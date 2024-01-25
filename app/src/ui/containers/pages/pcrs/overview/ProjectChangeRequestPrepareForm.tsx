@@ -29,7 +29,7 @@ const ProjectChangeRequestPrepareForm = ({
     const dto = editor.data;
     if (submit) {
       switch (pcr.status) {
-        case PCRStatus.Draft:
+        case PCRStatus.DraftWithProjectManager:
         case PCRStatus.QueriedByMonitoringOfficer:
           if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
             dto.status = PCRStatus.SubmittedToInnovateUK;
@@ -37,7 +37,7 @@ const ProjectChangeRequestPrepareForm = ({
             dto.status = PCRStatus.SubmittedToMonitoringOfficer;
           }
           break;
-        case PCRStatus.QueriedByInnovateUK:
+        case PCRStatus.QueriedToProjectManager:
           dto.status = PCRStatus.SubmittedToInnovateUK;
           break;
         default:

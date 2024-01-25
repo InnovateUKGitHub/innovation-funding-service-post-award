@@ -894,7 +894,7 @@ export class TestData {
     const response: ProjectChangeRequestStatusChangeEntity = {
       id: `StatusChange: ${seed}` as PcrItemId,
       pcrId: projectChangeRequest.id,
-      previousStatus: PCRStatus.Draft,
+      previousStatus: PCRStatus.DraftWithProjectManager,
       newStatus: PCRStatus.SubmittedToMonitoringOfficer,
       createdBy: "Person A",
       createdDate: new Date(),

@@ -2,7 +2,7 @@ import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
-import { PCRStatus } from "@framework/constants/pcrConstants";
+import { pcrStatusMetaValues } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -19,7 +19,7 @@ import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Ta
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
 import { usePcrItemName } from "../utils/getPcrItemName";
-import { useGetPcrStatusName } from "../utils/useGetPcrStatusName";
+import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { useContent } from "@ui/hooks/content.hook";
 
 interface PCRDashboardParams {
@@ -41,7 +41,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
   const { getPcrItemContent } = usePcrItemName();
-  const { getPcrStatusName } = useGetPcrStatusName();
+  const { getPcrStatusName, getPcrMetadata } = useGetPcrStatusMetadata();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
     const { isPm } = getAuthRoles(project.roles);
@@ -85,16 +85,15 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id };
+    const pcrMetadata = getPcrMetadata(pcr.status);
 
-    const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
-
-    if (prepareStatus.indexOf(pcr.status) >= 0 && isPm && isProjectActive) {
+    if (pcrMetadata?.editableByPm && isPm && isProjectActive) {
       links.push({
         route: props.routes.pcrPrepare.getLink(pcrLinkArgs),
         text: "Edit",
         qa: "pcrPrepareLink",
       });
-    } else if (pcr.status === PCRStatus.SubmittedToMonitoringOfficer && isMo && isProjectActive) {
+    } else if (pcrMetadata?.reviewableByMo && isMo && isProjectActive) {
       links.push({
         route: props.routes.pcrReview.getLink(pcrLinkArgs),
         text: "Review",
@@ -108,7 +107,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       });
     }
 
-    if (pcr.status === PCRStatus.Draft && isPm && isProjectActive) {
+    if (pcrMetadata?.deletableByPm && isPm && isProjectActive) {
       links.push({
         route: props.routes.pcrDelete.getLink(pcrLinkArgs),
         text: "Delete",
@@ -123,9 +122,9 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     ));
   };
 
-  const archivedStatuses = [PCRStatus.Approved, PCRStatus.Withdrawn, PCRStatus.Rejected, PCRStatus.Actioned];
-  const active = pcrs.filter(x => archivedStatuses.indexOf(x.status) === -1);
-  const archived = pcrs.filter(x => archivedStatuses.indexOf(x.status) !== -1);
+  const archivedStatuses = pcrStatusMetaValues.filter(x => x.archived);
+  const active = pcrs.filter(x => !archivedStatuses.some(y => y.status === x.status));
+  const archived = pcrs.filter(x => archivedStatuses.some(y => y.status === x.status));
 
   return (
     <Page

@@ -4,21 +4,26 @@ import { SalesforceCompetitionTypes } from "./competitionTypes";
 
 export enum PCRStatus {
   Unknown = 0,
-  Draft = 1,
+
+  // Current Values
+  DraftWithProjectManager = 1,
   SubmittedToMonitoringOfficer = 2,
   QueriedByMonitoringOfficer = 3,
-  SubmittedToInnovationLead = 4,
-  QueriedByInnovateUK = 5,
-  InExternalReview = 6,
-  InReviewWithInnovateUK = 7,
-  Rejected = 8,
-  Withdrawn = 9,
-  Approved = 10,
-  Actioned = 11,
   SubmittedToInnovateUK = 12,
-  QueriedByInnovationLead = 13,
-  InReviewWithProjectFinance = 14,
-  ReadyForApproval = 15,
+  QueriedToProjectManager = 13,
+  Withdrawn = 9,
+  Rejected = 8,
+  AwaitingAmendmentLetter = 16,
+  Approved = 10,
+
+  // Salesforce "Inactive Values"
+  DeprecatedSubmittedToInnovationLead = 4,
+  DeprecatedQueriedByInnovateUK = 5,
+  DeprecatedInExternalReview = 6,
+  DeprecatedInReviewWithInnovateUK = 7,
+  DeprecatedInReviewWithProjectFinance = 14,
+  DeprecatedActioned = 11,
+  DeprecatedReadyForApproval = 15,
 }
 
 export enum PCRProjectRole {
@@ -191,7 +196,7 @@ export const getPcrItemsSingleInstanceInAnyPcrViolations = (
     PCRStatus.Rejected,
     PCRStatus.Withdrawn,
     PCRStatus.Approved,
-    PCRStatus.Actioned,
+    PCRStatus.DeprecatedActioned,
   ];
 
   // Get a list of all our in progress PCRs.
@@ -313,25 +318,152 @@ You should not increase the overhead percentage rate.
 export interface IPcrStatusMetaValue {
   status: PCRStatus;
   i18nName: ContentSelector;
+  editableByPm: boolean;
+  deletableByPm: boolean;
+  reviewableByMo: boolean;
+  archived: boolean;
 }
 
 export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
-  { status: PCRStatus.Unknown, i18nName: x => x.pcrStatus.Unknown },
-  { status: PCRStatus.Draft, i18nName: x => x.pcrStatus.Draft },
-  { status: PCRStatus.SubmittedToMonitoringOfficer, i18nName: x => x.pcrStatus.SubmittedToMonitoringOfficer },
-  { status: PCRStatus.QueriedByMonitoringOfficer, i18nName: x => x.pcrStatus.Queried },
-  { status: PCRStatus.SubmittedToInnovationLead, i18nName: x => x.pcrStatus.SubmittedToInnovationLead },
-  { status: PCRStatus.QueriedByInnovateUK, i18nName: x => x.pcrStatus.Queried },
-  { status: PCRStatus.InExternalReview, i18nName: x => x.pcrStatus.InExternalReview },
-  { status: PCRStatus.InReviewWithInnovateUK, i18nName: x => x.pcrStatus.InReviewWithInnovateUK },
-  { status: PCRStatus.Rejected, i18nName: x => x.pcrStatus.Rejected },
-  { status: PCRStatus.Withdrawn, i18nName: x => x.pcrStatus.Withdrawn },
-  { status: PCRStatus.Approved, i18nName: x => x.pcrStatus.Approved },
-  { status: PCRStatus.Actioned, i18nName: x => x.pcrStatus.Actioned },
-  { status: PCRStatus.SubmittedToInnovateUK, i18nName: x => x.pcrStatus.SubmittedToInnovateUK },
-  { status: PCRStatus.QueriedByInnovationLead, i18nName: x => x.pcrStatus.Queried },
-  { status: PCRStatus.InReviewWithProjectFinance, i18nName: x => x.pcrStatus.InReviewWithProjectFinance },
-  { status: PCRStatus.ReadyForApproval, i18nName: x => x.pcrStatus.ReadyForApproval },
+  // Current Values
+  {
+    status: PCRStatus.Unknown,
+    i18nName: x => x.pcrStatus.Unknown,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DraftWithProjectManager,
+    i18nName: x => x.pcrStatus.DraftWithProjectManager,
+    editableByPm: true,
+    deletableByPm: true,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.SubmittedToMonitoringOfficer,
+    i18nName: x => x.pcrStatus.SubmittedToMonitoringOfficer,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: true,
+    archived: false,
+  },
+  {
+    status: PCRStatus.QueriedByMonitoringOfficer,
+    i18nName: x => x.pcrStatus.Queried,
+    editableByPm: true,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.SubmittedToInnovateUK,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.QueriedToProjectManager,
+    i18nName: x => x.pcrStatus.Queried,
+    editableByPm: true,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.Withdrawn,
+    i18nName: x => x.pcrStatus.Withdrawn,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: true,
+  },
+  {
+    status: PCRStatus.Rejected,
+    i18nName: x => x.pcrStatus.Rejected,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: true,
+  },
+  {
+    status: PCRStatus.AwaitingAmendmentLetter,
+    i18nName: x => x.pcrStatus.AwaitingAmendmentLetter,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.Approved,
+    i18nName: x => x.pcrStatus.Approved,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: true,
+  },
+
+  // Salesforce "Inactive Values"
+  {
+    status: PCRStatus.DeprecatedSubmittedToInnovationLead,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DeprecatedQueriedByInnovateUK,
+    i18nName: x => x.pcrStatus.Queried,
+    editableByPm: true,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DeprecatedInExternalReview,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DeprecatedInReviewWithInnovateUK,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DeprecatedActioned,
+    i18nName: x => x.pcrStatus.Approved,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: true,
+  },
+  {
+    status: PCRStatus.DeprecatedInReviewWithProjectFinance,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
+  {
+    status: PCRStatus.DeprecatedReadyForApproval,
+    i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    editableByPm: false,
+    deletableByPm: false,
+    reviewableByMo: false,
+    archived: false,
+  },
 ] as const;
 
 export interface IMetaValue {

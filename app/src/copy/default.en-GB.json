@@ -1153,19 +1153,15 @@
   },
   "pcrStatus": {
     "Unknown": "Unknown",
-    "Draft": "Draft with Project Manager",
+
     "Queried": "Queried to Project Manager",
+    "DraftWithProjectManager": "Draft with Project Manager",
     "SubmittedToMonitoringOfficer": "Submitted to Monitoring Officer",
-    "SubmittedToInnovationLead": "Submitted to Innovation Lead",
-    "InExternalReview": "In External Review",
-    "InReviewWithInnovateUK": "In Review with Innovate UK",
-    "Rejected": "Rejected",
-    "Withdrawn": "Withdrawn",
-    "Approved": "Approved",
-    "Actioned": "Actioned",
     "SubmittedToInnovateUK": "Submitted to Innovate UK",
-    "InReviewWithProjectFinance": "In Review with Project Finance",
-    "ReadyForApproval": "Ready for Approval"
+    "Withdrawn": "Withdrawn",
+    "Rejected": "Rejected",
+    "AwaitingAmendmentLetter": "Awaiting Amendment Letter",
+    "Approved": "Approved"
   },
   "spendProfileMessages": {
     "costGuidanceLabour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",

@@ -56,7 +56,7 @@ describe("GetPCRByIdQuery", () => {
       comments: "Expected comments",
       started: expectedStartDate,
       updated: expectedUpdatedDate,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       statusName: "Expected Status name",
     });
 
@@ -70,7 +70,7 @@ describe("GetPCRByIdQuery", () => {
     expect(result.comments).toBe("Expected comments");
     expect(result.started).toBe(expectedStartDate);
     expect(result.lastUpdated).toBe(expectedUpdatedDate);
-    expect(result.status).toBe(PCRStatus.Draft);
+    expect(result.status).toBe(PCRStatus.DraftWithProjectManager);
     expect(result.statusName).toBe("Expected Status name");
     expect(result.items).toEqual([]);
   });

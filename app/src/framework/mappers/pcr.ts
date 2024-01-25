@@ -51,36 +51,42 @@ export const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
 
 export const mapToPCRStatus = (statusLabel: string) => {
   switch (statusLabel) {
+    // Current Values
     case "Draft":
-      return PCRStatus.Draft;
+      return PCRStatus.DraftWithProjectManager;
     case "Submitted to Monitoring Officer":
       return PCRStatus.SubmittedToMonitoringOfficer;
     case "Queried by Monitoring Officer":
       return PCRStatus.QueriedByMonitoringOfficer;
     case "Submitted to Innovate UK":
       return PCRStatus.SubmittedToInnovateUK;
-    case "Submitted to Innovation Lead":
-      return PCRStatus.SubmittedToInnovationLead;
-    case "Queried by Innovate UK":
-      return PCRStatus.QueriedByInnovateUK;
     case "Queried by Innovation Lead":
-      return PCRStatus.QueriedByInnovationLead;
-    case "In Review with Project Finance":
-      return PCRStatus.InReviewWithProjectFinance;
-    case "In External Review":
-      return PCRStatus.InExternalReview;
-    case "In Review with Innovate UK":
-      return PCRStatus.InReviewWithInnovateUK;
-    case "Ready for approval":
-      return PCRStatus.ReadyForApproval;
-    case "Rejected":
-      return PCRStatus.Rejected;
+      return PCRStatus.QueriedToProjectManager;
     case "Withdrawn":
       return PCRStatus.Withdrawn;
+    case "Rejected":
+      return PCRStatus.Rejected;
+    case "Awaiting Amendment Letter":
+      return PCRStatus.AwaitingAmendmentLetter;
     case "Approved":
       return PCRStatus.Approved;
+
+    // Salesforce "Inactive Values"
+    case "Submitted to Innovation Lead":
+      return PCRStatus.DeprecatedSubmittedToInnovationLead;
+    case "Queried by Innovate UK":
+      return PCRStatus.DeprecatedQueriedByInnovateUK;
+    case "In Review with Project Finance":
+      return PCRStatus.DeprecatedInReviewWithProjectFinance;
+    case "In External Review":
+      return PCRStatus.DeprecatedInExternalReview;
+    case "In Review with Innovate UK":
+      return PCRStatus.DeprecatedInReviewWithInnovateUK;
+    case "Ready for approval":
+      return PCRStatus.DeprecatedReadyForApproval;
     case "Actioned":
-      return PCRStatus.Actioned;
+      return PCRStatus.DeprecatedActioned;
+
     default:
       return PCRStatus.Unknown;
   }

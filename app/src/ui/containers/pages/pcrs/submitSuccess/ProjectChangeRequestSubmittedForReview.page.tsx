@@ -13,7 +13,7 @@ import { usePcrItemName } from "../utils/getPcrItemName";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { useContent } from "@ui/hooks/content.hook";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { useGetPcrStatusName } from "../utils/useGetPcrStatusName";
+import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 
 export interface ProjectChangeRequestSubmittedForReviewParams {
   projectId: ProjectId;
@@ -26,7 +26,7 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
 }: BaseProps & ProjectChangeRequestSubmittedForReviewParams) => {
   const routes = useRoutes();
   const { getPcrItemContent } = usePcrItemName();
-  const { getPcrStatusName } = useGetPcrStatusName();
+  const { getPcrStatusName } = useGetPcrStatusMetadata();
   const { getContent } = useContent();
   const { project, pcr } = useProjectChangeRequestSubmittedForReviewQuery({ projectId, pcrId });
 

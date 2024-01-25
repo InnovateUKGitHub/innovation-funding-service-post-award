@@ -71,7 +71,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
-    const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
+    const pcr = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
 
     const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
@@ -82,7 +82,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
     expect(context.repositories.projectChangeRequests.Items.length).toBe(0);
   });
 
-  const draftItemsToExclude = [PCRStatus.Draft, PCRStatus.Unknown];
+  const draftItemsToExclude = [PCRStatus.DraftWithProjectManager, PCRStatus.Unknown];
   const filteredPcrStates = getAllNumericalEnumValues(PCRStatus).filter(x => !draftItemsToExclude.includes(x));
 
   filteredPcrStates.forEach(status => {

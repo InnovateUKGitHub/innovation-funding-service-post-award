@@ -96,7 +96,7 @@ const getPayload = (
   const payload = { ...pcr, comments: data.comments };
   if (saveAndContinue) {
     switch (pcr.status) {
-      case PCRStatus.Draft:
+      case PCRStatus.DraftWithProjectManager:
       case PCRStatus.QueriedByMonitoringOfficer:
         if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
           payload.status = PCRStatus.SubmittedToInnovateUK;
@@ -104,7 +104,7 @@ const getPayload = (
           payload.status = PCRStatus.SubmittedToMonitoringOfficer;
         }
         break;
-      case PCRStatus.QueriedByInnovateUK:
+      case PCRStatus.QueriedToProjectManager:
         payload.status = PCRStatus.SubmittedToInnovateUK;
         break;
       default:

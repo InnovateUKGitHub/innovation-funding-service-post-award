@@ -9,7 +9,7 @@ export const setup = (projectStatus?: string) => {
   );
 
   context.testData.createCurrentUserAsProjectManager(project);
-  const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+  const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
   const recordTypes = context.testData.createPCRRecordTypes();
   const projectSuspensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
   const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);

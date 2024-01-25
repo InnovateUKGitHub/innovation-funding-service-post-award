@@ -54,7 +54,7 @@ class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSche
       new CreateProjectChangeRequestCommand(input.projectId, {
         projectId: input.projectId,
         reasoningStatus: PCRItemStatus.ToDo,
-        status: PCRStatus.Draft,
+        status: PCRStatus.DraftWithProjectManager,
         items: input.types.map(x => ({
           status: PCRItemStatus.ToDo,
           type: x,

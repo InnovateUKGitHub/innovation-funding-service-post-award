@@ -126,35 +126,40 @@ export interface ISalesforcePCR {
   Loan_RepaymentPeriodChange__c: string | null;
 }
 
-export const mapToPCRStatusLabel = (status: PCRStatus): string => {
+export const mapToPCRApiName = (status: PCRStatus): string => {
   switch (status) {
-    case PCRStatus.Draft:
+    // Current Values
+    case PCRStatus.DraftWithProjectManager:
       return "Draft";
     case PCRStatus.SubmittedToMonitoringOfficer:
       return "Submitted to Monitoring Officer";
     case PCRStatus.QueriedByMonitoringOfficer:
       return "Queried by Monitoring Officer";
-    case PCRStatus.SubmittedToInnovationLead:
-      return "Submitted to Innovation Lead";
     case PCRStatus.SubmittedToInnovateUK:
       return "Submitted to Innovate UK";
-    case PCRStatus.QueriedByInnovateUK:
-      return "Queried by Innovate UK";
-    case PCRStatus.QueriedByInnovationLead:
+    case PCRStatus.QueriedToProjectManager:
       return "Queried by Innovation Lead";
-    case PCRStatus.InReviewWithProjectFinance:
-      return "In Review with Project Finance";
-    case PCRStatus.InExternalReview:
-      return "In External Review";
-    case PCRStatus.InReviewWithInnovateUK:
-      return "In Review with Innovate UK";
-    case PCRStatus.Rejected:
-      return "Rejected";
     case PCRStatus.Withdrawn:
       return "Withdrawn";
+    case PCRStatus.Rejected:
+      return "Rejected";
+    case PCRStatus.AwaitingAmendmentLetter:
+      return "Awaiting Amendment Letter";
     case PCRStatus.Approved:
       return "Approved";
-    case PCRStatus.Actioned:
+
+    // Salesforce "Inactive Values"
+    case PCRStatus.DeprecatedSubmittedToInnovationLead:
+      return "Submitted to Innovation Lead";
+    case PCRStatus.DeprecatedQueriedByInnovateUK:
+      return "Queried by Innovate UK";
+    case PCRStatus.DeprecatedInReviewWithProjectFinance:
+      return "In Review with Project Finance";
+    case PCRStatus.DeprecatedInExternalReview:
+      return "In External Review";
+    case PCRStatus.DeprecatedInReviewWithInnovateUK:
+      return "In Review with Innovate UK";
+    case PCRStatus.DeprecatedActioned:
       return "Actioned";
     default:
       return "";
@@ -414,7 +419,7 @@ export class ProjectChangeRequestRepository
   }
 
   private mapStatus(status: PCRStatus): string {
-    return mapToPCRStatusLabel(status);
+    return mapToPCRApiName(status);
   }
 
   private mapItemStatus(status?: PCRItemStatus): string {

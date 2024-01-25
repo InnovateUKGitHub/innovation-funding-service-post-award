@@ -128,10 +128,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
     { standardMonitoring: PCRStatus[]; internalAssurance: PCRStatus[] }
   >([
     [
-      PCRStatus.Draft,
+      PCRStatus.DraftWithProjectManager,
       {
-        standardMonitoring: [PCRStatus.Draft, PCRStatus.SubmittedToMonitoringOfficer],
-        internalAssurance: [PCRStatus.Draft, PCRStatus.SubmittedToInnovateUK],
+        standardMonitoring: [PCRStatus.DraftWithProjectManager, PCRStatus.SubmittedToMonitoringOfficer],
+        internalAssurance: [PCRStatus.DraftWithProjectManager, PCRStatus.SubmittedToInnovateUK],
       },
     ],
     [
@@ -142,10 +142,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
       },
     ],
     [
-      PCRStatus.QueriedByInnovateUK,
+      PCRStatus.QueriedToProjectManager,
       {
-        standardMonitoring: [PCRStatus.QueriedByInnovateUK, PCRStatus.SubmittedToInnovateUK],
-        internalAssurance: [PCRStatus.QueriedByInnovateUK, PCRStatus.SubmittedToInnovateUK],
+        standardMonitoring: [PCRStatus.QueriedToProjectManager, PCRStatus.SubmittedToInnovateUK],
+        internalAssurance: [PCRStatus.QueriedToProjectManager, PCRStatus.SubmittedToInnovateUK],
       },
     ],
   ]);
@@ -265,7 +265,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
     if (isPm) {
       if (!this.original) {
-        permittedStatus.push(PCRStatus.Draft);
+        permittedStatus.push(PCRStatus.DraftWithProjectManager);
       } else {
         permittedStatus.push(
           ...(this.projectManagerPermittedStatus.get(this.original.status)?.[
@@ -300,7 +300,11 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateReasonStatus() {
     const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
-    const preparePcrStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
+    const preparePcrStatus = [
+      PCRStatus.DraftWithProjectManager,
+      PCRStatus.QueriedByMonitoringOfficer,
+      PCRStatus.QueriedToProjectManager,
+    ];
     return Validation.all(
       this,
       () =>
@@ -400,10 +404,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private validateItems() {
     const statusWhenNotRequiredToBeComplete = [
-      PCRStatus.Draft,
-      PCRStatus.QueriedByInnovateUK,
+      PCRStatus.DraftWithProjectManager,
+      PCRStatus.QueriedToProjectManager,
       PCRStatus.QueriedByMonitoringOfficer,
-      PCRStatus.QueriedByInnovationLead,
+      PCRStatus.QueriedToProjectManager,
     ];
 
     return Validation.child(
@@ -620,8 +624,8 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
     const statusWhenNotRequiredToBeComplete = [
-      PCRStatus.Draft,
-      PCRStatus.QueriedByInnovateUK,
+      PCRStatus.DraftWithProjectManager,
+      PCRStatus.QueriedToProjectManager,
       PCRStatus.QueriedByMonitoringOfficer,
     ];
 

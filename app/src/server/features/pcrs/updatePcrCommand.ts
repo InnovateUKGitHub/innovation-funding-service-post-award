@@ -69,7 +69,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const nowSubmittedToMo = newStatus === PCRStatus.SubmittedToMonitoringOfficer;
     const nowQueriedToMo = newStatus === PCRStatus.QueriedByMonitoringOfficer;
     const nowQueriedToInnovateUk = newStatus === PCRStatus.SubmittedToInnovateUK;
-    const previouslyQueriedByInnovateUk = originalStatus === PCRStatus.QueriedByInnovateUK;
+    const previouslyQueriedByInnovateUk = originalStatus === PCRStatus.QueriedToProjectManager;
 
     const shouldPmSee = nowSubmittedToMo || nowQueriedToMo || (nowQueriedToInnovateUk && previouslyQueriedByInnovateUk);
 

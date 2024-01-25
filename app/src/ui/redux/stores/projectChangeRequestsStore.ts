@@ -152,7 +152,7 @@ export class ProjectChangeRequestStore extends StoreBase {
         Pending.done<PCRDto>({
           id: "" as PcrId,
           projectId,
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           statusName: "",
           comments: "",
           reasoningComments: "",

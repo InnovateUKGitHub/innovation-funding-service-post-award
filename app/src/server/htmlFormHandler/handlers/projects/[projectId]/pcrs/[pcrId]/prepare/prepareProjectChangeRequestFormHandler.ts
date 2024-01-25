@@ -38,7 +38,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
 
     if (button.value === "submit") {
       switch (pcr.status) {
-        case PCRStatus.Draft:
+        case PCRStatus.DraftWithProjectManager:
         case PCRStatus.QueriedByMonitoringOfficer:
           if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
             pcr.status = PCRStatus.SubmittedToInnovateUK;
@@ -46,7 +46,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
             pcr.status = PCRStatus.SubmittedToMonitoringOfficer;
           }
           break;
-        case PCRStatus.QueriedByInnovateUK:
+        case PCRStatus.QueriedToProjectManager:
           pcr.status = PCRStatus.SubmittedToInnovateUK;
           break;
       }

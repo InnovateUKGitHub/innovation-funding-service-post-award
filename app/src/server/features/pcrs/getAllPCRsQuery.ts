@@ -30,7 +30,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
 
     return (await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId))
       .sort((a, b) => numberComparator(b.number, a.number))
-      .filter(x => (isPmOrFc ? true : x.status !== PCRStatus.Draft)) // If we are an MO, hide any draft PCRs.
+      .filter(x => (isPmOrFc ? true : x.status !== PCRStatus.DraftWithProjectManager)) // If we are an MO, hide any draft PCRs.
       .map(x => this.map(x, pcrItemTypes));
   }
 

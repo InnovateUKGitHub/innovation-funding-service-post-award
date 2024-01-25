@@ -37,7 +37,7 @@ describe("Create PCR Command", () => {
 
         // Note: We're creating test data since we need to check against an existing scopeChangePcrItem
         for (let recordIndex = 0; recordIndex < pcrItemsToCheck.length; recordIndex++) {
-          const pcrRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+          const pcrRequest = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
 
           context.testData.createPCRItem(pcrRequest, recordsToCreate[recordIndex].recordType, {
             status: PCRItemStatus.Complete,
@@ -73,7 +73,7 @@ describe("Create PCR Command", () => {
 
         const pcrPayload = {
           projectId: project.Id,
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           reasoningStatus: PCRItemStatus.ToDo,
           items: pcrItems,
         } as PCRDto;
@@ -95,7 +95,7 @@ describe("Create PCR Command", () => {
 
         const pcrPayload = {
           projectId: project.Id,
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           reasoningStatus: PCRItemStatus.ToDo,
           items: pcrItems,
         } as PCRDto;
@@ -113,7 +113,7 @@ describe("Create PCR Command", () => {
     await context.testData.createPartner(project);
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
     } as unknown as PCRDto);
 
@@ -126,7 +126,7 @@ describe("Create PCR Command", () => {
     await context.testData.createPartner(project);
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.Complete,
     } as unknown as PCRDto);
 
@@ -155,7 +155,7 @@ describe("Create PCR Command", () => {
 
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
@@ -179,7 +179,7 @@ describe("Create PCR Command", () => {
 
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
@@ -196,7 +196,7 @@ describe("Create PCR Command", () => {
     expect(newPCR).toMatchObject({
       id,
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
@@ -216,7 +216,7 @@ describe("Create PCR Command", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
@@ -241,7 +241,7 @@ describe("Create PCR Command", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {

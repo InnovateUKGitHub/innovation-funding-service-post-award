@@ -93,7 +93,7 @@ describe("GetAllPCRsQuery", () => {
 
       // Create a PCR that should NOT be returned, if we're an MO.
       context.testData.createPCR(project, {
-        status: PCRStatus.Draft,
+        status: PCRStatus.DraftWithProjectManager,
       });
 
       const query = new GetAllPCRsQuery(project.Id);
@@ -115,7 +115,7 @@ describe("GetAllPCRsQuery", () => {
 
     // Create a PCR that should NOT be returned.
     context.testData.createPCR(project, {
-      status: PCRStatus.Draft,
+      status: PCRStatus.DraftWithProjectManager,
     });
 
     const query = new GetAllPCRsQuery(expected.projectId);

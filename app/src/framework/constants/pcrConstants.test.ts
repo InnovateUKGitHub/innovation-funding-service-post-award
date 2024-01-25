@@ -16,7 +16,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
       ${"when Rejected"}  | ${PCRStatus.Rejected}
       ${"when Withdrawn"} | ${PCRStatus.Withdrawn}
       ${"when Approved"}  | ${PCRStatus.Approved}
-      ${"when Actioned"}  | ${PCRStatus.Actioned}
+      ${"when Actioned"}  | ${PCRStatus.DeprecatedActioned}
     `("with an invalid type $name", ({ statusType }) => {
       const stubPcr = createPCRSummaryDto({ status: statusType });
       const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubPcr]);
@@ -29,7 +29,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
     describe("returns with matching values", () => {
       test("with reallocated project costs", () => {
         const stubDraftPcrPartnerVirement = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement)],
         });
 
@@ -40,7 +40,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
 
       test("with change project duration", () => {
         const stubDraftPcrTimeExtension = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(PCRItemType.TimeExtension)],
         });
 
@@ -51,7 +51,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
 
       test("with project scope change", () => {
         const stubDraftPcrScopeChange = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(PCRItemType.ScopeChange)],
         });
 
@@ -72,7 +72,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
         ${"with PeriodLengthChange"} | ${PCRItemType.PeriodLengthChange}
       `("$name", ({ itemTypeInput }) => {
         const stubSinglePcr = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(itemTypeInput)],
         });
 
@@ -98,7 +98,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
 
       test("returns two unique values", () => {
         const stubSinglePcrMultipleTypes = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement), stubItemType(PCRItemType.TimeExtension)],
         });
 
@@ -109,7 +109,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
 
       test("returns two unique values with two ignored matrix items", () => {
         const stubSinglePcrMultipleTypesWithDupes = createPCRSummaryDto({
-          status: PCRStatus.Draft,
+          status: PCRStatus.DraftWithProjectManager,
           items: [
             stubItemType(PCRItemType.TimeExtension),
             stubItemType(PCRItemType.PartnerWithdrawal),
@@ -135,7 +135,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
             ],
           }),
           createPCRSummaryDto({
-            status: PCRStatus.Actioned,
+            status: PCRStatus.DeprecatedActioned,
             items: [stubItemType(PCRItemType.PartnerAddition), stubItemType(PCRItemType.PartnerWithdrawal)],
           }),
         ];
@@ -152,7 +152,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
             items: [stubItemType(PCRItemType.PartnerAddition), stubItemType(PCRItemType.PartnerWithdrawal)],
           }),
           createPCRSummaryDto({
-            status: PCRStatus.InExternalReview,
+            status: PCRStatus.DeprecatedInExternalReview,
             items: [
               stubItemType(PCRItemType.MultiplePartnerFinancialVirement),
               stubItemType(PCRItemType.TimeExtension),
@@ -168,11 +168,11 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
       test("returns no values with valid status but no matrix conditions", () => {
         const stubMultiplePcrsMultipleTypes = [
           createPCRSummaryDto({
-            status: PCRStatus.QueriedByInnovateUK,
+            status: PCRStatus.QueriedToProjectManager,
             items: [stubItemType(PCRItemType.PartnerAddition), stubItemType(PCRItemType.PartnerWithdrawal)],
           }),
           createPCRSummaryDto({
-            status: PCRStatus.InExternalReview,
+            status: PCRStatus.DeprecatedInExternalReview,
             items: [stubItemType(PCRItemType.Unknown), stubItemType(PCRItemType.PartnerAddition)],
           }),
         ];
@@ -185,14 +185,14 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
       test("returns two unique values for 1 valid pcr", () => {
         const stubMultiplePcrsMultipleTypes = [
           createPCRSummaryDto({
-            status: PCRStatus.Draft,
+            status: PCRStatus.DraftWithProjectManager,
             items: [
               stubItemType(PCRItemType.MultiplePartnerFinancialVirement),
               stubItemType(PCRItemType.TimeExtension),
             ],
           }),
           createPCRSummaryDto({
-            status: PCRStatus.Draft,
+            status: PCRStatus.DraftWithProjectManager,
             items: [stubItemType(PCRItemType.PartnerAddition), stubItemType(PCRItemType.PartnerWithdrawal)],
           }),
         ];
@@ -205,14 +205,14 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
       test("returns two unique values with two duplicate types", () => {
         const stubMultiplePcrsDuplicateItems = [
           createPCRSummaryDto({
-            status: PCRStatus.Draft,
+            status: PCRStatus.DraftWithProjectManager,
             items: [
               stubItemType(PCRItemType.MultiplePartnerFinancialVirement),
               stubItemType(PCRItemType.TimeExtension),
             ],
           }),
           createPCRSummaryDto({
-            status: PCRStatus.Draft,
+            status: PCRStatus.DraftWithProjectManager,
             items: [
               stubItemType(PCRItemType.MultiplePartnerFinancialVirement),
               stubItemType(PCRItemType.TimeExtension),

@@ -1,7 +1,7 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
 import { IContext } from "@framework/types/IContext";
-import { mapToPCRStatus } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
+import { mapToPCRStatus } from "@framework/mappers/pcr";
 
 export class GetPcrStatusesQuery extends OptionsQueryBase<PCRStatus> {
   constructor() {
