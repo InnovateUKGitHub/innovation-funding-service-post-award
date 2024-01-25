@@ -2169,8 +2169,11 @@
         },
         "subcontractorCost": {
           "errors": {
-            "too_small": "Enter the cost of work to be carried out by the new subcontractor.",
-            "too_big": "Cost of work must be {{ count }} characters or less.",
+            "too_small": {
+              "string": "Enter the cost of work to be carried out by the new subcontractor.",
+              "number": "Subcontractor cost must be 0 or more."
+            },
+            "too_big": "Enter a real subcontractor cost.",
             "invalid": "Enter a valid cost of work."
           }
         }

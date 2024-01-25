@@ -2,11 +2,11 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   booleanValidation,
-  currencyValidation,
   emptyStringToUndefinedValidation,
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
+  zeroOrGreaterCurrencyValidation,
 } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
@@ -35,7 +35,7 @@ const approveNewSubcontractorSchema = z
     subcontractorLocation: z.string().max(subcontractorLocationMaxChars),
     subcontractorDescription: z.string().max(subcontractorDescriptionMaxChars),
     subcontractorJustification: z.string().max(subcontractorJustificationMaxChars),
-    subcontractorCost: z.union([currencyValidation, emptyStringToUndefinedValidation]),
+    subcontractorCost: z.union([zeroOrGreaterCurrencyValidation, emptyStringToUndefinedValidation]),
     markedAsComplete: z.boolean(),
   })
   .superRefine((data, ctx) => {
