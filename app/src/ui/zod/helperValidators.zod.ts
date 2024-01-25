@@ -67,7 +67,6 @@ const booleanValidation = z
 const currencyValidation = z
   .string()
   .nonempty()
-  .max(20) // Assumption that nobody will claim more than ninety-nine quadrillion pounds.
   .superRefine((val, ctx) => {
     const currency = parseFloat(val.replaceAll("£", ""));
 
@@ -81,11 +80,11 @@ const currencyValidation = z
     }
 
     // Make sure our currency isn't so big as to break our server
-    if (currency > Number.MAX_SAFE_INTEGER / 10000) {
+    if (currency > 999_999_999_999) {
       return ctx.addIssue({
         code: ZodIssueCode.too_big,
         type: "number",
-        maximum: Number.MAX_SAFE_INTEGER / 10000,
+        maximum: 999_999_999_999,
         inclusive: false,
       });
     }
@@ -97,6 +96,19 @@ const currencyValidation = z
       });
     }
   });
+
+const zeroOrGreaterCurrencyValidation = currencyValidation.superRefine((val, ctx) => {
+  const currency = parseFloat(val.replaceAll("£", ""));
+
+  if (currency < 0) {
+    return ctx.addIssue({
+      code: ZodIssueCode.too_small,
+      type: "number",
+      minimum: 0,
+      inclusive: true,
+    });
+  }
+});
 
 const getSingleFileValidation = (options: IAppOptions) => {
   const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
@@ -204,6 +216,7 @@ export {
   periodIdValidation,
   booleanValidation,
   currencyValidation,
+  zeroOrGreaterCurrencyValidation,
   claimIdValidation,
   costCategoryIdValidation,
   emptyStringToUndefinedValidation,

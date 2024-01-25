@@ -103,6 +103,10 @@ export const makeZodI18nMap =
               paths.push(basicArrayTypePath);
             }
           }
+
+          if ("type" in issue) {
+            paths.unshift(path + "." + issue.type);
+          }
         }
       }
 
