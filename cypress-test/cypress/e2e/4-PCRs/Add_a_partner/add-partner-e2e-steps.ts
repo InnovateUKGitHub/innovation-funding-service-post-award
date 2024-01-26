@@ -9,7 +9,10 @@ import {
   loremIpsum256Char,
 } from "common/lorem";
 import { testFile } from "common/testfileNames";
-
+let newCurrency = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+});
 const uploadDate = new Date().getFullYear().toString();
 
 export const navigateToCostCat = (category: string, row: number) => {
@@ -813,4 +816,99 @@ export const deleteCoste2e = () => {
   cy.get("h2").contains("Labour");
   cy.getByQA("validation-message-content").contains("You have deleted a cost");
   cy.get("td").should("not.have.text", "Test");
+};
+
+export const addManyLines = () => {
+  for (let i = 1; i < 80; i++) {
+    let subtotal = 1332.66 * i;
+    let GBPTotal = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.log(`***Adding cost item number ${i}***`);
+    cy.wait(500);
+    cy.get("a").contains("Add a cost").click();
+    cy.getByLabel("Role within project");
+    cy.getByLabel("Role within project").type(`Lorem ${i}`);
+    cy.wait(500);
+    cy.getByLabel("Gross employee cost").type("1000");
+    cy.wait(500);
+    cy.getByLabel("Rate (£/day)").type("666.33");
+    cy.wait(500);
+    cy.getByLabel("Days to be spent by all staff with this role").type("2");
+    cy.wait(500);
+    cy.clickOn("Save and return to labour");
+    cy.tableCell(`Lorem ${i}`);
+    cy.get("tfoot").within(() => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get("td:nth-child(2)").contains(GBPTotal.format(subtotal));
+        });
+    });
+  }
+};
+
+export const clearValidationAddManyOther = () => {
+  cy.reload();
+  cy.get("h2").contains("Other public sector funding?");
+  for (let i = 1; i < 51; i++) {
+    cy.wait(300);
+    cy.clickOn("Add another source of funding");
+    cy.getByAriaLabel(`source of funding item ${i}`).type(`Lorem ${i}`);
+    cy.wait(200);
+    cy.getByAriaLabel(`month funding is secured for item ${i}`).type(`09`);
+    cy.wait(200);
+    cy.getByAriaLabel(`year funding is secured for item ${i}`).type("2023");
+    cy.wait(200);
+    cy.getByAriaLabel(`funding amount for item ${i - 1}`).type("333.33");
+    cy.wait(200);
+    cy.get("tfoot").within(() => {
+      let total = i * 333.33;
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get("td:nth-child(3)").contains(newCurrency.format(total));
+        });
+    });
+  }
+  cy.wait(1000);
+  cy.clickOn("Save and return to summary");
+};
+
+export const otherFundingCorrectlyDisplayed = () => {
+  [
+    ["Project costs for new partner", "£50,000.00"],
+    ["Other sources of funding?", "Yes"],
+    ["Funding from other sources", "£16,666.50"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key, item);
+  });
+};
+
+export const deleteOtherFundingLines = () => {
+  cy.getListItemFromKey("Funding from other sources", "Edit").click();
+  cy.get("h2").contains("Other public sector funding?");
+  cy.get("main").within(() => {
+    cy.get("tr").then($rows => {
+      let rowNumber = $rows.length;
+      while (rowNumber > 3) {
+        cy.log(`***DELETING ROW NUMBER ${rowNumber}***`);
+        cy.get("tr")
+          .eq(rowNumber)
+          .within(() => {
+            cy.button("Remove").click();
+            cy.wait(500);
+          });
+      }
+      cy.button("Save and return to summary").click();
+      [
+        ["Project costs for new partner", "£50,000.00"],
+        ["Other sources of funding?", "Yes"],
+        ["Funding from other sources", "£0.00"],
+      ].forEach(([key, item]) => {
+        cy.getListItemFromKey(key, item);
+      });
+    });
+  });
 };

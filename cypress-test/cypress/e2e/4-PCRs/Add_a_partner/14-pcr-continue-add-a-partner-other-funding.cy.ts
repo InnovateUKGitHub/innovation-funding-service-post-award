@@ -6,7 +6,6 @@ import {
   addPartnerDocUpload,
   pcrFileTable,
   otherFundingTable,
-  addSourceOfFunding,
   fundingLevelPage,
   uploadPartnerInfo,
   otherFundingOptions,
@@ -15,7 +14,14 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { learnFiles } from "common/fileComponentTests";
-import { deleteCost, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
+import {
+  clearValidationAddManyOther,
+  deleteCost,
+  deleteOtherFundingLines,
+  displayCostCatTable,
+  navigateToCostCat,
+  otherFundingCorrectlyDisplayed,
+} from "./add-partner-e2e-steps";
 
 const pm = "james.black@euimeabs.test";
 
@@ -99,40 +105,18 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should click 'Add another source of funding' and then validate fields.", addSourceOfFundingValidation);
 
-  it("Should reload the page and then continue through without adding information", () => {
-    cy.reload();
-    cy.get("h2").contains("Other public sector funding?");
-    cy.clickOn("Save and continue");
-    cy.get("h2").contains("Funding level");
-    cy.clickOn("Save and continue");
-    cy.get("legend").contains("Upload partner agreement");
-  });
+  it("Should reload to clear the validation changes and add many lines", clearValidationAddManyOther);
 
-  it("Should save and return to summary and still display the project costs from the previous steps", () => {
-    cy.clickOn("Save and return to summary");
-    [
-      ["Project costs for new partner", "£50,000.00"],
-      ["Other sources of funding?", "Yes"],
-      ["Funding from other sources", "£0.00"],
-    ].forEach(([key, item]) => {
-      cy.getListItemFromKey(key, item);
-    });
-  });
+  it(
+    "Should still display the project costs from the previous steps and total other funding",
+    otherFundingCorrectlyDisplayed,
+  );
 
-  it("Should now re-access Other sources of funding and complete", () => {
-    cy.getListItemFromKey("Funding from other sources", "Edit").click();
-    cy.get("h2").contains("Other public sector funding?");
-    cy.contains("button", "Add another source of funding").click();
-  });
+  it("Should now re-access Other sources of funding and delete all line items", deleteOtherFundingLines);
 
-  it("Should now enter valid information into the fields", addSourceOfFunding);
-
-  it("Should reflect the value entered in the table", () => {
-    cy.tableCell("£2,000.00");
-  });
-
-  it("Should 'Save and continue'", () => {
-    cy.clickOn("Save and continue");
+  it("Should access other sources of funding again", () => {
+    cy.getListItemFromKey("Other sources of funding?", "Edit").click();
+    cy.button("Save and continue").click();
   });
 
   it("Should land on the 'Funding level' page and contain subheading and guidance information", fundingLevelPage);
@@ -188,7 +172,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     [
       ["Project costs for new partner", "£50,000.00"],
       ["Other sources of funding?", "Yes"],
-      ["Funding from other sources", "£2,000.00"],
+      ["Funding from other sources", "£0.00"],
       ["Funding level", "5.00%"],
       ["Funding sought", "£2,400.00"],
       ["Partner contribution to project", "£45,600.00"],

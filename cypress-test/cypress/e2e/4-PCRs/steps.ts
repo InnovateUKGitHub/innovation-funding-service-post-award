@@ -988,18 +988,6 @@ export const addSourceOfFundingValidation = () => {
   cy.paragraph("Date secured must be a date");
 };
 
-export const addSourceOfFunding = () => {
-  cy.getCellFromHeaderAndRowNumber("Source of funding", 1, "input").clear().type("Public");
-  cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="month funding is secured for item 1"]')
-    .clear()
-    .type("12");
-  cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="year funding is secured for item 1"]')
-    .clear()
-    .type("2022");
-  cy.getCellFromHeaderAndRowNumber("Funding amount", 1, "input").clear().type("2000");
-  cy.wait(500);
-};
-
 export const fundingLevelPage = () => {
   cy.get("h2").contains("Funding level");
   cy.paragraph("The maximum the new organisation can enter");
