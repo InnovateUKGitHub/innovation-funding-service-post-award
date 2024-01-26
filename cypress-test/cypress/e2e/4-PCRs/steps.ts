@@ -1631,10 +1631,12 @@ export const switchUserMoReviewPcr = () => {
   cy.switchUserTo(moEmail);
   cy.get("a").contains("Review").click();
   cy.heading("Request");
+  cy.wait(500);
 };
 
 export const leaveCommentQuery = () => {
   cy.getByLabel("Query the request").click();
+  cy.wait(500);
   cy.get("textarea").clear().type(comments);
   cy.button("Submit").click();
   cy.get("h1").contains("Project change requests");

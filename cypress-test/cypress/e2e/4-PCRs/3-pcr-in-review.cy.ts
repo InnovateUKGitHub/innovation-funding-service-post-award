@@ -14,7 +14,7 @@ import { uploadDate } from "e2e/2-claims/steps";
 describe("PCR > In Review", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSvOGEA0/pcrs/dashboard" });
-    pcrStatusChange("Queried by Monitoring Officer");
+    pcrStatusChange("Queried to Project Manager");
   });
 
   it("Should switch user to Monitoring Officer and open the submitted PCR", switchUserMoReviewPcr);
@@ -50,10 +50,10 @@ describe("PCR > In Review", () => {
 
   it("Should have request number, request type, request start date, status and last updated list", () => {
     [
-      ["Request number", "10"],
+      ["Request number", "25"],
       ["Request type", "Change project scope"],
       ["Request type", "Reallocate project costs"],
-      ["Request started", "5 July 2023"],
+      ["Request started", "26 January 2024"],
       ["Request status", "Submitted to Monitoring Officer"],
       ["Request last updated", uploadDate],
     ].forEach(([requestItem, requestDetail]) => {
