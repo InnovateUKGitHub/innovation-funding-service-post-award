@@ -172,6 +172,9 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_Location__c {
                   value
                 }
+                Acc_MarkedasComplete__c {
+                  value
+                }
                 Acc_OrganisationName__c {
                   value
                 }
