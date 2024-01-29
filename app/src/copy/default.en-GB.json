@@ -2078,8 +2078,8 @@
         },
         "contact2Surname": {
           "errors": {
-            "too_small": "Enter a project manager name.",
-            "invalid_type": "Enter a project manager name.",
+            "too_small": "Enter a project manager surname.",
+            "invalid_type": "Enter a project manager surname.",
             "too_big": "Project manager surname must be {{count}} characters or less."
           }
         },

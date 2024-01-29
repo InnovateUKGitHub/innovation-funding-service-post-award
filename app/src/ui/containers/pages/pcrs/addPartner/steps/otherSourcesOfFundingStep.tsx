@@ -30,6 +30,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./schemas/otherSourcesOfFunding.zod";
 import { useMemo } from "react";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -81,15 +82,14 @@ export const OtherSourcesOfFundingStep = () => {
   const { isClient } = useMounted();
   const { projectId, itemId, fetchKey, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
 
-  const { costCategories, pcrSpendProfile, academicCostCategories, spendProfileCostCategories } =
+  const { costCategories, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem } =
     useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const { spendProfile, funds } = useMemo(() => {
-    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, [
-      ...academicCostCategories,
-      ...spendProfileCostCategories,
-    ]);
+    const costCategoryList =
+      pcrItem.organisationType === PCROrganisationType.Academic ? academicCostCategories : spendProfileCostCategories;
 
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategoryList);
     return { spendProfile, funds: getFunds(spendProfile.funds).map(mapWithDateParts) };
   }, [itemId]);
 

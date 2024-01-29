@@ -96,7 +96,7 @@ export const ProjectManagerDetailsStep = () => {
               <TextInput
                 hasError={!!validationErrors?.contact2Forename}
                 defaultValue={pcrItem.contact2Forename ?? ""}
-                id="contact1Forename"
+                id="contact2Forename"
                 disabled={isFetching}
                 {...register("contact2Forename")}
               />

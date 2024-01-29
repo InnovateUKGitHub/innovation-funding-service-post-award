@@ -27,6 +27,7 @@ import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/constants/enums";
 
 type AcademicCostsRhfError = {
   tsbReference: RhfError;
@@ -40,25 +41,29 @@ const getInitialCosts = (
   profile: PcrSpendProfileDto,
   costCategories: Pick<CostCategoryDto & { displayOrder: number }, "id" | "displayOrder" | "name" | "type">[],
 ) => {
-  if (profile.costs.length) {
-    return profile.costs.map(x => ({
-      id: x.id,
-      value: x.value ?? 0,
-      description: x.description ?? "",
-      costCategory: x.costCategory,
-      costCategoryId: x.costCategoryId,
-    }));
-  } else {
-    return costCategories
-      .sort((a, b) => (a.displayOrder < b.displayOrder ? 1 : -1))
-      .map(x => ({
+  return costCategories
+    .filter(x => x.type !== CostCategoryType.Other_Funding && x.type !== CostCategoryType.Other_Public_Sector_Funding)
+    .sort((a, b) => (a.displayOrder > b.displayOrder ? 1 : -1))
+    .map(x => {
+      const matchingProfile = profile.costs.find(cost => cost.costCategoryId === x.id);
+      if (matchingProfile) {
+        return {
+          id: matchingProfile.id,
+          value: matchingProfile.value ?? 0,
+          description: matchingProfile.description ?? "",
+          costCategory: matchingProfile.costCategory,
+          costCategoryId: matchingProfile.costCategoryId,
+        };
+      }
+
+      return {
         id: "" as PcrId,
         value: 0,
         costCategoryId: x.id,
         description: x.name ?? "",
         costCategory: x.type,
-      }));
-  }
+      };
+    });
 };
 
 export const AcademicCostsStep = () => {

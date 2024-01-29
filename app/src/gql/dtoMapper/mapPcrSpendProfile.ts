@@ -184,7 +184,7 @@ export class SpendProfile {
         .flatMap(x =>
           this.mapFunds(
             x,
-            spendProfiles.filter(s => s.costCategoryId === x.id),
+            spendProfiles.filter(s => s.costCategoryId === x.id && s.dateOtherFundingSecured),
           ),
         ),
     };
