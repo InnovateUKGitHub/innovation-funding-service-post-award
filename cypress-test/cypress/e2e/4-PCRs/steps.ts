@@ -332,6 +332,13 @@ export const typeASearchResults = () => {
   cy.get(`input[type="radio"]`).click();
 };
 
+export const swindonUniResults = () => {
+  cy.get("#searchJesOrganisations").clear().type("University").wait(500);
+  cy.get("h2").contains("Je-S search results");
+  cy.getByLabel("University of Bristol");
+  cy.getByLabel("Swindon University").click();
+};
+
 export const companyHouseAutofillAssert = () => {
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);

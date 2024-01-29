@@ -92,6 +92,13 @@ export const collaboratorAndBusiness = () => {
   cy.clickOn("Save and return to summary");
 };
 
+export const leadAndResearch = () => {
+  ["Project Lead", "Research"].forEach(radio => {
+    cy.getByLabel(radio).click();
+  });
+  cy.clickOn("Save and return to summary");
+};
+
 export const summaryWithSubs = () => {
   cy.heading("Add a partner");
   ["Organisation", "Contacts", "Funding", "Agreement"].forEach(subheading => {
@@ -142,6 +149,41 @@ export const saveAndReturnPromptingValidation = () => {
   });
 };
 
+export const saveJeSReturnPromptingValidation = () => {
+  cy.getByLabel("I agree with this change.").click();
+  cy.clickOn("Save and return to request");
+  [
+    "Enter an organisation name.",
+    "Enter a finance contact name.",
+    "Enter a finance contact surname.",
+    "Enter a finance contact phone number.",
+    "Enter a finance contact email address.",
+    "Enter a project manager name.",
+    "Enter a project manager surname.",
+    "Enter a project manager phone number.",
+    "Enter a project manager email address.",
+    "Select a project location.",
+    "Enter a project city.",
+    "Enter a funding level.",
+    "Enter the TSB reference",
+  ].forEach(valMsg => {
+    cy.validationLink(valMsg);
+  });
+  [
+    "Organisation name",
+    "First name",
+    "Last name",
+    "Phone number",
+    "Email",
+    "Project location",
+    "Name of town or city",
+    "Funding level",
+    "TSB reference",
+  ].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
+  });
+};
+
 export const validateWithoutOrganisation = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
@@ -162,6 +204,79 @@ export const validateWithoutOrganisation = () => {
   });
   ["Enter an organisation name.", "Enter a registered address.", "Enter a registration number."].forEach(completed => {
     cy.validationLink(completed).should("not.exist");
+  });
+};
+
+export const jeSValidationNoOrganisation = () => {
+  cy.getByLabel("I agree with this change.").click();
+  cy.clickOn("Save and return to request");
+  [
+    "Enter a finance contact name.",
+    "Enter a finance contact surname.",
+    "Enter a finance contact phone number.",
+    "Enter a finance contact email address.",
+    "Enter a project manager name.",
+    "Enter a project manager surname.",
+    "Enter a project manager phone number.",
+    "Enter a project manager email address.",
+    "Enter a funding level.",
+    "Enter the TSB reference",
+  ].forEach(valMsg => {
+    cy.validationLink(valMsg);
+  });
+  ["First name", "Last name", "Phone number", "Email", "Funding level", "TSB reference"].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
+  });
+};
+
+export const jeSValidationNoLocation = () => {
+  cy.getByLabel("I agree with this change.").click();
+  cy.clickOn("Save and return to request");
+  [
+    "Enter a finance contact name.",
+    "Enter a finance contact surname.",
+    "Enter a finance contact phone number.",
+    "Enter a finance contact email address.",
+    "Enter a project manager name.",
+    "Enter a project manager surname.",
+    "Enter a project manager phone number.",
+    "Enter a project manager email address.",
+    "Enter a funding level.",
+    "Enter the TSB reference",
+  ].forEach(valMsg => {
+    cy.validationLink(valMsg);
+  });
+  ["First name", "Last name", "Phone number", "Email", "Funding level", "TSB reference"].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
+  });
+};
+
+export const jeSValidationNoFCName = () => {
+  cy.getByLabel("I agree with this change.").click();
+  cy.clickOn("Save and return to request");
+  [
+    "Enter a project manager name.",
+    "Enter a project manager surname.",
+    "Enter a project manager phone number.",
+    "Enter a project manager email address.",
+    "Enter a funding level.",
+    "Enter the TSB reference",
+  ].forEach(valMsg => {
+    cy.validationLink(valMsg);
+  });
+  ["First name", "Last name", "Phone number", "Email", "Funding level", "TSB reference"].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
+  });
+};
+
+export const jeSValidationNoPMName = () => {
+  cy.getByLabel("I agree with this change.").click();
+  cy.clickOn("Save and return to request");
+  ["Enter a funding level.", "Enter the TSB reference"].forEach(valMsg => {
+    cy.validationLink(valMsg);
+  });
+  ["Funding level", "TSB reference"].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
   });
 };
 
@@ -198,11 +313,11 @@ export const validateWithoutSize = () => {
     cy.validationLink(valMsg);
   });
   [
-    "Enter an organisation name.",
-    "Enter a registered address.",
-    "Enter a registration number.",
-    "Select a participant size.",
-    "Enter the number of employees.",
+    "Enter an organisation name",
+    "Enter a registered address",
+    "Enter a registration number",
+    "Select a participant size",
+    "Enter the number of employees",
   ].forEach(completed => {
     cy.validationLink(completed).should("not.exist");
   });
@@ -451,6 +566,41 @@ export const displayCostCatTable = () => {
   });
 };
 
+export const completeAcademicCostCatTable = () => {
+  ["Category", "Cost (£)"].forEach(head => {
+    cy.tableHeader(head);
+  });
+  let baseNumber = 333.33;
+  cy.get("#tsb-reference").clear().type("1234567");
+  [
+    ["Directly incurred - Staff", baseNumber.toString()],
+    ["Directly incurred - Travel and subsistence", baseNumber.toString()],
+    ["Directly incurred - Equipment", baseNumber.toString()],
+    ["Directly incurred - Other costs", baseNumber.toString()],
+    ["Directly allocated - Investigations", baseNumber.toString()],
+    ["Directly allocated - Estates costs", baseNumber.toString()],
+    ["Directly allocated - Other costs", baseNumber.toString()],
+    ["Indirect costs - Investigations", baseNumber.toString()],
+    ["Exceptions - Staff", baseNumber.toString()],
+    ["Exceptions - Travel and subsistence", baseNumber.toString()],
+    ["Exceptions - Equipment", baseNumber.toString()],
+    ["Exceptions - Other costs", baseNumber.toString()],
+  ].forEach(([costCat, value], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(costCat);
+        cy.get("td:nth-child(2)").clear().type(value);
+      });
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("td:nth-child(1)").contains("Total costs (£)");
+      cy.get("td:nth-child(2)").contains(newCurrency.format(333.33 * 12));
+    });
+  });
+};
+
 export const completeLabourForm = () => {
   cy.get("a").contains("Add a cost").click();
   [
@@ -666,6 +816,34 @@ export const checkDetailsScreenComplete = () => {
   });
 };
 
+export const jeSDetailsScreenComplete = () => {
+  [
+    ["Project role", "Project Lead"],
+    ["Commercial or economic project outputs", "No"],
+    ["Organisation type", "Research"],
+    ["Eligibility of aid declaration", "Not applicable"],
+    ["Organisation name", "Swindon University"],
+    ["Size", "Academic"],
+    ["Project location", "Inside the United Kingdom"],
+    ["Name of town or city", "Swindon"],
+    ["Postcode", "SN5 1LT"],
+    ["First name", "Joseph"],
+    ["Last name", "Dredd"],
+    ["Phone number", "01234567890"],
+    ["Email", "j.dredd@mc1justice.law"],
+    ["je-S form", "Not applicable"],
+    ["TSB reference", "1234567"],
+    ["Project costs for new partner", "£3,996.96"],
+    ["Other sources of funding", "No"],
+    ["Funding level", "75.00%"],
+    ["Funding sought", "£2,999.97"],
+    ["Partner contribution to project", "£999.99"],
+    ["Partner agreement", "Not applicable"],
+  ].forEach(([section, data]) => {
+    cy.getListItemFromKey(section, data);
+  });
+};
+
 export const accessOtherPublicFunding = () => {
   cy.getListItemFromKey("Other sources of funding", "Edit").click();
   cy.get("h2").contains("Other public sector funding?");
@@ -721,9 +899,35 @@ export const completeOtherSourceLine = () => {
   cy.get("dt").contains("Project role");
 };
 
+export const jesCompleteOtherSourceLine = () => {
+  [
+    ["source of funding item 1", "Side project cash injection"],
+    ["month funding is secured for item 1", "02"],
+    ["year funding is secured for item 1", "2024"],
+    ["funding amount for item 0", "1000"],
+  ].forEach(([input, copy]) => {
+    cy.getByAriaLabel(input).clear().type(copy);
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(2)").contains("Total other funding");
+        cy.get("td:nth-child(3)").contains("£1,000.00");
+      });
+  });
+  cy.button("Remove");
+  cy.clickOn("Save and return to summary");
+  cy.get("dt").contains("Project role");
+};
+
 export const checkDetailsAgain = () => {
   cy.getListItemFromKey("Other sources of funding?", "Yes");
   cy.getListItemFromKey("Funding from other sources", "£10,000.00");
+};
+export const jeScheckDetailsAgain = () => {
+  cy.getListItemFromKey("Other sources of funding?", "Yes");
+  cy.getListItemFromKey("Funding from other sources", "£1,000.00");
 };
 
 export const accessPartnerAgreement = () => {
@@ -816,6 +1020,15 @@ export const deleteCoste2e = () => {
   cy.get("h2").contains("Labour");
   cy.getByQA("validation-message-content").contains("You have deleted a cost");
   cy.get("td").should("not.have.text", "Test");
+};
+
+export const jesDeleteCostCat = () => {
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(1)").contains("Directly incurred - Staff");
+      cy.get("input").clear();
+    });
 };
 
 export const addManyLines = () => {
