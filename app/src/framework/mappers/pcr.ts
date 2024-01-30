@@ -169,7 +169,9 @@ export const mapToPcrItemType = (developerName: string) => {
     case ProjectChangeRequest.changePeriodLength:
       return PCRItemType.PeriodLengthChange;
     case ProjectChangeRequest.approveNewSubcontractor:
-      return PCRItemType.ApproveNewSubcontractor;
+      return PCRItemType.ApproveNewSubcontrator;
+    case ProjectChangeRequest.uplift:
+      return PCRItemType.Uplift;
 
     // Request header
     case ProjectChangeRequest.requestHeader:
@@ -213,7 +215,10 @@ export const mapToPcrItemType = (developerName: string) => {
     case "loan duration change":
       return PCRItemType.LoanDrawdownExtension;
     case "approve a new subcontractor":
-      return PCRItemType.ApproveNewSubcontractor;
+      return PCRItemType.ApproveNewSubcontrator;
+    case "uplift":
+      return PCRItemType.Uplift;
+
     default:
       return PCRItemType.Unknown;
   }
