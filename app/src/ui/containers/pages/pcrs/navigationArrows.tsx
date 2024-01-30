@@ -1,4 +1,4 @@
-import { PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemType, disableSummaryItems } from "@framework/constants/pcrConstants";
 import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
 import { IRoutes } from "@ui/routing/routeConfig";
@@ -18,6 +18,7 @@ export interface Props {
 export const NavigationArrowsForPCRs = (props: Props) => {
   const { pcr, currentItem, isReviewing, editableItemTypes, routes } = props;
   const pcrItems = pcr.items.filter(x => editableItemTypes.indexOf(x.type) >= 0);
+  const disableSummary = pcr.items.some(x => disableSummaryItems.some(y => x.type === y));
 
   // if current item is null then you are looking at reasoning so you want a previous link to the last item ie current index is length
   const currentIndex = currentItem ? pcrItems.findIndex(x => x.id === currentItem.id) : pcrItems.length;
@@ -28,8 +29,20 @@ export const NavigationArrowsForPCRs = (props: Props) => {
 
   // if current item is null then you are looking at reasoning so you do not want a next link
   const next = isReviewing
-    ? getLinkForReviewingItem(routes, pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem)
-    : getLinkForViewingItem(routes, pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem);
+    ? getLinkForReviewingItem(
+        routes,
+        pcrItems[currentIndex + 1],
+        pcr.projectId,
+        pcr.id,
+        !!currentItem && !disableSummary,
+      )
+    : getLinkForViewingItem(
+        routes,
+        pcrItems[currentIndex + 1],
+        pcr.projectId,
+        pcr.id,
+        !!currentItem && !disableSummary,
+      );
 
   return <NavigationArrows previousLink={prev} nextLink={next} />;
 };

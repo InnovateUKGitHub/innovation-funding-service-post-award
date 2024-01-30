@@ -30,7 +30,7 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
   const pcrs = mapToPcrDtoArray(
     projectNode?.Project_Change_Requests__r?.edges ?? [],
     ["status", "started", "lastUpdated", "id", "projectId", "requestNumber"],
-    ["shortName"],
+    ["shortName", "type"],
     {},
   );
 

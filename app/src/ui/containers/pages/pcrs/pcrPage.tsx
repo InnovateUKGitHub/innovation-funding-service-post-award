@@ -7,7 +7,7 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
-import { usePcrItemName } from "./utils/getPcrItemName";
+import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
@@ -22,7 +22,7 @@ export const PcrPage = ({
   validationErrors?: RhfErrors;
 }) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
-  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrItemContent } = useGetPcrItemMetadata();
 
   useScrollToTopSmoothly([step]);
 

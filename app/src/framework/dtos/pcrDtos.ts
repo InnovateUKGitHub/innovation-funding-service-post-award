@@ -65,7 +65,8 @@ export type PCRItemDto =
   | PCRItemForProjectTerminationDto
   | PCRItemForScopeChangeDto
   | PCRItemForTimeExtensionDto
-  | PCRItemForApproveNewSubcontractorDto;
+  | PCRItemForApproveNewSubcontractorDto
+  | PCRItemForUpliftDto;
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
   grantMovingOverFinancialYear: number | null;
@@ -117,6 +118,11 @@ export interface PCRItemForPeriodLengthChangeDto extends PCRItemBaseDto {
 export interface PCRItemForLoanDrawdownChangeDto extends PCRItemBaseDto {
   type: PCRItemType.LoanDrawdownChange;
 }
+
+export interface PCRItemForUpliftDto extends PCRItemBaseDto {
+  type: PCRItemType.Uplift;
+}
+
 export interface PCRItemForLoanDrawdownExtensionDto extends PCRItemBaseDto {
   availabilityPeriod: number | null;
   availabilityPeriodChange: number | null;
@@ -261,6 +267,7 @@ export type FullPCRItemDto = {
   projectSummarySnapshot: string | null;
   publicDescription: string | null;
   publicDescriptionSnapshot: string | null;
+  reasoningComments: string | null;
   registeredAddress: string | null;
   registrationNumber: string | null;
   removalPeriod: number | null;

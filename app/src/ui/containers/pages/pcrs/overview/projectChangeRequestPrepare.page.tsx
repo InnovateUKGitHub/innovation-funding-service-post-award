@@ -22,7 +22,7 @@ import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrep
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { usePcrItemName } from "../utils/getPcrItemName";
+import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
@@ -35,7 +35,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
   const { project, pcr, pcrs, statusChanges, editableItemTypes, isMultipleParticipants, numberOfPartners } =
     usePCRPrepareQuery(props.projectId, props.pcrId);
 
-  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrItemContent } = useGetPcrItemMetadata();
 
   const pcrItems = pcr.items.map(x => ({
     shortName: getPcrItemContent(x.shortName).name,

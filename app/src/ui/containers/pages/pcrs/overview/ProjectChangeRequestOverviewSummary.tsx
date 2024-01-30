@@ -5,7 +5,7 @@ import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/l
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { usePcrItemName } from "../utils/getPcrItemName";
+import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 
 const ProjectChangeRequestOverviewSummary = ({
   pcr,
@@ -18,7 +18,7 @@ const ProjectChangeRequestOverviewSummary = ({
 }) => {
   const routes = useRoutes();
   const { getContent } = useContent();
-  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrItemContent } = useGetPcrItemMetadata();
 
   return (
     <Section title={getContent(x => x.pcrLabels.details)}>

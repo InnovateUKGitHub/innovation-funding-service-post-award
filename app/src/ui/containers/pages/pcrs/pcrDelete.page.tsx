@@ -13,7 +13,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { usePcrItemName } from "./utils/getPcrItemName";
+import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -22,7 +22,7 @@ export interface PCRDeleteParams {
 
 const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
   const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
-  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrItemContent } = useGetPcrItemMetadata();
 
   const { getContent } = useContent();
 
