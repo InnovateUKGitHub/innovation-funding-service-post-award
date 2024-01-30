@@ -73,7 +73,8 @@ export const enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
-  ApproveNewSubcontractor = 130,
+  ApproveNewSubcontrator = 130,
+  Uplift = 140,
 }
 
 export const enum PCRItemTypeName {
@@ -483,6 +484,16 @@ export interface IMetaValue {
   deprecated?: boolean;
   singleInstanceInAnyPcr?: boolean;
   singleInstanceInThisPcr?: boolean;
+
+  /**
+   * If this PCR Item exists, hide the Summary step in the entire PCR
+   */
+  disableSummary?: boolean;
+
+  /**
+   * Hide the "To do"/"Incomplete"/"Complete" status associated with a PCR Item
+   */
+  disableStatus?: boolean;
 }
 
 /**
@@ -502,6 +513,8 @@ export const pcrItemTypes: IMetaValue[] = [
     ignoredCompetitions: [],
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.PartnerWithdrawal,
@@ -511,6 +524,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.removePartnerMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.PartnerAddition,
@@ -522,6 +537,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.addPartnerMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.ScopeChange,
@@ -532,6 +549,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changeScopeMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.TimeExtension,
@@ -541,6 +560,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changeDurationMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.PeriodLengthChange,
@@ -558,6 +579,8 @@ export const pcrItemTypes: IMetaValue[] = [
     ],
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.AccountNameChange,
@@ -568,6 +591,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changePartnersNameMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.ProjectSuspension,
@@ -577,6 +602,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.putProjectOnHoldMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.ProjectTermination,
@@ -587,6 +614,8 @@ export const pcrItemTypes: IMetaValue[] = [
     deprecated: true,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.LoanDrawdownChange,
@@ -605,6 +634,8 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.loanDrawdownChangeMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.LoanDrawdownExtension,
@@ -618,11 +649,14 @@ export const pcrItemTypes: IMetaValue[] = [
       SalesforceCompetitionTypes.sbri,
       SalesforceCompetitionTypes.sbriIfs,
       SalesforceCompetitionTypes.horizonEurope,
+      SalesforceCompetitionTypes.combinedCapital,
     ],
     i18nName: x => x.pcrTypes.loanDrawdownExtension,
     i18nDescription: x => x.pages.pcrModifyOptions.loanDrawdownExtensionMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
+    disableSummary: false,
+    disableStatus: false,
   },
   {
     type: PCRItemType.ApproveNewSubcontractor,
@@ -632,6 +666,27 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.approveNewSubcontractorMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
+    disableSummary: false,
+    disableStatus: false,
+  },
+  {
+    type: PCRItemType.Uplift,
+    typeName: "Uplift",
+    i18nName: x => x.pcrTypes.uplift,
+    ignoredCompetitions: [
+      SalesforceCompetitionTypes.crnd,
+      SalesforceCompetitionTypes.contracts,
+      SalesforceCompetitionTypes.ktp,
+      SalesforceCompetitionTypes.catapults,
+      SalesforceCompetitionTypes.edge,
+      SalesforceCompetitionTypes.sbri,
+      SalesforceCompetitionTypes.sbriIfs,
+      SalesforceCompetitionTypes.horizonEurope,
+      SalesforceCompetitionTypes.loans,
+      SalesforceCompetitionTypes.combinedCapital,
+    ],
+    disableSummary: true,
+    disableStatus: true,
   },
 ];
 
@@ -649,3 +704,5 @@ export const pcrItems = [
   PCRItemType.LoanDrawdownExtension,
   PCRItemType.ApproveNewSubcontractor,
 ] as const;
+
+export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);

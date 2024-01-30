@@ -24,6 +24,7 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 import { accountNameChangeWorkflow } from "./renamePartner/renamePartnerWorkflow";
 import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
 import { approveNewSubcontractorWorkflow } from "./approveNewSubcontractor/approveNewSubcontractorWorkflow";
+import { upliftWorkflow } from "./uplift/upliftWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -96,6 +97,8 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> ex
         return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.ApproveNewSubcontractor:
         return new PcrWorkflow(approveNewSubcontractorWorkflow, step);
+      case PCRItemType.Uplift:
+        return new PcrWorkflow(upliftWorkflow, step);
       default:
         return null;
     }
