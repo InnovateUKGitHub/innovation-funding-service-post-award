@@ -5,7 +5,7 @@ import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { usePcrItemName } from "../utils/getPcrItemName";
+import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 
 export type GetItemTaskProps = {
@@ -38,15 +38,17 @@ const GetItemTasks = ({ editor, rhfErrors, index, item, projectId, pcrId, mode }
   const routes = useRoutes();
   const validationErrors = editor?.validator.items.results[index].errors;
   const workflow = PcrWorkflow.getWorkflow(item, 1);
-  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
+
+  const itemMetadata = getPcrItemMetadata(item.type);
 
   const rhfError = rhfErrors?.items?.[index];
 
   return (
     <Task
       id={`items_${index}`}
-      name={getPcrItemContent(item.typeName, item).label}
-      status={getPcrItemTaskStatus(item.status)}
+      name={getPcrItemContent(item.type, item).label}
+      status={itemMetadata?.disableStatus ? undefined : getPcrItemTaskStatus(item.status)}
       route={(mode === "prepare" ? routes.pcrPrepareItem : routes.pcrViewItem).getLink({
         projectId: projectId,
         pcrId: pcrId,

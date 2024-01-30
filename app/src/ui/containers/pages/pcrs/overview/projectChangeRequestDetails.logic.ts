@@ -5,7 +5,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPcrStatusDtoArray } from "@gql/dtoMapper/mapPcrStatus";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { PCRItemType } from "@framework/constants/pcrConstants";
+import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 
 export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestDetailsQuery>(
@@ -47,9 +47,8 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
     ["id", "pcrId", "createdBy", "createdDate", "newStatus", "previousStatus", "newStatusLabel", "comments"],
     { roles: project.roles },
   );
-  const nonEditableTypes: PCRItemType[] = [PCRItemType.ProjectTermination];
 
-  const editableItemTypes = pcr.items.map(x => x.type).filter(x => !nonEditableTypes.includes(x));
+  const editableItemTypes = getEditableItemTypes(pcr);
 
   return { project, pcr, editableItemTypes, statusChanges };
 };
