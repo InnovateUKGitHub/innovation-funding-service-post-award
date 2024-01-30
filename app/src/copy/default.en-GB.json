@@ -852,6 +852,8 @@
       "currentProjectEndDate": "Current project end date"
     },
     "pcrAddPartnerRoleAndOrganisation": {
+      "lead": "Project Lead",
+      "collaborator": "Collaborator",
       "formSectionTitle": "New partner information",
       "validationMessage": "You cannot change this information after you continue.",
       "alreadyCompletedMessage": "The information here can no longer be changed. If there is a mistake, you should delete the request and start again.",

@@ -22,6 +22,7 @@ import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { useMemo } from "react";
+import { useContent } from "@ui/hooks/content.hook";
 
 export const AddPartnerSummary = () => {
   const { projectId, itemId, fetchKey, mode, displayCompleteForm } = usePcrWorkflowContext();
@@ -48,6 +49,13 @@ export const AddPartnerSummary = () => {
     ),
   });
 
+  const { getContent } = useContent();
+
+  const projectRoleLabel =
+    pcrItem.projectRoleLabel === "Lead"
+      ? getContent(x => x.pages.pcrAddPartnerRoleAndOrganisation.lead)
+      : pcrItem.projectRoleLabel;
+
   const validationErrors = useRhfErrors(formState.errors);
 
   // Used to determine items displayed for industrial org vs academic org
@@ -70,7 +78,7 @@ export const AddPartnerSummary = () => {
         <SummaryList qa="add-partner-summary-list-organisation">
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.roleHeading}
-            content={pcrItem.projectRoleLabel}
+            content={projectRoleLabel}
             hasError={!!validationErrors?.projectRole}
             qa="projectRole"
           />
