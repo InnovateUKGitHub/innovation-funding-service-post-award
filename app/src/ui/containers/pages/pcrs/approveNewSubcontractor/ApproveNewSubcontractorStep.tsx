@@ -95,6 +95,8 @@ const ApproveNewSubcontractorStep = () => {
                 inputWidth="one-half"
               />
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorRegistrationNumber").error}>
               <Label htmlFor="subcontractorRegistrationNumber">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorRegistrationNumber)}
@@ -110,6 +112,8 @@ const ApproveNewSubcontractorStep = () => {
                 inputWidth="one-third"
               />
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorRelationship").error}>
               <Label htmlFor="subcontractorRelationship">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorRelationship)}
@@ -156,6 +160,8 @@ const ApproveNewSubcontractorStep = () => {
                 />
               </RadioList>
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorLocation").error}>
               <Label htmlFor="subcontractorLocation">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorLocation)}
@@ -169,6 +175,8 @@ const ApproveNewSubcontractorStep = () => {
                 {...register("subcontractorLocation")}
               />
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorDescription").error}>
               <Label htmlFor="subcontractorDescription">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorDescription)}
@@ -183,6 +191,8 @@ const ApproveNewSubcontractorStep = () => {
                 {...register("subcontractorDescription")}
               />
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorCost").error}>
               <Label htmlFor="subcontractorCost">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorCost)}
@@ -198,6 +208,8 @@ const ApproveNewSubcontractorStep = () => {
                 {...register("subcontractorCost")}
               />
             </FormGroup>
+          </Fieldset>
+          <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorJustification").error}>
               <Label htmlFor="subcontractorJustification">
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorJustification)}
