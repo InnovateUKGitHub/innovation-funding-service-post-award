@@ -129,6 +129,7 @@ export type PcrItemDtoMapping = Pick<
   | "subcontractorDescription"
   | "subcontractorJustification"
   | "subcontractorCost"
+  | "reasoningComments"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -228,6 +229,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   publicDescriptionSnapshot(node) {
     return node?.Acc_PublicDescriptionSnapshot__c?.value ?? "";
+  },
+  reasoningComments(node) {
+    return node?.Acc_Reasoning__c?.value ?? null;
   },
   removalPeriod(node) {
     return node?.Acc_RemovalPeriod__c?.value ?? null;

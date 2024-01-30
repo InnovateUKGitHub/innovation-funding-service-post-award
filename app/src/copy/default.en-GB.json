@@ -1394,7 +1394,8 @@
     "timeExtension": "Change project duration",
     "loanDrawdownChange": "Loan Drawdown Change",
     "loanDrawdownExtension": "Change Loans Duration",
-    "approveNewSubcontractor": "Approve a new subcontractor"
+    "approveNewSubcontractor": "Approve a new subcontractor",
+    "uplift": "Uplift"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
@@ -1472,6 +1473,8 @@
     "requestStarted": "Request started",
     "requestLastUpdated": "Request last updated",
     "requestStatus": "Request status",
+    "type_one": "Type",
+    "type_other": "Types",
     "types": "Types",
     "started": "Started",
     "status": "Status",
