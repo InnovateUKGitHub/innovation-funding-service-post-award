@@ -61,7 +61,7 @@ let newCurrency = new Intl.NumberFormat("en-GB", {
   currency: "GBP",
 });
 
-describe("PCR >  Add a partner > E2E", () => {
+describe("PCR >  Add a partner > E2E: Je-S", () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
@@ -289,7 +289,7 @@ describe("PCR >  Add a partner > E2E", () => {
 
   it("Should let you click 'Add a partner' and continue to the next screen", addPartnerContinue);
 
-  it("Should validate the details entered on the Details screen", jeSDetailsScreenComplete);
+  it("Should show the details entered are displayed on the summary screen", jeSDetailsScreenComplete);
 
   /**
    * Other sources of funding section

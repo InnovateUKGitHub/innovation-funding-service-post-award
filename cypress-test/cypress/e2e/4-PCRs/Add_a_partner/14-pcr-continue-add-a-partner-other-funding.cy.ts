@@ -31,9 +31,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     pcrTidyUp("Add a partner");
   });
 
-  after(() => {
-    cy.deletePcr("328407");
-  });
+  // after(() => {
+  //   cy.deletePcr("328407");
+  // });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
@@ -115,7 +115,8 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should now re-access Other sources of funding and delete all line items", deleteOtherFundingLines);
 
   it("Should access other sources of funding again", () => {
-    cy.getListItemFromKey("Other sources of funding?", "Edit").click();
+    cy.getListItemFromKey("Funding from other sources", "Edit").click();
+    cy.get("h2").contains("Other public sector funding?");
     cy.button("Save and continue").click();
   });
 
@@ -174,8 +175,8 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
       ["Other sources of funding?", "Yes"],
       ["Funding from other sources", "£0.00"],
       ["Funding level", "5.00%"],
-      ["Funding sought", "£2,400.00"],
-      ["Partner contribution to project", "£45,600.00"],
+      ["Funding sought", "£2,500.00"],
+      ["Partner contribution to project", "£47,500.00"],
     ].forEach(([key, item]) => {
       cy.getListItemFromKey(key, item);
     });

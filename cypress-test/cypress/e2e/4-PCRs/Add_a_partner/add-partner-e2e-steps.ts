@@ -831,9 +831,9 @@ export const jeSDetailsScreenComplete = () => {
     ["Last name", "Dredd"],
     ["Phone number", "01234567890"],
     ["Email", "j.dredd@mc1justice.law"],
-    ["je-S form", "Not applicable"],
+    ["Je-S form", "Not applicable"],
     ["TSB reference", "1234567"],
-    ["Project costs for new partner", "£3,996.96"],
+    ["Project costs for new partner", "£3,999.96"],
     ["Other sources of funding", "No"],
     ["Funding level", "75.00%"],
     ["Funding sought", "£2,999.97"],
@@ -1027,7 +1027,7 @@ export const jesDeleteCostCat = () => {
     .eq(1)
     .within(() => {
       cy.get("td:nth-child(1)").contains("Directly incurred - Staff");
-      cy.get("input").clear();
+      cy.get("input").clear().type("0");
     });
 };
 
