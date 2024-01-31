@@ -2104,7 +2104,8 @@
             "value": {
               "aria_label": "value of academic cost item {{costCategory}}",
               "errors": {
-                "invalid_type": "Value must be a number."
+                "invalid_type": "Value must be a number.",
+                "invalid_string": { "regex": "Value must be 2 decimal places or fewer" }
               }
             }
           }

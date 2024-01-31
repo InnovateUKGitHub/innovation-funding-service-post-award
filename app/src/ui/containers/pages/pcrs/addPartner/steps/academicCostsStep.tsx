@@ -49,7 +49,7 @@ const getInitialCosts = (
       if (matchingProfile) {
         return {
           id: matchingProfile.id,
-          value: matchingProfile.value ?? 0,
+          value: String(matchingProfile.value ?? 0),
           description: matchingProfile.description ?? "",
           costCategory: matchingProfile.costCategory,
           costCategoryId: matchingProfile.costCategoryId,
@@ -58,7 +58,7 @@ const getInitialCosts = (
 
       return {
         id: "" as PcrId,
-        value: 0,
+        value: "0",
         costCategoryId: x.id,
         description: x.name ?? "",
         costCategory: x.type,
@@ -89,6 +89,8 @@ export const AcademicCostsStep = () => {
     }),
   });
 
+  console.log("formState error", formState.errors);
+
   const validationErrors = useRhfErrors(formState.errors) as AcademicCostsRhfError;
   useFormValidate(trigger);
 
@@ -111,7 +113,7 @@ export const AcademicCostsStep = () => {
                 type: pcrItem.type,
                 spendProfile: {
                   ...spendProfile,
-                  costs: data.costs as PcrSpendProfileDto["costs"],
+                  costs: data.costs.map(x => ({ ...x, value: Number(x.value) })) as PcrSpendProfileDto["costs"],
                 },
               },
               context: link(data),
