@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aff541097af6a93519c6981029df80d0>>
+ * @generated SignedSource<<7e3e3d3906679ef3f7f084f3a42fdbba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -60,6 +60,9 @@ export type UpliftSummaryQuery$data = {
                 readonly Title: {
                   readonly value: string | null | undefined;
                 } | null | undefined;
+              } | null | undefined;
+              readonly LinkedEntityId: {
+                readonly value: string | null | undefined;
               } | null | undefined;
               readonly isFeedAttachment: boolean;
               readonly isOwner: boolean;
@@ -353,6 +356,16 @@ v4 = [
                           {
                             "alias": null,
                             "args": null,
+                            "concreteType": "IDValue",
+                            "kind": "LinkedField",
+                            "name": "LinkedEntityId",
+                            "plural": false,
+                            "selections": (v2/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "ContentDocument",
                             "kind": "LinkedField",
                             "name": "ContentDocument",
@@ -502,16 +515,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "abd73885d427c3329647027a6880a837",
+    "cacheID": "b4142746815853f2df69e77638a75068",
     "id": null,
     "metadata": {},
     "name": "UpliftSummaryQuery",
     "operationKind": "query",
-    "text": "query UpliftSummaryQuery(\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Child: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n        Documents: ContentDocumentLink(where: {LinkedEntityId: {in: [$pcrId, $pcrItemId]}}, first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n          edges {\n            node {\n              isFeedAttachment\n              isOwner\n              ContentDocument {\n                Id\n                LastModifiedBy {\n                  ContactId {\n                    value\n                  }\n                }\n                Description {\n                  value\n                }\n                CreatedDate {\n                  value\n                }\n                LatestPublishedVersionId {\n                  value\n                }\n                FileExtension {\n                  value\n                }\n                Title {\n                  value\n                }\n                ContentSize {\n                  value\n                }\n                CreatedBy {\n                  Name {\n                    value\n                  }\n                  Id\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query UpliftSummaryQuery(\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Child: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n        Documents: ContentDocumentLink(where: {LinkedEntityId: {in: [$pcrId, $pcrItemId]}}, first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n          edges {\n            node {\n              isFeedAttachment\n              isOwner\n              LinkedEntityId {\n                value\n              }\n              ContentDocument {\n                Id\n                LastModifiedBy {\n                  ContactId {\n                    value\n                  }\n                }\n                Description {\n                  value\n                }\n                CreatedDate {\n                  value\n                }\n                LatestPublishedVersionId {\n                  value\n                }\n                FileExtension {\n                  value\n                }\n                Title {\n                  value\n                }\n                ContentSize {\n                  value\n                }\n                CreatedBy {\n                  Name {\n                    value\n                  }\n                  Id\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b8e0badbaf5ac5a82500cd31d32006dc";
+(node as any).hash = "86422abb2df8a06602de65ce47f63496";
 
 export default node;
