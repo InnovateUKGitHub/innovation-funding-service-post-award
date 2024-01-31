@@ -83,6 +83,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
       virements: virementData.virements.map(x => ({
         partnerId: x.partnerId,
         newRemainingGrant: String(x.newRemainingGrant ?? 0),
+        newRemainingCosts: x.newRemainingCosts,
       })),
       originalRemainingGrant: virementData.originalRemainingGrant,
       newRemainingGrant: virementData.newRemainingGrant,
@@ -184,6 +185,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
                     <Currency value={x.newRemainingCosts} />
                   </TD>
                   <TD numeric>
+                    <ValidationError error={getFieldState(`virements.${i}.newRemainingGrant`).error} />
                     <NumberInput
                       inputWidth={10}
                       aria-label={`${x.name} new remaining grant`}

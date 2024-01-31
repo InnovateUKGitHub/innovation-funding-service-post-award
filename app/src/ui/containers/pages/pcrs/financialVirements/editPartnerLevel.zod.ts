@@ -7,11 +7,23 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "editPartnerLevel"] 
 export const editPartnerLevelSchema = z
   .object({
     virements: z.array(
-      z.object({
-        newRemainingGrant: zeroOrGreaterCurrencyValidation,
-        newRemainingCosts: z.number(),
-        partnerId: partnerIdValidation,
-      }),
+      z
+        .object({
+          newRemainingGrant: zeroOrGreaterCurrencyValidation,
+          newRemainingCosts: z.number(),
+          partnerId: partnerIdValidation,
+        })
+        .superRefine((data, ctx) => {
+          if (Number(data.newRemainingGrant.replace("£", "")) > data.newRemainingCosts) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.too_big,
+              type: "number",
+              inclusive: true,
+              maximum: data.newRemainingCosts,
+              path: ["newRemainingGrant"],
+            });
+          }
+        }),
     ),
     originalRemainingGrant: z.number(),
     newRemainingGrant: z.number(),
