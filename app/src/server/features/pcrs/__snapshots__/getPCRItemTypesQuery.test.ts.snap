@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with CATAPULTS 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+  130,
+]
+`;
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with CONTRACTS 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+  130,
+]
+`;
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with CR&D 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+  130,
+]
+`;
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with KTP 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+]
+`;
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with SBRI 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+  130,
+]
+`;
+
+exports[`GetPCRItemTypesQuery with competition types with common competition types with SBRI IFS 1`] = `
+[
+  60,
+  30,
+  20,
+  80,
+  90,
+  10,
+  40,
+  50,
+  130,
+]
+`;
