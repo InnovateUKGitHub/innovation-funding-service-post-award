@@ -11,6 +11,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { CuratedSection, CuratedSections, FilterOptions, Partner, Project, Section } from "./Dashboard.interface";
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
+import { IClientConfig } from "src/types/IClientConfig";
 
 /**
  * filter function for a reducer.
@@ -230,13 +231,18 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
   }
 }
 
-const getFilteredProjects = (filteredProjects: Project[], searchQuery?: string | null): Project[] => {
-  return searchQuery
-    ? fuzzySearch(searchQuery.trim(), filteredProjects, ["title", "projectNumber", "leadPartnerName"]).map(x => x.item)
-    : filteredProjects;
+const getFilteredProjects = (
+  filteredProjects: Project[],
+  searchQuery?: string | number | undefined | null,
+): Project[] => {
+  if (searchQuery === null || typeof searchQuery === "undefined" || searchQuery === "") return filteredProjects;
+
+  return fuzzySearch(String(searchQuery).trim(), filteredProjects, ["title", "projectNumber", "leadPartnerName"]).map(
+    x => x.item,
+  );
 };
 
-export const useProjectsDashboardData = (search: string | number) => {
+export const useProjectsDashboardData = (search: string | number | undefined, config: IClientConfig) => {
   const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(projectDashboardQuery, {});
   const projectsGql = data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? [];
   const unfilteredObjects = projectsGql.map(x => ({
@@ -280,7 +286,9 @@ export const useProjectsDashboardData = (search: string | number) => {
       {},
     ),
   }));
-  const projects = getFilteredProjects(unfilteredObjects, search.toString());
+
+  const displaySearch = (unfilteredObjects?.length ?? 0) >= config.options.numberOfProjectsToSearch;
+  const projects = getFilteredProjects(unfilteredObjects, displaySearch ? search : null);
 
   const broadcasts = mapToBroadcastDtoArray(data?.salesforce?.uiapi?.query?.Acc_BroadcastMessage__c?.edges ?? [], [
     "id",
@@ -294,5 +302,5 @@ export const useProjectsDashboardData = (search: string | number) => {
       unfilteredObjects.some(y => y.competitionType === x.competitionType),
   );
 
-  return { unfilteredObjects, totalNumberOfProjects: unfilteredObjects?.length ?? 0, projects, broadcasts };
+  return { unfilteredObjects, displaySearch, projects, broadcasts };
 };

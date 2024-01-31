@@ -18,6 +18,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
+import { useRoutes } from "@ui/redux/routesProvider";
 
 interface ProjectDashboardParams {
   search?: string | number;
@@ -34,13 +35,12 @@ const Form = createTypedForm<IProjectDashboardForm>();
 const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: ProjectDashboardParams & BaseProps) => {
   const navigate = useNavigate();
   const { getContent } = useContent();
+  const routes = useRoutes();
 
-  const { projects, unfilteredObjects, totalNumberOfProjects, broadcasts } = useProjectsDashboardData(
-    searchQuery ?? "",
-  );
+  const { projects, unfilteredObjects, displaySearch, broadcasts } = useProjectsDashboardData(searchQuery, config);
 
   const onSearch = (searchParams: { search?: string | number; arrayFilters: FilterOptions[] }) => {
-    const routeInfo = ProjectDashboardRoute.getLink(searchParams);
+    const routeInfo = routes.projectDashboard.getLink(searchParams);
     return navigate(routeInfo.path, { replace: true });
   };
 
@@ -63,7 +63,6 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
     isFiltering: !!search || !!arrayFilters.length,
   };
 
-  const displaySearch: boolean = totalNumberOfProjects >= config.options.numberOfProjectsToSearch;
   const options: SelectOption[] = filterOptions.map(x => ({ id: x.id, value: x.label }));
 
   return (
