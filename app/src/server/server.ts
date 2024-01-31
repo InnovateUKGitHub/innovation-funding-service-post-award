@@ -1,5 +1,3 @@
-import fs from "fs";
-import https from "https";
 import express from "express";
 import crypto from "crypto";
 
@@ -22,12 +20,12 @@ export class Server {
   private readonly app: express.Express;
   private readonly logger: Logger;
 
-  constructor(private readonly port: number, private readonly isDevelopment: boolean) {
+  constructor(private readonly isDevelopment: boolean) {
     this.app = express();
     this.logger = new Logger("Webserver");
   }
 
-  public async start(serveHttps: boolean) {
+  public async start() {
     this.app.enable("trust proxy");
 
     if (this.isDevelopment) {
@@ -46,14 +44,9 @@ export class Server {
       throw error;
     }
 
-    if (serveHttps) {
-      this.startHTTPS();
-    } else {
-      this.app.listen(this.port);
-    }
-
+    this.app.listen(configuration.webserver.port);
     this.logger.info("Configuration", configuration);
-    this.logger.info(`Webserver is now available at ${process.env.SERVER_URL}`);
+    this.logger.info(`Webserver is now available at ${configuration.webserver.url}`);
 
     setTimeout(() => this.primeCaches());
 
@@ -64,16 +57,6 @@ export class Server {
         setInterval(() => this.initialiseCustomContent(true), configuration.timeouts.contentRefreshSeconds * 1000);
       }
     }
-  }
-
-  private startHTTPS(): void {
-    const privateKey = fs.readFileSync("security/AccLocalDevKey.key", "utf8");
-    const certificate = fs.readFileSync("security/AccLocalDevCert.crt", "utf8");
-
-    const credentials = { key: privateKey, cert: certificate };
-    const httpsServer = https.createServer(credentials, this.app);
-
-    httpsServer.listen(this.port);
   }
 
   private middleware(): void {

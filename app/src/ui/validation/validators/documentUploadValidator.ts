@@ -5,7 +5,7 @@ import { ImpactManagementParticipation } from "@framework/constants/competitionT
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFileWrapper } from "@framework/types/fileWapper";
-import { IAppOptions } from "@framework/types/IAppOptions";
+import { IAppOptions, IAppPermittedTypes } from "@framework/types/IAppOptions";
 import { getFileSize, getFileExtension, getFileName } from "@framework/util/files";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
@@ -75,7 +75,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
           fileTooBigErrorMessage(this, model?.file, config.maxFileSize),
         ),
       () => Validation.isFalse(this, model?.file?.size === 0, fileEmptyErrorMessage(this, model?.file)),
-      () => validateFileExtension(this, model.file, config.permittedFileTypes),
+      () => validateFileExtension(this, model.file, config.permittedTypes),
     );
     this.description = model.description
       ? Validation.permittedValues(
@@ -213,7 +213,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
   // TODO: when this branch is merged with the odg branch, we should take in one config options instead of maxFileSize/permittedFileTypes
   constructor(
     file: IFileWrapper,
-    { maxFileSize, maxFileBasenameLength, permittedFileTypes }: IAppOptions,
+    { maxFileSize, maxFileBasenameLength, permittedTypes }: IAppOptions,
     showValidationErrors: boolean,
   ) {
     // file is deliberately not a private field so it isn't logged....
@@ -233,7 +233,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
       () => validateFileName(this, file, maxFileBasenameLength),
       () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(this, file, maxFileSize)),
       () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(this, file)),
-      () => validateFileExtension(this, file, permittedFileTypes),
+      () => validateFileExtension(this, file, permittedTypes),
     );
   }
 
@@ -245,7 +245,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
 function validateFileExtension<T extends Results<ResultBase>>(
   results: T,
   file: IFileWrapper | null,
-  permittedFileTypes: Readonly<string[]>,
+  permittedFileTypes: IAppPermittedTypes,
 ): Result {
   const fileName = file ? file.fileName : "";
   const extension = getFileExtension(fileName);
@@ -260,7 +260,7 @@ function validateFileExtension<T extends Results<ResultBase>>(
   return Validation.permittedValues(
     results,
     getFileExtension(fileName),
-    permittedFileTypes,
+    Object.values(permittedFileTypes).flat(),
     permittedFileTypeErrorMessage(results, file),
   );
 }

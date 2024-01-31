@@ -29,8 +29,8 @@ export type ShibbolethPayload = expectedUrnResponse & {
 
 const baseShibbolethConfig: SamlConfig = {
   entryPoint: configuration.sso.providerUrl,
-  issuer: configuration.serverUrl,
-  callbackUrl: configuration.serverUrl + successfulValidationRoute,
+  issuer: configuration.webserver.url,
+  callbackUrl: configuration.webserver.url + successfulValidationRoute,
 };
 
 // the info we're asking for

@@ -53,7 +53,8 @@ import { ProjectContactsRepository } from "@server/repositories/projectContactsR
 import { ProjectRepository } from "@server/repositories/projectsRepository";
 import { RecordTypeRepository } from "@server/repositories/recordTypeRepository";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "./commandBase";
-import { configuration, IConfig } from "./config";
+import { configuration } from "./config";
+import { IConfig } from "@framework/types/IConfig";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { Timer } from "./timer";
 import { Option } from "@framework/dtos/option";

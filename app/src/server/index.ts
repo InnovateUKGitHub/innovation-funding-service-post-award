@@ -7,10 +7,10 @@ import { Command } from "commander";
 
 import { Server } from "./server";
 import { healthCheck } from "./healthCheck";
-import { isLocalDevelopment } from "@shared/isEnv";
+import { configuration } from "./features/common/config";
 
 // Set up New Relic to monitor app when deployed
-if (process.env.NEW_RELIC_ENABLED === "true") {
+if (configuration.newRelic.enabled) {
   require("newrelic");
   setInterval(healthCheck, 60000);
 }
@@ -22,20 +22,12 @@ interface CustomProcessArgs {
 }
 
 const program = new Command();
-program.option("--secure", "Run in HTTPS mode");
 program.option("--dev", "Enable development endpoints for use in esbuild", false);
 program.parse(process.argv);
 
-const { secure, dev } = program as CustomProcessArgs;
+const { dev } = program as CustomProcessArgs;
 
-const port = parseInt(process.env.PORT ?? "8080", 10);
-const development = dev || isLocalDevelopment;
-
-if (secure && process.env.SERVER_URL) {
-  process.env.SERVER_URL = process.env.SERVER_URL.replace("http://", "https://");
-}
-
-const server = new Server(port, development);
+const server = new Server(dev ?? false);
 
 // Use HTTPS if --secure flag set
-server.start(!!secure);
+server.start();

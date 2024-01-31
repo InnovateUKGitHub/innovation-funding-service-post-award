@@ -2,7 +2,7 @@ import { PCRItemType, PCRItemDisabledReason, pcrItemTypes, IMetaValue } from "@f
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
-import { IConfig } from "../common/config";
+import { IConfig } from "@framework/types/IConfig";
 import { QueryBase } from "../common/queryBase";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";

@@ -83,7 +83,7 @@ describe("Document upload validator", () => {
 
     describe("test file extension", () => {
       describe("with allowed file", () => {
-        test.each(configuration.options.permittedFileTypes)("with %s", fileType => {
+        test.each(Object.values(configuration.options.permittedTypes).flat())("with %s", fileType => {
           const validator = new FileDtoValidator(createFile(fileType), configuration.options, false);
           expect(validator.errors).toHaveLength(0);
         });

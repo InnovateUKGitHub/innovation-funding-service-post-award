@@ -140,14 +140,14 @@ describe("UploadProjectDocumentCommand", () => {
     const project = context.testData.createProject();
 
     const file = context.testData.createFile();
-    file.fileName = "text.txt";
+    file.fileName = "text.jpeg";
 
     const command = new UploadProjectDocumentCommand(project.Id, { files: [file] });
 
-    context.config.options.permittedFileTypes = ["nottxt"];
+    context.config.options.permittedTypes.imageTypes = ["gif"];
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
-    context.config.options.permittedFileTypes = ["txt"];
+    context.config.options.permittedTypes.imageTypes = ["jpeg"];
     await expect(context.runCommand(command)).resolves.not.toBeNull();
   });
 

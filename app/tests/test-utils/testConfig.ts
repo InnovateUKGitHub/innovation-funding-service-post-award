@@ -1,5 +1,5 @@
 import { AccEnvironment, LogLevel } from "@framework/constants/enums";
-import { IConfig } from "@server/features/common/config";
+import { IConfig } from "@framework/types/IConfig";
 
 export class TestConfig implements IConfig {
   public build = `test${Date.now()}`;
@@ -39,25 +39,6 @@ export class TestConfig implements IConfig {
     maxFileSize: 100000,
     maxUploadFileCount: 10,
     maxFileBasenameLength: 80,
-    permittedFileTypes: [
-      "pdf",
-      "xps",
-      "doc",
-      "docx",
-      "rdf",
-      "txt",
-      "csv",
-      "odt",
-      "ppt",
-      "pptx",
-      "odp",
-      "xls",
-      "xlsx",
-      "ods",
-      "jpg",
-      "jpeg",
-      "png",
-    ], // TODO: deprecated list
     permittedTypes: {
       pdfTypes: ["pdf", "xps"],
       textTypes: ["doc", "docx", "rtf", "txt", "csv", "odt"],
@@ -66,7 +47,6 @@ export class TestConfig implements IConfig {
       imageTypes: ["jpg", "jpeg", "png", "odg"],
     },
     bankCheckValidationRetries: 2,
-    bankCheckPersonalDetailsScorePass: 6,
     bankCheckAddressScorePass: 6,
     bankCheckCompanyNameScorePass: 6,
     numberOfProjectsToSearch: 3,
@@ -86,8 +66,6 @@ export class TestConfig implements IConfig {
     connectionUrl: "",
     serviceUsername: "",
   };
-
-  public serverUrl = "http://localhost:8080";
 
   public sso = {
     enabled: false,
@@ -110,7 +88,10 @@ export class TestConfig implements IConfig {
     ifsGrantLetterUrl: "",
   };
 
-  public cookieKey = "thekey";
+  public cookie = {
+    secret: "thekey",
+    secure: true,
+  };
 
   public googleTagManagerCode = "";
 
@@ -122,4 +103,20 @@ export class TestConfig implements IConfig {
   };
 
   public accEnvironment = AccEnvironment.BASE;
+
+  public newRelic = {
+    enabled: false,
+    apiKey: "",
+    eventsUrl: "",
+    appName: "",
+  };
+
+  public webserver = {
+    port: "8080",
+    url: "http://localhost:8080",
+  };
+
+  public developer = {
+    writeGraphQL: false,
+  };
 }

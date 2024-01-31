@@ -37,7 +37,7 @@ const initialCacheQueries: ICacheQuery[] = [
 ];
 
 export const fetchCaches = async ({ config, logger, runQuery }: IContext) => {
-  const isHTTPS = config.serverUrl.startsWith("https://");
+  const isHTTPS = config.webserver.url.startsWith("https://");
 
   // Note: We only cache on PROD (when live), otherwise we have a slower dev experience
   if (!isHTTPS) return;

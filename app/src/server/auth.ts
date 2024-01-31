@@ -11,7 +11,6 @@ import {
   ShibbolethPayload,
   shibbolethStrategy,
 } from "./shibboleth.config";
-import { isLocalDevelopment } from "@shared/isEnv";
 
 export const router = express.Router();
 
@@ -20,10 +19,10 @@ const logger = new Logger("Auth");
 const cookieName = "chocolate-chip";
 router.use(
   cookieSession({
-    secure: !isLocalDevelopment,
+    secure: configuration.cookie.secure,
     httpOnly: true,
     name: cookieName,
-    secret: configuration.cookieKey,
+    secret: configuration.cookie.secret,
     maxAge: 1000 * 60 * configuration.timeouts.cookie,
   }),
 );
@@ -42,7 +41,7 @@ router.get("/login", noCache, passport.authenticate("shibboleth"));
 router.get("/logout", noCache, (_req, res) => {
   res.cookie(cookieName, "", {
     expires: new Date("1970-01-01"),
-    secure: !isLocalDevelopment,
+    secure: configuration.cookie.secure,
     httpOnly: true,
   });
 
@@ -73,7 +72,7 @@ router.post(successfulValidationRoute, (req, res) =>
 
     // redirect to original location if it starts with a / otherwise use server root
     const redirect: string | undefined = req.session?.redirect;
-    const validatedRedirect = redirect?.startsWith("/") ? redirect : configuration.serverUrl;
+    const validatedRedirect = redirect?.startsWith("/") ? redirect : configuration.webserver.url;
 
     return res.redirect(validatedRedirect);
   })(req, res),

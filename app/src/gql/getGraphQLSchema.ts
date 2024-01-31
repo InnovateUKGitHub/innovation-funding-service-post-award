@@ -2,7 +2,6 @@ import { Transform } from "@graphql-tools/delegate";
 import { stitchSchemas } from "@graphql-tools/stitch";
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { Logger } from "@shared/developmentLogger";
-import { isLocalDevelopment } from "@shared/isEnv";
 import { writeFileSync } from "fs";
 import { GraphQLSchema, printSchema } from "graphql";
 import path from "path";
@@ -15,6 +14,7 @@ import { getTypeGraphQLSchema } from "./typegraphql/schema";
 import { usernameResolver } from "./resolvers/Acc_ProjectContactLink__c/username";
 import { isFeedAttachmentResolver } from "./resolvers/ContentDocument/isFeedAttachment";
 import { isOwnerResolver } from "./resolvers/ContentDocument/isOwner";
+import { configuration } from "@server/features/common/config";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
@@ -65,7 +65,7 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
   // See `typeDefs.gql` for extensions; extra resolvers used to resolve extensions.
   const schema = stitchSchemas(stitchConfig);
 
-  if (isLocalDevelopment) {
+  if (configuration.developer.writeGraphQL) {
     writeFileSync(fullSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
     logger.warn("Schema", `Written the full schema to "${fullSchemaFilePath}".`);
   }

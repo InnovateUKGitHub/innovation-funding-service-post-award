@@ -12,7 +12,7 @@ import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { ILogger } from "@shared/developmentLogger";
 import { Connection } from "jsforce";
-import { IConfig } from "@server/features/common/config";
+import { IConfig } from "@framework/types/IConfig";
 import { IAccountsRepository } from "@server/repositories/accountsRepository";
 import { IClaimDetailsRepository } from "@server/repositories/claimDetailsRepository";
 import { IClaimLineItemRepository } from "@server/repositories/claimLineItemRepository";

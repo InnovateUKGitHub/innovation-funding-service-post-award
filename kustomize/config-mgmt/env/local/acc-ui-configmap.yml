@@ -8,3 +8,5 @@ data:
   NODE_ENV: development
   LOG_LEVEL: VERBOSE
   ACC_ENVIRONMENT: local
+  COOKIE_SECURE: "false"
+  DEVELOPER_WRITE_GRAPHQL: "true"
