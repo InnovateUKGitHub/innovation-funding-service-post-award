@@ -1162,6 +1162,7 @@
   },
   "pcrStatus": {
     "Unknown": "Unknown",
+    "InternalInProgress": "In Progress",
 
     "Queried": "Queried to Project Manager",
     "DraftWithProjectManager": "Draft with Project Manager",

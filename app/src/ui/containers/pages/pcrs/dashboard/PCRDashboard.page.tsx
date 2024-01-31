@@ -41,7 +41,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
   const { getPcrItemContent } = useGetPcrItemMetadata();
-  const { getPcrStatusName, getPcrMetadata } = useGetPcrStatusMetadata();
+  const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
     const { isPm } = getAuthRoles(project.roles);
@@ -74,18 +74,28 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
           value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.shortName).name)} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
-        <PCRTable.String qa="status" header="Status" value={x => getPcrStatusName(x.status)} />
+        <PCRTable.Custom qa="status" header="Status" value={x => renderStatus(x)} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
         <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => renderLinks(project, x)} />
       </PCRTable.Table>
     );
   };
 
+  const renderStatus = (pcr: PCRDashboardType): React.ReactNode => {
+    const hasUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+
+    if (hasUplift) {
+      return <>{getPcrInternalStatusName(pcr.status)}</>;
+    } else {
+      return <>{getPcrStatusName(pcr.status)}</>;
+    }
+  };
+
   const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id };
-    const pcrMetadata = getPcrMetadata(pcr.status);
+    const pcrMetadata = getPcrStatusMetadata(pcr.status);
     const hasUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
 
     const viewLink = {
