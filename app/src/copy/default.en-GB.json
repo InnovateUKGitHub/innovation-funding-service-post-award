@@ -2183,7 +2183,8 @@
           "arrayType": {
             "newRemainingGrant": {
               "errors": {
-                "invalid_string": { "regex": "New remaining grant must be a valid currency value." }
+                "invalid_string": { "regex": "New remaining grant must be a valid currency value." },
+                "too_big": "The grant cannot exceed the remaining grant for any individual partner."
               }
             }
           }
