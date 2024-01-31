@@ -35,7 +35,7 @@ const useUpliftSummaryQuery = ({
   const documents = mapToProjectDocumentSummaryDtoArray(
     data?.salesforce.uiapi.query.Documents?.edges ?? [],
     ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-    { projectId, type: "pcr", pcrId },
+    { projectId, type: "pcr" },
   );
 
   return { pcr, documents };

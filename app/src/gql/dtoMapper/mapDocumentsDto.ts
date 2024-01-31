@@ -58,7 +58,7 @@ const mapper: GQL.DtoMapper<
   },
   link(node, { projectId, partnerId, periodId, type, costCategoryId, pcrId }) {
     const fileId = node?.node?.ContentDocument?.LatestPublishedVersionId?.value ?? "";
-    const linkedEntityId = node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
+    const linkedEntityId = node?.node?.LinkedEntityId?.value;
 
     switch (type) {
       case "projects":
@@ -70,7 +70,7 @@ const mapper: GQL.DtoMapper<
       case "claim details":
         return `/api/documents/claim-details/${projectId}/${partnerId}/${periodId}/${costCategoryId}/${fileId}/content`;
       case "pcr":
-        return `/api/documents/projectChangeRequests/${projectId}/${pcrId}/${fileId}/content`;
+        return `/api/documents/projectChangeRequests/${projectId}/${linkedEntityId ?? pcrId}/${fileId}/content`;
     }
   },
   fileName(node) {

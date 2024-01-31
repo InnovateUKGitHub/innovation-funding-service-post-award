@@ -32,6 +32,9 @@ const upliftSummaryQuery = graphql`
               node {
                 isFeedAttachment
                 isOwner
+                LinkedEntityId {
+                  value
+                }
                 ContentDocument {
                   Id
                   LastModifiedBy {
