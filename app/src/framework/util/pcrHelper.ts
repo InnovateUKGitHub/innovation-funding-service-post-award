@@ -1,16 +1,9 @@
-import { PCRItemType } from "@framework/constants/pcrConstants";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 
-type AddPartnerItem = { id: PcrItemId; type: PCRItemType.PartnerAddition; spendProfile: PcrSpendProfileDto };
-type Item = { id: PcrItemId; type: PCRItemType };
-
-type MinimalPcrType = {
-  id: PcrId;
-  items?: (Item | AddPartnerItem)[];
-};
-
-export const mergePcrData = <T extends MinimalPcrType>(newPcr: T, existingPcr: PCRDto) => {
+export const mergePcrData = <T extends Pick<PCRDto, "id"> & { items?: Pick<PCRItemDto, "id">[] }>(
+  newPcr: T,
+  existingPcr: PCRDto,
+) => {
   // Collect a list of PCR items, as well as already seen PCR Item IDs
   const items = [];
   const ids = new Set<string>();
@@ -30,7 +23,6 @@ export const mergePcrData = <T extends MinimalPcrType>(newPcr: T, existingPcr: P
 
       // If we have seen the ID before, merge it in.
       const existingItem = items.find(x => x.id === item.id);
-
       if (existingItem) {
         Object.assign(existingItem, item);
       }
