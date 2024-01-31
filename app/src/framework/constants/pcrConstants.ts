@@ -328,6 +328,10 @@ export interface IPcrStatusMetaValue {
   deletableByPm: boolean;
   reviewableByMo: boolean;
   archived: boolean;
+
+  // For internal PCRs (aka Uplift)
+  // Replaces the External facing status with a new Internal status
+  i18nInternalName?: ContentSelector;
 }
 
 export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
@@ -343,6 +347,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DraftWithProjectManager,
     i18nName: x => x.pcrStatus.DraftWithProjectManager,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: true,
     deletableByPm: true,
     reviewableByMo: false,
@@ -351,6 +356,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.SubmittedToMonitoringOfficer,
     i18nName: x => x.pcrStatus.SubmittedToMonitoringOfficer,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: true,
@@ -367,6 +373,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.SubmittedToInnovateUK,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -375,6 +382,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.QueriedToProjectManager,
     i18nName: x => x.pcrStatus.Queried,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: true,
     deletableByPm: false,
     reviewableByMo: false,
@@ -399,6 +407,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.AwaitingAmendmentLetter,
     i18nName: x => x.pcrStatus.AwaitingAmendmentLetter,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -417,6 +426,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedSubmittedToInnovationLead,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -433,6 +443,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInExternalReview,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -441,6 +452,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInReviewWithInnovateUK,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -457,6 +469,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInReviewWithProjectFinance,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -465,6 +478,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedReadyForApproval,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
