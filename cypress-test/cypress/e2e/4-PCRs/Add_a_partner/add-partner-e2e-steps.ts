@@ -890,8 +890,8 @@ export const completeOtherSourceLine = () => {
     cy.get("tr")
       .eq(1)
       .within(() => {
-        cy.get("td:nth-child(2)").contains("Total other funding");
-        cy.get("td:nth-child(3)").contains("£10,000.00");
+        cy.get("th:nth-child(2)").contains("Total other funding");
+        cy.get("th:nth-child(3)").contains("£10,000.00");
       });
   });
   cy.button("Remove");
@@ -912,8 +912,8 @@ export const jesCompleteOtherSourceLine = () => {
     cy.get("tr")
       .eq(1)
       .within(() => {
-        cy.get("td:nth-child(2)").contains("Total other funding");
-        cy.get("td:nth-child(3)").contains("£1,000.00");
+        cy.get("th:nth-child(2)").contains("Total other funding");
+        cy.get("th:nth-child(3)").contains("£1,000.00");
       });
   });
   cy.button("Remove");
