@@ -3,7 +3,6 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileOtherFundingDto } from "@framework/dtos/pcrSpendProfileDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
@@ -23,7 +22,6 @@ import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDes
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { DateInputGroup } from "@ui/components/atomicDesign/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInput";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
@@ -31,6 +29,7 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./schemas/otherSourcesOfFunding.zod";
 import { useMemo } from "react";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -156,14 +155,21 @@ export const OtherSourcesOfFundingStep = () => {
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDate)}</TH>
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderValue)}</TH>
                   <TH hidden>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.actionHeader)}</TH>
+                  <TH>
+                    <TableEmptyCell />
+                  </TH>
                 </TR>
               </THead>
 
               <TBody>
                 {fields.map((x, i) => (
-                  <TR key={`funds.${i}.key`}>
+                  <TR key={`funds.${i}.key`} className="govuk-table__row--editable">
                     <TD>
-                      <FormGroup id={`funds_${i}_description`} hasError={!!validationErrors?.funds?.[i]?.description}>
+                      <FormGroup
+                        noMarginBottom
+                        id={`funds_${i}_description`}
+                        hasError={!!validationErrors?.funds?.[i]?.description}
+                      >
                         <ValidationError error={validationErrors?.funds?.[i]?.description as RhfError} />
                         <TextInput
                           hasError={!!validationErrors?.funds?.[i]?.description}
@@ -176,6 +182,7 @@ export const OtherSourcesOfFundingStep = () => {
 
                     <TD>
                       <DateInputGroup
+                        noMarginBottom
                         id={`funds_${i}_dateSecured`}
                         error={validationErrors?.funds?.[i]?.dateSecured as RhfError}
                       >
@@ -198,19 +205,26 @@ export const OtherSourcesOfFundingStep = () => {
                     </TD>
 
                     <TD>
-                      <FormGroup id={`funds_${i}_value`} hasError={!!validationErrors?.funds?.[i]?.value}>
+                      <FormGroup
+                        noMarginBottom
+                        id={`funds_${i}_value`}
+                        hasError={!!validationErrors?.funds?.[i]?.value}
+                      >
                         <ValidationError error={validationErrors?.funds?.[i]?.value as RhfError} />
                         <TextInput
+                          numeric
                           hasError={!!validationErrors?.funds?.[i]?.value}
                           aria-label={`funding amount for item ${i}`}
                           {...register(`funds.${i}.value`)}
                           disabled={isFetching}
+                          inputMode="numeric"
                         />
                       </FormGroup>
                     </TD>
 
                     <TD>
                       <Button
+                        className="govuk-"
                         type="button"
                         link
                         data-qa="remove-fund"
@@ -253,32 +267,36 @@ export const OtherSourcesOfFundingStep = () => {
                     </TD>
 
                     <TD>
-                      <AccessibilityText>No data</AccessibilityText>
+                      <TableEmptyCell />
                     </TD>
 
                     <TD>
-                      <AccessibilityText>No data</AccessibilityText>
+                      <TableEmptyCell />
+                    </TD>
+
+                    <TD>
+                      <TableEmptyCell />
                     </TD>
                   </TR>
                 )}
                 <TR>
-                  <TD>
-                    <AccessibilityText>No data</AccessibilityText>
-                  </TD>
+                  <TH>
+                    <TableEmptyCell />
+                  </TH>
 
-                  <TD>
-                    <P bold>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.footerLabelTotal)} </P>
-                  </TD>
+                  <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.footerLabelTotal)}</TH>
 
-                  <TD className="govuk-table__cell--numeric">
+                  <TH className="govuk-table__cell--numeric">
                     <Currency value={total} />
-                  </TD>
+                  </TH>
 
-                  {isClient && (
-                    <TD>
-                      <AccessibilityText>No data</AccessibilityText>
-                    </TD>
-                  )}
+                  <TH>
+                    <TableEmptyCell />
+                  </TH>
+
+                  <TH>
+                    <TableEmptyCell />
+                  </TH>
                 </TR>
               </TFoot>
             </Table>

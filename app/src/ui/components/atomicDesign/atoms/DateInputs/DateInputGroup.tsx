@@ -8,10 +8,16 @@ export const DateInputGroup = ({
   hasError,
   error,
   hint,
+  noMarginBottom,
   ...props
-}: React.ComponentProps<"div"> & { error?: RhfError; hasError?: boolean; hint?: ReactNode }) => {
+}: React.ComponentProps<"div"> & {
+  error?: RhfError;
+  hasError?: boolean;
+  hint?: ReactNode;
+  noMarginBottom?: boolean;
+}) => {
   return (
-    <FormGroup className={cx({ "govuk-form-group--error": !!error })} {...props}>
+    <FormGroup noMarginBottom={noMarginBottom} className={cx({ "govuk-form-group--error": !!error })} {...props}>
       {typeof hint !== "undefined" && hint}
       <ValidationError error={error} />
       <div className="govuk-date-input">
@@ -20,7 +26,10 @@ export const DateInputGroup = ({
             throw new Error(" children of date input group must be a DateInput component");
           }
           if ("props" in child) {
-            return React.cloneElement(child, { hasError: !!error || hasError || child?.props?.hasError });
+            return React.cloneElement(child, {
+              hasError: !!error || hasError || child?.props?.hasError,
+              noMarginBottom,
+            });
           } else {
             return child;
           }
