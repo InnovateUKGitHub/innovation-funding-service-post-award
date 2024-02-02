@@ -4,6 +4,7 @@ metadata:
   name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: demo
-  NEW_RELIC_APP_NAME: acc-demo
   SERVER_URL: https://www-acc-demo.apps.ocp4.innovateuk.ukri.org
-  USE_SSO: "false"
+  USE_SSO: "true"
+  NEW_RELIC_ENABLED: "false"
+  NEW_RELIC_APP_NAME: acc-demo
