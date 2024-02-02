@@ -4,4 +4,5 @@ export interface IFeatureFlags {
   readonly searchDocsMinThreshold: number;
   readonly futureTimeExtensionInYears: number;
   readonly approveNewSubcontractor: boolean;
+  readonly detailedErrorSummaryComponent: boolean;
 }

@@ -1,10 +1,13 @@
 import { ErrorCode } from "@framework/constants/enums";
-import { IAppError } from "@framework/types/IAppError";
+import { IAppDetailedError, IAppError } from "@framework/types/IAppError";
+import { Error as SfdcError } from "jsforce";
 import { Results } from "@ui/validation/results";
 import { ZodIssue } from "zod";
+import { mapSfdcErrors, mapValidationResultErrors } from "@shared/mapAppErrorDetails";
 
 export class AppError<T extends Results<ResultBase> = Results<ResultBase>> extends Error implements IAppError<T> {
   public results: T | null = null;
+  public details: IAppDetailedError[] = [];
 
   constructor(public code: ErrorCode, public message: string, public original?: Error) {
     super();
@@ -59,6 +62,7 @@ export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>
   constructor(results: T, readonly original?: Error) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
     this.results = results;
+    this.details = mapValidationResultErrors(results);
   }
 }
 
@@ -71,6 +75,13 @@ export class UnauthenticatedError extends AppError {
 export class ConfigurationError extends AppError {
   constructor(message: string) {
     super(ErrorCode.CONFIGURATION_ERROR, message);
+  }
+}
+
+export class SfdcServerError extends AppError {
+  constructor(message: string, errors: SfdcError[]) {
+    super(ErrorCode.SFDC_ERROR, message);
+    this.details = mapSfdcErrors(errors);
   }
 }
 

@@ -13,20 +13,23 @@ export const getErrorStatus = (err?: IAppError) => {
 
   switch (code) {
     case ErrorCode.VALIDATION_ERROR:
-      log.info("VALIDATION_ERROR", message);
+      log.info("Validation Error", message);
       return 400;
     case ErrorCode.BAD_REQUEST_ERROR:
-      log.info("BAD_REQUEST_ERROR", err, stack);
+      log.info("Bad Request Error", err, stack);
       return 400;
     case ErrorCode.FORBIDDEN_ERROR:
-      log.warn("FORBIDDEN_ERROR", err, stack);
+      log.warn("Forbidden Error", err, stack);
       return 403;
     case ErrorCode.REQUEST_ERROR:
-      log.info("REQUEST_ERROR", err, stack);
+      log.info("Request Error", err, stack);
       return 404;
     case ErrorCode.SECURITY_ERROR:
-      log.error("SECURITY_ERROR", err, stack);
+      log.error("Security Error", err, stack);
       return 503;
+    case ErrorCode.SFDC_ERROR:
+      log.error("Salesforce Error", err, stack);
+      return 500;
     case ErrorCode.UNKNOWN_ERROR:
     default:
       log.error("UNKNOWN_ERROR", err, stack);
@@ -38,6 +41,7 @@ export const getErrorResponse = (err: IAppError) => {
   const code = err ? err.code : ErrorCode.UNKNOWN_ERROR;
   const message = err ? err.message : "Something went wrong";
   const results = err ? err.results : null;
+  const details = err ? err.details : [];
 
-  return { code, message, results };
+  return { code, message, results, details };
 };

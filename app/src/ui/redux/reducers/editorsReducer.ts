@@ -102,7 +102,12 @@ export const editorsReducer =
           ...originalEditor,
           data: action.payload?.dto as TDto,
           status: EditorStatus.Editing,
-          error: { code: err?.code || ErrorCode.UNKNOWN_ERROR, message: err?.message || "", results: err?.results },
+          error: {
+            code: err?.code || ErrorCode.UNKNOWN_ERROR,
+            message: err?.message || "",
+            results: err?.results,
+            details: err?.details ?? [],
+          },
         };
         result[action.payload?.id] = newEditor;
       }

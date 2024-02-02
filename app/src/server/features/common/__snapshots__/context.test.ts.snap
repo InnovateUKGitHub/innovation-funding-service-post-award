@@ -15,11 +15,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Name",
@@ -40,11 +35,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Claims Detail",
     "salesforceFieldNames": [
       "Id",
@@ -74,11 +64,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Claims Line Item",
     "salesforceFieldNames": [
       "Id",
@@ -104,11 +89,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_Claim__c",
@@ -133,11 +113,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Total Cost Category",
     "salesforceFieldNames": [
       "Acc_CostCategory__c",
@@ -158,11 +133,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Total Project Period",
     "salesforceFieldNames": [
       "Id",
@@ -210,11 +180,6 @@ exports[`Context should contain the repositories 1`] = `
     "mapper": SalesforceCostCategoryMapper {
       "clock": Clock {},
     },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_CostCategoryName__c",
@@ -240,11 +205,6 @@ exports[`Context should contain the repositories 1`] = `
         },
       },
       "mapper": DefaultMapper {},
-      "payloadErrors": {
-        "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-        "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-        "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-      },
       "salesforceFieldNames": [
         "Id",
         "ContentDocumentId",
@@ -264,11 +224,6 @@ exports[`Context should contain the repositories 1`] = `
         },
       },
       "mapper": DefaultMapper {},
-      "payloadErrors": {
-        "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-        "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-        "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-      },
       "salesforceFieldNames": [
         "Id",
       ],
@@ -286,11 +241,6 @@ exports[`Context should contain the repositories 1`] = `
         },
       },
       "mapper": DefaultMapper {},
-      "payloadErrors": {
-        "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-        "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-        "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-      },
       "salesforceFieldNames": [
         "Id",
         "Title",
@@ -325,11 +275,6 @@ exports[`Context should contain the repositories 1`] = `
         },
       },
       "mapper": DefaultMapper {},
-      "payloadErrors": {
-        "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-        "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-        "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-      },
       "salesforceFieldNames": [
         "Id",
         "RecordId",
@@ -350,11 +295,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_ProjectChangeRequest__c",
@@ -382,11 +322,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_ProjectChangeRequest__c",
@@ -420,11 +355,6 @@ exports[`Context should contain the repositories 1`] = `
     "mapper": LoanMapper {
       "clock": Clock {},
     },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_PeriodNumber__c",
@@ -451,11 +381,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Monitoring Header",
     "salesforceFieldNames": [
       "Id",
@@ -482,11 +407,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_QuestionName__c",
@@ -512,11 +432,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Monitoring Answer",
     "salesforceFieldNames": [
       "Id",
@@ -538,11 +453,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_MonitoringReport__c",
@@ -567,11 +477,6 @@ exports[`Context should contain the repositories 1`] = `
     },
     "mapper": SalesforcePartnerMapper {
       "clock": Clock {},
-    },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
     },
     "salesforceFieldNames": [
       "Id",
@@ -655,11 +560,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "PCR Spend Profile",
     "salesforceFieldNames": [
       "Id",
@@ -705,11 +605,6 @@ exports[`Context should contain the repositories 1`] = `
         "Acc_Claims_Team_Lead_Pending_Assignment": 1,
       },
     },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "DeveloperName",
@@ -728,11 +623,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Profile Detail",
     "requiredCategoryType": "Total Cost Category",
     "salesforceFieldNames": [
@@ -759,11 +649,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Total Cost Category",
     "salesforceFieldNames": [
       "Id",
@@ -789,11 +674,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Total Project Period",
     "salesforceFieldNames": [
       "LastModifiedDate",
@@ -821,11 +701,6 @@ exports[`Context should contain the repositories 1`] = `
     "mapper": PCRStatusChangeMapper {
       "clock": Clock {},
     },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_ProjectChangeRequest__c",
@@ -851,11 +726,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "recordType": "Request Header",
     "salesforceFieldNames": [
       "Id",
@@ -942,11 +812,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_AccountId__c",
@@ -974,11 +839,6 @@ exports[`Context should contain the repositories 1`] = `
       },
     },
     "mapper": DefaultMapper {},
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
-    },
     "salesforceFieldNames": [
       "Id",
       "Acc_ClaimFrequency__c",
@@ -1032,11 +892,6 @@ exports[`Context should contain the repositories 1`] = `
     },
     "mapper": SalesforceRecordTypeMapper {
       "clock": Clock {},
-    },
-    "payloadErrors": {
-      "FALLBACK_QUERY_ERROR": "FALLBACK_QUERY_ERROR",
-      "INSUFFICIENT_ACCESS_OR_READONLY": "INSUFFICIENT_ACCESS_OR_READONLY",
-      "UNABLE_TO_LOCK_ROW": "SF_UPDATE_ALL_FAILURE",
     },
     "salesforceFieldNames": [
       "Id",

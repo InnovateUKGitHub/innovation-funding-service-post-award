@@ -35,7 +35,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading, page = 
   };
 
   const handleError = (error: IAppError = fallbackPendingError) => {
-    return renderError?.(error) || <ErrorSummary {...error} />;
+    return renderError?.(error) || <ErrorSummary error={error} />;
   };
 
   let pendingElement: React.ReactNode;
@@ -134,6 +134,7 @@ const GraphQLLoader = <T extends OperationType>(props: Pick<graphqlLoadingAndErr
       {
         code: ErrorCode.UNKNOWN_ERROR,
         message: props.error.message,
+        details: [],
       },
       true,
     ).params;

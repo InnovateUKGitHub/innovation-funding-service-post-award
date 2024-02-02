@@ -43,6 +43,7 @@ export class TestConfig implements IConfig {
     approveNewSubcontractor: false,
     searchDocsMinThreshold: 3,
     futureTimeExtensionInYears: 5,
+    detailedErrorSummaryComponent: true,
   };
 
   public logLevel = LogLevel.DEBUG;

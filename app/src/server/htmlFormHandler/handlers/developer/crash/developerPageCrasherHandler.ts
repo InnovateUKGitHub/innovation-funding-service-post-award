@@ -49,6 +49,7 @@ export class DeveloperPageCrasherHandler implements IFormHandler {
         throw new FormHandlerError("test", "test", null, null, {
           code: ErrorCode.UNKNOWN_ERROR,
           message: "This page has crashed on purpose.",
+          details: [],
         });
     }
 
