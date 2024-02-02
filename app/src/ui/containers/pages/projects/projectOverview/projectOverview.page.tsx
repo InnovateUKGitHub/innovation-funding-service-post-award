@@ -20,7 +20,6 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
     props.projectId,
   );
 
-  console.log("project", project);
   const title =
     isProjectClosed || project.isPastEndDate || isPartnerWithdrawn(project.roles, partners) ? (
       <Content value={x => x.projectMessages.projectEndedMessage} />

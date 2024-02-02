@@ -214,17 +214,21 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
             qa="finance-contact-details"
             contactRoles={financeContacts}
             comment={
-              <SimpleString>
-                <Content value={x => x.pages.projectDetails.financeContactInfo} />
-              </SimpleString>
+              !project.roles.isAssociate && (
+                <SimpleString>
+                  <Content value={x => x.pages.projectDetails.financeContactInfo} />
+                </SimpleString>
+              )
             }
             footnote={
-              <SimpleString>
-                <Content
-                  value={x => x.pages.projectDetails.changeInfo}
-                  components={[<EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
-                />
-              </SimpleString>
+              !project.roles.isAssociate && (
+                <SimpleString>
+                  <Content
+                    value={x => x.pages.projectDetails.changeInfo}
+                    components={[<EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
+                  />
+                </SimpleString>
+              )
             }
           />
         </Section>
