@@ -5,6 +5,7 @@ metadata:
 data:
   ACC_ENVIRONMENT: demo
   SERVER_URL: https://www-acc-demo.apps.ocp4.innovateuk.ukri.org
+  IFS_ROOT: https://ifs-demo.apps.org-env-0.org.innovateuk.ukri.org
   USE_SSO: "true"
   NEW_RELIC_ENABLED: "false"
   NEW_RELIC_APP_NAME: acc-demo
