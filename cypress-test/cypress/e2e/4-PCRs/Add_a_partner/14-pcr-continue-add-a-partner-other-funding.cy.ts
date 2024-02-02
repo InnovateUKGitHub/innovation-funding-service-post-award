@@ -25,7 +25,7 @@ import {
 
 const pm = "james.black@euimeabs.test";
 
-describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
+describe("PCR > Add partner > Continuing editing PCR > Other funding costs", () => {
   before(() => {
     visitApp({ asUser: pm, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
@@ -105,7 +105,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should click 'Add another source of funding' and then validate fields.", addSourceOfFundingValidation);
 
-  it("Should reload to clear the validation changes and add many lines", clearValidationAddManyOther);
+  it("Should reload to clear the validation changes and add 50 lines", clearValidationAddManyOther);
 
   it(
     "Should still display the project costs from the previous steps and total other funding",

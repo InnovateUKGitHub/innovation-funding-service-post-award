@@ -72,5 +72,5 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should access the cost category again and delete the line item", deleteCost);
 
-  it("Should enter many line items", addManyLines);
+  it("Should enter 40 line items", addManyLines);
 });

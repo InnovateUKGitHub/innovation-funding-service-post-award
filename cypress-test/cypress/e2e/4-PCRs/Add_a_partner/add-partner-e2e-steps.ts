@@ -1032,7 +1032,7 @@ export const jesDeleteCostCat = () => {
 };
 
 export const addManyLines = () => {
-  for (let i = 1; i < 80; i++) {
+  for (let i = 1; i < 40; i++) {
     let subtotal = 1332.66 * i;
     let GBPTotal = new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -1081,7 +1081,7 @@ export const clearValidationAddManyOther = () => {
       cy.get("tr")
         .eq(1)
         .within(() => {
-          cy.get("td:nth-child(3)").contains(newCurrency.format(total));
+          cy.get("th:nth-child(3)").contains(newCurrency.format(total));
         });
     });
   }

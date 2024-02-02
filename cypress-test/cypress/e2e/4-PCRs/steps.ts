@@ -968,7 +968,7 @@ export const otherFundingTable = () => {
   cy.tableHeader("Source of funding");
   cy.tableHeader("Date secured (MM YYYY)");
   cy.tableHeader("Funding amount (£)");
-  cy.tableCell("Total other funding");
+  cy.tableHeader("Total other funding");
 };
 
 export const addSourceOfFundingValidation = () => {

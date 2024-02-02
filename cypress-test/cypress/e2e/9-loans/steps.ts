@@ -3,6 +3,7 @@ const fcEmail = "wed.addams@test.test.co.uk";
 const hybridEmail = "s.shuang@irc.trde.org.uk.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
+import { newCurrency } from "common/currency";
 import { fileTidyUp } from "common/filetidyup";
 import { testFile } from "common/testfileNames";
 import { visitApp } from "common/visit";
@@ -255,43 +256,65 @@ export const deletePcr = () => {
 };
 
 export const loansEditTable = () => {
+  let baseCurrentAmount = 10000;
+  ["Drawdown", "Current date", "Current amount", "New date", "New amount"].forEach((header, index) => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(header);
+      });
+  });
   [
-    "Drawdown",
-    "Current date",
-    "Current amount",
-    "New date",
-    "New amount",
-    "Total",
-    "Day",
-    "Month",
-    "Year",
-    "£114,000.00",
-    "£10,000.00",
-    "£11,000.00",
-    "£13,000.00",
-    "£14,000.00",
-    "£15,000.00",
-    "£16,000.00",
-    "£17,000.00",
-    "£18,000.00",
-  ].forEach(loanItem => {
-    cy.getByQA("loan-edit-table").contains(loanItem);
+    ["1", "1 February 2021", newCurrency.format(baseCurrentAmount), "01", "02", "2021", baseCurrentAmount],
+    ["2", "1 August 2021", newCurrency.format(baseCurrentAmount), "01", "08", "2021", baseCurrentAmount],
+    ["3", "1 November 2021", newCurrency.format(baseCurrentAmount), "01", "11", "2021", baseCurrentAmount],
+    ["4", "1 February 2022", newCurrency.format(baseCurrentAmount), "01", "02", "2022", baseCurrentAmount],
+    ["5", "1 May 2022", newCurrency.format(baseCurrentAmount), "01", "05", "2022", baseCurrentAmount],
+    ["6", "1 August 2022", newCurrency.format(baseCurrentAmount), "01", "08", "2022", baseCurrentAmount],
+    ["7", "1 November 2022", newCurrency.format(baseCurrentAmount), "01", "11", "2022", baseCurrentAmount],
+    ["8", "1 February 2023", newCurrency.format(baseCurrentAmount), "01", "02", "2023", baseCurrentAmount],
+  ].forEach(([drawdown, currentDate, currentAmount, day, month, year, total], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(1)`).contains(drawdown);
+        cy.get(`td:nth-child(2)`).contains(currentDate);
+        cy.get(`td:nth-child(3)`).contains(currentAmount);
+        cy.get(`td:nth-child(4)`).within(() => {
+          cy.getByLabel("Day").should("have.value", day);
+        });
+        cy.get(`td:nth-child(5)`).within(() => {
+          cy.getByLabel("Month").contains("have.value", month);
+        });
+        cy.get(`td:nth-child(6)`).within(() => {
+          cy.getByLabel("Year").contains("have.value", year);
+        });
+        cy.get(`td:nth-child(7)`).within(() => {
+          cy.get("input").contains("have.value", total);
+        });
+      });
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        ["Total", "£114,000.00", "£114,000.00"].forEach((footer, index) => {
+          cy.get(`td:nth-child(${index + 1})`).contains(footer);
+        });
+      });
   });
 };
 
 export const updateLoansValue = () => {
-  [
-    "input#1_newValue",
-    "input#2_newValue",
-    "input#3_newValue",
-    "input#4_newValue",
-    "input#5_newValue",
-    "input#6_newValue",
-    "input#7_newValue",
-    "input#8_newValue",
-  ].forEach(inputItem => {
-    cy.get(inputItem).clear().wait(100).type("1").wait(100);
-  });
+  for (let i = 1; i < 9; i++) {
+    cy.get("tr")
+      .eq(i)
+      .within(() => {
+        cy.get("td:nth-child(5)").within(() => {
+          cy.get("input").clear().wait(100).type("1").wait(100);
+        });
+      });
+  }
 };
 
 export const amendLoansTable = () => {
