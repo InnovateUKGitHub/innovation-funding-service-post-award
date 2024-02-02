@@ -62,6 +62,7 @@ export function TestBed({
       searchDocsMinThreshold: 9999,
       futureTimeExtensionInYears: 5,
       approveNewSubcontractor: false,
+      detailedErrorSummaryComponent: true,
     },
     options: {
       maxTotalFileSize: 33554432,

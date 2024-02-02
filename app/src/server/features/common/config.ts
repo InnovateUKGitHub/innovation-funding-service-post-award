@@ -56,6 +56,7 @@ const configuration: Readonly<IConfig> = {
     searchDocsMinThreshold: intEnv("SEARCH_DOCS_MIN_THRESHOLD", 5),
     futureTimeExtensionInYears: intEnv("FUTURE_TIME_EXTENSION_IN_YEARS", 5),
     approveNewSubcontractor: boolEnv("FEATURE_APPROVE_NEW_SUBCONTRACTOR", false),
+    detailedErrorSummaryComponent: boolEnv("FEATURE_DETAILED_ERROR_SUMMARY_COMPONENT", false),
   },
   logLevel: env("LOG_LEVEL", LogLevel.ERROR, parseLogLevel),
   options: {

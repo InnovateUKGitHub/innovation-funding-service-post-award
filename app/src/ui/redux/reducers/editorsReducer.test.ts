@@ -36,7 +36,7 @@ const setupInitialState = (update?: (data: IEditorStore<ClaimDto, ClaimDtoValida
 describe("editorsReducer", () => {
   describe("editor updated", () => {
     it("should preserve any errors", () => {
-      const error = { code: 1, message: "keep this error", results: null };
+      const error = { code: 1, message: "keep this error", results: null, details: [] };
       const claimDto = createClaim();
       const originalState = setupInitialState(x => (x.error = error));
       const validator = new Results({ model: claimDto, showValidationErrors: true });
@@ -96,7 +96,7 @@ describe("editorsReducer", () => {
     });
 
     it("should delete the errors from other editors in the same store", () => {
-      const error = { code: 1, message: "original error 1", results: null };
+      const error = { code: 1, message: "original error 1", results: null, details: [] };
       const originalState = setupInitialState(x => (x.error = error));
 
       const action: EditorSuccessAction = {
@@ -109,7 +109,7 @@ describe("editorsReducer", () => {
     });
 
     it("should delete the errors from other editors in other stores", () => {
-      const error = { code: 1, message: "original error 2", results: null };
+      const error = { code: 1, message: "original error 2", results: null, details: [] };
       const originalState = setupInitialState(x => (x.error = error));
 
       const action: EditorSuccessAction = {
@@ -140,7 +140,7 @@ describe("editorsReducer", () => {
   describe("submit error", () => {
     it("should update status to Editing", () => {
       const originalState = setupInitialState(x => (x.status = EditorStatus.Saving));
-      const error: IAppError = { code: 1, message: "this is an error 1" };
+      const error: IAppError = { code: 1, message: "this is an error 1", details: [] };
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
         payload: { id: "1", store: "claim", dto: {}, error },
@@ -152,7 +152,7 @@ describe("editorsReducer", () => {
 
     it("should add the editor error to the store", () => {
       const originalState = setupInitialState();
-      const error = { code: 1, message: "this is an error 1" };
+      const error = { code: 1, message: "this is an error 1", details: [] };
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
         payload: { id: "1", store: "claim", dto: "test data", error },
@@ -164,7 +164,12 @@ describe("editorsReducer", () => {
 
     it("should strip out the original error", () => {
       const originalState = setupInitialState();
-      const error = { code: 1, message: "this is an error", original: "the original error passed in the context" };
+      const error = {
+        code: 1,
+        message: "this is an error",
+        original: "the original error passed in the context",
+        details: [],
+      };
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
         payload: { id: "1", store: "claim", dto: "test data", error },
@@ -184,7 +189,12 @@ describe("editorsReducer", () => {
 
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
-        payload: { id: "1", store: "claim", dto: "test data", error: { code: 1, message: "this is also an error" } },
+        payload: {
+          id: "1",
+          store: "claim",
+          dto: "test data",
+          error: { code: 1, message: "this is also an error", details: [] },
+        },
       };
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
@@ -192,7 +202,7 @@ describe("editorsReducer", () => {
     });
 
     it("should delete the errors from other editors in the same store", () => {
-      const error = { code: 1, message: "original error", results: null };
+      const error = { code: 1, message: "original error", results: null, details: [] };
       const originalState = setupInitialState(x => (x.error = error));
 
       const action: EditorErrorAction = {
@@ -201,7 +211,7 @@ describe("editorsReducer", () => {
           id: "2",
           store: "claim",
           dto: "test data",
-          error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error" },
+          error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error", details: [] },
         },
       };
 
@@ -210,7 +220,7 @@ describe("editorsReducer", () => {
     });
 
     it("should delete the errors from other editors in other stores", () => {
-      const error = { code: 1, message: "This is an existing error", results: null };
+      const error = { code: 1, message: "This is an existing error", results: null, details: [] };
       const originalState = setupInitialState(x => (x.error = error));
 
       const action: EditorErrorAction = {
@@ -219,7 +229,7 @@ describe("editorsReducer", () => {
           id: "2",
           store: "testStore",
           dto: "test data",
-          error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error" },
+          error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error", details: [] },
         },
       };
 

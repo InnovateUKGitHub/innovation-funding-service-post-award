@@ -50,6 +50,7 @@ const createEditorErrorAction = (): EditorErrorAction => {
         code: ErrorCode.UNKNOWN_ERROR,
         message: "",
         results: new Results({ model: {}, showValidationErrors: false }),
+        details: [],
       },
     },
   };

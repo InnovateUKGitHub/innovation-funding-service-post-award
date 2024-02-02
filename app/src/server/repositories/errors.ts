@@ -1,3 +1,5 @@
+import { Error as SfdcError } from "jsforce";
+
 export class BadSalesforceQuery extends Error {
   constructor(public errorReason: string = "FAILED_SOQL_QUERY", public errorDetail?: unknown) {
     super(errorReason);
@@ -23,7 +25,7 @@ export class SalesforceInvalidFilterError extends Error {
 }
 
 export class SalesforceDataChangeError extends Error {
-  constructor(message: string, public errors: unknown[]) {
+  constructor(message: string, public errors: SfdcError[]) {
     super(message);
   }
 }

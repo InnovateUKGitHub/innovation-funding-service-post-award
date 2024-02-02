@@ -1,5 +1,13 @@
 import { Stream } from "stream";
-import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult, Error as JError } from "jsforce";
+import {
+  Connection,
+  DescribeSObjectResult,
+  Field,
+  Query,
+  RecordResult,
+  SuccessResult,
+  Error as SfdcError,
+} from "jsforce";
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
 import { createBatch } from "@shared/create-batch";
@@ -31,12 +39,6 @@ export abstract class RepositoryBase {
     protected readonly getSalesforceConnection: () => Promise<Connection>,
     protected readonly logger: ILogger,
   ) {}
-
-  protected readonly payloadErrors = {
-    UNABLE_TO_LOCK_ROW: "SF_UPDATE_ALL_FAILURE",
-    INSUFFICIENT_ACCESS_OR_READONLY: "INSUFFICIENT_ACCESS_OR_READONLY",
-    FALLBACK_QUERY_ERROR: "FALLBACK_QUERY_ERROR",
-  };
 
   protected constructError(e: unknown | Errors.SalesforceErrorResponse, soql = "No SOQL available for this query") {
     if (Errors.isSalesforceErrorResponse(e)) {
@@ -240,7 +242,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   private getDataChangeErrorMessages(results: RecordResult[]) {
-    return results.map(x => (!x.success ? x.errors : [])).reduce<JError[]>((a, b) => a.concat(b), []);
+    return results.map(x => (!x.success ? x.errors : [])).reduce<SfdcError[]>((a, b) => a.concat(b), []);
   }
 
   protected async insertItem<Payload extends Partial<TSalesforce>>(inserts: Payload): Promise<string> {
@@ -317,9 +319,10 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
         return batchResults.reduce<boolean>((_, result) => {
           if (!result.success && !!result.errors.length) {
-            const errorMessage = this.getErrorFromPayload(result.errors);
-
-            throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(batchResults));
+            throw new Errors.SalesforceDataChangeError(
+              "Failed to update to Salesforce",
+              this.getDataChangeErrorMessages(batchResults),
+            );
           }
 
           return true;
@@ -348,8 +351,10 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
         // If there are any errors in our batchResults, throw it
         for (const result of batchResults) {
           if (!result.success && result.errors.length) {
-            const errorMessage = this.getErrorFromPayload(result.errors);
-            throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(batchResults));
+            throw new Errors.SalesforceDataChangeError(
+              "Failed to delete from Salesforce",
+              this.getDataChangeErrorMessages(batchResults),
+            );
           }
         }
 
@@ -361,9 +366,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
       // Note: Ensure all items are deleted
       if (!allIdsDeleted) {
-        const deleteStatus = deleteBatchConfirmations.map((x, i) => `ID: ${deleteIds[i]}, Status: ${x}`);
-
-        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", deleteStatus);
+        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", []);
       }
     } catch (error) {
       throw this.constructError(error);
@@ -389,22 +392,6 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
   public map(salesforceResult: TSalesforce[]): TEntity[] {
     return salesforceResult.map(x => this.mapper.map(x));
-  }
-
-  /**
-   * @description Provide an escape hatch from the default error message, so we can show unique error messages
-   */
-  private getErrorFromPayload(errors: (UpdatedErrorResult | string)[]) {
-    // Note: Iterate over errors and check for sfPayloadErrors keys
-    const uniqueError = errors.find(err =>
-      Object.keys(this.payloadErrors).find(errorKey => errorKey === this.getPayloadErrorStatusCode(err)),
-    );
-
-    if (!uniqueError) return this.payloadErrors.FALLBACK_QUERY_ERROR;
-
-    const payloadErrorKey = this.getPayloadErrorStatusCode(uniqueError);
-
-    throw Error(payloadErrorKey);
   }
 
   /**

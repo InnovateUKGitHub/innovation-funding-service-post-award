@@ -24,7 +24,7 @@ describe("dataLoadAction", () => {
   });
 
   it("should have correct payload with error", () => {
-    const result = dataLoadAction("a", "b", 2, "d", { code: 1, message: "I'm a teapot" });
+    const result = dataLoadAction("a", "b", 2, "d", { code: 1, message: "I'm a teapot", details: [] });
     const expected = {
       id: "a",
       store: "b",
@@ -99,6 +99,7 @@ describe("conditionalLoad", () => {
     const error: IAppError = {
       code: 1,
       message: "I am a teapot",
+      details: [],
     };
     const load = jest.fn(() => Promise.reject(error));
     const thunk = conditionalLoad(selector, load);

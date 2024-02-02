@@ -4,7 +4,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
-import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
+import { SfdcServerError, AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 import { ILogger, Logger } from "@shared/developmentLogger";
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
@@ -32,6 +32,7 @@ import {
   SalesforceTokenError,
   SalesforceInvalidFilterError,
   FileTypeNotAllowedError,
+  SalesforceDataChangeError,
 } from "@server/repositories/errors";
 import { FinancialLoanVirementRepository } from "@server/repositories/financialLoanVirementRepository";
 import { FinancialVirementRepository } from "@server/repositories/financialVirementRepository";
@@ -77,7 +78,8 @@ export const constructErrorResponse = (error: unknown): AppError => {
     error instanceof ValidationError ||
     error instanceof ForbiddenError ||
     error instanceof BadRequestError ||
-    error instanceof NotFoundError
+    error instanceof NotFoundError ||
+    error instanceof SfdcServerError
   ) {
     return error;
   }
@@ -88,6 +90,10 @@ export const constructErrorResponse = (error: unknown): AppError => {
 
   if (error instanceof SalesforceInvalidFilterError) {
     return new NotFoundError(undefined, error);
+  }
+
+  if (error instanceof SalesforceDataChangeError) {
+    return new SfdcServerError(error.message, error.errors);
   }
 
   if (error instanceof FileTypeNotAllowedError) {

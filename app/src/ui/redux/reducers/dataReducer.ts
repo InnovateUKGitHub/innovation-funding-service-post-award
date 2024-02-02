@@ -62,7 +62,7 @@ const dataStoreReducer =
       const pending: IDataStore<TData> = {
         status: action.payload.status,
         data: action.payload.data || (existing && existing.data),
-        error: err && { code: err.code, message: err.message, results: err.results },
+        error: err && { code: err.code, message: err.message, results: err.results, details: err.details },
       };
 
       return Object.assign({}, state, { [action.payload.id]: pending });

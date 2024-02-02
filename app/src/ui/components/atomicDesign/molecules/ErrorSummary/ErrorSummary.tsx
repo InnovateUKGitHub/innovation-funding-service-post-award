@@ -2,30 +2,24 @@ import { ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks/content.hook";
 import { H2 } from "../../atoms/Heading/Heading.variants";
+import { Info } from "../../atoms/Details/Details";
+import { ErrorDetails } from "./ErrorDetails";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 export interface ErrorSummaryProps {
-  code?: IAppError["code"];
-  message?: IAppError["message"];
+  error: Partial<IAppError>;
 }
 
-export const ErrorSummary = ({ code, message }: ErrorSummaryProps) => {
+export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
+  const { code, details } = error;
+
   const { getContent } = useContent();
+  const { features } = useClientConfig();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
   const title = getContent(x => x.components.errorSummary.title);
   const expiredMessage = getContent(x => x.components.errorSummary.expiredMessage);
   const unsavedWarning = getContent(x => x.components.errorSummary.unsavedWarning);
-  const somethingGoneWrong = getContent(x => x.components.errorSummary.somethingGoneWrong);
-
-  // Unique Errors
-  const authErrorMessages = {
-    SF_UPDATE_ALL_FAILURE: getContent(x => x.components.errorSummary.updateAllFailure),
-    INSUFFICIENT_ACCESS_OR_READONLY: getContent(x => x.components.errorSummary.insufficientAccessRights),
-    NOT_UPLOADED_FROM_OWNER: getContent(x => x.components.errorSummary.notUploadedByOwner),
-  };
-
-  const authWMessage = !isUnauthenticated && message && authErrorMessages[message as keyof typeof authErrorMessages];
-  const errorMessage = authWMessage || somethingGoneWrong;
 
   return (
     <div
@@ -47,7 +41,17 @@ export const ErrorSummary = ({ code, message }: ErrorSummaryProps) => {
             <p data-qa="error-summary-unsaved-mssg">{unsavedWarning}</p>
           </>
         ) : (
-          <p data-qa="error-summary-general-mssg">{errorMessage}</p>
+          <p data-qa="error-summary-general-mssg">
+            {details && details.length > 0
+              ? getContent(x => x.components.errorSummary.somethingGoneWrong)
+              : getContent(x => x.components.errorSummary.somethingUnknownGoneWrong)}
+          </p>
+        )}
+
+        {features.detailedErrorSummaryComponent && details && details.length > 0 && (
+          <Info summary={getContent(x => x.components.errorSummary.info)} className="govuk-!-margin-bottom-0">
+            <ErrorDetails details={details} />
+          </Info>
         )}
       </div>
     </div>

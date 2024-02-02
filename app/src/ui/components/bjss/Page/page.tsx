@@ -107,7 +107,7 @@ export function Page({
             <>
               {displayAriaLive && (
                 <AriaLive>
-                  {error && <ErrorSummary {...error} />}
+                  {error && <ErrorSummary error={error} />}
                   {validation && <ValidationSummary validation={validation} compressed={false} />}
                 </AriaLive>
               )}

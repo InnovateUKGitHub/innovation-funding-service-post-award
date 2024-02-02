@@ -133,6 +133,7 @@ describe("<Page />", () => {
       code: ErrorCode.BAD_REQUEST_ERROR,
       message: "stub-message",
       results: null,
+      details: [],
     };
 
     const { queryByTestId, pageErrorElementQa } = setup({ error: stubAppError });

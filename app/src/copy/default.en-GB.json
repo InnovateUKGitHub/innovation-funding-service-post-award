@@ -51,10 +51,33 @@
       "title": "There is a problem",
       "expiredMessage": "Your session has expired. You must reload the page before trying again.",
       "unsavedWarning": "Anything you have not already saved will be lost.",
-      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again.",
-      "updateAllFailure": "Something went wrong and we could not update your forecast. Please click \u2018Save and return to project setup\u2019 again.",
-      "insufficientAccessRights": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save.",
-      "notUploadedByOwner": "You cannot remove this file as you did not upload it. You can only remove files that you have uploaded."
+      "somethingUnknownGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again.",
+      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action.",
+      "info": "Details",
+      "details": {
+        "ACC_VALIDATION_ERROR": {
+          "invalid": "{{ message }}"
+        },
+        "SFDC_SF_UPDATE_ALL_FAILURE": {
+          "invalid": "Something went wrong and we could not update your forecast. Please click \u2018Save and return to project setup\u2019 again."
+        },
+        "SFDC_INSUFFICIENT_ACCESS_OR_READONLY": {
+          "invalid": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save."
+        },
+        "SFDC_NOT_UPLOADED_FROM_OWNER": {
+          "invalid": "You cannot remove this file as you did not upload it. You can only remove files that you have uploaded."
+        },
+        "SFDC_CANNOT_USE_RECORD_TYPE": {
+          "invalid": "You have selected a record type that you are not allowed to select."
+        },
+        "SFDC_STRING_TOO_LONG": {
+          "too_big": "{{ field }} can be a maximum of {{ maximum }} characters or less.",
+          "invalid": "{{ field }} contains too many characters."
+        },
+        "SFDC_DEFAULT_STACKTRACE": {
+          "invalid": "{{ data.statusCode }}: {{ data.message }} (on fields [{{ data.fields, arrayJoin }}])."
+        }
+      }
     },
     "validationError": {
       "prefix": "Error:"

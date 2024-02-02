@@ -93,7 +93,7 @@ export function Page({
             <>
               {displayAriaLive && (
                 <AriaLive>
-                  {apiError && <ErrorSummary {...apiError} />}
+                  {apiError && <ErrorSummary error={apiError} />}
                   {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
                 </AriaLive>
               )}
