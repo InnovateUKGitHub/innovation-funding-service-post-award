@@ -492,7 +492,7 @@ export const projCostsPeriodTable = () => {
     cy.get(`th:nth-child(${thnth++})`).contains(header);
   });
   let tdnth = 1;
-  ["EUI Small Ent Health (Lead)", "£115,000.00", "£115,000.00", "£0.00", "Draft", "2023", "Edit"].forEach(row => {
+  ["EUI Small Ent Health (Lead)", "£115,000.00", "£115,000.00", "£0.00", "Draft", uploadDate, "Edit"].forEach(row => {
     cy.get("tr")
       .eq(1)
       .within(() => {

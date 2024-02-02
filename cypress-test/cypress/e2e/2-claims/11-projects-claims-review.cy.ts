@@ -61,6 +61,7 @@ describe("Claims > Review as MO", () => {
   });
 
   it("Should switch user to the Monitoring Officer", () => {
+    cy.wait(1000);
     cy.switchUserTo("testman2@testing.com");
   });
 

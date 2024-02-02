@@ -85,10 +85,7 @@ export const pcrCheckboxesWithHint = () => {
       "Change a partner's name",
       "Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.",
     ],
-    [
-      "Approve a new subcontractor",
-      "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
-    ],
+    ["Approve a new subcontractor", "If you are requesting a change in subcontractor, please select this option."],
     [
       "Put project on hold",
       "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
@@ -1572,6 +1569,7 @@ export const addTypesForValidation = (button: string) => {
 
 export const selectEachPcr = () => {
   pcrArray.forEach(pcr => {
+    cy.wait(300);
     cy.clickCheckBox(pcr);
   });
   cy.submitButton("Create request").click();
