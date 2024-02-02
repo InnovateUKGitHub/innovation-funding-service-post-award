@@ -73,7 +73,8 @@ describe("PCR > Reasoning section", () => {
     );
   });
 
-  it("Should type 'hello' and display the number of characters used", () => {
+  it("Should type 'hello' but not display the number of characters used", () => {
+    cy.wait(2000);
     cy.get("textarea").clear().type("hello");
     cy.get("p").contains("You have 5 characters").should("not.exist");
   });

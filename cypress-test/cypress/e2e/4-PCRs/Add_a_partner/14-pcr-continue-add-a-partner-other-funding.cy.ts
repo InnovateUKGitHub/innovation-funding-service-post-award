@@ -15,7 +15,7 @@ import {
 import { pcrTidyUp } from "common/pcrtidyup";
 import { learnFiles } from "common/fileComponentTests";
 
-describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
+describe("PCR > Add partner > Continuing editing PCR project costs (other funding)", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
