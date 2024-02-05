@@ -5,7 +5,6 @@ import { useContent } from "@ui/hooks/content.hook";
 import { MappedFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Mode } from "../../pcrItemWorkflowContainer";
 
 interface FinancialVirementsViewTableProps {
   virementData: MappedFinancialVirements["virementData"];
@@ -70,7 +69,7 @@ const FinancialVirementsViewTable = ({
                   partnerId: x.partnerId,
                   itemId,
                   pcrId,
-                  mode: mode as Mode,
+                  mode: mode as "view",
                 })}
               >
                 {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}
