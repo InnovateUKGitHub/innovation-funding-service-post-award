@@ -19,7 +19,11 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { useStores } from "@ui/redux/storesProvider";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { Mode } from "../pcrItemWorkflowContainer";
+import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { Helmet } from "react-helmet";
+
+type Mode = "review" | "view";
 
 interface Params {
   projectId: ProjectId;
@@ -35,6 +39,7 @@ interface Props {
   pcr: Pending<PCRDto>;
   costCategories: Pending<CostCategoryDto[]>;
   financialVirements: Pending<PartnerVirementsDto>;
+  getPcrItemContent: (item: PCRItemType) => { name: string };
 }
 
 interface TableData {
@@ -77,8 +82,16 @@ class Component extends ContainerBase<Params, Props> {
         financialVirements.virements.find(x => x.costCategoryId === costCategory.id) ||
         createDto<CostCategoryVirementDto>({}),
     }));
+
+    const pcrItem = pcr.items.find(x => x.id === this.props.itemId);
+    if (!pcrItem) throw new Error("Cannot find PCR Item associated with this financial virement");
+    const itemName = this.props.getPcrItemContent(pcrItem.type).name;
+
     return (
-      <Page backLink={this.getBackLink()} pageTitle={<Title {...project} />}>
+      <Page backLink={this.getBackLink()} pageTitle={<Title {...project} heading={itemName} />}>
+        <Helmet>
+          <title>{itemName}</title>
+        </Helmet>
         <Section title={partner.name}>
           {this.renderReasoning(project, pcr)}
           <VirementTable.Table qa="partnerVirements" data={data}>
@@ -153,6 +166,7 @@ class Component extends ContainerBase<Params, Props> {
 
 const Container = (props: Params & BaseProps) => {
   const stores = useStores();
+  const { getPcrItemContent } = useGetPcrItemMetadata();
 
   return (
     <Component
@@ -167,6 +181,7 @@ const Container = (props: Params & BaseProps) => {
         props.pcrId,
         props.itemId,
       )}
+      getPcrItemContent={getPcrItemContent}
     />
   );
 };
