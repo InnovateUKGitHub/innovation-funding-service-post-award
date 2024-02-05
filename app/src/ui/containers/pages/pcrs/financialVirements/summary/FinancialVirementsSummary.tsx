@@ -28,12 +28,12 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/emailContent";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { useMapVirements } from "../mapFinancialVirements";
+import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { FinancialVirementEditRoute } from "../editPage";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
+import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
@@ -52,7 +52,7 @@ export const FinancialVirementSummary = () => {
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
     useFinancialVirementsSummaryData({ projectId, itemId });
 
-  const { virementData, virementMeta, isSummaryValid } = useMapVirements({
+  const { virementData, virementMeta, isSummaryValid } = useMapFinancialVirements({
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
@@ -179,113 +179,13 @@ export const FinancialVirementSummary = () => {
           </TFoot>
         </Table>
       ) : (
-        <Table>
-          <THead>
-            <TR>
-              <TH small className={colClass}>
-                {getContent(x => x.financialVirementLabels.partnerName)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.partnerOriginalEligibleCosts)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.partnerNewEligibleCosts)}
-              </TH>
-              <TH small numeric className={colClass}>
-                {getContent(x => x.financialVirementLabels.partnerDifferenceCosts)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.originalFundingLevel)}
-              </TH>
-              <TH small numeric className={colClass}>
-                {getContent(x => x.financialVirementLabels.newFundingLevel)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.partnerNewRemainingGrant)}
-              </TH>
-              <TH small numeric>
-                {getContent(x => x.financialVirementLabels.partnerDifferenceGrant)}
-              </TH>
-            </TR>
-          </THead>
-          <TBody>
-            {virementData.virements.map(x => (
-              <TR key={x.virementParticipantId}>
-                <TD small className={colClass}>
-                  <Link
-                    route={routes.pcrFinancialVirementDetails.getLink({
-                      projectId,
-                      partnerId: x.partnerId,
-                      itemId,
-                      pcrId,
-                      mode,
-                    })}
-                  >
-                    {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}
-                  </Link>
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.originalEligibleCosts} />
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.newEligibleCosts} />
-                </TD>
-                <TD small numeric className={colClass}>
-                  <Currency value={x.costDifference} />
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.originalFundingLevel} />
-                </TD>
-                <TD small numeric className={colClass}>
-                  <Currency value={x.newFundingLevel} />
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.originalRemainingGrant} />
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.newRemainingGrant} />
-                </TD>
-                <TD small numeric>
-                  <Currency value={x.grantDifference} />
-                </TD>
-              </TR>
-            ))}
-          </TBody>
-          <TFoot>
-            <TR>
-              <TH small className={colClass}>
-                {getContent(x => x.financialVirementLabels.projectTotals)}
-              </TH>
-              <TH small numeric>
-                <Currency value={virementData.originalEligibleCosts} />
-              </TH>
-              <TH small numeric>
-                <Currency value={virementData.newEligibleCosts} />
-              </TH>
-              <TH small numeric className={colClass}>
-                <Currency value={virementData.costDifference} />
-              </TH>
-              <TH small numeric>
-                <Percentage value={virementData.originalFundingLevel} />
-              </TH>
-              <TH small numeric className={colClass}>
-                <Percentage value={virementData.newFundingLevel} />
-              </TH>
-              <TH small numeric>
-                <Currency value={virementData.originalRemainingGrant} />
-              </TH>
-              <TH small numeric>
-                <Currency value={virementData.newRemainingGrant} />
-              </TH>
-              <TH small numeric>
-                <Currency value={virementData.grantDifference} />
-              </TH>
-            </TR>
-          </TFoot>
-        </Table>
+        <FinancialVirementsViewTable
+          virementData={virementData}
+          projectId={projectId}
+          pcrId={pcrId}
+          itemId={itemId}
+          mode="details"
+        />
       )}
 
       {mode === "prepare" && (

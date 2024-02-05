@@ -5,11 +5,22 @@ import { useContent } from "@ui/hooks/content.hook";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { PcrPage } from "../pcrPage";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
+import { FinancialVirementsViewTable } from "../financialVirements/summary/FinancialVirementsViewTable";
+import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
 
 const UpliftSummary = () => {
-  const { projectId, pcrId, itemId } = usePcrWorkflowContext();
-  const { pcr, documents } = useUpliftSummaryQuery({ projectId, pcrId, pcrItemId: itemId });
+  const { projectId, pcrId, itemId, mode } = usePcrWorkflowContext();
+  if (mode === "prepare") throw new Error("This page does not support the prepare mode");
+
+  const { pcr, documents, financialVirementsForCosts, financialVirementsForParticipants, partners } =
+    useUpliftSummaryQuery({ projectId, pcrId, pcrItemId: itemId });
   const { getContent } = useContent();
+
+  const { virementData } = useMapFinancialVirements({
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    partners,
+  });
 
   return (
     <PcrPage validationErrors={undefined}>
@@ -41,6 +52,14 @@ const UpliftSummary = () => {
           qa="files"
         />
       </SummaryList>
+
+      <FinancialVirementsViewTable
+        virementData={virementData}
+        projectId={projectId}
+        pcrId={pcrId}
+        itemId={itemId}
+        mode="details"
+      />
     </PcrPage>
   );
 };
