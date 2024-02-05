@@ -30,6 +30,7 @@ import { useNextLink, useSummaryLink } from "../utils/useNextLink";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ReactNode } from "react";
 import { createRegisterButton } from "@framework/util/registerButton";
+import { useMessages } from "@framework/api-helpers/useMessages";
 
 export const FilesStep = ({
   heading,
@@ -96,12 +97,15 @@ export const FilesStep = ({
   const disabled = isFetching || isDeleting || isUploading;
 
   const registerButton = createRegisterButton(setValue, "button_submit");
+
+  const { clearMessages } = useMessages();
+
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section>
         <Form
           encType="multipart/form-data"
-          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }))}
+          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }), clearMessages)}
           aria-disabled={disabled}
         >
           <Fieldset>
