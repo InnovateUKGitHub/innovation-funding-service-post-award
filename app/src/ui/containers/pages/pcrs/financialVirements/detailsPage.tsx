@@ -19,8 +19,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { useStores } from "@ui/redux/storesProvider";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-
-type Mode = "review" | "view";
+import { Mode } from "../pcrItemWorkflowContainer";
 
 interface Params {
   projectId: ProjectId;
