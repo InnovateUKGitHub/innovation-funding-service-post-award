@@ -2123,7 +2123,7 @@ export const changeRemainingGrantPage = () => {
     (footer, index) => {
       cy.get("tfoot").within(() => {
         cy.get("tr").within(() => {
-          cy.get(`td:nth-child(${index + 1})`).contains(footer);
+          cy.get(`th:nth-child(${index + 1})`).contains(footer);
         });
       });
     },
@@ -2132,9 +2132,9 @@ export const changeRemainingGrantPage = () => {
 
 export const updateNewRemainingGrant = () => {
   [
-    ["EUI Small Ent Health", "191748.50", "200000", "67.80%", "£349,500.00", "66.57%"],
-    ["A B Cad Services", "148850", "150000", "65.50%", "£350,650.00", "66.79%"],
-    ["ABS EUI Medium Enterprise", "650", "700", "70.00%", "£350,700.00", "66.80%"],
+    ["EUI Small Ent Health new remaining grant", "191748.50", "200000", "67.80%", "£349,500.00", "66.57%"],
+    ["A B Cad Services new remaining grant", "148850", "150000", "65.50%", "£350,650.00", "66.79%"],
+    ["ABS EUI Medium Enterprise new remaining grant", "650", "700", "70.00%", "£350,700.00", "66.80%"],
   ].forEach(([aria, value, input, rowPercentage, totalGrant, totalPercentage], index) => {
     cy.getByAriaLabel(aria).should("have.value", Number(value)).clear().type(input);
     cy.get("tr")
@@ -2144,8 +2144,8 @@ export const updateNewRemainingGrant = () => {
       });
     cy.get("tfoot").within(() => {
       cy.get("tr").within(() => {
-        cy.get("td:nth-child(6)").contains(totalGrant);
-        cy.get("td:nth-child(7)").contains(totalPercentage);
+        cy.get("th:nth-child(6)").contains(totalGrant);
+        cy.get("th:nth-child(7)").contains(totalPercentage);
       });
     });
   });
@@ -2153,9 +2153,9 @@ export const updateNewRemainingGrant = () => {
 
 export const reduceNewRemainingGrant = () => {
   [
-    ["EUI Small Ent Health", "192399", "65.22%", "£343,099.00", "65.35%"],
-    ["A B Cad Services", "148849", "65.00%", "£341,948.00", "65.13%"],
-    ["ABS EUI Medium Enterprise", "649", "64.90%", "£341,897.00", "65.12%"],
+    ["EUI Small Ent Health new remaining grant", "192399", "65.22%", "£343,099.00", "65.35%"],
+    ["A B Cad Services new remaining grant", "148849", "65.00%", "£341,948.00", "65.13%"],
+    ["ABS EUI Medium Enterprise new remaining grant", "649", "64.90%", "£341,897.00", "65.12%"],
   ].forEach(([aria, input, rowPercentage, totalGrant, totalPercentage], index) => {
     cy.getByAriaLabel(aria).clear().type(input);
     cy.get("tr")
@@ -2165,8 +2165,8 @@ export const reduceNewRemainingGrant = () => {
       });
     cy.get("tfoot").within(() => {
       cy.get("tr").within(() => {
-        cy.get("td:nth-child(6)").contains(totalGrant);
-        cy.get("td:nth-child(7)").contains(totalPercentage);
+        cy.get("th:nth-child(6)").contains(totalGrant);
+        cy.get("th:nth-child(7)").contains(totalPercentage);
       });
     });
   });
@@ -2190,10 +2190,38 @@ export const saveReflectSurplus = () => {
   });
 };
 
+export const negativeGrantChange = () => {
+  cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("-1000");
+  cy.button("Save and return to reallocate project costs").click();
+  cy.validationLink("Grant cannot be less than zero.");
+};
+
+export const validateAlphaCharacters = () => {
+  cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("lorem");
+  cy.button("Save and return to reallocate project costs").click();
+  cy.validationLink("New remaining grant must be a valid currency value.");
+  cy.paragraph("New remaining grant must be a valid currency value.");
+};
+
+export const saveZeroValue = () => {
+  cy.clickOn("Change remaining grant");
+  cy.heading("Change remaining grant");
+  cy.getByAriaLabel("ABS EUI Medium Enterprise new remaining grant").clear().type("0");
+  cy.wait(300);
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+  cy.get("tr")
+    .eq(3)
+    .within(() => {
+      cy.get("td:nth-child(1)").contains("ABS EUI Medium Enterprise");
+      cy.get("td:nth-child(7)").contains("£0.00");
+    });
+};
+
 export const restoreRemainingGrant = () => {
   cy.clickOn("Change remaining grant");
   cy.heading("Change remaining grant");
-  cy.getByAriaLabel("ABS EUI Medium Enterprise").clear().type("652");
+  cy.getByAriaLabel("ABS EUI Medium Enterprise new remaining grant").clear().type("652");
   cy.wait(300);
   cy.clickOn("Save and return to reallocate project costs");
   cy.heading("Reallocate project costs");

@@ -310,6 +310,12 @@ export const amendLoansTable = () => {
   });
 };
 
+export const acceptNegativeInput = () => {
+  cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
+  cy.get("input#1_newValue").clear().wait(100).type("-200").wait(200);
+  cy.get("td").contains("-£192.00");
+};
+
 export const changeFirstValue = () => {
   cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
   cy.get("input#1_newValue").clear().wait(100).type("2").wait(200);

@@ -1,6 +1,13 @@
 import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../common/visit";
-import { loansEditTable, updateLoansValue, amendLoansTable, changeFirstValue, markAndContinue } from "./steps";
+import {
+  loansEditTable,
+  updateLoansValue,
+  amendLoansTable,
+  changeFirstValue,
+  markAndContinue,
+  acceptNegativeInput,
+} from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -78,6 +85,8 @@ describe("Loans project > Loan Drawdown Change", () => {
     "Should click on the first Edit option and change the value to '£2'. It should update the total to '£9.00'",
     changeFirstValue,
   );
+
+  it("Should accept a negative input", acceptNegativeInput);
 
   it("Should click 'Continue to summary' one more time", () => {
     cy.submitButton("Continue to summary").click();

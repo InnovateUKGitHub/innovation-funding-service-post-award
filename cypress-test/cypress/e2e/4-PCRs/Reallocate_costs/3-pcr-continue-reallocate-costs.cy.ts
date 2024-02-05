@@ -18,6 +18,9 @@ import {
   reduceNewRemainingGrant,
   saveReflectSurplus,
   restoreRemainingGrant,
+  negativeGrantChange,
+  validateAlphaCharacters,
+  saveZeroValue,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -138,15 +141,21 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
     cy.paragraph("The total grant cannot exceed the remaining grant.");
   });
 
+  it("Should attempt to enter a negative number, prompting validation", negativeGrantChange);
+
+  it("Should validate that alpha characters aren't allowed", validateAlphaCharacters);
+
   it("Should reduce the grant value to below the remaining grant value", reduceNewRemainingGrant);
 
   it("Should save and reflect on the previous page this changes and surplus", saveReflectSurplus);
 
-  it("Should show validation pertaining to surplus of £2.99", () => {
+  it("Should show validation pertaining to surplus of £3", () => {
     cy.getByQA("validation-message-content").contains(
       "Your 'Remaining grant' has a surplus of £3.00. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
     );
   });
+
+  it("Should ensure a zero can be saved as a value", saveZeroValue);
 
   it("Should go back into Change remaining grant and reduce figure by £3.00", restoreRemainingGrant);
 
