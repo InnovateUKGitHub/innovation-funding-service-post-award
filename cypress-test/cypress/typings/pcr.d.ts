@@ -9,4 +9,5 @@ export type PcrType =
   | "Approve a new subcontractor"
   | "Put project on hold"
   | "Loan Drawdown Change"
-  | "Change Loans Duration";
+  | "Change Loans Duration"
+  | "Uplift";
