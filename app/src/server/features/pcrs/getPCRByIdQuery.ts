@@ -5,8 +5,8 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { QueryBase } from "../common/queryBase";
-import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
+import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
 
 export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   constructor(private readonly projectId: ProjectId, private readonly id: PcrId | PcrItemId) {
@@ -18,7 +18,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   }
 
   protected async run(context: IContext): Promise<PCRDto> {
-    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
+    const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
     const item = await context.repositories.projectChangeRequests.getById(this.projectId, this.id);
     const pcrDto = mapToPcrDto(item, itemTypes);
 

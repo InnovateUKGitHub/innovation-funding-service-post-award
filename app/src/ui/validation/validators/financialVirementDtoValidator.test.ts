@@ -91,7 +91,11 @@ describe("financialVirementDtoValidator", () => {
             ] as PartnerVirementsDto[],
           } as FinancialVirementDto;
 
-          const validation = new FinancialVirementDtoValidator(stubFinancialVirement, false, true);
+          const validation = new FinancialVirementDtoValidator({
+            model: stubFinancialVirement,
+            showValidationErrors: false,
+            submit: true,
+          });
           expect(validation.partners.results).toHaveLength(expectedLength);
         });
       });
@@ -108,7 +112,11 @@ describe("financialVirementDtoValidator", () => {
             newRemainingGrant,
           } as FinancialVirementDto;
 
-          const validation = new FinancialVirementDtoValidator(stubFinancialVirement, false, true);
+          const validation = new FinancialVirementDtoValidator({
+            model: stubFinancialVirement,
+            showValidationErrors: false,
+            submit: true,
+          });
           expect(validation.newRemainingGrant.isValid).toBe(isValid);
         });
       });

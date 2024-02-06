@@ -508,6 +508,11 @@ export interface IMetaValue {
    * Hide the "To do"/"Incomplete"/"Complete" status associated with a PCR Item
    */
   disableStatus?: boolean;
+
+  /**
+   * Check if PCR Type successfully validates against Financial Virement DTO Validator
+   */
+  enableFinancialVirement?: boolean;
 }
 
 /**
@@ -529,6 +534,7 @@ export const pcrItemTypes: IMetaValue[] = [
     singleInstanceInThisPcr: true,
     disableSummary: false,
     disableStatus: false,
+    enableFinancialVirement: true,
   },
   {
     type: PCRItemType.PartnerWithdrawal,
@@ -687,7 +693,18 @@ export const pcrItemTypes: IMetaValue[] = [
     type: PCRItemType.Uplift,
     typeName: "Uplift",
     i18nName: x => x.pcrTypes.uplift,
-    ignoredCompetitions: [],
+    ignoredCompetitions: [
+      SalesforceCompetitionTypes.crnd,
+      SalesforceCompetitionTypes.contracts,
+      SalesforceCompetitionTypes.ktp,
+      SalesforceCompetitionTypes.catapults,
+      SalesforceCompetitionTypes.edge,
+      SalesforceCompetitionTypes.sbri,
+      SalesforceCompetitionTypes.sbriIfs,
+      SalesforceCompetitionTypes.horizonEurope,
+      SalesforceCompetitionTypes.combinedCapital,
+      SalesforceCompetitionTypes.loans,
+    ],
     disableSummary: true,
     disableStatus: true,
   },
@@ -709,3 +726,4 @@ export const pcrItems = [
 ] as const;
 
 export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
+export const enableFinancialVirementItems = pcrItemTypes.filter(x => x.enableFinancialVirement).map(x => x.type);
