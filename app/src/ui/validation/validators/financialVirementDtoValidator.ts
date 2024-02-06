@@ -10,6 +10,7 @@ import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 
 import * as Validation from "./common";
+import { PCRItemType, enableFinancialVirementItems } from "@framework/constants/pcrConstants";
 
 export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVirementDto> {
   constructor(
@@ -156,8 +157,30 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
 }
 
 export class FinancialVirementDtoValidator extends Results<FinancialVirementDto> {
-  constructor(model: FinancialVirementDto, showValidationErrors: boolean, private readonly submit: boolean) {
+  private readonly submit: boolean;
+  public pcrItemType: Result;
+
+  constructor({
+    model,
+    showValidationErrors,
+    submit,
+    pcrItemType,
+  }: {
+    model: FinancialVirementDto;
+    showValidationErrors: boolean;
+    readonly submit: boolean;
+    readonly pcrItemType?: PCRItemType;
+  }) {
     super({ model, showValidationErrors });
+    this.submit = submit;
+    this.pcrItemType = pcrItemType
+      ? Validation.isTrue(
+          this,
+          enableFinancialVirementItems.includes(pcrItemType),
+          this.getContent(x => x.validation.financialVirementDtoValidator.invalidPcrItemType),
+          "invalidPcrType",
+        )
+      : Validation.valid(this);
   }
 
   private filteredPartners = () => {
