@@ -1449,19 +1449,17 @@ export const validatePcrDurationPage = () => {
   cy.reload();
 };
 
-/**
- * UNCOMMENT IN 10795 ONCE SUBCONTRACTOR IS READY FOR DEV.
- */
-export const PcrItemType = {
-  ReallocateProjectCosts: "Reallocate project costs",
-  RemoveAPartner: "Remove a partner",
-  AddAPartner: "Add a partner",
-  ChangeProjectScope: "Change project scope",
-  ChangeProjectDuration: "Change project duration",
-  ChangeAPartnerName: "Change a partner's name",
-  // ApproveANewSubcontractor: "Approve a new subcontractor",
-  PutAProjectOnHold: "Put project on hold",
-};
+export enum PcrItemType {
+  ReallocateProjectCosts = "Reallocate project costs",
+  RemoveAPartner = "Remove a partner",
+  AddAPartner = "Add a partner",
+  ChangeProjectScope = "Change project scope",
+  ChangeProjectDuration = "Change project duration",
+  ChangeAPartnerName = "Change a partner's name",
+  ApproveANewSubcontractor = "Approve a new subcontractor",
+  PutAProjectOnHold = "Put project on hold",
+  Uplift = "Uplift",
+}
 
 const pcrArray = [
   PcrItemType.ReallocateProjectCosts,
@@ -1472,6 +1470,7 @@ const pcrArray = [
   PcrItemType.ChangeAPartnerName,
   //PcrItemType.ApproveANewSubcontractor,
   PcrItemType.PutAProjectOnHold,
+  PcrItemType.Uplift,
 ];
 
 export const multiPcrArray = [
@@ -2184,6 +2183,8 @@ export const reduceNewRemainingGrant = () => {
   [
     ["EUI Small Ent Health new remaining grant", "192399", "65.22%", "£343,099.00", "65.35%"],
     ["A B Cad Services new remaining grant", "148849", "65.00%", "£341,948.00", "65.13%"],
+    ["EUI Small Ent Health new remaining grant", "192399.01", "65.22%", "£343,099.01", "65.35%"],
+    ["A B Cad Services new remaining grant", "148848.99", "65.00%", "£341,948.00", "65.13%"],
     ["ABS EUI Medium Enterprise new remaining grant", "649", "64.90%", "£341,897.00", "65.12%"],
   ].forEach(([aria, input, rowPercentage, totalGrant, totalPercentage], index) => {
     cy.getByAriaLabel(aria).clear().type(input);
@@ -2255,4 +2256,83 @@ export const restoreRemainingGrant = () => {
   cy.clickOn("Save and return to reallocate project costs");
   cy.heading("Reallocate project costs");
   cy.getByQA("validation-message-content").should("not.exist");
+};
+
+export const increaseSinglePartnerOver100 = () => {
+  cy.clickOn("Change remaining grant");
+  cy.heading("Change remaining grant");
+  cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("0");
+  cy.getByAriaLabel("A B Cad Services new remaining grant").clear().type("229020");
+  cy.get("tr")
+    .eq(2)
+    .within(() => {
+      cy.get("td:nth-child(7)").contains("100.01%");
+    });
+  cy.button("Save and return to reallocate project costs").click();
+  cy.validationLink("The grant cannot exceed the remaining grant for any individual partner");
+  cy.paragraph("The grant cannot exceed the remaining grant for any individual partner");
+};
+
+export const revertToPreviousValues = () => {
+  [
+    ["EUI Small Ent Health new remaining grant", "192399.01"],
+    ["A B Cad Services new remaining grant", "148848.99"],
+  ].forEach(([input, value]) => {
+    cy.getByAriaLabel(input).clear().type(value);
+  });
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+};
+
+export const changeRemainingGrantRounding = () => {
+  [
+    ["EUI Small Ent Health new remaining grant", "192399.33", "65.22%"],
+    ["A B Cad Services new remaining grant", "148848.67", "65.00%"],
+  ].forEach(([input, value, percentage], index) => {
+    cy.getByAriaLabel(input).clear().type(value);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(7)").contains(percentage);
+      });
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("th:nth-child(6)").contains("£341,900.00");
+      cy.get("th:nth-child(7)").contains("65.12%");
+    });
+  });
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("th:nth-child(7)").contains("£341,900.00");
+    });
+  });
+  cy.clickOn("Change remaining grant");
+  cy.heading("Change remaining grant");
+  [
+    ["EUI Small Ent Health new remaining grant", "192399.22", "65.22%"],
+    ["A B Cad Services new remaining grant", "148848.78", "65.00%"],
+  ].forEach(([input, value, percentage], index) => {
+    cy.getByAriaLabel(input).clear().type(value);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(7)").contains(percentage);
+      });
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("th:nth-child(6)").contains("£341,900.00");
+      cy.get("th:nth-child(7)").contains("65.12%");
+    });
+  });
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("th:nth-child(7)").contains("£341,900.00");
+    });
+  });
 };
