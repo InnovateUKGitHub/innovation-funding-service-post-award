@@ -40,16 +40,15 @@ interface MapVirements {
 }
 
 const mapCostCategory = ({ financialVirementsForParticipant, financialVirementsForCost }: MapCostCategoryProps) => {
-  const originalRemainingCosts = roundCurrency(
-    financialVirementsForCost.originalEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate,
-  );
-  const newRemainingCosts = roundCurrency(
-    financialVirementsForCost.newEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate,
-  );
-  const originalRemainingGrant = roundCurrency(
-    originalRemainingCosts * (financialVirementsForParticipant.originalFundingLevel / 100),
-  );
-  const newRemainingGrant = roundCurrency(newRemainingCosts * (financialVirementsForParticipant.newFundingLevel / 100));
+  const originalRemainingCosts =
+    financialVirementsForCost.originalEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate;
+
+  const newRemainingCosts =
+    financialVirementsForCost.newEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate;
+
+  const originalRemainingGrant = originalRemainingCosts * (financialVirementsForParticipant.originalFundingLevel / 100);
+
+  const newRemainingGrant = newRemainingCosts * (financialVirementsForParticipant.newFundingLevel / 100);
 
   return {
     virementCostId: financialVirementsForCost.id,
@@ -82,11 +81,12 @@ const mapProjectParticipant = ({
     .map(financialVirementsForCost => {
       const costCategoryVirement = mapCostCategory({ financialVirementsForParticipant, financialVirementsForCost });
 
-      costsClaimedToDate = roundCurrency(costsClaimedToDate + costCategoryVirement.originalCostsClaimedToDate);
-      originalEligibleCosts = roundCurrency(originalEligibleCosts + costCategoryVirement.originalEligibleCosts);
-      newRemainingGrant = roundCurrency(newRemainingGrant + costCategoryVirement.newRemainingGrant);
-      originalRemainingGrant = roundCurrency(originalRemainingGrant + costCategoryVirement.originalRemainingGrant);
-      newEligibleCosts = roundCurrency(newEligibleCosts + costCategoryVirement.newEligibleCosts);
+      costsClaimedToDate += costCategoryVirement.originalCostsClaimedToDate;
+      originalEligibleCosts += costCategoryVirement.originalEligibleCosts;
+      newRemainingGrant += costCategoryVirement.newRemainingGrant;
+      originalRemainingGrant += costCategoryVirement.originalRemainingGrant;
+      newEligibleCosts += costCategoryVirement.newEligibleCosts;
+
       return costCategoryVirement;
     });
 
@@ -100,13 +100,13 @@ const mapProjectParticipant = ({
     partnerId: financialVirementsForParticipant.partnerId,
     name: partner.name,
     isLead: partner.isLead,
-    costsClaimedToDate,
-    originalEligibleCosts,
-    originalRemainingCosts,
-    newEligibleCosts,
+    costsClaimedToDate: roundCurrency(costsClaimedToDate),
+    originalEligibleCosts: roundCurrency(originalEligibleCosts),
+    originalRemainingCosts: roundCurrency(originalRemainingCosts),
+    newEligibleCosts: roundCurrency(newEligibleCosts),
     newRemainingCosts,
-    originalRemainingGrant,
-    newRemainingGrant,
+    originalRemainingGrant: roundCurrency(originalRemainingGrant),
+    newRemainingGrant: roundCurrency(newRemainingGrant),
     costDifference,
     grantDifference,
     virements: costCategoryVirements,
@@ -136,13 +136,13 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
       partner,
     });
 
-    costsClaimedToDate = roundCurrency(costsClaimedToDate + partnerVirement.costsClaimedToDate);
-    originalEligibleCosts = roundCurrency(originalEligibleCosts + partnerVirement.originalEligibleCosts);
-    originalRemainingCosts = roundCurrency(originalRemainingCosts + partnerVirement.originalRemainingCosts);
-    originalRemainingGrant = roundCurrency(originalRemainingGrant + partnerVirement.originalRemainingGrant);
-    newEligibleCosts = roundCurrency(newEligibleCosts + partnerVirement.newEligibleCosts);
-    newRemainingCosts = roundCurrency(newRemainingCosts + partnerVirement.newRemainingCosts);
-    newRemainingGrant = roundCurrency(newRemainingGrant + partnerVirement.newRemainingGrant);
+    costsClaimedToDate += partnerVirement.costsClaimedToDate;
+    originalEligibleCosts += partnerVirement.originalEligibleCosts;
+    originalRemainingCosts += partnerVirement.originalRemainingCosts;
+    originalRemainingGrant += partnerVirement.originalRemainingGrant;
+    newEligibleCosts += partnerVirement.newEligibleCosts;
+    newRemainingCosts += partnerVirement.newRemainingCosts;
+    newRemainingGrant += partnerVirement.newRemainingGrant;
     if (partnerVirement.virements.length > 0) hasAvailablePartners = true;
 
     return partnerVirement;
@@ -153,32 +153,29 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
   const hasAvailableGrant: boolean = grantDifference < 0;
   const hasMatchingGrant: boolean = grantDifference === 0;
   const isValidGrantTotal: boolean = hasAvailableGrant || hasMatchingGrant;
-
-  const originalFundingLevel = roundCurrency(
-    originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0,
-  );
-  const newFundingLevel = roundCurrency(newRemainingCosts ? (100 * newRemainingGrant) / newRemainingCosts : 0);
+  const originalFundingLevel = originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0;
+  const newFundingLevel = newRemainingCosts ? (100 * newRemainingGrant) / newRemainingCosts : 0;
 
   return {
     virementData: {
-      costsClaimedToDate,
-      originalEligibleCosts,
-      originalRemainingCosts,
-      originalRemainingGrant,
-      newEligibleCosts,
-      newRemainingCosts,
-      newRemainingGrant,
+      costsClaimedToDate: roundCurrency(costsClaimedToDate),
+      originalEligibleCosts: roundCurrency(originalEligibleCosts),
+      originalRemainingCosts: roundCurrency(originalRemainingCosts),
+      originalRemainingGrant: roundCurrency(originalRemainingGrant),
+      newEligibleCosts: roundCurrency(newEligibleCosts),
+      newRemainingCosts: roundCurrency(newRemainingCosts),
+      newRemainingGrant: roundCurrency(newRemainingGrant),
       grantDifference,
       costDifference,
       virements,
-      originalFundingLevel,
-      newFundingLevel,
+      originalFundingLevel: roundCurrency(originalFundingLevel),
+      newFundingLevel: roundCurrency(newFundingLevel),
     },
     virementMeta: {
       hasMatchingGrant,
       hasAvailableGrant,
-      originalRemainingGrant,
-      grantDifference,
+      originalRemainingGrant: roundCurrency(originalRemainingGrant),
+      grantDifference: roundCurrency(grantDifference),
       isValidGrantTotal,
     },
     isSummaryValid: isValidGrantTotal && hasAvailablePartners,
