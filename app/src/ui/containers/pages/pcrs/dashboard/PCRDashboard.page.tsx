@@ -1,4 +1,4 @@
-import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
@@ -21,6 +21,7 @@ import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { useContent } from "@ui/hooks/content.hook";
+import { PcrItemDtoMapping } from "@gql/dtoMapper/mapPcrDto";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -31,7 +32,7 @@ type PCRDashboardType = Merge<
     Pick<PCRSummaryDto, "id" | "requestNumber" | "started" | "status" | "lastUpdated" | "items" | "projectId">,
     "items"
   >,
-  { items: Pick<PCRItemSummaryDto, "shortName" | "type">[] }
+  { items: Pick<PcrItemDtoMapping, "shortName" | "type" | "id">[] }
 >;
 
 const PCRTable = createTypedTable<PCRDashboardType>();
@@ -94,9 +95,16 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
-    const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id };
     const pcrMetadata = getPcrStatusMetadata(pcr.status);
-    const hasUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+
+    const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
+    const hasAnyUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+
+    const viewItemLink = {
+      route: props.routes.pcrViewItem.getLink(pcrLinkArgs),
+      text: "View",
+      qa: "pcrViewItemLink",
+    };
 
     const viewLink = {
       route: props.routes.pcrDetails.getLink(pcrLinkArgs),
@@ -122,8 +130,14 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       qa: "pcrDeleteLink",
     };
 
-    if (hasUplift) {
-      links.push(viewLink);
+    if (hasAnyUplift) {
+      // If we only have 1 PCR item, show the view item link.
+      if (pcr.items.length === 1) {
+        links.push(viewItemLink);
+      } else {
+        // Otherwise, show the standard view link
+        links.push(viewLink);
+      }
     } else {
       if (pcrMetadata?.editableByPm && isPm && isProjectActive) {
         links.push(editLink);
