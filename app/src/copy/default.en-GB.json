@@ -1591,7 +1591,8 @@
       "remainingGrantTooSmall": "Grant cannot be less than zero.",
       "costRequired": "Costs are required.",
       "costClaimedTooSmall": "Costs cannot be less than amount already claimed for {{ name }}.",
-      "costTooSmall": "Costs cannot be less than zero."
+      "costTooSmall": "Costs cannot be less than zero.",
+      "invalidPcrItemType": "You cannot reallocate project costs on an uplift."
     },
     "forecastDetailsDtoValidator": {
       "noEditAboutToSubmitFinalClaim": "You cannot change your forecast as you are due to submit your final claim.",
