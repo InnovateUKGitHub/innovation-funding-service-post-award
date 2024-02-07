@@ -15,10 +15,7 @@ describe("Loans project > Loan Drawdown Change", () => {
   });
 
   it("Should click the 'Loan Drawdown Change' checkbox and create the PCR", () => {
-    cy.heading("Start a new request");
-    cy.clickCheckBox("Loan Drawdown Change");
-    cy.wait(1000);
-    cy.submitButton("Create request").click();
+    cy.createPcr("Loan Drawdown Change");
   });
 
   it("Should load the 'Request' page", () => {

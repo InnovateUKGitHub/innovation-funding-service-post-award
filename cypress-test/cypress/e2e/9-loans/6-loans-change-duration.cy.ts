@@ -21,10 +21,7 @@ describe("Loans project > Change Loans Duration", () => {
   });
 
   it("Should click the 'Change Loans Duration' checkbox and create the PCR", () => {
-    cy.heading("Start a new request");
-    cy.clickCheckBox("Change Loans Duration");
-    cy.wait(1000);
-    cy.submitButton("Create request").click();
+    cy.createPcr("Change Loans Duration");
   });
 
   it("Should load the 'Request' page", () => {
