@@ -55,7 +55,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
 
   const tableData = useMapToForecastTableDto({ ...data, clientProfiles: watch("profile") });
 
-  const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
+  const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ periodId, isPm });
 
   const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
     onUpdate({
@@ -75,6 +75,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
           {getContent(x => x.pages.claimForecast.backLink)}
         </BackLink>
       }
+      apiError={apiError}
     >
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("projectId")} value={projectId} type="hidden" />
