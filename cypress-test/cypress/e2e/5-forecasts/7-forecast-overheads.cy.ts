@@ -8,6 +8,7 @@ import {
   returnToForecastArea,
   submitForecastBackOut,
   updateLabourCalculateOH,
+  saveNegativeValues,
 } from "./steps";
 const fcEmail = "james.black@euimeabs.test";
 
@@ -39,4 +40,6 @@ describe("Forecast > edit", () => {
   );
 
   it("Should click the update forecast button and check the value is correct", clickEditCheckValues);
+
+  it("Should save down a negative value and check it displays correctly", saveNegativeValues);
 });

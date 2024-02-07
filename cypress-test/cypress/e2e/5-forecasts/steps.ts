@@ -312,6 +312,9 @@ export const displayCorrectOverheadRate = () => {
 
 export const updateLabourCalculateOH = () => {
   [
+    [-25000, -5000],
+    [-2000, -400],
+    [-3333.33, -666.666],
     [50.24, 10.048],
     [6530.64, 1306.128],
     [50.64, 10.128],
@@ -498,4 +501,20 @@ export const forecastPartnerTable = () => {
         cy.get("td:nth-child(4)").contains(underspend);
       });
   });
+};
+
+export const saveNegativeValues = () => {
+  cy.getByAriaLabel("Labour Period 2").clear().type("-3333.33");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "-666.666");
+  cy.clickOn("Submit changes");
+  cy.get("tr")
+    .eq(4)
+    .within(() => {
+      cy.get("td:nth-child(3)").contains("-£3,333.33");
+    });
+  cy.get("tr")
+    .eq(5)
+    .within(() => {
+      cy.get("td:nth-child(3)").contains("-£666.67");
+    });
 };
