@@ -34,30 +34,31 @@ export const drawdownCard = () => {
 };
 
 export const drawdownTable = () => {
+  ["Drawdown", "Due date", "Drawdown Amount", "Status"].forEach((header, index) => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(header);
+      });
+  });
   [
-    "Drawdown",
-    "Due date",
-    "Drawdown Amount",
-    "Status",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "£10,000",
-    "£11,000",
-    "£13,000",
-    "£14,000",
-    "£15,000",
-    "£16,000",
-    "£17,000",
-    "£18,000",
-    "Planned",
-  ].forEach(loanCat => {
-    cy.getByQA("drawdown-list").contains(loanCat);
+    ["1", "1/02/2021", "£10,000", "Planned"],
+    ["2", "01/08/2021", "£11,000", "Planned"],
+    ["3", "01/11/2021", "£13,000", "Planned"],
+    ["4", "01/02/2022", "£14,000", "Planned"],
+    ["5", "01/05/2022", "£15,000", "Planned"],
+    ["6", "01/08/2022", "£16,000", "Planned"],
+    ["7", "01/11/2022", "£17,000", "Planned"],
+    ["8", "01/02/2023", "£18,000", "Planned"],
+  ].forEach(([drawdownNum, date, amount, status], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(1)`).contains(drawdownNum);
+        cy.get(`td:nth-child(2)`).contains(date);
+        cy.get(`td:nth-child(3)`).contains(amount);
+        cy.get(`td:nth-child(4)`).contains(status);
+      });
   });
 };
 
