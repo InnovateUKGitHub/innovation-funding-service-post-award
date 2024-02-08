@@ -32,7 +32,7 @@ type PCRDashboardType = Merge<
     Pick<PCRSummaryDto, "id" | "requestNumber" | "started" | "status" | "lastUpdated" | "items" | "projectId">,
     "items"
   >,
-  { items: Pick<PcrItemDtoMapping, "shortName" | "type" | "id">[] }
+  { items: Pick<PcrItemDtoMapping, "type" | "id">[] }
 >;
 
 const PCRTable = createTypedTable<PCRDashboardType>();
@@ -72,7 +72,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         <PCRTable.Custom
           qa="types"
           header="Types"
-          value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.shortName).name)} />}
+          value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.type).name)} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.Custom qa="status" header="Status" value={x => renderStatus(x)} />

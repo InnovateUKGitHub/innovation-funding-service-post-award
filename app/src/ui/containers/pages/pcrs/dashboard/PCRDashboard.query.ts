@@ -22,36 +22,43 @@ const pcrDashboardQuery = graphql`
                 Acc_ProjectTitle__c {
                   value
                 }
-                Project_Change_Requests__r(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
+              }
+            }
+          }
+          Acc_ProjectChangeRequest__c(
+            first: 2000
+            where: { Acc_Project__c: { eq: $projectId }, RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } } }
+            orderBy: { Acc_RequestNumber__c: { order: DESC } }
+          ) {
+            edges {
+              node {
+                Id
+                Acc_Status__c {
+                  value
+                }
+                Acc_RequestHeader__c {
+                  value
+                }
+                Acc_RequestNumber__c {
+                  value
+                }
+                CreatedDate {
+                  value
+                }
+                Acc_Status__c {
+                  value
+                }
+                LastModifiedDate {
+                  value
+                }
+                Acc_Project__c {
+                  value
+                }
+                Acc_Project_Change_Requests__r(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
                   edges {
                     node {
                       Id
-                      Acc_Status__c {
-                        value
-                      }
-                      Acc_RequestHeader__c {
-                        value
-                      }
-                      Acc_RequestNumber__c {
-                        value
-                      }
-                      CreatedDate {
-                        value
-                      }
-                      Acc_Status__c {
-                        value
-                      }
-                      LastModifiedDate {
-                        value
-                      }
-                      Acc_Project__c {
-                        value
-                      }
                       RecordType {
-                        Name {
-                          value
-                          label
-                        }
                         DeveloperName {
                           value
                         }
