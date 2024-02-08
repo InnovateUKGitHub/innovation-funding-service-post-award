@@ -135,7 +135,7 @@ const timeouts = {
   recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
   optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
   token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES ?? "") || 10,
-  cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES ?? "") || 10,
+  cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES ?? "") || 30,
   contentRefreshSeconds: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT_SECONDS ?? "") || 0,
 };
 
