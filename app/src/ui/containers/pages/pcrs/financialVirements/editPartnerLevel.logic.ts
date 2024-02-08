@@ -12,7 +12,6 @@ import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinanc
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
 import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
 import { useMapVirements } from "./mapFinancialVirements";
 
@@ -55,7 +54,6 @@ export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: Proj
       "profileId",
       "parentId",
       "costCategoryId",
-      "costCategoryName",
       "newEligibleCosts",
       "originalCostsClaimedToDate",
       "originalCostsClaimedToDate",
@@ -78,7 +76,7 @@ export const useOnUpdatePartnerLevel = (
   const navigate = useNavigate();
 
   return useOnUpdate({
-    req: (financialVirement: FinancialVirementDto) =>
+    req: (financialVirement: ReturnType<typeof getPayload>) =>
       clientsideApiClient.financialVirements.update({
         projectId,
         pcrId,
@@ -140,7 +138,6 @@ export const getPayload = (
             "originalRemainingCosts",
             "newRemainingCosts",
             "costCategoryId",
-            "costCategoryName",
           ]),
           costsClaimedToDate: virement.originalCostsClaimedToDate,
         })),

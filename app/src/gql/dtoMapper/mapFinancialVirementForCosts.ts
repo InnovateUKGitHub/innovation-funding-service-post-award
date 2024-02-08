@@ -44,9 +44,6 @@ const mapper: GQL.DtoMapper<
   costCategoryId(node) {
     return (node?.Acc_Profile__r?.Acc_CostCategory__c?.value ?? "unknown cost category id") as CostCategoryId;
   },
-  costCategoryName(node) {
-    return node?.Acc_Profile__r?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "";
-  },
   originalEligibleCosts(node) {
     return node?.Acc_CurrentCosts__c?.value ?? 0;
   },
