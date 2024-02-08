@@ -52,7 +52,7 @@ describe("Loans project > Change Loans Duration", () => {
 
   it("Should click 'Save and continue' and go to next page", () => {
     cy.submitButton("Save and continue").click();
-    cy.get("h2").contains("Mark as complete");
+    cy.get("legend").contains("Mark as complete");
   });
 
   it("Should have a back option", () => {

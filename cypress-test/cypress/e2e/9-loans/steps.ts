@@ -313,13 +313,22 @@ export const amendLoansTable = () => {
 export const acceptNegativeInput = () => {
   cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
   cy.get("input#1_newValue").clear().wait(100).type("-200").wait(200);
-  cy.get("td").contains("-£192.00");
+  cy.get("td").contains("-£193.00");
 };
 
 export const changeFirstValue = () => {
   cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
   cy.get("input#1_newValue").clear().wait(100).type("2").wait(200);
   cy.get("td").contains("£9.00");
+  cy.clickOn("Continue to summary");
+  cy.get("h2").contains("Mark as complete");
+  cy.get("tfoot").within(() => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains("£9.00");
+      });
+  });
 };
 
 export const markAndContinue = () => {
@@ -388,20 +397,27 @@ export const newLoanDurationTable = () => {
 };
 
 export const updatedLoansTable = () => {
-  [
-    "Phase",
-    "Current length (quarters)",
-    "Current end date",
-    "New length (quarters)",
-    "New end date",
-    "Availability Period",
-    "Extension Period",
-    "Repayment Period",
-    "Edit",
-  ].forEach(updatedChange => {
-    cy.getByQA("loanChangeDuration").contains(updatedChange);
-  });
-  cy.get("td:nth-child(4)").contains("25");
+  ["Phase", "Current length (quarters)", "Current end date", "New length (quarters)", "New end date"].forEach(
+    (header, index) => {
+      cy.get(`th:nth-child(${index + 1})`).contains(header);
+    },
+  ),
+    [
+      ["Availability Period", "8", "01/02/2025", "25", "01/05/2029"],
+      ["Extension Period", "0", "01/02/2025", "25", "01/08/2035"],
+      ["Repayment Period", "0", "01/02/2025", "25", "01/11/2041"],
+    ].forEach(([phase, currentLength, currentEnd, newLength, newEnd], index) => {
+      cy.get("tr")
+        .eq(index)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(phase);
+          cy.get("td:nth-child(2)").contains(currentLength);
+          cy.get("td:nth-child(3)").contains(currentEnd);
+          cy.get("td:nth-child(4)").contains(newLength);
+          cy.get("td:nth-child(5)").contains(newEnd);
+          cy.get("td:nth-child(6)").contains("Edit");
+        });
+    });
 };
 
 export const loanDurationGuidance = () => {
