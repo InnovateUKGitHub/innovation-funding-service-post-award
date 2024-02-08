@@ -16,8 +16,7 @@ export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigi
     maximumFractionDigits: fractionDigits,
   });
 
-  // Note: If the input matches a negative zero, then remove the change of a minus later on
-  const absoluteNumber = Object.is(Math.sign(value), -0) ? Math.abs(value) : value;
+  const absoluteNumber = Math.round(value * Math.pow(10, fractionDigits)) === 0 ? 0 : value;
 
   const shouldWordWrap = absoluteNumber > 1_000_000_000;
   const wordWrap = shouldWordWrap ? "normal" : "nowrap";
