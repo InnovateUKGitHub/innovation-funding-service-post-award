@@ -66,13 +66,33 @@ const pcrDetailsQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
-                Project_Change_Requests__r(first: 2000) {
+              }
+            }
+          }
+          Acc_ProjectChangeRequest__c(
+            first: 2000
+            where: { Acc_Project__c: { eq: $projectId }, RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } } }
+            orderBy: { Acc_RequestNumber__c: { order: DESC } }
+          ) {
+            edges {
+              node {
+                Id
+                Acc_Status__c {
+                  value
+                }
+                Acc_RequestHeader__c {
+                  value
+                }
+                Acc_RequestNumber__c {
+                  value
+                }
+                Acc_MarkedasComplete__c {
+                  value
+                }
+                Acc_Project_Change_Requests__r(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
                   edges {
                     node {
                       Id
-                      Acc_Status__c {
-                        value
-                      }
                       Acc_MarkedasComplete__c {
                         value
                       }
@@ -100,18 +120,10 @@ const pcrDetailsQuery = graphql`
                       Acc_ExistingPartnerName__c {
                         value
                       }
-
-                      Acc_Status__c {
-                        value
-                      }
                       Acc_ProjectRole__c {
                         value
                       }
                       RecordType {
-                        Name {
-                          value
-                          label
-                        }
                         DeveloperName {
                           value
                         }

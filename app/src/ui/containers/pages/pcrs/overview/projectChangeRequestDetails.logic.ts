@@ -19,22 +19,20 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const project = mapToProjectDto(projectNode, ["id", "title", "status", "projectNumber", "typeOfAid", "roles"]);
 
   const pcr = mapToPcrDtoArray(
-    projectNode?.Project_Change_Requests__r?.edges ?? [],
+    data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
     ["id", "status", "reasoningStatus", "requestNumber"],
     [
+      "id",
       "accountName",
       "hasOtherFunding",
-      "id",
       "isCommercialWork",
       "organisationName",
       "organisationType",
       "partnerNameSnapshot",
       "partnerType",
       "projectRole",
-      "shortName",
       "status",
       "type",
-      "typeName",
       "typeOfAid",
     ],
     { typeOfAid: project.typeOfAid },

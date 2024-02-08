@@ -24,7 +24,6 @@ type Data = {
   pcrItem: Pick<
     FullPCRItemDto,
     | "id"
-    | "shortName"
     | "type"
     | "projectRole"
     | "partnerType"
@@ -34,7 +33,6 @@ type Data = {
     | "organisationType"
     | "hasOtherFunding"
     | "status"
-    | "typeName"
   >;
   mode: Mode;
   fragmentRef: unknown;

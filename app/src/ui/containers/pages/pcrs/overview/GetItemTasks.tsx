@@ -24,9 +24,7 @@ export type GetItemTaskProps = {
     | "projectRole"
     | "status"
     | "type"
-    | "typeName"
     | "typeOfAid"
-    | "shortName"
   >;
   projectId: ProjectId;
   pcrId: PcrId;

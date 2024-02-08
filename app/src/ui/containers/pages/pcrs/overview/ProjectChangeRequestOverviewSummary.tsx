@@ -1,4 +1,4 @@
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemSummaryDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
@@ -12,7 +12,7 @@ const ProjectChangeRequestOverviewSummary = ({
   projectId,
   hideAddTypesLink,
 }: {
-  pcr: Pick<PCRDto, "id" | "requestNumber"> & { items: Pick<PCRItemDto, "shortName">[] };
+  pcr: Pick<PCRDto, "id" | "requestNumber"> & { items: Pick<PCRItemSummaryDto, "type">[] };
   projectId: ProjectId;
   hideAddTypesLink?: boolean;
 }) => {
@@ -30,7 +30,7 @@ const ProjectChangeRequestOverviewSummary = ({
         />
         <SummaryListItem
           label={getContent(x => x.pcrLabels.types)}
-          content={<LineBreakList items={pcr.items.map(x => getPcrItemContent(x.shortName).name)} />}
+          content={<LineBreakList items={pcr.items.map(x => getPcrItemContent(x.type).name)} />}
           action={
             !hideAddTypesLink && (
               <Link
