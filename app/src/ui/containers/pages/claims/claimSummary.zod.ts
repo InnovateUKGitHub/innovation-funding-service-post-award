@@ -1,10 +1,19 @@
 import { ZodIssueCode, z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { DocumentDescription } from "@framework/constants/documentDescription";
+import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 export const claimSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["claimSummary"] });
 
-export const getClaimSummarySchema = ({ iarRequired, pcfRequired }: { iarRequired: boolean; pcfRequired: boolean }) =>
+export const getClaimSummarySchema = ({
+  iarRequired,
+  pcfRequired,
+  competitionType,
+}: {
+  iarRequired: boolean;
+  pcfRequired: boolean;
+  competitionType: string;
+}) =>
   z.discriminatedUnion("button_submit", [
     z.object({
       button_submit: z.literal("submit"),
@@ -14,16 +23,22 @@ export const getClaimSummarySchema = ({ iarRequired, pcfRequired }: { iarRequire
         .object({ description: z.nullable(z.number()).optional() })
         .array()
         .superRefine((data, ctx) => {
-          // x => !iarRequired || x.some(doc => doc.description === DocumentDescription.IAR)
+          const hasDocument = (docType: DocumentDescription) => data.some(x => x.description === docType);
 
           if (iarRequired) {
-            if (!data.some(doc => doc.description === DocumentDescription.IAR)) {
-              ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.iar_required" } });
+            if (competitionType === SalesforceCompetitionTypes.ktp) {
+              if (!hasDocument(DocumentDescription.ScheduleThree)) {
+                ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.schedule_three_required" } });
+              }
+            } else {
+              if (!hasDocument(DocumentDescription.IAR)) {
+                ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.iar_required" } });
+              }
             }
           }
 
           if (pcfRequired) {
-            if (!data.some(doc => doc.description === DocumentDescription.ProjectCompletionForm)) {
+            if (!hasDocument(DocumentDescription.ProjectCompletionForm)) {
               ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.pcf_required" } });
             }
           }
