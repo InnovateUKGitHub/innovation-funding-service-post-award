@@ -26,7 +26,7 @@ const useJesContent = () => {
       jesIntroduction: getContent(x => x.pages.pcrAddPartnerJes.jesIntroduction),
       jesUploadSupport: getContent(x => x.pages.pcrAddPartnerJes.jesUploadSupport),
       submitButton: getContent(x => x.pcrItem.submitButton),
-      returnToSummaryButton: getContent(x => x.pcrItem.returnToSummaryButton),
+      returnToSummaryButton: getContent(x => x.pcrItem.saveAndReturnToSummaryButton),
       jesHeading: getContent(x => x.pcrAddPartnerLabels.jesHeading),
       uploadInputLabel: getContent(x => x.documentLabels.uploadInputLabel),
       uploadTitle: getContent(x => x.documentMessages.uploadTitle),

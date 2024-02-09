@@ -17,7 +17,7 @@ import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmp
 
 export const SpendProfileStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, mode } = usePcrWorkflowContext();
 
   const { spendProfileCostCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -88,13 +88,21 @@ export const SpendProfileStep = () => {
         </Section>
 
         <Section>
-          <Link route={nextLink} styling="PrimaryButton">
-            {getContent(x => x.pcrItem.submitButton)}
-          </Link>
+          {mode === "review" ? (
+            <Link route={summaryLink} styling="SecondaryButton">
+              {getContent(x => x.pcrItem.returnToSummaryButton)}
+            </Link>
+          ) : (
+            <>
+              <Link route={nextLink} styling="PrimaryButton">
+                {getContent(x => x.pcrItem.submitButton)}
+              </Link>
 
-          <Link route={summaryLink} styling="SecondaryButton">
-            {getContent(x => x.pcrItem.returnToSummaryButton)}
-          </Link>
+              <Link route={summaryLink} styling="SecondaryButton">
+                {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
+              </Link>
+            </>
+          )}
         </Section>
       </Section>
     </PcrPage>

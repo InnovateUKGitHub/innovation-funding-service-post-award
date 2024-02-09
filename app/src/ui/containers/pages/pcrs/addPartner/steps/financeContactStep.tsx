@@ -127,7 +127,7 @@ export const FinanceContactStep = () => {
               <Content value={x => x.pcrItem.submitButton} />
             </Button>
             <Button type="submit" secondary disabled={isFetching} {...registerButton("saveAndReturnToSummary")}>
-              <Content value={x => x.pcrItem.returnToSummaryButton} />
+              <Content value={x => x.pcrItem.saveAndReturnToSummaryButton} />
             </Button>
           </Fieldset>
         </Form>

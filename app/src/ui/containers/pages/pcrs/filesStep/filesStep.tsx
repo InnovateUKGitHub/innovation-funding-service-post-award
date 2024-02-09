@@ -174,7 +174,7 @@ export const FilesStep = ({
 
           {returnToSummaryButton && (
             <Button secondary disabled={disabled} type="submit" {...registerButton("returnToSummary")}>
-              {getContent(x => x.pcrItem.returnToSummaryButton)}
+              {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
             </Button>
           )}
         </Fieldset>

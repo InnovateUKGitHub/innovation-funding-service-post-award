@@ -148,7 +148,7 @@ export const ProjectManagerDetailsStep = () => {
               {getContent(x => x.pcrItem.submitButton)}
             </Button>
             <Button type="submit" secondary disabled={isFetching} {...registerButton("saveAndReturnToSummary")}>
-              {getContent(x => x.pcrItem.returnToSummaryButton)}
+              {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
             </Button>
           </Fieldset>
         </Form>

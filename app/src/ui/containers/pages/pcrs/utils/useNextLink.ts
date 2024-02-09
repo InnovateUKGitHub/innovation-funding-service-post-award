@@ -2,12 +2,13 @@ import { useMemo } from "react";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 
 export const useNextLink = () => {
-  const { projectId, pcrId, itemId, workflow, routes } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, workflow, routes, mode } = usePcrWorkflowContext();
 
   return useMemo(() => {
+    const item = mode === "review" ? "pcrReviewItem" : "pcrPrepareItem";
     const nextStep = workflow.getNextStepInfo();
 
-    return routes.pcrPrepareItem.getLink({
+    return routes[item].getLink({
       projectId,
       pcrId,
       itemId,
@@ -17,10 +18,11 @@ export const useNextLink = () => {
 };
 
 export const useSummaryLink = () => {
-  const { projectId, pcrId, itemId, workflow, routes } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, workflow, routes, mode } = usePcrWorkflowContext();
 
   return useMemo(() => {
-    return routes.pcrPrepareItem.getLink({
+    const item = mode === "review" ? "pcrReviewItem" : "pcrPrepareItem";
+    return routes[item].getLink({
       projectId,
       pcrId,
       itemId,

@@ -168,7 +168,7 @@ export const CompaniesHouseStep = () => {
               {getContent(x => x.pcrItem.submitButton)}
             </Button>
             <Button type="submit" secondary {...registerButton("returnToSummary")} disabled={disabled}>
-              {getContent(x => x.pcrItem.returnToSummaryButton)}
+              {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
             </Button>
           </Fieldset>
         </Form>

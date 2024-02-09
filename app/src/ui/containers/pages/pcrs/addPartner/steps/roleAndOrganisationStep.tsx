@@ -193,7 +193,7 @@ export const RoleAndOrganisationStep = () => {
               <Content value={x => x.pcrItem.submitButton} />
             </Button>
             <Button type="submit" secondary {...registerButton("saveAndReturn")} disabled={disabled}>
-              <Content value={x => x.pcrItem.returnToSummaryButton} />
+              <Content value={x => x.pcrItem.saveAndReturnToSummaryButton} />
             </Button>
           </Fieldset>
         </Form>

@@ -1382,8 +1382,9 @@
   "pcrItem": {
     "submitButton": "Save and continue",
     "continueToSummaryButton": "Continue to summary",
-    "returnToSummaryButton": "Save and return to summary",
+    "saveAndReturnToSummaryButton": "Save and return to summary",
     "returnToRequestButton": "Save and return to request",
+    "returnToSummaryButton": "Return to summary",
     "uploadDocumentsButton": "Upload documents"
   },
   "pcrTypes": {

@@ -80,7 +80,7 @@ export const AcademicCostsReviewStep = () => {
             projectId,
           })}
         >
-          {getContent(x => x.pcrItem.returnToSummaryButton)}
+          {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
         </Link>
       </Section>
     </PcrPage>

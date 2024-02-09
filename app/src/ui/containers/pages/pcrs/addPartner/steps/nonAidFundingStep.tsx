@@ -38,7 +38,7 @@ export const NonAidFundingStep = () => {
           </Link>
 
           <Link route={summaryLink} styling="SecondaryButton">
-            {getContent(x => x.pcrItem.returnToSummaryButton)}
+            {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
           </Link>
         </Fieldset>
       </Form>
