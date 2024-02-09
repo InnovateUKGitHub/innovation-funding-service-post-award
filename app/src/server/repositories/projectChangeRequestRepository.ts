@@ -301,16 +301,20 @@ export class ProjectChangeRequestRepository
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
-    const data = await super.where(`Acc_Project__c='${sss(projectId)}'`);
+    const data = await super.where(
+      `Acc_Project__c='${sss(projectId)}' OR Acc_RequestHeader__r.Acc_Project__c='${sss(projectId)}'`,
+    );
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
-  async getById(projectId: ProjectId, id: string): Promise<ProjectChangeRequestEntity> {
+  async getById(projectId: ProjectId, pcrId: string): Promise<ProjectChangeRequestEntity> {
+    // Find all PCRs where the Project ID and ID match
+    // or all PCRs where the header record's Project ID and ID match
     const data = await super.where(
-      `(Id = '${sss(id)}' AND Acc_Project__c='${sss(projectId)}') OR (Acc_RequestHeader__c = '${sss(
-        id,
-      )}' AND Acc_RequestHeader__r.Acc_Project__c='${sss(projectId)}')`,
+      `(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(pcrId)}') OR (Acc_RequestHeader__r.Acc_Project__c='${sss(
+        projectId,
+      )}' AND Acc_RequestHeader__c = '${sss(pcrId)}')`,
     );
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
@@ -323,8 +327,14 @@ export class ProjectChangeRequestRepository
     return mapped;
   }
 
-  async isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean> {
-    const data = await super.filterOne(`Acc_Project__c='${sss(projectId)}' AND Id = '${sss(projectChangeRequestId)}'`);
+  async isExisting(projectId: ProjectId, pcrOrItemId: string): Promise<boolean> {
+    const data = await super.filterOne(
+      `(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(
+        pcrOrItemId,
+      )}') OR (Acc_RequestHeader__r.Acc_Project__c='${sss(projectId)}' AND Acc_RequestHeader__c = '${sss(
+        pcrOrItemId,
+      )}')`,
+    );
 
     return !!data;
   }
