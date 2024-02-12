@@ -237,10 +237,10 @@ export const FinancialVirementSummary = () => {
                   <Currency value={x.costDifference} />
                 </TD>
                 <TD small numeric>
-                  <Currency value={x.originalFundingLevel} />
+                  <Percentage value={x.originalFundingLevel} />
                 </TD>
                 <TD small numeric className={colClass}>
-                  <Currency value={x.newFundingLevel} />
+                  <Percentage value={x.newFundingLevel} />
                 </TD>
                 <TD small numeric>
                   <Currency value={x.originalRemainingGrant} />
