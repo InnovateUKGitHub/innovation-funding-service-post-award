@@ -2336,3 +2336,466 @@ export const changeRemainingGrantRounding = () => {
     });
   });
 };
+
+export const displayUpliftInProgress = () => {
+  ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((cell, index) => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(cell);
+      });
+  });
+};
+
+export const clickViewLoadUplift = () => {
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get(`td:nth-child(6)`).contains("View").click();
+    });
+  cy.heading("Uplift");
+};
+
+export const upliftListItems = () => {
+  [
+    ["Request number", "183"],
+    ["Type", "Uplift"],
+    ["Justification", 'This is the override justification and should be visible. *!"£$%^&()/`@#~<>,.'],
+  ].forEach(([key, list]) => {
+    cy.getListItemFromKey(key, list);
+  });
+  cy.get("dt").should("not.have.text", "Files");
+  cy.get("dd").should("not.have.text", "documentUploadedByIUK.docx");
+};
+
+export const upliftPartnerTable = () => {
+  [
+    "Partner",
+    "Total eligible costs",
+    "New total eligible costs",
+    "Difference",
+    "Funding level",
+    "New funding level",
+    "Remaining grant",
+    "New remaining grant",
+    "Difference",
+  ].forEach((header, index) => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(header);
+      });
+  });
+  [
+    [
+      "EUI Small Ent Health (Lead)",
+      "£384,000.00",
+      "£384,666.33",
+      "£666.33",
+      "65.00%",
+      "65.00%",
+      "£247,650.00",
+      "£248,083.11",
+      "£433.11",
+    ],
+    [
+      "A B Cad Services",
+      "£386,000.00",
+      "£386,666.33",
+      "£666.33",
+      "66.00%",
+      "66.00%",
+      "£254,760.00",
+      "£255,199.78",
+      "£439.78",
+    ],
+    [
+      "ABS EUI Medium Enterprise",
+      "£385,000.00",
+      "£385,666.33",
+      "£666.33",
+      "67.00%",
+      "67.00%",
+      "£257,950.00",
+      "£258,396.44",
+      "£446.44",
+    ],
+    [
+      "Auto Corporation Ltd",
+      "£381,000.00",
+      "£381,666.66",
+      "£666.66",
+      "68.00%",
+      "68.00%",
+      "£259,080.00",
+      "£259,533.33",
+      "£453.33",
+    ],
+    [
+      "Auto Healthcare Ltd",
+      "£387,220.00",
+      "£387,886.66",
+      "£666.66",
+      "69.00%",
+      "69.00%",
+      "£267,181.80",
+      "£267,641.80",
+      "£460.00",
+    ],
+    ["Auto Monitoring Ltd", "£420,000.00", "£420,666.66", "£666.66", "70.00%", "70.00%", "£0.00", "£466.66", "£466.66"],
+    [
+      "Auto Research Ltd",
+      "£388,000.00",
+      "£388,666.33",
+      "£666.33",
+      "71.00%",
+      "71.00%",
+      "£275,480.00",
+      "£275,953.09",
+      "£473.09",
+    ],
+    ["Brown and co", "£35,000.00", "£35,666.66", "£666.66", "72.00%", "72.00%", "£25,200.00", "£25,680.00", "£480.00"],
+    [
+      "Deep Rock Galactic",
+      "£390,000.00",
+      "£390,333.33",
+      "£333.33",
+      "73.00%",
+      "73.00%",
+      "£284,700.00",
+      "£284,943.33",
+      "£243.33",
+    ],
+    [
+      "EUI Micro Research Co.",
+      "£416,000.00",
+      "£416,666.66",
+      "£666.66",
+      "74.00%",
+      "74.00%",
+      "-£2,960.00",
+      "-£2,466.67",
+      "£493.33",
+    ],
+    [
+      "Gorcium Management Services Ltd.",
+      "£389,000.00",
+      "£389,666.66",
+      "£666.66",
+      "75.00%",
+      "75.00%",
+      "£291,750.00",
+      "£292,250.00",
+      "£500.00",
+    ],
+    [
+      "Hedges' Hedges Ltd",
+      "£414,000.00",
+      "£414,666.66",
+      "£666.66",
+      "76.00%",
+      "76.00%",
+      "£314,640.00",
+      "£315,146.66",
+      "£506.66",
+    ],
+    [
+      "Hyperion Corporation",
+      "£400,000.00",
+      "£400,333.33",
+      "£333.33",
+      "77.00%",
+      "77.00%",
+      "£308,000.00",
+      "£308,256.66",
+      "£256.66",
+    ],
+    [
+      "Image Development Society",
+      "£267,160.50",
+      "£267,827.16",
+      "£666.66",
+      "78.00%",
+      "78.00%",
+      "£208,385.19",
+      "£208,905.18",
+      "£519.99",
+    ],
+    [
+      "Intaser",
+      "£1,010,000.00",
+      "£1,010,666.66",
+      "£666.66",
+      "79.00%",
+      "79.00%",
+      "£797,900.00",
+      "£798,426.66",
+      "£526.66",
+    ],
+    ["Jakobs", "£372,000.00", "£372,333.33", "£333.33", "80.00%", "80.00%", "£297,600.00", "£297,866.66", "£266.66"],
+    [
+      "Java Coffee Inc",
+      "£550,000.00",
+      "£550,333.33",
+      "£333.33",
+      "81.00%",
+      "81.00%",
+      "£445,500.00",
+      "£445,770.00",
+      "£270.00",
+    ],
+    [
+      "Lutor Systems",
+      "£396,000.00",
+      "£396,333.33",
+      "£333.33",
+      "82.00%",
+      "82.00%",
+      "-£19,680.00",
+      "-£19,406.67",
+      "£273.33",
+    ],
+    ["Maliwan", "£355,000.00", "£355,333.33", "£333.33", "83.00%", "83.00%", "£294,650.00", "£294,926.66", "£276.66"],
+    ["Munce Inc", "£450,000.00", "£450,333.33", "£333.33", "84.00%", "84.00%", "£378,000.00", "£378,280.00", "£280.00"],
+    [
+      "National Investment Bank",
+      "£440,000.00",
+      "£440,333.33",
+      "£333.33",
+      "85.00%",
+      "85.00%",
+      "£374,000.00",
+      "£374,283.33",
+      "£283.33",
+    ],
+    [
+      "NIB Reasearch Limited",
+      "£385,000.00",
+      "£385,333.33",
+      "£333.33",
+      "86.00%",
+      "86.00%",
+      "£331,100.00",
+      "£331,386.66",
+      "£286.66",
+    ],
+    [
+      "RBA Test Account 1",
+      "£404,000.00",
+      "£404,666.33",
+      "£666.33",
+      "87.00%",
+      "87.00%",
+      "£351,480.00",
+      "£352,059.71",
+      "£579.71",
+    ],
+    [
+      "Red Motor Research Ltd.",
+      "£416,000.00",
+      "£416,333.33",
+      "£333.33",
+      "88.00%",
+      "88.00%",
+      "-£3,520.00",
+      "-£3,226.67",
+      "£293.33",
+    ],
+    [
+      "Swindon Development University",
+      "£420,000.00",
+      "£420,666.66",
+      "£666.66",
+      "89.00%",
+      "89.00%",
+      "£373,800.00",
+      "£374,393.33",
+      "£593.33",
+    ],
+    [
+      "Swindon University",
+      "£413,000.00",
+      "£413,333.33",
+      "£333.33",
+      "90.00%",
+      "90.00%",
+      "-£6,300.00",
+      "-£6,000.00",
+      "£300.00",
+    ],
+    [
+      "The Best Manufacturing",
+      "£360,000.00",
+      "£360,333.33",
+      "£333.33",
+      "91.00%",
+      "91.00%",
+      "£327,600.00",
+      "£327,903.33",
+      "£303.33",
+    ],
+    [
+      "Top Castle Co.",
+      "£470,000.00",
+      "£470,333.33",
+      "£333.33",
+      "92.00%",
+      "92.00%",
+      "£46,000.00",
+      "£46,306.66",
+      "£306.66",
+    ],
+    ["UAT37", "£485,000.00", "£485,666.33", "£666.33", "93.00%", "93.00%", "£451,050.00", "£451,669.69", "£619.69"],
+    [
+      "University of Bristol",
+      "£429,000.00",
+      "£429,333.33",
+      "£333.33",
+      "94.00%",
+      "94.00%",
+      "£8,460.00",
+      "£8,773.33",
+      "£313.33",
+    ],
+    [
+      "Vitruvius Stonework Limited",
+      "£389,000.00",
+      "£389,666.66",
+      "£666.66",
+      "95.00%",
+      "95.00%",
+      "£369,550.00",
+      "£370,183.33",
+      "£633.33",
+    ],
+    ["YHDHDL", "£735,000.00", "£735,666.66", "£666.66", "96.11%", "96.11%", "£706,408.50", "£707,049.23", "£640.73"],
+  ].forEach(
+    (
+      [
+        partner,
+        totalEligible,
+        difference,
+        newEligible,
+        fundingLevel,
+        newFundingLevel,
+        remainingGrant,
+        newRemainingGrant,
+        totalDifference,
+      ],
+      index,
+    ) => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(partner);
+          cy.get("td:nth-child(2)").contains(totalEligible);
+          cy.get("td:nth-child(3)").contains(difference);
+          cy.get("td:nth-child(4)").contains(newEligible);
+          cy.get("td:nth-child(5)").contains(fundingLevel);
+          cy.get("td:nth-child(6)").contains(newFundingLevel);
+          cy.get("td:nth-child(7)").contains(remainingGrant);
+          cy.get("td:nth-child(8)").contains(newRemainingGrant);
+          cy.get("td:nth-child(9)").contains(totalDifference);
+        });
+    },
+  );
+  [
+    "Project totals",
+    "£13,521,380.50",
+    "£13,538,045.02",
+    "£16,664.52",
+    "80.50%",
+    "80.50%",
+    "£8,515,415.49",
+    "£8,528,634.61",
+    "£13,219.12",
+  ].forEach((footer, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get(`th:nth-child(${index + 1})`).contains(footer);
+    });
+  });
+};
+
+export const clickIntoPartnerTable = (partner: string) => {
+  cy.get("a").contains(partner).click();
+  cy.get("h2").contains(partner);
+};
+
+export const validateEuiSmallEntUplift = () => {
+  ["Cost category", "Total eligible costs", "New total eligible costs", "Costs reallocated"].forEach(
+    (header, index) => {
+      cy.get("tr")
+        .eq(0)
+        .within(() => {
+          cy.get(`th:nth-child(${index + 1})`).contains(header);
+        });
+    },
+  );
+  [
+    ["Labour", "£35,000.00", "£35,666.33", "£666.33"],
+    ["Overheads", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Materials", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Capital usage", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Subcontracting", "£34,000.00", "£34,000.00", "£0.00"],
+    ["Travel and subsistence", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Other costs", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Other costs 2", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Other costs 3", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Other costs 4", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Other costs 5", "£35,000.00", "£35,000.00", "£0.00"],
+  ].forEach(([category, totalEligible, newEligible, costsReallocated], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(category);
+        cy.get("td:nth-child(2)").contains(totalEligible);
+        cy.get("td:nth-child(3)").contains(newEligible);
+        cy.get("td:nth-child(4)").contains(costsReallocated);
+      });
+  });
+  ["Partner totals", "£384,000.00", "£384,666.33", "£666.33"].forEach((footer, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get(`td:nth-child(${index + 1})`).contains(footer);
+    });
+  });
+};
+
+export const validateSwindonDevUni = () => {
+  ["Cost category", "Total eligible costs", "New total eligible costs", "Costs reallocated"].forEach(
+    (header, index) => {
+      cy.get("tr")
+        .eq(0)
+        .within(() => {
+          cy.get(`th:nth-child(${index + 1})`).contains(header);
+        });
+    },
+  );
+  [
+    ["Directly incurred - Staff", "£35,000.00", "£35,666.66", "£666.66"],
+    ["Directly incurred - Travel and subsistence", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Directly incurred - Equipment", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Directly incurred - Other costs", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Directly allocated - Investigations", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Directly allocated - Estates costs", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Directly allocated - Other costs", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Indirect costs - Investigations", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Exceptions - Staff", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Exceptions - Travel and subsistence", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Exceptions - Equipment", "£35,000.00", "£35,000.00", "£0.00"],
+    ["Exceptions - Other costs", "£35,000.00", "£35,000.00", "£0.00"],
+  ].forEach(([category, totalEligible, newEligible, costsReallocated], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(category);
+        cy.get("td:nth-child(2)").contains(totalEligible);
+        cy.get("td:nth-child(3)").contains(newEligible);
+        cy.get("td:nth-child(4)").contains(costsReallocated);
+      });
+  });
+  ["Partner totals", "£420,000.00", "£420,666.66", "£666.66"].forEach((footer, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get(`td:nth-child(${index + 1})`).contains(footer);
+    });
+  });
+};
