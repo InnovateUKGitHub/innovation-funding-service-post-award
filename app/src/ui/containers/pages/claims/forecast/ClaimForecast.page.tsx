@@ -24,6 +24,7 @@ import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules
 import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import { getAuthRoles } from "@framework/types/authorisation";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -42,7 +43,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
   const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
-  const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError } = useForm<
+  const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError, trigger } = useForm<
     z.output<ForecastTableSchemaType>
   >({
     resolver: zodResolver(schema, {
@@ -56,6 +57,8 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
   const tableData = useMapToForecastTableDto({ ...data, clientProfiles: watch("profile") });
 
   const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
+
+  useFormRevalidate(watch, trigger);
 
   const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
     onUpdate({
