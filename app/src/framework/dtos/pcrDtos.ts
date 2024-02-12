@@ -294,4 +294,5 @@ export type FullPCRItemDto = {
   subcontractorDescription: string | null;
   subcontractorJustification: string | null;
   subcontractorCost: number | null;
+  upliftJustification: string | null;
 };

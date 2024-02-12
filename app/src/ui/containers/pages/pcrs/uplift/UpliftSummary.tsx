@@ -32,13 +32,13 @@ const UpliftSummary = () => {
           qa="typesRow"
         />
         <SummaryListItem
-          label={x => x.pcrReasoningLabels.comments}
+          label={x => x.pcrUpliftLabels.overrideJustification}
           content={
             <SimpleString multiline verticalScrollbar>
-              {pcr.items[0].reasoningComments}
+              {pcr.items[0].upliftJustification}
             </SimpleString>
           }
-          qa="comments"
+          qa="overrideJustification"
         />
         <SummaryListItem
           label={x => x.pcrReasoningLabels.files}

@@ -89,6 +89,7 @@ export type PcrNode = GQL.PartialNode<{
   Country_where_work_will_be_carried_out__c: GQL.Value<string>;
   Cost_of_work__c: GQL.Value<number>;
   Justification__c: GQL.Value<string>;
+  Override_Justification__c: GQL.Value<string>;
   Acc_Project_Change_Requests__r: GQL.ArrayValue<PcrNode>;
 }>;
 
@@ -180,6 +181,7 @@ export type PcrItemDtoMapping = Pick<
   | "subcontractorJustification"
   | "subcontractorCost"
   | "reasoningComments"
+  | "upliftJustification"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -430,6 +432,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   subcontractorJustification(node) {
     return node?.Justification__c?.value ?? null;
+  },
+  upliftJustification(node) {
+    return node?.Override_Justification__c?.value ?? null;
   },
 };
 
