@@ -54,12 +54,9 @@ import {
   jeScheckDetailsAgain,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";
+import { newCurrency } from "common/currency";
 
 const pmEmail = "james.black@euimeabs.test";
-let newCurrency = new Intl.NumberFormat("en-GB", {
-  style: "currency",
-  currency: "GBP",
-});
 
 describe("PCR >  Add a partner > E2E: Je-S", () => {
   before(() => {

@@ -372,7 +372,7 @@ export const currentLoanTable = () => {
   );
   ["Availability Period", "Extension Period", "Repayment Period"].forEach((phase, index) => {
     cy.get("tr")
-      .eq(index)
+      .eq(index + 1)
       .within(() => {
         cy.get("td:nth-child(1)").contains(phase);
       });
