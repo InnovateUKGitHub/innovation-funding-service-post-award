@@ -97,8 +97,6 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   const validationErrors = useRhfErrors(formState.errors);
   const commentsCharacterCount = watch("comments").length;
 
-  const disabled = imDisabled || isFetching;
-
   return (
     <Page
       backLink={
@@ -201,18 +199,18 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
               characterCount={commentsCharacterCount}
               characterCountMax={claimCommentsMaxLength}
               defaultValue={data.claim.comments ?? ""}
-              disabled={disabled}
+              disabled={imDisabled || isFetching}
             />
           </Fieldset>
 
           <Fieldset>
             <P>{getContent(x => x.claimsMessages.submitClaimConfirmation)}</P>
 
-            <Button disabled={disabled} type="submit" {...registerButton("submit")}>
+            <Button disabled={imDisabled || isFetching} type="submit" {...registerButton("submit")}>
               {getContent(x => x.pages.claimPrepareSummary.submitClaimMessage)}
             </Button>
 
-            <Button disabled={disabled} type="submit" secondary {...registerButton("saveAndReturnToClaims")}>
+            <Button disabled={isFetching} type="submit" secondary {...registerButton("saveAndReturnToClaims")}>
               {getContent(x => x.pages.claimPrepareSummary.saveAndReturnMessage)}
             </Button>
           </Fieldset>
