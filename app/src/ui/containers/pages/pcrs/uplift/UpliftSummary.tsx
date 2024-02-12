@@ -4,7 +4,6 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { useContent } from "@ui/hooks/content.hook";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { PcrPage } from "../pcrPage";
-import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { FinancialVirementsViewTable } from "../financialVirements/summary/FinancialVirementsViewTable";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
 
@@ -12,8 +11,11 @@ const UpliftSummary = () => {
   const { projectId, pcrId, itemId, mode } = usePcrWorkflowContext();
   if (mode === "prepare") throw new Error("This page does not support the prepare mode");
 
-  const { pcr, documents, financialVirementsForCosts, financialVirementsForParticipants, partners } =
-    useUpliftSummaryQuery({ projectId, pcrId, pcrItemId: itemId });
+  const { pcr, financialVirementsForCosts, financialVirementsForParticipants, partners } = useUpliftSummaryQuery({
+    projectId,
+    pcrId,
+    pcrItemId: itemId,
+  });
   const { getContent } = useContent();
 
   const { virementData } = useMapFinancialVirements({
@@ -39,17 +41,6 @@ const UpliftSummary = () => {
             </SimpleString>
           }
           qa="overrideJustification"
-        />
-        <SummaryListItem
-          label={x => x.pcrReasoningLabels.files}
-          content={
-            documents.length ? (
-              <DocumentList documents={documents} qa="docs" />
-            ) : (
-              getContent(x => x.pages.pcrReasoningSummary.noDocuments)
-            )
-          }
-          qa="files"
         />
       </SummaryList>
 

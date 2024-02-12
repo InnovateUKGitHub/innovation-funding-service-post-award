@@ -23,53 +23,6 @@ const upliftSummaryQuery = graphql`
               }
             }
           }
-          Documents: ContentDocumentLink(
-            where: { LinkedEntityId: { in: [$pcrId, $pcrItemId] } }
-            first: 2000
-            orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }
-          ) {
-            edges {
-              node {
-                isFeedAttachment
-                isOwner
-                LinkedEntityId {
-                  value
-                }
-                ContentDocument {
-                  Id
-                  LastModifiedBy {
-                    ContactId {
-                      value
-                    }
-                  }
-                  Description {
-                    value
-                  }
-                  CreatedDate {
-                    value
-                  }
-                  LatestPublishedVersionId {
-                    value
-                  }
-                  FileExtension {
-                    value
-                  }
-                  Title {
-                    value
-                  }
-                  ContentSize {
-                    value
-                  }
-                  CreatedBy {
-                    Name {
-                      value
-                    }
-                    Id
-                  }
-                }
-              }
-            }
-          }
           Acc_VirementsForParticipant: Acc_Virements__c(
             where: {
               Acc_ProjectChangeRequest__c: { eq: $pcrItemId }
