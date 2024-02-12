@@ -3,19 +3,24 @@ import { useUpliftSummaryQuery } from "./UpliftSummary.logic";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { PcrPage } from "../pcrPage";
+import { PcrBackLink, PcrPage } from "../pcrPage";
 import { FinancialVirementsViewTable } from "../financialVirements/summary/FinancialVirementsViewTable";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
+import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { useRoutes } from "@ui/redux/routesProvider";
 
 const UpliftSummary = () => {
   const { projectId, pcrId, itemId, mode } = usePcrWorkflowContext();
+  const routes = useRoutes();
+
   if (mode === "prepare") throw new Error("This page does not support the prepare mode");
 
-  const { pcr, financialVirementsForCosts, financialVirementsForParticipants, partners } = useUpliftSummaryQuery({
-    projectId,
-    pcrId,
-    pcrItemId: itemId,
-  });
+  const { pcr, pcrItemCount, financialVirementsForCosts, financialVirementsForParticipants, partners } =
+    useUpliftSummaryQuery({
+      projectId,
+      pcrId,
+      pcrItemId: itemId,
+    });
   const { getContent } = useContent();
 
   const { virementData } = useMapFinancialVirements({
@@ -25,7 +30,18 @@ const UpliftSummary = () => {
   });
 
   return (
-    <PcrPage validationErrors={undefined}>
+    <PcrPage
+      validationErrors={undefined}
+      backLink={
+        pcrItemCount === 1 ? (
+          <BackLink route={routes.pcrsDashboard.getLink({ projectId })}>
+            {getContent(x => x.pages.pcrOverview.backToPcrs)}
+          </BackLink>
+        ) : (
+          <PcrBackLink />
+        )
+      }
+    >
       <SummaryList qa="pcr_reasoning">
         <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
         <SummaryListItem

@@ -35,9 +35,9 @@ export const useInactiveMessage = (projectStatus?: ProjectStatus, partnerStatus?
 };
 
 export interface PageProps {
-  pageTitle: React.ReactElement<AnyObject>;
+  pageTitle: React.ReactNode;
   children: React.ReactNode;
-  backLink?: React.ReactElement<AnyObject>;
+  backLink?: React.ReactNode;
   apiError?: IAppError | null;
   validationErrors?: RhfErrors;
   projectStatus?: ProjectStatus;

@@ -35,6 +35,7 @@ const useUpliftSummaryQuery = ({
     ["upliftJustification"],
     {},
   );
+  const pcrItemCount = pcrNode?.Acc_Project_Change_Requests__r?.totalCount ?? 0;
 
   const partners = mapToPartnerDtoArray(
     data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
@@ -66,7 +67,7 @@ const useUpliftSummaryQuery = ({
     },
   );
 
-  return { pcr, partners, financialVirementsForCosts, financialVirementsForParticipants };
+  return { pcr, pcrItemCount, partners, financialVirementsForCosts, financialVirementsForParticipants };
 };
 
 export { useUpliftSummaryQuery };
