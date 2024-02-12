@@ -33,7 +33,7 @@ const useUpliftSummaryQuery = ({
       children: [pcrItemNode],
     },
     ["requestNumber"],
-    ["reasoningComments"],
+    ["upliftJustification"],
     {},
   );
 
