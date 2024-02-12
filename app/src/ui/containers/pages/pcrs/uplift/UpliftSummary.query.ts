@@ -17,7 +17,7 @@ const upliftSummaryQuery = graphql`
           Child: Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrItemId } }, first: 1) {
             edges {
               node {
-                Acc_Reasoning__c {
+                Override_Justification__c {
                   value
                 }
               }

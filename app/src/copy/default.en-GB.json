@@ -1505,6 +1505,9 @@
     "comments": "Comments",
     "files": "Files"
   },
+  "pcrUpliftLabels": {
+    "overrideJustification": "Justification"
+  },
   "pcrRemovePartnerLabels": {
     "removalPeriod": "Removal period",
     "removedPartner": "Partner being removed",
