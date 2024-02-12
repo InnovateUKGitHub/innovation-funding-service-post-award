@@ -15,10 +15,12 @@ export const PcrPage = ({
   children,
   apiError: pcrLevelApiError,
   validationErrors,
+  backLink,
 }: {
   children: React.ReactNode;
   apiError?: IAppError<Results<ResultBase>> | null | undefined;
   validationErrors: RhfErrors;
+  backLink?: React.ReactNode;
 }) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
   const { getPcrItemContent } = useGetPcrItemMetadata();
@@ -34,7 +36,7 @@ export const PcrPage = ({
 
   return (
     <Page
-      backLink={<PcrBackLink />}
+      backLink={backLink ?? <PcrBackLink />}
       pageTitle={<Title heading={content.name} />}
       projectStatus={project.status}
       fragmentRef={fragmentRef}
