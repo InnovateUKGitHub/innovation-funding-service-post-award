@@ -1,5 +1,4 @@
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
-import { mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinancialVirementForCosts";
 import { mapToFinancialVirementForParticipantDtoArray } from "@gql/dtoMapper/mapFinancialVirementForParticipant";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
@@ -37,12 +36,6 @@ const useUpliftSummaryQuery = ({
     {},
   );
 
-  const documents = mapToProjectDocumentSummaryDtoArray(
-    data?.salesforce.uiapi.query.Documents?.edges ?? [],
-    ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-    { projectId, type: "pcr" },
-  );
-
   const partners = mapToPartnerDtoArray(
     data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
     ["id", "name", "isLead"],
@@ -73,7 +66,7 @@ const useUpliftSummaryQuery = ({
     },
   );
 
-  return { pcr, partners, documents, financialVirementsForCosts, financialVirementsForParticipants };
+  return { pcr, partners, financialVirementsForCosts, financialVirementsForParticipants };
 };
 
 export { useUpliftSummaryQuery };
