@@ -130,7 +130,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       qa: "pcrDeleteLink",
     };
 
-    if (hasAnyUplift) {
+    if (isPmOrMo && hasAnyUplift) {
       // If we only have 1 PCR item, show the view item link.
       if (pcr.items.length === 1) {
         links.push(viewItemLink);
