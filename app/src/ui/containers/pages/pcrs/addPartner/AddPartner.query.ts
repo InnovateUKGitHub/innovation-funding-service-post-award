@@ -278,6 +278,7 @@ export const addPartnerWorkflowQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
                 Acc_CompetitionType__c {
                   value

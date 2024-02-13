@@ -1015,6 +1015,7 @@ type Acc_IFSSpendProfile__c {
 type Acc_IFSSpendProfile__cConnection {
   edges: [Acc_IFSSpendProfile__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_IFSSpendProfile__cEdge {
@@ -6011,29 +6012,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  LAST_FISCAL_QUARTER
-  THIS_FISCAL_QUARTER
-  THIS_YEAR
-  YESTERDAY
-  NEXT_MONTH
   THIS_QUARTER
-  NEXT_90_DAYS
-  LAST_MONTH
-  NEXT_YEAR
-  THIS_MONTH
-  NEXT_WEEK
-  NEXT_QUARTER
-  NEXT_FISCAL_YEAR
-  TOMORROW
-  LAST_YEAR
-  LAST_WEEK
   LAST_FISCAL_YEAR
-  THIS_WEEK
-  NEXT_FISCAL_QUARTER
+  LAST_MONTH
+  LAST_WEEK
   LAST_90_DAYS
-  THIS_FISCAL_YEAR
+  NEXT_90_DAYS
+  NEXT_FISCAL_QUARTER
+  NEXT_MONTH
+  YESTERDAY
+  THIS_WEEK
+  THIS_MONTH
+  NEXT_FISCAL_YEAR
+  NEXT_YEAR
+  NEXT_QUARTER
+  THIS_FISCAL_QUARTER
+  NEXT_WEEK
+  THIS_YEAR
   TODAY
+  TOMORROW
+  THIS_FISCAL_YEAR
+  LAST_YEAR
   LAST_QUARTER
+  LAST_FISCAL_QUARTER
 }
 
 input DateOperators {
@@ -6653,11 +6654,11 @@ input NoFunctionAggregateOrderByClause {
 
 """Enum representing possible null ordering options."""
 enum NullOrder {
-  """The enum value represents null first order."""
-  FIRST
-
   """The enum value represents null last order."""
   LAST
+
+  """The enum value represents null first order."""
+  FIRST
 }
 
 enum NullsOrder {
@@ -7301,11 +7302,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents ascending order."""
-  ASC
-
   """The enum value represents descending order."""
   DESC
+
+  """The enum value represents ascending order."""
+  ASC
 }
 
 enum ResultsOrder {
