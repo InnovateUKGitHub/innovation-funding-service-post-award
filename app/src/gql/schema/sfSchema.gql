@@ -1,4 +1,6 @@
-"""Entry point for read operations to the schema."""
+"""
+Entry point for read operations to the schema.
+"""
 type Query {
   uiapi: UIAPI!
 }
@@ -14,28 +16,44 @@ type Acc_BroadcastMessage__c {
   LastReferencedDate: DateTimeValue
   Acc_RequestedBy__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_RequestedBy__r: User
   Acc_EndDate__c: DateValue
   Name: StringValue
   SystemModstamp: DateTimeValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_BroadcastMessage__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_Type__c: PicklistValue
   CreatedDate: DateTimeValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -175,7 +193,9 @@ type Acc_Claims__c {
   Competition__c: StringValue
   Acc_CostCategory__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_CostCategory__r: Acc_CostCategory__c
   ACC_ProjectCurrentClaimFrequency__c: StringValue
   Acc_Prepayment__c: CurrencyValue
@@ -186,7 +206,9 @@ type Acc_Claims__c {
   Acc_StaticCapLimitDeferredGrant__c: CurrencyValue
   Competition_Rec__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Competition_Rec__r: Competition__c
   Acc_PeriodGrantToBePaidBase__c: CurrencyValue
   Acc_ReviewCapLimit__c: StringValue
@@ -199,7 +221,9 @@ type Acc_Claims__c {
   Acc_Grant_Paid_To_Date__c: CurrencyValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_Claims__c_Owner
   RecordTypeId(
     """
@@ -208,7 +232,9 @@ type Acc_Claims__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_ApprovalStatus__c: PicklistValue
   Acc_CostsClaimedToDate__c: CurrencyValue
@@ -246,7 +272,9 @@ type Acc_Claims__c {
   Acc_ParticipantCapLimit__c: CurrencyValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_PeriodApprovedDeferredCosts__c: CurrencyValue
   Acc_Integration_AccountId__c: StringValue
@@ -267,7 +295,9 @@ type Acc_Claims__c {
   CreatedDate: DateTimeValue
   Acc_ProjectParticipant__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_NewDefGrantPrepaymentCarriedForward__c: CurrencyValue
   Acc_CompletionReport__c: BooleanValue
@@ -279,7 +309,9 @@ type Acc_Claims__c {
   Acc_Over100k__c: StringValue
   Acc_ParentId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ParentId__r: Acc_Claims__c
   IM_PreCursorCompetition__c: StringValue
   Acc_IsLockedDetail__c: BooleanValue
@@ -313,24 +345,66 @@ type Acc_Claims__c {
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
 
-  """childRelationship"""
-  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  """
+  childRelationship
+  """
+  Claims__r(
+    upperBound: Int
+    orderBy: Acc_Claims__c_OrderBy
+    where: Acc_Claims__c_Filter
+    after: String
+    first: Int
+  ): Acc_Claims__cConnection
 
-  """childRelationship"""
-  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  childRelationship
+  """
+  Profiles__r(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """childRelationship"""
-  Profiles1__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  childRelationship
+  """
+  Profiles1__r(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """childRelationship"""
-  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  """
+  childRelationship
+  """
+  Status_Changes__r(
+    upperBound: Int
+    orderBy: Acc_StatusChange__c_OrderBy
+    where: Acc_StatusChange__c_Filter
+    after: String
+    first: Int
+  ): Acc_StatusChange__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -755,11 +829,15 @@ type Acc_CostCategory__c {
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_CostCategory__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_CostCategoryId__c: DoubleValue
   Acc_OrganisationType__c: StringValue
@@ -769,22 +847,56 @@ type Acc_CostCategory__c {
   Acc_HintText__c: LongTextAreaValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_DisplayOrder__c: DoubleValue
   VAT_Cost_Category__c: BooleanValue
 
-  """childRelationship"""
-  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  """
+  childRelationship
+  """
+  Claims__r(
+    upperBound: Int
+    orderBy: Acc_Claims__c_OrderBy
+    where: Acc_Claims__c_Filter
+    after: String
+    first: Int
+  ): Acc_Claims__cConnection
 
-  """childRelationship"""
-  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+  """
+  childRelationship
+  """
+  IFS_Spend_Profiles__r(
+    upperBound: Int
+    orderBy: Acc_IFSSpendProfile__c_OrderBy
+    where: Acc_IFSSpendProfile__c_Filter
+    after: String
+    first: Int
+  ): Acc_IFSSpendProfile__cConnection
 
-  """childRelationship"""
-  Profile__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  childRelationship
+  """
+  Profile__r(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -908,7 +1020,9 @@ type Acc_IFSSpendProfile__c {
   Acc_AwardRate__c: PercentValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_CostEach__c: CurrencyValue
   Acc_TotalIndirectCosts__c: CurrencyValue
@@ -921,7 +1035,9 @@ type Acc_IFSSpendProfile__c {
   Acc_DateSecured__c: DateValue
   Acc_ProjectParticipantID__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c
   IsDeleted: BooleanValue
   Acc_PeriodForecastStatus__c: PicklistValue
@@ -939,7 +1055,9 @@ type Acc_IFSSpendProfile__c {
   Acc_Name__c: StringValue
   Acc_CostCategoryID__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_CostCategoryID__r: Acc_CostCategory__c
   Acc_DATotalOtherCosts__c: CurrencyValue
   Acc_TotalFutureCostCategoryValue__c: CurrencyValue
@@ -958,7 +1076,9 @@ type Acc_IFSSpendProfile__c {
   Acc_Country__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_IFSSpendProfile__c_Owner
   Acc_TotalCost__c: CurrencyValue
   Acc_RoleAndDescription__c: LongTextAreaValue
@@ -969,14 +1089,18 @@ type Acc_IFSSpendProfile__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_TotalTravelCosts__c: CurrencyValue
   Acc_ProjectPeriodEndDate__c: DateValue
   Acc_TotalMaterialsCosts__c: CurrencyValue
   Acc_ProjectChangeRequest__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Acc_DepreciationPeriod__c: DoubleValue
   Acc_TotalExceptionsCosts__c: CurrencyValue
@@ -1000,12 +1124,22 @@ type Acc_IFSSpendProfile__c {
   Acc_ForecastLatestValue__c: CurrencyValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1277,11 +1411,15 @@ type Acc_MonitoringAnswer__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_MonitoringAnswer__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   RecordTypeId(
@@ -1291,12 +1429,16 @@ type Acc_MonitoringAnswer__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_PriorStatusValue__c: TextAreaValue
   Acc_MonitoringHeader__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_MonitoringHeader__r: Acc_MonitoringAnswer__c
   Acc_AddComments__c: LongTextAreaValue
   IsDeleted: BooleanValue
@@ -1304,30 +1446,60 @@ type Acc_MonitoringAnswer__c {
   LastViewedDate: DateTimeValue
   Acc_Question__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Question__r: Acc_MonitoringQuestion__c
   SystemModstamp: DateTimeValue
   CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   Acc_Project__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Project__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_MonitoringReportStatus__c: PicklistValue
 
-  """childRelationship"""
-  Monitoring_Answers__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  """
+  childRelationship
+  """
+  Monitoring_Answers__r(
+    upperBound: Int
+    orderBy: Acc_MonitoringAnswer__c_OrderBy
+    where: Acc_MonitoringAnswer__c_Filter
+    after: String
+    first: Int
+  ): Acc_MonitoringAnswer__cConnection
 
-  """childRelationship"""
-  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  """
+  childRelationship
+  """
+  Status_Changes__r(
+    upperBound: Int
+    orderBy: Acc_StatusChange__c_OrderBy
+    where: Acc_StatusChange__c_Filter
+    after: String
+    first: Int
+  ): Acc_StatusChange__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1476,25 +1648,47 @@ type Acc_MonitoringQuestion__c {
   Acc_QuestionDescription__c: LongTextAreaValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_MonitoringQuestion__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   CreatedDate: DateTimeValue
   Acc_QuestionText__c: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_DisplayOrder__c: DoubleValue
 
-  """childRelationship"""
-  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  """
+  childRelationship
+  """
+  Monitoring_Reports__r(
+    upperBound: Int
+    orderBy: Acc_MonitoringAnswer__c_OrderBy
+    where: Acc_MonitoringAnswer__c_Filter
+    after: String
+    first: Int
+  ): Acc_MonitoringAnswer__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1606,11 +1800,15 @@ type Acc_Prepayment__c {
   Name: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_Prepayment__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   Acc_ProjectPeriodEndDate__c: DateValue
@@ -1634,23 +1832,43 @@ type Acc_Prepayment__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_HubAndSpokePrePayment__c: BooleanValue
   Acc_AccountId__c: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_Loan_Due_Days__c: DoubleValue
   Acc_PreviousPrepaymentStatus__c: StringValue
 
-  """childRelationship"""
-  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  childRelationship
+  """
+  Virements__r(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1813,7 +2031,9 @@ type Acc_Profile__c {
   LastModifiedDate: DateTimeValue
   Acc_ParentId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ParentId__r: Acc_Profile__c
   Acc_ProjectNumber__c: StringValue
   Acc_TotalGOLCost__c: CurrencyValue
@@ -1829,11 +2049,15 @@ type Acc_Profile__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_Profile__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   RecordTypeId(
@@ -1843,7 +2067,9 @@ type Acc_Profile__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_ProjectPeriodEndDate__c: DateValue
   Acc_PeriodLatestForecastCost__c: CurrencyValue
@@ -1855,12 +2081,16 @@ type Acc_Profile__c {
   LastViewedDate: DateTimeValue
   Acc_ClaimDetail__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ClaimDetail__r: Acc_Claims__c
   Acc_GrantDue__c: CurrencyValue
   Acc_Claim__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Claim__r: Acc_Claims__c
   SystemModstamp: DateTimeValue
   Acc_CostCategoryLatestForecastCost__c: CurrencyValue
@@ -1869,12 +2099,16 @@ type Acc_Profile__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_ClaimPeriodNumber__c: DoubleValue
   Acc_CostCategory__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_CostCategory__r: Acc_CostCategory__c
   Acc_Project__c: StringValue
   Acc_CostCategoryAwardOverride__c: PercentValue
@@ -1882,23 +2116,57 @@ type Acc_Profile__c {
   Acc_TotalLatestForecastCost__c: CurrencyValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_LatestForecastCost__c: CurrencyValue
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_CostCategoryFutureForecastCost__c: CurrencyValue
 
-  """childRelationship"""
-  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  childRelationship
+  """
+  Profiles__r(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  childRelationship
+  """
+  Virements__r(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2085,7 +2353,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_Approved__c: BooleanValue
   Acc_Contact1__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Contact1__r: Contact
   Loan_ProjectStartDate__c: DateValue
   Acc_AwardRate__c: PercentValue
@@ -2094,7 +2364,9 @@ type Acc_ProjectChangeRequest__c {
   Loan_ExtensionEndDate__c: DateValue
   Acc_RequestHeader__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_RequestHeader__r: Acc_ProjectChangeRequest__c
   Acc_Subsidy_Control_Scheme__c: StringValue
   Acc_Reasoning__c: LongTextAreaValue
@@ -2116,7 +2388,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_Nickname__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_ProjectChangeRequest__c_Owner
   Justification__c: LongTextAreaValue
   Acc_TurnoverYearEnd__c: DateValue
@@ -2127,17 +2401,23 @@ type Acc_ProjectChangeRequest__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_ApprovalStatus__c: PicklistValue
   Acc_ProjectTitle__c: StringValue
   Acc_Profile__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Profile__r: Acc_Profile__c
   Acc_Project_Participant__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Project_Participant__r: Acc_ProjectParticipant__c
   Acc_PriorStatusValue__c: TextAreaValue
   Country_where_work_will_be_carried_out__c: StringValue
@@ -2156,7 +2436,9 @@ type Acc_ProjectChangeRequest__c {
   LastActivityDate: DateValue
   Acc_Project__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Project__r: Acc_Project__c
   Acc_RequestedEndDate__c: DateValue
   Acc_ExternalReviewRequestedDate__c: DateValue
@@ -2165,7 +2447,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_AuthorisationHardStopDate__c: DateValue
   Acc_Account__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Account__r: Account
   Acc_ProjectID__c: StringValue
   Days_in_previous_statuses__c: DoubleValue
@@ -2173,11 +2457,15 @@ type Acc_ProjectChangeRequest__c {
   Name: StringValue
   Acc_ProjectContactLink__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectContactLink__r: Acc_ProjectContactLink__c
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_ExternalReviewStatus__c: PicklistValue
   Acc_ReasonforTermination__c: PicklistValue
@@ -2225,7 +2513,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_ProjectCity__c: StringValue
   Acc_Contact2__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Contact2__r: Contact
   Acc_Contact2EmailAddress__c: StringValue
   PCR_Age__c: DoubleValue
@@ -2234,23 +2524,65 @@ type Acc_ProjectChangeRequest__c {
   Acc_ExistingPartnerName__c: TextAreaValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+  """
+  childRelationship
+  """
+  IFS_Spend_Profiles__r(
+    upperBound: Int
+    orderBy: Acc_IFSSpendProfile__c_OrderBy
+    where: Acc_IFSSpendProfile__c_Filter
+    after: String
+    first: Int
+  ): Acc_IFSSpendProfile__cConnection
 
-  """childRelationship"""
-  Acc_Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Acc_Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  """
+  childRelationship
+  """
+  Status_Changes__r(
+    upperBound: Int
+    orderBy: Acc_StatusChange__c_OrderBy
+    where: Acc_StatusChange__c_Filter
+    after: String
+    first: Int
+  ): Acc_StatusChange__cConnection
 
-  """childRelationship"""
-  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  childRelationship
+  """
+  Virements__r(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2651,11 +2983,15 @@ type Acc_ProjectContactLink__c {
   Acc_Internal_User__c: BooleanValue
   Acc_UserId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_UserId__r: User
   Acc_ContactId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ContactId__r: Contact
   Acc_Role__c: PicklistValue
   Acc_StartDate__c: DateValue
@@ -2667,36 +3003,70 @@ type Acc_ProjectContactLink__c {
   Acc_Project_Number__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_ProjectContactLink__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_EmailOfSFContact__c: EmailValue
   CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   Acc_AccountId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_AccountId__r: Account
   Acc_ProjectId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectId__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2850,12 +3220,16 @@ type Acc_ProjectParticipant__c {
   Acc_Overdue_Claim_Helper__c: BooleanValue
   Acc_FinanceContact__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_FinanceContact__r: Contact
   Acc_ForecastLastModifiedDate__c: DateTimeValue
   Acc_ProjectManager__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectManager__r: Contact
   Acc_FinalClaim__c: BooleanValue
   Acc_RemainingParticipantGrant__c: CurrencyValue
@@ -2876,7 +3250,9 @@ type Acc_ProjectParticipant__c {
   Acc_ValidationConditionsDesc__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_ProjectParticipant__c_Owner
   Acc_Iban__c: EncryptedStringValue
   Acc_WorkdaySupplierSetupComplete__c: BooleanValue
@@ -2888,7 +3264,9 @@ type Acc_ProjectParticipant__c {
   Acc_TotalApprovedCosts__c: CurrencyValue
   Acc_FinanceContactPcl__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_FinanceContactPcl__r: Acc_ProjectContactLink__c
   SystemModstamp: DateTimeValue
   Acc_OrganisationType__c: PicklistValue
@@ -2898,7 +3276,9 @@ type Acc_ProjectParticipant__c {
   Acc_FirstName__c: StringValue
   Acc_AccountId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_AccountId__r: Account
   Acc_ValidationConditionsCode__c: StringValue
   Acc_NonfundedParticipant__c: BooleanValue
@@ -2912,7 +3292,9 @@ type Acc_ProjectParticipant__c {
   Acc_OverdueEmailsSent__c: MultiPicklistValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_Postcode__c: StringValue
   Acc_CurrentPeriodNumber__c: DoubleValue
@@ -2950,7 +3332,9 @@ type Acc_ProjectParticipant__c {
   Acc_AccountValidationNotes__c: StringValue
   Acc_MonitoringOfficer__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_MonitoringOfficer__r: Contact
   Acc_ClaimsUnderQuery__c: DoubleValue
   ParticipantMigrationID__c: StringValue
@@ -2965,34 +3349,94 @@ type Acc_ProjectParticipant__c {
   Acc_Overdue_Project__c: StringValue
   Acc_ProjectId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectId__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   IM_Survey_Last_Updated__c: DateValue
 
-  """childRelationship"""
-  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  """
+  childRelationship
+  """
+  Claims__r(
+    upperBound: Int
+    orderBy: Acc_Claims__c_OrderBy
+    where: Acc_Claims__c_Filter
+    after: String
+    first: Int
+  ): Acc_Claims__cConnection
 
-  """childRelationship"""
-  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+  """
+  childRelationship
+  """
+  IFS_Spend_Profiles__r(
+    upperBound: Int
+    orderBy: Acc_IFSSpendProfile__c_OrderBy
+    where: Acc_IFSSpendProfile__c_Filter
+    after: String
+    first: Int
+  ): Acc_IFSSpendProfile__cConnection
 
-  """childRelationship"""
-  Pre_Payments__r(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
+  """
+  childRelationship
+  """
+  Pre_Payments__r(
+    upperBound: Int
+    orderBy: Acc_Prepayment__c_OrderBy
+    where: Acc_Prepayment__c_Filter
+    after: String
+    first: Int
+  ): Acc_Prepayment__cConnection
 
-  """childRelationship"""
-  Costs__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  childRelationship
+  """
+  Costs__r(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  childRelationship
+  """
+  Virements__r(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3407,7 +3851,9 @@ type Acc_Project__c {
   Acc_Overdue_Claim_Helper__c: BooleanValue
   Acc_CompetitionId__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_CompetitionId__r: Competition__c
   Acc_HubAndSpokeProject__c: BooleanValue
   Acc_SuspensionStartDate__c: DateValue
@@ -3421,7 +3867,9 @@ type Acc_Project__c {
   Acc_LeadParticipantName__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_Project__c_Owner
   Acc_CompetitionCode__c: StringValue
   Loans_RnDStatus__c: PicklistValue
@@ -3459,14 +3907,18 @@ type Acc_Project__c {
   Acc_SuspensionEndDate__c: DateValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_CurrentPeriodNumber__c: DoubleValue
   Acc_IFSApplicationIdNumber__c: StringValue
   Acc_MonitoringLevel__c: PicklistValue
   Acc_LinkedProject__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_LinkedProject__r: Acc_Project__c
   Acc_TrackingClaimStatus__c: PicklistValue
   LastViewedDate: DateTimeValue
@@ -3491,7 +3943,9 @@ type Acc_Project__c {
   Acc_CurrentPeriodEndDateHelper__c: DateValue
   Loan_FinanceContact__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Loan_FinanceContact__r: Contact
   Acc_ClaimsUnderQuery__c: DoubleValue
   Acc_TotalProjectCosts__c: CurrencyValue
@@ -3502,26 +3956,76 @@ type Acc_Project__c {
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  """
+  childRelationship
+  """
+  Monitoring_Reports__r(
+    upperBound: Int
+    orderBy: Acc_MonitoringAnswer__c_OrderBy
+    where: Acc_MonitoringAnswer__c_Filter
+    after: String
+    first: Int
+  ): Acc_MonitoringAnswer__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  childRelationship
+  """
+  Project_Contact_Links__r(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """childRelationship"""
-  Acc_ProjectParticipantsProject__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Acc_ProjectParticipantsProject__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  """
+  childRelationship
+  """
+  Projects__r(
+    upperBound: Int
+    orderBy: Acc_Project__c_OrderBy
+    where: Acc_Project__c_Filter
+    after: String
+    first: Int
+  ): Acc_Project__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3850,15 +4354,21 @@ type Acc_StatusChange__c {
   Acc_ParticipantVisibility__c: BooleanValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_StatusChange__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Acc_ProjectChangeRequest__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Acc_ExternalComment__c: LongTextAreaValue
   IsDeleted: BooleanValue
@@ -3867,7 +4377,9 @@ type Acc_StatusChange__c {
   Acc_PreviousClaimStatus__c: TextAreaValue
   Acc_Claim__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Claim__r: Acc_Claims__c
   SystemModstamp: DateTimeValue
   Acc_NewClaimStatus__c: TextAreaValue
@@ -3876,17 +4388,29 @@ type Acc_StatusChange__c {
   Acc_NewProjectChangeRequestStatus__c: TextAreaValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_NewMonitoringReportStatus__c: TextAreaValue
   Acc_PreviousMonitoringReportStatus__c: TextAreaValue
   Acc_MonitoringReport__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4031,11 +4555,15 @@ type Acc_Virements__c {
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Acc_Virements__c_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Loan_CurrentDrawdownValue__c: CurrencyValue
   RecordTypeId(
@@ -4045,16 +4573,22 @@ type Acc_Virements__c {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   Acc_NewCosts__c: CurrencyValue
   Acc_Profile__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_Profile__r: Acc_Profile__c
   Acc_ProjectChangeRequest__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Loan_DrawdownStatus__c: StringValue
   IsDeleted: BooleanValue
@@ -4065,12 +4599,16 @@ type Acc_Virements__c {
   SystemModstamp: DateTimeValue
   Loan_LoanDrawdownRequest__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Loan_LoanDrawdownRequest__r: Acc_Prepayment__c
   Acc_NewTotalEligibleCosts__c: CurrencyValue
   Acc_ParticipantVirement__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ParticipantVirement__r: Acc_Virements__c
   Loan_PeriodNumber__c: DoubleValue
   Acc_NewRemainingGrant__c: CurrencyValue
@@ -4078,21 +4616,41 @@ type Acc_Virements__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_ParticipantVirementRecordId__c: StringValue
   Acc_CurrentCosts__c: CurrencyValue
   Acc_Comments__c: LongTextAreaValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  childRelationship
+  """
+  Virements__r(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4295,7 +4853,9 @@ type Account {
   Federation_Id__pc: StringValue
   OwnerId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Owner: User
   PersonMobilePhone: PhoneNumberValue
   PersonLastCUUpdateDate: DateTimeValue
@@ -4306,7 +4866,9 @@ type Account {
     fallback: Boolean
   ): IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   RecordType: RecordType
   ShippingCity: StringValue
   PersonMailingGeocodeAccuracy: PicklistValue
@@ -4314,7 +4876,9 @@ type Account {
   pi__created_date__pc: DateTimeValue
   ParentId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Parent: Account
   IsPersonAccount: BooleanValue
   FirstName: StringValue
@@ -4332,7 +4896,9 @@ type Account {
   BillingCity: StringValue
   PersonContactId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   PersonContact: Contact
   JigsawCompanyId: StringValue
   Acc_BillingPostCode__c: StringValue
@@ -4343,7 +4909,9 @@ type Account {
   pi__last_activity__pc: DateTimeValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Email__pc: StringValue
   pi__conversion_date__pc: DateTimeValue
@@ -4353,7 +4921,9 @@ type Account {
   PersonMailingCountry: StringValue
   MasterRecordId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   MasterRecord: Account
   PersonMailingStreet: TextAreaValue
   LastViewedDate: DateTimeValue
@@ -4404,62 +4974,190 @@ type Account {
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Migration_account_key__c: StringValue
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests1__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests1__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  childRelationship
+  """
+  Project_Contact_Links__r(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """childRelationship"""
-  Project_Contact_Links__pr(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  childRelationship
+  """
+  Project_Contact_Links__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """childRelationship"""
-  Acc_ProjectParticipantsAccount__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Acc_ProjectParticipantsAccount__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Project_Participants__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Project_Participants1__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants1__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Project_Participants2__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants2__pr(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Projects__pr(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  """
+  childRelationship
+  """
+  Projects__pr(
+    upperBound: Int
+    orderBy: Acc_Project__c_OrderBy
+    where: Acc_Project__c_Filter
+    after: String
+    first: Int
+  ): Acc_Project__cConnection
 
-  """childRelationship"""
-  ChildAccounts(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
+  """
+  childRelationship
+  """
+  ChildAccounts(
+    upperBound: Int
+    orderBy: Account_OrderBy
+    where: Account_Filter
+    after: String
+    first: Int
+  ): AccountConnection
 
-  """childRelationship"""
-  Competitions2__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions2__pr(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competitions1__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions1__pr(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Contacts(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
+  """
+  childRelationship
+  """
+  Contacts(
+    upperBound: Int
+    orderBy: Contact_OrderBy
+    where: Contact_Filter
+    after: String
+    first: Int
+  ): ContactConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   PersonUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -4951,12 +5649,16 @@ type Competition__c {
   Name: StringValue
   Acc_PortfolioManager__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_PortfolioManager__r: User
   Acc_TermsConditions__c: PicklistValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   Sent_to_MM__c: BooleanValue
   Acc_LegacyCompetitionCode__c: StringValue
@@ -4967,17 +5669,23 @@ type Competition__c {
   LastViewedDate: DateTimeValue
   CSS_Representative__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CSS_Representative__r: User
   Acc_CompetitionType__c: PicklistValue
   Acc_FinanceBusinessPartner__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Acc_FinanceBusinessPartner__r: User
   Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
   IM_Phase1Competition__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   IM_Phase1Competition__r: Competition__c
   Acc_CompetitionName__c: StringValue
   CreatedDate: DateTimeValue
@@ -4985,32 +5693,42 @@ type Competition__c {
   Phased_Competition_Stage__c: PicklistValue
   IM_PreCursorCompetition__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   IM_PreCursorCompetition__r: Competition__c
   LastReferencedDate: DateTimeValue
   ACC_PaymentType__c: PicklistValue
   Acc_AGRefNumber__c: IDValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Competition__c_Owner
   Acc_CompetitionCode__c: StringValue
   Impact_Management_participation__c: PicklistValue
   Technologists__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Technologists__r: Contact
   Acc_ProgrammeID__c: IDValue
   Acc_ProgrammeName__c: StringValue
   Acc_ActivityCode__c: StringValue
   Competition_Manager__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Competition_Manager__r: User
   Authorisation_hard_stop_date__c: DateValue
   Competition_Exec__c: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Competition_Exec__r: Contact
   Authorisation_expected_end_date__c: DateValue
   SystemModstamp: DateTimeValue
@@ -5019,25 +5737,67 @@ type Competition__c {
   LastActivityDate: DateValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   Acc_TypeofAid__c: PicklistValue
   Acc_Review_Team__c: PicklistValue
 
-  """childRelationship"""
-  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  """
+  childRelationship
+  """
+  Claims__r(
+    upperBound: Int
+    orderBy: Acc_Claims__c_OrderBy
+    where: Acc_Claims__c_Filter
+    after: String
+    first: Int
+  ): Acc_Claims__cConnection
 
-  """childRelationship"""
-  Acc_ProjectCompetition__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  """
+  childRelationship
+  """
+  Acc_ProjectCompetition__r(
+    upperBound: Int
+    orderBy: Acc_Project__c_OrderBy
+    where: Acc_Project__c_Filter
+    after: String
+    first: Int
+  ): Acc_Project__cConnection
 
-  """childRelationship"""
-  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions1__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5254,7 +6014,9 @@ type Contact {
   LastModifiedDate: DateTimeValue
   AccountId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Account: Account
   Email: EmailValue
   Alt_Email__c: EmailValue
@@ -5271,7 +6033,9 @@ type Contact {
   ContactMigrationId__c: StringValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   pi__conversion_object_name__c: StringValue
   OtherCity: StringValue
@@ -5281,7 +6045,9 @@ type Contact {
   pi__utm_source__c: StringValue
   MasterRecordId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   MasterRecord: Contact
   IndividualId: IDValue
   IsDeleted: BooleanValue
@@ -5318,7 +6084,9 @@ type Contact {
   Federation_Id__c: StringValue
   OwnerId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Owner: User
   Phone: PhoneNumberValue
   MailingPostalCode: StringValue
@@ -5344,7 +6112,9 @@ type Contact {
   pi__conversion_date__c: DateTimeValue
   ReportsToId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   ReportsTo: Contact
   LastActivityDate: DateValue
   pi__pardot_hard_bounced__c: BooleanValue
@@ -5352,42 +6122,126 @@ type Contact {
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   pi__first_search_term__c: StringValue
   JigsawContactId: StringValue
 
-  """childRelationship"""
-  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Change_Requests1__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  childRelationship
+  """
+  Project_Change_Requests1__r(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """childRelationship"""
-  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  childRelationship
+  """
+  Project_Contact_Links__r(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """childRelationship"""
-  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Project_Participants1__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants1__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Project_Participants2__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  childRelationship
+  """
+  Project_Participants2__r(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """childRelationship"""
-  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  """
+  childRelationship
+  """
+  Projects__r(
+    upperBound: Int
+    orderBy: Acc_Project__c_OrderBy
+    where: Acc_Project__c_Filter
+    after: String
+    first: Int
+  ): Acc_Project__cConnection
 
-  """childRelationship"""
-  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions2__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions1__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -5714,11 +6568,15 @@ type ContentDocument {
   ContentSize: IntValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   OwnerId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Owner: User
   FileExtension: StringValue
   PublishStatus: PicklistValue
@@ -5737,11 +6595,21 @@ type ContentDocument {
   CreatedDate: DateTimeValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5771,7 +6639,9 @@ type ContentDocumentLink {
   Visibility: PicklistValue
   ContentDocumentId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   ContentDocument: ContentDocument
   SystemModstamp: DateTimeValue
   ShareType: PicklistValue
@@ -5977,10 +6847,14 @@ input CurrencyOperators {
   """
   gte: Currency
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Currency]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Currency]
 }
 
@@ -6004,10 +6878,14 @@ type DateAggregate {
 }
 
 input DateInput {
-  """Value to compare with."""
+  """
+  Value to compare with.
+  """
   value: Date
 
-  """Date literal functions."""
+  """
+  Date literal functions.
+  """
   literal: DateLiteral
 }
 
@@ -6068,10 +6946,14 @@ input DateOperators {
   """
   gte: DateInput
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [DateInput]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [DateInput]
 }
 
@@ -6088,10 +6970,14 @@ type DateTimeAggregate {
 }
 
 input DateTimeInput {
-  """Value to compare with."""
+  """
+  Value to compare with.
+  """
   value: DateTime
 
-  """Date literal functions."""
+  """
+  Date literal functions.
+  """
   literal: DateLiteral
 }
 
@@ -6126,10 +7012,14 @@ input DateTimeOperators {
   """
   gte: DateTimeInput
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [DateTimeInput]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [DateTimeInput]
 }
 
@@ -6190,10 +7080,14 @@ input DoubleOperators {
   """
   gte: Double
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Double]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Double]
 }
 
@@ -6251,10 +7145,14 @@ input EmailOperators {
   """
   gte: Email
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Email]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Email]
 }
 
@@ -6278,12 +7176,16 @@ type Group {
   Type: PicklistValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Group_Owner
   DoesSendEmailToMembers: BooleanValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   CreatedDate: DateTimeValue
   DoesIncludeBosses: BooleanValue
@@ -6292,10 +7194,14 @@ type Group {
   RelatedId: IDValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -6485,10 +7391,14 @@ input IdOperators {
   """
   gte: ID
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [ID]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [ID]
 }
 
@@ -6511,7 +7421,9 @@ type IntValue {
   format: String
 }
 
-"""Long type"""
+"""
+Long type
+"""
 scalar Long
 
 type LongAggregate {
@@ -6558,10 +7470,14 @@ input LongOperators {
   """
   gte: Long
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Long]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Long]
 }
 
@@ -6603,10 +7519,14 @@ input LongTextAreaOperators {
   """
   gte: LongTextArea
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [LongTextArea]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [LongTextArea]
 }
 
@@ -6634,10 +7554,14 @@ input MultiPicklistOperators {
   """
   ne: MultiPicklist
 
-  """Includes (contains) the specified string."""
+  """
+  Includes (contains) the specified string.
+  """
   includes: [MultiPicklist]
 
-  """Excludes (does not contain) the specified string."""
+  """
+  Excludes (does not contain) the specified string.
+  """
   excludes: [MultiPicklist]
 }
 
@@ -6652,12 +7576,18 @@ input NoFunctionAggregateOrderByClause {
   nulls: NullsOrder
 }
 
-"""Enum representing possible null ordering options."""
+"""
+Enum representing possible null ordering options.
+"""
 enum NullOrder {
-  """The enum value represents null last order."""
+  """
+  The enum value represents null last order.
+  """
   LAST
 
-  """The enum value represents null first order."""
+  """
+  The enum value represents null first order.
+  """
   FIRST
 }
 
@@ -6688,16 +7618,22 @@ type ObjectInfo {
 type Order {
   CompanyAuthorizedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CompanyAuthorizedBy: User
   ActivatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   ActivatedBy: User
   LastModifiedDate: DateTimeValue
   AccountId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Account: Account
   Description: LongTextAreaValue
   BillingCity: StringValue
@@ -6706,11 +7642,15 @@ type Order {
   StatusCode: PicklistValue
   OwnerId: IDValue
 
-  """polymorphicParentRelationship"""
+  """
+  polymorphicParentRelationship
+  """
   Owner: Order_Owner
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   BillingGeocodeAccuracy: PicklistValue
   ShippingCountry: StringValue
@@ -6721,7 +7661,9 @@ type Order {
   IsDeleted: BooleanValue
   OriginalOrderId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   OriginalOrder: Order
   LastViewedDate: DateTimeValue
   ShippingGeocodeAccuracy: PicklistValue
@@ -6735,7 +7677,9 @@ type Order {
   BillingCountry: StringValue
   CustomerAuthorizedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CustomerAuthorizedBy: Contact
   BillingStreet: TextAreaValue
   ShippingPostalCode: StringValue
@@ -6744,15 +7688,27 @@ type Order {
   ShippingState: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   BillingState: StringValue
   EffectiveDate: DateValue
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
   Id: ID!
   ApiName: String!
@@ -6766,7 +7722,9 @@ type Order {
   ): IDValue
 }
 
-"""The Order-by input object"""
+"""
+The Order-by input object
+"""
 input OrderByClause {
   """
   The field that contains result order configuration. Default order is ascending.
@@ -6990,10 +7948,14 @@ input PercentOperators {
   """
   gte: Percent
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Percent]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Percent]
 }
 
@@ -7051,10 +8013,14 @@ input PhoneNumberOperators {
   """
   gte: PhoneNumber
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [PhoneNumber]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [PhoneNumber]
 }
 
@@ -7087,10 +8053,14 @@ input PicklistOperators {
   """
   ne: Picklist
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Picklist]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Picklist]
 
   """
@@ -7126,73 +8096,239 @@ type PicklistValue {
 }
 
 type RecordQuery {
-  """Issues a query for the specified record type."""
-  Acc_BroadcastMessage__c(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_BroadcastMessage__c(
+    upperBound: Int
+    orderBy: Acc_BroadcastMessage__c_OrderBy
+    where: Acc_BroadcastMessage__c_Filter
+    after: String
+    first: Int
+  ): Acc_BroadcastMessage__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_Claims__c(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_Claims__c(
+    upperBound: Int
+    orderBy: Acc_Claims__c_OrderBy
+    where: Acc_Claims__c_Filter
+    after: String
+    first: Int
+  ): Acc_Claims__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_CostCategory__c(upperBound: Int, orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, first: Int): Acc_CostCategory__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_CostCategory__c(
+    upperBound: Int
+    orderBy: Acc_CostCategory__c_OrderBy
+    where: Acc_CostCategory__c_Filter
+    after: String
+    first: Int
+  ): Acc_CostCategory__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_IFSSpendProfile__c(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_IFSSpendProfile__c(
+    upperBound: Int
+    orderBy: Acc_IFSSpendProfile__c_OrderBy
+    where: Acc_IFSSpendProfile__c_Filter
+    after: String
+    first: Int
+  ): Acc_IFSSpendProfile__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_MonitoringAnswer__c(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_MonitoringAnswer__c(
+    upperBound: Int
+    orderBy: Acc_MonitoringAnswer__c_OrderBy
+    where: Acc_MonitoringAnswer__c_Filter
+    after: String
+    first: Int
+  ): Acc_MonitoringAnswer__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_MonitoringQuestion__c(upperBound: Int, orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, first: Int): Acc_MonitoringQuestion__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_MonitoringQuestion__c(
+    upperBound: Int
+    orderBy: Acc_MonitoringQuestion__c_OrderBy
+    where: Acc_MonitoringQuestion__c_Filter
+    after: String
+    first: Int
+  ): Acc_MonitoringQuestion__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_Prepayment__c(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_Prepayment__c(
+    upperBound: Int
+    orderBy: Acc_Prepayment__c_OrderBy
+    where: Acc_Prepayment__c_Filter
+    after: String
+    first: Int
+  ): Acc_Prepayment__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_Profile__c(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_Profile__c(
+    upperBound: Int
+    orderBy: Acc_Profile__c_OrderBy
+    where: Acc_Profile__c_Filter
+    after: String
+    first: Int
+  ): Acc_Profile__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_ProjectChangeRequest__c(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_ProjectChangeRequest__c(
+    upperBound: Int
+    orderBy: Acc_ProjectChangeRequest__c_OrderBy
+    where: Acc_ProjectChangeRequest__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectChangeRequest__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_ProjectContactLink__c(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_ProjectContactLink__c(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_ProjectParticipant__c(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_ProjectParticipant__c(
+    upperBound: Int
+    orderBy: Acc_ProjectParticipant__c_OrderBy
+    where: Acc_ProjectParticipant__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectParticipant__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_Project__c(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_Project__c(
+    upperBound: Int
+    orderBy: Acc_Project__c_OrderBy
+    where: Acc_Project__c_Filter
+    after: String
+    first: Int
+  ): Acc_Project__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_StatusChange__c(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_StatusChange__c(
+    upperBound: Int
+    orderBy: Acc_StatusChange__c_OrderBy
+    where: Acc_StatusChange__c_Filter
+    after: String
+    first: Int
+  ): Acc_StatusChange__cConnection
 
-  """Issues a query for the specified record type."""
-  Acc_Virements__c(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Acc_Virements__c(
+    upperBound: Int
+    orderBy: Acc_Virements__c_OrderBy
+    where: Acc_Virements__c_Filter
+    after: String
+    first: Int
+  ): Acc_Virements__cConnection
 
-  """Issues a query for the specified record type."""
-  Account(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Account(
+    upperBound: Int
+    orderBy: Account_OrderBy
+    where: Account_Filter
+    after: String
+    first: Int
+  ): AccountConnection
 
-  """Issues a query for the specified record type."""
-  Competition__c(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Competition__c(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """Issues a query for the specified record type."""
-  Contact(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
+  """
+  Issues a query for the specified record type.
+  """
+  Contact(
+    upperBound: Int
+    orderBy: Contact_OrderBy
+    where: Contact_Filter
+    after: String
+    first: Int
+  ): ContactConnection
 
-  """Issues a query for the specified record type."""
-  ContentDocument(upperBound: Int, orderBy: ContentDocument_OrderBy, where: ContentDocument_Filter, after: String, first: Int): ContentDocumentConnection
+  """
+  Issues a query for the specified record type.
+  """
+  ContentDocument(
+    upperBound: Int
+    orderBy: ContentDocument_OrderBy
+    where: ContentDocument_Filter
+    after: String
+    first: Int
+  ): ContentDocumentConnection
 
-  """Issues a query for the specified record type."""
-  ContentDocumentLink(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  Issues a query for the specified record type.
+  """
+  ContentDocumentLink(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
 
-  """Issues a query for the specified record type."""
+  """
+  Issues a query for the specified record type.
+  """
   Group(upperBound: Int, orderBy: Group_OrderBy, where: Group_Filter, after: String, first: Int): GroupConnection
 
-  """Issues a query for the specified record type."""
+  """
+  Issues a query for the specified record type.
+  """
   Order(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
-  """Issues a query for the specified record type."""
-  RecordType(upperBound: Int, orderBy: RecordType_OrderBy, where: RecordType_Filter, after: String, first: Int): RecordTypeConnection
+  """
+  Issues a query for the specified record type.
+  """
+  RecordType(
+    upperBound: Int
+    orderBy: RecordType_OrderBy
+    where: RecordType_Filter
+    after: String
+    first: Int
+  ): RecordTypeConnection
 
-  """Issues a query for the specified record type."""
+  """
+  Issues a query for the specified record type.
+  """
   User(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 }
 
@@ -7207,13 +8343,17 @@ type RecordType {
   IsPersonType: BooleanValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   CreatedDate: DateTimeValue
   DeveloperName: StringValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   NamespacePrefix: StringValue
   Id: ID!
@@ -7300,12 +8440,18 @@ input RecordType_OrderBy {
   NamespacePrefix: AggregateOrderByStringClause
 }
 
-"""Enum representing possible results ordering options."""
+"""
+Enum representing possible results ordering options.
+"""
 enum ResultOrder {
-  """The enum value represents descending order."""
+  """
+  The enum value represents descending order.
+  """
   DESC
 
-  """The enum value represents ascending order."""
+  """
+  The enum value represents ascending order.
+  """
   ASC
 }
 
@@ -7368,10 +8514,14 @@ input StringOperators {
   """
   gte: String
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [String]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [String]
 }
 
@@ -7429,10 +8579,14 @@ input TextAreaOperators {
   """
   gte: TextArea
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [TextArea]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [TextArea]
 }
 
@@ -7480,10 +8634,14 @@ input TimeOperators {
   """
   gte: Time
 
-  """If the value equals any one of the specified values."""
+  """
+  If the value equals any one of the specified values.
+  """
   in: [Time]
 
-  """If the value does not equal any of the specified values."""
+  """
+  If the value does not equal any of the specified values.
+  """
   nin: [Time]
 }
 
@@ -7493,7 +8651,9 @@ type TimeValue {
   format: String
 }
 
-"""The User Interface API family."""
+"""
+The User Interface API family.
+"""
 type UIAPI {
   query: RecordQuery!
   objectInfos(
@@ -7579,7 +8739,9 @@ type User {
   Email: EmailValue
   AccountId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Account: Account
   UserPreferencesDisableLaterCommentEmail: BooleanValue
   LastLoginDate: DateTimeValue
@@ -7591,7 +8753,9 @@ type User {
   UserPreferencesGlobalNavBarWTShown: BooleanValue
   CreatedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   CreatedBy: User
   UserPreferencesDisableMessageEmail: BooleanValue
   UserPreferencesShowEmailToExternalUsers: BooleanValue
@@ -7607,7 +8771,9 @@ type User {
   OutOfOfficeMessage: StringValue
   ManagerId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Manager: User
   UserPreferencesShowProfilePicToGuestUsers: BooleanValue
   SenderName: StringValue
@@ -7719,7 +8885,9 @@ type User {
   UserPreferencesHideBrowseProductRedirectConfirmation: BooleanValue
   ContactId: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   Contact: Contact
   StayInTouchSignature: LongTextAreaValue
   UserPreferencesActivityRemindersPopup: BooleanValue
@@ -7739,35 +8907,97 @@ type User {
   UserPreferencesHideBiggerPhotoCallout: BooleanValue
   LastModifiedById: IDValue
 
-  """parentRelationship"""
+  """
+  parentRelationship
+  """
   LastModifiedBy: User
   UserPreferencesHideMailAppWelcomeMat: BooleanValue
 
-  """childRelationship"""
-  Acc_BroadcastMessages__r(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
+  """
+  childRelationship
+  """
+  Acc_BroadcastMessages__r(
+    upperBound: Int
+    orderBy: Acc_BroadcastMessage__c_OrderBy
+    where: Acc_BroadcastMessage__c_Filter
+    after: String
+    first: Int
+  ): Acc_BroadcastMessage__cConnection
 
-  """childRelationship"""
-  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  """
+  childRelationship
+  """
+  Project_Contact_Links__r(
+    upperBound: Int
+    orderBy: Acc_ProjectContactLink__c_OrderBy
+    where: Acc_ProjectContactLink__c_Filter
+    after: String
+    first: Int
+  ): Acc_ProjectContactLink__cConnection
 
-  """childRelationship"""
-  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions2__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions1__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competitions__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  Competition_Manager__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  """
+  childRelationship
+  """
+  Competition_Manager__r(
+    upperBound: Int
+    orderBy: Competition__c_OrderBy
+    where: Competition__c_Filter
+    after: String
+    first: Int
+  ): Competition__cConnection
 
-  """childRelationship"""
-  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  """
+  childRelationship
+  """
+  ContentDocumentLinks(
+    upperBound: Int
+    orderBy: ContentDocumentLink_OrderBy
+    where: ContentDocumentLink_Filter
+    after: String
+    first: Int
+  ): ContentDocumentLinkConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
-  """childRelationship"""
+  """
+  childRelationship
+  """
   ManagedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
