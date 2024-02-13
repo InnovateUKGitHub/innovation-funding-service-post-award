@@ -4,26 +4,20 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
-import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
+import { getInitialAcademicCosts, useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { sum } from "lodash";
+import { sumBy } from "lodash";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 
 export const AcademicCostsReviewStep = () => {
   const { getContent } = useContent();
   const { projectId, pcrId, itemId, fetchKey, routes } = usePcrWorkflowContext();
-
   const { pcrItem, academicCostCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
-
   const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
-
-  const costs = academicCostCategories.map(
-    costCat => spendProfile.costs.find(x => x.costCategoryId === costCat.id)?.value ?? 0,
-  );
-
-  const total = sum(costs);
+  const costs = getInitialAcademicCosts(spendProfile, academicCostCategories);
+  const total = sumBy(costs, x => Number(x.value.replace("£", "")));
 
   return (
     <PcrPage>
@@ -37,19 +31,15 @@ export const AcademicCostsReviewStep = () => {
             <THead>
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading)}</TH>
-                <TH className="govuk-table__header--numeric">
-                  {getContent(x => x.pages.pcrAddPartnerAcademicCosts.costHeading)}
-                </TH>
+                <TH numeric>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.costHeading)}</TH>
               </TR>
             </THead>
             <TBody>
-              {academicCostCategories.map((x, i) => (
-                <TR key={x.name}>
-                  <TD>
-                    <P>{x.name}</P>
-                  </TD>
-                  <TD>
-                    <P>{costs[i]}</P>
+              {costs.map(x => (
+                <TR key={x.description}>
+                  <TD>{x.description}</TD>
+                  <TD numeric>
+                    <Currency value={Number(x.value.replace("£", ""))} />
                   </TD>
                 </TR>
               ))}
@@ -80,7 +70,7 @@ export const AcademicCostsReviewStep = () => {
             projectId,
           })}
         >
-          {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
+          {getContent(x => x.pcrItem.returnToSummaryButton)}
         </Link>
       </Section>
     </PcrPage>
