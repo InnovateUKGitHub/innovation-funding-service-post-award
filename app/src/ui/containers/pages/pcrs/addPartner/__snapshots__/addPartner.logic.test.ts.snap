@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getInitialAcademicCosts should initialise an empty spend profile with default values 1`] = `
+[
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT1AAI",
+    "description": "Directly incurred - Staff",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT2AAI",
+    "description": "Directly incurred - Travel and subsistence",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT3AAI",
+    "description": "Directly incurred - Equipment",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT4AAI",
+    "description": "Directly incurred - Other costs",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT5AAI",
+    "description": "Directly allocated - Investigations",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT6AAI",
+    "description": "Directly allocated - Estates costs",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT7AAI",
+    "description": "Directly allocated - Other costs",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQpAAI",
+    "description": "Indirect costs - Investigations",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQqAAI",
+    "description": "Exceptions - Staff",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQrAAI",
+    "description": "Exceptions - Travel and subsistence",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQsAAI",
+    "description": "Exceptions - Equipment",
+    "id": "",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQtAAI",
+    "description": "Exceptions - Other costs",
+    "id": "",
+    "value": "0",
+  },
+]
+`;
+
+exports[`getInitialAcademicCosts should return the formatted initial academic costs without other public sector funding if there are already costs saved 1`] = `
+[
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT1AAI",
+    "description": "Directly incurred - Staff",
+    "id": "a08Ad00000BWIzzIAH",
+    "value": "10000",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT2AAI",
+    "description": "Directly incurred - Travel and subsistence",
+    "id": "a08Ad00000BWJ00IAH",
+    "value": "5000",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT3AAI",
+    "description": "Directly incurred - Equipment",
+    "id": "a08Ad00000BWJ01IAH",
+    "value": "2000",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT4AAI",
+    "description": "Directly incurred - Other costs",
+    "id": "a08Ad00000BWJ02IAH",
+    "value": "1000",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT5AAI",
+    "description": "Directly allocated - Investigations",
+    "id": "a08Ad00000BWJ03IAH",
+    "value": "500",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT6AAI",
+    "description": "Directly allocated - Estates costs",
+    "id": "a08Ad00000BWJ04IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoT7AAI",
+    "description": "Directly allocated - Other costs",
+    "id": "a08Ad00000BWJ05IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQpAAI",
+    "description": "Indirect costs - Investigations",
+    "id": "a08Ad00000BWJ06IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQqAAI",
+    "description": "Exceptions - Staff",
+    "id": "a08Ad00000BWJ07IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQrAAI",
+    "description": "Exceptions - Travel and subsistence",
+    "id": "a08Ad00000BWJ08IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQsAAI",
+    "description": "Exceptions - Equipment",
+    "id": "a08Ad00000BWJ09IAH",
+    "value": "0",
+  },
+  {
+    "costCategory": 2,
+    "costCategoryId": "a0626000007qoQtAAI",
+    "description": "Exceptions - Other costs",
+    "id": "a08Ad00000BWJ0AIAX",
+    "value": "0",
+  },
+]
+`;
