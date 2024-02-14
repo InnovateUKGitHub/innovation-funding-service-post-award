@@ -339,6 +339,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.Unknown,
     i18nName: x => x.pcrStatus.Unknown,
+    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
