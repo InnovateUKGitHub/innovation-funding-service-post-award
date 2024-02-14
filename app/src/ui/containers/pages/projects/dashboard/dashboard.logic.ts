@@ -253,7 +253,11 @@ const getFilteredProjects = (
 };
 
 export const useProjectsDashboardData = (search: string | number | undefined, config: IClientConfig) => {
-  const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(projectDashboardQuery, {});
+  const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(
+    projectDashboardQuery,
+    {},
+    { fetchPolicy: "network-only" },
+  );
   const projectsGql = data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? [];
   const unfilteredObjects = projectsGql.map(x => ({
     ...mapToProjectDto(x?.node ?? null, [
