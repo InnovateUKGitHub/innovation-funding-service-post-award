@@ -20,6 +20,7 @@ import {
   ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
+import { configuration } from "@server/features/common/config";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -284,15 +285,18 @@ export class ProjectChangeRequestRepository
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
 
-    // Approve a new subcontractor fields
-    "New_company_subcontractor_name__c",
-    "Company_registration_number__c",
-    "Relationship_between_partners__c",
-    "Relationship_justification__c",
-    "Country_where_work_will_be_carried_out__c",
-    "Role_in_the_project__c",
-    "Cost_of_work__c",
-    "Justification__c",
+    ...(configuration.features.approveNewSubcontractor
+      ? [
+          "New_company_subcontractor_name__c",
+          "Company_registration_number__c",
+          "Relationship_between_partners__c",
+          "Relationship_justification__c",
+          "Country_where_work_will_be_carried_out__c",
+          "Role_in_the_project__c",
+          "Cost_of_work__c",
+          "Justification__c",
+        ]
+      : []),
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {

@@ -5,8 +5,10 @@ import {
   getPcrItemsSingleInstanceInThisPcrViolations,
   getPcrItemsTooManyViolations,
   PCRItemDisabledReason,
+  PCRItemType,
 } from "@framework/constants/pcrConstants";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
 
 const usePcrItemsForThisCompetition = (
@@ -16,8 +18,15 @@ const usePcrItemsForThisCompetition = (
   numberOfPartners: number,
 ) => {
   const { getContent } = useContent();
+  const { features } = useClientConfig();
 
-  const items = pcrItemTypes.filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated));
+  const items = pcrItemTypes
+    .filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated))
+    .filter(
+      x =>
+        x.type !== PCRItemType.ApproveNewSubcontrator ||
+        (x.type === PCRItemType.ApproveNewSubcontrator && features.approveNewSubcontractor),
+    );
 
   const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
   const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(allPcrs.find(x => x.id === pcrId));

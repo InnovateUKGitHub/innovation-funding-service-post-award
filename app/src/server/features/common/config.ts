@@ -43,6 +43,7 @@ const configuration: Readonly<IConfig> = {
     customContent: boolEnv("FEATURE_CUSTOM_CONTENT", false),
     searchDocsMinThreshold: intEnv("SEARCH_DOCS_MIN_THRESHOLD", 5),
     futureTimeExtensionInYears: intEnv("FUTURE_TIME_EXTENSION_IN_YEARS", 5),
+    approveNewSubcontractor: boolEnv("FEATURE_APPROVE_NEW_SUBCONTRACTOR", false),
   },
   logLevel: env("LOG_LEVEL", LogLevel.ERROR, parseLogLevel),
   options: {

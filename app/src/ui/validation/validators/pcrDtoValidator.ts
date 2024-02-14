@@ -599,21 +599,6 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
           !!this.original || (this.recordTypes.find(x => x.type === this.model.type)?.enabled ?? null),
           this.getContent(x => x.validation.pcrBaseItemDtoValidator.itemInvalid),
         ),
-      () => {
-        const inValidRecordIndex = this.recordTypes.findIndex(x => x.recordTypeId === "Unknown");
-
-        if (inValidRecordIndex === -1) return Validation.valid(this);
-
-        // Note: At this point it is likely that SF does not have the recordType to match up against our local item options.
-        return Validation.inValid(
-          this,
-          this.getContent(x =>
-            x.validation.pcrBaseItemDtoValidator.itemUnavailable({
-              name: this.recordTypes[inValidRecordIndex]?.displayName,
-            }),
-          ),
-        );
-      },
       // If role is not Project Manager then can not add new type
       () =>
         Validation.isTrue(
