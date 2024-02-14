@@ -72,10 +72,46 @@ export const pcrPrepareQuery = graphql`
                 Acc_MonitoringLevel__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(first: 2000) {
+                Acc_ProjectParticipantsProject__r {
                   totalCount
                 }
-                Project_Change_Requests__r(first: 2000) {
+              }
+            }
+          }
+          OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
+            edges {
+              node {
+                Id
+                Acc_Status__c {
+                  value
+                }
+              }
+            }
+          }
+          Acc_ProjectChangeRequest__c(
+            first: 1
+            where: {
+              Id: { eq: $pcrId }
+              Acc_Project__c: { eq: $projectId }
+              RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } }
+            }
+          ) {
+            edges {
+              node {
+                Id
+                Acc_Status__c {
+                  value
+                }
+                Acc_RequestHeader__c {
+                  value
+                }
+                Acc_RequestNumber__c {
+                  value
+                }
+                Acc_MarkedasComplete__c {
+                  value
+                }
+                Acc_Project_Change_Requests__r(first: 2000) {
                   edges {
                     node {
                       Id
@@ -100,19 +136,10 @@ export const pcrPrepareQuery = graphql`
                       Acc_OrganisationName__c {
                         value
                       }
-                      Acc_RequestHeader__c {
-                        value
-                      }
-                      Acc_RequestNumber__c {
-                        value
-                      }
                       Acc_ParticipantType__c {
                         value
                       }
                       Acc_ExistingPartnerName__c {
-                        value
-                      }
-                      Acc_Status__c {
                         value
                       }
                       Acc_ProjectRole__c {
