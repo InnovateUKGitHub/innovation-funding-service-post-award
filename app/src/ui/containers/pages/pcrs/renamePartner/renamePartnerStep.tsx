@@ -18,6 +18,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRenamePartnerSchema, renamePartnerErrorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
@@ -29,12 +30,11 @@ export const RenamePartnerStep = () => {
     onSave,
     isFetching,
     markedAsCompleteHasBeenChecked,
-    useFormValidate,
   } = usePcrWorkflowContext();
 
   const { partners, pcrItem } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger, getFieldState } = useForm<RenamePartnerSchemaType>({
+  const { handleSubmit, register, formState, trigger, getFieldState, watch } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
       // take the marked as complete state from the current checkbox state on the summary
       markedAsComplete: markedAsCompleteHasBeenChecked,
@@ -47,7 +47,7 @@ export const RenamePartnerStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const partnerOptions = partners
     .filter(x => !x.isWithdrawn)

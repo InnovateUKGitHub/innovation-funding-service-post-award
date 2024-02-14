@@ -19,6 +19,7 @@ import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
@@ -31,7 +32,6 @@ export const ProjectSummaryChangeStep = () => {
     fetchKey,
     getRequiredToCompleteMessage,
     markedAsCompleteHasBeenChecked,
-    useFormValidate,
   } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
@@ -52,7 +52,7 @@ export const ProjectSummaryChangeStep = () => {
 
   const validationErrors = useRhfErrors(formState.errors);
 
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
   const hint = getRequiredToCompleteMessage();
 
   const nextLink = useNextLink();

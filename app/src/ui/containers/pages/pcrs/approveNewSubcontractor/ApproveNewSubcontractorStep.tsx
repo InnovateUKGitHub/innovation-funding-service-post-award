@@ -28,9 +28,10 @@ import {
 } from "./ApproveNewSubcontractor.zod";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const ApproveNewSubcontractorStep = () => {
-  const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
+  const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
   const nextLink = useNextLink();
   const { getContent } = useContent();
@@ -54,7 +55,7 @@ const ApproveNewSubcontractorStep = () => {
     defaults?.subcontractorRelationship ?? pcrItem?.subcontractorRelationship ?? undefined;
   const subcontractorRelationship = watch("subcontractorRelationship") as boolean | string;
 
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
     <PcrPage validationErrors={validationErrors}>

@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const SuspendProjectStep = () => {
   const { getContent } = useContent();
@@ -35,7 +36,6 @@ export const SuspendProjectStep = () => {
     onSave,
     isFetching,
     markedAsCompleteHasBeenChecked,
-    useFormValidate,
   } = usePcrWorkflowContext();
 
   const { project, pcrItem } = usePcrSuspendProjectWorkflowQuery(projectId, itemId, fetchKey);
@@ -49,7 +49,7 @@ export const SuspendProjectStep = () => {
   const lastDayOfPauseHint = getContent(x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseHint);
   const saveAndContinue = getContent(x => x.pages.pcrTimeExtensionStep.saveAndContinue);
 
-  const { handleSubmit, register, formState, trigger } = useForm<ProjectSuspensionSchemaType>({
+  const { handleSubmit, register, formState, watch, trigger } = useForm<ProjectSuspensionSchemaType>({
     defaultValues: {
       markedAsCompleteHasBeenChecked,
       suspensionStartDate_month: getMonth(pcrItem.suspensionStartDate),
@@ -66,7 +66,7 @@ export const SuspendProjectStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
     <PcrPage validationErrors={validationErrors}>

@@ -14,12 +14,12 @@ import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { LoanDrawdownTable } from "./loanDrawdownTable";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const LoanDrawdownExtensionStep = () => {
   const { getContent } = useContent();
 
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useLoanDrawdownExtensionQuery(projectId, itemId, fetchKey);
 
@@ -45,7 +45,7 @@ export const LoanDrawdownExtensionStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownExtensionErrors;
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const nextLink = useNextLink();
 

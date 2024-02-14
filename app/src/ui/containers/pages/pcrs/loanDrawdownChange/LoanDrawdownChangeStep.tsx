@@ -13,11 +13,11 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { LoanDrawdownChangeEditTable, LoanDrawdownEditErrors } from "./LoanDrawdownChangeEditTable";
 import { getDay, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const LoanDrawdownChangeStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem, loans } = useLoanDrawdownChangeQuery(itemId, fetchKey);
 
@@ -44,7 +44,7 @@ export const LoanDrawdownChangeStep = () => {
   const { isFetching: isUpdatingLoans, onUpdate: onUpdateLoans } = useOnUpdateLoanChange(projectId, itemId, loans);
 
   const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownEditErrors;
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const nextLink = useNextLink();
   return (

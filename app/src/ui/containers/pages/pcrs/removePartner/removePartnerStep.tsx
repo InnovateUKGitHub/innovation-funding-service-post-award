@@ -18,15 +18,15 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRemovePartnerSchema, removePartnerErrorMap, RemovePartnerSchemaType } from "./removePartner.zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const RemovePartnerStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { partners, pcrItem, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger } = useForm<RemovePartnerSchemaType>({
+  const { handleSubmit, register, formState, trigger, watch } = useForm<RemovePartnerSchemaType>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
       removalPeriod: pcrItem.removalPeriod,
@@ -38,7 +38,7 @@ export const RemovePartnerStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const partnerOptions = partners
     .filter(x => !x.isWithdrawn)

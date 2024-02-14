@@ -18,6 +18,7 @@ import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -28,7 +29,6 @@ export const PublicDescriptionChangeStep = () => {
     getRequiredToCompleteMessage,
     onSave,
     markedAsCompleteHasBeenChecked,
-    useFormValidate,
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
@@ -50,7 +50,7 @@ export const PublicDescriptionChangeStep = () => {
   const validationErrors = useRhfErrors(formState.errors);
   const nextLink = useNextLink();
 
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
     <PcrPage validationErrors={validationErrors}>

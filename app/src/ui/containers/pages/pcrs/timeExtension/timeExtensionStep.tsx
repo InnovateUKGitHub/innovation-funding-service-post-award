@@ -23,12 +23,13 @@ import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrTimeExtensionSchema, errorMap } from "./timeExtension.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const TimeExtensionStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const { projectId, itemId, onSave, config, isFetching, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate } =
+  const { projectId, itemId, onSave, config, isFetching, fetchKey, markedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
 
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
@@ -77,7 +78,7 @@ export const TimeExtensionStep = () => {
 
   const newOffset = Number(watch("timeExtension"));
 
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const newProjectDuration = (newOffset ?? 0) + pcrItem.projectDurationSnapshot;
 
