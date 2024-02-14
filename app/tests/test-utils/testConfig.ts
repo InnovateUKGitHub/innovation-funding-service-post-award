@@ -40,6 +40,7 @@ export class TestConfig implements IConfig {
   public features = {
     changePeriodLengthWorkflow: false,
     customContent: true,
+    approveNewSubcontractor: false,
     searchDocsMinThreshold: 3,
     futureTimeExtensionInYears: 5,
   };

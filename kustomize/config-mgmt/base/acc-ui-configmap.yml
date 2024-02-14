@@ -12,6 +12,7 @@ data:
   NEW_RELIC_ENABLED: "true"
   COOKIE_TIMEOUT_MINUTES: "30"
   COOKIE_SECURE: "true"
+  FEATURE_APPROVE_NEW_SUBCONTRACTOR: "false"
 
   # Values to overwrite per environment
   USE_SSO: "true"
