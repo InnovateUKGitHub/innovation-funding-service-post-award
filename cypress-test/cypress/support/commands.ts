@@ -8,7 +8,7 @@ const [username, password] = Cypress.env("BASIC_AUTH").split(":");
 type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>;
 
 const getByLabel = (label: string) => {
-  cy.log("**getByLabel**");
+  cy.log(`**getByLabel "${label}" **`);
   cy.contains("label", label)
     .invoke("attr", "for")
     .then(id => {
