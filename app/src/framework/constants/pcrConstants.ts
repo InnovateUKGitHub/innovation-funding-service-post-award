@@ -512,6 +512,11 @@ export interface IMetaValue {
   disableStatus?: boolean;
 
   /**
+   * Whether to use internal statuses (map status to "In progress"/"Done")
+   */
+  enableInternalStatuses?: boolean;
+
+  /**
    * Check if PCR Type successfully validates against Financial Virement DTO Validator
    */
   enableFinancialVirement?: boolean;
@@ -534,8 +539,6 @@ export const pcrItemTypes: IMetaValue[] = [
     ignoredCompetitions: [],
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
     enableFinancialVirement: true,
   },
   {
@@ -546,8 +549,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.removePartnerMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.PartnerAddition,
@@ -559,8 +560,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.addPartnerMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.ScopeChange,
@@ -571,8 +570,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changeScopeMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.TimeExtension,
@@ -582,8 +579,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changeDurationMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.PeriodLengthChange,
@@ -601,8 +596,6 @@ export const pcrItemTypes: IMetaValue[] = [
     ],
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.AccountNameChange,
@@ -613,8 +606,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.changePartnersNameMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.ProjectSuspension,
@@ -624,8 +615,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.putProjectOnHoldMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.ProjectTermination,
@@ -636,8 +625,6 @@ export const pcrItemTypes: IMetaValue[] = [
     deprecated: true,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.LoanDrawdownChange,
@@ -656,8 +643,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.loanDrawdownChangeMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.LoanDrawdownExtension,
@@ -677,8 +662,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.loanDrawdownExtensionMessage,
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.ApproveNewSubcontractor,
@@ -688,8 +671,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.approveNewSubcontractorMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
-    disableSummary: false,
-    disableStatus: false,
   },
   {
     type: PCRItemType.Uplift,
@@ -709,6 +690,7 @@ export const pcrItemTypes: IMetaValue[] = [
     ],
     disableSummary: true,
     disableStatus: true,
+    enableInternalStatuses: true,
   },
 ];
 
