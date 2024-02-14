@@ -88,9 +88,15 @@ export const isPartnerWithdrawn = (roles: SfRoles, partners: Partner[]) => {
 
 export const useProjectOverviewData = (projectId: string) => {
   const clientConfig = useClientConfig();
-  const data = useLazyLoadQuery<ProjectOverviewQuery>(projectOverviewQuery, {
-    projectId,
-  });
+  const data = useLazyLoadQuery<ProjectOverviewQuery>(
+    projectOverviewQuery,
+    {
+      projectId,
+    },
+    {
+      fetchPolicy: "network-only",
+    },
+  );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
