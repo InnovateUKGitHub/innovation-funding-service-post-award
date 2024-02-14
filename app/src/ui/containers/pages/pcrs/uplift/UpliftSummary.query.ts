@@ -11,6 +11,9 @@ const upliftSummaryQuery = graphql`
                 Acc_RequestNumber__c {
                   value
                 }
+                Acc_Project_Change_Requests__r {
+                  totalCount
+                }
               }
             }
           }
