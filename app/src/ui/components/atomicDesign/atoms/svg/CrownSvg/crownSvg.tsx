@@ -1,3 +1,6 @@
+/**
+ * @deprecated Use the King Charles III "Tudor Crown" instead of the Queen Elizbaeth "St Edward's Crown"
+ */
 export const SvgCrown = ({ colour }: { colour: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
