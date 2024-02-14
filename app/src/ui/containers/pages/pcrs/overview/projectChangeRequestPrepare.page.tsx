@@ -61,7 +61,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.projectId, props.pcrId, pcr, project);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.pcrId, pcr, project);
 
   const { getContent } = useContent();
   const characterCount = watch("comments")?.length ?? 0;

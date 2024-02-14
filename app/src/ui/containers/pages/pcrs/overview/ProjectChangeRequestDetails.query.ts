@@ -89,7 +89,7 @@ const pcrDetailsQuery = graphql`
                 Acc_MarkedasComplete__c {
                   value
                 }
-                Acc_Project_Change_Requests__r(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
+                Acc_Project_Change_Requests__r(first: 2000) {
                   edges {
                     node {
                       Id
