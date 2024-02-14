@@ -266,13 +266,15 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
             <RadioList inline name="status" register={register}>
               <Radio
                 data-qa={`status_${ClaimStatus.MO_QUERIED}`}
-                id={ClaimStatus.MO_QUERIED}
+                id="MO_Queried"
+                value={ClaimStatus.MO_QUERIED}
                 label={content.optionQueryClaim}
                 disabled={isFetching}
               />
               <Radio
                 data-qa={`status_${ClaimStatus.AWAITING_IUK_APPROVAL}`}
-                id={ClaimStatus.AWAITING_IUK_APPROVAL}
+                id="Awaiting_IUK_Approval"
+                value={ClaimStatus.AWAITING_IUK_APPROVAL}
                 label={content.optionSubmitClaim}
                 disabled={isFetching}
               />
