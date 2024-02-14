@@ -294,7 +294,7 @@ const EditPage = ({
       }
       pageTitle={<Title {...project} />}
       error={editor.error}
-      validator={[partnerVirementsValidator, editor.validator]}
+      validator={partnerVirementsValidator}
     >
       <AwardRateOverridesMessage
         claimOverrides={claimOverrides}
