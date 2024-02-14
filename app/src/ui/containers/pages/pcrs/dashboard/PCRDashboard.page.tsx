@@ -41,7 +41,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
   const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
@@ -83,9 +83,9 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   };
 
   const renderStatus = (pcr: PCRDashboardType): React.ReactNode => {
-    const hasUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+    const enableInternalStatuses = pcr.items.some(x => getPcrItemMetadata(x.type)?.enableInternalStatuses);
 
-    if (hasUplift) {
+    if (enableInternalStatuses) {
       return <>{getPcrInternalStatusName(pcr.status)}</>;
     } else {
       return <>{getPcrStatusName(pcr.status)}</>;
@@ -95,7 +95,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
-    const pcrMetadata = getPcrStatusMetadata(pcr.status);
+    const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
 
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
     const hasAnyUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
@@ -139,15 +139,15 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         links.push(viewLink);
       }
     } else {
-      if (pcrMetadata?.editableByPm && isPm && isProjectActive) {
+      if (pcrStatusMetadata?.editableByPm && isPm && isProjectActive) {
         links.push(editLink);
-      } else if (pcrMetadata?.reviewableByMo && isMo && isProjectActive) {
+      } else if (pcrStatusMetadata?.reviewableByMo && isMo && isProjectActive) {
         links.push(reviewLink);
       } else if (isPmOrMo) {
         links.push(viewLink);
       }
 
-      if (pcrMetadata?.deletableByPm && isPm && isProjectActive) {
+      if (pcrStatusMetadata?.deletableByPm && isPm && isProjectActive) {
         links.push(deleteLink);
       }
     }
