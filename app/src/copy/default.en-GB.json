@@ -1592,9 +1592,11 @@
       "totalTooLarge": "The total grant cannot exceed the remaining grant.",
       "remainingGrantMissing": "New remaining grant is required.",
       "remainingGrantTooSmall": "Grant cannot be less than zero.",
+      "remainingGrantTooBig": "Grant must be less than £10,000,000,000,000,000.",
       "costRequired": "Costs are required.",
       "costClaimedTooSmall": "Costs cannot be less than amount already claimed for {{ name }}.",
-      "costTooSmall": "Costs cannot be less than zero."
+      "costTooSmall": "Costs cannot be less than zero.",
+      "costTooBig": "Eligible costs must be less than £10,000,000,000,000,000."
     },
     "forecastDetailsDtoValidator": {
       "noEditAboutToSubmitFinalClaim": "You cannot change your forecast as you are due to submit your final claim.",

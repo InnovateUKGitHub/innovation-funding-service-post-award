@@ -236,5 +236,11 @@ export class CostCategoryVirementDtoValidator extends Results<CostCategoryVireme
         this.model.newEligibleCosts >= 0,
         this.getContent(x => x.validation.financialVirementDtoValidator.costTooSmall),
       ),
+    () =>
+      Validation.isTrue(
+        this,
+        this.model.newEligibleCosts < BigInt("10000000000000000"),
+        this.getContent(x => x.validation.financialVirementDtoValidator.costTooBig),
+      ),
   );
 }
