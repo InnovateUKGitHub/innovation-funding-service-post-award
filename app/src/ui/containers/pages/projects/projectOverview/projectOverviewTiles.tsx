@@ -32,7 +32,7 @@ function getPcrMessages(project: Project) {
       qa: "message-pcrQueried",
     });
   }
-  if (isMo) {
+  if (isMo && project.pcrsToReview > 0) {
     result.push({
       message: (
         <Content
@@ -125,7 +125,7 @@ function getClaimMessages(project: Project, partner: Partner) {
     }
   }
 
-  if (isMo) {
+  if (isMo && project.claimsToReview > 0) {
     result.push({
       message: <Content value={x => x.projectMessages.claimsToReviewMessage({ count: project.claimsToReview })} />,
       qa: "message-claimsToReview",
