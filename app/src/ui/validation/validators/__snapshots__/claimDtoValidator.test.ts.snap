@@ -4,43 +4,43 @@ exports[`claimDtoValidator() With en-GB i18n with claimState as default when cla
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with not required IAR and not received valid IAR status without documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status with documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status with documents as KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status without documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status with documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status without documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status without documents as KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR + PCF status is not received 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is not received and PCF status is received 1`] = `"You must upload a project completion form before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is not received and PCF status is received 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is received and PCF status is not received 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is invalid 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `"You must upload a project completion form before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status with documents as non-KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status without documents as non-KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as non-KTP competition 1`] = `"You must upload an independent accountant's report before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as non-KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as non-KTP competition 1`] = `"You must upload an independent accountant's report before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as non-KTP competition 1`] = `"You must upload an independent accountant's report before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as non-KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as KTP competition 1`] = `"You must upload a schedule 3 before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as non-KTP competition 1`] = `"You must upload an independent accountant's report before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as non-KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR status is valid 1`] = `null`;
 
@@ -76,7 +76,7 @@ exports[`claimDtoValidator() With en-GB i18n with claimState when status is awai
 
 exports[`claimDtoValidator() With en-GB i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with PCF received but not IAR 1`] = `null`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are invalid 1`] = `"You must upload an independent accountant's report and a project completion form before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are invalid 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are valid 1`] = `null`;
 
@@ -116,49 +116,49 @@ exports[`claimDtoValidator() With no i18n with claimState as default when claim 
 
 exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with not required IAR and not received valid IAR status without documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status with documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status without documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and invalid IAR status without documents as KTP competition 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status with documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status without documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim and is a Ktp competition with required IAR and valid IAR status without documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR + PCF status is not received 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR + PCF status is not received 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is not received and PCF status is received 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is not received and PCF status is received 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is received and PCF status is not received 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is received and PCF status is not received 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is invalid 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is invalid 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status with documents as non-KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status without documents as non-KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as non-KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status with documents as non-KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as KTP competition 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as non-KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and invalid IAR status without documents as non-KTP competition 1`] = `"forms.claimSummary.documents.errors.iar_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as non-KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status with documents as non-KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as KTP competition 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as non-KTP competition 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with required IAR and valid IAR status without documents as non-KTP competition 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR status is valid 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR statuses is invalid when a KTP project 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR statuses is invalid when a KTP project 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR statuses is invalid when not KTP project 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when not the final claim when IAR required with IAR statuses is invalid when not KTP project 1`] = `"forms.claimSummary.documents.errors.iar_required"`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR not required when iar and pcf statuses are invalid 1`] = `null`;
 
@@ -168,33 +168,33 @@ exports[`claimDtoValidator() With no i18n with claimState when status is awaitin
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR not required when pcf status is valid and not iar 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when iar and pcf statuses are invalid 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when iar and pcf statuses are invalid 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when iar and pcf statuses are valid 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when iar status is valid and not pcf 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when pcf status is valid and not iar 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when KTP with IAR required when pcf status is valid and not iar 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when ktp project competition when iar required and status when invalid 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when ktp project competition when iar required and status when invalid 1`] = `"forms.claimSummary.documents.errors.schedule3_required"`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when ktp project competition when iar required and status when valid 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with IAR and PCF received 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with IAR and PCF statuses are not received 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with IAR and PCF statuses are not received 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with IAR received but not PCF 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with IAR received but not PCF 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with non required IAR with PCF received but not IAR 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are invalid 1`] = `"validation.claimDtoValidator.iarPcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are invalid 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
 exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR and PCF statuses are valid 1`] = `null`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR status is valid and not PCF 1`] = `"validation.claimDtoValidator.pcfStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with IAR status is valid and not PCF 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with PCF status is valid and not iar 1`] = `"validation.claimDtoValidator.iarStatusInvalid"`;
+exports[`claimDtoValidator() With no i18n with claimState when status is awaiting IAR when the final claim when not KTP with required IAR with PCF status is valid and not iar 1`] = `"forms.claimSummary.documents.errors.iar_required"`;
 
 exports[`claimDtoValidator() With no i18n with comments with correct claim status with an incorrect status and valid original status but no comments 1`] = `null`;
 

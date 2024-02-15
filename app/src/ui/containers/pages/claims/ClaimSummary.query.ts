@@ -89,6 +89,9 @@ export const claimSummaryQuery = graphql`
                 Acc_PCF_Status__c {
                   value
                 }
+                Acc_IAR_Status__c {
+                  value
+                }
                 Acc_ProjectPeriodEndDate__c {
                   value
                 }

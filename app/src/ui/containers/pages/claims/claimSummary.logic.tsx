@@ -77,6 +77,7 @@ export const useClaimSummaryData = (
       "periodId",
       "periodStartDate",
       "isIarRequired",
+      "iarStatus",
       "comments",
       "totalCost",
       "status",
