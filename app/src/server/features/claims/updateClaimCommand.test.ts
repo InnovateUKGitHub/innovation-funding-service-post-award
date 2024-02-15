@@ -6,6 +6,7 @@ import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { Authorisation } from "@framework/types/authorisation";
+import { ReceivedStatus } from "@framework/entities/received-status";
 
 describe("UpdateClaimCommand", () => {
   describe("with accessControl", () => {
@@ -97,14 +98,13 @@ describe("UpdateClaimCommand", () => {
 
   it("updates the status to submitted if an iar is required and there are claim documents uploaded", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => {
-      x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const claim = context.testData.createClaim(partner, undefined, x => {
       x.Acc_IARRequired__c = true;
     });
-    context.testData.createDocument(claim.Id, "cats_are_the_best.txt");
-    const partner = context.testData.createPartner();
+    context.testData.createDocument(claim.Id, "cats_are_the_best.txt", undefined, undefined, undefined, "IAR");
     const dto = mapClaim(context)(claim, partner.competitionType);
-    const project = context.testData.createProject();
 
     dto.status = ClaimStatus.SUBMITTED;
 
@@ -447,9 +447,8 @@ describe("UpdateClaimCommand", () => {
     });
 
     describe("throws a validation error", () => {
-      it("when documents are missing from a valid a valid request", async () => {
+      it("when documents are missing from a valid request", async () => {
         const validCompetitionType = "KTP";
-        const validIarStatus = "Received";
 
         const context = new TestContext();
         const project = context.testData.createProject();
@@ -458,17 +457,17 @@ describe("UpdateClaimCommand", () => {
         const claim = context.testData.createClaim(partner, undefined, x => {
           x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
           x.Acc_IARRequired__c = isIarRequiredState;
-          x.Acc_IAR_Status__c = validIarStatus;
+          x.Acc_IAR_Status__c = ReceivedStatus.Received;
         });
         const dto = mapClaim(context)(claim, partner.competitionType);
+        dto.status = ClaimStatus.SUBMITTED;
 
         const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
-        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+        await expect(context.runCommand(command)).resolves.toEqual(true);
       });
 
       it("when iar status is invalid but the request with documents is valid", async () => {
         const validCompetitionType = "KTP";
-        const invalidIarStatus = "Not Received";
 
         const context = new TestContext();
         const project = context.testData.createProject();
@@ -476,13 +475,21 @@ describe("UpdateClaimCommand", () => {
         const claim = context.testData.createClaim(partner, undefined, x => {
           x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
           x.Acc_IARRequired__c = isIarRequiredState;
-          x.Acc_IAR_Status__c = invalidIarStatus;
+          x.Acc_IAR_Status__c = ReceivedStatus.NotReceived;
         });
-        context.testData.createDocument(claim.Id, "stub-document.docx");
+        context.testData.createDocument(
+          claim.Id,
+          "stub-document.docx",
+          undefined,
+          undefined,
+          undefined,
+          "ScheduleThree",
+        );
         const dto = mapClaim(context)(claim, partner.competitionType);
+        dto.status = ClaimStatus.SUBMITTED;
 
         const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
-        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+        await expect(context.runCommand(command)).resolves.toEqual(true);
       });
     });
   });
@@ -545,9 +552,8 @@ describe("UpdateClaimCommand", () => {
           x.Acc_IARRequired__c = true;
         });
 
-        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-
         const dto = mapClaim(context)(claim, partner.competitionType);
+        dto.status = ClaimStatus.SUBMITTED;
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -564,9 +570,8 @@ describe("UpdateClaimCommand", () => {
         });
         context.testData.createDocument(claim.Id, "stub-document.docx");
 
-        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-
         const dto = mapClaim(context)(claim, partner.competitionType);
+        dto.status = ClaimStatus.SUBMITTED;
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -579,9 +584,8 @@ describe("UpdateClaimCommand", () => {
         const partner = context.testData.createPartner(project, x => (x.competitionType = "KTP"));
         const claim = context.testData.createClaim(partner, 2);
 
-        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-
         const dto = mapClaim(context)(claim, partner.competitionType);
+        dto.status = ClaimStatus.SUBMITTED;
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 

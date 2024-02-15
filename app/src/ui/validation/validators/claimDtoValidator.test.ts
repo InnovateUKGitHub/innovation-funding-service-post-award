@@ -3,6 +3,8 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
 import { ClaimDtoValidator } from "./claimDtoValidator";
+import { ReceivedStatus } from "@framework/entities/received-status";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 describe("claimDtoValidator()", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {
@@ -17,6 +19,10 @@ describe("claimDtoValidator()", () => {
     const stubClaimDto = { id: "stub-id", status: ClaimStatus.UNKNOWN } as ClaimDto;
     const stubOriginalStatus = ClaimStatus.DRAFT;
     const stubDocument = { fileName: "stub-fileName" } as DocumentSummaryDto;
+    const stubIar: DocumentSummaryDto = { ...stubDocument, description: DocumentDescription.IAR };
+    const stubScheduleThree: DocumentSummaryDto = { ...stubDocument, description: DocumentDescription.ScheduleThree };
+    // const stubPcf: DocumentSummaryDto = { ...stubDocument, description: DocumentDescription.ProjectCompletionForm };
+
     const stubShowErrors = true;
     const stubCompetitionType = "CR&D";
     const stubIsFinalSummary = true;
@@ -218,13 +224,13 @@ describe("claimDtoValidator()", () => {
           const ktpCompetitionType = "KTP";
 
           test.each`
-            name                                                                           | stubClaim                                              | stubDocuments     | expectedToBeValid
-            ${"with not required IAR and not received valid IAR status with documents"}    | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[stubDocument]} | ${true}
-            ${"with not required IAR and not received valid IAR status without documents"} | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[]}             | ${true}
-            ${"with required IAR and valid IAR status with documents"}                     | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[stubDocument]} | ${true}
-            ${"with required IAR and valid IAR status without documents"}                  | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[]}             | ${false}
-            ${"with required IAR and invalid IAR status with documents"}                   | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[stubDocument]} | ${false}
-            ${"with required IAR and invalid IAR status without documents"}                | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[]}             | ${false}
+            name                                                                           | stubClaim                                              | stubDocuments          | expectedToBeValid
+            ${"with not required IAR and not received valid IAR status with documents"}    | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[stubScheduleThree]} | ${true}
+            ${"with not required IAR and not received valid IAR status without documents"} | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[]}                  | ${true}
+            ${"with required IAR and valid IAR status with documents"}                     | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[stubScheduleThree]} | ${true}
+            ${"with required IAR and valid IAR status without documents"}                  | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[]}                  | ${true}
+            ${"with required IAR and invalid IAR status with documents"}                   | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[stubScheduleThree]} | ${true}
+            ${"with required IAR and invalid IAR status without documents"}                | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[]}                  | ${false}
           `("$name as KTP competition", ({ stubClaim, stubDocuments, expectedToBeValid }) => {
             const stubFinalClaim = {
               ...stubClaimDto,
@@ -251,17 +257,17 @@ describe("claimDtoValidator()", () => {
           const ktpCompetitionType = "KTP";
 
           test.each`
-            name                                                                                       | stubClaim                                             | stubDocuments     | testCompetitionType    | expectedToBeValid
-            ${"with required IAR and valid IAR status with documents as non-KTP competition"}          | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${stubCompetitionType} | ${true}
-            ${"with required IAR and valid IAR status without documents as non-KTP competition"}       | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${stubCompetitionType} | ${false}
-            ${"with required IAR and invalid IAR status with documents as non-KTP competition"}        | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${stubCompetitionType} | ${false}
-            ${"with required IAR and invalid IAR status without documents as non-KTP competition"}     | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${stubCompetitionType} | ${false}
-            ${"with non required IAR and a valid IAR status without documents as non-KTP competition"} | ${{ isIarRequired: false, iarStatus: "Received" }}    | ${[]}             | ${stubCompetitionType} | ${true}
-            ${"with non required IAR and a valid IAR status with documents as non-KTP competition"}    | ${{ isIarRequired: false, iarStatus: "Received" }}    | ${[stubDocument]} | ${stubCompetitionType} | ${true}
-            ${"with required IAR and valid IAR status with documents as KTP competition"}              | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${ktpCompetitionType}  | ${true}
-            ${"with required IAR and valid IAR status without documents as KTP competition"}           | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${ktpCompetitionType}  | ${false}
-            ${"with required IAR and invalid IAR status with documents as KTP competition"}            | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${ktpCompetitionType}  | ${false}
-            ${"with required IAR and invalid IAR status without documents as KTP competition"}         | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${ktpCompetitionType}  | ${false}
+            name                                                                                       | stubClaim                                                         | stubDocuments          | testCompetitionType    | expectedToBeValid
+            ${"with required IAR and valid IAR status with documents as non-KTP competition"}          | ${{ isIarRequired: true, iarStatus: ReceivedStatus.Received }}    | ${[stubIar]}           | ${stubCompetitionType} | ${true}
+            ${"with required IAR and valid IAR status without documents as non-KTP competition"}       | ${{ isIarRequired: true, iarStatus: ReceivedStatus.Received }}    | ${[]}                  | ${stubCompetitionType} | ${true}
+            ${"with required IAR and invalid IAR status with documents as non-KTP competition"}        | ${{ isIarRequired: true, iarStatus: ReceivedStatus.NotReceived }} | ${[stubIar]}           | ${stubCompetitionType} | ${true}
+            ${"with required IAR and invalid IAR status without documents as non-KTP competition"}     | ${{ isIarRequired: true, iarStatus: ReceivedStatus.NotReceived }} | ${[]}                  | ${stubCompetitionType} | ${false}
+            ${"with non required IAR and a valid IAR status without documents as non-KTP competition"} | ${{ isIarRequired: false, iarStatus: ReceivedStatus.Received }}   | ${[]}                  | ${stubCompetitionType} | ${true}
+            ${"with non required IAR and a valid IAR status with documents as non-KTP competition"}    | ${{ isIarRequired: false, iarStatus: ReceivedStatus.Received }}   | ${[stubIar]}           | ${stubCompetitionType} | ${true}
+            ${"with required IAR and valid IAR status with documents as KTP competition"}              | ${{ isIarRequired: true, iarStatus: ReceivedStatus.Received }}    | ${[stubScheduleThree]} | ${ktpCompetitionType}  | ${true}
+            ${"with required IAR and valid IAR status without documents as KTP competition"}           | ${{ isIarRequired: true, iarStatus: ReceivedStatus.Received }}    | ${[]}                  | ${ktpCompetitionType}  | ${true}
+            ${"with required IAR and invalid IAR status with documents as KTP competition"}            | ${{ isIarRequired: true, iarStatus: ReceivedStatus.NotReceived }} | ${[stubScheduleThree]} | ${ktpCompetitionType}  | ${true}
+            ${"with required IAR and invalid IAR status without documents as KTP competition"}         | ${{ isIarRequired: true, iarStatus: ReceivedStatus.NotReceived }} | ${[]}                  | ${ktpCompetitionType}  | ${false}
           `("$name", ({ stubClaim, stubDocuments, testCompetitionType, expectedToBeValid }) => {
             const stubFinalClaim = {
               ...stubClaimDto,

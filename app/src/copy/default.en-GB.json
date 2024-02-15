@@ -1897,7 +1897,9 @@
       "documents": {
         "errors": {
           "iar_required": "You must upload an independent accountant's report before you can submit this claim.",
-          "pcf_required": "You must upload a project completion form before you can submit this claim."
+          "im_required": "You must complete your project impact questions before you can submit this claim.",
+          "pcf_required": "You must upload a project completion form before you can submit this claim.",
+          "schedule3_required": "You must upload a schedule 3 before you can submit this claim."
         }
       },
       "status": {

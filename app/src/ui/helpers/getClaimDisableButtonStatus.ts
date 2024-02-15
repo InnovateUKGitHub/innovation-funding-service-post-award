@@ -11,7 +11,7 @@ type CheckImpactManagementPcfNotSubmittedForFinalClaimProps = Pick<
   | "impactManagementPhasedCompetitionStage"
 >;
 
-const checkPcfNotSubmittedForFinalClaim = ({
+const getClaimDisableButtonStatus = ({
   impactManagementParticipation,
   isFinalClaim,
   pcfStatus,
@@ -24,16 +24,13 @@ const checkPcfNotSubmittedForFinalClaim = ({
   const isFinalPhase = impactManagementPhasedCompetitionStage === ImpactManagementPhase.Last;
 
   if (isImpactManagement && !isReceived && isFinalClaim && !isPhased) {
-    return { imDisabled: true, checkForFileOnSubmit: true };
+    return { imDisabled: true };
   }
   if (isImpactManagement && !isReceived && isFinalClaim && isPhased && isFinalPhase) {
-    return { imDisabled: true, checkForFileOnSubmit: true };
-  }
-  if (!isImpactManagement && !isReceived && isFinalClaim) {
-    return { imDisabled: false, checkForFileOnSubmit: true };
+    return { imDisabled: true };
   }
 
-  return { imDisabled: false, checkForFileOnSubmit: false };
+  return { imDisabled: false };
 };
 
-export { checkPcfNotSubmittedForFinalClaim };
+export { getClaimDisableButtonStatus };

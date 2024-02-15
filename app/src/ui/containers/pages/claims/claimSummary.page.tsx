@@ -21,7 +21,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { checkPcfNotSubmittedForFinalClaim } from "@ui/helpers/checkPcfNotSubmittedForFinalClaim";
+import { getClaimDisableButtonStatus } from "@ui/helpers/getClaimDisableButtonStatus";
 import { useClaimSummaryData, useOnUpdateClaimSummary } from "./claimSummary.logic";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useForm } from "react-hook-form";
@@ -59,7 +59,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   const { isMo } = getAuthRoles(data.project.roles);
 
   // Disable completing the form if impact management and not received PCF
-  const { checkForFileOnSubmit, imDisabled } = checkPcfNotSubmittedForFinalClaim(data.claim);
+  const { imDisabled } = getClaimDisableButtonStatus(data.claim);
 
   const { isPmOrMo } = getAuthRoles(data.project.roles);
 
@@ -85,8 +85,8 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
     },
     resolver: zodResolver(
       getClaimSummarySchema({
-        iarRequired: data.claim.isIarRequired,
-        pcfRequired: checkForFileOnSubmit,
+        claim: data.claim,
+        project: data.project,
         claimDetails: data.claimDetails,
       }),
       { errorMap: claimSummaryErrorMap },

@@ -1,14 +1,12 @@
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import * as Validation from "@ui/validation/validators/common";
-import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ReceivedStatus } from "@framework/entities/received-status";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
+import * as Validation from "@ui/validation/validators/common";
+import { ClaimPcfIarSharedValidatorResult, iarValidation, pcfValidation } from "./shared/claimPcfIarSharedValidator";
 
 export const claimCommentsMaxLength = 1000;
 
@@ -34,27 +32,9 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     ClaimStatus.INNOVATE_QUERIED,
   ];
 
-  private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
-  private readonly hasDocuments: boolean = !!this.documents.length;
-  private readonly isPcfStatusValid = this.model.pcfStatus === ReceivedStatus.Received;
-  private readonly shouldValidatePcf =
-    (!this.isKtpCompetition &&
-      this.model.isFinalClaim &&
-      this.model.impactManagementParticipation !== ImpactManagementParticipation.Yes) ||
-    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes &&
-      !this.model.impactManagementPhasedCompetition &&
-      this.model.isFinalClaim) ||
-    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes &&
-      this.model.impactManagementPhasedCompetition &&
-      this.model.impactManagementPhasedCompetitionStage === ImpactManagementPhase.Last &&
-      this.model.isFinalClaim);
-
-  private readonly isReceivedIarStatus: boolean = this.model.iarStatus === ReceivedStatus.Received;
-  private readonly isIarStatusWithDocsValid: boolean = this.hasDocuments && this.isReceivedIarStatus;
-
   public status = this.validateStatus();
   public id = this.validateId();
-  public claimState = this.getClaimValidation();
+  public claimState = this.getPcfIarValidation();
   public totalCosts = this.validateTotalCosts();
   public comments = this.validateComments();
 
@@ -121,69 +101,63 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     );
   }
 
-  private validateIarStatus(): Result {
-    const notIarRequired = !this.model.isIarRequired;
-    const ktpAndNotIarRequired = this.isKtpCompetition && notIarRequired;
-
-    // Note: ignore validation when is not required
-    if (notIarRequired || ktpAndNotIarRequired) return Validation.valid(this);
-
-    return Validation.isTrue(
-      this,
-      this.isIarStatusWithDocsValid,
-      this.getContent(x => x.validation.claimDtoValidator.iarStatusInvalid),
-    );
-  }
-
-  private validatePcfStatus(): Result {
-    // Note: For the time being ignore all ktp validation here
-    if (this.isKtpCompetition) return Validation.valid(this);
-
-    // Allow not having a PCF if we are in draft, queried by MO, or queried by Innovate UK
-    if (
-      this.model.status === ClaimStatus.DRAFT ||
-      this.model.status === ClaimStatus.MO_QUERIED ||
-      this.model.status === ClaimStatus.INNOVATE_QUERIED
-    ) {
-      return Validation.valid(this);
-    }
-
-    return Validation.isTrue(
-      this,
-      this.isPcfStatusValid,
-      this.getContent(x => x.validation.claimDtoValidator.pcfStatusInvalid),
-    );
-  }
-
-  private getClaimValidation(): Result {
-    // Note: We only validate the claim state on the summary page
-    if (!this.isClaimSummary) return Validation.valid(this);
-
-    const hasOriginalAwaitingIarClaim: boolean = this.originalStatus === ClaimStatus.AWAITING_IAR;
-
-    return hasOriginalAwaitingIarClaim ? this.validateAwaitingIarClaim() : this.validateDefaultClaim();
-  }
-
-  private validateAwaitingIarClaim(): Result {
-    const hasInvalidStatuses = !this.isIarStatusWithDocsValid && !this.isPcfStatusValid;
-
-    // Note: Auto-fail and combine both (pcf + iar) errors in one when not valid
-    if (this.shouldValidatePcf && this.model.isIarRequired && hasInvalidStatuses) {
-      return Validation.inValid(
-        this,
-        this.getContent(x => x.validation.claimDtoValidator.iarPcfStatusInvalid),
-      );
-    }
-
+  /**
+   * Run both PCF and IAR (KTP: Schedule 3) validation
+   *
+   * YOU MUST update the Confluence document before editing the code.
+   * https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+   */
+  private getPcfIarValidation(): Result {
     return Validation.all(
       this,
-      () => this.validateIarStatus(),
-      () => (this.shouldValidatePcf ? this.validatePcfStatus() : Validation.valid(this)),
+      () => this.getPcfValidation(),
+      () => this.getIarValidation(),
     );
   }
 
-  private validateDefaultClaim(): Result {
-    // Note: KTP will only every require IAR validation not PCF
-    return this.shouldValidatePcf ? this.validatePcfStatus() : this.validateIarStatus();
+  private getPcfValidation(): Result {
+    switch (
+      pcfValidation({
+        claim: this.model,
+        documents: this.documents,
+        project: { competitionType: this.competitionType },
+      })
+    ) {
+      case ClaimPcfIarSharedValidatorResult.PCF_MISSING:
+        return Validation.inValid(
+          this,
+          this.getContent(x => x.forms.claimSummary.documents.errors.pcf_required),
+        );
+      case ClaimPcfIarSharedValidatorResult.IM_QUESTIONS_MISSING:
+        return Validation.inValid(
+          this,
+          this.getContent(x => x.forms.claimSummary.documents.errors.im_required),
+        );
+      default:
+        return Validation.valid(this);
+    }
+  }
+
+  private getIarValidation(): Result {
+    switch (
+      iarValidation({
+        claim: this.model,
+        documents: this.documents,
+        project: { competitionType: this.competitionType },
+      })
+    ) {
+      case ClaimPcfIarSharedValidatorResult.IAR_MISSING:
+        return Validation.inValid(
+          this,
+          this.getContent(x => x.forms.claimSummary.documents.errors.iar_required),
+        );
+      case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
+        return Validation.inValid(
+          this,
+          this.getContent(x => x.forms.claimSummary.documents.errors.schedule3_required),
+        );
+      default:
+        return Validation.valid(this);
+    }
   }
 }
