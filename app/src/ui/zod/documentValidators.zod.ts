@@ -16,6 +16,7 @@ import {
   periodIdValidation,
   pcrItemIdValidation,
   costCategoryIdValidation,
+  pcrIdValidation,
 } from "./helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
@@ -159,7 +160,7 @@ const claimDetailLevelDelete = z.object({
 const pcrLevelDelete = z.object({
   form: z.literal(FormTypes.PcrLevelDelete),
   projectId: projectIdValidation,
-  projectChangeRequestIdOrItemId: pcrItemIdValidation,
+  projectChangeRequestIdOrItemId: z.union([pcrItemIdValidation, pcrIdValidation]),
   documentId: z.string(),
 });
 

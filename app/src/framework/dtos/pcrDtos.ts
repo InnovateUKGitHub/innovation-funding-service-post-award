@@ -169,7 +169,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
 }
 
 export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
-  type: PCRItemType.ApproveNewSubcontrator;
+  type: PCRItemType.ApproveNewSubcontractor;
   subcontractorName: string | null;
   subcontractorRegistrationNumber: string | null;
   subcontractorRelationship: boolean | null;

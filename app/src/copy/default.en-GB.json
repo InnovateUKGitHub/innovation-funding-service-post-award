@@ -2227,6 +2227,14 @@
           }
         }
       },
+      "pcrReasoning": {
+        "reasoningComments": {
+          "required": "Enter reasoning for the request.",
+          "errors": {
+            "too_big": "Reasoning can be a maximum of {{count}} characters."
+          }
+        }
+      },
       "timeExtension": {
         "errors": {
           "custom": "You must either increase or decrease the project duration. You cannot select your current end date."

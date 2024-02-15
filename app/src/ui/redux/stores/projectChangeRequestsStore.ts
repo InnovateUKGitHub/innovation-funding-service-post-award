@@ -379,7 +379,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           repaymentPeriod: null,
           repaymentPeriodChange: null,
         };
-      case PCRItemType.ApproveNewSubcontrator:
+      case PCRItemType.ApproveNewSubcontractor:
         return {
           ...baseFields,
           type: itemType.type,

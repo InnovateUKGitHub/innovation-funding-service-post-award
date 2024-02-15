@@ -105,7 +105,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.LoanDrawdownExtension:
         this.updateLoanExtension(item, body, stepName);
         break;
-      case PCRItemType.ApproveNewSubcontrator:
+      case PCRItemType.ApproveNewSubcontractor:
         // It should not be possible for this handler to handle these
         // PCRs because it is dealt with in a separate form handler.
 

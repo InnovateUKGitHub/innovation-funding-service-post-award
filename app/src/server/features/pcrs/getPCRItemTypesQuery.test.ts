@@ -17,7 +17,7 @@ describe("GetPCRItemTypesQuery", () => {
       PCRItemType.AccountNameChange,
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
-      PCRItemType.ApproveNewSubcontrator,
+      PCRItemType.ApproveNewSubcontractor,
     ];
 
     const project = context.testData.createProject();

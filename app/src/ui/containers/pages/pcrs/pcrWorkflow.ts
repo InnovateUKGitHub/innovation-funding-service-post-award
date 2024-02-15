@@ -94,7 +94,7 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> ex
         return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
       case PCRItemType.PeriodLengthChange:
         return new PcrWorkflow(periodLengthChangeWorkflow, step);
-      case PCRItemType.ApproveNewSubcontrator:
+      case PCRItemType.ApproveNewSubcontractor:
         return new PcrWorkflow(approveNewSubcontractorWorkflow, step);
       default:
         return null;

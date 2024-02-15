@@ -1,17 +1,64 @@
 import { graphql } from "react-relay";
 
-const pcrReasoningWorkflowQuery = graphql`
-  query PcrReasoningWorkflowQuery($projectId: ID, $pcrId: ID) {
+export const pcrReasoningFilesQuery = graphql`
+  query PcrReasoningFilesQuery($projectId: ID!, $pcrId: ID!) {
     salesforce {
       uiapi {
         query {
-          PcrHeader: Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrId } }, first: 1) {
+          Acc_ProjectParticipant__c(
+            where: { Acc_ProjectId__c: { eq: $projectId } }
+            orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
+            first: 2000
+          ) {
             edges {
               node {
                 Id
+                Acc_AccountId__r {
+                  Name {
+                    value
+                  }
+                }
+                Acc_OrganisationType__c {
+                  value
+                }
+                Acc_ParticipantStatus__c {
+                  value
+                }
+                Acc_ProjectRole__c {
+                  value
+                }
+              }
+            }
+          }
+          Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrId } }, first: 1) {
+            edges {
+              node {
+                Id
+                Acc_Project_Participant__c {
+                  value
+                }
+                Acc_ExistingPartnerName__c {
+                  value
+                }
+                Acc_NewOrganisationName__c {
+                  value
+                }
+                Acc_Status__c {
+                  value
+                }
+                RecordType {
+                  Name {
+                    value
+                    label
+                  }
+                  DeveloperName {
+                    value
+                  }
+                }
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
                   edges {
                     node {
+                      Id
                       LinkedEntityId {
                         value
                       }
@@ -55,54 +102,15 @@ const pcrReasoningWorkflowQuery = graphql`
               }
             }
           }
-          Acc_ProjectChangeRequest__c(
-            where: { or: [{ Id: { eq: $pcrId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
-            first: 2000
-          ) {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id
-                Acc_Status__c {
-                  value
-                }
-                Acc_RequestHeader__c {
-                  value
-                }
-                Acc_RequestNumber__c {
-                  value
-                }
-                Acc_MarkedasComplete__c {
-                  value
-                }
-                Acc_Reasoning__c {
-                  value
-                }
-                Acc_Project__c {
-                  value
-                }
-                RecordType {
-                  Name {
-                    value
-                    label
-                  }
-                  DeveloperName {
-                    value
-                  }
-                }
-              }
-            }
-          }
-          Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
+                roles {
+                  isPm
+                  isFc
+                  isMo
+                  isAssociate
                 }
               }
             }
@@ -112,5 +120,3 @@ const pcrReasoningWorkflowQuery = graphql`
     }
   }
 `;
-
-export { pcrReasoningWorkflowQuery };

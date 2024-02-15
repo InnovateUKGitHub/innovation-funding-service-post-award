@@ -86,7 +86,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRI
       return mapItemForLoansChangeDrawdown(pcr, itemType.displayName, itemType.type);
     case PCRItemType.LoanDrawdownExtension:
       return mapItemForChangeLoansDuration(pcr, itemType.displayName, itemType.type);
-    case PCRItemType.ApproveNewSubcontrator:
+    case PCRItemType.ApproveNewSubcontractor:
       return mapItemForApproveNewSubcontractor(pcr, itemType.displayName, itemType.type);
     default:
       throw new Error("Type not handled");
@@ -123,7 +123,7 @@ const mapItemForPeriodLengthChange = (
 const mapItemForApproveNewSubcontractor = (
   pcr: ProjectChangeRequestItemEntity,
   typeName: string,
-  type: PCRItemType.ApproveNewSubcontrator,
+  type: PCRItemType.ApproveNewSubcontractor,
 ): PCRItemForApproveNewSubcontractorDto => ({
   ...mapBaseItem(pcr, typeName, type),
   subcontractorName: pcr.subcontractorName ?? null,

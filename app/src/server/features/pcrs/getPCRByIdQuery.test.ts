@@ -265,7 +265,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for approving a new subcontractor", async () => {
     const context = new TestContext();
 
-    const approveNewSubcontractorType = pcrItemTypes.find(x => x.type === PCRItemType.ApproveNewSubcontrator);
+    const approveNewSubcontractorType = pcrItemTypes.find(x => x.type === PCRItemType.ApproveNewSubcontractor);
     const recordType = context.testData
       .createPCRRecordTypes()
       .find(x => x.type === approveNewSubcontractorType?.typeName);

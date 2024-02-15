@@ -20,8 +20,8 @@ export function useFormRevalidate<T extends FieldValues>(
   // ref prevents revalidating until after the submit event has been triggered once unless pcr marked as complete
   const hasSubmitted = useRef(shouldInitiallyValidate);
 
+  // fires on initialization if should initially validate is true
   const hasFiredOnce = useRef(false);
-
   const submitFormHandler = () => {
     hasSubmitted.current = true;
   };

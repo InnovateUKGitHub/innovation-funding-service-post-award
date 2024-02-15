@@ -73,7 +73,7 @@ export const enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
-  ApproveNewSubcontrator = 130,
+  ApproveNewSubcontractor = 130,
 }
 
 export const enum PCRItemTypeName {
@@ -625,7 +625,7 @@ export const pcrItemTypes: IMetaValue[] = [
     singleInstanceInThisPcr: true,
   },
   {
-    type: PCRItemType.ApproveNewSubcontrator,
+    type: PCRItemType.ApproveNewSubcontractor,
     typeName: "Approve a new subcontractor",
     ignoredCompetitions: [SalesforceCompetitionTypes.ktp, SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.approveNewSubcontractor,
@@ -647,5 +647,5 @@ export const pcrItems = [
   PCRItemType.PeriodLengthChange,
   PCRItemType.LoanDrawdownChange,
   PCRItemType.LoanDrawdownExtension,
-  PCRItemType.ApproveNewSubcontrator,
+  PCRItemType.ApproveNewSubcontractor,
 ] as const;

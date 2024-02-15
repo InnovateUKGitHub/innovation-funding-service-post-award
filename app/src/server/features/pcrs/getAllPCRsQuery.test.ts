@@ -147,7 +147,7 @@ describe("GetAllPCRsQuery", () => {
       PCRItemType.AccountNameChange,
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
-      PCRItemType.ApproveNewSubcontrator,
+      PCRItemType.ApproveNewSubcontractor,
     ];
 
     const expectedNames = [

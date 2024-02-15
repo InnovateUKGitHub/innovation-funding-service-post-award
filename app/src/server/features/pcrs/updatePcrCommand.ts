@@ -334,7 +334,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         break;
       }
 
-      case PCRItemType.ApproveNewSubcontrator: {
+      case PCRItemType.ApproveNewSubcontractor: {
         if (
           statusChange ||
           item.subcontractorName !== dto.subcontractorName ||

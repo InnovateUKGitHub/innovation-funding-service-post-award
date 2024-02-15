@@ -386,7 +386,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRLoanExtensionItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForLoanDrawdownExtensionDto>,
         );
-      case PCRItemType.ApproveNewSubcontrator:
+      case PCRItemType.ApproveNewSubcontractor:
         return new PCRApproveNewSubcontractorItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForApproveNewSubcontractorDto>,
         );

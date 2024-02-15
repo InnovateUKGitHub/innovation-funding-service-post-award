@@ -1,41 +1,85 @@
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ReasoningStepProps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
-import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { BaseProps } from "../../../containerBase";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { useContent } from "@ui/hooks/content.hook";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { useForm } from "react-hook-form";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useGetBackLink, useNextReasoningLink } from "./pcrReasoningWorkflow.logic";
+import { PcrReasoningSchemaType, pcrReasoningErrorMap, pcrReasoningSchema } from "./pcrReasoning.zod";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
+import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { usePcrReasoningContext } from "./pcrReasoningContext";
 
-const PCRForm = createTypedForm<PCRDto>();
+export const PCRPrepareReasoningStep = () => {
+  const { pcr, isFetching, onUpdate, messages, project, apiError, markedAsCompleteHasBeenChecked } =
+    usePcrReasoningContext();
+  const { register, watch, handleSubmit, formState, trigger } = useForm<PcrReasoningSchemaType>({
+    defaultValues: {
+      reasoningComments: pcr.reasoningComments ?? "",
+      markedAsCompleteHasBeenChecked,
+    },
+    resolver: zodResolver(pcrReasoningSchema, {
+      errorMap: pcrReasoningErrorMap,
+    }),
+  });
 
-export const PCRPrepareReasoningStep = (props: BaseProps & ReasoningStepProps) => {
-  const { editor, onSave, onChange } = props;
+  const { getContent } = useContent();
+
+  const validationErrors = useRhfErrors(formState?.errors);
+
+  const nextLink = useNextReasoningLink();
+
+  const backLink = useGetBackLink();
+
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
-    <Section qa="reasoning-save-and-return">
-      <PCRForm.Form editor={editor} onChange={dto => onChange(dto)}>
-        <PCRForm.Fieldset heading={x => x.pages.pcrReasoningPrepareReasoning.headingReasoning}>
-          <PCRForm.MultilineString
-            name="reasoningComments"
-            label={x => x.pages.pcrReasoningPrepareReasoning.headingReasoning}
-            labelHidden
-            hint={x => x.pages.pcrReasoningPrepareReasoning.hint}
-            qa="reason"
-            value={m => m.reasoningComments}
-            update={(m, v) => (m.reasoningComments = v || "")}
-            validation={editor.validator.reasoningComments}
-            characterCountOptions={{
-              type: "descending",
-              maxValue: PCRDtoValidator.maxSalesforceFieldLength,
-              warnValue: PCRDtoValidator.maxSalesforceFieldLength - 2000,
-            }}
-            rows={15}
-          />
-        </PCRForm.Fieldset>
-        <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}>
-          <Content value={x => x.pcrItem.submitButton} />
-        </PCRForm.Button>
-      </PCRForm.Form>
-    </Section>
+    <Page
+      validationErrors={validationErrors}
+      backLink={backLink}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      apiError={apiError}
+    >
+      <Messages messages={messages} />
+      <PcrItemListSection />
+
+      <Section data-qa="reasoning-save-and-return">
+        <Form
+          onSubmit={handleSubmit(data =>
+            onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
+          )}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrReasoningPrepareReasoning.headingReasoning)}</Legend>
+            <TextAreaField
+              {...register("reasoningComments")}
+              id="reasoning_comments"
+              hint={getContent(x => x.pages.pcrReasoningPrepareReasoning.hint)}
+              disabled={isFetching}
+              characterCount={watch("reasoningComments")?.length ?? 0}
+              data-qa="reason"
+              characterCountType="descending"
+              characterCountMax={32_000}
+              aria-label={getContent(x => x.pages.pcrReasoningPrepareReasoning.headingReasoning)}
+              rows={15}
+            />
+          </Fieldset>
+
+          <Fieldset>
+            <Button type="submit" name="reasoningStep" disabled={isFetching}>
+              {getContent(x => x.pcrItem.submitButton)}
+            </Button>
+          </Fieldset>
+        </Form>
+      </Section>
+    </Page>
   );
 };

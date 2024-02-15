@@ -1,126 +1,155 @@
-import { ReasoningStepProps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { useStores } from "@ui/redux/storesProvider";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { useOnDelete } from "@framework/api-helpers/onFileDelete";
+import { useOnUpload } from "@framework/api-helpers/onFileUpload";
+import { useForm } from "react-hook-form";
+import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { makeZodI18nMap } from "@shared/zodi18n";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { z } from "zod";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useGetBackLink, useNextReasoningLink, usePcrReasoningFilesQuery } from "./pcrReasoningWorkflow.logic";
+import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
+import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { usePcrReasoningContext } from "./pcrReasoningContext";
 
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
-
-interface InnerProps {
-  documents: DocumentSummaryDto[];
-  onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
-}
-
-const PrepareReasoningFilesStepComponent = (props: BaseProps & InnerProps & ReasoningStepProps) => {
-  const { documentsEditor, pcrId, projectId, documents = [] } = props;
-
-  // Get the step-less review-before-submit page.
-  const back = props.routes.pcrPrepareReasoning.getLink({
-    projectId: projectId,
-    pcrId: pcrId,
-  });
-
-  return (
-    <>
-      <Section qa="uploadFileSection">
-        <UploadForm.Form
-          enctype="multipart"
-          editor={documentsEditor}
-          onSubmit={() => props.onFileChange("SaveAndContinue", documentsEditor.data)}
-          onChange={dto => props.onFileChange("DontSave", dto)}
-          qa="projectChangeRequestItemUpload"
-        >
-          <UploadForm.Fieldset heading={x => x.documentMessages.uploadDocuments}>
-            <DocumentGuidance />
-
-            <UploadForm.MultipleFileUpload
-              label={x => x.documentLabels.uploadInputLabel}
-              name="attachment"
-              labelHidden
-              value={data => data.files}
-              update={(dto, files) => (dto.files = files || [])}
-              validation={documentsEditor.validator.files}
-            />
-
-            <UploadForm.Button
-              name="uploadFile"
-              styling="Secondary"
-              onClick={() => props.onFileChange("SaveAndRemain", documentsEditor.data)}
-            >
-              <Content value={x => x.documentMessages.uploadDocuments} />
-            </UploadForm.Button>
-          </UploadForm.Fieldset>
-        </UploadForm.Form>
-        <Section>
-          <DocumentEdit
-            qa="prepare-files-documents"
-            onRemove={document => props.onFileDelete(documentsEditor.data, document)}
-            documents={documents}
-          />
-        </Section>
-
-        <Link styling="PrimaryButton" route={back}>
-          <Content value={x => x.pcrItem.submitButton} />
-        </Link>
-      </Section>
-    </>
-  );
-};
-
-export const PCRPrepareReasoningFilesStep = (
-  props: ReasoningStepProps & { documents: InnerProps["documents"]; refresh: () => void },
-) => {
-  const stores = useStores();
+export const PCRPrepareReasoningFilesStep = () => {
   const { getContent } = useContent();
 
+  const { pcrId, projectId, project, messages, isFetching, apiError, config, onUpdate } = usePcrReasoningContext();
+  const nextLink = useNextReasoningLink();
+
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrReasoningFilesQuery, {
+    projectId,
+    pcrId,
+  });
+
+  const { documents } = usePcrReasoningFilesQuery(projectId, pcrId, refreshedQueryOptions);
+
+  const {
+    register,
+    handleSubmit: handleDocumentSubmit,
+    formState,
+    getFieldState,
+    reset,
+  } = useForm<z.output<PcrLevelUploadSchemaType>>({
+    resolver: zodResolver(getPcrLevelUpload({ config: config.options }), {
+      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+    }),
+  });
+
+  const { onUpdate: onFileDelete, isProcessing: isDeleting } = useOnDelete({
+    onSuccess: refresh,
+  });
+
+  const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
+    async onSuccess() {
+      await refresh();
+      reset();
+    },
+  });
+
+  const { handleSubmit: handleFormSubmit } = useForm<{}>({
+    defaultValues: {},
+  });
+
+  const validationErrors = useRhfErrors(formState?.errors);
+
+  const disabled = isFetching || isDeleting || isUploading;
+
+  const backLink = useGetBackLink();
   return (
-    <PrepareReasoningFilesStepComponent
-      {...props}
-      onFileChange={(saving, dto) => {
-        stores.messages.clearMessages();
-        // show message if remaining on page
-        const successMessage =
-          saving === "SaveAndRemain"
-            ? dto.files.length === 1
-              ? "Your document has been uploaded."
-              : `${dto.files.length} documents have been uploaded.`
-            : undefined;
-        stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
-          saving !== "DontSave",
-          props.projectId,
-          props.pcrId,
-          dto,
-          saving === "SaveAndRemain",
-          successMessage,
-          () => {
-            props.refresh();
-            if (saving === "SaveAndContinue") {
-              props.onSave(props.editor.data);
-            }
-          },
-        );
-      }}
-      onFileDelete={(dto, document) => {
-        stores.messages.clearMessages();
-        stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
-          props.projectId,
-          props.pcrId,
-          dto,
-          document,
-          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
-          () => {
-            props.refresh();
-          },
-        );
-      }}
-    />
+    <Page
+      apiError={apiError}
+      validationErrors={validationErrors}
+      backLink={backLink}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+    >
+      <Messages messages={messages} />
+      <PcrItemListSection />
+      <Section>
+        <Form
+          encType="multipart/form-data"
+          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }))}
+          aria-disabled={disabled}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.documentMessages.uploadDocuments)}</Legend>
+
+            <input type="hidden" value={DocumentDescription.Evidence} {...register("description")}></input>
+            <input type="hidden" value={projectId} {...register("projectId")} />
+            <input type="hidden" value={pcrId} {...register("projectChangeRequestIdOrItemId")} />
+            <input type="hidden" value={FormTypes.PcrLevelUpload} {...register("form")} />
+
+            <DocumentGuidance />
+            <FormGroup hasError={!!getFieldState("files").error}>
+              <ValidationError error={getFieldState("files").error} />
+              <FileInput
+                disabled={disabled}
+                id="files"
+                hasError={!!getFieldState("files").error}
+                multiple
+                {...register("files")}
+              />
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <FormGroup>
+              <Button type="submit" secondary disabled={disabled}>
+                {getContent(x => x.pcrItem.uploadDocumentsButton)}
+              </Button>
+            </FormGroup>
+          </Fieldset>
+        </Form>
+      </Section>
+
+      <Section>
+        <DocumentEdit
+          qa="prepare-item-file-for-partner-documents"
+          onRemove={doc =>
+            onFileDelete({
+              data: {
+                form: FormTypes.PcrLevelDelete,
+                documentId: doc.id,
+                projectId,
+                projectChangeRequestIdOrItemId: pcrId,
+              },
+              context: doc,
+            })
+          }
+          documents={documents}
+          formType={FormTypes.PcrLevelDelete}
+          disabled={disabled}
+        />
+      </Section>
+      <Form
+        onSubmit={handleFormSubmit(data =>
+          onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
+        )}
+      >
+        <Fieldset>
+          <Button disabled={disabled} type="submit">
+            {getContent(x => x.pcrItem.submitButton)}
+          </Button>
+        </Fieldset>
+      </Form>
+    </Page>
   );
 };
