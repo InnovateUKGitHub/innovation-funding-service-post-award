@@ -13,6 +13,7 @@ import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@fra
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 import { mapToPCRStatus } from "@framework/mappers/pcr";
+import { configuration } from "@server/features/common/config";
 
 export const mapToPCRItemStatus = (status: string): PCRItemStatus => {
   switch (status) {
@@ -311,15 +312,19 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       repaymentPeriod,
       repaymentPeriodChange: this.mapChangeOffsetToQuarter(repaymentPeriod, repaymentPeriodChange),
 
-      // Approve a new subcontractor
-      subcontractorName: pcrItem.New_company_subcontractor_name__c,
-      subcontractorRegistrationNumber: pcrItem.Company_registration_number__c,
-      subcontractorRelationship: pcrItem.Relationship_between_partners__c,
-      subcontractorRelationshipJustification: pcrItem.Relationship_justification__c,
-      subcontractorLocation: pcrItem.Country_where_work_will_be_carried_out__c,
-      subcontractorDescription: pcrItem.Role_in_the_project__c,
-      subcontractorJustification: pcrItem.Justification__c,
-      subcontractorCost: pcrItem.Cost_of_work__c,
+      ...(configuration.features.approveNewSubcontractor
+        ? {
+            // Approve a new subcontractor
+            subcontractorName: pcrItem.New_company_subcontractor_name__c,
+            subcontractorRegistrationNumber: pcrItem.Company_registration_number__c,
+            subcontractorRelationship: pcrItem.Relationship_between_partners__c,
+            subcontractorRelationshipJustification: pcrItem.Relationship_justification__c,
+            subcontractorLocation: pcrItem.Country_where_work_will_be_carried_out__c,
+            subcontractorDescription: pcrItem.Role_in_the_project__c,
+            subcontractorJustification: pcrItem.Justification__c,
+            subcontractorCost: pcrItem.Cost_of_work__c,
+          }
+        : {}),
     };
   }
 
