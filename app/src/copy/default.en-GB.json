@@ -112,10 +112,6 @@
       "continueText": "Continue",
       "saveAndReturnText": "Save and return to monitoring reports"
     },
-    "forecastDetails": {
-      "finalClaimMessageFc": "You cannot change your forecast. You must ",
-      "submitLink": "submit your final claim"
-    },
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
       "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
@@ -1190,6 +1186,8 @@
   "forecastsMessages": {
     "warningPeriodChange": "Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim.",
     "projectEnded": "You cannot change your forecast. Your project has ended.",
+    "projectFinalClaimNotSubmitted": "You cannot change your forecast. You must <0>submit your final claim</0>.",
+    "projectFinalClaimSubmitted": "You cannot change your forecast. You have already submitted your final claim.",
     "finalClaim": "This is the final claim.",
     "forecastUpdated": "Your forecast has been updated.",
     "partnerHasWithdrawn": "This partner has withdrawn from the project. It is not possible to update the forecast."

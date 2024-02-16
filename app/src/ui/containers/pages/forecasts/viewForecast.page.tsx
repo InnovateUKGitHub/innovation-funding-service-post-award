@@ -21,6 +21,7 @@ import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 
 interface ViewForecastParams {
   projectId: ProjectId;
@@ -123,7 +124,7 @@ const FinalClaimMessage = ({
   isFc,
 }: {
   data: {
-    claims: Pick<ClaimDto, "isFinalClaim" | "isApproved" | "paidDate">[];
+    claims: Pick<ClaimDto, "isFinalClaim" | "isApproved" | "paidDate" | "periodId" | "status">[];
     project: Pick<ProjectDto, "id" | "periodId">;
     partner: Pick<PartnerDto, "id" | "isWithdrawn">;
   };
@@ -136,30 +137,51 @@ const FinalClaimMessage = ({
   const claimPageLink = PrepareClaimRoute.getLink({
     projectId: data.project.id,
     partnerId: data.partner.id,
-    periodId: data.project.periodId,
+    periodId: finalClaim.periodId,
   });
   const isClaimApprovedOrPaid = !!(finalClaim.isApproved || finalClaim.paidDate);
 
   if (isFc) {
-    return isClaimApprovedOrPaid || data.partner.isWithdrawn ? (
+    if (isClaimApprovedOrPaid || data.partner.isWithdrawn) {
+      return (
+        <ValidationMessage
+          qa="final-claim-message-FC"
+          messageType="info"
+          message={x => x.forecastsMessages.projectEnded}
+        />
+      );
+    }
+
+    if (
+      finalClaim.status === ClaimStatus.DRAFT ||
+      finalClaim.status === ClaimStatus.MO_QUERIED ||
+      finalClaim.status === ClaimStatus.INNOVATE_QUERIED
+    ) {
+      return (
+        <ValidationMessage
+          qa="final-claim-message-FC"
+          messageType="info"
+          message={
+            <span>
+              <Content
+                value={x => x.forecastsMessages.projectFinalClaimNotSubmitted}
+                components={[
+                  <Link key="0" route={claimPageLink} styling="Link">
+                    {" "}
+                  </Link>,
+                ]}
+              />
+            </span>
+          }
+        />
+      );
+    }
+
+    return (
       <ValidationMessage
         qa="final-claim-message-FC"
         messageType="info"
-        message={x => x.forecastsMessages.projectEnded}
-      />
-    ) : (
-      <ValidationMessage
-        qa="final-claim-message-FC"
-        messageType="info"
-        message={
-          <span>
-            <Content value={x => x.components.forecastDetails.finalClaimMessageFc} />
-            <Link route={claimPageLink} styling="Link">
-              <Content value={x => x.components.forecastDetails.submitLink} />
-            </Link>
-            .
-          </span>
-        }
+        message={x => x.forecastsMessages.projectFinalClaimSubmitted}
       />
     );
   } else {

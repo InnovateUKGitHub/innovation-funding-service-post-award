@@ -32,6 +32,9 @@ export const viewForecastQuery = graphql`
                 Acc_PaidDate__c {
                   value
                 }
+                Acc_ClaimStatus__c {
+                  value
+                }
                 RecordType {
                   DeveloperName {
                     value

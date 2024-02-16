@@ -51,7 +51,7 @@ export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId) 
   // CLAIMS
   const claims = mapToCurrentClaimsDtoArray(
     claimsGql,
-    ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"],
+    ["id", "isApproved", "periodId", "isFinalClaim", "paidDate", "status"],
     {},
   );
 
