@@ -103,6 +103,15 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   }
 
   private validateTotalCosts(): Result {
+    // Allow trying to claim too much money if draft, queried by MO or queried by Innovate UK
+    if (
+      this.model.status === ClaimStatus.DRAFT ||
+      this.model.status === ClaimStatus.MO_QUERIED ||
+      this.model.status === ClaimStatus.INNOVATE_QUERIED
+    ) {
+      return Validation.valid(this);
+    }
+
     const remainingOfferCosts = this.details.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
     return Validation.isPositiveFloat(

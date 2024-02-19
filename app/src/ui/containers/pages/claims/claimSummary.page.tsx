@@ -87,6 +87,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
       getClaimSummarySchema({
         iarRequired: data.claim.isIarRequired,
         pcfRequired: checkForFileOnSubmit,
+        claimDetails: data.claimDetails,
       }),
       { errorMap: claimSummaryErrorMap },
     ),
