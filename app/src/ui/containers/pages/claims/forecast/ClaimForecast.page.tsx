@@ -24,6 +24,7 @@ import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules
 import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import { getAuthRoles } from "@framework/types/authorisation";
+import { ButtonGroup } from "@ui/components/atomicDesign/atoms/ButtonGroup/ButtonGroup";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -107,23 +108,25 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
           </P>
         </Section>
         <Fieldset>
-          <SubmitButton
-            onClick={() => setValue("form", FormTypes.ClaimForecastSaveAndContinue)}
-            name="form"
-            value={FormTypes.ClaimForecastSaveAndContinue}
-            disabled={isFetching}
-          >
-            {getContent(x => x.pages.claimForecast.buttonContinueToSummary)}
-          </SubmitButton>
-          <SubmitButton
-            onClick={() => setValue("form", FormTypes.ClaimForecastSaveAndQuit)}
-            secondary
-            name="form"
-            value={FormTypes.ClaimForecastSaveAndQuit}
-            disabled={isFetching}
-          >
-            {getContent(x => x.pages.claimForecast.buttonSaveAndReturn)}
-          </SubmitButton>
+          <ButtonGroup>
+            <SubmitButton
+              onClick={() => setValue("form", FormTypes.ClaimForecastSaveAndContinue)}
+              name="form"
+              value={FormTypes.ClaimForecastSaveAndContinue}
+              disabled={isFetching}
+            >
+              {getContent(x => x.pages.claimForecast.buttonContinueToSummary)}
+            </SubmitButton>
+            <SubmitButton
+              onClick={() => setValue("form", FormTypes.ClaimForecastSaveAndQuit)}
+              secondary
+              name="form"
+              value={FormTypes.ClaimForecastSaveAndQuit}
+              disabled={isFetching}
+            >
+              {getContent(x => x.pages.claimForecast.buttonSaveAndReturn)}
+            </SubmitButton>
+          </ButtonGroup>
         </Fieldset>
       </Form>
     </Page>

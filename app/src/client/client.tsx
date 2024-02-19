@@ -25,6 +25,7 @@ import { Result } from "@ui/validation/result";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "src/types/IClientConfig";
+import "govuk-frontend";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;

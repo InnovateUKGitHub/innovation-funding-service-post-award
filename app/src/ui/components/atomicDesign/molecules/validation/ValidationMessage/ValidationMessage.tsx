@@ -5,6 +5,7 @@ import * as colours from "../../../../../styles/colours";
 import { isContentSolution } from "@ui/hooks/content.hook";
 import { SimpleString } from "../../../atoms/SimpleString/simpleString";
 import { Markdown } from "../../../atoms/Markdown/markdown";
+import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
@@ -90,9 +91,7 @@ export const ValidationMessage = ({
       aria-label={`${messageType} message`}
       style={ui.styles}
     >
-      <span data-qa={`${qa}-assistive`} className="govuk-warning-text__assistive">
-        {ui.text}
-      </span>
+      <AccessibilityText data-qa={`${qa}-assistive`}>{ui.text}</AccessibilityText>
 
       <SimpleString as={elementType} qa={`${qa}-content`} style={{ color: ui.styles.color }}>
         {isContentSolution(message) ? (

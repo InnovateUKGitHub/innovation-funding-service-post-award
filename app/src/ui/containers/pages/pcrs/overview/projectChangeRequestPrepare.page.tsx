@@ -25,6 +25,7 @@ import { createRegisterButton } from "@framework/util/registerButton";
 import { usePcrItemName } from "../utils/getPcrItemName";
 import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
+import { ButtonGroup } from "@ui/components/atomicDesign/atoms/ButtonGroup/ButtonGroup";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -112,13 +113,15 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
         <Fieldset data-qa="save-buttons">
           {isMultipleParticipants && <P>{getContent(x => x.pcrMessages.submittingGuidance)}</P>}
 
-          <SubmitButton {...registerButton("submit")} disabled={isFetching}>
-            {getContent(x => x.pages.pcrOverview.submitRequest)}
-          </SubmitButton>
+          <ButtonGroup>
+            <SubmitButton {...registerButton("submit")} disabled={isFetching}>
+              {getContent(x => x.pages.pcrOverview.submitRequest)}
+            </SubmitButton>
 
-          <SubmitButton disabled={isFetching} secondary {...registerButton("save-and-return")}>
-            {getContent(x => x.pages.pcrOverview.saveAndReturn)}
-          </SubmitButton>
+            <SubmitButton disabled={isFetching} secondary {...registerButton("save-and-return")}>
+              {getContent(x => x.pages.pcrOverview.saveAndReturn)}
+            </SubmitButton>
+          </ButtonGroup>
         </Fieldset>
       </Form>
     </Page>

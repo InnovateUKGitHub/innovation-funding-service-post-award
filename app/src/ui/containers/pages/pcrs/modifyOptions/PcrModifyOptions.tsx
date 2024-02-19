@@ -27,6 +27,7 @@ import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisa
 import { usePcrItemName } from "../utils/getPcrItemName";
 import { useOnSubmit, usePcrModifyOptionsQuery } from "./PcrModifyOptions.logic";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
+import { ButtonGroup } from "@ui/components/atomicDesign/atoms/ButtonGroup/ButtonGroup";
 
 interface PcrModifyParams {
   projectId: ProjectId;
@@ -150,15 +151,17 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
         <PcrDisabledReasoning items={pcrItems} />
 
         <Fieldset>
-          <SubmitButton disabled={isFetching}>
-            {pcrId
-              ? getContent(x => x.pages.pcrModifyOptions.buttonUpdateRequest)
-              : getContent(x => x.pages.pcrModifyOptions.buttonCreateRequest)}
-          </SubmitButton>
+          <ButtonGroup>
+            <SubmitButton disabled={isFetching}>
+              {pcrId
+                ? getContent(x => x.pages.pcrModifyOptions.buttonUpdateRequest)
+                : getContent(x => x.pages.pcrModifyOptions.buttonCreateRequest)}
+            </SubmitButton>
 
-          <Link styling="SecondaryButton" route={cancelLink}>
-            {getContent(x => x.pages.pcrModifyOptions.buttonCancelRequest)}
-          </Link>
+            <Link styling="SecondaryButton" route={cancelLink}>
+              {getContent(x => x.pages.pcrModifyOptions.buttonCancelRequest)}
+            </Link>
+          </ButtonGroup>
         </Fieldset>
       </Form>
     </Page>

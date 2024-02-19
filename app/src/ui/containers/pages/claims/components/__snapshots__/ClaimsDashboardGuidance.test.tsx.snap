@@ -8,12 +8,12 @@ exports[`<ClaimsDashboardGuidance /> @renders when overdue claim 1`] = `
   data-qa-type="info"
   style="border-color: #1d70b8;"
 >
-  <span
-    class="govuk-warning-text__assistive"
+  <div
+    class="govuk-visually-hidden"
     data-qa="guidance-message-assistive"
   >
     Info
-  </span>
+  </div>
   <div
     class="govuk-body"
     data-qa="guidance-message-content"

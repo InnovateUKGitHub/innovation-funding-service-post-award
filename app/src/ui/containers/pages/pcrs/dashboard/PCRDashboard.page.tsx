@@ -21,6 +21,7 @@ import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/
 import { usePcrItemName } from "../utils/getPcrItemName";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { useContent } from "@ui/hooks/content.hook";
+import { SummaryListActions } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -115,11 +116,15 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       });
     }
 
-    return links.map((x, i) => (
-      <div key={i} data-qa={x.qa}>
-        <Link route={x.route}>{x.text}</Link>
-      </div>
-    ));
+    return (
+      <SummaryListActions
+        actions={links.map((x, i) => (
+          <div key={i} data-qa={x.qa}>
+            <Link route={x.route}>{x.text}</Link>
+          </div>
+        ))}
+      />
+    );
   };
 
   const archivedStatuses = pcrStatusMetaValues.filter(x => x.archived);

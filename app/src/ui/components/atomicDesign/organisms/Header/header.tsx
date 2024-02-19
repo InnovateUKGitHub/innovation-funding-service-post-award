@@ -52,7 +52,7 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
         </div>
 
         <div className="govuk-header__content">
-          <a href={headingLink} className="govuk-header__link govuk-header__link--service-name" data-qa="site-name">
+          <a href={headingLink} className="govuk-header__link govuk-header__service-name" data-qa="site-name">
             {getContent(x => x.site.header.siteName)}
           </a>
 

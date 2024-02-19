@@ -1,16 +1,15 @@
-import React from "react";
-import cx from "classnames";
-import { v4 as uuid } from "uuid";
 import type { ContentSelector } from "@copy/type";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Tag, TagTypeOptions } from "@ui/components/atomicDesign/atoms/Tag/Tag";
+import { ValidationError as RhfValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atomicDesign/molecules/validation/ValidationError/validationError";
 import { useContent } from "@ui/hooks/content.hook";
 import { Result } from "@ui/validation/result";
-import { UL } from "@ui/components/atomicDesign/atoms/List/list";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { ValidationError } from "@ui/components/atomicDesign/molecules/validation/ValidationError/validationError";
-import { ValidationError as RhfValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { TagTypeOptions, Tag } from "@ui/components/atomicDesign/atoms/Tag/Tag";
-import { H2 } from "../../atoms/Heading/Heading.variants";
+import cx from "classnames";
+import React from "react";
+import { v4 as uuid } from "uuid";
+import { H3 } from "../../atoms/Heading/Heading.variants";
 
 export type TaskStatus = "To do" | "Complete" | "Incomplete";
 
@@ -34,23 +33,31 @@ export const Task = ({ route, name, status, validation, rhfError, id }: ITask) =
   const hasError = !!validation?.find(x => !x.isValid) || !!rhfError;
 
   const link = typeof name === "string" ? name : getContent(name);
-  const taskName = route ? <Link route={route}>{link}</Link> : link;
+  const taskName = route ? (
+    <Link route={route} className="govuk-task-list__link">
+      {link}
+    </Link>
+  ) : (
+    link
+  );
 
   const taskStyle = statusConfig[status];
 
   return (
-    <li className={cx("app-task-list__item", { "app-task-list__item--error": hasError })}>
-      {validation?.map(v => (
-        <ValidationError error={v} key={uuid()} />
-      ))}
-
-      <RhfValidationError error={rhfError} />
-
-      <span id={id} className="app-task-list__task-name">
+    <li
+      className={cx("govuk-task-list__item", "govuk-task-list__item--with-link", {
+        "app-task-list__item--error": hasError,
+      })}
+    >
+      <div id={id} className="govuk-task-list__name-and-hint">
+        <RhfValidationError error={rhfError} />
+        {validation?.map(v => (
+          <ValidationError error={v} key={uuid()} />
+        ))}
         {taskName}
-      </span>
+      </div>
 
-      <span className="app-task-list__task-action">
+      <span className="govuk-task-list__status">
         <Tag type={taskStyle}>{status}</Tag>
       </span>
     </li>
@@ -73,14 +80,14 @@ export const TaskListSection = ({ step, title, validation, children, qa }: ITask
 
   return (
     <li data-qa={qa}>
-      <H2 className="app-task-list__section">
+      <H3 as="h2">
         {step && <span className="app-task-list__section-number">{step}.</span>} {titleValue}
-      </H2>
+      </H3>
 
-      <UL className="app-task-list__items">
+      <ul className="govuk-task-list">
         {validationErrors}
         {children}
-      </UL>
+      </ul>
     </li>
   );
 };

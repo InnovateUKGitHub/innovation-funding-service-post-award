@@ -1,6 +1,5 @@
 import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
-import * as pkg from "../../package.json";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { PreloadedState } from "redux";
 import { IAppError } from "@framework/types/IAppError";
@@ -62,8 +61,6 @@ export function renderHtml({
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
-  const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
-
   return `
   <!DOCTYPE html>
 
@@ -90,16 +87,13 @@ export function renderHtml({
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
       <body class="govuk-template__body">
+          <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
+
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
 
           <div id="root">${html}</div>
 
           <script nonce="${nonce}">
-            // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
-            document.body.style.visibility = "hidden";
-            setTimeout(function () {
-              document.body.style.visibility = "visible";
-            }, 10);
             window.__CLIENT_CONFIG__ = ${injectJson(clientConfig)}
             window.__PRELOADED_STATE__ = ${injectJson(preloadedState)}
             window.__RELAY_BOOTSTRAP_DATA__ = ${injectJson(relayData)}
@@ -107,10 +101,7 @@ export function renderHtml({
             window.__PRELOADED_API_ERRORS__ = ${apiError ? injectJson(apiError) : undefined}
           </script>
 
-          <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
-    configuration.build
-  }"></script>
-          <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
+          <script nonce="${nonce}" type="module" src="/build/bundle.js?build=${configuration.build}"></script>
       </body>
   </html>
 `;

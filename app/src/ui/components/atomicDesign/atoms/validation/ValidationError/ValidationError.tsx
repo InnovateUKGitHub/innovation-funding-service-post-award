@@ -2,18 +2,20 @@ import { mapErrors, TValidationError } from "@framework/mappers/mapRhfError";
 import { useContent } from "@ui/hooks/content.hook";
 import React from "react";
 import { AccessibilityText } from "../../AccessibilityText/AccessibilityText";
+import classNames from "classnames";
 
 interface Props {
   error: TValidationError;
   id?: string;
   "data-qa"?: string;
+  className?: string;
 }
 
 const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-export const ValidationError = ({ error, id, "data-qa": qa }: Props) => {
+export const ValidationError = ({ error, id, "data-qa": qa, className }: Props) => {
   const { getContent } = useContent();
 
   if (!error) {
@@ -30,7 +32,7 @@ export const ValidationError = ({ error, id, "data-qa": qa }: Props) => {
           data-qa={qa ? `${qa}-${index}` : undefined}
           key={message}
           style={alignTextLeftStyle}
-          className="govuk-error-message"
+          className={classNames("govuk-error-message", className)}
         >
           <AccessibilityText as="span">{getContent(x => x.components.validationError.prefix)}</AccessibilityText>{" "}
           {message}

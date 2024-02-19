@@ -16,7 +16,7 @@ type ButtonSubTypes =
     };
 
 const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
-  const govukButton = "govuk-button govuk-!-margin-right-1";
+  const govukButton = "govuk-button";
 
   const buttonTypeMap = {
     Primary: govukButton,

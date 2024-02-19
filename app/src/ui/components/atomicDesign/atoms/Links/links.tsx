@@ -23,7 +23,6 @@ const getClassNames = (styling: TStyling, disabled = false, ...className: cx.Arg
     {
       "govuk-link": styling === "Link",
       "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
-      "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
       "govuk-button--secondary": styling === "SecondaryButton",
       "govuk-back-link": styling === "BackLink",
       "govuk-button--disabled": (styling === "PrimaryButton" || styling === "SecondaryButton") && disabled,

@@ -1,47 +1,34 @@
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useCallback } from "react";
+import { Accordion, Button, CharacterCount, Checkboxes, ErrorSummary, Header, Radios } from "govuk-frontend";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 
-// Note: There is no available interface for this module, this is an interim type
-type GDSModule = new (node: HTMLElement) => {
-  init: () => void;
+const gdsModules = {
+  Accordion,
+  Button,
+  CharacterCount,
+  Checkboxes,
+  ErrorSummary,
+  Header,
+  Radios,
 };
 
-type GDSModuleList =
-  | "Accordion"
-  | "Button"
-  | "CharacterCount"
-  | "Checkboxes"
-  | "Details"
-  | "ErrorSummary"
-  | "Header"
-  | "Radios";
-
-// Note: These were taken from "window", I can't see any docs on this GDS library
-export type GDSModules = Record<GDSModuleList, GDSModule>;
-
-type WindowWithGDSLoaded = typeof window & {
-  GOVUKFrontend: GDSModules;
-};
-
-/**
- * ### useGovFrontend
- *
- * initializes govFrontend module
- */
-export function useGovFrontend(gdsModule: keyof GDSModules) {
+const useGovFrontend = (gdsModule: keyof typeof gdsModules) => {
   const { isClient } = useMounted();
-
-  const hasGovFrontendLoaded: boolean = isClient ? "GOVUKFrontend" in window : false;
-  const govFrontend = hasGovFrontendLoaded ? (window as WindowWithGDSLoaded).GOVUKFrontend : null;
 
   const setRef = useCallback(
     (node: HTMLElement | null) => {
-      if (!govFrontend || !node) return;
+      if (!isClient || !node) return;
 
-      new govFrontend[gdsModule](node).init();
+      // If the web browser supports GOV.UK Frontend, initialise the component
+      if ("noModule" in HTMLScriptElement.prototype) {
+        window.document.body.classList.add("govuk-frontend-supported");
+        new gdsModules[gdsModule](node);
+      }
     },
-    [govFrontend, gdsModule],
+    [gdsModules, gdsModule, isClient],
   );
 
   return { setRef };
-}
+};
+
+export { useGovFrontend, gdsModules };

@@ -127,7 +127,7 @@ export const broadcastMessageText = (message: string) => {
 };
 
 export const backToDashboard = () => {
-  cy.backLink("Back to Project").click();
+  cy.backLink("Back to projects").click();
   cy.heading("Dashboard");
 };
 

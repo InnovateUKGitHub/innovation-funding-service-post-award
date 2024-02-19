@@ -13,6 +13,7 @@ const listOptions: Record<string, ["ol" | "ul", string]> = {
   number: ["ol", "govuk-list--number"],
   bullet: ["ul", "govuk-list--bullet"],
   plain: ["ul", "govuk-list--plain"],
+  tasks: ["ul", "govuk-task-list"],
 };
 export interface ListProps extends ListBaseProps {
   type?: keyof typeof listOptions;

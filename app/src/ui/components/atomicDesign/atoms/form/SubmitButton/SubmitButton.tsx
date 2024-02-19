@@ -14,7 +14,7 @@ export const SubmitButton = ({ className, name = "button_default", ...props }: P
       ref={setRef}
       type="submit"
       name={name}
-      className={cx("govuk-button govuk-!-margin-right-1", className)}
+      className={cx("govuk-button", className)}
       data-module="govuk-button"
       {...props}
     />

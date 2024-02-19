@@ -135,7 +135,7 @@
     },
     "phaseBannerContent": {
       "newServiceMessage": "This is a new service – your <0>feedback</0> will help us to improve it.",
-      "betaText": "beta"
+      "betaText": "Beta"
     },
     "broadcastContent": {
       "broadcastsTitle": "Broadcasts",
@@ -321,7 +321,7 @@
         "pcrQueried": "Request queried",
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
       },
-      "backToProjects": "Back to Project",
+      "backToProjects": "Back to projects",
       "costsToDateMessage": "{{partnerName}} costs to date"
     },
     "projectDetails": {

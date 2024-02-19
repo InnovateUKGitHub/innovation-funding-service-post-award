@@ -11,7 +11,7 @@ describe("Loans project > Drawdowns", () => {
   it("Should click the 'Drawdowns' card and navigate to the 'Drawdowns' page", drawdownCard);
 
   it("Has a back link", () => {
-    cy.backLink("Back to Project");
+    cy.backLink("Back to projects");
   });
 
   it("Has a project title", () => {

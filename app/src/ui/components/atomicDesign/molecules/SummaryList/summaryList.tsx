@@ -74,3 +74,18 @@ export const SummaryListItem = ({
     </div>
   );
 };
+
+export const SummaryListActions = ({ actions }: { actions: React.ReactNode[] }) => {
+  if (actions.length === 0) return null;
+  if (actions.length === 1) return <>{actions[0]}</>;
+
+  return (
+    <ul className="govuk-summary-list__actions-list">
+      {actions.map((x, i) => (
+        <li className="govuk-summary-list__actions-list-item" key={i}>
+          {x}
+        </li>
+      ))}
+    </ul>
+  );
+};
