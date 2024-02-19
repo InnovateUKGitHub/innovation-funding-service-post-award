@@ -1,4 +1,5 @@
 import { ClaimDto } from "@framework/dtos/claimDto";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import {
@@ -23,6 +24,7 @@ export const claimSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["claimSummary"]
 export const getClaimSummarySchema = ({
   claim,
   project,
+  claimDetails,
 }: {
   claim: Pick<
     ClaimDto,
@@ -36,11 +38,33 @@ export const getClaimSummarySchema = ({
     | "isIarRequired"
   >;
   project: Pick<ProjectDto, "competitionType">;
+  claimDetails: Pick<
+    CostsSummaryForPeriodDto,
+    | "costsClaimedToDate"
+    | "costCategoryId"
+    | "costsClaimedThisPeriod"
+    | "forecastThisPeriod"
+    | "offerTotal"
+    | "remainingOfferCosts"
+  >[];
 }) =>
   z.discriminatedUnion("button_submit", [
     z.object({
       button_submit: z.literal("submit"),
-      status: z.string(),
+      status: z.string().superRefine((_, ctx) => {
+        const remainingOfferCosts = claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0);
+
+        if (remainingOfferCosts < 0) {
+          ctx.addIssue({
+            code: ZodIssueCode.too_small,
+            path: ["totalCosts"],
+            type: "number",
+            inclusive: true,
+            minimum: 0,
+          });
+        }
+      }),
+
       comments: z.string().max(1000),
       documents: z
         .object({ description: z.nullable(z.number()).optional() })

@@ -89,6 +89,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
       getClaimSummarySchema({
         claim: data.claim,
         project: data.project,
+        claimDetails: data.claimDetails,
       }),
       { errorMap: claimSummaryErrorMap },
     ),
