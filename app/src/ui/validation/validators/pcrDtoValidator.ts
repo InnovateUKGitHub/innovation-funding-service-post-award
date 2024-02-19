@@ -151,10 +151,35 @@ export class PCRDtoValidator extends Results<PCRDto> {
     [
       PCRStatus.QueriedToProjectManager,
       {
-        standardMonitoring: [PCRStatus.QueriedToProjectManager, PCRStatus.SubmittedToInnovateUK],
-        internalAssurance: [PCRStatus.QueriedToProjectManager, PCRStatus.SubmittedToInnovateUK],
+        standardMonitoring: [
+          PCRStatus.DeprecatedQueriedByInnovateUK,
+          PCRStatus.QueriedToProjectManager,
+          PCRStatus.SubmittedToInnovateUK,
+        ],
+        internalAssurance: [
+          PCRStatus.DeprecatedQueriedByInnovateUK,
+          PCRStatus.QueriedToProjectManager,
+          PCRStatus.SubmittedToInnovateUK,
+        ],
       },
     ],
+    // PCRCHANGES START
+    [
+      PCRStatus.DeprecatedQueriedByInnovateUK,
+      {
+        standardMonitoring: [
+          PCRStatus.DeprecatedQueriedByInnovateUK,
+          PCRStatus.QueriedToProjectManager,
+          PCRStatus.SubmittedToInnovateUK,
+        ],
+        internalAssurance: [
+          PCRStatus.DeprecatedQueriedByInnovateUK,
+          PCRStatus.QueriedToProjectManager,
+          PCRStatus.SubmittedToInnovateUK,
+        ],
+      },
+    ],
+    // PCRCHANGES END
   ]);
 
   private readonly monitoringOfficerPermittedStatus = new Map<
