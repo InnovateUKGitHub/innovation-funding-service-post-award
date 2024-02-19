@@ -35,6 +35,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ClaimSummarySchema, claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { iarValidation } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -200,7 +202,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
               characterCount={commentsCharacterCount}
               characterCountMax={claimCommentsMaxLength}
               defaultValue={data.claim.comments ?? ""}
-              disabled={imDisabled || isFetching}
+              disabled={isFetching}
             />
           </Fieldset>
 
@@ -221,23 +223,42 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   );
 };
 
-const DocumentValidation = (
-  props: { claim: Pick<ClaimDto, "isIarRequired">; documents: DocumentSummaryDto[] } & {
-    linkProps: LinkProps;
-    routes: BaseProps["routes"];
-  },
-) => {
-  const displayDocumentError = props.claim.isIarRequired && !props.documents.length;
+const DocumentValidation = ({
+  claim,
+  documents,
+  project,
+  linkProps,
+  routes,
+}: {
+  claim: Pick<
+    ClaimDto,
+    | "status"
+    | "isFinalClaim"
+    | "impactManagementParticipation"
+    | "impactManagementPhasedCompetition"
+    | "impactManagementPhasedCompetitionStage"
+    | "pcfStatus"
+    | "iarStatus"
+    | "isIarRequired"
+  >;
+  documents: DocumentSummaryDto[];
+  project: Pick<ProjectDto, "competitionType">;
+  linkProps: LinkProps;
+  routes: BaseProps["routes"];
+}) => {
+  // https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+  const iarResult = iarValidation({ claim, documents, project });
 
   const editDocumentLink = (
     <SimpleString>
-      <Link id="claimDocumentsLink" route={props.routes.claimDocuments.getLink(props.linkProps)}>
+      <Link id="claimDocumentsLink" route={routes.claimDocuments.getLink(linkProps)}>
         <Content value={x => x.pages.claimPrepareSummary.editClaimDocuments} />
       </Link>
     </SimpleString>
   );
 
-  return displayDocumentError ? (
+  // Show "missing documents" message when IAR is missing (PCF doesn't matter for some reason)
+  return iarResult ? (
     <ValidationMessage
       messageType="error"
       message={
@@ -252,9 +273,9 @@ const DocumentValidation = (
     />
   ) : (
     <>
-      {props.documents.length ? (
+      {documents.length ? (
         <Section qa="supporting-documents-section">
-          <DocumentView hideHeader qa="claim-documents-list" documents={props.documents} />
+          <DocumentView hideHeader qa="claim-documents-list" documents={documents} />
         </Section>
       ) : (
         <DocumentsUnavailable />
