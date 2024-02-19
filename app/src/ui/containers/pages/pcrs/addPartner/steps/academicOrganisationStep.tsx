@@ -25,17 +25,17 @@ import { useJesSearchQuery } from "./jesSearch.logic";
 import { useContent } from "@ui/hooks/content.hook";
 import { AcademicOrganisationSchema, getAcademicOrganisationSchema } from "./schemas/academicOrganisation.zod";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const AcademicOrganisationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
   const { isServer } = useMounted();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<AcademicOrganisationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicOrganisationSchema>({
     defaultValues: {
       button_submit: "submit",
       organisationName: pcrItem.organisationName,
@@ -46,7 +46,7 @@ export const AcademicOrganisationStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

@@ -30,6 +30,7 @@ import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./sche
 import { useMemo } from "react";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -79,7 +80,7 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
 export const OtherSourcesOfFundingStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
-  const { projectId, itemId, fetchKey, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { costCategories, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem } =
     useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
@@ -106,7 +107,7 @@ export const OtherSourcesOfFundingStep = () => {
 
   const validationErrors = useRhfErrors(formState.errors) as FundingSourceRhfError;
 
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

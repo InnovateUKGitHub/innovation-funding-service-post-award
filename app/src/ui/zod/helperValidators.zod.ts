@@ -229,29 +229,37 @@ const integerInput = z.union([
   }),
 ]);
 
-const positiveIntegerInput = z.union([
-  z.number().int().min(0),
-  z.string().transform((x, ctx) => {
-    if (x === "") return null;
-    const x1 = Number(x);
+const positiveIntegerInput = ({ lt }: { lt?: number }) =>
+  z.union([
+    z.number().int().min(0),
+    z.string().transform((x, ctx) => {
+      if (x === "") return null;
+      const x1 = Number(x);
 
-    if (isNaN(x1)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_type,
-        expected: "number",
-        received: "string",
-      });
-    } else if (x1 < 0) {
-      ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 0, inclusive: true, type: "number" });
-    } else if (!Number.isInteger(x1)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-      });
-    }
+      if (isNaN(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_type,
+          expected: "number",
+          received: "string",
+        });
+      } else if (x1 < 0) {
+        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 0, inclusive: true, type: "number" });
+      } else if (!Number.isInteger(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+        });
+      } else if (typeof lt === "number" && x1 >= lt) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          inclusive: false,
+          maximum: lt,
+          type: "number",
+        });
+      }
 
-    return x1;
-  }),
-]);
+      return x1;
+    }),
+  ]);
 
 const numberInput = z.union([z.number(), z.string().transform(x => (x === "" ? null : Number(x)))]);
 

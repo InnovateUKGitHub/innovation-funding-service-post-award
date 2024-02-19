@@ -31,6 +31,7 @@ import {
   getPCROrganisationType,
 } from "@framework/constants/pcrConstants";
 import { RoleAndOrganisationSchema, roleAndOrganisationSchema } from "./schemas/roleAndOrganisation.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const setData = (data: RoleAndOrganisationSchema) => {
   // It's not possible to come back to this page after it's submitted
@@ -54,7 +55,7 @@ const setData = (data: RoleAndOrganisationSchema) => {
 
 export const RoleAndOrganisationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, useFormValidate, refreshItemWorkflowQuery } =
+  const { projectId, itemId, fetchKey, onSave, isFetching, refreshItemWorkflowQuery, markedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
@@ -62,7 +63,7 @@ export const RoleAndOrganisationStep = () => {
   const formHasBeenFilled =
     pcrItem.projectRole !== PCRProjectRole.Unknown && pcrItem.partnerType !== PCRPartnerType.Unknown;
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<RoleAndOrganisationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<RoleAndOrganisationSchema>({
     defaultValues: {
       isCommercialWork: pcrItem.isCommercialWork === null ? undefined : pcrItem.isCommercialWork ? "true" : "false",
       projectRole: pcrItem.projectRole,
@@ -76,7 +77,7 @@ export const RoleAndOrganisationStep = () => {
   const disabled = formHasBeenFilled || isFetching;
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

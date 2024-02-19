@@ -21,6 +21,7 @@ import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { ProjectLocationSchema, getProjectLocationSchema } from "./schemas/projectLocation.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const pcrProjectLocation = [
   {
@@ -39,14 +40,13 @@ const pcrProjectLocation = [
 
 export const ProjectLocationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<ProjectLocationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<ProjectLocationSchema>({
     defaultValues: {
       button_submit: "submit",
       projectLocation: pcrItem.projectLocation ?? 0,
@@ -59,7 +59,7 @@ export const ProjectLocationStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

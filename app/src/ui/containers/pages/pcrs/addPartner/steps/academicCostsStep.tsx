@@ -26,6 +26,7 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 type AcademicCostsRhfError = {
   tsbReference: RhfError;
@@ -38,8 +39,7 @@ type AcademicCostsRhfError = {
 export const AcademicCostsStep = () => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const link = useLinks();
 
@@ -59,7 +59,7 @@ export const AcademicCostsStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors) as AcademicCostsRhfError;
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

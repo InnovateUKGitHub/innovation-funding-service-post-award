@@ -17,15 +17,17 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { OtherFundingSchema, otherFundingSchema } from "./schemas/otherFunding.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
-  const { projectId, pcrId, itemId, fetchKey, useFormValidate, onSave, isFetching, routes } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, routes, markedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const summaryLink = useSummaryLink();
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<OtherFundingSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<OtherFundingSchema>({
     defaultValues: {
       button_submit: "submit",
       hasOtherFunding: pcrItem.hasOtherFunding ? "true" : "false",
@@ -36,7 +38,7 @@ export const OtherFundingStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

@@ -20,9 +20,16 @@ export function useFormRevalidate<T extends FieldValues>(
   // ref prevents revalidating until after the submit event has been triggered once unless pcr marked as complete
   const hasSubmitted = useRef(shouldInitiallyValidate);
 
+  const hasFiredOnce = useRef(false);
+
   const submitFormHandler = () => {
     hasSubmitted.current = true;
   };
+
+  if (shouldInitiallyValidate && !hasFiredOnce.current) {
+    trigger();
+    hasFiredOnce.current = true;
+  }
 
   useEffect(() => {
     // sets the hasSubmitted to true on the event

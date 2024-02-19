@@ -23,17 +23,17 @@ import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { FinanceContactSchema, getFinanceContactSchema } from "./schemas/financeContact.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const FinanceContactStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<FinanceContactSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<FinanceContactSchema>({
     defaultValues: {
       button_submit: "submit",
       contact1Forename: pcrItem.contact1Forename ?? "",
@@ -47,7 +47,7 @@ export const FinanceContactStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

@@ -22,17 +22,17 @@ import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atom
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { FinanceDetailsSchema, getFinanceDetailsSchema } from "./schemas/financialDetails.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const FinanceDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<FinanceDetailsSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<FinanceDetailsSchema>({
     defaultValues: {
       button_submit: "submit",
       financialYearEndTurnover: pcrItem.financialYearEndTurnover,
@@ -45,7 +45,7 @@ export const FinanceDetailsStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

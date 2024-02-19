@@ -23,17 +23,17 @@ import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { ProjectManagerSchema, getProjectManagerSchema } from "./schemas/projectManager.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const ProjectManagerDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, reset } = useForm<ProjectManagerSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, reset, watch } = useForm<ProjectManagerSchema>({
     defaultValues: {
       button_submit: "submit",
       contact2Forename: pcrItem.contact2Forename ?? "",
@@ -47,7 +47,7 @@ export const ProjectManagerDetailsStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

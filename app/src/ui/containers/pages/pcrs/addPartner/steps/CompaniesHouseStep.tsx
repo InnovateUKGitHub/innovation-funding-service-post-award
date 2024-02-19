@@ -25,30 +25,31 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { useUpdateCompaniesHouseResults } from "./useFetchCompanies";
 import { CompaniesHouseSchema, getCompaniesHouseSchema } from "./schemas/companyHouse.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const CompaniesHouseStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, reset, getValues } = useForm<CompaniesHouseSchema>({
-    defaultValues: {
-      button_submit: "submit",
-      organisationName: pcrItem.organisationName ?? "",
-      registeredAddress: pcrItem.registeredAddress ?? "",
-      registrationNumber: pcrItem.registrationNumber ?? "",
-      searchResults: "",
-    },
-    resolver: zodResolver(getCompaniesHouseSchema(markedAsCompleteHasBeenChecked), {
-      errorMap: addPartnerErrorMap,
-    }),
-  });
+  const { handleSubmit, register, formState, trigger, setValue, reset, getValues, watch } =
+    useForm<CompaniesHouseSchema>({
+      defaultValues: {
+        button_submit: "submit",
+        organisationName: pcrItem.organisationName ?? "",
+        registeredAddress: pcrItem.registeredAddress ?? "",
+        registrationNumber: pcrItem.registrationNumber ?? "",
+        searchResults: "",
+      },
+      resolver: zodResolver(getCompaniesHouseSchema(markedAsCompleteHasBeenChecked), {
+        errorMap: addPartnerErrorMap,
+      }),
+    });
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const { isFetchingCompanies, updateCompaniesHouseResults, companyResults } = useUpdateCompaniesHouseResults();
 

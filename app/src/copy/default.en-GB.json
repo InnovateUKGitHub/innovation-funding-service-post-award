@@ -2163,7 +2163,8 @@
             "invalid_type_received_null": "Enter the number of employees.",
             "invalid_type_received_string": "Enter a valid number of employees.",
             "custom": "Enter a valid number of employees.",
-            "too_small": "Enter a valid number of employees."
+            "too_small": "Enter a valid number of employees.",
+            "too_big": "Number of employees cannot be more than 99,999,999"
           }
         },
         "organisationName": {

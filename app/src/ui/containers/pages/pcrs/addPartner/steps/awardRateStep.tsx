@@ -17,17 +17,17 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { AwardRateSchema, getAwardRateSchema } from "./schemas/awardRate.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const AwardRateStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<AwardRateSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AwardRateSchema>({
     defaultValues: {
       button_submit: "submit",
       awardRate: pcrItem.awardRate,
@@ -38,7 +38,7 @@ export const AwardRateStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

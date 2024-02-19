@@ -21,17 +21,17 @@ import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/R
 import { PCRParticipantSize } from "@framework/constants/pcrConstants";
 import { OrganisationDetailsSchema, getOrganisationDetailsSchema } from "./schemas/organisationDetails.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const OrganisationDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<OrganisationDetailsSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<OrganisationDetailsSchema>({
     defaultValues: {
       button_submit: "submit",
       numberOfEmployees: pcrItem.numberOfEmployees,
@@ -43,7 +43,7 @@ export const OrganisationDetailsStep = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-  useFormValidate(trigger);
+  useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
