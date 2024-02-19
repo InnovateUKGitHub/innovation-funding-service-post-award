@@ -374,7 +374,9 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.QueriedToProjectManager,
     i18nName: x => x.pcrStatus.Queried,
-    editableByPm: true,
+    // PCRCHANGES START
+    editableByPm: false,
+    // PCRCHANGES STOP
     deletableByPm: false,
     reviewableByMo: false,
     archived: false,

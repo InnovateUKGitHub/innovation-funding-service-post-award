@@ -105,6 +105,9 @@ const getPayload = (
         }
         break;
       case PCRStatus.QueriedToProjectManager:
+      // PCRCHANGES START
+      case PCRStatus.DeprecatedQueriedByInnovateUK:
+        // PCRCHANGES END
         payload.status = PCRStatus.SubmittedToInnovateUK;
         break;
       default:
