@@ -71,12 +71,12 @@ export const getClaimSummarySchema = ({
                 params: { i18n: "errors.iar_required" },
               });
               break;
-            // case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
-            //   ctx.addIssue({
-            //     code: ZodIssueCode.custom,
-            //     message: "You must upload a schedule 3 before you can submit this claim",
-            //   });
-            //   break;
+            case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
+              ctx.addIssue({
+                code: ZodIssueCode.custom,
+                message: "You must upload a schedule 3 before you can submit this claim",
+              });
+              break;
           }
         }),
     }),
