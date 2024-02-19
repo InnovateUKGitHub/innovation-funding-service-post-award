@@ -53,6 +53,7 @@ export class DocumentDescriptionMapper {
     ProjectCompletionForm: "ProjectCompletionForm",
     ProofOfSatisfiedConditions: "ProofOfSatisfiedConditions",
     Loan: "Loan",
+    PcrEvidence: "PcrEvidence",
   } as const;
 
   public mapFromSalesforceDocumentDescription = (
@@ -111,6 +112,8 @@ export class DocumentDescriptionMapper {
         return DocumentDescription.Loan;
       case this.types.EndOfProjectSurvey:
         return DocumentDescription.EndOfProjectSurvey;
+      case this.types.PcrEvidence:
+        return DocumentDescription.PcrEvidence;
       default:
         return null;
     }
@@ -170,6 +173,8 @@ export class DocumentDescriptionMapper {
         return this.types.Loan;
       case DocumentDescription.EndOfProjectSurvey:
         return this.types.EndOfProjectSurvey;
+      case DocumentDescription.PcrEvidence:
+        return this.types.PcrEvidence;
       default:
         return null;
     }

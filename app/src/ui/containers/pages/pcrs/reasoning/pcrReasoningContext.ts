@@ -31,6 +31,7 @@ type PcrReasoningContextType = {
   editableItemTypes: PCRItemType[];
   markedAsCompleteHasBeenChecked: boolean;
   setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
+  fetchKey: number;
 };
 
 export const PcrReasoningContext = createContext<PcrReasoningContextType>({} as PcrReasoningContextType);

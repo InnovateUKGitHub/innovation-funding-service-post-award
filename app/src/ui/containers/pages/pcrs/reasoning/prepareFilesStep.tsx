@@ -92,7 +92,7 @@ export const PCRPrepareReasoningFilesStep = () => {
           <Fieldset>
             <Legend>{getContent(x => x.documentMessages.uploadDocuments)}</Legend>
 
-            <input type="hidden" value={DocumentDescription.Evidence} {...register("description")}></input>
+            <input type="hidden" value={DocumentDescription.PcrEvidence} {...register("description")}></input>
             <input type="hidden" value={projectId} {...register("projectId")} />
             <input type="hidden" value={pcrId} {...register("projectChangeRequestIdOrItemId")} />
             <input type="hidden" value={FormTypes.PcrLevelUpload} {...register("form")} />

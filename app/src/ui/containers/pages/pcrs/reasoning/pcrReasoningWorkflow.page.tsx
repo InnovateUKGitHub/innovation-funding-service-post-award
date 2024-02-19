@@ -9,8 +9,6 @@ import {
 } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { Mode, useOnSavePcrReasoning, usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
-import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
-import { pcrReasoningWorkflowQuery } from "./PcrReasoningWorkflow.query";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { useState } from "react";
@@ -24,17 +22,11 @@ export interface ProjectChangeRequestPrepareReasoningParams {
 
 const PcrReasoningWorkflow = (props: BaseProps & ProjectChangeRequestPrepareReasoningParams & { mode: Mode }) => {
   useScrollToTopSmoothly([props.step]);
-  const [refreshedQueryOptions] = useRefreshQuery(pcrReasoningWorkflowQuery, {
-    projectId: props.projectId,
-    pcrId: props.pcrId,
-  });
-  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(
-    props.projectId,
-    props.pcrId,
-    refreshedQueryOptions,
-  );
+  const [fetchKey, setFetchKey] = useState<number>(0);
 
-  const { isFetching, onUpdate, apiError } = useOnSavePcrReasoning(props.projectId, props.pcrId, pcr);
+  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(props.projectId, props.pcrId, fetchKey);
+
+  const { isFetching, onUpdate, apiError } = useOnSavePcrReasoning(props.projectId, props.pcrId, pcr, setFetchKey);
 
   const [markedAsCompleteHasBeenChecked, setMarkedAsCompleteHasBeenChecked] = useState(false);
   return (
@@ -56,6 +48,7 @@ const PcrReasoningWorkflow = (props: BaseProps & ProjectChangeRequestPrepareReas
         editableItemTypes,
         markedAsCompleteHasBeenChecked,
         setMarkedAsCompleteHasBeenChecked,
+        fetchKey,
       }}
     >
       {props.mode === "prepare" && !!props.step && <Step stepNumber={props.step} />}

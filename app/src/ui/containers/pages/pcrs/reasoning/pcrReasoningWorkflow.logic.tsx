@@ -23,19 +23,16 @@ import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { PcrReasoningSchemaType } from "./pcrReasoning.zod";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
+import { Dispatch, SetStateAction } from "react";
 
-export const usePcrReasoningQuery = (
-  projectId: ProjectId,
-  pcrId: PcrId,
-  refreshedQueryOptions: RefreshedQueryOptions,
-) => {
+export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId, fetchKey: number) => {
   const data = useLazyLoadQuery<PcrReasoningWorkflowQuery>(
     pcrReasoningWorkflowQuery,
     {
       projectId,
       pcrId,
     },
-    refreshedQueryOptions,
+    { fetchPolicy: "network-only", fetchKey },
   );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
@@ -120,7 +117,9 @@ export const usePcrReasoningFilesQuery = (
 
 export type Mode = "prepare" | "review" | "view";
 
-type PcrDtoForReasoning = Partial<Omit<PCRDto, "items">> & { items?: PickRequiredFromPartial<FullPCRItemDto, "id">[] };
+type PcrDtoForReasoning = Partial<Omit<PCRDto, "items">> & {
+  items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
+};
 
 const createMinimalPcrUpdateDto = ({
   projectId,
@@ -141,7 +140,12 @@ const createMinimalPcrUpdateDto = ({
   };
 };
 
-export const useOnSavePcrReasoning = (projectId: ProjectId, pcrId: PcrId, pcr: PcrDtoForReasoning) => {
+export const useOnSavePcrReasoning = (
+  projectId: ProjectId,
+  pcrId: PcrId,
+  pcr: PcrDtoForReasoning,
+  setFetchKey: Dispatch<SetStateAction<number>>,
+) => {
   const navigate = useNavigate();
   const { clearMessages } = useMessages();
   return useOnUpdate<Omit<PcrReasoningSchemaType, "markedAsCompleteHasBeenChecked">, PCRDto, { link: ILinkInfo }>({
@@ -159,8 +163,8 @@ export const useOnSavePcrReasoning = (projectId: ProjectId, pcrId: PcrId, pcr: P
     },
     onSuccess: (_, __, context) => {
       clearMessages();
-      // setFetchKey(k => k + 1);
       navigate(context?.link?.path ?? "");
+      setFetchKey(x => x + 1);
     },
   });
 };

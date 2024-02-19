@@ -29,6 +29,7 @@ export class DocumentDescriptionMapper {
     ProjectCompletionForm: "ProjectCompletionForm",
     ProofOfSatisfiedConditions: "ProofOfSatisfiedConditions",
     Loan: "Loan",
+    PcrEvidence: "PcrEvidence",
   } as const;
 
   public mapFromSalesforceDocumentDescription = (
@@ -87,6 +88,8 @@ export class DocumentDescriptionMapper {
         return DocumentDescription.Loan;
       case this.types.EndOfProjectSurvey:
         return DocumentDescription.EndOfProjectSurvey;
+      case this.types.PcrEvidence:
+        return DocumentDescription.PcrEvidence;
       default:
         return null;
     }
@@ -146,6 +149,8 @@ export class DocumentDescriptionMapper {
         return this.types.Loan;
       case DocumentDescription.EndOfProjectSurvey:
         return this.types.EndOfProjectSurvey;
+      case DocumentDescription.PcrEvidence:
+        return this.types.PcrEvidence;
       default:
         return null;
     }
@@ -183,6 +188,7 @@ export enum DocumentDescription {
   ProjectCompletionForm = 220,
   ProofOfSatisfiedConditions = 230,
   Loan = 240,
+  PcrEvidence = 270,
 }
 
 const getDocumentDescriptionContentSelector = (type: DocumentDescription | null | undefined): ContentSelector => {
@@ -239,6 +245,8 @@ const getDocumentDescriptionContentSelector = (type: DocumentDescription | null 
       return x => x.documentLabels.description.proofOfSatisfiedConditions;
     case DocumentDescription.Loan:
       return x => x.documentLabels.description.loan;
+    case DocumentDescription.PcrEvidence:
+      return x => x.documentLabels.description.pcrEvidence;
     case null:
     case undefined:
     default:
@@ -282,6 +290,7 @@ export const allowedPcrLevelDocuments = [
   DocumentDescription.JeSForm,
   DocumentDescription.AgreementToPCR,
   DocumentDescription.DeMinimisDeclarationForm,
+  DocumentDescription.PcrEvidence,
 ];
 
 export { getDocumentDescriptionContentSelector };
