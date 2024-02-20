@@ -248,3 +248,33 @@ export const spendLabourCalculateOH = () => {
       });
   });
 };
+
+export const manualTopThreeRows = () => {
+  [
+    ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
+    [
+      "Month",
+      "Feb 2024",
+      "Mar 2024",
+      "Apr 2024",
+      "May 2024",
+      "Jun 2024",
+      "Jul 2024",
+      "Aug 2024",
+      "Sep 2024",
+      "Oct 2024",
+      "Nov 2024",
+      "Dec 2024",
+      "Jan 2025",
+    ],
+  ].forEach((cols, rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
+      .within(() => {
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
+        }
+      });
+  });
+};

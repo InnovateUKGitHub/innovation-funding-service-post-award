@@ -17,7 +17,7 @@ import { spendTableValues } from "common/spend-table-values";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Project setup > Set spend profile", () => {
+describe("Project setup > IFS > Set spend profile", () => {
   before(() => {
     visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");

@@ -11,12 +11,12 @@ import {
   validateInvalidAccDetails,
 } from "./steps";
 
-const pmEmail = "james.black@euimeabs.test";
+const pmEmail = "this'is'a'test@innovateuk.gov.uk.bjssdev";
 
-describe("Project setup > Provide your bank details", () => {
+describe("Project setup > Manual > Provide your bank details", () => {
   before(() => {
     visitApp({ asUser: pmEmail });
-    cy.navigateToProject("365447");
+    cy.navigateToProject("472465");
   });
 
   it("Should navigate to 'Provide your bank details' section", () => {

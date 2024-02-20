@@ -3,15 +3,17 @@ import { giveUsInformation, shouldShowProjectTitle } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Project setup > general", () => {
+describe("Project setup > IFS > general", () => {
   before(() => {
     visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
   });
 
-  it("Should have a 'Project setup' paging heading with guidance text", () => {
+  it("Should have a 'Project setup' page heading with guidance text", () => {
     cy.heading("Project setup");
-    cy.paragraph("You need to give us some information so that we can complete project setup.");
+    cy.paragraph(
+      "You need to give us some information so that we can complete project setup. You will then be able to view your project and begin making claims.",
+    );
   });
 
   it("Should have a back option", () => {

@@ -7,12 +7,12 @@ import {
   shouldShowProjectTitle,
 } from "./steps";
 
-const pmEmail = "james.black@euimeabs.test";
+const pmEmail = "this'is'a'test@innovateuk.gov.uk.bjssdev";
 
-describe("Project setup > Provide your project location postcode", () => {
+describe("Project setup > Manual > Provide your project location postcode", () => {
   before(() => {
     visitApp({ asUser: pmEmail });
-    cy.navigateToProject("365447");
+    cy.navigateToProject("472465");
   });
 
   it("Should navigate to 'Provide your project location postcode' section", () => {
