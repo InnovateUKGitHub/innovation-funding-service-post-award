@@ -383,6 +383,8 @@ export const openClosedSection = () => {
 
 export const ktpGuidance = () => {
   [
+    "You must upload a Schedule 3 with this claim.",
+    "Useful tip: you can use this page to upload and store all your claim support documents for this project.",
     "For KTP claims, you must upload one of these claim approval documents",
     "LMC minutes",
     "LMC virtual approval",
@@ -391,7 +393,18 @@ export const ktpGuidance = () => {
   });
 };
 
-export const ktpForecastUpdate = () => {
+export const ktpGuidanceWithoutSchedule3 = () => {
+  [
+    "Useful tip: you can use this page to upload and store all your claim support documents for this project.",
+    "For KTP claims, you must upload one of these claim approval documents",
+    "LMC minutes",
+    "LMC virtual approval",
+  ].forEach(ktpDocGuidance => {
+    cy.getByQA("iarText").contains(ktpDocGuidance);
+  });
+};
+
+export const ktpForecastCategories = () => {
   cy.clickOn("Continue to update forecast");
   [
     "Associate Employment",
@@ -458,6 +471,15 @@ export const nonFECMessaging = () => {
   [
     "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).",
     "This claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+  ].forEach(guidance => {
+    cy.validationNotification(guidance);
+  });
+};
+
+export const nonFECMessagingFinalClaim = () => {
+  [
+    "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).",
+    "The project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
   ].forEach(guidance => {
     cy.validationNotification(guidance);
   });
@@ -871,6 +893,22 @@ export const topThreeRows = () => {
       "Jan 2024",
       "Feb 2024",
     ],
+  ].forEach((cols, rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
+      .within(() => {
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
+        }
+      });
+  });
+};
+
+export const ktpTopThreeRows = () => {
+  [
+    ["Period", "1", "2", "3", "4"],
+    ["Schedule 3 Due", "Yes", "No", "No", "No"],
+    ["Month", "Feb to Apr 2023", "May to Jul 2023", "Aug to Oct 2023", "Nov 2023 to Jan 2024"],
   ].forEach((cols, rowNumber = 0) => {
     cy.get("tr")
       .eq(rowNumber + 1)

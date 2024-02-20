@@ -46,7 +46,7 @@ describe("Claims > Review as MO", () => {
     createTestFile("11MB_1", 11);
     createTestFile("11MB_2", 11);
     createTestFile("11MB_3", 11);
-    moClaimTidyUp("Queried by Monitoring Officer");
+    moClaimTidyUp("ABS EUI Medium Enterprise", "Queried by Monitoring Officer");
   });
 
   after(() => {

@@ -15,7 +15,7 @@ import {
 describe("Claims > IAR Required - Submission", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSvOGEA0/claims/dashboard" });
-    fcClaimTidyUp("Submitted to Monitoring Officer");
+    fcClaimTidyUp("ABS EUI Medium Enterprise", "Submitted to Monitoring Officer");
   });
 
   /**
