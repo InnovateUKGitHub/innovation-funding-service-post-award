@@ -10,6 +10,7 @@ import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { usePcrItemName } from "./utils/getPcrItemName";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 
 export const PcrPage = ({
   children,
@@ -22,6 +23,8 @@ export const PcrPage = ({
 }) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
   const { getPcrItemContent } = usePcrItemName();
+
+  useScrollToTopSmoothly([step]);
 
   const isPrepareMode = mode === "prepare";
   const isFirstStep = step === 1;
