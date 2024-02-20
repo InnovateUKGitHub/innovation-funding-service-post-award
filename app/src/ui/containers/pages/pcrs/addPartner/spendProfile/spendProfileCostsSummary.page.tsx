@@ -190,7 +190,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       }),
     ];
     return (
-      <Table.Table qa="costs" data={costs} footers={footers}>
+      <Table.Table qa="costs" data={costs} footers={footers} initialSortKey="value" initialSortState="descending">
         <Table.String header={x => x.pcrSpendProfileLabels.description} value={x => x.description} qa={"description"} />
         <Table.Currency header={x => x.pcrSpendProfileLabels.cost} value={x => x.value} qa={"cost"} />
         <Table.Custom
