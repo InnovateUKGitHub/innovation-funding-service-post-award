@@ -1,5 +1,5 @@
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";

@@ -6,7 +6,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { zodResolver } from "@hookform/resolvers/zod";

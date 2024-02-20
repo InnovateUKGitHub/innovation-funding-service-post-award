@@ -1,7 +1,7 @@
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";

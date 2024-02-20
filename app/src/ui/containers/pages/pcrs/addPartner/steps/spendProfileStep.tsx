@@ -3,7 +3,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
 import { useContent } from "@ui/hooks/content.hook";

@@ -2,7 +2,7 @@ import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { useForm } from "react-hook-form";

@@ -3,7 +3,7 @@ import { formatDate } from "@framework/util/dateHelpers";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useContent } from "@ui/hooks/content.hook";
 import { PcrPage } from "../pcrPage";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

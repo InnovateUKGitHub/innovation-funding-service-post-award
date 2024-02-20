@@ -5,7 +5,7 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { PcrPage } from "../../pcrPage";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,8 +1,7 @@
 import { PCRStepType } from "@framework/constants/pcrConstants";
-import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PcrWorkflow } from "./pcrWorkflow";
-import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 
@@ -32,7 +31,7 @@ export const EditLink = ({ stepName, disabled }: { stepName: PCRStepType; disabl
 };
 
 export const getStepLink = (
-  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
+  workflow: Pick<PcrWorkflow, "findStepNumberByName">,
   stepName: string,
   routes: BaseProps["routes"],
   projectId: ProjectId,
@@ -48,7 +47,7 @@ export const getStepLink = (
 };
 
 export const getStepReviewLink = (
-  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
+  workflow: Pick<PcrWorkflow, "findStepNumberByName">,
   stepName: string,
   routes: BaseProps["routes"],
   projectId: ProjectId,

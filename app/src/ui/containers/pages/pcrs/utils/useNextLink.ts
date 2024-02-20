@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 
 export const useNextLink = () => {
   const { projectId, pcrId, itemId, workflow, routes, mode } = usePcrWorkflowContext();

@@ -10,7 +10,7 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { useContent } from "@ui/hooks/content.hook";
 import { UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form";
-import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import { ReactNode, useEffect } from "react";
 
 export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolean }>({

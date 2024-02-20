@@ -1,7 +1,7 @@
 import { PCRProjectLocation } from "@framework/constants/pcrConstants";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useLinks } from "../../utils/useNextLink";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";

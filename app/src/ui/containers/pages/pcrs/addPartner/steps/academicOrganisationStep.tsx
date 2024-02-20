@@ -4,7 +4,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { PcrPage } from "../../pcrPage";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useLinks } from "../../utils/useNextLink";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";

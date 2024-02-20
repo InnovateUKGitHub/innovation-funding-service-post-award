@@ -6,7 +6,7 @@ import { ExternalLink } from "@ui/components/atomicDesign/atoms/ExternalLink/ext
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMemo } from "react";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
 import { PcrPage } from "../../pcrPage";

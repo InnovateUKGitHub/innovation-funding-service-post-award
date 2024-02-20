@@ -2,7 +2,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";

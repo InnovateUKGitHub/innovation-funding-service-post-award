@@ -3,7 +3,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { useForm } from "react-hook-form";
 import { RemovePartnerSchemaType, getRemovePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";

@@ -3,7 +3,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";

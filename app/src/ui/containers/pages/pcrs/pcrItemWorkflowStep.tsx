@@ -1,5 +1,5 @@
 import { ForbiddenError } from "@shared/appError";
-import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 
 export const WorkflowStep = () => {
@@ -11,19 +11,19 @@ export const WorkflowStep = () => {
 
   if (mode === "review") {
     // When reviewing a pcr, the MO should only be able to visit pages which support read only.
-    if (!currentStep.migratedReadonlyStepRender) throw new ForbiddenError();
+    if (!currentStep.readonlyStepRender) throw new ForbiddenError();
 
-    const ReadonlyCurrentStep = currentStep.migratedReadonlyStepRender;
+    const ReadonlyCurrentStep = currentStep.readonlyStepRender;
     return <ReadonlyCurrentStep />;
   }
 
-  if (!currentStep?.migratedStepRender) {
+  if (!currentStep?.stepRender) {
     throw new Error(
       `${currentStep.displayName} workflow does not have a matching migratedStepRender method on the config`,
     );
   }
 
-  const CurrentStep = currentStep?.migratedStepRender;
+  const CurrentStep = currentStep?.stepRender;
 
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>

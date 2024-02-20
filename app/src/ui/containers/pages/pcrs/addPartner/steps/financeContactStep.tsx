@@ -13,7 +13,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

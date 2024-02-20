@@ -6,7 +6,7 @@ import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/
 import { useContent } from "@ui/hooks/content.hook";
 import React from "react";
 import { usePcrTimeExtensionWorkflowQuery, generateOptions } from "./timeExtension.logic";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";

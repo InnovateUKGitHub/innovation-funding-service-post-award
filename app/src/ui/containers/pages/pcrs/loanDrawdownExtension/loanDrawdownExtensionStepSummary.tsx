@@ -1,6 +1,6 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";

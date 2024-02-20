@@ -1,75 +1,37 @@
-import React from "react";
-import { EditorStatus } from "@ui/redux/constants/enums";
 import { timeExtensionItemWorkflow } from "@ui/containers/pages/pcrs/timeExtension/timeExtensionWorkflow";
-import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
-import { PCRWorkflowValidator } from "@ui/validation/validators/pcrWorkflowValidator";
+import { IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { getAddPartnerWorkflow, AddPartnerWorkflowItem } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { periodLengthChangeWorkflow } from "@ui/containers/pages/pcrs/periodLengthChange/periodLengthChangeWorkflow";
-import { BaseProps } from "../../containerBase";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
 import { suspendProjectWorkflow } from "./suspendProject/suspendProjectWorkflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";
 import { PCRStepType, PCRItemType } from "@framework/constants/pcrConstants";
-import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { IRoutes } from "@ui/routing/routeConfig";
-import { Result } from "@ui/validation/result";
-import { Results } from "@ui/validation/results";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { accountNameChangeWorkflow } from "./renamePartner/renamePartnerWorkflow";
 import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
 import { approveNewSubcontractorWorkflow } from "./approveNewSubcontractor/approveNewSubcontractorWorkflow";
 import { upliftWorkflow } from "./uplift/upliftWorkflow";
 
-export interface PcrStepProps<TDto, TVal> extends IStepProps {
-  project: ProjectDto;
-  pcr: PCRDto;
-  pcrItem: TDto;
-  pcrItemType: PCRItemTypeDto;
-  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-  validator: TVal;
-  status: EditorStatus;
-  onChange: (dto: TDto) => void;
-  onSave: (skipToSummary: boolean) => void;
-  getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
-  routes: IRoutes;
-  mode: "prepare" | "review" | "view";
-}
-
-export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, BaseProps {
-  projectId: ProjectId;
-  pcr: PCRDto;
-  pcrItem: TDto;
-  project: ProjectDto;
-  validator: TVal;
-  mode: "prepare" | "review" | "view";
-  onSave: () => void;
-  getStepLink: (stepName: TStepNames) => ILinkInfo;
-  getEditLink: (stepName: TStepNames, validation: Result | null) => React.ReactNode;
-  getViewLink: (stepName: TStepNames) => React.ReactNode;
-}
-
-export type IPCRWorkflow<T, TVal extends Results<AnyObject> | null> = IWorkflow<
-  PCRStepType,
-  PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, PCRStepType>,
-  PCRWorkflowValidator
->;
+export type IPCRWorkflow = IWorkflow<PCRStepType>;
 
 export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
 
-export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> extends WorkflowBase<
-  PCRStepType,
-  PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, PCRStepType>,
-  PCRWorkflowValidator
-> {
-  public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {
+// export interface PcrStepProps<TDto, TVal> extends IStepProps {
+//   project: ProjectDto;
+//   pcr: PCRDto;
+//   pcrItem: TDto;
+//   pcrItemType: PCRItemTypeDto;
+//   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
+//   validator: TVal;
+//   status: EditorStatus;
+//   onChange: (dto: TDto) => void;
+//   onSave: (skipToSummary: boolean) => void;
+//   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
+//   routes: IRoutes;
+//   mode: "prepare" | "review" | "view";
+// }
+export class PcrWorkflow extends WorkflowBase<PCRStepType> {
+  public constructor(definition: IPCRWorkflow, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }
 
@@ -93,8 +55,6 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> ex
         return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.PartnerAddition:
         return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
-      case PCRItemType.PeriodLengthChange:
-        return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.ApproveNewSubcontractor:
         return new PcrWorkflow(approveNewSubcontractorWorkflow, step);
       case PCRItemType.Uplift:

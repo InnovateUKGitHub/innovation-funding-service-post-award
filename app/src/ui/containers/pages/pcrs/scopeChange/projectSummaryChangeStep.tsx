@@ -10,7 +10,7 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { useForm } from "react-hook-form";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeProjectSummarySchema, scopeChangeErrorMap } from "./scopeChange.zod";

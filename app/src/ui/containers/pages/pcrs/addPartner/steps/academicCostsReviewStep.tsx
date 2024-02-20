@@ -3,7 +3,7 @@ import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { getInitialAcademicCosts, useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";

@@ -3,7 +3,7 @@ import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { PcrPage } from "../../pcrPage";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useSummaryLink } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";

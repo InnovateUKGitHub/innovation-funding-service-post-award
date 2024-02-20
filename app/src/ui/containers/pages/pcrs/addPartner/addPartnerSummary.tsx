@@ -11,7 +11,7 @@ import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { MonthYear } from "@ui/components/atomicDesign/atoms/Date";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

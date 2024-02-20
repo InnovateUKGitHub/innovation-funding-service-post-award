@@ -7,7 +7,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { PCRContactRole } from "@framework/constants/pcrConstants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";

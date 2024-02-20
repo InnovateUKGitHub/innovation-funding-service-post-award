@@ -1,11 +1,10 @@
-import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
+import { IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportQuestionStep";
 import { MonitoringReportSummary } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { numberComparator } from "@framework/util/comparator";
-import { BaseProps } from "@ui/containers/containerBase";
 
 export interface MonitoringReportReportStepProps extends IStepProps {
   report: MonitoringReportDto;
@@ -21,12 +20,7 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   statusChanges: Pick<MonitoringReportStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
 }
 
-export type IMonitoringReportWorkflow = IWorkflow<
-  string,
-  MonitoringReportReportStepProps,
-  MonitoringReportReportSummaryProps & BaseProps,
-  undefined
->;
+export type IMonitoringReportWorkflow = IWorkflow<string>;
 
 const getQuestionSteps = (dto: MonitoringReportDto, startingStepNumber: number) => {
   return dto.questions
@@ -87,12 +81,7 @@ export const getForwardLink = ({
   });
 };
 
-export class MonitoringReportWorkflowDef extends WorkflowBase<
-  string,
-  MonitoringReportReportStepProps,
-  MonitoringReportReportSummaryProps & BaseProps,
-  undefined
-> {
+export class MonitoringReportWorkflowDef extends WorkflowBase<string> {
   public constructor(definition: IMonitoringReportWorkflow, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }
