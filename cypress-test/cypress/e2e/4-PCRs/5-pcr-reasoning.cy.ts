@@ -44,7 +44,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Will click Create request button and proceed to next page", () => {
-    cy.button("Create request").click();
+    cy.clickOn("Create request");
     cy.heading("Request");
     cy.wait(5000);
   });
@@ -68,13 +68,15 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should contain Reasoning subheading", () => {
-    cy.get("#reasoningComments-hint").contains(
+    cy.get("#hint-for-reasoning_comments").contains(
       "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
     );
   });
 
   it("Should type 'hello' and display the number of characters used", () => {
-    cy.get("textarea").clear().type("hello");
+    cy.get("textarea").as("txt");
+    cy.get("@txt").clear();
+    cy.get("@txt").type("hello");
     cy.get("p").contains("You have 5 characters").should("not.exist");
   });
 
@@ -147,8 +149,8 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should continue to the next page", () => {
-    cy.get("a").contains("Save and continue").click();
-    cy.get("h2").contains("Mark as complete");
+    cy.clickOn("Save and continue");
+    cy.get("legend").contains("Mark as complete");
   });
 
   it("Should display the comments entered in the previous comments box", () => {
@@ -156,8 +158,8 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should mark as complete and 'Save and return to request'", () => {
-    cy.getByLabel("I have finished making changes.").click();
-    cy.button("Save and return to request").click();
+    cy.getByLabel("I agree with this change.").click();
+    cy.clickOn("Save and return to request");
   });
 
   it("Should show the reasoning section as complete", () => {
@@ -172,7 +174,7 @@ describe("PCR > Reasoning section", () => {
 
   it("Should click the Edit button against the comments and open the freetext box", () => {
     cy.getListItemFromKey("Comments", "Edit").click();
-    cy.get("#reasoningComments-hint").contains(
+    cy.get("#hint-for-reasoning_comments").contains(
       "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
     );
     cy.get("textarea").should("have.value", loremIpsum32k);
@@ -206,7 +208,8 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should validate that this is too many characters when you click save", () => {
-    cy.button("Save and continue").click();
+    cy.clickOn("Save and continue");
+
     cy.validationLink("Reasoning can be a maximum of 32000 characters");
   });
 
@@ -219,7 +222,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should save the comments and proceed", () => {
-    cy.button("Save and continue").click();
-    cy.get("h2").contains("Upload documents");
+    cy.clickOn("Save and continue");
+    cy.get("legend").contains("Upload documents");
   });
 });
