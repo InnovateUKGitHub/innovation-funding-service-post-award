@@ -9,7 +9,7 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
   z
     .object({
       markedAsComplete: z.boolean(),
-      accountName: z.string().optional(),
+      accountName: z.string().max(256).optional(),
       partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
     })
     .superRefine((data, ctx) => {

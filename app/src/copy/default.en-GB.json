@@ -2259,7 +2259,8 @@
         "accountName": {
           "errors": {
             "custom": "The proposed name of the partner must be different to the existing one.",
-            "too_small": "Enter a new partner name."
+            "too_small": "Enter a new partner name.",
+            "too_big": "New partner name can be a maximum of {{ count }} characters."
           }
         }
       },
@@ -2315,8 +2316,8 @@
         },
         "removalPeriod": {
           "errors": {
-            "too_small": "Enter a valid removal period",
-            "too_big": "Period must be {{count}} or fewer",
+            "too_small": "Enter a valid removal period.",
+            "too_big": "Period must be {{count}} or fewer.",
             "invalid_type": "Period must be a whole number, like 3."
           }
         }
