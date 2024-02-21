@@ -8,6 +8,11 @@
     "requiredUploadStep1": "LMC minutes - from the local management committee (LMC) meeting where your claim was approved",
     "requiredUploadStep2": "LMC virtual approval - an email approval saved as a PDF document or screenshot image, which clearly shows the date and time the email was sent"
   },
+  "components": {
+    "forecastTable": {
+      "iarDueHeader": "Schedule 3 Due"
+    }
+  },
   "pages": {
     "claimReview": {
       "additionalInfoHint": "If you:\n\n- query the claim, you must explain what the partner needs to change\n- submit the claim for approval, you can write a supporting statement to Innovate UK",
