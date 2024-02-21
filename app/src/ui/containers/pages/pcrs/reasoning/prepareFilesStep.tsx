@@ -28,6 +28,7 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
+import { useMessages } from "@framework/api-helpers/useMessages";
 
 export const PCRPrepareReasoningFilesStep = () => {
   const { getContent } = useContent();
@@ -71,6 +72,8 @@ export const PCRPrepareReasoningFilesStep = () => {
 
   const validationErrors = useRhfErrors(formState?.errors);
 
+  const { clearMessages } = useMessages();
+
   const disabled = isFetching || isDeleting || isUploading;
 
   const backLink = useGetBackLink();
@@ -86,7 +89,7 @@ export const PCRPrepareReasoningFilesStep = () => {
       <Section>
         <Form
           encType="multipart/form-data"
-          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }))}
+          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }), clearMessages)}
           aria-disabled={disabled}
         >
           <Fieldset>
