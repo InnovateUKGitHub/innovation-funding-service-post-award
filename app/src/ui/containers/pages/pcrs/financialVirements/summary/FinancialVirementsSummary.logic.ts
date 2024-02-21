@@ -50,7 +50,6 @@ const useFinancialVirementsSummaryData = ({ projectId, itemId }: FinancialVireme
       "profileId",
       "parentId",
       "costCategoryId",
-      "costCategoryName",
       "newEligibleCosts",
       "originalCostsClaimedToDate",
       "originalCostsClaimedToDate",
