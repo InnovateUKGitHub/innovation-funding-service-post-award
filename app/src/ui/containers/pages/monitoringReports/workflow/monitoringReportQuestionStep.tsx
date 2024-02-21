@@ -1,4 +1,3 @@
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
@@ -16,14 +15,10 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-interface Props {
-  questionNumber: number;
-  report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate" | "addComments">;
-  mode: "prepare" | "view";
-}
-
-const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) => {
+const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: number }) => {
   const { getContent } = useContent();
+  const { report, mode, register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset, registerButton } =
+    useContext(MonitoringReportFormContext);
 
   const i = report.questions.findIndex(x => x.displayOrder === questionNumber);
   const q = report.questions[i];
@@ -35,9 +30,6 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
         qa: `question-${q.displayOrder}-score-${y.questionScore}`,
       }))
     : [];
-
-  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset, registerButton } =
-    useContext(MonitoringReportFormContext);
 
   useEffect(() => {
     reset({

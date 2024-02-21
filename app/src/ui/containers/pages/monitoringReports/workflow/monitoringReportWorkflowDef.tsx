@@ -2,23 +2,8 @@ import { IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportQuestionStep";
 import { MonitoringReportSummary } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { numberComparator } from "@framework/util/comparator";
-
-export interface MonitoringReportReportStepProps extends IStepProps {
-  report: MonitoringReportDto;
-  mode: "prepare" | "view";
-}
-
-export interface MonitoringReportReportSummaryProps extends ISummaryProps {
-  projectId: ProjectId;
-  id: MonitoringReportId;
-  mode: "prepare" | "view";
-  report: Pick<MonitoringReportDto, "startDate" | "endDate" | "questions" | "periodId">;
-  getEditLink: (stepName: string) => ILinkInfo;
-  statusChanges: Pick<MonitoringReportStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
-}
 
 export type IMonitoringReportWorkflow = IWorkflow<string>;
 
@@ -29,13 +14,13 @@ const getQuestionSteps = (dto: MonitoringReportDto, startingStepNumber: number) 
       stepName: `question-${x.displayOrder}`,
       displayName: x.title,
       stepNumber: i + startingStepNumber,
-      stepRender: function QuestionStepWrapper(props: MonitoringReportReportStepProps) {
-        return <MonitoringReportQuestionStep questionNumber={x.displayOrder} {...props} />;
+      stepRender: function QuestionStepWrapper() {
+        return <MonitoringReportQuestionStep questionNumber={x.displayOrder} />;
       },
     }));
 };
 
-const monitoringReportWorkflowDef = (dto: MonitoringReportDto): IMonitoringReportWorkflow => {
+const monitoringReportWorkflowDef = (dto: MonitoringReportDto) => {
   const questions = dto.questions;
   questions.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
   return {

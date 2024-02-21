@@ -1,13 +1,5 @@
 import React from "react";
-import { ILinkInfo } from "./ILinkInfo";
-import { PCRStepType } from "@framework/constants/pcrConstants";
 import { numberComparator } from "@framework/util/comparator";
-
-export type SummaryProps = {
-  getStepLink: (stepName: PCRStepType) => ILinkInfo;
-  getEditLink: (stepName: PCRStepType) => React.ReactElement;
-  getViewLink: (stepName: PCRStepType) => React.ReactElement;
-};
 
 export interface IStep<TStepName extends string> {
   stepName: TStepName;
@@ -18,7 +10,7 @@ export interface IStep<TStepName extends string> {
 }
 
 interface ISummary {
-  summaryRender?: (props: SummaryProps) => React.ReactElement;
+  summaryRender?: () => React.ReactElement;
 }
 export interface IWorkflow<TStepName extends string> {
   steps: IStep<TStepName>[];
@@ -29,7 +21,7 @@ export type ICallableStep = IStep<string>;
 
 export interface ICallableWorkflow {
   isOnSummary: () => boolean;
-  getSummary: () => { summaryRender?: (props: SummaryProps) => React.ReactNode } | undefined;
+  getSummary: () => { summaryRender?: () => React.ReactNode } | undefined;
   findStepNumberByName: (name: string) => number | undefined;
   getCurrentStepInfo: () => ICallableStep | undefined;
   getCurrentStepName: () => string | undefined;

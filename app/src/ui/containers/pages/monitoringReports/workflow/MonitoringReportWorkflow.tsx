@@ -23,8 +23,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from "./monitoringReportWorkflow.zod";
 import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
 import { RegisterButton, createRegisterButton } from "@framework/util/registerButton";
+import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 type MonitoringReportContextType = {
+  projectId: ProjectId;
+  id: MonitoringReportId;
   register: UseFormRegister<FormValues>;
   watch: UseFormWatch<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
@@ -33,6 +38,16 @@ type MonitoringReportContextType = {
   validatorErrors: RhfErrors;
   registerButton: RegisterButton<FormValues>;
   reset: UseFormReset<FormValues>;
+  workflow: MonitoringReportWorkflowDef;
+  report: Pick<MonitoringReportDto, "questions" | "periodId" | "addComments" | "endDate" | "startDate">;
+  mode: "prepare" | "view";
+  statusChanges: Pick<
+    MonitoringReportStatusChangeDto,
+    "id" | "comments" | "createdBy" | "createdDate" | "newStatusLabel"
+  >[];
+  project: Pick<ProjectDto, "title" | "id" | "projectNumber">;
+  routes: BaseProps["routes"];
+  getEditLink: (stepName: string) => ILinkInfo;
 };
 
 export const MonitoringReportFormContext = createContext<MonitoringReportContextType>({
@@ -44,6 +59,14 @@ export const MonitoringReportFormContext = createContext<MonitoringReportContext
   validatorErrors: undefined,
   registerButton: noop as RegisterButton<FormValues>,
   reset: noop as UseFormReset<FormValues>,
+  workflow: {},
+  report: {},
+  statusChanges: {},
+  project: {},
+  projectId: "",
+  id: "",
+  routes: {},
+  getEditLink: noop,
 } as MonitoringReportContextType);
 
 const getMonitoringReportSchema = (step?: number | null | undefined) =>
@@ -105,6 +128,14 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
+  const getEditLink = (stepName: string) =>
+    props.routes.monitoringReportWorkflow.getLink({
+      projectId: props.projectId,
+      id: props.id,
+      mode: props.mode,
+      step: workflow.findStepNumberByName(stepName),
+    });
+
   const MonitoringReportContextValues = {
     register,
     watch,
@@ -114,6 +145,14 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     validatorErrors,
     registerButton,
     reset,
+    mode: props.mode,
+    workflow,
+    report,
+    projectId: props.projectId,
+    id: props.id,
+    routes: props.routes,
+    statusChanges,
+    getEditLink,
   } as MonitoringReportContextType;
 
   return (
@@ -130,17 +169,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
             messageType="info"
           />
         )}
-        {!workflow.isOnSummary() ? (
-          <MonitoringReportWorkflowPrepare project={project} report={report} workflow={workflow} {...props} />
-        ) : (
-          <MonitoringReportWorkflowView
-            project={project}
-            report={report}
-            workflow={workflow}
-            statusChanges={statusChanges}
-            {...props}
-          />
-        )}
+        {!workflow.isOnSummary() ? <MonitoringReportWorkflowPrepare /> : <MonitoringReportWorkflowView />}
       </Page>
     </MonitoringReportFormContext.Provider>
   );

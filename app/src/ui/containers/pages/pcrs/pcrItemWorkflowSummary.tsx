@@ -1,6 +1,5 @@
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
-import { EditLink, ViewLink, getStepLink } from "./pcrItemSummaryLinks";
 
 export const SummarySection = () => {
   const { workflow } = usePcrWorkflowContext();
@@ -22,7 +21,7 @@ export const SummarySection = () => {
 };
 
 const Summary = () => {
-  const { pcrItem, itemId, workflow, projectId, pcrId, routes } = usePcrWorkflowContext();
+  const { pcrItem, itemId, workflow } = usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
   const workflowSummary = workflow?.getSummary();
@@ -35,13 +34,5 @@ const Summary = () => {
 
   const SummaryComponent = workflowSummary.summaryRender;
 
-  return (
-    <SummaryComponent
-      getEditLink={stepName => <EditLink stepName={stepName} />}
-      getStepLink={stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}
-      getViewLink={stepName => <ViewLink stepName={stepName} />}
-    />
-  );
-
-  // });
+  return <SummaryComponent />;
 };

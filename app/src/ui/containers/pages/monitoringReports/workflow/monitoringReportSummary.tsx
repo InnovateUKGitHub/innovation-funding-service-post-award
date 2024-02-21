@@ -10,8 +10,6 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { MonitoringReportReportSummaryProps } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
-import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
 import { useContent } from "@ui/hooks/content.hook";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -23,16 +21,16 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IRoutes } from "@ui/routing/routeConfig";
 
-export const MonitoringReportSummary = ({
-  report,
-  statusChanges,
-  id,
-  projectId,
-  getEditLink,
-  mode,
-  routes,
-}: MonitoringReportReportSummaryProps & BaseProps) => {
-  const { validatorErrors: validationErrors } = useContext(MonitoringReportFormContext);
+export const MonitoringReportSummary = () => {
+  const {
+    report,
+    mode,
+    id,
+    projectId,
+    validatorErrors: validationErrors,
+    routes,
+    getEditLink,
+  } = useContext(MonitoringReportFormContext);
 
   return (
     <Section data-qa="monitoringReportViewSection">
@@ -56,13 +54,14 @@ export const MonitoringReportSummary = ({
           getEditLink={getEditLink}
         />
       ))}
-      <ReportLog statusChanges={statusChanges} />
+      <ReportLog />
       {mode === "prepare" && <ReportForm />}
     </Section>
   );
 };
 
-const ReportLog = ({ statusChanges }: { statusChanges: MonitoringReportReportSummaryProps["statusChanges"] }) => {
+const ReportLog = () => {
+  const { statusChanges } = useContext(MonitoringReportFormContext);
   return (
     <Section>
       <Accordion>
