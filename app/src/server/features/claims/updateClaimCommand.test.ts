@@ -252,8 +252,10 @@ describe("UpdateClaimCommand", () => {
     const context = new TestContext();
     const testData = context.testData;
     const project = testData.createProject();
-    const partner = context.testData.createPartner();
-    const claim = testData.createClaim(partner, 2);
+    const partner = context.testData.createPartner(project);
+    const claim = testData.createClaim(partner, 2, x => {
+      x.Acc_ClaimStatus__c = "Submitted";
+    });
     const costCategory = testData.createCostCategory();
 
     testData.createProfileDetail(costCategory, partner);
