@@ -74,7 +74,7 @@ export const getClaimSummarySchema = ({
             case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
               ctx.addIssue({
                 code: ZodIssueCode.custom,
-                message: "You must upload a schedule 3 before you can submit this claim",
+                params: { i18n: "errors.schedule3_required" },
               });
               break;
           }

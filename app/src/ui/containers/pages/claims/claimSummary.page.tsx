@@ -246,7 +246,9 @@ const DocumentValidation = ({
   routes: BaseProps["routes"];
 }) => {
   // https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
-  const iarResult = iarValidation({ claim, documents, project });
+  // Submit is "TRUE" because...
+  // If the claim was submitted, we get the IAR results that WOULD happen
+  const iarResult = iarValidation({ claim, documents, project, submit: true });
 
   const editDocumentLink = (
     <SimpleString>
