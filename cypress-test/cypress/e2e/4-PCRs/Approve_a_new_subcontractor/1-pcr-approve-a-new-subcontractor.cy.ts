@@ -49,31 +49,31 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
 
   it("Should create a new 'Approve a new subcontractor' PCR", createApproveNewSubcontractor);
 
-  //it("Should add 5 more types and correctly display them in the Request page", () => {
-  //  cy.get("a").contains("Add types").click();
-  //
-  //  [
-  //    "Remove a partner",
-  //    "Add a partner",
-  //    "Change project scope",
-  //    "Change a partner's name",
-  //    "Put project on hold",
-  //  ].forEach(pcr => {
-  //    cy.getByLabel(pcr).wait(500).click();
-  //  });
-  //  cy.button("Add to request").click();
-  //  cy.heading("Request");
-  //  [
-  //    "Remove a partner",
-  //    "Add a partner",
-  //    "Change project scope",
-  //    "Change a partner's name",
-  //    "Put project on hold",
-  //    "Approve a new subcontractor",
-  //  ].forEach(pcr => {
-  //    cy.get("li").contains(pcr);
-  //  });
-  //});
+  it("Should add 5 more types and correctly display them in the Request page", () => {
+    cy.get("a").contains("Add types").click();
+
+    [
+      "Remove a partner",
+      "Add a partner",
+      "Change project scope",
+      "Change a partner's name",
+      "Put project on hold",
+    ].forEach(pcr => {
+      cy.getByLabel(pcr).wait(500).click();
+    });
+    cy.button("Add to request").click();
+    cy.heading("Request");
+    [
+      "Remove a partner",
+      "Add a partner",
+      "Change project scope",
+      "Change a partner's name",
+      "Put project on hold",
+      "Approve a new subcontractor",
+    ].forEach(pcr => {
+      cy.get("li").contains(pcr);
+    });
+  });
 
   it("Should have a working backlink", approveSubcontractorBacklink);
 
