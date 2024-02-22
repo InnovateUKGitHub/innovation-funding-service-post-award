@@ -16,7 +16,7 @@ import {
   doNotUploadSpecialChar,
 } from "common/fileComponentTests";
 
-import { rejectElevenDocsAndShowError } from "e2e/2-claims/steps";
+import { rejectElevenDocsAndShowError, uploadDate } from "e2e/2-claims/steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -68,6 +68,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should contain Reasoning subheading", () => {
+    cy.get("legend").contains("Reasons");
     cy.get("#hint-for-reasoning_comments").contains(
       "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
     );
@@ -146,6 +147,34 @@ describe("PCR > Reasoning section", () => {
     cy.fileInput(testFile);
     cy.button("Upload documents").click();
     cy.validationNotification("Your document has been uploaded.");
+  });
+
+  it("Should display all the files in the correct order with the correct information", () => {
+    [
+      "testfile.doc",
+      "testfile.doc",
+      "testfile2.doc",
+      "testfile3.doc",
+      "testfile4.doc",
+      "testfile5.doc",
+      "testfile6.doc",
+      "testfile7.doc",
+      "testfile8.doc",
+      "testfile9.doc",
+      "testfile10.doc",
+      "T.doc",
+    ].forEach((doc, index) => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(doc);
+          cy.get("td:nth-child(2)").contains("PCR evidence");
+          cy.get("td:nth-child(3)").contains(uploadDate);
+          cy.get("td:nth-child(4)").contains("0KB");
+          cy.get("td:nth-child(5)").contains("James Black");
+          cy.get("td:nth-child(6)").contains("Remove");
+        });
+    });
   });
 
   it("Should continue to the next page", () => {
