@@ -21,6 +21,7 @@ import {
   negativeGrantChange,
   validateAlphaCharacters,
   saveZeroValue,
+  reallocateDecimals,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -67,6 +68,14 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   /**
    * This assumes the value in the current box is 35000 as per project creation script
    */
+  it(
+    "Should confirm that decimals are saving and rounding correctly in conjunction with grant calculation.",
+    reallocateDecimals,
+  );
+
+  it("Should go back into EUI costs", () => {
+    cy.get("td.govuk-table__cell").contains("EUI Small Ent Health").click();
+  });
   it("Should update costs for re-distribution", updateEUICosts);
 
   it("Should have a 'Save and return to reallocate project costs' button", () => {

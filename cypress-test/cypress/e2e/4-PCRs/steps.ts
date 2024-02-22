@@ -1882,6 +1882,37 @@ export const validateCostUpdateInputs = () => {
   cy.validationLink("Please enter a valid cost");
 };
 
+export const reallocateDecimals = () => {
+  [
+    ["Labour", "34999.66", "-£0.34"],
+    ["Overheads", "333.33", "-£34,666.67"],
+    ["Materials", "35333.33", "£333.33"],
+    ["Capital usage", "35000.33", "£0.33"],
+  ].forEach(([aria, input, calculation], index) => {
+    cy.getByAriaLabel(aria).clear().type(input);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains(calculation);
+      });
+  });
+  cy.wait(500);
+  ["Partner totals", "£350,000.00", "£0.00", "£315,666.65", "-£34,333.35"].forEach((total, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get("tr").within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(total);
+      });
+    });
+  });
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.get("td.govuk-table__cell").contains("EUI Small Ent Health");
+  cy.get("tfoot").within(() => {
+    cy.get("th:nth-child(5)").contains("£540,666.65");
+    cy.get("th:nth-child(6)").contains("£491,666.65");
+    cy.get("th:nth-child(7)").contains("£319,583.32");
+  });
+};
+
 export const updateEUICosts = () => {
   [
     ["Labour", "33998.90", "-£1,001.10"],
