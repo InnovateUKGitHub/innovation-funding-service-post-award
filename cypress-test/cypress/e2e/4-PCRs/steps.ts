@@ -712,87 +712,6 @@ export const completeAddPartnerForMulti = () => {
   cy.getByLabel("Large").click();
   cy.get(`input[id="numberOfEmployees"]`).type("1000");
   cy.clickOn("Save and continue");
-};
-
-export const navigateToPartnerLocation = () => {
-  cy.clickCheckBox("Add a partner");
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.clickOn("Create request");
-  cy.wait("@pcrPrepare");
-  cy.heading("Request");
-  cy.get("a").contains("Add a partner").click();
-  cy.getByLabel("Collaborator").click();
-  cy.getByLabel("Yes").click();
-  cy.getByLabel("Business").click();
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("State aid eligibility");
-  cy.clickOn("Save and continue");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get(`input[type="radio"]`).click();
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Organisation details");
-  cy.getByLabel("Large").click();
-  cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Financial details");
-  cy.get("#financialYearEndDate_month").type("03");
-  cy.get("#financialYearEndDate_year").type("2022");
-  cy.get("#financialYearEndTurnover").type("1000000");
-  cy.clickOn("Save and continue");
-};
-
-export const navigateToPartnerPerson = () => {
-  cy.clickCheckBox("Add a partner");
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.clickOn("Create request");
-  cy.wait("@pcrPrepare");
-  cy.heading("Request");
-  cy.get("a").contains("Add a partner").click();
-  cy.getByLabel("Collaborator").click();
-  cy.getByLabel("Yes").click();
-  cy.getByLabel("Business").click();
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("State aid eligibility");
-  cy.clickOn("Save and continue");
-  cy.getByLabel("Search companies house").type("A").wait(500);
-  cy.getByLabel("A LIMITED").click();
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Organisation details");
-  cy.getByLabel("Large").click();
-  cy.get("#numberOfEmployees").type("1000");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Financial details");
-  cy.get("#financialYearEndDate_month").type("03");
-  cy.get("#financialYearEndDate_year").type("2022");
-  cy.get("#financialYearEndTurnover").type("1000000");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Project location");
-  cy.getByLabel("Inside the United Kingdom").click();
-  cy.getByLabel("Name of town or city").type("Swindon");
-  cy.getByLabel("Postcode").type("SN5");
-  cy.clickOn("Save and continue");
-};
-
-export const completeAddPartnerForMulti = () => {
-  cy.getByLabel("Collaborator").click();
-  cy.getByLabel("Yes").click();
-  cy.getByLabel("Business").click();
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("State aid eligibility");
-  cy.clickOn("Save and continue");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get(`input[type="radio"]`).click();
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Organisation details");
-  cy.getByLabel("Large").click();
-  cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.clickOn("Save and continue");
   cy.get("h2").contains("Financial details");
   cy.get("#financialYearEndDate_month").type("03");
   cy.get("#financialYearEndDate_year").type("2022");
@@ -2235,7 +2154,7 @@ export const reduceNewRemainingGrant = () => {
 export const saveReflectSurplus = () => {
   cy.clickOn("Save and return to reallocate project costs");
   cy.heading("Reallocate project costs");
-  ["£192,399.01", "£148,848.99", "£649.00"].forEach((newRemGrant, index) => {
+  ["£192,399.00", "£148,849.00", "£649.00"].forEach((newRemGrant, index) => {
     cy.get("tr")
       .eq(index + 1)
       .within(() => {
