@@ -57,6 +57,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
 
     // TODO: Merge what we need automatically
     this.claimDto.iarStatus = mapToReceivedStatus(existingClaim.Acc_IAR_Status__c);
+    this.claimDto.pcfStatus = mapToReceivedStatus(existingClaim.Acc_PCF_Status__c);
 
     const result = new ClaimDtoValidator(
       this.claimDto,
