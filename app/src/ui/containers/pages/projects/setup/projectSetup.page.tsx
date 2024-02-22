@@ -109,11 +109,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
       partnerStatus={partner.partnerStatus}
     >
       <Section qa="guidance">
-        <P>
-          {project.projectSource === "Manual"
-            ? getContent(x => x.projectMessages.manualSetupGuidance)
-            : getContent(x => x.projectMessages.setupGuidance)}
-        </P>
+        <P>{getContent(x => x.projectMessages.setupGuidance)}</P>
       </Section>
 
       <List qa="taskList">

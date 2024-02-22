@@ -1134,8 +1134,7 @@
     }
   },
   "projectMessages": {
-    "manualSetupGuidance": "You need to give us some information so that we can complete project setup. Innovate UK will send you an email when you are able to view your project and begin making claims.",
-    "setupGuidance": "You need to give us some information so that we can complete project setup.  You will then be able to view your project and begin making claims.",
+    "setupGuidance": "We will need some information before we can complete project setup.",
     "noClaimDueMessage": "No claim due",
     "claimDueMessage": "Claim due",
     "claimOverdueMessage": "Claim overdue",
