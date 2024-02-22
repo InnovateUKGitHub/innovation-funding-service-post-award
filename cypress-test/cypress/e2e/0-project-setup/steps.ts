@@ -268,9 +268,9 @@ export const manualTopThreeRows = () => {
       "Dec 2024",
       "Jan 2025",
     ],
-  ].forEach((cols, rowNumber = 0) => {
+  ].forEach((cols, index) => {
     cy.get("tr")
-      .eq(rowNumber + 1)
+      .eq(index + 1)
       .within(() => {
         for (let i = 0; i < cols.length; i++) {
           cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
