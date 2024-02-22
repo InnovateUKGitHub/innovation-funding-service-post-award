@@ -310,10 +310,16 @@ export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<P
     this.model.subcontractorCountry,
     this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.countryRequired),
   );
-  public subcontractorRoleAndDescription = Validation.required(
+
+  public subcontractorRoleAndDescription = Validation.all(
     this,
-    this.model.subcontractorRoleAndDescription,
-    this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.roleRequired),
+    () =>
+      Validation.required(
+        this,
+        this.model.subcontractorRoleAndDescription,
+        this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.roleRequired),
+      ),
+    () => Validation.maxLength(this, this.model.subcontractorRoleAndDescription, 131072),
   );
   public value = Validation.all(
     this,
@@ -339,10 +345,15 @@ export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<P
 }
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
-  public description = Validation.required(
+  public description = Validation.all(
     this,
-    this.model.description,
-    this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.descriptionRequired),
+    () =>
+      Validation.required(
+        this,
+        this.model.description,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.descriptionRequired),
+      ),
+    () => Validation.maxLength(this, this.model.description, 131072),
   );
   public type = Validation.all(this, () =>
     Validation.required(
