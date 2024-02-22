@@ -18,9 +18,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     pcrTidyUp("Add a partner");
   });
 
-  // after(() => {
-  //   cy.deletePcr("328407");
-  // });
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
