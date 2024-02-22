@@ -72,7 +72,10 @@ export const FilesStep = ({
   });
 
   const { onUpdate: onFileDelete, isProcessing: isDeleting } = useOnDelete({
-    onSuccess: refresh,
+    async onSuccess() {
+      await refresh();
+      reset();
+    },
   });
 
   const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
