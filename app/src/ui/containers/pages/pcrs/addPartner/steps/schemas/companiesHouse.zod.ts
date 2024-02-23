@@ -3,7 +3,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { pcrIdValidation, pcrItemIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
-const pcrAddPartnerCompaniesHouseStepSearchMaxLength = 100;
+const pcrAddPartnerCompaniesHouseStepSearchMaxLength = 159;
 const pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength = 100;
 const pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength = 40;
 const pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength = 32768;
