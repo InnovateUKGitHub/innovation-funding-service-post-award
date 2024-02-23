@@ -125,28 +125,38 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
   let newRemainingGrant = 0;
   let hasAvailablePartners = false;
 
-  const virements = sortPartnersLeadFirst(partners).map(partner => {
-    const financialVirementsForParticipant = financialVirementsForParticipants.find(
-      financialVirementsForParticipant => financialVirementsForParticipant.partnerId === partner.id,
-    ) as FinancialVirementForParticipant;
+  const virements = sortPartnersLeadFirst(partners)
+    .filter(partner =>
+      financialVirementsForParticipants.find(
+        financialVirementsForParticipant => financialVirementsForParticipant.partnerId === partner.id,
+      ),
+    )
+    .map(partner => {
+      const financialVirementsForParticipant = financialVirementsForParticipants.find(
+        financialVirementsForParticipant => financialVirementsForParticipant.partnerId === partner.id,
+      );
 
-    const partnerVirement = mapProjectParticipant({
-      financialVirementsForParticipant,
-      financialVirementsForCosts,
-      partner,
-    });
+      if (!financialVirementsForParticipant) {
+        throw new Error(`failed to find match a financial virement with partner of id: ${partner.id}`);
+      }
+      const partnerVirement = mapProjectParticipant({
+        financialVirementsForParticipant,
+        financialVirementsForCosts,
+        partner,
+      });
 
-    costsClaimedToDate += partnerVirement.costsClaimedToDate;
-    originalEligibleCosts += partnerVirement.originalEligibleCosts;
-    originalRemainingCosts += partnerVirement.originalRemainingCosts;
-    originalRemainingGrant += partnerVirement.originalRemainingGrant;
-    newEligibleCosts += partnerVirement.newEligibleCosts;
-    newRemainingCosts += partnerVirement.newRemainingCosts;
-    newRemainingGrant += partnerVirement.newRemainingGrant;
-    if (partnerVirement.virements.length > 0) hasAvailablePartners = true;
+      costsClaimedToDate += partnerVirement.costsClaimedToDate;
+      originalEligibleCosts += partnerVirement.originalEligibleCosts;
+      originalRemainingCosts += partnerVirement.originalRemainingCosts;
+      originalRemainingGrant += partnerVirement.originalRemainingGrant;
+      newEligibleCosts += partnerVirement.newEligibleCosts;
+      newRemainingCosts += partnerVirement.newRemainingCosts;
+      newRemainingGrant += partnerVirement.newRemainingGrant;
+      if (partnerVirement.virements.length > 0) hasAvailablePartners = true;
 
-    return partnerVirement;
-  });
+      return partnerVirement;
+    })
+    .filter(x => x);
 
   const grantDifference = roundCurrency(newRemainingGrant - originalRemainingGrant);
   const costDifference = roundCurrency(newEligibleCosts - originalEligibleCosts);
