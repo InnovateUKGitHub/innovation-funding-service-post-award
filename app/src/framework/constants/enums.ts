@@ -95,16 +95,6 @@ export enum CostCategoryGroupType {
   Other_Funding,
 }
 
-export enum CostCategoryInputType {
-  Labour,
-  Overheads,
-  Materials,
-  Subcontracting,
-  Capital_Usage,
-  Travel_And_Subsistence,
-  Other_Costs,
-}
-
 export enum DateFormat {
   FULL_DATE,
   FULL_NUMERIC_DATE,

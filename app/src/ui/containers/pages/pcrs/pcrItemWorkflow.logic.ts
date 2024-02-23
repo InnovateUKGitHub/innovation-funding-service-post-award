@@ -81,7 +81,7 @@ export const useOnSavePcrItem = (
   pcrId: PcrId,
   pcrItemId: PcrItemId,
   setFetchKey: Dispatch<SetStateAction<number>>,
-  refreshItemWorkflowQuery: () => Promise<void>,
+  refreshItemWorkflowQuery: (() => Promise<void>) | undefined | null,
   step: number | undefined,
   pcrType: PCRItemType,
 ) => {
@@ -103,7 +103,9 @@ export const useOnSavePcrItem = (
       });
     },
     onSuccess: async (_, __, context) => {
-      await refreshItemWorkflowQuery();
+      if (!!refreshItemWorkflowQuery) {
+        await refreshItemWorkflowQuery();
+      }
 
       stores.messages.clearMessages();
       clearMessages();

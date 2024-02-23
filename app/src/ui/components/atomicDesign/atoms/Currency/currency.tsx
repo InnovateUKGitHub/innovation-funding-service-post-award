@@ -14,6 +14,7 @@ export interface CurrencyProps extends CurrentArgs {
   qa?: string;
   bold?: boolean;
   noDefault?: boolean;
+  id?: string;
 }
 
 /**

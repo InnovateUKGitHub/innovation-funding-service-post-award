@@ -1,27 +1,41 @@
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { Pending } from "@shared/pending";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { LinksList } from "@ui/components/atomicDesign/atoms/LinksList/linksList";
-import { PageLoader } from "@ui/components/bjss/loading";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { useContent } from "@ui/hooks/content.hook";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { useOnDelete } from "@framework/api-helpers/onFileDelete";
+import { useOnUpload } from "@framework/api-helpers/onFileUpload";
+import { useForm } from "react-hook-form";
+import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { makeZodI18nMap } from "@shared/zodi18n";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { usePcrFilesQuery } from "../../filesStep/filesStep.logic";
+import { pcrFilesQuery } from "../../filesStep/PcrFiles.query";
+import { z } from "zod";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { useMessages } from "@framework/api-helpers/useMessages";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
+import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
+import { noop } from "lodash";
+import { ProjectRole } from "@framework/constants/project";
+import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { LinksList } from "@ui/components/atomicDesign/atoms/LinksList/linksList";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
@@ -30,203 +44,179 @@ export interface OverheadDocumentsPageParams {
   costCategoryId: CostCategoryId;
 }
 
-interface Data {
-  project: Pending<ProjectDto>;
-  pcrItem: Pending<PCRItemForPartnerAdditionDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
-}
-
-interface CombinedData {
-  project: ProjectDto;
-  pcrItem: PCRItemForPartnerAdditionDto;
-  costCategories: CostCategoryDto[];
-  documents: DocumentSummaryDto[];
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-}
-
-interface Callbacks {
-  onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
-}
-
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
-
-export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsPageParams, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      pcrItem: this.props.pcrItem,
-      costCategories: this.props.costCategories,
-      documents: this.props.documents,
-      editor: this.props.editor,
-    });
-
-    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents({ project, costCategories, documents, editor, pcrItem }: CombinedData) {
-    const cost = pcrItem.spendProfile.costs.find(x => x.costCategoryId === this.props.costCategoryId);
-    if (!cost) throw new Error(`Cannot find cost matching ${this.props.costCategoryId}`);
-    const back = this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
-      projectId: project.id,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      costCategoryId: this.props.costCategoryId,
-      costId: cost.id,
-    });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
-
-    return (
-      <Page
-        backLink={
-          <BackLink route={back}>
-            <Content
-              value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })}
-            />
-          </BackLink>
-        }
-        error={editor.error}
-        validator={editor.validator}
-        pageTitle={<Title {...project} />}
-      >
-        <Messages messages={this.props.messages} />
-
-        {this.renderForm(editor)}
-
-        <Section>
-          <DocumentEdit
-            qa="overhead-calculation-document"
-            onRemove={document => this.props.onFileDelete(editor.data, document)}
-            documents={documents}
-          />
-        </Section>
-        <Link styling="PrimaryButton" route={back}>
-          <Content value={x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit} />
-        </Link>
-      </Page>
-    );
-  }
-
-  private renderForm(
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ): React.ReactNode {
-    return (
-      <>
-        <Section title={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading}>
-          <Content markdown value={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceDocumentUpload} />
-        </Section>
-
-        <Section>
-          <UploadForm.Form
-            enctype="multipart"
-            editor={documentsEditor}
-            onChange={dto => this.props.onFileChange(false, dto)}
-            qa="projectChangeRequestItemUpload"
-          >
-            <UploadForm.Fieldset heading={x => x.pages.pcrSpendProfileOverheadDocuments.headingTemplate} qa="template">
-              {this.renderTemplateLink()}
-            </UploadForm.Fieldset>
-
-            <UploadForm.Fieldset
-              qa="documentUpload"
-              heading={x => x.pages.pcrSpendProfileOverheadDocuments.documentUploadHeading}
-            >
-              <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
-              <DocumentGuidance />
-              <UploadForm.MultipleFileUpload
-                label={x => x.documentLabels.uploadInputLabel}
-                name="attachment"
-                labelHidden
-                value={data => data.files}
-                update={(dto, files) => {
-                  dto.files = files || [];
-                  dto.description = DocumentDescription.OverheadCalculationSpreadsheet;
-                }}
-                validation={documentsEditor.validator.files}
-              />
-            </UploadForm.Fieldset>
-            <UploadForm.Fieldset>
-              <UploadForm.Button
-                name="uploadFile"
-                styling="Secondary"
-                onClick={() => this.props.onFileChange(true, documentsEditor.data)}
-              >
-                <Content value={x => x.documentMessages.uploadTitle} />
-              </UploadForm.Button>
-            </UploadForm.Fieldset>
-          </UploadForm.Form>
-        </Section>
-      </>
-    );
-  }
-
-  private renderTemplateLink() {
-    const links = [{ text: "Overhead calculation spreadsheet", url: "/ifspa-assets/pcr_templates/overheads.ods" }];
-    return (
-      <Section>
-        <LinksList data-qa="template-link" links={links} />
-      </Section>
-    );
-  }
-}
-
-const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProps) => {
-  const stores = useStores();
+const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BaseProps) => {
   const { getContent } = useContent();
+  const { pcrId, itemId, projectId, routes, costCategoryId } = props;
+
+  const { project, spendProfile } = useSpendProfileCostsQuery(projectId, itemId, costCategoryId, undefined, undefined);
+
+  const cost = spendProfile.costs.find(x => x.costCategoryId === costCategoryId);
+  if (!cost) throw new Error(`Cannot find cost matching ${costCategoryId}`);
+  const back = routes.pcrPrepareSpendProfileEditCost.getLink({
+    projectId,
+    pcrId,
+    itemId,
+    costCategoryId,
+    costId: cost.id,
+  });
+
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrFilesQuery, {
+    projectId,
+    pcrItemId: itemId,
+  });
+
+  const { documents } = usePcrFilesQuery(projectId, itemId, refreshedQueryOptions);
+
+  const {
+    register,
+    handleSubmit: handleDocumentSubmit,
+    formState,
+    getFieldState,
+    reset,
+  } = useForm<z.output<PcrLevelUploadSchemaType>>({
+    resolver: zodResolver(getPcrLevelUpload({ config: props.config.options }), {
+      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+    }),
+  });
+
+  const { onUpdate: onFileDelete, isProcessing: isDeleting } = useOnDelete({
+    async onSuccess() {
+      await refresh();
+      reset();
+    },
+  });
+
+  const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
+    async onSuccess() {
+      await refresh();
+      reset();
+    },
+  });
+
+  const { handleSubmit: handleFormSubmit } = useForm<{}>({
+    defaultValues: {},
+  });
+
+  const { onUpdate, isFetching } = useOnSavePcrItem(
+    projectId,
+    pcrId,
+    itemId,
+    noop,
+    undefined,
+    undefined,
+    PCRItemType.PartnerAddition,
+  );
+
+  const validationErrors = useRhfErrors(formState?.errors);
+
+  const disabled = isFetching || isDeleting || isUploading;
+
+  const { clearMessages } = useMessages();
 
   return (
-    <OverheadDocumentsComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      costCategories={stores.costCategories.getAllUnfiltered()}
-      pcrItem={
-        stores.projectChangeRequests.getItemById(
-          props.projectId,
-          props.pcrId,
-          props.itemId,
-        ) as Pending<PCRItemForPartnerAdditionDto>
+    <Page
+      backLink={
+        <BackLink route={back}>
+          <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
+        </BackLink>
       }
-      documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
-      editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
-      onFileChange={(isSaving, dto) => {
-        stores.messages.clearMessages();
-        // show message if remaining on page
-        const successMessage = isSaving
-          ? dto.files.length === 1
-            ? "Your document has been uploaded."
-            : `${dto.files.length} documents have been uploaded.`
-          : undefined;
-        stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
-          isSaving,
-          props.projectId,
-          props.itemId,
-          dto,
-          true,
-          successMessage,
-        );
-      }}
-      onFileDelete={(dto, document) => {
-        stores.messages.clearMessages();
-        stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
-          props.projectId,
-          props.itemId,
-          dto,
-          document,
-          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
-        );
-      }}
-    />
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      projectStatus={project.status}
+      validationErrors={validationErrors}
+    >
+      <Messages messages={props.messages} />
+      <Section>
+        <H2>{getContent(x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading)}</H2>
+        <Content markdown value={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceDocumentUpload} />
+      </Section>
+      <Section>
+        <H3>{getContent(x => x.pages.pcrSpendProfileOverheadDocuments.headingTemplate)}</H3>
+        <LinksList
+          data-qa="template-link"
+          links={[{ text: "Overhead calculation spreadsheet", url: "/ifspa-assets/pcr_templates/overheads.ods" }]}
+        />
+      </Section>
+      <Section>
+        <Form
+          encType="multipart/form-data"
+          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }), clearMessages)}
+          aria-disabled={disabled}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrSpendProfileOverheadDocuments.documentUploadHeading)}</Legend>
+            <input
+              type="hidden"
+              value={DocumentDescription.OverheadCalculationSpreadsheet}
+              {...register("description")}
+            ></input>
+            <input type="hidden" value={projectId} {...register("projectId")} />
+            <input type="hidden" value={itemId} {...register("projectChangeRequestIdOrItemId")} />
+            <input type="hidden" value={FormTypes.PcrLevelUpload} {...register("form")} />
+
+            <DocumentGuidance />
+            <FormGroup hasError={!!getFieldState("files").error}>
+              <ValidationError error={getFieldState("files").error} />
+              <FileInput
+                disabled={disabled}
+                id="files"
+                hasError={!!getFieldState("files").error}
+                multiple
+                {...register("files")}
+              />
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <FormGroup>
+              <Button type="submit" secondary disabled={disabled}>
+                {getContent(x => x.pcrItem.uploadDocumentsButton)}
+              </Button>
+            </FormGroup>
+          </Fieldset>
+        </Form>
+      </Section>
+
+      <Section>
+        <DocumentEdit
+          qa="prepare-item-file-for-partner-documents"
+          onRemove={doc =>
+            onFileDelete({
+              data: {
+                form: FormTypes.PcrLevelDelete,
+                documentId: doc.id,
+                projectId,
+                projectChangeRequestIdOrItemId: itemId,
+              },
+              context: doc,
+            })
+          }
+          documents={documents}
+          formType={FormTypes.PcrLevelDelete}
+          disabled={disabled}
+        />
+      </Section>
+      <Form
+        onSubmit={handleFormSubmit(data =>
+          onUpdate({
+            data,
+            context: { link: back },
+          }),
+        )}
+      >
+        <Fieldset>
+          <Button disabled={disabled} type="submit">
+            {getContent(x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit)}
+          </Button>
+        </Fieldset>
+      </Form>
+    </Page>
   );
 };
 
 export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocumentsPageParams>({
   routeName: "pcrSpendProfileOverheadDocument",
-  // This is a generic route which could in theory be used to support documents for other spend profiles.
-  // However the page itself is currently closely tied to overhead costs. This could be adapted if required.
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/documents",
-  container: OverheadDocumentContainer,
+  container: OverheadDocumentsComponent,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,

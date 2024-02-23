@@ -1,88 +1,149 @@
-import { PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { Component } from "react";
-import { PCRMaterialsCostDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { MountedHoc } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 
-const Form = createTypedForm<PCRSpendProfileMaterialsCostDto>();
+import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { useForm } from "react-hook-form";
+import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useContext } from "react";
+import { PCRSpendProfileCostDto, PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { isObject } from "lodash";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 
-export class MaterialsFormComponent extends Component<
-  SpendProfileCostFormProps<PCRSpendProfileMaterialsCostDto, PCRMaterialsCostDtoValidator>
-> {
-  render() {
-    const { editor, validator, data, costCategory } = this.props;
+const isMaterialsCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileMaterialsCostDto {
+  return isObject(cost) && ["id", "description", "quantity", "costPerItem"].every(x => x in cost);
+};
 
-    return (
-      <MountedHoc>
-        {({ isClient }) => (
-          <Form.Form
-            qa="addPartnerForm"
-            data={data}
-            isSaving={editor.status === EditorStatus.Saving}
-            onSubmit={() => this.props.onSave(editor.data)}
-            onChange={dto => this.onChange(dto)}
-          >
-            <Form.Fieldset qa="materials-costs">
-              <Form.Hidden name="id" value={dto => dto.id} />
-              <Form.String
-                label={x => x.pcrSpendProfileLabels.materials.item}
-                width={"one-third"}
-                name="description"
-                value={dto => dto.description}
-                update={(x, val) => (x.description = val)}
-                validation={validator && validator.description}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.materials.quantity}
-                name="quantity"
-                width={"one-third"}
-                value={dto => dto.quantity}
-                update={(dto, val) => (dto.quantity = val)}
-                validation={validator && validator.quantity}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.materials.costPerItem}
-                name="costPerItem"
-                width={"one-third"}
-                value={dto => dto.costPerItem}
-                update={(dto, val) => (dto.costPerItem = val)}
-                validation={validator && validator.costPerItem}
-              />
+export const MaterialsFormComponent = () => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    addNewItem,
+  } = useContext(SpendProfileContext);
+  const { isClient } = useMounted();
 
-              {isClient && (
-                <Form.Custom
-                  label={x => x.pcrSpendProfileLabels.materials.totalCost}
-                  labelBold
-                  name="totalCost"
-                  value={({ formData }) => (
-                    <SimpleString>
-                      <Currency value={formData.value} />
-                    </SimpleString>
-                  )}
-                  update={() => null}
-                />
-              )}
-            </Form.Fieldset>
-            <Form.Fieldset qa="save">
-              <Form.Submit>
-                <Content
-                  value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
-                />
-              </Form.Submit>
-            </Form.Fieldset>
-          </Form.Form>
+  let defaultCost: PCRSpendProfileMaterialsCostDto;
+
+  if (addNewItem) {
+    defaultCost = {
+      id: null as unknown as PcrId,
+      description: null,
+      quantity: null,
+      costPerItem: null,
+      value: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+    };
+  } else if (isMaterialsCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
+  }
+
+  const { handleSubmit, watch, formState, register } = useForm<MaterialsSchema>({
+    defaultValues: {
+      id: defaultCost.id,
+      materialsDescription: defaultCost.description ?? "",
+      quantityOfMaterialItems: defaultCost.quantity ?? undefined,
+      costPerItem: String(defaultCost.costPerItem ?? ""),
+    },
+    resolver: zodResolver(materialsSchema, {
+      errorMap,
+    }),
+  });
+
+  const { getContent } = useContent();
+
+  const totalCost = Number(watch("quantityOfMaterialItems") ?? 0) * Number(watch("costPerItem") ?? 0);
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<MaterialsSchema>;
+
+  return (
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  description: data?.materialsDescription,
+                  id: data.id ?? ("" as PcrId),
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  quantity: Number(data.quantityOfMaterialItems),
+                  costPerItem: Number(data.costPerItem),
+                  value: totalCost,
+                }),
+              },
+            },
+            context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
+          }),
         )}
-      </MountedHoc>
-    );
-  }
+      >
+        <Fieldset data-qa="materials-costs">
+          <input type="hidden" name="id" value={cost?.id} />
+          <Field
+            error={validationErrors?.materialsDescription}
+            id="materialsDescription"
+            label={getContent(x => x.pcrSpendProfileLabels.materials.item)}
+          >
+            <TextInput inputWidth="one-third" {...register("materialsDescription")} disabled={isFetching} />
+          </Field>
 
-  private onChange(dto: PCRSpendProfileMaterialsCostDto) {
-    dto.value = dto.quantity && dto.costPerItem ? dto.quantity * dto.costPerItem : 0;
-    this.props.onChange(this.props.editor.data);
-  }
-}
+          <Field
+            error={validationErrors?.quantityOfMaterialItems}
+            id="quantity"
+            label={getContent(x => x.pcrSpendProfileLabels.materials.quantity)}
+          >
+            <NumberInput inputWidth="one-third" {...register("quantityOfMaterialItems")} disabled={isFetching} />
+          </Field>
+
+          <Field
+            error={validationErrors.costPerItem}
+            label={getContent(x => x.pcrSpendProfileLabels.materials.costPerItem)}
+            id="costPerItem"
+          >
+            <NumberInput inputWidth="one-third" {...register("costPerItem")} disabled={isFetching} />
+          </Field>
+        </Fieldset>
+
+        {isClient && (
+          <Section>
+            <H3>{getContent(x => x.pcrSpendProfileLabels.materials.totalCost)}</H3>
+            <P>
+              <Currency value={totalCost} />
+            </P>
+          </Section>
+        )}
+
+        <Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name }))}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
+  );
+};

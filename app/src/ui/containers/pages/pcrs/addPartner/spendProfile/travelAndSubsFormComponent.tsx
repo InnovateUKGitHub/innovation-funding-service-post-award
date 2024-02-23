@@ -1,92 +1,153 @@
-import { PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRTravelAndSubsCostDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
+import { PCRSpendProfileCostDto, PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { useContext } from "react";
+import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { useForm } from "react-hook-form";
+import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } from "./spendProfile.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { isObject } from "lodash";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 
-const Form = createTypedForm<PCRSpendProfileTravelAndSubsCostDto>();
+const isTravelAndSubsCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileTravelAndSubsCostDto {
+  return isObject(cost) && ["id", "description", "numberOfTimes", "costOfEach"].every(x => x in cost);
+};
 
-export const TravelAndSubsFormComponent = ({
-  onSave,
-  onChange,
-  editor,
-  validator,
-  data,
-  costCategory,
-}: SpendProfileCostFormProps<PCRSpendProfileTravelAndSubsCostDto, PCRTravelAndSubsCostDtoValidator>) => {
+export const TravelAndSubsFormComponent = () => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    addNewItem,
+  } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  const handleOnChange = (dto: PCRSpendProfileTravelAndSubsCostDto) => {
-    const newValue = dto.numberOfTimes && dto.costOfEach ? dto.numberOfTimes * dto.costOfEach : 0;
+  let defaultCost: PCRSpendProfileTravelAndSubsCostDto;
 
-    dto.value = newValue;
+  if (addNewItem) {
+    defaultCost = {
+      id: null as unknown as PcrId,
+      description: null,
+      numberOfTimes: null,
+      costOfEach: null,
+      value: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+    };
+  } else if (isTravelAndSubsCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
+  }
 
-    onChange(editor.data);
-  };
+  const { handleSubmit, watch, formState, register } = useForm<TravelAndASubsistenceSchema>({
+    defaultValues: {
+      id: defaultCost.id,
+      descriptionOfCost: defaultCost.description ?? "",
+      numberOfTimes: defaultCost.numberOfTimes ?? undefined,
+      costOfEach: String(defaultCost.costOfEach ?? ""),
+    },
+    resolver: zodResolver(travelAndASubsistenceSchema, {
+      errorMap,
+    }),
+  });
+
+  const { getContent } = useContent();
+
+  const totalCost = Number(watch("numberOfTimes") ?? 0) * Number(watch("costOfEach") ?? 0);
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<TravelAndASubsistenceSchema>;
 
   return (
-    <Form.Form
-      qa="addPartnerForm"
-      data={data}
-      isSaving={editor.status === EditorStatus.Saving}
-      onSubmit={() => onSave(editor.data)}
-      onChange={handleOnChange}
-    >
-      <Form.Fieldset qa="travel-and-subs-costs">
-        <Form.Hidden name="id" value={dto => dto.id} />
-
-        <Form.String
-          label={x => x.pcrSpendProfileLabels.travelAndSubs.description}
-          width="one-half"
-          name="description"
-          value={dto => dto.description}
-          update={(x, val) => (x.description = val)}
-          validation={validator && validator.description}
-        />
-
-        <Form.Numeric
-          label={x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes}
-          name="numberOfTimes"
-          width="one-third"
-          value={dto => dto.numberOfTimes}
-          update={(dto, val) => (dto.numberOfTimes = val)}
-          validation={validator && validator.numberOfTimes}
-        />
-
-        <Form.Numeric
-          label={x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach}
-          name="costOfEach"
-          width="one-third"
-          value={dto => dto.costOfEach}
-          update={(dto, val) => (dto.costOfEach = val)}
-          validation={validator && validator.costOfEach}
-        />
-        {isClient && (
-          <Form.Custom
-            label={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
-            labelBold
-            name="totalCost"
-            value={({ formData }) => (
-              <SimpleString>
-                <Currency value={formData.value} />
-              </SimpleString>
-            )}
-            update={() => null}
-          />
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  id: data.id ?? ("" as PcrId),
+                  description: data.descriptionOfCost,
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  numberOfTimes: Number(data.numberOfTimes),
+                  costOfEach: Number(data.costOfEach),
+                  value: totalCost,
+                }),
+              },
+            },
+            context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
+          }),
         )}
-      </Form.Fieldset>
+      >
+        <Fieldset data-qa="travel-and-subs-costs">
+          <input type="hidden" name="id" value={cost?.id} />
+          <Field
+            error={validationErrors.descriptionOfCost}
+            id="descriptionOfCost"
+            label={getContent(x => x.pcrSpendProfileLabels.travelAndSubs.description)}
+          >
+            <TextInput
+              inputWidth="one-third"
+              id="description"
+              {...register("descriptionOfCost")}
+              disabled={isFetching}
+            />
+          </Field>
 
-      <Form.Fieldset qa="save">
-        <Form.Submit>
-          <Content
-            value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
-          />
-        </Form.Submit>
-      </Form.Fieldset>
-    </Form.Form>
+          <Field
+            error={validationErrors.numberOfTimes}
+            id="numberOfTimes"
+            label={getContent(x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes)}
+          >
+            <NumberInput inputWidth="one-third" {...register("numberOfTimes")} disabled={isFetching} />
+          </Field>
+
+          <Field
+            error={validationErrors.costOfEach}
+            id="costOfEach"
+            label={getContent(x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach)}
+          >
+            <NumberInput inputWidth="one-third" {...register("costOfEach")} disabled={isFetching} />
+          </Field>
+        </Fieldset>
+
+        {isClient && (
+          <Section>
+            <H3>{getContent(x => x.pcrSpendProfileLabels.travelAndSubs.totalCost)}</H3>
+            <P>
+              <Currency value={totalCost} />
+            </P>
+          </Section>
+        )}
+
+        <Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name }))}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
   );
 };

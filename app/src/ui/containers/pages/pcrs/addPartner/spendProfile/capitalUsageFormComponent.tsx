@@ -1,150 +1,216 @@
-import React from "react";
-import { PCRSpendProfileCapitalUsageCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRCapitalUsageCostDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
-import { roundCurrency } from "@framework/util/numberHelper";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
+import { useContext, useMemo } from "react";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { appendOrMerge, SpendProfileContext } from "./spendProfileCosts.logic";
+import { useForm } from "react-hook-form";
+import { CapitalUsageSchema, capitalUsageSchema, errorMap } from "./spendProfile.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { MountedHoc } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useStores } from "@ui/redux/storesProvider";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
-import { Option } from "@framework/dtos/option";
-import { Loader } from "@ui/components/bjss/loading";
+import { PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { isObject } from "lodash";
+import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-interface InnerProps {
-  types: Option<PCRSpendProfileCapitalUsageType>[];
-}
-
-const Form = createTypedForm<PCRSpendProfileCapitalUsageCostDto>();
-
-class Component extends React.Component<
-  SpendProfileCostFormProps<PCRSpendProfileCapitalUsageCostDto, PCRCapitalUsageCostDtoValidator> & InnerProps
-> {
-  render() {
-    const { editor, validator, data, costCategory } = this.props;
-    const typeOptions = this.getOptions(this.props.data.type, this.props.types);
-
-    return (
-      <MountedHoc>
-        {({ isClient }) => (
-          <Form.Form
-            qa="addPartnerForm"
-            data={data}
-            isSaving={editor.status === EditorStatus.Saving}
-            onSubmit={() => this.props.onSave(editor.data)}
-            onChange={dto => this.onChange(dto)}
-          >
-            <Form.Fieldset qa="capital-usage-costs">
-              <Form.Hidden name="id" value={dto => dto.id} />
-              <Form.MultilineString
-                label={x => x.pcrSpendProfileLabels.capitalUsage.description}
-                name="description"
-                value={dto => dto.description}
-                update={(x, val) => (x.description = val)}
-                validation={validator && validator.description}
-              />
-              <Form.Radio
-                label={x => x.pcrSpendProfileLabels.capitalUsage.type}
-                name="type"
-                options={typeOptions.options}
-                inline={false}
-                value={() => typeOptions.selected}
-                update={(x, option) => {
-                  if (!option) return (x.type = PCRSpendProfileCapitalUsageType.Unknown);
-                  x.type = parseInt(option.id, 10);
-                }}
-                validation={this.props.validator.type}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.capitalUsage.depreciationPeriod}
-                name="depreciationPeriod"
-                width={"one-third"}
-                value={dto => dto.depreciationPeriod}
-                update={(dto, val) => (dto.depreciationPeriod = val)}
-                validation={validator && validator.depreciationPeriod}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.capitalUsage.netPresentValue}
-                hint={x => x.pcrSpendProfileLabels.capitalUsage.netPresentValueHint}
-                name="netPresentValue"
-                width={"one-third"}
-                value={dto => dto.netPresentValue}
-                update={(dto, val) => (dto.netPresentValue = val)}
-                validation={validator && validator.netPresentValue}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.capitalUsage.residualValue}
-                name="residualValue"
-                width={"one-third"}
-                value={dto => dto.residualValue}
-                update={(dto, val) => (dto.residualValue = val)}
-                validation={validator && validator.residualValue}
-              />
-              <Form.Numeric
-                label={x => x.pcrSpendProfileLabels.capitalUsage.utilisation}
-                name="utilisation"
-                width={"one-third"}
-                value={dto => dto.utilisation}
-                update={(dto, val) => (dto.utilisation = val)}
-                validation={validator && validator.utilisation}
-              />
-              {isClient && (
-                <Form.Custom
-                  label={x => x.pcrSpendProfileLabels.capitalUsage.netCost}
-                  labelBold
-                  name="netCost"
-                  value={({ formData }) => (
-                    <SimpleString>
-                      <Currency value={formData.value} />
-                    </SimpleString>
-                  )}
-                />
-              )}
-            </Form.Fieldset>
-            <Form.Fieldset qa="save">
-              <Form.Submit>
-                <Content
-                  value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
-                />
-              </Form.Submit>
-            </Form.Fieldset>
-          </Form.Form>
-        )}
-      </MountedHoc>
-    );
-  }
-
-  private getOptions<T extends number>(selected: T, options: Option<T>[]) {
-    const filteredOptions: SelectOption[] = options
-      .filter(x => x.active)
-      .map(x => ({ id: x.value.toString(), value: x.label }));
-
-    const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
-
-    return { options: filteredOptions, selected: selectedOption };
-  }
-
-  private onChange(dto: PCRSpendProfileCapitalUsageCostDto) {
-    dto.value =
-      dto.utilisation && dto.netPresentValue && dto.residualValue
-        ? roundCurrency((dto.utilisation / 100) * (dto.netPresentValue - dto.residualValue))
-        : 0;
-    this.props.onChange(this.props.editor.data);
-  }
-}
-
-export const CapitalUsageFormComponent = (
-  props: SpendProfileCostFormProps<PCRSpendProfileCapitalUsageCostDto, PCRCapitalUsageCostDtoValidator>,
-) => {
-  const stores = useStores();
-
+const isCapitalUsageCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileCapitalUsageCostDto {
   return (
-    <Loader
-      pending={stores.projectChangeRequests.getPcrSpendProfileCapitalUsageType()}
-      render={x => <Component types={x} {...props} />}
-    />
+    isObject(cost) &&
+    ["id", "description", "depreciationPeriod", "netPresentValue", "residualValue", "utilisation"].every(x => x in cost)
+  );
+};
+
+export const CapitalUsageFormComponent = () => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    addNewItem,
+  } = useContext(SpendProfileContext);
+  const { isClient } = useMounted();
+
+  let defaultCost: PCRSpendProfileCapitalUsageCostDto;
+
+  if (addNewItem) {
+    defaultCost = {
+      id: null as unknown as PcrId,
+      description: null,
+      depreciationPeriod: null,
+      netPresentValue: null,
+      residualValue: null,
+      utilisation: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+      type: PCRSpendProfileCapitalUsageType.Unknown,
+      typeLabel: "",
+      value: null,
+    };
+  } else if (isCapitalUsageCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
+  }
+
+  const { handleSubmit, watch, formState, register } = useForm<CapitalUsageSchema>({
+    defaultValues: {
+      id: defaultCost.id,
+      capitalUsageDescription: defaultCost.description ?? "",
+      depreciationPeriod: defaultCost.depreciationPeriod ?? undefined,
+      netPresentValue: String(defaultCost.netPresentValue ?? ""),
+      residualValue: String(defaultCost.residualValue ?? ""),
+      utilisation: defaultCost.utilisation ?? undefined,
+      itemType: defaultCost.type ?? PCRSpendProfileCapitalUsageType.Unknown,
+    },
+    resolver: zodResolver(capitalUsageSchema, {
+      errorMap,
+    }),
+  });
+
+  const { getContent } = useContent();
+
+  const typeOptions = useMemo(
+    () => [
+      {
+        id: "type_10",
+        value: 10,
+        label: getContent(x => x.pcrSpendProfileLabels.capitalUsage.new),
+      },
+      {
+        id: "type_20",
+        value: 20,
+        label: getContent(x => x.pcrSpendProfileLabels.capitalUsage.existing),
+      },
+    ],
+    [getContent],
+  );
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<CapitalUsageSchema>;
+
+  const values = watch();
+
+  const netCost = (Number(values.netPresentValue) - Number(values.residualValue)) * (Number(values.utilisation) / 100);
+  return (
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  description: data.capitalUsageDescription,
+                  type: Number(data.itemType),
+                  id: data.id ?? ("" as PcrId),
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  depreciationPeriod: Number(data.depreciationPeriod),
+                  netPresentValue: Number(data.netPresentValue),
+                  residualValue: Number(data.residualValue),
+                  utilisation: Number(data.utilisation),
+                  typeLabel: typeOptions.find(x => x.value === Number(data.itemType))?.label ?? "",
+                  value: netCost,
+                }),
+              },
+            },
+            context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
+          }),
+        )}
+      >
+        <Fieldset data-qa="capital-usage-costs">
+          <input type="hidden" name="id" value={cost?.id} />
+
+          <FormGroup>
+            <TextAreaField
+              {...register("capitalUsageDescription")}
+              error={validationErrors?.capitalUsageDescription}
+              id="capitalUsageDescription"
+              label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.description)}
+              disabled={isFetching}
+              characterCount={watch("capitalUsageDescription")?.length ?? 0}
+              characterCountType="ascending"
+            />
+          </FormGroup>
+
+          <FormGroup hasError={!!validationErrors.itemType}>
+            <Legend>{getContent(x => x.pcrSpendProfileLabels.capitalUsage.type)}</Legend>
+            <ValidationError error={validationErrors.itemType} />
+            <RadioList register={register} name="itemType">
+              {typeOptions.map(x => (
+                <Radio label={x.label} key={x.id} id={x.id} value={x.value} disabled={isFetching} />
+              ))}
+            </RadioList>
+          </FormGroup>
+
+          <Field
+            error={validationErrors.depreciationPeriod}
+            id="depreciationPeriod"
+            label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.depreciationPeriod)}
+          >
+            <NumberInput inputWidth="one-quarter" {...register("depreciationPeriod")} disabled={isFetching} />
+          </Field>
+
+          <Field
+            hint={getContent(x => x.pcrSpendProfileLabels.capitalUsage.netPresentValueHint)}
+            error={validationErrors.netPresentValue}
+            id="netPresentValue"
+            label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.netPresentValue)}
+          >
+            <NumberInput inputWidth="one-quarter" {...register("netPresentValue")} disabled={isFetching} />
+          </Field>
+
+          <Field
+            error={validationErrors.residualValue}
+            id="residualValue"
+            label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.residualValue)}
+          >
+            <NumberInput inputWidth="one-quarter" {...register("residualValue")} disabled={isFetching} />
+          </Field>
+
+          <Field
+            error={validationErrors.utilisation}
+            id="utilisation"
+            label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.utilisation)}
+          >
+            <NumberInput inputWidth="one-quarter" {...register("utilisation")} disabled={isFetching} />
+          </Field>
+        </Fieldset>
+
+        {isClient && (
+          <Section>
+            <H3>{getContent(x => x.pcrSpendProfileLabels.capitalUsage.netCost)}</H3>
+            <P>
+              <Currency value={netCost} />
+            </P>
+          </Section>
+        )}
+
+        <Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name }))}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
   );
 };

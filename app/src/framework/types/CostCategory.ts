@@ -377,8 +377,8 @@ class CostCategoryList {
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    * @returns A cost category.
    */
-  fromName(name?: string) {
-    const category = this.costCategories.find(costCategory => costCategory.name === name);
+  fromName(name: string) {
+    const category = this.costCategories.find(costCategory => costCategory.name.toUpperCase() === name.toUpperCase());
     if (category) return category;
     return this.unknownCostCategory;
   }
