@@ -12,7 +12,7 @@ const pcrAddPartnerCompaniesHouseStepErrorMap = makeZodI18nMap({ keyPrefix: ["pc
 
 const pcrAddPartnerCompaniesHouseStepSearchSchema = z.object({
   step: z.number(),
-  search: z.string().max(pcrAddPartnerCompaniesHouseStepSearchMaxLength),
+  search: z.string().max(pcrAddPartnerCompaniesHouseStepSearchMaxLength).optional(),
 });
 
 const pcrAddPartnerCompaniesHouseStepSearchSelectSchema = z.object({
