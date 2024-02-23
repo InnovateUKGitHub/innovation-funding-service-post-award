@@ -22,7 +22,9 @@ export const mergePcrData = <T extends Pick<PCRDto, "id"> & { items?: Pick<PCRIt
       }
 
       // If we have seen the ID before, merge it in.
-      const existingItem = items.find(x => x.id === item.id);
+      const existingItem = items.find(
+        x => typeof x.id !== "undefined" && typeof item.id !== "undefined" && x.id === item.id,
+      );
       if (existingItem) {
         Object.assign(existingItem, item);
       }

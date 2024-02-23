@@ -308,7 +308,9 @@ export class ProjectChangeRequestRepository
 
   async getById(projectId: ProjectId, id: string): Promise<ProjectChangeRequestEntity> {
     const data = await super.where(
-      `Acc_Project__c='${sss(projectId)}' AND (Id = '${sss(id)}' OR Acc_RequestHeader__c = '${sss(id)}')`,
+      `Id = '${sss(id)}' AND (Acc_Project__c='${sss(projectId)}' OR Acc_RequestHeader__r.Acc_Project__c='${sss(
+        projectId,
+      )}')`,
     );
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
