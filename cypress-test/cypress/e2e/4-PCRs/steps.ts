@@ -70,7 +70,9 @@ export const statusAndCommentsAccordion = () => {
 export const createRequestButton = () => {
   cy.get("a.govuk-link.govuk-button").click();
 };
-
+/**
+ * UNCOMMENT IN 10795 ONCE SUBCONTRACTOR IS READY FOR DEV.
+ */
 export const pcrCheckboxesWithHint = () => {
   [
     ["Reallocate project costs", "This allows you to move costs from one category to another."],
@@ -85,7 +87,7 @@ export const pcrCheckboxesWithHint = () => {
       "Change a partner's name",
       "Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.",
     ],
-    ["Approve a new subcontractor", "If you are requesting a change in subcontractor, please select this option."],
+    //["Approve a new subcontractor", "If you are requesting a change in subcontractor, please select this option."],
     [
       "Put project on hold",
       "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
@@ -96,6 +98,9 @@ export const pcrCheckboxesWithHint = () => {
   });
 };
 
+/**
+ * UNCOMMENT IN 10795 ONCE SUBCONTRACTOR IS READY FOR DEV.
+ */
 export const pcrCheckBoxes = () => {
   /**
    * Check each check box can be selected
@@ -106,8 +111,8 @@ export const pcrCheckBoxes = () => {
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Add a partner");
   cy.wait(500);
-  cy.clickCheckBox<PcrType>("Approve a new subcontractor");
-  cy.wait(500);
+  //cy.clickCheckBox<PcrType>("Approve a new subcontractor");
+  //cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project scope");
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project duration");
@@ -125,8 +130,8 @@ export const pcrCheckBoxes = () => {
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Add a partner", true);
   cy.wait(500);
-  cy.clickCheckBox<PcrType>("Approve a new subcontractor", true);
-  cy.wait(500);
+  // cy.clickCheckBox<PcrType>("Approve a new subcontractor", true);
+  //cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project scope", true);
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project duration", true);
@@ -1432,6 +1437,9 @@ export const validatePcrDurationPage = () => {
   cy.reload();
 };
 
+/**
+ * UNCOMMENT IN 10795 ONCE SUBCONTRACTOR IS READY FOR DEV.
+ */
 export const PcrItemType = {
   ReallocateProjectCosts: "Reallocate project costs",
   RemoveAPartner: "Remove a partner",
@@ -1439,7 +1447,7 @@ export const PcrItemType = {
   ChangeProjectScope: "Change project scope",
   ChangeProjectDuration: "Change project duration",
   ChangeAPartnerName: "Change a partner's name",
-  ApproveANewSubcontractor: "Approve a new subcontractor",
+  // ApproveANewSubcontractor: "Approve a new subcontractor",
   PutAProjectOnHold: "Put project on hold",
 };
 
