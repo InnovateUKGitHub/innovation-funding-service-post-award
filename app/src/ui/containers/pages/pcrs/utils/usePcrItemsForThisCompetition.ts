@@ -24,8 +24,8 @@ const usePcrItemsForThisCompetition = (
     .filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated))
     .filter(
       x =>
-        x.type !== PCRItemType.ApproveNewSubcontrator ||
-        (x.type === PCRItemType.ApproveNewSubcontrator && features.approveNewSubcontractor),
+        x.type !== PCRItemType.ApproveNewSubcontractor ||
+        (x.type === PCRItemType.ApproveNewSubcontractor && features.approveNewSubcontractor),
     );
 
   const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
