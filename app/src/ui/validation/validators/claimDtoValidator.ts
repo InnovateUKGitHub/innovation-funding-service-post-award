@@ -96,7 +96,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
    * Run both PCF and IAR (KTP: Schedule 3) validation
    *
    * YOU MUST update the Confluence document before editing the code.
-   * https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+   * @see {@link https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation}
    */
   private getPcfIarValidation(): Result {
     return Validation.all(

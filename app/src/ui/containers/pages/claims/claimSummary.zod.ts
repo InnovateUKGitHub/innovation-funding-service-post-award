@@ -14,7 +14,7 @@ export const claimSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["claimSummary"]
  * Run both PCF and IAR (KTP: Schedule 3) validation
  *
  * YOU MUST update the Confluence document before editing the code.
- * https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+ * @see {@link https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation}
  *
  * Differences here:
  * 1. Draft/Queried validation is not ran here since it is assumed being on the

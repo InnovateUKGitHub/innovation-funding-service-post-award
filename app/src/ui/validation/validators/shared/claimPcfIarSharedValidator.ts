@@ -56,7 +56,7 @@ const map = ({ claim, project, documents, submit }: ClaimPcfIarValidatorProps) =
  * Run PCF validation
  *
  * YOU MUST update the Confluence document before editing the code.
- * https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+ * @see {@link https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation}
  */
 const pcfValidation = (props: ClaimPcfIarValidatorProps) => {
   const {
@@ -88,7 +88,7 @@ const pcfValidation = (props: ClaimPcfIarValidatorProps) => {
  * Run IAR (KTP: Schedule 3) validation
  *
  * YOU MUST update the Confluence document before editing the code.
- * https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation
+ * @see {@link https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation}
  */
 const iarValidation = (props: ClaimPcfIarValidatorProps) => {
   const {
