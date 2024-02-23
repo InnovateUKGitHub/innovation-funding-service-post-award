@@ -11,9 +11,7 @@ describe("Project setup > Manual > general", () => {
 
   it("Should have a 'Project setup' page heading with guidance text", () => {
     cy.heading("Project setup");
-    cy.paragraph(
-      "You need to give us some information so that we can complete project setup. Innovate UK will send you an email when you are able to view your project and begin making claims.",
-    );
+    cy.paragraph("We will need some information before we can complete project setup.");
   });
 
   it("Should have a back option", () => {

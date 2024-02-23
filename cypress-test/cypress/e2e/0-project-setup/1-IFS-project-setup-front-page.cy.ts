@@ -11,9 +11,7 @@ describe("Project setup > IFS > general", () => {
 
   it("Should have a 'Project setup' page heading with guidance text", () => {
     cy.heading("Project setup");
-    cy.paragraph(
-      "You need to give us some information so that we can complete project setup. You will then be able to view your project and begin making claims.",
-    );
+    cy.paragraph("We will need some information before we can complete project setup.");
   });
 
   it("Should have a back option", () => {
