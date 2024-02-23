@@ -291,6 +291,7 @@ export const allowedPcrLevelDocuments = [
   DocumentDescription.AgreementToPCR,
   DocumentDescription.DeMinimisDeclarationForm,
   DocumentDescription.PcrEvidence,
+  DocumentDescription.OverheadCalculationSpreadsheet,
 ];
 
 export { getDocumentDescriptionContentSelector };

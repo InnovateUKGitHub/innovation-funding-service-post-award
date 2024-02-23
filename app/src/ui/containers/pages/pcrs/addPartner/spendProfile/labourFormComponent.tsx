@@ -1,104 +1,166 @@
-import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRLabourCostDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { useContent } from "@ui/hooks/content.hook";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
+import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { isObject } from "lodash";
 
-const Form = createTypedForm<PCRSpendProfileLabourCostDto>();
+const isLabourCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileLabourCostDto {
+  return (
+    isObject(cost) && ["id", "description", "grossCostOfRole", "ratePerDay", "daysSpentOnProject"].every(x => x in cost)
+  );
+};
 
-export const LabourFormComponent = ({
-  onSave,
-  onChange,
-  editor,
-  validator,
-  data,
-  costCategory,
-}: SpendProfileCostFormProps<PCRSpendProfileLabourCostDto, PCRLabourCostDtoValidator>) => {
+export const LabourFormComponent = () => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    addNewItem,
+  } = useContext(SpendProfileContext);
+
+  let defaultCost: PCRSpendProfileLabourCostDto;
+
+  if (addNewItem) {
+    defaultCost = {
+      id: null as unknown as PcrId,
+      description: null,
+      grossCostOfRole: null,
+      ratePerDay: null,
+      daysSpentOnProject: null,
+      value: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+    };
+  } else if (isLabourCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
+  }
+
   const { isClient } = useMounted();
 
-  const handleOnChange = (dto: PCRSpendProfileLabourCostDto) => {
-    const newValue = dto.daysSpentOnProject && dto.ratePerDay ? dto.daysSpentOnProject * dto.ratePerDay : 0;
+  const { handleSubmit, watch, formState, register } = useForm<LabourSchema>({
+    defaultValues: {
+      id: defaultCost.id,
+      descriptionOfRole: defaultCost.description ?? "",
+      grossCostOfRole: String(defaultCost.grossCostOfRole ?? ""),
+      ratePerDay: String(defaultCost.ratePerDay ?? ""),
+      daysSpentOnProject: defaultCost.daysSpentOnProject ?? undefined,
+    },
+    resolver: zodResolver(labourSchema, {
+      errorMap,
+    }),
+  });
 
-    dto.value = newValue;
+  const { getContent } = useContent();
 
-    onChange(editor.data);
-  };
+  const totalCost = Number(watch("ratePerDay") ?? 0) * (watch("daysSpentOnProject") ?? 0);
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<LabourSchema>;
 
   return (
-    <Form.Form
-      qa="addPartnerForm"
-      data={data}
-      isSaving={editor.status === EditorStatus.Saving}
-      onSubmit={() => onSave(editor.data)}
-      onChange={handleOnChange}
-    >
-      <Form.Fieldset qa="labour-costs">
-        <Form.Hidden name="id" value={dto => dto.id} />
-
-        <Form.String
-          label={x => x.pcrSpendProfileLabels.labour.role}
-          width="one-third"
-          name="description"
-          value={dto => dto.description}
-          update={(x, val) => (x.description = val)}
-          validation={validator?.description}
-        />
-
-        <Form.Numeric
-          label={x => x.pcrSpendProfileLabels.labour.grossCost}
-          name="grossCostOfRole"
-          width="one-third"
-          value={dto => dto.grossCostOfRole}
-          update={(dto, val) => (dto.grossCostOfRole = val)}
-          validation={validator?.grossCostOfRole}
-        />
-
-        <Form.Numeric
-          label={x => x.pcrSpendProfileLabels.labour.rate}
-          hint={x => x.pcrSpendProfileLabels.labour.rateHint}
-          name="ratePerDay"
-          width="one-third"
-          value={dto => dto.ratePerDay}
-          update={(dto, val) => (dto.ratePerDay = val)}
-          validation={validator?.ratePerDay}
-        />
-
-        <Form.Numeric
-          label={x => x.pcrSpendProfileLabels.labour.daysSpentOnProject}
-          name="daysSpentOnProject"
-          width="one-third"
-          value={dto => dto.daysSpentOnProject}
-          update={(dto, val) => (dto.daysSpentOnProject = val)}
-          validation={validator?.daysSpentOnProject}
-        />
-
-        {isClient && (
-          <Form.Custom
-            label={x => x.pcrSpendProfileLabels.labour.totalCost}
-            hint={x => x.pcrSpendProfileLabels.labour.totalCostHint}
-            labelBold
-            name="totalCost"
-            value={({ formData }) => (
-              <SimpleString>
-                <Currency value={formData.value} />
-              </SimpleString>
-            )}
-            update={() => null}
-          />
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        data-qa="addPartnerForm"
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  description: data.descriptionOfRole,
+                  id: data.id ?? ("" as PcrId),
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  grossCostOfRole: Number(data.grossCostOfRole),
+                  ratePerDay: Number(data.ratePerDay),
+                  daysSpentOnProject: Number(data.daysSpentOnProject),
+                  value: totalCost,
+                }),
+              },
+            },
+            context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
+          }),
         )}
-      </Form.Fieldset>
+      >
+        <Fieldset data-qa="labour-costs">
+          <input type="hidden" name="id" value={cost?.id} />
 
-      <Form.Fieldset qa="save">
-        <Form.Submit>
-          <Content
-            value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
-          />
-        </Form.Submit>
-      </Form.Fieldset>
-    </Form.Form>
+          <Field
+            error={validationErrors?.descriptionOfRole}
+            label={getContent(x => x.pcrSpendProfileLabels.labour.role)}
+            id="descriptionOfRole"
+          >
+            <TextInput disabled={isFetching} inputWidth="one-third" {...register("descriptionOfRole")} />
+          </Field>
+
+          <Field
+            error={validationErrors?.grossCostOfRole}
+            label={getContent(x => x.pcrSpendProfileLabels.labour.grossCost)}
+            id="grossCostOfRole"
+          >
+            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("grossCostOfRole")} />
+          </Field>
+
+          <Field
+            error={validationErrors?.ratePerDay}
+            label={getContent(x => x.pcrSpendProfileLabels.labour.rate)}
+            id="ratePerDay"
+            hint={getContent(x => x.pcrSpendProfileLabels.labour.rateHint)}
+          >
+            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("ratePerDay")} />
+          </Field>
+
+          <Field
+            error={validationErrors?.daysSpentOnProject}
+            label={getContent(x => x.pcrSpendProfileLabels.labour.daysSpentOnProject)}
+            id="daysSpentOnProject"
+          >
+            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("daysSpentOnProject")} />
+          </Field>
+
+          {isClient && (
+            <>
+              <H3>{getContent(x => x.pcrSpendProfileLabels.labour.totalCost)}</H3>
+              <Hint id="hint-for-total-cost">{getContent(x => x.pcrSpendProfileLabels.labour.totalCostHint)}</Hint>
+              <P>
+                <Currency id="total-cost" value={totalCost} />
+              </P>
+            </>
+          )}
+        </Fieldset>
+
+        <Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name }))}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
   );
 };

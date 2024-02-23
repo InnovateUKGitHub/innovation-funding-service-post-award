@@ -100,6 +100,15 @@ const currencyValidation = z
       });
     }
 
+    if (/\.\d\d\d/.test(val)) {
+      return ctx.addIssue({
+        code: ZodIssueCode.custom,
+        params: {
+          i18n: "errors.two_decimal_places",
+        },
+      });
+    }
+
     if (!validCurrencyRegex.test(val)) {
       return ctx.addIssue({
         code: ZodIssueCode.invalid_string,
@@ -233,6 +242,9 @@ const integerInput = z.union([
     if (!Number.isInteger(x1)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
+        params: {
+          i18n: "not_integer",
+        },
       });
     }
 
@@ -240,9 +252,9 @@ const integerInput = z.union([
   }),
 ]);
 
-const positiveIntegerInput = ({ lt }: { lt?: number }) =>
+const positiveIntegerInput = ({ lt, min = 0 }: { lt?: number; min?: number }) =>
   z.union([
-    z.number().int().min(0),
+    z.number().int().min(min),
     z.string().transform((x, ctx) => {
       if (x === "") return null;
       const x1 = Number(x);
@@ -253,8 +265,8 @@ const positiveIntegerInput = ({ lt }: { lt?: number }) =>
           expected: "number",
           received: "string",
         });
-      } else if (x1 < 0) {
-        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 0, inclusive: true, type: "number" });
+      } else if (x1 < min) {
+        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: min, inclusive: true, type: "number" });
       } else if (!Number.isInteger(x1)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -264,6 +276,48 @@ const positiveIntegerInput = ({ lt }: { lt?: number }) =>
           code: z.ZodIssueCode.too_big,
           inclusive: false,
           maximum: lt,
+          type: "number",
+        });
+      }
+
+      return x1;
+    }),
+  ]);
+
+const requiredPositiveIntegerInput = ({ max = 1000000000, min = 0 }: { max?: number; min?: number }) =>
+  z.union([
+    z.number().int().min(min).max(max),
+    z.string().transform((x, ctx) => {
+      if (x === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          params: {
+            i18n: "errors.required",
+          },
+        });
+      }
+      const x1 = Number(x);
+
+      if (isNaN(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_type,
+          expected: "number",
+          received: "string",
+        });
+      } else if (x1 < min) {
+        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: min, inclusive: true, type: "number" });
+      } else if (!Number.isInteger(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          params: {
+            i18n: "errors.not_integer",
+          },
+        });
+      } else if (typeof max === "number" && x1 > max) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          inclusive: true,
+          maximum: max,
           type: "number",
         });
       }
@@ -300,19 +354,85 @@ const positiveNumberInput = z.union([
   }),
 ]);
 
-const percentageNumberInput = ({ max = 0, min = 100 }: { max: number; min: number } = { max: 100, min: 0 }) =>
+const requiredPositiveNumberInput = ({ max = 1000000000 }: { max?: number }) =>
+  z.union([
+    z.number().min(0).max(max),
+    z.string().transform((x, ctx) => {
+      if (x === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          params: {
+            i18n: "errors.required",
+          },
+        });
+      }
+      const x1 = Number(x);
+
+      if (isNaN(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.invalid_type,
+          expected: "number",
+          received: "string",
+        });
+      }
+      if (x1 < 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_small,
+          minimum: 0,
+          inclusive: true,
+          type: "number",
+        });
+      } else if (x1 > max) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          maximum: max,
+          inclusive: true,
+          type: "number",
+        });
+      }
+
+      return x1;
+    }),
+  ]);
+
+const percentageNumberInput = (
+  { max = 0, min = 100, required }: { max: number; min: number; required?: boolean } = {
+    max: 100,
+    min: 0,
+    required: false,
+  },
+) =>
   z.union([
     z.number().min(min).max(max),
     z.string().transform((x, ctx) => {
-      if (x === "") return null;
+      if (x === "") {
+        if (required) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            params: {
+              i18n: "errors.required",
+            },
+          });
+        } else {
+          return null;
+        }
+      }
+
+      if (/\.\d\d\d/.test(x)) {
+        ctx.addIssue({
+          code: ZodIssueCode.custom,
+          params: {
+            i18n: "errors.two_decimal_places",
+          },
+        });
+      }
 
       const x1 = Number(x.replace(/%$/, ""));
       if (Number.isNaN(x1)) {
         ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: min,
-          inclusive: true,
-          type: "number",
+          code: z.ZodIssueCode.invalid_type,
+          expected: "number",
+          received: "string",
         });
       } else if (x1 < min) {
         ctx.addIssue({
@@ -385,6 +505,8 @@ export {
   percentageNumberInput,
   positiveNumberInput,
   positiveIntegerInput,
+  requiredPositiveNumberInput,
+  requiredPositiveIntegerInput,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,

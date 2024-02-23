@@ -1,7 +1,7 @@
 import { graphql } from "react-relay";
 
-export const addPartnerWorkflowQuery = graphql`
-  query AddPartnerWorkflowQuery($projectId: ID!, $pcrItemId: ID!) {
+export const spendProfileCostsQuery = graphql`
+  query SpendProfileCostsQuery($projectId: ID!, $pcrItemId: ID!) {
     salesforce {
       uiapi {
         query {
@@ -19,31 +19,6 @@ export const addPartnerWorkflowQuery = graphql`
                   value
                 }
                 Acc_CompetitionType__c {
-                  value
-                }
-              }
-            }
-          }
-          Acc_ProjectParticipant__c(
-            where: { Acc_ProjectId__c: { eq: $projectId } }
-            orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
-            first: 2000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_AccountId__r {
-                  Name {
-                    value
-                  }
-                }
-                Acc_OrganisationType__c {
-                  value
-                }
-                Acc_ParticipantStatus__c {
-                  value
-                }
-                Acc_ProjectRole__c {
                   value
                 }
               }
@@ -136,40 +111,7 @@ export const addPartnerWorkflowQuery = graphql`
             edges {
               node {
                 Id
-                Acc_AwardRate__c {
-                  value
-                }
                 Acc_CommercialWork__c {
-                  value
-                }
-                Acc_Contact1EmailAddress__c {
-                  value
-                }
-                Acc_Contact1Forename__c {
-                  value
-                }
-                Acc_Contact1Surname__c {
-                  value
-                }
-                Acc_Contact1Phone__c {
-                  value
-                }
-                Acc_Contact2EmailAddress__c {
-                  value
-                }
-                Acc_Contact2Forename__c {
-                  value
-                }
-                Acc_Contact2Surname__c {
-                  value
-                }
-                Acc_Contact2Phone__c {
-                  value
-                }
-                Acc_Employees__c {
-                  value
-                }
-                Acc_Location__c {
                   value
                 }
                 Acc_MarkedasComplete__c {
@@ -181,37 +123,13 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_OtherFunding__c {
                   value
                 }
-                Acc_ParticipantSize__c {
-                  value
-                }
                 Acc_ParticipantType__c {
                   value
                 }
                 Acc_ProjectRole__c {
                   value
                 }
-                Acc_ProjectPostcode__c {
-                  value
-                }
-                Acc_ProjectCity__c {
-                  value
-                }
-                Acc_RegisteredAddress__c {
-                  value
-                }
-                Acc_RegistrationNumber__c {
-                  value
-                }
                 Acc_Status__c {
-                  value
-                }
-                Acc_TSBReference__c {
-                  value
-                }
-                Acc_Turnover__c {
-                  value
-                }
-                Acc_TurnoverYearEnd__c {
                   value
                 }
                 RecordType {
@@ -282,6 +200,20 @@ export const addPartnerWorkflowQuery = graphql`
                 }
                 Acc_CompetitionType__c {
                   value
+                }
+                Acc_ProjectNumber__c {
+                  value
+                }
+                Acc_ProjectTitle__c {
+                  value
+                }
+                Acc_ProjectStatus__c {
+                  value
+                }
+                Acc_CompetitionId__r {
+                  Acc_TypeofAid__c {
+                    value
+                  }
                 }
               }
             }

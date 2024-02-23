@@ -1,53 +1,123 @@
-import { PCRSpendProfileOtherCostsDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCROtherCostsDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { Component } from "react";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { useContext } from "react";
+import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { useForm } from "react-hook-form";
+import { OtherCostsSchema, otherCostsSchema, errorMap } from "./spendProfile.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { PCRSpendProfileCostDto, PCRSpendProfileOtherCostsDto } from "@framework/dtos/pcrSpendProfileDto";
+import { isObject } from "lodash";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 
-const Form = createTypedForm<PCRSpendProfileOtherCostsDto>();
+const isOtherCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileOtherCostsDto {
+  return isObject(cost) && ["id", "description", "value"].every(x => x in cost);
+};
 
-export class OtherCostsFormComponent extends Component<
-  SpendProfileCostFormProps<PCRSpendProfileOtherCostsDto, PCROtherCostsDtoValidator>
-> {
-  render() {
-    const { editor, validator, data, costCategory } = this.props;
+export const OtherCostsFormComponent = () => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    addNewItem,
+  } = useContext(SpendProfileContext);
 
-    return (
-      <Form.Form
-        qa="addPartnerForm"
-        data={data}
-        isSaving={editor.status === EditorStatus.Saving}
-        onSubmit={() => this.props.onSave(editor.data)}
-        onChange={() => this.props.onChange(editor.data)}
-      >
-        <Form.Fieldset qa="other-costs">
-          <Form.Hidden name="id" value={dto => dto.id} />
-          <Form.MultilineString
-            label={x => x.pcrSpendProfileLabels.otherCosts.description}
-            name="description"
-            value={dto => dto.description}
-            update={(x, val) => (x.description = val)}
-            validation={validator && validator.description}
-          />
-          <Form.Numeric
-            label={x => x.pcrSpendProfileLabels.otherCosts.totalCost}
-            width="one-quarter"
-            name="value"
-            value={dto => dto.value}
-            update={(dto, val) => (dto.value = val)}
-            validation={validator && validator.value}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset qa="save">
-          <Form.Submit>
-            <Content
-              value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
-            />
-          </Form.Submit>
-        </Form.Fieldset>
-      </Form.Form>
-    );
+  let defaultCost: PCRSpendProfileOtherCostsDto;
+
+  if (addNewItem) {
+    defaultCost = {
+      id: null as unknown as PcrId,
+      description: null,
+      value: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+    };
+  } else if (isOtherCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
   }
-}
+
+  const { handleSubmit, watch, formState, register } = useForm<OtherCostsSchema>({
+    defaultValues: {
+      id: defaultCost?.id,
+      descriptionOfCost: defaultCost?.description ?? "",
+      estimatedCost: String(defaultCost?.value ?? ""),
+    },
+    resolver: zodResolver(otherCostsSchema, {
+      errorMap,
+    }),
+  });
+
+  const { getContent } = useContent();
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<OtherCostsSchema>;
+
+  return (
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  id: data.id ?? ("" as PcrId),
+                  description: data.descriptionOfCost,
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  value: Number(data.estimatedCost.replace("£", "")),
+                }),
+              },
+            },
+            context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
+          }),
+        )}
+      >
+        <Fieldset data-qa="other-costs">
+          <input type="hidden" name="id" value={cost?.id} />
+          <FormGroup hasError={!!validationErrors.descriptionOfCost}>
+            <TextAreaField
+              {...register("descriptionOfCost")}
+              id="description"
+              error={validationErrors.descriptionOfCost}
+              label={getContent(x => x.pcrSpendProfileLabels.otherCosts.description)}
+              disabled={isFetching}
+              characterCount={watch("descriptionOfCost")?.length ?? 0}
+              characterCountType="ascending"
+            />
+          </FormGroup>
+
+          <Field
+            error={validationErrors.estimatedCost}
+            id="estimatedCost"
+            label={getContent(x => x.pcrSpendProfileLabels.otherCosts.totalCost)}
+          >
+            <NumberInput inputWidth="one-quarter" {...register("estimatedCost")} disabled={isFetching} />
+          </Field>
+        </Fieldset>
+
+        <Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name }))}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
+  );
+};

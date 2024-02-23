@@ -141,3 +141,7 @@ declare type RhfErrors =
  */
 declare type PickRequiredFromPartial<Dto extends AnyObject, PickList extends keyof Dto> = Partial<Dto> &
   Pick<Dto, PickList>;
+
+declare type ValidationError<Schema> = {
+  [P in keyof Schema]: RhfError;
+};

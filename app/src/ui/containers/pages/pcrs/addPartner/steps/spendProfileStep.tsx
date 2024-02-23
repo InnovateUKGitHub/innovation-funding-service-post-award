@@ -79,7 +79,7 @@ export const SpendProfileStep = () => {
             <TFoot>
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.totalCosts)}</TH>
-                <TH numeric>
+                <TH numeric id="new-partner-total-costs">
                   <Currency value={data.total} />
                 </TH>
                 <TH>

@@ -815,7 +815,11 @@
       "buttonSubmit": "Save and return to project costs",
       "buttonAddCost": "Add a cost",
       "buttonEditCost": "Edit",
-      "buttonRemoveCost": "Remove"
+      "buttonRemoveCost": "Remove",
+      "table": {
+        "description": "Description",
+        "cost": "Cost (£)"
+      }
     },
     "pcrSpendProfileDeleteCost": {
       "title": "Add partner",
@@ -1142,7 +1146,10 @@
     "overheads": {
       "totalCost": "Total cost",
       "calculatedCost": "Total cost of overheads as calculated in the spreadsheet (£)",
-      "linkDocumentsUpload": "Calculate overheads documents"
+      "linkDocumentsUpload": "Calculate overheads documents",
+      "zeroPercent": "0%",
+      "twentyPercent": "20%",
+      "calculated": "calculated"
     },
     "materials": {
       "item": "Item",
@@ -1164,12 +1171,14 @@
       "netPresentValueHint": "Either the current net present value or the price you bought it for",
       "residualValue": "Residual value at end of project (£)",
       "utilisation": "Utilisation (%)",
-      "netCost": "Net cost:"
+      "netCost": "Net cost:",
+      "new": "New",
+      "existing": "Existing"
     },
     "travelAndSubs": {
       "description": "Purpose of journey or description of subsistence cost",
       "numberOfTimes": "Number of times",
-      "costOfEach": "Cost each (£)",
+      "costOfEach": "Cost of each (£)",
       "totalCost": "Total cost"
     },
     "otherCosts": {
@@ -2178,7 +2187,8 @@
                 "invalid_string": {
                   "regex": "Cost must be 2 decimal places or fewer."
                 },
-                "invalid_type_received_nan": "Enter a valid cost."
+                "invalid_type_received_nan": "Enter a valid cost.",
+                "two_decimal_places": "Value must be 2 decimal places or fewer."
               }
             }
           }
@@ -2295,6 +2305,192 @@
             "too_small": "Enter a registration number.",
             "invalid_type": "Enter a registration number.",
             "too_big": "Registration number must be {{ count }} characters or less."
+          }
+        },
+        "spendProfile": {
+          "description": {
+            "errors": {
+              "invalid_type": "Enter description of role.",
+              "too_small": "Enter description of role.",
+              "too_big": "Description must be {{count}} or fewer."
+            }
+          },
+          "descriptionOfRole": {
+            "errors": {
+              "invalid_type": "Enter description of role.",
+              "too_small": "Enter description of role.",
+              "too_big": "Description must be {{count}} or fewer."
+            }
+          },
+          "grossCostOfRole": {
+            "errors": {
+              "too_small": "Enter gross cost of role.",
+              "invalid_type": "Gross cost of role must be a number.",
+              "invalid_string": { "regex": "Gross cost of role must be a number." },
+              "too_big": "Gross cost of role must be {{count}} or less.",
+              "two_decimal_places": "Gross cost of role must be 2 decimal places or fewer."
+            }
+          },
+          "ratePerDay": {
+            "errors": {
+              "too_small": "Enter rate per day.",
+              "invalid_type": "Rate per day must be a number.",
+              "invalid_string": { "regex": "Rate per day must be a number." },
+              "two_decimal_places": "Rate per day must be 2 decimal places or fewer.",
+              "too_big": "Rate per day must be {{count}} or less."
+            }
+          },
+          "daysSpentOnProject": {
+            "errors": {
+              "required": "Enter days spent on project.",
+              "too_small": "Days spent on project must be {{count}} or more.",
+              "too_big": "Days spent on project must be {{count}} or fewer.",
+              "invalid_type": "Days spent on project must be a number.",
+              "not_integer": "Days spent on project must be a whole number, like 15."
+            }
+          },
+          "calculatedValue": {
+            "errors": {
+              "too_small": "Enter total cost.",
+              "invalid_type": "Total cost must be a number.",
+              "invalid_string": { "regex": "Total cost must be a number." },
+              "too_big": "Total cost must be {{count}} or less.",
+              "two_decimal_places": "Total cost must be 2 decimal places or fewer."
+            }
+          },
+          "subcontractorCountry": {
+            "errors": {
+              "too_small": "Enter subcontractor country.",
+              "too_big": "Subcontractor country must be {{count}} or fewer."
+            }
+          },
+          "subcontractorName": {
+            "errors": {
+              "too_small": "Enter subcontractor name.",
+              "too_big": "Subcontractor name must be {{count}} or fewer."
+            }
+          },
+          "subcontractorRoleAndDescription": {
+            "errors": {
+              "too_small": "Enter role and description.",
+              "too_big": "Role and description must be {{count}} or fewer."
+            }
+          },
+          "subcontractorCost": {
+            "errors": {
+              "too_small": "Enter cost.",
+              "invalid_type": "Cost must be a number.",
+              "too_big": "Cost must be {{count}} or less.",
+              "invalid_string": { "regex": "Cost must be a number." },
+              "two_decimal_places": "Cost must be 2 decimal places or fewer."
+            }
+          },
+          "descriptionOfCost": {
+            "errors": {
+              "too_small": "Enter description of cost.",
+              "too_big": "Description of cost must be {{count}} or fewer.",
+              "invalid_type": "Cost must be a number.",
+              "invalid_string": { "regex": "Cost must be a number." },
+              "two_decimal_places": "Cost must be 2 decimal places or fewer."
+            }
+          },
+          "numberOfTimes": {
+            "errors": {
+              "required": "Enter number of times.",
+              "not_integer": "Number of times must be a whole number, like 15.",
+              "invalid_type": "Number of times must be a number.",
+              "too_small": "Number of times must be {{count}} or more.",
+              "too_big": "Number of times must be {{count}} or less."
+            }
+          },
+          "costOfEach": {
+            "errors": {
+              "too_small": "Enter cost of each.",
+              "invalid_type": "Cost of each must be a number.",
+              "invalid_string": { "regex": "Cost of each must be a number." },
+              "too_big": "Cost of each must be {{count}} or less.",
+              "two_decimal_places": "Cost of each must be 2 decimal places or fewer."
+            }
+          },
+          "capitalUsageDescription": {
+            "errors": {
+              "too_small": "Enter item description.",
+              "too_big": "Item description must be {{count}} or fewer."
+            }
+          },
+          "materialsDescription": {
+            "errors": {
+              "too_big": "Item description must be {{count}} or fewer.",
+              "too_small": "Enter item description."
+            }
+          },
+          "quantityOfMaterialItems": {
+            "errors": {
+              "required": "Enter quantity.",
+              "invalid_type": "Quantity must be a number.",
+              "too_small": "Quantity must be {{count}} or more.",
+              "too_big": "Quantity must be {{count}} or less.",
+              "not_integer": "Quantity must be a whole number, like 15."
+            }
+          },
+          "itemType": {
+            "errors": {
+              "too_small": "Select item type."
+            }
+          },
+          "costPerItem": {
+            "errors": {
+              "invalid_type": "Cost per item must be a number.",
+              "invalid_string": { "regex": "Cost per item must be a number." },
+              "too_small": "Enter cost per item.",
+              "too_big": "Cost per item must be {{count}} or less.",
+              "two_decimal_places": "Cost per item must be 2 decimal places or fewer."
+            }
+          },
+          "depreciationPeriod": {
+            "errors": {
+              "required": "Enter depreciation period.",
+              "not_integer": "Depreciation period must be a whole number, like 15.",
+              "invalid_type": "Depreciation period must be a number.",
+              "too_big": "Depreciation period must be {{count}} or less.",
+              "too_small": "Depreciation period must be {{count}} or more."
+            }
+          },
+          "netPresentValue": {
+            "errors": {
+              "too_small": "Enter net present value.",
+              "invalid_type": "Net present value must be a number.",
+              "too_big": "Net present value must be {{count}} or less.",
+              "invalid_string": { "regex": "Net present value must be a number." },
+              "two_decimal_places": "Net present value must be 2 decimal places or fewer."
+            }
+          },
+          "residualValue": {
+            "errors": {
+              "too_small": "Enter residual value.",
+              "invalid_type": "Residual value must be a number.",
+              "invalid_string": { "regex": "Residual value must be a number." },
+              "too_big": "Residual value must be {{count}} or less.",
+              "two_decimal_places": "Residual value must be 2 decimal places or fewer."
+            }
+          },
+          "utilisation": {
+            "errors": {
+              "required": "Enter utilisation.",
+              "too_big": "Utilisation must be a value under 100%.",
+              "too_small": "Utilisation must be {{count}} or more.",
+              "invalid_type": "Utilisation must be a number.",
+              "two_decimal_places": "Utilisation must be 2 decimal places or fewer."
+            }
+          },
+          "estimatedCost": {
+            "errors": {
+              "too_small": "Enter estimated cost.",
+              "invalid_type": "Estimated cost must be a number.",
+              "too_big": "Estimated cost must be {{count}} or less.",
+              "invalid_string": { "regex": "Estimated cost must be a number." },
+              "two_decimal_places": "Estimated cost must be 2 decimal places or fewer."
+            }
           }
         },
         "tsbReference": {
@@ -2551,6 +2747,7 @@
               "errors": {
                 "invalid_type": "New remaining grant must be a valid currency value.",
                 "invalid_string": { "regex": "New remaining grant must be a valid currency value." },
+                "two_decimal_places": "New remaining grant must be 2 decimal places or fewer.",
                 "too_big": "The grant cannot exceed the remaining grant for any individual partner.",
                 "too_small": "Grant cannot be less than zero."
               }
@@ -2622,6 +2819,7 @@
               "invalid_string": {
                 "regex": "Costs must be no more than 2 decimal places."
               },
+              "two_decimal_places": "Costs must be 2 decimal places or fewer.",
               "invalid_type_received_nan": "Costs must be a number."
             }
           },

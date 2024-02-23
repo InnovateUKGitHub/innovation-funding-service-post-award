@@ -1,187 +1,243 @@
-import { PCRSpendProfileCostDto, PCRSpendProfileOverheadsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCROverheadsCostDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { Pending } from "@shared/pending";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCRSpendProfileOverheadRate, PCRItemType } from "@framework/constants/pcrConstants";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useStores } from "@ui/redux/storesProvider";
-import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
-import { Option } from "@framework/dtos/option";
-import { Loader } from "@ui/components/bjss/loading";
+import { SpendProfilePreparePage } from "./spendProfilePageComponent";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { useContext, useMemo } from "react";
+import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { OverheadSchema, overheadSchema, errorMap } from "./spendProfile.zod";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { isObject, sumBy } from "lodash";
+import { createRegisterButton } from "@framework/util/registerButton";
+import { PCRSpendProfileCostDto, PCRSpendProfileOverheadsCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-interface InnerProps {
-  rateOptions: Option<PCRSpendProfileOverheadRate>[];
-  documents: DocumentSummaryDto[];
-}
+const isOverheadsCostDto = function (
+  cost: PCRSpendProfileCostDto | null | undefined,
+): cost is PCRSpendProfileOverheadsCostDto {
+  return isObject(cost) && ["id", "overheadRate", "value"].every(x => x in cost);
+};
 
-const Form = createTypedForm<PCRSpendProfileOverheadsCostDto>();
-
-const SpendProfileCostForm = ({
-  editor,
-  validator,
-  data,
-  documents,
-  params,
-  ...props
-}: SpendProfileCostFormProps<PCRSpendProfileOverheadsCostDto, PCROverheadsCostDtoValidator> & InnerProps) => {
+export const OverheadsFormComponent = ({}) => {
+  const {
+    cost,
+    isFetching,
+    costCategory,
+    onUpdate,
+    routes,
+    pcrId,
+    projectId,
+    itemId,
+    costCategoryId,
+    spendProfile,
+    documents,
+    stepRoute,
+    addNewItem,
+  } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  const getOptions = <T extends number>(selected: T, options: Option<T>[]) => {
-    const filteredOptions: SelectOption[] = options
-      .filter(x => x.active)
-      .map(x => ({ id: x.value.toString(), value: x.label }));
+  let defaultCost: PCRSpendProfileOverheadsCostDto;
 
-    const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
+  if (addNewItem) {
+    defaultCost = {
+      description: "",
+      id: null as unknown as PcrId,
+      overheadRate: PCRSpendProfileOverheadRate.Unknown,
+      value: null,
+      costCategoryId,
+      costCategory: costCategory.type,
+    };
+  } else if (isOverheadsCostDto(cost)) {
+    defaultCost = cost;
+  } else {
+    throw Error("Invalid cost dto");
+  }
 
-    return { options: filteredOptions, selected: selectedOption };
-  };
+  const { getContent } = useContent();
 
-  const getOverheadsCostValue = (
-    overheadsCostDto: PCRSpendProfileOverheadsCostDto,
-    costs: PCRSpendProfileCostDto[],
-  ) => {
-    const labourCosts = costs
-      .filter(x => x.costCategory === CostCategoryType.Labour)
-      .reduce((acc, item) => acc + (item.value || 0), 0);
+  const rateOptions = useMemo(
+    () => [
+      {
+        id: "overheadRate_20",
+        value: PCRSpendProfileOverheadRate.Zero,
+        label: getContent(x => x.pcrSpendProfileLabels.overheads.zeroPercent),
+      },
+      {
+        id: "overheadRate_30",
+        value: PCRSpendProfileOverheadRate.Twenty,
+        label: getContent(x => x.pcrSpendProfileLabels.overheads.twentyPercent),
+      },
+      {
+        id: "overheadRate_10",
+        value: PCRSpendProfileOverheadRate.Calculated,
+        label: getContent(x => x.pcrSpendProfileLabels.overheads.calculated),
+      },
+    ],
+    [getContent],
+  );
 
-    switch (overheadsCostDto.overheadRate) {
+  const { handleSubmit, watch, formState, register, setValue } = useForm<OverheadSchema>({
+    defaultValues: {
+      id: defaultCost.id,
+      calculatedValue: defaultCost.value ? String(defaultCost.value) : null,
+      overheadRate: defaultCost?.overheadRate ?? PCRSpendProfileOverheadRate.Unknown,
+      button_submit: "submit",
+    },
+    resolver: zodResolver(overheadSchema, {
+      errorMap,
+    }),
+  });
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
+
+  const totalLabourCosts = useMemo(
+    () =>
+      sumBy(
+        spendProfile.costs.filter(x => x.costCategory === CostCategoryType.Labour),
+        x => x?.value ?? 0,
+      ),
+    [spendProfile],
+  );
+
+  const getOverheadsCostValue = (overheadRate: PCRSpendProfileOverheadRate) => {
+    switch (overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
-        return null;
+        return 0;
       case PCRSpendProfileOverheadRate.Calculated:
-        return overheadsCostDto.value;
+        return Number(watch("calculatedValue")) ?? 0;
       case PCRSpendProfileOverheadRate.Zero:
         return 0;
       case PCRSpendProfileOverheadRate.Twenty:
-        return roundCurrency((labourCosts * 20) / 100);
+        return roundCurrency((totalLabourCosts * 20) / 100);
       default:
-        return null;
+        return 0;
     }
   };
 
-  const onChange = (dto: PCRSpendProfileOverheadsCostDto) => {
-    const pcrItem = editor.data.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-    const value = getOverheadsCostValue(dto, pcrItem.spendProfile.costs);
-
-    dto.value = value;
-
-    props.onChange(editor.data);
-  };
-
   const getUploadDocumentsLink = () => {
-    return props.routes.pcrSpendProfileOverheadDocument.getLink({
-      projectId: params.projectId,
-      pcrId: params.pcrId,
-      itemId: params.itemId,
-      costCategoryId: params.costCategoryId,
+    return routes.pcrSpendProfileOverheadDocument.getLink({
+      projectId,
+      pcrId,
+      itemId,
+      costCategoryId,
     });
   };
 
-  // If server rendering then always show hidden section
-  const displayHiddenForm = !isClient || data.overheadRate === PCRSpendProfileOverheadRate.Calculated;
+  const overheadRate = Number(watch("overheadRate")) as PCRSpendProfileOverheadRate;
 
-  const rateOptions = getOptions(data.overheadRate, props.rateOptions);
+  // If server rendering then always show hidden section
+  const displayHiddenForm = !isClient || overheadRate === PCRSpendProfileOverheadRate.Calculated;
+
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<OverheadSchema>;
+
+  const calculatedTotalCost = getOverheadsCostValue(overheadRate);
 
   return (
-    <Form.Form
-      qa="addPartnerForm"
-      data={data}
-      isSaving={editor.status === EditorStatus.Saving}
-      onSubmit={() => props.onSave(editor.data)}
-      onChange={dto => onChange(dto)}
-    >
-      <Form.Fieldset qa="overheads-costs">
-        <Form.Hidden name="id" value={dto => dto.id} />
-        <Form.Radio
-          name="overheadRate"
-          options={rateOptions.options}
-          inline={false}
-          value={() => rateOptions.selected}
-          update={(x, option) => {
-            if (!option) {
-              return (x.overheadRate = PCRSpendProfileOverheadRate.Unknown);
-            }
-            x.overheadRate = parseInt(option.id, 10);
-            // As we need to save the cost before moving to document upload page if overhead rate is calculated,
-            // value is set to 0 here to prevent validation errors.
-            if (x.overheadRate === PCRSpendProfileOverheadRate.Calculated && x.value === null) {
-              x.value = 0;
-            }
-          }}
-          validation={validator.overheadRate}
-        />
+    <SpendProfilePreparePage validationErrors={validationErrors}>
+      <Form
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              spendProfile: {
+                ...spendProfile,
+                costs: appendOrMerge(spendProfile.costs, {
+                  ...data,
+                  id: data.id ?? ("" as PcrId),
+                  description: "",
+                  costCategoryId,
+                  costCategory: costCategory.type,
+                  overheadRate: Number(data.overheadRate),
+                  value: data.calculatedValue ? Number(data.calculatedValue.replace("£", "")) : null,
+                }),
+              },
+            },
+            context: {
+              link: data.button_submit === "uploadDocuments" ? getUploadDocumentsLink() : stepRoute,
+            },
+          }),
+        )}
+        data-qa="overheadsForm"
+      >
+        <Fieldset data-qa="overhead-costs">
+          <input type="hidden" name="id" value={cost?.id} />
+          <FormGroup hasError={!!validationErrors.overheadRate}>
+            <ValidationError error={validationErrors?.overheadRate} />
+            <RadioList register={register} name="overheadRate">
+              {rateOptions.map(x => (
+                <Radio
+                  key={x.id}
+                  id={x.id}
+                  disabled={isFetching}
+                  label={x.label}
+                  value={x.value}
+                  defaultChecked={x.value === defaultCost.overheadRate}
+                />
+              ))}
+            </RadioList>
+          </FormGroup>
+        </Fieldset>
 
         {displayHiddenForm && (
-          <Form.Fieldset>
-            <SimpleString>
-              <Content value={x => x.spendProfileMessages.calculatedGuidanceOverheads} />
-            </SimpleString>
-            <Form.Button
+          <Fieldset>
+            <P>{getContent(x => x.spendProfileMessages.calculatedGuidanceOverheads)}</P>
+            <Button
+              type="submit"
+              disabled={isFetching}
+              secondary
               name="calculateOverheadsDocuments"
-              onClick={() => props.onSave(editor.data, getUploadDocumentsLink())}
+              {...registerButton("uploadDocuments")}
             >
-              <Content value={x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload} />
-            </Form.Button>
+              {getContent(x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload)}
+            </Button>
 
             <Section qa="overheads-form-section">
               <DocumentView hideHeader qa="overheads-documents" documents={documents} />
             </Section>
 
-            <Form.Numeric
-              label={x => x.pcrSpendProfileLabels.overheads.calculatedCost}
-              width="one-quarter"
-              name="value"
-              value={dto => dto.value}
-              update={(dto, val) => (dto.value = val)}
-              validation={validator && validator.value}
-            />
-          </Form.Fieldset>
+            <FormGroup hasError={!!validationErrors?.calculatedValue}>
+              <Label htmlFor="value">{getContent(x => x.pcrSpendProfileLabels.overheads.calculatedCost)}</Label>
+              <ValidationError error={validationErrors?.calculatedValue} />
+              <NumberInput
+                hasError={!!validationErrors?.calculatedValue}
+                id="value"
+                {...register("calculatedValue")}
+                inputWidth="one-quarter"
+                disabled={isFetching}
+              />
+            </FormGroup>
+          </Fieldset>
         )}
 
         {isClient && (
-          <Form.Custom
-            label={x => x.pcrSpendProfileLabels.overheads.totalCost}
-            labelBold
-            name="totalCost"
-            value={({ formData }) => (
-              <SimpleString>
-                <Currency value={formData.value} />
-              </SimpleString>
-            )}
-            update={() => null}
-          />
+          <>
+            <H3>{getContent(x => x.pcrSpendProfileLabels.overheads.totalCost)}</H3>
+            <P>
+              <Currency value={calculatedTotalCost} />
+            </P>
+          </>
         )}
-      </Form.Fieldset>
-      <Form.Fieldset qa="save">
-        <Form.Submit>
-          <Content value={x => x.pages.pcrSpendProfilePrepareCost.overheads.buttonSubmit} />
-        </Form.Submit>
-      </Form.Fieldset>
-    </Form.Form>
-  );
-};
 
-export const OverheadsFormComponent = (
-  props: SpendProfileCostFormProps<PCRSpendProfileOverheadsCostDto, PCROverheadsCostDtoValidator>,
-) => {
-  const { projectChangeRequests, projectChangeRequestDocuments } = useStores();
-
-  const rateOptions = projectChangeRequests.getPcrSpendProfileOverheadRateOptions();
-  const documents = projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.params.projectId, props.params.itemId);
-
-  return (
-    <Loader
-      pending={Pending.combine({ rateOptions, documents })}
-      render={x => <SpendProfileCostForm {...props} rateOptions={x.rateOptions} documents={x.documents} />}
-    />
+        <Fieldset>
+          <Button type="submit" disabled={isFetching} {...registerButton("submit")}>
+            {getContent(x => x.pages.pcrSpendProfilePrepareCost.overheads.buttonSubmit)}
+          </Button>
+        </Fieldset>
+      </Form>
+    </SpendProfilePreparePage>
   );
 };
