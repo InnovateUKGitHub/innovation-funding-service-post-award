@@ -1296,10 +1296,6 @@ export const sbriCorrectForecastCostCat = () => {
 };
 
 export const iarProceedToDocs = () => {
-  cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
-  cy.selectTile("Claims");
-  cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
-  cy.heading("Costs to be claimed");
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
 };
@@ -1314,10 +1310,6 @@ export const iarGuidance = () => {
 };
 
 export const iarSubmitValidate = () => {
-  cy.clickOn("Continue to update forecast");
-  cy.heading("Update forecast");
-  cy.clickOn("Continue to summary");
-  cy.heading("Claim summary");
   impactGuidance();
   cy.clickOn("Submit claim");
   cy.validationLink("You must upload an independent accountant's report before you can submit this claim.");
@@ -1516,12 +1508,13 @@ export const reviewLabourRightLeft = () => {
   cy.heading("Claim");
 };
 
-export const accessClaimNavigateToForecast = () => {
+export const accessClaimNavigateToForecastPage = () => {
   cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
   cy.heading("Costs to be claimed");
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
   cy.clickOn("Continue to update forecast");
+  cy.heading("Update forecast");
 };
 
 export const forecastShowsIARDue = () => {
@@ -1541,4 +1534,47 @@ export const forecastShowsIARNotDue = () => {
     .within(() => {
       cy.get("th:nth-child(2)").should("have.text", "No");
     });
+};
+
+export const exceedGolAccessClaim = () => {
+  cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
+  cy.selectTile("Claims");
+  cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
+  cy.heading("Costs to be claimed");
+  cy.wait(1000);
+};
+
+export const exceedOtherCosts5 = () => {
+  cy.get("a").contains("Other costs 5").click();
+  cy.heading("Other costs 5");
+  cy.getByAriaLabel("Cost of claim line item 0").clear();
+  cy.getByAriaLabel("Cost of claim line item 0").type("91001");
+  cy.clickOn("Save and return to claims");
+  cy.heading("Costs to be claimed");
+};
+
+export const cleanUpOtherCosts5 = () => {
+  cy.get("a").contains("Edit costs to be claimed").click();
+  cy.heading("Costs to be claimed");
+  cy.get("a").contains("Other costs 5").click();
+  cy.heading("Other costs 5");
+  cy.getByAriaLabel("Cost of claim line item 0").clear();
+  cy.getByAriaLabel("Cost of claim line item 0").type("2100");
+  cy.clickOn("Save and return to claims");
+  cy.heading("Costs to be claimed");
+};
+
+export const cleanUpExceedGolDocs = () => {
+  cy.clickOn("Continue to claims documents");
+  cy.heading("Claim documents");
+  fileTidyUp("Sarah Shuang");
+};
+
+export const cleanUpExceedGolForecast = () => {
+  cy.clickOn("Continue to update forecast");
+  cy.heading("Update forecast");
+  cy.getByAriaLabel("Other costs 5 Period 2").clear();
+  cy.getByAriaLabel("Other costs 5 Period 2").type("0");
+  cy.clickOn("Save and return to claims");
+  cy.heading("Claims");
 };

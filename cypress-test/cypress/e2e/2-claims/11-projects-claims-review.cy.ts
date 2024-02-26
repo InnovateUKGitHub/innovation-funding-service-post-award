@@ -56,13 +56,18 @@ describe("Claims > Review as MO", () => {
     deleteTestFile("11MB_3");
   });
 
-  it("Should ensure the Claims dashboard has loaded", () => {
+  it("Should ensure the Claims dashboard has loaded and return to Project overview", () => {
     cy.heading("Claims");
+    cy.backLink("Back to project").click();
+    cy.heading("Project overview");
   });
 
-  it("Should switch user to the Monitoring Officer", () => {
-    cy.wait(1000);
+  it("Should switch user to the Monitoring Officer and then access the Claims tile", () => {
+    cy.wait(2000);
     cy.switchUserTo("testman2@testing.com");
+    cy.heading("Project overview");
+    cy.selectTile("Claims");
+    cy.heading("Claims");
   });
 
   it("Should have the project name displayed", shouldShowProjectTitle);

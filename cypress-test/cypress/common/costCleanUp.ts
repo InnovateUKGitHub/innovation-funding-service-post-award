@@ -91,3 +91,32 @@ export const retentionTidyUp = () => {
       });
   });
 };
+
+export const otherCost5TidyUp = () => {
+  cy.wait(2000);
+  cy.get("tr")
+    .eq(11)
+    .then($row => {
+      if ($row.text().includes("£91,001.00")) {
+        cy.log("**Clearing Other costs 5**");
+        cy.get("a").contains("Other costs 5").click();
+        cy.heading("Other costs 5");
+        cy.getByAriaLabel("Cost of claim line item 0").clear();
+        cy.getByAriaLabel("Cost of claim line item 0").type("2100");
+        cy.wait(500);
+        cy.clickOn("Save and return to claims");
+        cy.heading("Costs to be claimed");
+      }
+    });
+};
+
+export const forecastTidyUp = (value: string) => {
+  cy.get("tr")
+    .eq(14)
+    .then($row => {
+      if ($row.text().includes(value)) {
+        cy.getByAriaLabel("Other costs 5 Period 2").clear();
+        cy.getByAriaLabel("Other costs 5 Period 2").type("0");
+      }
+    });
+};
