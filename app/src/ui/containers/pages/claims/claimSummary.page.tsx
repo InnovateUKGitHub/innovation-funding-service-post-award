@@ -260,7 +260,8 @@ const DocumentValidation = ({
   );
 
   // Show "missing documents" message when IAR is missing (PCF doesn't matter for some reason)
-  return iarResult ? (
+  // or if there are no documents
+  return iarResult && documents.length === 0 ? (
     <ValidationMessage
       messageType="error"
       message={
