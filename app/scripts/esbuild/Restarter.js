@@ -29,35 +29,38 @@ class Restarter {
       fetch(`${this.url}/dev/reload`).catch(() => {
         console.log("Could not send reload signal - is the server running?");
       });
+    } else {
+      console.log("Could not find server process to kill - is the server running?");
     }
   }
 
   /**
    * Create a server development instance.
    * Will automatically restart when it exits.
+   * @returns {Promise<void>} Successful build
    */
   createServer() {
-    this.serverProcess = spawn("npm", ["run", "serve", "--", "--dev"], {
-      // Copy stdout of server to current stdio
-      stdio: "inherit",
+    return new Promise((resolve, reject) => {
+      this.serverProcess = spawn("npm", ["run", "serve", "--", "--dev"], {
+        // Copy stdout of server to current stdio
+        stdio: "inherit",
 
-      // Windows developers needs a shell so it can parse `PATH`
-      // (so npm can be ran with nvm/nvs)
-      shell: process.platform === "win32",
+        // Windows developers needs a shell so it can parse `PATH`
+        // (so npm can be ran with nvm/nvs)
+        shell: process.platform === "win32",
 
-      // Set a default NODE_ENV just in case.
-      env: {
-        ...process.env,
-        NODE_ENV: process.env.NODE_ENV || "development",
-      },
-    });
+        // Set a default NODE_ENV just in case.
+        env: {
+          ...process.env,
+          NODE_ENV: process.env.NODE_ENV || "development",
+        },
+      });
 
-    // If the server closes itself at any time
-    this.serverProcess.on("exit", code => {
-      if (code !== 0) {
-        console.log(`Server quit with error code ${code}`);
-      }
-      this.createServer();
+      // If the server closes itself at any time
+      this.serverProcess.on("exit", code => {
+        if (code === 0) resolve();
+        reject(code);
+      });
     });
   }
 
@@ -82,9 +85,39 @@ class Restarter {
   const source = new EventSource(window.location.origin + "/dev/hook");
   console.log("Client reloader loaded!", source);
 
-  source.onmessage = () => {
-    location.reload()
+  const sleep = (x) => new Promise((resolve) => {
+    setTimeout(() => resolve(), x);
+  });
+
+  let isReloading = false;
+  let serverReloading = false;
+  const reloadApp = async (timeout) => {
+    if (isReloading) return;
+    isReloading = true;
+
+    let loading = true;
+    while(loading) {
+      await sleep(serverReloading ? 2000 : 500);
+      try {
+        const res = await fetch("/api/health/version");
+        location.reload();
+        loading = false;
+      } catch {
+        console.log("Waiting for server to become alive...");
+      }
+    }
+  };
+
+  source.onerror = () => {
+    console.log("Server disconnected");
+    serverReloading = true;
+    reloadApp();
   }
+
+  source.onmessage = () => {
+    console.log("Client reloading");
+    reloadApp();
+  };
 })();`;
   }
 }

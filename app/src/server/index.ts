@@ -23,9 +23,9 @@ interface CustomProcessArgs {
 
 const program = new Command();
 program.option("--dev", "Enable development endpoints for use in esbuild", false);
-program.parse(process.argv);
+program.parse();
 
-const { dev } = program as CustomProcessArgs;
+const { dev } = program.opts() as CustomProcessArgs;
 
 const server = new Server(dev ?? false);
 

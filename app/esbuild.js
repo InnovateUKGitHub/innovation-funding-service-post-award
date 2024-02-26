@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 const { program, Option } = require("commander");
-const { build } = require("esbuild");
+const { build, context } = require("esbuild");
 const ESBuildConfiguration = require("./scripts/esbuild/ESBuildConfiguration");
 
 const opts = program
@@ -16,7 +16,7 @@ const opts = program
 
 const esbuildConfig = new ESBuildConfiguration(__dirname);
 const restarter = esbuildConfig.getRestarter();
-const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || process.env.NODE_ENV === "development";
+const shouldEnableDevTools = process.env.ACC_ENVIRONMENT !== "prod" || process.env.NODE_ENV === "development";
 
 if (opts.watch) {
   esbuildConfig.withWatch();
@@ -30,20 +30,27 @@ if (opts.devtools || shouldEnableDevTools) {
   esbuildConfig.withSourceMap();
 }
 
-switch (opts.target) {
-  case "acc":
-    // Build and bundle the server
-    build(esbuildConfig.getServerConfig())
-      .then(() => {
-        // Create a server on first build.
-        if (opts.watch) restarter.createServer();
-      })
-      .catch(() => process.exit(1));
+(async () => {
+  switch (opts.target) {
+    case "acc":
+      const [server, client] = await Promise.all([
+        context(esbuildConfig.getServerConfig()),
+        context(esbuildConfig.getClientConfig()),
+      ]);
 
-    // Build and bundle the client
-    build(esbuildConfig.getClientConfig()).catch(() => process.exit(1));
-    break;
-  case "updateSchema":
-    build(esbuildConfig.getUpdateSchemaBuild()).catch(() => process.exit(1));
-    break;
-}
+      if (opts.watch) {
+        await Promise.all([server.watch(), client.watch()]);
+        while (1) {
+          await restarter.createServer();
+        }
+      } else {
+        await Promise.all([server.rebuild(), client.rebuild()]);
+        await Promise.all([server.dispose(), client.dispose()]);
+      }
+
+      break;
+    case "updateSchema":
+      build(esbuildConfig.getUpdateSchemaBuild());
+      break;
+  }
+})();

@@ -39,7 +39,9 @@ developmentRouter.get("/dev/reload", (req, res) => {
   // esbuild will help re-create a new server.
   logger.info("Server reload requested.");
   res.sendStatus(201);
-  process.exit(0);
+  setTimeout(() => {
+    process.exit(0);
+  }, 100);
 });
 
 export { developmentRouter };

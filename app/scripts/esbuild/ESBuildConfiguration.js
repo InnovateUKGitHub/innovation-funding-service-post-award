@@ -7,6 +7,7 @@ const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
 const replaceModulesPlugin = require("./replaceModulesPlugin");
 const replaceGraphqlRelayPlugin = require("./replaceGraphqlRelayPlugin");
 const Restarter = require("./Restarter");
+const reloadPlugin = require("./reloadPlugin");
 
 class ESBuildConfiguration {
   /**
@@ -108,21 +109,20 @@ class ESBuildConfiguration {
    * @returns {ESBuildConfiguration} Itself
    */
   withWatch() {
-    Object.assign(this.serverBuild, {
-      watch: {
-        onRebuild: () => {
-          // On a rebuild, reload the server.
-          this.getRestarter().reloadServer();
-        },
-      },
-    });
+    this.serverBuild.plugins.push(
+      reloadPlugin(() => {
+        // On a rebuild, reload the server.
+        this.getRestarter().reloadServer();
+      }),
+    );
+    this.clientBuild.plugins.push(
+      reloadPlugin(() => {
+        // On a rebuild, tell the client to reload.
+        this.getRestarter().refreshClient();
+      }),
+    );
+
     Object.assign(this.clientBuild, {
-      watch: {
-        onRebuild: () => {
-          // On a rebuild, tell the client to reload.
-          this.getRestarter().refreshClient();
-        },
-      },
       banner: {
         js: this.restarter.getClientBanner(),
       },
