@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a9f106c337c987a7151f22c3c6356b71>>
+ * @generated SignedSource<<a2f802e5585ebb070b8664b96503e812>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,7 @@ export type CompaniesHouseSearchQuery$variables = {
 };
 export type CompaniesHouseSearchQuery$data = {
   readonly companies: ReadonlyArray<{
-    readonly addressFull: string;
+    readonly addressFull: string | null | undefined;
     readonly registrationNumber: string;
     readonly title: string;
   }>;
@@ -36,6 +36,11 @@ v1 = [
   {
     "alias": null,
     "args": [
+      {
+        "kind": "Literal",
+        "name": "itemsPerPage",
+        "value": 10
+      },
       {
         "kind": "Variable",
         "name": "query",
@@ -90,16 +95,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "ee52262532b7fbd0543e91de6fa3df74",
+    "cacheID": "cb95f976509835e72a5becd7a10029ea",
     "id": null,
     "metadata": {},
     "name": "CompaniesHouseSearchQuery",
     "operationKind": "query",
-    "text": "query CompaniesHouseSearchQuery(\n  $searchQuery: String!\n) {\n  companies(query: $searchQuery) {\n    registrationNumber\n    title\n    addressFull\n  }\n}\n"
+    "text": "query CompaniesHouseSearchQuery(\n  $searchQuery: String!\n) {\n  companies(query: $searchQuery, itemsPerPage: 10) {\n    registrationNumber\n    title\n    addressFull\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c67076fd031cf74cda2e2b73b42f38ae";
+(node as any).hash = "9ee00e0d23ac74a58b747d9cb094a07a";
 
 export default node;
