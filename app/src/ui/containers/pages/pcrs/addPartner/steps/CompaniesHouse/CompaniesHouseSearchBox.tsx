@@ -21,7 +21,6 @@ import {
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useValidateInitialSearchQuery } from "./CompaniesHouseStep.logic";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 
 interface CompaniesHouseSearchProps {
   setSearchQuery?: (searchQuery?: string) => void;
@@ -67,7 +66,7 @@ const CompaniesHouseSearchBox = ({ setSearchQuery }: CompaniesHouseSearchProps) 
               {getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}
             </Label>
           </h2>
-          <Hint id="hint-for-search">{getContent(x => x.pages.pcrAddPartnerCompanyHouse.hint)}</Hint>
+          {/* <Hint id="hint-for-search">{getContent(x => x.pages.pcrAddPartnerCompanyHouse.hint)}</Hint> */}
           <ValidationError error={validationErrors?.search as RhfError} />
           <TextInput
             hasError={!!validationErrors?.search}

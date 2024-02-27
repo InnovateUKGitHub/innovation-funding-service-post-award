@@ -98,7 +98,7 @@ export const CompaniesHouseStep = () => {
                 }
                 hasError={!!validationErrors?.organisationName}
                 id="organisationName"
-                inputWidth="one-third"
+                // inputWidth="one-third"
                 {...register("organisationName")}
                 disabled={disabled}
               />
@@ -118,7 +118,7 @@ export const CompaniesHouseStep = () => {
                 }
                 hasError={!!validationErrors?.registrationNumber}
                 id="registrationNumber"
-                inputWidth="one-quarter"
+                // inputWidth="one-quarter"
                 {...register("registrationNumber")}
                 disabled={disabled}
               />
@@ -138,7 +138,7 @@ export const CompaniesHouseStep = () => {
                 }
                 hasError={!!validationErrors?.registeredAddress}
                 id="registeredAddress"
-                inputWidth="full"
+                // inputWidth="full"
                 {...register("registeredAddress")}
                 disabled={disabled}
               />

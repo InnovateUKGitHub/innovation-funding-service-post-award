@@ -892,7 +892,7 @@
       "noResultsFound": "No results found"
     },
     "pcrAddPartnerCompanyHouse": {
-      "sectionTitle": "Company Information",
+      "sectionTitle": "Company house",
       "headingForm": "Company details",
       "headingSearch": "Search companies house",
       "hint": "Enter your organisation name or registration number. To filter your search by location e.g. find HSBC in London would be - hsbc location:'London'.",
