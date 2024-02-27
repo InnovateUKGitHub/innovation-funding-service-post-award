@@ -7,3 +7,4 @@ data:
   NEW_RELIC_APP_NAME: acc-demo
   SERVER_URL: https://www-acc-demo.apps.ocp4.innovateuk.ukri.org
   USE_SSO: "false"
+  FEATURE_DETAILED_ERROR_SUMMARY_COMPONENT: "true"
