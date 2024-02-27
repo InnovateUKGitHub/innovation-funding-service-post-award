@@ -73,7 +73,7 @@ export const enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
-  ApproveNewSubcontrator = 130,
+  ApproveNewSubcontractor = 130,
   Uplift = 140,
 }
 
