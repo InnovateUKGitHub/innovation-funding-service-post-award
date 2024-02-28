@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ACC Factory Builder Expect apex to be built with a copy 1`] = `
+[
+  {
+    "code": "
+            Parent parent3 = new Parent();
+            parent3.var = 'My fancy title';
+            insert parent3;
+          ",
+    "priority": 1,
+  },
+]
+`;
+
+exports[`ACC Factory Builder Expect apex to be built with a single variable 1`] = `
+[
+  {
+    "code": "
+            Parent parent1 = new Parent();
+            parent1.var = 'My fancy title';
+            insert parent1;
+          ",
+    "priority": 1,
+  },
+]
+`;
+
+exports[`ACC Factory Builder Expect apex to be built with no variables 1`] = `
+[
+  {
+    "code": "
+            Parent parent0 = new Parent();
+            // parent0.var field is not defined
+            insert parent0;
+          ",
+    "priority": 1,
+  },
+]
+`;
+
+exports[`ACC Factory Builder Expect apex to be built with parent/child relationships 1`] = `
+"
+Parent parent4 = new Parent();
+parent4.var = 'My fancy title';
+insert parent4;
+
+Child child0 = new Child();
+child0.var = 'My child 1';
+child0.parent = parent4.Id;
+insert child0;
+
+Child child1 = new Child();
+child1.var = 'My child 2';
+child1.parent = parent4.Id;
+insert child1;
+
+Child child2 = new Child();
+child2.var = 'My child 3';
+child2.parent = parent4.Id;
+insert child2;
+"
+`;

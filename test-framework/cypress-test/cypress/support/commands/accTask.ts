@@ -1,4 +1,4 @@
-import { SirtestalotTasks } from "../tasks";
+import { SirtestalotTaskProps, SirtestalotTasks } from "../tasks";
 
 /**
  * Executes a task as specified in "/cypress/step_definitions/node.ts"
@@ -11,10 +11,10 @@ import { SirtestalotTasks } from "../tasks";
  */
 const accTask = <T extends keyof SirtestalotTasks>(
   taskName: T,
-  args: Parameters<SirtestalotTasks[T]>[0],
+  args: Omit<Parameters<SirtestalotTasks[T]>[0], keyof SirtestalotTaskProps>,
   options?: Partial<Cypress.Loggable & Cypress.Timeoutable>,
 ): Cypress.Chainable<ReturnType<SirtestalotTasks[T]>> => {
-  return cy.task(taskName, args, options);
+  return cy.task(taskName, Object.assign({ cyEnv: Cypress.env() }, args), options);
 };
 
 const accCommands = {

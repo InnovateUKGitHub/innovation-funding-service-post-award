@@ -1,0 +1,10 @@
+{
+  "name": "test-framework",
+  "private": "true",
+  "workspaces": [
+    "./cypress-test",
+    "./salesforce-factory",
+    "./envman"
+  ],
+  "scripts": {}
+}
