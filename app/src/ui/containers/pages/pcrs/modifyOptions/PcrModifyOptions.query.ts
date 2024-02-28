@@ -24,7 +24,15 @@ const pcrModifyOptionsQuery = graphql`
           Acc_ProjectParticipant__c(where: { Acc_ProjectId__c: { eq: $projectId } }, first: 2000) {
             totalCount
           }
-          Acc_ProjectChangeRequest__c(where: { Acc_Project__c: { eq: $projectId } }, first: 2000) {
+          Acc_ProjectChangeRequest__c(
+            where: {
+              or: [
+                { Acc_Project__c: { eq: $projectId } }
+                { Acc_RequestHeader__r: { Acc_Project__c: { eq: $projectId } } }
+              ]
+            }
+            first: 2000
+          ) {
             edges {
               node {
                 Id

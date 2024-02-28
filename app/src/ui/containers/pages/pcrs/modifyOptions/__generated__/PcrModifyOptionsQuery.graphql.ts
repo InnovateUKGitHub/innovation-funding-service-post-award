@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<db2d9ffee9946a267bfb5881db2aa175>>
+ * @generated SignedSource<<d1f613527a2b760a7654a1aa8bf2389b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -105,6 +105,13 @@ v5 = {
   "value": 2000
 },
 v6 = [
+  {
+    "fields": (v1/*: any*/),
+    "kind": "ObjectValue",
+    "name": "Acc_Project__c"
+  }
+],
+v7 = [
   {
     "alias": null,
     "args": null,
@@ -248,9 +255,26 @@ v6 = [
                   {
                     "fields": [
                       {
-                        "fields": (v1/*: any*/),
-                        "kind": "ObjectValue",
-                        "name": "Acc_Project__c"
+                        "items": [
+                          {
+                            "fields": (v6/*: any*/),
+                            "kind": "ObjectValue",
+                            "name": "or.0"
+                          },
+                          {
+                            "fields": [
+                              {
+                                "fields": (v6/*: any*/),
+                                "kind": "ObjectValue",
+                                "name": "Acc_RequestHeader__r"
+                              }
+                            ],
+                            "kind": "ObjectValue",
+                            "name": "or.1"
+                          }
+                        ],
+                        "kind": "ListValue",
+                        "name": "or"
                       }
                     ],
                     "kind": "ObjectValue",
@@ -365,7 +389,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "PcrModifyOptionsQuery",
-    "selections": (v6/*: any*/),
+    "selections": (v7/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -374,19 +398,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "PcrModifyOptionsQuery",
-    "selections": (v6/*: any*/)
+    "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "5f7c2614031f506100e2e029967e80e3",
+    "cacheID": "a163bcc74650f999678454c5db944524",
     "id": null,
     "metadata": {},
     "name": "PcrModifyOptionsQuery",
     "operationKind": "query",
-    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {or: [{Acc_Project__c: {eq: $projectId}}, {Acc_RequestHeader__r: {Acc_Project__c: {eq: $projectId}}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "54392237b6db2ff9a64b49fa34db5369";
+(node as any).hash = "5ce4c76d19e7afd6f469304db3452353";
 
 export default node;
