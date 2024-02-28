@@ -1,0 +1,22 @@
+{
+  "name": "salesforce-factory",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --sourcemap=inline --outfile=dist/index.js",
+    "start": "node --inspect --enable-source-maps --env-file .env dist/",
+    "patch-package": "patch-package",
+    "test": "jest",
+    "schema": "node schema/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jsforce": "^3.0.0-next.1",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "typescript": "^5.3.3"
+  }
+}
