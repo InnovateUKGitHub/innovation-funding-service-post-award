@@ -26,6 +26,15 @@ export function roundCurrency(value: number) {
   return roundedValue / 100;
 }
 
+/**
+ * Regular expression to allow user to type an empty string
+ * (so they can clear a text box)
+ */
+export const validTypingCurrencyRegex = /^-?£?(?:\d+|\d*\.\d{0,2})?$/;
+
+/**
+ * Regular expression to validate currency input
+ */
 export const validCurrencyRegex = /^-?£?(?:\d+|\d*\.\d{0,2})$/;
 
 /**

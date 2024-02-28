@@ -1,4 +1,4 @@
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { validTypingCurrencyRegex } from "@framework/util/numberHelper";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import { DetailedHTMLProps, InputHTMLAttributes } from "react";
@@ -36,7 +36,7 @@ const ForecastTableCurrencyInput = ({
           className="govuk-!-font-size-16"
           onChange={e => {
             const valueAsString = e.target.value;
-            if (validCurrencyRegex.test(valueAsString)) {
+            if (validTypingCurrencyRegex.test(valueAsString)) {
               onChange(valueAsString);
             }
           }}
