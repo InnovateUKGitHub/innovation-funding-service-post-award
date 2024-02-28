@@ -31,6 +31,12 @@ export class InActiveProjectError extends ForbiddenError {
   }
 }
 
+export class ActiveProjectError extends ForbiddenError {
+  constructor(readonly original?: Error) {
+    super("Project must be 'Offet Letter Sent' to proceed.", original);
+  }
+}
+
 export class FormHandlerError extends AppError {
   constructor(
     public key: string,

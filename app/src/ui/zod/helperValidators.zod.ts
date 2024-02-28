@@ -7,6 +7,7 @@ import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { DateTime } from "luxon";
 
 const projectIdValidation = z
   .string()
@@ -37,6 +38,11 @@ const costCategoryIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_CostCategory__c)
   .transform(x => x as CostCategoryId);
+
+const pclIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_ProjectContactLink__c)
+  .transform(x => x as ContactId);
 
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
 
@@ -328,6 +334,26 @@ const percentageNumberInput = ({ max = 0, min = 100 }: { max: number; min: numbe
     }),
   ]);
 
+const dateValidation = z
+  .object({
+    day: z.string().regex(/^\d\d?$/),
+    month: z.string().regex(/^\d\d?$/),
+    year: z.string().regex(/^\d\d\d\d$/),
+  })
+  .superRefine((x, ctx) => {
+    const year = Number(x.year);
+    const month = Number(x.month);
+    const day = Number(x.day);
+    const datetime = DateTime.local(year, month, day);
+    if (!datetime.isValid) {
+      ctx.addIssue({
+        code: ZodIssueCode.custom,
+        message: datetime.invalidReason ?? "invalid date",
+      });
+    }
+  })
+  .transform(x => DateTime.local(Number(x.year), Number(x.month), Number(x.day)).toJSDate());
+
 export {
   projectIdValidation,
   pcrIdValidation,
@@ -336,6 +362,7 @@ export {
   partnerIdValidation,
   profileIdValidation,
   periodIdValidation,
+  pclIdValidation,
   booleanValidation,
   currencyValidation,
   zeroOrGreaterCurrencyValidation,
@@ -350,4 +377,5 @@ export {
   emptyStringToNullValidation,
   getSingleFileValidation,
   getMultiFileValidation,
+  dateValidation,
 };

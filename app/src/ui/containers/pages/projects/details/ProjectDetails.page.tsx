@@ -142,7 +142,7 @@ const PartnerInformationTable = ({
 };
 
 const getDetailsContactRole = getContactRole<
-  ProjectContactDto,
+  Pick<ProjectContactDto, "role" | "name" | "accountId" | "email">,
   Pick<PartnerDtoGql, "accountId" | "name" | "isWithdrawn" | "isLead">
 >;
 

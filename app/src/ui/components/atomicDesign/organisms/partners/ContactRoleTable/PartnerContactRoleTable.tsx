@@ -5,7 +5,7 @@ import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Ta
 import { getPartnerName } from "../utils/partnerName";
 
 type PartnersTableType = {
-  contact: ProjectContactDto;
+  contact: Pick<ProjectContactDto, "name" | "email">;
   partner: Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead">;
 };
 

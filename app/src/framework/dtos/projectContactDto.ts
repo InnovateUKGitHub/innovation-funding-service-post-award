@@ -7,11 +7,13 @@ export type ProjectRoleName =
   | "Associate";
 
 export interface ProjectContactDto {
-  accountId?: string;
+  accountId?: AccountId;
   email: string;
-  id: string;
+  id: ContactId;
   name: string;
   projectId: ProjectId;
   role: ProjectRoleName;
   roleName: string;
+  startDate: Date | null;
+  endDate: Date | null;
 }
