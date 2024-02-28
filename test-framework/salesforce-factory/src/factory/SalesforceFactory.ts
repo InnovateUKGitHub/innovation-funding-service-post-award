@@ -55,28 +55,25 @@ class SffBuilder<T extends Readonly<SffFactoryObjectDefinition>> {
     this.definition = definition;
   }
 
-  public readonly setField: <K extends string, M extends { sffName: K }, U = { [K in T["fields"]] }>(
-    sffName: U["sffName"],
-    value: U["sfdcType"],
-  ) => this = (sffName, value) => {
+  setField<HAHA extends T["fields"][number]>(sffName: HAHA["sffName"], value: SffTypeToJsType<HAHA["sfdcType"]>) {
     const sfdcName: SffField = this.definition.fields.find(x => x.sffName === sffName)!;
 
     return this;
-  };
+  }
 }
 
-const project = new SffBuilder({
+const project = new SffBuilder(<const>{
   definition: {
     sfdcName: "Acc_Project__c",
     fields: [
-      { sfdcName: "Acc_ProjectNumber__c", sffName: "string", sfdcType: SffFieldType.STRING },
+      { sfdcName: "Acc_ProjectNumber__c", sffName: "projectNumber", sfdcType: SffFieldType.STRING },
       { sfdcName: "Acc_SomethingElse__c", sffName: "number", sfdcType: SffFieldType.NUMBER },
     ],
     relationships: [],
   },
-} as const);
+});
 
-project.setField("string", 42).setField("number", "sdaasd");
+project.setField("projectNumber", 34438724).setField("number", "jkjkhasdhads");
 
 abstract class SffObject {
   create() {}
