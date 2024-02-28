@@ -5,11 +5,11 @@ interface SffFieldBase {
 }
 
 enum SffFieldType {
-  STRING,
-  NUMBER,
-  SINGLE_PICKLIST,
-  MULTI_PICKLIST,
-  CHECKBOX,
+  STRING = "STRING",
+  NUMBER = "NUMBER",
+  SINGLE_PICKLIST = "SINGLE_PICKLIST",
+  MULTI_PICKLIST = "MULTI_PICKLIST",
+  CHECKBOX = "CHECKBOX",
 }
 
 interface SffFieldTypeToJsMap {
@@ -48,6 +48,8 @@ interface SffFactoryObjectDefinition {
   relationships: ReadonlyArray<SffRelationship>;
 }
 
+type InferValueFromFactoryKey<T extends Readonly<SffFactoryObjectDefinition>, Key> = T extends 
+
 class SffBuilder<T extends Readonly<SffFactoryObjectDefinition>> {
   private readonly definition: Readonly<T>;
 
@@ -55,7 +57,7 @@ class SffBuilder<T extends Readonly<SffFactoryObjectDefinition>> {
     this.definition = definition;
   }
 
-  setField<HAHA extends T["fields"][number]>(sffName: HAHA["sffName"], value: SffTypeToJsType<HAHA["sfdcType"]>) {
+  setField<Key extends { sfdcType: infer Value }>(sffName, value) {
     const sfdcName: SffField = this.definition.fields.find(x => x.sffName === sffName)!;
 
     return this;
