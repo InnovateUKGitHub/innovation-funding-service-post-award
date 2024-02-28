@@ -4,8 +4,8 @@ import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact" | "Associate";
 
 export interface ISalesforceProjectContact {
-  Id: string;
-  Acc_AccountId__c: string | undefined;
+  Id: ContactId;
+  Acc_AccountId__c: AccountId | undefined;
   Acc_ProjectId__c: string;
   Acc_EmailOfSFContact__c: string;
   Acc_Role__c: SalesforceRole;
@@ -19,6 +19,8 @@ export interface ISalesforceProjectContact {
     Name: string;
     Username: string;
   } | null;
+  Acc_StartDate__c: string | null;
+  Acc_EndDate__c: string | null;
 }
 
 type UserResult = { ContactId: string };
@@ -26,6 +28,7 @@ type UserResult = { ContactId: string };
 export interface IProjectContactsRepository {
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
+  update(contacts: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean>;
 }
 
 /**
@@ -51,6 +54,8 @@ export class ProjectContactsRepository
     "Acc_ContactId__r.Email",
     "Acc_UserId__r.Name",
     "Acc_UserId__r.Username",
+    "Acc_StartDate__c",
+    "Acc_EndDate__c",
   ];
 
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]> {
@@ -69,5 +74,9 @@ export class ProjectContactsRepository
       .catch(e => this.constructError(e))) as UserResult; // type hack here
 
     return this.where(`Acc_ContactId__c = '${sss(userResult?.ContactId ?? "")}'`);
+  }
+
+  public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean> {
+    return super.updateAll(contacts);
   }
 }

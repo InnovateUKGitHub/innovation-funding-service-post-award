@@ -2,6 +2,9 @@ import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
 import { QueryBase } from "../common/queryBase";
+import { Clock } from "@framework/util/clock";
+
+const clock = new Clock();
 
 export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
   constructor(private readonly projectId: ProjectId) {
@@ -28,6 +31,8 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
       email: x.Acc_EmailOfSFContact__c,
       accountId: x.Acc_AccountId__c,
       projectId: x.Acc_ProjectId__c as ProjectId,
+      startDate: clock.parseOptionalSalesforceDateTime(x.Acc_StartDate__c),
+      endDate: clock.parseOptionalSalesforceDateTime(x.Acc_EndDate__c),
     };
   }
 }
