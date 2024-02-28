@@ -12,7 +12,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { UseFormReset, useForm } from "react-hook-form";
 import { useLazyLoadQuery } from "react-relay";
 import { z } from "zod";
-import { usePcrWorkflowContext } from "../../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../../pcrItemWorkflow";
 import {
   PcrAddPartnerCompaniesHouseStepSchemaType,
   pcrAddPartnerCompaniesHouseStepSearchMaxLength,

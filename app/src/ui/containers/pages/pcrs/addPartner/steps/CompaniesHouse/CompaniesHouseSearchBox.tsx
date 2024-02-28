@@ -11,7 +11,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { usePcrWorkflowContext } from "../../../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../../../pcrItemWorkflow";
 import {
   PcrAddPartnerCompaniesHouseStepSearchSchemaType,
   pcrAddPartnerCompaniesHouseStepErrorMap,
