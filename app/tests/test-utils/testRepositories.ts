@@ -34,7 +34,6 @@ import { pcrStatusesPicklist } from "@server/features/pcrs/pcrStatusesPicklist";
 import { IAccountsRepository, ISalesforceAccount } from "@server/repositories/accountsRepository";
 import { IClaimDetailsRepository, ISalesforceClaimDetails } from "@server/repositories/claimDetailsRepository";
 import { IClaimLineItemRepository, ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepository";
-import { IClaimRepository, ISalesforceClaim } from "@server/repositories/claimsRepository";
 import {
   IClaimStatusChangeRepository,
   ISalesforceClaimStatusChange,
@@ -43,6 +42,7 @@ import {
   IClaimTotalCostCategoryRepository,
   ISalesforceClaimTotalCostCategory,
 } from "@server/repositories/claimTotalCostCategoryRepository";
+import { IClaimRepository, ISalesforceClaim } from "@server/repositories/claimsRepository";
 import { ICompaniesHouse } from "@server/repositories/companiesRepository";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { ICostCategoryRepository } from "@server/repositories/costCategoriesRepository";
@@ -227,6 +227,16 @@ class ProjectContactTestRepository
 
   getAllForUser(email: string) {
     return super.getWhere(x => x.Acc_ContactId__r.Email === email);
+  }
+
+  update(items: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean> {
+    for (const item of items) {
+      const foundItem = this.Items.find(x => x.Id === item.Id);
+      if (!foundItem) return Promise.resolve(false);
+      foundItem.Acc_StartDate__c = item.Acc_StartDate__c ?? null;
+    }
+
+    return Promise.resolve(true);
   }
 }
 

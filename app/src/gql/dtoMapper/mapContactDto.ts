@@ -1,4 +1,7 @@
 import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
+import { Clock } from "@framework/util/clock";
+
+const clock = new Clock();
 
 type ContactNode = GQL.PartialNode<{
   Id: string;
@@ -12,19 +15,18 @@ type ContactNode = GQL.PartialNode<{
   Acc_EmailOfSFContact__c: GQL.Value<string>;
   Acc_AccountId__c: GQL.Value<string>;
   Acc_ProjectId__c: GQL.Value<string>;
+  Acc_StartDate__c: GQL.Value<string>;
+  Acc_EndDate__c: GQL.Value<string>;
 }>;
 
-type ContactDtoMapping = Pick<
-  ProjectContactDto,
-  "id" | "accountId" | "email" | "name" | "projectId" | "role" | "roleName"
->;
+type ContactDtoMapping = ProjectContactDto;
 
 const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
   accountId(node) {
-    return node?.Acc_AccountId__c?.value ?? "unknown";
+    return (node?.Acc_AccountId__c?.value ?? "unknown") as AccountId;
   },
   id(node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as ContactId;
   },
   email(node) {
     return node?.Acc_EmailOfSFContact__c?.value ?? "";
@@ -46,6 +48,12 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
   },
   roleName(node) {
     return node?.Acc_Role__c?.label ?? "";
+  },
+  startDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_StartDate__c?.value ?? null);
+  },
+  endDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? null);
   },
 };
 

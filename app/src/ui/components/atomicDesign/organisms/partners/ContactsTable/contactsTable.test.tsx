@@ -46,22 +46,26 @@ describe("<ContactsTable />", () => {
     it("when contacts are provided", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100",
+          id: "100" as ContactId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
-          accountId: "321",
+          accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
+          startDate: null,
+          endDate: null,
         },
         {
-          id: "101",
+          id: "101" as ContactId,
           name: "Dave Developer",
           role: "Project Manager",
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
-          accountId: "312",
+          accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
+          startDate: null,
+          endDate: null,
         },
       ];
 
@@ -77,13 +81,15 @@ describe("<ContactsTable />", () => {
     it("with valid form data", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100",
+          id: "100" as ContactId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
-          accountId: "321",
+          accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
+          startDate: null,
+          endDate: null,
         },
       ];
 
@@ -99,22 +105,26 @@ describe("<ContactsTable />", () => {
     it("with correct table layout", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100",
+          id: "100" as ContactId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
-          accountId: "321",
+          accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
+          startDate: null,
+          endDate: null,
         },
         {
-          id: "101",
+          id: "101" as ContactId,
           name: "Dave Developer",
           role: "Project Manager",
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
-          accountId: "312",
+          accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
+          startDate: null,
+          endDate: null,
         },
       ];
 
