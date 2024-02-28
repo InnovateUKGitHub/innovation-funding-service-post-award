@@ -48,16 +48,16 @@ interface SffFactoryObjectDefinition {
   relationships: ReadonlyArray<SffRelationship>;
 }
 
-class SffBuilder<T extends SffFactoryObjectDefinition> {
+class SffBuilder<T extends Readonly<SffFactoryObjectDefinition>> {
   private readonly definition: Readonly<T>;
 
   constructor({ definition }: { definition: Readonly<T> }) {
     this.definition = definition;
   }
 
-  public readonly setField: <K extends T["fields"][number]>(
-    sffName: K["sffName"],
-    value: SffTypeToJsType<K["sfdcType"]>,
+  public readonly setField: <K extends string, M extends { sffName: K }, U = { [K in T["fields"]] }>(
+    sffName: U["sffName"],
+    value: U["sfdcType"],
   ) => this = (sffName, value) => {
     const sfdcName: SffField = this.definition.fields.find(x => x.sffName === sffName)!;
 
