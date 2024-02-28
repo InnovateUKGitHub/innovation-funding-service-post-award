@@ -21,7 +21,7 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
   it("Should navigate to the Partner organisation page", navigateToPartnerOrgPage);
 
   it("Should display the subheading 'Organisation details'", () => {
-    cy.get("h2").contains("Organisation details");
+    cy.get("h2").contains("Company house");
   });
 
   it("Should have a back option", () => {

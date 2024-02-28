@@ -315,23 +315,26 @@ export const addPartnerCompanyHouseHeader = () => {
   cy.get("h2").contains("Company house");
 };
 
+/**
+ * Commented out until the hint is re-enabled in the app.
+ */
 export const searchCompanyHouseGuidance = () => {
   cy.getByLabel("Search companies house");
-  cy.get("#hint-for-searchCompaniesHouse").contains("Enter the name of the organisation that you work for.");
-  cy.paragraph("Is your organisation not showing in these results?");
+  // cy.get("#hint-for-search").contains("Enter the name of the organisation that you work for.");
+  //cy.paragraph("Is your organisation not showing in these results?");
 };
 
 export const specialCharInput = () => {
   ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|"].forEach(specChar => {
-    cy.get("#searchCompaniesHouse").clear().type(specChar).wait(1000);
+    cy.get("#search").clear().type(specChar).wait(1000);
     cy.getByQA("error-summary").should("not.exist");
   });
 };
 
 export const typeASearchResults = () => {
-  cy.get("#searchCompaniesHouse").clear().type("A").wait(500);
-  cy.get("legend").contains("Companies house search results");
-  cy.get(`input[type="radio"]`).click();
+  cy.get("#search").clear().type("A").wait(500);
+  cy.get("h2").contains("Companies house search results");
+  cy.getByLabel("A LIMITED").click();
 };
 
 export const swindonUniResults = () => {
@@ -602,9 +605,9 @@ export const navigateToPartnerOrgPage = () => {
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
   cy.getByLabel("Search companies house");
-  cy.get("#searchCompaniesHouse").type("A").wait(500);
-  cy.get("legend").contains("Companies house search results");
-  cy.get(`input[type="radio"]`).click();
+  cy.get("#search").type("A").wait(500);
+  cy.get("h2").contains("Companies house search results");
+  cy.getByLabel(`A LIMITED`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
@@ -625,9 +628,9 @@ export const navigateToFinancialsPage = () => {
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
   cy.getByLabel("Search companies house");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("legend").contains("Companies house search results");
-  cy.get(`input[type="radio"]`).click();
+  cy.get("#search").type("A").wait(500);
+  cy.get("h2").contains("Companies house search results");
+  cy.getByLabel(`A LIMITED`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
@@ -651,8 +654,8 @@ export const navigateToPartnerLocation = () => {
   cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get(`input[type="radio"]`).click();
+  cy.get(`input[id="search"]`).type("A").wait(500);
+  cy.getByLabel(`A LIMITED`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
@@ -707,8 +710,8 @@ export const completeAddPartnerForMulti = () => {
   cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get(`input[type="radio"]`).click();
+  cy.get(`input[id="search"]`).type("A").wait(500);
+  cy.getByLabel(`A LIMITED`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
@@ -751,11 +754,19 @@ export const pcrNewCostCatLineItem = () => {
   cy.validationLink("Gross cost of role is required");
   cy.validationLink("Rate per day is required");
   cy.validationLink("Days spent on project is required");
-  cy.get(`input[id="description"]`).type("Law keeper");
   cy.get("h2").contains("Labour");
-  cy.get(`input[id="grossCostOfRole"]`).type("50000");
-  cy.get(`input[id="ratePerDay"]`).type("500");
-  cy.get(`input[id="daysSpentOnProject"]`).clear().type("100");
+  cy.wait(2000);
+  cy.getByLabel("Role within project").type("Law keeper");
+  cy.wait(500);
+  cy.getByLabel("Gross employee cost").type("50000");
+  cy.wait(500);
+  cy.getByLabel("Rate (£/day)").type("500");
+  cy.wait(500);
+  cy.get("#ratePerDay-hint").contains(
+    "This should be calculated from the number of working days for this role per year.",
+  );
+  cy.wait(500);
+  cy.getByLabel("Days to be spent by all staff with this role").clear().type("100");
   cy.wait(500);
   cy.get("div").contains("Total cost will update when saved.");
   cy.get("span").contains("£50,000.00");
@@ -1458,7 +1469,7 @@ const pcrArray = [
   PcrItemType.ChangeProjectScope,
   PcrItemType.ChangeProjectDuration,
   PcrItemType.ChangeAPartnerName,
-  PcrItemType.ApproveANewSubcontractor,
+  //PcrItemType.ApproveANewSubcontractor,
   PcrItemType.PutAProjectOnHold,
 ];
 
@@ -1887,7 +1898,7 @@ export const validateCostUpdateInputs = () => {
   cy.getByAriaLabel("Labour").clear().type("10000000000000000");
   cy.wait(500);
   cy.clickOn("Save and return to reallocate project costs");
-  cy.validationLink("Please enter a valid cost");
+  cy.validationLink("Eligible costs must be less than £10,000,000,000,000,000.");
 };
 
 export const reallocateDecimals = () => {

@@ -11,9 +11,11 @@ import {
 } from "./steps";
 import { uploadDate } from "e2e/2-claims/steps";
 
+const pmEmail = "james.black@euimeabs.test";
+
 describe("PCR > In Review", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSvOGEA0/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSvOGEA0/pcrs/dashboard" });
     pcrStatusChange("Queried to Project Manager");
   });
 
@@ -26,6 +28,16 @@ describe("PCR > In Review", () => {
   it("Should switch the user to PM and re-submit the claim with comments", switchUserCheckForComments);
 
   it("Should check that more than 10 status changes are displayed for the PM.", pcrStatusTable);
+
+  it("Should clearly display correctly labeled status changes with users", () => {
+    [
+      ["Draft with Project Manager", "James Black"],
+      ["Submitted to Monitoring Officer", "James Black"],
+      ["Queried by Monitoring Officer", "Javier Baez"],
+    ].forEach(([statusChange, user]) => {
+      cy.get("td").contains(statusChange).siblings().contains(user);
+    });
+  });
 
   it("Should enter comments and re-submit", enterCommentsSubmit);
 

@@ -22,4 +22,8 @@ describe("PCR > Save and return to requests", () => {
   );
 
   it("Should access the PCR again and check that the comments have saved correctly", accessPcrCheckForComments);
+
+  it("Should check the correct status appears in the status change log", () => {
+    cy.get("td").contains("Draft with Project Manager").siblings().contains("James Black");
+  });
 });

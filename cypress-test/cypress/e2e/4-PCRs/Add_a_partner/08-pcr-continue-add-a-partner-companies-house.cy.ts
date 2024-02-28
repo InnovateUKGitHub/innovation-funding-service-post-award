@@ -45,7 +45,7 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Add a partner' heading and 'Company house heading", addPartnerCompanyHouseHeader);
+  it("Should display a 'Add a partner' heading and 'Company house' heading", addPartnerCompanyHouseHeader);
 
   it(
     "Should have a 'Search companies house' subheading and guidance information beneath search box",
@@ -53,32 +53,32 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
   );
 
   it("Should accept 159 characters", () => {
-    cy.get("#searchCompaniesHouse").clear().invoke("val", loremIpsum159Char).trigger("input");
+    cy.get("#search").clear().invoke("val", loremIpsum159Char).trigger("input");
     cy.getByQA("error-summary").should("not.exist");
   });
 
   it("Should increase character count to 160 characters", () => {
-    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
   });
 
   it("Should have a value in the input box of 160 characters", () => {
-    cy.get("#searchCompaniesHouse").should("have.value", loremIpsum159Char + "t");
+    cy.get("#search").should("have.value", loremIpsum159Char + "t");
     cy.getByQA("error-summary").should("not.exist");
   });
 
   it("Should attempt to enter another character bringing it to 161 characters", () => {
-    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
   });
 
   it("Should attempt to do so again bringing total to 162 characters", () => {
-    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
   });
 
   it("Should still only contain the 160 characters in the input", () => {
-    cy.get("#searchCompaniesHouse").should("have.value", loremIpsum159Char + "t");
+    cy.get("#search").should("have.value", loremIpsum159Char + "t");
     cy.getByQA("error-summary").should("not.exist");
   });
 
