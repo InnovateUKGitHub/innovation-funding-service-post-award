@@ -38,7 +38,7 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
     return (node?.Acc_ProjectId__c?.value ?? "unknown") as ProjectId;
   },
   role(node) {
-    return ["Monitoring officer", "Project Manager", "Finance contact", "Innovation lead", "IPM"].includes(
+    return ["Monitoring officer", "Project Manager", "Finance contact", "Innovation lead", "IPM", "Associate"].includes(
       node?.Acc_Role__c?.value ?? "",
     )
       ? (node?.Acc_Role__c?.value as ProjectRoleName)
