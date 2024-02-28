@@ -757,11 +757,11 @@ export const pcrNewCostCatLineItem = () => {
   cy.get("h2").contains("Labour");
   cy.wait(2000);
   cy.getByLabel("Role within project").type("Law keeper");
-  cy.wait(500);
+  cy.wait(800);
   cy.getByLabel("Gross employee cost").type("50000");
-  cy.wait(500);
+  cy.wait(800);
   cy.getByLabel("Rate (£/day)").type("500");
-  cy.wait(500);
+  cy.wait(800);
   cy.get("#ratePerDay-hint").contains(
     "This should be calculated from the number of working days for this role per year.",
   );
@@ -778,6 +778,7 @@ export const addPartnerWholeDaysOnly = () => {
   cy.get("a").contains("Add a cost").click();
   ["0.5", "-100", "Stuff", "100.32", "$^&&*&)", "100.232321"].forEach(entry => {
     cy.get(`input[id="daysSpentOnProject"]`).clear().type(entry);
+    cy.wait(800);
     cy.submitButton("Save and return to labour").click();
     cy.validationLink("Days spent on project must be a whole number, like 15");
     cy.reload();
@@ -1750,7 +1751,7 @@ export const correctPcrHeaders = () => {
 
 export const existingPcrTable = () => {
   [
-    ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer", "27 Feb 2023"],
+    ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer", "28 Feb 2024"],
     ["1419", "Remove a partner", "27 Feb 2023", "Queried to Project Manager", "27 Feb 2023"],
   ].forEach(([reqNo, types, started, status, lastUpdated], index) => {
     cy.get("tr")
