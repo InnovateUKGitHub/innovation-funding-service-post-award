@@ -71,6 +71,7 @@ import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page
 import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
 import { PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
+import { ContactSetupAssociateRoute } from "@ui/containers/pages/contact/associate/setup/ContactSetupAssociate.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -127,6 +128,7 @@ export const routeConfig = {
   pcrViewItem: PCRViewItemRoute,
   pcrViewReasoning: PCRViewReasoningRoute,
   pcrsDashboard: PCRsDashboardRoute,
+  ContactSetupAssociate: ContactSetupAssociateRoute,
   projectDashboard: ProjectDashboardRoute,
   projectDetails: ProjectDetailsRoute,
   projectDocuments: ProjectDocumentsRoute,

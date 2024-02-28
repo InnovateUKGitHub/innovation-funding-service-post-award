@@ -1,6 +1,7 @@
 declare type ProjectId = Nominal<string, "ProjectId">;
 declare type PartnerId = Nominal<string, "PartnerId">; // Project Participant ID
 declare type AccountId = Nominal<string, "AccountId">;
+declare type ContactId = Nominal<string, "ContactId">; // Project Contact Link ID
 declare type LoanId = Nominal<string, "LoanId">;
 declare type DocumentId = Nominal<string, "DocumentId">;
 declare type MonitoringReportId = Nominal<string, "MonitoringReportId">;
