@@ -1,4 +1,4 @@
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useUpliftSummaryQuery } from "./UpliftSummary.logic";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
