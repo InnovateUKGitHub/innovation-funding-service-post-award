@@ -16,20 +16,6 @@ export type IPCRWorkflow = IWorkflow<PCRStepType>;
 
 export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
 
-// export interface PcrStepProps<TDto, TVal> extends IStepProps {
-//   project: ProjectDto;
-//   pcr: PCRDto;
-//   pcrItem: TDto;
-//   pcrItemType: PCRItemTypeDto;
-//   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-//   validator: TVal;
-//   status: EditorStatus;
-//   onChange: (dto: TDto) => void;
-//   onSave: (skipToSummary: boolean) => void;
-//   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
-//   routes: IRoutes;
-//   mode: "prepare" | "review" | "view";
-// }
 export class PcrWorkflow extends WorkflowBase<PCRStepType> {
   public constructor(definition: IPCRWorkflow, stepNumber: number | undefined) {
     super(definition, stepNumber);
