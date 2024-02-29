@@ -3,6 +3,8 @@ import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 
+// Acc_Project__c.ProjectContactLink__r
+// Acc_ProjectContactLink__c
 type ContactNode = GQL.PartialNode<{
   Id: string;
   Acc_Role__c: GQL.ValueAndLabel<string>;

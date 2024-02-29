@@ -128,7 +128,7 @@ export const routeConfig = {
   pcrViewItem: PCRViewItemRoute,
   pcrViewReasoning: PCRViewReasoningRoute,
   pcrsDashboard: PCRsDashboardRoute,
-  ContactSetupAssociate: ContactSetupAssociateRoute,
+  contactSetupAssociate: ContactSetupAssociateRoute,
   projectDashboard: ProjectDashboardRoute,
   projectDetails: ProjectDetailsRoute,
   projectDocuments: ProjectDocumentsRoute,
