@@ -209,7 +209,7 @@ export function getPartnerOnProject(project: Project): Partner | undefined {
  * if user is a PM and there is a KTP project in Offer Letter Sent and there is an associate
  * then the card should appear in the open category and redirect to the start date page if so
  */
-export function getShouldShowAssociateStartDateWarning(project: Project) {
+export function getIsKtpOfferLetterSent(project: Project) {
   const { isPm } = getAuthRoles(project.roles);
   return (
     isPm && // is Project Manager
@@ -235,9 +235,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
   }
 
   const { isFc, isPmOrMo, isAssociate, isPm } = getAuthRoles(project.roles);
-  if (project.projectNumber === "243015") {
-    console.log("==== found 243015", isPm, getShouldShowAssociateStartDateWarning(project), project, partner);
-  }
+
   switch (project.status) {
     case ProjectStatus.Live:
     case ProjectStatus.FinalClaim:
@@ -258,7 +256,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
       return "upcoming";
 
     case ProjectStatus.OfferLetterSent: {
-      if (getShouldShowAssociateStartDateWarning(project)) {
+      if (getIsKtpOfferLetterSent(project)) {
         return "open";
       }
     }

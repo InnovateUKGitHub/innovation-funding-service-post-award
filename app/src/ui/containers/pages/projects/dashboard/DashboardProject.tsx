@@ -9,7 +9,7 @@ import { H4 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
-import { getAssociateStartDateMissing, getShouldShowAssociateStartDateWarning } from "./dashboard.logic";
+import { getAssociateStartDateMissing, getIsKtpOfferLetterSent } from "./dashboard.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 const useProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
@@ -115,7 +115,7 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
       messages.push(getContent(x => x.projectMessages.pcrQueried));
     }
 
-    if (getShouldShowAssociateStartDateWarning(project)) {
+    if (getIsKtpOfferLetterSent(project)) {
       if (getAssociateStartDateMissing(project)) {
         messages.push(getContent(x => x.projectMessages.startDateRequired));
       } else {
@@ -138,7 +138,7 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
 
   let route: ILinkInfo;
 
-  if (getShouldShowAssociateStartDateWarning(project)) {
+  if (getIsKtpOfferLetterSent(project)) {
     route = routes.contactSetupAssociate.getLink({ projectId: project.id });
   } else if (projectNotSetup) {
     route = routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id });
