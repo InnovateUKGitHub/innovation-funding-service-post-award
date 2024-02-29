@@ -1186,7 +1186,9 @@
     "pcrsToReview": "Project change requests to review: {{count}}",
     "projectOnHold": "On hold",
     "pendingProject": "You need to set up your project",
-    "checkForecast": "Check your forecast"
+    "checkForecast": "Check your forecast",
+    "startDateRequired": "You need to provide confirmation of the associate's start date",
+    "canEditStartDate": "You can update the associate's start date here"
   },
   "pcrMessages": {
     "additionalCommentsGuidance": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",

@@ -12,6 +12,8 @@ import { CuratedSection, CuratedSections, FilterOptions, Partner, Project, Secti
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
 import { IClientConfig } from "src/types/IClientConfig";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 
 /**
  * filter function for a reducer.
@@ -71,7 +73,7 @@ interface ProjectFilterOption {
 /**
  * gets filter types for projects
  */
-export function useAvailableProjectFilters(projects: Project[]): ProjectFilterOption[] {
+export function useAvailableProjectFilters(projects: Pick<Project, "roles">[]): ProjectFilterOption[] {
   const { getContent } = useContent();
 
   if (!projects.length) return [];
@@ -204,6 +206,27 @@ export function getPartnerOnProject(project: Project): Partner | undefined {
 }
 
 /**
+ * if user is a PM and there is a KTP project in Offer Letter Sent and there is an associate
+ * then the card should appear in the open category and redirect to the start date page if so
+ */
+export function getShouldShowAssociateStartDateWarning(project: Project) {
+  const { isPm } = getAuthRoles(project.roles);
+  return (
+    isPm && // is Project Manager
+    project.status === ProjectStatus.OfferLetterSent && // is in Offer Letter Sent status
+    checkProjectCompetition(project.competitionType).isKTP && // is a KTP project
+    project.contacts.some(x => x.role === "Associate") // has one or more contacts links as associate
+  );
+}
+
+/**
+ * if the associate roles have a nullish start date then the message shown will be different, so this checks for existence
+ * of start date
+ */
+export function getAssociateStartDateMissing(project: Project) {
+  return project.contacts.filter(x => x.role === "Associate").some(x => !x.startDate);
+}
+/**
  * gets projects for the section
  */
 export function getProjectSection(project: Project, partner?: Partner): Section {
@@ -211,8 +234,10 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
     return "pending";
   }
 
-  const { isFc, isPmOrMo, isAssociate } = getAuthRoles(project.roles);
-
+  const { isFc, isPmOrMo, isAssociate, isPm } = getAuthRoles(project.roles);
+  if (project.projectNumber === "243015") {
+    console.log("==== found 243015", isPm, getShouldShowAssociateStartDateWarning(project), project, partner);
+  }
   switch (project.status) {
     case ProjectStatus.Live:
     case ProjectStatus.FinalClaim:
@@ -232,6 +257,11 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
 
       return "upcoming";
 
+    case ProjectStatus.OfferLetterSent: {
+      if (getShouldShowAssociateStartDateWarning(project)) {
+        return "open";
+      }
+    }
     case ProjectStatus.Closed:
     case ProjectStatus.Terminated:
       return "archived";
@@ -241,10 +271,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
   }
 }
 
-const getFilteredProjects = (
-  filteredProjects: Project[],
-  searchQuery?: string | number | undefined | null,
-): Project[] => {
+const getFilteredProjects = (filteredProjects: Project[], searchQuery?: string | number | undefined | null) => {
   if (searchQuery === null || typeof searchQuery === "undefined" || searchQuery === "") return filteredProjects;
 
   return fuzzySearch(String(searchQuery).trim(), filteredProjects, ["title", "projectNumber", "leadPartnerName"]).map(
@@ -259,8 +286,9 @@ export const useProjectsDashboardData = (search: string | number | undefined, co
     { fetchPolicy: "network-only" },
   );
   const projectsGql = data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? [];
-  const unfilteredObjects = projectsGql.map(x => ({
-    ...mapToProjectDto(x?.node ?? null, [
+
+  const unfilteredObjects = projectsGql.map(x => {
+    const project = mapToProjectDto(x?.node ?? null, [
       "claimsOverdue",
       "claimsToReview",
       "endDate",
@@ -283,23 +311,29 @@ export const useProjectsDashboardData = (search: string | number | undefined, co
       "status",
       "statusName",
       "title",
-    ]),
-    partners: mapToPartnerDtoArray(
-      x?.node?.Acc_ProjectParticipantsProject__r?.edges ?? [],
-      [
-        "accountId",
-        "id",
-        "claimStatus",
-        "partnerStatus",
-        "newForecastNeeded",
-        "name",
-        "isWithdrawn",
-        "isLead",
-        "projectId",
-      ],
-      {},
-    ),
-  }));
+    ]);
+
+    return {
+      ...project,
+      partners: mapToPartnerDtoArray(
+        x?.node?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+        [
+          "accountId",
+          "id",
+          "claimStatus",
+          "partnerStatus",
+          "newForecastNeeded",
+          "name",
+          "isWithdrawn",
+          "isLead",
+          "projectId",
+          "roles",
+        ],
+        { partnerRoles: project.partnerRoles },
+      ),
+      contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], ["role", "startDate"]),
+    };
+  });
 
   const displaySearch = (unfilteredObjects?.length ?? 0) >= config.options.numberOfProjectsToSearch;
   const projects = getFilteredProjects(unfilteredObjects, displaySearch ? search : null);

@@ -9,6 +9,8 @@ import { H4 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
+import { getAssociateStartDateMissing, getShouldShowAssociateStartDateWarning } from "./dashboard.logic";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 const useProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
   const { getContent } = useContent();
@@ -112,6 +114,14 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
     if (isPm && hasQueriedPcrs) {
       messages.push(getContent(x => x.projectMessages.pcrQueried));
     }
+
+    if (getShouldShowAssociateStartDateWarning(project)) {
+      if (getAssociateStartDateMissing(project)) {
+        messages.push(getContent(x => x.projectMessages.startDateRequired));
+      } else {
+        messages.push(getContent(x => x.projectMessages.canEditStartDate));
+      }
+    }
   }
 
   return messages;
@@ -126,9 +136,15 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
 
   const projectNotSetup = partner && section === "pending";
 
-  const route = projectNotSetup
-    ? routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id })
-    : routes.projectOverview.getLink({ projectId: project.id });
+  let route: ILinkInfo;
+
+  if (getShouldShowAssociateStartDateWarning(project)) {
+    route = routes.contactSetupAssociate.getLink({ projectId: project.id });
+  } else if (projectNotSetup) {
+    route = routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id });
+  } else {
+    route = routes.projectOverview.getLink({ projectId: project.id });
+  }
 
   return <Link route={route}>{titleContent}</Link>;
 };
