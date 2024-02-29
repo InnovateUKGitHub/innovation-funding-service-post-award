@@ -1,4 +1,5 @@
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { BaseProps } from "@ui/containers/containerBase";
 
@@ -10,6 +11,7 @@ export type Project = Pick<
   ProjectDtoGql,
   | "claimsOverdue"
   | "claimsToReview"
+  | "competitionType"
   | "endDate"
   | "id"
   | "isPastEndDate"
@@ -29,7 +31,8 @@ export type Project = Pick<
   | "status"
   | "statusName"
   | "title"
-> & { partners: Partner[] };
+> & { partners: Partner[] } & { contacts: Pick<ProjectContactDto, "role" | "startDate">[] };
+
 export type Partner = Pick<
   PartnerDtoGql,
   | "accountId"
@@ -41,6 +44,7 @@ export type Partner = Pick<
   | "isWithdrawn"
   | "isLead"
   | "projectId"
+  | "roles"
 >;
 
 export interface ProjectProps {

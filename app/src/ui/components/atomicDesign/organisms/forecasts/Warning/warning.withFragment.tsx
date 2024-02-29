@@ -41,7 +41,7 @@ export const Warning = ({ editor }: { editor?: IEditorStore<ForecastDetailsDTO[]
 
   // PARTNER
   const partner = mapToPartnerDto(partnerNode, ["id", "roles"], {
-    roles: partnerRoles.find(x => x.partnerId === partnerNode?.Id ?? "unknown") ?? defaultRole,
+    roles: partnerRoles.find(x => x.partnerId === (partnerNode?.Id ?? "unknown")) ?? defaultRole,
   });
 
   // CLAIMS
