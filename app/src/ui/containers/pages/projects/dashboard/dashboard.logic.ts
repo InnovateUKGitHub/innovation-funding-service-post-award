@@ -234,7 +234,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
     return "pending";
   }
 
-  const { isFc, isPmOrMo, isAssociate, isPm } = getAuthRoles(project.roles);
+  const { isFc, isPmOrMo, isAssociate } = getAuthRoles(project.roles);
 
   switch (project.status) {
     case ProjectStatus.Live:
