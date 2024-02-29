@@ -20,7 +20,6 @@ import { PCRStatus, PCRItemType, PCRItemStatus, pcrItemTypes } from "@framework/
 import { ValidationError } from "@shared/appError";
 import { InActiveProjectError } from "../common/appError";
 import { ISalesforceProject } from "@server/repositories/projectsRepository";
-import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 const setCompetitionTypeAsLoans = (x: ISalesforceProject) => (x.Acc_CompetitionType__c = "LOANS");
 
@@ -209,9 +208,7 @@ describe("UpdatePCRCommand", () => {
 
         const project = context.testData.createProject(setCompetitionTypeAsLoans);
         const pcr = context.testData.createPCR(project, { status: from });
-        const recordTypes = context.testData.createPCRRecordTypes({
-          competitionType: SalesforceCompetitionTypes.loans,
-        });
+        const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownChange);
         const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
@@ -247,9 +244,7 @@ describe("UpdatePCRCommand", () => {
             comments: "Comments",
             reasoning: "Reasoning",
           });
-          const recordTypes = context.testData.createPCRRecordTypes({
-            competitionType: SalesforceCompetitionTypes.loans,
-          });
+          const recordTypes = context.testData.createPCRRecordTypes();
           const projectTestType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownChange);
 
           const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
@@ -585,9 +580,7 @@ describe("UpdatePCRCommand", () => {
 
         const project = context.testData.createProject(setCompetitionTypeAsLoans);
         const pcr = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
-        const recordTypes = context.testData.createPCRRecordTypes({
-          competitionType: SalesforceCompetitionTypes.loans,
-        });
+        const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownChange);
         const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
@@ -616,9 +609,7 @@ describe("UpdatePCRCommand", () => {
         const project = context.testData.createProject(setCompetitionTypeAsLoans);
         const pcr = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
 
-        const recordTypes = context.testData.createPCRRecordTypes({
-          competitionType: SalesforceCompetitionTypes.loans,
-        });
+        const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownChange);
         const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
@@ -643,9 +634,7 @@ describe("UpdatePCRCommand", () => {
         const project = context.testData.createProject(setCompetitionTypeAsLoans);
         const pcr = context.testData.createPCR(project, { status: PCRStatus.QueriedToProjectManager });
 
-        const recordTypes = context.testData.createPCRRecordTypes({
-          competitionType: SalesforceCompetitionTypes.loans,
-        });
+        const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownChange);
         const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
@@ -1607,9 +1596,7 @@ describe("UpdatePCRCommand", () => {
         const project = context.testData.createProject(x => (x.Acc_CompetitionType__c = "LOANS"));
         context.testData.createCurrentUserAsProjectManager(project);
         const pcr = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
-        const recordTypes = context.testData.createPCRRecordTypes({
-          competitionType: SalesforceCompetitionTypes.loans,
-        });
+        const recordTypes = context.testData.createPCRRecordTypes();
 
         const loanExtensionType = pcrItemTypes.find(x => x.type === PCRItemType.LoanDrawdownExtension);
         const recordType = recordTypes.find(x => x.type === loanExtensionType?.typeName);

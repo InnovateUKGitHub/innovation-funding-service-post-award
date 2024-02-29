@@ -9,7 +9,7 @@ import {
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
-import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
+import { MapVirements, mapVirements } from "../mapFinancialVirements";
 
 const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
 

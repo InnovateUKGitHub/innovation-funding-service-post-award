@@ -20,7 +20,6 @@ import { ValidationError } from "../common/appError";
 import { InActiveProjectError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
-import { GetPCRByIdQuery } from "../pcrs/getPCRByIdQuery";
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
@@ -44,18 +43,8 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     }
 
     const existingVirements = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
-    const pcr = await context.runQuery(new GetPCRByIdQuery(this.projectId, this.pcrId));
-    const pcrItem = pcr.items.find(x => x.id === this.pcrItemId);
 
-    if (!pcrItem) throw new Error("Cannot find PCR item ID");
-
-    const validator = new FinancialVirementDtoValidator({
-      model: this.data,
-      showValidationErrors: true,
-      submit: this.submit,
-      pcrItemType: pcrItem.type,
-    });
-
+    const validator = new FinancialVirementDtoValidator(this.data, true, this.submit);
     if (!validator.isValid) {
       throw new ValidationError(validator);
     }

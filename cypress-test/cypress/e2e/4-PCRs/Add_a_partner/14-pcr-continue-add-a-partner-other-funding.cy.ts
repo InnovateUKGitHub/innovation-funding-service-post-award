@@ -25,7 +25,7 @@ import {
 
 const pm = "james.black@euimeabs.test";
 
-describe("PCR > Add partner > Continuing editing PCR project costs (other funding)", () => {
+describe("PCR > Add partner > Continuing editing PCR > Other funding costs", () => {
   before(() => {
     visitApp({ asUser: pm, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");

@@ -23,7 +23,7 @@ const statusConfig: Record<TaskStatus, TagTypeOptions | undefined> = {
 interface ITask {
   name: string | ContentSelector;
   route: ILinkInfo | null;
-  status?: TaskStatus;
+  status: TaskStatus;
   validation?: Result[];
   rhfError?: { key: string; message: string | null };
   id?: string;
@@ -35,6 +35,8 @@ export const Task = ({ route, name, status, validation, rhfError, id }: ITask) =
 
   const link = typeof name === "string" ? name : getContent(name);
   const taskName = route ? <Link route={route}>{link}</Link> : link;
+
+  const taskStyle = statusConfig[status];
 
   return (
     <li className={cx("app-task-list__item", { "app-task-list__item--error": hasError })}>
@@ -48,11 +50,9 @@ export const Task = ({ route, name, status, validation, rhfError, id }: ITask) =
         {taskName}
       </span>
 
-      {status && (
-        <span className="app-task-list__task-action">
-          <Tag type={statusConfig[status]}>{status}</Tag>
-        </span>
-      )}
+      <span className="app-task-list__task-action">
+        <Tag type={taskStyle}>{status}</Tag>
+      </span>
     </li>
   );
 };

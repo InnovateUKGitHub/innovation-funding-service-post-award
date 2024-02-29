@@ -72,6 +72,6 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
   }
 
   protected createValidationResult(params: VirementCostsParams, dto: FinancialVirementDto) {
-    return new FinancialVirementDtoValidator({ model: dto, showValidationErrors: false, submit: false });
+    return new FinancialVirementDtoValidator(dto, false, false);
   }
 }

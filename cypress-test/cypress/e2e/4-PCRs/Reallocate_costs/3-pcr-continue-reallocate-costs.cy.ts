@@ -22,9 +22,6 @@ import {
   validateAlphaCharacters,
   saveZeroValue,
   reallocateDecimals,
-  increaseSinglePartnerOver100,
-  revertToPreviousValues,
-  changeRemainingGrantRounding,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -115,10 +112,11 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   it("Should re-access A B Cad Services and reduce costs in line with total grant value", reaccessABCadReduce);
 
   it("Should no longer show validation message stating overspend", () => {
-    cy.getByQA("validation-message-content").should(
-      "not.have.text",
-      "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
-    );
+    cy.getByQA("validation-message-content")
+      .contains(
+        "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
+      )
+      .should("not.exist");
   });
 
   it("Should navigate back into EUI and validate the inputs", validateCostUpdateInputs);
@@ -134,9 +132,6 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
     );
   });
 
-  /**
-   * Change remaining grant section
-   */
   it("Should access the 'Change remaining grant section", () => {
     cy.clickOn("Change remaining grant");
     cy.heading("Change remaining grant");
@@ -172,20 +167,6 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   it("Should ensure a zero can be saved as a value", saveZeroValue);
 
   it("Should go back into Change remaining grant and reduce figure by £3.00", restoreRemainingGrant);
-
-  it(
-    "Should increase one partner to above 100% grant, keeping the project total within total allowed and correctly validate",
-    increaseSinglePartnerOver100,
-  );
-
-  it("Should return to the previous values and save correctly", revertToPreviousValues);
-
-  it("Should access the 'Change remaining grant section", () => {
-    cy.clickOn("Change remaining grant");
-    cy.heading("Change remaining grant");
-  });
-
-  it("Should check that pennies are rounded correctly and calculate correctly", changeRemainingGrantRounding);
 
   it("Has an input box for grant moving over financial year and will validate the input", validateGrantMoving);
 

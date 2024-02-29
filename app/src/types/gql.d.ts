@@ -26,10 +26,6 @@ declare namespace GQL {
   type Maybe<T> = T | null | undefined;
 
   type Value<T> = Maybe<{ value: Maybe<T> }>;
-  type ArrayValue<T> = Maybe<List<Maybe<Node<T>>>>;
-
-  type List<T> = { readonly totalCount?: number; readonly edges?: Maybe<ReadonlyArray<T>> };
-  type Node<T> = { readonly node: Maybe<T> };
 
   type ValueAndLabel<T> = Maybe<{ value?: Maybe<T>; label?: Maybe<string> }>;
 

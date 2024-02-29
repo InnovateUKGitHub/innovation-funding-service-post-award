@@ -54,7 +54,6 @@ export const mapToPCRStatus = (statusLabel: string) => {
   switch (statusLabel) {
     // Current Values
     case "Draft":
-    case "Draft with Project Manager":
       return PCRStatus.DraftWithProjectManager;
     case "Submitted to Monitoring Officer":
       return PCRStatus.SubmittedToMonitoringOfficer;
@@ -171,8 +170,6 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.PeriodLengthChange;
     case ProjectChangeRequest.approveNewSubcontractor:
       return PCRItemType.ApproveNewSubcontractor;
-    case ProjectChangeRequest.uplift:
-      return PCRItemType.Uplift;
 
     // Request header
     case ProjectChangeRequest.requestHeader:
@@ -217,9 +214,6 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.LoanDrawdownExtension;
     case "approve a new subcontractor":
       return PCRItemType.ApproveNewSubcontractor;
-    case "uplift":
-      return PCRItemType.Uplift;
-
     default:
       return PCRItemType.Unknown;
   }

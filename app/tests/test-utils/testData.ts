@@ -41,7 +41,6 @@ import { ISalesforceProfileTotalCostCategory } from "@server/repositories/profil
 import { SalesforceRole, ISalesforceProjectContact } from "@server/repositories/projectContactsRepository";
 import { ISalesforceProject } from "@server/repositories/projectsRepository";
 import { RecordType } from "@framework/entities/recordType";
-import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 export class TestData {
   constructor(private readonly repositories: ITestRepositories, private readonly getCurrentUser: () => IClientUser) {}
@@ -775,28 +774,18 @@ export class TestData {
     return newItem;
   }
 
-  public createPCRRecordTypes(
-    {
-      competitionType,
-    }: {
-      competitionType?: SalesforceCompetitionTypes;
-    } = {
-      competitionType: SalesforceCompetitionTypes?.sbri,
-    },
-  ) {
-    return pcrItemTypes
-      .filter(x => typeof competitionType === "undefined" || !x.ignoredCompetitions.includes(competitionType))
-      .map(x => {
-        const parent = "Acc_ProjectChangeRequest__c";
-        const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
-        return (
-          existing ||
-          this.createRecordType({
-            parent,
-            type: x.typeName,
-          })
-        );
-      });
+  public createPCRRecordTypes() {
+    return pcrItemTypes.map(x => {
+      const parent = "Acc_ProjectChangeRequest__c";
+      const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
+      return (
+        existing ||
+        this.createRecordType({
+          parent,
+          type: x.typeName,
+        })
+      );
+    });
   }
 
   public createPCR(project?: ISalesforceProject, update?: Partial<ProjectChangeRequestEntity>) {

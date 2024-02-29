@@ -22,7 +22,7 @@ import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrep
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
+import { usePcrItemName } from "../utils/getPcrItemName";
 import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
@@ -35,7 +35,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
   const { project, pcr, pcrs, statusChanges, editableItemTypes, isMultipleParticipants, numberOfPartners } =
     usePCRPrepareQuery(props.projectId, props.pcrId);
 
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { getPcrItemContent } = usePcrItemName();
 
   const pcrItems = pcr.items.map(x => ({
     shortName: getPcrItemContent(x.shortName).name,
@@ -61,7 +61,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.pcrId, pcr, project);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.projectId, props.pcrId, pcr, project);
 
   const { getContent } = useContent();
   const characterCount = watch("comments")?.length ?? 0;

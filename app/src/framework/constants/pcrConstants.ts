@@ -74,7 +74,6 @@ export const enum PCRItemType {
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
   ApproveNewSubcontractor = 130,
-  Uplift = 140,
 }
 
 export const enum PCRItemTypeName {
@@ -328,10 +327,6 @@ export interface IPcrStatusMetaValue {
   deletableByPm: boolean;
   reviewableByMo: boolean;
   archived: boolean;
-
-  // For internal PCRs (aka Uplift)
-  // Replaces the External facing status with a new Internal status
-  i18nInternalName?: ContentSelector;
 }
 
 export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
@@ -339,7 +334,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.Unknown,
     i18nName: x => x.pcrStatus.Unknown,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -348,7 +342,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DraftWithProjectManager,
     i18nName: x => x.pcrStatus.DraftWithProjectManager,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: true,
     deletableByPm: true,
     reviewableByMo: false,
@@ -357,7 +350,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.SubmittedToMonitoringOfficer,
     i18nName: x => x.pcrStatus.SubmittedToMonitoringOfficer,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: true,
@@ -366,7 +358,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.QueriedByMonitoringOfficer,
     i18nName: x => x.pcrStatus.Queried,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: true,
     deletableByPm: false,
     reviewableByMo: false,
@@ -375,7 +366,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.SubmittedToInnovateUK,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -384,7 +374,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.QueriedToProjectManager,
     i18nName: x => x.pcrStatus.Queried,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: true,
     deletableByPm: false,
     reviewableByMo: false,
@@ -409,7 +398,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.AwaitingAmendmentLetter,
     i18nName: x => x.pcrStatus.AwaitingAmendmentLetter,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -428,7 +416,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedSubmittedToInnovationLead,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -445,7 +432,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInExternalReview,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -454,7 +440,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInReviewWithInnovateUK,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -471,7 +456,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedInReviewWithProjectFinance,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -480,7 +464,6 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   {
     status: PCRStatus.DeprecatedReadyForApproval,
     i18nName: x => x.pcrStatus.SubmittedToInnovateUK,
-    i18nInternalName: x => x.pcrStatus.InternalInProgress,
     editableByPm: false,
     deletableByPm: false,
     reviewableByMo: false,
@@ -500,26 +483,6 @@ export interface IMetaValue {
   deprecated?: boolean;
   singleInstanceInAnyPcr?: boolean;
   singleInstanceInThisPcr?: boolean;
-
-  /**
-   * If this PCR Item exists, hide the Summary step in the entire PCR
-   */
-  disableSummary?: boolean;
-
-  /**
-   * Hide the "To do"/"Incomplete"/"Complete" status associated with a PCR Item
-   */
-  disableStatus?: boolean;
-
-  /**
-   * Whether to use internal statuses (map status to "In progress"/"Done")
-   */
-  enableInternalStatuses?: boolean;
-
-  /**
-   * Check if PCR Type successfully validates against Financial Virement DTO Validator
-   */
-  enableFinancialVirement?: boolean;
 }
 
 /**
@@ -539,7 +502,6 @@ export const pcrItemTypes: IMetaValue[] = [
     ignoredCompetitions: [],
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
-    enableFinancialVirement: true,
   },
   {
     type: PCRItemType.PartnerWithdrawal,
@@ -656,7 +618,6 @@ export const pcrItemTypes: IMetaValue[] = [
       SalesforceCompetitionTypes.sbri,
       SalesforceCompetitionTypes.sbriIfs,
       SalesforceCompetitionTypes.horizonEurope,
-      SalesforceCompetitionTypes.combinedCapital,
     ],
     i18nName: x => x.pcrTypes.loanDrawdownExtension,
     i18nDescription: x => x.pages.pcrModifyOptions.loanDrawdownExtensionMessage,
@@ -671,26 +632,6 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.approveNewSubcontractorMessage,
     singleInstanceInAnyPcr: false,
     singleInstanceInThisPcr: false,
-  },
-  {
-    type: PCRItemType.Uplift,
-    typeName: "Uplift",
-    i18nName: x => x.pcrTypes.uplift,
-    ignoredCompetitions: [
-      SalesforceCompetitionTypes.crnd,
-      SalesforceCompetitionTypes.contracts,
-      SalesforceCompetitionTypes.ktp,
-      SalesforceCompetitionTypes.catapults,
-      SalesforceCompetitionTypes.edge,
-      SalesforceCompetitionTypes.sbri,
-      SalesforceCompetitionTypes.sbriIfs,
-      SalesforceCompetitionTypes.horizonEurope,
-      SalesforceCompetitionTypes.combinedCapital,
-      SalesforceCompetitionTypes.loans,
-    ],
-    disableSummary: true,
-    disableStatus: true,
-    enableInternalStatuses: true,
   },
 ];
 
@@ -708,6 +649,3 @@ export const pcrItems = [
   PCRItemType.LoanDrawdownExtension,
   PCRItemType.ApproveNewSubcontractor,
 ] as const;
-
-export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
-export const enableFinancialVirementItems = pcrItemTypes.filter(x => x.enableFinancialVirement).map(x => x.type);

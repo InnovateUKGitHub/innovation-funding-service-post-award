@@ -5,7 +5,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPcrStatusDtoArray } from "@gql/dtoMapper/mapPcrStatus";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestDetailsQuery>(
@@ -19,20 +19,22 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const project = mapToProjectDto(projectNode, ["id", "title", "status", "projectNumber", "typeOfAid", "roles"]);
 
   const pcr = mapToPcrDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
+    projectNode?.Project_Change_Requests__r?.edges ?? [],
     ["id", "status", "reasoningStatus", "requestNumber"],
     [
-      "id",
       "accountName",
       "hasOtherFunding",
+      "id",
       "isCommercialWork",
       "organisationName",
       "organisationType",
       "partnerNameSnapshot",
       "partnerType",
       "projectRole",
+      "shortName",
       "status",
       "type",
+      "typeName",
       "typeOfAid",
     ],
     { typeOfAid: project.typeOfAid },
@@ -45,8 +47,9 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
     ["id", "pcrId", "createdBy", "createdDate", "newStatus", "previousStatus", "newStatusLabel", "comments"],
     { roles: project.roles },
   );
+  const nonEditableTypes: PCRItemType[] = [PCRItemType.ProjectTermination];
 
-  const editableItemTypes = getEditableItemTypes(pcr);
+  const editableItemTypes = pcr.items.map(x => x.type).filter(x => !nonEditableTypes.includes(x));
 
   return { project, pcr, editableItemTypes, statusChanges };
 };

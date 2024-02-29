@@ -7,7 +7,7 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
-import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
+import { usePcrItemName } from "./utils/getPcrItemName";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
@@ -16,15 +16,13 @@ export const PcrPage = ({
   children,
   apiError: pcrLevelApiError,
   validationErrors,
-  backLink,
 }: {
   children: React.ReactNode;
   apiError?: IAppError<Results<ResultBase>> | null | undefined;
   validationErrors?: RhfErrors;
-  backLink?: React.ReactNode;
 }) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { getPcrItemContent } = usePcrItemName();
 
   useScrollToTopSmoothly([step]);
 
@@ -39,7 +37,7 @@ export const PcrPage = ({
 
   return (
     <Page
-      backLink={backLink ?? <PcrBackLink />}
+      backLink={<PcrBackLink />}
       pageTitle={<Title heading={content.name} />}
       projectStatus={project.status}
       fragmentRef={fragmentRef}

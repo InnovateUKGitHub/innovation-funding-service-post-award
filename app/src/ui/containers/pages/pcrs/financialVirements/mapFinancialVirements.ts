@@ -192,13 +192,10 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
   };
 };
 
-const useMapFinancialVirements = (props: MapVirements) => {
+const useMapVirements = (props: MapVirements) => {
   return useMemo(() => {
     return mapVirements(props);
   }, [props.financialVirementsForCosts, props.financialVirementsForParticipants]);
 };
 
-type MappedFinancialVirements = ReturnType<typeof mapVirements>;
-
-export { mapVirements, useMapFinancialVirements, MapVirements };
-export type { MappedFinancialVirements };
+export { mapVirements, useMapVirements, MapVirements };

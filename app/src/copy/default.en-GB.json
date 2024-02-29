@@ -581,7 +581,7 @@
       "additionalInfo": "Additional info"
     },
     "financialVirementDetails": {
-      "title": "Financial virements"
+      "title": "Reallocate costs"
     },
     "financialVirementEdit": {
       "title": "Reallocate costs",
@@ -1163,7 +1163,6 @@
   },
   "pcrStatus": {
     "Unknown": "Unknown",
-    "InternalInProgress": "In Progress",
 
     "Queried": "Queried to Project Manager",
     "DraftWithProjectManager": "Draft with Project Manager",
@@ -1400,8 +1399,7 @@
     "timeExtension": "Change project duration",
     "loanDrawdownChange": "Loan Drawdown Change",
     "loanDrawdownExtension": "Change Loans Duration",
-    "approveNewSubcontractor": "Approve a new subcontractor",
-    "uplift": "Uplift"
+    "approveNewSubcontractor": "Approve a new subcontractor"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
@@ -1482,8 +1480,6 @@
     "requestStarted": "Request started",
     "requestLastUpdated": "Request last updated",
     "requestStatus": "Request status",
-    "type_one": "Type",
-    "type_other": "Types",
     "types": "Types",
     "started": "Started",
     "status": "Status",
@@ -1505,9 +1501,6 @@
   "pcrReasoningLabels": {
     "comments": "Comments",
     "files": "Files"
-  },
-  "pcrUpliftLabels": {
-    "overrideJustification": "Justification"
   },
   "pcrRemovePartnerLabels": {
     "removalPeriod": "Removal period",
@@ -1604,8 +1597,7 @@
       "costRequired": "Costs are required.",
       "costClaimedTooSmall": "Costs cannot be less than amount already claimed for {{ name }}.",
       "costTooSmall": "Costs cannot be less than zero.",
-      "costTooBig": "Eligible costs must be less than £10,000,000,000,000,000.",
-      "invalidPcrItemType": "You cannot reallocate project costs on an uplift."
+      "costTooBig": "Eligible costs must be less than £10,000,000,000,000,000."
     },
     "forecastDetailsDtoValidator": {
       "noEditAboutToSubmitFinalClaim": "You cannot change your forecast as you are due to submit your final claim.",

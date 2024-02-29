@@ -24,7 +24,7 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
-import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
+import { usePcrItemName } from "../utils/getPcrItemName";
 import { useOnSubmit, usePcrModifyOptionsQuery } from "./PcrModifyOptions.logic";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
@@ -43,7 +43,7 @@ interface PcrBaseParams {
 const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { getPcrItemContent } = usePcrItemName();
   const { project, pcrs, numberOfPartners } = usePcrModifyOptionsQuery({ projectId });
   const currentPcr = pcrs.find(x => x.id === pcrId);
 

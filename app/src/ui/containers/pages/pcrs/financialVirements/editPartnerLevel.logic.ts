@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
-import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
+import { useMapVirements } from "./mapFinancialVirements";
 
 export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: ProjectId; itemId: PcrItemId }) => {
   const data = useLazyLoadQuery<EditPartnerLevelQuery>(
@@ -90,7 +90,7 @@ export const useOnUpdatePartnerLevel = (
 
 export const getPayload = (
   data: EditPartnerLevelSchema,
-  virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
+  virementData: ReturnType<typeof useMapVirements>["virementData"],
   itemId: PcrItemId,
 ) => {
   const newRemainingGrantTotal = sumBy(data.virements, x => Number(x.newRemainingGrant.replace("£", "")));

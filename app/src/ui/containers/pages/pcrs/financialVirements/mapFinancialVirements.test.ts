@@ -1,4 +1,4 @@
-import { MapVirements, mapVirements } from "./useMapFinancialVirements";
+import { mapVirements, MapVirements } from "./mapFinancialVirements";
 
 describe("mapFinancialVirements", () => {
   const data: MapVirements = {
