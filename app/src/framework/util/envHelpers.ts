@@ -96,12 +96,12 @@ const getFloatEnv = (env: string, defaultValue?: number) => getEnv(env, defaultV
  * @param defaultValue The default value of the environment variable. If both this and the environment variable does not exist, the function will throw an exception.
  * @returns The environment variable, either from the env itself or from a file stored on diskette
  */
-const getCertificateEnv = (type: string, defaultValue?: string): string => {
-  if (envExists(type)) {
-    return getStringEnv(type);
+const getCertificateEnv = (type: "SHIBBOLETH" | "SALESFORCE", defaultValue?: string): string => {
+  if (envExists(`${type}_PRIVATE_KEY`)) {
+    return getStringEnv(`${type}_PRIVATE_KEY`);
   }
-  if (envExists(`${type}_FILE`)) {
-    return readFileSync(getStringEnv(`${type}_FILE`), { encoding: "utf-8" });
+  if (envExists(`${type}_PRIVATE_KEY_FILE`)) {
+    return readFileSync(getStringEnv(`${type}_PRIVATE_KEY_FILE`), { encoding: "utf-8" });
   }
   if (typeof defaultValue === "string") {
     return defaultValue;

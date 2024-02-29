@@ -8,9 +8,9 @@ import { Logger } from "@shared/developmentLogger";
 import {
   successfulValidationRoute,
   getEmailFromAuthPayload,
-  PassportSamlPayload,
-  getPassportSamlStrategy,
-} from "./passportSaml";
+  ShibbolethPayload,
+  shibbolethStrategy,
+} from "./shibboleth.config";
 
 export const router = express.Router();
 
@@ -29,17 +29,14 @@ router.use(
 
 router.use(passport.initialize());
 
-if (configuration.sso.enabled) {
-  const passportSamlStrategy = getPassportSamlStrategy();
-  passport.use("passportSaml", passportSamlStrategy);
-}
+passport.use("shibboleth", shibbolethStrategy);
 
 passport.serializeUser((parsedResponse: unknown, onSuccess: (err: unknown, id?: unknown) => void): void => {
-  const payload = parsedResponse as Pick<PassportSamlPayload, "email">;
+  const payload = parsedResponse as Pick<ShibbolethPayload, "email">;
   onSuccess(null, { email: payload.email });
 });
 
-router.get("/login", noCache, passport.authenticate("passportSaml"));
+router.get("/login", noCache, passport.authenticate("shibboleth"));
 
 router.get("/logout", noCache, (_req, res) => {
   res.cookie(cookieName, "", {
@@ -51,10 +48,9 @@ router.get("/logout", noCache, (_req, res) => {
   return res.redirect((configuration.sso.enabled && configuration.sso.signoutUrl) || "/");
 });
 
-// Note: On success Passport SAML redirects to `configuration.webserver.url + successfulValidationRoute`
-// See `passportSaml.ts` for more info
+// Note: On success Shibboleth calls SamlConfig["callbackUrl"] (see config)
 router.post(successfulValidationRoute, (req, res) =>
-  passport.authenticate("passportSaml", (authError: AnyObject, payload: AnyObject) => {
+  passport.authenticate("shibboleth", (authError: AnyObject, payload: AnyObject) => {
     if (authError) {
       logger.error("Authentication Error", authError);
 
