@@ -1,8 +1,8 @@
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
-import { PCRItemType, pcrStatusMetaValues } from "@framework/constants/pcrConstants";
+import { pcrStatusMetaValues } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -18,10 +18,9 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
+import { usePcrItemName } from "../utils/getPcrItemName";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { useContent } from "@ui/hooks/content.hook";
-import { PcrItemDtoMapping } from "@gql/dtoMapper/mapPcrDto";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -32,7 +31,7 @@ type PCRDashboardType = Merge<
     Pick<PCRSummaryDto, "id" | "requestNumber" | "started" | "status" | "lastUpdated" | "items" | "projectId">,
     "items"
   >,
-  { items: Pick<PcrItemDtoMapping, "type" | "id">[] }
+  { items: Pick<PCRItemSummaryDto, "shortName">[] }
 >;
 
 const PCRTable = createTypedTable<PCRDashboardType>();
@@ -41,8 +40,8 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
-  const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
-  const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
+  const { getPcrItemContent } = usePcrItemName();
+  const { getPcrStatusName, getPcrMetadata } = useGetPcrStatusMetadata();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
     const { isPm } = getAuthRoles(project.roles);
@@ -72,84 +71,48 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         <PCRTable.Custom
           qa="types"
           header="Types"
-          value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.type).name)} />}
+          value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.shortName).name)} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
-        <PCRTable.Custom qa="status" header="Status" value={x => renderStatus(x)} />
+        <PCRTable.String qa="status" header="Status" value={x => getPcrStatusName(x.status)} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
         <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => renderLinks(project, x)} />
       </PCRTable.Table>
     );
   };
 
-  const renderStatus = (pcr: PCRDashboardType): React.ReactNode => {
-    const enableInternalStatuses = pcr.items.some(x => getPcrItemMetadata(x.type)?.enableInternalStatuses);
-
-    if (enableInternalStatuses) {
-      return <>{getPcrInternalStatusName(pcr.status)}</>;
-    } else {
-      return <>{getPcrStatusName(pcr.status)}</>;
-    }
-  };
-
   const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
-    const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
+    const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id };
+    const pcrMetadata = getPcrMetadata(pcr.status);
 
-    const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
-    const hasAnyUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+    if (pcrMetadata?.editableByPm && isPm && isProjectActive) {
+      links.push({
+        route: props.routes.pcrPrepare.getLink(pcrLinkArgs),
+        text: "Edit",
+        qa: "pcrPrepareLink",
+      });
+    } else if (pcrMetadata?.reviewableByMo && isMo && isProjectActive) {
+      links.push({
+        route: props.routes.pcrReview.getLink(pcrLinkArgs),
+        text: "Review",
+        qa: "pcrReviewLink",
+      });
+    } else if (isPmOrMo) {
+      links.push({
+        route: props.routes.pcrDetails.getLink(pcrLinkArgs),
+        text: "View",
+        qa: "pcrViewLink",
+      });
+    }
 
-    const viewItemLink = {
-      route: props.routes.pcrViewItem.getLink(pcrLinkArgs),
-      text: "View",
-      qa: "pcrViewItemLink",
-    };
-
-    const viewLink = {
-      route: props.routes.pcrDetails.getLink(pcrLinkArgs),
-      text: "View",
-      qa: "pcrViewLink",
-    };
-
-    const reviewLink = {
-      route: props.routes.pcrReview.getLink(pcrLinkArgs),
-      text: "Review",
-      qa: "pcrReviewLink",
-    };
-
-    const editLink = {
-      route: props.routes.pcrPrepare.getLink(pcrLinkArgs),
-      text: "Edit",
-      qa: "pcrPrepareLink",
-    };
-
-    const deleteLink = {
-      route: props.routes.pcrDelete.getLink(pcrLinkArgs),
-      text: "Delete",
-      qa: "pcrDeleteLink",
-    };
-
-    if (isPmOrMo && hasAnyUplift) {
-      // If we only have 1 PCR item, show the view item link.
-      if (pcr.items.length === 1) {
-        links.push(viewItemLink);
-      } else {
-        // Otherwise, show the standard view link
-        links.push(viewLink);
-      }
-    } else {
-      if (pcrStatusMetadata?.editableByPm && isPm && isProjectActive) {
-        links.push(editLink);
-      } else if (pcrStatusMetadata?.reviewableByMo && isMo && isProjectActive) {
-        links.push(reviewLink);
-      } else if (isPmOrMo) {
-        links.push(viewLink);
-      }
-
-      if (pcrStatusMetadata?.deletableByPm && isPm && isProjectActive) {
-        links.push(deleteLink);
-      }
+    if (pcrMetadata?.deletableByPm && isPm && isProjectActive) {
+      links.push({
+        route: props.routes.pcrDelete.getLink(pcrLinkArgs),
+        text: "Delete",
+        qa: "pcrDeleteLink",
+      });
     }
 
     return links.map((x, i) => (

@@ -51,7 +51,7 @@ export class FinancialVirementsStore extends StoreBase {
       this.getKey(projectId, pcrId, pcrItemId, partnerId),
       () => this.get(projectId, pcrId, pcrItemId, partnerId),
       undefined,
-      data => new FinancialVirementDtoValidator({ model: data, showValidationErrors: false, submit: false }),
+      data => new FinancialVirementDtoValidator(data, false, false),
     );
   }
 
@@ -70,7 +70,7 @@ export class FinancialVirementsStore extends StoreBase {
       "financialVirement",
       this.getKey(projectId, pcrId, pcrItemId, partnerId),
       dto,
-      showErrors => new FinancialVirementDtoValidator({ model: dto, showValidationErrors: showErrors, submit }),
+      showErrors => new FinancialVirementDtoValidator(dto, showErrors, submit),
       p =>
         apiClient.financialVirements.update({
           projectId,

@@ -36,8 +36,8 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   ]);
 
   const pcr = mapToPcrDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
-    ["id", "status", "reasoningStatus", "requestNumber", "comments"],
+    projectNode?.Project_Change_Requests__r?.edges ?? [],
+    ["id", "status", "reasoningStatus", "requestNumber", "projectId", "comments"],
     [
       "accountName",
       "hasOtherFunding",
@@ -60,7 +60,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   if (!pcr) throw new Error("Failed to find a matching PCR");
 
   const pcrs = mapToPcrDtoArray(
-    data.salesforce.uiapi.query.OtherPCRs?.edges ?? [],
+    projectNode?.Project_Change_Requests__r?.edges ?? [],
     ["id", "status"],
     ["id", "type", "typeName", "shortName"],
     {},
@@ -89,11 +89,11 @@ export type FormValues = {
 
 const getPayload = (
   saveAndContinue: boolean,
-  project: Pick<ProjectDto, "monitoringLevel" | "id">,
-  pcr: Pick<PCRDto, "status" | "id">,
+  project: Pick<ProjectDto, "monitoringLevel">,
+  pcr: Pick<PCRDto, "status" | "projectId" | "id">,
   data: Pick<FormValues, "comments">,
 ) => {
-  const payload = { ...pcr, comments: data.comments, projectId: project.id };
+  const payload = { ...pcr, comments: data.comments };
   if (saveAndContinue) {
     switch (pcr.status) {
       case PCRStatus.DraftWithProjectManager:
@@ -117,13 +117,13 @@ const getPayload = (
 };
 
 export const useOnUpdatePcrPrepare = (
+  projectId: ProjectId,
   pcrId: PcrId,
-  pcr: Pick<PCRDto, "status" | "id">,
-  project: Pick<ProjectDto, "monitoringLevel" | "id">,
+  pcr: Pick<PCRDto, "status" | "id" | "projectId">,
+  project: Pick<ProjectDto, "monitoringLevel">,
 ) => {
   const routes = useRoutes();
   const navigate = useNavigate();
-  const { id: projectId } = project;
 
   return useOnUpdate<FormValues, PCRDto>({
     req(data) {

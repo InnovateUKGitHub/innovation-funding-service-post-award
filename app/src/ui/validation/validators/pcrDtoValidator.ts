@@ -27,7 +27,6 @@ import {
   PCRItemForLoanDrawdownChangeDto,
   PCRItemForLoanDrawdownExtensionDto,
   PCRItemForApproveNewSubcontractorDto,
-  PCRItemForUpliftDto,
 } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -962,7 +961,6 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 }
 export class PCRLoanDrawdownChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownChangeDto> {}
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {}
-export class PCRUpliftDtoValidator extends PCRBaseItemDtoValidator<PCRItemForUpliftDto> {}
 
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}
 export class PCRApproveNewSubcontractorItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForApproveNewSubcontractorDto> {}

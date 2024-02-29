@@ -28,9 +28,9 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
   const project = mapToProjectDto(projectNode, ["id", "projectNumber", "roles", "title", "status"]);
 
   const pcrs = mapToPcrDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
+    projectNode?.Project_Change_Requests__r?.edges ?? [],
     ["status", "started", "lastUpdated", "id", "projectId", "requestNumber"],
-    ["type", "id"],
+    ["shortName"],
     {},
   );
 

@@ -11,7 +11,6 @@ export abstract class TestRepository<T> {
       if (found) {
         resolve(found);
       } else {
-        console.info("Failed to find any items in list", this.Items);
         reject(new NotFoundError("NOT FOUND"));
       }
     });

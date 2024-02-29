@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e48d849023c49b9e2a1f42e5452b116f>>
+ * @generated SignedSource<<e27e0078f0391d26152cdf9a2f5609a7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,43 +16,6 @@ export type PCRDashboardQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
-        readonly Acc_ProjectChangeRequest__c: {
-          readonly edges: ReadonlyArray<{
-            readonly node: {
-              readonly Acc_Project_Change_Requests__r: {
-                readonly edges: ReadonlyArray<{
-                  readonly node: {
-                    readonly Id: string;
-                    readonly RecordType: {
-                      readonly DeveloperName: {
-                        readonly value: string | null | undefined;
-                      } | null | undefined;
-                    } | null | undefined;
-                  } | null | undefined;
-                } | null | undefined> | null | undefined;
-              } | null | undefined;
-              readonly Acc_Project__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_RequestHeader__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_RequestNumber__c: {
-                readonly value: number | null | undefined;
-              } | null | undefined;
-              readonly Acc_Status__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly CreatedDate: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Id: string;
-              readonly LastModifiedDate: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
@@ -63,6 +26,40 @@ export type PCRDashboardQuery$data = {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
+              readonly Project_Change_Requests__r: {
+                readonly edges: ReadonlyArray<{
+                  readonly node: {
+                    readonly Acc_Project__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_RequestHeader__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_RequestNumber__c: {
+                      readonly value: number | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_Status__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly CreatedDate: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly Id: string;
+                    readonly LastModifiedDate: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                      readonly Name: {
+                        readonly label: string | null | undefined;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly isActive: boolean;
               readonly roles: {
                 readonly isAssociate: boolean;
@@ -90,44 +87,24 @@ var v0 = [
     "name": "projectId"
   }
 ],
-v1 = [
-  {
-    "kind": "Variable",
-    "name": "eq",
-    "variableName": "projectId"
-  }
-],
-v2 = {
+v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
 v3 = [
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "value",
-    "storageKey": null
-  }
+  (v2/*: any*/)
 ],
-v4 = {
-  "kind": "Literal",
-  "name": "first",
-  "value": 2000
-},
-v5 = {
-  "kind": "Literal",
-  "name": "orderBy",
-  "value": {
-    "Acc_RequestNumber__c": {
-      "order": "DESC"
-    }
-  }
-},
-v6 = [
+v4 = [
   {
     "alias": null,
     "args": null,
@@ -158,7 +135,13 @@ v6 = [
                   {
                     "fields": [
                       {
-                        "fields": (v1/*: any*/),
+                        "fields": [
+                          {
+                            "kind": "Variable",
+                            "name": "eq",
+                            "variableName": "projectId"
+                          }
+                        ],
                         "kind": "ObjectValue",
                         "name": "Id"
                       }
@@ -188,7 +171,7 @@ v6 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v2/*: any*/),
+                          (v1/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -254,133 +237,28 @@ v6 = [
                             "plural": false,
                             "selections": (v3/*: any*/),
                             "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": [
-                  (v4/*: any*/),
-                  (v5/*: any*/),
-                  {
-                    "fields": [
-                      {
-                        "fields": (v1/*: any*/),
-                        "kind": "ObjectValue",
-                        "name": "Acc_Project__c"
-                      },
-                      {
-                        "kind": "Literal",
-                        "name": "RecordType",
-                        "value": {
-                          "DeveloperName": {
-                            "eq": "Acc_RequestHeader"
-                          }
-                        }
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_ProjectChangeRequest__cConnection",
-                "kind": "LinkedField",
-                "name": "Acc_ProjectChangeRequest__c",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_ProjectChangeRequest__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_ProjectChangeRequest__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_Status__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "IDValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_RequestHeader__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DoubleValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_RequestNumber__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DateTimeValue",
-                            "kind": "LinkedField",
-                            "name": "CreatedDate",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DateTimeValue",
-                            "kind": "LinkedField",
-                            "name": "LastModifiedDate",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "IDValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_Project__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
                           },
                           {
                             "alias": null,
                             "args": [
-                              (v4/*: any*/),
-                              (v5/*: any*/)
+                              {
+                                "kind": "Literal",
+                                "name": "first",
+                                "value": 2000
+                              },
+                              {
+                                "kind": "Literal",
+                                "name": "orderBy",
+                                "value": {
+                                  "Acc_RequestNumber__c": {
+                                    "order": "DESC"
+                                  }
+                                }
+                              }
                             ],
                             "concreteType": "Acc_ProjectChangeRequest__cConnection",
                             "kind": "LinkedField",
-                            "name": "Acc_Project_Change_Requests__r",
+                            "name": "Project_Change_Requests__r",
                             "plural": false,
                             "selections": [
                               {
@@ -399,7 +277,67 @@ v6 = [
                                     "name": "node",
                                     "plural": false,
                                     "selections": [
-                                      (v2/*: any*/),
+                                      (v1/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "PicklistValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_Status__c",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "IDValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_RequestHeader__c",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "DoubleValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_RequestNumber__c",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "DateTimeValue",
+                                        "kind": "LinkedField",
+                                        "name": "CreatedDate",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "DateTimeValue",
+                                        "kind": "LinkedField",
+                                        "name": "LastModifiedDate",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "IDValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_Project__c",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
+                                      },
                                       {
                                         "alias": null,
                                         "args": null,
@@ -408,6 +346,25 @@ v6 = [
                                         "name": "RecordType",
                                         "plural": false,
                                         "selections": [
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "Name",
+                                            "plural": false,
+                                            "selections": [
+                                              (v2/*: any*/),
+                                              {
+                                                "alias": null,
+                                                "args": null,
+                                                "kind": "ScalarField",
+                                                "name": "label",
+                                                "storageKey": null
+                                              }
+                                            ],
+                                            "storageKey": null
+                                          },
                                           {
                                             "alias": null,
                                             "args": null,
@@ -428,7 +385,7 @@ v6 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": "Acc_Project_Change_Requests__r(first:2000,orderBy:{\"Acc_RequestNumber__c\":{\"order\":\"DESC\"}})"
+                            "storageKey": "Project_Change_Requests__r(first:2000,orderBy:{\"Acc_RequestNumber__c\":{\"order\":\"DESC\"}})"
                           }
                         ],
                         "storageKey": null
@@ -455,7 +412,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "PCRDashboardQuery",
-    "selections": (v6/*: any*/),
+    "selections": (v4/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -464,19 +421,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "PCRDashboardQuery",
-    "selections": (v6/*: any*/)
+    "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "5ce1b92dd506950bdb0da934c0f8d565",
+    "cacheID": "05079461ae95c0033cd278ac7ff3d601",
     "id": null,
     "metadata": {},
     "name": "PCRDashboardQuery",
     "operationKind": "query",
-    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ace1547683fc05f5e4c1d2346340a9cf";
+(node as any).hash = "8c0f6016eeda39cdd29f382344b01d95";
 
 export default node;

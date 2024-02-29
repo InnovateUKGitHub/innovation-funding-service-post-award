@@ -38,5 +38,4 @@ export const enum ProjectChangeRequest {
   changePeriodLength = "Acc_ChangePeriodLength",
   projectChangeRequests = "Acc_ProjectChangeRequests",
   approveNewSubcontractor = "Approve_a_new_subcontractor",
-  uplift = "Acc_Uplift",
 }

@@ -1,4 +1,4 @@
-import { PCRItemType, PCRItemStatus, disableSummaryItems } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRItemStatus } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
@@ -75,7 +75,6 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
   const routes = useRoutes();
   const { getContent } = useContent();
 
-  const disableSummary = pcr.items.some(x => disableSummaryItems.some(y => x.type === y));
   const editableItems = pcr.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
   const stepCount = editableItems.length ? 2 : 1;
 
@@ -86,8 +85,6 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
   });
 
   const rhfError = rhfErrors?.["reasoningStatus"];
-
-  if (disableSummary) return null;
 
   return (
     <TaskListSection step={stepCount} title={getContent(x => x.taskList.explainSectionTitle)} qa="reasoning">

@@ -16,14 +16,13 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { Results } from "@ui/validation/results";
 import { IAppError } from "@framework/types/IAppError";
-import { Helmet } from "react-helmet";
-import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 
 type Data = {
   project: Pick<ProjectDto, "status">;
   pcrItem: Pick<
     FullPCRItemDto,
     | "id"
+    | "shortName"
     | "type"
     | "projectRole"
     | "partnerType"
@@ -33,6 +32,7 @@ type Data = {
     | "organisationType"
     | "hasOtherFunding"
     | "status"
+    | "typeName"
   >;
   mode: Mode;
   fragmentRef: unknown;
@@ -90,7 +90,6 @@ export const usePcrWorkflowContext = () => useContext(PcrWorkflowContext);
 export const PCRItemWorkflowMigratedForGql = (
   props: BaseProps & Data & ProjectChangeRequestPrepareItemParams & ProjectChangeRequestPrepareItemSearchParams,
 ) => {
-  const { getPcrItemContent } = useGetPcrItemMetadata();
   const workflow = PcrWorkflow.getWorkflow(props.pcrItem, props.step) as unknown as PcrWorkflow<
     Partial<FullPCRItemDto>,
     null
@@ -142,9 +141,6 @@ export const PCRItemWorkflowMigratedForGql = (
         setMarkedAsCompleteHasBeenChecked,
       }}
     >
-      <Helmet>
-        <title>{getPcrItemContent(props.pcrItem.type).name}</title>
-      </Helmet>
       {workflow?.isOnSummary() ? <SummarySection /> : <WorkflowStep />}
     </PcrWorkflowContext.Provider>
   );

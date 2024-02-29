@@ -89,8 +89,6 @@ export type PcrNode = GQL.PartialNode<{
   Country_where_work_will_be_carried_out__c: GQL.Value<string>;
   Cost_of_work__c: GQL.Value<number>;
   Justification__c: GQL.Value<string>;
-  Override_Justification__c: GQL.Value<string>;
-  Acc_Project_Change_Requests__r: GQL.ArrayValue<PcrNode>;
 }>;
 
 type PcrDtoMapping = Pick<
@@ -180,8 +178,6 @@ export type PcrItemDtoMapping = Pick<
   | "subcontractorDescription"
   | "subcontractorJustification"
   | "subcontractorCost"
-  | "reasoningComments"
-  | "upliftJustification"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -356,9 +352,6 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   registrationNumber(node) {
     return node?.Acc_RegistrationNumber__c?.value ?? null;
   },
-  reasoningComments(node) {
-    return node?.Acc_Reasoning__c?.value ?? null;
-  },
   removalPeriod(node) {
     return node?.Acc_RemovalPeriod__c?.value ?? null;
   },
@@ -433,9 +426,6 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   subcontractorJustification(node) {
     return node?.Justification__c?.value ?? null;
   },
-  upliftJustification(node) {
-    return node?.Override_Justification__c?.value ?? null;
-  },
 };
 
 /**
@@ -476,9 +466,9 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
   },
 };
 
-type CollatedPcrNode<TParent extends PcrNode = PcrNode, TChildren extends PcrNode = PcrNode> = {
-  head: TParent;
-  children: TChildren[];
+type CollatedPcrNode<T extends PcrNode = PcrNode> = {
+  head: T;
+  children: T[];
 };
 
 type PcrDtoWithItems<PickList extends keyof PcrDtoMapping, ItemPickList extends keyof PcrItemDtoMapping> = Merge<
@@ -565,37 +555,22 @@ export function mapToPcrDtoArray<
 ): PcrDtoWithItems<PickList, ItemPickList>[] {
   if (!pcrs) return [];
 
-  const collatedPcrs: { head: NonNullable<T>; children: NonNullable<Partial<PcrNode>>[] }[] = [];
+  const collatedPcrs = [];
 
   for (const pcr of pcrs) {
-    if (pcr?.node) {
-      const childPcrs: NonNullable<Partial<PcrNode>>[] = [];
+    if (typeof pcr === null) continue;
+    if (pcr?.node?.RecordType?.DeveloperName?.value === ProjectChangeRequest.requestHeader) {
+      const childPcrs = [];
 
-      // Check for relationship in child array...
-      // ...or by child/parent ID relationship
-      if (
-        pcr?.node?.Acc_Project_Change_Requests__r?.edges &&
-        pcr?.node?.Acc_Project_Change_Requests__r?.edges?.length > 0
-      ) {
-        for (const childPcr of pcr?.node?.Acc_Project_Change_Requests__r?.edges) {
-          if (childPcr?.node) {
-            childPcrs.push(childPcr.node);
-          }
+      for (const childPcr of pcrs) {
+        if (!!pcr?.node?.Id && pcr?.node?.Id === childPcr?.node?.Acc_RequestHeader__c?.value) {
+          childPcrs.push(childPcr);
         }
-      } else if (pcr?.node?.RecordType?.DeveloperName?.value === ProjectChangeRequest.requestHeader) {
-        for (const childPcr of pcrs) {
-          if (!!pcr?.node && !!childPcr?.node && pcr?.node?.Id === childPcr?.node?.Acc_RequestHeader__c?.value) {
-            childPcrs.push(childPcr.node);
-          }
-        }
-      } else {
-        // Not a PCR header record.
-        continue;
       }
 
       collatedPcrs.push({
-        head: pcr.node,
-        children: childPcrs,
+        head: pcr?.node,
+        children: childPcrs.map(x => x?.node) as T[],
       });
     }
   }

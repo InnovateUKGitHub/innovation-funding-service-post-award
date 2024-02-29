@@ -9,7 +9,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { useProjectChangeRequestSubmittedForReviewQuery } from "./ProjectChangeRequestSubmittedForReview.logic";
 import { FullDate } from "@ui/components/atomicDesign/atoms/Date";
-import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
+import { usePcrItemName } from "../utils/getPcrItemName";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { useContent } from "@ui/hooks/content.hook";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
@@ -25,7 +25,7 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
   pcrId,
 }: BaseProps & ProjectChangeRequestSubmittedForReviewParams) => {
   const routes = useRoutes();
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { getPcrItemContent } = usePcrItemName();
   const { getPcrStatusName } = useGetPcrStatusMetadata();
   const { getContent } = useContent();
   const { project, pcr } = useProjectChangeRequestSubmittedForReviewQuery({ projectId, pcrId });

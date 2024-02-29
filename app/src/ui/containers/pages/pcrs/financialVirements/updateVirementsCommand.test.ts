@@ -23,10 +23,8 @@ describe("UpdateFinancialVirementCommand", () => {
     const testContext = new TestContext();
     const { testData } = testContext;
 
-    const project = testData.createProject();
-    const pcr = testData.createPCR(project);
-    const pcrItem = testData.createPCRItem(pcr);
-    const partner = testData.createPartner(project);
+    const pcrItem = testData.createPCRItem();
+    const partner = testData.createPartner();
 
     testData.createFinancialVirement(pcrItem, partner);
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -48,10 +46,8 @@ describe("UpdateFinancialVirementCommand", () => {
       repositories: { financialVirements },
     } = testContext;
 
-    const project = testData.createProject();
-    const pcr = testData.createPCR(project);
-    const pcrItem = testData.createPCRItem(pcr);
-    const partner = testData.createPartner(project);
+    const pcrItem = testData.createPCRItem();
+    const partner = testData.createPartner();
 
     const costCategory = testData.createCostCategory();
 
@@ -89,10 +85,8 @@ describe("UpdateFinancialVirementCommand", () => {
       repositories: { financialVirements },
     } = testContext;
 
-    const project = testData.createProject();
-    const pcr = testData.createPCR(project);
-    const pcrItem = testData.createPCRItem(pcr);
-    const partner = testData.createPartner(project);
+    const pcrItem = testData.createPCRItem();
+    const partner = testData.createPartner();
 
     const costCategory1 = testData.createCostCategory();
     const costCategory2 = testData.createCostCategory();
@@ -145,10 +139,8 @@ describe("UpdateFinancialVirementCommand", () => {
       repositories: { financialVirements },
     } = testContext;
 
-    const project = testData.createProject();
-    const pcr = testData.createPCR(project);
-    const pcrItem = testData.createPCRItem(pcr);
-    const partner = testData.createPartner(project);
+    const pcrItem = testData.createPCRItem();
+    const partner = testData.createPartner();
 
     const costCategory1 = testData.createCostCategory();
     const costCategory2 = testData.createCostCategory();
@@ -200,10 +192,8 @@ describe("UpdateFinancialVirementCommand", () => {
     const testContext = new TestContext();
     const { testData } = testContext;
 
-    const project = testData.createProject();
-    const pcr = testData.createPCR(project);
-    const pcrItem = testData.createPCRItem(pcr);
-    const partner = testData.createPartner(project);
+    const pcrItem = testData.createPCRItem();
+    const partner = testData.createPartner();
 
     const costCategory = testData.createCostCategory();
 

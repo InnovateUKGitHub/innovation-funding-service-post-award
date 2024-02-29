@@ -7,7 +7,7 @@ import { IContext } from "@framework/types/IContext";
 import { numberComparator } from "@framework/util/comparator";
 import { QueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
-import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
+import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   constructor(private readonly projectId: ProjectId) {
@@ -22,7 +22,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
 
   protected async run(context: IContext): Promise<PCRSummaryDto[]> {
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
-    const pcrItemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
+    const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
 
     const isPmOrFc = roles
       .forProject(this.projectId)

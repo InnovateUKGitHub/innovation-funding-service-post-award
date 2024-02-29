@@ -24,8 +24,6 @@ import { Currency } from "../../../atoms/Currency/currency";
 import { CondensedDateRange } from "../../../atoms/Date";
 import { Percentage } from "../../../atoms/Percentage/percentage";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TD, TH } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -233,7 +231,6 @@ export class ForecastTable extends React.Component<Props> {
 
     const claims = Object.keys(firstRow.claims);
     const forecasts = Object.keys(firstRow.forecasts);
-    const noClaimsOrForecastsAvailable = claims.length === 0 && forecasts.length === 0;
     const periods = claims.concat(forecasts);
 
     const isDivider = (i: number) => {
@@ -251,19 +248,12 @@ export class ForecastTable extends React.Component<Props> {
           <Table.Table
             data={tableRows}
             qa="forecast-table"
-            headers={this.renderTableHeaders(
-              periods,
-              periodId,
-              data.claim,
-              data.IARDueOnClaimPeriods ?? [],
-              noClaimsOrForecastsAvailable,
-            )}
+            headers={this.renderTableHeaders(periods, periodId, data.claim, data.IARDueOnClaimPeriods ?? [])}
             footers={this.renderTableFooters(
               periods,
               periodId,
               tableRows,
               hideValidation !== true && editor ? editor.validator : undefined,
-              noClaimsOrForecastsAvailable,
             )}
             headerRowClass="govuk-body-s govuk-table__header--light"
             bodyRowClass={x =>
@@ -286,12 +276,6 @@ export class ForecastTable extends React.Component<Props> {
                 })
               }
             />
-
-            {noClaimsOrForecastsAvailable ? (
-              <Table.Custom qa="no-data" header={<TableEmptyCell />} value={() => <TableEmptyCell />} />
-            ) : (
-              <></>
-            )}
 
             {claims.map((p, i) => (
               <Table.Currency
@@ -552,7 +536,6 @@ export class ForecastTable extends React.Component<Props> {
     claimPeriod: number,
     claim: Pick<ClaimDto, "periodId"> | null,
     periodsWithIARDue: string[],
-    noClaimsOrForecastsAvailable: boolean,
   ) {
     // If there is a draft claim then show "Costs you are claiming"
     // If there isn't a draft claim then don't show "Costs you are claiming" and "Costs claimed" applies to all claims
@@ -583,11 +566,6 @@ export class ForecastTable extends React.Component<Props> {
             {costsClaimedText}
           </th>
         ) : null}
-        {noClaimsOrForecastsAvailable && (
-          <TH>
-            <TableEmptyCell />
-          </TH>
-        )}
         {!!claim && claimPeriod > 0 ? (
           <th
             className="govuk-table__header govuk-table__header--numeric acc-table__cell-right-border"
@@ -623,11 +601,6 @@ export class ForecastTable extends React.Component<Props> {
       </tr>,
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header sticky-col sticky-col-left-1">{periodText}</th>
-        {noClaimsOrForecastsAvailable && (
-          <TH>
-            <TableEmptyCell />
-          </TH>
-        )}
         {periods.map((p, i) => (
           <th
             key={i}
@@ -651,11 +624,6 @@ export class ForecastTable extends React.Component<Props> {
       </tr>,
       <tr key="cHeader3" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header sticky-col sticky-col-left-1">{iarDueText}</th>
-        {noClaimsOrForecastsAvailable && (
-          <TH>
-            <TableEmptyCell />
-          </TH>
-        )}
         {periods.map((p, i) => (
           <th
             key={i}
@@ -685,7 +653,6 @@ export class ForecastTable extends React.Component<Props> {
     claimPeriod: number,
     parsed: TableRow[],
     validator: IForecastDetailsDtosValidator | undefined,
-    noClaimsOrForecastsAvailable: boolean,
   ) {
     const cells = [];
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
@@ -709,13 +676,6 @@ export class ForecastTable extends React.Component<Props> {
         Total
       </th>,
     );
-    if (noClaimsOrForecastsAvailable) {
-      cells.push(
-        <TD className="acc-table__cell-top-border">
-          <TableEmptyCell />
-        </TD>,
-      );
-    }
     cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index, claimPeriod)));
     cells.push(
       this.renderTableFooterCell(

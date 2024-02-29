@@ -14,7 +14,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
+import { useMapVirements } from "./mapFinancialVirements";
 import { useForm } from "react-hook-form";
 import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -72,7 +72,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   });
   const content = useEditPartnerLevelContent();
 
-  const { virementData } = useMapFinancialVirements({
+  const { virementData } = useMapVirements({
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
