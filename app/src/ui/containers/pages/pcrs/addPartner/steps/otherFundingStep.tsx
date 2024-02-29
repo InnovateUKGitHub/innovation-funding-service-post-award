@@ -18,13 +18,28 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { OtherFundingSchema, otherFundingSchema } from "./schemas/otherFunding.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
+import { useMemo } from "react";
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
   const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, routes, markedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
 
-  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
+  const { pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem } = useAddPartnerWorkflowQuery(
+    projectId,
+    itemId,
+    fetchKey,
+  );
+
+  const { spendProfile } = useMemo(() => {
+    const costCategoryList =
+      pcrItem.organisationType === PCROrganisationType.Academic ? academicCostCategories : spendProfileCostCategories;
+
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategoryList);
+    return { spendProfile };
+  }, [itemId, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem]);
 
   const summaryLink = useSummaryLink();
   const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<OtherFundingSchema>({
@@ -65,15 +80,26 @@ export const OtherFundingStep = () => {
       <Section>
         <Form
           data-qa="addPartnerForm"
-          onSubmit={handleSubmit(data =>
+          onSubmit={handleSubmit(data => {
+            const hasOtherFunding = data.hasOtherFunding === "true";
+            const funds = hasOtherFunding
+              ? {}
+              : {
+                  spendProfile: {
+                    ...spendProfile,
+                    funds: [],
+                  },
+                };
+
             onSave({
               data: {
                 ...data,
-                hasOtherFunding: data.hasOtherFunding === "true",
+                ...funds,
+                hasOtherFunding,
               },
               context: getNextLink(data),
-            }),
-          )}
+            });
+          })}
         >
           <Fieldset>
             <FormGroup>
