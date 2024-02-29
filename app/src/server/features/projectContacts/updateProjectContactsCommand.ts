@@ -4,8 +4,9 @@ import { ProjectRole, ProjectStatus } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
-import { ActiveProjectError } from "../common/appError";
+import { ActiveProjectError, ZodFormHandlerError } from "../common/appError";
 import { DateTime } from "luxon";
+import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 
 export class UpdateProjectContactsCommand extends CommandBase<boolean> {
   constructor(
@@ -24,6 +25,12 @@ export class UpdateProjectContactsCommand extends CommandBase<boolean> {
 
     if (status !== ProjectStatus.OfferLetterSent) {
       throw new ActiveProjectError();
+    }
+
+    const validation = multipleContactDtoSchema.safeParse({ contacts: this.contacts });
+
+    if (!validation.success) {
+      throw new ZodFormHandlerError(this.contacts, validation.error.message, validation.error.issues);
     }
 
     return await context.repositories.projectContacts.update(

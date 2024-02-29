@@ -1,13 +1,15 @@
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { useLazyLoadQuery } from "react-relay";
-import { contactSetupAssociateQuery } from "./ContactSetupAssociate.query";
-import { ContactSetupAssociateQuery } from "./__generated__/ContactSetupAssociateQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { ContactSetupAssociateSchemaType } from "./ContactSetupAssociate.zod";
-import { z } from "zod";
 import { clientsideApiClient } from "@ui/apiClient";
+import { useRoutes } from "@ui/redux/routesProvider";
+import { useLazyLoadQuery } from "react-relay";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import { contactSetupAssociateQuery } from "./ContactSetupAssociate.query";
+import { ContactSetupAssociateSchemaType } from "./ContactSetupAssociate.zod";
+import { ContactSetupAssociateQuery } from "./__generated__/ContactSetupAssociateQuery.graphql";
 
 interface ContactSetupAssociateParams {
   projectId: ProjectId;
@@ -38,17 +40,18 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
 };
 
 const useOnContactSetupAssociateSubmit = ({ projectId }: ContactSetupAssociateParams) => {
+  const routes = useRoutes();
+  const navigateTo = useNavigate();
+
   return useOnUpdate<z.output<ContactSetupAssociateSchemaType>, unknown>({
     req(data) {
-      console.log("wahwah", data);
-
       return clientsideApiClient.projectContacts.update({
         projectId,
-        contacts: Object.entries(data.contacts).map(([key, value]) => ({
-          id: key as ContactId,
-          startDate: value?.startDate ?? null,
-        })),
+        contacts: data.contacts,
       });
+    },
+    onSuccess() {
+      navigateTo(routes.projectDashboard.getLink({}).path);
     },
   });
 };

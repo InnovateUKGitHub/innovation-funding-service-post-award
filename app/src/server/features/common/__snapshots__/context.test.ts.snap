@@ -824,6 +824,8 @@ exports[`Context should contain the repositories 1`] = `
       "Acc_ContactId__r.Email",
       "Acc_UserId__r.Name",
       "Acc_UserId__r.Username",
+      "Acc_StartDate__c",
+      "Acc_EndDate__c",
     ],
     "salesforceObjectName": "Acc_ProjectContactLink__c",
   },

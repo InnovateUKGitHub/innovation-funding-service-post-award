@@ -306,6 +306,7 @@
       "projectPrefixCount_other": "{{count}} projects",
       "backToDashboard": "Back to dashboard",
       "backToHomepage": "Back to home page",
+      "backLink": "Back to projects",
       "countMessages": {
         "pendingMessage": "{{count}} in project setup",
         "liveMessage": "{{count}} live",
@@ -333,6 +334,16 @@
       "provideProjectLocation": "Provide your project location postcode",
       "complete": "Complete project setup",
       "manualComplete": "Return to projects dashboard"
+    },
+    "projectSetupAssociate": {
+      "title": "Associate start date",
+      "guidanceMessage": "You need to provide an associate start date so we can complete this section of the project setup.",
+      "name": "Name",
+      "role": "Role",
+      "associate": "Associate",
+      "email": "Email address",
+      "startDate": "Start date",
+      "saveAndReturn": "Save and return to dashboard"
     },
     "projectOverview": {
       "title": "Project overview",
@@ -2645,6 +2656,42 @@
       "errors": {
         "final_claim": "You cannot change your forecast as you are due to submit your final claim.",
         "final_claim_already_approved": "You cannot change your forecast as you have submitted your final claim."
+      }
+    },
+    "contact": {
+      "contacts": {
+        "arrayType": {
+          "startDate": {
+            "day": {
+              "errors": {
+                "too_big": "Start day must be valid number.",
+                "invalid_string": {
+                  "regex": "Start day must be a number."
+                }
+              }
+            },
+            "month": {
+              "errors": {
+                "too_big": "Start month must be valid number.",
+                "invalid_string": {
+                  "regex": "Start month must be a number."
+                }
+              }
+            },
+            "year": {
+              "errors": {
+                "too_small": "Start year must be valid 4 digit number.",
+                "too_big": "Start year must be valid 4 digit number.",
+                "invalid_string": {
+                  "regex": "Start year must be a 4 digit number."
+                }
+              }
+            },
+            "errors": {
+              "invalid_date": "Enter a valid start date."
+            }
+          }
+        }
       }
     }
   }

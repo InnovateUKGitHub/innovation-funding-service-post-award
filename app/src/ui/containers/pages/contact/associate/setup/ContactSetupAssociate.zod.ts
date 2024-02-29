@@ -1,18 +1,13 @@
-import { makeZodI18nMap } from "@shared/zodi18n";
-import { dateValidation, pclIdValidation } from "@ui/zod/helperValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
+import { projectIdValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
-const contactSetupAssociateErrorMap = makeZodI18nMap({ keyPrefix: ["setup", "contactSetupAssociate"] });
-
-const contactSetupAssociateSchema = z.object({
-  contacts: z.record(
-    pclIdValidation,
-    z.object({
-      startDate: dateValidation,
-    }),
-  ),
+const contactSetupAssociateSchema = multipleContactDtoSchema.extend({
+  form: z.literal(FormTypes.ProjectSetupContactAssociate),
+  projectId: projectIdValidation,
 });
 
 type ContactSetupAssociateSchemaType = typeof contactSetupAssociateSchema;
 
-export { contactSetupAssociateSchema, contactSetupAssociateErrorMap, ContactSetupAssociateSchemaType };
+export { contactSetupAssociateSchema, ContactSetupAssociateSchemaType };
