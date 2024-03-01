@@ -40,7 +40,10 @@ export abstract class RepositoryBase {
     protected readonly logger: ILogger,
   ) {}
 
-  protected constructError(e: unknown | Errors.SalesforceErrorResponse, soql = "No SOQL available for this query") {
+  protected constructError(
+    e: unknown | Errors.SalesforceDetailedErrorResponse,
+    soql = "No SOQL available for this query",
+  ) {
     if (Errors.isSalesforceErrorResponse(e)) {
       if (e.message.length < 10_000) {
         this.logger.error(
@@ -71,6 +74,11 @@ export abstract class RepositoryBase {
       if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
         throw new Errors.FileTypeNotAllowedError(e.message);
       }
+      if (e.errorCode === "FIELD_CUSTOM_VALIDATION_EXCEPTION") {
+        throw new Errors.SalesforceFieldCustomValidationError({ message: e.message });
+      }
+
+      throw new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [] });
     }
     return e instanceof Error ? e : new Error(`${e}`);
   }

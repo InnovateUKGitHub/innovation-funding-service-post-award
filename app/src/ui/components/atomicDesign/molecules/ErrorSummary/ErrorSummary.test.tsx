@@ -17,11 +17,11 @@ describe("<ErrorSummary />", () => {
         insufficientAccessRights: "stub-insufficientAccessRights",
         notUploadedByOwner: "stub-notUploadedByOwner",
         details: {
-          SFDC_SF_UPDATE_ALL_FAILURE: "stub-SFDC_SF_UPDATE_ALL_FAILURE",
-          SFDC_INSUFFICIENT_ACCESS_OR_READONLY: "stub-SFDC_INSUFFICIENT_ACCESS_OR_READONLY",
-          SFDC_NOT_UPLOADED_FROM_OWNER: "stub-SFDC_NOT_UPLOADED_FROM_OWNER",
-          SFDC_CANNOT_USE_RECORD_TYPE: "stub-SFDC_CANNOT_USE_RECORD_TYPE",
-          SFDC_STRING_TOO_LONG: "stub-SFDC_STRING_TOO_LONG",
+          SFDC_SF_UPDATE_ALL_FAILURE: { invalid: "stub-SFDC_SF_UPDATE_ALL_FAILURE" },
+          SFDC_INSUFFICIENT_ACCESS_OR_READONLY: { invalid: "stub-SFDC_INSUFFICIENT_ACCESS_OR_READONLY" },
+          SFDC_NOT_UPLOADED_FROM_OWNER: { invalid: "stub-SFDC_NOT_UPLOADED_FROM_OWNER" },
+          SFDC_CANNOT_USE_RECORD_TYPE: { invalid: "stub-SFDC_CANNOT_USE_RECORD_TYPE" },
+          SFDC_STRING_TOO_LONG: { invalid: "stub-SFDC_STRING_TOO_LONG" },
         },
       },
     },
@@ -80,11 +80,15 @@ describe("<ErrorSummary />", () => {
       describe("with error messages", () => {
         test.each`
           name                                                          | code                                                      | expectedContent
-          ${"with an update all failure"}                               | ${DetailedErrorCode.SFDC_SF_UPDATE_ALL_FAILURE}           | ${stubContent.components.errorSummary.details.SFDC_SF_UPDATE_ALL_FAILURE}
-          ${"with insufficient access to remove claim line items"}      | ${DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY} | ${stubContent.components.errorSummary.details.SFDC_INSUFFICIENT_ACCESS_OR_READONLY}
-          ${"when the document owner does not match original uploader"} | ${DetailedErrorCode.SFDC_NOT_UPLOADED_FROM_OWNER}         | ${stubContent.components.errorSummary.details.SFDC_NOT_UPLOADED_FROM_OWNER}
+          ${"with an update all failure"}                               | ${DetailedErrorCode.SFDC_SF_UPDATE_ALL_FAILURE}           | ${stubContent.components.errorSummary.details.SFDC_SF_UPDATE_ALL_FAILURE.invalid}
+          ${"with insufficient access to remove claim line items"}      | ${DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY} | ${stubContent.components.errorSummary.details.SFDC_INSUFFICIENT_ACCESS_OR_READONLY.invalid}
+          ${"when the document owner does not match original uploader"} | ${DetailedErrorCode.SFDC_NOT_UPLOADED_FROM_OWNER}         | ${stubContent.components.errorSummary.details.SFDC_NOT_UPLOADED_FROM_OWNER.invalid}
         `("$name", ({ code, expectedContent }) => {
-          const { queryByText } = setup({ error: { code: ErrorCode.SFDC_ERROR, details: [{ code }] } });
+          const { queryByText, debug } = setup({
+            error: { code: ErrorCode.SFDC_ERROR, details: [{ code }] },
+          });
+
+          debug();
 
           const targetElement = queryByText(expectedContent);
 

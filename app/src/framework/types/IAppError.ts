@@ -1,4 +1,4 @@
-import { DetailedErrorCode, ErrorCode } from "@framework/constants/enums";
+import { DetailedErrorCode, ErrorCode, SfdcFieldCustomValidationException } from "@framework/constants/enums";
 import { Results } from "@ui/validation/results";
 import type { Error as SfdcError } from "jsforce";
 
@@ -43,6 +43,11 @@ interface IAppDetailedSfdcNotUploadedFromOwnerError extends IAppDetailedBaseErro
   code: DetailedErrorCode.SFDC_NOT_UPLOADED_FROM_OWNER;
 }
 
+interface IAppDetailedSfdcFieldCustomValidationExceptionError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.SFDC_FIELD_CUSTOM_VALIDATION_EXCEPTION;
+  message: SfdcFieldCustomValidationException;
+}
+
 interface IAppDetailedSfdcGenericError extends IAppDetailedBaseError {
   code: DetailedErrorCode.SFDC_DEFAULT_STACKTRACE;
   data: SfdcError;
@@ -55,4 +60,5 @@ export type IAppDetailedError =
   | IAppDetailedSfdcSfUpdateAllFailureError
   | IAppDetailedSfdcInsufficientAccessOrReadonlyError
   | IAppDetailedSfdcNotUploadedFromOwnerError
-  | IAppDetailedSfdcGenericError;
+  | IAppDetailedSfdcGenericError
+  | IAppDetailedSfdcFieldCustomValidationExceptionError;

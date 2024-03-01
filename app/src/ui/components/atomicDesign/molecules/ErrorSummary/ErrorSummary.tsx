@@ -7,10 +7,10 @@ import { ErrorDetails } from "./ErrorDetails";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 export interface ErrorSummaryProps {
-  error: Partial<IAppError>;
+  error?: Partial<IAppError>;
 }
 
-export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
+export const ErrorSummary = ({ error = {} }: ErrorSummaryProps) => {
   const { code, details } = error;
 
   const { getContent } = useContent();
@@ -42,13 +42,13 @@ export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
           </>
         ) : (
           <p data-qa="error-summary-general-mssg">
-            {details && details.length > 0
+            {Array.isArray(details)
               ? getContent(x => x.components.errorSummary.somethingGoneWrong)
               : getContent(x => x.components.errorSummary.somethingUnknownGoneWrong)}
           </p>
         )}
 
-        {features.detailedErrorSummaryComponent && details && details.length > 0 && (
+        {features.detailedErrorSummaryComponent && Array.isArray(details) && (
           <Info summary={getContent(x => x.components.errorSummary.info)} className="govuk-!-margin-bottom-0">
             <ErrorDetails details={details} />
           </Info>

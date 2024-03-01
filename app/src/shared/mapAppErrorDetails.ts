@@ -1,4 +1,8 @@
-import { DetailedErrorCode, SalesforceStatusCode } from "@framework/constants/enums";
+import {
+  DetailedErrorCode,
+  SalesforceStatusCode,
+  SfdcFieldCustomValidationException,
+} from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { Error as SfdcError } from "jsforce";
@@ -64,15 +68,26 @@ export const mapSfdcErrors = (errors: SfdcError[]): IAppDetailedError[] => {
 export const mapValidationResultErrors = (results: Results<ResultBase>): IAppDetailedError[] => {
   const details: IAppDetailedError[] = [];
 
-  for (const error of results.errors) {
-    if (error.errorMessage) {
-      details.push({
-        code: DetailedErrorCode.ACC_VALIDATION_ERROR,
-        message: error.errorMessage,
-        key: error.keyId ?? undefined,
-      });
+  if (Array.isArray(results.errors)) {
+    for (const error of results.errors) {
+      if (error.errorMessage) {
+        details.push({
+          code: DetailedErrorCode.ACC_VALIDATION_ERROR,
+          message: error.errorMessage,
+          key: error.keyId ?? undefined,
+        });
+      }
     }
   }
 
   return details;
+};
+
+export const mapSfdcFieldCustomValidation = (message: string): SfdcFieldCustomValidationException => {
+  switch (message) {
+    case "You need to set the Award Rate for this Participant before this claim can be processed.":
+      return SfdcFieldCustomValidationException.CLAIM_MISSING_AWARD_RATE;
+    default:
+      return SfdcFieldCustomValidationException.UNKNOWN_ERROR;
+  }
 };

@@ -76,6 +76,11 @@
         },
         "SFDC_DEFAULT_STACKTRACE": {
           "invalid": "{{ data.statusCode }}: {{ data.message }} (on fields [{{ data.fields, arrayJoin }}])."
+        },
+        "SFDC_FIELD_CUSTOM_VALIDATION_EXCEPTION": {
+          "CLAIM_MISSING_AWARD_RATE": "Please contact us to set the award rate for this partner before this claim can be processed.",
+          "UNKNOWN": "{{ data.message }}",
+          "invalid": "{{ data.message }}"
         }
       }
     },

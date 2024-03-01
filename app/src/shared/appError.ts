@@ -1,9 +1,8 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { IAppDetailedError, IAppError } from "@framework/types/IAppError";
-import { Error as SfdcError } from "jsforce";
+import { mapValidationResultErrors } from "@shared/mapAppErrorDetails";
 import { Results } from "@ui/validation/results";
 import { ZodIssue } from "zod";
-import { mapSfdcErrors, mapValidationResultErrors } from "@shared/mapAppErrorDetails";
 
 export class AppError<T extends Results<ResultBase> = Results<ResultBase>> extends Error implements IAppError<T> {
   public results: T | null = null;
@@ -79,9 +78,9 @@ export class ConfigurationError extends AppError {
 }
 
 export class SfdcServerError extends AppError {
-  constructor(message: string, errors: SfdcError[]) {
+  constructor(message: string, details: IAppDetailedError[]) {
     super(ErrorCode.SFDC_ERROR, message);
-    this.details = mapSfdcErrors(errors);
+    this.details = details;
   }
 }
 

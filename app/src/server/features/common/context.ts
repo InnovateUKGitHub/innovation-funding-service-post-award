@@ -32,7 +32,7 @@ import {
   SalesforceTokenError,
   SalesforceInvalidFilterError,
   FileTypeNotAllowedError,
-  SalesforceDataChangeError,
+  SalesforceDetailedErrorResponse,
 } from "@server/repositories/errors";
 import { FinancialLoanVirementRepository } from "@server/repositories/financialLoanVirementRepository";
 import { FinancialVirementRepository } from "@server/repositories/financialVirementRepository";
@@ -92,8 +92,8 @@ export const constructErrorResponse = (error: unknown): AppError => {
     return new NotFoundError(undefined, error);
   }
 
-  if (error instanceof SalesforceDataChangeError) {
-    return new SfdcServerError(error.message, error.errors);
+  if (error instanceof SalesforceDetailedErrorResponse) {
+    return new SfdcServerError(error.message, error.details);
   }
 
   if (error instanceof FileTypeNotAllowedError) {
