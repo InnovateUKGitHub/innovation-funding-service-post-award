@@ -21,6 +21,7 @@ import {
   displayCostCatTable,
   navigateToCostCat,
   otherFundingCorrectlyDisplayed,
+  otherSourcesLineItemsSaved,
 } from "./add-partner-e2e-steps";
 
 const pm = "james.black@euimeabs.test";
@@ -112,7 +113,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
     otherFundingCorrectlyDisplayed,
   );
 
-  it("Should now re-access Other sources of funding and delete all line items", deleteOtherFundingLines);
+  it("Should re-access Other sources of funding and assert the line items are there", otherSourcesLineItemsSaved);
+
+  it("Should now delete all line items", deleteOtherFundingLines);
 
   it("Should access other sources of funding again", () => {
     cy.getListItemFromKey("Funding from other sources", "Edit").click();

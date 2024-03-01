@@ -1100,19 +1100,22 @@ export const otherFundingCorrectlyDisplayed = () => {
 };
 
 export const deleteOtherFundingLines = () => {
-  cy.getListItemFromKey("Funding from other sources", "Edit").click();
-  cy.get("h2").contains("Other public sector funding?");
   cy.get("main").within(() => {
     cy.get("tr").then($rows => {
       let rowNumber = $rows.length;
-      while (rowNumber > 3) {
-        cy.log(`***DELETING ROW NUMBER ${rowNumber}***`);
-        cy.get("tr")
-          .eq(rowNumber)
-          .within(() => {
-            cy.button("Remove").click();
-            cy.wait(500);
-          });
+      cy.log(`Number of rows is ${rowNumber}`);
+      if (rowNumber > 3) {
+        for (let i = rowNumber; i > 3; i--) {
+          cy.log(`***DELETING ROW NUMBER ${rowNumber}***`);
+          cy.get("tr")
+            .eq(i - 3)
+            .within(() => {
+              cy.button("Remove").click();
+              cy.wait(500);
+            });
+        }
+      } else if (rowNumber <= 3) {
+        throw new Error("Test has failed as no line items are present to delete!");
       }
       cy.button("Save and return to summary").click();
       [
@@ -1123,5 +1126,23 @@ export const deleteOtherFundingLines = () => {
         cy.getListItemFromKey(key, item);
       });
     });
+  });
+};
+
+export const otherSourcesLineItemsSaved = () => {
+  cy.getListItemFromKey("Funding from other sources", "Edit").click();
+  cy.get("h2").contains("Other public sector funding?");
+  for (let i = 1; i < 51; i++) {
+    cy.getByAriaLabel(`source of funding item ${i}`).should("have.value", `Lorem ${i}`);
+    cy.getByAriaLabel(`month funding is secured for item ${i}`).should("have.value", `09`);
+    cy.getByAriaLabel(`year funding is secured for item ${i}`).should("have.value", "2023");
+    cy.getByAriaLabel(`funding amount for item ${i - 1}`).should("have.value", "333.33");
+  }
+  cy.get("tfoot").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("th:nth-child(3)").contains("£16,666.50");
+      });
   });
 };
