@@ -92,7 +92,7 @@ const ContactDateInput = ({
 const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParams) => {
   const routes = useRoutes();
   const { getContent } = useContent();
-  const { project, contacts } = useContactSetupAssociatePageData({ projectId: props.projectId });
+  const { project, contacts, setFetchKey } = useContactSetupAssociatePageData({ projectId: props.projectId });
 
   const { register, handleSubmit, setError, formState, getFieldState } = useForm<
     z.input<ContactSetupAssociateSchemaType>
@@ -104,7 +104,10 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { isProcessing, apiError, onUpdate } = useOnContactSetupAssociateSubmit({ projectId: props.projectId });
+  const { isProcessing, apiError, onUpdate } = useOnContactSetupAssociateSubmit({
+    projectId: props.projectId,
+    setFetchKey,
+  });
 
   return (
     <Page
