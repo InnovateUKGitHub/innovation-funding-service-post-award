@@ -52,8 +52,8 @@ const ContactDateInput = ({
 
     return {
       defaultDay: defaultDate && "day" in defaultDate ? defaultDate.day : getDay(contact.startDate),
-      defaultMonth: defaultDate && "month" in defaultDate ? defaultDate.day : getMonth(contact.startDate),
-      defaultYear: defaultDate && "year" in defaultDate ? defaultDate.day : getYear(contact.startDate),
+      defaultMonth: defaultDate && "month" in defaultDate ? defaultDate.month : getMonth(contact.startDate),
+      defaultYear: defaultDate && "year" in defaultDate ? defaultDate.year : getYear(contact.startDate),
     };
   }, [defaults, index, contact.startDate]);
 
