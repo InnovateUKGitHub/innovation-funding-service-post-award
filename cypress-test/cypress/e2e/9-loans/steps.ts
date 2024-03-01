@@ -266,13 +266,45 @@ export const loansEditTable = () => {
   });
   [
     ["1", "1 February 2021", newCurrency.format(baseCurrentAmount), "01", "02", "2021", baseCurrentAmount],
-    ["2", "1 August 2021", newCurrency.format(baseCurrentAmount), "01", "08", "2021", baseCurrentAmount],
-    ["3", "1 November 2021", newCurrency.format(baseCurrentAmount), "01", "11", "2021", baseCurrentAmount],
-    ["4", "1 February 2022", newCurrency.format(baseCurrentAmount), "01", "02", "2022", baseCurrentAmount],
-    ["5", "1 May 2022", newCurrency.format(baseCurrentAmount), "01", "05", "2022", baseCurrentAmount],
-    ["6", "1 August 2022", newCurrency.format(baseCurrentAmount), "01", "08", "2022", baseCurrentAmount],
-    ["7", "1 November 2022", newCurrency.format(baseCurrentAmount), "01", "11", "2022", baseCurrentAmount],
-    ["8", "1 February 2023", newCurrency.format(baseCurrentAmount), "01", "02", "2023", baseCurrentAmount],
+    ["2", "1 August 2021", newCurrency.format(baseCurrentAmount + 1000), "01", "08", "2021", baseCurrentAmount + 1000],
+    [
+      "3",
+      "1 November 2021",
+      newCurrency.format(baseCurrentAmount + 3000),
+      "01",
+      "11",
+      "2021",
+      baseCurrentAmount + 3000,
+    ],
+    [
+      "4",
+      "1 February 2022",
+      newCurrency.format(baseCurrentAmount + 4000),
+      "01",
+      "02",
+      "2022",
+      baseCurrentAmount + 4000,
+    ],
+    ["5", "1 May 2022", newCurrency.format(baseCurrentAmount + 5000), "01", "05", "2022", baseCurrentAmount + 5000],
+    ["6", "1 August 2022", newCurrency.format(baseCurrentAmount + 6000), "01", "08", "2022", baseCurrentAmount + 6000],
+    [
+      "7",
+      "1 November 2022",
+      newCurrency.format(baseCurrentAmount + 7000),
+      "01",
+      "11",
+      "2022",
+      baseCurrentAmount + 7000,
+    ],
+    [
+      "8",
+      "1 February 2023",
+      newCurrency.format(baseCurrentAmount + 8000),
+      "01",
+      "02",
+      "2023",
+      baseCurrentAmount + 8000,
+    ],
   ].forEach(([drawdown, currentDate, currentAmount, day, month, year, total], index) => {
     cy.get("tr")
       .eq(index + 1)
@@ -282,26 +314,18 @@ export const loansEditTable = () => {
         cy.get(`td:nth-child(3)`).contains(currentAmount);
         cy.get(`td:nth-child(4)`).within(() => {
           cy.getByLabel("Day").should("have.value", day);
+          cy.getByLabel("Month").should("have.value", month);
+          cy.getByLabel("Year").should("have.value", year);
         });
         cy.get(`td:nth-child(5)`).within(() => {
-          cy.getByLabel("Month").contains("have.value", month);
-        });
-        cy.get(`td:nth-child(6)`).within(() => {
-          cy.getByLabel("Year").contains("have.value", year);
-        });
-        cy.get(`td:nth-child(7)`).within(() => {
-          cy.get("input").contains("have.value", total);
+          cy.get("input").should("have.value", total);
         });
       });
   });
   cy.get("tfoot").within(() => {
-    cy.get("tr")
-      .eq(0)
-      .within(() => {
-        ["Total", "£114,000.00", "£114,000.00"].forEach((footer, index) => {
-          cy.get(`td:nth-child(${index + 1})`).contains(footer);
-        });
-      });
+    cy.get("th:nth-child(1)").contains("Total");
+    cy.get("th:nth-child(3)").contains("£114,000.00");
+    cy.get("th:nth-child(5)").contains("£114,000.00");
   });
 };
 
@@ -329,33 +353,49 @@ export const amendLoansTable = () => {
     "£114,000.00",
     "Edit",
   ].forEach(editItem => {
-    cy.getByQA("loan-edit-table").contains(editItem);
+    cy.get("table").contains(editItem);
   });
 };
 
 export const acceptNegativeInput = () => {
   cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
-  cy.get("input#1_newValue").clear().wait(100).type("-200").wait(200);
-  cy.get("td").contains("-£193.00");
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(5)").within(() => {
+        cy.get("input").clear().wait(100).type("-200").wait(200);
+      });
+    });
+  cy.get("tfoot").within(() => {
+    cy.get("th:nth-child(5)").contains("-£193.00");
+  });
 };
 
 export const changeFirstValue = () => {
   cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
-  cy.get("input#1_newValue").clear().wait(100).type("2").wait(200);
-  cy.get("td").contains("£9.00");
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(5)").within(() => {
+        cy.get("input").clear().wait(100).type("2").wait(200);
+      });
+    });
+  cy.get("tfoot").within(() => {
+    cy.get("th:nth-child(5)").contains("£9.00");
+  });
   cy.clickOn("Continue to summary");
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.get("tfoot").within(() => {
     cy.get("tr")
       .eq(0)
       .within(() => {
-        cy.get("td:nth-child(5)").contains("£9.00");
+        cy.get("th:nth-child(5)").contains("£9.00");
       });
   });
 };
 
 export const markAndContinue = () => {
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change.").check();
   cy.submitButton("Save and return to request").click();
 };
@@ -431,7 +471,7 @@ export const updatedLoansTable = () => {
       ["Repayment Period", "0", "01/02/2025", "25", "01/11/2041"],
     ].forEach(([phase, currentLength, currentEnd, newLength, newEnd], index) => {
       cy.get("tr")
-        .eq(index)
+        .eq(index + 1)
         .within(() => {
           cy.get("td:nth-child(1)").contains(phase);
           cy.get("td:nth-child(2)").contains(currentLength);
