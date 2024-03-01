@@ -131,7 +131,9 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
   );
 
   const spendProfileCostCategories = costCategories.filter(
-    x => x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType,
+    x =>
+      (x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType) ||
+      x.type === CostCategoryType.Other_Public_Sector_Funding,
   );
 
   return {

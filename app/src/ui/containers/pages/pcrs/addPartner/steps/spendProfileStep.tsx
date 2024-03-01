@@ -21,10 +21,13 @@ export const SpendProfileStep = () => {
 
   const { spendProfileCostCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
+  const spendProfileCostOnlyCategories = spendProfileCostCategories.filter(
+    x => x.type !== CostCategoryType.Other_Public_Sector_Funding && x.type !== CostCategoryType.Other_Funding,
+  );
   const data = useMemo(() => {
-    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, spendProfileCostCategories);
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, spendProfileCostOnlyCategories);
 
-    const costCategories = spendProfileCostCategories.map(costCategory => ({
+    const costCategories = spendProfileCostOnlyCategories.map(costCategory => ({
       ...costCategory,
       cost: spendProfile.costs
         .filter(y => y.costCategoryId === costCategory.id)
