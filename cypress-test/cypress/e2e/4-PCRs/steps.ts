@@ -1458,7 +1458,6 @@ export enum PcrItemType {
   ChangeAPartnerName = "Change a partner's name",
   ApproveANewSubcontractor = "Approve a new subcontractor",
   PutAProjectOnHold = "Put project on hold",
-  Uplift = "Uplift",
 }
 
 const pcrArray = [
@@ -1470,7 +1469,6 @@ const pcrArray = [
   PcrItemType.ChangeAPartnerName,
   //PcrItemType.ApproveANewSubcontractor,
   PcrItemType.PutAProjectOnHold,
-  PcrItemType.Uplift,
 ];
 
 export const multiPcrArray = [
@@ -2181,15 +2179,15 @@ export const updateNewRemainingGrant = () => {
 
 export const reduceNewRemainingGrant = () => {
   [
-    ["EUI Small Ent Health new remaining grant", "192399", "65.22%", "£343,099.00", "65.35%"],
-    ["A B Cad Services new remaining grant", "148849", "65.00%", "£341,948.00", "65.13%"],
-    ["EUI Small Ent Health new remaining grant", "192399.01", "65.22%", "£343,099.01", "65.35%"],
-    ["A B Cad Services new remaining grant", "148848.99", "65.00%", "£341,948.00", "65.13%"],
-    ["ABS EUI Medium Enterprise new remaining grant", "649", "64.90%", "£341,897.00", "65.12%"],
-  ].forEach(([aria, input, rowPercentage, totalGrant, totalPercentage], index) => {
+    ["1", "EUI Small Ent Health new remaining grant", "192399", "65.22%", "£343,099.00", "65.35%"],
+    ["2", "A B Cad Services new remaining grant", "148849", "65.00%", "£341,948.00", "65.13%"],
+    ["1", "EUI Small Ent Health new remaining grant", "192399.01", "65.22%", "£341,948.01", "65.13%"],
+    ["2", "A B Cad Services new remaining grant", "148848.99", "65.00%", "£341,948.00", "65.13%"],
+    ["3", "ABS EUI Medium Enterprise new remaining grant", "649", "64.90%", "£341,897.00", "65.12%"],
+  ].forEach(([row, aria, input, rowPercentage, totalGrant, totalPercentage]) => {
     cy.getByAriaLabel(aria).clear().type(input);
     cy.get("tr")
-      .eq(index + 1)
+      .eq(Number(row))
       .within(() => {
         cy.get(`td:nth-child(7)`).contains(rowPercentage);
       });
@@ -2206,7 +2204,7 @@ export const reduceNewRemainingGrant = () => {
 export const saveReflectSurplus = () => {
   cy.clickOn("Save and return to reallocate project costs");
   cy.heading("Reallocate project costs");
-  ["£192,399.00", "£148,849.00", "£649.00"].forEach((newRemGrant, index) => {
+  ["£192,399.01", "£148,848.99", "£649.00"].forEach((newRemGrant, index) => {
     cy.get("tr")
       .eq(index + 1)
       .within(() => {

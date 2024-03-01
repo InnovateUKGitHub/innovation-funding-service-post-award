@@ -611,6 +611,17 @@ export const reflectSection4Changes = () => {
   );
 };
 
+export const validateMoCommentBoxMaximum = () => {
+  cy.get("textarea").clear();
+  cy.get("textarea").invoke("val", loremIpsum32k);
+  cy.get("textarea").type("{moveToEnd}");
+  cy.wait(500);
+  cy.get("textarea").type(".");
+  cy.paragraph("You have 32001 characters");
+  cy.button("Save and return to summary").click();
+  cy.validationLink("Maximum of 32,000 characters");
+};
+
 export const editSection5WithTooMuchCopy = () => {
   cy.getByQA("summary-question-5").contains("Edit").click();
   cy.get("legend").contains("Risk management");

@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { deleteMoReport, deleteUsingCorrectDeleteButton, validatePeriodBox } from "./steps";
+import { deleteUsingCorrectDeleteButton, validatePeriodBox } from "./steps";
 import {
   clickMoReportTile,
   clickStartNewReportButton,

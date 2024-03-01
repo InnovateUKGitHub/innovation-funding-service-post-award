@@ -1,3 +1,5 @@
+import { uploadIAR } from "e2e/2-claims/steps";
+
 let date = new Date().toUTCString();
 let comments = date;
 
@@ -10,6 +12,8 @@ export const moClaimTidyUp = (partnerName: string, claimType: string) => {
         cy.switchUserTo("iuk.accproject@bjss.com.bjssdev");
         cy.get("td").contains(partnerName).siblings().clickOn("a", "Edit");
         cy.clickOn("Continue to claims documents");
+        cy.heading("Claim documents");
+        uploadIAR;
         cy.clickOn("Continue to update forecast");
         cy.clickOn("Continue to summary");
         cy.clickOn("Submit claim");

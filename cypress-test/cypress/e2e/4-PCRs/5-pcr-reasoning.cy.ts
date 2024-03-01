@@ -39,14 +39,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should select 'Add a partner' checkbox", () => {
-    cy.clickCheckBox("Add a partner");
-    cy.wait(500);
-  });
-
-  it("Will click Create request button and proceed to next page", () => {
-    cy.clickOn("Create request");
-    cy.heading("Request");
-    cy.wait(5000);
+    cy.createPcr("Add a partner");
   });
 
   it("Should click into the Reasoning section", () => {

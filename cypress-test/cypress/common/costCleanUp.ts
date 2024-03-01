@@ -102,6 +102,7 @@ export const otherCost5TidyUp = () => {
         cy.get("a").contains("Other costs 5").click();
         cy.heading("Other costs 5");
         cy.getByAriaLabel("Cost of claim line item 0").clear();
+        cy.wait(500);
         cy.getByAriaLabel("Cost of claim line item 0").type("2100");
         cy.wait(500);
         cy.clickOn("Save and return to claims");
