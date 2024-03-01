@@ -257,7 +257,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
 
     case ProjectStatus.OfferLetterSent: {
       if (getIsKtpOfferLetterSent(project)) {
-        return "open";
+        return "pending";
       } else {
         return "upcoming";
       }

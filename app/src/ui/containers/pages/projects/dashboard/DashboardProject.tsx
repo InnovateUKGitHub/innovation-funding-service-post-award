@@ -62,7 +62,15 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
   const messages: string[] = [];
 
   if (section === "pending") {
-    messages.push(getContent(x => x.projectMessages.pendingProject));
+    if (getIsKtpOfferLetterSent(project)) {
+      if (getAssociateStartDateMissing(project)) {
+        messages.push(getContent(x => x.projectMessages.startDateRequired));
+      } else {
+        messages.push(getContent(x => x.projectMessages.canEditStartDate));
+      }
+    } else {
+      messages.push(getContent(x => x.projectMessages.pendingProject));
+    }
   }
 
   if (section === "archived") {
@@ -113,14 +121,6 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
 
     if (isPm && hasQueriedPcrs) {
       messages.push(getContent(x => x.projectMessages.pcrQueried));
-    }
-
-    if (getIsKtpOfferLetterSent(project)) {
-      if (getAssociateStartDateMissing(project)) {
-        messages.push(getContent(x => x.projectMessages.startDateRequired));
-      } else {
-        messages.push(getContent(x => x.projectMessages.canEditStartDate));
-      }
     }
   }
 
