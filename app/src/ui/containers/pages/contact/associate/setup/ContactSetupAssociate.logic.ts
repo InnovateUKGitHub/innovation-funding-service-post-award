@@ -10,17 +10,20 @@ import { z } from "zod";
 import { contactSetupAssociateQuery } from "./ContactSetupAssociate.query";
 import { ContactSetupAssociateSchemaType } from "./ContactSetupAssociate.zod";
 import { ContactSetupAssociateQuery } from "./__generated__/ContactSetupAssociateQuery.graphql";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface ContactSetupAssociateParams {
   projectId: ProjectId;
 }
 
 const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociateParams) => {
+  const [fetchKey, setFetchKey] = useState(0);
   const data = useLazyLoadQuery<ContactSetupAssociateQuery>(
     contactSetupAssociateQuery,
     { projectId },
     {
-      fetchPolicy: "store-and-network",
+      fetchPolicy: "network-only",
+      fetchKey,
     },
   );
 
@@ -36,10 +39,13 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
     "endDate",
   ]);
 
-  return { project, contacts };
+  return { project, contacts, setFetchKey };
 };
 
-const useOnContactSetupAssociateSubmit = ({ projectId }: ContactSetupAssociateParams) => {
+const useOnContactSetupAssociateSubmit = ({
+  projectId,
+  setFetchKey,
+}: ContactSetupAssociateParams & { setFetchKey: Dispatch<SetStateAction<number>> }) => {
   const routes = useRoutes();
   const navigateTo = useNavigate();
 
@@ -51,6 +57,7 @@ const useOnContactSetupAssociateSubmit = ({ projectId }: ContactSetupAssociatePa
       });
     },
     onSuccess() {
+      setFetchKey(n => n + 1);
       navigateTo(routes.projectDashboard.getLink({}).path);
     },
   });
