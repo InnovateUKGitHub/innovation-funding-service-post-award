@@ -32,8 +32,9 @@ import {
 import {
   CostCategoryLevelFinancialVirementEditSchemaType,
   costCategoryLevelFinancialVirementEditErrorMap,
-  costCategoryLevelFinancialVirementEditSchema,
+  getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 
 /**
  * hook to return edit page content
@@ -81,46 +82,32 @@ interface PartnerLevelFinancialVirementParams {
 const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancialVirementParams & BaseProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
+  const { isServer } = useMounted();
 
   const { project, partner, financialVirementsForCosts, financialVirementsForParticipants, partners } =
     useCostCategoryLevelFinancialVirementEditData({ projectId, partnerId, itemId });
 
-  const mapFinancialVirement = useMapOverwrittenFinancialVirements({
+  const mapFinancialVirementProps = {
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
     pcrItemId: itemId,
-  });
+  };
 
-  const { virementData: initialVirementData } = mapFinancialVirement();
-
-  const initialPartnerVirement = initialVirementData.partners.find(x => x.partnerId === partnerId)!;
+  const mapFinancialVirement = useMapOverwrittenFinancialVirements(mapFinancialVirementProps);
 
   const { register, watch, handleSubmit, setError, formState, getFieldState } = useForm<
     z.input<CostCategoryLevelFinancialVirementEditSchemaType>
   >({
-    resolver: zodResolver(costCategoryLevelFinancialVirementEditSchema, {
+    resolver: zodResolver(getCostCategoryLevelFinancialVirementEditSchema(mapFinancialVirementProps), {
       errorMap: costCategoryLevelFinancialVirementEditErrorMap,
     }),
-    defaultValues: {
-      form: FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue,
-      projectId,
-      pcrId,
-      pcrItemId: itemId,
-      partnerId,
-      virements: initialPartnerVirement.virements.map(x => ({
-        costCategoryId: x.costCategoryId,
-        costsClaimedToDate: x.costsClaimedToDate,
-        newEligibleCosts: String(x.newEligibleCosts),
-        costCategoryName: x.costCategoryName,
-      })),
-    },
   });
 
   const defaults = useServerInput();
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { virementData } = mapFinancialVirement(watch("virements"));
+  const { virementData } = mapFinancialVirement(isServer ? defaults?.virements : watch("virements"));
 
   const { onUpdate, isProcessing } = useOnUpdateCostCategoryLevel({
     mapFinancialVirement,
@@ -206,7 +193,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
                         id={`virements_${i}_newEligibleCosts`}
                         disabled={isProcessing}
                         hasError={!!getFieldState(`virements.${i}.newEligibleCosts`).error}
-                        defaultValue={defaults?.newEligibleCosts ?? x.newEligibleCosts}
+                        defaultValue={defaults?.virements?.[i]?.newEligibleCosts ?? x.newEligibleCosts}
                       />
                     </Fieldset>
                   </TD>

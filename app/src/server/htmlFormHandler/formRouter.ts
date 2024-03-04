@@ -63,6 +63,7 @@ import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handl
 import { ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorSummaryUpdate.handler";
 import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorStepUpdate.handler";
 import { ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemAddPartnerCompaniesHouseStepUpdate.handler";
+import { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsCostCategoryUpdate.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -75,6 +76,7 @@ export const standardFormHandlers = [
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
   new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
+  new ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate(),
   new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),

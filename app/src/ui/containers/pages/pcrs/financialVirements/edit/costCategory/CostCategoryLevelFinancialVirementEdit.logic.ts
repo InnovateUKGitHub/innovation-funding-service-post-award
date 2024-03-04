@@ -125,21 +125,20 @@ export const useOnUpdateCostCategoryLevel = ({
   });
 };
 
-export const useMapOverwrittenFinancialVirements = ({
-  financialVirementsForCosts,
-  financialVirementsForParticipants,
-  partners,
-  pcrItemId,
-}: MapVirements) =>
+export const mapOverwrittenFinancialVirements =
+  ({ financialVirementsForCosts, financialVirementsForParticipants, partners, pcrItemId }: MapVirements) =>
+  (virements?: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"]) =>
+    mapVirements({
+      financialVirementsForCosts: patchFinancialVirementsForCosts(financialVirementsForCosts, virements),
+      financialVirementsForParticipants,
+      partners,
+      pcrItemId,
+    });
+
+export const useMapOverwrittenFinancialVirements = (props: MapVirements) =>
   useMemo(
-    () => (virements?: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"]) =>
-      mapVirements({
-        financialVirementsForCosts: patchFinancialVirementsForCosts(financialVirementsForCosts, virements),
-        financialVirementsForParticipants,
-        partners,
-        pcrItemId,
-      }),
-    [financialVirementsForCosts, financialVirementsForParticipants, partners, pcrItemId],
+    () => mapOverwrittenFinancialVirements(props),
+    [props.financialVirementsForCosts, props.financialVirementsForParticipants, props.partners, props.pcrItemId],
   );
 
 export { patchFinancialVirementsForCosts, usePartnerLevelFinancialVirementEditData };
