@@ -1,4 +1,4 @@
-import { roundCurrency } from "@framework/util/numberHelper";
+import { roundCurrency, parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { partnerIdValidation, zeroOrGreaterCurrencyValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
@@ -7,7 +7,7 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "editPartnerLevel"] 
 
 export const editPartnerLevelSchema = z
   .object({
-    virements: z.array(
+    partners: z.array(
       z
         .object({
           newRemainingGrant: zeroOrGreaterCurrencyValidation,
@@ -15,7 +15,7 @@ export const editPartnerLevelSchema = z
           partnerId: partnerIdValidation,
         })
         .superRefine((data, ctx) => {
-          if (roundCurrency(Number(data.newRemainingGrant.replace("£", ""))) > roundCurrency(data.newRemainingCosts)) {
+          if (roundCurrency(parseCurrency(data.newRemainingGrant)) > roundCurrency(data.newRemainingCosts)) {
             ctx.addIssue({
               code: z.ZodIssueCode.too_big,
               type: "number",

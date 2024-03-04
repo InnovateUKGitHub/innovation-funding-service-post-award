@@ -27,6 +27,7 @@ const UpliftSummary = () => {
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
+    pcrItemId: itemId,
   });
 
   return (

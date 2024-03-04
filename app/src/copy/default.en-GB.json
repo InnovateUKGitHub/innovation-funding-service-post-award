@@ -1630,7 +1630,6 @@
       "remainingGrantTooSmall": "Grant cannot be less than zero.",
       "remainingGrantTooBig": "Grant must be less than £10,000,000,000,000,000.",
       "costRequired": "Costs are required.",
-      "costClaimedTooSmall": "Costs cannot be less than amount already claimed for {{ name }}.",
       "costTooSmall": "Costs cannot be less than zero.",
       "costTooBig": "Eligible costs must be less than £10,000,000,000,000,000.",
       "invalidPcrItemType": "You cannot reallocate project costs on an uplift."
@@ -2434,6 +2433,22 @@
             "required": "Grant moving over financial year is required.",
             "invalid": "The value of a grant moving over financial year must be numerical.",
             "too_small": "The value can not be lower than 0."
+          }
+        },
+        "costCategoryLevel": {
+          "virements": {
+            "arrayType": {
+              "newEligibleCosts": {
+                "errors": {
+                  "too_small": "Costs cannot be less than zero.",
+                  "too_big": "Costs cannot be greater than {{ count, currency }}.",
+                  "costs_too_small": "Costs cannot be less than amount already claimed for {{ name }}.",
+                  "invalid_string": {
+                    "regex": "Costs must be no more than 2 decimal places."
+                  }
+                }
+              }
+            }
           }
         }
       },

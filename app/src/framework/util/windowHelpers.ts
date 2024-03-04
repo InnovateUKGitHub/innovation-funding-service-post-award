@@ -39,6 +39,9 @@ export const scrollToTheParentFieldsetSmoothly = (tag: string) => {
       } else {
         nameTag.scrollIntoView({ behavior: "smooth" });
       }
+
+      // Select the input box without scrolling to it
+      nameTag.focus({ preventScroll: true });
     }
   });
 };

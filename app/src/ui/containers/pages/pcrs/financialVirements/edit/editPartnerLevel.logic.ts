@@ -13,8 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
-import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
 import { roundCurrency } from "@framework/util/numberHelper";
+import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
 
 export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: ProjectId; itemId: PcrItemId }) => {
   const data = useLazyLoadQuery<EditPartnerLevelQuery>(
@@ -59,6 +59,7 @@ export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: Proj
       "originalCostsClaimedToDate",
       "originalCostsClaimedToDate",
       "originalEligibleCosts",
+      "costCategoryName",
     ],
     {
       overrides: claimOverrides,
@@ -94,9 +95,7 @@ export const getPayload = (
   virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
   itemId: PcrItemId,
 ) => {
-  const newRemainingGrantTotal = roundCurrency(
-    sumBy(data.virements, x => Number(x.newRemainingGrant.replace("£", ""))),
-  );
+  const newRemainingGrantTotal = roundCurrency(sumBy(data.partners, x => Number(x.newRemainingGrant.replace("£", ""))));
 
   const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
 
@@ -113,8 +112,8 @@ export const getPayload = (
     ]),
     newFundingLevel: newFundingLevelTotal,
     newRemainingGrant: newRemainingGrantTotal,
-    partners: virementData.virements.map(x => {
-      const matchingPartner = data.virements.find(v => v.partnerId === x.partnerId);
+    partners: virementData.partners.map(x => {
+      const matchingPartner = data.partners.find(v => v.partnerId === x.partnerId);
       if (!matchingPartner) throw new Error("cannot find matching partner id");
 
       const newRemainingGrant = Number(matchingPartner.newRemainingGrant.replace("£", ""));
@@ -143,7 +142,7 @@ export const getPayload = (
             "newRemainingCosts",
             "costCategoryId",
           ]),
-          costsClaimedToDate: virement.originalCostsClaimedToDate,
+          costsClaimedToDate: virement.costsClaimedToDate,
         })),
       };
     }),

@@ -1,3 +1,8 @@
+import {
+  CostCategoryVirementDto,
+  FinancialVirementDto,
+  PartnerVirementsDto,
+} from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
@@ -33,13 +38,51 @@ interface MapCostCategoryProps {
   financialVirementsForParticipant: FinancialVirementForParticipant;
 }
 
+interface MappedFinancialVirementCostCategoryDto extends CostCategoryVirementDto {
+  virementCostId: FinancialVirementForCostsId;
+  virementParticipantId: FinancialVirementForParticipantId;
+}
+
+interface MappedFinancialVirementParticipantDto extends PartnerVirementsDto {
+  virementParticipantId: FinancialVirementForParticipantId;
+  isLead: boolean;
+  name: string;
+  costDifference: number;
+  grantDifference: number;
+  virements: MappedFinancialVirementCostCategoryDto[];
+}
+
+interface MappedFinancialVirementDto extends FinancialVirementDto {
+  grantDifference: number;
+  costDifference: number;
+  partners: MappedFinancialVirementParticipantDto[];
+}
+
+interface MappedFinancialVirementMeta {
+  hasMatchingGrant: boolean;
+  hasAvailableGrant: boolean;
+  originalRemainingGrant: number;
+  grantDifference: number;
+  isValidGrantTotal: boolean;
+}
+
+interface MappedFinancialVirement {
+  virementData: MappedFinancialVirementDto;
+  virementMeta: MappedFinancialVirementMeta;
+  isSummaryValid: boolean;
+}
+
 interface MapVirements {
   financialVirementsForCosts: FinancialVirementForCost[];
   financialVirementsForParticipants: FinancialVirementForParticipant[];
   partners: Partner[];
+  pcrItemId: PcrItemId;
 }
 
-const mapCostCategory = ({ financialVirementsForParticipant, financialVirementsForCost }: MapCostCategoryProps) => {
+const mapCostCategory = ({
+  financialVirementsForParticipant,
+  financialVirementsForCost,
+}: MapCostCategoryProps): MappedFinancialVirementCostCategoryDto => {
   const originalRemainingCosts =
     financialVirementsForCost.originalEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate;
 
@@ -55,7 +98,7 @@ const mapCostCategory = ({ financialVirementsForParticipant, financialVirementsF
     virementParticipantId: financialVirementsForParticipant.id,
     originalEligibleCosts: financialVirementsForCost.originalEligibleCosts,
     newEligibleCosts: financialVirementsForCost.newEligibleCosts,
-    originalCostsClaimedToDate: financialVirementsForCost.originalCostsClaimedToDate,
+    costsClaimedToDate: financialVirementsForCost.originalCostsClaimedToDate,
     originalRemainingCosts,
     newRemainingCosts,
     originalRemainingGrant,
@@ -69,7 +112,7 @@ const mapProjectParticipant = ({
   financialVirementsForParticipant,
   financialVirementsForCosts,
   partner,
-}: MapToFinancialVirementProps) => {
+}: MapToFinancialVirementProps): MappedFinancialVirementParticipantDto => {
   let costsClaimedToDate = 0;
   let originalEligibleCosts = 0;
   let newRemainingGrant = 0;
@@ -81,7 +124,7 @@ const mapProjectParticipant = ({
     .map(financialVirementsForCost => {
       const costCategoryVirement = mapCostCategory({ financialVirementsForParticipant, financialVirementsForCost });
 
-      costsClaimedToDate += costCategoryVirement.originalCostsClaimedToDate;
+      costsClaimedToDate += costCategoryVirement.costsClaimedToDate;
       originalEligibleCosts += costCategoryVirement.originalEligibleCosts;
       newRemainingGrant += costCategoryVirement.newRemainingGrant;
       originalRemainingGrant += costCategoryVirement.originalRemainingGrant;
@@ -121,7 +164,12 @@ const mapProjectParticipant = ({
   };
 };
 
-const mapVirements = ({ financialVirementsForParticipants, financialVirementsForCosts, partners }: MapVirements) => {
+const mapVirements = ({
+  financialVirementsForParticipants,
+  financialVirementsForCosts,
+  partners,
+  pcrItemId,
+}: MapVirements): MappedFinancialVirement => {
   let costsClaimedToDate = 0;
   let originalEligibleCosts = 0;
   let originalRemainingCosts = 0;
@@ -131,7 +179,7 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
   let newRemainingGrant = 0;
   let hasAvailablePartners = false;
 
-  const virements = sortPartnersLeadFirst(partners)
+  const partnerVirements = sortPartnersLeadFirst(partners)
     .filter(partner =>
       financialVirementsForParticipants.find(
         financialVirementsForParticipant => financialVirementsForParticipant.partnerId === partner.id,
@@ -191,9 +239,10 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
       newRemainingGrant,
       grantDifference,
       costDifference,
-      virements,
+      partners: partnerVirements,
       originalFundingLevel: roundCurrency(originalFundingLevel),
       newFundingLevel: roundCurrency(newFundingLevel),
+      pcrItemId,
     },
     virementMeta: {
       hasMatchingGrant,
@@ -215,4 +264,4 @@ const useMapFinancialVirements = (props: MapVirements) => {
 type MappedFinancialVirements = ReturnType<typeof mapVirements>;
 
 export { mapVirements, useMapFinancialVirements, MapVirements };
-export type { MappedFinancialVirements };
+export type { MappedFinancialVirements, FinancialVirementForCost };

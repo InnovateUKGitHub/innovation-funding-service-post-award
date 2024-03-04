@@ -250,14 +250,18 @@ export class CostCategoryVirementDtoValidator extends Results<CostCategoryVireme
         this,
         this.model.newEligibleCosts >= this.model.costsClaimedToDate,
         this.getContent(x =>
-          x.validation.financialVirementDtoValidator.costClaimedTooSmall({ name: this.model.costCategoryName }),
+          x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.costs_too_small({
+            name: this.model.costCategoryName,
+          }),
         ),
       ),
     () =>
       Validation.isTrue(
         this,
         this.model.newEligibleCosts >= 0,
-        this.getContent(x => x.validation.financialVirementDtoValidator.costTooSmall),
+        this.getContent(
+          x => x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.too_small,
+        ),
       ),
     () =>
       Validation.isTrue(

@@ -5,11 +5,11 @@ import { GetFinancialVirementQuery } from "@server/features/financialVirements/g
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { VirementCostsParams } from "@ui/containers/pages/pcrs/financialVirements/editPage";
+import { PartnerLevelFinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
 import {
   FinancialVirementParams,
   FinancialVirementEditPartnerLevelRoute,
-} from "@ui/containers/pages/pcrs/financialVirements/editPartnerLevel.page";
+} from "@ui/containers/pages/pcrs/financialVirements/edit/editPartnerLevel.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
@@ -53,7 +53,7 @@ export class VirementPartnerCostsUpdateHandler extends StandardFormHandlerBase<
 
   protected async run(
     context: IContext,
-    { projectId, itemId, pcrId }: VirementCostsParams,
+    { projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams,
     button: IFormButton,
     dto: FinancialVirementDto,
   ): Promise<ILinkInfo> {
@@ -61,11 +61,11 @@ export class VirementPartnerCostsUpdateHandler extends StandardFormHandlerBase<
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId }: VirementCostsParams) {
+  protected getStoreKey({ projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId);
   }
 
-  protected createValidationResult(params: VirementCostsParams, dto: FinancialVirementDto) {
+  protected createValidationResult(params: PartnerLevelFinancialVirementParams, dto: FinancialVirementDto) {
     return new FinancialVirementDtoValidator({ model: dto, showValidationErrors: false, submit: true });
   }
 }

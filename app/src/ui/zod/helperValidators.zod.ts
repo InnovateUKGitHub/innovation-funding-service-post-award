@@ -23,6 +23,11 @@ const pcrItemIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_ProjectChangeRequest__c)
   .transform(x => x as PcrItemId);
 
+const financialVirementForCostsIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_Virements__c)
+  .transform(x => x as FinancialVirementForCostsId);
+
 const partnerIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_ProjectParticipant__c)
@@ -327,6 +332,7 @@ export {
   projectIdValidation,
   pcrIdValidation,
   pcrItemIdValidation,
+  financialVirementForCostsIdValidation,
   partnerIdValidation,
   profileIdValidation,
   periodIdValidation,

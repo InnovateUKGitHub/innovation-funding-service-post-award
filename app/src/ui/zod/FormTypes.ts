@@ -26,6 +26,8 @@ enum FormTypes {
   PcrLevelUpload = "pcrLevelUpload",
 
   PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
+  PcrFinancialVirementsCostCategorySaveAndContinue = "pcrFinancialVirementsCostCategorySaveAndContinue",
+
   PcrApproveNewSubcontractorStep = "pcrApproveNewSubcontractorDetails",
   PcrApproveNewSubcontractorSummary = "pcrApproveNewSubcontractorSummary",
 

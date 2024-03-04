@@ -29,7 +29,6 @@ import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/ema
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
-import { FinancialVirementEditRoute } from "../editPage";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
@@ -56,6 +55,7 @@ export const FinancialVirementSummary = () => {
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
+    pcrItemId: itemId,
   });
   const defaults = useServerInput<z.output<FinancialVirementsSummaryValidatorSchema>>();
 
@@ -65,6 +65,7 @@ export const FinancialVirementSummary = () => {
         financialVirementsForCosts,
         financialVirementsForParticipants,
         partners,
+        pcrItemId: itemId,
       }),
       { errorMap: financialVirementsSummaryErrorMap },
     ),
@@ -118,11 +119,16 @@ export const FinancialVirementSummary = () => {
             </TR>
           </THead>
           <TBody>
-            {virementData.virements.map(x => (
+            {virementData.partners.map(x => (
               <TR key={x.virementParticipantId}>
                 <TD className={colClass}>
                   <Link
-                    route={FinancialVirementEditRoute.getLink({ projectId, partnerId: x.partnerId, itemId, pcrId })}
+                    route={routes.pcrFinancialVirementEditCostCategoryLevel.getLink({
+                      projectId,
+                      partnerId: x.partnerId,
+                      itemId,
+                      pcrId,
+                    })}
                   >
                     {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}
                   </Link>

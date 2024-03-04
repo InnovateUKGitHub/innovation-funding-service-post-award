@@ -5,8 +5,8 @@ import { GetFinancialLoanVirementQuery } from "@server/features/financialViremen
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { VirementCostsParams } from "@ui/containers/pages/pcrs/financialVirements/editPage";
-import { FinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/editPartnerLevel.page";
+import { PartnerLevelFinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+import { FinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/editPartnerLevel.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
@@ -57,7 +57,7 @@ export class VirementLoanEditHandler extends StandardFormHandlerBase<FinancialVi
 
   protected async run(
     context: IContext,
-    { projectId, itemId, pcrId }: VirementCostsParams,
+    { projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams,
     button: IFormButton,
     dto: FinancialLoanVirementDto,
   ): Promise<ILinkInfo> {
@@ -65,11 +65,11 @@ export class VirementLoanEditHandler extends StandardFormHandlerBase<FinancialVi
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId }: VirementCostsParams) {
+  protected getStoreKey({ projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId);
   }
 
-  protected createValidationResult(params: VirementCostsParams, dto: FinancialLoanVirementDto) {
+  protected createValidationResult(params: PartnerLevelFinancialVirementParams, dto: FinancialLoanVirementDto) {
     return new FinancialLoanVirementDtoValidator(dto, false, true);
   }
 }

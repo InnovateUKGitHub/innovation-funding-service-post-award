@@ -52,6 +52,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
         partners,
         financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
         financialVirementsForParticipants,
+        pcrItemId: input.pcrItemId as PcrItemId,
       }),
       errorMap: financialVirementsSummaryErrorMap,
     };

@@ -8,8 +8,9 @@ type FinancialVirementForCostsNode = GQL.PartialNode<{
   Acc_Profile__c: GQL.Value<string>;
   Acc_Profile__r: GQL.Maybe<{
     Id: GQL.Maybe<string>;
-    Acc_CostCategory__c: GQL.Value<string>;
+    Acc_CostCategory__c?: GQL.Value<string>;
     Acc_CostCategory__r?: GQL.Maybe<{
+      Id: GQL.Maybe<string>;
       Acc_CostCategoryName__c: GQL.Value<string>;
     }>;
   }>;
@@ -42,7 +43,12 @@ const mapper: GQL.DtoMapper<
     return node?.Acc_Profile__c?.value ?? node?.Acc_Profile__r?.Id ?? "unknown profile id";
   },
   costCategoryId(node) {
-    return (node?.Acc_Profile__r?.Acc_CostCategory__c?.value ?? "unknown cost category id") as CostCategoryId;
+    return (node?.Acc_Profile__r?.Acc_CostCategory__r?.Id ??
+      node?.Acc_Profile__r?.Acc_CostCategory__c?.value ??
+      "unknown cost category id") as CostCategoryId;
+  },
+  costCategoryName(node) {
+    return node?.Acc_Profile__r?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "";
   },
   originalEligibleCosts(node) {
     return node?.Acc_CurrentCosts__c?.value ?? 0;

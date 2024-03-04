@@ -8,19 +8,25 @@ import { UpdateFinancialVirementCommand } from "@server/features/financialVireme
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { VirementCostsParams, FinancialVirementEditRoute } from "@ui/containers/pages/pcrs/financialVirements/editPage";
+import {
+  PartnerLevelFinancialVirementParams,
+  PartnerLevelFinancialVirementRoute,
+} from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 
-export class VirementCostsUpdateHandler extends StandardFormHandlerBase<VirementCostsParams, "financialVirement"> {
+export class VirementCostsUpdateHandler extends StandardFormHandlerBase<
+  PartnerLevelFinancialVirementParams,
+  "financialVirement"
+> {
   constructor() {
-    super(FinancialVirementEditRoute, ["default"], "financialVirement");
+    super(PartnerLevelFinancialVirementRoute, ["default"], "financialVirement");
   }
 
   protected async getDto(
     context: IContext,
-    params: VirementCostsParams,
+    params: PartnerLevelFinancialVirementParams,
     button: IFormButton,
     body: IFormBody,
   ): Promise<FinancialVirementDto> {
@@ -59,7 +65,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
 
   protected async run(
     context: IContext,
-    { projectId, itemId, pcrId }: VirementCostsParams,
+    { projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams,
     button: IFormButton,
     dto: FinancialVirementDto,
   ): Promise<ILinkInfo> {
@@ -67,11 +73,11 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId, partnerId }: VirementCostsParams) {
+  protected getStoreKey({ projectId, itemId, pcrId, partnerId }: PartnerLevelFinancialVirementParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId, partnerId);
   }
 
-  protected createValidationResult(params: VirementCostsParams, dto: FinancialVirementDto) {
+  protected createValidationResult(params: PartnerLevelFinancialVirementParams, dto: FinancialVirementDto) {
     return new FinancialVirementDtoValidator({ model: dto, showValidationErrors: false, submit: false });
   }
 }

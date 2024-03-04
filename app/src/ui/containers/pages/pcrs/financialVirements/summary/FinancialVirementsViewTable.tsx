@@ -60,7 +60,7 @@ const FinancialVirementsViewTable = ({
         </TR>
       </THead>
       <TBody>
-        {virementData.virements.map(x => (
+        {virementData.partners.map(x => (
           <TR key={x.virementParticipantId}>
             <TD small className={colClass}>
               <Link

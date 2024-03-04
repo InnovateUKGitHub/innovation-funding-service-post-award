@@ -14,7 +14,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
+import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { useForm } from "react-hook-form";
 import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,11 +76,12 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
     financialVirementsForCosts,
     financialVirementsForParticipants,
     partners,
+    pcrItemId: props.itemId,
   });
 
   const { register, watch, formState, handleSubmit, getFieldState, setValue } = useForm<EditPartnerLevelSchema>({
     defaultValues: {
-      virements: virementData.virements.map(x => ({
+      partners: virementData.partners.map(x => ({
         partnerId: x.partnerId,
         newRemainingGrant: String(x.newRemainingGrant ?? 0),
         newRemainingCosts: x.newRemainingCosts,
@@ -110,11 +111,11 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   const validationErrors = useRhfErrors(formState?.errors) as EditPartnerLevelErrors;
 
   const getNewFundingLevel = (index: number) => {
-    const value = Number(watch(`virements.${index}.newRemainingGrant`));
-    return (value / virementData.virements[index].newRemainingCosts) * 100;
+    const value = Number(watch(`partners.${index}.newRemainingGrant`));
+    return (value / virementData.partners[index].newRemainingCosts) * 100;
   };
 
-  const newRemainingGrantTotal = sumBy(watch("virements"), x => Number(x.newRemainingGrant.replace("£", "")) || 0);
+  const newRemainingGrantTotal = sumBy(watch("partners"), x => Number(x.newRemainingGrant.replace("£", "")) || 0);
 
   useEffect(() => {
     setValue("newRemainingGrant", newRemainingGrantTotal, { shouldValidate: formState.isSubmitted });
@@ -169,7 +170,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
               </TR>
             </THead>
             <TBody>
-              {virementData.virements.map((x, i) => (
+              {virementData.partners.map((x, i) => (
                 <TR key={x.partnerId}>
                   <TD dividerRight>{partners.find(p => p.id === x.partnerId)?.name}</TD>
                   <TD numeric>
@@ -185,13 +186,13 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
                     <Currency value={x.newRemainingCosts} />
                   </TD>
                   <TD numeric>
-                    <ValidationError error={getFieldState(`virements.${i}.newRemainingGrant`).error} />
+                    <ValidationError error={getFieldState(`partners.${i}.newRemainingGrant`).error} />
                     <NumberInput
                       inputWidth={10}
                       aria-label={`${x.name} new remaining grant`}
-                      id={`virements_${i}_newRemainingGrant`}
+                      id={`partners_${i}_newRemainingGrant`}
                       hasError={!!validationErrors?.virements?.[i]?.newRemainingGrant}
-                      {...register(`virements.${i}.newRemainingGrant`)}
+                      {...register(`partners.${i}.newRemainingGrant`)}
                       disabled={isFetching}
                     />
                   </TD>

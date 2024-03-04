@@ -377,6 +377,7 @@ describe("mapFinancialVirements", () => {
         isLead: true,
       },
     ],
+    pcrItemId: "a0G-Acc_ProjectChangeRequest__c" as PcrItemId,
   };
 
   it("should map the virements into the correct format", () => {

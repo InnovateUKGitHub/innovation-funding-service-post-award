@@ -37,8 +37,8 @@ import { ProjectChangeRequestAddTypeRoute } from "@ui/containers/pages/pcrs/addT
 import { PCRCreateRoute } from "@ui/containers/pages/pcrs/create";
 import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
 import { FinancialVirementDetailsRoute } from "@ui/containers/pages/pcrs/financialVirements/detailsPage";
-import { FinancialVirementEditRoute } from "@ui/containers/pages/pcrs/financialVirements/editPage";
-import { FinancialVirementEditPartnerLevelRoute } from "@ui/containers/pages/pcrs/financialVirements/editPartnerLevel.page";
+import { PartnerLevelFinancialVirementRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+import { FinancialVirementEditPartnerLevelRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/editPartnerLevel.page";
 import { PCRDetailsRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestDetails.page";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
@@ -110,7 +110,7 @@ export const routeConfig = {
   pcrDetails: PCRDetailsRoute,
   pcrDelete: PCRDeleteRoute,
   pcrFinancialVirementEditPartnerLevel: FinancialVirementEditPartnerLevelRoute,
-  pcrFinancialVirementEditCostCategoryLevel: FinancialVirementEditRoute,
+  pcrFinancialVirementEditCostCategoryLevel: PartnerLevelFinancialVirementRoute,
   pcrFinancialVirementDetails: FinancialVirementDetailsRoute,
   pcrPrepare: ProjectChangeRequestPrepareRoute,
   pcrPrepareItem: PCRPrepareItemRoute,
