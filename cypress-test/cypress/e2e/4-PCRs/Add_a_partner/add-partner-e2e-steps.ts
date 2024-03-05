@@ -1103,11 +1103,12 @@ export const deleteOtherFundingLines = () => {
   cy.get("main").within(() => {
     cy.get("tr").then($rows => {
       let rowNumber = $rows.length;
+      cy.log(`Number of rows is ${rowNumber}`);
       if (rowNumber > 3) {
-        while (rowNumber > 3) {
+        for (let i = rowNumber; i > 3; i--) {
           cy.log(`***DELETING ROW NUMBER ${rowNumber}***`);
           cy.get("tr")
-            .eq(rowNumber)
+            .eq(i - 3)
             .within(() => {
               cy.button("Remove").click();
               cy.wait(500);

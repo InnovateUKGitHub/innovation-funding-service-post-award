@@ -123,7 +123,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
   it("Should access other sources of funding again and add two line items", () => {
     cy.getListItemFromKey("Funding from other sources", "Edit").click();
     cy.get("h2").contains("Other public sector funding?");
-    for (let i = 1; i < 2; i++) {
+    for (let i = 1; i <= 2; i++) {
       cy.wait(300);
       cy.clickOn("Add another source of funding");
       cy.getByAriaLabel(`source of funding item ${i}`).type(`Lorem ${i}`);
@@ -134,14 +134,14 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
       cy.wait(200);
       cy.getByAriaLabel(`funding amount for item ${i - 1}`).type("333.33");
       cy.wait(200);
-      cy.get("tfoot").within(() => {
-        cy.get("tr")
-          .eq(1)
-          .within(() => {
-            cy.get("th:nth-child(3)").contains("£666.66");
-          });
-      });
     }
+    cy.get("tfoot").within(() => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get("th:nth-child(3)").contains("£666.66");
+        });
+    });
     cy.wait(1000);
     cy.clickOn("Save and return to summary");
   });
@@ -185,7 +185,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
       cy.getListItemFromKey(key, item);
     });
     cy.getListItemFromKey("Funding from other sources", "Edit").click();
-    cy.heading("Other sources of funding?");
+    cy.get("h2").contains("Other public sector funding?");
     cy.get("main").within(() => {
       cy.get("tr").then($rows => {
         let rowNumber = $rows.length;
@@ -203,7 +203,6 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
   it("Should have a back option", () => {
     cy.backLink("Back to request");
   });
-
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
