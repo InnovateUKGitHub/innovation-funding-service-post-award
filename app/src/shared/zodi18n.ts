@@ -85,6 +85,11 @@ export const makeZodI18nMap =
       for (let i = fullPrefix.length; i >= 0; i--) {
         for (const key of alternativeKeys) {
           const path = ["forms", ...fullPrefix.slice(0, i), key].join(".");
+
+          if ("type" in issue) {
+            paths.push(path + "." + issue.type);
+          }
+
           paths.push(path);
 
           /*
@@ -100,12 +105,12 @@ export const makeZodI18nMap =
           if (isArrayTypeError) {
             const basicArrayTypePath = path.replace(/\.\d+\./g, ".arrayType.");
             if (!paths.includes(basicArrayTypePath)) {
+              if ("type" in issue) {
+                paths.push(basicArrayTypePath + "." + issue.type);
+              }
+
               paths.push(basicArrayTypePath);
             }
-          }
-
-          if ("type" in issue) {
-            paths.unshift(path + "." + issue.type);
           }
         }
       }

@@ -175,33 +175,37 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
               </TR>
             </THead>
             <TBody>
-              {partnerVirement.virements.map((x, i) => (
-                <TR key={x.costCategoryId} hasError={!!getFieldState(`virements.${i}`).error}>
-                  <TD>{x.costCategoryName}</TD>
-                  <TD numeric>
-                    <Currency value={x.originalEligibleCosts} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={x.costsClaimedToDate} />
-                  </TD>
-                  <TD numeric>
-                    <input type="hidden" value={x.virementCostId} {...register(`virements.${i}.virementCostId`)} />
-                    <Fieldset>
-                      <ValidationError error={getFieldState(`virements.${i}.newEligibleCosts`).error} />
-                      <NumberInput
-                        {...register(`virements.${i}.newEligibleCosts`)}
-                        id={`virements_${i}_newEligibleCosts`}
-                        disabled={isProcessing}
-                        hasError={!!getFieldState(`virements.${i}.newEligibleCosts`).error}
-                        defaultValue={defaults?.virements?.[i]?.newEligibleCosts ?? x.newEligibleCosts}
-                      />
-                    </Fieldset>
-                  </TD>
-                  <TD numeric>
-                    <Currency value={roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)} />
-                  </TD>
-                </TR>
-              ))}
+              {partnerVirement.virements.map((x, i) => {
+                const defaultValue = defaults?.virements?.[i]?.newEligibleCosts ?? x.newEligibleCosts;
+
+                return (
+                  <TR key={x.costCategoryId} hasError={!!getFieldState(`virements.${i}`).error}>
+                    <TD>{x.costCategoryName}</TD>
+                    <TD numeric>
+                      <Currency value={x.originalEligibleCosts} />
+                    </TD>
+                    <TD numeric>
+                      <Currency value={x.costsClaimedToDate} />
+                    </TD>
+                    <TD numeric>
+                      <input type="hidden" value={x.virementCostId} {...register(`virements.${i}.virementCostId`)} />
+                      <Fieldset>
+                        <ValidationError error={getFieldState(`virements.${i}.newEligibleCosts`).error} />
+                        <NumberInput
+                          {...register(`virements.${i}.newEligibleCosts`)}
+                          id={`virements_${i}_newEligibleCosts`}
+                          disabled={isProcessing}
+                          hasError={!!getFieldState(`virements.${i}.newEligibleCosts`).error}
+                          defaultValue={isNaN(defaultValue) ? undefined : defaultValue}
+                        />
+                      </Fieldset>
+                    </TD>
+                    <TD numeric>
+                      <Currency value={roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)} />
+                    </TD>
+                  </TR>
+                );
+              })}
             </TBody>
             <TFoot>
               <TR>

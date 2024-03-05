@@ -260,7 +260,9 @@ export class CostCategoryVirementDtoValidator extends Results<CostCategoryVireme
         this,
         this.model.newEligibleCosts >= 0,
         this.getContent(
-          x => x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.too_small,
+          x =>
+            x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.too_small
+              .number,
         ),
       ),
     () =>

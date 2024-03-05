@@ -2440,12 +2440,16 @@
             "arrayType": {
               "newEligibleCosts": {
                 "errors": {
-                  "too_small": "Costs cannot be less than zero.",
+                  "too_small": {
+                    "string": "Enter a new total eligible cost.",
+                    "number": "Costs cannot be less than zero."
+                  },
                   "too_big": "Costs cannot be greater than {{ count, currency }}.",
                   "costs_too_small": "Costs cannot be less than amount already claimed for {{ name }}.",
                   "invalid_string": {
                     "regex": "Costs must be no more than 2 decimal places."
-                  }
+                  },
+                  "invalid_type_received_nan": "Enter a valid total eligible cost."
                 }
               }
             }
