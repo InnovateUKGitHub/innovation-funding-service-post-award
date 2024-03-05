@@ -1,4 +1,3 @@
-import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import { CostCategoryFinancialVirement } from "@framework/entities/financialVirement";
 
 type FinancialVirementForCostsNode = GQL.PartialNode<{
@@ -24,15 +23,7 @@ type FinancialVirementForCostsNode = GQL.PartialNode<{
 
 export type FinancialVirementForCostsMapping = CostCategoryFinancialVirement;
 
-interface FinancialVirementForCostsAdditionalData {
-  overrides: ClaimOverrideRateDto;
-}
-
-const mapper: GQL.DtoMapper<
-  FinancialVirementForCostsMapping,
-  FinancialVirementForCostsNode,
-  FinancialVirementForCostsAdditionalData
-> = {
+const mapper: GQL.DtoMapper<FinancialVirementForCostsMapping, FinancialVirementForCostsNode> = {
   id(node) {
     return (node?.Id ?? "unknown financial virement for project costs id") as FinancialVirementForCostsId;
   },
@@ -67,10 +58,9 @@ const mapToFinancialVirementForCostsDto = <
 >(
   financialVirementForCostsNode: TNode,
   pickList: TPickList[],
-  additionalData: FinancialVirementForCostsAdditionalData,
 ): Pick<FinancialVirementForCostsMapping, TPickList> => {
   return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](financialVirementForCostsNode, additionalData);
+    dto[field] = mapper[field](financialVirementForCostsNode);
     return dto;
   }, {} as Pick<FinancialVirementForCostsMapping, TPickList>);
 };
@@ -81,11 +71,10 @@ const mapToFinancialVirementForCostsDtoArray = <
 >(
   financialVirementForCostsNodeEdges: TNode,
   pickList: TPickList[],
-  additionalData: FinancialVirementForCostsAdditionalData,
 ): Pick<FinancialVirementForCostsMapping, TPickList>[] => {
   return (
     financialVirementForCostsNodeEdges?.map(node => {
-      return mapToFinancialVirementForCostsDto(node?.node, pickList, additionalData);
+      return mapToFinancialVirementForCostsDto(node?.node, pickList);
     }) ?? []
   );
 };

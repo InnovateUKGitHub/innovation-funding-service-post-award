@@ -1,73 +1,10 @@
-import { useLazyLoadQuery } from "react-relay";
-import { pick, sumBy } from "lodash";
-import { EditPartnerLevelQuery } from "./__generated__/EditPartnerLevelQuery.graphql";
-import { editPartnerLevelQuery } from "./EditPartnerLevel.query";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
-import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
-import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
-import { mapToFinancialVirementForParticipantDtoArray } from "@gql/dtoMapper/mapFinancialVirementForParticipant";
-import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinancialVirementForCosts";
-import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
 import { roundCurrency } from "@framework/util/numberHelper";
+import { pick, sumBy } from "lodash";
+import { useNavigate } from "react-router-dom";
 import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
-
-export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: ProjectId; itemId: PcrItemId }) => {
-  const data = useLazyLoadQuery<EditPartnerLevelQuery>(
-    editPartnerLevelQuery,
-    { projectId, itemId },
-    { fetchPolicy: "network-only" },
-  );
-
-  const project = mapToProjectDto(getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges).node, [
-    "title",
-    "projectNumber",
-    "isNonFec",
-  ]);
-
-  const partners = mapToPartnerDtoArray(
-    data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
-    ["id", "name", "isLead"],
-    {},
-  );
-
-  const pcrItem = mapPcrItemDto(
-    getFirstEdge(data.salesforce.uiapi.query.Acc_ProjectChangeRequest__c?.edges).node,
-    ["status", "grantMovingOverFinancialYear"],
-    {},
-  );
-
-  const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
-
-  const financialVirementsForParticipants = mapToFinancialVirementForParticipantDtoArray(
-    data.salesforce.uiapi.query.Acc_VirementsForParticipant?.edges ?? [],
-    ["id", "newEligibleCosts", "newFundingLevel", "newRemainingGrant", "originalFundingLevel", "partnerId"],
-  );
-
-  const financialVirementsForCosts = mapToFinancialVirementForCostsDtoArray(
-    data.salesforce.uiapi.query.Acc_VirementsForCosts?.edges ?? [],
-    [
-      "id",
-      "profileId",
-      "parentId",
-      "costCategoryId",
-      "newEligibleCosts",
-      "originalCostsClaimedToDate",
-      "originalCostsClaimedToDate",
-      "originalEligibleCosts",
-      "costCategoryName",
-    ],
-    {
-      overrides: claimOverrides,
-    },
-  );
-
-  return { project, partners, pcrItem, financialVirementsForParticipants, financialVirementsForCosts };
-};
+import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
 
 export const useOnUpdatePartnerLevel = (
   projectId: ProjectId,

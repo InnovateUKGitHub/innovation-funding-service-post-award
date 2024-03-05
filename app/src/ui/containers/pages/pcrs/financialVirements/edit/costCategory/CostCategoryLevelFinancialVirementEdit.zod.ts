@@ -19,6 +19,7 @@ const costCategoryLevelFinancialVirementEditErrorMap = makeZodI18nMap({
 const getCostCategoryLevelFinancialVirementEditSchema = ({
   financialVirementsForCosts,
   financialVirementsForParticipants,
+  claimOverrideAwardRates,
   partners,
   pcrItemId,
 }: MapVirements) =>
@@ -40,6 +41,7 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
       const { virementData } = mapVirements({
         financialVirementsForCosts: patchFinancialVirementsForCosts(financialVirementsForCosts, data.virements),
         financialVirementsForParticipants,
+        claimOverrideAwardRates,
         partners,
         pcrItemId,
       });

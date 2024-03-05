@@ -8,7 +8,6 @@ import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { useEditPartnerLevelData } from "./editPartnerLevel.logic";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
@@ -23,6 +22,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { sumBy } from "lodash";
 import { useOnUpdatePartnerLevel, getPayload } from "./editPartnerLevel.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
 
 /**
  * Hook returns content for edit partner view
@@ -66,15 +66,17 @@ type EditPartnerLevelErrors = {
 };
 
 const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
-  const { project, financialVirementsForParticipants, financialVirementsForCosts, partners } = useEditPartnerLevelData({
-    projectId: props.projectId,
-    itemId: props.itemId,
-  });
+  const { project, financialVirementsForParticipants, financialVirementsForCosts, claimOverrideAwardRates, partners } =
+    usePcrFinancialVirementData({
+      projectId: props.projectId,
+      itemId: props.itemId,
+    });
   const content = useEditPartnerLevelContent();
 
   const { virementData } = useMapFinancialVirements({
     financialVirementsForCosts,
     financialVirementsForParticipants,
+    claimOverrideAwardRates,
     partners,
     pcrItemId: props.itemId,
   });

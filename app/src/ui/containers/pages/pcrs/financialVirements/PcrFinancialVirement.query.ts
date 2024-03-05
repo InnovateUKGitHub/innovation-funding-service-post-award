@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
-export const editPartnerLevelQuery = graphql`
-  query EditPartnerLevelQuery($projectId: ID, $itemId: ID) {
+const pcrFinancialVirementQuery = graphql`
+  query PcrFinancialVirementQuery($projectId: ID, $itemId: ID) {
     salesforce {
       uiapi {
         query {
@@ -36,11 +36,13 @@ export const editPartnerLevelQuery = graphql`
               }
             }
           }
+
           Acc_VirementsForCosts: Acc_Virements__c(
             where: {
               Acc_ParticipantVirement__r: { Acc_ProjectChangeRequest__c: { eq: $itemId } }
               RecordType: { DeveloperName: { eq: "Acc_VirementsForCosts" } }
             }
+            orderBy: { Acc_Profile__r: { Acc_CostCategory__r: { Acc_DisplayOrder__c: { order: ASC } } } }
             first: 2000
           ) {
             edges {
@@ -48,8 +50,11 @@ export const editPartnerLevelQuery = graphql`
                 Id
                 Acc_Profile__r {
                   Id
-                  Acc_CostCategory__c {
-                    value
+                  Acc_CostCategory__r {
+                    Id
+                    Acc_CostCategoryName__c {
+                      value
+                    }
                   }
                 }
                 Acc_ParticipantVirement__c {
@@ -80,9 +85,20 @@ export const editPartnerLevelQuery = graphql`
                 Acc_ProjectNumber__c {
                   value
                 }
+                roles {
+                  isMo
+                  isFc
+                  isPm
+                  isAssociate
+                  isSalesforceSystemUser
+                }
+                Acc_CompetitionType__c {
+                  value
+                }
               }
             }
           }
+
           Acc_ProjectParticipant__c(
             where: { Acc_ProjectId__c: { eq: $projectId } }
             orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
@@ -102,6 +118,7 @@ export const editPartnerLevelQuery = graphql`
               }
             }
           }
+
           Acc_ProjectChangeRequest__c(where: { Id: { eq: $itemId } }, first: 1) {
             edges {
               node {
@@ -180,3 +197,5 @@ export const editPartnerLevelQuery = graphql`
     }
   }
 `;
+
+export { pcrFinancialVirementQuery };

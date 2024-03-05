@@ -1,3 +1,5 @@
+import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import {
   CostCategoryVirementDto,
   FinancialVirementDto,
@@ -30,17 +32,21 @@ type Partner = Pick<PartnerDto, "id" | "name" | "isLead">;
 interface MapToFinancialVirementProps {
   financialVirementsForCosts: FinancialVirementForCost[];
   financialVirementsForParticipant: FinancialVirementForParticipant;
+  claimOverrideAwardRates?: ClaimOverrideRateDto;
   partner: Partner;
 }
 
 interface MapCostCategoryProps {
   financialVirementsForCost: FinancialVirementForCost;
   financialVirementsForParticipant: FinancialVirementForParticipant;
+  claimOverrideAwardRates?: ClaimOverrideRateDto;
 }
 
 interface MappedFinancialVirementCostCategoryDto extends CostCategoryVirementDto {
   virementCostId: FinancialVirementForCostsId;
   virementParticipantId: FinancialVirementForParticipantId;
+  newFundingLevel: number;
+  originalFundingLevel: number;
 }
 
 interface MappedFinancialVirementParticipantDto extends PartnerVirementsDto {
@@ -75,6 +81,7 @@ interface MappedFinancialVirement {
 interface MapVirements {
   financialVirementsForCosts: FinancialVirementForCost[];
   financialVirementsForParticipants: FinancialVirementForParticipant[];
+  claimOverrideAwardRates?: ClaimOverrideRateDto;
   partners: Partner[];
   pcrItemId: PcrItemId;
 }
@@ -82,6 +89,7 @@ interface MapVirements {
 const mapCostCategory = ({
   financialVirementsForParticipant,
   financialVirementsForCost,
+  claimOverrideAwardRates,
 }: MapCostCategoryProps): MappedFinancialVirementCostCategoryDto => {
   const originalRemainingCosts =
     financialVirementsForCost.originalEligibleCosts - financialVirementsForCost.originalCostsClaimedToDate;
@@ -93,6 +101,20 @@ const mapCostCategory = ({
 
   const newRemainingGrant = newRemainingCosts * (financialVirementsForParticipant.newFundingLevel / 100);
 
+  let originalFundingLevel = financialVirementsForParticipant.originalFundingLevel;
+  let newFundingLevel = financialVirementsForParticipant.newFundingLevel;
+
+  if (claimOverrideAwardRates?.type === AwardRateOverrideType.BY_COST_CATEGORY) {
+    const override = claimOverrideAwardRates.overrides.find(
+      x => x.costCategoryId === financialVirementsForCost.costCategoryId,
+    );
+
+    if (override) {
+      originalFundingLevel = override.amount;
+      newFundingLevel = override.amount;
+    }
+  }
+
   return {
     virementCostId: financialVirementsForCost.id,
     virementParticipantId: financialVirementsForParticipant.id,
@@ -103,6 +125,8 @@ const mapCostCategory = ({
     newRemainingCosts,
     originalRemainingGrant,
     newRemainingGrant,
+    originalFundingLevel,
+    newFundingLevel,
     costCategoryId: financialVirementsForCost.costCategoryId,
     costCategoryName: financialVirementsForCost.costCategoryName ?? "",
   };
@@ -111,6 +135,7 @@ const mapCostCategory = ({
 const mapProjectParticipant = ({
   financialVirementsForParticipant,
   financialVirementsForCosts,
+  claimOverrideAwardRates,
   partner,
 }: MapToFinancialVirementProps): MappedFinancialVirementParticipantDto => {
   let costsClaimedToDate = 0;
@@ -122,7 +147,11 @@ const mapProjectParticipant = ({
   const costCategoryVirements = financialVirementsForCosts
     .filter(financialVirementsForCost => financialVirementsForCost.parentId === financialVirementsForParticipant.id)
     .map(financialVirementsForCost => {
-      const costCategoryVirement = mapCostCategory({ financialVirementsForParticipant, financialVirementsForCost });
+      const costCategoryVirement = mapCostCategory({
+        financialVirementsForParticipant,
+        financialVirementsForCost,
+        claimOverrideAwardRates,
+      });
 
       costsClaimedToDate += costCategoryVirement.costsClaimedToDate;
       originalEligibleCosts += costCategoryVirement.originalEligibleCosts;
@@ -167,6 +196,7 @@ const mapProjectParticipant = ({
 const mapVirements = ({
   financialVirementsForParticipants,
   financialVirementsForCosts,
+  claimOverrideAwardRates,
   partners,
   pcrItemId,
 }: MapVirements): MappedFinancialVirement => {
@@ -196,6 +226,7 @@ const mapVirements = ({
       const partnerVirement = mapProjectParticipant({
         financialVirementsForParticipant,
         financialVirementsForCosts,
+        claimOverrideAwardRates,
         partner,
       });
 

@@ -5,10 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -24,8 +27,8 @@ import { useRoutes } from "@ui/redux/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { usePcrPartnerFinancialVirementData } from "../../PcrFinancialVirement.logic";
 import {
-  usePartnerLevelFinancialVirementEditData as useCostCategoryLevelFinancialVirementEditData,
   useMapOverwrittenFinancialVirements,
   useOnUpdateCostCategoryLevel,
 } from "./CostCategoryLevelFinancialVirementEdit.logic";
@@ -34,7 +37,6 @@ import {
   costCategoryLevelFinancialVirementEditErrorMap,
   getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 
 /**
  * hook to return edit page content
@@ -84,12 +86,19 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
   const { getContent } = useContent();
   const { isServer } = useMounted();
 
-  const { project, partner, financialVirementsForCosts, financialVirementsForParticipants, partners } =
-    useCostCategoryLevelFinancialVirementEditData({ projectId, partnerId, itemId });
+  const {
+    project,
+    partner,
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    claimOverrideAwardRates,
+    partners,
+  } = usePcrPartnerFinancialVirementData({ projectId, partnerId, itemId });
 
   const mapFinancialVirementProps = {
     financialVirementsForCosts,
     financialVirementsForParticipants,
+    claimOverrideAwardRates,
     partners,
     pcrItemId: itemId,
   };
@@ -167,11 +176,18 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           <Table>
             <THead>
               <TR>
-                <TH>Cost Category</TH>
-                <TH numeric>Total eligible costs</TH>
-                <TH numeric>Costs claimed</TH>
-                <TH numeric>New total eligible costs</TH>
-                <TH numeric>Costs reallocated</TH>
+                <TH>{getContent(x => x.financialVirementLabels.costCategoryName)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryOriginalEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryCostsClaimed)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryNewEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryDifferenceCosts)}</TH>
+                {project.isNonFec && (
+                  <>
+                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryOriginalRemainingGrant)}</TH>
+                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryAwardRate)}</TH>
+                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryNewRemainingGrant)}</TH>
+                  </>
+                )}
               </TR>
             </THead>
             <TBody>
@@ -203,13 +219,26 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
                     <TD numeric>
                       <Currency value={roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)} />
                     </TD>
+                    {project.isNonFec && (
+                      <>
+                        <TD numeric>
+                          <Currency value={x.originalRemainingGrant} />
+                        </TD>
+                        <TD numeric>
+                          <Percentage value={x.originalFundingLevel} />
+                        </TD>
+                        <TD numeric>
+                          <Currency value={x.newRemainingGrant} />
+                        </TD>
+                      </>
+                    )}
                   </TR>
                 );
               })}
             </TBody>
             <TFoot>
               <TR>
-                <TD bold>Project Totals</TD>
+                <TD bold>{getContent(x => x.financialVirementLabels.projectTotals)}</TD>
                 <TD bold numeric>
                   <Currency value={partnerVirement.originalEligibleCosts} />
                 </TD>
@@ -224,6 +253,19 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
                     value={roundCurrency(partnerVirement.newEligibleCosts - partnerVirement.originalEligibleCosts)}
                   />
                 </TD>
+                {project.isNonFec && (
+                  <>
+                    <TD bold numeric>
+                      <Currency value={partnerVirement.originalRemainingGrant} />
+                    </TD>
+                    <TD bold numeric>
+                      <TableEmptyCell />
+                    </TD>
+                    <TD bold numeric>
+                      <Currency value={partnerVirement.newRemainingGrant} />
+                    </TD>
+                  </>
+                )}
               </TR>
             </TFoot>
           </Table>
@@ -231,32 +273,32 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
             <Table data-qa="summary-table">
               <THead>
                 <TR>
-                  <TH>Total eligible costs</TH>
-                  <TH>New total eligible costs</TH>
-                  <TH>Difference</TH>
-                  <TH>Total remaining grant</TH>
-                  <TH>New total remaining grant</TH>
-                  <TH>Difference</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts)}</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectNewEligibleCosts)}</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceCosts)}</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant)}</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectNewRemainingGrant)}</TH>
+                  <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceGrant)}</TH>
                 </TR>
               </THead>
               <TBody>
                 <TR>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.originalEligibleCosts} />
                   </TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.newEligibleCosts} />
                   </TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.costDifference} />
                   </TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.originalRemainingGrant} />
                   </TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.newRemainingGrant} />
                   </TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={virementData.grantDifference} />
                   </TD>
                 </TR>
@@ -267,7 +309,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
 
         <Fieldset>
           <Button type="submit" styling="Primary" disabled={isProcessing}>
-            Save and return to reallocate project costs
+            {getContent(x => x.pages.financialVirementEdit.saveButton)}
           </Button>
         </Fieldset>
       </Form>

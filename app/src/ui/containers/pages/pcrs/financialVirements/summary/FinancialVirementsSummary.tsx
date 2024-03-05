@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { PcrPage } from "../../pcrPage";
-import { useFinancialVirementsSummaryData, useGrantMessage } from "./FinancialVirementsSummary.logic";
+import { useGrantMessage } from "./FinancialVirementsSummary.logic";
 import {
   FinancialVirementsSummaryValidatorSchema,
   financialVirementsSummaryErrorMap,
@@ -33,6 +33,7 @@ import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
+import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
@@ -45,11 +46,11 @@ export const FinancialVirementSummary = () => {
     onSave,
     isFetching,
     mode,
-    // fetchKey,
+    fetchKey,
     // displayCompleteForm,
   } = usePcrWorkflowContext();
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
-    useFinancialVirementsSummaryData({ projectId, itemId });
+    usePcrFinancialVirementData({ projectId, itemId, fetchKey });
 
   const { virementData, virementMeta, isSummaryValid } = useMapFinancialVirements({
     financialVirementsForCosts,

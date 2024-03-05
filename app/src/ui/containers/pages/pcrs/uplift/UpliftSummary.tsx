@@ -15,17 +15,24 @@ const UpliftSummary = () => {
 
   if (mode === "prepare") throw new Error("This page does not support the prepare mode");
 
-  const { pcr, pcrItemCount, financialVirementsForCosts, financialVirementsForParticipants, partners } =
-    useUpliftSummaryQuery({
-      projectId,
-      pcrId,
-      pcrItemId: itemId,
-    });
+  const {
+    pcr,
+    pcrItemCount,
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    claimOverrideAwardRates,
+    partners,
+  } = useUpliftSummaryQuery({
+    projectId,
+    pcrId,
+    pcrItemId: itemId,
+  });
   const { getContent } = useContent();
 
   const { virementData } = useMapFinancialVirements({
     financialVirementsForCosts,
     financialVirementsForParticipants,
+    claimOverrideAwardRates,
     partners,
     pcrItemId: itemId,
   });

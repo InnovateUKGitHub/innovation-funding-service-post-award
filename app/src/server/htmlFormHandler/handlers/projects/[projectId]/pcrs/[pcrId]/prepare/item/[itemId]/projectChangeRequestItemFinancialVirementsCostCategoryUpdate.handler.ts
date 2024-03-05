@@ -1,4 +1,5 @@
 import { IContext } from "@framework/types/IContext";
+import { GetClaimOverrideRates } from "@server/features/claims/getClaimOverrideRates";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
@@ -43,9 +44,11 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     const financialVirementsForParticipantsPromise = await context.repositories.financialVirements.getAllForPcr(
       input.pcrItemId as PcrItemId,
     );
-    const [partners, financialVirementsForParticipants] = await Promise.all([
+    const claimOverrideAwardRatesPromise = context.runQuery(new GetClaimOverrideRates(input.partnerId as PartnerId));
+    const [partners, financialVirementsForParticipants, claimOverrideAwardRates] = await Promise.all([
       partnersPromise,
       financialVirementsForParticipantsPromise,
+      claimOverrideAwardRatesPromise,
     ]);
 
     return {
@@ -55,6 +58,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
           x.virements.map(y => ({ ...y, parentId: x.id })),
         ),
         financialVirementsForParticipants,
+        claimOverrideAwardRates,
         pcrItemId: input.pcrItemId as PcrItemId,
       }),
       errorMap: costCategoryLevelFinancialVirementEditErrorMap,
@@ -101,9 +105,11 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     const financialVirementsForParticipantsPromise = await context.repositories.financialVirements.getAllForPcr(
       input.pcrItemId as PcrItemId,
     );
-    const [partners, financialVirementsForParticipants] = await Promise.all([
+    const claimOverrideAwardRatesPromise = context.runQuery(new GetClaimOverrideRates(input.partnerId as PartnerId));
+    const [partners, financialVirementsForParticipants, claimOverrideAwardRates] = await Promise.all([
       partnersPromise,
       financialVirementsForParticipantsPromise,
+      claimOverrideAwardRatesPromise,
     ]);
 
     const dto = mapOverwrittenFinancialVirements({
@@ -113,6 +119,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
         input.virements,
       ),
       financialVirementsForParticipants,
+      claimOverrideAwardRates,
       pcrItemId: input.pcrItemId as PcrItemId,
     })(input.virements);
 

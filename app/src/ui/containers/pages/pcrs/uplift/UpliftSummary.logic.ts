@@ -43,7 +43,7 @@ const useUpliftSummaryQuery = ({
     {},
   );
 
-  const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
+  const claimOverrideAwardRates = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
 
   const financialVirementsForParticipants = mapToFinancialVirementForParticipantDtoArray(
     data.salesforce.uiapi.query.Acc_VirementsForParticipant?.edges ?? [],
@@ -62,12 +62,16 @@ const useUpliftSummaryQuery = ({
       "originalCostsClaimedToDate",
       "originalEligibleCosts",
     ],
-    {
-      overrides: claimOverrides,
-    },
   );
 
-  return { pcr, pcrItemCount, partners, financialVirementsForCosts, financialVirementsForParticipants };
+  return {
+    pcr,
+    pcrItemCount,
+    partners,
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    claimOverrideAwardRates,
+  };
 };
 
 export { useUpliftSummaryQuery };
