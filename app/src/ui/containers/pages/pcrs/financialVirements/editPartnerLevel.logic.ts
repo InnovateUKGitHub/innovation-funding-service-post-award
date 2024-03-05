@@ -14,6 +14,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 export const useEditPartnerLevelData = ({ projectId, itemId }: { projectId: ProjectId; itemId: PcrItemId }) => {
   const data = useLazyLoadQuery<EditPartnerLevelQuery>(
@@ -93,7 +94,10 @@ export const getPayload = (
   virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
   itemId: PcrItemId,
 ) => {
-  const newRemainingGrantTotal = sumBy(data.virements, x => Number(x.newRemainingGrant.replace("£", "")));
+  const newRemainingGrantTotal = roundCurrency(
+    sumBy(data.virements, x => Number(x.newRemainingGrant.replace("£", ""))),
+  );
+
   const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
 
   return {
