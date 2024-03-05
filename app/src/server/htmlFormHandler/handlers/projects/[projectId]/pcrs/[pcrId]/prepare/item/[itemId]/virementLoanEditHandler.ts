@@ -6,7 +6,7 @@ import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVi
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
 import { PartnerLevelFinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
-import { FinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/editPartnerLevel.page";
+import { FinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/edit/partner/editPartnerLevel.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";

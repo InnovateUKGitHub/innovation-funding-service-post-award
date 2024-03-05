@@ -38,39 +38,6 @@ import {
   getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
 
-/**
- * hook to return edit page content
- */
-export function useEditPageContent() {
-  const { getContent } = useContent();
-
-  return {
-    summaryTitle: getContent(x => x.pages.financialVirementEdit.summaryTitle),
-    saveButton: getContent(x => x.pages.financialVirementEdit.saveButton),
-
-    introMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.intro),
-    virementsMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.virements),
-    requestsMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.requests),
-
-    costCategoryName: getContent(x => x.financialVirementLabels.costCategoryName),
-    costCategoryOriginalEligibleCosts: getContent(x => x.financialVirementLabels.costCategoryOriginalEligibleCosts),
-    costCategoryCostsClaimed: getContent(x => x.financialVirementLabels.costCategoryCostsClaimed),
-    costCategoryNewEligibleCosts: getContent(x => x.financialVirementLabels.costCategoryNewEligibleCosts),
-    costCategoryDifferenceCosts: getContent(x => x.financialVirementLabels.costCategoryDifferenceCosts),
-    partnerTotals: getContent(x => x.financialVirementLabels.partnerTotals),
-    projectOriginalEligibleCosts: getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts),
-    projectNewEligibleCosts: getContent(x => x.financialVirementLabels.projectNewEligibleCosts),
-    projectDifferenceCosts: getContent(x => x.financialVirementLabels.projectDifferenceCosts),
-    projectOriginalRemainingGrant: getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant),
-    projectNewRemainingGrant: getContent(x => x.financialVirementLabels.projectNewRemainingGrant),
-    projectDifferenceGrant: getContent(x => x.financialVirementLabels.projectDifferenceGrant),
-    backToSummary: getContent(x => x.financialVirementLabels.backToSummary),
-    costCategoryAwardRate: getContent(x => x.financialVirementLabels.costCategoryAwardRate),
-    costCategoryNewRemainingGrant: getContent(x => x.financialVirementLabels.costCategoryNewRemainingGrant),
-    costCategoryOriginalRemainingGrant: getContent(x => x.financialVirementLabels.costCategoryOriginalRemainingGrant),
-  };
-}
-
 interface PartnerLevelFinancialVirementParams {
   projectId: ProjectId;
   partnerId: PartnerId;
@@ -93,7 +60,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
     financialVirementsForParticipants,
     claimOverrideAwardRates,
     partners,
-  } = usePcrPartnerFinancialVirementData({ projectId, partnerId, itemId });
+  } = usePcrPartnerFinancialVirementData({ projectId, partnerId, pcrId, itemId });
 
   const mapFinancialVirementProps = {
     financialVirementsForCosts,
@@ -213,6 +180,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
                           disabled={isProcessing}
                           hasError={!!getFieldState(`virements.${i}.newEligibleCosts`).error}
                           defaultValue={isNaN(defaultValue) ? undefined : defaultValue}
+                          aria-label={x.costCategoryName}
                         />
                       </Fieldset>
                     </TD>
@@ -238,7 +206,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
             </TBody>
             <TFoot>
               <TR>
-                <TD bold>{getContent(x => x.financialVirementLabels.projectTotals)}</TD>
+                <TD bold>{getContent(x => x.financialVirementLabels.partnerTotals)}</TD>
                 <TD bold numeric>
                   <Currency value={partnerVirement.originalEligibleCosts} />
                 </TD>

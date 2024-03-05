@@ -3,7 +3,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { pick, sumBy } from "lodash";
 import { useNavigate } from "react-router-dom";
-import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
+import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
 
 export const useOnUpdatePartnerLevel = (

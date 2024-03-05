@@ -13,7 +13,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
+import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { useForm } from "react-hook-form";
 import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +22,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { sumBy } from "lodash";
 import { useOnUpdatePartnerLevel, getPayload } from "./editPartnerLevel.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
+import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
 
 /**
  * Hook returns content for edit partner view
@@ -69,6 +69,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   const { project, financialVirementsForParticipants, financialVirementsForCosts, claimOverrideAwardRates, partners } =
     usePcrFinancialVirementData({
       projectId: props.projectId,
+      pcrId: props.pcrId,
       itemId: props.itemId,
     });
   const content = useEditPartnerLevelContent();

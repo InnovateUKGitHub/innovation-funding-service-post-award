@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
 const pcrFinancialVirementQuery = graphql`
-  query PcrFinancialVirementQuery($projectId: ID, $itemId: ID) {
+  query PcrFinancialVirementQuery($projectId: ID, $pcrId: ID, $itemId: ID) {
     salesforce {
       uiapi {
         query {
@@ -119,7 +119,17 @@ const pcrFinancialVirementQuery = graphql`
             }
           }
 
-          Acc_ProjectChangeRequest__c(where: { Id: { eq: $itemId } }, first: 1) {
+          ParentPcr: Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrId } }, first: 1) {
+            edges {
+              node {
+                Acc_Reasoning__c {
+                  value
+                }
+              }
+            }
+          }
+
+          ChildPcr: Acc_ProjectChangeRequest__c(where: { Id: { eq: $itemId } }, first: 1) {
             edges {
               node {
                 Acc_GrantMovingOverFinancialYear__c {

@@ -9,7 +9,7 @@ import { PartnerLevelFinancialVirementParams } from "@ui/containers/pages/pcrs/f
 import {
   FinancialVirementParams,
   FinancialVirementEditPartnerLevelRoute,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/editPartnerLevel.page";
+} from "@ui/containers/pages/pcrs/financialVirements/edit/partner/editPartnerLevel.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";

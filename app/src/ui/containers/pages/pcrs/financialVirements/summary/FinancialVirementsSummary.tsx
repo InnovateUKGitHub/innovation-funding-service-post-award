@@ -50,7 +50,7 @@ export const FinancialVirementSummary = () => {
     // displayCompleteForm,
   } = usePcrWorkflowContext();
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
-    usePcrFinancialVirementData({ projectId, itemId, fetchKey });
+    usePcrFinancialVirementData({ projectId, pcrId, itemId, fetchKey });
 
   const { virementData, virementMeta, isSummaryValid } = useMapFinancialVirements({
     financialVirementsForCosts,

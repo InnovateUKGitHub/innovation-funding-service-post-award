@@ -2,7 +2,7 @@ import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinancialVirementForCosts";
 import { mapToFinancialVirementForParticipantDtoArray } from "@gql/dtoMapper/mapFinancialVirementForParticipant";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
-import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
+import { mapPcrItemDto, mapToPcrDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
@@ -11,6 +11,7 @@ import { PcrFinancialVirementQuery } from "./__generated__/PcrFinancialVirementQ
 
 interface UsePcrFinancialVirementDataProps {
   projectId: ProjectId;
+  pcrId: PcrId;
   itemId: PcrItemId;
   fetchKey?: number;
 }
@@ -18,10 +19,10 @@ interface UsePcrPartnerFinancialVirementDataProps extends UsePcrFinancialViremen
   partnerId: PartnerId;
 }
 
-const usePcrFinancialVirementData = ({ projectId, itemId, fetchKey }: UsePcrFinancialVirementDataProps) => {
+const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: UsePcrFinancialVirementDataProps) => {
   const data = useLazyLoadQuery<PcrFinancialVirementQuery>(
     pcrFinancialVirementQuery,
-    { projectId, itemId },
+    { projectId, pcrId, itemId },
     { fetchPolicy: "network-only", fetchKey },
   );
 
@@ -39,8 +40,18 @@ const usePcrFinancialVirementData = ({ projectId, itemId, fetchKey }: UsePcrFina
     {},
   );
 
+  const pcr = mapToPcrDto(
+    {
+      head: getFirstEdge(data.salesforce.uiapi.query.ParentPcr?.edges).node,
+      children: [],
+    },
+    ["reasoningComments"],
+    [],
+    {},
+  );
+
   const pcrItem = mapPcrItemDto(
-    getFirstEdge(data.salesforce.uiapi.query.Acc_ProjectChangeRequest__c?.edges).node,
+    getFirstEdge(data.salesforce.uiapi.query.ChildPcr?.edges).node,
     ["status", "grantMovingOverFinancialYear"],
     {},
   );
@@ -70,6 +81,7 @@ const usePcrFinancialVirementData = ({ projectId, itemId, fetchKey }: UsePcrFina
   return {
     project,
     partners,
+    pcr,
     pcrItem,
     financialVirementsForParticipants,
     financialVirementsForCosts,

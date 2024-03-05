@@ -1399,7 +1399,8 @@
     "projectTotals": "Project totals",
     "partnerTotals": "Partner totals",
     "grantMovingOverYear": "Grant value moving over the financial year end",
-    "backToSummary": "Back to summary"
+    "backToSummary": "Back to summary",
+    "reasoningComments": "Reasoning for the request"
   },
   "forecastsLabels": {
     "overheadCosts": "Overhead costs: "
