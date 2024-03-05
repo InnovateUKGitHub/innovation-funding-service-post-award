@@ -32,9 +32,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
     pcrTidyUp("Add a partner");
   });
 
-  // after(() => {
-  //   cy.deletePcr("328407");
-  // });
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
@@ -117,10 +117,85 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
 
   it("Should now delete all line items", deleteOtherFundingLines);
 
-  it("Should access other sources of funding again", () => {
+  /**
+   * Adding line items
+   */
+  it("Should access other sources of funding again and add two line items", () => {
     cy.getListItemFromKey("Funding from other sources", "Edit").click();
     cy.get("h2").contains("Other public sector funding?");
-    cy.button("Save and continue").click();
+    for (let i = 1; i < 2; i++) {
+      cy.wait(300);
+      cy.clickOn("Add another source of funding");
+      cy.getByAriaLabel(`source of funding item ${i}`).type(`Lorem ${i}`);
+      cy.wait(200);
+      cy.getByAriaLabel(`month funding is secured for item ${i}`).type(`09`);
+      cy.wait(200);
+      cy.getByAriaLabel(`year funding is secured for item ${i}`).type("2023");
+      cy.wait(200);
+      cy.getByAriaLabel(`funding amount for item ${i - 1}`).type("333.33");
+      cy.wait(200);
+      cy.get("tfoot").within(() => {
+        cy.get("tr")
+          .eq(1)
+          .within(() => {
+            cy.get("th:nth-child(3)").contains("£666.66");
+          });
+      });
+    }
+    cy.wait(1000);
+    cy.clickOn("Save and return to summary");
+  });
+
+  it("Should display the correct total on the Summary page", () => {
+    [
+      ["Funding from other sources", "£666.66"],
+      ["Other sources of funding?", "Yes"],
+    ].forEach(([key, item]) => {
+      cy.getListItemFromKey(key, item);
+    });
+  });
+
+  /**
+   * Mark other sources as No
+   */
+  it("Should access the 'Other sources of funding' and mark as 'No'", () => {
+    cy.getListItemFromKey("Other sources of funding?", "Edit").click();
+    cy.get("h2").contains("Other public sector funding?");
+    cy.getByLabel("No").click();
+    cy.clickOn("Save and return to summary");
+  });
+
+  it("Should no longer display costs for the other sources of funding", () => {
+    cy.getListItemFromKey("Other sources of funding?", "No");
+    cy.get("dt").should("not.contain", "Funding from other sources");
+    cy.get("dd").should("not.contain", "£666.66");
+  });
+
+  it("Should access Other sources of funding again and select 'Yes'", () => {
+    cy.getListItemFromKey("Other sources of funding?", "Edit").click();
+    cy.getByLabel("Yes").click();
+    cy.clickOn("Save and return to summary");
+  });
+
+  it("Should display Yes against other sources of funding but value of Funding from other sources should be zero", () => {
+    [
+      ["Other sources of funding?", "Yes"],
+      ["Funding from other sources", "£0.00"],
+    ].forEach(([key, item]) => {
+      cy.getListItemFromKey(key, item);
+    });
+    cy.getListItemFromKey("Funding from other sources", "Edit").click();
+    cy.heading("Other sources of funding?");
+    cy.get("main").within(() => {
+      cy.get("tr").then($rows => {
+        let rowNumber = $rows.length;
+        if (rowNumber > 3) {
+          throw new Error("Test failed. There should be no line items saved!");
+        } else if (rowNumber == 3) {
+          cy.clickOn("Save and continue");
+        }
+      });
+    });
   });
 
   it("Should land on the 'Funding level' page and contain subheading and guidance information", fundingLevelPage);
