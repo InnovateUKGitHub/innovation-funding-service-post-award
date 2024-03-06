@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5da3826ee00571fd139e162229d400f8>>
+ * @generated SignedSource<<032002452420d38bbb5d99db625ae6bd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -38,6 +38,14 @@ export type ProjectSuspensionMessageFragment$data = {
             readonly isMo: boolean;
             readonly isPm: boolean;
             readonly isSalesforceSystemUser: boolean;
+            readonly partnerRoles: ReadonlyArray<{
+              readonly isAssociate: boolean;
+              readonly isFc: boolean;
+              readonly isMo: boolean;
+              readonly isPm: boolean;
+              readonly isSalesforceSystemUser: boolean;
+              readonly partnerId: string;
+            }>;
           };
         } | null | undefined;
       } | null | undefined> | null | undefined;
@@ -66,7 +74,42 @@ v1 = [
     "name": "value",
     "storageKey": null
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isMo",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
+};
 return {
   "argumentDefinitions": [
     {
@@ -152,39 +195,32 @@ return {
                       "name": "roles",
                       "plural": false,
                       "selections": [
+                        (v2/*: any*/),
+                        (v3/*: any*/),
+                        (v4/*: any*/),
+                        (v5/*: any*/),
+                        (v6/*: any*/),
                         {
                           "alias": null,
                           "args": null,
-                          "kind": "ScalarField",
-                          "name": "isPm",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isFc",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isMo",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isAssociate",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isSalesforceSystemUser",
+                          "concreteType": "Ext_Partner_Roles",
+                          "kind": "LinkedField",
+                          "name": "partnerRoles",
+                          "plural": true,
+                          "selections": [
+                            (v3/*: any*/),
+                            (v4/*: any*/),
+                            (v2/*: any*/),
+                            (v6/*: any*/),
+                            (v5/*: any*/),
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "partnerId",
+                              "storageKey": null
+                            }
+                          ],
                           "storageKey": null
                         }
                       ],
@@ -262,6 +298,6 @@ return {
 };
 })();
 
-(node as any).hash = "45cd782843d057ae46a647061142cd20";
+(node as any).hash = "c50a05bd984075e0919a1b42caf43dd8";
 
 export default node;
