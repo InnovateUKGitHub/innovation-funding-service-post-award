@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7ff6bc7095744eba530086ab72507535>>
+ * @generated SignedSource<<5281e6762d93df8b6e4d2fd98d674777>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type ProjectSetupQuery$variables = {
   partnerId: string;
   projectId: string;
@@ -61,6 +62,7 @@ export type ProjectSetupQuery$data = {
           } | null | undefined> | null | undefined;
         } | null | undefined;
       };
+      readonly " $fragmentSpreads": FragmentRefs<"ProjectSuspensionMessageFragment">;
     };
   };
 };
@@ -80,239 +82,432 @@ v1 = {
   "kind": "LocalArgument",
   "name": "projectId"
 },
-v2 = {
+v2 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 1
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "kind": "Variable",
+            "name": "eq",
+            "variableName": "projectId"
+          }
+        ],
+        "kind": "ObjectValue",
+        "name": "Id"
+      }
+    ],
+    "kind": "ObjectValue",
+    "name": "where"
+  }
+],
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "value",
   "storageKey": null
 },
-v4 = [
-  (v3/*: any*/)
+v5 = [
+  (v4/*: any*/)
 ],
-v5 = {
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PicklistValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectStatus__c",
+  "plural": false,
+  "selections": (v5/*: any*/),
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PicklistValue",
+  "kind": "LinkedField",
+  "name": "Acc_ParticipantStatus__c",
+  "plural": false,
+  "selections": (v5/*: any*/),
+  "storageKey": null
+},
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "label",
   "storageKey": null
 },
-v6 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "SalesforceQuery",
-    "kind": "LinkedField",
-    "name": "salesforce",
-    "plural": false,
+v9 = {
+  "alias": null,
+  "args": (v2/*: any*/),
+  "concreteType": "Acc_Project__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_Project__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_Project__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_Project__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v3/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "StringValue",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectNumber__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            (v6/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "StringValue",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectTitle__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "PicklistValue",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectSource__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": [
+                {
+                  "fields": [
+                    {
+                      "fields": [
+                        {
+                          "kind": "Variable",
+                          "name": "eq",
+                          "variableName": "partnerId"
+                        }
+                      ],
+                      "kind": "ObjectValue",
+                      "name": "Id"
+                    }
+                  ],
+                  "kind": "ObjectValue",
+                  "name": "where"
+                }
+              ],
+              "concreteType": "Acc_ProjectParticipant__cConnection",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectParticipantsProject__r",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Acc_ProjectParticipant__cEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "Acc_ProjectParticipant__c",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v3/*: any*/),
+                        (v7/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_Postcode__c",
+                          "plural": false,
+                          "selections": (v5/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "PicklistValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_BankCheckCompleted__c",
+                          "plural": false,
+                          "selections": [
+                            (v4/*: any*/),
+                            (v8/*: any*/)
+                          ],
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "PicklistValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_BankCheckState__c",
+                          "plural": false,
+                          "selections": (v5/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "PicklistValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_SpendProfileCompleted__c",
+                          "plural": false,
+                          "selections": [
+                            (v8/*: any*/),
+                            (v4/*: any*/)
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "ProjectSetupQuery",
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "UIAPI",
+        "concreteType": "SalesforceQuery",
         "kind": "LinkedField",
-        "name": "uiapi",
+        "name": "salesforce",
         "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "RecordQuery",
+            "concreteType": "UIAPI",
             "kind": "LinkedField",
-            "name": "query",
+            "name": "uiapi",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "ProjectSuspensionMessageFragment"
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "RecordQuery",
+                "kind": "LinkedField",
+                "name": "query",
+                "plural": false,
+                "selections": [
+                  (v9/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "type": "Query",
+    "abstractKey": null
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
+    "kind": "Operation",
+    "name": "ProjectSetupQuery",
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "SalesforceQuery",
+        "kind": "LinkedField",
+        "name": "salesforce",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UIAPI",
+            "kind": "LinkedField",
+            "name": "uiapi",
             "plural": false,
             "selections": [
               {
                 "alias": null,
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 1
-                  },
-                  {
-                    "fields": [
-                      {
-                        "fields": [
-                          {
-                            "kind": "Variable",
-                            "name": "eq",
-                            "variableName": "projectId"
-                          }
-                        ],
-                        "kind": "ObjectValue",
-                        "name": "Id"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_Project__cConnection",
+                "args": null,
+                "concreteType": "RecordQuery",
                 "kind": "LinkedField",
-                "name": "Acc_Project__c",
+                "name": "query",
                 "plural": false,
                 "selections": [
                   {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_Project__cEdge",
+                    "alias": "ProjectSuspensionProject",
+                    "args": (v2/*: any*/),
+                    "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
+                    "name": "Acc_Project__c",
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
-                        "concreteType": "Acc_Project__c",
+                        "concreteType": "Acc_Project__cEdge",
                         "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
+                        "name": "edges",
+                        "plural": true,
                         "selections": [
-                          (v2/*: any*/),
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "StringValue",
+                            "concreteType": "Acc_Project__c",
                             "kind": "LinkedField",
-                            "name": "Acc_ProjectNumber__c",
-                            "plural": false,
-                            "selections": (v4/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectStatus__c",
-                            "plural": false,
-                            "selections": (v4/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectTitle__c",
-                            "plural": false,
-                            "selections": (v4/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectSource__c",
-                            "plural": false,
-                            "selections": (v4/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": [
-                              {
-                                "fields": [
-                                  {
-                                    "fields": [
-                                      {
-                                        "kind": "Variable",
-                                        "name": "eq",
-                                        "variableName": "partnerId"
-                                      }
-                                    ],
-                                    "kind": "ObjectValue",
-                                    "name": "Id"
-                                  }
-                                ],
-                                "kind": "ObjectValue",
-                                "name": "where"
-                              }
-                            ],
-                            "concreteType": "Acc_ProjectParticipant__cConnection",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectParticipantsProject__r",
+                            "name": "node",
                             "plural": false,
                             "selections": [
+                              (v3/*: any*/),
+                              (v6/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
-                                "concreteType": "Acc_ProjectParticipant__cEdge",
+                                "concreteType": "Ext_Project_Roles",
                                 "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
+                                "name": "roles",
+                                "plural": false,
                                 "selections": [
                                   {
                                     "alias": null,
                                     "args": null,
-                                    "concreteType": "Acc_ProjectParticipant__c",
+                                    "kind": "ScalarField",
+                                    "name": "isPm",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "isFc",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "isMo",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "isAssociate",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "isSalesforceSystemUser",
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "Acc_ProjectParticipant__cConnection",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectParticipantsProject__r",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Acc_ProjectParticipant__cEdge",
                                     "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
+                                    "name": "edges",
+                                    "plural": true,
                                     "selections": [
-                                      (v2/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
-                                        "concreteType": "PicklistValue",
+                                        "concreteType": "Acc_ProjectParticipant__c",
                                         "kind": "LinkedField",
-                                        "name": "Acc_ParticipantStatus__c",
-                                        "plural": false,
-                                        "selections": (v4/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "StringValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_Postcode__c",
-                                        "plural": false,
-                                        "selections": (v4/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "PicklistValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_BankCheckCompleted__c",
+                                        "name": "node",
                                         "plural": false,
                                         "selections": [
                                           (v3/*: any*/),
-                                          (v5/*: any*/)
-                                        ],
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "PicklistValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_BankCheckState__c",
-                                        "plural": false,
-                                        "selections": (v4/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "PicklistValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_SpendProfileCompleted__c",
-                                        "plural": false,
-                                        "selections": [
-                                          (v5/*: any*/),
-                                          (v3/*: any*/)
+                                          (v7/*: any*/),
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "BooleanValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_FlaggedParticipant__c",
+                                            "plural": false,
+                                            "selections": (v5/*: any*/),
+                                            "storageKey": null
+                                          }
                                         ],
                                         "storageKey": null
                                       }
@@ -330,7 +525,8 @@ v6 = [
                       }
                     ],
                     "storageKey": null
-                  }
+                  },
+                  (v9/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -340,44 +536,19 @@ v6 = [
         ],
         "storageKey": null
       }
-    ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "ProjectSetupQuery",
-    "selections": (v6/*: any*/),
-    "type": "Query",
-    "abstractKey": null
-  },
-  "kind": "Request",
-  "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
-    "kind": "Operation",
-    "name": "ProjectSetupQuery",
-    "selections": (v6/*: any*/)
+    ]
   },
   "params": {
-    "cacheID": "94f031c4d4449c630efeda76a9602504",
+    "cacheID": "6a71c1d5337f3a03528f311ef6b0d3fc",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectSource__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectSource__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "585395bb593c2abcf88ddcf540287b31";
+(node as any).hash = "e8d236069c3f0388b8a3a0543d3a79f5";
 
 export default node;

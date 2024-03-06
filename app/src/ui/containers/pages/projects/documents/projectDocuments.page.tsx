@@ -128,9 +128,9 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
     <Page
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={<ProjectBackLink projectId={project.id} disabled={disabled} />}
-      projectStatus={project.status}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
+      projectId={props.projectId}
     >
       <Messages messages={props.messages} />
 

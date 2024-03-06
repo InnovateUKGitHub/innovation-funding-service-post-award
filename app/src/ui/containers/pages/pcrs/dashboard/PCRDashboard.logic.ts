@@ -37,6 +37,7 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
   return {
     project,
     pcrs,
+    fragmentRef: data.salesforce.uiapi,
   };
 };
 export type { Project, ProjectChangeRequest };

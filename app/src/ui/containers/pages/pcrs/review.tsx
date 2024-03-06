@@ -73,9 +73,9 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
           </BackLink>
         }
         pageTitle={<Title {...project} />}
-        project={project}
         validator={editor.validator}
         error={editor.error}
+        projectId={this.props.projectId}
       >
         {this.renderSummary(projectChangeRequest)}
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}

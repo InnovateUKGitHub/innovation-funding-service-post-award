@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<59fb79c2aaec83c59450c6d4322d5c14>>
+ * @generated SignedSource<<f1138ec917e1fdc4d68a44adb0b08a4b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,19 +10,19 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type FailedBankCheckConfirmationQuery$variables = {
+export type ProjectSuspensionMessageQuery$variables = {
   projectId: string;
 };
-export type FailedBankCheckConfirmationQuery$data = {
+export type ProjectSuspensionMessageQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
-      readonly " $fragmentSpreads": FragmentRefs<"ProjectSuspensionMessageFragment" | "TitleFragment">;
+      readonly " $fragmentSpreads": FragmentRefs<"ProjectSuspensionMessageFragment">;
     };
   };
 };
-export type FailedBankCheckConfirmationQuery = {
-  response: FailedBankCheckConfirmationQuery$data;
-  variables: FailedBankCheckConfirmationQuery$variables;
+export type ProjectSuspensionMessageQuery = {
+  response: ProjectSuspensionMessageQuery$data;
+  variables: ProjectSuspensionMessageQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -33,30 +33,13 @@ var v0 = [
     "name": "projectId"
   }
 ],
-v1 = [
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 1
-  },
-  {
-    "fields": [
-      {
-        "fields": [
-          {
-            "kind": "Variable",
-            "name": "eq",
-            "variableName": "projectId"
-          }
-        ],
-        "kind": "ObjectValue",
-        "name": "Id"
-      }
-    ],
-    "kind": "ObjectValue",
-    "name": "where"
-  }
-],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "Id",
+  "storageKey": null
+},
 v2 = [
   {
     "alias": null,
@@ -65,20 +48,13 @@ v2 = [
     "name": "value",
     "storageKey": null
   }
-],
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "Id",
-  "storageKey": null
-};
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "FailedBankCheckConfirmationQuery",
+    "name": "ProjectSuspensionMessageQuery",
     "selections": [
       {
         "alias": null,
@@ -99,11 +75,6 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "TitleFragment"
-              },
-              {
-                "args": null,
-                "kind": "FragmentSpread",
                 "name": "ProjectSuspensionMessageFragment"
               }
             ],
@@ -120,7 +91,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "FailedBankCheckConfirmationQuery",
+    "name": "ProjectSuspensionMessageQuery",
     "selections": [
       {
         "alias": null,
@@ -147,61 +118,31 @@ return {
                 "plural": false,
                 "selections": [
                   {
-                    "alias": "Title_Project",
-                    "args": (v1/*: any*/),
-                    "concreteType": "Acc_Project__cConnection",
-                    "kind": "LinkedField",
-                    "name": "Acc_Project__c",
-                    "plural": false,
-                    "selections": [
+                    "alias": "ProjectSuspensionProject",
+                    "args": [
                       {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_Project__cEdge",
-                        "kind": "LinkedField",
-                        "name": "edges",
-                        "plural": true,
-                        "selections": [
+                        "kind": "Literal",
+                        "name": "first",
+                        "value": 1
+                      },
+                      {
+                        "fields": [
                           {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Acc_Project__c",
-                            "kind": "LinkedField",
-                            "name": "node",
-                            "plural": false,
-                            "selections": [
+                            "fields": [
                               {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "StringValue",
-                                "kind": "LinkedField",
-                                "name": "Acc_ProjectNumber__c",
-                                "plural": false,
-                                "selections": (v2/*: any*/),
-                                "storageKey": null
-                              },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "StringValue",
-                                "kind": "LinkedField",
-                                "name": "Acc_ProjectTitle__c",
-                                "plural": false,
-                                "selections": (v2/*: any*/),
-                                "storageKey": null
+                                "kind": "Variable",
+                                "name": "eq",
+                                "variableName": "projectId"
                               }
                             ],
-                            "storageKey": null
+                            "kind": "ObjectValue",
+                            "name": "Id"
                           }
                         ],
-                        "storageKey": null
+                        "kind": "ObjectValue",
+                        "name": "where"
                       }
                     ],
-                    "storageKey": null
-                  },
-                  {
-                    "alias": "ProjectSuspensionProject",
-                    "args": (v1/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -223,7 +164,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v3/*: any*/),
+                              (v1/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -304,7 +245,7 @@ return {
                                         "name": "node",
                                         "plural": false,
                                         "selections": [
-                                          (v3/*: any*/),
+                                          (v1/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -355,16 +296,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "de336e8854a8e485dcd7f7486096eb1c",
+    "cacheID": "3f94d6e7fee53daf617844a7970d0be0",
     "id": null,
     "metadata": {},
-    "name": "FailedBankCheckConfirmationQuery",
+    "name": "ProjectSuspensionMessageQuery",
     "operationKind": "query",
-    "text": "query FailedBankCheckConfirmationQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...TitleFragment\n      ...ProjectSuspensionMessageFragment\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSuspensionMessageQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ProjectSuspensionMessageFragment\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b6e29af802d492bf7d9c35f05a74d16b";
+(node as any).hash = "60b9135c33c9d7b0b9853b099330a91f";
 
 export default node;

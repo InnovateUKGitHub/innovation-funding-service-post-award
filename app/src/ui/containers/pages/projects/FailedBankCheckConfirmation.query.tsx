@@ -5,17 +5,7 @@ export const failedBankCheckConfirmationQuery = graphql`
     salesforce {
       uiapi {
         ...TitleFragment
-        query {
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Acc_ProjectStatus__c {
-                  value
-                }
-              }
-            }
-          }
-        }
+        ...ProjectSuspensionMessageFragment
       }
     }
   }

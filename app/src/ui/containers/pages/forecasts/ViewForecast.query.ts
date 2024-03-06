@@ -6,6 +6,7 @@ export const viewForecastQuery = graphql`
       uiapi {
         ...ForecastWarningFragment
         ...TitleFragment
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_Claims__c(
             where: {

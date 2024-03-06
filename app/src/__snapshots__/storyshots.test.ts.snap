@@ -2624,6 +2624,11 @@ exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
 ",
           }
         }
+        style={
+          {
+            "borderColor": "#1d70b8",
+          }
+        }
       />
     </span>
   </div>

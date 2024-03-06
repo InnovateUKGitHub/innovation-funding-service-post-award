@@ -47,7 +47,6 @@ export type Partner = Pick<
   | "percentageParticipantCostsClaimed"
   | "newForecastNeeded"
   | "claimStatus"
-  | "partnerStatus"
 >;
 
 /**
@@ -136,7 +135,6 @@ export const useProjectOverviewData = (projectId: string) => {
       "percentageParticipantCostsClaimed",
       "newForecastNeeded",
       "claimStatus",
-      "partnerStatus",
     ],
     { partnerRoles },
   );
@@ -164,5 +162,6 @@ export const useProjectOverviewData = (projectId: string) => {
     highlightedPartner,
     user,
     accessControlOptions,
+    fragmentRef: data?.salesforce?.uiapi,
   };
 };

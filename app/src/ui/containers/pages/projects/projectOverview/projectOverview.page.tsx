@@ -16,9 +16,8 @@ type Props = {
 };
 
 const ProjectOverviewPage = (props: Props & BaseProps) => {
-  const { project, partners, isProjectClosed, highlightedPartner, user, accessControlOptions } = useProjectOverviewData(
-    props.projectId,
-  );
+  const { project, partners, isProjectClosed, highlightedPartner, user, accessControlOptions, fragmentRef } =
+    useProjectOverviewData(props.projectId);
 
   const title =
     isProjectClosed || project.isPastEndDate || isPartnerWithdrawn(project.roles, partners) ? (
@@ -49,8 +48,9 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
         </BackLink>
       }
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectStatus={project.status}
-      partnerStatus={highlightedPartner?.partnerStatus}
+      fragmentRef={fragmentRef}
+      projectId={props.projectId}
+      partnerId={highlightedPartner?.id}
     >
       <Section qa="period-information" className="govuk-!-padding-bottom-6" title={title} subtitle={subtitle}>
         {highlightedPartner && (project.roles.isPm || project.roles.isMo) ? (

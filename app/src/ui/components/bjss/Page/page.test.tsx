@@ -1,51 +1,11 @@
-import { render } from "@testing-library/react";
-import { renderHook } from "@testing-library/react";
-import TestBed, { hookTestBed } from "@shared/TestBed";
-import { Page, PageProps, usePageValidationMessage } from "@ui/components/bjss/Page/page";
-import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ErrorCode } from "@framework/constants/enums";
-import { PartnerStatus } from "@framework/constants/partner";
-import { ProjectStatus } from "@framework/constants/project";
 import { IAppError } from "@framework/types/IAppError";
+import TestBed from "@shared/TestBed";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { render } from "@testing-library/react";
+import { Page, PageProps } from "@ui/components/bjss/Page/page";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
-
-describe("usePageValidationMessage()", () => {
-  const stubContent = {
-    components: {
-      projectInactiveContent: {
-        projectOnHoldMessage: "stub-projectOnHoldMessage",
-        partnerOnHoldMessage: "stub-partnerOnHoldMessage",
-      },
-    },
-  };
-
-  const renderPageContent = (project: ProjectStatus, partner: PartnerStatus) => {
-    return renderHook(() => usePageValidationMessage(project, partner), hookTestBed({}));
-  };
-
-  beforeAll(async () => {
-    initStubTestIntl(stubContent);
-  });
-
-  it("should return null", () => {
-    const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.Active);
-
-    expect(result.current).toBeNull();
-  });
-
-  it("should return project hold message", () => {
-    const { result } = renderPageContent(ProjectStatus.OnHold, PartnerStatus.Active);
-
-    expect(result.current).toBe(stubContent.components.projectInactiveContent.projectOnHoldMessage);
-  });
-
-  it("should return partner hold message", () => {
-    const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.OnHold);
-
-    expect(result.current).toBe(stubContent.components.projectInactiveContent.partnerOnHoldMessage);
-  });
-});
 
 describe("<Page />", () => {
   const stubTitleQa = "title-qa";
@@ -164,18 +124,6 @@ describe("<Page />", () => {
       const { queryByText } = setup({ validator: arrayOfValidations });
 
       expect(queryByText(stubContent.components.validationSummary.title)).toBeInTheDocument();
-    });
-  });
-
-  describe("renders a hold message", () => {
-    test.each`
-      name                | props                                                   | expectedMessage
-      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage}
-      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage}
-    `("$name on hold", ({ props, expectedMessage }) => {
-      const { holdMessageElementQa, queryByTestId } = setup(props);
-
-      expect(queryByTestId(holdMessageElementQa)).toHaveTextContent(expectedMessage);
     });
   });
 });

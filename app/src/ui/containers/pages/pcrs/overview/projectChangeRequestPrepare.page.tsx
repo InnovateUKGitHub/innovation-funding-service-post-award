@@ -76,9 +76,9 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
         </BackLink>
       }
       pageTitle={<Title {...project} />}
-      projectStatus={project.status}
       validationErrors={validatorErrors}
       apiError={apiError}
+      projectId={props.projectId}
     >
       <ProjectChangeRequestOverviewSummary
         pcr={pcr}

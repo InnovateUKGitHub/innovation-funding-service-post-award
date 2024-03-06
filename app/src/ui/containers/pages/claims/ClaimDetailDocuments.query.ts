@@ -10,6 +10,7 @@ export const claimDetailDocumentsQuery = graphql`
   ) {
     salesforce {
       uiapi {
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_CostCategory__c(first: 2000) {
             edges {

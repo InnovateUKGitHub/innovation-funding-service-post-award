@@ -59,15 +59,14 @@ const ClaimTable = createTypedTable<Claim>();
 
 const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) => {
   const data = useClaimDashboardData(props.projectId, props.partnerId);
-  const { project, partner, previousClaims, currentClaim } = data;
+  const { project, partner, previousClaims, currentClaim, fragmentRef } = data;
 
   const { isMultipleParticipants } = useProjectParticipants();
   return (
     <Page
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       backLink={<ProjectBackLink projectId={project.id} />}
-      projectStatus={project.status}
-      partnerStatus={partner.partnerStatus}
+      fragmentRef={fragmentRef}
     >
       {isMultipleParticipants && (
         <ClaimsDashboardGuidance competitionType={project.competitionType} overdueProject={partner.overdueProject} />

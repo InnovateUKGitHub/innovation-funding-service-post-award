@@ -127,7 +127,8 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           {getContent(x => x.pages.claimDocuments.backLink)}
         </BackLink>
       }
-      projectStatus={project.status}
+      projectId={projectId}
+      partnerId={partnerId}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
     >
