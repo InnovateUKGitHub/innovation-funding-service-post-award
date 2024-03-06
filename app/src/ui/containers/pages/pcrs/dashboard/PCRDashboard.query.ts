@@ -11,12 +11,6 @@ const pcrDashboardQuery = graphql`
               node {
                 Id
                 isActive
-                roles {
-                  isMo
-                  isFc
-                  isPm
-                  isAssociate
-                }
                 Acc_ProjectNumber__c {
                   value
                 }

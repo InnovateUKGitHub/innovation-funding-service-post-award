@@ -1,27 +1,28 @@
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
-import { BaseProps, defineRoute } from "../../../containerBase";
-import { usePcrDashboardQuery } from "./PCRDashboard.logic";
 import { PCRItemType, pcrStatusMetaValues } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { getAuthRoles } from "@framework/types/authorisation";
+import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { PcrItemDtoMapping } from "@gql/dtoMapper/mapPcrDto";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Page } from "@ui/components/bjss/Page/page";
+import { useContent } from "@ui/hooks/content.hook";
+import { useProjectStatus } from "@ui/hooks/project-status.hook";
+import { BaseProps, defineRoute } from "../../../containerBase";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
-import { useContent } from "@ui/hooks/content.hook";
-import { PcrItemDtoMapping } from "@gql/dtoMapper/mapPcrDto";
+import { usePcrDashboardQuery } from "./PCRDashboard.logic";
+import { useProjectSuspensionMessageWithFragmentData } from "@ui/components/atomicDesign/organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.logic";
+import { PartnerStatus } from "@framework/constants/partner";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -43,11 +44,18 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { getContent } = useContent();
   const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
   const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
+  const {
+    project: { roles, partnerRoles },
+    partners,
+  } = useProjectSuspensionMessageWithFragmentData(fragmentRef);
+  const { isMo, isPmOrMo } = getAuthRoles(roles);
 
-  const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
-    const { isPm } = getAuthRoles(project.roles);
+  const isPmAllowedToEdit = partnerRoles.some(
+    x => x.isPm && partners.some(y => x.partnerId === y.id && y.partnerStatus !== PartnerStatus.OnHold),
+  );
 
-    if (!isPm) return null;
+  const renderStartANewRequestLink = () => {
+    if (!isPmAllowedToEdit) return null;
 
     return (
       <Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })} className="govuk-button">
@@ -56,12 +64,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     );
   };
 
-  const renderTable = (
-    project: Pick<ProjectDto, "roles" | "id">,
-    pcrs: PCRDashboardType[],
-    qa: string,
-    message: string,
-  ) => {
+  const renderTable = (pcrs: PCRDashboardType[], qa: string, message: string) => {
     if (!pcrs.length) {
       return <SimpleString>{message}</SimpleString>;
     }
@@ -77,7 +80,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.Custom qa="status" header="Status" value={x => renderStatus(x)} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
-        <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => renderLinks(project, x)} />
+        <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => renderLinks(x)} />
       </PCRTable.Table>
     );
   };
@@ -92,8 +95,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     }
   };
 
-  const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
-    const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
+  const renderLinks = (pcr: PCRDashboardType): React.ReactNode => {
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
     const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
 
@@ -139,7 +141,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         links.push(viewLink);
       }
     } else {
-      if (pcrStatusMetadata?.editableByPm && isPm && isProjectActive) {
+      if (pcrStatusMetadata?.editableByPm && isPmAllowedToEdit && isProjectActive) {
         links.push(editLink);
       } else if (pcrStatusMetadata?.reviewableByMo && isMo && isProjectActive) {
         links.push(reviewLink);
@@ -147,7 +149,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         links.push(viewLink);
       }
 
-      if (pcrStatusMetadata?.deletableByPm && isPm && isProjectActive) {
+      if (pcrStatusMetadata?.deletableByPm && isPmAllowedToEdit && isProjectActive) {
         links.push(deleteLink);
       }
     }
@@ -174,19 +176,17 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 
       <Section qa="pcr-table">
         {renderTable(
-          project,
           active,
           "pcrs-active",
           getContent(x => x.pages.pcrsDashboard.noOngoingRequests),
         )}
 
-        {isProjectActive && renderStartANewRequestLink(project)}
+        {isProjectActive && renderStartANewRequestLink()}
       </Section>
 
       <Accordion>
         <AccordionItem title="Past requests" qa="past-requests">
           {renderTable(
-            project,
             archived,
             "pcrs-archived",
             getContent(x => x.pages.pcrsDashboard.noPastRequests),

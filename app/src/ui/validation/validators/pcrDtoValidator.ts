@@ -43,6 +43,7 @@ import {
   pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
   pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
 } from "@ui/containers/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
+import { PartnerStatus } from "@framework/constants/partner";
 
 interface PCRBaseDtoValidationProps<T> {
   model: T;
@@ -76,6 +77,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly pcrStepId?: PcrItemId;
 
   private readonly projectManagerCanEdit: boolean;
+  private readonly isPmProjectParticipantOnHold: boolean;
   private readonly monitoringOfficerCanEdit: boolean;
 
   public comments: Result;
@@ -119,9 +121,12 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this.pcrStepType = pcrStepType;
     this.pcrStepId = pcrStepId;
 
-    this.projectManagerCanEdit = !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
+    this.projectManagerCanEdit = !this.original || this.projectManagerPermittedStatus.has(this.original.status);
     this.monitoringOfficerCanEdit =
       (this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status)) ?? false;
+    this.isPmProjectParticipantOnHold = this.partners
+      ? this.partners.some(x => getAuthRoles(x.roles).isPm && x.partnerStatus !== PartnerStatus.OnHold)
+      : true;
 
     // Validating these fields requires above values to be computed
     this.comments = this.validateComments();
@@ -181,7 +186,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateComments(): Result {
     const { isPm, isMo } = getAuthRoles(this.role);
 
-    const canPmEdit = isPm && this.projectManagerCanEdit;
+    const canPmEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold;
     const canMoEdit = isMo && this.monitoringOfficerCanEdit;
 
     if (canPmEdit || canMoEdit) {
@@ -229,7 +234,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateReasoningComments() {
     const { isPm } = getAuthRoles(this.role);
 
-    if (isPm && this.projectManagerCanEdit) {
+    if (isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold) {
       return Validation.all(
         this,
         () =>
@@ -333,7 +338,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private getItemValidator(item: PCRItemDto) {
     const { isPm } = getAuthRoles(this.role);
-    const canEdit = isPm ? this.projectManagerCanEdit : false;
+    const canEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold;
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
 
     const params: PCRBaseItemDtoValidatorProps<typeof item> = {

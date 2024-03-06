@@ -1,20 +1,9 @@
 import { PartnerStatus } from "@framework/constants/partner";
 import { ProjectStatus } from "@framework/constants/project";
-import { PartnerDtoGql } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useContent } from "@ui/hooks/content.hook";
-
-export interface ProjectSuspensionMessageWithFragmentProps {
-  projectId: ProjectId;
-  partnerId?: PartnerId;
-}
-
-interface ProjectSuspensionMessageProps extends ProjectSuspensionMessageWithFragmentProps {
-  project: Pick<ProjectDto, "status" | "roles">;
-  partners: Pick<PartnerDtoGql, "id" | "partnerStatus" | "isFlagged">[];
-}
+import { ProjectSuspensionMessageProps } from "./ProjectSuspensionMessage.logic";
 
 const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspensionMessageProps) => {
   const { getContent } = useContent();
@@ -50,7 +39,11 @@ const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspe
     );
   }
 
-  switch (partners.find(x => x.id === partnerId)?.partnerStatus) {
+  const partner =
+    partners.find(x => x.id === partnerId) ?? // If a specific partner is selected, use that partner
+    partners.find(x => project.partnerRoles.find(y => y.partnerId === x.id)?.isPm); // Otherwise, find a partner where the user is PM
+
+  switch (partner?.partnerStatus) {
     case PartnerStatus.OnHold:
       return (
         <ValidationMessage
@@ -67,9 +60,9 @@ const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspe
           message={getContent(x => x.components.projectInactiveContent.partnerWithdrawal)}
         />
       );
-    default:
-      return null;
   }
+
+  return null;
 };
 
 export { ProjectSuspensionMessage };

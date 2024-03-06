@@ -16,6 +16,14 @@ export const projectSuspensionMessageFragment = graphql`
               isMo
               isAssociate
               isSalesforceSystemUser
+              partnerRoles {
+                isFc
+                isMo
+                isPm
+                isSalesforceSystemUser
+                isAssociate
+                partnerId
+              }
             }
             Acc_ProjectParticipantsProject__r {
               edges {
