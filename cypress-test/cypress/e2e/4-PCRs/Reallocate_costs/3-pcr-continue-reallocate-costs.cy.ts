@@ -28,9 +28,11 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
+const projManager = "james.black@euimeabs.test";
+
 describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: projManager, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });
 
@@ -42,7 +44,7 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
     cy.createPcr("Reallocate project costs");
   });
 
-  it("Should show select 'Give us information' and continue to the next page", reallocateCostsGiveUsInfoContinue);
+  it("Should select 'Give us information' and continue to the next page", reallocateCostsGiveUsInfoContinue);
 
   it("Should show the project title", shouldShowProjectTitle);
 

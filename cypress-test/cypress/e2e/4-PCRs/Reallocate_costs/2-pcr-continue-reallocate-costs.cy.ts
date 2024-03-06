@@ -10,9 +10,11 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
+const projManager = "james.black@euimeabs.test";
+
 describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: projManager, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });
 

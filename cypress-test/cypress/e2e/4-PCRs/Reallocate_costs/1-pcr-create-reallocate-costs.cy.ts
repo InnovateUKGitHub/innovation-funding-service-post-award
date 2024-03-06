@@ -12,9 +12,11 @@ import {
 
 import { pcrTidyUp } from "common/pcrtidyup";
 
+const projManager = "james.black@euimeabs.test";
+
 describe("PCR > Reallocate Costs > Creating  PCR", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: projManager, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });
 
