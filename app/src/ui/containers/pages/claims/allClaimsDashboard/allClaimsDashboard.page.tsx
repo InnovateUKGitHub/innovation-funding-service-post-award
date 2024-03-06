@@ -62,7 +62,7 @@ type PartnerType = Pick<
 const ClaimTable = createTypedTable<ClaimType>();
 
 const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => {
-  const { project, partners, claims } = useAllClaimsDashboardData(props.projectId);
+  const { project, partners, claims, fragmentRef } = useAllClaimsDashboardData(props.projectId);
 
   const isMultipleParticipants = partners.length > 1;
 
@@ -80,8 +80,9 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
     <Page
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={<ProjectBackLink projectId={project.id} />}
-      projectStatus={project.status}
-      partnerStatus={isLeadPartnerFc ? leadPartner.partnerStatus : undefined}
+      fragmentRef={fragmentRef}
+      projectId={props.projectId}
+      partnerId={isLeadPartnerFc ? leadPartner.id : undefined}
     >
       {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
 

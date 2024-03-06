@@ -74,6 +74,6 @@ export const useClaimDashboardData = (projectId: ProjectId, partnerId: PartnerId
     const previousClaims = claims.filter(x => x.isApproved);
     const currentClaim = claims.find(x => !x.isApproved) ?? null;
 
-    return { project, partner, previousClaims, currentClaim };
+    return { project, partner, previousClaims, currentClaim, fragmentRef: data.salesforce.uiapi };
   }, []);
 };

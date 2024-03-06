@@ -55,5 +55,5 @@ export const useClaimDetailDocumentsQuery = (
     "organisationType",
   ]);
 
-  return { project, claimDetailDocuments, costCategories };
+  return { project, claimDetailDocuments, costCategories, fragmentRef: data.salesforce.uiapi };
 };

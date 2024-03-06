@@ -66,6 +66,6 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
       { periodProfileDetails, competitionType: project.competitionType },
     );
 
-    return { project, partners, claims };
+    return { project, partners, claims, fragmentRef: data.salesforce.uiapi };
   }, []);
 };

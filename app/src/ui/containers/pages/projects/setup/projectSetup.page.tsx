@@ -40,7 +40,7 @@ const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? 
 
 const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
   const { getContent } = useContent();
-  const { project, partner } = useProjectSetupQuery(props.projectId, props.partnerId);
+  const { project, partner, fragmentRef } = useProjectSetupQuery(props.projectId, props.partnerId);
 
   const [validatorErrors, setValidatorZodErrors] = useZodFormatValidationErrors();
 
@@ -105,8 +105,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       error={apiError}
       validator={validatorErrors}
-      projectStatus={project.status}
-      partnerStatus={partner.partnerStatus}
+      fragmentRef={fragmentRef}
     >
       <Section qa="guidance">
         <P>{getContent(x => x.projectMessages.setupGuidance)}</P>

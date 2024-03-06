@@ -4,6 +4,7 @@ const pcrDashboardQuery = graphql`
   query PCRDashboardQuery($projectId: ID) {
     salesforce {
       uiapi {
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {

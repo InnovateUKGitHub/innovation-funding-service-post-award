@@ -56,7 +56,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
     costCategoryId,
   });
 
-  const { project, claimDetailDocuments, costCategories } = useClaimDetailDocumentsQuery(
+  const { project, claimDetailDocuments, costCategories, fragmentRef } = useClaimDetailDocumentsQuery(
     { projectId, partnerId, periodId, costCategoryId },
     refreshedQueryOptions,
   );
@@ -128,9 +128,11 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
           <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
         </BackLink>
       }
-      projectStatus={project.status}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
+      fragmentRef={fragmentRef}
+      projectId={props.projectId}
+      partnerId={props.partnerId}
     >
       {isCombinationOfSBRI ? (
         <>

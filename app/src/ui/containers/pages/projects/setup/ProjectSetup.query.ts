@@ -4,6 +4,7 @@ export const projectSetupQuery = graphql`
   query ProjectSetupQuery($projectId: ID!, $partnerId: ID!) {
     salesforce {
       uiapi {
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {

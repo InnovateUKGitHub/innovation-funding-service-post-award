@@ -30,8 +30,8 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
         </BackLink>
       }
       pageTitle={<Title {...project} />}
-      projectStatus={project.status}
-      partnerStatus={partner.partnerStatus}
+      projectId={props.projectId}
+      partnerId={props.partnerId}
     >
       <Section>
         <SummaryList qa="partner-details">

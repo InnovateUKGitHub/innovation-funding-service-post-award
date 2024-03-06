@@ -36,7 +36,7 @@ export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId)
     {},
   );
 
-  return { project, partner };
+  return { project, partner, fragmentRef: data.salesforce.uiapi };
 };
 
 export const useOnUpdateProjectSetup = (

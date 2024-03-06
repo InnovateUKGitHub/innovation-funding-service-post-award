@@ -17,11 +17,7 @@ export const useFailedBankCheckConfirmationData = (projectId: ProjectId) => {
     { fetchPolicy: "network-only" },
   );
 
-  const project = mapToProjectDto(getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? []).node, [
-    "status",
-  ]);
-
-  return { fragmentRef: data?.salesforce?.uiapi, project };
+  return { fragmentRef: data?.salesforce?.uiapi };
 };
 
 export const useOnUpdateSetupBankDetailsVerify = (

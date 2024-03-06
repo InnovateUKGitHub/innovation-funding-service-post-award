@@ -103,8 +103,9 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
         </BackLink>
       }
       pageTitle={<Title />}
-      partnerStatus={data.partner.partnerStatus}
       fragmentRef={data?.fragmentRef}
+      projectId={props.projectId}
+      partnerId={props.partnerId}
     >
       {/* If the partner is not withdrawn, and it's the final claim, show message. */}
       {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (

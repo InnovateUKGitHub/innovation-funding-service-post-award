@@ -4,6 +4,7 @@ export const claimDetailsQuery = graphql`
     salesforce {
       uiapi {
         ...TitleFragment
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_Profile__c(
             where: {

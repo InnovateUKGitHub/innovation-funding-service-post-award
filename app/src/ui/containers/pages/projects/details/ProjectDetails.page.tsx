@@ -171,7 +171,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
     <Page
       backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectStatus={project.status}
+      projectId={props.projectId}
     >
       <Section
         qa="period-information"

@@ -108,4 +108,5 @@ export interface PartnerDtoGql extends PartnerDto {
   capLimitGrant: number;
   roles: SfRoles;
   openClaimPeriodNumber: number;
+  isFlagged: boolean;
 }

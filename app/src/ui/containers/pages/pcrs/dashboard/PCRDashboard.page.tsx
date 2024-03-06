@@ -39,7 +39,7 @@ const PCRTable = createTypedTable<PCRDashboardType>();
 
 const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
-  const { project, pcrs } = usePcrDashboardQuery(props.projectId);
+  const { project, pcrs, fragmentRef } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
   const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
   const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
@@ -167,7 +167,8 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     <Page
       backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectStatus={project.status}
+      fragmentRef={fragmentRef}
+      projectId={props.projectId}
     >
       <Messages messages={props.messages} />
 

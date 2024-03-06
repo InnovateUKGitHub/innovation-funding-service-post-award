@@ -81,8 +81,8 @@ export function PartnerDetailsEditComponent({
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors as RhfErrors}
       apiError={apiError}
-      projectStatus={project.status}
-      partnerStatus={partner.partnerStatus}
+      projectId={projectId}
+      partnerId={partnerId}
     >
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>

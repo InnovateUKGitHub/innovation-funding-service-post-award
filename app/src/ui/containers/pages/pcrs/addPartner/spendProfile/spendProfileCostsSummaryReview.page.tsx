@@ -77,7 +77,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
           </BackLink>
         }
         pageTitle={<Title {...project} />}
-        project={project}
+        projectId={this.props.projectId}
       >
         <Messages messages={this.props.messages} />
         <Section

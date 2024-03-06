@@ -93,8 +93,8 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
           </BackLink>
         }
         pageTitle={<Title {...project} />}
-        project={project}
         error={editor.error}
+        projectId={this.props.projectId}
       >
         <Messages messages={this.props.messages} />
         <Section>

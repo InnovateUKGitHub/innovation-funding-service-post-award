@@ -64,10 +64,10 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
   return (
     <Page
       pageTitle={<Title />}
-      projectStatus={data.project.status}
-      partnerStatus={data.partner.partnerStatus}
       backLink={<BackLink route={backLink}>{backText}</BackLink>}
       fragmentRef={data.fragmentRef}
+      projectId={props.projectId}
+      partnerId={props.partnerId}
     >
       {!data.partner.isWithdrawn && (
         <>

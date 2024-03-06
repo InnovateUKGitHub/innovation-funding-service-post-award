@@ -3,6 +3,7 @@ export const claimDashboardQuery = graphql`
   query ClaimDashboardQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!) {
     salesforce {
       uiapi {
+        ...ProjectSuspensionMessageFragment
         query {
           Acc_Profile__c(
             where: {

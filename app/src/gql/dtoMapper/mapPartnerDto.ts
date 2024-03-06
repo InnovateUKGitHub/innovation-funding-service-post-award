@@ -57,6 +57,7 @@ type PartnerNode = GQL.PartialNode<{
   Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
   Acc_StaticCapLimitGrant__c: GQL.Value<number>;
   Acc_FirstName__c: GQL.Value<string>;
+  Acc_FlaggedParticipant__c: GQL.Value<boolean>;
   Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
   Acc_LastName__c: GQL.Value<string>;
   Acc_NewForecastNeeded__c: GQL.Value<boolean>;
@@ -103,6 +104,7 @@ type PartnerDtoMapping = Pick<
   | "competitionName"
   | "forecastLastModifiedDate"
   | "forecastsAndCosts"
+  | "isFlagged"
   | "isLead"
   | "isNonFunded"
   | "isWithdrawn"
@@ -210,6 +212,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   isLead(node) {
     return node?.Acc_ProjectRole__c?.value === SalesforceProjectRole.ProjectLead;
+  },
+  isFlagged(node) {
+    return node?.Acc_FlaggedParticipant__c?.value === true;
   },
   isNonFunded(node) {
     return node?.Acc_NonfundedParticipant__c?.value ?? false;

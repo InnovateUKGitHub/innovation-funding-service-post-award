@@ -1,8 +1,9 @@
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 import classNames from "classnames";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
 
-export interface IMarkdownProps {
+export interface IMarkdownProps extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
   value: string;
   trusted?: boolean;
   verticalScrollbar?: boolean;
@@ -88,6 +89,6 @@ export function Markdown({ value, trusted = false, verticalScrollbar, ...props }
         "acc-height-container acc-vertical-scrollbar": verticalScrollbar,
       })}
       dangerouslySetInnerHTML={{ __html: marked.parse(content, { renderer }) }}
-    ></span>
+    />
   );
 }
