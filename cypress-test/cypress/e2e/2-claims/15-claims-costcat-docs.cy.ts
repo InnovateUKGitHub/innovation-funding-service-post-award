@@ -1,7 +1,10 @@
 import { visitApp } from "common/visit";
 import {
   allowBatchFileUpload,
+  backOutToClaimsPage,
   deleteClaimDocument,
+  downloadExceptionsStaff,
+  downloadExceptionsStaffDocPage,
   rejectElevenDocsAndShowError,
   documents as uploadDocuments,
 } from "./steps";
@@ -134,4 +137,13 @@ describe("Claims > Cost category document uploads", () => {
       deleteClaimDocument(document);
     }
   });
+
+  it("Should back out to the claims page and access Exceptions - Equipment.", backOutToClaimsPage);
+
+  it("Should download the file on the Exceptions - Staff page.", downloadExceptionsStaff);
+
+  it(
+    "Should download the file on screen on the document upload page of Exceptions Staff",
+    downloadExceptionsStaffDocPage,
+  );
 });

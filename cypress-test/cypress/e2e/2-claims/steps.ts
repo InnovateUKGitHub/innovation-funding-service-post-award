@@ -1578,3 +1578,46 @@ export const cleanUpExceedGolForecast = () => {
   cy.clickOn("Save and return to claims");
   cy.heading("Claims");
 };
+
+export const backOutToClaimsPage = () => {
+  cy.clickOn("Back to Exceptions - Staff");
+  cy.heading("Exceptions - Staff");
+  cy.clickOn("Back to claim");
+  cy.heading("Costs to be claimed");
+  cy.clickOn("Exceptions - Equipment");
+  cy.heading("Exceptions - Equipment");
+};
+
+export const downloadExceptionsStaff = () => {
+  cy.readFile("cypress/documents/testfileEUIpm.doc", "base64").then((base64: string) => {
+    cy.getByQA("claim-line-item-documents-container")
+      .contains("a", "testfileEUIpm.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfileEUIpm.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
+  });
+};
+
+export const downloadExceptionsStaffDocPage = () => {
+  cy.button("Upload and remove documents").click();
+  cy.heading("Exceptions - Equipment documents");
+  cy.readFile("cypress/documents/testfileEUIpm.doc", "base64").then((base64: string) => {
+    cy.getByQA("claim-detail-documents-container")
+      .contains("a", "testfileEUIpm.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfileEUIpm.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
+  });
+};
