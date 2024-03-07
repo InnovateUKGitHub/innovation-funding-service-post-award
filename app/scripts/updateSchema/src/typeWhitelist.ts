@@ -66,16 +66,18 @@ const objectSuffixes = [
   "Edge",
   "Connection",
   "Aggregate",
+  "AggregateEdge",
   "AggregateConnection",
+  "Result",
   "_Filter",
   "_OrderBy",
   "_GroupBy",
   "_Owner",
   "OrderByStringClause",
 ];
+
 const additionalObjects = [
   "Query",
-  "Aggregate",
   "UIAPI",
   "GroupByDateFunction",
   "GroupByFunction",
@@ -83,6 +85,7 @@ const additionalObjects = [
   "GroupByType",
   "GroupEdge",
   "GroupResult",
+  "Aggregate",
   "OrderByClause",
   "ResultOrder",
   "NullOrder",

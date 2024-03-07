@@ -72,7 +72,13 @@ type Acc_BroadcastMessage__cAggregate {
 }
 
 type Acc_BroadcastMessage__cAggregateConnection {
+  edges: [Acc_BroadcastMessage__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_BroadcastMessage__cAggregateEdge {
+  node: Acc_BroadcastMessage__cResult
+  cursor: String!
 }
 
 type Acc_BroadcastMessage__cConnection {
@@ -84,6 +90,10 @@ type Acc_BroadcastMessage__cConnection {
 type Acc_BroadcastMessage__cEdge {
   node: Acc_BroadcastMessage__c
   cursor: String!
+}
+
+type Acc_BroadcastMessage__cResult {
+  aggregate: Acc_BroadcastMessage__cAggregate
 }
 
 input Acc_BroadcastMessage__c_Filter {
@@ -520,7 +530,13 @@ type Acc_Claims__cAggregate {
 }
 
 type Acc_Claims__cAggregateConnection {
+  edges: [Acc_Claims__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_Claims__cAggregateEdge {
+  node: Acc_Claims__cResult
+  cursor: String!
 }
 
 type Acc_Claims__cConnection {
@@ -532,6 +548,10 @@ type Acc_Claims__cConnection {
 type Acc_Claims__cEdge {
   node: Acc_Claims__c
   cursor: String!
+}
+
+type Acc_Claims__cResult {
+  aggregate: Acc_Claims__cAggregate
 }
 
 input Acc_Claims__c_Filter {
@@ -1010,7 +1030,13 @@ type Acc_CostCategory__cAggregate {
 }
 
 type Acc_CostCategory__cAggregateConnection {
+  edges: [Acc_CostCategory__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_CostCategory__cAggregateEdge {
+  node: Acc_CostCategory__cResult
+  cursor: String!
 }
 
 type Acc_CostCategory__cConnection {
@@ -1022,6 +1048,10 @@ type Acc_CostCategory__cConnection {
 type Acc_CostCategory__cEdge {
   node: Acc_CostCategory__c
   cursor: String!
+}
+
+type Acc_CostCategory__cResult {
+  aggregate: Acc_CostCategory__cAggregate
 }
 
 input Acc_CostCategory__c_Filter {
@@ -1323,7 +1353,13 @@ type Acc_IFSSpendProfile__cAggregate {
 }
 
 type Acc_IFSSpendProfile__cAggregateConnection {
+  edges: [Acc_IFSSpendProfile__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_IFSSpendProfile__cAggregateEdge {
+  node: Acc_IFSSpendProfile__cResult
+  cursor: String!
 }
 
 type Acc_IFSSpendProfile__cConnection {
@@ -1335,6 +1371,10 @@ type Acc_IFSSpendProfile__cConnection {
 type Acc_IFSSpendProfile__cEdge {
   node: Acc_IFSSpendProfile__c
   cursor: String!
+}
+
+type Acc_IFSSpendProfile__cResult {
+  aggregate: Acc_IFSSpendProfile__cAggregate
 }
 
 input Acc_IFSSpendProfile__c_Filter {
@@ -1684,7 +1724,13 @@ type Acc_MonitoringAnswer__cAggregate {
 }
 
 type Acc_MonitoringAnswer__cAggregateConnection {
+  edges: [Acc_MonitoringAnswer__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_MonitoringAnswer__cAggregateEdge {
+  node: Acc_MonitoringAnswer__cResult
+  cursor: String!
 }
 
 type Acc_MonitoringAnswer__cConnection {
@@ -1696,6 +1742,10 @@ type Acc_MonitoringAnswer__cConnection {
 type Acc_MonitoringAnswer__cEdge {
   node: Acc_MonitoringAnswer__c
   cursor: String!
+}
+
+type Acc_MonitoringAnswer__cResult {
+  aggregate: Acc_MonitoringAnswer__cAggregate
 }
 
 input Acc_MonitoringAnswer__c_Filter {
@@ -1884,7 +1934,13 @@ type Acc_MonitoringQuestion__cAggregate {
 }
 
 type Acc_MonitoringQuestion__cAggregateConnection {
+  edges: [Acc_MonitoringQuestion__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_MonitoringQuestion__cAggregateEdge {
+  node: Acc_MonitoringQuestion__cResult
+  cursor: String!
 }
 
 type Acc_MonitoringQuestion__cConnection {
@@ -1896,6 +1952,10 @@ type Acc_MonitoringQuestion__cConnection {
 type Acc_MonitoringQuestion__cEdge {
   node: Acc_MonitoringQuestion__c
   cursor: String!
+}
+
+type Acc_MonitoringQuestion__cResult {
+  aggregate: Acc_MonitoringQuestion__cAggregate
 }
 
 input Acc_MonitoringQuestion__c_Filter {
@@ -2092,7 +2152,13 @@ type Acc_Prepayment__cAggregate {
 }
 
 type Acc_Prepayment__cAggregateConnection {
+  edges: [Acc_Prepayment__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_Prepayment__cAggregateEdge {
+  node: Acc_Prepayment__cResult
+  cursor: String!
 }
 
 type Acc_Prepayment__cConnection {
@@ -2104,6 +2170,10 @@ type Acc_Prepayment__cConnection {
 type Acc_Prepayment__cEdge {
   node: Acc_Prepayment__c
   cursor: String!
+}
+
+type Acc_Prepayment__cResult {
+  aggregate: Acc_Prepayment__cAggregate
 }
 
 input Acc_Prepayment__c_Filter {
@@ -2389,7 +2459,13 @@ type Acc_Profile__cAggregate {
 }
 
 type Acc_Profile__cAggregateConnection {
+  edges: [Acc_Profile__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_Profile__cAggregateEdge {
+  node: Acc_Profile__cResult
+  cursor: String!
 }
 
 type Acc_Profile__cConnection {
@@ -2401,6 +2477,10 @@ type Acc_Profile__cConnection {
 type Acc_Profile__cEdge {
   node: Acc_Profile__c
   cursor: String!
+}
+
+type Acc_Profile__cResult {
+  aggregate: Acc_Profile__cAggregate
 }
 
 input Acc_Profile__c_Filter {
@@ -2873,7 +2953,13 @@ type Acc_ProjectChangeRequest__cAggregate {
 }
 
 type Acc_ProjectChangeRequest__cAggregateConnection {
+  edges: [Acc_ProjectChangeRequest__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_ProjectChangeRequest__cAggregateEdge {
+  node: Acc_ProjectChangeRequest__cResult
+  cursor: String!
 }
 
 type Acc_ProjectChangeRequest__cConnection {
@@ -2885,6 +2971,10 @@ type Acc_ProjectChangeRequest__cConnection {
 type Acc_ProjectChangeRequest__cEdge {
   node: Acc_ProjectChangeRequest__c
   cursor: String!
+}
+
+type Acc_ProjectChangeRequest__cResult {
+  aggregate: Acc_ProjectChangeRequest__cAggregate
 }
 
 input Acc_ProjectChangeRequest__c_Filter {
@@ -3356,7 +3446,13 @@ type Acc_ProjectContactLink__cAggregate {
 }
 
 type Acc_ProjectContactLink__cAggregateConnection {
+  edges: [Acc_ProjectContactLink__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_ProjectContactLink__cAggregateEdge {
+  node: Acc_ProjectContactLink__cResult
+  cursor: String!
 }
 
 type Acc_ProjectContactLink__cConnection {
@@ -3368,6 +3464,10 @@ type Acc_ProjectContactLink__cConnection {
 type Acc_ProjectContactLink__cEdge {
   node: Acc_ProjectContactLink__c
   cursor: String!
+}
+
+type Acc_ProjectContactLink__cResult {
+  aggregate: Acc_ProjectContactLink__cAggregate
 }
 
 input Acc_ProjectContactLink__c_Filter {
@@ -3784,7 +3884,13 @@ type Acc_ProjectParticipant__cAggregate {
 }
 
 type Acc_ProjectParticipant__cAggregateConnection {
+  edges: [Acc_ProjectParticipant__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_ProjectParticipant__cAggregateEdge {
+  node: Acc_ProjectParticipant__cResult
+  cursor: String!
 }
 
 type Acc_ProjectParticipant__cConnection {
@@ -3796,6 +3902,10 @@ type Acc_ProjectParticipant__cConnection {
 type Acc_ProjectParticipant__cEdge {
   node: Acc_ProjectParticipant__c
   cursor: String!
+}
+
+type Acc_ProjectParticipant__cResult {
+  aggregate: Acc_ProjectParticipant__cAggregate
 }
 
 input Acc_ProjectParticipant__c_Filter {
@@ -4425,7 +4535,13 @@ type Acc_Project__cAggregate {
 }
 
 type Acc_Project__cAggregateConnection {
+  edges: [Acc_Project__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_Project__cAggregateEdge {
+  node: Acc_Project__cResult
+  cursor: String!
 }
 
 type Acc_Project__cConnection {
@@ -4437,6 +4553,10 @@ type Acc_Project__cConnection {
 type Acc_Project__cEdge {
   node: Acc_Project__c
   cursor: String!
+}
+
+type Acc_Project__cResult {
+  aggregate: Acc_Project__cAggregate
 }
 
 input Acc_Project__c_Filter {
@@ -4825,7 +4945,13 @@ type Acc_StatusChange__cAggregate {
 }
 
 type Acc_StatusChange__cAggregateConnection {
+  edges: [Acc_StatusChange__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_StatusChange__cAggregateEdge {
+  node: Acc_StatusChange__cResult
+  cursor: String!
 }
 
 type Acc_StatusChange__cConnection {
@@ -4837,6 +4963,10 @@ type Acc_StatusChange__cConnection {
 type Acc_StatusChange__cEdge {
   node: Acc_StatusChange__c
   cursor: String!
+}
+
+type Acc_StatusChange__cResult {
+  aggregate: Acc_StatusChange__cAggregate
 }
 
 input Acc_StatusChange__c_Filter {
@@ -5075,7 +5205,13 @@ type Acc_Virements__cAggregate {
 }
 
 type Acc_Virements__cAggregateConnection {
+  edges: [Acc_Virements__cAggregateEdge]
   totalCount: Int!
+}
+
+type Acc_Virements__cAggregateEdge {
+  node: Acc_Virements__cResult
+  cursor: String!
 }
 
 type Acc_Virements__cConnection {
@@ -5087,6 +5223,10 @@ type Acc_Virements__cConnection {
 type Acc_Virements__cEdge {
   node: Acc_Virements__c
   cursor: String!
+}
+
+type Acc_Virements__cResult {
+  aggregate: Acc_Virements__cAggregate
 }
 
 input Acc_Virements__c_Filter {
@@ -5583,7 +5723,13 @@ type AccountAggregate {
 }
 
 type AccountAggregateConnection {
+  edges: [AccountAggregateEdge]
   totalCount: Int!
+}
+
+type AccountAggregateEdge {
+  node: AccountResult
+  cursor: String!
 }
 
 type AccountConnection {
@@ -5595,6 +5741,10 @@ type AccountConnection {
 type AccountEdge {
   node: Account
   cursor: String!
+}
+
+type AccountResult {
+  aggregate: AccountAggregate
 }
 
 input Account_Filter {
@@ -6223,7 +6373,13 @@ type Competition__cAggregate {
 }
 
 type Competition__cAggregateConnection {
+  edges: [Competition__cAggregateEdge]
   totalCount: Int!
+}
+
+type Competition__cAggregateEdge {
+  node: Competition__cResult
+  cursor: String!
 }
 
 type Competition__cConnection {
@@ -6235,6 +6391,10 @@ type Competition__cConnection {
 type Competition__cEdge {
   node: Competition__c
   cursor: String!
+}
+
+type Competition__cResult {
+  aggregate: Competition__cAggregate
 }
 
 input Competition__c_Filter {
@@ -6671,7 +6831,13 @@ type ContactAggregate {
 }
 
 type ContactAggregateConnection {
+  edges: [ContactAggregateEdge]
   totalCount: Int!
+}
+
+type ContactAggregateEdge {
+  node: ContactResult
+  cursor: String!
 }
 
 type ContactConnection {
@@ -6683,6 +6849,10 @@ type ContactConnection {
 type ContactEdge {
   node: Contact
   cursor: String!
+}
+
+type ContactResult {
+  aggregate: ContactAggregate
 }
 
 input Contact_Filter {
@@ -7057,7 +7227,13 @@ type ContentDocumentAggregate {
 }
 
 type ContentDocumentAggregateConnection {
+  edges: [ContentDocumentAggregateEdge]
   totalCount: Int!
+}
+
+type ContentDocumentAggregateEdge {
+  node: ContentDocumentResult
+  cursor: String!
 }
 
 type ContentDocumentConnection {
@@ -7107,7 +7283,13 @@ type ContentDocumentLinkAggregate {
 }
 
 type ContentDocumentLinkAggregateConnection {
+  edges: [ContentDocumentLinkAggregateEdge]
   totalCount: Int!
+}
+
+type ContentDocumentLinkAggregateEdge {
+  node: ContentDocumentLinkResult
+  cursor: String!
 }
 
 type ContentDocumentLinkConnection {
@@ -7119,6 +7301,10 @@ type ContentDocumentLinkConnection {
 type ContentDocumentLinkEdge {
   node: ContentDocumentLink
   cursor: String!
+}
+
+type ContentDocumentLinkResult {
+  aggregate: ContentDocumentLinkAggregate
 }
 
 input ContentDocumentLink_Filter {
@@ -7156,6 +7342,10 @@ input ContentDocumentLink_OrderBy {
   ContentDocument: ContentDocument_OrderBy
   SystemModstamp: AggregateOrderByStringClause
   ShareType: AggregateOrderByStringClause
+}
+
+type ContentDocumentResult {
+  aggregate: ContentDocumentAggregate
 }
 
 input ContentDocument_Filter {
@@ -7333,29 +7523,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  TOMORROW
-  THIS_YEAR
-  YESTERDAY
-  NEXT_QUARTER
-  THIS_FISCAL_YEAR
-  NEXT_MONTH
-  TODAY
-  LAST_QUARTER
-  NEXT_FISCAL_QUARTER
   THIS_QUARTER
-  THIS_WEEK
-  NEXT_YEAR
-  NEXT_WEEK
-  LAST_FISCAL_QUARTER
+  TOMORROW
   THIS_FISCAL_QUARTER
+  LAST_WEEK
+  THIS_FISCAL_YEAR
+  YESTERDAY
+  LAST_90_DAYS
+  NEXT_FISCAL_QUARTER
+  LAST_FISCAL_QUARTER
+  THIS_YEAR
+  NEXT_MONTH
+  THIS_WEEK
   LAST_FISCAL_YEAR
   THIS_MONTH
-  NEXT_90_DAYS
-  LAST_YEAR
-  LAST_WEEK
   LAST_MONTH
-  LAST_90_DAYS
+  NEXT_YEAR
+  NEXT_QUARTER
+  LAST_QUARTER
   NEXT_FISCAL_YEAR
+  NEXT_WEEK
+  LAST_YEAR
+  NEXT_90_DAYS
+  TODAY
 }
 
 input DateOperators {
@@ -7650,7 +7840,13 @@ type GroupAggregate {
 }
 
 type GroupAggregateConnection {
+  edges: [GroupAggregateEdge]
   totalCount: Int!
+}
+
+type GroupAggregateEdge {
+  node: GroupResult
+  cursor: String!
 }
 
 input GroupByClause {
@@ -8136,7 +8332,13 @@ type OrderAggregate {
 }
 
 type OrderAggregateConnection {
+  edges: [OrderAggregateEdge]
   totalCount: Int!
+}
+
+type OrderAggregateEdge {
+  node: OrderResult
+  cursor: String!
 }
 
 """The Order-by input object"""
@@ -8161,6 +8363,10 @@ type OrderConnection {
 type OrderEdge {
   node: Order
   cursor: String!
+}
+
+type OrderResult {
+  aggregate: OrderAggregate
 }
 
 input Order_Filter {
@@ -8646,7 +8852,13 @@ type RecordTypeAggregate {
 }
 
 type RecordTypeAggregateConnection {
+  edges: [RecordTypeAggregateEdge]
   totalCount: Int!
+}
+
+type RecordTypeAggregateEdge {
+  node: RecordTypeResult
+  cursor: String!
 }
 
 type RecordTypeConnection {
@@ -8658,6 +8870,10 @@ type RecordTypeConnection {
 type RecordTypeEdge {
   node: RecordType
   cursor: String!
+}
+
+type RecordTypeResult {
+  aggregate: RecordTypeAggregate
 }
 
 input RecordType_Filter {
@@ -8723,11 +8939,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents ascending order."""
-  ASC
-
   """The enum value represents descending order."""
   DESC
+
+  """The enum value represents ascending order."""
+  ASC
 }
 
 enum ResultsOrder {
@@ -9411,7 +9627,13 @@ type UserAggregate {
 }
 
 type UserAggregateConnection {
+  edges: [UserAggregateEdge]
   totalCount: Int!
+}
+
+type UserAggregateEdge {
+  node: UserResult
+  cursor: String!
 }
 
 type UserConnection {
@@ -9423,6 +9645,10 @@ type UserConnection {
 type UserEdge {
   node: User
   cursor: String!
+}
+
+type UserResult {
+  aggregate: UserAggregate
 }
 
 input User_Filter {
