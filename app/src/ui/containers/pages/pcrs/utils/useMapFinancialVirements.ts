@@ -90,6 +90,12 @@ const mapProjectParticipant = ({
       return costCategoryVirement;
     });
 
+  costsClaimedToDate = roundCurrency(costsClaimedToDate);
+  originalEligibleCosts = roundCurrency(originalEligibleCosts);
+  newRemainingGrant = roundCurrency(newRemainingGrant);
+  originalRemainingGrant = roundCurrency(originalRemainingGrant);
+  newEligibleCosts = roundCurrency(newEligibleCosts);
+
   const originalRemainingCosts = roundCurrency(originalEligibleCosts - costsClaimedToDate);
   const newRemainingCosts = roundCurrency(newEligibleCosts - costsClaimedToDate);
   const grantDifference = roundCurrency(newRemainingGrant - originalRemainingGrant);
@@ -100,13 +106,13 @@ const mapProjectParticipant = ({
     partnerId: financialVirementsForParticipant.partnerId,
     name: partner.name,
     isLead: partner.isLead,
-    costsClaimedToDate: roundCurrency(costsClaimedToDate),
-    originalEligibleCosts: roundCurrency(originalEligibleCosts),
-    originalRemainingCosts: roundCurrency(originalRemainingCosts),
-    newEligibleCosts: roundCurrency(newEligibleCosts),
+    costsClaimedToDate,
+    originalEligibleCosts,
+    originalRemainingCosts,
+    newEligibleCosts,
     newRemainingCosts,
-    originalRemainingGrant: roundCurrency(originalRemainingGrant),
-    newRemainingGrant: roundCurrency(newRemainingGrant),
+    originalRemainingGrant,
+    newRemainingGrant,
     costDifference,
     grantDifference,
     virements: costCategoryVirements,
@@ -158,6 +164,14 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
     })
     .filter(x => x);
 
+  costsClaimedToDate = roundCurrency(costsClaimedToDate);
+  originalEligibleCosts = roundCurrency(originalEligibleCosts);
+  originalRemainingCosts = roundCurrency(originalRemainingCosts);
+  originalRemainingGrant = roundCurrency(originalRemainingGrant);
+  newEligibleCosts = roundCurrency(newEligibleCosts);
+  newRemainingCosts = roundCurrency(newRemainingCosts);
+  newRemainingGrant = roundCurrency(newRemainingGrant);
+
   const grantDifference = roundCurrency(newRemainingGrant - originalRemainingGrant);
   const costDifference = roundCurrency(newEligibleCosts - originalEligibleCosts);
   const hasAvailableGrant: boolean = grantDifference < 0;
@@ -168,13 +182,13 @@ const mapVirements = ({ financialVirementsForParticipants, financialVirementsFor
 
   return {
     virementData: {
-      costsClaimedToDate: roundCurrency(costsClaimedToDate),
-      originalEligibleCosts: roundCurrency(originalEligibleCosts),
-      originalRemainingCosts: roundCurrency(originalRemainingCosts),
-      originalRemainingGrant: roundCurrency(originalRemainingGrant),
-      newEligibleCosts: roundCurrency(newEligibleCosts),
-      newRemainingCosts: roundCurrency(newRemainingCosts),
-      newRemainingGrant: roundCurrency(newRemainingGrant),
+      costsClaimedToDate,
+      originalEligibleCosts,
+      originalRemainingCosts,
+      originalRemainingGrant,
+      newEligibleCosts,
+      newRemainingCosts,
+      newRemainingGrant,
       grantDifference,
       costDifference,
       virements,
