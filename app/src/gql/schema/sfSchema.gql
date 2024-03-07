@@ -1,6 +1,4 @@
-"""
-Entry point for read operations to the schema.
-"""
+"""Entry point for read operations to the schema."""
 type Query {
   uiapi: UIAPI!
 }
@@ -16,44 +14,28 @@ type Acc_BroadcastMessage__c {
   LastReferencedDate: DateTimeValue
   Acc_RequestedBy__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_RequestedBy__r: User
   Acc_EndDate__c: DateValue
   Name: StringValue
   SystemModstamp: DateTimeValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_BroadcastMessage__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_Type__c: PicklistValue
   CreatedDate: DateTimeValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -64,6 +46,33 @@ type Acc_BroadcastMessage__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_BroadcastMessage__cAggregate {
+  LastModifiedDate: DateAggregate
+  IsDeleted: BooleanAggregate
+  Acc_Message__c: TextAreaAggregate
+  Competition_type__c: PicklistAggregate
+  Acc_StartDate__c: DateAggregate
+  LastViewedDate: DateAggregate
+  Acc_Product__c: PicklistAggregate
+  LastReferencedDate: DateAggregate
+  Acc_RequestedBy__c: IDAggregate
+  Acc_EndDate__c: DateAggregate
+  Name: StringAggregate
+  SystemModstamp: DateAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_Type__c: PicklistAggregate
+  CloneSourceId: IDAggregate
+  CreatedDate: DateAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type Acc_BroadcastMessage__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_BroadcastMessage__cConnection {
@@ -193,9 +202,7 @@ type Acc_Claims__c {
   Competition__c: StringValue
   Acc_CostCategory__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_CostCategory__r: Acc_CostCategory__c
   ACC_ProjectCurrentClaimFrequency__c: StringValue
   Acc_Prepayment__c: CurrencyValue
@@ -206,9 +213,7 @@ type Acc_Claims__c {
   Acc_StaticCapLimitDeferredGrant__c: CurrencyValue
   Competition_Rec__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Competition_Rec__r: Competition__c
   Acc_PeriodGrantToBePaidBase__c: CurrencyValue
   Acc_ReviewCapLimit__c: StringValue
@@ -221,9 +226,7 @@ type Acc_Claims__c {
   Acc_Grant_Paid_To_Date__c: CurrencyValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_Claims__c_Owner
   RecordTypeId(
     """
@@ -232,9 +235,7 @@ type Acc_Claims__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_ApprovalStatus__c: PicklistValue
   Acc_CostsClaimedToDate__c: CurrencyValue
@@ -272,9 +273,7 @@ type Acc_Claims__c {
   Acc_ParticipantCapLimit__c: CurrencyValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_PeriodApprovedDeferredCosts__c: CurrencyValue
   Acc_Integration_AccountId__c: StringValue
@@ -295,9 +294,7 @@ type Acc_Claims__c {
   CreatedDate: DateTimeValue
   Acc_ProjectParticipant__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_NewDefGrantPrepaymentCarriedForward__c: CurrencyValue
   Acc_CompletionReport__c: BooleanValue
@@ -309,9 +306,7 @@ type Acc_Claims__c {
   Acc_Over100k__c: StringValue
   Acc_ParentId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ParentId__r: Acc_Claims__c
   IM_PreCursorCompetition__c: StringValue
   Acc_IsLockedDetail__c: BooleanValue
@@ -345,70 +340,187 @@ type Acc_Claims__c {
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
 
-  """
-  childRelationship
-  """
-  Claims__r(
-    upperBound: Int
-    orderBy: Acc_Claims__c_OrderBy
-    where: Acc_Claims__c_Filter
-    after: String
-    first: Int
-  ): Acc_Claims__cConnection
+  """childRelationship"""
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
-  """
-  childRelationship
-  """
-  Profiles__r(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """childRelationship"""
+  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  childRelationship
-  """
-  Profiles1__r(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """childRelationship"""
+  Profiles1__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  childRelationship
-  """
-  Status_Changes__r(
-    upperBound: Int
-    orderBy: Acc_StatusChange__c_OrderBy
-    where: Acc_StatusChange__c_Filter
-    after: String
-    first: Int
-  ): Acc_StatusChange__cConnection
+  """childRelationship"""
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_Claims__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_NonStandardProjectInformation__c: StringAggregate
+  Acc_Approved__c: BooleanAggregate
+  Acc_ClaimEmailDate__c: StringAggregate
+  Acc_OverdueEmailSent__c: BooleanAggregate
+  Acc_PaidDate__c: DateAggregate
+  Acc_ProjectParticipantName__c: StringAggregate
+  Total_Project_Grant__c: CurrencyAggregate
+  CloneSourceId: IDAggregate
+  Acc_ClaimReference__c: StringAggregate
+  Acc_Date_Submitted__c: DateAggregate
+  Acc_DeferredGrantToBePaid__c: CurrencyAggregate
+  VAT_Cost_Category__c: BooleanAggregate
+  IM_PhasedCompetition__c: BooleanAggregate
+  Acc_AccountIdReference__c: StringAggregate
+  Acc_DeferredGrant__c: CurrencyAggregate
+  Acc_AddComments__c: TextAreaAggregate
+  Acc_OverdueEmailSentDate__c: DateAggregate
+  Acc_DeferredApprovalStatus__c: PicklistAggregate
+  IsDeleted: BooleanAggregate
+  Acc_PeriodCostsApprovedForPayment__c: CurrencyAggregate
+  Acc_CostCategoryTotal__c: CurrencyAggregate
+  Acc_Grant_Due_This_Claim__c: CurrencyAggregate
+  Acc_PercentageOfTotalGrant__c: PercentAggregate
+  Acc_Total_Participant_Grant__c: CurrencyAggregate
+  Acc_IAROverride__c: PicklistAggregate
+  Acc_CompetitionType__c: StringAggregate
+  Acc_PeriodGrantToBePaidPrepDef__c: CurrencyAggregate
+  Acc_DeferredGrantStaticDefGrant__c: CurrencyAggregate
+  Acc_NewCapLimitDeferredGrant__c: CurrencyAggregate
+  Acc_FinalClaim__c: BooleanAggregate
+  Acc_OverrideAwardRate__c: PercentAggregate
+  Monitoring_Officer_Name__c: StringAggregate
+  Acc_TotalCostsSubmitted__c: CurrencyAggregate
+  Competition__c: StringAggregate
+  Acc_CostCategory__c: IDAggregate
+  Id: IDAggregate
+  ACC_ProjectCurrentClaimFrequency__c: StringAggregate
+  Acc_Prepayment__c: CurrencyAggregate
+  Acc_PaidCosts__c: CurrencyAggregate
+  Acc_LineItemDescription__c: StringAggregate
+  Acc_CapLimitPercentage__c: PercentAggregate
+  Acc_HubAndSpokeClaim__c: BooleanAggregate
+  Acc_StaticCapLimitDeferredGrant__c: CurrencyAggregate
+  Competition_Rec__c: IDAggregate
+  Acc_PeriodGrantToBePaidBase__c: CurrencyAggregate
+  Acc_ReviewCapLimit__c: StringAggregate
+  Acc_Overdue_helper__c: BooleanAggregate
+  Acc_WatchFlag__c: StringAggregate
+  Acc_ThirdPartyPayment__c: BooleanAggregate
+  Acc_StaticDeferredGrant__c: CurrencyAggregate
+  Acc_IAR_Required_Helper__c: BooleanAggregate
+  Acc_ProjectPeriodEndDateHelper__c: DateAggregate
+  Acc_Grant_Paid_To_Date__c: CurrencyAggregate
+  OwnerId: IDAggregate
+  RecordTypeId: IDAggregate
+  Acc_ApprovalStatus__c: PicklistAggregate
+  Acc_CostsClaimedToDate__c: CurrencyAggregate
+  Acc_ProjectTitle__c: StringAggregate
+  Acc_PriorStatusValue__c: StringAggregate
+  Acc_StaticDeferredAmount__c: CurrencyAggregate
+  Acc_PeriodCostsToBeApproved__c: CurrencyAggregate
+  Acc_ClaimStatus__c: PicklistAggregate
+  Acc_TwoStageApproval__c: BooleanAggregate
+  Acc_TotalPercentageOfParticipantCosts__c: PercentAggregate
+  Acc_PeriodCostCategoryTotal__c: CurrencyAggregate
+  Acc_PeriodCoststobePaid__c: CurrencyAggregate
+  SystemModstamp: DateAggregate
+  Acc_SupplierInvoiceAddedToWorkday__c: BooleanAggregate
+  Acc_ClaimOverdue__c: DoubleAggregate
+  LastActivityDate: DateAggregate
+  Acc_Project__c: StringAggregate
+  Acc_Review_Team__c: StringAggregate
+  Acc_IARRequired__c: BooleanAggregate
+  Acc_GrantToBePaid__c: StringAggregate
+  Acc_FinanceContactName__c: StringAggregate
+  Acc_ApprovedDate__c: DateAggregate
+  Acc_IAR_Helper_Non_Quarterly__c: BooleanAggregate
+  Acc_PeriodGrantToBePaidCapLimit__c: CurrencyAggregate
+  Acc_Account__c: StringAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_ClaimFrequency__c: PicklistAggregate
+  Acc_ParticipantCapLimitFormula__c: PercentAggregate
+  Acc_ProjectPeriodStartDate__c: DateAggregate
+  Acc_TotalCostsApproved__c: CurrencyAggregate
+  Name: StringAggregate
+  Acc_CostCategoryDescription__c: StringAggregate
+  Acc_ReasonForDifference__c: TextAreaAggregate
+  Acc_PeriodCostsSubmitted__c: CurrencyAggregate
+  Acc_ParticipantCapLimit__c: CurrencyAggregate
+  CreatedById: IDAggregate
+  Acc_PeriodApprovedDeferredCosts__c: CurrencyAggregate
+  Acc_Integration_AccountId__c: StringAggregate
+  Acc_TotalDeferredAmount__c: CurrencyAggregate
+  Acc_TotalParticipantCosts__c: CurrencyAggregate
+  Acc_TrackingClaimStatus__c: PicklistAggregate
+  Acc_ProjectPeriodStartDateHelper__c: DateAggregate
+  CAwardRate__c: PercentAggregate
+  LastViewedDate: DateAggregate
+  Acc_GrantPaidToDateHelper__c: CurrencyAggregate
+  Net_Invoice_total__c: DoubleAggregate
+  Acc_LastStatusChangeDate__c: DateAggregate
+  Acc_OverrideReviewTeam__c: PicklistAggregate
+  Acc_PeriodGrantToBePaidHelper__c: CurrencyAggregate
+  Acc_Integration_AccountName__c: StringAggregate
+  Acc_IAR_Helper_Quarterly__c: BooleanAggregate
+  Acc_IAR_Status__c: PicklistAggregate
+  CreatedDate: DateAggregate
+  Acc_ProjectParticipant__c: IDAggregate
+  Acc_NewDefGrantPrepaymentCarriedForward__c: CurrencyAggregate
+  Acc_CompletionReport__c: BooleanAggregate
+  Acc_PeriodGrantApprovedForPaymentHelper__c: CurrencyAggregate
+  Acc_OutstandingPayment__c: StringAggregate
+  Acc_PCF_Status__c: PicklistAggregate
+  Acc_SubsidyControlScheme__c: StringAggregate
+  SBRI_Contracting_Authority__c: StringAggregate
+  Acc_Over100k__c: StringAggregate
+  Acc_ParentId__c: IDAggregate
+  IM_PreCursorCompetition__c: StringAggregate
+  Acc_IsLockedDetail__c: BooleanAggregate
+  Claim_VAT_total__c: DoubleAggregate
+  LastReferencedDate: DateAggregate
+  Acc_LeadParticipant__c: BooleanAggregate
+  Acc_NumberofPeriods__c: DoubleAggregate
+  Acc_PeriodApprovedDeferredGrant__c: CurrencyAggregate
+  Acc_isCalculated__c: BooleanAggregate
+  Acc_TotalCost__c: CurrencyAggregate
+  Acc_PeriodLengthChanged__c: BooleanAggregate
+  Acc_Claim_Age__c: DoubleAggregate
+  Acc_ProjectPeriodEndDate__c: DateAggregate
+  Acc_StaticAwardRate__c: PercentAggregate
+  Acc_ClaimForReview__c: DoubleAggregate
+  Acc_PeriodCostsApproved__c: CurrencyAggregate
+  Acc_LineItemCost__c: CurrencyAggregate
+  Acc_DeferredAmount__c: CurrencyAggregate
+  Acc_TotalGrantPerCategory__c: DoubleAggregate
+  Acc_StaticCapLimitDeferredAmount__c: CurrencyAggregate
+  Organisation_Type__c: StringAggregate
+  Project_Sector__c: StringAggregate
+  Acc_IsLockedLI__c: BooleanAggregate
+  Acc_ProjectPeriodCost__c: CurrencyAggregate
+  Acc_ClaimUnderQuery__c: DoubleAggregate
+  Acc_ProjectPeriodId__c: DoubleAggregate
+  Acc_Non_FEC_project__c: BooleanAggregate
+  IM_PhasedCompetitionStage__c: StringAggregate
+  Acc_Overdue_Project__c: StringAggregate
+  Acc_OverrideGrantToBePaid__c: CurrencyAggregate
+  Impact_Management_Participation__c: StringAggregate
+  LastModifiedById: IDAggregate
+  Acc_ProjectPeriodNumber__c: DoubleAggregate
+  ApiName: String!
+}
+
+type Acc_Claims__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_Claims__cConnection {
@@ -829,15 +941,11 @@ type Acc_CostCategory__c {
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_CostCategory__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_CostCategoryId__c: DoubleValue
   Acc_OrganisationType__c: StringValue
@@ -847,56 +955,22 @@ type Acc_CostCategory__c {
   Acc_HintText__c: LongTextAreaValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_DisplayOrder__c: DoubleValue
   VAT_Cost_Category__c: BooleanValue
 
-  """
-  childRelationship
-  """
-  Claims__r(
-    upperBound: Int
-    orderBy: Acc_Claims__c_OrderBy
-    where: Acc_Claims__c_Filter
-    after: String
-    first: Int
-  ): Acc_Claims__cConnection
+  """childRelationship"""
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
-  """
-  childRelationship
-  """
-  IFS_Spend_Profiles__r(
-    upperBound: Int
-    orderBy: Acc_IFSSpendProfile__c_OrderBy
-    where: Acc_IFSSpendProfile__c_Filter
-    after: String
-    first: Int
-  ): Acc_IFSSpendProfile__cConnection
+  """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
-  """
-  childRelationship
-  """
-  Profile__r(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """childRelationship"""
+  Profile__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -907,6 +981,36 @@ type Acc_CostCategory__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_CostCategory__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_CostCategoryName__c: StringAggregate
+  IsDeleted: BooleanAggregate
+  LastViewedDate: DateAggregate
+  LastReferencedDate: DateAggregate
+  Acc_CompetitionType__c: PicklistAggregate
+  Name: StringAggregate
+  SystemModstamp: DateAggregate
+  Acc_CostCategoryDescription__c: StringAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_CostCategoryId__c: DoubleAggregate
+  Acc_OrganisationType__c: StringAggregate
+  CloneSourceId: IDAggregate
+  Acc_OverrideAwardRate__c: PercentAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Id: IDAggregate
+  Acc_HintText__c: TextAreaAggregate
+  LastModifiedById: IDAggregate
+  Acc_DisplayOrder__c: DoubleAggregate
+  VAT_Cost_Category__c: BooleanAggregate
+  ApiName: String!
+}
+
+type Acc_CostCategory__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_CostCategory__cConnection {
@@ -1020,9 +1124,7 @@ type Acc_IFSSpendProfile__c {
   Acc_AwardRate__c: PercentValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_CostEach__c: CurrencyValue
   Acc_TotalIndirectCosts__c: CurrencyValue
@@ -1035,9 +1137,7 @@ type Acc_IFSSpendProfile__c {
   Acc_DateSecured__c: DateValue
   Acc_ProjectParticipantID__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c
   IsDeleted: BooleanValue
   Acc_PeriodForecastStatus__c: PicklistValue
@@ -1055,9 +1155,7 @@ type Acc_IFSSpendProfile__c {
   Acc_Name__c: StringValue
   Acc_CostCategoryID__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_CostCategoryID__r: Acc_CostCategory__c
   Acc_DATotalOtherCosts__c: CurrencyValue
   Acc_TotalFutureCostCategoryValue__c: CurrencyValue
@@ -1076,9 +1174,7 @@ type Acc_IFSSpendProfile__c {
   Acc_Country__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_IFSSpendProfile__c_Owner
   Acc_TotalCost__c: CurrencyValue
   Acc_RoleAndDescription__c: LongTextAreaValue
@@ -1089,18 +1185,14 @@ type Acc_IFSSpendProfile__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_TotalTravelCosts__c: CurrencyValue
   Acc_ProjectPeriodEndDate__c: DateValue
   Acc_TotalMaterialsCosts__c: CurrencyValue
   Acc_ProjectChangeRequest__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Acc_DepreciationPeriod__c: DoubleValue
   Acc_TotalExceptionsCosts__c: CurrencyValue
@@ -1124,26 +1216,114 @@ type Acc_IFSSpendProfile__c {
   Acc_ForecastLatestValue__c: CurrencyValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_IFSSpendProfile__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_DATotalEstatesCosts__c: CurrencyAggregate
+  Acc_ForecastInitialValue__c: CurrencyAggregate
+  Acc_TotalOverheadCosts1__c: CurrencyAggregate
+  Acc_Amount__c: CurrencyAggregate
+  Acc_Role__c: StringAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_CostOfSubcontractor__c: CurrencyAggregate
+  Acc_FundingSought__c: CurrencyAggregate
+  Acc_OverheadRate__c: PicklistAggregate
+  Acc_CostOfRole__c: CurrencyAggregate
+  Acc_ProjectPeriodStartDate__c: DateAggregate
+  Acc_TotalOverheadCosts__c: CurrencyAggregate
+  Name: StringAggregate
+  Acc_CostCategoryDescription__c: StringAggregate
+  Acc_TotalValue__c: CurrencyAggregate
+  Acc_AwardRate__c: PercentAggregate
+  CreatedById: IDAggregate
+  Acc_CostEach__c: CurrencyAggregate
+  Acc_TotalIndirectCosts__c: CurrencyAggregate
+  CloneSourceId: IDAggregate
+  Acc_ResidualValue__c: CurrencyAggregate
+  Acc_DITotalOtherCosts__c: CurrencyAggregate
+  Acc_TotalOtherCosts__c: CurrencyAggregate
+  Acc_PartnerContribution__c: CurrencyAggregate
+  Acc_GolValue__c: CurrencyAggregate
+  Acc_ProjectPeriodLongName__c: StringAggregate
+  Acc_DateSecured__c: DateAggregate
+  Acc_ProjectParticipantID__c: IDAggregate
+  IsDeleted: BooleanAggregate
+  Acc_PeriodForecastStatus__c: PicklistAggregate
+  LastViewedDate: DateAggregate
+  Acc_DITotalStaffCosts__c: CurrencyAggregate
+  Acc_CompetitionType__c: StringAggregate
+  Acc_DATotalInvestigatorsCosts__c: CurrencyAggregate
+  Acc_NewOrExisting__c: PicklistAggregate
+  Acc_Utilisation__c: PercentAggregate
+  Acc_ETotalOtherCosts__c: CurrencyAggregate
+  CreatedDate: DateAggregate
+  Acc_TSBReference__c: StringAggregate
+  Acc_TotalSubcontractingCosts__c: CurrencyAggregate
+  Id: IDAggregate
+  Acc_TotalCapitalUsageCosts__c: CurrencyAggregate
+  Acc_Name__c: StringAggregate
+  Acc_CostCategoryID__c: IDAggregate
+  Acc_DATotalOtherCosts__c: CurrencyAggregate
+  Acc_TotalFutureCostCategoryValue__c: CurrencyAggregate
+  Acc_Item__c: StringAggregate
+  Acc_OCDescription__c: TextAreaAggregate
+  Acc_NetPresentValue__c: CurrencyAggregate
+  LastReferencedDate: DateAggregate
+  Acc_TotalGolvalue__c: CurrencyAggregate
+  Acc_DITotalTravelCosts__c: CurrencyAggregate
+  Acc_OtherFunding__c: BooleanAggregate
+  Acc_DaysSpentOnProject__c: DoubleAggregate
+  Acc_TotalDirectlyAllocatedCosts__c: CurrencyAggregate
+  Acc_ItemDescription__c: TextAreaAggregate
+  Acc_Quantity__c: DoubleAggregate
+  Acc_TravelCostOfItem__c: CurrencyAggregate
+  Acc_Country__c: StringAggregate
+  OwnerId: IDAggregate
+  Acc_TotalCost__c: CurrencyAggregate
+  Acc_RoleAndDescription__c: TextAreaAggregate
+  RecordTypeId: IDAggregate
+  Acc_TotalTravelCosts__c: CurrencyAggregate
+  Acc_ProjectPeriodEndDate__c: DateAggregate
+  Acc_TotalMaterialsCosts__c: CurrencyAggregate
+  Acc_ProjectChangeRequest__c: IDAggregate
+  Acc_DepreciationPeriod__c: DoubleAggregate
+  Acc_TotalExceptionsCosts__c: CurrencyAggregate
+  Acc_ETotalStaffCosts__c: CurrencyAggregate
+  Acc_MaterialsCostOfItem__c: CurrencyAggregate
+  Acc_TotalLabourCosts__c: CurrencyAggregate
+  Acc_TSDescription__c: TextAreaAggregate
+  Acc_TotalCostCategoryValue__c: CurrencyAggregate
+  Acc_TotalProjectCosts__c: CurrencyAggregate
+  Acc_Source__c: StringAggregate
+  Acc_NumberOfTimes__c: DoubleAggregate
+  Acc_TotalDirectlyIncurredCosts__c: CurrencyAggregate
+  Acc_CapitalUsageCostOfItem__c: CurrencyAggregate
+  Acc_OtherCostsCostOfItem__c: CurrencyAggregate
+  Acc_TotalIndirectCosts1__c: CurrencyAggregate
+  SystemModstamp: DateAggregate
+  Acc_GrossCostOfRole__c: CurrencyAggregate
+  Acc_CostPerItem__c: CurrencyAggregate
+  Acc_Rate__c: CurrencyAggregate
+  Acc_OrganisationType__c: StringAggregate
+  Acc_ForecastLatestValue__c: CurrencyAggregate
+  LastModifiedById: IDAggregate
+  Acc_ProjectPeriodNumber__c: DoubleAggregate
+  ApiName: String!
+}
+
+type Acc_IFSSpendProfile__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_IFSSpendProfile__cConnection {
@@ -1411,15 +1591,11 @@ type Acc_MonitoringAnswer__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_MonitoringAnswer__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   RecordTypeId(
@@ -1429,16 +1605,12 @@ type Acc_MonitoringAnswer__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_PriorStatusValue__c: TextAreaValue
   Acc_MonitoringHeader__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_MonitoringHeader__r: Acc_MonitoringAnswer__c
   Acc_AddComments__c: LongTextAreaValue
   IsDeleted: BooleanValue
@@ -1446,64 +1618,73 @@ type Acc_MonitoringAnswer__c {
   LastViewedDate: DateTimeValue
   Acc_Question__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Question__r: Acc_MonitoringQuestion__c
   SystemModstamp: DateTimeValue
   CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   Acc_Project__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Project__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_MonitoringReportStatus__c: PicklistValue
 
-  """
-  childRelationship
-  """
-  Monitoring_Answers__r(
-    upperBound: Int
-    orderBy: Acc_MonitoringAnswer__c_OrderBy
-    where: Acc_MonitoringAnswer__c_Filter
-    after: String
-    first: Int
-  ): Acc_MonitoringAnswer__cConnection
+  """childRelationship"""
+  Monitoring_Answers__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
-  """
-  childRelationship
-  """
-  Status_Changes__r(
-    upperBound: Int
-    orderBy: Acc_StatusChange__c_OrderBy
-    where: Acc_StatusChange__c_Filter
-    after: String
-    first: Int
-  ): Acc_StatusChange__cConnection
+  """childRelationship"""
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_MonitoringAnswer__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_PeriodEndDate__c: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_QuestionName__c: StringAggregate
+  Acc_QuestionScore__c: DoubleAggregate
+  LastReferencedDate: DateAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_QuestionComments__c: TextAreaAggregate
+  Name: StringAggregate
+  Acc_PeriodStartDate__c: DateAggregate
+  Acc_ProjectPeriodEndDateHelper__c: DateAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_PeriodLengthChanged__c: BooleanAggregate
+  CloneSourceId: IDAggregate
+  RecordTypeId: IDAggregate
+  Acc_PriorStatusValue__c: TextAreaAggregate
+  Acc_MonitoringHeader__c: IDAggregate
+  Acc_AddComments__c: TextAreaAggregate
+  IsDeleted: BooleanAggregate
+  Acc_ProjectPeriodStartDateHelper__c: DateAggregate
+  LastViewedDate: DateAggregate
+  Acc_Question__c: IDAggregate
+  SystemModstamp: DateAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Id: IDAggregate
+  Acc_Project__c: IDAggregate
+  LastModifiedById: IDAggregate
+  Acc_ProjectPeriodNumber__c: DoubleAggregate
+  Acc_MonitoringReportStatus__c: PicklistAggregate
+  ApiName: String!
+}
+
+type Acc_MonitoringAnswer__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_MonitoringAnswer__cConnection {
@@ -1648,47 +1829,25 @@ type Acc_MonitoringQuestion__c {
   Acc_QuestionDescription__c: LongTextAreaValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_MonitoringQuestion__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   CreatedDate: DateTimeValue
   Acc_QuestionText__c: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_DisplayOrder__c: DoubleValue
 
-  """
-  childRelationship
-  """
-  Monitoring_Reports__r(
-    upperBound: Int
-    orderBy: Acc_MonitoringAnswer__c_OrderBy
-    where: Acc_MonitoringAnswer__c_Filter
-    after: String
-    first: Int
-  ): Acc_MonitoringAnswer__cConnection
+  """childRelationship"""
+  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1699,6 +1858,33 @@ type Acc_MonitoringQuestion__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_MonitoringQuestion__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_ActiveFlag__c: BooleanAggregate
+  IsDeleted: BooleanAggregate
+  Acc_ScoredQuestion__c: BooleanAggregate
+  Acc_QuestionName__c: StringAggregate
+  Acc_QuestionScore__c: DoubleAggregate
+  LastViewedDate: DateAggregate
+  LastReferencedDate: DateAggregate
+  Name: StringAggregate
+  SystemModstamp: DateAggregate
+  Acc_QuestionDescription__c: TextAreaAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  CloneSourceId: IDAggregate
+  CreatedDate: DateAggregate
+  Acc_QuestionText__c: StringAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  Acc_DisplayOrder__c: DoubleAggregate
+  ApiName: String!
+}
+
+type Acc_MonitoringQuestion__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_MonitoringQuestion__cConnection {
@@ -1800,15 +1986,11 @@ type Acc_Prepayment__c {
   Name: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_Prepayment__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   Acc_ProjectPeriodEndDate__c: DateValue
@@ -1832,43 +2014,23 @@ type Acc_Prepayment__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_HubAndSpokePrePayment__c: BooleanValue
   Acc_AccountId__c: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_Loan_Due_Days__c: DoubleValue
   Acc_PreviousPrepaymentStatus__c: StringValue
 
-  """
-  childRelationship
-  """
-  Virements__r(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """childRelationship"""
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1879,6 +2041,58 @@ type Acc_Prepayment__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_Prepayment__cAggregate {
+  Loan_PlannedDateForDrawdown__c: DateAggregate
+  LastModifiedDate: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_ApprovedDate__c: DateAggregate
+  Loan_UserComments__c: TextAreaAggregate
+  Acc_Account__c: StringAggregate
+  Acc_Adjustment_Type__c: PicklistAggregate
+  LastReferencedDate: DateAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_ProjectPeriodStartDate__c: DateAggregate
+  Acc_PaidDate__c: DateAggregate
+  Grant_Exceeded__c: BooleanAggregate
+  Name: StringAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_PeriodLengthChanged__c: BooleanAggregate
+  CloneSourceId: IDAggregate
+  Acc_ProjectPeriodEndDate__c: DateAggregate
+  Acc_ProjectTitle__c: StringAggregate
+  Loan_DrawdownStatus__c: PicklistAggregate
+  Acc_AccountIdReference__c: StringAggregate
+  Acc_Competition_Type__c: StringAggregate
+  IsDeleted: BooleanAggregate
+  Acc_ReasonForPrepayment__c: TextAreaAggregate
+  Acc_Status__c: PicklistAggregate
+  Acc_GranttobePaid__c: CurrencyAggregate
+  Acc_Competition__c: StringAggregate
+  LastViewedDate: DateAggregate
+  Project_Sector__c: StringAggregate
+  Acc_PeriodCoststobePaid__c: CurrencyAggregate
+  Loan_InitialForecastDrawdown__c: CurrencyAggregate
+  SystemModstamp: DateAggregate
+  Acc_PeriodNumber__c: DoubleAggregate
+  Loan_LatestForecastDrawdown__c: CurrencyAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Acc_ProjectParticipant__c: IDAggregate
+  Acc_HubAndSpokePrePayment__c: BooleanAggregate
+  Acc_AccountId__c: StringAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  Acc_ProjectPeriodNumber__c: DoubleAggregate
+  Acc_Loan_Due_Days__c: DoubleAggregate
+  Acc_PreviousPrepaymentStatus__c: StringAggregate
+  ApiName: String!
+}
+
+type Acc_Prepayment__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_Prepayment__cConnection {
@@ -2031,9 +2245,7 @@ type Acc_Profile__c {
   LastModifiedDate: DateTimeValue
   Acc_ParentId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ParentId__r: Acc_Profile__c
   Acc_ProjectNumber__c: StringValue
   Acc_TotalGOLCost__c: CurrencyValue
@@ -2049,15 +2261,11 @@ type Acc_Profile__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_Profile__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_PeriodLengthChanged__c: BooleanValue
   RecordTypeId(
@@ -2067,9 +2275,7 @@ type Acc_Profile__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_ProjectPeriodEndDate__c: DateValue
   Acc_PeriodLatestForecastCost__c: CurrencyValue
@@ -2081,16 +2287,12 @@ type Acc_Profile__c {
   LastViewedDate: DateTimeValue
   Acc_ClaimDetail__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ClaimDetail__r: Acc_Claims__c
   Acc_GrantDue__c: CurrencyValue
   Acc_Claim__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Claim__r: Acc_Claims__c
   SystemModstamp: DateTimeValue
   Acc_CostCategoryLatestForecastCost__c: CurrencyValue
@@ -2099,16 +2301,12 @@ type Acc_Profile__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_ClaimPeriodNumber__c: DoubleValue
   Acc_CostCategory__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_CostCategory__r: Acc_CostCategory__c
   Acc_Project__c: StringValue
   Acc_CostCategoryAwardOverride__c: PercentValue
@@ -2116,61 +2314,82 @@ type Acc_Profile__c {
   Acc_TotalLatestForecastCost__c: CurrencyValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_LatestForecastCost__c: CurrencyValue
   Acc_ProjectPeriodNumber__c: DoubleValue
   Acc_CostCategoryFutureForecastCost__c: CurrencyValue
 
-  """
-  childRelationship
-  """
-  Profiles__r(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """childRelationship"""
+  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Virements__r(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """childRelationship"""
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_Profile__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_ParentId__c: IDAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_TotalGOLCost__c: CurrencyAggregate
+  Acc_Account__c: StringAggregate
+  LastReferencedDate: DateAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_ClaimFrequency__c: PicklistAggregate
+  Acc_ProjectPeriodStartDate__c: DateAggregate
+  Name: StringAggregate
+  Acc_CostCategoryDescription__c: StringAggregate
+  Acc_AwardRate__c: PercentAggregate
+  Acc_InitialForecastCost__c: CurrencyAggregate
+  Acc_ProjectPeriodEndDateHelper__c: DateAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_PeriodLengthChanged__c: BooleanAggregate
+  CloneSourceId: IDAggregate
+  RecordTypeId: IDAggregate
+  Acc_ProjectPeriodEndDate__c: DateAggregate
+  Acc_PeriodLatestForecastCost__c: CurrencyAggregate
+  IsDeleted: BooleanAggregate
+  Acc_CostCategoryGOLCost__c: CurrencyAggregate
+  Acc_PeriodForecastStatus__c: PicklistAggregate
+  Acc_ProfileOverrideAwardRate__c: PercentAggregate
+  Acc_ProjectPeriodStartDateHelper__c: DateAggregate
+  LastViewedDate: DateAggregate
+  Acc_ClaimDetail__c: IDAggregate
+  Acc_GrantDue__c: CurrencyAggregate
+  Acc_Claim__c: IDAggregate
+  SystemModstamp: DateAggregate
+  Acc_CostCategoryLatestForecastCost__c: CurrencyAggregate
+  Acc_OverrideAwardRate__c: PercentAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Acc_ProjectParticipant__c: IDAggregate
+  Acc_ClaimPeriodNumber__c: DoubleAggregate
+  Acc_CostCategory__c: IDAggregate
+  Id: IDAggregate
+  Acc_Project__c: StringAggregate
+  Acc_CostCategoryAwardOverride__c: PercentAggregate
+  Acc_PeriodInitialForecastCost__c: CurrencyAggregate
+  Acc_TotalLatestForecastCost__c: CurrencyAggregate
+  LastModifiedById: IDAggregate
+  Acc_LatestForecastCost__c: CurrencyAggregate
+  Acc_ProjectPeriodNumber__c: DoubleAggregate
+  Acc_CostCategoryFutureForecastCost__c: CurrencyAggregate
+  ApiName: String!
+}
+
+type Acc_Profile__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_Profile__cConnection {
@@ -2353,9 +2572,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_Approved__c: BooleanValue
   Acc_Contact1__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Contact1__r: Contact
   Loan_ProjectStartDate__c: DateValue
   Acc_AwardRate__c: PercentValue
@@ -2364,9 +2581,7 @@ type Acc_ProjectChangeRequest__c {
   Loan_ExtensionEndDate__c: DateValue
   Acc_RequestHeader__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_RequestHeader__r: Acc_ProjectChangeRequest__c
   Acc_Subsidy_Control_Scheme__c: StringValue
   Acc_Reasoning__c: LongTextAreaValue
@@ -2388,9 +2603,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_Nickname__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_ProjectChangeRequest__c_Owner
   Justification__c: LongTextAreaValue
   Acc_TurnoverYearEnd__c: DateValue
@@ -2401,23 +2614,17 @@ type Acc_ProjectChangeRequest__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_ApprovalStatus__c: PicklistValue
   Acc_ProjectTitle__c: StringValue
   Acc_Profile__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Profile__r: Acc_Profile__c
   Acc_Project_Participant__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Project_Participant__r: Acc_ProjectParticipant__c
   Acc_PriorStatusValue__c: TextAreaValue
   Country_where_work_will_be_carried_out__c: StringValue
@@ -2436,9 +2643,7 @@ type Acc_ProjectChangeRequest__c {
   LastActivityDate: DateValue
   Acc_Project__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Project__r: Acc_Project__c
   Acc_RequestedEndDate__c: DateValue
   Acc_ExternalReviewRequestedDate__c: DateValue
@@ -2447,9 +2652,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_AuthorisationHardStopDate__c: DateValue
   Acc_Account__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Account__r: Account
   Acc_ProjectID__c: StringValue
   Days_in_previous_statuses__c: DoubleValue
@@ -2457,15 +2660,11 @@ type Acc_ProjectChangeRequest__c {
   Name: StringValue
   Acc_ProjectContactLink__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectContactLink__r: Acc_ProjectContactLink__c
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_ExternalReviewStatus__c: PicklistValue
   Acc_ReasonforTermination__c: PicklistValue
@@ -2513,9 +2712,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_ProjectCity__c: StringValue
   Acc_Contact2__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Contact2__r: Contact
   Acc_Contact2EmailAddress__c: StringValue
   PCR_Age__c: DoubleValue
@@ -2524,69 +2721,159 @@ type Acc_ProjectChangeRequest__c {
   Acc_ExistingPartnerName__c: TextAreaValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  IFS_Spend_Profiles__r(
-    upperBound: Int
-    orderBy: Acc_IFSSpendProfile__c_OrderBy
-    where: Acc_IFSSpendProfile__c_Filter
-    after: String
-    first: Int
-  ): Acc_IFSSpendProfile__cConnection
+  """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
-  """
-  childRelationship
-  """
-  Acc_Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Acc_Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Status_Changes__r(
-    upperBound: Int
-    orderBy: Acc_StatusChange__c_OrderBy
-    where: Acc_StatusChange__c_Filter
-    after: String
-    first: Int
-  ): Acc_StatusChange__cConnection
+  """childRelationship"""
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
-  """
-  childRelationship
-  """
-  Virements__r(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """childRelationship"""
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_ProjectChangeRequest__cAggregate {
+  Acc_Employees__c: DoubleAggregate
+  LastModifiedDate: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_Contact1ProjectRole__c: PicklistAggregate
+  Acc_Contact1Forename__c: StringAggregate
+  Loan_RepaymentPeriod__c: StringAggregate
+  Acc_ExternalReviewCompletedDate__c: DateAggregate
+  Acc_FastTrack__c: BooleanAggregate
+  Acc_ProjectRole__c: PicklistAggregate
+  Acc_Approved__c: BooleanAggregate
+  Acc_Contact1__c: IDAggregate
+  Loan_ProjectStartDate__c: DateAggregate
+  Acc_AwardRate__c: PercentAggregate
+  Acc_Subsidy_Control_End_Date__c: StringAggregate
+  Acc_NewOrganisationName__c: TextAreaAggregate
+  Loan_ExtensionEndDate__c: DateAggregate
+  Acc_RequestHeader__c: IDAggregate
+  Acc_Subsidy_Control_Scheme__c: StringAggregate
+  Acc_Reasoning__c: TextAreaAggregate
+  CloneSourceId: IDAggregate
+  Acc_RegisteredAddress__c: TextAreaAggregate
+  Acc_ExistingProjectDuration__c: DoubleAggregate
+  Acc_TerminationDate__c: DateAggregate
+  IsDeleted: BooleanAggregate
+  Acc_ExistingEndDate__c: DateAggregate
+  Acc_ReasonForWithdrawal__c: PicklistAggregate
+  Acc_ParticipantSize__c: PicklistAggregate
+  Acc_ProjectSummarySnapshot__c: TextAreaAggregate
+  Acc_CompetitionType__c: StringAggregate
+  Acc_TotalOtherFunding__c: CurrencyAggregate
+  Override_Grant_Control__c: BooleanAggregate
+  Acc_AdditionalNumberofPeriods__c: DoubleAggregate
+  Id: IDAggregate
+  Loan_Duration__c: StringAggregate
+  Acc_SuspensionStarts__c: DateAggregate
+  New_company_subcontractor_name__c: StringAggregate
+  Acc_Nickname__c: StringAggregate
+  OwnerId: IDAggregate
+  Justification__c: TextAreaAggregate
+  Acc_TurnoverYearEnd__c: DateAggregate
+  RecordTypeId: IDAggregate
+  Acc_ApprovalStatus__c: PicklistAggregate
+  Acc_ProjectTitle__c: StringAggregate
+  Acc_Profile__c: IDAggregate
+  Acc_Project_Participant__c: IDAggregate
+  Acc_PriorStatusValue__c: TextAreaAggregate
+  Country_where_work_will_be_carried_out__c: StringAggregate
+  Acc_TypesofPCRRequests__c: TextAreaAggregate
+  Acc_RemovalPeriod__c: DoubleAggregate
+  Acc_Status__c: PicklistAggregate
+  Acc_ParticipantType__c: PicklistAggregate
+  Acc_RemovalDate__c: DateAggregate
+  Loan_RepaymentPeriodChange__c: DoubleAggregate
+  Acc_Contact1EmailAddress__c: StringAggregate
+  Acc_LastUpdated__c: DateAggregate
+  Acc_RequestNumber__c: DoubleAggregate
+  Acc_GrantMovingOverFinancialYear__c: CurrencyAggregate
+  SystemModstamp: DateAggregate
+  Acc_Rejected__c: BooleanAggregate
+  LastActivityDate: DateAggregate
+  Acc_Project__c: IDAggregate
+  Acc_RequestedEndDate__c: DateAggregate
+  Acc_ExternalReviewRequestedDate__c: DateAggregate
+  Acc_Contact2Surname__c: StringAggregate
+  Acc_Guidance__c: TextAreaAggregate
+  Acc_AuthorisationHardStopDate__c: DateAggregate
+  Acc_Account__c: IDAggregate
+  Acc_ProjectID__c: StringAggregate
+  Days_in_previous_statuses__c: DoubleAggregate
+  Acc_RequestedEndPeriod__c: DoubleAggregate
+  Name: StringAggregate
+  Acc_ProjectContactLink__c: IDAggregate
+  CreatedById: IDAggregate
+  Acc_ExternalReviewStatus__c: PicklistAggregate
+  Acc_ReasonforTermination__c: PicklistAggregate
+  Acc_Contact2Phone__c: StringAggregate
+  Cost_of_work__c: CurrencyAggregate
+  Acc_Contact2ProjectRole__c: PicklistAggregate
+  Acc_Subsidiary__c: BooleanAggregate
+  Role_in_the_project__c: StringAggregate
+  Company_registration_number__c: StringAggregate
+  Acc_ProjectPostcode__c: StringAggregate
+  Acc_Contact1Surname__c: StringAggregate
+  Acc_EligibleForStateAid__c: BooleanAggregate
+  Acc_NewPeriodLength__c: PicklistAggregate
+  LastViewedDate: DateAggregate
+  Acc_RegistrationNumber__c: StringAggregate
+  Acc_Contact2Forename__c: StringAggregate
+  Acc_AccountName__c: StringAggregate
+  Loan_ExtensionPeriod__c: StringAggregate
+  Status_change_date__c: DateAggregate
+  CreatedDate: DateAggregate
+  Acc_TSBReference__c: StringAggregate
+  Acc_OrganisationName__c: StringAggregate
+  Acc_CommercialWork__c: BooleanAggregate
+  Loan_AvailabilityEndDate__c: DateAggregate
+  Acc_Turnover__c: CurrencyAggregate
+  Loan_ExtensionPeriodChange__c: DoubleAggregate
+  LastReferencedDate: DateAggregate
+  Acc_OtherFunding__c: BooleanAggregate
+  Relationship_between_partners__c: BooleanAggregate
+  Acc_AdditionalNumberofMonths__c: DoubleAggregate
+  Acc_Location__c: PicklistAggregate
+  Acc_MarkedasComplete__c: PicklistAggregate
+  Acc_Contact1Phone__c: StringAggregate
+  Acc_AuthorisationExpectedEndDate__c: DateAggregate
+  Acc_NewPublicDescription__c: TextAreaAggregate
+  Acc_SuspensionEnds__c: DateAggregate
+  Acc_NewProjectSummary__c: TextAreaAggregate
+  Acc_NewProjectDuration__c: DoubleAggregate
+  Acc_NewProjectEndDate__c: DateAggregate
+  Loan_RepaymentEndDate__c: DateAggregate
+  Acc_EmailSentDate__c: StringAggregate
+  Override_Justification__c: StringAggregate
+  Acc_TypeofWithdrawal__c: PicklistAggregate
+  Acc_PublicDescriptionSnapshot__c: TextAreaAggregate
+  Acc_ProjectCity__c: StringAggregate
+  Acc_Contact2__c: IDAggregate
+  Acc_Contact2EmailAddress__c: StringAggregate
+  PCR_Age__c: DoubleAggregate
+  Relationship_justification__c: TextAreaAggregate
+  Acc_Comments__c: TextAreaAggregate
+  Acc_ExistingPartnerName__c: TextAreaAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type Acc_ProjectChangeRequest__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_ProjectChangeRequest__cConnection {
@@ -2983,15 +3270,11 @@ type Acc_ProjectContactLink__c {
   Acc_Internal_User__c: BooleanValue
   Acc_UserId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_UserId__r: User
   Acc_ContactId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ContactId__r: Contact
   Acc_Role__c: PicklistValue
   Acc_StartDate__c: DateValue
@@ -3003,70 +3286,36 @@ type Acc_ProjectContactLink__c {
   Acc_Project_Number__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_ProjectContactLink__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_EmailOfSFContact__c: EmailValue
   CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   Acc_AccountId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_AccountId__r: Account
   Acc_ProjectId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectId__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3077,6 +3326,37 @@ type Acc_ProjectContactLink__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_ProjectContactLink__cAggregate {
+  LastModifiedDate: DateAggregate
+  IsDeleted: BooleanAggregate
+  Acc_Internal_User__c: BooleanAggregate
+  Acc_UserId__c: IDAggregate
+  Acc_ContactId__c: IDAggregate
+  Acc_Role__c: PicklistAggregate
+  Acc_StartDate__c: DateAggregate
+  LastViewedDate: DateAggregate
+  LastReferencedDate: DateAggregate
+  Acc_EndDate__c: DateAggregate
+  Name: StringAggregate
+  SystemModstamp: DateAggregate
+  Acc_Project_Number__c: StringAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Acc_EmailOfSFContact__c: EmailAggregate
+  CloneSourceId: IDAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Acc_AccountId__c: IDAggregate
+  Id: IDAggregate
+  Acc_ProjectId__c: IDAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type Acc_ProjectContactLink__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_ProjectContactLink__cConnection {
@@ -3220,16 +3500,12 @@ type Acc_ProjectParticipant__c {
   Acc_Overdue_Claim_Helper__c: BooleanValue
   Acc_FinanceContact__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_FinanceContact__r: Contact
   Acc_ForecastLastModifiedDate__c: DateTimeValue
   Acc_ProjectManager__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectManager__r: Contact
   Acc_FinalClaim__c: BooleanValue
   Acc_RemainingParticipantGrant__c: CurrencyValue
@@ -3250,9 +3526,7 @@ type Acc_ProjectParticipant__c {
   Acc_ValidationConditionsDesc__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_ProjectParticipant__c_Owner
   Acc_Iban__c: EncryptedStringValue
   Acc_WorkdaySupplierSetupComplete__c: BooleanValue
@@ -3264,9 +3538,7 @@ type Acc_ProjectParticipant__c {
   Acc_TotalApprovedCosts__c: CurrencyValue
   Acc_FinanceContactPcl__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_FinanceContactPcl__r: Acc_ProjectContactLink__c
   SystemModstamp: DateTimeValue
   Acc_OrganisationType__c: PicklistValue
@@ -3276,9 +3548,7 @@ type Acc_ProjectParticipant__c {
   Acc_FirstName__c: StringValue
   Acc_AccountId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_AccountId__r: Account
   Acc_ValidationConditionsCode__c: StringValue
   Acc_NonfundedParticipant__c: BooleanValue
@@ -3292,9 +3562,7 @@ type Acc_ProjectParticipant__c {
   Acc_OverdueEmailsSent__c: MultiPicklistValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_Postcode__c: StringValue
   Acc_CurrentPeriodNumber__c: DoubleValue
@@ -3332,9 +3600,7 @@ type Acc_ProjectParticipant__c {
   Acc_AccountValidationNotes__c: StringValue
   Acc_MonitoringOfficer__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_MonitoringOfficer__r: Contact
   Acc_ClaimsUnderQuery__c: DoubleValue
   ParticipantMigrationID__c: StringValue
@@ -3349,94 +3615,34 @@ type Acc_ProjectParticipant__c {
   Acc_Overdue_Project__c: StringValue
   Acc_ProjectId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectId__r: Acc_Project__c
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   IM_Survey_Last_Updated__c: DateValue
 
-  """
-  childRelationship
-  """
-  Claims__r(
-    upperBound: Int
-    orderBy: Acc_Claims__c_OrderBy
-    where: Acc_Claims__c_Filter
-    after: String
-    first: Int
-  ): Acc_Claims__cConnection
+  """childRelationship"""
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
-  """
-  childRelationship
-  """
-  IFS_Spend_Profiles__r(
-    upperBound: Int
-    orderBy: Acc_IFSSpendProfile__c_OrderBy
-    where: Acc_IFSSpendProfile__c_Filter
-    after: String
-    first: Int
-  ): Acc_IFSSpendProfile__cConnection
+  """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
-  """
-  childRelationship
-  """
-  Pre_Payments__r(
-    upperBound: Int
-    orderBy: Acc_Prepayment__c_OrderBy
-    where: Acc_Prepayment__c_Filter
-    after: String
-    first: Int
-  ): Acc_Prepayment__cConnection
+  """childRelationship"""
+  Pre_Payments__r(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
 
-  """
-  childRelationship
-  """
-  Costs__r(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """childRelationship"""
+  Costs__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Virements__r(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """childRelationship"""
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3447,6 +3653,138 @@ type Acc_ProjectParticipant__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_ProjectParticipant__cAggregate {
+  Acc_CreateClaims__c: BooleanAggregate
+  LastModifiedDate: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_VerificationConditionsDesc__c: StringAggregate
+  Acc_AddressTown__c: StringAggregate
+  Acc_CompanysHouseNumber__c: StringAggregate
+  Acc_ProjectRole__c: PicklistAggregate
+  Acc_ManuallyVerified__c: BooleanAggregate
+  Acc_ClaimsOverdue__c: DoubleAggregate
+  Acc_TotalFutureForecastsForParticipant__c: CurrencyAggregate
+  Acc_AddressBuildingName__c: StringAggregate
+  IM_Survey_Form__c: IDAggregate
+  Acc_Subsidy_Control_Scheme__c: StringAggregate
+  Acc_TotalGrantApproved__c: CurrencyAggregate
+  CloneSourceId: IDAggregate
+  IM_Survey__c: StringAggregate
+  Acc_VerificationConditionsSeverity__c: StringAggregate
+  Acc_DeferredGrant__c: CurrencyAggregate
+  Acc_PostcodeStatus__c: PicklistAggregate
+  Acc_TotalParticipantGrant__c: CurrencyAggregate
+  IsDeleted: BooleanAggregate
+  Acc_FlaggedParticipant__c: BooleanAggregate
+  Acc_ReasonForWithdrawal__c: PicklistAggregate
+  Acc_ParticipantSize__c: PicklistAggregate
+  Acc_Cap_Limit__c: PercentAggregate
+  Acc_Award_Rate__c: PercentAggregate
+  Acc_AccountValidation__c: PicklistAggregate
+  Acc_AccountVerification__c: PicklistAggregate
+  Acc_Overdue_Claim_Helper__c: BooleanAggregate
+  Acc_FinanceContact__c: IDAggregate
+  Acc_ForecastLastModifiedDate__c: DateAggregate
+  Acc_ProjectManager__c: IDAggregate
+  Acc_FinalClaim__c: BooleanAggregate
+  Acc_RemainingParticipantGrant__c: CurrencyAggregate
+  Acc_TotalCostsSubmitted__c: CurrencyAggregate
+  Id: IDAggregate
+  Acc_CompanyName__c: StringAggregate
+  Acc_VerificationConditionsCode__c: StringAggregate
+  Acc_Prepayment__c: BooleanAggregate
+  Acc_AddressOrganisation__c: StringAggregate
+  Acc_AuditReportFrequency__c: PicklistAggregate
+  Acc_CapLimitDeferredGrant__c: CurrencyAggregate
+  Acc_NewForecastNeeded__c: BooleanAggregate
+  No_Of_Periods__c: DoubleAggregate
+  Acc_ParticipantProjectReportingType__c: PicklistAggregate
+  Acc_CompanyNameAndAddressScore__c: DoubleAggregate
+  Acc_WatchFlag__c: StringAggregate
+  Acc_SpendProfileCompleted__c: PicklistAggregate
+  Acc_ValidationConditionsDesc__c: StringAggregate
+  OwnerId: IDAggregate
+  Acc_WorkdaySupplierSetupComplete__c: BooleanAggregate
+  Acc_AddressPostcode__c: StringAggregate
+  Acc_ParticipantType__c: PicklistAggregate
+  Acc_Open_Claim_Period__c: DoubleAggregate
+  Acc_FlaggedParticipantComments__c: TextAreaAggregate
+  IM_Survey_Link__c: StringAggregate
+  Acc_TotalApprovedCosts__c: CurrencyAggregate
+  Acc_FinanceContactPcl__c: IDAggregate
+  SystemModstamp: DateAggregate
+  Acc_OrganisationType__c: PicklistAggregate
+  Acc_Total_Prepayment_Approved__c: DoubleAggregate
+  IM_Survey_Stage__c: StringAggregate
+  LastActivityDate: DateAggregate
+  Acc_FirstName__c: StringAggregate
+  Acc_AccountId__c: IDAggregate
+  Acc_ValidationConditionsCode__c: StringAggregate
+  Acc_NonfundedParticipant__c: BooleanAggregate
+  Acc_Current_Period_Number__c: DoubleAggregate
+  Acc_TotalPaidCosts__c: CurrencyAggregate
+  Acc_OverheadRate__c: PercentAggregate
+  Acc_TotalParticipationGrantHelper__c: DoubleAggregate
+  Acc_Recovery__c: PicklistAggregate
+  Name: StringAggregate
+  Acc_ValidationCheckPassed__c: BooleanAggregate
+  CreatedById: IDAggregate
+  Acc_Postcode__c: StringAggregate
+  Acc_CurrentPeriodNumber__c: DoubleAggregate
+  Acc_ParticipantStatus__c: PicklistAggregate
+  Acc_AddressStreet__c: StringAggregate
+  Acc_BacsCheck__c: StringAggregate
+  Acc_RegistrationNumberMatch__c: StringAggregate
+  Acc_OrganisationLegalForm__c: PicklistAggregate
+  Acc_IsVariableGrant__c: BooleanAggregate
+  Acc_TotalParticipantCosts__c: CurrencyAggregate
+  LastViewedDate: DateAggregate
+  Acc_RegistrationNumber__c: StringAggregate
+  Acc_CapLimitDeferredGrantHelper__c: CurrencyAggregate
+  Acc_StaticCapLimitGrant__c: CurrencyAggregate
+  Acc_CompanyNameScore__c: DoubleAggregate
+  Acc_Total_Prepayment_Not_Approved__c: DoubleAggregate
+  CreatedDate: DateAggregate
+  Acc_BankAccountName__c: StringAggregate
+  Acc_BankCheckState__c: PicklistAggregate
+  Acc_CreateProfiles__c: BooleanAggregate
+  Acc_AddressScore__c: DoubleAggregate
+  Acc_LastName__c: StringAggregate
+  LastReferencedDate: DateAggregate
+  Acc_TotalForecastsForParticipant__c: CurrencyAggregate
+  Acc_OpenClaimStatus__c: StringAggregate
+  Acc_TotalPrepayment__c: CurrencyAggregate
+  Acc_OverrideOverdueProject__c: PicklistAggregate
+  Acc_Total_Prepayment_created__c: DoubleAggregate
+  Acc_CapLimitDeferredAmount__c: CurrencyAggregate
+  Acc_OutstandingDeferredCosts__c: CurrencyAggregate
+  IM_Survey_Status__c: PicklistAggregate
+  Acc_PersonalDetailsScore__c: DoubleAggregate
+  Acc_ValidationConditionsSeverity__c: StringAggregate
+  Acc_RegNumberScore__c: StringAggregate
+  Acc_AccountValidationNotes__c: StringAggregate
+  Acc_MonitoringOfficer__c: IDAggregate
+  Acc_ClaimsUnderQuery__c: DoubleAggregate
+  ParticipantMigrationID__c: StringAggregate
+  Acc_TotalCostsAwarded__c: PercentAggregate
+  Acc_ClaimsForReview__c: DoubleAggregate
+  Excess_Award_Rate__c: PercentAggregate
+  IM_Survey_result_id__c: StringAggregate
+  Acc_TrackingClaims__c: PicklistAggregate
+  Acc_AddressLocality__c: StringAggregate
+  Acc_Non_FEC_project__c: BooleanAggregate
+  Acc_BankCheckCompleted__c: PicklistAggregate
+  Acc_Overdue_Project__c: StringAggregate
+  Acc_ProjectId__c: IDAggregate
+  LastModifiedById: IDAggregate
+  IM_Survey_Last_Updated__c: DateAggregate
+  ApiName: String!
+}
+
+type Acc_ProjectParticipant__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_ProjectParticipant__cConnection {
@@ -3851,9 +4189,7 @@ type Acc_Project__c {
   Acc_Overdue_Claim_Helper__c: BooleanValue
   Acc_CompetitionId__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_CompetitionId__r: Competition__c
   Acc_HubAndSpokeProject__c: BooleanValue
   Acc_SuspensionStartDate__c: DateValue
@@ -3867,9 +4203,7 @@ type Acc_Project__c {
   Acc_LeadParticipantName__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_Project__c_Owner
   Acc_CompetitionCode__c: StringValue
   Loans_RnDStatus__c: PicklistValue
@@ -3907,18 +4241,14 @@ type Acc_Project__c {
   Acc_SuspensionEndDate__c: DateValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_CurrentPeriodNumber__c: DoubleValue
   Acc_IFSApplicationIdNumber__c: StringValue
   Acc_MonitoringLevel__c: PicklistValue
   Acc_LinkedProject__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_LinkedProject__r: Acc_Project__c
   Acc_TrackingClaimStatus__c: PicklistValue
   LastViewedDate: DateTimeValue
@@ -3943,9 +4273,7 @@ type Acc_Project__c {
   Acc_CurrentPeriodEndDateHelper__c: DateValue
   Loan_FinanceContact__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Loan_FinanceContact__r: Contact
   Acc_ClaimsUnderQuery__c: DoubleValue
   Acc_TotalProjectCosts__c: CurrencyValue
@@ -3956,76 +4284,26 @@ type Acc_Project__c {
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  Monitoring_Reports__r(
-    upperBound: Int
-    orderBy: Acc_MonitoringAnswer__c_OrderBy
-    where: Acc_MonitoringAnswer__c_Filter
-    after: String
-    first: Int
-  ): Acc_MonitoringAnswer__cConnection
+  """childRelationship"""
+  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Contact_Links__r(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """childRelationship"""
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  childRelationship
-  """
-  Acc_ProjectParticipantsProject__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Acc_ProjectParticipantsProject__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Projects__r(
-    upperBound: Int
-    orderBy: Acc_Project__c_OrderBy
-    where: Acc_Project__c_Filter
-    after: String
-    first: Int
-  ): Acc_Project__cConnection
+  """childRelationship"""
+  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4036,6 +4314,118 @@ type Acc_Project__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_Project__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_ProjectNumber__c: StringAggregate
+  Acc_NonStandardProjectInformation__c: StringAggregate
+  Acc_OverrideReviewTeamValue__c: StringAggregate
+  Acc_ProjectReportingType__c: PicklistAggregate
+  Acc_CurrentPeriodStartDateHelper__c: DateAggregate
+  Loan_LoanEndDate__c: DateAggregate
+  Acc_WorkdayParticipantCompleteHelper__c: BooleanAggregate
+  Acc_AwardRate__c: PercentAggregate
+  Acc_EmailProjectEndDate__c: StringAggregate
+  Acc_WorkdaySetupComplete__c: BooleanAggregate
+  Acc_ClaimsOverdue__c: DoubleAggregate
+  Acc_Loan_Availability_End_Date__c: DateAggregate
+  Acc_LegacyID__c: StringAggregate
+  CloneSourceId: IDAggregate
+  Acc_FlaggedProject__c: BooleanAggregate
+  IM_PhasedCompetition__c: BooleanAggregate
+  Acc_TotalFutureForecastsforProject__c: CurrencyAggregate
+  IsDeleted: BooleanAggregate
+  Acc_Loan_Extension_End_Date__c: DateAggregate
+  Acc_CompetitionType__c: StringAggregate
+  Acc_Overdue_Claim_Helper__c: BooleanAggregate
+  Acc_CompetitionId__c: IDAggregate
+  Acc_HubAndSpokeProject__c: BooleanAggregate
+  Acc_SuspensionStartDate__c: DateAggregate
+  Id: IDAggregate
+  Loan_LoanRepaymentPeriodLength__c: DoubleAggregate
+  Loan_LoanAvailabilityPeriodLength__c: DoubleAggregate
+  Loan_LoanAvailabilityPeriodQuarter__c: DoubleAggregate
+  Acc_MonitoringReportSchedule__c: PicklistAggregate
+  Acc_NumberofPCRs__c: DoubleAggregate
+  Acc_WatchFlag__c: StringAggregate
+  Acc_ThirdPartyPayment__c: BooleanAggregate
+  Acc_LeadParticipantName__c: StringAggregate
+  OwnerId: IDAggregate
+  Acc_CompetitionCode__c: StringAggregate
+  Loans_RnDStatus__c: PicklistAggregate
+  Acc_CurrentPeriodNumberHelper__c: DoubleAggregate
+  Acc_ProjectTitle__c: StringAggregate
+  Acc_NonFEC__c: BooleanAggregate
+  Acc_TotalProjectGrant__c: CurrencyAggregate
+  Acc_WorkdayProjectSetupComplete__c: BooleanAggregate
+  Loan_LoanExtensionPeriodLength__c: DoubleAggregate
+  Acc_CurrentPeriodStartDate__c: DateAggregate
+  Acc_TestProject__c: BooleanAggregate
+  Acc_NumberofPeriodsHelper__c: DoubleAggregate
+  Acc_EmailProjectStartDate__c: StringAggregate
+  Acc_LeadParticipantID__c: StringAggregate
+  SystemModstamp: DateAggregate
+  Acc_ProjectEmailDate__c: StringAggregate
+  Acc_ProjectStatus__c: PicklistAggregate
+  Acc_Can_Suspend__c: BooleanAggregate
+  LastActivityDate: DateAggregate
+  Acc_Review_Team__c: StringAggregate
+  Acc_CurrentPeriodEndDate__c: DateAggregate
+  IM_Phase1ProjectNumber__c: StringAggregate
+  Acc_NumberOfOpenClaims__c: DoubleAggregate
+  Acc_ProjectSource__c: PicklistAggregate
+  Acc_ReasonForTermination__c: PicklistAggregate
+  Loan_AvailabilityEndDateFormat__c: StringAggregate
+  Acc_StartDate__c: DateAggregate
+  Acc_ClaimFrequency__c: PicklistAggregate
+  Loan_LoanApplicationID__c: StringAggregate
+  Acc_Duration__c: DoubleAggregate
+  Acc_EndDate__c: DateAggregate
+  Name: StringAggregate
+  Acc_IsVariableGrantCalculation__c: BooleanAggregate
+  Acc_IFSApplicationId__c: DoubleAggregate
+  Acc_SuspensionEndDate__c: DateAggregate
+  CreatedById: IDAggregate
+  Acc_CurrentPeriodNumber__c: DoubleAggregate
+  Acc_IFSApplicationIdNumber__c: StringAggregate
+  Acc_MonitoringLevel__c: PicklistAggregate
+  Acc_LinkedProject__c: IDAggregate
+  Acc_TrackingClaimStatus__c: PicklistAggregate
+  LastViewedDate: DateAggregate
+  Acc_OfferLetterDate__c: DateAggregate
+  Acc_PCRsForReview__c: DoubleAggregate
+  Acc_PublicDescription__c: TextAreaAggregate
+  Acc_PCRsUnderQuery__c: DoubleAggregate
+  Acc_TSBProjectNumber__c: DoubleAggregate
+  IM_Phase1Competition__c: StringAggregate
+  CreatedDate: DateAggregate
+  Loans_DocusignRDConfirmation__c: PicklistAggregate
+  Acc_SubsidyControlScheme__c: StringAggregate
+  SBRI_Contracting_Authority__c: StringAggregate
+  IM_PreCursorCompetition__c: StringAggregate
+  LastReferencedDate: DateAggregate
+  Acc_NumberofPeriods__c: DoubleAggregate
+  Acc_GOLTotalCostAwarded__c: CurrencyAggregate
+  Acc_PeriodLengthChanged__c: BooleanAggregate
+  Acc_UpdatingDuration__c: BooleanAggregate
+  Acc_EmailClaimFrequency__c: StringAggregate
+  Acc_ProjectSummary__c: TextAreaAggregate
+  Acc_CurrentPeriodEndDateHelper__c: DateAggregate
+  Loan_FinanceContact__c: IDAggregate
+  Acc_ClaimsUnderQuery__c: DoubleAggregate
+  Acc_TotalProjectCosts__c: CurrencyAggregate
+  Acc_FlaggedProjectComments__c: TextAreaAggregate
+  Acc_ClaimsForReview__c: DoubleAggregate
+  IM_PhasedCompetitionStage__c: StringAggregate
+  Acc_Overdue_Project__c: StringAggregate
+  Impact_Management_Participation__c: StringAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type Acc_Project__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_Project__cConnection {
@@ -4354,21 +4744,15 @@ type Acc_StatusChange__c {
   Acc_ParticipantVisibility__c: BooleanValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_StatusChange__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Acc_ProjectChangeRequest__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Acc_ExternalComment__c: LongTextAreaValue
   IsDeleted: BooleanValue
@@ -4377,9 +4761,7 @@ type Acc_StatusChange__c {
   Acc_PreviousClaimStatus__c: TextAreaValue
   Acc_Claim__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Claim__r: Acc_Claims__c
   SystemModstamp: DateTimeValue
   Acc_NewClaimStatus__c: TextAreaValue
@@ -4388,29 +4770,17 @@ type Acc_StatusChange__c {
   Acc_NewProjectChangeRequestStatus__c: TextAreaValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_NewMonitoringReportStatus__c: TextAreaValue
   Acc_PreviousMonitoringReportStatus__c: TextAreaValue
   Acc_MonitoringReport__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4421,6 +4791,41 @@ type Acc_StatusChange__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Acc_StatusChange__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_Reason_for_Querying__c: PicklistAggregate
+  Acc_PreviousProjectChangeRequestStatus__c: TextAreaAggregate
+  LastReferencedDate: DateAggregate
+  Acc_ProjectID__c: StringAggregate
+  Name: StringAggregate
+  Acc_ParticipantVisibility__c: BooleanAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  CloneSourceId: IDAggregate
+  Acc_ProjectChangeRequest__c: IDAggregate
+  Acc_ExternalComment__c: TextAreaAggregate
+  IsDeleted: BooleanAggregate
+  Acc_CreatedByAlias__c: StringAggregate
+  LastViewedDate: DateAggregate
+  Acc_PreviousClaimStatus__c: TextAreaAggregate
+  Acc_Claim__c: IDAggregate
+  SystemModstamp: DateAggregate
+  Acc_NewClaimStatus__c: TextAreaAggregate
+  CreatedDate: DateAggregate
+  Acc_AccountId__c: StringAggregate
+  Id: IDAggregate
+  Acc_NewProjectChangeRequestStatus__c: TextAreaAggregate
+  LastModifiedById: IDAggregate
+  Acc_NewMonitoringReportStatus__c: TextAreaAggregate
+  Acc_PreviousMonitoringReportStatus__c: TextAreaAggregate
+  Acc_MonitoringReport__c: IDAggregate
+  ApiName: String!
+}
+
+type Acc_StatusChange__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_StatusChange__cConnection {
@@ -4555,15 +4960,11 @@ type Acc_Virements__c {
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Acc_Virements__c_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Loan_CurrentDrawdownValue__c: CurrencyValue
   RecordTypeId(
@@ -4573,22 +4974,16 @@ type Acc_Virements__c {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   Acc_NewCosts__c: CurrencyValue
   Acc_Profile__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_Profile__r: Acc_Profile__c
   Acc_ProjectChangeRequest__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
   Loan_DrawdownStatus__c: StringValue
   IsDeleted: BooleanValue
@@ -4599,16 +4994,12 @@ type Acc_Virements__c {
   SystemModstamp: DateTimeValue
   Loan_LoanDrawdownRequest__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Loan_LoanDrawdownRequest__r: Acc_Prepayment__c
   Acc_NewTotalEligibleCosts__c: CurrencyValue
   Acc_ParticipantVirement__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ParticipantVirement__r: Acc_Virements__c
   Loan_PeriodNumber__c: DoubleValue
   Acc_NewRemainingGrant__c: CurrencyValue
@@ -4616,45 +5007,75 @@ type Acc_Virements__c {
   LastActivityDate: DateValue
   Acc_ProjectParticipant__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c
   Acc_ParticipantVirementRecordId__c: StringValue
   Acc_CurrentCosts__c: CurrencyValue
   Acc_Comments__c: LongTextAreaValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  Virements__r(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """childRelationship"""
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type Acc_Virements__cAggregate {
+  LastModifiedDate: DateAggregate
+  Cost_Category_Description_Order__c: DoubleAggregate
+  Acc_CurrentAwardRate__c: PercentAggregate
+  Acc_TotalGrant__c: CurrencyAggregate
+  Loan_NewDrawdownDate__c: DateAggregate
+  Acc_Approved__c: BooleanAggregate
+  Acc_ProjectID__c: StringAggregate
+  Acc_CurrentTotalEligibleCosts__c: CurrencyAggregate
+  Loan_NewDrawdownValue__c: CurrencyAggregate
+  Acc_NewAwardRate__c: PercentAggregate
+  Acc_ParticipantName__c: StringAggregate
+  Name: StringAggregate
+  Acc_PcrRecordId__c: StringAggregate
+  Acc_CostCategoryDescription__c: StringAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  Loan_CurrentDrawdownValue__c: CurrencyAggregate
+  CloneSourceId: IDAggregate
+  RecordTypeId: IDAggregate
+  Acc_NewCosts__c: CurrencyAggregate
+  Acc_Profile__c: IDAggregate
+  Acc_ProjectChangeRequest__c: IDAggregate
+  Loan_DrawdownStatus__c: StringAggregate
+  IsDeleted: BooleanAggregate
+  Acc_ClaimedCostsToDate__c: CurrencyAggregate
+  Acc_RemainingGrant__c: CurrencyAggregate
+  Loan_CurrentDrawdownDate__c: DateAggregate
+  Acc_NewTotalGrant__c: CurrencyAggregate
+  SystemModstamp: DateAggregate
+  Loan_LoanDrawdownRequest__c: IDAggregate
+  Acc_NewTotalEligibleCosts__c: CurrencyAggregate
+  Acc_ParticipantVirement__c: IDAggregate
+  Loan_PeriodNumber__c: DoubleAggregate
+  Acc_NewRemainingGrant__c: CurrencyAggregate
+  CreatedDate: DateAggregate
+  LastActivityDate: DateAggregate
+  Acc_ProjectParticipant__c: IDAggregate
+  Acc_ParticipantVirementRecordId__c: StringAggregate
+  Acc_CurrentCosts__c: CurrencyAggregate
+  Acc_Comments__c: TextAreaAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type Acc_Virements__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Acc_Virements__cConnection {
@@ -4853,9 +5274,7 @@ type Account {
   Federation_Id__pc: StringValue
   OwnerId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Owner: User
   PersonMobilePhone: PhoneNumberValue
   PersonLastCUUpdateDate: DateTimeValue
@@ -4866,9 +5285,7 @@ type Account {
     fallback: Boolean
   ): IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   RecordType: RecordType
   ShippingCity: StringValue
   PersonMailingGeocodeAccuracy: PicklistValue
@@ -4876,9 +5293,7 @@ type Account {
   pi__created_date__pc: DateTimeValue
   ParentId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Parent: Account
   IsPersonAccount: BooleanValue
   FirstName: StringValue
@@ -4896,9 +5311,7 @@ type Account {
   BillingCity: StringValue
   PersonContactId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   PersonContact: Contact
   JigsawCompanyId: StringValue
   Acc_BillingPostCode__c: StringValue
@@ -4909,9 +5322,7 @@ type Account {
   pi__last_activity__pc: DateTimeValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Email__pc: StringValue
   pi__conversion_date__pc: DateTimeValue
@@ -4921,9 +5332,7 @@ type Account {
   PersonMailingCountry: StringValue
   MasterRecordId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   MasterRecord: Account
   PersonMailingStreet: TextAreaValue
   LastViewedDate: DateTimeValue
@@ -4974,195 +5383,207 @@ type Account {
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Migration_account_key__c: StringValue
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests1__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests1__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Contact_Links__r(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """childRelationship"""
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Contact_Links__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """childRelationship"""
+  Project_Contact_Links__pr(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  childRelationship
-  """
-  Acc_ProjectParticipantsAccount__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Acc_ProjectParticipantsAccount__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants1__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants1__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants2__pr(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants2__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Projects__pr(
-    upperBound: Int
-    orderBy: Acc_Project__c_OrderBy
-    where: Acc_Project__c_Filter
-    after: String
-    first: Int
-  ): Acc_Project__cConnection
+  """childRelationship"""
+  Projects__pr(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
-  """
-  childRelationship
-  """
-  ChildAccounts(
-    upperBound: Int
-    orderBy: Account_OrderBy
-    where: Account_Filter
-    after: String
-    first: Int
-  ): AccountConnection
+  """childRelationship"""
+  ChildAccounts(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
 
-  """
-  childRelationship
-  """
-  Competitions2__pr(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions2__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions1__pr(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions1__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Contacts(
-    upperBound: Int
-    orderBy: Contact_OrderBy
-    where: Contact_Filter
-    after: String
-    first: Int
-  ): ContactConnection
+  """childRelationship"""
+  Contacts(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   PersonUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
   DisplayValue: String
+}
+
+type AccountAggregate {
+  LastModifiedDate: DateAggregate
+  pi__utm_term__pc: StringAggregate
+  ChannelProgramName: StringAggregate
+  PersonDoNotCall: BooleanAggregate
+  ContactMigrationId__pc: StringAggregate
+  JES_Organisation__c: PicklistAggregate
+  pi__grade__pc: StringAggregate
+  pi__url__pc: UrlAggregate
+  PersonOtherCountry: StringAggregate
+  PersonHomePhone: PhoneNumberAggregate
+  Application_Number__pc: StringAggregate
+  Acc_FundingStatus__pc: PicklistAggregate
+  OrgMigrationID__c: StringAggregate
+  pi__utm_medium__pc: StringAggregate
+  CloneSourceId: IDAggregate
+  AccountSource: PicklistAggregate
+  PhotoUrl: UrlAggregate
+  PersonMailingState: StringAggregate
+  pi__notes__pc: TextAreaAggregate
+  PersonOtherPostalCode: StringAggregate
+  IsDeleted: BooleanAggregate
+  PersonOtherStreet: TextAreaAggregate
+  pi__utm_campaign__pc: StringAggregate
+  Acc_FlaggedParticipant__c: BooleanAggregate
+  Converting_Person_Account__pc: BooleanAggregate
+  ChannelProgramLevelName: StringAggregate
+  LinkedIn_Id__pc: StringAggregate
+  PersonOtherGeocodeAccuracy: PicklistAggregate
+  pi__Needs_Score_Synced__pc: BooleanAggregate
+  ShippingPostalCode: StringAggregate
+  SF_Id__c: StringAggregate
+  ShippingState: StringAggregate
+  Id: IDAggregate
+  Jigsaw: StringAggregate
+  Acc_Name__c: StringAggregate
+  Description: TextAreaAggregate
+  Dissolution_Date__c: DateAggregate
+  Company_Status__c: PicklistAggregate
+  Website: UrlAggregate
+  NumberOfEmployees: IntAggregate
+  Acc_WatchFlag__c: StringAggregate
+  Salutation: PicklistAggregate
+  PersonEmailBouncedDate: DateAggregate
+  Federation_Id__pc: StringAggregate
+  OwnerId: IDAggregate
+  PersonMobilePhone: PhoneNumberAggregate
+  PersonLastCUUpdateDate: DateAggregate
+  RecordTypeId: IDAggregate
+  ShippingCity: StringAggregate
+  PersonMailingGeocodeAccuracy: PicklistAggregate
+  PersonHasOptedOutOfEmail: BooleanAggregate
+  pi__created_date__pc: DateAggregate
+  ParentId: IDAggregate
+  IsPersonAccount: BooleanAggregate
+  FirstName: StringAggregate
+  IsCustomerPortal: BooleanAggregate
+  OrgMigrationID__pc: StringAggregate
+  pi__utm_source__pc: StringAggregate
+  pi__pardot_hard_bounced__pc: BooleanAggregate
+  PersonIndividualId: IDAggregate
+  SystemModstamp: DateAggregate
+  Type: PicklistAggregate
+  BillingCountry: StringAggregate
+  LastActivityDate: DateAggregate
+  Experience_Type__pc: PicklistAggregate
+  Acc_Overdue_Project_Helper__c: BooleanAggregate
+  BillingCity: StringAggregate
+  PersonContactId: IDAggregate
+  JigsawCompanyId: StringAggregate
+  Acc_BillingPostCode__c: StringAggregate
+  pi__conversion_object_name__pc: StringAggregate
+  Name: StringAggregate
+  PersonTitle: StringAggregate
+  Industry: PicklistAggregate
+  pi__last_activity__pc: DateAggregate
+  CreatedById: IDAggregate
+  Email__pc: StringAggregate
+  pi__conversion_date__pc: DateAggregate
+  BillingGeocodeAccuracy: PicklistAggregate
+  BillingPostalCode: StringAggregate
+  PersonMailingCity: StringAggregate
+  PersonMailingCountry: StringAggregate
+  MasterRecordId: IDAggregate
+  PersonMailingStreet: TextAreaAggregate
+  LastViewedDate: DateAggregate
+  PersonBirthdate: DateAggregate
+  ShippingGeocodeAccuracy: PicklistAggregate
+  Sic: StringAggregate
+  PersonEmailBouncedReason: StringAggregate
+  ShippingStreet: TextAreaAggregate
+  pi__Pardot_Last_Scored_At__pc: DateAggregate
+  pi__first_touch_url__pc: TextAreaAggregate
+  CreatedDate: DateAggregate
+  pi__conversion_object_type__pc: StringAggregate
+  LastName: StringAggregate
+  SicDesc: StringAggregate
+  PersonOtherPhone: PhoneNumberAggregate
+  PersonEmail: EmailAggregate
+  BillingState: StringAggregate
+  IsPartner: BooleanAggregate
+  Email__c: StringAggregate
+  SugarContactId__pc: StringAggregate
+  Acc_FundingStatus__c: PicklistAggregate
+  Acc_RiskRating__c: PicklistAggregate
+  LastReferencedDate: DateAggregate
+  Acc_OnHold__c: BooleanAggregate
+  Region__pc: StringAggregate
+  pi__score__pc: DoubleAggregate
+  Phone: PhoneNumberAggregate
+  PersonDepartment: StringAggregate
+  ShippingCountry: StringAggregate
+  PersonMailingPostalCode: StringAggregate
+  Migration_address_key__c: StringAggregate
+  pi__comments__pc: TextAreaAggregate
+  pi__utm_content__pc: StringAggregate
+  PersonLastCURequestDate: DateAggregate
+  pi__first_search_term__pc: StringAggregate
+  RegistrationNumber__c: StringAggregate
+  pi__first_search_type__pc: StringAggregate
+  PersonOtherState: StringAggregate
+  Alt_Email__pc: EmailAggregate
+  AccountNumber: StringAggregate
+  Incorporation_Date__c: DateAggregate
+  Twitter_Name__pc: StringAggregate
+  BillingStreet: TextAreaAggregate
+  pi__campaign__pc: StringAggregate
+  PersonOtherCity: StringAggregate
+  pi__first_activity__pc: DateAggregate
+  Acc_Overdue_Project__c: StringAggregate
+  Fax: PhoneNumberAggregate
+  LastModifiedById: IDAggregate
+  Migration_account_key__c: StringAggregate
+  ApiName: String!
+}
+
+type AccountAggregateConnection {
+  totalCount: Int!
 }
 
 type AccountConnection {
@@ -5649,16 +6070,12 @@ type Competition__c {
   Name: StringValue
   Acc_PortfolioManager__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_PortfolioManager__r: User
   Acc_TermsConditions__c: PicklistValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   Sent_to_MM__c: BooleanValue
   Acc_LegacyCompetitionCode__c: StringValue
@@ -5669,23 +6086,17 @@ type Competition__c {
   LastViewedDate: DateTimeValue
   CSS_Representative__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CSS_Representative__r: User
   Acc_CompetitionType__c: PicklistValue
   Acc_FinanceBusinessPartner__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Acc_FinanceBusinessPartner__r: User
   Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
   IM_Phase1Competition__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   IM_Phase1Competition__r: Competition__c
   Acc_CompetitionName__c: StringValue
   CreatedDate: DateTimeValue
@@ -5693,42 +6104,32 @@ type Competition__c {
   Phased_Competition_Stage__c: PicklistValue
   IM_PreCursorCompetition__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   IM_PreCursorCompetition__r: Competition__c
   LastReferencedDate: DateTimeValue
   ACC_PaymentType__c: PicklistValue
   Acc_AGRefNumber__c: IDValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Competition__c_Owner
   Acc_CompetitionCode__c: StringValue
   Impact_Management_participation__c: PicklistValue
   Technologists__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Technologists__r: Contact
   Acc_ProgrammeID__c: IDValue
   Acc_ProgrammeName__c: StringValue
   Acc_ActivityCode__c: StringValue
   Competition_Manager__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Competition_Manager__r: User
   Authorisation_hard_stop_date__c: DateValue
   Competition_Exec__c: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Competition_Exec__r: Contact
   Authorisation_expected_end_date__c: DateValue
   SystemModstamp: DateTimeValue
@@ -5737,67 +6138,25 @@ type Competition__c {
   LastActivityDate: DateValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   Acc_TypeofAid__c: PicklistValue
   Acc_Review_Team__c: PicklistValue
 
-  """
-  childRelationship
-  """
-  Claims__r(
-    upperBound: Int
-    orderBy: Acc_Claims__c_OrderBy
-    where: Acc_Claims__c_Filter
-    after: String
-    first: Int
-  ): Acc_Claims__cConnection
+  """childRelationship"""
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
-  """
-  childRelationship
-  """
-  Acc_ProjectCompetition__r(
-    upperBound: Int
-    orderBy: Acc_Project__c_OrderBy
-    where: Acc_Project__c_Filter
-    after: String
-    first: Int
-  ): Acc_Project__cConnection
+  """childRelationship"""
+  Acc_ProjectCompetition__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions1__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5808,6 +6167,63 @@ type Competition__c {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type Competition__cAggregate {
+  LastModifiedDate: DateAggregate
+  Acc_ProjectHardStopDate__c: DateAggregate
+  Acc_NonStandardProjectInformation__c: TextAreaAggregate
+  Acc_PublicityEmbargoOnResults__c: PicklistAggregate
+  Authorisation_Gateway__c: IDAggregate
+  Name: StringAggregate
+  Acc_PortfolioManager__c: IDAggregate
+  Acc_TermsConditions__c: PicklistAggregate
+  CreatedById: IDAggregate
+  CloneSourceId: IDAggregate
+  Sent_to_MM__c: BooleanAggregate
+  Acc_LegacyCompetitionCode__c: StringAggregate
+  IM_PhasedCompetition__c: BooleanAggregate
+  Acc_ExpectedLastDateOfProjectsEnd__c: DateAggregate
+  IsDeleted: BooleanAggregate
+  Acc_LevelOfMonitoring__c: PicklistAggregate
+  LastViewedDate: DateAggregate
+  CSS_Representative__c: IDAggregate
+  Acc_CompetitionType__c: PicklistAggregate
+  Acc_FinanceBusinessPartner__c: IDAggregate
+  Acc_ExpectedFirstDateOfProjectsStart__c: DateAggregate
+  IM_Phase1Competition__c: IDAggregate
+  Acc_CompetitionName__c: StringAggregate
+  CreatedDate: DateAggregate
+  Id: IDAggregate
+  SBRI_Contracting_Authority__c: PicklistAggregate
+  Phased_Competition_Stage__c: PicklistAggregate
+  IM_PreCursorCompetition__c: IDAggregate
+  LastReferencedDate: DateAggregate
+  ACC_PaymentType__c: PicklistAggregate
+  Acc_AGRefNumber__c: IDAggregate
+  OwnerId: IDAggregate
+  Acc_CompetitionCode__c: StringAggregate
+  Impact_Management_participation__c: PicklistAggregate
+  Technologists__c: IDAggregate
+  Acc_ProgrammeID__c: IDAggregate
+  Acc_ProgrammeName__c: StringAggregate
+  Acc_ActivityCode__c: StringAggregate
+  Competition_Manager__c: IDAggregate
+  Authorisation_hard_stop_date__c: DateAggregate
+  Competition_Exec__c: IDAggregate
+  Authorisation_expected_end_date__c: DateAggregate
+  SystemModstamp: DateAggregate
+  ACC_SubsidyControlScheme__c: IDAggregate
+  Acc_InsertCostCentreCode__c: StringAggregate
+  LastActivityDate: DateAggregate
+  LastModifiedById: IDAggregate
+  Acc_TypeofAid__c: PicklistAggregate
+  Acc_Review_Team__c: PicklistAggregate
+  ApiName: String!
+}
+
+type Competition__cAggregateConnection {
+  totalCount: Int!
 }
 
 type Competition__cConnection {
@@ -6014,9 +6430,7 @@ type Contact {
   LastModifiedDate: DateTimeValue
   AccountId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Account: Account
   Email: EmailValue
   Alt_Email__c: EmailValue
@@ -6033,9 +6447,7 @@ type Contact {
   ContactMigrationId__c: StringValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   pi__conversion_object_name__c: StringValue
   OtherCity: StringValue
@@ -6045,9 +6457,7 @@ type Contact {
   pi__utm_source__c: StringValue
   MasterRecordId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   MasterRecord: Contact
   IndividualId: IDValue
   IsDeleted: BooleanValue
@@ -6084,9 +6494,7 @@ type Contact {
   Federation_Id__c: StringValue
   OwnerId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Owner: User
   Phone: PhoneNumberValue
   MailingPostalCode: StringValue
@@ -6112,9 +6520,7 @@ type Contact {
   pi__conversion_date__c: DateTimeValue
   ReportsToId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   ReportsTo: Contact
   LastActivityDate: DateValue
   pi__pardot_hard_bounced__c: BooleanValue
@@ -6122,126 +6528,42 @@ type Contact {
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   pi__first_search_term__c: StringValue
   JigsawContactId: StringValue
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Change_Requests1__r(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """childRelationship"""
+  Project_Change_Requests1__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Contact_Links__r(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """childRelationship"""
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants1__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants1__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Participants2__r(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """childRelationship"""
+  Project_Participants2__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  childRelationship
-  """
-  Projects__r(
-    upperBound: Int
-    orderBy: Acc_Project__c_OrderBy
-    where: Acc_Project__c_Filter
-    after: String
-    first: Int
-  ): Acc_Project__cConnection
+  """childRelationship"""
+  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions2__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions1__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -6253,6 +6575,103 @@ type Contact {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type ContactAggregate {
+  LastModifiedDate: DateAggregate
+  AccountId: IDAggregate
+  Email: EmailAggregate
+  Alt_Email__c: EmailAggregate
+  pi__campaign__c: StringAggregate
+  pi__first_search_type__c: StringAggregate
+  pi__first_touch_url__c: TextAreaAggregate
+  MobilePhone: PhoneNumberAggregate
+  pi__Needs_Score_Synced__c: BooleanAggregate
+  LinkedIn_Id__c: StringAggregate
+  Name: StringAggregate
+  Region__c: StringAggregate
+  Department: StringAggregate
+  pi__created_date__c: DateAggregate
+  ContactMigrationId__c: StringAggregate
+  CreatedById: IDAggregate
+  pi__conversion_object_name__c: StringAggregate
+  OtherCity: StringAggregate
+  OrgMigrationID__c: StringAggregate
+  pi__utm_campaign__c: StringAggregate
+  CloneSourceId: IDAggregate
+  PhotoUrl: UrlAggregate
+  pi__utm_source__c: StringAggregate
+  MasterRecordId: IDAggregate
+  IndividualId: IDAggregate
+  IsDeleted: BooleanAggregate
+  OtherGeocodeAccuracy: PicklistAggregate
+  IsEmailBounced: BooleanAggregate
+  pi__comments__c: TextAreaAggregate
+  HasOptedOutOfEmail: BooleanAggregate
+  LastViewedDate: DateAggregate
+  MailingCity: StringAggregate
+  Birthdate: DateAggregate
+  OtherStreet: TextAreaAggregate
+  pi__first_activity__c: DateAggregate
+  Application_Number__c: StringAggregate
+  Experience_Type__c: PicklistAggregate
+  CreatedDate: DateAggregate
+  Id: IDAggregate
+  LastName: StringAggregate
+  MailingStreet: TextAreaAggregate
+  Jigsaw: StringAggregate
+  Email__c: StringAggregate
+  Converting_Person_Account__c: BooleanAggregate
+  pi__utm_medium__c: StringAggregate
+  EmailBouncedDate: DateAggregate
+  OtherPhone: PhoneNumberAggregate
+  Acc_FundingStatus__c: PicklistAggregate
+  Description: TextAreaAggregate
+  DoNotCall: BooleanAggregate
+  MailingCountry: StringAggregate
+  LastReferencedDate: DateAggregate
+  pi__notes__c: TextAreaAggregate
+  Salutation: PicklistAggregate
+  OtherState: StringAggregate
+  pi__last_activity__c: DateAggregate
+  MailingState: StringAggregate
+  Federation_Id__c: StringAggregate
+  OwnerId: IDAggregate
+  Phone: PhoneNumberAggregate
+  MailingPostalCode: StringAggregate
+  OtherCountry: StringAggregate
+  LastCUUpdateDate: DateAggregate
+  pi__conversion_object_type__c: StringAggregate
+  MailingGeocodeAccuracy: PicklistAggregate
+  SugarContactId__c: StringAggregate
+  Twitter_Name__c: StringAggregate
+  pi__url__c: UrlAggregate
+  EmailBouncedReason: StringAggregate
+  IsPersonAccount: BooleanAggregate
+  pi__grade__c: StringAggregate
+  FirstName: StringAggregate
+  OtherPostalCode: StringAggregate
+  Title: StringAggregate
+  pi__Pardot_Last_Scored_At__c: DateAggregate
+  pi__utm_term__c: StringAggregate
+  LastCURequestDate: DateAggregate
+  SystemModstamp: DateAggregate
+  pi__score__c: DoubleAggregate
+  HomePhone: PhoneNumberAggregate
+  pi__conversion_date__c: DateAggregate
+  ReportsToId: IDAggregate
+  LastActivityDate: DateAggregate
+  pi__pardot_hard_bounced__c: BooleanAggregate
+  pi__utm_content__c: StringAggregate
+  Fax: PhoneNumberAggregate
+  LastModifiedById: IDAggregate
+  pi__first_search_term__c: StringAggregate
+  JigsawContactId: StringAggregate
+  ApiName: String!
+}
+
+type ContactAggregateConnection {
+  totalCount: Int!
 }
 
 type ContactConnection {
@@ -6568,15 +6987,11 @@ type ContentDocument {
   ContentSize: IntValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   OwnerId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Owner: User
   FileExtension: StringValue
   PublishStatus: PicklistValue
@@ -6595,21 +7010,11 @@ type ContentDocument {
   CreatedDate: DateTimeValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -6620,6 +7025,39 @@ type ContentDocument {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type ContentDocumentAggregate {
+  LastModifiedDate: DateAggregate
+  Description: TextAreaAggregate
+  SharingPrivacy: PicklistAggregate
+  LastReferencedDate: DateAggregate
+  ArchivedDate: DateAggregate
+  ContentSize: IntAggregate
+  CreatedById: IDAggregate
+  OwnerId: IDAggregate
+  FileExtension: StringAggregate
+  PublishStatus: PicklistAggregate
+  ParentId: IDAggregate
+  IsDeleted: BooleanAggregate
+  ContentAssetId: IDAggregate
+  LastViewedDate: DateAggregate
+  Title: StringAggregate
+  ArchivedById: IDAggregate
+  SystemModstamp: DateAggregate
+  IsArchived: BooleanAggregate
+  LatestPublishedVersionId: IDAggregate
+  FileType: StringAggregate
+  ContentModifiedDate: DateAggregate
+  SharingOption: PicklistAggregate
+  CreatedDate: DateAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  ApiName: String!
+}
+
+type ContentDocumentAggregateConnection {
+  totalCount: Int!
 }
 
 type ContentDocumentConnection {
@@ -6639,9 +7077,7 @@ type ContentDocumentLink {
   Visibility: PicklistValue
   ContentDocumentId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   ContentDocument: ContentDocument
   SystemModstamp: DateTimeValue
   ShareType: PicklistValue
@@ -6657,6 +7093,21 @@ type ContentDocumentLink {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type ContentDocumentLinkAggregate {
+  LinkedEntityId: IDAggregate
+  IsDeleted: BooleanAggregate
+  Visibility: PicklistAggregate
+  Id: IDAggregate
+  ContentDocumentId: IDAggregate
+  SystemModstamp: DateAggregate
+  ShareType: PicklistAggregate
+  ApiName: String!
+}
+
+type ContentDocumentLinkAggregateConnection {
+  totalCount: Int!
 }
 
 type ContentDocumentLinkConnection {
@@ -6847,14 +7298,10 @@ input CurrencyOperators {
   """
   gte: Currency
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Currency]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Currency]
 }
 
@@ -6878,41 +7325,37 @@ type DateAggregate {
 }
 
 input DateInput {
-  """
-  Value to compare with.
-  """
+  """Value to compare with."""
   value: Date
 
-  """
-  Date literal functions.
-  """
+  """Date literal functions."""
   literal: DateLiteral
 }
 
 enum DateLiteral {
-  THIS_QUARTER
-  LAST_FISCAL_YEAR
-  LAST_MONTH
-  LAST_WEEK
-  LAST_90_DAYS
-  NEXT_90_DAYS
-  NEXT_FISCAL_QUARTER
-  NEXT_MONTH
-  YESTERDAY
-  THIS_WEEK
-  THIS_MONTH
-  NEXT_FISCAL_YEAR
-  NEXT_YEAR
-  NEXT_QUARTER
-  THIS_FISCAL_QUARTER
-  NEXT_WEEK
-  THIS_YEAR
-  TODAY
   TOMORROW
+  THIS_YEAR
+  YESTERDAY
+  NEXT_QUARTER
   THIS_FISCAL_YEAR
-  LAST_YEAR
+  NEXT_MONTH
+  TODAY
   LAST_QUARTER
+  NEXT_FISCAL_QUARTER
+  THIS_QUARTER
+  THIS_WEEK
+  NEXT_YEAR
+  NEXT_WEEK
   LAST_FISCAL_QUARTER
+  THIS_FISCAL_QUARTER
+  LAST_FISCAL_YEAR
+  THIS_MONTH
+  NEXT_90_DAYS
+  LAST_YEAR
+  LAST_WEEK
+  LAST_MONTH
+  LAST_90_DAYS
+  NEXT_FISCAL_YEAR
 }
 
 input DateOperators {
@@ -6946,14 +7389,10 @@ input DateOperators {
   """
   gte: DateInput
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [DateInput]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [DateInput]
 }
 
@@ -6970,14 +7409,10 @@ type DateTimeAggregate {
 }
 
 input DateTimeInput {
-  """
-  Value to compare with.
-  """
+  """Value to compare with."""
   value: DateTime
 
-  """
-  Date literal functions.
-  """
+  """Date literal functions."""
   literal: DateLiteral
 }
 
@@ -7012,14 +7447,10 @@ input DateTimeOperators {
   """
   gte: DateTimeInput
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [DateTimeInput]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [DateTimeInput]
 }
 
@@ -7080,14 +7511,10 @@ input DoubleOperators {
   """
   gte: Double
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Double]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Double]
 }
 
@@ -7145,14 +7572,10 @@ input EmailOperators {
   """
   gte: Email
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Email]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Email]
 }
 
@@ -7176,16 +7599,12 @@ type Group {
   Type: PicklistValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Group_Owner
   DoesSendEmailToMembers: BooleanValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   CreatedDate: DateTimeValue
   DoesIncludeBosses: BooleanValue
@@ -7194,14 +7613,10 @@ type Group {
   RelatedId: IDValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -7232,6 +7647,10 @@ type GroupAggregate {
   RelatedId: IDAggregate
   LastModifiedById: IDAggregate
   ApiName: String!
+}
+
+type GroupAggregateConnection {
+  totalCount: Int!
 }
 
 input GroupByClause {
@@ -7391,14 +7810,10 @@ input IdOperators {
   """
   gte: ID
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [ID]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [ID]
 }
 
@@ -7421,9 +7836,7 @@ type IntValue {
   format: String
 }
 
-"""
-Long type
-"""
+"""Long type"""
 scalar Long
 
 type LongAggregate {
@@ -7470,14 +7883,10 @@ input LongOperators {
   """
   gte: Long
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Long]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Long]
 }
 
@@ -7519,14 +7928,10 @@ input LongTextAreaOperators {
   """
   gte: LongTextArea
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [LongTextArea]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [LongTextArea]
 }
 
@@ -7554,14 +7959,10 @@ input MultiPicklistOperators {
   """
   ne: MultiPicklist
 
-  """
-  Includes (contains) the specified string.
-  """
+  """Includes (contains) the specified string."""
   includes: [MultiPicklist]
 
-  """
-  Excludes (does not contain) the specified string.
-  """
+  """Excludes (does not contain) the specified string."""
   excludes: [MultiPicklist]
 }
 
@@ -7576,19 +7977,13 @@ input NoFunctionAggregateOrderByClause {
   nulls: NullsOrder
 }
 
-"""
-Enum representing possible null ordering options.
-"""
+"""Enum representing possible null ordering options."""
 enum NullOrder {
-  """
-  The enum value represents null last order.
-  """
-  LAST
-
-  """
-  The enum value represents null first order.
-  """
+  """The enum value represents null first order."""
   FIRST
+
+  """The enum value represents null last order."""
+  LAST
 }
 
 enum NullsOrder {
@@ -7618,22 +8013,16 @@ type ObjectInfo {
 type Order {
   CompanyAuthorizedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CompanyAuthorizedBy: User
   ActivatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   ActivatedBy: User
   LastModifiedDate: DateTimeValue
   AccountId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Account: Account
   Description: LongTextAreaValue
   BillingCity: StringValue
@@ -7642,15 +8031,11 @@ type Order {
   StatusCode: PicklistValue
   OwnerId: IDValue
 
-  """
-  polymorphicParentRelationship
-  """
+  """polymorphicParentRelationship"""
   Owner: Order_Owner
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   BillingGeocodeAccuracy: PicklistValue
   ShippingCountry: StringValue
@@ -7661,9 +8046,7 @@ type Order {
   IsDeleted: BooleanValue
   OriginalOrderId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   OriginalOrder: Order
   LastViewedDate: DateTimeValue
   ShippingGeocodeAccuracy: PicklistValue
@@ -7677,9 +8060,7 @@ type Order {
   BillingCountry: StringValue
   CustomerAuthorizedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CustomerAuthorizedBy: Contact
   BillingStreet: TextAreaValue
   ShippingPostalCode: StringValue
@@ -7688,27 +8069,15 @@ type Order {
   ShippingState: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   BillingState: StringValue
   EffectiveDate: DateValue
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
   Id: ID!
   ApiName: String!
@@ -7722,9 +8091,55 @@ type Order {
   ): IDValue
 }
 
-"""
-The Order-by input object
-"""
+type OrderAggregate {
+  CompanyAuthorizedById: IDAggregate
+  ActivatedById: IDAggregate
+  LastModifiedDate: DateAggregate
+  AccountId: IDAggregate
+  Description: TextAreaAggregate
+  BillingCity: StringAggregate
+  OrderNumber: StringAggregate
+  LastReferencedDate: DateAggregate
+  StatusCode: PicklistAggregate
+  OwnerId: IDAggregate
+  CreatedById: IDAggregate
+  CloneSourceId: IDAggregate
+  BillingGeocodeAccuracy: PicklistAggregate
+  ShippingCountry: StringAggregate
+  BillingPostalCode: StringAggregate
+  ShippingCity: StringAggregate
+  ActivatedDate: DateAggregate
+  Status: PicklistAggregate
+  IsDeleted: BooleanAggregate
+  OriginalOrderId: IDAggregate
+  LastViewedDate: DateAggregate
+  ShippingGeocodeAccuracy: PicklistAggregate
+  ContractId: IDAggregate
+  TotalAmount: CurrencyAggregate
+  EndDate: DateAggregate
+  IsReductionOrder: BooleanAggregate
+  ShippingStreet: TextAreaAggregate
+  SystemModstamp: DateAggregate
+  Type: PicklistAggregate
+  BillingCountry: StringAggregate
+  CustomerAuthorizedById: IDAggregate
+  BillingStreet: TextAreaAggregate
+  ShippingPostalCode: StringAggregate
+  CreatedDate: DateAggregate
+  Pricebook2Id: IDAggregate
+  ShippingState: StringAggregate
+  Id: IDAggregate
+  LastModifiedById: IDAggregate
+  BillingState: StringAggregate
+  EffectiveDate: DateAggregate
+  ApiName: String!
+}
+
+type OrderAggregateConnection {
+  totalCount: Int!
+}
+
+"""The Order-by input object"""
 input OrderByClause {
   """
   The field that contains result order configuration. Default order is ascending.
@@ -7948,14 +8363,10 @@ input PercentOperators {
   """
   gte: Percent
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Percent]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Percent]
 }
 
@@ -8013,14 +8424,10 @@ input PhoneNumberOperators {
   """
   gte: PhoneNumber
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [PhoneNumber]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [PhoneNumber]
 }
 
@@ -8053,14 +8460,10 @@ input PicklistOperators {
   """
   ne: Picklist
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Picklist]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Picklist]
 
   """
@@ -8096,240 +8499,100 @@ type PicklistValue {
 }
 
 type RecordQuery {
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_BroadcastMessage__c(
-    upperBound: Int
-    orderBy: Acc_BroadcastMessage__c_OrderBy
-    where: Acc_BroadcastMessage__c_Filter
-    after: String
-    first: Int
-  ): Acc_BroadcastMessage__cConnection
+  """Issues a query for the specified record type."""
+  Acc_BroadcastMessage__c(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_Claims__c(
-    upperBound: Int
-    orderBy: Acc_Claims__c_OrderBy
-    where: Acc_Claims__c_Filter
-    after: String
-    first: Int
-  ): Acc_Claims__cConnection
+  """Issues a query for the specified record type."""
+  Acc_Claims__c(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_CostCategory__c(
-    upperBound: Int
-    orderBy: Acc_CostCategory__c_OrderBy
-    where: Acc_CostCategory__c_Filter
-    after: String
-    first: Int
-  ): Acc_CostCategory__cConnection
+  """Issues a query for the specified record type."""
+  Acc_CostCategory__c(upperBound: Int, orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, first: Int): Acc_CostCategory__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_IFSSpendProfile__c(
-    upperBound: Int
-    orderBy: Acc_IFSSpendProfile__c_OrderBy
-    where: Acc_IFSSpendProfile__c_Filter
-    after: String
-    first: Int
-  ): Acc_IFSSpendProfile__cConnection
+  """Issues a query for the specified record type."""
+  Acc_IFSSpendProfile__c(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_MonitoringAnswer__c(
-    upperBound: Int
-    orderBy: Acc_MonitoringAnswer__c_OrderBy
-    where: Acc_MonitoringAnswer__c_Filter
-    after: String
-    first: Int
-  ): Acc_MonitoringAnswer__cConnection
+  """Issues a query for the specified record type."""
+  Acc_MonitoringAnswer__c(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_MonitoringQuestion__c(
-    upperBound: Int
-    orderBy: Acc_MonitoringQuestion__c_OrderBy
-    where: Acc_MonitoringQuestion__c_Filter
-    after: String
-    first: Int
-  ): Acc_MonitoringQuestion__cConnection
+  """Issues a query for the specified record type."""
+  Acc_MonitoringQuestion__c(upperBound: Int, orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, first: Int): Acc_MonitoringQuestion__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_Prepayment__c(
-    upperBound: Int
-    orderBy: Acc_Prepayment__c_OrderBy
-    where: Acc_Prepayment__c_Filter
-    after: String
-    first: Int
-  ): Acc_Prepayment__cConnection
+  """Issues a query for the specified record type."""
+  Acc_Prepayment__c(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_Profile__c(
-    upperBound: Int
-    orderBy: Acc_Profile__c_OrderBy
-    where: Acc_Profile__c_Filter
-    after: String
-    first: Int
-  ): Acc_Profile__cConnection
+  """Issues a query for the specified record type."""
+  Acc_Profile__c(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_ProjectChangeRequest__c(
-    upperBound: Int
-    orderBy: Acc_ProjectChangeRequest__c_OrderBy
-    where: Acc_ProjectChangeRequest__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectChangeRequest__cConnection
+  """Issues a query for the specified record type."""
+  Acc_ProjectChangeRequest__c(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_ProjectContactLink__c(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """Issues a query for the specified record type."""
+  Acc_ProjectContactLink__c(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_ProjectParticipant__c(
-    upperBound: Int
-    orderBy: Acc_ProjectParticipant__c_OrderBy
-    where: Acc_ProjectParticipant__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectParticipant__cConnection
+  """Issues a query for the specified record type."""
+  Acc_ProjectParticipant__c(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_Project__c(
-    upperBound: Int
-    orderBy: Acc_Project__c_OrderBy
-    where: Acc_Project__c_Filter
-    after: String
-    first: Int
-  ): Acc_Project__cConnection
+  """Issues a query for the specified record type."""
+  Acc_Project__c(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_StatusChange__c(
-    upperBound: Int
-    orderBy: Acc_StatusChange__c_OrderBy
-    where: Acc_StatusChange__c_Filter
-    after: String
-    first: Int
-  ): Acc_StatusChange__cConnection
+  """Issues a query for the specified record type."""
+  Acc_StatusChange__c(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Acc_Virements__c(
-    upperBound: Int
-    orderBy: Acc_Virements__c_OrderBy
-    where: Acc_Virements__c_Filter
-    after: String
-    first: Int
-  ): Acc_Virements__cConnection
+  """Issues a query for the specified record type."""
+  Acc_Virements__c(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Account(
-    upperBound: Int
-    orderBy: Account_OrderBy
-    where: Account_Filter
-    after: String
-    first: Int
-  ): AccountConnection
+  """Issues a query for the specified record type."""
+  Account(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Competition__c(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """Issues a query for the specified record type."""
+  Competition__c(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  Contact(
-    upperBound: Int
-    orderBy: Contact_OrderBy
-    where: Contact_Filter
-    after: String
-    first: Int
-  ): ContactConnection
+  """Issues a query for the specified record type."""
+  Contact(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  ContentDocument(
-    upperBound: Int
-    orderBy: ContentDocument_OrderBy
-    where: ContentDocument_Filter
-    after: String
-    first: Int
-  ): ContentDocumentConnection
+  """Issues a query for the specified record type."""
+  ContentDocument(upperBound: Int, orderBy: ContentDocument_OrderBy, where: ContentDocument_Filter, after: String, first: Int): ContentDocumentConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  ContentDocumentLink(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """Issues a query for the specified record type."""
+  ContentDocumentLink(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
-  """
-  Issues a query for the specified record type.
-  """
+  """Issues a query for the specified record type."""
   Group(upperBound: Int, orderBy: Group_OrderBy, where: Group_Filter, after: String, first: Int): GroupConnection
 
-  """
-  Issues a query for the specified record type.
-  """
+  """Issues a query for the specified record type."""
   Order(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
-  """
-  Issues a query for the specified record type.
-  """
-  RecordType(
-    upperBound: Int
-    orderBy: RecordType_OrderBy
-    where: RecordType_Filter
-    after: String
-    first: Int
-  ): RecordTypeConnection
+  """Issues a query for the specified record type."""
+  RecordType(upperBound: Int, orderBy: RecordType_OrderBy, where: RecordType_Filter, after: String, first: Int): RecordTypeConnection
 
-  """
-  Issues a query for the specified record type.
-  """
+  """Issues a query for the specified record type."""
   User(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+}
+
+type RecordQueryAggregate {
+  Acc_BroadcastMessage__c(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, groupBy: Acc_BroadcastMessage__c_GroupBy, first: Int): Acc_BroadcastMessage__cAggregateConnection
+  Acc_Claims__c(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, groupBy: Acc_Claims__c_GroupBy, first: Int): Acc_Claims__cAggregateConnection
+  Acc_CostCategory__c(upperBound: Int, orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, groupBy: Acc_CostCategory__c_GroupBy, first: Int): Acc_CostCategory__cAggregateConnection
+  Acc_IFSSpendProfile__c(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, groupBy: Acc_IFSSpendProfile__c_GroupBy, first: Int): Acc_IFSSpendProfile__cAggregateConnection
+  Acc_MonitoringAnswer__c(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, groupBy: Acc_MonitoringAnswer__c_GroupBy, first: Int): Acc_MonitoringAnswer__cAggregateConnection
+  Acc_MonitoringQuestion__c(upperBound: Int, orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, groupBy: Acc_MonitoringQuestion__c_GroupBy, first: Int): Acc_MonitoringQuestion__cAggregateConnection
+  Acc_Prepayment__c(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, groupBy: Acc_Prepayment__c_GroupBy, first: Int): Acc_Prepayment__cAggregateConnection
+  Acc_Profile__c(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, groupBy: Acc_Profile__c_GroupBy, first: Int): Acc_Profile__cAggregateConnection
+  Acc_ProjectChangeRequest__c(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, groupBy: Acc_ProjectChangeRequest__c_GroupBy, first: Int): Acc_ProjectChangeRequest__cAggregateConnection
+  Acc_ProjectContactLink__c(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, groupBy: Acc_ProjectContactLink__c_GroupBy, first: Int): Acc_ProjectContactLink__cAggregateConnection
+  Acc_ProjectParticipant__c(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, groupBy: Acc_ProjectParticipant__c_GroupBy, first: Int): Acc_ProjectParticipant__cAggregateConnection
+  Acc_Project__c(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, groupBy: Acc_Project__c_GroupBy, first: Int): Acc_Project__cAggregateConnection
+  Acc_StatusChange__c(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, groupBy: Acc_StatusChange__c_GroupBy, first: Int): Acc_StatusChange__cAggregateConnection
+  Acc_Virements__c(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, groupBy: Acc_Virements__c_GroupBy, first: Int): Acc_Virements__cAggregateConnection
+  Account(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, groupBy: Account_GroupBy, first: Int): AccountAggregateConnection
+  Competition__c(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, groupBy: Competition__c_GroupBy, first: Int): Competition__cAggregateConnection
+  Contact(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, groupBy: Contact_GroupBy, first: Int): ContactAggregateConnection
+  ContentDocument(upperBound: Int, orderBy: ContentDocument_OrderBy, where: ContentDocument_Filter, after: String, groupBy: ContentDocument_GroupBy, first: Int): ContentDocumentAggregateConnection
+  ContentDocumentLink(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, groupBy: ContentDocumentLink_GroupBy, first: Int): ContentDocumentLinkAggregateConnection
+  Group(upperBound: Int, orderBy: Group_OrderBy, where: Group_Filter, after: String, groupBy: Group_GroupBy, first: Int): GroupAggregateConnection
+  Order(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, groupBy: Order_GroupBy, first: Int): OrderAggregateConnection
+  RecordType(upperBound: Int, orderBy: RecordType_OrderBy, where: RecordType_Filter, after: String, groupBy: RecordType_GroupBy, first: Int): RecordTypeAggregateConnection
+  User(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, groupBy: User_GroupBy, first: Int): UserAggregateConnection
 }
 
 type RecordType {
@@ -8343,17 +8606,13 @@ type RecordType {
   IsPersonType: BooleanValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   CreatedDate: DateTimeValue
   DeveloperName: StringValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   NamespacePrefix: StringValue
   Id: ID!
@@ -8366,6 +8625,28 @@ type RecordType {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type RecordTypeAggregate {
+  LastModifiedDate: DateAggregate
+  Description: StringAggregate
+  BusinessProcessId: IDAggregate
+  IsActive: BooleanAggregate
+  Name: StringAggregate
+  SystemModstamp: DateAggregate
+  SobjectType: PicklistAggregate
+  IsPersonType: BooleanAggregate
+  CreatedById: IDAggregate
+  CreatedDate: DateAggregate
+  Id: IDAggregate
+  DeveloperName: StringAggregate
+  LastModifiedById: IDAggregate
+  NamespacePrefix: StringAggregate
+  ApiName: String!
+}
+
+type RecordTypeAggregateConnection {
+  totalCount: Int!
 }
 
 type RecordTypeConnection {
@@ -8440,19 +8721,13 @@ input RecordType_OrderBy {
   NamespacePrefix: AggregateOrderByStringClause
 }
 
-"""
-Enum representing possible results ordering options.
-"""
+"""Enum representing possible results ordering options."""
 enum ResultOrder {
-  """
-  The enum value represents descending order.
-  """
-  DESC
-
-  """
-  The enum value represents ascending order.
-  """
+  """The enum value represents ascending order."""
   ASC
+
+  """The enum value represents descending order."""
+  DESC
 }
 
 enum ResultsOrder {
@@ -8514,14 +8789,10 @@ input StringOperators {
   """
   gte: String
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [String]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [String]
 }
 
@@ -8579,14 +8850,10 @@ input TextAreaOperators {
   """
   gte: TextArea
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [TextArea]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [TextArea]
 }
 
@@ -8634,14 +8901,10 @@ input TimeOperators {
   """
   gte: Time
 
-  """
-  If the value equals any one of the specified values.
-  """
+  """If the value equals any one of the specified values."""
   in: [Time]
 
-  """
-  If the value does not equal any of the specified values.
-  """
+  """If the value does not equal any of the specified values."""
   nin: [Time]
 }
 
@@ -8651,11 +8914,12 @@ type TimeValue {
   format: String
 }
 
-"""
-The User Interface API family.
-"""
+"""The User Interface API family."""
 type UIAPI {
   query: RecordQuery!
+
+  """Performs queries that group and aggregate over records"""
+  aggregate: RecordQueryAggregate!
   objectInfos(
     apiNames: [String]
 
@@ -8739,9 +9003,7 @@ type User {
   Email: EmailValue
   AccountId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Account: Account
   UserPreferencesDisableLaterCommentEmail: BooleanValue
   LastLoginDate: DateTimeValue
@@ -8753,9 +9015,7 @@ type User {
   UserPreferencesGlobalNavBarWTShown: BooleanValue
   CreatedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   CreatedBy: User
   UserPreferencesDisableMessageEmail: BooleanValue
   UserPreferencesShowEmailToExternalUsers: BooleanValue
@@ -8771,9 +9031,7 @@ type User {
   OutOfOfficeMessage: StringValue
   ManagerId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Manager: User
   UserPreferencesShowProfilePicToGuestUsers: BooleanValue
   SenderName: StringValue
@@ -8885,9 +9143,7 @@ type User {
   UserPreferencesHideBrowseProductRedirectConfirmation: BooleanValue
   ContactId: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   Contact: Contact
   StayInTouchSignature: LongTextAreaValue
   UserPreferencesActivityRemindersPopup: BooleanValue
@@ -8907,97 +9163,35 @@ type User {
   UserPreferencesHideBiggerPhotoCallout: BooleanValue
   LastModifiedById: IDValue
 
-  """
-  parentRelationship
-  """
+  """parentRelationship"""
   LastModifiedBy: User
   UserPreferencesHideMailAppWelcomeMat: BooleanValue
 
-  """
-  childRelationship
-  """
-  Acc_BroadcastMessages__r(
-    upperBound: Int
-    orderBy: Acc_BroadcastMessage__c_OrderBy
-    where: Acc_BroadcastMessage__c_Filter
-    after: String
-    first: Int
-  ): Acc_BroadcastMessage__cConnection
+  """childRelationship"""
+  Acc_BroadcastMessages__r(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
 
-  """
-  childRelationship
-  """
-  Project_Contact_Links__r(
-    upperBound: Int
-    orderBy: Acc_ProjectContactLink__c_OrderBy
-    where: Acc_ProjectContactLink__c_Filter
-    after: String
-    first: Int
-  ): Acc_ProjectContactLink__cConnection
+  """childRelationship"""
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions2__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions1__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competitions__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  Competition_Manager__r(
-    upperBound: Int
-    orderBy: Competition__c_OrderBy
-    where: Competition__c_Filter
-    after: String
-    first: Int
-  ): Competition__cConnection
+  """childRelationship"""
+  Competition_Manager__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
-  """
-  childRelationship
-  """
-  ContentDocumentLinks(
-    upperBound: Int
-    orderBy: ContentDocumentLink_OrderBy
-    where: ContentDocumentLink_Filter
-    after: String
-    first: Int
-  ): ContentDocumentLinkConnection
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
-  """
-  childRelationship
-  """
+  """childRelationship"""
   ManagedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
@@ -9009,6 +9203,215 @@ type User {
     """
     fallback: Boolean
   ): IDValue
+}
+
+type UserAggregate {
+  LastModifiedDate: DateAggregate
+  BadgeText: StringAggregate
+  IsProfilePhotoActive: BooleanAggregate
+  UserPreferencesShowMobilePhoneToExternalUsers: BooleanAggregate
+  UserPreferencesFirstTimeInLightning: BooleanAggregate
+  Department: StringAggregate
+  UserPreferencesReadReceiptLastToggleValue: BooleanAggregate
+  UserPreferencesHasSentWarningEmail: BooleanAggregate
+  Street: TextAreaAggregate
+  FederationIdentifier: StringAggregate
+  UserPreferencesHasSentWarningEmail238: BooleanAggregate
+  UserPermissionsCallCenterAutoLogin: BooleanAggregate
+  UserPreferencesDisableSharePostEmail: BooleanAggregate
+  UserPermissionsInteractionUser: BooleanAggregate
+  UserPreferencesShowStateToExternalUsers: BooleanAggregate
+  UserPreferencesContentEmailAsAndWhen: BooleanAggregate
+  UserPreferencesHideCSNDesktopTask: BooleanAggregate
+  UserPreferencesSalesEssentialsSetupAssistantCompleted: BooleanAggregate
+  UserPreferencesHideS1BrowserUI: BooleanAggregate
+  UserPreferencesHideEndUserOnboardingAssistantModal: BooleanAggregate
+  UserType: PicklistAggregate
+  UserPreferencesShowStateToGuestUsers: BooleanAggregate
+  ReceivesAdminInfoEmails: BooleanAggregate
+  UserPreferencesShowMobilePhoneToGuestUsers: BooleanAggregate
+  TimeZoneSidKey: PicklistAggregate
+  UserRoleId: IDAggregate
+  UserPreferencesHideCSNGetChatterMobileTask: BooleanAggregate
+  UserPreferencesNewLightningReportRunPageEnabled: BooleanAggregate
+  ForecastEnabled: BooleanAggregate
+  UserPreferencesLtngPromoReserved10UserPref: BooleanAggregate
+  natterbox__Natterbox_Username__c: EmailAggregate
+  UserPreferencesExcludeMailAppAttachments: BooleanAggregate
+  UserPreferencesTaskRemindersCheckboxDefault: BooleanAggregate
+  LastPasswordChangeDate: DateAggregate
+  LocaleSidKey: PicklistAggregate
+  SmallPhotoUrl: UrlAggregate
+  UserPreferencesSRHOverrideActivities: BooleanAggregate
+  UserPreferencesShowStreetAddressToExternalUsers: BooleanAggregate
+  FirstName: StringAggregate
+  UserPreferencesShowEmailToGuestUsers: BooleanAggregate
+  SmallBannerPhotoUrl: UrlAggregate
+  UserPreferencesFavoritesShowTopFavorites: BooleanAggregate
+  ReceivesInfoEmails: BooleanAggregate
+  UserPreferencesGlobalNavGridMenuWTShown: BooleanAggregate
+  SystemModstamp: DateAggregate
+  UserPreferencesShowWorkPhoneToGuestUsers: BooleanAggregate
+  dsfs__DSProSFUsername__c: StringAggregate
+  UserPreferencesReceiveNoNotificationsAsApprover: BooleanAggregate
+  IsPortalEnabled: BooleanAggregate
+  UserPreferencesHideSecondChatterOnboardingSplash: BooleanAggregate
+  ProfilePhotoId: IDAggregate
+  pi__Can_View_Not_Assigned_Prospects__c: BooleanAggregate
+  Email: EmailAggregate
+  AccountId: IDAggregate
+  UserPreferencesDisableLaterCommentEmail: BooleanAggregate
+  LastLoginDate: DateAggregate
+  UserPreferencesDisableFollowersEmail: BooleanAggregate
+  UserPreferencesTodayGettingStarted: BooleanAggregate
+  IsExtIndicatorVisible: BooleanAggregate
+  DigestFrequency: PicklistAggregate
+  Name: StringAggregate
+  UserPreferencesGlobalNavBarWTShown: BooleanAggregate
+  CreatedById: IDAggregate
+  UserPreferencesDisableMessageEmail: BooleanAggregate
+  UserPreferencesShowEmailToExternalUsers: BooleanAggregate
+  UserPreferencesShowManagerToExternalUsers: BooleanAggregate
+  UserPreferencesDisCommentAfterLikeEmail: BooleanAggregate
+  LastViewedDate: DateAggregate
+  UserPermissionsSupportUser: BooleanAggregate
+  EmailPreferencesStayInTouchReminder: BooleanAggregate
+  State: StringAggregate
+  UserPreferencesSuppressEventSFXReminders: BooleanAggregate
+  CreatedDate: DateAggregate
+  LastName: StringAggregate
+  OutOfOfficeMessage: StringAggregate
+  ManagerId: IDAggregate
+  UserPreferencesShowProfilePicToGuestUsers: BooleanAggregate
+  SenderName: StringAggregate
+  UserPermissionsSFContentUser: BooleanAggregate
+  UserPreferencesHideLightningMigrationModal: BooleanAggregate
+  UserPreferencesPreviewLightning: BooleanAggregate
+  UserPreferencesDisMentionsCommentEmail: BooleanAggregate
+  LastReferencedDate: DateAggregate
+  UserPreferencesApexPagesDeveloperMode: BooleanAggregate
+  UserPreferencesDisableAllFeedsEmail: BooleanAggregate
+  StayInTouchNote: StringAggregate
+  UserPreferencesReminderSoundOff: BooleanAggregate
+  UserPreferencesLightningExperiencePreferred: BooleanAggregate
+  UserPreferencesDisableMentionsPostEmail: BooleanAggregate
+  UserPreferencesShowCountryToGuestUsers: BooleanAggregate
+  UserPreferencesLtngPromoReserved19UserPref: BooleanAggregate
+  UserPreferencesShowCityToGuestUsers: BooleanAggregate
+  UserPreferencesHasSentWarningEmail240: BooleanAggregate
+  OfflineTrialExpirationDate: DateAggregate
+  UserPreferencesPathAssistantCollapsed: BooleanAggregate
+  UserPermissionsChatterAnswersUser: BooleanAggregate
+  EmployeeNumber: StringAggregate
+  Title: StringAggregate
+  UserPreferencesLtngPromoReserved16UserPref: BooleanAggregate
+  natterbox__Natterbox_Password__c: StringAggregate
+  UserPreferencesShowCountryToExternalUsers: BooleanAggregate
+  UserPreferencesFavoritesWTShown: BooleanAggregate
+  EmailEncodingKey: PicklistAggregate
+  UserPreferencesDisProfPostCommentEmail: BooleanAggregate
+  BannerPhotoId: IDAggregate
+  UserPreferencesHideTrialsWelcomeMat: BooleanAggregate
+  UserPreferencesSuppressTaskSFXReminders: BooleanAggregate
+  Extension: PhoneNumberAggregate
+  UserPreferencesShowFaxToExternalUsers: BooleanAggregate
+  UserPreferencesHideMailAppEAPUserGuidance: BooleanAggregate
+  Username: StringAggregate
+  UserPreferencesDisableBookmarkEmail: BooleanAggregate
+  UserPreferencesSortFeedByComment: BooleanAggregate
+  Fax: PhoneNumberAggregate
+  ProfileId: IDAggregate
+  UserPreferencesReceiveNotificationsAsDelegatedApprover: BooleanAggregate
+  pi__Pardot_Api_Version__c: StringAggregate
+  LanguageLocaleKey: PicklistAggregate
+  UserPreferencesRecordHomeSectionCollapseWTShown: BooleanAggregate
+  UserPreferencesHideEventCalendar: BooleanAggregate
+  UserPreferencesHasCelebrationBadge: BooleanAggregate
+  EmailPreferencesAutoBccStayInTouch: BooleanAggregate
+  CommunityNickname: StringAggregate
+  UserPreferencesDisableEndorsementEmail: BooleanAggregate
+  UserPreferencesPreviewCustomTheme: BooleanAggregate
+  StayInTouchSubject: StringAggregate
+  UserPreferencesDisableChangeCommentEmail: BooleanAggregate
+  NumberOfFailedLogins: IntAggregate
+  GeocodeAccuracy: PicklistAggregate
+  Country: StringAggregate
+  UserPreferencesShowPostalCodeToGuestUsers: BooleanAggregate
+  Id: IDAggregate
+  UserPreferencesHideSfxWelcomeMat: BooleanAggregate
+  UserPreferencesCacheDiagnostics: BooleanAggregate
+  UserPreferencesLiveAgentMiawSetupDeflection: BooleanAggregate
+  UserPreferencesShowForecastingChangeSignals: BooleanAggregate
+  UserPreferencesShowWorkPhoneToExternalUsers: BooleanAggregate
+  UserPreferencesHideTrialsCelebration: BooleanAggregate
+  UserPreferencesShowForecastingRoundedAmounts: BooleanAggregate
+  Division: StringAggregate
+  UserPreferencesShowCityToExternalUsers: BooleanAggregate
+  UserPreferencesHideChatterOnboardingSplash: BooleanAggregate
+  UserPreferencesReverseOpenActivitiesView: BooleanAggregate
+  UserPermissionsKnowledgeUser: BooleanAggregate
+  FullPhotoUrl: UrlAggregate
+  MediumBannerPhotoUrl: UrlAggregate
+  DefaultGroupNotificationFrequency: PicklistAggregate
+  UserPreferencesDedupeStorageMigrationComplete: BooleanAggregate
+  UserPreferencesDisableProfilePostEmail: BooleanAggregate
+  UserPreferencesShowTitleToExternalUsers: BooleanAggregate
+  UserPermissionsLiveAgentUser: BooleanAggregate
+  UserPreferencesShowPostalCodeToExternalUsers: BooleanAggregate
+  UserPreferencesNativeEmailClient: BooleanAggregate
+  MobilePhone: PhoneNumberAggregate
+  BannerPhotoUrl: UrlAggregate
+  CompanyName: StringAggregate
+  UserPreferencesShowFaxToGuestUsers: BooleanAggregate
+  SenderEmail: EmailAggregate
+  UserPreferencesHideLearningPathModal: BooleanAggregate
+  IndividualId: IDAggregate
+  pi__Pardot_User_Role__c: StringAggregate
+  MediumPhotoUrl: UrlAggregate
+  DelegatedApproverId: IDAggregate
+  UserPreferencesDisableFileShareNotificationsForApi: BooleanAggregate
+  UserPreferencesShowStreetAddressToGuestUsers: BooleanAggregate
+  City: StringAggregate
+  UserPreferencesHideTaskListViewsPopover: BooleanAggregate
+  UserPreferencesUserDebugModePref: BooleanAggregate
+  UserPreferencesSetupAssistantUserPref1: BooleanAggregate
+  UserPermissionsMarketingUser: BooleanAggregate
+  UserPreferencesContentNoEmail: BooleanAggregate
+  OfflinePdaTrialExpirationDate: DateAggregate
+  UserPreferencesShowTitleToGuestUsers: BooleanAggregate
+  EmailPreferencesAutoBcc: BooleanAggregate
+  UserPreferencesCreateLEXAppsWTShown: BooleanAggregate
+  UserPermissionsAvantgoUser: BooleanAggregate
+  UserPreferencesShowManagerToGuestUsers: BooleanAggregate
+  UserPreferencesHideOnlineSalesAppWelcomeMat: BooleanAggregate
+  UserPermissionsOfflineUser: BooleanAggregate
+  IsActive: BooleanAggregate
+  PostalCode: StringAggregate
+  UserPreferencesHideBrowseProductRedirectConfirmation: BooleanAggregate
+  ContactId: IDAggregate
+  StayInTouchSignature: TextAreaAggregate
+  UserPreferencesActivityRemindersPopup: BooleanAggregate
+  UserPreferencesEventRemindersCheckboxDefault: BooleanAggregate
+  Phone: PhoneNumberAggregate
+  UserPreferencesDisableLikeEmail: BooleanAggregate
+  UserPreferencesHeavyPagePromptEnabled: BooleanAggregate
+  UserPreferencesEnableAutoSubForFeeds: BooleanAggregate
+  CallCenterId: IDAggregate
+  UserPreferencesTrailheadBadgeCreated: BooleanAggregate
+  UserPreferencesRecordHomeReservedWTShown: BooleanAggregate
+  AboutMe: TextAreaAggregate
+  UserPreferencesBrowserNotificationEnabled: BooleanAggregate
+  PortalRole: PicklistAggregate
+  Alias: StringAggregate
+  Signature: TextAreaAggregate
+  UserPreferencesHideBiggerPhotoCallout: BooleanAggregate
+  LastModifiedById: IDAggregate
+  UserPreferencesHideMailAppWelcomeMat: BooleanAggregate
+  ApiName: String!
+}
+
+type UserAggregateConnection {
+  totalCount: Int!
 }
 
 type UserConnection {

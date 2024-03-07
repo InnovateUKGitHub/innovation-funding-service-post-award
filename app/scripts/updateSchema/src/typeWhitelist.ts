@@ -65,6 +65,8 @@ const objectSuffixes = [
   "Node",
   "Edge",
   "Connection",
+  "Aggregate",
+  "AggregateConnection",
   "_Filter",
   "_OrderBy",
   "_GroupBy",
@@ -73,6 +75,7 @@ const objectSuffixes = [
 ];
 const additionalObjects = [
   "Query",
+  "Aggregate",
   "UIAPI",
   "GroupByDateFunction",
   "GroupByFunction",
@@ -87,6 +90,8 @@ const additionalObjects = [
   "ResultsOrder",
   "NullsOrder",
 ];
+
+// ACC_Email_Alerts__mdtAggregateConnection
 
 const getTypeWhitelist = () => {
   const whitelist: string[] = [];

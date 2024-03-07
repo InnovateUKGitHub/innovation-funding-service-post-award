@@ -9,6 +9,7 @@ import path from "path";
 import { getTypeWhitelist } from "./typeWhitelist";
 
 const sfSchemaFilePath = path.join("src", "gql", "schema", "sfSchema.gql");
+const unfilteredSfSchemaFilePath = path.join("src", "gql", "schema", "unfilteredSfSchema.temp.gql");
 
 const getEnv = (key: string): string => {
   const value = process.env[key];
@@ -18,6 +19,7 @@ const getEnv = (key: string): string => {
 
 const main = async () => {
   const whitelist = getTypeWhitelist();
+  const allKeys: string[] = [];
 
   const executor: AsyncExecutor = async request => {
     const data = await api.executeGraphQL<AnyObject>(request);
@@ -39,7 +41,12 @@ const main = async () => {
   const salesforceSchema = await introspectSchema(executor);
   const transformedSchema = {
     schema: salesforceSchema,
-    transforms: [new FilterTypes(type => whitelist.includes(type.name))],
+    transforms: [
+      new FilterTypes(type => {
+        allKeys.push(type.name);
+        return whitelist.includes(type.name);
+      }),
+    ],
   };
 
   const schema = stitchSchemas({
@@ -48,6 +55,7 @@ const main = async () => {
   });
 
   fs.writeFileSync(sfSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
+  fs.writeFileSync(unfilteredSfSchemaFilePath, printSchema(salesforceSchema), { encoding: "utf-8" });
 };
 
 main();
