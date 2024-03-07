@@ -140,7 +140,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
         <input type="hidden" value={partnerId} {...register("partnerId")} />
 
         <Section title={partner.name}>
-          <Table>
+          <Table data-qa="partnerVirements">
             <THead>
               <TR>
                 <TH>{getContent(x => x.financialVirementLabels.costCategoryName)}</TH>
