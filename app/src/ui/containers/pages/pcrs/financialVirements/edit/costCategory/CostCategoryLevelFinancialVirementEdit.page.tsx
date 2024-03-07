@@ -37,6 +37,7 @@ import {
   costCategoryLevelFinancialVirementEditErrorMap,
   getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
+import { capitalizeFirstWord } from "@shared/string-helpers";
 
 interface PartnerLevelFinancialVirementParams {
   projectId: ProjectId;
@@ -163,7 +164,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
 
                 return (
                   <TR key={x.costCategoryId} hasError={!!getFieldState(`virements.${i}`).error}>
-                    <TD>{x.costCategoryName}</TD>
+                    <TD>{capitalizeFirstWord(x.costCategoryName ?? "")}</TD>
                     <TD numeric>
                       <Currency value={x.originalEligibleCosts} />
                     </TD>
