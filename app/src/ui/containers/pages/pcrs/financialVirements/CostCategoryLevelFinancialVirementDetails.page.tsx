@@ -124,7 +124,7 @@ const EditPage = ({
           </TBody>
           <TFoot>
             <TR>
-              <TD bold>{getContent(x => x.financialVirementLabels.projectTotals)}</TD>
+              <TD bold>{getContent(x => x.financialVirementLabels.partnerTotals)}</TD>
               <TD bold numeric>
                 <Currency value={partnerVirement.originalEligibleCosts} />
               </TD>
