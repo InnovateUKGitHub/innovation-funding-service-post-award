@@ -38,6 +38,7 @@ import {
   getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
 import { capitalizeFirstWord } from "@shared/string-helpers";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 
 interface PartnerLevelFinancialVirementParams {
   projectId: ProjectId;
@@ -238,42 +239,43 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
               </TR>
             </TFoot>
           </Table>
-          <Section title={getContent(x => x.pages.financialVirementEdit.summaryTitle)}>
-            <Table data-qa="summary-table">
-              <THead>
-                <TR>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts)}</TH>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectNewEligibleCosts)}</TH>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceCosts)}</TH>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant)}</TH>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectNewRemainingGrant)}</TH>
-                  <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceGrant)}</TH>
-                </TR>
-              </THead>
-              <TBody>
-                <TR>
-                  <TD numeric>
-                    <Currency value={virementData.originalEligibleCosts} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={virementData.newEligibleCosts} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={virementData.costDifference} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={virementData.originalRemainingGrant} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={virementData.newRemainingGrant} />
-                  </TD>
-                  <TD numeric>
-                    <Currency value={virementData.grantDifference} />
-                  </TD>
-                </TR>
-              </TBody>
-            </Table>
-          </Section>
+        </Section>
+        <Section>
+          <H3 as="h2">{getContent(x => x.pages.financialVirementEdit.summaryTitle)}</H3>
+          <Table data-qa="summary-table">
+            <THead>
+              <TR>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectNewEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceCosts)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectNewRemainingGrant)}</TH>
+                <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceGrant)}</TH>
+              </TR>
+            </THead>
+            <TBody>
+              <TR>
+                <TD numeric>
+                  <Currency value={virementData.originalEligibleCosts} />
+                </TD>
+                <TD numeric>
+                  <Currency value={virementData.newEligibleCosts} />
+                </TD>
+                <TD numeric>
+                  <Currency value={virementData.costDifference} />
+                </TD>
+                <TD numeric>
+                  <Currency value={virementData.originalRemainingGrant} />
+                </TD>
+                <TD numeric>
+                  <Currency value={virementData.newRemainingGrant} />
+                </TD>
+                <TD numeric>
+                  <Currency value={virementData.grantDifference} />
+                </TD>
+              </TR>
+            </TBody>
+          </Table>
         </Section>
 
         <Fieldset>
