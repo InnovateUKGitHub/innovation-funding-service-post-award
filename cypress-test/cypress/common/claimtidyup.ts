@@ -13,7 +13,7 @@ export const moClaimTidyUp = (partnerName: string, claimType: string) => {
         cy.get("td").contains(partnerName).siblings().clickOn("a", "Edit");
         cy.clickOn("Continue to claims documents");
         cy.heading("Claim documents");
-        uploadIAR;
+        uploadIAR();
         cy.clickOn("Continue to update forecast");
         cy.clickOn("Continue to summary");
         cy.clickOn("Submit claim");
