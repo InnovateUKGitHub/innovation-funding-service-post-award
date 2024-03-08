@@ -331,6 +331,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   /**
    * These next sections do not appear in acc-dev so these steps have been removed for now.
+   * Validation must be tested on each page.
    */
   //it("Should access the Other costs 2 section", () => navigateToCostCat("Other costs 2", 8));
   //
