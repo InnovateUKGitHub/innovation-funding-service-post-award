@@ -1896,7 +1896,7 @@ export const validateCostUpdateInputs = () => {
   cy.getByAriaLabel("Labour").clear().type("10000000000000000");
   cy.wait(500);
   cy.clickOn("Save and return to reallocate project costs");
-  cy.validationLink("Eligible costs must be less than £10,000,000,000,000,000.");
+  cy.validationLink("Eligible costs must be less than £999,999,999,999.00.");
 };
 
 export const reallocateDecimals = () => {
