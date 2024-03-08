@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { IAppError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
@@ -7,7 +8,6 @@ import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import isNil from "lodash/isNil";
-import React, { useEffect } from "react";
 import { ValidationSummary } from "../../atoms/validation/ValidationSummary/ValidationSummary";
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
 
@@ -48,9 +48,14 @@ export function Page({
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
   const validationErrorSize = isNil(validationErrors) ? 0 : Object.keys(validationErrors)?.length;
 
+  // hasValidated tracks how many times the validation has occurred,
+  // so that scroll to top is only called after the first time validation
+  // messages appear
+  const hasValidated = useRef(false);
   useEffect(() => {
-    if (validationErrorSize > 0) {
+    if (!hasValidated.current && validationErrorSize > 0) {
       scrollToTheTopSmoothly();
+      hasValidated.current = true;
     }
   }, [apiError, validationErrorSize]);
 
