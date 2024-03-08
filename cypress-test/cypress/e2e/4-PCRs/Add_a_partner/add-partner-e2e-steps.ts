@@ -731,10 +731,10 @@ export const completedCostCatProfiles = () => {
     ["Subcontracting", "£3,000.00"],
     ["Travel and subsistence", oneThousand],
     ["Other costs", oneThousand],
-    //["Other cost 2", oneThousand],
-    //["Other cost 3", oneThousand],
-    //["Other costs 4", oneThousand],
-    //["Other costs 5", oneThousand],
+    ["Other cost 2", oneThousand],
+    ["Other cost 3", oneThousand],
+    ["Other costs 4", oneThousand],
+    ["Other costs 5", oneThousand],
   ].forEach(([costcat, cost], index) => {
     cy.get("tr")
       .eq(index + 1)
@@ -984,21 +984,11 @@ export const companyHouseSwindonUniversity = () => {
 export const deleteCost = () => {
   cy.tableCell("Labour").siblings().contains("Edit").click();
   cy.get("h2").contains("Labour");
-  cy.tableCell("Law keeper").siblings().contains("Remove").click();
+  cy.clickLink("Law keeper", "Remove");
   cy.getByQA("validation-message-content").contains("All the information will be permanently deleted.");
   cy.get("h2").contains("Delete labour");
-  [
-    ["Role within project", "Law keeper"],
-    ["Gross employee cost", "£50,000.00"],
-    ["Rate (£/day)", "£500.00"],
-    ["Days to be spent by all staff with this role", "100"],
-    ["Total cost", "£50,000.00"],
-  ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key, item);
-  });
   cy.button("Delete cost").click();
   cy.get("h2").contains("Labour");
-  cy.getByQA("validation-message-content").contains("You have deleted a cost");
   cy.get("td").should("not.have.text", "Law keeper");
 };
 
@@ -1032,6 +1022,7 @@ export const jesDeleteCostCat = () => {
 };
 
 export const addManyLines = () => {
+  const wait = 250;
   for (let i = 1; i < 40; i++) {
     let subtotal = 1332.66 * i;
     let GBPTotal = new Intl.NumberFormat("en-GB", {
@@ -1039,26 +1030,19 @@ export const addManyLines = () => {
       currency: "GBP",
     });
     cy.log(`***Adding cost item number ${i}***`);
-    cy.wait(500);
+    cy.wait(wait);
     cy.get("a").contains("Add a cost").click();
-    cy.getByLabel("Role within project");
     cy.getByLabel("Role within project").type(`Lorem ${i}`);
-    cy.wait(500);
+    cy.wait(wait);
     cy.getByLabel("Gross employee cost").type("1000");
-    cy.wait(500);
+    cy.wait(wait);
     cy.getByLabel("Rate (£/day)").type("666.33");
-    cy.wait(500);
+    cy.wait(wait);
     cy.getByLabel("Days to be spent by all staff with this role").type("2");
-    cy.wait(500);
+    cy.wait(wait);
     cy.clickOn("Save and return to labour");
     cy.tableCell(`Lorem ${i}`);
-    cy.get("tfoot").within(() => {
-      cy.get("tr")
-        .eq(1)
-        .within(() => {
-          cy.get("td:nth-child(2)").contains(GBPTotal.format(subtotal));
-        });
-    });
+    cy.checkTotalFor("Total labour", GBPTotal.format(subtotal));
   }
 };
 

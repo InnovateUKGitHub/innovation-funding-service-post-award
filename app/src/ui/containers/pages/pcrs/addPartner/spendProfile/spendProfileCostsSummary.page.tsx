@@ -184,7 +184,7 @@ const SummaryTable = ({ costs, costCategory, routes, itemId, pcrId, projectId, c
           <TH numeric>
             <Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />
           </TH>
-          <TH numeric>
+          <TH numeric id="category-total-cost">
             <Currency value={total} />
           </TH>
           <TH>
