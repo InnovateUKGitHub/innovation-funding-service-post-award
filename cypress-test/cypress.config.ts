@@ -45,7 +45,7 @@ const isTrue = (s: string = "") => s.toLowerCase() === "true";
 
 const baseUrl = process.env.TEST_URL || accDevUrl;
 
-console.info("*** Targetting url:", baseUrl);
+console.info("*** Targeting url:", baseUrl);
 
 export default defineConfig({
   reporter: "mochawesome",

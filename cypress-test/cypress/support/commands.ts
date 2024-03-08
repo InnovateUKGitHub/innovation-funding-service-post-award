@@ -270,6 +270,48 @@ function selectProject(label: string) {
   cy.getByQA("pending-and-open-projects").contains(label).click();
 }
 
+const checkTotalFor = (label: string, total: string | number) => {
+  cy.get("tr").contains(label).siblings().contains(total);
+};
+
+const clickLink = (label: string, link: "Edit" | "Review" | "Delete" | "Remove") => {
+  cy.get("tr").contains(label).siblings().contains("a", link).click();
+};
+
+const validateCurrency = (label: string, errorLabel: string, validValue: string, submitLabel?: string) => {
+  const errorToken = errorLabel.toLowerCase();
+  const firstPlaceErrorToken = errorToken
+    .split("")
+    .map((x, i) => (i === 0 ? x.toUpperCase() : x))
+    .join("");
+  cy.getByLabel(label).clear();
+  if (submitLabel) cy.clickOn(submitLabel);
+  cy.validationLink(`Enter ${errorToken}.`);
+  cy.getByLabel(label).clear().type("banana");
+  cy.validationLink(`${firstPlaceErrorToken} must be a number.`);
+  cy.getByLabel(label).clear().type("35.45678");
+  cy.validationLink(`${firstPlaceErrorToken} must be 2 decimal places or fewer.`);
+  cy.getByLabel(label).clear().type(validValue);
+};
+
+const validatePositiveWholeNumber = (label: string, errorLabel: string, validValue: string, submitLabel?: string) => {
+  const errorToken = errorLabel.toLowerCase();
+  const firstPlaceErrorToken = errorToken
+    .split("")
+    .map((x, i) => (i === 0 ? x.toUpperCase() : x))
+    .join("");
+  cy.getByLabel(label).clear();
+  if (submitLabel) cy.clickOn(submitLabel);
+  cy.validationLink(`Enter ${errorToken}.`);
+  cy.getByLabel(label).clear().type("banana");
+  cy.validationLink(`${firstPlaceErrorToken} must be a number.`);
+  cy.getByLabel(label).clear().type("35.45678");
+  cy.validationLink(`${firstPlaceErrorToken} must be a whole number, like 15.`);
+  cy.getByLabel(label).clear().type("-56");
+  cy.validationLink(`${firstPlaceErrorToken} must be 0 or more.`);
+  cy.getByLabel(label).clear().type(validValue);
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -307,3 +349,7 @@ Cypress.Commands.add("getHintFromLabel", getHintFromLabel);
 Cypress.Commands.add("enter", enter);
 Cypress.Commands.add("checkEntry", checkEntry);
 Cypress.Commands.add("selectProject", selectProject);
+Cypress.Commands.add("checkTotalFor", checkTotalFor);
+Cypress.Commands.add("clickLink", clickLink);
+Cypress.Commands.add("validateCurrency", validateCurrency);
+Cypress.Commands.add("validatePositiveWholeNumber", validatePositiveWholeNumber);

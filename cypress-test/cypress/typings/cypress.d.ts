@@ -234,6 +234,46 @@ declare global {
        * selects the open project matching the label and clicks on it
        */
       selectProject(label: string): void;
+
+      /**
+       * checks the total value in a footer row matching a label.
+       * Footer element should be bolded (th)
+       */
+      checkTotalFor(label: string, total: string | number): void;
+
+      /**
+       * will find the  link on a table row matching the label and click it.
+       * second argument is the link type
+       */
+      clickLink(label: string, link: "Edit" | "Review" | "Delete" | "Remove"): void;
+
+      /**
+       * runs validations for regular currency input
+       *
+       * label is the actual label of the input field.
+       * errorLabel is the identifier used for the actual error message
+       * validValue is the value that should show no error and allow to pass
+       * submitLabel if passed in will cause this button to be pressed after the first validation to
+       * trigger validation messages
+       *
+       * @example
+       * cy.validateCurrency("Rate (£/day)", "Rate per day", "50000");
+       */
+      validateCurrency(label: string, errorLabel: string, validValue: string, submitLabel?: string): void;
+
+      /**
+       * runs validations for positive whole number inputs
+       *
+       * label is the actual label of the input field.
+       * errorLabel is the identifier used for the actual error message
+       * validValue is the value that should show no error and allow to pass
+       * submitLabel if passed in will cause this button to be pressed after the first validation to
+       * trigger validation messages
+       *
+       * @example
+       * cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "50");
+       */
+      validatePositiveWholeNumber(label: string, errorLabel: string, validValue: string, submitLabel?: string): void;
     }
   }
 }

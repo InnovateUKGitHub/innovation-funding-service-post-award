@@ -751,39 +751,47 @@ export const navigateToPartnerCosts = () => {
 
 export const pcrNewCostCatLineItem = () => {
   cy.submitButton("Save and return to labour").click();
-  cy.validationLink("Description of role is required");
-  cy.validationLink("Gross cost of role is required");
-  cy.validationLink("Rate per day is required");
-  cy.validationLink("Days spent on project is required");
+  cy.validationLink("Enter description of role.");
+  cy.validationLink("Enter gross cost of role.");
+  cy.validationLink("Enter rate per day.");
+  cy.validationLink("Enter days spent on project.");
   cy.get("h2").contains("Labour");
-  cy.wait(2000);
+  cy.wait(200);
   cy.getByLabel("Role within project").type("Law keeper");
-  cy.wait(800);
+  cy.wait(200);
   cy.getByLabel("Gross employee cost").type("50000");
-  cy.wait(800);
+  cy.wait(200);
   cy.getByLabel("Rate (£/day)").type("500");
-  cy.wait(800);
-  cy.get("#ratePerDay-hint").contains(
+  cy.wait(200);
+  cy.getHintFromLabel("Rate (£/day)").contains(
     "This should be calculated from the number of working days for this role per year.",
   );
-  cy.wait(500);
+  cy.wait(200);
   cy.getByLabel("Days to be spent by all staff with this role").clear().type("100");
-  cy.wait(500);
+  cy.wait(200);
   cy.get("div").contains("Total cost will update when saved.");
   cy.get("span").contains("£50,000.00");
   cy.submitButton("Save and return to labour").click();
 };
 
-export const addPartnerWholeDaysOnly = () => {
-  cy.wait(500);
+export const validateAddPartnerDaysOnProject = () => {
+  cy.wait(250);
   cy.get("a").contains("Add a cost").click();
-  ["0.5", "-100", "Stuff", "100.32", "$^&&*&)", "100.232321"].forEach(entry => {
-    cy.get(`input[id="daysSpentOnProject"]`).clear().type(entry);
-    cy.wait(800);
+  ["0.5", "Stuff", "100.32", "$^&&*&)", "100.232321"].forEach(entry => {
+    cy.getByLabel("Days to be spent by all staff with this role").clear().type(entry);
+    cy.wait(250);
     cy.submitButton("Save and return to labour").click();
-    cy.validationLink("Days spent on project must be a whole number, like 15");
-    cy.reload();
+    cy.validationLink("Days spent on project must be a whole number, like 15.");
   });
+
+  ["-100"].forEach(entry => {
+    cy.getByLabel("Days to be spent by all staff with this role").clear().type(entry);
+    cy.wait(250);
+    cy.submitButton("Save and return to labour").click();
+    cy.validationLink("Days spent on project must be 0 or more.");
+  });
+
+  cy.getByLabel("Days to be spent by all staff with this role").clear();
 };
 
 export const addPartnerSummaryTable = () => {

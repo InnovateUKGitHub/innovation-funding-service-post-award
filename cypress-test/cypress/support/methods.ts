@@ -32,3 +32,13 @@ export const testEach =
       it(replaceTitleTemplateWithArg(title, element), () => fn(element));
     });
   };
+
+export function abortTestsAfterFail() {
+  // very long tests should be aborted after first fail to save time
+  if (this.currentTest.state === "failed") {
+    cy.log("stopping this test file because of failure in one test");
+    console.warn("Stopping tests file because of failure in one test");
+    // casting as any because Cypress typings do not expose "internal" api
+    (Cypress as any).runner.stop();
+  }
+}
