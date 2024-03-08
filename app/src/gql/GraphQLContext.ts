@@ -6,6 +6,7 @@ import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { getUserContactDataLoader } from "./dataloader/userContactDataLoader";
 import { getUsernameDataLoader } from "./dataloader/usernameDataLoader";
 import { Api } from "./sf/Api";
+import { getProjectClaimStatusCountsDataLoader } from "./dataloader/projectClaimStatusCountsDataLoader";
 
 const logger = new Logger("GraphQLContext");
 
@@ -20,6 +21,7 @@ export type GraphQLContext = PartialGraphQLContext & {
   userContactDataLoader: ReturnType<typeof getUserContactDataLoader>;
   usernameDataLoader: ReturnType<typeof getUsernameDataLoader>;
   feedAttachmentDataLoader: ReturnType<typeof getFeedAttachmentDataLoader>;
+  projectClaimStatusCountsDataLoader: ReturnType<typeof getProjectClaimStatusCountsDataLoader>;
 };
 
 export const createContextFromEmail = async ({ email }: { email: string }): Promise<GraphQLContext | EmptyObject> => {
@@ -40,6 +42,7 @@ export const createContextFromEmail = async ({ email }: { email: string }): Prom
       userContactDataLoader: getUserContactDataLoader(partialCtx),
       usernameDataLoader: getUsernameDataLoader(partialCtx),
       feedAttachmentDataLoader: getFeedAttachmentDataLoader(partialCtx),
+      projectClaimStatusCountsDataLoader: getProjectClaimStatusCountsDataLoader(partialCtx),
     };
 
     return ctx;

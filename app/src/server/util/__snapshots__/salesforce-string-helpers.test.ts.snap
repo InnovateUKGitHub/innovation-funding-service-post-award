@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SalesForce string helpers apex (JavaScript Apex Variable Injector) properly injects id in query: id in query 1`] = `"SELECT Id FROM Acc_Claims__c WHERE Id = 'a0E-something'"`;
+
+exports[`SalesForce string helpers apex (JavaScript Apex Variable Injector) properly injects int array in query: int array in query 1`] = `"SELECT Id FROM Acc_Claims__c WHERE Id in (1, 2, 3)"`;
+
+exports[`SalesForce string helpers apex (JavaScript Apex Variable Injector) properly injects string array in query: string array in query 1`] = `"SELECT Id FROM Acc_Claims__c WHERE Id in ('a', 'b', 'c')"`;
+
+exports[`SalesForce string helpers apex (JavaScript Apex Variable Injector) properly injects whitespace in query: whitespace in query 1`] = `
+"SELECT 
+Id 
+         FROM 
+
+Acc_Claims__c WHERE Id = 
+
+'a0E-something'"
+`;

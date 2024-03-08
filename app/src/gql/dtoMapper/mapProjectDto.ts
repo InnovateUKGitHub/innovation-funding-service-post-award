@@ -1,3 +1,4 @@
+import { ClaimStatusKey } from "@framework/constants/claimStatus";
 import { ClaimFrequency } from "@framework/constants/enums";
 import { ProjectSource, TypeOfAid } from "@framework/constants/project";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
@@ -38,6 +39,7 @@ type ProjectNode = GQL.PartialNode<{
     isSalesforceSystemUser?: boolean | null;
     partnerRoles?: ReadonlyArray<SfRoles & { partnerId: string }>;
   };
+  claimCounts: Partial<Record<ClaimStatusKey, number | undefined>>;
   isActive: boolean;
   Acc_ClaimFrequency__c: GQL.Value<string>;
   Acc_ClaimsForReview__c: GQL.Value<number>;
@@ -139,10 +141,35 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   claimsOverdue(node) {
     return node?.Acc_ClaimsOverdue__c?.value ?? 0;
   },
+  numberOfOpenClaims(node) {
+    if (node?.claimCounts) {
+      /**
+       * See Project_Dashboard_Rollup#createRollupValues on Salesforce repo
+       * https://bitbucket.org/ukri-ddat/salesforce/src/develop/metadata/src/classes/Project_Dashboard_Rollup.cls#lines-111
+       */
+      return (
+        (node.claimCounts.DRAFT ?? 0) +
+        (node.claimCounts.SUBMITTED ?? 0) +
+        (node.claimCounts.MO_QUERIED ?? 0) +
+        (node.claimCounts.AWAITING_IAR ?? 0) +
+        (node.claimCounts.AWAITING_IUK_APPROVAL ?? 0) +
+        (node.claimCounts.INNOVATE_QUERIED ?? 0)
+      );
+    }
+    return node?.Acc_NumberOfOpenClaims__c?.value ?? 0;
+  },
   claimsToReview(node) {
+    if (node?.claimCounts) {
+      return node?.claimCounts?.SUBMITTED ?? 0;
+    }
     return node?.Acc_ClaimsForReview__c?.value ?? 0;
   },
   claimsWithParticipant(node) {
+    if (node?.claimCounts) {
+      return (
+        (node.claimCounts?.DRAFT ?? 0) + (node.claimCounts?.MO_QUERIED ?? 0) + (node.claimCounts?.INNOVATE_QUERIED ?? 0)
+      );
+    }
     return node?.Acc_ClaimsUnderQuery__c?.value ?? 0;
   },
   competitionName(node) {
@@ -195,9 +222,6 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   monitoringLevel(node) {
     return getMonitoringLevel(node?.Acc_MonitoringLevel__c?.value);
-  },
-  numberOfOpenClaims(node) {
-    return node?.Acc_NumberOfOpenClaims__c?.value ?? 0;
   },
   numberOfPeriods(node) {
     return Number(node?.Acc_NumberofPeriods__c?.value ?? 0);

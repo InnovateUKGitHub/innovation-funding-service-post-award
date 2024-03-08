@@ -25,9 +25,25 @@ type Ext_Project_Roles implements Ext_Roles {
   partnerRoles: [Ext_Partner_Roles!]!
 }
 
+type Ext_Project_Counts {
+  UNKNOWN: Int!
+  NEW: Int!
+  DRAFT: Int!
+  SUBMITTED: Int!
+  MO_QUERIED: Int!
+  AWAITING_IUK_APPROVAL: Int!
+  INNOVATE_QUERIED: Int!
+  APPROVED: Int!
+  PAID: Int!
+  AWAITING_IAR: Int!
+  PAYMENT_REQUESTED: Int!
+  NOT_USED: Int!
+}
+
 extend type Acc_Project__c {
   roles: Ext_Project_Roles!
   isActive: Boolean!
+  claimCounts: Ext_Project_Counts!
 }
 
 extend type Contact {

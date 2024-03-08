@@ -27,6 +27,9 @@ export const projectOverviewQuery = graphql`
                     partnerId
                   }
                 }
+                claimCounts {
+                  SUBMITTED
+                }
                 Acc_ProjectNumber__c {
                   value
                 }

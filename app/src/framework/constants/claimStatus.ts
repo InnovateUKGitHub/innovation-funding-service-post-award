@@ -1,3 +1,17 @@
+export type ClaimStatusKey =
+  | "UNKNOWN"
+  | "NEW"
+  | "DRAFT"
+  | "SUBMITTED"
+  | "MO_QUERIED"
+  | "AWAITING_IUK_APPROVAL"
+  | "INNOVATE_QUERIED"
+  | "APPROVED"
+  | "PAID"
+  | "AWAITING_IAR"
+  | "PAYMENT_REQUESTED"
+  | "NOT_USED";
+
 export enum ClaimStatus {
   UNKNOWN = "",
   NEW = "New",

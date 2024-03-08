@@ -15,6 +15,7 @@ import { usernameResolver } from "./resolvers/Acc_ProjectContactLink__c/username
 import { isFeedAttachmentResolver } from "./resolvers/ContentDocument/isFeedAttachment";
 import { isOwnerResolver } from "./resolvers/ContentDocument/isOwner";
 import { configuration } from "@server/features/common/config";
+import { claimCountsResolver } from "./resolvers/Acc_Project__c/claimCounts";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
@@ -48,6 +49,7 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
         Acc_Project__c: {
           roles: rolesResolver,
           isActive: projectIsActiveResolver,
+          claimCounts: claimCountsResolver,
         },
         Contact: {
           username: usernameResolver,

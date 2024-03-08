@@ -50,6 +50,14 @@ export const projectDashboardQuery = graphql`
                     partnerId
                   }
                 }
+                claimCounts {
+                  DRAFT
+                  SUBMITTED
+                  MO_QUERIED
+                  AWAITING_IUK_APPROVAL
+                  INNOVATE_QUERIED
+                  AWAITING_IAR
+                }
                 Acc_CompetitionType__c {
                   value
                 }
@@ -77,9 +85,6 @@ export const projectDashboardQuery = graphql`
                 Acc_EndDate__c {
                   value
                 }
-                Acc_ClaimsForReview__c {
-                  value
-                }
                 Acc_PCRsForReview__c {
                   value
                 }
@@ -87,12 +92,6 @@ export const projectDashboardQuery = graphql`
                   value
                 }
                 Acc_ClaimsOverdue__c {
-                  value
-                }
-                Acc_ClaimsUnderQuery__c {
-                  value
-                }
-                Acc_NumberOfOpenClaims__c {
                   value
                 }
                 Acc_ProjectStatus__c {

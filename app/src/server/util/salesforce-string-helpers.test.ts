@@ -1,4 +1,4 @@
-import { apex, parseSfLongTextArea, sss } from "@server/util/salesforce-string-helpers";
+import { soql, parseSfLongTextArea, sss } from "@server/util/salesforce-string-helpers";
 
 describe("SalesForce string helpers", () => {
   describe("parseSfLongTextArea()", () => {
@@ -48,13 +48,23 @@ describe("SalesForce string helpers", () => {
 
     test.each`
       name                            | input                                       | expected
-      ${"no injection"}               | ${apex`The quick brown fox`}                | ${"The quick brown fox"}
-      ${"string"}                     | ${apex`${testString}`}                      | ${"'stub-string'"}
-      ${"number"}                     | ${apex`${testNumber}`}                      | ${"321"}
-      ${"testDate"}                   | ${apex`${testDate}`}                        | ${"date.valueOf('2022-04-11 23:00:00')"}
-      ${"string around other string"} | ${apex`String testString = ${testString};`} | ${"String testString = 'stub-string';"}
+      ${"no injection"}               | ${soql`The quick brown fox`}                | ${"The quick brown fox"}
+      ${"string"}                     | ${soql`${testString}`}                      | ${"'stub-string'"}
+      ${"number"}                     | ${soql`${testNumber}`}                      | ${"321"}
+      ${"testDate"}                   | ${soql`${testDate}`}                        | ${"date.valueOf('2022-04-11 23:00:00')"}
+      ${"string around other string"} | ${soql`String testString = ${testString};`} | ${"String testString = 'stub-string';"}
     `("properly injects with $name input(s)", ({ input, expected }) => {
       expect(input.trim()).toBe(expected);
+    });
+
+    test.each`
+      name                       | input
+      ${"string array in query"} | ${soql`SELECT Id FROM Acc_Claims__c WHERE Id in ${["a", "b", "c"]}`}
+      ${"int array in query"}    | ${soql`SELECT Id FROM Acc_Claims__c WHERE Id in ${[1, 2, 3]}`}
+      ${"id in query"}           | ${soql`SELECT Id FROM Acc_Claims__c WHERE Id = ${"a0E-something"}`}
+      ${"whitespace in query"}   | ${soql`\n\nSELECT \nId \n         FROM \n\nAcc_Claims__c WHERE Id = \n\n${"a0E-something"}`}
+    `("properly injects $name", ({ input, name }) => {
+      expect(input).toMatchSnapshot(name);
     });
   });
 });

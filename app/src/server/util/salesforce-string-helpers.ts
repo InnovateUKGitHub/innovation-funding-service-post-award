@@ -9,37 +9,79 @@ export function parseSfLongTextArea(unParsedString: string): string[] {
     .filter(x => x);
 }
 
+type SalesforceSoqlSanitisable = string | number | Date;
+type SalesforceSoqlSanitiserInput =
+  | SalesforceSoqlSanitisable
+  | ReadonlyArray<SalesforceSoqlSanitisable>
+  | Array<SalesforceSoqlSanitisable>;
+
 /**
- * Salesforce SQL Sanitiser
+ * Salesforce SOQL Sanitiser
  * Sanitises the input value to ensure SQL injection attacks are _less likely_ to occur
  *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  * @see https://developer.salesforce.com/docs/atlas.en-us.secure_coding_guide.meta/secure_coding_guide/secure_coding_sql_injection.htm
- * @param unsanitisedValue The unsanitised value to inject into the SQL query
+ * @param x The unsanitised value to inject into the SQL query
  * @example queryString += ` AND Description = '${sss(filter.description)}'`;
+ * @deprecated Use the `soql` string template to sanitise strings
  */
-export function sss(unsanitisedValue: string | number): string {
-  if (typeof unsanitisedValue === "number") {
-    if (unsanitisedValue >= Number.MAX_SAFE_INTEGER) throw new Error("Number greater than MAX_SAFE_INTEGER");
-    if (unsanitisedValue <= Number.MIN_SAFE_INTEGER) throw new Error("Number less than than MIN_SAFE_INTEGER");
+export function sss(x: SalesforceSoqlSanitiserInput): string {
+  if (typeof x === "number") {
+    if (x >= Number.MAX_SAFE_INTEGER) throw new Error("Number greater than MAX_SAFE_INTEGER");
+    if (x <= Number.MIN_SAFE_INTEGER) throw new Error("Number less than than MIN_SAFE_INTEGER");
 
-    return String(unsanitisedValue);
+    return String(x);
   }
 
-  // TODO: When in NodeJS 16, use the replaceAll API from ES2021
-  // https://github.com/tc39/proposal-string-replaceall
-  return unsanitisedValue.replace(/'/g, "\\'");
+  if (x instanceof Date) {
+    // Convert dates to the Salesforce accepted format.
+    // https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_date.htm#apex_System_Date_valueOf
+    return `date.valueOf('${x.toISOString().replace("T", " ").split(".")[0]}')`;
+  }
+
+  if (Array.isArray(x)) {
+    // sss every single item and join them with commas
+    return x.map(sss).join(", ");
+  }
+
+  if (typeof x === "string") {
+    return x.replaceAll("'", "\\'");
+  }
+
+  throw new Error(`Invalid input type to apex sanitiser: ${x}`);
 }
 
 /**
- * Apex Injector
- * Injects strings, numbers and dates (only!) into an Apex string.
- *
- * Do not wrap variables in quotes `"` or `'`.
+ * SOQL template string generator
+ * Injects strings, numbers and dates (only!) into a SOQL string.
  */
-export function apex(strings: TemplateStringsArray, ...values: (string | number | Date)[]) {
+export function soql(strings: TemplateStringsArray, ...values: SalesforceSoqlSanitiserInput[]) {
   // Start off with just the output string.
   let outputString = "";
+
+  const sanitise = (x: SalesforceSoqlSanitiserInput): string => {
+    if (typeof x === "number") {
+      if (x >= Number.MAX_SAFE_INTEGER) throw new Error("Number greater than MAX_SAFE_INTEGER");
+      if (x <= Number.MIN_SAFE_INTEGER) throw new Error("Number less than than MIN_SAFE_INTEGER");
+      return String(x);
+    }
+
+    if (x instanceof Date) {
+      // Convert dates to the Salesforce accepted format.
+      // https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_date.htm#apex_System_Date_valueOf
+      return `date.valueOf('${x.toISOString().replace("T", " ").split(".")[0]}')`;
+    }
+
+    if (Array.isArray(x)) {
+      // sss every single item and join them with commas
+      return "(" + x.map(sanitise).join(", ") + ")";
+    }
+
+    if (typeof x === "string") {
+      return "'" + x.replaceAll("'", "\\'") + "'";
+    }
+
+    throw new Error(`Invalid input type to apex sanitiser: ${x}`);
+  };
 
   // For each item in the strings/values array...
   for (let i = 0; i < Math.max(strings.length, values.length); i++) {
@@ -47,24 +89,8 @@ export function apex(strings: TemplateStringsArray, ...values: (string | number 
     const currentValue = values[i];
 
     outputString += currentString;
-
-    if (typeof currentValue === "string") {
-      // If our input variable is a string, escape any quotes within it.
-      outputString += `'${currentValue.replace(/'/g, "'")}'`;
-    } else if (typeof currentValue === "number") {
-      // If our input variable is a number, check if it's too big/small to be potentially accepted by Salesforce
-      if (currentValue >= Number.MAX_SAFE_INTEGER) throw new Error("Number greater than MAX_SAFE_INTEGER");
-      if (currentValue <= Number.MIN_SAFE_INTEGER) throw new Error("Number less than than MIN_SAFE_INTEGER");
-      outputString += `${currentValue}`;
-    } else if (currentValue instanceof Date) {
-      // Convert dates to the Salesforce accepted format.
-      // https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_methods_system_date.htm#apex_System_Date_valueOf
-      outputString += `date.valueOf('${currentValue.toISOString().replace("T", " ").split(".")[0]}')`;
-    }
+    if (typeof currentValue !== "undefined") outputString += sanitise(currentValue);
   }
 
-  // Add a few newlines, just in case the input template string does not.
-  outputString += "\n\n";
-
-  return outputString;
+  return outputString.trim();
 }
