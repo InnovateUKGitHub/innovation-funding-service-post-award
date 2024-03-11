@@ -2,13 +2,19 @@ import { SffBuilder } from "../factory/SalesforceFactory";
 
 interface SffFieldBase {
   sfdcName: Readonly<string>;
-  // sffName: Readonly<string>;
   sfdcType: Readonly<SffFieldType>;
+}
+
+interface SffRelationshipBase {
+  sfdcName: Readonly<string>;
+  sfdcType: Readonly<SffRelationshipType>;
+  sffBuilder: SffBuilder<any>;
 }
 
 interface SffFactoryObjectDefinition {
   sfdcName: Readonly<string>;
   fields: ReadonlyArray<SffField>;
+  relationships: ReadonlyArray<SffRelationship>;
 }
 
 enum SffFieldType {
@@ -18,8 +24,11 @@ enum SffFieldType {
   MULTI_PICKLIST = "MULTI_PICKLIST",
   CHECKBOX = "CHECKBOX",
   DATETIME = "DATETIME",
-  SINGLE_RELATIONSHIP = "SINGLE_RELATIONSHIP",
-  MULTI_RELATIONSHIP = "MULTI_RELATIONSHIP",
+}
+
+enum SffRelationshipType {
+  SINGLE = "SINGLE",
+  MULTI = "MULTI",
 }
 
 interface SffFieldTypeToJsMap {
@@ -29,15 +38,9 @@ interface SffFieldTypeToJsMap {
   [SffFieldType.MULTI_PICKLIST]: string[];
   [SffFieldType.CHECKBOX]: boolean;
   [SffFieldType.DATETIME]: Date;
-  [SffFieldType.SINGLE_RELATIONSHIP]: SffBuilder<any>;
-  [SffFieldType.MULTI_RELATIONSHIP]: SffBuilder<any>[];
 }
 
-type SffTypeToJsType<T extends SffFieldType> = SffFieldTypeToJsMap[T];
-
-type DataEntryMap<T extends SffFactoryObjectDefinition> = {
-  [key in T["fields"][number]["sfdcName"]]?: SffTypeToJsType<(T["fields"][number] & { sfdcName: key })["sfdcType"]>;
-};
+type SffFieldTypeToJsType<T extends SffFieldType> = SffFieldTypeToJsMap[T];
 
 interface SffStringField extends SffFieldBase {
   sfdcType: SffFieldType.STRING;
@@ -54,17 +57,25 @@ interface SffCheckboxField extends SffFieldBase {
 interface SffDateTimeField extends SffFieldBase {
   sfdcType: SffFieldType.DATETIME;
 }
-interface SffSingleRelationshipField extends SffFieldBase {
-  sfdcType: SffFieldType.SINGLE_RELATIONSHIP;
-  sffBuilder: SffBuilder<any>;
+
+type SffField = SffStringField | SffNumberField | SffPicklistField | SffCheckboxField | SffDateTimeField;
+
+interface SffSingleRelationship extends SffRelationshipBase {
+  sfdcType: SffRelationshipType.SINGLE;
 }
 
-type SffField =
-  | SffStringField
-  | SffNumberField
-  | SffPicklistField
-  | SffCheckboxField
-  | SffDateTimeField
-  | SffSingleRelationshipField;
+interface SffMultiRelationship extends SffRelationshipBase {
+  sfdcType: SffRelationshipType.MULTI;
+}
 
-export { SffFactoryObjectDefinition, SffFieldBase, SffField, SffTypeToJsType, SffFieldType, DataEntryMap };
+type SffRelationship = SffSingleRelationship | SffMultiRelationship;
+
+export {
+  SffFactoryObjectDefinition,
+  SffFieldBase,
+  SffRelationship,
+  SffField,
+  SffFieldTypeToJsType,
+  SffFieldType,
+  SffRelationshipType,
+};

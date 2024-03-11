@@ -1,5 +1,5 @@
 import { SffBuilder } from "./factory/SalesforceFactory";
-import { SffFieldType } from "./types/SffFactoryDefinition";
+import { SffFieldType, SffRelationshipType } from "./types/SffFactoryDefinition";
 
 const contactBuilder = new SffBuilder(<const>{
   definition: {
@@ -15,15 +15,16 @@ const projectBuilder = new SffBuilder(<const>{
     fields: [
       { sfdcName: "Acc_ProjectNumber__c", sfdcType: SffFieldType.STRING },
       { sfdcName: "Acc_StartDate__c", sfdcType: SffFieldType.DATETIME },
-      { sfdcName: "Acc_Contact__r", sfdcType: SffFieldType.SINGLE_RELATIONSHIP, sffBuilder: contactBuilder },
     ],
+    relationships: [{ sfdcName: "Acc_Contact__r", sfdcType: SffRelationshipType.MULTI, sffBuilder: contactBuilder }],
   },
 });
 
-// const contactA = contactBuilder.new({ data: { Title: "sda" } });
+const contactA = contactBuilder.new();
 const projectA = projectBuilder
-  .new({ fields: { Acc_StartDate__c: new Date() } })
+  .new()
   .setField("Acc_ProjectNumber__c", "hello")
-  .setField("Acc_StartDate__c", new Date());
+  .setField("Acc_StartDate__c", new Date())
+  .setRelationship("Acc_Contact__r", [contactA]);
 
 const projectB = projectA.copy().setField("Acc_ProjectNumber__c", "world");
