@@ -18,7 +18,7 @@ export interface ProjectChangeRequestPrepareItemSearchParams {
   companiesHouseResult?: SerialisedProjectChangeRequestAddPartnerCompaniesHouseResult;
 }
 
-export type Mode = "prepare" | "review" | "view";
+export type Mode = "prepare" | "review" | "details";
 
 export const PCRItemContainer = (
   props: ProjectChangeRequestPrepareItemParams &
@@ -66,7 +66,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     pcrId: route.params.pcrId as PcrId,
   }),
   container: function PCRViewItemContainer(props) {
-    return <PCRItemContainer {...props} mode="view" />;
+    return <PCRItemContainer {...props} mode="details" />;
   },
   getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }) =>

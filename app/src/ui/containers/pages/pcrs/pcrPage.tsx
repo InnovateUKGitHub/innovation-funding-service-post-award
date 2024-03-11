@@ -33,7 +33,7 @@ export const PcrPage = ({
   const displayGuidance = isPrepareMode && isFirstStep && !!pcrItem?.guidance;
 
   const isReviewing = mode === "review";
-  const displayNavigationArrows = (workflow.isOnSummary() && mode === "review") || mode === "view";
+  const displayNavigationArrows = (workflow.isOnSummary() && mode === "review") || mode === "details";
 
   const content = getPcrItemContent(pcrItem.type);
 
