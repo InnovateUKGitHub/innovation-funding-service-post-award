@@ -669,6 +669,52 @@ describe("UpdateClaimCommand", () => {
 
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
+
+      it("should pass validation when PCF status is Not Received and submitted to Monitoring Officer iff not final phase", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject(x => {
+          x.Impact_Management_Participation__c = "Yes";
+        });
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Not Received";
+          x.Impact_Management_Participation__c = "Yes";
+          x.IM_PhasedCompetitionStage__c = "1st";
+          x.IM_PhasedCompetition__c = true;
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+        const dto = mapClaim(context)(claim, partner.competitionType);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should not pass validation when PCF status is Not Received and submitted to Monitoring Officer iff final phase", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject(x => {
+          x.Impact_Management_Participation__c = "Yes";
+        });
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Not Received";
+          x.Impact_Management_Participation__c = "Yes";
+          x.IM_PhasedCompetitionStage__c = "Last";
+          x.IM_PhasedCompetition__c = true;
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+        const dto = mapClaim(context)(claim, partner.competitionType);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
     });
   });
 });

@@ -13,6 +13,10 @@ import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { mapToReceivedStatus } from "@gql/dtoMapper/mapClaimDto";
+import {
+  mapImpactManagementParticipationToEnum,
+  mapImpactManagementPhasedStageToEnum,
+} from "@framework/mappers/impactManagementParticipation";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(
@@ -58,6 +62,14 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     // TODO: Merge what we need automatically
     this.claimDto.iarStatus = mapToReceivedStatus(existingClaim.Acc_IAR_Status__c);
     this.claimDto.pcfStatus = mapToReceivedStatus(existingClaim.Acc_PCF_Status__c);
+    this.claimDto.isIarRequired = existingClaim.Acc_IARRequired__c;
+    this.claimDto.impactManagementParticipation = mapImpactManagementParticipationToEnum(
+      existingClaim.Impact_Management_Participation__c,
+    );
+    this.claimDto.impactManagementPhasedCompetition = existingClaim.IM_PhasedCompetition__c;
+    this.claimDto.impactManagementPhasedCompetitionStage = mapImpactManagementPhasedStageToEnum(
+      existingClaim.IM_PhasedCompetitionStage__c,
+    );
 
     const result = new ClaimDtoValidator(
       this.claimDto,
