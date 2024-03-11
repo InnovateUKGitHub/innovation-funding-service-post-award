@@ -15,12 +15,12 @@ const projectBuilder = new SffBuilder(<const>{
     fields: [
       { sfdcName: "Acc_ProjectNumber__c", sfdcType: SffFieldType.STRING },
       { sfdcName: "Acc_StartDate__c", sfdcType: SffFieldType.DATETIME },
+      { sfdcName: "Acc_Contact__r", sfdcType: SffFieldType.SINGLE_RELATIONSHIP, sffBuilder: contactBuilder },
     ],
-    relationships: [{ sfdcName: "Acc_Contact__r", sffBuilder: contactBuilder }],
   },
 });
 
-const contactA = contactBuilder.new({ fields: { Title: "sda" } });
+// const contactA = contactBuilder.new({ data: { Title: "sda" } });
 const projectA = projectBuilder
   .new({ fields: { Acc_StartDate__c: new Date() } })
   .setField("Acc_ProjectNumber__c", "hello")
