@@ -111,6 +111,9 @@ export const pcrPrepareQuery = graphql`
                 Acc_MarkedasComplete__c {
                   value
                 }
+                Acc_Comments__c {
+                  value
+                }
                 Acc_Project_Change_Requests__r(first: 2000) {
                   edges {
                     node {
