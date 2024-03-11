@@ -69,7 +69,7 @@ const FinancialVirementsViewTable = ({
                   partnerId: x.partnerId,
                   itemId,
                   pcrId,
-                  mode: mode as "view",
+                  mode,
                 })}
               >
                 {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}

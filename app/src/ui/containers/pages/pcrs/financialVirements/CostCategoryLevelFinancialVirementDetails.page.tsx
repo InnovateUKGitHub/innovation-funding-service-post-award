@@ -17,7 +17,7 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 
-type Mode = "review" | "view";
+type Mode = "review" | "details";
 
 interface PartnerLevelFinancialVirementDetailsParams {
   projectId: ProjectId;

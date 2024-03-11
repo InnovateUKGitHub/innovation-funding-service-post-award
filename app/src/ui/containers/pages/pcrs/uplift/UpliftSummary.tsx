@@ -73,7 +73,7 @@ const UpliftSummary = () => {
         projectId={projectId}
         pcrId={pcrId}
         itemId={itemId}
-        mode="details"
+        mode={mode}
       />
     </PcrPage>
   );
