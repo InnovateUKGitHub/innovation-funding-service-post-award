@@ -7,6 +7,7 @@ export interface ListBaseProps extends ListItemAttr {
   children: React.ReactNode | React.ReactNode[];
   qa?: string;
   className?: string;
+  noBottomMargin?: boolean;
 }
 
 const listOptions: Record<string, ["ol" | "ul", string]> = {
@@ -21,10 +22,16 @@ export interface ListProps extends ListBaseProps {
 /**
  * List component defaulting to unordered list
  */
-export function List({ type, qa, className, ...props }: ListProps) {
+export function List({ type, qa, noBottomMargin, className, ...props }: ListProps) {
   const [Element = "ul", gdsStyle] = type ? listOptions[type] : [];
 
-  return <Element {...props} data-qa={qa} className={cx("govuk-list", gdsStyle, className)} />;
+  return (
+    <Element
+      {...props}
+      data-qa={qa}
+      className={cx("govuk-list", gdsStyle, { "govuk-!-margin-bottom-0": noBottomMargin }, className)}
+    />
+  );
 }
 
 /**
