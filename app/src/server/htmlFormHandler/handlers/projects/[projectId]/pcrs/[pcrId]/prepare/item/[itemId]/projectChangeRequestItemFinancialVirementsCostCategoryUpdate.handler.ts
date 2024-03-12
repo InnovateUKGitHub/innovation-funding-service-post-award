@@ -32,6 +32,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
   }
 
   public readonly acceptFiles = false;
+  private static readonly MAX_NUMBER_COST_CATS = 50;
 
   protected async getZodSchema({
     input,
@@ -72,8 +73,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
   }): Promise<z.input<CostCategoryLevelFinancialVirementEditSchemaType>> {
     const virements: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"] = [];
 
-    // TODO: Set a non-magic number for the max number of cost categories
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate.MAX_NUMBER_COST_CATS; i++) {
       const virementCostId = input[`virements.${i}.virementCostId`];
       const newEligibleCosts = input[`virements.${i}.newEligibleCosts`];
 
