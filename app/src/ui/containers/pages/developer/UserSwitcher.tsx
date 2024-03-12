@@ -1,6 +1,5 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
-import { SalesforceRole } from "@server/repositories/projectContactsRepository";
 import { createTypedForm } from "@ui/components/bjss/form/form";
 import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
@@ -21,6 +20,7 @@ import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQue
 import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import { DeveloperCurrentUsername } from "@ui/components/atomicDesign/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
+import { PlainList } from "@ui/components/atomicDesign/atoms/List/list";
 
 /**
  * Get the link to the current page
@@ -111,7 +111,6 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
             externalUsername,
             internalUsername,
             name: user.Acc_ContactId__r?.Name?.value ?? user.Acc_UserId__r?.Name?.value ?? "Untitled User",
-            role: role as SalesforceRole,
           },
         };
       }
@@ -145,10 +144,17 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
           value={x => x.user.name}
         />
 
-        <ProjectContactTable.String
+        <ProjectContactTable.Custom
           qa="partner-role"
           header={x => x.components.userSwitcher.tableHeaderRole}
-          value={x => x.user.role}
+          value={x => (
+            <PlainList noBottomMargin>
+              {x.isPm && <li>{getContent(x => x.components.userSwitcher.projectManagerContact)}</li>}
+              {x.isFc && <li>{getContent(x => x.components.userSwitcher.financeContact)}</li>}
+              {x.isMo && <li>{getContent(x => x.components.userSwitcher.monitoringOfficerContact)}</li>}
+              {x.isAssociate && <li>{getContent(x => x.components.userSwitcher.associateContact)}</li>}
+            </PlainList>
+          )}
         />
 
         <ProjectContactTable.Email
@@ -175,20 +181,6 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
                   <SelectContactForm.Hidden name="project_id" value={() => projectId} />
                   <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
                   <SelectContactForm.Hidden name="user" value={() => x.user.externalUsername} />
-                  <SelectContactForm.Button name="home" styling="Link" qa="btn-home">
-                    {getContent(x => x.components.userSwitcher.switchAndHome)}
-                  </SelectContactForm.Button>
-                  <SelectContactForm.Button name="stay" styling="Link" qa="btn-stay">
-                    {getContent(x => x.components.userSwitcher.switchAndStay)}
-                  </SelectContactForm.Button>
-                </SelectContactForm.Form>
-              );
-            } else if (x.user.internalUsername) {
-              return (
-                <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
-                  <SelectContactForm.Hidden name="project_id" value={() => projectId} />
-                  <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
-                  <SelectContactForm.Hidden name="user" value={() => x.user.internalUsername} />
                   <SelectContactForm.Button name="home" styling="Link" qa="btn-home">
                     {getContent(x => x.components.userSwitcher.switchAndHome)}
                   </SelectContactForm.Button>
