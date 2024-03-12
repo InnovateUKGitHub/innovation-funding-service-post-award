@@ -9,8 +9,12 @@ export const moClaimTidyUp = (partnerName: string, claimType: string) => {
     .then($tr => {
       if ($tr.text().includes(claimType)) {
         cy.log(`Change claim status of ${claimType} claim`);
-        cy.switchUserTo("iuk.accproject@bjss.com.bjssdev");
-        cy.get("td").contains(partnerName).siblings().clickOn("a", "Edit");
+        cy.clickOn("Back to project");
+        cy.heading("Project overview");
+        cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
+        cy.selectTile("Claims");
+        cy.heading("Claims");
+        cy.get("td").contains("a", "Edit").click();
         cy.clickOn("Continue to claims documents");
         cy.heading("Claim documents");
         uploadIAR();

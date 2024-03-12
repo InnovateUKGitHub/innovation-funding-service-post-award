@@ -164,6 +164,7 @@ describe("Claims > Review as MO", () => {
   });
 
   it("Should access the claims area again", () => {
+    cy.wait(500);
     cy.selectTile("Claims");
     cy.heading("Claims");
   });

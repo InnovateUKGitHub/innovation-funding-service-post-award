@@ -186,6 +186,7 @@ export const populateRelationshipSave = () => {
     "Please describe the relationship between the collaborator and the new subcontractor",
     "Edit",
   ).click();
+  cy.getByLabel("Company name of subcontractor");
 };
 
 export const validateCountry = () => {

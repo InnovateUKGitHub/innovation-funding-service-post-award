@@ -20,6 +20,7 @@ export const loremIpsum50Char = getLorem(50);
 export const loremIpsum21Char = getLorem(21);
 export const loremIpsum41Char = getLorem(41);
 export const loremIpsum51Char = getLorem(51);
+export const loremIpsum100Char = getLorem(100);
 export const loremIpsum159Char = getLorem(159);
 export const loremIpsum255Char = getLorem(255);
 export const loremIpsum256Char = getLorem(256);
