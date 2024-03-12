@@ -1,5 +1,4 @@
 import { render } from "@testing-library/react";
-
 import { TestBed } from "@shared/TestBed";
 
 import {
@@ -46,6 +45,7 @@ const testContactData: ProjectContactDto[] = [
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
+    associateStartDate: null,
   },
   {
     id: "101" as ContactId,
@@ -57,6 +57,7 @@ const testContactData: ProjectContactDto[] = [
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
+    associateStartDate: null,
   },
   {
     id: "102" as ContactId,
@@ -68,6 +69,7 @@ const testContactData: ProjectContactDto[] = [
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
+    associateStartDate: null,
   },
   {
     id: "103" as ContactId,
@@ -79,6 +81,7 @@ const testContactData: ProjectContactDto[] = [
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
+    associateStartDate: null,
   },
 ];
 

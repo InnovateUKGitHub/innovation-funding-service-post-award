@@ -33,6 +33,7 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
       projectId: x.Acc_ProjectId__c as ProjectId,
       startDate: clock.parseOptionalSalesforceDateTime(x.Acc_StartDate__c),
       endDate: clock.parseOptionalSalesforceDateTime(x.Acc_EndDate__c),
+      associateStartDate: clock.parseOptionalSalesforceDateTime(x.Associate_Start_Date__c),
     };
   }
 }

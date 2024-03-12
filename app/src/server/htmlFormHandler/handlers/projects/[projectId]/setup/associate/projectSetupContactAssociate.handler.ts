@@ -37,12 +37,12 @@ class ProjectSetupContactAssociateHandler extends ZodFormHandlerBase<
 
     for (let i = 0; true; i++) {
       const id = input[`contacts.${i}.id`];
-      const day = input[`contacts.${i}.startDate.day`];
-      const month = input[`contacts.${i}.startDate.month`];
-      const year = input[`contacts.${i}.startDate.year`];
+      const day = input[`contacts.${i}.associateStartDate.day`];
+      const month = input[`contacts.${i}.associateStartDate.month`];
+      const year = input[`contacts.${i}.associateStartDate.year`];
 
       if (id && day && month && year) {
-        contacts.push({ id, startDate: { day, month, year } });
+        contacts.push({ id, associateStartDate: { day, month, year } });
       } else {
         break;
       }

@@ -16,4 +16,5 @@ export interface ProjectContactDto {
   roleName: string;
   startDate: Date | null;
   endDate: Date | null;
+  associateStartDate: Date | null;
 }

@@ -114,7 +114,7 @@ export const projectDashboardQuery = graphql`
                       Acc_ProjectId__c {
                         value
                       }
-                      Acc_StartDate__c {
+                      Associate_Start_Date__c {
                         value
                       }
                     }

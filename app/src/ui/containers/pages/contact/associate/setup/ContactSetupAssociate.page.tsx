@@ -39,7 +39,7 @@ const ContactDateInput = ({
   index,
   disabled,
 }: {
-  contact: Pick<ProjectContactDto, "id" | "startDate">;
+  contact: Pick<ProjectContactDto, "id" | "associateStartDate">;
   register: UseFormRegister<z.input<ContactSetupAssociateSchemaType>>;
   getFieldState: UseFormGetFieldState<z.input<ContactSetupAssociateSchemaType>>;
   index: number;
@@ -48,41 +48,40 @@ const ContactDateInput = ({
   const defaults = useServerInput<z.input<ContactSetupAssociateSchemaType>>();
 
   const { defaultDay, defaultMonth, defaultYear } = useMemo(() => {
-    const defaultDate = defaults?.contacts?.[index]?.startDate;
+    const defaultDate = defaults?.contacts?.[index]?.associateStartDate;
 
     return {
-      defaultDay: defaultDate && "day" in defaultDate ? defaultDate.day : getDay(contact.startDate),
-      defaultMonth: defaultDate && "month" in defaultDate ? defaultDate.month : getMonth(contact.startDate),
-      defaultYear: defaultDate && "year" in defaultDate ? defaultDate.year : getYear(contact.startDate),
+      defaultDay: defaultDate && "day" in defaultDate ? defaultDate.day : getDay(contact.associateStartDate),
+      defaultMonth: defaultDate && "month" in defaultDate ? defaultDate.month : getMonth(contact.associateStartDate),
+      defaultYear: defaultDate && "year" in defaultDate ? defaultDate.year : getYear(contact.associateStartDate),
     };
-  }, [defaults, index, contact.startDate]);
+  }, [defaults, index, contact.associateStartDate]);
 
   return (
     <>
       <ValidationError error={getFieldState(`contacts.${index}`).error} />
-      <input type="hidden" value={FormTypes.ProjectSetupContactAssociate} {...register("form")} />
       <input type="hidden" value={contact.id} {...register(`contacts.${index}.id`)} />
       <DateInputGroup hasError={!!getFieldState(`contacts.${index}`).error}>
         <DateInput
           type="day"
           defaultValue={defaultDay}
           disabled={disabled}
-          id={`contacts_${index}_startDate_day`}
-          {...register(`contacts.${index}.startDate.day`)}
+          id={`contacts_${index}_associateStartDate_day`}
+          {...register(`contacts.${index}.associateStartDate.day`)}
         />
         <DateInput
           type="month"
           defaultValue={defaultMonth}
           disabled={disabled}
-          id={`contacts_${index}_startDate_month`}
-          {...register(`contacts.${index}.startDate.month`)}
+          id={`contacts_${index}_associateStartDate_month`}
+          {...register(`contacts.${index}.associateStartDate.month`)}
         />
         <DateInput
           type="year"
           defaultValue={defaultYear}
           disabled={disabled}
-          id={`contacts_${index}_startDate_year`}
-          {...register(`contacts.${index}.startDate.year`)}
+          id={`contacts_${index}_associateStartDate_year`}
+          {...register(`contacts.${index}.associateStartDate.year`)}
         />
       </DateInputGroup>
     </>
@@ -133,6 +132,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
           onUpdate({ data: data as unknown as z.output<ContactSetupAssociateSchemaType> });
         })}
       >
+        <input type="hidden" value={FormTypes.ProjectSetupContactAssociate} {...register("form")} />
         <input type="hidden" value={props.projectId} {...register("projectId")} />
         {contacts.length === 1 && (
           <>
@@ -180,9 +180,17 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
                   <TD>{getContent(x => x.pages.projectSetupAssociate.associate)}</TD>
                   <TD>{contact.email}</TD>
                   <TD>
-                    <FormGroup hasError={!!getFieldState(`contacts.${i}`).error} noMarginBottom>
-                      <ContactDateInput contact={contact} register={register} getFieldState={getFieldState} index={i} />
-                    </FormGroup>
+                    <Fieldset>
+                      <FormGroup hasError={!!getFieldState(`contacts.${i}`).error} noMarginBottom>
+                        <ContactDateInput
+                          disabled={isProcessing}
+                          contact={contact}
+                          register={register}
+                          getFieldState={getFieldState}
+                          index={i}
+                        />
+                      </FormGroup>
+                    </Fieldset>
                   </TD>
                 </TR>
               ))}

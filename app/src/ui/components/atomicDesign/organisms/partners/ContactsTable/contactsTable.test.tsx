@@ -55,6 +55,7 @@ describe("<ContactsTable />", () => {
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
+          associateStartDate: null,
         },
         {
           id: "101" as ContactId,
@@ -66,6 +67,7 @@ describe("<ContactsTable />", () => {
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
+          associateStartDate: null,
         },
       ];
 
@@ -90,6 +92,7 @@ describe("<ContactsTable />", () => {
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
+          associateStartDate: null,
         },
       ];
 
@@ -114,6 +117,7 @@ describe("<ContactsTable />", () => {
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
+          associateStartDate: null,
         },
         {
           id: "101" as ContactId,
@@ -125,6 +129,7 @@ describe("<ContactsTable />", () => {
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
+          associateStartDate: null,
         },
       ];
 

@@ -224,7 +224,7 @@ export function getIsKtpOfferLetterSent(project: Project) {
  * of start date
  */
 export function getAssociateStartDateMissing(project: Project) {
-  return project.contacts.filter(x => x.role === "Associate").some(x => !x.startDate);
+  return project.contacts.filter(x => x.role === "Associate").some(x => !x.associateStartDate);
 }
 /**
  * gets projects for the section
@@ -331,7 +331,7 @@ export const useProjectsDashboardData = (search: string | number | undefined, co
         ],
         { partnerRoles: project.partnerRoles },
       ),
-      contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], ["role", "startDate"]),
+      contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], ["role", "associateStartDate"]),
     };
   });
 

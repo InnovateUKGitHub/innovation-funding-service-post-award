@@ -11,7 +11,7 @@ import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 export class UpdateProjectContactsCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
-    private readonly contacts: PickRequiredFromPartial<ProjectContactDto, "id" | "startDate">[],
+    private readonly contacts: PickRequiredFromPartial<ProjectContactDto, "id" | "associateStartDate">[],
   ) {
     super();
   }
@@ -36,7 +36,9 @@ export class UpdateProjectContactsCommand extends CommandBase<boolean> {
     return await context.repositories.projectContacts.update(
       this.contacts.map(x => ({
         Id: x.id,
-        Acc_StartDate__c: x.startDate ? DateTime.fromJSDate(x.startDate).toFormat("yyyy-MM-dd") : null,
+        Associate_Start_Date__c: x.associateStartDate
+          ? DateTime.fromJSDate(x.associateStartDate).toFormat("yyyy-MM-dd")
+          : null,
       })),
     );
   }

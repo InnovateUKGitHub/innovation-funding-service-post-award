@@ -21,6 +21,7 @@ export interface ISalesforceProjectContact {
   } | null;
   Acc_StartDate__c: string | null;
   Acc_EndDate__c: string | null;
+  Associate_Start_Date__c: string | null;
 }
 
 type UserResult = { ContactId: string };
@@ -28,7 +29,7 @@ type UserResult = { ContactId: string };
 export interface IProjectContactsRepository {
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
-  update(contacts: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean>;
+  update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean>;
 }
 
 /**
@@ -56,6 +57,7 @@ export class ProjectContactsRepository
     "Acc_UserId__r.Username",
     "Acc_StartDate__c",
     "Acc_EndDate__c",
+    "Associate_Start_Date__c",
   ];
 
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]> {
@@ -76,7 +78,7 @@ export class ProjectContactsRepository
     return this.where(`Acc_ContactId__c = '${sss(userResult?.ContactId ?? "")}'`);
   }
 
-  public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean> {
+  public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
     return super.updateAll(contacts);
   }
 }
