@@ -104,7 +104,7 @@ export const projectDashboardQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
-                Project_Contact_Links__r(where: { Acc_Role__c: { eq: "Associate" } }, first: 5) {
+                Project_Contact_Links__r(first: 2000) {
                   edges {
                     node {
                       Acc_Role__c {
@@ -115,6 +115,17 @@ export const projectDashboardQuery = graphql`
                       }
                       Associate_Start_Date__c {
                         value
+                      }
+                      Acc_ContactId__r {
+                        Name {
+                          value
+                        }
+                      }
+
+                      Acc_UserId__r {
+                        Name {
+                          value
+                        }
                       }
                     }
                   }

@@ -9,7 +9,7 @@ import { H4 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
-import { getAssociateStartDateMissing, getIsKtpOfferLetterSent } from "./dashboard.logic";
+import { getAssociateStartDateMissing, getIsKtpOfferLetterSent, shouldCompleteSetup } from "./dashboard.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 const useProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
@@ -62,7 +62,7 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
   const messages: string[] = [];
 
   if (section === "pending") {
-    if (getIsKtpOfferLetterSent(project)) {
+    if (project.status === ProjectStatus.OfferLetterSent && getIsKtpOfferLetterSent(project)) {
       if (getAssociateStartDateMissing(project)) {
         messages.push(getContent(x => x.projectMessages.startDateRequired));
       } else {
@@ -134,14 +134,15 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
 
   if (section === "upcoming") return titleContent;
 
-  const projectNotSetup = partner && section === "pending";
+  const projectNotSetup = section === "pending" && shouldCompleteSetup(project, partner);
 
   let route: ILinkInfo;
 
-  if (getIsKtpOfferLetterSent(project)) {
-    route = routes.contactSetupAssociate.getLink({ projectId: project.id });
-  } else if (projectNotSetup) {
+  if (projectNotSetup) {
+    if (!partner?.id) throw new Error("trying to setup without a valid partner id");
     route = routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id });
+  } else if (getIsKtpOfferLetterSent(project)) {
+    route = routes.contactSetupAssociate.getLink({ projectId: project.id });
   } else {
     route = routes.projectOverview.getLink({ projectId: project.id });
   }

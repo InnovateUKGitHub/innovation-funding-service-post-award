@@ -170,7 +170,7 @@ export function generateFilteredProjects(filters: FilterOptions[], projects: Pro
 /**
  * gets the partner roles for the partner when given a set of partner roles for a project
  */
-export function getRolesForPartner(partner: Partner, partnerRoles: SfPartnerRoles[]): SfRoles {
+export function getRolesForPartner(partner: Pick<Partner, "id">, partnerRoles: SfPartnerRoles[]): SfRoles {
   return (
     partnerRoles.find(x => x.partnerId === partner.id) ?? {
       isFc: false,
@@ -226,11 +226,21 @@ export function getIsKtpOfferLetterSent(project: Project) {
 export function getAssociateStartDateMissing(project: Project) {
   return project.contacts.filter(x => x.role === "Associate").some(x => !x.associateStartDate);
 }
+
+/**
+ * determines whether user needs to complete projects setup actions
+ */
+export function shouldCompleteSetup(
+  project: Pick<Project, "partnerRoles">,
+  partner?: Pick<Partner, "partnerStatus" | "id">,
+) {
+  return partner?.partnerStatus === PartnerStatus.Pending && getRolesForPartner(partner, project.partnerRoles).isFc;
+}
 /**
  * gets projects for the section
  */
 export function getProjectSection(project: Project, partner?: Partner): Section {
-  if (partner?.partnerStatus === PartnerStatus.Pending && getRolesForPartner(partner, project.partnerRoles).isFc) {
+  if (shouldCompleteSetup(project, partner)) {
     return "pending";
   }
 
@@ -331,7 +341,11 @@ export const useProjectsDashboardData = (search: string | number | undefined, co
         ],
         { partnerRoles: project.partnerRoles },
       ),
-      contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], ["role", "associateStartDate"]),
+      contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], [
+        "role",
+        "associateStartDate",
+        "name",
+      ]),
     };
   });
 
