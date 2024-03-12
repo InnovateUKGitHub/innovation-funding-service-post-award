@@ -229,11 +229,11 @@ class ProjectContactTestRepository
     return super.getWhere(x => x.Acc_ContactId__r.Email === email);
   }
 
-  update(items: Pick<ISalesforceProjectContact, "Id" | "Acc_StartDate__c">[]): Promise<boolean> {
+  update(items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
     for (const item of items) {
       const foundItem = this.Items.find(x => x.Id === item.Id);
       if (!foundItem) return Promise.resolve(false);
-      foundItem.Acc_StartDate__c = item.Acc_StartDate__c ?? null;
+      foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c ?? null;
     }
 
     return Promise.resolve(true);

@@ -19,6 +19,7 @@ type ContactNode = GQL.PartialNode<{
   Acc_ProjectId__c: GQL.Value<string>;
   Acc_StartDate__c: GQL.Value<string>;
   Acc_EndDate__c: GQL.Value<string>;
+  Associate_Start_Date__c: GQL.Value<string>;
 }>;
 
 type ContactDtoMapping = ProjectContactDto;
@@ -56,6 +57,9 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
   },
   endDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? null);
+  },
+  associateStartDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Associate_Start_Date__c?.value ?? null);
   },
 };
 

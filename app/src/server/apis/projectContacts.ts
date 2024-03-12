@@ -8,7 +8,10 @@ import { UpdateProjectContactsCommand } from "@server/features/projectContacts/u
 export interface IProjectContactsApi<Context extends "client" | "server"> {
   getAllByProjectId: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<ProjectContactDto[]>;
   update: (
-    params: ApiParams<Context, { projectId: ProjectId; contacts: Pick<ProjectContactDto, "id" | "startDate">[] }>,
+    params: ApiParams<
+      Context,
+      { projectId: ProjectId; contacts: Pick<ProjectContactDto, "id" | "associateStartDate">[] }
+    >,
   ) => Promise<ProjectContactDto[]>;
 }
 
@@ -23,7 +26,10 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     );
     this.putItems(
       "/:projectId",
-      (p, _, b: Pick<ProjectContactDto, "id" | "startDate">[]) => ({ projectId: p.projectId, contacts: processDto(b) }),
+      (p, _, b: Pick<ProjectContactDto, "id" | "associateStartDate">[]) => ({
+        projectId: p.projectId,
+        contacts: processDto(b),
+      }),
       p => this.update(p),
     );
   }
@@ -34,7 +40,10 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
   }
 
   public async update(
-    params: ApiParams<"server", { projectId: ProjectId; contacts: Pick<ProjectContactDto, "id" | "startDate">[] }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; contacts: Pick<ProjectContactDto, "id" | "associateStartDate">[] }
+    >,
   ) {
     const command = new UpdateProjectContactsCommand(params.projectId, params.contacts);
     await contextProvider.start(params).runCommand(command);

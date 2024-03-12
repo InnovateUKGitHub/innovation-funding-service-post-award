@@ -29,14 +29,13 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
 
   const projectNode = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges).node;
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "title", "startDate", "endDate"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "title"]);
 
   const contacts = mapToContactDtoArray(projectNode?.Project_Contact_Links__r?.edges ?? [], [
     "id",
     "email",
     "name",
-    "startDate",
-    "endDate",
+    "associateStartDate",
   ]);
 
   return { project, contacts, setFetchKey };

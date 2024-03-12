@@ -268,6 +268,7 @@ export class TestData {
       RoleName: roleName,
       Acc_StartDate__c: null,
       Acc_EndDate__c: null,
+      Associate_Start_Date__c: null,
     };
 
     if (update) {

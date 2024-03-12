@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3d67ad512c2647ab54adf64210cf3b33>>
+ * @generated SignedSource<<b14fcd82472f95a4102eb2a997c8fcc1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,16 +19,10 @@ export type ContactSetupAssociateQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
-              readonly Acc_EndDate__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_StartDate__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
@@ -43,10 +37,7 @@ export type ContactSetupAssociateQuery$data = {
                     readonly Acc_EmailOfSFContact__c: {
                       readonly value: string | null | undefined;
                     } | null | undefined;
-                    readonly Acc_EndDate__c: {
-                      readonly value: string | null | undefined;
-                    } | null | undefined;
-                    readonly Acc_StartDate__c: {
+                    readonly Associate_Start_Date__c: {
                       readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Id: string;
@@ -89,27 +80,7 @@ v2 = [
     "storageKey": null
   }
 ],
-v3 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "DateValue",
-  "kind": "LinkedField",
-  "name": "Acc_StartDate__c",
-  "plural": false,
-  "selections": (v2/*: any*/),
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "DateValue",
-  "kind": "LinkedField",
-  "name": "Acc_EndDate__c",
-  "plural": false,
-  "selections": (v2/*: any*/),
-  "storageKey": null
-},
-v5 = [
+v3 = [
   {
     "alias": null,
     "args": null,
@@ -197,8 +168,6 @@ v5 = [
                             "selections": (v2/*: any*/),
                             "storageKey": null
                           },
-                          (v3/*: any*/),
-                          (v4/*: any*/),
                           {
                             "alias": null,
                             "args": [
@@ -270,8 +239,16 @@ v5 = [
                                         ],
                                         "storageKey": null
                                       },
-                                      (v3/*: any*/),
-                                      (v4/*: any*/)
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "DateValue",
+                                        "kind": "LinkedField",
+                                        "name": "Associate_Start_Date__c",
+                                        "plural": false,
+                                        "selections": (v2/*: any*/),
+                                        "storageKey": null
+                                      }
                                     ],
                                     "storageKey": null
                                   }
@@ -306,7 +283,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ContactSetupAssociateQuery",
-    "selections": (v5/*: any*/),
+    "selections": (v3/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -315,19 +292,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ContactSetupAssociateQuery",
-    "selections": (v5/*: any*/)
+    "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "930417295fbee4ac79fdc987a0ff9c27",
+    "cacheID": "b843a571bae23f0b94dcc64cba414f22",
     "id": null,
     "metadata": {},
     "name": "ContactSetupAssociateQuery",
     "operationKind": "query",
-    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_StartDate__c {\n                      value\n                    }\n                    Acc_EndDate__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c2ae3852793026bca773aad2e7f29806";
+(node as any).hash = "669123fc676877aa9ba7f0b51124c8e2";
 
 export default node;

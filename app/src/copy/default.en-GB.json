@@ -2661,7 +2661,7 @@
     "contact": {
       "contacts": {
         "arrayType": {
-          "startDate": {
+          "associateStartDate": {
             "day": {
               "errors": {
                 "too_big": "Start day must be valid number.",

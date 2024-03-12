@@ -15,12 +15,6 @@ const contactSetupAssociateQuery = graphql`
                 Acc_ProjectNumber__c {
                   value
                 }
-                Acc_StartDate__c {
-                  value
-                }
-                Acc_EndDate__c {
-                  value
-                }
                 Project_Contact_Links__r(where: { Acc_Role__c: { eq: "Associate" } }, first: 2000) {
                   edges {
                     node {
@@ -33,10 +27,7 @@ const contactSetupAssociateQuery = graphql`
                           value
                         }
                       }
-                      Acc_StartDate__c {
-                        value
-                      }
-                      Acc_EndDate__c {
+                      Associate_Start_Date__c {
                         value
                       }
                     }
