@@ -18,3 +18,10 @@ import "./commands.ts";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+afterEach(function onAfterEach() {
+  if (Cypress.env("ABORT_EARLY") && this.currentTest.state === "failed") {
+    cy.log("stopping this test file because of failure in one test");
+    // casting as any because Cypress typings do not expose "internal" api
+    (Cypress as any).runner.stop();
+  }
+});

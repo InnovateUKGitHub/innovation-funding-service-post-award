@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["eslint:recommended", "plugin:cypress/recommended"],
+  extends: ["eslint:recommended", "plugin:cypress/recommended", "eslint:typescript"],
   env: {
     browser: true,
     es2021: true,
@@ -11,7 +11,7 @@ module.exports = {
     sourceType: "module",
   },
   parser: "@typescript-eslint/parser",
-  plugins: ["cypress"],
+  plugins: ["cypress", "@typescript-eslint"],
   rules: {
     "cypress/no-unnecessary-waiting": "off",
   },

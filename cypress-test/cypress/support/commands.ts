@@ -258,15 +258,6 @@ function clickOn(...args: unknown[]) {
   }
 }
 
-const getHintFromLabel = (label: string) => {
-  cy.log(`** get hint related to ${label} **`);
-  cy.contains("label", label)
-    .invoke("attr", "for")
-    .then(id => {
-      cy.get("#hint-for-" + id);
-    });
-};
-
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
