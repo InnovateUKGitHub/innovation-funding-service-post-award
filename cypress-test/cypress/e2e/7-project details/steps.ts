@@ -286,15 +286,22 @@ export const reflectChangesMade = () => {
 };
 
 export const navigateToPartnerHeadings = () => {
-  cy.getByQA("partner-information").contains("EUI Small Ent Health").click();
+  cy.getByQA("partner-information").within(() => {
+    cy.get("a").contains("EUI Small Ent Health").click();
+  });
   cy.backLink("Back to project details");
   cy.getByQA("page-title").contains("328407");
   cy.heading("Partner information");
 };
 
 export const ensureTableIsPopulated = () => {
-  ["Name", "Type", "Location", "EUI Small Ent Health", "Business", "SN5", "Edit"].forEach(item => {
-    cy.getByQA("section-content").contains(item);
+  [
+    ["Name", "EUI Small Ent Health"],
+    ["Type", "Business"],
+    ["Location", "SN5"],
+    ["Location", "Edit"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key, item);
   });
   cy.backLink("Back to project details").click();
   cy.heading("Project details");
