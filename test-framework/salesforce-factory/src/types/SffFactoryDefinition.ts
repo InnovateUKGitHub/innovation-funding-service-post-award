@@ -1,4 +1,4 @@
-import { SffBuilder } from "../factory/SalesforceFactory";
+import { SffBuilder } from "../factory/SffBuilder";
 
 interface SffFieldBase {
   sfdcName: string;
@@ -25,14 +25,16 @@ type RelationshipsToRecord<T extends SffFactoryObjectDefinition> = {
 type PipelineFunction<T extends SffFactoryObjectDefinition> = ({
   fields,
   relationships,
-  fnNumber,
-  fnBodies,
+  fnName,
+  varName,
 }: {
   fields: FieldsToRecord<T>;
   relationships: RelationshipsToRecord<T>;
-  fnNumber: number;
-  fnBodies: string[];
-}) => string;
+  fnName: string;
+  varName: string;
+}) => {
+  code: string;
+};
 
 interface SffFactoryObjectDefinition<Fields extends ReadonlyArray<SffField> = ReadonlyArray<SffField>> {
   sfdcName: Readonly<string>;
@@ -129,4 +131,6 @@ export {
   FieldsToRecord,
   RelationshipsToRecord,
   PipelineFunction,
+  SffSingleRelationship,
+  SffMultiRelationship,
 };

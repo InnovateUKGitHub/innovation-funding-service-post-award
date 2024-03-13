@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Salesforce Factory Builder Expect apex to be built with a single variable 1`] = `
+{
+  "code": "
+          Child child1 = new Child();
+          child1.var = 'My fancy title';
+          child1.parentId = parentId;
+          insert child1;
+        ",
+  "fnName": "mkChild1",
+  "varName": "child1",
+}
+`;
+
+exports[`Salesforce Factory Builder Expect apex to be built with no variables 1`] = `
+{
+  "code": "
+          Child child0 = new Child();
+          
+          child0.parentId = parentId;
+          insert child0;
+        ",
+  "fnName": "mkChild0",
+  "varName": "child0",
+}
+`;
+
+exports[`Salesforce Factory Builder Expect apex to be built with parent/child relationships 1`] = `
+{
+  "code": "
+          Parent parent0 = new Parent();
+          parent0.var = 'My fancy title';
+          parent0 = idMap.get('child2');
+          insert parent0;
+          parent0 = idMap.get('child3');
+parent0 = idMap.get('child4');
+        ",
+  "fnName": "mkParent0",
+  "varName": "parent0",
+}
+`;

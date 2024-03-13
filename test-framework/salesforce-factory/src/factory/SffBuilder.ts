@@ -1,6 +1,5 @@
 import {
   SffFactoryObjectDefinition,
-  SffRelationshipType,
   SffFieldTypeToJsType,
   PipelineFunction,
   SffRelationshipToJsType,
@@ -10,16 +9,25 @@ import {
 
 interface SffBuilderProps<T extends SffFactoryObjectDefinition> {
   definition: Readonly<T>;
+  generator: {
+    fnName: (x: number) => string;
+    varName: (x: number) => string;
+  };
 }
 
 class SffBuilder<T extends SffFactoryObjectDefinition> {
   public readonly definition: T;
   public readonly pipeline: PipelineFunction<T>;
+  public readonly generator: {
+    fnName: (x: number) => string;
+    varName: (x: number) => string;
+  };
   private fnNumber: number;
 
-  constructor({ definition }: SffBuilderProps<T>, pipeline: PipelineFunction<T>) {
+  constructor({ definition, generator }: SffBuilderProps<T>, pipeline: PipelineFunction<T>) {
     this.definition = definition;
     this.pipeline = pipeline;
+    this.generator = generator;
     this.fnNumber = 0;
   }
 
@@ -32,7 +40,8 @@ class SffBuilder<T extends SffFactoryObjectDefinition> {
   }
 }
 
-interface SffBuilderInstanceProps<T extends SffFactoryObjectDefinition> extends SffBuilderProps<T> {
+interface SffBuilderInstanceProps<T extends SffFactoryObjectDefinition> {
+  definition: Readonly<T>;
   builder: SffBuilder<T>;
   fields?: Map<T["fields"][number]["sfdcName"], any>;
   relationships?: Map<T["relationships"][number]["sfdcName"], any>;
@@ -77,16 +86,20 @@ class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
     });
   }
 
-  build(fnBodies: string[] = []) {
-    const fnName = this.builder.pipeline({
+  build() {
+    const fnNumber = this.builder.getNextFnNumber();
+    const fnName = this.builder.generator.fnName(fnNumber);
+    const varName = this.builder.generator.varName(fnNumber);
+
+    const { code } = this.builder.pipeline({
       fields: Object.fromEntries(this.fields) as FieldsToRecord<T>,
       relationships: Object.fromEntries(this.relationships) as RelationshipsToRecord<T>,
-      fnNumber: this.builder.getNextFnNumber(),
-      fnBodies,
+      fnName,
+      varName,
     });
 
-    return { fnBodies, fnName };
+    return { fnName, varName, code };
   }
 }
 
-export { SffBuilder };
+export { SffBuilder, SffBuilderInstance };
