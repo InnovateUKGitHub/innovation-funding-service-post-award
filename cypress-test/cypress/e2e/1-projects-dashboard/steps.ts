@@ -1,3 +1,5 @@
+import { otherCost5TidyUp } from "common/costCleanUp";
+
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "328407";
 
@@ -13,6 +15,11 @@ const fcEight = "t.williamson@auto-research.co.uk";
 const fcNine = "b.doe@auto-corp.co.uk";
 const fcTen = "n.mcdermott@auto-health.co.uk";
 const fcEleven = "u.adams-taylor@auto-research.co.uk";
+
+const javierBaez = "testman2@testing.com";
+
+let date = new Date().toUTCString();
+let comments = date;
 
 export const monitoringReportCardShouldNotExist = () => {
   cy.get(".card-link h2").contains("Monitoring reports").should("not.exist");
@@ -160,4 +167,136 @@ export const collaboratorFinancials = () => {
   ].forEach(summary => {
     cy.getByQA("section-content").contains(summary);
   });
+};
+
+export const jamesBlackCounters = () => {
+  [
+    ["365447", "You need to set up your project"],
+    ["328407", "Claim overdue"],
+    ["328407", "Project change request queried"],
+  ].forEach(([project, counter]) => {
+    cy.getByQA(`project-${project}`).contains(counter);
+  });
+};
+
+export const javierBaezCounters = () => {
+  [
+    ["154870", "Claims to review: 3"],
+    ["154870", "Claim overdue"],
+    ["879546", "Claim overdue"],
+    ["597638", "Project change requests to review: 2"],
+    ["191431", "Claim overdue"],
+    ["271316", "Claim overdue"],
+    ["223377", "Claim overdue"],
+    ["663878", "Claim overdue"],
+  ].forEach(([project, counter]) => {
+    cy.getByQA(`project-${project}`).contains(counter);
+  });
+};
+
+export const access879546NavToClaims = () => {
+  cy.getByQA("project-879546").within(() => {
+    cy.get("a").contains("879546").click();
+  });
+  cy.heading("Project overview");
+  cy.selectTile("Claims");
+  cy.heading("Claims");
+};
+
+export const checkClaimQueriedByMo = () => {
+  cy.contains("td", "Period 1:")
+    .siblings()
+    .then($tr => {
+      if ($tr.text().includes("Submitted to Monitoring Officer")) {
+        cy.get("a").contains("Back to project").click();
+        cy.heading("Project overview");
+        cy.switchUserTo(javierBaez);
+        cy.selectTile("Claims");
+        cy.heading("Claims");
+        cy.get("td").contains("ABS EUI Medium").siblings().contains("a", "Review").click();
+        cy.heading("Claim");
+        cy.clickOn("Query claim");
+        cy.get("textarea").as("txt").wait(200);
+        cy.get("@txt").clear();
+        cy.get("@txt").type(comments);
+        cy.paragraph("You have");
+        cy.paragraph("I am satisfied that the costs claimed appear to comply");
+        cy.clickOn("Send query");
+        cy.heading("Claims");
+        cy.clickOn("Back to project");
+        cy.heading("Project overview");
+      } else if ($tr.text().includes("Queried by Monitoring Officer")) {
+        cy.get("a").contains("Back to project").click();
+        cy.heading("Project overview");
+      }
+    });
+};
+
+export const navigateToDashCheckStatus = () => {
+  cy.clickOn("Back to Project");
+  cy.heading("Dashboard");
+  cy.getByQA("project-879546").contains("Claim queried");
+};
+
+export const switchToJavierCheckStatus = () => {
+  cy.wait(500);
+  cy.switchUserTo(javierBaez);
+  cy.wait(500);
+  cy.getByQA("project-879546").contains("Claims to review: 1");
+};
+
+export const accessProjectSubmitToMO = () => {
+  cy.getByQA("project-879546").within(() => {
+    cy.get("a").contains("879546").click();
+  });
+  cy.heading("Project overview");
+  cy.selectTile("Claims");
+  cy.heading("Claim");
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs to be claimed");
+  otherCost5TidyUp();
+  cy.clickOn("Continue to claims documents");
+  cy.heading("Claim documents");
+  cy.clickOn("Continue to update forecast");
+  cy.heading("Update forecast");
+  cy.clickOn("Continue to summary");
+  cy.heading("Claim summary");
+  cy.clickOn("Submit claim");
+  cy.heading("Claims");
+};
+
+export const backOutToDashCheckStatus = () => {
+  cy.clickOn("Back to Project");
+  cy.heading("Dashboard");
+  cy.wait(500);
+  cy.getByQA("project-879546").should("not.contain", "Claim queried");
+};
+
+export const accessProjectCheckClaimsTile = () => {
+  cy.getByQA("project-879546").within(() => {
+    cy.get("a").contains("879546").click();
+  });
+  cy.heading("Project overview");
+  cy.getByQA("overview-link-allClaimsDashboard").contains("Claims to review: 2");
+};
+
+export const accessClaimQuery = () => {
+  cy.selectTile("Claims");
+  cy.heading("Claims");
+  cy.get("td").contains("ABS EUI Medium").siblings().contains("a", "Review").click();
+  cy.heading("Claim");
+  cy.clickOn("Query claim");
+  cy.get("textarea").as("txt").wait(200);
+  cy.get("@txt").clear();
+  cy.get("@txt").type(comments);
+  cy.paragraph("You have");
+  cy.paragraph("I am satisfied that the costs claimed appear to comply");
+  cy.clickOn("Send query");
+  cy.heading("Claims");
+};
+
+export const backOutToDashCheckUpdatedCounter = () => {
+  cy.clickOn("Back to project");
+  cy.heading("Project overview");
+  cy.getByQA("overview-link-allClaimsDashboard").contains("Claims to review: 1");
 };
