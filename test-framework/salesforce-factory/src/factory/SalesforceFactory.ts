@@ -1,8 +1,11 @@
 import {
   SffFactoryObjectDefinition,
-  SffFieldType,
   SffRelationshipType,
   SffFieldTypeToJsType,
+  PipelineFunction,
+  SffRelationshipToJsType,
+  FieldsToRecord,
+  RelationshipsToRecord,
 } from "../types/SffFactoryDefinition";
 
 interface SffBuilderProps<T extends SffFactoryObjectDefinition> {
@@ -11,13 +14,21 @@ interface SffBuilderProps<T extends SffFactoryObjectDefinition> {
 
 class SffBuilder<T extends SffFactoryObjectDefinition> {
   public readonly definition: T;
+  public readonly pipeline: PipelineFunction<T>;
+  private fnNumber: number;
 
-  constructor({ definition }: SffBuilderProps<T>) {
+  constructor({ definition }: SffBuilderProps<T>, pipeline: PipelineFunction<T>) {
     this.definition = definition;
+    this.pipeline = pipeline;
+    this.fnNumber = 0;
   }
 
   new() {
     return new SffBuilderInstance({ builder: this, definition: this.definition });
+  }
+
+  getNextFnNumber() {
+    return this.fnNumber++;
   }
 }
 
@@ -42,7 +53,7 @@ class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
 
   setField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
     sfdcName: Key,
-    value: SffFieldTypeToJsType<Row["sfdcType"]>,
+    value: SffFieldTypeToJsType<Row>,
   ) {
     // const field = this.definition.fields.find(x => x.sfdcName === sfdcName)! as Row;
     this.fields.set(sfdcName, value);
@@ -52,12 +63,7 @@ class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
   setRelationship<
     Key extends T["relationships"][number]["sfdcName"],
     Row extends { sfdcName: Key } & T["relationships"][number],
-  >(
-    sfdcName: Key,
-    child: Row["sfdcType"] extends SffRelationshipType.SINGLE
-      ? ReturnType<Row["sffBuilder"]["new"]>
-      : ReturnType<Row["sffBuilder"]["new"]>[],
-  ) {
+  >(sfdcName: Key, child: SffRelationshipToJsType<Row>) {
     this.relationships.set(sfdcName, child);
     return this;
   }
@@ -69,6 +75,17 @@ class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
       relationships: this.relationships,
       definition: this.definition,
     });
+  }
+
+  build(fnBodies: string[] = []) {
+    const fnName = this.builder.pipeline({
+      fields: Object.fromEntries(this.fields) as FieldsToRecord<T>,
+      relationships: Object.fromEntries(this.relationships) as RelationshipsToRecord<T>,
+      fnNumber: this.builder.getNextFnNumber(),
+      fnBodies,
+    });
+
+    return { fnBodies, fnName };
   }
 }
 
