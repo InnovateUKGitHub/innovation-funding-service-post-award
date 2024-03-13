@@ -10,9 +10,9 @@ describe("PCR > Reallocate Costs > 5 - Change remaining grant", () => {
     pcrTidyUp("Reallocate project costs");
   });
 
-  //after(() => {
-  //  cy.deletePcr("328407");
-  //});
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should create a Reallocate Partner costs PCR", () => {
     cy.createPcr("Reallocate project costs");
