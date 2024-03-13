@@ -14,7 +14,7 @@ export interface ProjectChangeRequestPrepareItemParams {
 }
 
 export interface ProjectChangeRequestPrepareItemSearchParams {
-  search?: string;
+  search?: string | number; // Our app is too clever - If you search for a number, it transforms the input to a number!
   companiesHouseResult?: SerialisedProjectChangeRequestAddPartnerCompaniesHouseResult;
 }
 

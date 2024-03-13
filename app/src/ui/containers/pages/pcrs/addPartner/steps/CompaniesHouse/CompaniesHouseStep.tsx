@@ -43,7 +43,7 @@ export const CompaniesHouseStep = () => {
     search: defaultSearchQuery,
   } = usePcrWorkflowContext();
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(defaultSearchQuery ?? "");
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(String(defaultSearchQuery) ?? "");
   const defaultCompaniesHouseResult = useDefaultCompaniesHouseResult();
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();

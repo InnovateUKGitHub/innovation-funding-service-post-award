@@ -39,7 +39,7 @@ const CompaniesHouseSearchBox = ({ setSearchQuery }: CompaniesHouseSearchProps) 
     mode: "all",
   });
 
-  const searchErrors = useValidateInitialSearchQuery({ step, search: initialSearchQuery });
+  const searchErrors = useValidateInitialSearchQuery({ step, search: String(initialSearchQuery) });
   const validationErrors = useZodErrors(setError, formState.errors, searchErrors);
 
   const searchQuery = watch("search");
