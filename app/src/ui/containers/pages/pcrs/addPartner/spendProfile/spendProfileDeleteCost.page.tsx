@@ -37,7 +37,7 @@ import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { noop } from "lodash";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
-  costId: string;
+  costId: CostId;
 }
 
 export interface SpendProfileDeleteFormProps<T extends PCRSpendProfileCostDto> {
@@ -184,7 +184,7 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId as CostCategoryId,
-    costId: route.params.costId,
+    costId: route.params.costId as CostId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileDeleteCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),

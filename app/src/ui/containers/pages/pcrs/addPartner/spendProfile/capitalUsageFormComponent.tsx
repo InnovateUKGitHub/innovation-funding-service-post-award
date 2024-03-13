@@ -54,7 +54,7 @@ export const CapitalUsageFormComponent = () => {
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       description: null,
       depreciationPeriod: null,
       netPresentValue: null,
@@ -121,7 +121,7 @@ export const CapitalUsageFormComponent = () => {
                 costs: appendOrMerge(spendProfile.costs, {
                   description: data.capitalUsageDescription,
                   type: Number(data.itemType),
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   costCategoryId,
                   costCategory: costCategory.type,
                   depreciationPeriod: Number(data.depreciationPeriod),

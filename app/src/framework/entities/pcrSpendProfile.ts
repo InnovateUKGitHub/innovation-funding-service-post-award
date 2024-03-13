@@ -27,5 +27,5 @@ export interface PcrSpendProfileEntityForCreate {
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {
-  id: PcrId;
+  id: CostId;
 }

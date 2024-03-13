@@ -47,7 +47,7 @@ export const LabourFormComponent = () => {
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       description: null,
       grossCostOfRole: null,
       ratePerDay: null,
@@ -94,7 +94,7 @@ export const LabourFormComponent = () => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   description: data.descriptionOfRole,
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   costCategoryId,
                   costCategory: costCategory.type,
                   grossCostOfRole: Number(data.grossCostOfRole),

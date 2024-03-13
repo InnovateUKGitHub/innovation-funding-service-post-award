@@ -119,7 +119,7 @@ const LinkToCostSummary = ({
 }: {
   costCategoryType: CostCategoryType;
   costCategoryId: CostCategoryId;
-  overheadCostId: PcrId | null;
+  overheadCostId: CostId | null;
 }) => {
   const { mode, routes, itemId, pcrId, projectId } = usePcrWorkflowContext();
 

@@ -214,7 +214,7 @@ const getWorkflow = (
 
 const renderLinks = (
   itemId: PcrItemId,
-  costId: string,
+  costId: CostId,
   costCategoryId: CostCategoryId,
   projectId: ProjectId,
   pcrId: PcrId,

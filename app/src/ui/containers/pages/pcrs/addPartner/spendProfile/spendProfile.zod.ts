@@ -1,19 +1,19 @@
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { currencyValidation, percentageNumberInput, requiredPositiveIntegerInput } from "@ui/zod/helperValidators.zod";
+import {
+  costIdValidation,
+  currencyValidation,
+  percentageNumberInput,
+  requiredPositiveIntegerInput,
+} from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
-const idValidation = z
-  .string()
-  .transform(x => x as PcrId)
-  .nullable();
-
 const description = z.string().min(1).max(255);
 
 export const labourSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   descriptionOfRole: description,
   grossCostOfRole: currencyValidation,
   ratePerDay: currencyValidation,
@@ -24,7 +24,7 @@ export type LabourSchema = z.infer<typeof labourSchema>;
 
 export const overheadSchema = z
   .object({
-    id: idValidation,
+    id: costIdValidation.nullable(),
     overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
     calculatedValue: currencyValidation.nullable(),
     button_submit: z.string(),
@@ -46,7 +46,7 @@ export const overheadSchema = z
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
 export const materialsSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   materialsDescription: description,
   costPerItem: currencyValidation,
   quantityOfMaterialItems: requiredPositiveIntegerInput({ min: 0 }),
@@ -55,7 +55,7 @@ export const materialsSchema = z.object({
 export type MaterialsSchema = z.infer<typeof materialsSchema>;
 
 export const subcontractingSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   subcontractorName: z.string().min(1),
   subcontractorCountry: z.string().min(1),
   subcontractorRoleAndDescription: z.string().min(1),
@@ -65,7 +65,7 @@ export const subcontractingSchema = z.object({
 export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
 
 export const capitalUsageSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   capitalUsageDescription: description,
   depreciationPeriod: requiredPositiveIntegerInput({}),
   itemType: z.coerce.number().min(1),
@@ -77,7 +77,7 @@ export const capitalUsageSchema = z.object({
 export type CapitalUsageSchema = z.infer<typeof capitalUsageSchema>;
 
 export const travelAndASubsistenceSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   descriptionOfCost: description,
   numberOfTimes: requiredPositiveIntegerInput({ max: 1_000_000 }),
   costOfEach: currencyValidation,
@@ -86,7 +86,7 @@ export const travelAndASubsistenceSchema = z.object({
 export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSchema>;
 
 export const otherCostsSchema = z.object({
-  id: idValidation,
+  id: costIdValidation.nullable(),
   descriptionOfCost: description,
   estimatedCost: currencyValidation,
 });

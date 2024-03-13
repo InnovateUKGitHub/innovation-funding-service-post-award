@@ -30,7 +30,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: null,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
@@ -61,7 +61,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: null,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
@@ -70,7 +70,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -80,7 +80,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
           grossCostOfRole: 21,
         },
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -92,7 +92,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       ];
 
       const otherCost: PCRSpendProfileOtherCostsDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 100022,
         costCategoryId: costCategoryOther.id,
         costCategory: CostCategoryType.Other_Costs,
@@ -127,7 +127,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 30,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
@@ -136,7 +136,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -146,7 +146,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
           grossCostOfRole: 21,
         },
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -179,7 +179,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       spendProfileDto.costs = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: 30,
           costCategoryId: costCategoryOverheads.id,
           costCategory: CostCategoryType.Overheads,
@@ -187,7 +187,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
           overheadRate: PCRSpendProfileOverheadRate.Calculated,
         },
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: 40,
           costCategoryId: costCategoryOverheads.id,
           costCategory: CostCategoryType.Overheads,
@@ -211,7 +211,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const labourCosts: PCRSpendProfileLabourCostDto[] = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -221,7 +221,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
           grossCostOfRole: 21,
         },
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -232,7 +232,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         },
       ];
       spendProfileDto.costs.push({
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 50,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
@@ -267,7 +267,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: null,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
@@ -276,7 +276,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -286,7 +286,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
           grossCostOfRole: 21,
         },
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: costCategoryLabour.id,
           costCategory: CostCategoryType.Labour,
@@ -303,7 +303,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
 
       const inserted = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       inserted.costs.push({
-        id: "" as PcrId,
+        id: "" as CostId,
         value: null,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,

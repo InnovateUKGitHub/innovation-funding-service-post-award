@@ -26,7 +26,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileCapitalUsageCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 1000,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Capital_Usage,

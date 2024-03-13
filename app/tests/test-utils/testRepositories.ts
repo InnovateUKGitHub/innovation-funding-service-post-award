@@ -868,7 +868,7 @@ class PcrSpendProfileTestRepository
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
     const newIds: string[] = [];
     items.forEach(x => {
-      const id = `PcrSpendProfile-${this.Items.length}` as PcrId;
+      const id = `PcrSpendProfile-${this.Items.length}` as CostId;
       newIds.push(id);
       this.Items.push({ ...x, id });
     });

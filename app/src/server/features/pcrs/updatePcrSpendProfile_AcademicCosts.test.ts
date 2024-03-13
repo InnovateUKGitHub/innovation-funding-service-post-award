@@ -40,7 +40,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Academic,
       });
       const cost: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 100,
         costCategoryId: directlyIncurredCostCategory.id,
         costCategory: CostCategoryType.Academic,
@@ -70,14 +70,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Academic,
       });
       const directlyIncurredCost: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 100,
         costCategoryId: directlyIncurredCostCategory.id,
         costCategory: CostCategoryType.Academic,
         description: directlyIncurredCostCategory.description,
       };
       const exceptionsEquipmentCost: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 200,
         costCategoryId: exceptionsEquipmentCostCategory.id,
         costCategory: CostCategoryType.Academic,
@@ -113,14 +113,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Academic,
       });
       const costA: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 100,
         costCategoryId: someCostCategory.id,
         costCategory: CostCategoryType.Academic,
         description: someCostCategory.description,
       };
       const costB: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 200,
         costCategoryId: someCostCategory.id,
         costCategory: CostCategoryType.Academic,
@@ -139,7 +139,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Academic,
       });
       const cost: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: "not a currency value" as unknown as number,
         costCategoryId: someCostCategory.id,
         costCategory: CostCategoryType.Academic,
@@ -158,7 +158,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Academic,
       });
       const cost: PCRSpendProfileAcademicCostDto = {
-        id: "" as PcrId,
+        id: "" as CostId,
         value: 0,
         costCategoryId: someCostCategory.id,
         costCategory: CostCategoryType.Academic,
@@ -178,7 +178,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       spendProfileDto.costs = [
         {
-          id: "" as PcrId,
+          id: "" as CostId,
           value: null,
           costCategoryId: directlyIncurredCostCategory.id,
           costCategory: CostCategoryType.Academic,

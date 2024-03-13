@@ -39,7 +39,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 interface IBaseCost {
-  id: PcrId;
+  id: CostId;
   costCategoryId: CostCategoryId;
   description: string;
   value: number | null;
@@ -89,7 +89,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     button: IFormButton,
   ) {
     const baseCostDto = {
-      id: "" as PcrId,
+      id: "" as CostId,
       costCategoryId: params.costCategoryId,
       description: body.description,
       value: parseNumber(body.value),

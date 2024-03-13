@@ -44,7 +44,7 @@ export const SubcontractingFormComponent = () => {
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       description: null,
       subcontractorCountry: null,
       subcontractorRoleAndDescription: null,
@@ -85,7 +85,7 @@ export const SubcontractingFormComponent = () => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   ...data,
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   costCategoryId,
                   costCategory: costCategory.type,
                   description: data?.subcontractorName,

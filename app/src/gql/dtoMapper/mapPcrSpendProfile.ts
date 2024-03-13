@@ -63,7 +63,7 @@ export type PcrSpendProfileNode = GQL.PartialNode<{
 
 const itemMapper: GQL.DtoMapper<PcrSpendProfileEntity, PcrSpendProfileNode> = {
   id(node) {
-    return node?.Id as PcrId;
+    return node?.Id as CostId;
   },
   capitalUsageType(node) {
     return new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(

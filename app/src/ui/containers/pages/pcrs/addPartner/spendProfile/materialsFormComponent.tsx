@@ -47,7 +47,7 @@ export const MaterialsFormComponent = () => {
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       description: null,
       quantity: null,
       costPerItem: null,
@@ -89,7 +89,7 @@ export const MaterialsFormComponent = () => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   description: data?.materialsDescription,
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   costCategoryId,
                   costCategory: costCategory.type,
                   quantity: Number(data.quantityOfMaterialItems),
