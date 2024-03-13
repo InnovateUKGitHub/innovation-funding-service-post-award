@@ -77,7 +77,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly pcrStepId?: PcrItemId;
 
   private readonly projectManagerCanEdit: boolean;
-  private readonly isPmProjectParticipantOnHold: boolean;
+  private readonly isPmProjectParticipantNotOnHold: boolean;
   private readonly monitoringOfficerCanEdit: boolean;
 
   public comments: Result;
@@ -124,9 +124,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this.projectManagerCanEdit = !this.original || this.projectManagerPermittedStatus.has(this.original.status);
     this.monitoringOfficerCanEdit =
       (this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status)) ?? false;
-    this.isPmProjectParticipantOnHold = this.partners
-      ? this.partners.some(x => getAuthRoles(x.roles).isPm && x.partnerStatus !== PartnerStatus.OnHold)
-      : true;
+    this.isPmProjectParticipantNotOnHold =
+      this.partners && this.partners.length > 0 && this.partners.some(x => getAuthRoles(x.roles).isPm)
+        ? this.partners.some(x => getAuthRoles(x.roles).isPm && x.partnerStatus !== PartnerStatus.OnHold)
+        : true;
 
     // Validating these fields requires above values to be computed
     this.comments = this.validateComments();
@@ -186,7 +187,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateComments(): Result {
     const { isPm, isMo } = getAuthRoles(this.role);
 
-    const canPmEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold;
+    const canPmEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold;
     const canMoEdit = isMo && this.monitoringOfficerCanEdit;
 
     if (canPmEdit || canMoEdit) {
@@ -234,7 +235,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateReasoningComments() {
     const { isPm } = getAuthRoles(this.role);
 
-    if (isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold) {
+    if (isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold) {
       return Validation.all(
         this,
         () =>
@@ -338,7 +339,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private getItemValidator(item: PCRItemDto) {
     const { isPm } = getAuthRoles(this.role);
-    const canEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantOnHold;
+    const canEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold;
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
 
     const params: PCRBaseItemDtoValidatorProps<typeof item> = {
