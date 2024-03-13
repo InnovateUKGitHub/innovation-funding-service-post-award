@@ -7,7 +7,7 @@ import SalesforceRepositoryBase, { Insertable } from "./salesforceRepositoryBase
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 
 export interface ISalesforcePcrSpendProfile {
-  Id: PcrId;
+  Id: CostId;
   Acc_ProjectChangeRequest__c: PcrItemId;
   Acc_CostCategoryID__c: string;
   RecordTypeId: string;

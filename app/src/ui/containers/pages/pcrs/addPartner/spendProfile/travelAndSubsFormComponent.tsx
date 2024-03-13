@@ -46,7 +46,7 @@ export const TravelAndSubsFormComponent = () => {
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       description: null,
       numberOfTimes: null,
       costOfEach: null,
@@ -87,7 +87,7 @@ export const TravelAndSubsFormComponent = () => {
               spendProfile: {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   description: data.descriptionOfCost,
                   costCategoryId,
                   costCategory: costCategory.type,

@@ -23,7 +23,7 @@ interface PCRSpendProfileBaseCostDto {
   costCategory: CostCategoryType;
   costCategoryId: CostCategoryId;
   description: string | null;
-  id: PcrId;
+  id: CostId;
   value: number | null;
 }
 

@@ -56,7 +56,7 @@ export const OverheadsFormComponent = ({}) => {
   if (addNewItem) {
     defaultCost = {
       description: "",
-      id: null as unknown as PcrId,
+      id: null as unknown as CostId,
       overheadRate: PCRSpendProfileOverheadRate.Unknown,
       value: null,
       costCategoryId,
@@ -157,7 +157,7 @@ export const OverheadsFormComponent = ({}) => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   ...data,
-                  id: data.id ?? ("" as PcrId),
+                  id: data.id ?? ("" as CostId),
                   description: "",
                   costCategoryId,
                   costCategory: costCategory.type,

@@ -209,7 +209,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
     return {
-      id: "" as PcrId,
+      id: "" as CostId,
       description: "",
       value: null,
       costCategory: costCategory.type as CostCategoryType.Other_Costs,

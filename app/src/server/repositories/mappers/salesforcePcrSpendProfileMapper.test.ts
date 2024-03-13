@@ -10,7 +10,7 @@ const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
     const expectedEntity: PcrSpendProfileEntity = {
-      id: "id1" as PcrId,
+      id: "id1" as CostId,
       costCategoryId: "costCatId1" as CostCategoryId,
       pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,
@@ -64,7 +64,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
   });
   it("Maps spend profile entity correctly to sf record", () => {
     const entity: PcrSpendProfileEntity = {
-      id: "id1" as PcrId,
+      id: "id1" as CostId,
       costCategoryId: "costCatId1" as CostCategoryId,
       pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,

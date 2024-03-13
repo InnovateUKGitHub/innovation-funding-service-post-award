@@ -22,11 +22,11 @@ export interface PcrAddSpendProfileCostParams {
   pcrId: PcrId;
   itemId: PcrItemId;
   costCategoryId: CostCategoryId;
-  costId?: string;
+  costId?: CostId;
 }
 
 export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostParams {
-  costId: string;
+  costId: CostId;
 }
 
 const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BaseProps) => {
@@ -153,7 +153,7 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId as CostCategoryId,
-    costId: route.params.costId,
+    costId: route.params.costId as CostId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),

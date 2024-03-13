@@ -30,7 +30,7 @@ import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 interface BaseEntityFields {
-  id: PcrId;
+  id: CostId;
   pcrItemId: PcrItemId;
   costCategoryId: CostCategoryId;
   costCategory: CostCategoryType;

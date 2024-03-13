@@ -138,7 +138,7 @@ export const OtherSourcesOfFundingStep = () => {
                     dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
                     costCategory: x.costCategory,
                     costCategoryId: x.costCategoryId,
-                    id: x.id as PcrId,
+                    id: x.id as CostId,
                   })),
                 },
               },
