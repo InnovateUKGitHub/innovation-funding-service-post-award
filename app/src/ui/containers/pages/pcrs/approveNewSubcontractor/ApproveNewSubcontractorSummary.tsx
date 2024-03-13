@@ -1,5 +1,5 @@
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
@@ -21,7 +21,8 @@ import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 
 const ApproveNewSubcontractorSummary = () => {
-  const { projectId, pcrId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, fetchKey, displayCompleteForm, markedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
   const { getContent } = useContent();
 
   const { pcrItem } = useApproveNewSubcontractorQuery({ projectId, itemId, fetchKey });
@@ -37,10 +38,10 @@ const ApproveNewSubcontractorSummary = () => {
       pcrId,
       pcrItemId: itemId,
       form: FormTypes.PcrApproveNewSubcontractorSummary,
-      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       subcontractorName: pcrItem.subcontractorName ?? "",
       subcontractorRegistrationNumber: pcrItem.subcontractorRegistrationNumber ?? "",
-      subcontractorRelationship: pcrItem.subcontractorRelationship ?? undefined,
+      subcontractorRelationship: pcrItem.subcontractorRelationship ?? false,
       subcontractorRelationshipJustification: pcrItem.subcontractorRelationshipJustification ?? "",
       subcontractorLocation: pcrItem.subcontractorLocation ?? "",
       subcontractorDescription: pcrItem.subcontractorDescription ?? "",

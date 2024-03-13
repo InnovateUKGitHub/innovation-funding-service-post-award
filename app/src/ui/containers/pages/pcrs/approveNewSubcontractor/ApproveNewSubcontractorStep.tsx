@@ -37,6 +37,7 @@ const ApproveNewSubcontractorStep = () => {
   const { getContent } = useContent();
 
   const { pcrItem } = useApproveNewSubcontractorQuery({ projectId, itemId, fetchKey });
+  const defaults = useServerInput<z.input<ApproveNewSubcontractorSchemaType>>();
 
   const { register, handleSubmit, formState, watch, getFieldState, setError, trigger } = useForm<
     z.output<ApproveNewSubcontractorSchemaType>
@@ -45,12 +46,29 @@ const ApproveNewSubcontractorStep = () => {
       errorMap: approveNewSubcontractorErrorMap,
     }),
     defaultValues: {
+      projectId,
+      pcrId,
+      pcrItemId: itemId,
+      form: FormTypes.PcrApproveNewSubcontractorSummary,
       markedAsComplete: markedAsCompleteHasBeenChecked,
+      subcontractorName: defaults?.subcontractorName ?? pcrItem.subcontractorName ?? "",
+      subcontractorRegistrationNumber:
+        defaults?.subcontractorRegistrationNumber ?? pcrItem.subcontractorRegistrationNumber ?? "",
+      subcontractorRelationship:
+        defaults?.subcontractorRelationship === true ||
+        defaults?.subcontractorRelationship === "true" ||
+        pcrItem.subcontractorRelationship ||
+        false,
+      subcontractorRelationshipJustification:
+        defaults?.subcontractorRelationshipJustification ?? pcrItem.subcontractorRelationshipJustification ?? "",
+      subcontractorLocation: defaults?.subcontractorLocation ?? pcrItem.subcontractorLocation ?? "",
+      subcontractorDescription: defaults?.subcontractorDescription ?? pcrItem.subcontractorDescription ?? "",
+      subcontractorCost: defaults?.subcontractorCost ?? String(pcrItem.subcontractorCost ?? ""),
+      subcontractorJustification: defaults?.subcontractorJustification ?? pcrItem.subcontractorJustification ?? "",
     },
   });
 
   const validationErrors = useZodErrors<z.output<ApproveNewSubcontractorSchemaType>>(setError, formState.errors);
-  const defaults = useServerInput<z.input<ApproveNewSubcontractorSchemaType>>();
   const subcontractorRelationshipDefault =
     defaults?.subcontractorRelationship ?? pcrItem?.subcontractorRelationship ?? undefined;
   const subcontractorRelationship = watch("subcontractorRelationship") as boolean | string;
