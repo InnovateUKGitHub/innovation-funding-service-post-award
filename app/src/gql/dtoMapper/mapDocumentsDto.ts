@@ -188,7 +188,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
  */
 export function mapToProjectDocumentSummaryDtoArray<
   T extends GQL.Maybe<ReadonlyArray<GQL.Maybe<DocumentSummaryNode>>>,
-  PickList extends keyof Omit<PartnerDocumentSummaryDtoGql, "linkedEntityId">,
+  PickList extends keyof PartnerDocumentSummaryDtoGql,
 >(
   edges: T,
   pickList: PickList[],

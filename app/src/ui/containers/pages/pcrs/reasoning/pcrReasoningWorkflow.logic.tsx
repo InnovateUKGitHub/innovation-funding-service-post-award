@@ -6,7 +6,7 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { PcrReasoningWorkflowQuery } from "./__generated__/PcrReasoningWorkflowQuery.graphql";
 import { head } from "lodash";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
-import { mapToDocumentSummaryDto, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
@@ -98,16 +98,14 @@ export const usePcrReasoningFilesQuery = (
     ),
   );
 
-  const documents = (pcrNode?.ContentDocumentLinks?.edges ?? []).map(node =>
-    mapToDocumentSummaryDto(
-      node,
-      ["id", "dateCreated", "description", "fileName", "fileSize", "isOwner", "uploadedBy", "link", "linkedEntityId"],
-      {
-        type: "pcr",
-        projectId,
-        pcrId: pcrId,
-      },
-    ),
+  const documents = mapToProjectDocumentSummaryDtoArray(
+    pcrNode?.ContentDocumentLinks?.edges,
+    ["id", "dateCreated", "description", "fileName", "fileSize", "isOwner", "uploadedBy", "link", "linkedEntityId"],
+    {
+      type: "pcr",
+      projectId,
+      pcrId: pcrId,
+    },
   );
 
   const pcrItem = mapPcrItemDto(pcrNode, ["accountName", "partnerId", "partnerNameSnapshot", "status", "type"], {});
