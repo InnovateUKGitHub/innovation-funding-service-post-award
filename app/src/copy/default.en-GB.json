@@ -2152,8 +2152,15 @@
             "value": {
               "aria_label": "value of academic cost item {{costCategory}}",
               "errors": {
-                "invalid_type": "Value must be a number.",
-                "invalid_string": { "regex": "Value must be 2 decimal places or fewer" }
+                "too_small": {
+                  "string": "Enter a cost.",
+                  "number": "Cost cannot be less than £0."
+                },
+                "too_big": "Cost must be less than {{ count, currency }}.",
+                "invalid_string": {
+                  "regex": "Cost must be 2 decimal places or fewer."
+                },
+                "invalid_type_received_nan": "Enter a valid cost."
               }
             }
           }

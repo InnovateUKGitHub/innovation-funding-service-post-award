@@ -1,7 +1,6 @@
 import { CostCategoryType } from "@framework/constants/enums";
+import { currencyValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
-
-const lineItemValue = z.string().regex(/^-?[0-9]{1,16}(\.[0-9]{1,2})?$/i);
 
 export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
   markedAsComplete
@@ -10,7 +9,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         tsbReference: z.string().min(1),
         costs: z.array(
           z.object({
-            value: lineItemValue,
+            value: currencyValidation,
             costCategoryId: z.string(),
             id: z.string(),
             description: z.string(),
@@ -23,7 +22,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         tsbReference: z.string(),
         costs: z.array(
           z.object({
-            value: lineItemValue,
+            value: currencyValidation,
             costCategoryId: z.string(),
             id: z.string(),
             description: z.string(),
