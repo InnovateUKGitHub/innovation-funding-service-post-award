@@ -85,6 +85,9 @@ export function getParamsFromUrl(routePath: string, pathname: string, search = "
       } else {
         queryParams[k] = [v];
       }
+    } else if (k === "search") {
+      // Never cooerce search query to a number
+      queryParams[k] = v;
     } else {
       queryParams[k] = toNumber(v);
     }
