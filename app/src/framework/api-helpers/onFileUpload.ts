@@ -11,6 +11,7 @@ import type {
   ClaimDetailLevelUploadSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
+import { IFileWrapper } from "@framework/types/fileWapper";
 
 type InputOptions =
   | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
@@ -30,69 +31,89 @@ const isClaimDetailLevelUpload = (data: InputOptions): data is z.output<ClaimDet
 const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSchemaType> =>
   data.form === FormTypes.PcrLevelUpload;
 
-export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
+export const useOnUpload = <Inputs extends InputOptions>({
+  onIndividualFileSuccess,
+  onSuccess,
+}: {
+  onIndividualFileSuccess?: ({ file, documentId }: { file: IFileWrapper; documentId: string }) => void | Promise<void>;
+  onSuccess: () => void | Promise<void>;
+}) => {
   const { getContent } = useContent();
   const { clearMessages, setSuccessMessage } = useMessages();
 
   return useOnUpdate<Inputs, unknown, MultipleDocumentUploadDto>({
-    req(data) {
+    async req(data) {
       clearMessages();
 
       const { files, description, projectId } = data;
 
-      if (isClaimLevelUpload(data)) {
-        return clientsideApiClient.documents.uploadClaimDocuments({
-          claimKey: { projectId, partnerId: data.partnerId, periodId: data.periodId },
-          documents: {
-            files,
-            description,
-          },
-        });
-      } else if (isClaimDetailLevelUpload(data)) {
-        return clientsideApiClient.documents.uploadClaimDetailDocuments({
-          claimDetailKey: {
+      const documentIds: string[] = [];
+
+      for (const file of files) {
+        let promise: Promise<{ documentIds: string[] }>;
+
+        if (isClaimLevelUpload(data)) {
+          promise = clientsideApiClient.documents.uploadClaimDocuments({
+            claimKey: { projectId, partnerId: data.partnerId, periodId: data.periodId },
+            documents: {
+              files: [file],
+              description,
+            },
+          });
+        } else if (isClaimDetailLevelUpload(data)) {
+          promise = clientsideApiClient.documents.uploadClaimDetailDocuments({
+            claimDetailKey: {
+              projectId,
+              partnerId: data.partnerId,
+              periodId: data.periodId,
+              costCategoryId: data.costCategoryId,
+            },
+            documents: {
+              files: [file],
+              description,
+            },
+          });
+        } else if (isPcrLevelUpload(data)) {
+          promise = clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
             projectId,
-            partnerId: data.partnerId,
-            periodId: data.periodId,
-            costCategoryId: data.costCategoryId,
-          },
-          documents: {
-            files,
-            description,
-          },
-        });
-      } else if (isPcrLevelUpload(data)) {
-        return clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
-          projectId,
-          projectChangeRequestIdOrItemId: data.projectChangeRequestIdOrItemId,
-          documents: {
-            files,
-            description,
-          },
-        });
-      } else if (isProjectLevelUpload(data)) {
-        if (data.partnerId) {
-          return clientsideApiClient.documents.uploadPartnerDocument({
-            projectId: data.projectId,
-            partnerId: data.partnerId,
+            projectChangeRequestIdOrItemId: data.projectChangeRequestIdOrItemId,
             documents: {
-              files,
+              files: [file],
               description,
             },
           });
+        } else if (isProjectLevelUpload(data)) {
+          if (data.partnerId) {
+            promise = clientsideApiClient.documents.uploadPartnerDocument({
+              projectId: data.projectId,
+              partnerId: data.partnerId,
+              documents: {
+                files: [file],
+                description,
+              },
+            });
+          } else {
+            promise = clientsideApiClient.documents.uploadProjectDocument({
+              projectId: data.projectId,
+              documents: {
+                files: [file],
+                description,
+              },
+            });
+          }
         } else {
-          return clientsideApiClient.documents.uploadProjectDocument({
-            projectId: data.projectId,
-            documents: {
-              files,
-              description,
-            },
-          });
+          // Invalid form
+          return Promise.reject();
         }
-      } else {
-        // Invalid form
-        return Promise.reject();
+
+        const {
+          documentIds: [documentId],
+        } = await promise;
+        await onIndividualFileSuccess?.({ file, documentId });
+        documentIds.push(documentId);
       }
+
+      return documentIds;
     },
     async onSuccess(data) {
       await onSuccess();

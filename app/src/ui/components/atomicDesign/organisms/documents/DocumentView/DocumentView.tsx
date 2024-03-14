@@ -20,12 +20,14 @@ export interface DocumentShow {
   disableSearch?: boolean;
   hideHeader?: boolean;
   hideSubtitle?: boolean;
+  pendingDocuments?: FileList;
 }
 
 interface DocumentDisplayProps<T extends DocumentSummaryDto>
   extends Partial<Pick<DocumentShow, "disableSearch" | "hideHeader" | "hideSubtitle">> {
   children: (documents: T[]) => React.ReactElement<DocumentViewProps<T>> | React.ReactElement<DocumentEditProps<T>>;
   documents: T[];
+  pendingDocuments?: FileList;
 }
 
 /**
@@ -41,10 +43,13 @@ function DocumentDisplay<
   hideSubtitle,
   disableSearch = false,
   documents: unCheckedDocuments,
+  pendingDocuments,
   children,
 }: DocumentDisplayProps<T>) {
   const { getContent } = useContent();
   const { displaySearch, hasDocuments, documents, filterConfig } = useDocumentSearch(disableSearch, unCheckedDocuments);
+
+  console.log(pendingDocuments);
 
   return (
     <>
@@ -56,7 +61,7 @@ function DocumentDisplay<
 
       {displaySearch && <DocumentFilter qa="document-filter" {...filterConfig} />}
 
-      {hasDocuments ? (
+      {hasDocuments || pendingDocuments ? (
         children(documents)
       ) : (
         <DocumentsUnavailable

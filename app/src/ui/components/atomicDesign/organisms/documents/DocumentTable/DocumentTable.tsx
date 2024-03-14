@@ -9,8 +9,10 @@ import { DocumentsBase } from "../utils/documents.interface";
 import { DocumentsUnavailable } from "../DocumentsUnavailable/DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "../DocumentView/DocumentView";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { useMemo } from "react";
 
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
+  pendingDocuments?: FileList;
   customContent?: (
     table: ReturnType<typeof createTypedTable<T>>,
   ) => UnwrapArray<Parameters<ReturnType<typeof createTypedTable<T>>["Table"]>["0"]["children"]>;
@@ -20,13 +22,21 @@ const Form = createTypedForm<DocumentSummaryDto[]>();
 
 export const DocumentTable = <T extends DocumentSummaryDto>({
   documents = [],
+  pendingDocuments,
   qa,
   customContent,
 }: DocumentTableProps<T>) => {
-  const ProjectDocumentsTable = createTypedTable<T>();
+  const ProjectDocumentsTable = useMemo(() => createTypedTable<T>(), []);
+
+  const pendin = pendingDocuments ? [...pendingDocuments].map(x => ({ fileName: x.name } as T)) : [];
 
   return (
-    <ProjectDocumentsTable.Table data={documents} qa={qa} initialSortKey="dateCreated" initialSortState="descending">
+    <ProjectDocumentsTable.Table
+      data={[...documents, ...pendin]}
+      qa={qa}
+      initialSortKey="dateCreated"
+      initialSortState="descending"
+    >
       <ProjectDocumentsTable.Custom
         sortByKey="fileName"
         header="File name"
@@ -77,6 +87,7 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
   hideRemove?: (d: T) => boolean;
   onRemove: (d: T) => void;
   disabled?: boolean;
+  pendingDocuments?: FileList;
   formType?:
     | FormTypes.ProjectLevelDelete
     | FormTypes.ClaimLevelDelete
@@ -86,13 +97,14 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({
   documents = [],
+  pendingDocuments,
   qa,
   hideRemove,
   onRemove,
   disabled,
   formType,
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
-  if (!documents.length) return <DocumentsUnavailable />;
+  if (!documents.length && !pendingDocuments) return <DocumentsUnavailable />;
 
   return (
     <Form.Form data={documents}>
@@ -100,6 +112,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
       <DocumentTable
         qa={qa}
         documents={documents}
+        pendingDocuments={pendingDocuments}
         customContent={table => (
           <table.Custom
             qa="delete"

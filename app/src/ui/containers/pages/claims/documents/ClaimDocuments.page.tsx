@@ -64,7 +64,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const isNonEditable = getClaimDetailsStatusType({ project, partner, claim }) !== "edit";
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
+  const { register, handleSubmit, formState, getFieldState, reset, setError, watch } = useForm<
     z.output<ClaimLevelUploadSchemaType>
   >({
     resolver: zodResolver(getClaimLevelUpload({ config: config.options, project }), {
@@ -77,6 +77,9 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     apiError: onUploadApiError,
     isProcessing: onUploadProcessing,
   } = useOnUpload({
+    async onIndividualFileSuccess({ file, documentId }) {
+      console.log(file, documentId);
+    },
     async onSuccess() {
       await refresh();
       reset();
@@ -220,6 +223,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           qa="claim-documents"
           onRemove={onDelete}
           documents={claimDocuments}
+          pendingDocuments={watch("files") as FileList}
           formType={FormTypes.ClaimLevelDelete}
           disabled={disabled}
         />
