@@ -12,7 +12,7 @@ const goToPage = (page: string) => {
   });
 
   cy.wait(["@i18n"]);
-  cy.wait(1000);
+  cy.get('[data-qa="react-loaded-indicator"]');
 };
 
 const waitForPageHeading = (title: string) => {
