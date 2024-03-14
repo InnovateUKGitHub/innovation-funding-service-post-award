@@ -98,7 +98,7 @@ const getFloatEnv = (env: string, defaultValue?: number) => getEnv(env, defaultV
  */
 const getCertificateEnv = (type: string, defaultValue?: string): string => {
   if (envExists(type)) {
-    return getStringEnv(type);
+    return getStringEnv(type).replaceAll("\\n", "\n");
   }
   if (envExists(`${type}_FILE`)) {
     return readFileSync(getStringEnv(`${type}_FILE`), { encoding: "utf-8" });
