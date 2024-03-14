@@ -27,6 +27,7 @@ const DeveloperEnvironmentInformation = ({ currentRoute }: DeveloperEnvironmentI
         content={<DeveloperCurrentUsername />}
       />
       <SummaryListItem
+        qa={isClient ? "react-loaded-indicator" : "react-not-loaded-indicator"}
         label={x => x.components.developerEnvironmentInformation.react}
         content={isClient ? "Loaded" : "Not Loaded"}
       />
