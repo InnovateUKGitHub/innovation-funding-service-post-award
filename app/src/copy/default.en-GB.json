@@ -2438,9 +2438,18 @@
         },
         "grantMovingOverFinancialYear": {
           "errors": {
-            "required": "Grant moving over financial year is required.",
-            "invalid": "The value of a grant moving over financial year must be numerical.",
-            "too_small": "The value can not be lower than 0."
+            "too_small": {
+              "string": "Enter a grant moving over financial year.",
+              "number": "Grant moving over financial year cannot be less than £0."
+            },
+            "too_big": {
+              "number": "Grant moving over financial year must be less than {{ count, currency }}."
+            },
+            "costs_too_small": "Grant moving over financial year must be greater than amount already claimed for {{ name }}.",
+            "invalid_string": {
+              "regex": "Grant moving over financial year must be 2 decimal places or fewer."
+            },
+            "invalid_type_received_nan": "Enter a valid grant moving over financial year."
           }
         },
         "costCategoryLevel": {

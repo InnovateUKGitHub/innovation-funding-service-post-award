@@ -1,12 +1,11 @@
-import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
-  currencyValidation,
   emptyStringToUndefinedValidation,
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
+  zeroOrGreaterCurrencyValidation,
 } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
@@ -20,7 +19,7 @@ const getFinancialVirementsSummaryValidator = (props: MapVirements) => {
       pcrId: pcrIdValidation,
       pcrItemId: pcrItemIdValidation,
       form: z.literal(FormTypes.PcrFinancialVirementsSummary),
-      grantMovingOverFinancialYear: z.union([emptyStringToUndefinedValidation, currencyValidation]),
+      grantMovingOverFinancialYear: z.union([zeroOrGreaterCurrencyValidation, emptyStringToUndefinedValidation]),
       markedAsComplete: z.boolean(),
     })
     .superRefine((data, ctx) => {
@@ -40,27 +39,13 @@ const getFinancialVirementsSummaryValidator = (props: MapVirements) => {
 
       if (!isSummaryValid) {
         ctx.addIssue({
-          code: "custom",
+          code: ZodIssueCode.custom,
           params: {
             i18n: "errors.virement_too_big",
             difference: virementMeta.grantDifference,
             total: virementMeta.originalRemainingGrant,
           },
         });
-      }
-
-      if (typeof data.grantMovingOverFinancialYear === "string") {
-        const numbericGrantMovingOverFinancialYear = parseCurrency(data.grantMovingOverFinancialYear);
-
-        if (numbericGrantMovingOverFinancialYear < 0) {
-          ctx.addIssue({
-            code: ZodIssueCode.too_small,
-            minimum: 1,
-            inclusive: true,
-            type: "number",
-            path: ["grantMovingOverFinancialYear"],
-          });
-        }
       }
     });
 };
