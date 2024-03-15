@@ -52,6 +52,7 @@ import {
   jesDeleteCostCat,
   jesCompleteOtherSourceLine,
   jeScheckDetailsAgain,
+  validateJesCostsFields,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";
 import { newCurrency } from "common/currency";
@@ -253,6 +254,8 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
     cy.get("h2").contains("Project costs for new partner");
   });
 
+  it("Should validate the input fields for costs", validateJesCostsFields);
+
   it("Should display an academic cost category table", completeAcademicCostCatTable);
 
   it("Should save and return to summary", () => {
@@ -291,7 +294,6 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
   /**
    * Other sources of funding section
    */
-
   it("Should re-access 'Other public sector funding' and change", accessOtherPublicFunding);
 
   it("Should add a source and validate the inputs", validateOtherSourceInput);
@@ -328,7 +330,6 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
   /**
    * Partner agreement section
    */
-
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);

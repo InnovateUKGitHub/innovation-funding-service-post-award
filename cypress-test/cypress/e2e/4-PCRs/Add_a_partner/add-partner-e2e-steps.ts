@@ -1146,3 +1146,38 @@ export const otherSourcesLineItemsSaved = () => {
       });
   });
 };
+
+export const validateJesCostsFields = () => {
+  cy.get("#tsb-reference").clear().type("1234567");
+  [
+    "value of academic cost item Directly incurred - Staff",
+    "value of academic cost item Directly incurred - Travel and subsistence",
+    "value of academic cost item Directly incurred - Equipment",
+    "value of academic cost item Directly incurred - Other costs",
+    "value of academic cost item Directly allocated - Investigations",
+    "value of academic cost item Directly allocated - Estates costs",
+    "value of academic cost item Directly allocated - Other costs",
+    "value of academic cost item Indirect costs - Investigations",
+    "value of academic cost item Exceptions - Staff",
+    "value of academic cost item Exceptions - Travel and subsistence",
+    "value of academic cost item Exceptions - Equipment",
+    "value of academic cost item Exceptions - Other costs",
+  ].forEach((input, index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.getByAriaLabel(input).clear().type("9999999999999999");
+      });
+
+    cy.button("Save and continue").click();
+    cy.validationLink("Cost must be less than £999,999,999,999.00.");
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.paragraph("Cost must be less than £999,999,999,999.00.");
+        cy.getByAriaLabel(input).clear();
+        cy.paragraph("Enter a cost");
+      });
+  });
+  cy.reload();
+};
