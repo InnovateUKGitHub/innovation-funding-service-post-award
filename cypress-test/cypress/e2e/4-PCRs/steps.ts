@@ -1435,8 +1435,18 @@ export const validateGrantMoving = () => {
   cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.validationLink("The value of a grant moving over financial year must be numerical.");
+  cy.validationLink("Enter a valid grant moving over financial year.");
   cy.clickCheckBox("I agree with this change");
+  cy.get("legend").contains("Grant value moving over the financial year end");
+  cy.get("#grantMovingOverFinancialYear").clear().type("10000000000000000000");
+  cy.clickOn("Save and return to request");
+  cy.validationLink("Grant moving over financial year must be less than £999,999,999,999.00.");
+  cy.get("#grantMovingOverFinancialYear").clear().type("-100");
+  cy.clickOn("Save and return to request");
+  cy.validationLink("Grant moving over financial year cannot be less than £0.");
+  cy.get("#grantMovingOverFinancialYear").clear().type("1000.333");
+  cy.clickOn("Save and return to request");
+  cy.validationLink("Grant moving over financial year must be 2 decimal places or fewer.");
   cy.get("input#grantMovingOverFinancialYear").clear().type("0");
 };
 
