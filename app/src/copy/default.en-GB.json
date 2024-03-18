@@ -2286,13 +2286,15 @@
           "description": {
             "errors": {
               "invalid_type": "Enter description of role.",
-              "too_small": "Enter description of role."
+              "too_small": "Enter description of role.",
+              "too_big": "Description must be {{count}} or fewer."
             }
           },
           "descriptionOfRole": {
             "errors": {
               "invalid_type": "Enter description of role.",
-              "too_small": "Enter description of role."
+              "too_small": "Enter description of role.",
+              "too_big": "Description must be {{count}} or fewer."
             }
           },
           "grossCostOfRole": {
@@ -2300,6 +2302,7 @@
               "too_small": "Enter gross cost of role.",
               "invalid_type": "Gross cost of role must be a number.",
               "invalid_string": { "regex": "Gross cost of role must be a number." },
+              "too_big": "Gross cost of role must be {{count}} or less.",
               "two_decimal_places": "Gross cost of role must be 2 decimal places or fewer."
             }
           },
@@ -2308,7 +2311,8 @@
               "too_small": "Enter rate per day.",
               "invalid_type": "Rate per day must be a number.",
               "invalid_string": { "regex": "Rate per day must be a number." },
-              "two_decimal_places": "Rate per day must be 2 decimal places or fewer."
+              "two_decimal_places": "Rate per day must be 2 decimal places or fewer.",
+              "too_big": "Rate per day must be {{count}} or less."
             }
           },
           "daysSpentOnProject": {
@@ -2325,28 +2329,33 @@
               "too_small": "Enter total cost.",
               "invalid_type": "Total cost must be a number.",
               "invalid_string": { "regex": "Total cost must be a number." },
+              "too_big": "Total cost must be {{count}} or less.",
               "two_decimal_places": "Total cost must be 2 decimal places or fewer."
             }
           },
           "subcontractorCountry": {
             "errors": {
-              "too_small": "Enter subcontractor country."
+              "too_small": "Enter subcontractor country.",
+              "too_big": "Subcontractor country must be {{count}} or fewer."
             }
           },
           "subcontractorName": {
             "errors": {
-              "too_small": "Enter subcontractor name."
+              "too_small": "Enter subcontractor name.",
+              "too_big": "Subcontractor name must be {{count}} or fewer."
             }
           },
           "subcontractorRoleAndDescription": {
             "errors": {
-              "too_small": "Enter role and description."
+              "too_small": "Enter role and description.",
+              "too_big": "Role and description must be {{count}} or fewer."
             }
           },
           "subcontractorCost": {
             "errors": {
               "too_small": "Enter cost.",
               "invalid_type": "Cost must be a number.",
+              "too_big": "Cost must be {{count}} or less.",
               "invalid_string": { "regex": "Cost must be a number." },
               "two_decimal_places": "Cost must be 2 decimal places or fewer."
             }
@@ -2354,6 +2363,7 @@
           "descriptionOfCost": {
             "errors": {
               "too_small": "Enter description of cost.",
+              "too_big": "Description of cost must be {{count}} or fewer.",
               "invalid_type": "Cost must be a number.",
               "invalid_string": { "regex": "Cost must be a number." },
               "two_decimal_places": "Cost must be 2 decimal places or fewer."
@@ -2364,7 +2374,8 @@
               "required": "Enter number of times.",
               "not_integer": "Number of times must be a whole number, like 15.",
               "invalid_type": "Number of times must be a number.",
-              "too_small": "Number of times must be {{count}} or more."
+              "too_small": "Number of times must be {{count}} or more.",
+              "too_big": "Number of times must be {{count}} or less."
             }
           },
           "costOfEach": {
@@ -2372,16 +2383,19 @@
               "too_small": "Enter cost of each.",
               "invalid_type": "Cost of each must be a number.",
               "invalid_string": { "regex": "Cost of each must be a number." },
+              "too_big": "Cost of each must be {{count}} or less.",
               "two_decimal_places": "Cost of each must be 2 decimal places or fewer."
             }
           },
           "capitalUsageDescription": {
             "errors": {
-              "too_small": "Enter item description."
+              "too_small": "Enter item description.",
+              "too_big": "Item description must be {{count}} or fewer."
             }
           },
           "materialsDescription": {
             "errors": {
+              "too_big": "Item description must be {{count}} or fewer.",
               "too_small": "Enter item description."
             }
           },
@@ -2390,6 +2404,7 @@
               "required": "Enter quantity.",
               "invalid_type": "Quantity must be a number.",
               "too_small": "Quantity must be {{count}} or more.",
+              "too_big": "Quantity must be {{count}} or less.",
               "not_integer": "Quantity must be a whole number, like 15."
             }
           },
@@ -2403,6 +2418,7 @@
               "invalid_type": "Cost per item must be a number.",
               "invalid_string": { "regex": "Cost per item must be a number." },
               "too_small": "Enter cost per item.",
+              "too_big": "Cost per item must be {{count}} or less.",
               "two_decimal_places": "Cost per item must be 2 decimal places or fewer."
             }
           },
@@ -2411,6 +2427,7 @@
               "required": "Enter depreciation period.",
               "not_integer": "Depreciation period must be a whole number, like 15.",
               "invalid_type": "Depreciation period must be a number.",
+              "too_big": "Depreciation period must be {{count}} or less.",
               "too_small": "Depreciation period must be {{count}} or more."
             }
           },
@@ -2418,6 +2435,7 @@
             "errors": {
               "too_small": "Enter net present value.",
               "invalid_type": "Net present value must be a number.",
+              "too_big": "Net present value must be {{count}} or less.",
               "invalid_string": { "regex": "Net present value must be a number." },
               "two_decimal_places": "Net present value must be 2 decimal places or fewer."
             }
@@ -2427,6 +2445,7 @@
               "too_small": "Enter residual value.",
               "invalid_type": "Residual value must be a number.",
               "invalid_string": { "regex": "Residual value must be a number." },
+              "too_big": "Residual value must be {{count}} or less.",
               "two_decimal_places": "Residual value must be 2 decimal places or fewer."
             }
           },
@@ -2443,6 +2462,7 @@
             "errors": {
               "too_small": "Enter estimated cost.",
               "invalid_type": "Estimated cost must be a number.",
+              "too_big": "Estimated cost must be {{count}} or less.",
               "invalid_string": { "regex": "Estimated cost must be a number." },
               "two_decimal_places": "Estimated cost must be 2 decimal places or fewer."
             }
