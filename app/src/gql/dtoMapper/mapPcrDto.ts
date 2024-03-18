@@ -181,7 +181,6 @@ export type PcrItemDtoMapping = Pick<
   | "subcontractorJustification"
   | "subcontractorCost"
   | "reasoningComments"
-  | "upliftJustification"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -432,9 +431,6 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   subcontractorJustification(node) {
     return node?.Justification__c?.value ?? null;
-  },
-  upliftJustification(node) {
-    return node?.Override_Justification__c?.value ?? null;
   },
 };
 

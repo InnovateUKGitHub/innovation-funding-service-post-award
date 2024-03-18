@@ -24,15 +24,14 @@ const useUpliftSummaryQuery = ({
   });
 
   const { node: pcrNode } = getFirstEdge(data?.salesforce.uiapi.query.Header?.edges ?? []);
-  const { node: pcrItemNode } = getFirstEdge(data?.salesforce.uiapi.query.Child?.edges ?? []);
 
   const pcr = mapToPcrDto(
     {
       head: pcrNode,
-      children: [pcrItemNode],
+      children: [],
     },
-    ["requestNumber"],
-    ["upliftJustification"],
+    ["requestNumber", "reasoningComments"],
+    [],
     {},
   );
   const pcrItemCount = pcrNode?.Acc_Project_Change_Requests__r?.totalCount ?? 0;
