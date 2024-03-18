@@ -7,7 +7,7 @@ import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htm
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { configuration } from "@server/features/common/config";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/pages/claims/review/claimReview.page";
 
 export class ClaimReviewDocumentsUploadHandler extends MultipleFileFormHandlerBase<
   ReviewClaimParams,

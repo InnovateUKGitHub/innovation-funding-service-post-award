@@ -1,6 +1,4 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { useRhfErrors } from "@framework/util/errorHelpers";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -10,55 +8,31 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
-import { useRoutes } from "@ui/redux/routesProvider";
-import { useForm } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
-import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
-import { IAppError } from "@framework/types/IAppError";
-import { Results } from "@ui/validation/results";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { claimReviewSchema } from "./claimReview.zod";
 
 interface ClaimReviewFormProps {
-  projectId: ProjectId;
-  partnerId: PartnerId;
-  periodId: PeriodId;
   data: ReturnType<typeof useClaimReviewPageData>;
   content: ReturnType<typeof useReviewContent>;
-  setApiError: Dispatch<SetStateAction<IAppError<Results<ResultBase>> | null | undefined>>;
-  setValidatorErrors: Dispatch<SetStateAction<RhfErrors>>;
+  validatorErrors: RhfErrors;
+  isFetching: boolean;
+  form: UseFormReturn<z.output<typeof claimReviewSchema>>;
+  onUpdate: ReturnType<typeof useOnUpdateClaimReview>["onUpdate"];
 }
 
 const validSubmittedClaimStatus = [ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IAR, ClaimStatus.AWAITING_IUK_APPROVAL];
 
 const ClaimReviewForm = ({
-  projectId,
-  partnerId,
-  periodId,
   data,
   content,
-  setApiError,
-  setValidatorErrors,
+  validatorErrors,
+  isFetching,
+  form: { watch, handleSubmit, register },
+  onUpdate,
 }: ClaimReviewFormProps) => {
   const { isClient } = useMounted();
-  const routes = useRoutes();
-  const { register, formState, handleSubmit, watch } = useForm<z.output<typeof claimReviewSchema>>({
-    defaultValues: {
-      status: undefined,
-      comments: "",
-    },
-    resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
-  });
-
-  const { onUpdate, apiError, isFetching } = useOnUpdateClaimReview(
-    partnerId,
-    projectId,
-    periodId,
-    routes.allClaimsDashboard.getLink({ projectId }).path,
-    data.claim,
-  );
-
-  const validatorErrors = useRhfErrors<z.output<typeof claimReviewSchema>>(formState.errors);
 
   const watchedStatus = watch("status");
   const watchedComments = watch("comments");
@@ -67,13 +41,6 @@ const ClaimReviewForm = ({
   const isInteractive = isClient && !watchedStatus;
   const displayAdditionalInformationForm = isValidStatus || !isInteractive;
   const submitLabel = watchedStatus === ClaimStatus.MO_QUERIED ? content.buttonSendQuery : content.buttonSubmit;
-
-  useEffect(() => {
-    setApiError(apiError);
-  }, [apiError, setApiError]);
-  useEffect(() => {
-    setValidatorErrors(validatorErrors);
-  }, [validatorErrors, setValidatorErrors]);
 
   return (
     <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">

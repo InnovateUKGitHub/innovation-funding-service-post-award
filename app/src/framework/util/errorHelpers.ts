@@ -2,7 +2,7 @@ import { FieldErrors, FieldValues, UseFormSetError, Path } from "react-hook-form
 import { useFormErrorContext } from "@ui/context/form-error";
 import { IAppError } from "@framework/types/IAppError";
 import { ZodError, ZodIssue } from "zod";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { NestedResult } from "@ui/validation/nestedResult";
@@ -128,7 +128,10 @@ export const useValidationErrors = <TFormValues extends AnyObject>(errors: Field
  */
 export const useRhfErrors = <TFormValues extends AnyObject>(errors: FieldErrors<TFormValues>) => {
   const serverSideFormErrors = useFormErrorContext();
-  return Object.assign({}, errors, convertResultErrorsToReactHookFormFormat(serverSideFormErrors)) as RhfErrors;
+  return useMemo(
+    () => Object.assign({}, errors, convertResultErrorsToReactHookFormFormat(serverSideFormErrors)) as RhfErrors,
+    [errors, serverSideFormErrors],
+  );
 };
 
 /**
