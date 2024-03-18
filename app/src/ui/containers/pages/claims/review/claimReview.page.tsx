@@ -1,17 +1,15 @@
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { convertResultErrorsToReactHookFormFormat } from "@framework/util/errorHelpers";
+import { convertResultErrorsToReactHookFormFormat, useRhfErrors } from "@framework/util/errorHelpers";
 import { RefreshedQueryOptions, useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Pending } from "@shared/pending";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { UL } from "@ui/components/atomicDesign/atoms/List/list";
-import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.standalone";
@@ -22,10 +20,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
-import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
-import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
-import { DropdownOption, createTypedForm } from "@ui/components/bjss/form/form";
 import { PageLoader } from "@ui/components/bjss/loading";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
@@ -34,13 +29,13 @@ import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { useStores } from "@ui/redux/storesProvider";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { claimReviewQuery } from "./ClaimReview.query";
-import { useClaimReviewPageData, useReviewContent } from "./claimReview.logic";
+import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
+import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { ClaimReviewForm } from "./claimReviewForm";
-import { EnumDocuments } from "./components/EnumDocuments";
-import { useState } from "react";
-import { IAppError } from "@framework/types/IAppError";
-import { Results } from "@ui/validation/results";
+import { ClaimReviewDocuments } from "./claimReviewDocuments";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -55,14 +50,6 @@ interface ReviewClaimContainerProps {
   refreshedQueryOptions: RefreshedQueryOptions;
 }
 
-/**
- * ### useReviewContent
- *
- * hook returns content needed for the review page
- */
-
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
-
 const ClaimReviewPage = ({
   projectId,
   partnerId,
@@ -75,10 +62,6 @@ const ClaimReviewPage = ({
 }: ReviewClaimParams & BaseProps & ReviewClaimContainerProps) => {
   const content = useReviewContent();
   const routes = useRoutes();
-
-  const [apiError, setApiError] = useState<IAppError<Results<ResultBase>> | null | undefined>(null);
-  const [validatorErrors, setValidatorErrors] = useState<RhfErrors>(null);
-
   const data = useClaimReviewPageData(projectId, partnerId, periodId, refreshedQueryOptions);
 
   const documentValidatorErrors = documentsEditor?.validator?.showValidationErrors
@@ -87,13 +70,28 @@ const ClaimReviewPage = ({
   const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
   const { isMo } = getAuthRoles(data.project.roles);
 
-  const backLinkElement = (
-    <BackLink route={routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>{content.backLink}</BackLink>
+  const { onUpdate, apiError, isFetching } = useOnUpdateClaimReview(
+    partnerId,
+    projectId,
+    periodId,
+    routes.allClaimsDashboard.getLink({ projectId }).path,
+    data.claim,
   );
+
+  const form = useForm<z.output<typeof claimReviewSchema>>({
+    defaultValues: {
+      status: undefined,
+      comments: "",
+    },
+    resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
+  });
+  const { formState } = form;
+
+  const validatorErrors = useRhfErrors<z.output<typeof claimReviewSchema>>(formState.errors);
 
   return (
     <Page
-      backLink={backLinkElement}
+      backLink={<BackLink route={routes.allClaimsDashboard.getLink({ projectId })}>{content.backLink}</BackLink>}
       apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
       pageTitle={<Title />}
@@ -178,87 +176,28 @@ const ClaimReviewPage = ({
             title={content.accordionTitleSupportingDocumentsForm}
             qa="upload-supporting-documents-form-accordion"
           >
-            <EnumDocuments
-              documentsToCheck={
-                data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-                  ? allowedImpactManagementClaimDocuments
-                  : allowedClaimDocuments
-              }
-            >
-              {docs => (
-                <>
-                  <UploadForm.Form
-                    enctype="multipart"
-                    editor={documentsEditor}
-                    onChange={dto => onUpload(false, dto)}
-                    onSubmit={() => onUpload(true, documentsEditor.data)}
-                    qa="projectDocumentUpload"
-                  >
-                    <UploadForm.Fieldset>
-                      <Markdown value={content.uploadInstruction} />
-
-                      <DocumentGuidance />
-
-                      <UploadForm.MultipleFileUpload
-                        label={content.labelInputUpload}
-                        name="attachment"
-                        labelHidden
-                        value={x => x.files}
-                        update={(dto, files) => (dto.files = files || [])}
-                        validation={documentsEditor.validator.files}
-                      />
-
-                      <UploadForm.DropdownList
-                        label={content.descriptionLabel}
-                        labelHidden={false}
-                        hasEmptyOption
-                        placeholder="-- No description --"
-                        name="description"
-                        validation={documentsEditor.validator.files}
-                        options={docs}
-                        value={selectedOption => filterDropdownList(selectedOption, docs)}
-                        update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
-                      />
-                    </UploadForm.Fieldset>
-
-                    <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                      {content.buttonUpload}
-                    </UploadForm.Submit>
-                  </UploadForm.Form>
-
-                  <Section>
-                    <DocumentEdit
-                      qa="claim-supporting-documents"
-                      onRemove={document => onDelete(documentsEditor.data, document)}
-                      documents={data.documents}
-                    />
-                  </Section>
-                </>
-              )}
-            </EnumDocuments>
+            <ClaimReviewDocuments
+              data={data}
+              content={content}
+              documentsEditor={documentsEditor}
+              isFetching={isFetching}
+              onUpload={onUpload}
+              onDelete={onDelete}
+            />
           </AccordionItem>
         </Accordion>
       </Section>
 
       <ClaimReviewForm
-        projectId={projectId}
-        partnerId={partnerId}
-        periodId={periodId}
         data={data}
         content={content}
-        setApiError={setApiError}
-        setValidatorErrors={setValidatorErrors}
+        validatorErrors={validatorErrors}
+        form={form}
+        isFetching={isFetching}
+        onUpdate={onUpdate}
       />
     </Page>
   );
-};
-
-const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
-  if (!documents.length || !selectedDocument.description) return undefined;
-
-  const targetId = selectedDocument.description.toString();
-
-  return documents.find(x => x.id === targetId);
 };
 
 const ClaimReviewContainer = (props: ReviewClaimParams & BaseProps) => {
@@ -309,6 +248,7 @@ const ClaimReviewContainer = (props: ReviewClaimParams & BaseProps) => {
       },
     );
   };
+
   return (
     <PageLoader
       pending={combined}

@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 
-import { useReviewContent } from "./claimReview.logic";
+import { useReviewContent } from "./review/claimReview.logic";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
