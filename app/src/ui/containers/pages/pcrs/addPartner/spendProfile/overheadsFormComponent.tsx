@@ -94,7 +94,7 @@ export const OverheadsFormComponent = ({}) => {
   const { handleSubmit, watch, formState, register, setValue } = useForm<OverheadSchema>({
     defaultValues: {
       id: defaultCost.id,
-      calculatedValue: String(defaultCost.value ?? ""),
+      calculatedValue: defaultCost.value ? String(defaultCost.value) : null,
       overheadRate: defaultCost?.overheadRate ?? PCRSpendProfileOverheadRate.Unknown,
       button_submit: "submit",
     },
@@ -162,7 +162,7 @@ export const OverheadsFormComponent = ({}) => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   overheadRate: Number(data.overheadRate),
-                  value: Number(data.calculatedValue.replace("£", "")) ?? null,
+                  value: data.calculatedValue ? Number(data.calculatedValue.replace("£", "")) : null,
                 }),
               },
             },

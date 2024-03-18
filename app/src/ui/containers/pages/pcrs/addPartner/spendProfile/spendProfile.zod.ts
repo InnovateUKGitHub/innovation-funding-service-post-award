@@ -10,7 +10,7 @@ import { z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
-const description = z.string().min(1);
+const description = z.string().min(1).max(255);
 
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
@@ -26,7 +26,7 @@ export const overheadSchema = z
   .object({
     id: costIdValidation.nullable(),
     overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
-    calculatedValue: currencyValidation,
+    calculatedValue: currencyValidation.nullable(),
     button_submit: z.string(),
   })
   .superRefine((data, ctx) => {
