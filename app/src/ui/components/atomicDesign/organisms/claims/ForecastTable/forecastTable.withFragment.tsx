@@ -13,6 +13,7 @@ import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
+import { useMemo } from "react";
 
 export type ForecastTableWithFragmentProps =
   | { periodId: PeriodId; selectCurrentClaimByApprovedStatus?: false | undefined | null }
@@ -30,68 +31,75 @@ export const ForecastTable = ({
   }
 
   const fragment: ForecastTableFragment$data = useFragment(forecastTableFragment, fragmentRef);
-  const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
-  const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_Partner?.edges);
 
-  const project = mapToProjectDto(projectNode, ["periodId", "numberOfPeriods", "competitionType"]);
+  const forecastData = useMemo(() => {
+    const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
+    const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_Partner?.edges);
 
-  const costCategories = mapToRequiredSortedCostCategoryDtoArray(
-    fragment?.query?.ForecastTable_CostCategory?.edges ?? [],
-    ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
-    fragment?.query?.ForecastTable_ProfileForCostCategory?.edges ?? [],
-  );
+    const project = mapToProjectDto(projectNode, ["periodId", "numberOfPeriods", "competitionType"]);
 
-  const partner = mapToPartnerDto(partnerNode, ["id", "partnerStatus", "name", "organisationType", "overheadRate"], {});
+    const costCategories = mapToRequiredSortedCostCategoryDtoArray(
+      fragment?.query?.ForecastTable_CostCategory?.edges ?? [],
+      ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
+      fragment?.query?.ForecastTable_ProfileForCostCategory?.edges ?? [],
+    );
 
-  const claims = mapToCurrentClaimsDtoArray(
-    fragment?.query?.ForecastTable_AllClaimsForPartner?.edges ?? [],
-    ["isApproved", "periodId"],
-    {},
-  );
+    const partner = mapToPartnerDto(
+      partnerNode,
+      ["id", "partnerStatus", "name", "organisationType", "overheadRate"],
+      {},
+    );
 
-  const costCategoriesOrder = costCategories.map(y => y.id);
+    const claims = mapToCurrentClaimsDtoArray(
+      fragment?.query?.ForecastTable_AllClaimsForPartner?.edges ?? [],
+      ["isApproved", "periodId"],
+      {},
+    );
 
-  let claim: typeof claims[0] | null;
-  if (selectCurrentClaimByApprovedStatus) {
-    claim = claims.find(claim => !claim.isApproved) ?? null;
-  } else {
-    claim = claims.find(claim => claim.periodId === periodId) ?? null;
-  }
+    const costCategoriesOrder = costCategories.map(y => y.id);
 
-  const claimDetails = mapToClaimDetailsDtoArray(
-    fragment?.query?.ForecastTable_ClaimDetails?.edges ?? [],
-    ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
-    {},
-  );
+    let claim: typeof claims[0] | null;
+    if (selectCurrentClaimByApprovedStatus) {
+      claim = claims.find(claim => !claim.isApproved) ?? null;
+    } else {
+      claim = claims.find(claim => claim.periodId === periodId) ?? null;
+    }
 
-  const golCosts = mapToGolCostDtoArray(
-    fragment?.query?.ForecastTable_GolCosts?.edges ?? [],
-    ["costCategoryId", "costCategoryName", "value"],
-    costCategories,
-  ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
+    const claimDetails = mapToClaimDetailsDtoArray(
+      fragment?.query?.ForecastTable_ClaimDetails?.edges ?? [],
+      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+      {},
+    );
 
-  const forecastDetails = mapToForecastDetailsDtoArray(fragment?.query?.ForecastTable_ForecastDetails?.edges ?? [], [
-    "id",
-    "costCategoryId",
-    "periodEnd",
-    "periodStart",
-    "periodId",
-    "value",
-  ]);
+    const golCosts = mapToGolCostDtoArray(
+      fragment?.query?.ForecastTable_GolCosts?.edges ?? [],
+      ["costCategoryId", "costCategoryName", "value"],
+      costCategories,
+    ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
 
-  const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(fragment?.query?.ForecastTable_ClaimsForIarDue?.edges ?? []);
+    const forecastDetails = mapToForecastDetailsDtoArray(fragment?.query?.ForecastTable_ForecastDetails?.edges ?? [], [
+      "id",
+      "costCategoryId",
+      "periodEnd",
+      "periodStart",
+      "periodId",
+      "value",
+    ]);
 
-  const forecastData = {
-    golCosts,
-    forecastDetails,
-    claimDetails,
-    costCategories,
-    project,
-    partner,
-    claim,
-    claims,
-    IARDueOnClaimPeriods,
-  };
+    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(fragment?.query?.ForecastTable_ClaimsForIarDue?.edges ?? []);
+
+    return {
+      golCosts,
+      forecastDetails,
+      claimDetails,
+      costCategories,
+      project,
+      partner,
+      claim,
+      claims,
+      IARDueOnClaimPeriods,
+    };
+  }, []);
 
   return <ForecastTableComponent data={forecastData} {...props} />;
 };
