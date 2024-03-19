@@ -545,7 +545,7 @@ export const checkEditOtherCostsItem = (pageNumber: OtherCostPages) => {
   checkSummaryForEdit(page, "Other expenses 2", cost, diff, "Estimated cost (£)", String(cost));
 };
 
-const checkDeleteItem = (category: Category, itemName: string, cost: number) => {
+const checkDeleteItem = (category: Category, itemName: string, cost: number, overheadsAdjustment: number = 0) => {
   refreshTest();
   cy.get("th#new-partner-total-costs").then($span => {
     const totalCost = getCost($span);
@@ -558,14 +558,15 @@ const checkDeleteItem = (category: Category, itemName: string, cost: number) => 
       cy.clickOn("Save and return to project costs");
       cy.get("h2").contains("Project costs for new partner");
       cy.checkTotalFor(category, pounds(categoryTotal - cost));
-      cy.checkTotalFor("Total costs (£)", pounds(totalCost - cost));
+      cy.checkTotalFor("Total costs (£)", pounds(totalCost - (cost + overheadsAdjustment)));
     });
   });
 };
 
 export const checkDeleteLabourItem = () => {
-  const cost = -10000 - 2000; // including overheads adjustment
-  checkDeleteItem("Labour", "Bar keeper", cost);
+  const cost = 10000;
+  const overheadsAdjustment = 2000;
+  checkDeleteItem("Labour", "Bar keeper", cost, overheadsAdjustment);
 };
 
 export const checkDeleteMaterialsItem = () => {
