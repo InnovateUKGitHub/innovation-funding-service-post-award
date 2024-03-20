@@ -4,14 +4,12 @@ import "isomorphic-form-data";
 import "reflect-metadata";
 
 import { Command } from "commander";
-
 import { Server } from "./server";
 import { healthCheck } from "./healthCheck";
 import { configuration } from "./features/common/config";
 
 // Set up New Relic to monitor app when deployed
 if (configuration.newRelic.enabled) {
-  require("newrelic");
   setInterval(healthCheck, 60000);
 }
 
