@@ -5,7 +5,7 @@ const path = require("path");
 const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const { NormalModuleReplacementPlugin, ProvidePlugin } = require("webpack");
+const { NormalModuleReplacementPlugin, ProvidePlugin, BannerPlugin } = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 
 /**
@@ -154,7 +154,13 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       filename: "index.js",
       path: getPath("dist/src/server"),
     },
-    plugins: [new ProvidePlugin({ React: "react" })],
+    plugins: [
+      new ProvidePlugin({ React: "react" }),
+      new BannerPlugin({
+        banner: "const newrelic = process.env.NEW_RELIC_ENABLED === 'true' ? require('newrelic') : null;",
+        raw: true,
+      }),
+    ],
     target: "node",
     externals: [nodeExternals()],
   };
