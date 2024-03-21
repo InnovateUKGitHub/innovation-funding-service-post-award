@@ -95,6 +95,7 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
     () => ({
       project,
       partners: sortPartnersLeadFirst(partners),
+      fragmentRef: data?.salesforce?.uiapi,
     }),
     [],
   );
