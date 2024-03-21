@@ -22,7 +22,7 @@ type Props = {
 const FinanceSummaryPage = (props: Props & BaseProps) => {
   const content = useFinanceSummaryContent();
   const FinanceSummaryTable = createTypedTable<Partner>();
-  const { project, partners } = useFinanceSummaryData(props.projectId);
+  const { project, partners, fragmentRef } = useFinanceSummaryData(props.projectId);
 
   const isPmOrMo = project.roles?.isPm || project.roles?.isMo;
 
@@ -37,6 +37,9 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
         </BackLink>
       }
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      projectId={props.projectId}
+      partnerId={props.partnerId}
+      fragmentRef={fragmentRef}
     >
       <Section
         title={
