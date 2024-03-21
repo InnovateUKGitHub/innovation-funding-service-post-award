@@ -1,39 +1,45 @@
 import { AccOrder } from "../../enum/AccOrder";
-import { injectFieldsToApex } from "../../helpers/apex";
-import { SffFieldType } from "../../types/SffFactoryDefinition";
+import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
+import { SffFieldType, SffRelationshipType } from "../../types/SffFactoryDefinition";
 import { AccFactory } from "../AccFactory";
+import { contactBuilder } from "./Contact";
 
 const userBuilder = new AccFactory(
   <const>{
     definition: {
       sfdcName: "User",
       fields: [
-        { sfdcName: "Username", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "Email", sfdcType: SffFieldType.STRING, nullable: false },
+        { sfdcName: "Username", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "Email", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
         { sfdcName: "FirstName", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "LastName", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "Alias", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "CommunityNickname", sfdcType: SffFieldType.STRING, nullable: false },
+        { sfdcName: "CommunityNickname", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
         { sfdcName: "EmailEncodingKey", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "LocaleSidKey", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "LanguageLocaleKey", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "TimeZoneSidKey", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "ProfileId", sfdcType: SffFieldType.STRING, nullable: false },
       ],
-      relationships: [],
+      relationships: [
+        { sfdcName: "ContactId", sfdcType: SffRelationshipType.SINGLE, sffBuilder: contactBuilder, required: true },
+      ],
     },
     generator: {
       varName: x => `user${x}`,
     },
   },
-  ({ fields, instanceName }) => [
+  ({ fields, relationships, instanceName, options }) => [
     {
       code: `
 User ${instanceName} = new User();
-${injectFieldsToApex(instanceName, fields)}
-insert ${instanceName}
+${injectFieldsToApex(options, instanceName, fields)}
+${injectRelationshipToApex(instanceName, "ContactId", relationships.ContactId)}
+insert ${instanceName};
       `,
       priority: AccOrder.USER_LOAD,
     },
   ],
 );
+
+export { userBuilder };

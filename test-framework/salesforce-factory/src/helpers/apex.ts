@@ -1,5 +1,11 @@
 import { AccFactoryInstance } from "../factory/AccFactory";
-import { FieldsToRecord } from "../types/SffFactoryDefinition";
+import {
+  AccFactoryBuildOptions,
+  FieldsToRecord,
+  SffField,
+  SffFieldType,
+  SffRelationship,
+} from "../types/SffFactoryDefinition";
 
 /**
  * Salesforce SQL Sanitiser
@@ -32,50 +38,63 @@ function sss(x: unknown): string {
   throw new Error("Cannot convert value " + String(x));
 }
 
-/**
- * SOQL template string generator
- * Injects strings, numbers and dates (only!) into a SOQL string.
- */
-export function soql(strings: TemplateStringsArray, ...values: unknown[]) {
-  // Start off with just the output string.
-  let outputString = "";
+const injectFieldToApex = (
+  options: AccFactoryBuildOptions,
+  instanceName: string,
+  instanceFieldName: string,
+  field: { value: unknown; meta: SffField },
+): string => {
+  let value: any = field.value;
 
-  // For each item in the strings/values array...
-  for (let i = 0; i < Math.max(strings.length, values.length); i++) {
-    const currentString = strings[i];
-    const currentValue = values[i];
-
-    outputString += currentString;
-    if (typeof currentValue !== "undefined") outputString += sss(currentValue);
+  if (
+    typeof value === "string" &&
+    typeof options.prefix === "string" &&
+    field.meta.sfdcType === SffFieldType.STRING &&
+    field.meta.prefixed
+  ) {
+    value = options.prefix + value;
   }
 
-  return outputString.trim();
-}
-
-const injectFieldToApex = (instanceName: string, instanceFieldName: string, value: unknown) => {
   try {
-    return `${instanceName}.${instanceFieldName} = ${sss(value)};`;
+    value = sss(value);
   } catch {
-    throw new Error(`Cannot convert ${instanceName}.${instanceFieldName} value ${String(value)}`);
+    if (field.meta.nullable) {
+      return `// ${instanceName}.${instanceFieldName} field is not defined`;
+    } else {
+      throw new Error(`Cannot convert ${instanceName}.${instanceFieldName} value ${String(value)}`);
+    }
   }
+
+  return `${instanceName}.${instanceFieldName} = ${value};`;
 };
 
-const injectFieldsToApex = (instanceName: string, fields: FieldsToRecord<any>) =>
+const injectFieldsToApex = (options: AccFactoryBuildOptions, instanceName: string, fields: FieldsToRecord<any>) =>
   Object.entries(fields)
-    .map(([key, value]) => injectFieldToApex(instanceName, key, value))
+    .map(([key, value]) => injectFieldToApex(options, instanceName, key, value))
     .join("\n");
 
 const injectRelationshipToApex = (
   instanceName: string,
   instanceRelFieldName: string,
-  relationship: AccFactoryInstance<any>,
-) => {
-  if (!relationship)
-    throw new Error(`Cannot find the required relationship of ${instanceName}.${instanceRelFieldName}`);
-  return `${instanceName}.${instanceRelFieldName} = ${relationship.instanceName}.Id;`;
+  relationship: { value: AccFactoryInstance<any>; meta: SffRelationship },
+): string | null => {
+  if (!relationship.value) {
+    if (relationship.meta.required) {
+      throw new Error(`Cannot find the required relationship of ${instanceName}.${instanceRelFieldName}`);
+    } else {
+      return `// ${instanceName}.${instanceRelFieldName} relationship is not defined`;
+    }
+  }
+  return `${instanceName}.${instanceRelFieldName} = ${relationship.value.instanceName}.Id;`;
 };
 
-const buildApex = (instances: AccFactoryInstance<any>[]) => {
+const buildApex = ({
+  instances,
+  options,
+}: {
+  instances: AccFactoryInstance<any>[];
+  options?: AccFactoryBuildOptions;
+}) => {
   const missingSet = new Set<string>();
 
   for (const instance of instances) {
@@ -94,7 +113,7 @@ const buildApex = (instances: AccFactoryInstance<any>[]) => {
   }
 
   const code = instances
-    .flatMap(x => x.build())
+    .flatMap(x => x.build(options))
     .sort((a, b) => a.priority - b.priority)
     .map(x => formatApex(x.code))
     .join("");

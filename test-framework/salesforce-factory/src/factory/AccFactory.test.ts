@@ -8,19 +8,19 @@ describe("ACC Factory Builder", () => {
     <const>{
       definition: {
         sfdcName: "Parent",
-        fields: [{ sfdcName: "var", sfdcType: SffFieldType.STRING, nullable: false }],
+        fields: [{ sfdcName: "var", sfdcType: SffFieldType.STRING, nullable: true }],
         relationships: [],
       },
       generator: {
         varName: x => "parent" + x,
       },
     },
-    ({ fields, instanceName }) => {
+    ({ fields, instanceName, options }) => {
       return [
         {
           code: `
             Parent ${instanceName} = new Parent();
-            ${injectFieldsToApex(instanceName, fields)}
+            ${injectFieldsToApex(options, instanceName, fields)}
             insert ${instanceName};
           `,
           priority: 1,
@@ -34,18 +34,20 @@ describe("ACC Factory Builder", () => {
       definition: {
         sfdcName: "Child",
         fields: [{ sfdcName: "var", sfdcType: SffFieldType.STRING, nullable: false }],
-        relationships: [{ sfdcName: "parent", sfdcType: SffRelationshipType.SINGLE, sffBuilder: parentBuilder }],
+        relationships: [
+          { sfdcName: "parent", sfdcType: SffRelationshipType.SINGLE, sffBuilder: parentBuilder, required: true },
+        ],
       },
       generator: {
         varName: x => "child" + x,
       },
     },
-    ({ fields, relationships, instanceName }) => {
+    ({ fields, relationships, instanceName, options }) => {
       return [
         {
           code: `
             Child ${instanceName} = new Child();
-            ${injectFieldsToApex(instanceName, fields)}
+            ${injectFieldsToApex(options, instanceName, fields)}
             ${injectRelationshipToApex(instanceName, "parent", relationships.parent)}
             insert ${instanceName};
           `,
@@ -77,14 +79,14 @@ describe("ACC Factory Builder", () => {
     const child2 = childBuilder.new().setField("var", "My child 2").setRelationship("parent", parent);
     const child3 = childBuilder.new().setField("var", "My child 3").setRelationship("parent", parent);
 
-    expect(buildApex([parent, child1, child2, child3])).toMatchSnapshot();
+    expect(buildApex({ instances: [parent, child1, child2, child3] })).toMatchSnapshot();
   });
 
   test("Expect apex to NOT be built with missing relationship in build", () => {
     const child = childBuilder.new().setField("var", "Bad Apple");
 
     // The child has no "parent" assigned
-    expect(() => buildApex([child])).toThrowError();
+    expect(() => buildApex({ instances: [child] })).toThrowError();
   });
 
   test("Expect apex to NOT be built with missing parent in build", () => {
@@ -92,6 +94,6 @@ describe("ACC Factory Builder", () => {
     const child = childBuilder.new().setField("var", "My child 1").setRelationship("parent", parent);
 
     // The parent should also be passed in
-    expect(() => buildApex([child])).toThrowError();
+    expect(() => buildApex({ instances: [child] })).toThrowError();
   });
 });

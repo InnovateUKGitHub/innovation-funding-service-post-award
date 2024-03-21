@@ -10,26 +10,33 @@ interface SffRelationshipBase {
   sfdcName: Readonly<string>;
   sfdcType: Readonly<SffRelationshipType>;
   sffBuilder: AccFactory<any>;
+  required: boolean;
 }
 
 type FieldsToRecord<T extends SffFactoryObjectDefinition> = {
-  [key in T["fields"][number]["sfdcName"]]: SffFieldToNullableJsType<{ sfdcName: key } & T["fields"][number]>;
+  [key in T["fields"][number]["sfdcName"]]: {
+    value: SffFieldToNullableJsType<{ sfdcName: key } & T["fields"][number]>;
+    meta: { sfdcName: key } & T["fields"][number];
+  };
 };
 
 type RelationshipsToRecord<T extends SffFactoryObjectDefinition> = {
-  [key in T["relationships"][number]["sfdcName"]]: SffRelationshipToJsType<
-    { sfdcName: key } & T["relationships"][number]
-  >;
+  [key in T["relationships"][number]["sfdcName"]]: {
+    value: SffRelationshipToJsType<{ sfdcName: key } & T["relationships"][number]>;
+    meta: { sfdcName: key } & T["relationships"][number];
+  };
 };
 
 type PipelineFunction<T extends SffFactoryObjectDefinition> = ({
   fields,
   relationships,
   instanceName,
+  options,
 }: {
   fields: FieldsToRecord<T>;
   relationships: RelationshipsToRecord<T>;
   instanceName: string;
+  options: AccFactoryBuildOptions;
 }) => AccFactoryCodeBlock[];
 
 interface SffFactoryObjectDefinition<Fields extends ReadonlyArray<SffField> = ReadonlyArray<SffField>> {
@@ -59,19 +66,20 @@ type SffFieldToNullableJsType<T extends SffField> = T["nullable"] extends true
 type SffFieldToJsType<T extends SffField> = T extends SffStringField
   ? string
   : T extends SffNumberField
-  ? number
-  : T extends SffSinglePicklistField
-  ? T["values"][number]
-  : T extends SffMultiPicklistField
-  ? T["values"]
-  : T extends SffCheckboxField
-  ? boolean
-  : T extends SffDateTimeField
-  ? Date
-  : never;
+    ? number
+    : T extends SffSinglePicklistField
+      ? T["values"][number]
+      : T extends SffMultiPicklistField
+        ? T["values"]
+        : T extends SffCheckboxField
+          ? boolean
+          : T extends SffDateTimeField
+            ? Date
+            : never;
 
 interface SffStringField extends SffFieldBase {
   sfdcType: SffFieldType.STRING;
+  prefixed?: boolean;
 }
 interface SffNumberField extends SffFieldBase {
   sfdcType: SffFieldType.NUMBER;
@@ -109,10 +117,14 @@ type SffRelationshipToJsType<T extends SffRelationship> = T extends SffSingleRel
   ? ReturnType<T["sffBuilder"]["new"]>
   : never;
 
-type AccFactoryCodeBlock = {
+interface AccFactoryCodeBlock {
   code: string;
   priority: number;
-};
+}
+
+interface AccFactoryBuildOptions {
+  prefix?: string;
+}
 
 export {
   SffFactoryObjectDefinition,
@@ -128,4 +140,5 @@ export {
   PipelineFunction,
   SffSingleRelationship,
   AccFactoryCodeBlock,
+  AccFactoryBuildOptions,
 };

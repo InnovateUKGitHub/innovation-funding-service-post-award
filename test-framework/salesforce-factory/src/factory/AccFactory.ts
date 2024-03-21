@@ -5,6 +5,7 @@ import {
   SffRelationshipToJsType,
   FieldsToRecord,
   RelationshipsToRecord,
+  AccFactoryBuildOptions,
 } from "../types/SffFactoryDefinition";
 
 interface AccFactoryProps<T extends AccFactoryObjectDefinition> {
@@ -41,8 +42,8 @@ class AccFactory<T extends AccFactoryObjectDefinition> {
 interface AccFactoryInstanceProps<T extends AccFactoryObjectDefinition> {
   definition: Readonly<T>;
   builder: AccFactory<T>;
-  fields?: Map<T["fields"][number]["sfdcName"], any>;
-  relationships?: Map<T["relationships"][number]["sfdcName"], any>;
+  fields?: [T["fields"][number]["sfdcName"], any][];
+  relationships?: [T["relationships"][number]["sfdcName"], AccFactoryInstance<any>][];
   instanceName: string;
 }
 
@@ -78,21 +79,32 @@ class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
     return this;
   }
 
-  copy() {
+  copy(): AccFactoryInstance<T> {
     return new AccFactoryInstance<T>({
       builder: this.builder,
-      fields: this.fields,
-      relationships: this.relationships,
+      fields: [...this.fields],
+      relationships: [...this.relationships].map(([key, value]) => [key, value.copy()]),
       definition: this.definition,
       instanceName: this.builder.getInstanceName(),
     });
   }
 
-  build() {
+  build(options: AccFactoryBuildOptions = {}) {
     return this.builder.pipeline({
-      fields: Object.fromEntries(this.fields) as FieldsToRecord<T>,
-      relationships: Object.fromEntries(this.relationships) as RelationshipsToRecord<T>,
+      fields: Object.fromEntries(
+        this.definition.fields.map(schema => [
+          schema.sfdcName,
+          { value: this.fields.get(schema.sfdcName), meta: schema },
+        ]),
+      ) as FieldsToRecord<T>,
+      relationships: Object.fromEntries(
+        this.definition.relationships.map(schema => [
+          schema.sfdcName,
+          { value: this.relationships.get(schema.sfdcName), meta: schema },
+        ]),
+      ) as RelationshipsToRecord<T>,
       instanceName: this.instanceName,
+      options,
     });
   }
 }

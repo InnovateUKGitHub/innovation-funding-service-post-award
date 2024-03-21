@@ -8,7 +8,7 @@ const competitionBuilder = new AccFactory(
     definition: {
       sfdcName: "Competition__c",
       fields: [
-        { sfdcName: "Acc_CompetitionCode__c", sfdcType: SffFieldType.STRING, nullable: false },
+        { sfdcName: "Acc_CompetitionCode__c", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
         { sfdcName: "Acc_CompetitionType__c", sfdcType: SffFieldType.STRING, nullable: false },
         { sfdcName: "Acc_CompetitionName__c", sfdcType: SffFieldType.STRING, nullable: false },
       ],
@@ -18,11 +18,11 @@ const competitionBuilder = new AccFactory(
       varName: x => `competition${x}`,
     },
   },
-  ({ fields, instanceName }) => [
+  ({ fields, instanceName, options }) => [
     {
       code: `
 Competition__c ${instanceName} = new Competition__c();
-${injectFieldsToApex(instanceName, fields)}
+${injectFieldsToApex(options, instanceName, fields)}
 insert ${instanceName};
       `,
       priority: AccOrder.COMPETITION_LOAD,

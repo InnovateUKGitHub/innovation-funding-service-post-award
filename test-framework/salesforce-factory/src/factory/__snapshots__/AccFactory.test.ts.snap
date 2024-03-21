@@ -31,7 +31,7 @@ exports[`ACC Factory Builder Expect apex to be built with no variables 1`] = `
   {
     "code": "
             Parent parent0 = new Parent();
-            
+            // parent0.var field is not defined
             insert parent0;
           ",
     "priority": 1,
