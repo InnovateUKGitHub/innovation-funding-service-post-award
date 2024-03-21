@@ -32,6 +32,26 @@ function sss(x: unknown): string {
   throw new Error("Cannot convert value " + String(x));
 }
 
+/**
+ * SOQL template string generator
+ * Injects strings, numbers and dates (only!) into a SOQL string.
+ */
+export function soql(strings: TemplateStringsArray, ...values: unknown[]) {
+  // Start off with just the output string.
+  let outputString = "";
+
+  // For each item in the strings/values array...
+  for (let i = 0; i < Math.max(strings.length, values.length); i++) {
+    const currentString = strings[i];
+    const currentValue = values[i];
+
+    outputString += currentString;
+    if (typeof currentValue !== "undefined") outputString += sss(currentValue);
+  }
+
+  return outputString.trim();
+}
+
 const injectFieldToApex = (instanceName: string, instanceFieldName: string, value: unknown) => {
   try {
     return `${instanceName}.${instanceFieldName} = ${sss(value)};`;
@@ -73,15 +93,13 @@ const buildApex = (instances: AccFactoryInstance<any>[]) => {
     throw new Error(`Missing values in missingSet: ${[...missingSet].join(", ")}`);
   }
 
-  const sortedCode = instances
+  const code = instances
     .flatMap(x => x.build())
     .sort((a, b) => a.priority - b.priority)
-    .map(x => x.code)
+    .map(x => formatApex(x.code))
     .join("");
 
-  const formattedCode = formatApex(sortedCode);
-
-  return formattedCode;
+  return code;
 };
 
 const formatApex = (apex: string) => {

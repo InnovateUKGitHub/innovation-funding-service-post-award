@@ -14,7 +14,7 @@ describe("Project Builder", () => {
     const project = accProjectBuilder
       .new()
       .setRelationship("Acc_CompetitionId__c", competition)
-      .setField("Acc_StartDate__c", new Date())
+      .setField("Acc_StartDate__c", new Date("2024-01-16 12:59:42"))
       .setField("Acc_Duration__c", 36)
       .setField("Acc_ClaimFrequency__c", "Quarterly")
       .setField("Acc_ProjectTitle__c", "Title")

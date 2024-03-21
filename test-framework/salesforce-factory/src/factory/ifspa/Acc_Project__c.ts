@@ -58,38 +58,32 @@ const accProjectBuilder = new AccFactory(
       varName: x => `project${x}`,
     },
   },
-  ({ fields, relationships, instanceName }) => {
-    return [
-      {
-        code: `
-          Acc_Project__c ${instanceName} = new Acc_Project__c();
-          ${injectRelationshipToApex(instanceName, "Acc_CompetitionId__c", relationships.Acc_CompetitionId__c)}
-          ${injectFieldToApex(instanceName, "Acc_StartDate__c", fields.Acc_StartDate__c)}
-          ${injectFieldToApex(instanceName, "Acc_Duration__c", fields.Acc_Duration__c)}
-          ${injectFieldToApex(instanceName, "Acc_ClaimFrequency__c", fields.Acc_ClaimFrequency__c)}
-          ${injectFieldToApex(instanceName, "Acc_ProjectTitle__c", fields.Acc_ProjectTitle__c)}
-          ${injectFieldToApex(instanceName, "Acc_TSBProjectNumber__c", fields.Acc_TSBProjectNumber__c)}
-          ${injectFieldToApex(
-            instanceName,
-            "Acc_WorkdayProjectSetupComplete__c",
-            fields.Acc_WorkdayProjectSetupComplete__c,
-          )}
-          insert ${instanceName};
+  ({ fields, relationships, instanceName }) => [
+    {
+      code: `
+Acc_Project__c ${instanceName} = new Acc_Project__c();
+${injectRelationshipToApex(instanceName, "Acc_CompetitionId__c", relationships.Acc_CompetitionId__c)}
+${injectFieldToApex(instanceName, "Acc_StartDate__c", fields.Acc_StartDate__c)}
+${injectFieldToApex(instanceName, "Acc_Duration__c", fields.Acc_Duration__c)}
+${injectFieldToApex(instanceName, "Acc_ClaimFrequency__c", fields.Acc_ClaimFrequency__c)}
+${injectFieldToApex(instanceName, "Acc_ProjectTitle__c", fields.Acc_ProjectTitle__c)}
+${injectFieldToApex(instanceName, "Acc_TSBProjectNumber__c", fields.Acc_TSBProjectNumber__c)}
+${injectFieldToApex(instanceName, "Acc_WorkdayProjectSetupComplete__c", fields.Acc_WorkdayProjectSetupComplete__c)}
+insert ${instanceName};
         `,
-        priority: AccOrder.ACC_PROJECT_LOAD,
-      },
-      {
-        code: `
-          ${injectFieldToApex(instanceName, "Acc_NonFEC__c", fields.Acc_NonFEC__c)}
-          ${injectFieldToApex(instanceName, "Acc_MonitoringLevel__c", fields.Acc_MonitoringLevel__c)}
-          ${injectFieldToApex(instanceName, "Acc_MonitoringReportSchedule__c", fields.Acc_MonitoringReportSchedule__c)}
-          ${injectFieldToApex(instanceName, "Acc_ProjectStatus__c", fields.Acc_ProjectStatus__c)}
-          upsert ${instanceName};
+      priority: AccOrder.ACC_PROJECT_LOAD,
+    },
+    {
+      code: `
+${injectFieldToApex(instanceName, "Acc_NonFEC__c", fields.Acc_NonFEC__c)}
+${injectFieldToApex(instanceName, "Acc_MonitoringLevel__c", fields.Acc_MonitoringLevel__c)}
+${injectFieldToApex(instanceName, "Acc_MonitoringReportSchedule__c", fields.Acc_MonitoringReportSchedule__c)}
+${injectFieldToApex(instanceName, "Acc_ProjectStatus__c", fields.Acc_ProjectStatus__c)}
+upsert ${instanceName};
         `,
-        priority: AccOrder.ACC_PROJECT_POSTLOAD,
-      },
-    ];
-  },
+      priority: AccOrder.ACC_PROJECT_POSTLOAD,
+    },
+  ],
 );
 
 export { accProjectBuilder };
