@@ -1,4 +1,4 @@
-import { SffBuilder } from "../factory/SffBuilder";
+import { AccFactory } from "../factory/AccFactory";
 
 interface SffFieldBase {
   sfdcName: string;
@@ -9,7 +9,7 @@ interface SffFieldBase {
 interface SffRelationshipBase {
   sfdcName: Readonly<string>;
   sfdcType: Readonly<SffRelationshipType>;
-  sffBuilder: SffBuilder<any>;
+  sffBuilder: AccFactory<any>;
 }
 
 type FieldsToRecord<T extends SffFactoryObjectDefinition> = {
@@ -25,16 +25,12 @@ type RelationshipsToRecord<T extends SffFactoryObjectDefinition> = {
 type PipelineFunction<T extends SffFactoryObjectDefinition> = ({
   fields,
   relationships,
-  fnName,
-  varName,
+  instanceName,
 }: {
   fields: FieldsToRecord<T>;
   relationships: RelationshipsToRecord<T>;
-  fnName: string;
-  varName: string;
-}) => {
-  code: string;
-};
+  instanceName: string;
+}) => AccFactoryCodeBlock[];
 
 interface SffFactoryObjectDefinition<Fields extends ReadonlyArray<SffField> = ReadonlyArray<SffField>> {
   sfdcName: Readonly<string>;
@@ -107,17 +103,16 @@ interface SffSingleRelationship extends SffRelationshipBase {
   sfdcType: SffRelationshipType.SINGLE;
 }
 
-interface SffMultiRelationship extends SffRelationshipBase {
-  sfdcType: SffRelationshipType.MULTI;
-}
-
-type SffRelationship = SffSingleRelationship | SffMultiRelationship;
+type SffRelationship = SffSingleRelationship;
 
 type SffRelationshipToJsType<T extends SffRelationship> = T extends SffSingleRelationship
   ? ReturnType<T["sffBuilder"]["new"]>
-  : T extends SffMultiRelationship
-  ? ReturnType<T["sffBuilder"]["new"]>[]
   : never;
+
+type AccFactoryCodeBlock = {
+  code: string;
+  priority: number;
+};
 
 export {
   SffFactoryObjectDefinition,
@@ -132,5 +127,5 @@ export {
   RelationshipsToRecord,
   PipelineFunction,
   SffSingleRelationship,
-  SffMultiRelationship,
+  AccFactoryCodeBlock,
 };

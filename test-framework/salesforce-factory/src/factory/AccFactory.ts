@@ -1,5 +1,5 @@
 import {
-  SffFactoryObjectDefinition,
+  SffFactoryObjectDefinition as AccFactoryObjectDefinition,
   SffFieldTypeToJsType,
   PipelineFunction,
   SffRelationshipToJsType,
@@ -7,24 +7,22 @@ import {
   RelationshipsToRecord,
 } from "../types/SffFactoryDefinition";
 
-interface SffBuilderProps<T extends SffFactoryObjectDefinition> {
+interface AccFactoryProps<T extends AccFactoryObjectDefinition> {
   definition: Readonly<T>;
   generator: {
-    fnName: (x: number) => string;
     varName: (x: number) => string;
   };
 }
 
-class SffBuilder<T extends SffFactoryObjectDefinition> {
+class AccFactory<T extends AccFactoryObjectDefinition> {
   public readonly definition: T;
   public readonly pipeline: PipelineFunction<T>;
-  public readonly generator: {
-    fnName: (x: number) => string;
+  private readonly generator: {
     varName: (x: number) => string;
   };
   private fnNumber: number;
 
-  constructor({ definition, generator }: SffBuilderProps<T>, pipeline: PipelineFunction<T>) {
+  constructor({ definition, generator }: AccFactoryProps<T>, pipeline: PipelineFunction<T>) {
     this.definition = definition;
     this.pipeline = pipeline;
     this.generator = generator;
@@ -32,32 +30,35 @@ class SffBuilder<T extends SffFactoryObjectDefinition> {
   }
 
   new() {
-    return new SffBuilderInstance({ builder: this, definition: this.definition });
+    return new AccFactoryInstance({ builder: this, definition: this.definition, instanceName: this.getInstanceName() });
   }
 
-  getNextFnNumber() {
-    return this.fnNumber++;
+  getInstanceName() {
+    return this.generator.varName(this.fnNumber++);
   }
 }
 
-interface SffBuilderInstanceProps<T extends SffFactoryObjectDefinition> {
+interface AccFactoryInstanceProps<T extends AccFactoryObjectDefinition> {
   definition: Readonly<T>;
-  builder: SffBuilder<T>;
+  builder: AccFactory<T>;
   fields?: Map<T["fields"][number]["sfdcName"], any>;
   relationships?: Map<T["relationships"][number]["sfdcName"], any>;
+  instanceName: string;
 }
 
-class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
+class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
   private readonly definition: T;
-  private readonly builder: SffBuilder<T>;
+  private readonly builder: AccFactory<T>;
   private readonly fields: Map<T["fields"][number]["sfdcName"], any>;
-  private readonly relationships: Map<T["relationships"][number]["sfdcName"], any>;
+  public readonly relationships: Map<T["relationships"][number]["sfdcName"], AccFactoryInstance<any>>;
+  public readonly instanceName: string;
 
-  constructor({ definition, builder, fields, relationships }: SffBuilderInstanceProps<T>) {
+  constructor({ definition, builder, fields, relationships, instanceName }: AccFactoryInstanceProps<T>) {
     this.definition = definition;
     this.builder = builder;
     this.fields = new Map(fields);
     this.relationships = new Map(relationships);
+    this.instanceName = instanceName;
   }
 
   setField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
@@ -78,28 +79,22 @@ class SffBuilderInstance<T extends SffFactoryObjectDefinition> {
   }
 
   copy() {
-    return new SffBuilderInstance<T>({
+    return new AccFactoryInstance<T>({
       builder: this.builder,
       fields: this.fields,
       relationships: this.relationships,
       definition: this.definition,
+      instanceName: this.builder.getInstanceName(),
     });
   }
 
   build() {
-    const fnNumber = this.builder.getNextFnNumber();
-    const fnName = this.builder.generator.fnName(fnNumber);
-    const varName = this.builder.generator.varName(fnNumber);
-
-    const { code } = this.builder.pipeline({
+    return this.builder.pipeline({
       fields: Object.fromEntries(this.fields) as FieldsToRecord<T>,
       relationships: Object.fromEntries(this.relationships) as RelationshipsToRecord<T>,
-      fnName,
-      varName,
+      instanceName: this.instanceName,
     });
-
-    return { fnName, varName, code };
   }
 }
 
-export { SffBuilder, SffBuilderInstance };
+export { AccFactory, AccFactoryInstance };

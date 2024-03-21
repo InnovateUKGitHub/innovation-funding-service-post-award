@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Project Builder Expect project to be built, linking correctly to competition 1`] = `
+"
+Competition__c competition0 = new Competition__c();
+competition0.Acc_CompetitionCode__c = '100';
+competition0.Acc_CompetitionType__c = 'KTP';
+competition0.Acc_CompetitionName__c = 'Competition';
+insert competition0;
+
+Acc_Project__c project0 = new Acc_Project__c();
+project0.Acc_CompetitionId__c = competition0.Id;
+project0.Acc_StartDate__c = date.valueOf('2024-03-21 10:43:01');
+project0.Acc_Duration__c = 36;
+project0.Acc_ClaimFrequency__c = 'Quarterly';
+project0.Acc_ProjectTitle__c = 'Title';
+project0.Acc_TSBProjectNumber__c = '100';
+project0.Acc_WorkdayProjectSetupComplete__c = true;
+insert project0;
+
+project0.Acc_NonFEC__c = false;
+project0.Acc_MonitoringLevel__c = 'Platinum';
+project0.Acc_MonitoringReportSchedule__c = 'Monthly';
+project0.Acc_ProjectStatus__c = 'Live';
+upsert project0;
+"
+`;

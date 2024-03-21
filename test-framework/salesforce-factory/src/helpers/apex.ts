@@ -1,4 +1,4 @@
-import { SffBuilderInstance } from "../factory/SffBuilder";
+import { AccFactoryInstance } from "../factory/AccFactory";
 import { FieldsToRecord } from "../types/SffFactoryDefinition";
 
 /**
@@ -9,7 +9,7 @@ import { FieldsToRecord } from "../types/SffFactoryDefinition";
  * @param x The unsanitised value to inject into the SQL query
  * @example queryString += ` AND Description = '${sss(filter.description)}'`;
  */
-function sss(x: string | number | Date): string {
+function sss(x: unknown): string {
   if (typeof x === "number") {
     if (x >= Number.MAX_SAFE_INTEGER) throw new Error("Number greater than MAX_SAFE_INTEGER");
     if (x <= Number.MIN_SAFE_INTEGER) throw new Error("Number less than than MIN_SAFE_INTEGER");
@@ -21,6 +21,10 @@ function sss(x: string | number | Date): string {
     return "'" + x.replace(/'/g, "\\'") + "'";
   }
 
+  if (typeof x === "boolean") {
+    return x ? "true" : "false";
+  }
+
   if (x instanceof Date) {
     return `date.valueOf('${x.toISOString().replace("T", " ").split(".")[0]}')`;
   }
@@ -28,21 +32,81 @@ function sss(x: string | number | Date): string {
   throw new Error("Cannot convert value " + String(x));
 }
 
-const injectFieldsToApex = (variableName: string, fields: FieldsToRecord<any>) =>
+const injectFieldToApex = (instanceName: string, instanceFieldName: string, value: unknown) => {
+  try {
+    return `${instanceName}.${instanceFieldName} = ${sss(value)};`;
+  } catch {
+    throw new Error(`Cannot convert ${instanceName}.${instanceFieldName} value ${String(value)}`);
+  }
+};
+
+const injectFieldsToApex = (instanceName: string, fields: FieldsToRecord<any>) =>
   Object.entries(fields)
-    .map(([key, value]) => `${variableName}.${key} = ${sss(value)};`)
+    .map(([key, value]) => injectFieldToApex(instanceName, key, value))
     .join("\n");
 
 const injectRelationshipToApex = (
-  parentVarName: string,
-  parentFieldName: string,
-  relationship: SffBuilderInstance<any>,
+  instanceName: string,
+  instanceRelFieldName: string,
+  relationship: AccFactoryInstance<any>,
 ) => {
-  const { varName: childVarName } = relationship.build();
-  return `${parentVarName}.${parentFieldName} = idMap.get('${childVarName}');`;
+  if (!relationship)
+    throw new Error(`Cannot find the required relationship of ${instanceName}.${instanceRelFieldName}`);
+  return `${instanceName}.${instanceRelFieldName} = ${relationship.instanceName}.Id;`;
 };
 
-const injectRelationshipsToApex = (variableName: string, relationships: SffBuilderInstance<any>[] = []) =>
-  relationships.map(x => injectRelationshipToApex(variableName, x)).join("\n");
+const buildApex = (instances: AccFactoryInstance<any>[]) => {
+  const missingSet = new Set<string>();
 
-export { sss, injectFieldsToApex, injectRelationshipToApex, injectRelationshipsToApex };
+  for (const instance of instances) {
+    missingSet.add(instance.instanceName);
+    for (const relationship of instance.relationships.values()) {
+      missingSet.add(relationship.instanceName);
+    }
+  }
+
+  for (const instance of instances) {
+    missingSet.delete(instance.instanceName);
+  }
+
+  if (missingSet.size !== 0) {
+    throw new Error(`Missing values in missingSet: ${[...missingSet].join(", ")}`);
+  }
+
+  const sortedCode = instances
+    .flatMap(x => x.build())
+    .sort((a, b) => a.priority - b.priority)
+    .map(x => x.code)
+    .join("");
+
+  const formattedCode = formatApex(sortedCode);
+
+  return formattedCode;
+};
+
+const formatApex = (apex: string) => {
+  const lines = apex.split(/\r?\n/g);
+  const whitespaceRegex = /^\s*/;
+
+  let indent = Infinity;
+
+  for (const line of lines) {
+    // entire line is whitespace :(
+    if (line.trim().length === 0) continue;
+
+    const hasWhitespace = whitespaceRegex.exec(line);
+
+    // If line starts with whitespace, set indent to smallest found indent (so far)
+    // If line starts with no whitespace, bail
+    if (hasWhitespace) {
+      indent = Math.min(hasWhitespace[0].length, indent);
+    } else {
+      indent = 0;
+      break;
+    }
+  }
+
+  return lines.map(line => line.substring(indent)).join("\n");
+};
+
+export { sss, injectFieldToApex, injectFieldsToApex, injectRelationshipToApex, buildApex, formatApex };
