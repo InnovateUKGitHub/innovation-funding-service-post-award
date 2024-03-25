@@ -1,6 +1,6 @@
 {
   "name": "test-framework",
-  "private": "true",
+  "private": true,
   "workspaces": [
     "./cypress-test",
     "./acc-factory",
