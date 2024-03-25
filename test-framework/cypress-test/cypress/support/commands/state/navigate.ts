@@ -3,12 +3,18 @@ import { CacheOptions } from "./cache";
 const goToPage = (page: string) => {
   cy.intercept("/internationalisation/**").as("i18n");
 
-  cy.visit(Cypress.config().baseUrl + page, {
-    auth: {
-      username: Cypress.env("USERNAME"),
-      password: Cypress.env("PASSWORD"),
-    },
-    failOnStatusCode: false,
+  cy.accTask("getSecret", { key: "BASIC_AUTH" }).then(basicAuth => {
+    const [match, username, password] = /(\w+):(\w+)/.exec(basicAuth);
+
+    if (!match) throw new Error("Could not read BASIC_AUTH env var");
+
+    cy.visit(Cypress.config().baseUrl + page, {
+      auth: {
+        username,
+        password,
+      },
+      failOnStatusCode: false,
+    });
   });
 
   cy.wait(["@i18n"]);

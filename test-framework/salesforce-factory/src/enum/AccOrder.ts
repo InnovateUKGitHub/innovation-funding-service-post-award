@@ -12,6 +12,12 @@ enum AccOrder {
   // Depends on competition
   ACC_PROJECT_LOAD,
 
+  // Depends on account
+  ACC_PROJECT_PARTICIPANT_LOAD,
+
+  // Depends on Project, Contact, User and Account
+  ACC_PROJECT_CONTACT_LINK_LOAD,
+
   // Needs contacts/pcls loaded in project first
   ACC_PROJECT_POSTLOAD,
 }

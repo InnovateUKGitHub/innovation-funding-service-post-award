@@ -32,7 +32,7 @@ const project = accProjectBuilder
   .setField("Acc_ClaimFrequency__c", "Quarterly")
   .setField("Acc_ProjectTitle__c", "Title")
   .setField("Acc_ProjectNumber__c", "100")
-  .setField("Acc_TSBProjectNumber__c", "100")
+  .setField("Acc_LegacyID__c", "100")
   .setField("Acc_WorkdayProjectSetupComplete__c", true)
   .setField("Acc_NonFEC__c", false)
   .setField("Acc_MonitoringLevel__c", "Platinum")
@@ -73,7 +73,7 @@ const projectContactLink = accProjectContactLinkBuilder
 const projectParticipant = accProjectParticipantBuilder
   .new()
   .setRelationship("Acc_AccountId__c", account)
-  .setRelationship("Acc_Project__c", project)
+  .setRelationship("Acc_ProjectId__c", project)
   .setField("ParticipantMigrationID__c", "004001")
   .setField("Acc_ParticipantType__c", "Business")
   .setField("Acc_ParticipantSize__c", "Medium")

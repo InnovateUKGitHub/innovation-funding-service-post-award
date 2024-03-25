@@ -12,7 +12,31 @@ const accProjectContactLinkBuilder = new AccFactory(
     definition: {
       sfdcName: "Acc_ProjectContactLink__c",
       fields: [
-        { sfdcName: "Acc_Role__c", sfdcType: SffFieldType.STRING, nullable: false },
+        {
+          sfdcName: "Acc_Role__c",
+          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          values: [
+            "Finance contact",
+            "Monitoring officer",
+            "Project Manager",
+            "Innovation Lead",
+            "IPM",
+            "Claims Notification",
+            "PCR Notification",
+            "Investor",
+            "Associate",
+            "Company Supervisor",
+            "Main Company Contact",
+            "KB Supervisor",
+            "Main KB Contact",
+            "KB Admin",
+            "KB Finance",
+            "Final Report Assessor",
+            "Contracting Authority",
+            "Relationship Manager",
+          ],
+          nullable: false,
+        },
         { sfdcName: "Acc_EmailOfSFContact__c", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
       ],
       relationships: [
@@ -52,7 +76,7 @@ ${injectRelationshipToApex(instanceName, "Acc_ContactId__c", relationships.Acc_C
 ${injectRelationshipToApex(instanceName, "Acc_UserId__c", relationships.Acc_UserId__c)}
 insert ${instanceName};
       `,
-      priority: AccOrder.ACCOUNT_LOAD,
+      priority: AccOrder.ACC_PROJECT_CONTACT_LINK_LOAD,
     },
   ],
 );

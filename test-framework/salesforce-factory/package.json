@@ -2,13 +2,14 @@
   "name": "salesforce-factory",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --sourcemap=inline --outfile=dist/index.js",
     "start": "node --inspect --enable-source-maps --env-file .env dist/",
     "patch-package": "patch-package",
     "test": "jest",
-    "schema": "node schema/"
+    "schema": "node schema/",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

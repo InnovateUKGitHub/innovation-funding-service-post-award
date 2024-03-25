@@ -83,7 +83,7 @@ const accProjectParticipantBuilder = new AccFactory(
       ],
       relationships: [
         {
-          sfdcName: "Acc_Project__c",
+          sfdcName: "Acc_ProjectId__c",
           sfdcType: SffRelationshipType.SINGLE,
           sffBuilder: accProjectBuilder,
           required: true,
@@ -105,13 +105,31 @@ const accProjectParticipantBuilder = new AccFactory(
       code: `
 Acc_ProjectParticipant__c ${instanceName} = new Acc_ProjectParticipant__c();
 ${injectFieldsToApex(options, instanceName, fields)}
-${injectRelationshipToApex(instanceName, "Acc_Project__c", relationships.Acc_Project__c)}
+${injectRelationshipToApex(instanceName, "Acc_ProjectId__c", relationships.Acc_ProjectId__c)}
 ${injectRelationshipToApex(instanceName, "Acc_AccountId__c", relationships.Acc_AccountId__c)}
 insert ${instanceName};
       `,
-      priority: AccOrder.ACCOUNT_LOAD,
+      priority: AccOrder.ACC_PROJECT_PARTICIPANT_LOAD,
     },
   ],
 );
 
-export { accProjectParticipantBuilder };
+const defaultAccProjectParticipant = accProjectParticipantBuilder
+  .new()
+  .setField("ParticipantMigrationID__c", "004001")
+  .setField("Acc_ParticipantType__c", "Business")
+  .setField("Acc_ParticipantSize__c", "Medium")
+  .setField("Acc_ProjectRole__c", "Lead")
+  .setField("Acc_AuditReportFrequency__c", "With all claims")
+  .setField("Acc_ParticipantStatus__c", "Active")
+  .setField("Acc_Award_Rate__c", 50)
+  .setField("Acc_Cap_Limit__c", 50)
+  .setField("Acc_FlaggedParticipant__c", false)
+  .setField("Acc_OverheadRate__c", 20)
+  .setField("Acc_ParticipantProjectReportingType__c", "Public")
+  .setField("Acc_OrganisationType__c", "Industrial")
+  .setField("Acc_CreateProfiles__c", false)
+  .setField("Acc_CreateClaims__c", false)
+  .copy();
+
+export { accProjectParticipantBuilder, defaultAccProjectParticipant };

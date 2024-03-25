@@ -5,6 +5,7 @@ import { accountBuilder } from "./factory/ifspa/Account";
 import { competitionBuilder } from "./factory/ifspa/Competition__c";
 import { contactBuilder } from "./factory/ifspa/Contact";
 import { userBuilder } from "./factory/ifspa/User";
+import { buildApex } from "./helpers/apex";
 
 export {
   accProjectBuilder,
@@ -14,4 +15,5 @@ export {
   competitionBuilder,
   contactBuilder,
   userBuilder,
+  buildApex,
 };

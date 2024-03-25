@@ -3,6 +3,8 @@
   "private": "true",
   "workspaces": [
     "./cypress-test",
-    "./salesforce-factory"
-  ]
+    "./salesforce-factory",
+    "./envman"
+  ],
+  "scripts": {}
 }

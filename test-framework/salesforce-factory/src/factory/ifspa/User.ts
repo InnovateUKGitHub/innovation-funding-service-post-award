@@ -42,4 +42,18 @@ insert ${instanceName};
   ],
 );
 
-export { userBuilder };
+const defaultUser = userBuilder
+  .new()
+  .setField("Username", "austria@x.gov.uk")
+  .setField("Email", "austria@x.gov.uk")
+  .setField("FirstName", "Austria")
+  .setField("LastName", "Hedges")
+  .setField("Alias", "xgovuk")
+  .setField("CommunityNickname", "austria")
+  .setField("EmailEncodingKey", "UTF-8")
+  .setField("LocaleSidKey", "en_GB")
+  .setField("LanguageLocaleKey", "en_US")
+  .setField("TimeZoneSidKey", "Europe/London")
+  .setField("ProfileId", "00e58000001ITpLAAW");
+
+export { userBuilder, defaultUser };

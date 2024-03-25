@@ -55,21 +55,21 @@ skaffold_debug() {
 
 # Use k8s_dep alias then the name is the first arg here e.g. 'k8s_log application-svc'
 k8s_log() {
-    pod=$(kubectl get pod -l app="$1" -o name)
-    kubectl logs -f $pod
+  pod=$(kubectl get pod -l app="$1" -o name)
+  kubectl logs -f $pod
 }
 
 k8s_wp() {
-    watch kubectl get po
+  watch kubectl get po
 }
 
 k8s_logs() {
-    k8s_log "$1"
+  k8s_log "$1"
 }
 
 k8s_describe() {
-    pod=$(kubectl get pod -l app="$1" -o name)
-    kubectl describe $pod
+  pod=$(kubectl get pod -l app="$1" -o name)
+  kubectl describe $pod
 }
 
 # Use k8s_dep alias then the name is the first arg here e.g. 'k8s_exec application-svc'
@@ -115,10 +115,10 @@ k8s_sync_ldap_one_user() {
   kubectl exec "$POD" -- bash -c "export IFS_TEST_USER_PASSWORD=$pass && /usr/local/bin/ldap-sync-one-user.sh $1"
 }
 
-k8s_find_anon_user(){
-  if [ $# -lt 1 ];
-   then echo "Specify one or more non-anonymised emails to find."
-   return
+k8s_find_anon_user() {
+  if [ $# -lt 1 ]; then
+    echo "Specify one or more non-anonymised emails to find."
+    return
   fi
   for EMAIL in "$@"; do
     echo "$EMAIL" | tr -d '\n' | tr '[:upper:]' '[:lower:]' | md5sum | sed 's/[- ]//g' | echo "$EMAIL - $(cat -)@example.com"
@@ -133,9 +133,9 @@ _assert_context() {
 }
 
 k8s_wait() {
-  while [[ $(kubectl get pods -l app=$1 -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
-    do echo "waiting for pod $1" && sleep 5;
-  done;
+  while [[ $(kubectl get pods -l app=$1 -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
+    echo "waiting for pod $1" && sleep 5
+  done
 }
 
 k8s_clean_svc() {
@@ -152,50 +152,50 @@ k8s_clean_all() {
   kubectl delete secrets acc-ui-secrets
 }
 
-skaffold_help () {
-    echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    echo 'Having sourced this file all commands prefixed skaffold_ should tab auto-complete'
-    echo 'Skaffold_e, _dx, _ports is the full dev env but there are many ways to run this'
-    echo ''
-    echo '    skaffold_e - auth, cache, mail, sil and ifs-database '
-    echo '    skaffold_dx - runs data and web tier '
-    echo '    skaffold_dev [file] runs fast dev mode on specified skaffold file'
-    echo '    skaffold_debug [file] runs fast debug mode on specified skaffold file'
-    echo ''
-    echo '    It is quite easy to create ad-hoc configurations for any dev/ops purpose'
-    echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+skaffold_help() {
+  echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+  echo 'Having sourced this file all commands prefixed skaffold_ should tab auto-complete'
+  echo 'Skaffold_e, _dx, _ports is the full dev env but there are many ways to run this'
+  echo ''
+  echo '    skaffold_e - auth, cache, mail, sil and ifs-database '
+  echo '    skaffold_dx - runs data and web tier '
+  echo '    skaffold_dev [file] runs fast dev mode on specified skaffold file'
+  echo '    skaffold_debug [file] runs fast debug mode on specified skaffold file'
+  echo ''
+  echo '    It is quite easy to create ad-hoc configurations for any dev/ops purpose'
+  echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 }
 
 k8s_help() {
-    echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-    echo 'Having sourced this file all commands prefixed k8s_ should tab auto-complete'
-    echo ''
-    echo 'Developer utility scripts -:'
-    echo '    k8s_clean_all - clean the k8s namespace'
-    echo '    k8s_clean_svc - clean non ext services'
-    echo '    k8s_rebuild_db - rebuilds the database and ldap entries'
-    echo '    k8s_sync_ldap_all_users - syncs all db users with ldap'
-    echo '    k8s_sync_ldap_one_user - syncs given db user with ldap'
-    echo '    k8s_find_anon_user - takes a given non-anonymised prod email and prints its anonymised version'
-    echo ''
-    echo 'Shortcuts (save typing) -:'
-    echo '    k8s_po - get the list of pods'
-    echo '    k8s_dep - get the list of deployments'
-    echo '    k8s_svc - get the list of services'
-    echo '    k8s_configmap - get the list of configmaps'
-    echo '    k8s_secrets - get the list of secrets'
-    echo ''
-    echo 'Helpers (where there is one pod per deployment) and the name matches k8s_dep output -:'
-    echo '    k8s_log [name] - tails the log of the pod matching the deployment'
-    echo '    k8s_exec [name] - opens into the pods terminal matching the deployment'
-    echo '    k8s_delete [name] - deletes the pod matching the deployment'
-    echo '    k8s_describe [name] - deletes the pod matching the deployment'
-    echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+  echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+  echo 'Having sourced this file all commands prefixed k8s_ should tab auto-complete'
+  echo ''
+  echo 'Developer utility scripts -:'
+  echo '    k8s_clean_all - clean the k8s namespace'
+  echo '    k8s_clean_svc - clean non ext services'
+  echo '    k8s_rebuild_db - rebuilds the database and ldap entries'
+  echo '    k8s_sync_ldap_all_users - syncs all db users with ldap'
+  echo '    k8s_sync_ldap_one_user - syncs given db user with ldap'
+  echo '    k8s_find_anon_user - takes a given non-anonymised prod email and prints its anonymised version'
+  echo ''
+  echo 'Shortcuts (save typing) -:'
+  echo '    k8s_po - get the list of pods'
+  echo '    k8s_dep - get the list of deployments'
+  echo '    k8s_svc - get the list of services'
+  echo '    k8s_configmap - get the list of configmaps'
+  echo '    k8s_secrets - get the list of secrets'
+  echo ''
+  echo 'Helpers (where there is one pod per deployment) and the name matches k8s_dep output -:'
+  echo '    k8s_log [name] - tails the log of the pod matching the deployment'
+  echo '    k8s_exec [name] - opens into the pods terminal matching the deployment'
+  echo '    k8s_delete [name] - deletes the pod matching the deployment'
+  echo '    k8s_describe [name] - deletes the pod matching the deployment'
+  echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 }
 
 docker_upload_node() {
-    VERSION=$1
-    docker pull --platform=linux/amd64 node:$VERSION
-    docker tag node:$VERSION docker-ifs.devops.innovateuk.org/acc/node:$VERSION
-    docker push docker-ifs.devops.innovateuk.org/acc/node:$VERSION
+  VERSION=$1
+  docker pull --platform=linux/amd64 node:$VERSION
+  docker tag node:$VERSION docker-ifs.devops.innovateuk.org/acc/node:$VERSION
+  docker push docker-ifs.devops.innovateuk.org/acc/node:$VERSION
 }
