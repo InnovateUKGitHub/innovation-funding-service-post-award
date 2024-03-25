@@ -15,19 +15,23 @@ const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspe
   // or if not viewing a specific partner, any partner is on hold and flagged,
   // show a project suspension message to the MO
   // https://ukri.atlassian.net/browse/ACC-10698
-  if (
-    isMo &&
-    ((!specificPartner && partners.some(x => x.partnerStatus === PartnerStatus.OnHold && x.isFlagged)) ||
-      (specificPartner?.partnerStatus === PartnerStatus.OnHold && specificPartner.isFlagged))
-  ) {
-    return (
-      <ValidationMessage
-        messageType="alert"
-        message="Please note this project is currently under suspension"
-        subMessage="Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
-        markdown
-      />
-    );
+  if (isMo) {
+    if (
+      (!specificPartner && partners.some(x => x.partnerStatus === PartnerStatus.OnHold && x.isFlagged)) ||
+      (specificPartner?.partnerStatus === PartnerStatus.OnHold && specificPartner.isFlagged)
+    ) {
+      return (
+        <ValidationMessage
+          messageType="alert"
+          message="Please note this project is currently under suspension"
+          subMessage="Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
+          markdown
+        />
+      );
+    } else if (specificPartner?.partnerStatus === PartnerStatus.OnHold && !specificPartner.isFlagged) {
+      // "Partner is on hold" should NOT appear for the MO when the partner is 'on hold' and the watched flag is NOT SET
+      return null;
+    }
   }
 
   if (project.status === ProjectStatus.OnHold) {
