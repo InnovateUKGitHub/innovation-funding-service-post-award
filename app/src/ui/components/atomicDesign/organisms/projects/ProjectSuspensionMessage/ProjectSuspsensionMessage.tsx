@@ -40,7 +40,7 @@ const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspe
   }
 
   const partner =
-    partners.find(x => x.id === partnerId) ?? // If a specific partner is selected, use that partner
+    specificPartner ?? // If a specific partner is selected, use that partner
     partners.find(x => project.partnerRoles.find(y => y.partnerId === x.id)?.isPm); // Otherwise, find a partner where the user is PM
 
   switch (partner?.partnerStatus) {
