@@ -8,7 +8,6 @@ import { AnyRouteDefinition } from "@ui/containers/containerBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { ProjectParticipantProvider } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
@@ -122,14 +121,12 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
               <SuspensePageLoader>
                 {hasAccess ? (
-                  <ProjectParticipantProvider projectId={routePathParams.projectId as ProjectId}>
-                    <ProjectStatusCheck
-                      projectId={routePathParams.projectId as ProjectId}
-                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                    >
-                      <PageContainer {...baseProps} />
-                    </ProjectStatusCheck>
-                  </ProjectParticipantProvider>
+                  <ProjectStatusCheck
+                    projectId={routePathParams.projectId as ProjectId}
+                    overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                  >
+                    <PageContainer {...baseProps} />
+                  </ProjectStatusCheck>
                 ) : (
                   <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
                 )}

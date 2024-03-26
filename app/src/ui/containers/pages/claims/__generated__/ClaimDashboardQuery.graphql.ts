@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b832dae1303637d10e6f34e79bbe387>>
+ * @generated SignedSource<<50bfd7d712577af3fbea8acb80c7c469>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -82,6 +82,14 @@ export type ClaimDashboardQuery$data = {
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
+        readonly Acc_ProjectParticipant__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Id: string;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+          readonly totalCount: number;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
@@ -94,7 +102,14 @@ export type ClaimDashboardQuery$data = {
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
-              readonly Acc_ProjectParticipantsProject__r: {
+              readonly Acc_ProjectStatus__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_ProjectTitle__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Id: string;
+              readonly Partner: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_AccountId__c: {
@@ -133,13 +148,6 @@ export type ClaimDashboardQuery$data = {
                   } | null | undefined;
                 } | null | undefined> | null | undefined;
               } | null | undefined;
-              readonly Acc_ProjectStatus__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectTitle__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
                 readonly isAssociate: boolean;
@@ -564,23 +572,77 @@ v15 = {
   ],
   "storageKey": null
 },
-v16 = {
+v16 = [
+  {
+    "kind": "Variable",
+    "name": "eq",
+    "variableName": "projectId"
+  }
+],
+v17 = {
+  "alias": null,
+  "args": [
+    {
+      "fields": [
+        {
+          "fields": (v16/*: any*/),
+          "kind": "ObjectValue",
+          "name": "Acc_ProjectId__c"
+        }
+      ],
+      "kind": "ObjectValue",
+      "name": "where"
+    }
+  ],
+  "concreteType": "Acc_ProjectParticipant__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectParticipant__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "totalCount",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_ProjectParticipant__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_ProjectParticipant__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v13/*: any*/)
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v18 = {
   "kind": "Literal",
   "name": "first",
   "value": 1
 },
-v17 = [
-  (v16/*: any*/),
+v19 = [
+  (v18/*: any*/),
   {
     "fields": [
       {
-        "fields": [
-          {
-            "kind": "Variable",
-            "name": "eq",
-            "variableName": "projectId"
-          }
-        ],
+        "fields": (v16/*: any*/),
         "kind": "ObjectValue",
         "name": "Id"
       }
@@ -589,42 +651,42 @@ v17 = [
     "name": "where"
   }
 ],
-v18 = {
+v20 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v19 = {
+v21 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v20 = {
+v22 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v21 = {
+v23 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v22 = {
+v24 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "partnerId",
   "storageKey": null
 },
-v23 = {
+v25 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -634,7 +696,7 @@ v23 = {
   "selections": (v7/*: any*/),
   "storageKey": null
 },
-v24 = {
+v26 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -644,9 +706,9 @@ v24 = {
   "selections": (v7/*: any*/),
   "storageKey": null
 },
-v25 = {
+v27 = {
   "alias": null,
-  "args": (v17/*: any*/),
+  "args": (v19/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
   "name": "Acc_Project__c",
@@ -684,10 +746,10 @@ v25 = {
               "name": "roles",
               "plural": false,
               "selections": [
-                (v18/*: any*/),
-                (v19/*: any*/),
                 (v20/*: any*/),
                 (v21/*: any*/),
+                (v22/*: any*/),
+                (v23/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -696,11 +758,11 @@ v25 = {
                   "name": "partnerRoles",
                   "plural": true,
                   "selections": [
-                    (v18/*: any*/),
-                    (v19/*: any*/),
                     (v20/*: any*/),
                     (v21/*: any*/),
-                    (v22/*: any*/)
+                    (v22/*: any*/),
+                    (v23/*: any*/),
+                    (v24/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -727,7 +789,7 @@ v25 = {
               "selections": (v7/*: any*/),
               "storageKey": null
             },
-            (v23/*: any*/),
+            (v25/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -749,9 +811,9 @@ v25 = {
               "storageKey": null
             },
             {
-              "alias": null,
+              "alias": "Partner",
               "args": [
-                (v16/*: any*/),
+                (v18/*: any*/),
                 {
                   "kind": "Literal",
                   "name": "orderBy",
@@ -832,7 +894,7 @@ v25 = {
                           "selections": (v7/*: any*/),
                           "storageKey": null
                         },
-                        (v24/*: any*/),
+                        (v26/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -891,7 +953,7 @@ v25 = {
   ],
   "storageKey": null
 },
-v26 = {
+v28 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -940,7 +1002,8 @@ return {
                 "selections": [
                   (v9/*: any*/),
                   (v15/*: any*/),
-                  (v25/*: any*/)
+                  (v17/*: any*/),
+                  (v27/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -990,7 +1053,7 @@ return {
                 "selections": [
                   {
                     "alias": "ProjectSuspensionProject",
-                    "args": (v17/*: any*/),
+                    "args": (v19/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -1013,7 +1076,7 @@ return {
                             "plural": false,
                             "selections": [
                               (v13/*: any*/),
-                              (v23/*: any*/),
+                              (v25/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -1022,11 +1085,11 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
-                                  (v20/*: any*/),
-                                  (v19/*: any*/),
-                                  (v18/*: any*/),
+                                  (v22/*: any*/),
                                   (v21/*: any*/),
-                                  (v26/*: any*/),
+                                  (v20/*: any*/),
+                                  (v23/*: any*/),
+                                  (v28/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -1035,12 +1098,12 @@ return {
                                     "name": "partnerRoles",
                                     "plural": true,
                                     "selections": [
-                                      (v19/*: any*/),
-                                      (v18/*: any*/),
-                                      (v20/*: any*/),
-                                      (v26/*: any*/),
                                       (v21/*: any*/),
-                                      (v22/*: any*/)
+                                      (v20/*: any*/),
+                                      (v22/*: any*/),
+                                      (v28/*: any*/),
+                                      (v23/*: any*/),
+                                      (v24/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
@@ -1072,7 +1135,7 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v13/*: any*/),
-                                          (v24/*: any*/),
+                                          (v26/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -1103,7 +1166,8 @@ return {
                   },
                   (v9/*: any*/),
                   (v15/*: any*/),
-                  (v25/*: any*/)
+                  (v17/*: any*/),
+                  (v27/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1116,16 +1180,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "487a886f4b371176f70f35747dddee84",
+    "cacheID": "ed825445afc06f1e9ce2bd48d928119d",
     "id": null,
     "metadata": {},
     "name": "ClaimDashboardQuery",
     "operationKind": "query",
-    "text": "query ClaimDashboardQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Acc_PeriodLatestForecastCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}, Acc_ProjectPeriodNumber__c: {order: ASC}}) {\n          edges {\n            node {\n              Id\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__r {\n                Acc_AccountId__r {\n                  Name {\n                    value\n                  }\n                }\n                Id\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ApprovedDate__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 1) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Overdue_Project__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimDashboardQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Acc_PeriodLatestForecastCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}, Acc_ProjectPeriodNumber__c: {order: ASC}}) {\n          edges {\n            node {\n              Id\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__r {\n                Acc_AccountId__r {\n                  Name {\n                    value\n                  }\n                }\n                Id\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ApprovedDate__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}) {\n          totalCount\n          edges {\n            node {\n              Id\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Partner: Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 1) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Overdue_Project__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b047b6f43965fdc19bdce3b6d274f6a6";
+(node as any).hash = "4d8f0b3e60bc4245b2e7de720aab1799";
 
 export default node;

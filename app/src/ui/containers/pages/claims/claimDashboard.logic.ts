@@ -15,6 +15,7 @@ export const useClaimDashboardData = (projectId: ProjectId, partnerId: PartnerId
     { projectId, projectIdStr: projectId, partnerId },
     { fetchPolicy: "network-only" },
   );
+
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
@@ -35,11 +36,13 @@ export const useClaimDashboardData = (projectId: ProjectId, partnerId: PartnerId
 
     const partner = head(
       mapToPartnerDtoArray(
-        projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+        projectNode?.Partner?.edges ?? [],
         ["isLead", "roles", "isWithdrawn", "partnerStatus", "overdueProject", "name", "accountId", "id"],
         { partnerRoles: project.partnerRoles },
       ),
     );
+
+    const isMultipleParticipants = (data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.totalCount ?? 0) > 1;
 
     if (!partner) {
       throw new Error("could not find matching partner");
@@ -74,6 +77,13 @@ export const useClaimDashboardData = (projectId: ProjectId, partnerId: PartnerId
     const previousClaims = claims.filter(x => x.isApproved);
     const currentClaim = claims.find(x => !x.isApproved) ?? null;
 
-    return { project, partner, previousClaims, currentClaim, fragmentRef: data.salesforce.uiapi };
+    return {
+      project,
+      partner,
+      previousClaims,
+      currentClaim,
+      isMultipleParticipants,
+      fragmentRef: data.salesforce.uiapi,
+    };
   }, []);
 };

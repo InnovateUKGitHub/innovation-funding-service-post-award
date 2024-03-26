@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { useProjectParticipants } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { ClaimsDashboardGuidance } from "./components/ClaimsDashboardGuidance";
 import { DateFormat } from "@framework/constants/enums";
@@ -59,9 +58,8 @@ const ClaimTable = createTypedTable<Claim>();
 
 const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) => {
   const data = useClaimDashboardData(props.projectId, props.partnerId);
-  const { project, partner, previousClaims, currentClaim, fragmentRef } = data;
+  const { project, partner, previousClaims, currentClaim, isMultipleParticipants, fragmentRef } = data;
 
-  const { isMultipleParticipants } = useProjectParticipants();
   return (
     <Page
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}

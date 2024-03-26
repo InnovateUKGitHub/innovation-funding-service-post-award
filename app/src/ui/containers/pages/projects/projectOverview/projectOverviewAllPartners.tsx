@@ -1,14 +1,20 @@
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { SectionPanel } from "@ui/components/atomicDesign/molecules/SectionPanel/sectionPanel";
-import { useProjectParticipants } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import type { Partner, Project } from "./projectOverview.logic";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 
-export const ProjectOverviewAllPartnersDetails = ({ project, partner }: { partner: Partner; project: Project }) => {
+export const ProjectOverviewAllPartnersDetails = ({
+  project,
+  partner,
+  isMultipleParticipants,
+}: {
+  partner: Partner;
+  project: Project;
+  isMultipleParticipants: boolean;
+}) => {
   const ProjectSummaryDetails = TypedDetails<Project>();
   const PartnerSummaryDetails = TypedDetails<Partner>();
-  const state = useProjectParticipants();
   return (
     <SectionPanel qa="claims-summary">
       <DualDetails>
@@ -36,7 +42,7 @@ export const ProjectOverviewAllPartnersDetails = ({ project, partner }: { partne
           />
         </ProjectSummaryDetails.Details>
 
-        {state.isMultipleParticipants && (
+        {isMultipleParticipants && (
           <PartnerSummaryDetails.Details
             data={partner}
             title={

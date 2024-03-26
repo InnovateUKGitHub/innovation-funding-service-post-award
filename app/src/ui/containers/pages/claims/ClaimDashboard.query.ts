@@ -93,6 +93,14 @@ export const claimDashboardQuery = graphql`
               }
             }
           }
+          Acc_ProjectParticipant__c(where: { Acc_ProjectId__c: { eq: $projectId } }) {
+            totalCount
+            edges {
+              node {
+                Id
+              }
+            }
+          }
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
@@ -129,7 +137,7 @@ export const claimDashboardQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(
+                Partner: Acc_ProjectParticipantsProject__r(
                   where: { Id: { eq: $partnerId } }
                   orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
                   first: 1

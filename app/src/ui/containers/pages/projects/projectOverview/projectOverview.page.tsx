@@ -19,6 +19,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
   const { project, partners, isProjectClosed, highlightedPartner, user, accessControlOptions, fragmentRef } =
     useProjectOverviewData(props.projectId);
 
+  const isMultipleParticipants = partners.length > 1;
   const title =
     isProjectClosed || project.isPastEndDate || isPartnerWithdrawn(project.roles, partners) ? (
       <Content value={x => x.projectMessages.projectEndedMessage} />
@@ -54,7 +55,11 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
     >
       <Section qa="period-information" className="govuk-!-padding-bottom-6" title={title} subtitle={subtitle}>
         {highlightedPartner && (project.roles.isPm || project.roles.isMo) ? (
-          <ProjectOverviewAllPartnersDetails project={project} partner={highlightedPartner} />
+          <ProjectOverviewAllPartnersDetails
+            project={project}
+            partner={highlightedPartner}
+            isMultipleParticipants={isMultipleParticipants}
+          />
         ) : highlightedPartner && project.roles.isFc ? (
           <ProjectOverviewSinglePartnerDetails partner={highlightedPartner} />
         ) : null}
