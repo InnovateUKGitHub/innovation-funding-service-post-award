@@ -129,6 +129,7 @@ export const monitoringReportWorkflowQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 roles {
                   isMo
                   isFc

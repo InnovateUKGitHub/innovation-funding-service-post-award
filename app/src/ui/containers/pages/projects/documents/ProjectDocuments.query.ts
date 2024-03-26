@@ -81,6 +81,7 @@ export const projectDocumentsQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 roles {
                   isMo
                   isFc

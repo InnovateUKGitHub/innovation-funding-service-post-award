@@ -28,6 +28,7 @@ export const useClaimDetailDocumentsQuery = (
     "roles",
     "impactManagementParticipation",
     "competitionType",
+    "isActive",
   ]);
 
   const claimDetailDocuments = (data?.salesforce?.uiapi?.query?.ClaimsDocuments?.edges ?? [])

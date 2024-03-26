@@ -76,6 +76,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         validator={editor.validator}
         error={editor.error}
         projectId={this.props.projectId}
+        isActive // todo: use project value after migrating to gql
       >
         {this.renderSummary(projectChangeRequest)}
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}

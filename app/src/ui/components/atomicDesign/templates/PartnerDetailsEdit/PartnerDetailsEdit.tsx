@@ -83,6 +83,7 @@ export function PartnerDetailsEditComponent({
       apiError={apiError}
       projectId={projectId}
       partnerId={partnerId}
+      isActive={project.isActive}
     >
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>

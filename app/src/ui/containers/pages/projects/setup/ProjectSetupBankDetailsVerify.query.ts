@@ -5,6 +5,14 @@ export const projectSetupBankDetailsVerifyQuery = graphql`
       uiapi {
         ...TitleFragment
         query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+            edges {
+              node {
+                Id
+                isActive
+              }
+            }
+          }
           Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }) {
             edges {
               node {

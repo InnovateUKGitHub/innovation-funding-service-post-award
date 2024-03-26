@@ -89,6 +89,7 @@ export const claimDocumentsQuery = graphql`
           Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
             edges {
               node {
+                isActive
                 Id
                 roles {
                   isMo

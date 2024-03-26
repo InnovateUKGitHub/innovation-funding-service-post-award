@@ -29,7 +29,7 @@ export const useMonitoringReportWorkflowQuery = (
   );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber"]);
+  const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "isActive"]);
 
   const questions = mapToMonitoringReportQuestionDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_MonitoringQuestion__c?.edges ?? [],

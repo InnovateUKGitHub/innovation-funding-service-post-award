@@ -24,6 +24,7 @@ export const useSetupSpendProfileData = (projectId: ProjectId, partnerId: Partne
     "periodId",
     "projectNumber",
     "title",
+    "isActive",
   ]);
 
   const partner = mapToPartnerDto(partnerNode, ["partnerStatus", "name", "organisationType", "overheadRate"], {});

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3f4773c8b5068bcf385cef095fb31d36>>
+ * @generated SignedSource<<041e42b25925cf13d25050cddb861022>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -58,6 +58,7 @@ export type PcrDeleteQuery$data = {
                   } | null | undefined;
                 } | null | undefined> | null | undefined;
               } | null | undefined;
+              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -173,6 +174,13 @@ v6 = [
                         "plural": false,
                         "selections": [
                           (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
                           {
                             "alias": null,
                             "args": null,
@@ -400,16 +408,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "c28dd58f417320c10f80d780b2cd54dc",
+    "cacheID": "96cace687e7759e8977b591a1aacd1d9",
     "id": null,
     "metadata": {},
     "name": "PcrDeleteQuery",
     "operationKind": "query",
-    "text": "query PcrDeleteQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n                edges {\n                  node {\n                    Id\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrDeleteQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n                edges {\n                  node {\n                    Id\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a8199899033a7b2bdf2c6060f21f489c";
+(node as any).hash = "523e454cdd2968e4492663e096aeeec2";
 
 export default node;

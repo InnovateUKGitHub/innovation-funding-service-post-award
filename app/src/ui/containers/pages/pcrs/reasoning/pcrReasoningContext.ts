@@ -1,4 +1,4 @@
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { Mode } from "./pcrReasoningWorkflow.logic";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, createContext, useContext } from "react";
 type PcrReasoningContextType = {
   projectId: ProjectId;
   pcrId: PcrId;
-  project: Pick<ProjectDto, "title" | "projectNumber">;
+  project: Pick<ProjectDtoGql, "title" | "projectNumber" | "isActive">;
   mode: Mode;
   stepNumber?: number;
   pcr: Pick<PCRDto, "reasoningComments" | "requestNumber" | "id" | "projectId" | "reasoningStatus"> & {

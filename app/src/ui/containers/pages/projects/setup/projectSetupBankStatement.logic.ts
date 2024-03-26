@@ -9,6 +9,8 @@ import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { UseFormReset } from "react-hook-form";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export const useSetupBankStatementData = (
   projectId: ProjectId,
@@ -21,7 +23,11 @@ export const useSetupBankStatementData = (
     refreshedQueryOptions,
   );
 
-  return { fragmentRef: data?.salesforce?.uiapi, userId: data?.currentUser?.userId ?? "unknown" };
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+
+  const project = mapToProjectDto(projectNode, ["id", "isActive"]);
+
+  return { fragmentRef: data?.salesforce?.uiapi, userId: data?.currentUser?.userId ?? "unknown", project };
 };
 
 export const useSetupBankStatementActions = (

@@ -47,7 +47,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const onBlurOrChange = useClearMessagesOnBlurOrChange();
 
-  const { fragmentRef } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
+  const { fragmentRef, project } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
 
   const { register, reset, getFieldState, handleSubmit, setError, formState } = useForm<
     z.output<UploadBankStatementSchemaType>
@@ -72,6 +72,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
       apiError={apiError}
       validationErrors={allErrors}
       pageTitle={<Title />}
+      isActive={project.isActive}
       fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />

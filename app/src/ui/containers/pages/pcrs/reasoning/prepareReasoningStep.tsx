@@ -47,6 +47,7 @@ export const PCRPrepareReasoningStep = () => {
       backLink={backLink}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       apiError={apiError}
+      isActive={project.isActive}
     >
       <Messages messages={messages} />
       <PcrItemListSection />

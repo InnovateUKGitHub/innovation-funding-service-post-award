@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2190d660bf11a1119e357578734a92fb>>
+ * @generated SignedSource<<ff6142fe4fef996d5b54808ceb51901a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -73,10 +73,14 @@ export type ProjectSetupBankDetailsQuery$data = {
                   } | null | undefined;
                 } | null | undefined> | null | undefined;
               } | null | undefined;
+              readonly Acc_ProjectStatus__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
+              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -198,6 +202,13 @@ v6 = [
                           {
                             "alias": null,
                             "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "StringValue",
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
@@ -211,6 +222,16 @@ v6 = [
                             "concreteType": "StringValue",
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
+                            "plural": false,
+                            "selections": (v4/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectStatus__c",
                             "plural": false,
                             "selections": (v4/*: any*/),
                             "storageKey": null
@@ -451,16 +472,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "21361dd0b1583d055eb2d76a5ebd346d",
+    "cacheID": "b3394c1d434f4270279333868f534ae4",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupBankDetailsQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupBankDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_RegistrationNumber__c {\n                      value\n                    }\n                    Acc_AddressPostcode__c {\n                      value\n                    }\n                    Acc_AddressStreet__c {\n                      value\n                    }\n                    Acc_AddressBuildingName__c {\n                      value\n                    }\n                    Acc_AddressLocality__c {\n                      value\n                    }\n                    Acc_AddressTown__c {\n                      value\n                    }\n                    Acc_AccountNumber__c {\n                      value\n                    }\n                    Acc_SortCode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupBankDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_RegistrationNumber__c {\n                      value\n                    }\n                    Acc_AddressPostcode__c {\n                      value\n                    }\n                    Acc_AddressStreet__c {\n                      value\n                    }\n                    Acc_AddressBuildingName__c {\n                      value\n                    }\n                    Acc_AddressLocality__c {\n                      value\n                    }\n                    Acc_AddressTown__c {\n                      value\n                    }\n                    Acc_AccountNumber__c {\n                      value\n                    }\n                    Acc_SortCode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4ba336d3b7ce23063f07ad8aa0862af7";
+(node as any).hash = "928a1145de86aafae3cc2bf8141a3a5b";
 
 export default node;

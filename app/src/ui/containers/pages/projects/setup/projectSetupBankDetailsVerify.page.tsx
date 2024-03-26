@@ -25,7 +25,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
   partnerId,
   ...props
 }: BaseProps & ProjectSetupBankDetailsVerifyParams) => {
-  const { partner, fragmentRef } = useSetupBankDetailsVerifyData(projectId, partnerId);
+  const { partner, fragmentRef, project } = useSetupBankDetailsVerifyData(projectId, partnerId);
   const { bankDetails } = partner;
 
   const { handleSubmit } = useForm({
@@ -48,6 +48,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
       }
       apiError={apiError}
       pageTitle={<Title />}
+      isActive={project.isActive}
       fragmentRef={fragmentRef}
     >
       <Section qa={"guidance"}>

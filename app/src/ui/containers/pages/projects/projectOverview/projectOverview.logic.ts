@@ -32,6 +32,7 @@ export type Project = Pick<
   | "pcrsQueried"
   | "pcrsToReview"
   | "claimsToReview"
+  | "isActive"
 >;
 
 export type Partner = Pick<
@@ -119,6 +120,7 @@ export const useProjectOverviewData = (projectId: string) => {
     "pcrsToReview",
     "pcrsQueried",
     "claimsToReview",
+    "isActive",
   ]);
 
   const partners = mapToPartnerDtoArray(

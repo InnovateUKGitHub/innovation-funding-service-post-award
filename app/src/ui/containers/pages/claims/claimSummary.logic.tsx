@@ -50,6 +50,7 @@ export const useClaimSummaryData = (
     "monitoringLevel",
     "title",
     "projectNumber",
+    "isActive",
   ]);
 
   const partner = mapToPartnerDto(

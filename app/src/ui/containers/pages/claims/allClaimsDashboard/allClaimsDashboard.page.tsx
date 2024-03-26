@@ -83,6 +83,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
       fragmentRef={fragmentRef}
       projectId={props.projectId}
       partnerId={isLeadPartnerFc ? leadPartner.id : undefined}
+      isActive={project.isActive}
     >
       {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
 

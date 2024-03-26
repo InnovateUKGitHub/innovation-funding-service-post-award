@@ -42,6 +42,7 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
           heading={getContent(x => x.pages.pcrSubmittedForReview.title)}
         />
       }
+      isActive={project.isActive}
       backLink={<BackLink route={pcrsRoute}>{getContent(x => x.pages.pcrSubmittedForReview.backLink)}</BackLink>}
     >
       <ValidationMessage

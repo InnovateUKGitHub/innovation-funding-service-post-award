@@ -11,6 +11,7 @@ export const pcrItemWorkflowQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_CompetitionId__r {
                   Acc_TypeofAid__c {
                     value

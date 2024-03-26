@@ -12,6 +12,7 @@ const projectChangeRequestSubmittedForReviewQuery = graphql`
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
+                isActive
                 Acc_ProjectTitle__c {
                   value
                 }

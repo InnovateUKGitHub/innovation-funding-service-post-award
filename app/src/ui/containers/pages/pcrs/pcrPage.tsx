@@ -23,7 +23,8 @@ export const PcrPage = ({
   validationErrors?: RhfErrors;
   backLink?: React.ReactNode;
 }) => {
-  const { workflow, pcrItem, mode, step, projectId, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
+  const { workflow, pcrItem, mode, step, projectId, apiError, fragmentRef, messages, routes, project } =
+    usePcrWorkflowContext();
   const { getPcrItemContent } = useGetPcrItemMetadata();
 
   useScrollToTopSmoothly([step]);
@@ -45,6 +46,7 @@ export const PcrPage = ({
       validationErrors={validationErrors}
       apiError={pcrLevelApiError ?? apiError}
       projectId={projectId}
+      isActive={project.isActive}
     >
       <Messages messages={messages} />
 

@@ -131,6 +131,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
       projectId={props.projectId}
+      isActive={project.isActive}
     >
       <Messages messages={props.messages} />
 

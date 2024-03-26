@@ -19,7 +19,7 @@ export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallba
   const internalError = !config.ssoEnabled && (errorStack || errorMessage);
 
   return (
-    <Page qa="fallback-error" pageTitle={<PageTitle />}>
+    <Page isActive qa="fallback-error" pageTitle={<PageTitle />}>
       <Section>
         <SimpleString qa="message">
           <Content value={x => x.pages.genericFallbackError.message} components={[goToDashboardLink]} />

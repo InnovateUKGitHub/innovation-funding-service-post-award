@@ -19,7 +19,7 @@ export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId)
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "id", "status", "title", "projectSource"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "id", "status", "title", "projectSource", "isActive"]);
 
   const partner = mapToPartnerDto(
     partnerNode,

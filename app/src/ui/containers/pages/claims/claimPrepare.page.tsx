@@ -50,6 +50,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       }
       pageTitle={<Title />}
       fragmentRef={data?.fragmentRef}
+      isActive={data.project.isActive}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
       {isNonEditable && (

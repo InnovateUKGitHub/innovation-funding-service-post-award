@@ -86,6 +86,7 @@ export const PCRPrepareReasoningFilesStep = () => {
       validationErrors={validationErrors}
       backLink={backLink}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      isActive={project.isActive}
     >
       <Messages messages={messages} />
       <PcrItemListSection />

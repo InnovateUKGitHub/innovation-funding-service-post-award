@@ -47,7 +47,7 @@ export const useMonitoringReportDashboardQuery = (projectId: ProjectId) => {
   return useMemo(() => {
     const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-    const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status"]);
+    const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "isActive"]);
 
     const reports = mapToMonitoringReportDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_MonitoringAnswer__c?.edges ?? [],

@@ -33,7 +33,7 @@ const BroadcastPage = (props: BroadcastItemProps) => {
   );
 
   return (
-    <Page pageTitle={titleElement} backLink={backLinkElement}>
+    <Page pageTitle={titleElement} backLink={backLinkElement} isActive={true}>
       {rejected && <SimpleString>{getContent(x => x.components.broadcastContent.errorBroadcast)}</SimpleString>}
 
       {!rejected && <BroadcastDetail {...broadcast} />}

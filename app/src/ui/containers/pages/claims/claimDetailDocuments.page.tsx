@@ -133,6 +133,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
       fragmentRef={fragmentRef}
       projectId={props.projectId}
       partnerId={props.partnerId}
+      isActive={project.isActive}
     >
       {isCombinationOfSBRI ? (
         <>

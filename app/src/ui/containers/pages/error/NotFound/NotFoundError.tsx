@@ -20,7 +20,7 @@ export const NotFoundError = () => {
   );
 
   return (
-    <Page qa="not-found" pageTitle={<PageTitle />}>
+    <Page isActive qa="not-found" pageTitle={<PageTitle />}>
       <Section>
         <SimpleString qa="errorMessage">
           <Content

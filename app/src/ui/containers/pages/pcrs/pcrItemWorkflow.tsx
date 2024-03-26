@@ -1,5 +1,5 @@
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
@@ -20,7 +20,7 @@ import { Helmet } from "react-helmet";
 import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 
 type Data = {
-  project: Pick<ProjectDto, "status">;
+  project: Pick<ProjectDtoGql, "status" | "isActive">;
   pcrItem: Pick<
     FullPCRItemDto,
     | "id"

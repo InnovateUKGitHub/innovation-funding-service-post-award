@@ -71,6 +71,7 @@ export const PCRReasoningSummary = () => {
   return (
     <Page
       apiError={apiError}
+      isActive={project.isActive}
       validationErrors={validationErrors}
       backLink={backLink}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}

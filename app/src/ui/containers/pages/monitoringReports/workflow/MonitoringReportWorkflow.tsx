@@ -162,6 +162,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
         pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
         validationErrors={validatorErrors}
         apiError={apiError}
+        isActive={project.isActive}
       >
         {displayUrlDiscrepancy && (
           <ValidationMessage

@@ -22,7 +22,7 @@ export const useLoanOverviewData = (projectId: ProjectId) => {
     const projectGqlData = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
     const loanGqlData = data?.salesforce?.uiapi?.query?.Acc_Prepayment__c?.edges;
 
-    const project = mapToProjectDto(projectGqlData?.node, ["id", "title", "projectNumber", "roles"]);
+    const project = mapToProjectDto(projectGqlData?.node, ["id", "title", "projectNumber", "roles", "isActive"]);
 
     const loans = mapToLoanDtoArray(loanGqlData ?? null, [
       "id",

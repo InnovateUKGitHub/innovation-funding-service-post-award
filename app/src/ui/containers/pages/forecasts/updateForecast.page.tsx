@@ -84,6 +84,7 @@ const UpdateForecastComponent = ({
       error={editor.error}
       validator={editor.validator}
       pageTitle={<Title />}
+      isActive={data.project.isActive}
       fragmentRef={data.fragmentRef}
     >
       <ForecastClaimAdvice isFc={isFc} />

@@ -59,6 +59,7 @@ const ProjectSetupSpendProfile = (props: BaseProps & ProjectSetupSpendProfilePar
           <Content value={x => x.pages.projectSetupSpendProfile.backLink} />
         </BackLink>
       }
+      isActive={data.project.isActive}
       error={editor.error}
       validator={editor.validator}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}

@@ -22,7 +22,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
 
   const partnerRoles = getPartnerRoles(projectNode?.roles ?? null);
 
-  const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "roles"]);
+  const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "roles", "isActive"]);
 
   const partners = sortPartnersLeadFirst(
     mapToPartnerDtoArray(

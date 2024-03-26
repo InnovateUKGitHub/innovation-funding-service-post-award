@@ -14,7 +14,7 @@ const DeveloperHomePageContainer = (props: BaseProps) => {
   const { getContent } = useContent();
 
   return (
-    <Page pageTitle={<H1>{getContent(x => x.pages.home.title)}</H1>}>
+    <Page isActive pageTitle={<H1>{getContent(x => x.pages.home.title)}</H1>}>
       <NavigationCardsGrid>
         <NavigationCard
           label={<Content value={x => x.pages.home.projectsHeading} />}

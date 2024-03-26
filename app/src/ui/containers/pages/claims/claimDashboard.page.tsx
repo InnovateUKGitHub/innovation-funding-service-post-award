@@ -5,7 +5,7 @@ import { DateFormat } from "@framework/constants/enums";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -22,7 +22,6 @@ import {
   getClaimDetailsStatusType,
 } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useClaimDashboardData } from "./claimDashboard.logic";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
 
 export interface ClaimDashboardPageParams {
   projectId: ProjectId;
@@ -46,8 +45,8 @@ type Claim = Pick<
 
 interface Data {
   project: Pick<
-    ProjectDto,
-    "status" | "title" | "projectNumber" | "id" | "roles" | "periodEndDate" | "competitionType"
+    ProjectDtoGql,
+    "status" | "title" | "projectNumber" | "id" | "roles" | "periodEndDate" | "competitionType" | "isActive"
   >;
   partner: Pick<PartnerDto, "partnerStatus" | "isWithdrawn" | "roles" | "id" | "overdueProject">;
   previousClaims: Claim[];
@@ -65,6 +64,7 @@ const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) =>
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       backLink={<ProjectBackLink projectId={project.id} />}
       fragmentRef={fragmentRef}
+      isActive={project.isActive}
     >
       {isMultipleParticipants && (
         <ClaimsDashboardGuidance competitionType={project.competitionType} overdueProject={partner.overdueProject} />
@@ -202,11 +202,10 @@ const ClaimsTable = ({
   tableCaption?: string;
   routes: BaseProps["routes"];
 }) => {
-  const projectStatus = useProjectStatus();
   return (
     <ClaimTable.Table
       data={data.sort((a, b) => a.periodId - b.periodId)}
-      bodyRowFlag={claim => (projectStatus.isActive ? hasBodyRowFlag(claim, project, partner) : null)}
+      bodyRowFlag={claim => (project.isActive ? hasBodyRowFlag(claim, project, partner) : null)}
       qa={tableQa}
       caption={tableCaption}
     >

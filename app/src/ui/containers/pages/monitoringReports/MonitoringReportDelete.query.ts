@@ -9,6 +9,7 @@ export const monitoringReportDeleteQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

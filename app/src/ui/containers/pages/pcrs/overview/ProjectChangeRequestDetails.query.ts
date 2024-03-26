@@ -46,6 +46,7 @@ const pcrDetailsQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 roles {
                   isFc
                   isMo

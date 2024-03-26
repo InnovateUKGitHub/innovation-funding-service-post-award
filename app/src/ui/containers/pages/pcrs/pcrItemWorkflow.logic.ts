@@ -29,7 +29,7 @@ export const usePcrItemWorkflowQuery = (
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["status", "typeOfAid"]);
+  const project = mapToProjectDto(projectNode, ["status", "typeOfAid", "isActive"]);
 
   const { node: pcrNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges);
 

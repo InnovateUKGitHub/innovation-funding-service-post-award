@@ -106,6 +106,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
       error={apiError}
       validator={validatorErrors}
       fragmentRef={fragmentRef}
+      isActive={project.isActive}
     >
       <Section qa="guidance">
         <P>{getContent(x => x.projectMessages.setupGuidance)}</P>

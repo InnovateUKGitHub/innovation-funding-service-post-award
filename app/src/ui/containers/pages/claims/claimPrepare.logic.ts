@@ -33,6 +33,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       "isNonFec",
       "competitionType",
       "status",
+      "isActive",
     ]);
 
     const partner = mapToPartnerDto(

@@ -6,6 +6,18 @@ export const failedBankCheckConfirmationQuery = graphql`
       uiapi {
         ...TitleFragment
         ...ProjectSuspensionMessageFragment
+        query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+            edges {
+              node {
+                isActive
+                Acc_ProjectStatus__c {
+                  value
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

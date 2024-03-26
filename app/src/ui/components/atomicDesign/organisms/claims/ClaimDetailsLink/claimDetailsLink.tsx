@@ -4,14 +4,13 @@ import { ClaimStatus } from "@framework/constants/claimStatus";
 import { PartnerStatus } from "@framework/constants/partner";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectDto, ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useContent } from "@ui/hooks/content.hook";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
 
 interface ClaimDetailsBaseProps {
   claim: Pick<ClaimDto, "status" | "periodId">;
-  project: Pick<ProjectDto, "id" | "status" | "roles">;
+  project: Pick<ProjectDtoGql, "id" | "status" | "roles" | "isActive">;
   partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus" | "isWithdrawn">;
 }
 
@@ -21,9 +20,8 @@ export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
 
 export const ClaimDetailsLink = ({ claim, partner, project, routes }: ClaimDetailsLinkRoutes) => {
   const { getContent } = useContent();
-  const { isActive: isProjectActive } = useProjectStatus();
 
-  const linkType = isProjectActive ? getClaimDetailsStatusType({ claim, partner, project }) : "view";
+  const linkType = project.isActive ? getClaimDetailsStatusType({ claim, partner, project }) : "view";
 
   if (!linkType) return null;
 

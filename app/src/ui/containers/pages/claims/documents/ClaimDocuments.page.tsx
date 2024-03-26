@@ -131,6 +131,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
       partnerId={partnerId}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
+      isActive={project.isActive}
     >
       <Messages messages={props.messages} />
       {isNonEditable && (

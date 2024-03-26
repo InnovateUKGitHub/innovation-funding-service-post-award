@@ -95,6 +95,7 @@ const pcrReasoningWorkflowQuery = graphql`
           Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
             edges {
               node {
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

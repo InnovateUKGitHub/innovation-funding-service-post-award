@@ -48,6 +48,7 @@ export const monitoringReportDashboardQuery = graphql`
                   isPm
                   isAssociate
                 }
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

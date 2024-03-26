@@ -85,6 +85,7 @@ const EditClaimLineItemsPage = ({
       }
       fragmentRef={fragmentRef}
       validationErrors={allErrors}
+      isActive={project.isActive}
     >
       {/* Update the HTML title to include the costCategoryName */}
       <Helmet>

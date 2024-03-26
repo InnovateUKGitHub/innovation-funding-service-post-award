@@ -26,6 +26,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
       pageTitle={<Title {...project} />}
       backLink={<ProjectBackLink projectId={project.id} />}
       projectId={props.projectId}
+      isActive={project.isActive}
     >
       <Section qa="project-forecasts">
         <Table.Table data={partners} qa="partner-table">

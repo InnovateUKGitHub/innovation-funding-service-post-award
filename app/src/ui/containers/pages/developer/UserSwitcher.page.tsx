@@ -7,7 +7,7 @@ import { UserSwitcher } from "./UserSwitcher";
 
 const UserSwitcherPage = () => {
   return (
-    <Page pageTitle={<H1>User Switcher</H1>}>
+    <Page isActive pageTitle={<H1>User Switcher</H1>}>
       <UserSwitcher />
     </Page>
   );

@@ -80,6 +80,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
           </BackLink>
         )
       }
+      isActive
     >
       <BroadcastsViewer broadcasts={broadcasts} />
 

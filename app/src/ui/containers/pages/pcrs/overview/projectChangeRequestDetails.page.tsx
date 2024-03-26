@@ -24,6 +24,7 @@ const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) =>
           {getContent(x => x.pages.pcrOverview.backToPcrs)}
         </BackLink>
       }
+      isActive={project.isActive}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       projectId={props.projectId}
     >

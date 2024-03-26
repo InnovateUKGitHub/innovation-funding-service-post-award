@@ -32,7 +32,7 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "id", "title"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "id", "title", "status", "isActive"]);
 
   const partner = mapToPartnerDto(
     getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? []).node,

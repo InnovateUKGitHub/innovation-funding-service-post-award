@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<37e35058bd08d27798b3127cb732c085>>
+ * @generated SignedSource<<d870fddaed71b273118a5ffd055a379b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -63,6 +63,7 @@ export type ProjectChangeRequestSubmittedForReviewQuery$data = {
               readonly Acc_ProjectTitle__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
+              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -194,6 +195,13 @@ v5 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
                           {
                             "alias": null,
                             "args": null,
@@ -425,16 +433,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "546dd3b30c89965e4455dee1c7bb303f",
+    "cacheID": "6e05989e40297cb707d5f9c6b4338b0a",
     "id": null,
     "metadata": {},
     "name": "ProjectChangeRequestSubmittedForReviewQuery",
     "operationKind": "query",
-    "text": "query ProjectChangeRequestSubmittedForReviewQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_LastUpdated__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectChangeRequestSubmittedForReviewQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              isActive\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_LastUpdated__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "fa5490d8e387fda80412ffaa98318cd9";
+(node as any).hash = "680dd67cf8030fba32376203da850512";
 
 export default node;

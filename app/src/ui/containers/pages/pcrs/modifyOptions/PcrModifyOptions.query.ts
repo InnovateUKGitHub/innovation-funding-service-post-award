@@ -9,6 +9,7 @@ const pcrModifyOptionsQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_CompetitionType__c {
                   value
                 }

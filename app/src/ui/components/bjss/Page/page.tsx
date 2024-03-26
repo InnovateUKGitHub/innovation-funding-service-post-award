@@ -1,9 +1,9 @@
 import { IAppError } from "@framework/types/IAppError";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
 import { ProjectSuspensionMessageWithOptionalFragment } from "@ui/components/atomicDesign/organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
+import { OverrideAccessContext } from "@ui/containers/app/override-access";
 import { CombinedResultsValidator, Results } from "@ui/validation/results";
-import React from "react";
+import React, { useContext } from "react";
 import { AriaLive } from "../../atomicDesign/atoms/AriaLive/ariaLive";
 import { GovWidthContainer } from "../../atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { ErrorSummary } from "../../atomicDesign/molecules/ErrorSummary/ErrorSummary";
@@ -18,6 +18,7 @@ export interface PageProps {
   validator?: Results<ResultBase> | (null | undefined | Results<ResultBase>)[] | null | undefined;
   qa?: string;
   className?: string;
+  isActive: boolean;
   fragmentRef?: unknown;
 
   projectId?: ProjectId;
@@ -37,14 +38,15 @@ export function Page({
   validator,
   qa,
   className,
+  isActive,
   fragmentRef,
 }: PageProps) {
   const validation = Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
-  const projectState = useProjectStatus();
+  const overrideAccess = useContext(OverrideAccessContext);
 
-  const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
+  const displayActiveUi: boolean = overrideAccess || isActive;
 
   return (
     <FragmentContext.Provider value={fragmentRef}>

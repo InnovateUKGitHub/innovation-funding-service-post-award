@@ -9,10 +9,14 @@ export const projectSetupBankDetailsQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }
                 Acc_ProjectTitle__c {
+                  value
+                }
+                Acc_ProjectStatus__c {
                   value
                 }
                 Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }) {

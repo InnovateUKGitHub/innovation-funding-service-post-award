@@ -56,6 +56,7 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
       }
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors}
+      isActive={project.isActive}
       apiError={apiError}
     >
       <Section>

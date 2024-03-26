@@ -30,6 +30,7 @@ const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
         </BackLink>
       }
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      isActive={project.isActive}
     >
       <Section>
         {pendingLoan && (

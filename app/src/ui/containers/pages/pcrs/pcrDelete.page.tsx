@@ -46,6 +46,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       apiError={apiError}
       projectId={projectId}
+      isActive={project.isActive}
     >
       <Section>
         <ValidationMessage messageType="alert" message={getContent(x => x.pages.pcrDelete.alertMessage)} />

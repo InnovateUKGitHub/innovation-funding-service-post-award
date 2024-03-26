@@ -14,6 +14,7 @@ describe("<Page />", () => {
   const defaultProps: PageProps = {
     pageTitle: <h1 data-qa={stubTitleQa}>stub title</h1>,
     children: <div data-qa={stubChildrenQa}>stub children</div>,
+    isActive: true,
   };
 
   const stubContent = {

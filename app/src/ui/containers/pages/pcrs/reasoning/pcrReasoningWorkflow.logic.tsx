@@ -37,7 +37,7 @@ export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId, fetchKe
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["title", "status", "projectNumber"]);
+  const project = mapToProjectDto(projectNode, ["title", "status", "projectNumber", "isActive"]);
 
   const pcrGql = data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [];
   const pcr = head(

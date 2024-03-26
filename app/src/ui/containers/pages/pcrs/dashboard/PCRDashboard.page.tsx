@@ -16,7 +16,6 @@ import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Page } from "@ui/components/bjss/Page/page";
 import { useContent } from "@ui/hooks/content.hook";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
@@ -39,7 +38,6 @@ type PCRDashboardType = Merge<
 const PCRTable = createTypedTable<PCRDashboardType>();
 
 const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
-  const { isActive: isProjectActive } = useProjectStatus();
   const { project, pcrs, fragmentRef } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
   const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
@@ -141,15 +139,15 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         links.push(viewLink);
       }
     } else {
-      if (pcrStatusMetadata?.editableByPm && isPmAllowedToEdit && isProjectActive) {
+      if (pcrStatusMetadata?.editableByPm && isPmAllowedToEdit && project.isActive) {
         links.push(editLink);
-      } else if (pcrStatusMetadata?.reviewableByMo && isMo && isProjectActive) {
+      } else if (pcrStatusMetadata?.reviewableByMo && isMo && project.isActive) {
         links.push(reviewLink);
       } else if (isPmOrMo) {
         links.push(viewLink);
       }
 
-      if (pcrStatusMetadata?.deletableByPm && isPmAllowedToEdit && isProjectActive) {
+      if (pcrStatusMetadata?.deletableByPm && isPmAllowedToEdit && project.isActive) {
         links.push(deleteLink);
       }
     }
@@ -171,6 +169,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       fragmentRef={fragmentRef}
       projectId={props.projectId}
+      isActive={project.isActive}
     >
       <Messages messages={props.messages} />
 
@@ -181,7 +180,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
           getContent(x => x.pages.pcrsDashboard.noOngoingRequests),
         )}
 
-        {isProjectActive && renderStartANewRequestLink()}
+        {project.isActive && renderStartANewRequestLink()}
       </Section>
 
       <Accordion>

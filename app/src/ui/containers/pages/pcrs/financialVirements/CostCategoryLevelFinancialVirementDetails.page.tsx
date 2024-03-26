@@ -83,6 +83,7 @@ const EditPage = ({
           <Content value={x => x.financialVirementLabels.backToSummary} />
         </BackLink>
       }
+      isActive={project.isActive}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
     >
       <AwardRateOverridesMessage

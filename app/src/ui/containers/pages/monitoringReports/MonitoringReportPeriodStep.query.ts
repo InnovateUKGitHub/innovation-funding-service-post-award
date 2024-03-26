@@ -31,6 +31,7 @@ export const monitoringReportPeriodStepQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

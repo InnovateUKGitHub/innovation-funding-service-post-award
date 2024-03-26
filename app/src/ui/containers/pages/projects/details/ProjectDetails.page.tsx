@@ -19,7 +19,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
+// import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
@@ -60,17 +60,17 @@ const OtherContactProjectDetailsComponent = ({
 };
 
 type PartnerNameProps = {
-  project: Pick<ProjectDtoGql, "id">;
+  project: Pick<ProjectDtoGql, "id" | "isActive">;
   partner: Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead" | "id">;
   readonly: boolean;
 };
 
 const PartnerName = ({ project, partner, readonly }: PartnerNameProps) => {
   const partnerName = getPartnerName(partner, true);
-  const projectStatus = useProjectStatus();
+  // const projectStatus = useProjectStatus();
   const routes = useRoutes();
 
-  if (projectStatus.isActive && !readonly) {
+  if (project.isActive && !readonly) {
     return (
       <Link
         route={routes.partnerDetails.getLink({
@@ -97,7 +97,7 @@ const PartnerInformationTable = ({
   project,
   partners,
 }: {
-  project: Pick<ProjectDtoGql, "roles" | "id">;
+  project: Pick<ProjectDtoGql, "roles" | "id" | "isActive">;
   partners: PartnerTableType[];
 }) => {
   const { isPmOrMo, isAssociate, isFc } = getAuthRoles(project.roles);
@@ -172,6 +172,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
       backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectId={props.projectId}
+      isActive={project.isActive}
     >
       <Section
         qa="period-information"

@@ -20,7 +20,7 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "isActive"]);
 
   const partner = mapToPartnerDto(partnerNode, ["partnerStatus", "postcode", "postcodeStatus"], {});
 

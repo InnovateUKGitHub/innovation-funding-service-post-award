@@ -22,6 +22,7 @@ const useProjectChangeRequestSubmittedForReviewQuery = ({
   const project = mapToProjectDto(getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges ?? []).node, [
     "title",
     "projectNumber",
+    "isActive",
   ]);
 
   const pcr = mapToPcrDto(

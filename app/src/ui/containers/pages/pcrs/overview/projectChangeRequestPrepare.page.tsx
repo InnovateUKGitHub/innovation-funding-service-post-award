@@ -79,6 +79,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       validationErrors={validatorErrors}
       apiError={apiError}
       projectId={props.projectId}
+      isActive={project.isActive}
     >
       <ProjectChangeRequestOverviewSummary
         pcr={pcr}

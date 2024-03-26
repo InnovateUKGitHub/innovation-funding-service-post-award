@@ -9,6 +9,16 @@ export const projectSetupBankStatementQuery = graphql`
       uiapi {
         ...TitleFragment
         ...ProjectDocumentViewFragment
+        query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+            edges {
+              node {
+                Id
+                isActive
+              }
+            }
+          }
+        }
       }
     }
   }

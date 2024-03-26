@@ -14,7 +14,7 @@ export const useMonitoringReportDeleteQuery = (projectId: ProjectId) => {
   });
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber"]);
+  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "isActive"]);
 
   return { project };
 };

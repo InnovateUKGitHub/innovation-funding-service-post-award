@@ -15,7 +15,14 @@ export const usePartnerDetailsQuery = (projectId: ProjectId, partnerId: PartnerI
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "roles", "partnerRoles", "status", "title"]);
+  const project = mapToProjectDto(projectNode, [
+    "projectNumber",
+    "roles",
+    "partnerRoles",
+    "status",
+    "title",
+    "isActive",
+  ]);
 
   const partner = mapToPartnerDto(partnerNode, ["partnerStatus", "postcode", "roles", "name", "type"], {
     roles: project.partnerRoles.find(roles => roles.partnerId === partnerNode?.Id) ?? {

@@ -188,6 +188,7 @@ export const claimLineItemsQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

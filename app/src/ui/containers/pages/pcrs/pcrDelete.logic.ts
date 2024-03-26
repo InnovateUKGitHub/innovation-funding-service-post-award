@@ -14,7 +14,7 @@ export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "isActive"]);
 
   const pcr = mapToPcrDtoArray(
     projectNode?.Project_Change_Requests__r?.edges ?? [],

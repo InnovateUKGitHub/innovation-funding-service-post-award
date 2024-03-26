@@ -52,6 +52,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
       fragmentRef={fragmentRef}
       projectId={props.projectId}
       partnerId={highlightedPartner?.id}
+      isActive={project.isActive}
     >
       <Section qa="period-information" className="govuk-!-padding-bottom-6" title={title} subtitle={subtitle}>
         {highlightedPartner && (project.roles.isPm || project.roles.isMo) ? (

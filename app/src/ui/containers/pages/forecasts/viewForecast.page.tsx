@@ -65,6 +65,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
     <Page
       pageTitle={<Title />}
       backLink={<BackLink route={backLink}>{backText}</BackLink>}
+      isActive={data.project.isActive}
       fragmentRef={data.fragmentRef}
       projectId={props.projectId}
       partnerId={props.partnerId}

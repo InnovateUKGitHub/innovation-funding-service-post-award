@@ -101,6 +101,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={allErrors}
       apiError={apiError}
+      isActive={project.isActive}
     >
       <Content markdown value={x => x.pages.pcrModifyOptions.guidance} />
 

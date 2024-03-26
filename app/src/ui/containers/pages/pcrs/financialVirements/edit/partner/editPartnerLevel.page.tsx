@@ -139,6 +139,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
           {content.backToSummary}
         </BackLink>
       }
+      isActive={project.isActive}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       apiError={apiError}
     >

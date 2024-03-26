@@ -11,7 +11,6 @@ import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
-import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
@@ -31,6 +30,7 @@ import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
+import { OverrideAccessContext } from "./app/override-access";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -114,12 +114,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </GovWidthContainer>
 
               <SuspensePageLoader>
-                <ProjectStatusCheck
-                  projectId={routePathParams.projectId as ProjectId}
-                  overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                >
+                <OverrideAccessContext.Provider value={!!currentRoute.allowRouteInActiveAccess}>
                   <PageContainer {...baseProps} />
-                </ProjectStatusCheck>
+                </OverrideAccessContext.Provider>
               </SuspensePageLoader>
             </FullHeight.Content>
 

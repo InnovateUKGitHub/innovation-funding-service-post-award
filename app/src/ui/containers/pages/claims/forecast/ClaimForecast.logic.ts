@@ -25,7 +25,7 @@ const useClaimForecastData = ({
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
+  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles", "isActive"]);
   const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
   const claims = mapToClaimDtoArray(
     data.salesforce.uiapi.query.Acc_Claims__c?.edges ?? [],

@@ -35,6 +35,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
 
   return (
     <Page
+      isActive={project.isActive}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink

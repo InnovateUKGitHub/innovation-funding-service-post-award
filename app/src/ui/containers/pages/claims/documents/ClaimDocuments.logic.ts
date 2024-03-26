@@ -32,6 +32,7 @@ export const useClaimDocumentsQuery = (
     "partnerRoles",
     "impactManagementParticipation",
     "competitionType",
+    "isActive",
   ]);
 
   const partner = mapToPartnerDto(partnerNode, ["roles", "partnerStatus", "isWithdrawn"], {

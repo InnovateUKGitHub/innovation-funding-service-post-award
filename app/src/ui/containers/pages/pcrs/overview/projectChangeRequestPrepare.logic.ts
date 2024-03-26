@@ -33,6 +33,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
     "roles",
     "monitoringLevel",
     "competitionType",
+    "isActive",
   ]);
 
   const pcr = mapToPcrDtoArray(

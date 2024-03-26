@@ -9,7 +9,7 @@ export const UnauthenticatedError = () => {
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";
 
   return (
-    <Page qa="unauthenticated-error" pageTitle={<PageTitle />}>
+    <Page isActive qa="unauthenticated-error" pageTitle={<PageTitle />}>
       <Section>
         <SimpleString qa="reason">
           <Content

@@ -113,6 +113,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
           </BackLink>
         )
       }
+      isActive={data.project.isActive}
       apiError={apiError}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
       validationErrors={validationErrors}

@@ -153,6 +153,7 @@ export const projectSetupSpendProfileQuery = graphql`
             edges {
               node {
                 Id
+                isActive
                 Acc_NumberofPeriods__c {
                   value
                 }

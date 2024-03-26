@@ -199,6 +199,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
       backLink={isRejected ? undefined : backLinkElement}
       error={payload?.loanEditor.error ?? payload?.loanDocsEditor.error}
       validator={[payload?.loanEditor.validator, payload?.loanDocsEditor.validator]}
+      isActive // TODO: replace with isActive property when migrated to gql
     >
       {isRejected && <SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</SimpleString>}
 

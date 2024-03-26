@@ -32,6 +32,7 @@ const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: Use
     "isNonFec",
     "roles",
     "competitionType",
+    "isActive",
   ]);
 
   const partners = mapToPartnerDtoArray(

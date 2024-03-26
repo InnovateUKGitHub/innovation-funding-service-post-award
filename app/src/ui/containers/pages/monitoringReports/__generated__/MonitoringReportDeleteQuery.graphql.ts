@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<590cc39a3187fba636198b11f0c53c81>>
+ * @generated SignedSource<<0adfe78c0230e133ed4f8c1b357f6d32>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,7 @@ export type MonitoringReportDeleteQuery$data = {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
+              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -132,6 +133,13 @@ v2 = [
                           {
                             "alias": null,
                             "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "StringValue",
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
@@ -186,16 +194,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "f5a71f1d0175a918248b70096c0a2414",
+    "cacheID": "1107847a6085307ac6d38aca2ff81372",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportDeleteQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5bc78d2297ad9a24705ac87c188969b6";
+(node as any).hash = "8ca205954b76df38fb255b350079e5d1";
 
 export default node;

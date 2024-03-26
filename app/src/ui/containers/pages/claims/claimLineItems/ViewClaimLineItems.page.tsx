@@ -43,6 +43,7 @@ const ViewClaimLineItemsPage = ({
       pageTitle={
         <Title title={project.title} projectNumber={project.projectNumber} heading={currentCostCategory.name} />
       }
+      isActive={project.isActive}
       fragmentRef={fragmentRef}
     >
       {/* Update the HTML title to include the costCategoryName */}

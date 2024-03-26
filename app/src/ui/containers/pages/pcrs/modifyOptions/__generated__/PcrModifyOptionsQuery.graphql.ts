@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<db2d9ffee9946a267bfb5881db2aa175>>
+ * @generated SignedSource<<abbbf8474f261bd5a83020b65ad589f2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -55,6 +55,7 @@ export type PcrModifyOptionsQuery$data = {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
+              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -171,6 +172,13 @@ v6 = [
                         "plural": false,
                         "selections": [
                           (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "isActive",
+                            "storageKey": null
+                          },
                           {
                             "alias": null,
                             "args": null,
@@ -377,16 +385,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "5f7c2614031f506100e2e029967e80e3",
+    "cacheID": "f6b4e80c04837a0a6e93dc93c71c03e8",
     "id": null,
     "metadata": {},
     "name": "PcrModifyOptionsQuery",
     "operationKind": "query",
-    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "54392237b6db2ff9a64b49fa34db5369";
+(node as any).hash = "786b3e75fa7d99a46c7fcee1269919c7";
 
 export default node;

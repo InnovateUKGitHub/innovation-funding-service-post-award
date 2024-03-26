@@ -80,6 +80,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       apiError={apiError}
       validationErrors={allErrors}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      projectId={props.projectId}
+      isActive={project.isActive}
     >
       <Guidance />
 

@@ -22,7 +22,7 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   return useMemo(() => {
-    const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "roles", "status"]);
+    const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "roles", "status", "isActive"]);
 
     const partners = mapToPartnerDtoArray(
       projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],

@@ -52,6 +52,7 @@ export const pcrPrepareQuery = graphql`
                   isPm
                   isAssociate
                 }
+                isActive
                 Acc_ProjectNumber__c {
                   value
                 }

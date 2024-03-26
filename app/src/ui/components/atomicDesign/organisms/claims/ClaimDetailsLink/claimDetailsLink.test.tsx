@@ -36,6 +36,10 @@ describe("<ClaimDetailsLink />", () => {
     );
   };
 
+  const getMo = () => ({ isMo: true, isFc: false, isPm: false, isAssociate: false });
+  const getFc = () => ({ isMo: false, isFc: true, isPm: false, isAssociate: false });
+  const getPm = () => ({ isMo: false, isFc: false, isPm: true, isAssociate: false });
+
   beforeAll(async () => {
     await initStubTestIntl(stubContent);
   });
@@ -46,7 +50,12 @@ describe("<ClaimDetailsLink />", () => {
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: ClaimStatus.PAID },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: projectStatus },
+        project: {
+          id: projectId,
+          roles: getMo(),
+          status: projectStatus,
+          isActive: true,
+        },
         partner: {
           id: partnerId,
           roles: ProjectRole.FinancialContact,
@@ -65,8 +74,8 @@ describe("<ClaimDetailsLink />", () => {
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: ClaimStatus.PAID },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus, isWithdrawn: false },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
+        partner: { id: partnerId, roles: getFc(), partnerStatus, isWithdrawn: false },
       };
 
       const { queryByText } = setup(draftProps);
@@ -79,7 +88,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: ClaimStatus.PAID },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus, isWithdrawn: true },
       };
 
@@ -97,7 +106,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: draftClaimState },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -107,11 +116,9 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when project is MO returns view link", () => {
-      const projectRole = ProjectRole.MonitoringOfficer;
-
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: draftClaimState },
-        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
           roles: ProjectRole.MonitoringOfficer,
@@ -126,12 +133,11 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when project is not an FC and the partner is not MO returns view link", () => {
-      const projectRole = ProjectRole.FinancialContact;
       const partnerRole = ProjectRole.MonitoringOfficer;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: draftClaimState },
-        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getFc(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -149,7 +155,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: moQueriedClaimState },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -163,7 +169,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: moQueriedClaimState },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -181,7 +187,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: innovateQueriedClaimState },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -195,7 +201,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: innovateQueriedClaimState },
-        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
       };
 
@@ -209,11 +215,9 @@ describe("<ClaimDetailsLink />", () => {
     const submittedClaimState = ClaimStatus.SUBMITTED;
 
     test("when project role is MO returns view link", () => {
-      const projectRole = ProjectRole.MonitoringOfficer;
-
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: submittedClaimState },
-        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
           roles: ProjectRole.FinancialContact,
@@ -228,11 +232,9 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when project role is not MO always returns view", () => {
-      const projectRole = ProjectRole.FinancialContact;
-
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: submittedClaimState },
-        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        project: { id: projectId, roles: getFc(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
           roles: ProjectRole.MonitoringOfficer,
@@ -252,12 +254,12 @@ describe("<ClaimDetailsLink />", () => {
 
     test.each`
       name                                               | projectRole
-      ${"when project role is MO returns view link"}     | ${ProjectRole.MonitoringOfficer}
-      ${"when project role is not FC returns view link"} | ${ProjectRole.ProjectManager}
+      ${"when project role is MO returns view link"}     | ${getMo()}
+      ${"when project role is not FC returns view link"} | ${getPm()}
     `("$name", ({ projectRole }) => {
       const awaitingIarProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: iarClaimState },
-        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
           roles: ProjectRole.ProjectManager,

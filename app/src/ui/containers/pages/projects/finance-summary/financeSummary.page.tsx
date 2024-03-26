@@ -40,6 +40,7 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
       projectId={props.projectId}
       partnerId={props.partnerId}
       fragmentRef={fragmentRef}
+      isActive={project.isActive}
     >
       <Section
         title={

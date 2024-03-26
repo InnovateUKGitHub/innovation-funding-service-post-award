@@ -21,7 +21,7 @@ export interface FailedBankCheckConfirmationParams {
 function FailedBankCheckConfirmation({ projectId, partnerId, routes }: BaseProps & FailedBankCheckConfirmationParams) {
   const { getContent } = useContent();
 
-  const { fragmentRef } = useFailedBankCheckConfirmationData(projectId);
+  const { fragmentRef, project } = useFailedBankCheckConfirmationData(projectId);
 
   const projectSetupRoute = routes.projectSetup.getLink({ projectId, partnerId });
 
@@ -34,6 +34,7 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes }: BaseProps
       fragmentRef={fragmentRef}
       projectId={projectId}
       partnerId={partnerId}
+      isActive={project.isActive}
     >
       <Section qa="guidance">
         <Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />

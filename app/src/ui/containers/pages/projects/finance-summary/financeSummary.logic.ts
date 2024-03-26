@@ -68,6 +68,7 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
     "numberOfPeriods",
     "roles",
     "projectNumber",
+    "isActive",
   ]);
 
   const partners: Partner[] = mapToPartnerDtoArray(

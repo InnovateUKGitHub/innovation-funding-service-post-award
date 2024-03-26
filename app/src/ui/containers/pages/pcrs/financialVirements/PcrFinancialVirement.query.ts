@@ -92,6 +92,7 @@ const pcrFinancialVirementQuery = graphql`
                   isAssociate
                   isSalesforceSystemUser
                 }
+                isActive
                 Acc_CompetitionType__c {
                   value
                 }

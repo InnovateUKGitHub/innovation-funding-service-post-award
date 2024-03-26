@@ -63,6 +63,7 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
           <Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
         </BackLink>
       }
+      isActive={project.isActive}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors}
       apiError={apiError}

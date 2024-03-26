@@ -126,6 +126,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
       pageTitle={<Title />}
+      isActive={data.project.isActive}
       fragmentRef={data.fragmentRef}
     >
       <Messages messages={props.messages} />

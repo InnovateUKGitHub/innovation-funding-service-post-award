@@ -32,6 +32,7 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
       pageTitle={<Title {...project} />}
       projectId={props.projectId}
       partnerId={props.partnerId}
+      isActive={project.isActive}
     >
       <Section>
         <SummaryList qa="partner-details">

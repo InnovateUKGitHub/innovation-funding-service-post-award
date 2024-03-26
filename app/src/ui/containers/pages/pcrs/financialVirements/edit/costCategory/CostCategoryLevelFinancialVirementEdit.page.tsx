@@ -110,6 +110,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           <Content value={x => x.financialVirementLabels.backToSummary} />
         </BackLink>
       }
+      isActive={project.isActive}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validationErrors}
     >

@@ -78,6 +78,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
           {getContent(x => x.pages.claimForecast.backLink)}
         </BackLink>
       }
+      isActive={project.isActive}
     >
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("projectId")} value={projectId} type="hidden" />

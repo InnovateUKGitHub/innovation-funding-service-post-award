@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import { IAppError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
@@ -6,7 +6,7 @@ import { AriaLive } from "@ui/components/atomicDesign/atoms/AriaLive/ariaLive";
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorSummary";
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
-import { useProjectStatus } from "@ui/hooks/project-status.hook";
+import { OverrideAccessContext } from "@ui/containers/app/override-access";
 import isNil from "lodash/isNil";
 import { ValidationSummary } from "../../atoms/validation/ValidationSummary/ValidationSummary";
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
@@ -20,6 +20,7 @@ export interface PageProps {
   qa?: string;
   className?: string;
   bailoutErrorNavigation?: boolean;
+  isActive: boolean;
   fragmentRef?: unknown;
 
   projectId?: ProjectId;
@@ -39,13 +40,13 @@ export function Page({
   className,
   projectId,
   partnerId,
+  isActive,
   fragmentRef,
 }: PageProps) {
   const displayAriaLive: boolean = !!apiError || !!validationErrors;
 
-  const projectState = useProjectStatus();
-
-  const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
+  const overrideAccess = useContext(OverrideAccessContext);
+  const displayActiveUi: boolean = overrideAccess || isActive;
   const validationErrorSize = isNil(validationErrors) ? 0 : Object.keys(validationErrors)?.length;
 
   // hasValidated tracks how many times the validation has occurred,

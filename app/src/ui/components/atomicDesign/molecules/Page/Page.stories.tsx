@@ -15,7 +15,7 @@ const validationErrors = {
 };
 
 const PageExample = () => (
-  <Page pageTitle={<h1>Demo page</h1>} validationErrors={validationErrors}>
+  <Page pageTitle={<h1>Demo page</h1>} validationErrors={validationErrors} isActive>
     <P>This is a GovUk Page</P>
     <FormGroup>
       <Label htmlFor="input">This is an input</Label>
