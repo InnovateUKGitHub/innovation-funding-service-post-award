@@ -10,7 +10,7 @@ describe("mapToProjectDto", () => {
     Acc_CurrentPeriodNumber__c: { value: 1 },
     Acc_CurrentPeriodStartDate__c: { value: "2022-01-24" },
     Acc_StartDate__c: { value: "2022-01-22" },
-    Acc_EndDate__c: { value: "2024-03-24" },
+    Acc_EndDate__c: { value: "2034-03-24" },
     Acc_GOLTotalCostAwarded__c: { value: 100000 },
     Acc_NumberOfOpenClaims__c: { value: 1 },
     Acc_NumberofPeriods__c: { value: 12 },

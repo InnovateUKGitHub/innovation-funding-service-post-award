@@ -25,7 +25,7 @@ exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
   "claimsToReview": 3,
   "competitionType": "CR&D",
   "costsClaimedToDate": 90000,
-  "endDate": 2024-03-24T00:00:00.000Z,
+  "endDate": 2034-03-24T00:00:00.000Z,
   "grantOfferLetterCosts": 100000,
   "id": "0",
   "impactManagementParticipation": "Yes",
