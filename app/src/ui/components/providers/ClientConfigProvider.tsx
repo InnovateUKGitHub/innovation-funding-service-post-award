@@ -9,7 +9,7 @@ const ClientConfigProvider = ({ config, children }: { config: IClientConfig; chi
 
 const useClientConfig = () => {
   const data = useContext(siteOptions);
-  if (!data) throw new Error("useClientConfig() must be used wthin a SiteOptionsProvider");
+  if (!data) throw new Error("useClientConfig() must be used within a SiteOptionsProvider");
   return data;
 };
 

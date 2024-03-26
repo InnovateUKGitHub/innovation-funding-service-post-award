@@ -13,15 +13,10 @@ import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
-import { useAppMount } from "./app/app-mount.hook";
-import { ErrorPayload } from "@shared/create-error-payload";
 import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
 import { MountedProvider } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import {
-  ErrorContainer,
-  ErrorBoundaryFallback,
-} from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
+import { ErrorBoundaryFallback } from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
 import { FullHeight } from "@ui/components/atomicDesign/atoms/FullHeight/FullHeight";
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
@@ -35,6 +30,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -54,17 +50,15 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     [currentRoute.routePath, location.pathname, location.search],
   );
 
-  // Note: Don't call me in a lifecycle - needs to be SSR compatible!
-  useAppMount(routePathParams);
+  const pathname = typeof window !== "undefined" ? window?.location?.pathname : "";
+  useScrollToTopSmoothly([pathname]);
 
   const content = useInitContent(params);
   const modalRegister = useModal();
-  const auth = stores.users.getCurrentUserAuthorisation();
+
   const config = useClientConfig();
   const messages = stores.messages.messages();
 
-  // Note: We treat no invocation as valid
-  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, config) : true;
   const titlePayload = currentRoute.getTitle?.({ params, stores, content });
 
   const navigationType = useNavigationType();
@@ -120,16 +114,12 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </GovWidthContainer>
 
               <SuspensePageLoader>
-                {hasAccess ? (
-                  <ProjectStatusCheck
-                    projectId={routePathParams.projectId as ProjectId}
-                    overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                  >
-                    <PageContainer {...baseProps} />
-                  </ProjectStatusCheck>
-                ) : (
-                  <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
-                )}
+                <ProjectStatusCheck
+                  projectId={routePathParams.projectId as ProjectId}
+                  overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                >
+                  <PageContainer {...baseProps} />
+                </ProjectStatusCheck>
               </SuspensePageLoader>
             </FullHeight.Content>
 
