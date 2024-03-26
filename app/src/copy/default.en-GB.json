@@ -238,6 +238,10 @@
       "day": "Day",
       "month": "Month",
       "year": "Year"
+    },
+    "projectSuspensionMessage": {
+      "message": "Please note this project is currently under suspension",
+      "subMessage": "Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
     }
   },
   "pages": {

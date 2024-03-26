@@ -23,8 +23,8 @@ const ProjectSuspensionMessage = ({ project, partners, partnerId }: ProjectSuspe
       return (
         <ValidationMessage
           messageType="alert"
-          message="Please note this project is currently under suspension"
-          subMessage="Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
+          message={getContent(x => x.components.projectSuspensionMessage.message)}
+          subMessage={getContent(x => x.components.projectSuspensionMessage.subMessage)}
           markdown
         />
       );
