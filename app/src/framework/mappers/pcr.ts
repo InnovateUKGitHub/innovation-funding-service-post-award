@@ -59,6 +59,7 @@ export const mapToPCRStatus = (statusLabel: string) => {
     case "Submitted to Monitoring Officer":
       return PCRStatus.SubmittedToMonitoringOfficer;
     case "Queried by Monitoring Officer":
+    case "Queried to Project Manager": // Not a real status - Used to map PCR Status Change log messages
       return PCRStatus.QueriedByMonitoringOfficer;
     case "Submitted to Innovate UK":
       return PCRStatus.SubmittedToInnovateUK;
