@@ -5,11 +5,11 @@ export const getAwardRateSchema = (markedAsComplete: boolean) =>
   markedAsComplete
     ? z.object({
         button_submit: z.string(),
-        awardRate: percentageNumberInput(),
+        awardRate: percentageNumberInput({ required: true }),
       })
     : z.object({
         button_submit: z.string(),
-        awardRate: percentageNumberInput().nullable(),
+        awardRate: percentageNumberInput(),
       });
 
 export type AwardRateSchema = z.infer<ReturnType<typeof getAwardRateSchema>>;

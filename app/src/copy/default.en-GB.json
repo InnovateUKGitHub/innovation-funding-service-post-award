@@ -2114,8 +2114,9 @@
         "awardRate": {
           "errors": {
             "too_small": "Enter a valid funding level.",
-            "invalid_type": "Enter a funding level.",
-            "too_big": "Enter a funding level up to {{count}}%."
+            "invalid_type": "Enter a valid funding level.",
+            "too_big": "Enter a funding level up to {{count}}%.",
+            "two_decimal_places": "Funding level must be 2 decimal places or fewer."
           }
         },
         "contact1Forename": {

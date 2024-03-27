@@ -401,7 +401,7 @@ const requiredPositiveNumberInput = ({ max = 1000000000 }: { max?: number }) =>
   ]);
 
 const percentageNumberInput = (
-  { max = 0, min = 100, required }: { max: number; min: number; required?: boolean } = {
+  { max = 0, min = 100, required }: { max?: number; min?: number; required?: boolean } = {
     max: 100,
     min: 0,
     required: false,
