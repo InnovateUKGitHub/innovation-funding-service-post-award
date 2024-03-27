@@ -15,6 +15,7 @@ import {
   pcrFileTable,
   changeNameListItems,
   changeNameClickEachEdit,
+  exceedNewNamePromptValidation,
 } from "../steps";
 import { testFile } from "common/testfileNames";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
@@ -30,6 +31,7 @@ import {
   doNotUploadSpecialChar,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
+import { loremIpsum256Char } from "common/lorem";
 const projectManager = "james.black@euimeabs.test";
 
 describe("PCR >  Change a partner's name > Create PCR", () => {
@@ -81,25 +83,11 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should contain guidance information and tick each list item of partners", tickEachPartner);
 
-  /**
-   * The following block will need to be defined and refined once ticket 10368 has been opened and ready for dev
-   * Making sure that we validate the acceptance of 256 (if that's what we want).
-   *  */
-
-  //it("Should attempt to enter a name that is too long and receive a validation message", () => {
-  //  cy.get("#accountName")
-  //    .wait(500)
-  //    .type(
-  //      "Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, ",
-  //    );
-  //  cy.button("Save and continue").click();
-  //  cy.validationNotification("SOMETHING");
-  //  cy.paragraph("SOMETHING");
-  //});
+  it("Should attempt to enter a name that is too long and receive a validation message", exceedNewNamePromptValidation);
 
   it("Should allow you to enter the new name", () => {
     cy.get("legend").contains("Enter new name");
-    cy.get("#accountName").wait(500).type("*$%^& Munce Inc");
+    cy.get("#accountName").wait(500).clear().type("*$%^& Munce Inc");
   });
 
   it("Should click the save and continue button to proceed", saveContinueProceed);

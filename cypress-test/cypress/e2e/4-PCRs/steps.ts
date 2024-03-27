@@ -2,6 +2,7 @@ import { PcrType } from "typings/pcr";
 import { documents, uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "common/seconds";
 import { testFile } from "common/testfileNames";
+import { loremIpsum256Char } from "common/lorem";
 
 let date = new Date();
 let createdDay = date.getDate();
@@ -1171,6 +1172,19 @@ export const tickEachPartner = () => {
   cy.getByLabel("EUI Small Ent Health").click();
   cy.getByLabel("A B Cad Services").wait(500).click();
   cy.getByLabel("ABS EUI Medium Enterprise").wait(500).click({ force: true });
+};
+
+/**
+ * Note loremIpsum256Char is not returning 256 characters but 255.
+ * You will see I am typing 'tt' in order to exceed the 256 limit and enter total of 257 to prompt validation.
+ */
+export const exceedNewNamePromptValidation = () => {
+  cy.get("#accountName").invoke("val", loremIpsum256Char).trigger("input");
+  cy.wait(1000);
+  cy.get("#accountName").wait(500).type("{moveToEnd}tt");
+  cy.button("Save and continue").click();
+  cy.validationLink("New partner name can be a maximum of 256 characters");
+  cy.paragraph("New partner name can be a maximum of 256 characters");
 };
 
 export const saveContinueProceed = () => {
