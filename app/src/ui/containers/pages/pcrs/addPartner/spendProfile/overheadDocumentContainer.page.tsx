@@ -121,8 +121,8 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
         </BackLink>
       }
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      projectStatus={project.status}
       validationErrors={validationErrors}
+      projectId={projectId}
     >
       <Messages messages={props.messages} />
       <Section>

@@ -59,9 +59,9 @@ export const SpendProfilePreparePage = ({
         </BackLink>
       }
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectStatus={project.status}
       apiError={apiError}
       validationErrors={validationErrors}
+      projectId={projectId}
     >
       <Messages messages={messages} />
       <Section
