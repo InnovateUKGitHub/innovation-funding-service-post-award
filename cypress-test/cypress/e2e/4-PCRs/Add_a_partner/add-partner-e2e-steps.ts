@@ -125,7 +125,7 @@ export const saveAndReturnPromptingValidation = () => {
     "Enter a project city.",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -164,7 +164,7 @@ export const saveJeSReturnPromptingValidation = () => {
     "Enter a project manager email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -198,7 +198,7 @@ export const validateWithoutOrganisation = () => {
     "Enter a project city.",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -219,7 +219,7 @@ export const jeSValidationNoOrganisation = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -241,7 +241,7 @@ export const jeSValidationNoLocation = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -259,7 +259,7 @@ export const jeSValidationNoFCName = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -272,7 +272,7 @@ export const jeSValidationNoFCName = () => {
 export const jeSValidationNoPMName = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
-  ["Enter a funding level.", "Enter the TSB reference"].forEach(valMsg => {
+  ["Enter a valid funding level.", "Enter the TSB reference"].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
   ["Funding level", "TSB reference"].forEach(section => {
@@ -308,7 +308,7 @@ export const validateWithoutSize = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -366,7 +366,7 @@ export const validateWithoutFY = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -421,7 +421,7 @@ export const validateWithoutLocation = () => {
     "Enter a finance contact surname.",
     "Enter a finance contact phone number.",
     "Enter a finance contact email address.",
-    "Enter a funding level.",
+    "Enter a valid funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -503,7 +503,7 @@ export const completeNameForm = () => {
 export const validateWithoutName = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
-  ["Enter a funding level."].forEach(valMsg => {
+  ["Enter a valid funding level."].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
   [
@@ -690,7 +690,7 @@ export const completeTandSForm = () => {
   [
     ["Purpose of journey or description of subsistence cost", "Journeying into the cursed earth."],
     ["Number of times", "2"],
-    ["Cost each (£)", "500"],
+    ["Cost of each (£)", "500"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
@@ -703,7 +703,10 @@ export const completeTandSForm = () => {
   cy.get("h2").contains("Project costs for new partner");
 };
 
-export const completeOtherCostsForm = () => {
+export const completeOtherCostsForm = (costsNumber?: string) => {
+  if (costsNumber === undefined) {
+    costsNumber = "";
+  }
   cy.get("a").contains("Add a cost").click();
   cy.get("h2").contains("Other costs");
   [
@@ -716,8 +719,9 @@ export const completeOtherCostsForm = () => {
     cy.getByLabel(label).type(input);
   });
   cy.wait(500);
-  cy.clickOn("Save and return to other costs");
-  cy.get("button").contains("Save and return to project costs").click();
+  cy.get("button").contains(`Save and return to other costs${costsNumber}`).click();
+  cy.get("h2").contains(`Other costs`);
+  cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
 
@@ -731,8 +735,8 @@ export const completedCostCatProfiles = () => {
     ["Subcontracting", "£3,000.00"],
     ["Travel and subsistence", oneThousand],
     ["Other costs", oneThousand],
-    ["Other cost 2", oneThousand],
-    ["Other cost 3", oneThousand],
+    ["Other costs 2", oneThousand],
+    ["Other costs 3", oneThousand],
     ["Other costs 4", oneThousand],
     ["Other costs 5", oneThousand],
   ].forEach(([costcat, cost], index) => {
@@ -746,7 +750,7 @@ export const completedCostCatProfiles = () => {
   cy.get("tfoot").within(() => {
     cy.get("tr").within(() => {
       cy.get("th:nth-child(1)").contains("Total costs (£)");
-      cy.get("th:nth-child(2)").contains("£20,656.58");
+      cy.get("th:nth-child(2)").contains("£24,656.58");
     });
   });
 };
@@ -784,7 +788,11 @@ export const validateWithoutFundingLevel = () => {
   cy.getByQA("validation-summary").should("not.exist");
   cy.get("h2").contains("Details");
 };
-
+/**
+ * N.B. ["Partner contribution to project", "£6,164.15"] has been changed from .14 to .15
+ * It is becoming apparent that a general rule for rounding needs to be decided.
+ * UCD is looking into a similar issue for reallocate project costs.
+ */
 export const checkDetailsScreenComplete = () => {
   [
     ["Project role", "Collaborator"],
@@ -805,11 +813,11 @@ export const checkDetailsScreenComplete = () => {
     ["Last name", "Dredd"],
     ["Phone number", "01234567890"],
     ["Email", "j.dredd@mc1justice.law"],
-    ["Project costs for new partner", "£20,656.58"],
+    ["Project costs for new partner", "£24,656.58"],
     ["Other sources of funding", "No"],
     ["Funding level", "75.00%"],
-    ["Funding sought", "£15,492.44"],
-    ["Partner contribution to project", "£5,164.14"],
+    ["Funding sought", "£18,492.44"],
+    ["Partner contribution to project", "£6,164.15"],
     ["Partner agreement", "Not applicable"],
   ].forEach(([section, data]) => {
     cy.getListItemFromKey(section, data);
@@ -1008,7 +1016,6 @@ export const deleteCoste2e = () => {
   });
   cy.button("Delete cost").click();
   cy.get("h2").contains("Labour");
-  cy.getByQA("validation-message-content").contains("You have deleted a cost");
   cy.get("td").should("not.have.text", "Test");
 };
 

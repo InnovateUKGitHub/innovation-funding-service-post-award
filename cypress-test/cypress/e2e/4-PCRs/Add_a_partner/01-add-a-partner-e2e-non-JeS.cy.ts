@@ -231,7 +231,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   /**
    * TODO This is a pre-existing bug so skipping this step to save time. It will always fail. ACC-10525 created.
    */
-  //it("Should validate the Turnover box", validateTurnoverInput);
+  it("Should validate the Turnover box", validateTurnoverInput);
 
   it("Should enter valid details in both the date section and turnover section", completeDateAndTurnover);
 
@@ -337,26 +337,22 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   it("Should access the Other costs section", () => navigateToCostCat("Other costs", 7));
 
-  it("Should complete the Other costs form", completeOtherCostsForm);
+  it("Should complete the Other costs form", () => completeOtherCostsForm(""));
 
-  /**
-   * These next sections do not appear in acc-dev so these steps have been removed for now.
-   * Validation must be tested on each page.
-   */
-  //it("Should access the Other costs 2 section", () => navigateToCostCat("Other costs 2", 8));
-  //
-  //it("Should complete the Other costs 2 section", completeOtherCostsForm);
-  //
-  //it("Should access the Other costs 3 section", () => navigateToCostCat("Other costs 3", 9));
-  //it("Should complete the Other costs 3 section", completeOtherCostsForm);
-  //
-  //it("Should access the Other costs 4 section", () => navigateToCostCat("Other costs 4", 10));
-  //
-  //it("Should complete the Other costs 4 section", completeOtherCostsForm);
-  //
-  //it("Should access the Other costs 5 section", () => navigateToCostCat("Other costs 5", 11));
-  //
-  //it("Should complete the Other costs 5 section", completeOtherCostsForm);
+  it("Should access the Other costs 2 section", () => navigateToCostCat("Other costs 2", 8));
+
+  it("Should complete the Other costs 2 section", () => completeOtherCostsForm(" 2"));
+
+  it("Should access the Other costs 3 section", () => navigateToCostCat("Other costs 3", 9));
+  it("Should complete the Other costs 3 section", () => completeOtherCostsForm(" 3"));
+
+  it("Should access the Other costs 4 section", () => navigateToCostCat("Other costs 4", 10));
+
+  it("Should complete the Other costs 4 section", () => completeOtherCostsForm(" 4"));
+
+  it("Should access the Other costs 5 section", () => navigateToCostCat("Other costs 5", 11));
+
+  it("Should complete the Other costs 5 section", () => completeOtherCostsForm(" 5"));
 
   it("Should show a completed table of cost categories with appropriate costs and total", completedCostCatProfiles);
 
@@ -366,7 +362,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   });
 
   it("Should display the saved total against the Project costs for new partner section", () => {
-    cy.getListItemFromKey("Project costs for new partner", "£20,656.58");
+    cy.getListItemFromKey("Project costs for new partner", "£24,656.58");
   });
 
   /**
@@ -407,12 +403,12 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   it("Should show that Project costs for new partner have been included on summary with correct totals", () => {
     [
-      ["Project costs for new partner", "£20,656.58"],
+      ["Project costs for new partner", "£24,656.58"],
       ["Other sources of funding?", "Yes"],
       ["Funding from other sources", "£10,000.00"],
       ["Funding level", "75.00%"],
-      ["Funding sought", "£7,992.44"],
-      ["Partner contribution to project", "£2,664.15"],
+      ["Funding sought", "£10,992.44"],
+      ["Partner contribution to project", "£3,664.14"],
     ].forEach(([key, item]) => {
       cy.getListItemFromKey(key, item);
     });
