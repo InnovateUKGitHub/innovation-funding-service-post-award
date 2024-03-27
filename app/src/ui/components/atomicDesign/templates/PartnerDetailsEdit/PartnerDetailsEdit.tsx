@@ -4,7 +4,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import {
   partnerDetailsEditSchema,
   postcodeSetupSchema,
-  emptySchema,
+  partnerDetailsOptionalSchema,
   partnerDetailsEditErrorMap,
 } from "./partnerDetailsEdit.zod";
 import { PostcodeTaskStatus } from "@framework/constants/partner";
@@ -42,7 +42,7 @@ const getZodResolver = (isSetupPage: boolean, postcodeStatus: PostcodeTaskStatus
   if (isSetupPage) {
     return postcodeSetupSchema;
   } else {
-    return postcodeStatus !== PostcodeTaskStatus.ToDo ? partnerDetailsEditSchema : emptySchema;
+    return postcodeStatus !== PostcodeTaskStatus.ToDo ? partnerDetailsEditSchema : partnerDetailsOptionalSchema;
   }
 };
 

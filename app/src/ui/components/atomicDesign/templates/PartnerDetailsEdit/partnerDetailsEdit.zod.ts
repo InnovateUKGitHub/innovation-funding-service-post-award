@@ -8,8 +8,8 @@ export const partnerDetailsEditSchema = z.object({
   postcode: z.string().min(1).max(10),
 });
 
-export const emptySchema = z.object({
-  postcode: z.string(),
+export const partnerDetailsOptionalSchema = z.object({
+  postcode: z.string().max(10).optional(),
 });
 
 export const postcodeSetupSchema = z
