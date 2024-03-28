@@ -2665,6 +2665,7 @@
             "invalid_string": {
               "regex": "Grant moving over financial year must be 2 decimal places or fewer."
             },
+            "two_decimal_places": " Grant moving over financial year must be 2 decimal places or fewer.",
             "invalid_type_received_nan": "Enter a valid grant moving over financial year."
           }
         },
