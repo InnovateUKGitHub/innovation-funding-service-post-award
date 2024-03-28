@@ -4,6 +4,7 @@ export const projectDocumentsQuery = graphql`
   query ProjectDocumentsQuery($projectId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_ProjectParticipant__c(
             where: { Acc_ProjectId__c: { eq: $projectId } }
@@ -81,7 +82,6 @@ export const projectDocumentsQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
@@ -94,15 +94,6 @@ export const projectDocumentsQuery = graphql`
                     isAssociate
                     partnerId
                   }
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { LastModifiedDate: { order: DESC } } }) {
                   edges {

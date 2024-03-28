@@ -20,7 +20,7 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
     { fetchPolicy: "network-only" },
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce.uiapi.query.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["id", "competitionType", "title", "projectNumber", "isActive"]);
+  const project = mapToProjectDto(projectNode, ["id", "competitionType"]);
   const pcrs = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
     ["id", "status"],
@@ -29,7 +29,7 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   );
   const numberOfPartners = data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.totalCount ?? 0;
 
-  return { project, pcrs, numberOfPartners };
+  return { project, pcrs, numberOfPartners, fragmentRef: data.salesforce.uiapi };
 };
 
 const useOnSubmit = () => {

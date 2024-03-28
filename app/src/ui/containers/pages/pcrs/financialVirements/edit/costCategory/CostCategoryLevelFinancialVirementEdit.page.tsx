@@ -15,11 +15,10 @@ import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmp
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { AwardRateOverrideLabel } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks/content.hook";
@@ -62,6 +61,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
     financialVirementsForParticipants,
     claimOverrideAwardRates,
     partners,
+    fragmentRef,
   } = usePcrPartnerFinancialVirementData({ projectId, partnerId, pcrId, itemId });
 
   const mapFinancialVirementProps = {
@@ -110,9 +110,8 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           <Content value={x => x.financialVirementLabels.backToSummary} />
         </BackLink>
       }
-      isActive={project.isActive}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validationErrors}
+      fragmentRef={fragmentRef}
     >
       <AwardRateOverridesMessage
         projectId={projectId}

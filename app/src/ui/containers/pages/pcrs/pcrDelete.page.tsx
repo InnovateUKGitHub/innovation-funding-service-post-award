@@ -1,5 +1,5 @@
 import { ProjectRole } from "@framework/constants/project";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useOnDeletePcr, usePcrDeleteQuery } from "./pcrDelete.logic";
 import { useForm } from "react-hook-form";
@@ -10,7 +10,6 @@ import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
@@ -21,7 +20,7 @@ export interface PCRDeleteParams {
 }
 
 const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
-  const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
+  const { pcr, fragmentRef } = usePcrDeleteQuery(projectId, pcrId);
   const { getPcrItemContent } = useGetPcrItemMetadata();
 
   const { getContent } = useContent();
@@ -43,10 +42,8 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
           {getContent(x => x.pages.pcrDelete.backLink)}
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       apiError={apiError}
-      projectId={projectId}
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <Section>
         <ValidationMessage messageType="alert" message={getContent(x => x.pages.pcrDelete.alertMessage)} />

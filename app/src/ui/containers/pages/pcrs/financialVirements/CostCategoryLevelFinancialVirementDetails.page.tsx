@@ -3,11 +3,10 @@ import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { AwardRateOverrideLabel } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -48,6 +47,7 @@ const EditPage = ({
     claimOverrideAwardRates,
     partners,
     pcr,
+    fragmentRef,
   } = usePcrPartnerFinancialVirementData({ projectId, partnerId, pcrId, itemId });
 
   const { virementData } = mapVirements({
@@ -64,6 +64,7 @@ const EditPage = ({
 
   return (
     <Page
+      fragmentRef={fragmentRef}
       backLink={
         <BackLink
           route={
@@ -83,8 +84,6 @@ const EditPage = ({
           <Content value={x => x.financialVirementLabels.backToSummary} />
         </BackLink>
       }
-      isActive={project.isActive}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
     >
       <AwardRateOverridesMessage
         projectId={projectId}

@@ -3,7 +3,6 @@ import { projectSetupBankDetailsQuery } from "./ProjectSetupBankDetails.query";
 import { ProjectSetupBankDetailsQuery } from "./__generated__/ProjectSetupBankDetailsQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { Propagation, useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +31,6 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "id", "title", "status", "isActive"]);
-
   const partner = mapToPartnerDto(
     getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? []).node,
     [
@@ -49,7 +46,7 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
     ],
     {},
   );
-  return { project, partner };
+  return { fragmentRef: data.salesforce.uiapi, partner };
 };
 
 export const useOnUpdateProjectSetupBankDetails = (

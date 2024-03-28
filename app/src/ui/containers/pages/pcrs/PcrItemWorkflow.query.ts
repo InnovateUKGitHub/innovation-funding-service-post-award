@@ -4,14 +4,13 @@ export const pcrItemWorkflowQuery = graphql`
   query PcrItemWorkflowQuery($projectId: ID!, $pcrId: ID!, $pcrItemId: ID!) {
     salesforce {
       uiapi {
-        ...TitleFragment
+        ...PageFragment
         ...NavigationArrowsFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id
-                isActive
                 Acc_CompetitionId__r {
                   Acc_TypeofAid__c {
                     value

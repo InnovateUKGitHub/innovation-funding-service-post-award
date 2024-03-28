@@ -19,12 +19,11 @@ import { Select } from "@ui/components/atomicDesign/atoms/form/Select/Select";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
@@ -56,7 +55,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     periodId,
   });
 
-  const { claim, project, partner, claimDocuments } = useClaimDocumentsQuery(
+  const { claim, project, partner, claimDocuments, fragmentRef } = useClaimDocumentsQuery(
     { projectId, partnerId, periodId },
     refreshedQueryOptions,
   );
@@ -121,17 +120,15 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
 
   return (
     <Page
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink route={props.routes.prepareClaim.getLink({ partnerId, periodId, projectId })} disabled={disabled}>
           {getContent(x => x.pages.claimDocuments.backLink)}
         </BackLink>
       }
-      projectId={projectId}
       partnerId={partnerId}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
       {isNonEditable && (

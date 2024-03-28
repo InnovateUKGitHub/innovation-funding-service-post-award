@@ -9,10 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -28,7 +27,7 @@ export interface MonitoringReportCreateParams {
 }
 
 const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BaseProps) => {
-  const { project } = useMonitoringReportCreateQuery(props.projectId);
+  const { project, fragmentRef } = useMonitoringReportCreateQuery(props.projectId);
   const { getContent } = useContent();
 
   const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
@@ -54,10 +53,9 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
           <Content value={x => x.pages.monitoringReportsCreate.backLink} />
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors}
-      isActive={project.isActive}
       apiError={apiError}
+      fragmentRef={fragmentRef}
     >
       <Section>
         <P>{getContent(x => x.components.reportForm.reportMessage)}</P>

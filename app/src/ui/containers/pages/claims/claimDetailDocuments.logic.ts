@@ -20,16 +20,7 @@ export const useClaimDetailDocumentsQuery = (
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, [
-    "id",
-    "projectNumber",
-    "title",
-    "status",
-    "roles",
-    "impactManagementParticipation",
-    "competitionType",
-    "isActive",
-  ]);
+  const project = mapToProjectDto(projectNode, ["id", "roles", "impactManagementParticipation", "competitionType"]);
 
   const claimDetailDocuments = (data?.salesforce?.uiapi?.query?.ClaimsDocuments?.edges ?? [])
     .map(edge =>

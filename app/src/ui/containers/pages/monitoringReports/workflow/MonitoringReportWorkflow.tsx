@@ -8,8 +8,7 @@ import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowVie
 import { createContext, useState } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import {
   FormValues,
@@ -80,7 +79,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
    */
   const [fetchKey, setFetchKey] = useState(0);
 
-  const { project, report, statusChanges } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
+  const { report, statusChanges, fragmentRef } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
 
   const { getContent } = useContent();
 
@@ -159,10 +158,9 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     <MonitoringReportFormContext.Provider value={MonitoringReportContextValues}>
       <Page
         backLink={<MonitoringReportWorkflowBackLink {...props} workflow={workflow} />}
-        pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
         validationErrors={validatorErrors}
         apiError={apiError}
-        isActive={project.isActive}
+        fragmentRef={fragmentRef}
       >
         {displayUrlDiscrepancy && (
           <ValidationMessage

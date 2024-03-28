@@ -4,6 +4,7 @@ export const claimDocumentsQuery = graphql`
   query ClaimDocumentsQuery($projectId: ID!, $partnerId: ID!, $periodId: Double) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_Claims__c(
             where: {
@@ -89,7 +90,6 @@ export const claimDocumentsQuery = graphql`
           Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
             edges {
               node {
-                isActive
                 Id
                 roles {
                   isMo
@@ -103,15 +103,6 @@ export const claimDocumentsQuery = graphql`
                     isAssociate
                     partnerId
                   }
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
                 Acc_CompetitionType__c {
                   value

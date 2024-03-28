@@ -3,7 +3,6 @@ import { projectChangeRequestSubmittedForReviewQuery } from "./ProjectChangeRequ
 import { ProjectChangeRequestSubmittedForReviewQuery } from "./__generated__/ProjectChangeRequestSubmittedForReviewQuery.graphql";
 import { mapToPcrDto } from "@gql/dtoMapper/mapPcrDto";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 interface UseProjectChangeRequestSubmittedForReviewQueryProps {
   projectId: ProjectId;
@@ -19,12 +18,6 @@ const useProjectChangeRequestSubmittedForReviewQuery = ({
     { projectId, pcrId },
   );
 
-  const project = mapToProjectDto(getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges ?? []).node, [
-    "title",
-    "projectNumber",
-    "isActive",
-  ]);
-
   const pcr = mapToPcrDto(
     {
       head: getFirstEdge(data.salesforce.uiapi.query.Acc_ProjectChangeRequest__c?.edges ?? []).node,
@@ -38,7 +31,7 @@ const useProjectChangeRequestSubmittedForReviewQuery = ({
     {},
   );
 
-  return { project, pcr };
+  return { pcr, fragmentRef: data.salesforce.uiapi };
 };
 
 export { useProjectChangeRequestSubmittedForReviewQuery };

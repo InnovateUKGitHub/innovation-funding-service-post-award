@@ -22,7 +22,6 @@ export interface PageProps {
   bailoutErrorNavigation?: boolean;
   isActive: boolean;
   fragmentRef?: unknown;
-
   projectId?: ProjectId;
   partnerId?: PartnerId;
 }

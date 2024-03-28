@@ -1,11 +1,10 @@
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import {
   useOnUpdateSetupBankDetailsVerify,
   useSetupBankDetailsVerifyData,
@@ -25,7 +24,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
   partnerId,
   ...props
 }: BaseProps & ProjectSetupBankDetailsVerifyParams) => {
-  const { partner, fragmentRef, project } = useSetupBankDetailsVerifyData(projectId, partnerId);
+  const { partner, fragmentRef } = useSetupBankDetailsVerifyData(projectId, partnerId);
   const { bankDetails } = partner;
 
   const { handleSubmit } = useForm({
@@ -47,8 +46,6 @@ const ProjectSetupBankDetailsVerifyComponent = ({
         </BackLink>
       }
       apiError={apiError}
-      pageTitle={<Title />}
-      isActive={project.isActive}
       fragmentRef={fragmentRef}
     >
       <Section qa={"guidance"}>

@@ -3,10 +3,9 @@ import { ProjectRole } from "@framework/constants/project";
 import { useContent } from "@ui/hooks/content.hook";
 import { useMonitoringReportDeleteQuery, useOnMonitoringReportDelete } from "./monitoringReportDelete.logic";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
@@ -21,7 +20,7 @@ export interface MonitoringReportDeleteParams {
 
 const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams) => {
   const { getContent } = useContent();
-  const { project } = useMonitoringReportDeleteQuery(props.projectId);
+  const { fragmentRef } = useMonitoringReportDeleteQuery(props.projectId);
 
   const { handleSubmit, formState } = useForm<{}>({});
 
@@ -35,8 +34,6 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
 
   return (
     <Page
-      isActive={project.isActive}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink
           route={props.routes.monitoringReportDashboard.getLink({
@@ -49,6 +46,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
       }
       validationErrors={validatorErrors}
       apiError={apiError}
+      fragmentRef={fragmentRef}
     >
       <Section>
         <P>{getContent(x => x.monitoringReportsMessages.deletingMonitoringReportMessage)}</P>

@@ -22,7 +22,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
 
   const partnerRoles = getPartnerRoles(projectNode?.roles ?? null);
 
-  const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "roles", "isActive"]);
+  const project = mapToProjectDto(projectNode, ["id", "roles"]);
 
   const partners = sortPartnersLeadFirst(
     mapToPartnerDtoArray(
@@ -60,7 +60,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
     },
   );
 
-  return { project, partners, partnerDocuments, projectDocuments };
+  return { project, partners, partnerDocuments, projectDocuments, fragmentRef: data.salesforce.uiapi };
 };
 
 export const useValidPartnerDropdownOptions = (

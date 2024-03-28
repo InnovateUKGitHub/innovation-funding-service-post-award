@@ -8,8 +8,7 @@ import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/SubmitButto
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -44,7 +43,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
   const { getPcrItemContent } = useGetPcrItemMetadata();
-  const { project, pcrs, numberOfPartners } = usePcrModifyOptionsQuery({ projectId });
+  const { project, pcrs, numberOfPartners, fragmentRef } = usePcrModifyOptionsQuery({ projectId });
   const currentPcr = pcrs.find(x => x.id === pcrId);
 
   const pcrItems = usePcrItemsForThisCompetition(
@@ -98,10 +97,9 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
             : getContent(x => x.pages.pcrModifyOptions.backToPcrs)}
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      fragmentRef={fragmentRef}
       validationErrors={allErrors}
       apiError={apiError}
-      isActive={project.isActive}
     >
       <Content markdown value={x => x.pages.pcrModifyOptions.guidance} />
 

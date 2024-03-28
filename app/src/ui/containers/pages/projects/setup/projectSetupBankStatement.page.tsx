@@ -3,10 +3,9 @@ import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/ProjectDocumentView.withFragment";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -47,7 +46,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const onBlurOrChange = useClearMessagesOnBlurOrChange();
 
-  const { fragmentRef, project } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
+  const { fragmentRef } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
 
   const { register, reset, getFieldState, handleSubmit, setError, formState } = useForm<
     z.output<UploadBankStatementSchemaType>
@@ -71,8 +70,6 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
       }
       apiError={apiError}
       validationErrors={allErrors}
-      pageTitle={<Title />}
-      isActive={project.isActive}
       fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />

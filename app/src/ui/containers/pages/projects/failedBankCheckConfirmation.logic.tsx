@@ -7,8 +7,6 @@ import { BankCheckStatus } from "@framework/constants/partner";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { FailedBankCheckConfirmationQuery } from "./__generated__/FailedBankCheckConfirmationQuery.graphql";
 import { failedBankCheckConfirmationQuery } from "./FailedBankCheckConfirmation.query";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { getFirstEdge } from "@gql/selectors/edges";
 
 export const useFailedBankCheckConfirmationData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<FailedBankCheckConfirmationQuery>(
@@ -17,12 +15,7 @@ export const useFailedBankCheckConfirmationData = (projectId: ProjectId) => {
     { fetchPolicy: "network-only" },
   );
 
-  const project = mapToProjectDto(getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? []).node, [
-    "status",
-    "isActive",
-  ]);
-
-  return { fragmentRef: data?.salesforce?.uiapi, project };
+  return { fragmentRef: data?.salesforce?.uiapi };
 };
 
 export const useOnUpdateSetupBankDetailsVerify = (

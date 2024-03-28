@@ -8,10 +8,9 @@ import { useForm } from "react-hook-form";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useGetBackLink, useNextReasoningLink } from "./pcrReasoningWorkflow.logic";
 import { PcrReasoningSchemaType, pcrReasoningErrorMap, pcrReasoningSchema } from "./pcrReasoning.zod";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
@@ -19,7 +18,7 @@ import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
 
 export const PCRPrepareReasoningStep = () => {
-  const { pcr, isFetching, onUpdate, messages, project, apiError, markedAsCompleteHasBeenChecked } =
+  const { pcr, isFetching, onUpdate, messages, fragmentRef, apiError, markedAsCompleteHasBeenChecked } =
     usePcrReasoningContext();
   const { register, watch, handleSubmit, formState, trigger } = useForm<PcrReasoningSchemaType>({
     defaultValues: {
@@ -42,13 +41,7 @@ export const PCRPrepareReasoningStep = () => {
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
-    <Page
-      validationErrors={validationErrors}
-      backLink={backLink}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      apiError={apiError}
-      isActive={project.isActive}
-    >
+    <Page validationErrors={validationErrors} backLink={backLink} fragmentRef={fragmentRef} apiError={apiError}>
       <Messages messages={messages} />
       <PcrItemListSection />
 

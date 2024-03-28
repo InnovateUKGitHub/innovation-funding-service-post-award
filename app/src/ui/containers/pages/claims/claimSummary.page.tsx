@@ -11,10 +11,9 @@ import { roundCurrency } from "@framework/util/numberHelper";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentsUnavailable } from "@ui/components/atomicDesign/organisms/documents/DocumentsUnavailable/DocumentsUnavailable";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
@@ -113,9 +112,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
           </BackLink>
         )
       }
-      isActive={data.project.isActive}
       apiError={apiError}
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
       validationErrors={validationErrors}
       fragmentRef={data.fragmentRef}
     >

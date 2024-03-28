@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0adfe78c0230e133ed4f8c1b357f6d32>>
+ * @generated SignedSource<<497689e319626716d45e6914805f3453>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,28 +9,14 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type MonitoringReportDeleteQuery$variables = {
   projectId: string;
 };
 export type MonitoringReportDeleteQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
-      readonly query: {
-        readonly Acc_Project__c: {
-          readonly edges: ReadonlyArray<{
-            readonly node: {
-              readonly Acc_ProjectNumber__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectTitle__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Id: string;
-              readonly isActive: boolean;
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
-      };
+      readonly " $fragmentSpreads": FragmentRefs<"PageFragment">;
     };
   };
 };
@@ -55,106 +41,160 @@ v1 = [
     "name": "value",
     "storageKey": null
   }
-],
-v2 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "SalesforceQuery",
-    "kind": "LinkedField",
-    "name": "salesforce",
-    "plural": false,
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "MonitoringReportDeleteQuery",
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "UIAPI",
+        "concreteType": "SalesforceQuery",
         "kind": "LinkedField",
-        "name": "uiapi",
+        "name": "salesforce",
         "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "RecordQuery",
+            "concreteType": "UIAPI",
             "kind": "LinkedField",
-            "name": "query",
+            "name": "uiapi",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "PageFragment"
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "type": "Query",
+    "abstractKey": null
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Operation",
+    "name": "MonitoringReportDeleteQuery",
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "SalesforceQuery",
+        "kind": "LinkedField",
+        "name": "salesforce",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UIAPI",
+            "kind": "LinkedField",
+            "name": "uiapi",
             "plural": false,
             "selections": [
               {
                 "alias": null,
-                "args": [
-                  {
-                    "fields": [
-                      {
-                        "fields": [
-                          {
-                            "kind": "Variable",
-                            "name": "eq",
-                            "variableName": "projectId"
-                          }
-                        ],
-                        "kind": "ObjectValue",
-                        "name": "Id"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_Project__cConnection",
+                "args": null,
+                "concreteType": "RecordQuery",
                 "kind": "LinkedField",
-                "name": "Acc_Project__c",
+                "name": "query",
                 "plural": false,
                 "selections": [
                   {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_Project__cEdge",
+                    "alias": "Page",
+                    "args": [
+                      {
+                        "kind": "Literal",
+                        "name": "first",
+                        "value": 1
+                      },
+                      {
+                        "fields": [
+                          {
+                            "fields": [
+                              {
+                                "kind": "Variable",
+                                "name": "eq",
+                                "variableName": "projectId"
+                              }
+                            ],
+                            "kind": "ObjectValue",
+                            "name": "Id"
+                          }
+                        ],
+                        "kind": "ObjectValue",
+                        "name": "where"
+                      }
+                    ],
+                    "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
+                    "name": "Acc_Project__c",
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
-                        "concreteType": "Acc_Project__c",
+                        "concreteType": "Acc_Project__cEdge",
                         "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
+                        "name": "edges",
+                        "plural": true,
                         "selections": [
                           {
                             "alias": null,
                             "args": null,
-                            "kind": "ScalarField",
-                            "name": "Id",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "isActive",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
+                            "concreteType": "Acc_Project__c",
                             "kind": "LinkedField",
-                            "name": "Acc_ProjectNumber__c",
+                            "name": "node",
                             "plural": false,
-                            "selections": (v1/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectTitle__c",
-                            "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isActive",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectNumber__c",
+                                "plural": false,
+                                "selections": (v1/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectTitle__c",
+                                "plural": false,
+                                "selections": (v1/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectStatus__c",
+                                "plural": false,
+                                "selections": (v1/*: any*/),
+                                "storageKey": null
+                              }
+                            ],
                             "storageKey": null
                           }
                         ],
@@ -172,38 +212,19 @@ v2 = [
         ],
         "storageKey": null
       }
-    ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "MonitoringReportDeleteQuery",
-    "selections": (v2/*: any*/),
-    "type": "Query",
-    "abstractKey": null
-  },
-  "kind": "Request",
-  "operation": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Operation",
-    "name": "MonitoringReportDeleteQuery",
-    "selections": (v2/*: any*/)
+    ]
   },
   "params": {
-    "cacheID": "1107847a6085307ac6d38aca2ff81372",
+    "cacheID": "7ca7c4cc900716c059c50afd1b81ad23",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportDeleteQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8ca205954b76df38fb255b350079e5d1";
+(node as any).hash = "a53b47d71ede2c2c3f2edf91b9a3b201";
 
 export default node;

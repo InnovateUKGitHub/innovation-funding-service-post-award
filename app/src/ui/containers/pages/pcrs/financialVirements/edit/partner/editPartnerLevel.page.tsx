@@ -3,10 +3,9 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -66,12 +65,18 @@ type EditPartnerLevelErrors = {
 };
 
 const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
-  const { project, financialVirementsForParticipants, financialVirementsForCosts, claimOverrideAwardRates, partners } =
-    usePcrFinancialVirementData({
-      projectId: props.projectId,
-      pcrId: props.pcrId,
-      itemId: props.itemId,
-    });
+  const {
+    project,
+    financialVirementsForParticipants,
+    financialVirementsForCosts,
+    claimOverrideAwardRates,
+    partners,
+    fragmentRef,
+  } = usePcrFinancialVirementData({
+    projectId: props.projectId,
+    pcrId: props.pcrId,
+    itemId: props.itemId,
+  });
   const content = useEditPartnerLevelContent();
 
   const { virementData } = useMapFinancialVirements({
@@ -139,9 +144,8 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
           {content.backToSummary}
         </BackLink>
       }
-      isActive={project.isActive}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       apiError={apiError}
+      fragmentRef={fragmentRef}
     >
       <Section>
         <AwardRateOverridesMessage isNonFec={project.isNonFec} />

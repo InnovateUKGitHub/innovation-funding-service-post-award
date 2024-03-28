@@ -4,6 +4,7 @@ export const pcrPrepareQuery = graphql`
   query ProjectChangeRequestPrepareQuery($projectId: ID!, $pcrId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_StatusChange__c(
             where: {
@@ -52,10 +53,6 @@ export const pcrPrepareQuery = graphql`
                   isPm
                   isAssociate
                 }
-                isActive
-                Acc_ProjectNumber__c {
-                  value
-                }
                 Acc_CompetitionType__c {
                   value
                 }
@@ -63,12 +60,6 @@ export const pcrPrepareQuery = graphql`
                   Acc_TypeofAid__c {
                     value
                   }
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
                 Acc_MonitoringLevel__c {
                   value

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4620b87bb1570d30934109bb7179d70a>>
+ * @generated SignedSource<<bbd3b0e55e25797461b4d855088f3859>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type ProjectDocumentsQuery$variables = {
   projectId: string;
 };
@@ -87,15 +88,6 @@ export type ProjectDocumentsQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
-              readonly Acc_ProjectNumber__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectStatus__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectTitle__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
               readonly ContentDocumentLinks: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
@@ -144,7 +136,6 @@ export type ProjectDocumentsQuery$data = {
                 } | null | undefined> | null | undefined;
               } | null | undefined;
               readonly Id: string;
-              readonly isActive: boolean;
               readonly roles: {
                 readonly isAssociate: boolean;
                 readonly isFc: boolean;
@@ -162,6 +153,7 @@ export type ProjectDocumentsQuery$data = {
           } | null | undefined> | null | undefined;
         } | null | undefined;
       };
+      readonly " $fragmentSpreads": FragmentRefs<"PageFragment">;
     };
   };
 };
@@ -371,357 +363,337 @@ v8 = {
 },
 v9 = {
   "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isMo",
+  "args": [
+    {
+      "kind": "Literal",
+      "name": "first",
+      "value": 200
+    },
+    {
+      "kind": "Literal",
+      "name": "orderBy",
+      "value": {
+        "Acc_AccountId__r": {
+          "Name": {
+            "order": "ASC"
+          }
+        }
+      }
+    },
+    {
+      "fields": [
+        {
+          "fields": (v1/*: any*/),
+          "kind": "ObjectValue",
+          "name": "Acc_ProjectId__c"
+        }
+      ],
+      "kind": "ObjectValue",
+      "name": "where"
+    }
+  ],
+  "concreteType": "Acc_ProjectParticipant__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectParticipant__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_ProjectParticipant__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_ProjectParticipant__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v2/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "IDValue",
+              "kind": "LinkedField",
+              "name": "Acc_AccountId__c",
+              "plural": false,
+              "selections": (v3/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "Account",
+              "kind": "LinkedField",
+              "name": "Acc_AccountId__r",
+              "plural": false,
+              "selections": [
+                (v4/*: any*/)
+              ],
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "PicklistValue",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectRole__c",
+              "plural": false,
+              "selections": (v3/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": (v5/*: any*/),
+              "concreteType": "ContentDocumentLinkConnection",
+              "kind": "LinkedField",
+              "name": "ContentDocumentLinks",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "ContentDocumentLinkEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "ContentDocumentLink",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v2/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "IDValue",
+                          "kind": "LinkedField",
+                          "name": "LinkedEntityId",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
+                          "storageKey": null
+                        },
+                        (v6/*: any*/),
+                        (v7/*: any*/),
+                        (v8/*: any*/)
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
-v10 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isFc",
-  "storageKey": null
-},
+v10 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 1
+  },
+  {
+    "fields": [
+      {
+        "fields": (v1/*: any*/),
+        "kind": "ObjectValue",
+        "name": "Id"
+      }
+    ],
+    "kind": "ObjectValue",
+    "name": "where"
+  }
+],
 v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isPm",
+  "name": "isMo",
   "storageKey": null
 },
 v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v13 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "SalesforceQuery",
-    "kind": "LinkedField",
-    "name": "salesforce",
-    "plural": false,
+v15 = {
+  "alias": null,
+  "args": (v10/*: any*/),
+  "concreteType": "Acc_Project__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_Project__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_Project__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_Project__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v2/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "Ext_Project_Roles",
+              "kind": "LinkedField",
+              "name": "roles",
+              "plural": false,
+              "selections": [
+                (v11/*: any*/),
+                (v12/*: any*/),
+                (v13/*: any*/),
+                (v14/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Ext_Partner_Roles",
+                  "kind": "LinkedField",
+                  "name": "partnerRoles",
+                  "plural": true,
+                  "selections": [
+                    (v12/*: any*/),
+                    (v11/*: any*/),
+                    (v13/*: any*/),
+                    (v14/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "partnerId",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": (v5/*: any*/),
+              "concreteType": "ContentDocumentLinkConnection",
+              "kind": "LinkedField",
+              "name": "ContentDocumentLinks",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "ContentDocumentLinkEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "ContentDocumentLink",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v2/*: any*/),
+                        (v6/*: any*/),
+                        (v7/*: any*/),
+                        (v8/*: any*/)
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "ProjectDocumentsQuery",
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "UIAPI",
+        "concreteType": "SalesforceQuery",
         "kind": "LinkedField",
-        "name": "uiapi",
+        "name": "salesforce",
         "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "RecordQuery",
+            "concreteType": "UIAPI",
             "kind": "LinkedField",
-            "name": "query",
+            "name": "uiapi",
             "plural": false,
             "selections": [
               {
-                "alias": null,
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 200
-                  },
-                  {
-                    "kind": "Literal",
-                    "name": "orderBy",
-                    "value": {
-                      "Acc_AccountId__r": {
-                        "Name": {
-                          "order": "ASC"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "fields": [
-                      {
-                        "fields": (v1/*: any*/),
-                        "kind": "ObjectValue",
-                        "name": "Acc_ProjectId__c"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_ProjectParticipant__cConnection",
-                "kind": "LinkedField",
-                "name": "Acc_ProjectParticipant__c",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_ProjectParticipant__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_ProjectParticipant__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "IDValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_AccountId__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Account",
-                            "kind": "LinkedField",
-                            "name": "Acc_AccountId__r",
-                            "plural": false,
-                            "selections": [
-                              (v4/*: any*/)
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectRole__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": (v5/*: any*/),
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "ContentDocumentLinkEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "ContentDocumentLink",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      (v2/*: any*/),
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "IDValue",
-                                        "kind": "LinkedField",
-                                        "name": "LinkedEntityId",
-                                        "plural": false,
-                                        "selections": (v3/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      (v6/*: any*/),
-                                      (v7/*: any*/),
-                                      (v8/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "PageFragment"
               },
               {
                 "alias": null,
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 1
-                  },
-                  {
-                    "fields": [
-                      {
-                        "fields": (v1/*: any*/),
-                        "kind": "ObjectValue",
-                        "name": "Id"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_Project__cConnection",
+                "args": null,
+                "concreteType": "RecordQuery",
                 "kind": "LinkedField",
-                "name": "Acc_Project__c",
+                "name": "query",
                 "plural": false,
                 "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_Project__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_Project__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "isActive",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Ext_Project_Roles",
-                            "kind": "LinkedField",
-                            "name": "roles",
-                            "plural": false,
-                            "selections": [
-                              (v9/*: any*/),
-                              (v10/*: any*/),
-                              (v11/*: any*/),
-                              (v12/*: any*/),
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "Ext_Partner_Roles",
-                                "kind": "LinkedField",
-                                "name": "partnerRoles",
-                                "plural": true,
-                                "selections": [
-                                  (v10/*: any*/),
-                                  (v9/*: any*/),
-                                  (v11/*: any*/),
-                                  (v12/*: any*/),
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
-                                    "name": "partnerId",
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectNumber__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectTitle__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectStatus__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": (v5/*: any*/),
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "ContentDocumentLinkEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "ContentDocumentLink",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      (v2/*: any*/),
-                                      (v6/*: any*/),
-                                      (v7/*: any*/),
-                                      (v8/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
+                  (v9/*: any*/),
+                  (v15/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -732,16 +704,6 @@ v13 = [
         "storageKey": null
       }
     ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "ProjectDocumentsQuery",
-    "selections": (v13/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -750,19 +712,125 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ProjectDocumentsQuery",
-    "selections": (v13/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "SalesforceQuery",
+        "kind": "LinkedField",
+        "name": "salesforce",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UIAPI",
+            "kind": "LinkedField",
+            "name": "uiapi",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "RecordQuery",
+                "kind": "LinkedField",
+                "name": "query",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": "Page",
+                    "args": (v10/*: any*/),
+                    "concreteType": "Acc_Project__cConnection",
+                    "kind": "LinkedField",
+                    "name": "Acc_Project__c",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_Project__cEdge",
+                        "kind": "LinkedField",
+                        "name": "edges",
+                        "plural": true,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Acc_Project__c",
+                            "kind": "LinkedField",
+                            "name": "node",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isActive",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectNumber__c",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectTitle__c",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectStatus__c",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  (v9/*: any*/),
+                  (v15/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "b425a5a8ad9fd06fe2b2dca677044f49",
+    "cacheID": "8c732393fdb9622191fb6cc1eeb98f3b",
     "id": null,
     "metadata": {},
     "name": "ProjectDocumentsQuery",
     "operationKind": "query",
-    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0a93968bcca3a5a4e76b35014ef7dbd4";
+(node as any).hash = "7947b5f2adc5a197cad407f45f08b353";
 
 export default node;

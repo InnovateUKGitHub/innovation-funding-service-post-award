@@ -10,6 +10,7 @@ export const claimDetailDocumentsQuery = graphql`
   ) {
     salesforce {
       uiapi {
+        ...PageFragment
         ...ProjectSuspensionMessageFragment
         query {
           Acc_CostCategory__c(first: 2000) {
@@ -104,7 +105,6 @@ export const claimDetailDocumentsQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
@@ -117,15 +117,6 @@ export const claimDetailDocumentsQuery = graphql`
                     isAssociate
                     partnerId
                   }
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
                 Acc_CompetitionType__c {
                   value

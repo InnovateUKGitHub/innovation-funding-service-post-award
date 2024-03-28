@@ -24,8 +24,7 @@ import {
   PartnerDocumentEdit,
 } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
 import { useContent } from "@ui/hooks/content.hook";
@@ -53,7 +52,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const config = useClientConfig();
 
   // GraphQL data loading
-  const { project, partners, partnerDocuments, projectDocuments } = useProjectDocumentsQuery(
+  const { project, partners, partnerDocuments, projectDocuments, fragmentRef } = useProjectDocumentsQuery(
     props.projectId,
     refreshedQueryOptions,
   );
@@ -126,12 +125,10 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
 
   return (
     <Page
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={<ProjectBackLink projectId={project.id} disabled={disabled} />}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
-      projectId={props.projectId}
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
 

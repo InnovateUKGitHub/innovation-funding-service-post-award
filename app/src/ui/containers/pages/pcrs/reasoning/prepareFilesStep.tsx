@@ -23,8 +23,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { useGetBackLink, useNextReasoningLink, usePcrReasoningFilesQuery } from "./pcrReasoningWorkflow.logic";
 import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
@@ -33,7 +32,7 @@ import { useMessages } from "@framework/api-helpers/useMessages";
 export const PCRPrepareReasoningFilesStep = () => {
   const { getContent } = useContent();
 
-  const { pcrId, projectId, project, messages, isFetching, apiError, config, onUpdate } = usePcrReasoningContext();
+  const { pcrId, projectId, fragmentRef, messages, isFetching, apiError, config, onUpdate } = usePcrReasoningContext();
   const nextLink = useNextReasoningLink();
 
   const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrReasoningFilesQuery, {
@@ -81,13 +80,7 @@ export const PCRPrepareReasoningFilesStep = () => {
 
   const backLink = useGetBackLink();
   return (
-    <Page
-      apiError={apiError}
-      validationErrors={validationErrors}
-      backLink={backLink}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      isActive={project.isActive}
-    >
+    <Page apiError={apiError} validationErrors={validationErrors} backLink={backLink} fragmentRef={fragmentRef}>
       <Messages messages={messages} />
       <PcrItemListSection />
       <Section>

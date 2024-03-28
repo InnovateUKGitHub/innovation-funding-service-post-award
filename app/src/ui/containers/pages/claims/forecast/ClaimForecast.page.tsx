@@ -6,11 +6,10 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -37,7 +36,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
     projectId,
     projectParticipantId: partnerId,
   });
-  const { project, partner } = data;
+  const { project, partner, fragmentRef } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
   const { isPm } = getAuthRoles(project.roles);
@@ -72,13 +71,12 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
   return (
     <Page
       validationErrors={allErrors}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink route={routes.claimDocuments.getLink({ projectId, partnerId, periodId })}>
           {getContent(x => x.pages.claimForecast.backLink)}
         </BackLink>
       }
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("projectId")} value={projectId} type="hidden" />

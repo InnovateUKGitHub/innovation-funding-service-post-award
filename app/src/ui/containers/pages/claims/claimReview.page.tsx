@@ -28,7 +28,6 @@ import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/C
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { createTypedForm, DropdownOption } from "@ui/components/bjss/form/form";
 import { PageLoader } from "@ui/components/bjss/loading";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -39,7 +38,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { useForm } from "react-hook-form";
@@ -125,8 +124,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       backLink={backLinkElement}
       apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
-      pageTitle={<Title />}
-      isActive={data.project.isActive}
       fragmentRef={data.fragmentRef}
     >
       <Messages messages={props.messages} />

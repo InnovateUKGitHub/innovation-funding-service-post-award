@@ -4,6 +4,7 @@ export const monitoringReportPeriodStepQuery = graphql`
   query MonitoringReportPeriodStepQuery($projectId: ID!, $monitoringReportId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_MonitoringAnswer__c(
             where: { Id: { eq: $monitoringReportId } }
@@ -31,13 +32,6 @@ export const monitoringReportPeriodStepQuery = graphql`
             edges {
               node {
                 Id
-                isActive
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
                 Acc_CurrentPeriodNumber__c {
                   value
                 }

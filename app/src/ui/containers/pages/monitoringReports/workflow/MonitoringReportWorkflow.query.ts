@@ -4,6 +4,7 @@ export const monitoringReportWorkflowQuery = graphql`
   query MonitoringReportWorkflowQuery($projectId: ID!, $monitoringReportId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_StatusChange__c(
             where: { Acc_MonitoringReport__c: { eq: $monitoringReportId } }
@@ -120,26 +121,6 @@ export const monitoringReportWorkflowQuery = graphql`
                   value
                 }
                 Acc_ScoredQuestion__c {
-                  value
-                }
-              }
-            }
-          }
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Id
-                isActive
-                roles {
-                  isMo
-                  isFc
-                  isPm
-                  isAssociate
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
               }

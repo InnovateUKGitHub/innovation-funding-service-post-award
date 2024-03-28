@@ -2,7 +2,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -28,22 +28,16 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
   const { getPcrItemContent } = useGetPcrItemMetadata();
   const { getPcrStatusName } = useGetPcrStatusMetadata();
   const { getContent } = useContent();
-  const { project, pcr } = useProjectChangeRequestSubmittedForReviewQuery({ projectId, pcrId });
+  const { pcr, fragmentRef } = useProjectChangeRequestSubmittedForReviewQuery({ projectId, pcrId });
 
   const pcrsRoute = routes.pcrsDashboard.getLink({ projectId });
   const reviewPcrRoute = routes.pcrDetails.getLink({ projectId, pcrId });
 
   return (
     <Page
-      pageTitle={
-        <Title
-          title={project.title}
-          projectNumber={project.projectNumber}
-          heading={getContent(x => x.pages.pcrSubmittedForReview.title)}
-        />
-      }
-      isActive={project.isActive}
+      heading={getContent(x => x.pages.pcrSubmittedForReview.title)}
       backLink={<BackLink route={pcrsRoute}>{getContent(x => x.pages.pcrSubmittedForReview.backLink)}</BackLink>}
+      fragmentRef={fragmentRef}
     >
       <ValidationMessage
         message={getContent(x => x.pages.pcrSubmittedForReview.submittedMessage)}

@@ -4,19 +4,13 @@ const pcrModifyOptionsQuery = graphql`
   query PcrModifyOptionsQuery($projectId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id
-                isActive
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
                   value
                 }
               }

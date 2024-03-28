@@ -7,8 +7,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
 import { BaseProps, defineRoute } from "../../../containerBase";
@@ -32,8 +31,16 @@ export interface ProjectChangeRequestPrepareParams {
 }
 
 const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) => {
-  const { project, pcr, pcrs, statusChanges, editableItemTypes, isMultipleParticipants, numberOfPartners } =
-    usePCRPrepareQuery(props.projectId, props.pcrId);
+  const {
+    project,
+    pcr,
+    pcrs,
+    statusChanges,
+    editableItemTypes,
+    isMultipleParticipants,
+    numberOfPartners,
+    fragmentRef,
+  } = usePCRPrepareQuery(props.projectId, props.pcrId);
 
   const { getPcrItemContent } = useGetPcrItemMetadata();
 
@@ -75,11 +82,9 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
           {getContent(x => x.pages.pcrOverview.backToPcrs)}
         </BackLink>
       }
-      pageTitle={<Title {...project} />}
       validationErrors={validatorErrors}
       apiError={apiError}
-      projectId={props.projectId}
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <ProjectChangeRequestOverviewSummary
         pcr={pcr}

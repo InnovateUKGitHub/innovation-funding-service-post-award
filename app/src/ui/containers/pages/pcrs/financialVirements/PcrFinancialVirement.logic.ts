@@ -27,12 +27,9 @@ const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: Use
   );
 
   const project = mapToProjectDto(getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges).node, [
-    "title",
-    "projectNumber",
     "isNonFec",
     "roles",
     "competitionType",
-    "isActive",
   ]);
 
   const partners = mapToPartnerDtoArray(
@@ -87,6 +84,7 @@ const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: Use
     financialVirementsForParticipants,
     financialVirementsForCosts,
     claimOverrideAwardRates,
+    fragmentRef: data.salesforce.uiapi,
   };
 };
 

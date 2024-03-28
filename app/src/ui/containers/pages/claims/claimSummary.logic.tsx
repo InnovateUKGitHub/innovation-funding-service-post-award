@@ -48,9 +48,6 @@ export const useClaimSummaryData = (
     "impactManagementParticipation",
     "isNonFec",
     "monitoringLevel",
-    "title",
-    "projectNumber",
-    "isActive",
   ]);
 
   const partner = mapToPartnerDto(

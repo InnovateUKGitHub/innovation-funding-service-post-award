@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fdb9bafb95711fc63522cb8c037e6661>>
+ * @generated SignedSource<<6ceb0dad3b4453a2152cf522fbac2c79>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type PcrReasoningWorkflowQuery$variables = {
   pcrId?: string | null | undefined;
   projectId?: string | null | undefined;
@@ -48,22 +49,6 @@ export type PcrReasoningWorkflowQuery$data = {
                   readonly value: string | null | undefined;
                 } | null | undefined;
               } | null | undefined;
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
-        readonly Acc_Project__c: {
-          readonly edges: ReadonlyArray<{
-            readonly node: {
-              readonly Acc_ProjectNumber__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectStatus__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_ProjectTitle__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
@@ -118,6 +103,7 @@ export type PcrReasoningWorkflowQuery$data = {
           } | null | undefined> | null | undefined;
         } | null | undefined;
       };
+      readonly " $fragmentSpreads": FragmentRefs<"PageFragment">;
     };
   };
 };
@@ -178,397 +164,531 @@ v7 = {
 v8 = [
   (v7/*: any*/)
 ],
-v9 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "SalesforceQuery",
-    "kind": "LinkedField",
-    "name": "salesforce",
-    "plural": false,
+v9 = {
+  "alias": "PcrHeader",
+  "args": [
+    (v2/*: any*/),
+    {
+      "fields": (v4/*: any*/),
+      "kind": "ObjectValue",
+      "name": "where"
+    }
+  ],
+  "concreteType": "Acc_ProjectChangeRequest__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectChangeRequest__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_ProjectChangeRequest__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_ProjectChangeRequest__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v5/*: any*/),
+            {
+              "alias": null,
+              "args": [
+                (v6/*: any*/),
+                {
+                  "kind": "Literal",
+                  "name": "orderBy",
+                  "value": {
+                    "ContentDocument": {
+                      "CreatedDate": {
+                        "order": "DESC"
+                      }
+                    }
+                  }
+                }
+              ],
+              "concreteType": "ContentDocumentLinkConnection",
+              "kind": "LinkedField",
+              "name": "ContentDocumentLinks",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "ContentDocumentLinkEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "ContentDocumentLink",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "IDValue",
+                          "kind": "LinkedField",
+                          "name": "LinkedEntityId",
+                          "plural": false,
+                          "selections": (v8/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "isFeedAttachment",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "isOwner",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "ContentDocument",
+                          "kind": "LinkedField",
+                          "name": "ContentDocument",
+                          "plural": false,
+                          "selections": [
+                            (v5/*: any*/),
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "User",
+                              "kind": "LinkedField",
+                              "name": "LastModifiedBy",
+                              "plural": false,
+                              "selections": [
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "concreteType": "IDValue",
+                                  "kind": "LinkedField",
+                                  "name": "ContactId",
+                                  "plural": false,
+                                  "selections": (v8/*: any*/),
+                                  "storageKey": null
+                                }
+                              ],
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "LongTextAreaValue",
+                              "kind": "LinkedField",
+                              "name": "Description",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "DateTimeValue",
+                              "kind": "LinkedField",
+                              "name": "CreatedDate",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "IDValue",
+                              "kind": "LinkedField",
+                              "name": "LatestPublishedVersionId",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "StringValue",
+                              "kind": "LinkedField",
+                              "name": "FileExtension",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "StringValue",
+                              "kind": "LinkedField",
+                              "name": "Title",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "IntValue",
+                              "kind": "LinkedField",
+                              "name": "ContentSize",
+                              "plural": false,
+                              "selections": (v8/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "User",
+                              "kind": "LinkedField",
+                              "name": "CreatedBy",
+                              "plural": false,
+                              "selections": [
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "concreteType": "StringValue",
+                                  "kind": "LinkedField",
+                                  "name": "Name",
+                                  "plural": false,
+                                  "selections": (v8/*: any*/),
+                                  "storageKey": null
+                                },
+                                (v5/*: any*/)
+                              ],
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"CreatedDate\":{\"order\":\"DESC\"}}})"
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": [
+    (v6/*: any*/),
+    {
+      "fields": [
+        {
+          "items": [
+            {
+              "fields": (v4/*: any*/),
+              "kind": "ObjectValue",
+              "name": "or.0"
+            },
+            {
+              "fields": [
+                {
+                  "fields": (v3/*: any*/),
+                  "kind": "ObjectValue",
+                  "name": "Acc_RequestHeader__c"
+                }
+              ],
+              "kind": "ObjectValue",
+              "name": "or.1"
+            }
+          ],
+          "kind": "ListValue",
+          "name": "or"
+        }
+      ],
+      "kind": "ObjectValue",
+      "name": "where"
+    }
+  ],
+  "concreteType": "Acc_ProjectChangeRequest__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectChangeRequest__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_ProjectChangeRequest__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_ProjectChangeRequest__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            (v5/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "PicklistValue",
+              "kind": "LinkedField",
+              "name": "Acc_Status__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "IDValue",
+              "kind": "LinkedField",
+              "name": "Acc_RequestHeader__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "DoubleValue",
+              "kind": "LinkedField",
+              "name": "Acc_RequestNumber__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "PicklistValue",
+              "kind": "LinkedField",
+              "name": "Acc_MarkedasComplete__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "LongTextAreaValue",
+              "kind": "LinkedField",
+              "name": "Acc_Reasoning__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "IDValue",
+              "kind": "LinkedField",
+              "name": "Acc_Project__c",
+              "plural": false,
+              "selections": (v8/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "RecordType",
+              "kind": "LinkedField",
+              "name": "RecordType",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "Name",
+                  "plural": false,
+                  "selections": [
+                    (v7/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "label",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "DeveloperName",
+                  "plural": false,
+                  "selections": (v8/*: any*/),
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "PcrReasoningWorkflowQuery",
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "UIAPI",
+        "concreteType": "SalesforceQuery",
         "kind": "LinkedField",
-        "name": "uiapi",
+        "name": "salesforce",
         "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "RecordQuery",
+            "concreteType": "UIAPI",
             "kind": "LinkedField",
-            "name": "query",
+            "name": "uiapi",
             "plural": false,
             "selections": [
               {
-                "alias": "PcrHeader",
-                "args": [
-                  (v2/*: any*/),
-                  {
-                    "fields": (v4/*: any*/),
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_ProjectChangeRequest__cConnection",
-                "kind": "LinkedField",
-                "name": "Acc_ProjectChangeRequest__c",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_ProjectChangeRequest__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_ProjectChangeRequest__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v5/*: any*/),
-                          {
-                            "alias": null,
-                            "args": [
-                              (v6/*: any*/),
-                              {
-                                "kind": "Literal",
-                                "name": "orderBy",
-                                "value": {
-                                  "ContentDocument": {
-                                    "CreatedDate": {
-                                      "order": "DESC"
-                                    }
-                                  }
-                                }
-                              }
-                            ],
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "ContentDocumentLinkEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "ContentDocumentLink",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "IDValue",
-                                        "kind": "LinkedField",
-                                        "name": "LinkedEntityId",
-                                        "plural": false,
-                                        "selections": (v8/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "isFeedAttachment",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "isOwner",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "ContentDocument",
-                                        "kind": "LinkedField",
-                                        "name": "ContentDocument",
-                                        "plural": false,
-                                        "selections": [
-                                          (v5/*: any*/),
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "User",
-                                            "kind": "LinkedField",
-                                            "name": "LastModifiedBy",
-                                            "plural": false,
-                                            "selections": [
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "IDValue",
-                                                "kind": "LinkedField",
-                                                "name": "ContactId",
-                                                "plural": false,
-                                                "selections": (v8/*: any*/),
-                                                "storageKey": null
-                                              }
-                                            ],
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "LongTextAreaValue",
-                                            "kind": "LinkedField",
-                                            "name": "Description",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "DateTimeValue",
-                                            "kind": "LinkedField",
-                                            "name": "CreatedDate",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "IDValue",
-                                            "kind": "LinkedField",
-                                            "name": "LatestPublishedVersionId",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "StringValue",
-                                            "kind": "LinkedField",
-                                            "name": "FileExtension",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "StringValue",
-                                            "kind": "LinkedField",
-                                            "name": "Title",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "IntValue",
-                                            "kind": "LinkedField",
-                                            "name": "ContentSize",
-                                            "plural": false,
-                                            "selections": (v8/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "User",
-                                            "kind": "LinkedField",
-                                            "name": "CreatedBy",
-                                            "plural": false,
-                                            "selections": [
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "StringValue",
-                                                "kind": "LinkedField",
-                                                "name": "Name",
-                                                "plural": false,
-                                                "selections": (v8/*: any*/),
-                                                "storageKey": null
-                                              },
-                                              (v5/*: any*/)
-                                            ],
-                                            "storageKey": null
-                                          }
-                                        ],
-                                        "storageKey": null
-                                      }
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"CreatedDate\":{\"order\":\"DESC\"}}})"
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "PageFragment"
               },
               {
                 "alias": null,
-                "args": [
-                  (v6/*: any*/),
-                  {
-                    "fields": [
-                      {
-                        "items": [
-                          {
-                            "fields": (v4/*: any*/),
-                            "kind": "ObjectValue",
-                            "name": "or.0"
-                          },
-                          {
-                            "fields": [
-                              {
-                                "fields": (v3/*: any*/),
-                                "kind": "ObjectValue",
-                                "name": "Acc_RequestHeader__c"
-                              }
-                            ],
-                            "kind": "ObjectValue",
-                            "name": "or.1"
-                          }
-                        ],
-                        "kind": "ListValue",
-                        "name": "or"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_ProjectChangeRequest__cConnection",
+                "args": null,
+                "concreteType": "RecordQuery",
                 "kind": "LinkedField",
-                "name": "Acc_ProjectChangeRequest__c",
+                "name": "query",
+                "plural": false,
+                "selections": [
+                  (v9/*: any*/),
+                  (v10/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "type": "Query",
+    "abstractKey": null
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
+    "kind": "Operation",
+    "name": "PcrReasoningWorkflowQuery",
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "SalesforceQuery",
+        "kind": "LinkedField",
+        "name": "salesforce",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "UIAPI",
+            "kind": "LinkedField",
+            "name": "uiapi",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "RecordQuery",
+                "kind": "LinkedField",
+                "name": "query",
                 "plural": false,
                 "selections": [
                   {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_ProjectChangeRequest__cEdge",
+                    "alias": "Page",
+                    "args": [
+                      (v2/*: any*/),
+                      {
+                        "fields": [
+                          {
+                            "fields": [
+                              {
+                                "kind": "Variable",
+                                "name": "eq",
+                                "variableName": "projectId"
+                              }
+                            ],
+                            "kind": "ObjectValue",
+                            "name": "Id"
+                          }
+                        ],
+                        "kind": "ObjectValue",
+                        "name": "where"
+                      }
+                    ],
+                    "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
+                    "name": "Acc_Project__c",
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
-                        "concreteType": "Acc_ProjectChangeRequest__c",
+                        "concreteType": "Acc_Project__cEdge",
                         "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
+                        "name": "edges",
+                        "plural": true,
                         "selections": [
-                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "PicklistValue",
+                            "concreteType": "Acc_Project__c",
                             "kind": "LinkedField",
-                            "name": "Acc_Status__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "IDValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_RequestHeader__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DoubleValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_RequestNumber__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_MarkedasComplete__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "LongTextAreaValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_Reasoning__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "IDValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_Project__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "RecordType",
-                            "kind": "LinkedField",
-                            "name": "RecordType",
+                            "name": "node",
                             "plural": false,
                             "selections": [
                               {
                                 "alias": null,
                                 "args": null,
-                                "concreteType": "StringValue",
-                                "kind": "LinkedField",
-                                "name": "Name",
-                                "plural": false,
-                                "selections": [
-                                  (v7/*: any*/),
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
-                                    "name": "label",
-                                    "storageKey": null
-                                  }
-                                ],
+                                "kind": "ScalarField",
+                                "name": "isActive",
                                 "storageKey": null
                               },
                               {
@@ -576,7 +696,27 @@ v9 = [
                                 "args": null,
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
-                                "name": "DeveloperName",
+                                "name": "Acc_ProjectNumber__c",
+                                "plural": false,
+                                "selections": (v8/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectTitle__c",
+                                "plural": false,
+                                "selections": (v8/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectStatus__c",
                                 "plural": false,
                                 "selections": (v8/*: any*/),
                                 "storageKey": null
@@ -589,96 +729,9 @@ v9 = [
                       }
                     ],
                     "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": [
-                  (v2/*: any*/),
-                  {
-                    "fields": [
-                      {
-                        "fields": [
-                          {
-                            "kind": "Variable",
-                            "name": "eq",
-                            "variableName": "projectId"
-                          }
-                        ],
-                        "kind": "ObjectValue",
-                        "name": "Id"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_Project__cConnection",
-                "kind": "LinkedField",
-                "name": "Acc_Project__c",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_Project__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_Project__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "isActive",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectNumber__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "StringValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectTitle__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "PicklistValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectStatus__c",
-                            "plural": false,
-                            "selections": (v8/*: any*/),
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
+                  },
+                  (v9/*: any*/),
+                  (v10/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -688,44 +741,19 @@ v9 = [
         ],
         "storageKey": null
       }
-    ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "PcrReasoningWorkflowQuery",
-    "selections": (v9/*: any*/),
-    "type": "Query",
-    "abstractKey": null
-  },
-  "kind": "Request",
-  "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
-    "kind": "Operation",
-    "name": "PcrReasoningWorkflowQuery",
-    "selections": (v9/*: any*/)
+    ]
   },
   "params": {
-    "cacheID": "1be8afe56545824e2792e39c9402656e",
+    "cacheID": "f9e50c3cd747beee0113686ec3aff718",
     "id": null,
     "metadata": {},
     "name": "PcrReasoningWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        PcrHeader: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Id\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        PcrHeader: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Id\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b3c6a11831b3d898e4cabfc5a8ffe37b";
+(node as any).hash = "fb8ac90a149dbfcf2f0523884c6bca3d";
 
 export default node;

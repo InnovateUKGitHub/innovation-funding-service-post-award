@@ -14,6 +14,7 @@ export const claimLineItemsQuery = graphql`
     salesforce {
       uiapi {
         ...AwardRateOverridesMessageFragment
+        ...PageFragment
         query {
           Acc_Profile__c(
             where: {
@@ -188,13 +189,6 @@ export const claimLineItemsQuery = graphql`
             edges {
               node {
                 Id
-                isActive
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
                 Acc_CompetitionType__c {
                   value
                 }

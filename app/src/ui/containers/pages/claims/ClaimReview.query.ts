@@ -4,6 +4,7 @@ export const claimReviewQuery = graphql`
     salesforce {
       uiapi {
         ...TitleFragment
+        ...PageFragment
         query {
           Acc_Profile__c(
             where: {
@@ -268,7 +269,6 @@ export const claimReviewQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
@@ -288,9 +288,6 @@ export const claimReviewQuery = graphql`
                   }
                 }
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
                   value
                 }
                 Impact_Management_Participation__c {

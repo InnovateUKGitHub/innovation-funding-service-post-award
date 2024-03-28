@@ -3,16 +3,8 @@ export const projectSetupBankDetailsVerifyQuery = graphql`
   query ProjectSetupBankDetailsVerifyQuery($projectId: ID!, $partnerId: ID!) {
     salesforce {
       uiapi {
-        ...TitleFragment
+        ...PageFragment
         query {
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Id
-                isActive
-              }
-            }
-          }
           Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }) {
             edges {
               node {

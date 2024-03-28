@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dcf009d5367fdef733736a4eefb667d1>>
+ * @generated SignedSource<<1612799cdc4def1a02e064c14ab4d6e9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -61,12 +61,11 @@ export type PcrItemWorkflowQuery$data = {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
-              readonly isActive: boolean;
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
       };
-      readonly " $fragmentSpreads": FragmentRefs<"NavigationArrowsFragment" | "TitleFragment">;
+      readonly " $fragmentSpreads": FragmentRefs<"NavigationArrowsFragment" | "PageFragment">;
     };
   };
 };
@@ -136,6 +135,16 @@ v8 = [
 ],
 v9 = {
   "alias": null,
+  "args": null,
+  "concreteType": "PicklistValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectStatus__c",
+  "plural": false,
+  "selections": (v8/*: any*/),
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
   "args": (v5/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
@@ -162,13 +171,6 @@ v9 = {
             {
               "alias": null,
               "args": null,
-              "kind": "ScalarField",
-              "name": "isActive",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
               "concreteType": "Competition__c",
               "kind": "LinkedField",
               "name": "Acc_CompetitionId__r",
@@ -187,16 +189,7 @@ v9 = {
               ],
               "storageKey": null
             },
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "PicklistValue",
-              "kind": "LinkedField",
-              "name": "Acc_ProjectStatus__c",
-              "plural": false,
-              "selections": (v8/*: any*/),
-              "storageKey": null
-            }
+            (v9/*: any*/)
           ],
           "storageKey": null
         }
@@ -206,21 +199,21 @@ v9 = {
   ],
   "storageKey": null
 },
-v10 = [
+v11 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "pcrId"
   }
 ],
-v11 = [
+v12 = [
   {
-    "fields": (v10/*: any*/),
+    "fields": (v11/*: any*/),
     "kind": "ObjectValue",
     "name": "Acc_RequestHeader__c"
   }
 ],
-v12 = {
+v13 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
@@ -230,7 +223,7 @@ v12 = {
   "selections": (v8/*: any*/),
   "storageKey": null
 },
-v13 = {
+v14 = {
   "alias": null,
   "args": [
     (v3/*: any*/),
@@ -256,7 +249,7 @@ v13 = {
               "name": "and.0"
             },
             {
-              "fields": (v11/*: any*/),
+              "fields": (v12/*: any*/),
               "kind": "ObjectValue",
               "name": "and.1"
             },
@@ -376,7 +369,7 @@ v13 = {
               "name": "RecordType",
               "plural": false,
               "selections": [
-                (v12/*: any*/)
+                (v13/*: any*/)
               ],
               "storageKey": null
             }
@@ -419,7 +412,7 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "TitleFragment"
+                "name": "PageFragment"
               },
               {
                 "args": null,
@@ -434,8 +427,8 @@ return {
                 "name": "query",
                 "plural": false,
                 "selections": [
-                  (v9/*: any*/),
-                  (v13/*: any*/)
+                  (v10/*: any*/),
+                  (v14/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -484,7 +477,7 @@ return {
                 "plural": false,
                 "selections": [
                   {
-                    "alias": "Title_Project",
+                    "alias": "Page",
                     "args": (v5/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
@@ -510,6 +503,13 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "kind": "ScalarField",
+                                "name": "isActive",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
@@ -526,7 +526,8 @@ return {
                                 "plural": false,
                                 "selections": (v8/*: any*/),
                                 "storageKey": null
-                              }
+                              },
+                              (v9/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -551,7 +552,7 @@ return {
                               {
                                 "fields": [
                                   {
-                                    "fields": (v10/*: any*/),
+                                    "fields": (v11/*: any*/),
                                     "kind": "ObjectValue",
                                     "name": "Id"
                                   }
@@ -560,7 +561,7 @@ return {
                                 "name": "or.0"
                               },
                               {
-                                "fields": (v11/*: any*/),
+                                "fields": (v12/*: any*/),
                                 "kind": "ObjectValue",
                                 "name": "or.1"
                               }
@@ -642,7 +643,7 @@ return {
                                     ],
                                     "storageKey": null
                                   },
-                                  (v12/*: any*/)
+                                  (v13/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -655,8 +656,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v9/*: any*/),
-                  (v13/*: any*/)
+                  (v10/*: any*/),
+                  (v14/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -669,16 +670,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "adbdb841ede836267e374ee6a45e6fce",
+    "cacheID": "a4e3f52499a11b4cc6e7cedb0b52f3eb",
     "id": null,
     "metadata": {},
     "name": "PcrItemWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...TitleFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}, {Acc_RequestHeader__r: {Acc_Project__c: {eq: $projectId}}}]}) {\n          edges {\n            node {\n              Id\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}, {Acc_RequestHeader__r: {Acc_Project__c: {eq: $projectId}}}]}) {\n          edges {\n            node {\n              Id\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0ab45ce868dddb5a7e53fc072ef97420";
+(node as any).hash = "1aa563af026d64815ba2b5cbff1e329d";
 
 export default node;

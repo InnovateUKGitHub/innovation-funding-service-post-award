@@ -25,10 +25,10 @@ export const useMonitoringReportPeriodStepQuery = (projectId: ProjectId, monitor
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: monitoringReportNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_MonitoringAnswer__c?.edges);
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "periodId", "isActive"]);
+  const project = mapToProjectDto(projectNode, ["periodId"]);
   const monitoringReport = mapToMonitoringReportDto(monitoringReportNode, ["headerId", "periodId"]);
 
-  return { project, monitoringReport };
+  return { project, monitoringReport, fragmentRef: data.salesforce.uiapi };
 };
 
 export type FormValues = { period: PeriodId; button_submit: string };

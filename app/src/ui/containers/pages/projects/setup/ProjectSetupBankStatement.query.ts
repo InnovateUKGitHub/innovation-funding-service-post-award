@@ -7,18 +7,8 @@ export const projectSetupBankStatementQuery = graphql`
     }
     salesforce {
       uiapi {
-        ...TitleFragment
+        ...PageFragment
         ...ProjectDocumentViewFragment
-        query {
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Id
-                isActive
-              }
-            }
-          }
-        }
       }
     }
   }

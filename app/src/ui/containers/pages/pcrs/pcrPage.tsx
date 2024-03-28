@@ -1,13 +1,11 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
-import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
@@ -23,9 +21,7 @@ export const PcrPage = ({
   validationErrors?: RhfErrors;
   backLink?: React.ReactNode;
 }) => {
-  const { workflow, pcrItem, mode, step, projectId, apiError, fragmentRef, messages, routes, project } =
-    usePcrWorkflowContext();
-  const { getPcrItemContent } = useGetPcrItemMetadata();
+  const { workflow, pcrItem, mode, step, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
 
   useScrollToTopSmoothly([step]);
 
@@ -36,17 +32,12 @@ export const PcrPage = ({
   const isReviewing = mode === "review";
   const displayNavigationArrows = (workflow.isOnSummary() && mode === "review") || mode === "details";
 
-  const content = getPcrItemContent(pcrItem.type);
-
   return (
     <Page
       backLink={backLink ?? <PcrBackLink />}
-      pageTitle={<Title heading={content.name} />}
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
       apiError={pcrLevelApiError ?? apiError}
-      projectId={projectId}
-      isActive={project.isActive}
     >
       <Messages messages={messages} />
 

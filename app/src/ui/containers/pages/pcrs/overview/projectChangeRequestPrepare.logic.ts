@@ -24,17 +24,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, [
-    "id",
-    "title",
-    "status",
-    "projectNumber",
-    "typeOfAid",
-    "roles",
-    "monitoringLevel",
-    "competitionType",
-    "isActive",
-  ]);
+  const project = mapToProjectDto(projectNode, ["id", "typeOfAid", "roles", "monitoringLevel", "competitionType"]);
 
   const pcr = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
@@ -78,7 +68,16 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const editableItemTypes = getEditableItemTypes(pcr);
 
-  return { project, pcr, pcrs, editableItemTypes, statusChanges, isMultipleParticipants, numberOfPartners };
+  return {
+    project,
+    pcr,
+    pcrs,
+    editableItemTypes,
+    statusChanges,
+    isMultipleParticipants,
+    numberOfPartners,
+    fragmentRef: data.salesforce.uiapi,
+  };
 };
 
 export type FormValues = {

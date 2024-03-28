@@ -5,10 +5,9 @@ import { BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
@@ -40,7 +39,7 @@ export interface ProjectSetupBankDetailsParams {
 
 const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsParams) => {
   const { getContent: c } = useContent();
-  const { project, partner } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
+  const { partner, fragmentRef } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
 
   const defaults = useServerInput<z.output<ProjectSetupBankDetailsSchemaType>>();
 
@@ -79,9 +78,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       }
       apiError={apiError}
       validationErrors={allErrors}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      projectId={props.projectId}
-      isActive={project.isActive}
+      fragmentRef={fragmentRef}
     >
       <Guidance />
 

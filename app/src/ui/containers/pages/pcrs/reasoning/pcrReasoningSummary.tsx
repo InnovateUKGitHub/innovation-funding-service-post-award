@@ -8,8 +8,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { useGetBackLink } from "./pcrReasoningWorkflow.logic";
 import { getStepLink } from "./pcrReasoningWorkflow.page";
@@ -33,7 +32,6 @@ export const PCRReasoningSummary = () => {
   const {
     pcrId,
     projectId,
-    project,
     messages,
     pcr,
     isFetching,
@@ -44,6 +42,7 @@ export const PCRReasoningSummary = () => {
     routes,
     editableItemTypes,
     setMarkedAsCompleteHasBeenChecked,
+    fragmentRef,
   } = usePcrReasoningContext();
 
   const backLink = useGetBackLink();
@@ -69,13 +68,7 @@ export const PCRReasoningSummary = () => {
   }, [watchedCheckbox]);
 
   return (
-    <Page
-      apiError={apiError}
-      isActive={project.isActive}
-      validationErrors={validationErrors}
-      backLink={backLink}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-    >
+    <Page apiError={apiError} validationErrors={validationErrors} backLink={backLink} fragmentRef={fragmentRef}>
       <Messages messages={messages} />
       <Section qa="reasoning-save-and-return">
         <Section>

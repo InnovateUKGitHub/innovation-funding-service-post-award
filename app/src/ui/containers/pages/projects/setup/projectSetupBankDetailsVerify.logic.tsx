@@ -9,7 +9,6 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupBankDetailsVerifyQuery>(
@@ -18,15 +17,11 @@ export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: P
     { fetchPolicy: "network-only" },
   );
 
-  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-
-  const project = mapToProjectDto(projectNode, ["id", "isActive"]);
-
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges ?? []);
 
   const partner = mapToPartnerDto(partnerNode, ["bankDetails", "name", "id", "projectId"], {});
 
-  return { fragmentRef: data?.salesforce?.uiapi, partner, project };
+  return { fragmentRef: data?.salesforce?.uiapi, partner };
 };
 
 export const useOnUpdateSetupBankDetailsVerify = (

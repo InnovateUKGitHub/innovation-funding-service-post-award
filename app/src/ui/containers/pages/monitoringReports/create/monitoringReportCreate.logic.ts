@@ -16,9 +16,9 @@ export const useMonitoringReportCreateQuery = (projectId: ProjectId) => {
   });
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "periodId", "isActive"]);
+  const project = mapToProjectDto(projectNode, ["periodId"]);
 
-  return { project };
+  return { project, fragmentRef: data.salesforce.uiapi };
 };
 
 export type FormValues = {

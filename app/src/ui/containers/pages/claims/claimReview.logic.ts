@@ -49,7 +49,6 @@ export const useClaimReviewPageData = (
       "partnerRoles",
       "roles",
       "impactManagementParticipation",
-      "isActive",
     ]);
 
     const partner = mapToPartnerDto(

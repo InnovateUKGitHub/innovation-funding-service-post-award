@@ -6,9 +6,8 @@ import {
 } from "./monitoringReportPeriodStep.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,7 +28,7 @@ export interface MonitoringReportPreparePeriodParams {
 }
 
 const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) => {
-  const { project, monitoringReport } = useMonitoringReportPeriodStepQuery(props.projectId, props.id);
+  const { project, monitoringReport, fragmentRef } = useMonitoringReportPeriodStepQuery(props.projectId, props.id);
   const { getContent } = useContent();
 
   const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
@@ -63,10 +62,9 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
           <Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
         </BackLink>
       }
-      isActive={project.isActive}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors}
       apiError={apiError}
+      fragmentRef={fragmentRef}
     >
       <Section>
         <P>{getContent(x => x.components.reportForm.reportMessage)}</P>

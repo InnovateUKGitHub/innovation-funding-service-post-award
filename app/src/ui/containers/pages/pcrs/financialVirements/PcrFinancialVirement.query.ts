@@ -4,6 +4,7 @@ const pcrFinancialVirementQuery = graphql`
   query PcrFinancialVirementQuery($projectId: ID, $pcrId: ID, $itemId: ID) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_VirementsForParticipant: Acc_Virements__c(
             where: {
@@ -79,12 +80,6 @@ const pcrFinancialVirementQuery = graphql`
                 Acc_NonFEC__c {
                   value
                 }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
                 roles {
                   isMo
                   isFc
@@ -92,7 +87,6 @@ const pcrFinancialVirementQuery = graphql`
                   isAssociate
                   isSalesforceSystemUser
                 }
-                isActive
                 Acc_CompetitionType__c {
                   value
                 }

@@ -4,6 +4,7 @@ export const claimSummaryQuery = graphql`
   query ClaimSummaryQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
+        ...PageFragment
         ...TotalCostsClaimedFragment
         query {
           Acc_Profile__c(
@@ -282,7 +283,6 @@ export const claimSummaryQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
@@ -306,12 +306,6 @@ export const claimSummaryQuery = graphql`
                   value
                 }
                 Acc_MonitoringLevel__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
               }

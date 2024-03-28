@@ -9,10 +9,9 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { Textarea } from "@ui/components/atomicDesign/atoms/form/TextArea/Textarea";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { CharacterCount } from "@ui/components/bjss/inputs/CharacterCount";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
@@ -80,12 +79,8 @@ const EditClaimLineItemsPage = ({
   return (
     <Page
       backLink={<BackLink route={backLink}>{getContent(x => x.pages.claimLineItems.backLink)}</BackLink>}
-      pageTitle={
-        <Title title={project.title} projectNumber={project.projectNumber} heading={currentCostCategory.name} />
-      }
       fragmentRef={fragmentRef}
       validationErrors={allErrors}
-      isActive={project.isActive}
     >
       {/* Update the HTML title to include the costCategoryName */}
       <Helmet>

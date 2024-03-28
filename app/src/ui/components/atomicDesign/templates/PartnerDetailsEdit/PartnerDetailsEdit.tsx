@@ -12,7 +12,6 @@ import { ProjectRole } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
@@ -23,7 +22,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -59,7 +58,7 @@ export function PartnerDetailsEditComponent({
   navigateTo,
   isSetup = false,
 }: BaseProps & PartnerDetailsEditComponentProps) {
-  const { project, partner } = usePartnerDetailsEditQuery(projectId, partnerId);
+  const { partner, fragmentRef } = usePartnerDetailsEditQuery(projectId, partnerId);
   const { getContent } = useContent();
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
@@ -77,13 +76,11 @@ export function PartnerDetailsEditComponent({
   const postcodeError = validatorErrors?.postcode as RhfErrors;
   return (
     <Page
+      fragmentRef={fragmentRef}
       backLink={backLink}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validatorErrors as RhfErrors}
       apiError={apiError}
-      projectId={projectId}
       partnerId={partnerId}
-      isActive={project.isActive}
     >
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>

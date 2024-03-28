@@ -7,10 +7,9 @@ import { DocumentDescription } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
@@ -114,7 +113,6 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
 
   return (
     <Page
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink
           route={props.routes.prepareClaimLineItems.getLink({
@@ -131,9 +129,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}
       fragmentRef={fragmentRef}
-      projectId={props.projectId}
       partnerId={props.partnerId}
-      isActive={project.isActive}
     >
       {isCombinationOfSBRI ? (
         <>

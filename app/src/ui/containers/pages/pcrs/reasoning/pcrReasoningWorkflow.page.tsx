@@ -24,7 +24,11 @@ const PcrReasoningWorkflow = (props: BaseProps & ProjectChangeRequestPrepareReas
   useScrollToTopSmoothly([props.step]);
   const [fetchKey, setFetchKey] = useState<number>(0);
 
-  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(props.projectId, props.pcrId, fetchKey);
+  const { pcr, documents, editableItemTypes, fragmentRef } = usePcrReasoningQuery(
+    props.projectId,
+    props.pcrId,
+    fetchKey,
+  );
 
   const { isFetching, onUpdate, apiError } = useOnSavePcrReasoning(props.projectId, props.pcrId, pcr, setFetchKey);
 
@@ -42,13 +46,13 @@ const PcrReasoningWorkflow = (props: BaseProps & ProjectChangeRequestPrepareReas
         documents,
         apiError,
         messages: props.messages,
-        project,
         routes: props.routes,
         config: props.config,
         editableItemTypes,
         markedAsCompleteHasBeenChecked,
         setMarkedAsCompleteHasBeenChecked,
         fetchKey,
+        fragmentRef,
       }}
     >
       {props.mode === "prepare" && !!props.step && <Step stepNumber={props.step} />}

@@ -25,14 +25,10 @@ export const useClaimDocumentsQuery = (
 
   const project = mapToProjectDto(projectNode, [
     "id",
-    "projectNumber",
-    "title",
-    "status",
     "roles",
     "partnerRoles",
     "impactManagementParticipation",
     "competitionType",
-    "isActive",
   ]);
 
   const partner = mapToPartnerDto(partnerNode, ["roles", "partnerStatus", "isWithdrawn"], {
@@ -56,5 +52,5 @@ export const useClaimDocumentsQuery = (
     },
   );
 
-  return { claim, project, partner, claimDocuments };
+  return { claim, project, partner, claimDocuments, fragmentRef: data.salesforce.uiapi };
 };

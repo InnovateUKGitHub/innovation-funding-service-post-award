@@ -4,6 +4,7 @@ const pcrReasoningWorkflowQuery = graphql`
   query PcrReasoningWorkflowQuery($projectId: ID, $pcrId: ID) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           PcrHeader: Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrId } }, first: 1) {
             edges {
@@ -88,22 +89,6 @@ const pcrReasoningWorkflowQuery = graphql`
                   DeveloperName {
                     value
                   }
-                }
-              }
-            }
-          }
-          Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                isActive
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
               }
             }

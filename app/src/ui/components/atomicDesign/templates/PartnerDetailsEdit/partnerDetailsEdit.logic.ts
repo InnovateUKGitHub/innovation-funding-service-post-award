@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -20,11 +19,12 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "isActive"]);
-
   const partner = mapToPartnerDto(partnerNode, ["partnerStatus", "postcode", "postcodeStatus"], {});
 
-  return { project, partner };
+  return {
+    partner,
+    fragmentRef: data.salesforce.uiapi,
+  };
 };
 
 export type FormValues = {

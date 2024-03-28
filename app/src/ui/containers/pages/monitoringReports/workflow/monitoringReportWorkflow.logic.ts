@@ -1,10 +1,8 @@
 import { useLazyLoadQuery } from "react-relay";
 import { MonitoringReportWorkflowQuery } from "./__generated__/MonitoringReportWorkflowQuery.graphql";
 import { monitoringReportWorkflowQuery } from "./MonitoringReportWorkflow.query";
-import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToMonitoringReportQuestionDtoArray } from "@gql/dtoMapper/mapMonitoringReportQuestions";
 import { mapToFullMonitoringReport } from "@gql/dtoMapper/mapMonitoringReportDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
@@ -27,9 +25,6 @@ export const useMonitoringReportWorkflowQuery = (
     },
     { fetchPolicy: "network-only", fetchKey },
   );
-
-  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "isActive"]);
 
   const questions = mapToMonitoringReportQuestionDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_MonitoringQuestion__c?.edges ?? [],
@@ -58,7 +53,7 @@ export const useMonitoringReportWorkflowQuery = (
     ["comments", "createdBy", "createdDate", "id", "newStatusLabel"],
   );
 
-  return { project, report, statusChanges };
+  return { report, statusChanges, fragmentRef: data.salesforce.uiapi };
 };
 
 export type FormValues = {
