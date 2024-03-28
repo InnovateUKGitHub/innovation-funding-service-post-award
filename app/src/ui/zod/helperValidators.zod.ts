@@ -9,6 +9,8 @@ import { IFileWrapper } from "@framework/types/fileWapper";
 import { validCurrencyRegex } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 
+const maxDefaultValue = 100_000_000_000;
+
 const projectIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_Project__c)
@@ -334,7 +336,7 @@ const requiredPositiveIntegerInput = ({ max = 1000000000, min = 0 }: { max?: num
 const numberInput = z.union([z.number(), z.string().transform(x => (x === "" ? null : Number(x)))]);
 
 const positiveNumberInput = z.union([
-  z.number().min(0),
+  z.number().min(0).max(maxDefaultValue),
   z.string().transform((x, ctx) => {
     if (x === "") return null;
     const x1 = Number(x);
@@ -350,6 +352,15 @@ const positiveNumberInput = z.union([
       ctx.addIssue({
         code: z.ZodIssueCode.too_small,
         minimum: 0,
+        inclusive: true,
+        type: "number",
+      });
+    }
+
+    if (x1 > maxDefaultValue) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: maxDefaultValue,
         inclusive: true,
         type: "number",
       });

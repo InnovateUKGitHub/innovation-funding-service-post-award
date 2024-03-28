@@ -2198,7 +2198,8 @@
           "errors": {
             "invalid_type_received_null": "Enter a financial year end turnover.",
             "invalid_type_received_string": "Enter a valid financial year end turnover.",
-            "too_small": "Enter a valid financial year end turnover."
+            "too_small": "Enter a valid financial year end turnover.",
+            "too_big": "Financial year end turnover must be {{count}} or less."
           }
         },
         "financialYearEndDate": {
