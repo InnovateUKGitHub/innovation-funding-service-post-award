@@ -10,7 +10,7 @@ import { z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
-const description = z.string().min(1).max(255);
+const description = z.string().min(1).max(131072);
 
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
@@ -56,9 +56,9 @@ export type MaterialsSchema = z.infer<typeof materialsSchema>;
 
 export const subcontractingSchema = z.object({
   id: costIdValidation.nullable(),
-  subcontractorName: z.string().min(1),
-  subcontractorCountry: z.string().min(1),
-  subcontractorRoleAndDescription: z.string().min(1),
+  subcontractorName: z.string().min(1).max(255),
+  subcontractorCountry: z.string().min(1).max(255),
+  subcontractorRoleAndDescription: z.string().min(1).max(131072),
   subcontractorCost: currencyValidation,
 });
 
@@ -79,7 +79,7 @@ export type CapitalUsageSchema = z.infer<typeof capitalUsageSchema>;
 export const travelAndASubsistenceSchema = z.object({
   id: costIdValidation.nullable(),
   descriptionOfCost: description,
-  numberOfTimes: requiredPositiveIntegerInput({ max: 1_000_000 }),
+  numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
   costOfEach: currencyValidation,
 });
 

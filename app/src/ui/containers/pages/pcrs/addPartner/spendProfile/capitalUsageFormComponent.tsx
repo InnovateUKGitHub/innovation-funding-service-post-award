@@ -157,7 +157,14 @@ export const CapitalUsageFormComponent = () => {
             <ValidationError error={validationErrors.itemType} />
             <RadioList register={register} name="itemType">
               {typeOptions.map(x => (
-                <Radio label={x.label} key={x.id} id={x.id} value={x.value} disabled={isFetching} />
+                <Radio
+                  label={x.label}
+                  key={x.id}
+                  id={x.id}
+                  value={x.value}
+                  disabled={isFetching}
+                  defaultChecked={String(x.value) === String(defaultCost.type)}
+                />
               ))}
             </RadioList>
           </FormGroup>

@@ -10,11 +10,11 @@ import { SubcontractingSchema, subcontractingSchema, errorMap } from "./spendPro
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { Textarea } from "@ui/components/atomicDesign/atoms/form/TextArea/Textarea";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 
 const isSubcontractingCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -40,10 +40,10 @@ export const SubcontractingFormComponent = () => {
     addNewItem,
   } = useContext(SpendProfileContext);
 
-  let defaultCost: PCRSpendProfileSubcontractingCostDto;
+  let defaultValues: PCRSpendProfileSubcontractingCostDto;
 
   if (addNewItem) {
-    defaultCost = {
+    defaultValues = {
       id: null as unknown as CostId,
       description: null,
       subcontractorCountry: null,
@@ -53,18 +53,18 @@ export const SubcontractingFormComponent = () => {
       costCategory: costCategory.type,
     };
   } else if (isSubcontractingCostDto(cost)) {
-    defaultCost = cost;
+    defaultValues = cost;
   } else {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, formState, register } = useForm<SubcontractingSchema>({
+  const { handleSubmit, formState, register, watch } = useForm<SubcontractingSchema>({
     defaultValues: {
-      id: defaultCost.id,
-      subcontractorName: defaultCost.description ?? "",
-      subcontractorCountry: defaultCost.subcontractorCountry ?? "",
-      subcontractorRoleAndDescription: defaultCost.subcontractorRoleAndDescription ?? "",
-      subcontractorCost: String(defaultCost.value ?? ""),
+      id: defaultValues.id,
+      subcontractorName: defaultValues.description ?? "",
+      subcontractorCountry: defaultValues.subcontractorCountry ?? "",
+      subcontractorRoleAndDescription: defaultValues.subcontractorRoleAndDescription ?? "",
+      subcontractorCost: String(defaultValues.value ?? ""),
     },
     resolver: zodResolver(subcontractingSchema, {
       errorMap,
@@ -116,13 +116,16 @@ export const SubcontractingFormComponent = () => {
             <TextInput inputWidth="one-half" {...register("subcontractorCountry")} disabled={isFetching} />
           </Field>
 
-          <Field
-            error={validationErrors.subcontractorRoleAndDescription}
+          <TextAreaField
             id="subcontractorRoleAndDescription"
+            error={validationErrors.subcontractorRoleAndDescription}
             label={getContent(x => x.pcrSpendProfileLabels.subcontracting.subcontractorRoleAndDescription)}
-          >
-            <Textarea {...register("subcontractorRoleAndDescription")} disabled={isFetching} />
-          </Field>
+            disabled={isFetching}
+            characterCount={watch("subcontractorRoleAndDescription")?.length ?? 0}
+            {...register("subcontractorRoleAndDescription")}
+            characterCountType="ascending"
+            defaultValue={defaultValues.subcontractorRoleAndDescription ?? ""}
+          />
 
           <Field
             error={validationErrors?.subcontractorCost}

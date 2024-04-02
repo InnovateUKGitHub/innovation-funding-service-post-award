@@ -2363,7 +2363,7 @@
           "subcontractorCountry": {
             "errors": {
               "too_small": "Enter subcontractor country.",
-              "too_big": "Subcontractor country must be {{count}} or fewer."
+              "too_big": "Subcontractor country must be {{count}} characters or fewer."
             }
           },
           "subcontractorName": {
@@ -2717,7 +2717,7 @@
         "subcontractorLocation": {
           "errors": {
             "too_small": "Enter the country where the subcontractor's work will be carried out.",
-            "too_big": "Country where the subcontactor's work will be carried out must be {{ count }} characters or less."
+            "too_big": "Country where the subcontractor's work will be carried out must be {{ count }} characters or less."
           }
         },
         "subcontractorDescription": {
