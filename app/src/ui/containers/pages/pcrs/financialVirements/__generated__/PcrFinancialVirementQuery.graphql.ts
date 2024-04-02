@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6c1b081a7010d6769adf0a1e9df0690a>>
+ * @generated SignedSource<<9043cb0110f33cac505b17881f6d34f8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -553,6 +553,13 @@ v19 = {
 },
 v20 = {
   "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
+},
+v21 = {
+  "alias": null,
   "args": (v15/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
@@ -597,13 +604,7 @@ v20 = {
                 (v17/*: any*/),
                 (v18/*: any*/),
                 (v19/*: any*/),
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isSalesforceSystemUser",
-                  "storageKey": null
-                }
+                (v20/*: any*/)
               ],
               "storageKey": null
             },
@@ -626,14 +627,14 @@ v20 = {
   ],
   "storageKey": null
 },
-v21 = [
+v22 = [
   {
     "fields": (v14/*: any*/),
     "kind": "ObjectValue",
     "name": "Acc_ProjectId__c"
   }
 ],
-v22 = {
+v23 = {
   "alias": null,
   "args": [
     (v9/*: any*/),
@@ -647,7 +648,7 @@ v22 = {
       }
     },
     {
-      "fields": (v21/*: any*/),
+      "fields": (v22/*: any*/),
       "kind": "ObjectValue",
       "name": "where"
     }
@@ -714,7 +715,7 @@ v22 = {
   ],
   "storageKey": null
 },
-v23 = {
+v24 = {
   "alias": "ParentPcr",
   "args": [
     (v13/*: any*/),
@@ -776,7 +777,7 @@ v23 = {
   ],
   "storageKey": null
 },
-v24 = {
+v25 = {
   "alias": "ChildPcr",
   "args": [
     (v13/*: any*/),
@@ -842,7 +843,7 @@ v24 = {
   ],
   "storageKey": null
 },
-v25 = {
+v26 = {
   "alias": null,
   "args": [
     (v9/*: any*/),
@@ -853,7 +854,7 @@ v25 = {
             {
               "fields": [
                 {
-                  "fields": (v21/*: any*/),
+                  "fields": (v22/*: any*/),
                   "kind": "ObjectValue",
                   "name": "Acc_ProjectParticipant__r"
                 }
@@ -1089,11 +1090,11 @@ return {
                 "selections": [
                   (v8/*: any*/),
                   (v12/*: any*/),
-                  (v20/*: any*/),
-                  (v22/*: any*/),
+                  (v21/*: any*/),
                   (v23/*: any*/),
                   (v24/*: any*/),
-                  (v25/*: any*/)
+                  (v25/*: any*/),
+                  (v26/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1165,6 +1166,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
+                              (v5/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -1184,6 +1186,7 @@ return {
                                   (v17/*: any*/),
                                   (v18/*: any*/),
                                   (v19/*: any*/),
+                                  (v20/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -1196,6 +1199,7 @@ return {
                                       (v17/*: any*/),
                                       (v18/*: any*/),
                                       (v19/*: any*/),
+                                      (v20/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -1304,11 +1308,11 @@ return {
                   },
                   (v8/*: any*/),
                   (v12/*: any*/),
-                  (v20/*: any*/),
-                  (v22/*: any*/),
+                  (v21/*: any*/),
                   (v23/*: any*/),
                   (v24/*: any*/),
-                  (v25/*: any*/)
+                  (v25/*: any*/),
+                  (v26/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1321,12 +1325,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "02b260d8e564a1ce962e39a0091d4032",
+    "cacheID": "57816d29572b77e893e363dc39b84052",
     "id": null,
     "metadata": {},
     "name": "PcrFinancialVirementQuery",
     "operationKind": "query",
-    "text": "query PcrFinancialVirementQuery(\n  $projectId: ID\n  $pcrId: ID\n  $itemId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_VirementsForParticipant: Acc_Virements__c(where: {Acc_ProjectChangeRequest__c: {eq: $itemId}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForParticipant\"}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_NewAwardRate__c {\n                value\n              }\n              Acc_CurrentAwardRate__c {\n                value\n              }\n              Acc_NewTotalEligibleCosts__c {\n                value\n              }\n              Acc_NewRemainingGrant__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_VirementsForCosts: Acc_Virements__c(where: {Acc_ParticipantVirement__r: {Acc_ProjectChangeRequest__c: {eq: $itemId}}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForCosts\"}}}, orderBy: {Acc_Profile__r: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Profile__r {\n                Id\n                Acc_CostCategory__r {\n                  Id\n                  Acc_CostCategoryName__c {\n                    value\n                  }\n                }\n              }\n              Acc_ParticipantVirement__c {\n                value\n              }\n              Acc_CurrentCosts__c {\n                value\n              }\n              Acc_ClaimedCostsToDate__c {\n                value\n              }\n              Acc_NewCosts__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NonFEC__c {\n                value\n              }\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        ParentPcr: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n        ChildPcr: Acc_ProjectChangeRequest__c(where: {Id: {eq: $itemId}}, first: 1) {\n          edges {\n            node {\n              Acc_GrantMovingOverFinancialYear__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, {or: [{RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategory__r {\n                Acc_CostCategoryName__c {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_OverrideAwardRate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProfileOverrideAwardRate__c {\n                value\n              }\n              Acc_CostCategoryAwardOverride__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrFinancialVirementQuery(\n  $projectId: ID\n  $pcrId: ID\n  $itemId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_VirementsForParticipant: Acc_Virements__c(where: {Acc_ProjectChangeRequest__c: {eq: $itemId}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForParticipant\"}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_NewAwardRate__c {\n                value\n              }\n              Acc_CurrentAwardRate__c {\n                value\n              }\n              Acc_NewTotalEligibleCosts__c {\n                value\n              }\n              Acc_NewRemainingGrant__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_VirementsForCosts: Acc_Virements__c(where: {Acc_ParticipantVirement__r: {Acc_ProjectChangeRequest__c: {eq: $itemId}}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForCosts\"}}}, orderBy: {Acc_Profile__r: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Profile__r {\n                Id\n                Acc_CostCategory__r {\n                  Id\n                  Acc_CostCategoryName__c {\n                    value\n                  }\n                }\n              }\n              Acc_ParticipantVirement__c {\n                value\n              }\n              Acc_CurrentCosts__c {\n                value\n              }\n              Acc_ClaimedCostsToDate__c {\n                value\n              }\n              Acc_NewCosts__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NonFEC__c {\n                value\n              }\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        ParentPcr: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n        ChildPcr: Acc_ProjectChangeRequest__c(where: {Id: {eq: $itemId}}, first: 1) {\n          edges {\n            node {\n              Acc_GrantMovingOverFinancialYear__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, {or: [{RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategory__r {\n                Acc_CostCategoryName__c {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_OverrideAwardRate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProfileOverrideAwardRate__c {\n                value\n              }\n              Acc_CostCategoryAwardOverride__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

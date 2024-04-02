@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c818f2c20bb7bbce3b5f00c754e694b>>
+ * @generated SignedSource<<4bd66d54ce156fad25763bd5387e6172>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -37,17 +37,20 @@ export type PageFragment$data = {
           readonly Acc_ProjectTitle__c: {
             readonly value: string | null | undefined;
           } | null | undefined;
+          readonly Id: string;
           readonly isActive: boolean;
           readonly roles: {
             readonly isAssociate: boolean;
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
+            readonly isSalesforceSystemUser: boolean;
             readonly partnerRoles: ReadonlyArray<{
               readonly isAssociate: boolean;
               readonly isFc: boolean;
               readonly isMo: boolean;
               readonly isPm: boolean;
+              readonly isSalesforceSystemUser: boolean;
               readonly partnerId: string;
             }>;
           };
@@ -67,31 +70,45 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isMo",
+  "name": "Id",
   "storageKey": null
 },
 v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isFc",
+  "name": "isMo",
   "storageKey": null
 },
 v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isPm",
+  "name": "isFc",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v4 = [
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
+},
+v6 = [
   {
     "alias": null,
     "args": null,
@@ -166,6 +183,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
+                    (v0/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -181,10 +199,11 @@ return {
                       "name": "roles",
                       "plural": false,
                       "selections": [
-                        (v0/*: any*/),
                         (v1/*: any*/),
                         (v2/*: any*/),
                         (v3/*: any*/),
+                        (v4/*: any*/),
+                        (v5/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -193,10 +212,11 @@ return {
                           "name": "partnerRoles",
                           "plural": true,
                           "selections": [
-                            (v0/*: any*/),
                             (v1/*: any*/),
                             (v2/*: any*/),
                             (v3/*: any*/),
+                            (v4/*: any*/),
+                            (v5/*: any*/),
                             {
                               "alias": null,
                               "args": null,
@@ -217,7 +237,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ProjectNumber__c",
                       "plural": false,
-                      "selections": (v4/*: any*/),
+                      "selections": (v6/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -227,7 +247,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ProjectTitle__c",
                       "plural": false,
-                      "selections": (v4/*: any*/),
+                      "selections": (v6/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -237,7 +257,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ProjectStatus__c",
                       "plural": false,
-                      "selections": (v4/*: any*/),
+                      "selections": (v6/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -264,13 +284,7 @@ return {
                               "name": "node",
                               "plural": false,
                               "selections": [
-                                {
-                                  "alias": null,
-                                  "args": null,
-                                  "kind": "ScalarField",
-                                  "name": "Id",
-                                  "storageKey": null
-                                },
+                                (v0/*: any*/),
                                 {
                                   "alias": null,
                                   "args": null,
@@ -278,7 +292,7 @@ return {
                                   "kind": "LinkedField",
                                   "name": "Acc_ParticipantStatus__c",
                                   "plural": false,
-                                  "selections": (v4/*: any*/),
+                                  "selections": (v6/*: any*/),
                                   "storageKey": null
                                 },
                                 {
@@ -288,7 +302,7 @@ return {
                                   "kind": "LinkedField",
                                   "name": "Acc_FlaggedParticipant__c",
                                   "plural": false,
-                                  "selections": (v4/*: any*/),
+                                  "selections": (v6/*: any*/),
                                   "storageKey": null
                                 }
                               ],
@@ -318,6 +332,6 @@ return {
 };
 })();
 
-(node as any).hash = "c1bd438325b5fe88a2bb3299d727b30a";
+(node as any).hash = "44d04b16271458b63cd60d5563ee30c4";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2ff349138c7d1011c79a0a7acfa5065e>>
+ * @generated SignedSource<<b8da3564de0f2d7144ed296c259732d8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -328,6 +328,13 @@ v13 = {
   "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -435,6 +442,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
+                              (v3/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -454,6 +462,7 @@ return {
                                   (v11/*: any*/),
                                   (v12/*: any*/),
                                   (v13/*: any*/),
+                                  (v14/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -466,6 +475,7 @@ return {
                                       (v11/*: any*/),
                                       (v12/*: any*/),
                                       (v13/*: any*/),
+                                      (v14/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -587,12 +597,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "52d3a527446353d5bd472bcdc097cb82",
+    "cacheID": "099b6dd57f427bf752f6e2150e11b4b7",
     "id": null,
     "metadata": {},
     "name": "PcrModifyOptionsQuery",
     "operationKind": "query",
-    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

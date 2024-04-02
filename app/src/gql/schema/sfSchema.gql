@@ -6024,29 +6024,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  THIS_FISCAL_YEAR
-  THIS_YEAR
-  THIS_WEEK
-  THIS_MONTH
-  LAST_YEAR
-  LAST_90_DAYS
-  YESTERDAY
-  NEXT_FISCAL_YEAR
-  LAST_MONTH
-  TOMORROW
-  LAST_FISCAL_YEAR
-  LAST_FISCAL_QUARTER
   LAST_QUARTER
-  NEXT_QUARTER
-  LAST_WEEK
-  NEXT_WEEK
-  NEXT_MONTH
-  NEXT_YEAR
-  TODAY
-  THIS_QUARTER
-  NEXT_90_DAYS
-  THIS_FISCAL_QUARTER
   NEXT_FISCAL_QUARTER
+  LAST_FISCAL_YEAR
+  LAST_MONTH
+  YESTERDAY
+  NEXT_MONTH
+  TODAY
+  THIS_WEEK
+  NEXT_90_DAYS
+  NEXT_WEEK
+  LAST_FISCAL_QUARTER
+  LAST_YEAR
+  NEXT_QUARTER
+  THIS_MONTH
+  TOMORROW
+  THIS_QUARTER
+  LAST_90_DAYS
+  NEXT_FISCAL_YEAR
+  THIS_FISCAL_YEAR
+  LAST_WEEK
+  THIS_FISCAL_QUARTER
+  THIS_YEAR
+  NEXT_YEAR
 }
 
 input DateOperators {
@@ -7314,11 +7314,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents ascending order."""
-  ASC
-
   """The enum value represents descending order."""
   DESC
+
+  """The enum value represents ascending order."""
+  ASC
 }
 
 enum ResultsOrder {

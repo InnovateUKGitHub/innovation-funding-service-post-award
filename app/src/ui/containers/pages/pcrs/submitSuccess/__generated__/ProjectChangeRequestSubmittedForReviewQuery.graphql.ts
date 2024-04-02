@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f3b909729bd54e15a1a0f3967eaece1f>>
+ * @generated SignedSource<<d8024c2afb507347239906b1c90ea0cb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -371,6 +371,13 @@ v13 = {
   "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -485,6 +492,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
+                              (v8/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -504,6 +512,7 @@ return {
                                   (v11/*: any*/),
                                   (v12/*: any*/),
                                   (v13/*: any*/),
+                                  (v14/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -516,6 +525,7 @@ return {
                                       (v11/*: any*/),
                                       (v12/*: any*/),
                                       (v13/*: any*/),
+                                      (v14/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -636,12 +646,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "764f4b1d03a89880c8bcc1db6b3d467d",
+    "cacheID": "aaf35f113ed66489870e93e27aeeeba2",
     "id": null,
     "metadata": {},
     "name": "ProjectChangeRequestSubmittedForReviewQuery",
     "operationKind": "query",
-    "text": "query ProjectChangeRequestSubmittedForReviewQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_LastUpdated__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectChangeRequestSubmittedForReviewQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_LastUpdated__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

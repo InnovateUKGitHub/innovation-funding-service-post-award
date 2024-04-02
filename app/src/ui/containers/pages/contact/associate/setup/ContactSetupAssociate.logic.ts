@@ -1,6 +1,5 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -29,8 +28,6 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
 
   const projectNode = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges).node;
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "title"]);
-
   const contacts = mapToContactDtoArray(projectNode?.Project_Contact_Links__r?.edges ?? [], [
     "id",
     "email",
@@ -38,7 +35,7 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
     "associateStartDate",
   ]);
 
-  return { project, contacts, setFetchKey };
+  return { contacts, setFetchKey, fragmentRef: data.salesforce.uiapi };
 };
 
 const useOnContactSetupAssociateSubmit = ({

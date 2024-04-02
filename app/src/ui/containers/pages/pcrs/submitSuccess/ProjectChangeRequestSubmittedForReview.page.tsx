@@ -12,7 +12,6 @@ import { FullDate } from "@ui/components/atomicDesign/atoms/Date";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { useContent } from "@ui/hooks/content.hook";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 
 export interface ProjectChangeRequestSubmittedForReviewParams {

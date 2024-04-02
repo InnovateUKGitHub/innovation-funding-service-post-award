@@ -14,9 +14,8 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -93,7 +92,9 @@ const ContactDateInput = ({
 const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParams) => {
   const routes = useRoutes();
   const { getContent } = useContent();
-  const { project, contacts, setFetchKey } = useContactSetupAssociatePageData({ projectId: props.projectId });
+  const { contacts, setFetchKey, fragmentRef } = useContactSetupAssociatePageData({
+    projectId: props.projectId,
+  });
 
   const { register, handleSubmit, setError, formState, getFieldState } = useForm<
     z.input<ContactSetupAssociateSchemaType>
@@ -112,13 +113,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
 
   return (
     <Page
-      pageTitle={
-        <Title
-          heading={getContent(x => x.pages.projectSetupAssociate.title)}
-          title={project.title}
-          projectNumber={project.projectNumber}
-        />
-      }
+      heading={getContent(x => x.pages.projectSetupAssociate.title)}
       apiError={apiError}
       backLink={
         <BackLink route={routes.projectDashboard.getLink({})}>
@@ -126,6 +121,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
         </BackLink>
       }
       validationErrors={validationErrors}
+      fragmentRef={fragmentRef}
     >
       {contacts.length !== 0 && <P>{getContent(x => x.pages.projectSetupAssociate.guidanceMessage)}</P>}
 

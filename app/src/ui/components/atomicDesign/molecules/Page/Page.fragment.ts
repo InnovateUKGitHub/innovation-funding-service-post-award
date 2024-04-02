@@ -6,17 +6,20 @@ export const pageFragment = graphql`
       Page: Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
         edges {
           node {
+            Id
             isActive
             roles {
               isMo
               isFc
               isPm
               isAssociate
+              isSalesforceSystemUser
               partnerRoles {
                 isMo
                 isFc
                 isPm
                 isAssociate
+                isSalesforceSystemUser
                 partnerId
               }
             }

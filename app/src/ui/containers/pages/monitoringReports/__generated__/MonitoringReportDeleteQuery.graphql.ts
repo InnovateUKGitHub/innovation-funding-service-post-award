@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3273fd53902e8d4be899e9f0c47fb056>>
+ * @generated SignedSource<<ee12bccd069c5affc99b65361f10b779>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -37,31 +37,45 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isMo",
+  "name": "Id",
   "storageKey": null
 },
 v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isFc",
+  "name": "isMo",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isPm",
+  "name": "isFc",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v5 = [
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isSalesforceSystemUser",
+  "storageKey": null
+},
+v7 = [
   {
     "alias": null,
     "args": null,
@@ -185,6 +199,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
+                              (v1/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -200,10 +215,11 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
-                                  (v1/*: any*/),
                                   (v2/*: any*/),
                                   (v3/*: any*/),
                                   (v4/*: any*/),
+                                  (v5/*: any*/),
+                                  (v6/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -212,10 +228,11 @@ return {
                                     "name": "partnerRoles",
                                     "plural": true,
                                     "selections": [
-                                      (v1/*: any*/),
                                       (v2/*: any*/),
                                       (v3/*: any*/),
                                       (v4/*: any*/),
+                                      (v5/*: any*/),
+                                      (v6/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -236,7 +253,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
                                 "plural": false,
-                                "selections": (v5/*: any*/),
+                                "selections": (v7/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -246,7 +263,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectTitle__c",
                                 "plural": false,
-                                "selections": (v5/*: any*/),
+                                "selections": (v7/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -256,7 +273,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectStatus__c",
                                 "plural": false,
-                                "selections": (v5/*: any*/),
+                                "selections": (v7/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -283,13 +300,7 @@ return {
                                         "name": "node",
                                         "plural": false,
                                         "selections": [
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "kind": "ScalarField",
-                                            "name": "Id",
-                                            "storageKey": null
-                                          },
+                                          (v1/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -297,7 +308,7 @@ return {
                                             "kind": "LinkedField",
                                             "name": "Acc_ParticipantStatus__c",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v7/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -307,7 +318,7 @@ return {
                                             "kind": "LinkedField",
                                             "name": "Acc_FlaggedParticipant__c",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v7/*: any*/),
                                             "storageKey": null
                                           }
                                         ],
@@ -340,12 +351,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "50b14ee0cb2dffade37e57f65d0e0f88",
+    "cacheID": "e6a0021d0b375296ad40ad975cef922f",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportDeleteQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportDeleteQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

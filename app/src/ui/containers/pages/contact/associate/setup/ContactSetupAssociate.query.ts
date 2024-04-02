@@ -4,17 +4,12 @@ const contactSetupAssociateQuery = graphql`
   query ContactSetupAssociateQuery($projectId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Id
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
                 Project_Contact_Links__r(where: { Acc_Role__c: { eq: "Associate" } }, first: 2000) {
                   edges {
                     node {

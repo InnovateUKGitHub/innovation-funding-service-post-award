@@ -11,6 +11,11 @@ import {
   ProjectSuspensionMessageFragment$key,
 } from "./__generated__/ProjectSuspensionMessageFragment.graphql";
 import { QueryOptions } from "@gql/hooks/useRefreshQuery";
+import {
+  PageFragment$data,
+  PageFragment$key,
+} from "@ui/components/atomicDesign/molecules/Page/__generated__/PageFragment.graphql";
+import { pageFragment } from "@ui/components/atomicDesign/molecules/Page/Page.fragment";
 
 interface ProjectSuspensionMessageWithFragmentProps {
   projectId: ProjectId;
@@ -45,9 +50,29 @@ const useProjectSuspensionMessageWithFragmentData = (fragmentRef: unknown) => {
   return { project, partners };
 };
 
+const useProjectSuspensionMessageWithPageFragmentData = (fragmentRef: unknown) => {
+  if (!isValidFragmentKey<PageFragment$key>(fragmentRef, "PageFragment")) {
+    throw new Error("Project Suspension Message is missing a PageFragment reference");
+  }
+
+  const fragment: PageFragment$data = useFragment(pageFragment, fragmentRef);
+
+  const projectNode = getFirstEdge(fragment?.query?.Page?.edges).node;
+
+  const project = mapToProjectDto(projectNode, ["status", "roles", "partnerRoles"]);
+  const partners = mapToPartnerDtoArray(
+    projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+    ["id", "partnerStatus", "isFlagged"],
+    {},
+  );
+
+  return { project, partners };
+};
+
 export {
   ProjectSuspensionMessageProps,
   ProjectSuspensionMessageStandaloneProps,
   ProjectSuspensionMessageWithFragmentProps,
   useProjectSuspensionMessageWithFragmentData,
+  useProjectSuspensionMessageWithPageFragmentData,
 };
