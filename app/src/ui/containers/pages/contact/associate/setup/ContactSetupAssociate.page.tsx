@@ -38,12 +38,14 @@ const ContactDateInput = ({
   register,
   index,
   disabled,
+  id,
 }: {
   contact: Pick<ProjectContactDto, "id" | "associateStartDate">;
   register: UseFormRegister<z.input<ContactSetupAssociateSchemaType>>;
   getFieldState: UseFormGetFieldState<z.input<ContactSetupAssociateSchemaType>>;
   index: number;
   disabled?: boolean;
+  id?: string;
 }) => {
   const defaults = useServerInput<z.input<ContactSetupAssociateSchemaType>>();
 
@@ -61,7 +63,7 @@ const ContactDateInput = ({
     <>
       <ValidationError error={getFieldState(`contacts.${index}`).error} />
       <input type="hidden" value={contact.id} {...register(`contacts.${index}.id`)} />
-      <DateInputGroup hasError={!!getFieldState(`contacts.${index}`).error}>
+      <DateInputGroup hasError={!!getFieldState(`contacts.${index}`).error} id={id}>
         <DateInput
           type="day"
           defaultValue={defaultDay}
@@ -149,7 +151,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
             </SummaryList>
             <Fieldset>
               <FormGroup hasError={!!getFieldState("contacts.0").error}>
-                <Label htmlFor="date" bold>
+                <Label htmlFor="start_date" bold>
                   {getContent(x => x.pages.projectSetupAssociate.startDate)}
                 </Label>
                 <ContactDateInput
@@ -158,6 +160,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
                   register={register}
                   getFieldState={getFieldState}
                   index={0}
+                  id="start_date"
                 />
               </FormGroup>
             </Fieldset>
@@ -188,6 +191,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
                           register={register}
                           getFieldState={getFieldState}
                           index={i}
+                          aria-label={`enter start date for ${contact.name}`}
                         />
                       </FormGroup>
                     </Fieldset>
