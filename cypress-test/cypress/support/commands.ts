@@ -258,6 +258,18 @@ function clickOn(...args: unknown[]) {
   }
 }
 
+function enter(label: string, value: string) {
+  cy.getByLabel(label).clear().type(value);
+}
+
+function checkEntry(label: string, value: string) {
+  cy.getByLabel(label).should("have.value", value);
+}
+
+function selectProject(label: string) {
+  cy.getByQA("pending-and-open-projects").contains(label).click();
+}
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -292,3 +304,6 @@ Cypress.Commands.add("downloadFile", downloadFile);
 Cypress.Commands.add("createPcr", createPcr);
 Cypress.Commands.add("clickOn", clickOn);
 Cypress.Commands.add("getHintFromLabel", getHintFromLabel);
+Cypress.Commands.add("enter", enter);
+Cypress.Commands.add("checkEntry", checkEntry);
+Cypress.Commands.add("selectProject", selectProject);

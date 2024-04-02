@@ -215,6 +215,25 @@ declare global {
        * match the id of the input element but with `hint-for-` prefixing it
        */
       getHintFromLabel(label: string): Chainable<Element>;
+
+      /**
+       * enters the value into the element according to the label
+       *
+       * the label must be connected to the input via `for` to match the `id`
+       */
+      enter(label: string, value: string): void;
+
+      /**
+       * checks the value in an input element according to the label
+       *
+       * the label must be connected to the input via `for` to match the `id`
+       */
+      checkEntry(label: string, value: string): void;
+
+      /**
+       * selects the open project matching the label and clicks on it
+       */
+      selectProject(label: string): void;
     }
   }
 }
