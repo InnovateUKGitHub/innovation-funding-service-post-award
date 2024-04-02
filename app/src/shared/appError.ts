@@ -33,7 +33,7 @@ export class InActiveProjectError extends ForbiddenError {
 
 export class ActiveProjectError extends ForbiddenError {
   constructor(readonly original?: Error) {
-    super("Project must be 'Offet Letter Sent' to proceed.", original);
+    super("Project must be 'Offer Letter Sent' to proceed.", original);
   }
 }
 
