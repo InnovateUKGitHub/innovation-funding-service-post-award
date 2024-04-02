@@ -140,10 +140,20 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
 
   if (projectNotSetup) {
     if (!partner?.id) throw new Error("trying to setup without a valid partner id");
+
+    /*
+     * if project not setup then navigate to setup bank details, spend profile etc.
+     */
     route = routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id });
   } else if (getIsKtpOfferLetterSent(project)) {
+    /**
+     * if associate start date not set, then navigate to associate start date page
+     */
     route = routes.contactSetupAssociate.getLink({ projectId: project.id });
   } else {
+    /**
+     * navigate to project overview
+     */
     route = routes.projectOverview.getLink({ projectId: project.id });
   }
 
