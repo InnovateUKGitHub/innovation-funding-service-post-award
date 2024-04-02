@@ -7,6 +7,19 @@ export const pageFragment = graphql`
         edges {
           node {
             isActive
+            roles {
+              isMo
+              isFc
+              isPm
+              isAssociate
+              partnerRoles {
+                isMo
+                isFc
+                isPm
+                isAssociate
+                partnerId
+              }
+            }
             Acc_ProjectNumber__c {
               value
             }
@@ -15,6 +28,19 @@ export const pageFragment = graphql`
             }
             Acc_ProjectStatus__c {
               value
+            }
+            Acc_ProjectParticipantsProject__r {
+              edges {
+                node {
+                  Id
+                  Acc_ParticipantStatus__c {
+                    value
+                  }
+                  Acc_FlaggedParticipant__c {
+                    value
+                  }
+                }
+              }
             }
           }
         }

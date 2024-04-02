@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<315e8528c0d9880a5df51de5bc8e1e83>>
+ * @generated SignedSource<<70144bd59177ef9f169da6991e829fec>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -84,7 +84,14 @@ v1 = {
   "kind": "LocalArgument",
   "name": "projectId"
 },
-v2 = [
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "Id",
+  "storageKey": null
+},
+v3 = [
   {
     "alias": null,
     "args": null,
@@ -93,7 +100,7 @@ v2 = [
     "storageKey": null
   }
 ],
-v3 = {
+v4 = {
   "alias": null,
   "args": [
     {
@@ -135,13 +142,7 @@ v3 = {
           "name": "node",
           "plural": false,
           "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "Id",
-              "storageKey": null
-            },
+            (v2/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -149,7 +150,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_ProjectId__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -167,7 +168,7 @@ v3 = {
                   "kind": "LinkedField",
                   "name": "Name",
                   "plural": false,
-                  "selections": (v2/*: any*/),
+                  "selections": (v3/*: any*/),
                   "storageKey": null
                 }
               ],
@@ -180,7 +181,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AccountNumber__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -190,7 +191,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AddressBuildingName__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -200,7 +201,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AddressLocality__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -210,7 +211,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AddressPostcode__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -220,7 +221,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AddressStreet__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -230,7 +231,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_AddressTown__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -240,7 +241,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_RegistrationNumber__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -250,7 +251,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_FirstName__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -260,7 +261,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_LastName__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             },
             {
@@ -270,7 +271,7 @@ v3 = {
               "kind": "LinkedField",
               "name": "Acc_SortCode__c",
               "plural": false,
-              "selections": (v2/*: any*/),
+              "selections": (v3/*: any*/),
               "storageKey": null
             }
           ],
@@ -280,6 +281,34 @@ v3 = {
       "storageKey": null
     }
   ],
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isMo",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
   "storageKey": null
 };
 return {
@@ -321,7 +350,7 @@ return {
                 "name": "query",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/)
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -425,11 +454,48 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "Ext_Project_Roles",
+                                "kind": "LinkedField",
+                                "name": "roles",
+                                "plural": false,
+                                "selections": [
+                                  (v5/*: any*/),
+                                  (v6/*: any*/),
+                                  (v7/*: any*/),
+                                  (v8/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Ext_Partner_Roles",
+                                    "kind": "LinkedField",
+                                    "name": "partnerRoles",
+                                    "plural": true,
+                                    "selections": [
+                                      (v5/*: any*/),
+                                      (v6/*: any*/),
+                                      (v7/*: any*/),
+                                      (v8/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "partnerId",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
                                 "plural": false,
-                                "selections": (v2/*: any*/),
+                                "selections": (v3/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -439,7 +505,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectTitle__c",
                                 "plural": false,
-                                "selections": (v2/*: any*/),
+                                "selections": (v3/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -449,7 +515,61 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectStatus__c",
                                 "plural": false,
-                                "selections": (v2/*: any*/),
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "Acc_ProjectParticipant__cConnection",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectParticipantsProject__r",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Acc_ProjectParticipant__cEdge",
+                                    "kind": "LinkedField",
+                                    "name": "edges",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "Acc_ProjectParticipant__c",
+                                        "kind": "LinkedField",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          (v2/*: any*/),
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "PicklistValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_ParticipantStatus__c",
+                                            "plural": false,
+                                            "selections": (v3/*: any*/),
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "BooleanValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_FlaggedParticipant__c",
+                                            "plural": false,
+                                            "selections": (v3/*: any*/),
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
                                 "storageKey": null
                               }
                             ],
@@ -461,7 +581,7 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v3/*: any*/)
+                  (v4/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -474,12 +594,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fff18cc18090f54c0d605f66df6abd87",
+    "cacheID": "dce05bafd6be00d8af67a6286f8883e0",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupBankDetailsVerifyQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupBankDetailsVerifyQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountNumber__c {\n                value\n              }\n              Acc_AddressBuildingName__c {\n                value\n              }\n              Acc_AddressLocality__c {\n                value\n              }\n              Acc_AddressPostcode__c {\n                value\n              }\n              Acc_AddressStreet__c {\n                value\n              }\n              Acc_AddressTown__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_FirstName__c {\n                value\n              }\n              Acc_LastName__c {\n                value\n              }\n              Acc_SortCode__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupBankDetailsVerifyQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountNumber__c {\n                value\n              }\n              Acc_AddressBuildingName__c {\n                value\n              }\n              Acc_AddressLocality__c {\n                value\n              }\n              Acc_AddressPostcode__c {\n                value\n              }\n              Acc_AddressStreet__c {\n                value\n              }\n              Acc_AddressTown__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_FirstName__c {\n                value\n              }\n              Acc_LastName__c {\n                value\n              }\n              Acc_SortCode__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

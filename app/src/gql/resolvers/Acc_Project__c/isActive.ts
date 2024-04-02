@@ -17,7 +17,7 @@ const getIsActive = (status: string) => {
 const projectIsActiveResolver: IFieldResolverOptions = {
   selectionSet: `{ Acc_ProjectStatus__c { value } }`,
   resolve(input) {
-    getIsActive(input.Acc_ProjectStatus__c.value);
+    return getIsActive(input.Acc_ProjectStatus__c.value);
   },
 };
 

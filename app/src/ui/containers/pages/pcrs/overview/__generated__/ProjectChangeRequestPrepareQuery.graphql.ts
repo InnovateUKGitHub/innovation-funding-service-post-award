@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6ef1e74e8587f393b7f72a14572dfd4f>>
+ * @generated SignedSource<<16cce55bc992b07e91d4e138069c5c80>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -381,6 +381,34 @@ v11 = {
 },
 v12 = {
   "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isMo",
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v15 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v16 = {
+  "alias": null,
   "args": [
     (v11/*: any*/)
   ],
@@ -414,34 +442,10 @@ v12 = {
               "name": "roles",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isFc",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isMo",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isPm",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "isAssociate",
-                  "storageKey": null
-                }
+                (v12/*: any*/),
+                (v13/*: any*/),
+                (v14/*: any*/),
+                (v15/*: any*/)
               ],
               "storageKey": null
             },
@@ -513,7 +517,7 @@ v12 = {
   ],
   "storageKey": null
 },
-v13 = {
+v17 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -523,7 +527,7 @@ v13 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v14 = {
+v18 = {
   "alias": "OtherPCRs",
   "args": [
     (v2/*: any*/),
@@ -557,7 +561,7 @@ v14 = {
           "plural": false,
           "selections": [
             (v7/*: any*/),
-            (v13/*: any*/)
+            (v17/*: any*/)
           ],
           "storageKey": null
         }
@@ -567,12 +571,12 @@ v14 = {
   ],
   "storageKey": "Acc_ProjectChangeRequest__c(first:2000,orderBy:{\"Acc_RequestNumber__c\":{\"order\":\"DESC\"}})"
 },
-v15 = {
+v19 = {
   "kind": "Literal",
   "name": "first",
   "value": 1
 },
-v16 = {
+v20 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -582,7 +586,7 @@ v16 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v17 = {
+v21 = {
   "alias": null,
   "args": null,
   "concreteType": "LongTextAreaValue",
@@ -592,10 +596,10 @@ v17 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v18 = {
+v22 = {
   "alias": null,
   "args": [
-    (v15/*: any*/),
+    (v19/*: any*/),
     {
       "fields": [
         (v5/*: any*/),
@@ -640,7 +644,7 @@ v18 = {
           "plural": false,
           "selections": [
             (v7/*: any*/),
-            (v13/*: any*/),
+            (v17/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -661,8 +665,8 @@ v18 = {
               "selections": (v9/*: any*/),
               "storageKey": null
             },
-            (v16/*: any*/),
-            (v17/*: any*/),
+            (v20/*: any*/),
+            (v21/*: any*/),
             {
               "alias": null,
               "args": [
@@ -690,9 +694,9 @@ v18 = {
                       "plural": false,
                       "selections": [
                         (v7/*: any*/),
+                        (v21/*: any*/),
                         (v17/*: any*/),
-                        (v13/*: any*/),
-                        (v16/*: any*/),
+                        (v20/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -871,9 +875,9 @@ return {
                 "plural": false,
                 "selections": [
                   (v10/*: any*/),
-                  (v12/*: any*/),
-                  (v14/*: any*/),
-                  (v18/*: any*/)
+                  (v16/*: any*/),
+                  (v18/*: any*/),
+                  (v22/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -923,7 +927,7 @@ return {
                   {
                     "alias": "Page",
                     "args": [
-                      (v15/*: any*/),
+                      (v19/*: any*/),
                       (v11/*: any*/)
                     ],
                     "concreteType": "Acc_Project__cConnection",
@@ -957,6 +961,43 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "Ext_Project_Roles",
+                                "kind": "LinkedField",
+                                "name": "roles",
+                                "plural": false,
+                                "selections": [
+                                  (v13/*: any*/),
+                                  (v12/*: any*/),
+                                  (v14/*: any*/),
+                                  (v15/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Ext_Partner_Roles",
+                                    "kind": "LinkedField",
+                                    "name": "partnerRoles",
+                                    "plural": true,
+                                    "selections": [
+                                      (v13/*: any*/),
+                                      (v12/*: any*/),
+                                      (v14/*: any*/),
+                                      (v15/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "partnerId",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
@@ -983,6 +1024,60 @@ return {
                                 "plural": false,
                                 "selections": (v9/*: any*/),
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "Acc_ProjectParticipant__cConnection",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectParticipantsProject__r",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Acc_ProjectParticipant__cEdge",
+                                    "kind": "LinkedField",
+                                    "name": "edges",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "Acc_ProjectParticipant__c",
+                                        "kind": "LinkedField",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          (v7/*: any*/),
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "PicklistValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_ParticipantStatus__c",
+                                            "plural": false,
+                                            "selections": (v9/*: any*/),
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "BooleanValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_FlaggedParticipant__c",
+                                            "plural": false,
+                                            "selections": (v9/*: any*/),
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -994,9 +1089,9 @@ return {
                     "storageKey": null
                   },
                   (v10/*: any*/),
-                  (v12/*: any*/),
-                  (v14/*: any*/),
-                  (v18/*: any*/)
+                  (v16/*: any*/),
+                  (v18/*: any*/),
+                  (v22/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1009,12 +1104,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "805ecdc5c41cec1774db14cc2d8e2ee4",
+    "cacheID": "1f3b97ee68492ada29669affdcc3dd22",
     "id": null,
     "metadata": {},
     "name": "ProjectChangeRequestPrepareQuery",
     "operationKind": "query",
-    "text": "query ProjectChangeRequestPrepareQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_MonitoringLevel__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Comments__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Comments__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectChangeRequestPrepareQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_MonitoringLevel__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Comments__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Comments__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

@@ -22,7 +22,7 @@ type PageWithFragmentProps = {
   heading?: string;
 };
 
-export const Page = ({ fragmentRef, children, heading, ...props }: PageWithFragmentProps) => {
+export const Page = ({ fragmentRef, children, heading, partnerId, ...props }: PageWithFragmentProps) => {
   if (!isValidFragmentKey<PageFragment$key>(fragmentRef, "PageFragment")) {
     throw new Error("Page is missing a PageFragment reference");
   }
@@ -35,9 +35,10 @@ export const Page = ({ fragmentRef, children, heading, ...props }: PageWithFragm
 
   return (
     <PageComponent
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} heading={heading} />}
+      pageTitle={<Title heading={heading} projectNumber={project.projectNumber} title={project.title} />}
       fragmentRef={fragmentRef}
       projectId={project.id}
+      partnerId={partnerId}
       isActive={project.isActive}
       {...props}
     >

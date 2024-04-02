@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4f23687a6b7a3ee92f9311be31053763>>
+ * @generated SignedSource<<777c8521e5b956a426eeee9ef1913cdd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -638,6 +638,34 @@ v11 = {
     }
   ],
   "storageKey": "Acc_MonitoringQuestion__c(first:1000)"
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isMo",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v15 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -784,6 +812,43 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "Ext_Project_Roles",
+                                "kind": "LinkedField",
+                                "name": "roles",
+                                "plural": false,
+                                "selections": [
+                                  (v12/*: any*/),
+                                  (v13/*: any*/),
+                                  (v14/*: any*/),
+                                  (v15/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Ext_Partner_Roles",
+                                    "kind": "LinkedField",
+                                    "name": "partnerRoles",
+                                    "plural": true,
+                                    "selections": [
+                                      (v12/*: any*/),
+                                      (v13/*: any*/),
+                                      (v14/*: any*/),
+                                      (v15/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "partnerId",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
@@ -810,6 +875,60 @@ return {
                                 "plural": false,
                                 "selections": (v6/*: any*/),
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "Acc_ProjectParticipant__cConnection",
+                                "kind": "LinkedField",
+                                "name": "Acc_ProjectParticipantsProject__r",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Acc_ProjectParticipant__cEdge",
+                                    "kind": "LinkedField",
+                                    "name": "edges",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "Acc_ProjectParticipant__c",
+                                        "kind": "LinkedField",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          (v4/*: any*/),
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "PicklistValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_ParticipantStatus__c",
+                                            "plural": false,
+                                            "selections": (v6/*: any*/),
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "BooleanValue",
+                                            "kind": "LinkedField",
+                                            "name": "Acc_FlaggedParticipant__c",
+                                            "plural": false,
+                                            "selections": (v6/*: any*/),
+                                            "storageKey": null
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -835,12 +954,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "18df06f5f81f9c52bf950e50562f0ab7",
+    "cacheID": "d6d7aae2a5fd0fa5a68ab921a203f1a8",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportWorkflowQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportWorkflowQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {Acc_MonitoringReport__c: {eq: $monitoringReportId}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_NewMonitoringReportStatus__c {\n                value\n              }\n              Acc_PreviousMonitoringReportStatus__c {\n                value\n              }\n              Acc_MonitoringReport__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringAnswer__c(where: {or: [{Id: {eq: $monitoringReportId}}, {and: [{Acc_MonitoringHeader__c: {eq: $monitoringReportId}}, {RecordType: {Name: {eq: \"Monitoring Answer\"}}}]}]}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_MonitoringHeader__c {\n                value\n              }\n              Acc_Question__c {\n                value\n              }\n              Acc_QuestionComments__c {\n                value\n              }\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringQuestion__c(first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_QuestionScore__c {\n                value\n              }\n              Acc_QuestionText__c {\n                value\n              }\n              Acc_QuestionDescription__c {\n                value\n              }\n              Acc_ActiveFlag__c {\n                value\n              }\n              Acc_ScoredQuestion__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportWorkflowQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {Acc_MonitoringReport__c: {eq: $monitoringReportId}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_NewMonitoringReportStatus__c {\n                value\n              }\n              Acc_PreviousMonitoringReportStatus__c {\n                value\n              }\n              Acc_MonitoringReport__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringAnswer__c(where: {or: [{Id: {eq: $monitoringReportId}}, {and: [{Acc_MonitoringHeader__c: {eq: $monitoringReportId}}, {RecordType: {Name: {eq: \"Monitoring Answer\"}}}]}]}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_MonitoringHeader__c {\n                value\n              }\n              Acc_Question__c {\n                value\n              }\n              Acc_QuestionComments__c {\n                value\n              }\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringQuestion__c(first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_QuestionScore__c {\n                value\n              }\n              Acc_QuestionText__c {\n                value\n              }\n              Acc_QuestionDescription__c {\n                value\n              }\n              Acc_ActiveFlag__c {\n                value\n              }\n              Acc_ScoredQuestion__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

@@ -44,7 +44,7 @@ const useClaimLineItemsData = (
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const project = mapToProjectDto(projectNode, ["id", "competitionType"]);
+  const project = mapToProjectDto(projectNode, ["id", "competitionType", "title", "projectNumber", "isActive"]);
 
   const partner = mapToPartnerDto(partnerNode, ["id", "organisationType", "overheadRate"], {});
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
