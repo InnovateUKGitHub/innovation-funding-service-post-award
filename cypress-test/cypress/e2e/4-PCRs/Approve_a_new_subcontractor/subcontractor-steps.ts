@@ -59,7 +59,8 @@ export const approveSubcontractorPromptValidation = () => {
 };
 
 export const subcontractorSaveAndReturn = () => {
-  cy.button("Save and continue").click();
+  cy.button("Save and continue").as("btn");
+  cy.get("@btn").click();
   cy.button("Save and return to request").click();
   cy.heading("Request");
   cy.get("li").contains("Approve a new subcontractor");
@@ -195,8 +196,8 @@ export const validateCountry = () => {
     .trigger("input");
   cy.getByLabel("Country where the subcontractor's work will be carried out").type("{moveToEnd}").type("l");
   cy.button("Save and continue").click();
-  cy.validationLink("Country where the subcontactor's work will be carried out must be 100 characters or less.");
-  cy.paragraph("Country where the subcontactor's work will be carried out must be 100 characters or less.");
+  cy.validationLink("Country where the subcontractor's work will be carried out must be 100 characters or less.");
+  cy.paragraph("Country where the subcontractor's work will be carried out must be 100 characters or less.");
   cy.getByLabel("Country where the subcontractor's work will be carried out").type("{moveToEnd}{backspace}");
   cy.button("Save and continue").click();
   cy.getListItemFromKey("Country where the subcontractor's work will be carried out", loremIpsum100Char);

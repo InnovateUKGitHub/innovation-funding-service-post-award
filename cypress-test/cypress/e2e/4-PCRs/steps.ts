@@ -949,12 +949,20 @@ export const uploadPartnerInfo = () => {
 };
 
 export const validateFundingLevelInput = () => {
-  ["200", "2000", "100.22222"].forEach(entry => {
+  ["99.333", "999.999", "222.22222222222", "100.22222"].forEach(entry => {
     cy.get("#awardRate").clear().type(entry);
+    cy.clickOn("Save and continue");
+    cy.validationLink("Funding level must be 2 decimal places or fewer.");
+    cy.paragraph("Funding level must be 2 decimal places or fewer.");
+  });
+
+  ["200", "2000", "101", "100.01"].forEach(input => {
+    cy.get("#awardRate").clear().type(input);
     cy.clickOn("Save and continue");
     cy.validationLink("Enter a funding level up to 100%.");
     cy.paragraph("Enter a funding level up to 100%.");
   });
+
   ["Lorem", "one hundred", "1 0 0", "£$%^*", "-100", "This is far too long for a percentage input"].forEach(input => {
     cy.get("#awardRate").clear().type(input);
     cy.clickOn("Save and continue");
@@ -1256,9 +1264,9 @@ export const existingProjectDetails = () => {
 };
 
 export const selectDateDropdown = () => {
-  cy.getByLabel("Please select a new date from the available list").select("March 2024");
+  cy.getByLabel("Please select a new date from the available list").select("December 2024");
   cy.getByLabel("Duration");
-  cy.getByLabel("Duration").contains("12 months");
+  cy.get("#proposed-duration").contains("22 months");
 };
 
 export const existingSubheadings = () => {
@@ -1277,7 +1285,7 @@ export const proposedSubheadings = () => {
     cy.getByQA("newStartToEndDate").contains(date);
   });
   cy.get("a").contains("Edit");
-  ["Duration", "13 months"].forEach(duration => {
+  ["Duration", "22 months"].forEach(duration => {
     cy.getByQA("newDuration").contains(duration);
   });
 };

@@ -1,6 +1,7 @@
 import { pounds } from "common/pounds";
 import { addPartnerLabourGuidance } from "../steps";
 import { visitApp } from "common/visit";
+import { loremIpsum131k, loremIpsum255Char } from "common/lorem";
 
 const refreshTest = () => {
   cy.get("main").then($main => {
@@ -238,11 +239,43 @@ export const checkAddSubcontractingItem = () => {
       cy.validationLink("Enter subcontractor country.");
       cy.validationLink("Enter role and description.");
       cy.validationLink("Enter cost.");
-      cy.getByLabel("Subcontractor name").type("Donald duck");
-      cy.getByLabel("Country where the subcontractor will work").type("USA");
+      cy.getByLabel("Subcontractor name").invoke("val", loremIpsum255Char).trigger("input");
+      cy.getByLabel("Subcontractor name").type("{moveToEnd}tt");
+      cy.getByLabel("Country where the subcontractor will work").invoke("val", loremIpsum255Char).trigger("input");
+      cy.getByLabel("Country where the subcontractor will work").type("{moveToEnd}tt");
+      cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do")
+        .invoke("val", loremIpsum131k)
+        .trigger("input");
       cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do").type(
-        "ducky activities",
+        "{moveToEnd}t",
       );
+      cy.paragraph("You have 131073 characters");
+      cy.clickOn("Save and return to subcontracting");
+      cy.validationLink("Subcontractor name must be 255 or fewer.");
+      cy.paragraph("Subcontractor name must be 255 or fewer.");
+      cy.validationLink("Subcontractor country must be 255 characters or fewer.");
+      cy.paragraph("Subcontractor country must be 255 characters or fewer.");
+      cy.validationLink("Role and description must be 131072 or fewer.");
+      cy.paragraph("Role and description must be 131072 or fewer.");
+      cy.getByLabel("Subcontractor name").type("{backspace}");
+      cy.getByLabel("Country where the subcontractor will work").type("{backspace}");
+      cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do").type(
+        "{backspace}",
+      );
+      cy.paragraph("You have 131072 characters");
+      [
+        "Subcontractor name must be 255 or fewer.",
+        "Subcontractor country must be 255 characters or fewer.",
+        "Role and description must be 131072 or fewer.",
+      ].forEach(validation => {
+        cy.getByQA("validation-summary").should("not.contain", validation);
+      });
+      cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do")
+        .clear()
+        .type("ducky activities");
+      cy.paragraph("You have 16 characters");
+      cy.getByLabel("Subcontractor name").clear().type("Donald duck");
+      cy.getByLabel("Country where the subcontractor will work").clear().type("USA");
       cy.validateCurrency("Cost (£)", "cost", String(cost));
       checkSummary("Subcontracting", "Donald duck", cost, categoryTotal, totalCost);
     });
@@ -338,8 +371,15 @@ export const checkAddOtherCostsItem = (pageNumber: OtherCostPages) => {
       cy.clickOn(`Save and return to ${page.toLowerCase()}`);
       cy.validationLink("Enter description of cost.");
       cy.validationLink("Enter estimated cost.");
-
-      cy.getByLabel("Description and justification of the cost").type("Other expenses");
+      cy.getByLabel("Description and justification of the cost").invoke("val", loremIpsum131k).trigger("input");
+      cy.getByLabel("Description and justification of the cost").type("{moveToEnd}t");
+      cy.paragraph("You have 131073 characters");
+      cy.button("Save and return to other costs").click();
+      cy.validationLink("Description of cost must be 131072 or fewer.");
+      cy.paragraph("Description of cost must be 131072 or fewer.");
+      cy.getByLabel("Description and justification of the cost").type("{backspace}");
+      cy.getByQA("validation-summary").should("not.contain", "Description of cost must be 131072 or fewer.");
+      cy.getByLabel("Description and justification of the cost").clear().type("Other expenses");
       cy.validateCurrency("Estimated cost (£)", "estimated cost", String(cost));
       checkSummary(page, "Other expenses", cost, categoryTotal, totalCost);
     });
@@ -473,6 +513,7 @@ const checkSummaryForEdit = (
   diff: number,
   label: string,
   newValue: string,
+  saveAndReturn: boolean,
 ) => {
   refreshTest();
   cy.get("th#new-partner-total-costs").then($span => {
@@ -487,18 +528,42 @@ const checkSummaryForEdit = (
       cy.clickOn(`Save and return to ${category.toLowerCase()}`);
       cy.checkTotalFor(description, pounds(cost));
       cy.checkTotalFor(`Total ${category.toLowerCase()}`, pounds(categoryTotal + diff));
-      cy.clickOn("Save and return to project costs");
-      cy.get("h2").contains("Project costs for new partner");
-      cy.checkTotalFor(category, pounds(categoryTotal + diff));
-      cy.checkTotalFor("Total costs (£)", pounds(totalCost + diff));
+      if (saveAndReturn === true) {
+        cy.clickOn("Save and return to project costs");
+        cy.get("h2").contains("Project costs for new partner");
+        cy.checkTotalFor(category, pounds(categoryTotal + diff));
+        cy.checkTotalFor("Total costs (£)", pounds(totalCost + diff));
+      }
     });
   });
+};
+
+export const checkCapUsageSavedData = (
+  lineItem: string,
+  newOrExisting: string,
+  period: number,
+  netValue: number,
+  residualValue: number,
+  utilisation: number,
+  netCost: string,
+) => {
+  cy.tableCell(lineItem).siblings().contains("a", "Edit").click();
+  cy.get("h2").contains("Capital usage");
+  cy.getByAriaLabel("Item description").should("have.value", lineItem);
+  cy.getByLabel(newOrExisting).should("have.attr", "checked");
+  cy.getByLabel("Depreciation period (months)").should("have.value", period);
+  cy.getByLabel("Net present value (£)").should("have.value", netValue);
+  cy.getByLabel("Residual value at end of project (£)").should("have.value", residualValue);
+  cy.getByLabel("Utilisation (%)").should("have.value", utilisation);
+  cy.paragraph(netCost);
+  cy.clickOn("Save and return to capital usage");
+  cy.get("span").contains("Capital usage guidance");
 };
 
 export const checkEditLabourItem = () => {
   const cost = 10000;
   const diff = -10000;
-  checkSummaryForEdit("Labour", "Bar keeper", cost, diff, "Days to be spent by all staff with this role", "50");
+  checkSummaryForEdit("Labour", "Bar keeper", cost, diff, "Days to be spent by all staff with this role", "50", true);
 };
 
 export const checkEditOverheads = () => {
@@ -520,29 +585,41 @@ export const checkEditOverheads = () => {
 export const checkEditMaterialsItem = () => {
   const cost = 200 * 4.99;
   const diff = 100 * 4.99;
-  checkSummaryForEdit("Materials", "Beach balls", cost, diff, "Quantity", "200");
+  checkSummaryForEdit("Materials", "Beach balls", cost, diff, "Quantity", "200", true);
 };
 export const checkEditCapitalUsageItem = () => {
   const cost = 500000;
   const diff = 250000;
 
-  checkSummaryForEdit("Capital usage", "credit swap", cost, diff, "Residual value at end of project (£)", "1000000");
+  checkSummaryForEdit(
+    "Capital usage",
+    "credit swap",
+    cost,
+    diff,
+    "Residual value at end of project (£)",
+    "1000000",
+    false,
+  );
+  checkCapUsageSavedData("credit swap", "Existing", 24, 2000000, 1000000, 50, "£500,000.00");
+  checkCapUsageSavedData("Slush fund usage", "New", 24, 25000, 9000, 50, "£8,000.00");
+  cy.clickOn("Save and return to project costs");
+  cy.get("h2").contains("Project costs for new partner");
 };
 export const checkEditSubcontractingItem = () => {
   const cost = 10000;
   const diff = -2500;
-  checkSummaryForEdit("Subcontracting", "Dodgy roofing", cost, diff, "Cost (£)", String(cost));
+  checkSummaryForEdit("Subcontracting", "Dodgy roofing", cost, diff, "Cost (£)", String(cost), true);
 };
 export const checkEditTravelAndSubsistenceItem = () => {
   const cost = 10 * 8500;
   const diff = cost - 8 * 8500;
-  checkSummaryForEdit("Travel and subsistence", "Caviar and champagne", cost, diff, "Number of times", "10");
+  checkSummaryForEdit("Travel and subsistence", "Caviar and champagne", cost, diff, "Number of times", "10", true);
 };
 export const checkEditOtherCostsItem = (pageNumber: OtherCostPages) => {
   const cost = 4000;
   const diff = 2000;
   const page = pageNumber === "1" ? "Other costs" : (("Other costs " + pageNumber) as Category);
-  checkSummaryForEdit(page, "Other expenses 2", cost, diff, "Estimated cost (£)", String(cost));
+  checkSummaryForEdit(page, "Other expenses 2", cost, diff, "Estimated cost (£)", String(cost), true);
 };
 
 const checkDeleteItem = (category: Category, itemName: string, cost: number, overheadsAdjustment: number = 0) => {

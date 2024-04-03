@@ -70,6 +70,7 @@ import {
   uploadTestFile,
   completeOtherSourceLine,
   deleteCoste2e,
+  checkPcrForValidation,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";
 
@@ -454,6 +455,9 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
     cy.getListItemFromKey("Partner agreement", "testfile.doc");
   });
 
+  /**
+   * Mark as complete - assert for completed sections
+   */
   it("Should mark as complete and Save and return to request", () => {
     cy.getByLabel("I agree with this change").click();
     cy.clickOn("Save and return to request");
@@ -461,10 +465,16 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
     cy.get("span").contains("Complete");
   });
 
+  it("Should let you click 'Add a partner' and continue to the next screen", addPartnerContinue);
+
+  it("Should access every part of the PCR and check that validation messaging does not exist", checkPcrForValidation);
+
   /**
    * TODO: Assert the tick box has value = true when completed.
    */
   it("Should return to Summary and assert that the tick is still true", () => {
+    cy.backLink("Back to request").click();
+    cy.heading("Request");
     cy.get("a").contains("Add a partner").click();
   });
 });

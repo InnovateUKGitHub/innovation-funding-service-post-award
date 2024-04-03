@@ -31,3 +31,4 @@ export const loremIpsum16k = getLorem(16_000);
 export const loremIpsum30k = getLorem(30_000);
 export const loremIpsum32k = getLorem(32_000);
 export const loremIpsum33k = getLorem(32_769);
+export const loremIpsum131k = getLorem(131_072);

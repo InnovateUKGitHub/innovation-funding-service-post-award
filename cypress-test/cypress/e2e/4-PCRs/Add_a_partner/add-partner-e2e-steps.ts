@@ -337,7 +337,13 @@ export const validateMonthYearInput = () => {
 };
 
 export const validateTurnoverInput = () => {
-  ["-1", "test copy", "99999999999999999999999999"].forEach(input => {
+  ["99999999999999999999999999", "1000000000000", "1000000000001", "9000000000001"].forEach(input => {
+    cy.get("#financialYearEndTurnover").clear().type(input);
+    cy.clickOn("Save and return to summary");
+    cy.validationLink("Financial year end turnover must be 100000000000 or less.");
+    cy.paragraph("Financial year end turnover must be 100000000000 or less.");
+  });
+  ["-1", "test copy", `"£$%%*"`].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
     cy.validationLink("Enter a valid financial year end turnover.");
@@ -1172,4 +1178,29 @@ export const validateJesCostsFields = () => {
       });
   });
   cy.reload();
+};
+
+export const checkPcrForValidation = () => {
+  [
+    [
+      "Eligibility of aid declaration",
+      "Organisation name",
+      "Size",
+      "End of financial year",
+      "Project location",
+      "First name",
+      "Project costs for new partner",
+      "Other sources of funding",
+      "Funding from other sources",
+      "Funding level",
+    ].forEach(section => {
+      cy.getListItemFromKey(section, "Edit").click();
+      cy.backLink("Back to request");
+      cy.getByQA("validation-summary").should("not.exist");
+      cy.backLink("Back to request").click();
+      cy.heading("Request");
+      cy.get("a").contains("Add a partner").click();
+      cy.heading("Add a partner");
+    }),
+  ];
 };
