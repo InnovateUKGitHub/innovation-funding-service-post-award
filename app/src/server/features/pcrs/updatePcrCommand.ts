@@ -22,11 +22,13 @@ import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 import { mergePcrData } from "@framework/util/pcrHelper";
-// import { GetPcrSpendProfilesQuery } from "./getPcrSpendProfiles";
 
 type PcrData = PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
   items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
 };
+
+const isPartnerAdditionItem = (item: PCRItemDto): item is PCRItemForPartnerAdditionDto =>
+  item.type === PCRItemType.PartnerAddition;
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectId: ProjectId;
@@ -71,7 +73,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const nowQueriedToMo = newStatus === PCRStatus.QueriedByMonitoringOfficer;
     const nowQueriedToInnovateUk = newStatus === PCRStatus.SubmittedToInnovateUK;
     const previouslyQueriedByInnovateUk = originalStatus === PCRStatus.QueriedToProjectManager;
-
     const shouldPmSee = nowSubmittedToMo || nowQueriedToMo || (nowQueriedToInnovateUk && previouslyQueriedByInnovateUk);
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
@@ -84,11 +85,9 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   protected async run(context: IContext): Promise<boolean> {
     const hasMismatchProjectId = this.projectId !== this.pcr.projectId;
     const hasMismatchPcrId = this.projectChangeRequestId !== this.pcr.id;
-
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
 
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-
     if (!isProjectActive) throw new InActiveProjectError();
 
     const pcr = await context.runQuery(new GetPCRByIdQuery(this.pcr.projectId, this.pcr.id));
@@ -96,12 +95,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
-
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
     const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
     const project = await context.runQuery(new GetByIdQuery(this.projectId));
     const allPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
-
     const mergedPcr = mergePcrData(this.pcr, pcr);
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
@@ -175,16 +172,13 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
-      const partnerAdditionItemDto = mergedPcr?.items?.find(
-        x => x.type === PCRItemType.PartnerAddition,
-      ) as PCRItemForPartnerAdditionDto;
-
-      if (partnerAdditionItemDto) {
+      const partnerAdditionItems = mergedPcr?.items?.filter(isPartnerAdditionItem);
+      for (const item of partnerAdditionItems) {
         await context.runCommand(
           new UpdatePCRSpendProfileCommand(
             this.projectId,
-            partnerAdditionItemDto.id,
-            partnerAdditionItemDto.spendProfile ?? {
+            item.id,
+            item.spendProfile ?? {
               costs: [],
               funds: [],
               pcrItemId: undefined,
