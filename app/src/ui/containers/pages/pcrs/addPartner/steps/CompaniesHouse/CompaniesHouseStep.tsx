@@ -1,4 +1,4 @@
-import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
@@ -43,7 +43,7 @@ export const CompaniesHouseStep = () => {
     search: defaultSearchQuery,
   } = usePcrWorkflowContext();
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(String(defaultSearchQuery) ?? "");
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(String(defaultSearchQuery ?? ""));
   const defaultCompaniesHouseResult = useDefaultCompaniesHouseResult();
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
@@ -51,12 +51,21 @@ export const CompaniesHouseStep = () => {
   const { handleSubmit, register, formState, trigger, setValue, watch, reset, setError } = useForm<
     z.output<PcrAddPartnerCompaniesHouseStepSchemaType>
   >({
+    defaultValues: {
+      pcrId,
+      projectId,
+      pcrItemId: itemId,
+      form: FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit,
+      organisationName: pcrItem?.organisationName ?? "",
+      registrationNumber: pcrItem?.registrationNumber ?? "",
+      registeredAddress: pcrItem?.registeredAddress ?? "",
+    },
     resolver: zodResolver(getPcrAddPartnerCompaniesHouseStepSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
   const validationErrors = useZodErrors(setError, formState.errors);
-  const defaultUserInput = useServerInput<z.input<PcrAddPartnerCompaniesHouseStepSchemaType>>();
+
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
   const registerButton = createRegisterButton(setValue, "form");
   const disabled = isFetching;
@@ -91,14 +100,10 @@ export const CompaniesHouseStep = () => {
               <ValidationError error={validationErrors?.organisationName as RhfError} />
               <TextInput
                 defaultValue={
-                  defaultUserInput?.organisationName ??
-                  defaultCompaniesHouseResult?.title ??
-                  pcrItem?.organisationName ??
-                  ""
+                  pcrItem?.organisationName ?? defaultCompaniesHouseResult?.title ?? pcrItem?.organisationName ?? ""
                 }
                 hasError={!!validationErrors?.organisationName}
                 id="organisationName"
-                // inputWidth="one-third"
                 {...register("organisationName")}
                 disabled={disabled}
               />
@@ -111,14 +116,13 @@ export const CompaniesHouseStep = () => {
               <ValidationError error={validationErrors?.registrationNumber as RhfError} />
               <TextInput
                 defaultValue={
-                  defaultUserInput?.registrationNumber ??
+                  pcrItem?.registrationNumber ??
                   defaultCompaniesHouseResult?.registrationNumber ??
                   pcrItem.registrationNumber ??
                   ""
                 }
                 hasError={!!validationErrors?.registrationNumber}
                 id="registrationNumber"
-                // inputWidth="one-quarter"
                 {...register("registrationNumber")}
                 disabled={disabled}
               />
@@ -131,14 +135,13 @@ export const CompaniesHouseStep = () => {
               <ValidationError error={validationErrors?.registeredAddress as RhfError} />
               <TextInput
                 defaultValue={
-                  defaultUserInput?.registeredAddress ??
+                  pcrItem?.registeredAddress ??
                   defaultCompaniesHouseResult?.addressFull ??
                   pcrItem?.registeredAddress ??
                   ""
                 }
                 hasError={!!validationErrors?.registeredAddress}
                 id="registeredAddress"
-                // inputWidth="full"
                 {...register("registeredAddress")}
                 disabled={disabled}
               />
