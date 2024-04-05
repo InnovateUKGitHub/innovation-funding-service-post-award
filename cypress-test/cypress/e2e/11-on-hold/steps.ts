@@ -4,9 +4,20 @@ export const onHoldMessage = () => {
   cy.validationNotification("Partner is on hold. Contact Innovate UK for more information.");
 };
 
+export const onHoldShouldNotExist = () => {
+  cy.getByQA("validation-message-content").should("not.exist");
+};
+
+export const moOnHoldShouldNotExist = () => {
+  cy.getByQA("validation-message-content").should(
+    "not.contain",
+    "Partner is on hold. Contact Innovate UK for more information.",
+  );
+};
+
 export const accessProjectCard = (projectNum: string) => {
+  cy.wait(1000);
   cy.getByQA("pending-and-open-projects").within(() => {
-    cy.wait(1000);
     cy.getByQA(`project-${projectNum}`).contains("a", projectNum).click();
   });
   cy.heading("Project overview");
@@ -15,6 +26,7 @@ export const accessProjectCard = (projectNum: string) => {
 export const accessTileAndCheckOnHoldMessage = (tile: Tile) => {
   cy.selectTile(tile);
   onHoldMessage();
+  suspensionNotificationShouldNotExist();
   cy.get("a").contains("Back to project").click();
   cy.heading("Project overview");
 };
@@ -32,6 +44,7 @@ export const accessForecastsCheckForMessaging = () => {
   cy.selectTile("Forecasts");
   cy.heading("Forecasts");
   onHoldMessage();
+  suspensionNotificationShouldNotExist();
   ["Swindon University", "Provar MO Account"].forEach((partner, index) => {
     cy.get("tr")
       .eq(index + 1)
@@ -87,6 +100,7 @@ export const checkEachPcrForMessaging = () => {
       });
     cy.heading("Request");
     onHoldMessage();
+    suspensionNotificationShouldNotExist();
     cy.getListItemFromKey("Request number", requestNumber);
     cy.getListItemFromKey("Types", pcrStatus);
     cy.clickOn("Back to project change requests");
@@ -112,6 +126,10 @@ export const moSuspensionNotification = () => {
     });
     cy.get("a").contains("askoperations@iuk.ukri.org");
   });
+};
+
+export const suspensionNotificationShouldNotExist = () => {
+  cy.getByAriaLabel("alert message").should("not.exist");
 };
 
 export const moAccessClaimCheckforMessaging = (fn: () => void) => {

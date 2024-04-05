@@ -8,6 +8,8 @@ import {
   checkClaimsTileforMessaging,
   checkEachPcrForMessaging,
   checkViewOnlyClaim,
+  onHoldMessage,
+  suspensionNotificationShouldNotExist,
 } from "./steps";
 
 const pm = "james.black@euimeabs.test";
@@ -20,19 +22,22 @@ describe("On hold project > Flagged participant > MO view.", () => {
   it("Should display the project card for 569082 and access the project", () => accessProjectCard("874195"));
 
   it("Should display an on hold warning message", () => {
-    cy.validationNotification("Partner is on hold. Contact Innovate UK for more information.");
+    onHoldMessage();
+    suspensionNotificationShouldNotExist();
   });
 
-  it(
-    "Should access the Claims tile and check for the correct messaging and that a Draft claim can only be viewed not edited",
-    checkClaimsTileforMessaging,
-  );
+  it("Should access the Claims tile and check for the correct messaging and that a Draft claim can only be viewed not edited", () => {
+    checkClaimsTileforMessaging();
+    suspensionNotificationShouldNotExist();
+  });
 
   it("Should click into the view-only claim and have the message persist", checkViewOnlyClaim);
 
   it("Should navigate back to the project overview", () => {
     cy.clickOn("Back to project");
     cy.heading("Project overview");
+    onHoldMessage();
+    suspensionNotificationShouldNotExist();
   });
 
   it("Should access Forecasts and check for messaging and view-only forecasts", accessForecastsCheckForMessaging);
@@ -40,6 +45,8 @@ describe("On hold project > Flagged participant > MO view.", () => {
   it("Should navigate back to the project overview", () => {
     cy.clickOn("Back to project");
     cy.heading("Project overview");
+    onHoldMessage();
+    suspensionNotificationShouldNotExist();
   });
 
   it(
@@ -48,7 +55,8 @@ describe("On hold project > Flagged participant > MO view.", () => {
   );
 
   it("Should display an on hold warning message", () => {
-    cy.validationNotification("Partner is on hold. Contact Innovate UK for more information.");
+    onHoldMessage();
+    suspensionNotificationShouldNotExist();
   });
 
   it("Should access each PCR in turn and check that the warning message is present", checkEachPcrForMessaging);
@@ -56,6 +64,8 @@ describe("On hold project > Flagged participant > MO view.", () => {
   it("Should navigate back to the project overview", () => {
     cy.clickOn("Back to project");
     cy.heading("Project overview");
+    onHoldMessage();
+    suspensionNotificationShouldNotExist();
   });
 
   testEach(["Documents", "Project details", "Finance summary"])(
