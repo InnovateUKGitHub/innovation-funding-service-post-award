@@ -26,8 +26,11 @@ describe("projects dashboard > general", () => {
     ["PCR's being queried", "Project change request queried"],
     ["Claims to review", "Claims to review"],
     ["PCR's to review", "Project change requests to review"],
-    ["Not completed setup", "You need to set up your project"],
-    ["Claims to submit", "You need to submit your claim."],
+    [
+      "Not completed setup",
+      /You need to set up your project|You need to provide confirmation of the associate's start date|You can update the associate's start date here/,
+    ],
+    ["Claims to submit", "You need to submit your claim"],
     ["Claims needing responses", "Claim queried"],
   ])(`should have a $0 filter`, shouldFilterProjectsUsingCheckboxes);
 
