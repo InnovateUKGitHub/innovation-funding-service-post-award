@@ -13,6 +13,7 @@ import {
   shouldNavigateToProjectDashboard,
   switchToJavierCheckStatus,
 } from "./steps";
+import { fileTidyUp } from "common/filetidyup";
 
 const jamesBlack = "james.black@euimeabs.test";
 const javierBaez = "testman2@testing.com";
@@ -96,4 +97,15 @@ describe("projects dashboard > Project tile counters", () => {
     "Should back out to Project overview and check the claims tile for updated counter.",
     backOutToDashCheckUpdatedCounter,
   );
+
+  it("Should access the claim one last time and clear up any documents", () => {
+    cy.switchUserTo(sarahShuang);
+    cy.selectTile("Claims");
+    cy.heading("Claims");
+    cy.tableCell("Queried by Monitoring Officer").siblings().contains("Edit").click();
+    cy.heading("Costs to be claimed");
+    cy.clickOn("Continue to claims documents");
+    cy.heading("Claim documents");
+    fileTidyUp("Sarah Shuang");
+  });
 });

@@ -1,4 +1,6 @@
 import { otherCost5TidyUp } from "common/costCleanUp";
+import { fileTidyUp } from "common/filetidyup";
+import { uploadIAR } from "e2e/2-claims/steps";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "328407";
@@ -257,6 +259,8 @@ export const accessProjectSubmitToMO = () => {
   otherCost5TidyUp();
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
+  fileTidyUp("Sarah Shuang");
+  uploadIAR();
   cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
   cy.clickOn("Continue to summary");
