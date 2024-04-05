@@ -1187,7 +1187,7 @@
     "iarRequiredMessage": "IAR required",
     "schedule3RequiredMessage": "Schedule 3 required",
     "claimsToReviewMessage": "Claims to review: {{count}}",
-    "claimToSubmitMessage": "You need to submit your claim.",
+    "claimToSubmitMessage": "You need to submit your claim",
     "claimRequestMissingDocument": "You need to submit your claim report.",
     "projectEndedMessage": "Project ended",
     "finalClaimPeriodMessage": "Final claim period",
