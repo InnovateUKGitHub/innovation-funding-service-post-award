@@ -10,6 +10,7 @@ import {
   explainChangesReasoning,
   typeASearchResults,
   companyHouseAutofillAssert,
+  PcrItemType,
 } from "../steps";
 import {
   validateFileUpload,
@@ -91,6 +92,15 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   });
 
   it("Should show the correct PCR type", correctPcrType);
+
+  it("Should add another Add partner PCR", () => {
+    cy.get("a").contains("Add types").click();
+    cy.heading("Add types");
+    cy.clickCheckBox(PcrItemType.AddAPartner);
+    cy.wait(5000);
+    cy.clickOn("Add to request");
+    cy.get("h1").contains("Request", { timeout: 60000 });
+  });
 
   it(
     "Should show a 'Give us information' section with the Add a partner PCR type listed and 'TO DO' listed beneath",

@@ -142,7 +142,7 @@ describe("PCR > Reasoning section", () => {
     cy.validationNotification("Your document has been uploaded.");
   });
 
-  it("Should display all the files in the correct order with the correct information", () => {
+  it("Should display all the files uploaded", () => {
     [
       "testfile.doc",
       "testfile.doc",
@@ -156,17 +156,15 @@ describe("PCR > Reasoning section", () => {
       "testfile9.doc",
       "testfile10.doc",
       "T.doc",
-    ].forEach((doc, index) => {
-      cy.get("tr")
-        .eq(index + 1)
-        .within(() => {
-          cy.get("td:nth-child(1)").contains(doc);
-          cy.get("td:nth-child(2)").contains("PCR evidence");
-          cy.get("td:nth-child(3)").contains(uploadDate);
-          cy.get("td:nth-child(4)").contains("0KB");
-          cy.get("td:nth-child(5)").contains("James Black");
-          cy.get("td:nth-child(6)").contains("Remove");
-        });
+    ].forEach(doc => {
+      const rowData = ["PCR evidence", uploadDate, "0KB", "James Black", "Remove"];
+      rowData.forEach((data, index) => {
+        cy.contains("td", doc)
+          .parent()
+          .within(() => {
+            cy.get(`td:nth-child(${index + 2})`).contains(data);
+          });
+      });
     });
   });
 

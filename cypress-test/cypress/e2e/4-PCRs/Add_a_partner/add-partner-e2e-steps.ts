@@ -1063,6 +1063,7 @@ export const addManyLines = () => {
 };
 
 export const clearValidationAddManyOther = () => {
+  cy.wait(1000);
   cy.reload();
   cy.get("h2").contains("Other public sector funding?");
   for (let i = 1; i < 51; i++) {
