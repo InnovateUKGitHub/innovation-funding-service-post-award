@@ -1182,25 +1182,23 @@ export const validateJesCostsFields = () => {
 
 export const checkPcrForValidation = () => {
   [
-    [
-      "Eligibility of aid declaration",
-      "Organisation name",
-      "Size",
-      "End of financial year",
-      "Project location",
-      "First name",
-      "Project costs for new partner",
-      "Other sources of funding",
-      "Funding from other sources",
-      "Funding level",
-    ].forEach(section => {
-      cy.getListItemFromKey(section, "Edit").click();
-      cy.backLink("Back to request");
-      cy.getByQA("validation-summary").should("not.exist");
-      cy.backLink("Back to request").click();
-      cy.heading("Request");
-      cy.get("a").contains("Add a partner").click();
-      cy.heading("Add a partner");
-    }),
-  ];
+    "Eligibility of aid declaration",
+    "Organisation name",
+    "Size",
+    "End of financial year",
+    "Project location",
+    "First name",
+    "Project costs for new partner",
+    "Other sources of funding",
+    "Funding from other sources",
+    "Funding level",
+  ].forEach(section => {
+    cy.getListItemFromKey(section, "Edit").click();
+    cy.backLink("Back to request");
+    cy.getByQA("validation-summary").should("not.exist");
+    cy.backLink("Back to request").click();
+    cy.heading("Request");
+    cy.get("a").contains("Add a partner").click();
+    cy.heading("Add a partner");
+  });
 };
