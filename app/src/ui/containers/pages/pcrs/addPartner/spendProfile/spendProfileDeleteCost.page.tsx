@@ -77,7 +77,7 @@ const SpendProfileDeleteCostPage = ({
     undefined,
     PCRItemType.PartnerAddition,
   );
-  const { handleSubmit } = useForm({});
+  const { handleSubmit } = useForm<EmptyObject>({});
 
   return (
     <Page

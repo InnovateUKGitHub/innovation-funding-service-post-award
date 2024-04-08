@@ -15,6 +15,7 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isSubcontractingCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -73,7 +74,7 @@ export const SubcontractingFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<SubcontractingSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<SubcontractingSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -89,7 +90,7 @@ export const SubcontractingFormComponent = () => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   description: data?.subcontractorName,
-                  value: Number(data.subcontractorCost),
+                  value: parseCurrency(data.subcontractorCost),
                 }),
               },
             },

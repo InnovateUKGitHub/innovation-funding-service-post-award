@@ -105,7 +105,7 @@ export const CapitalUsageFormComponent = () => {
     [getContent],
   );
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<CapitalUsageSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<CapitalUsageSchema>;
 
   const values = watch();
 

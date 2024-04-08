@@ -30,7 +30,7 @@ export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostPar
 }
 
 const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BaseProps) => {
-  const { itemId, pcrId, projectId, costCategoryId, costId, routes } = props;
+  const { itemId, pcrId, projectId, costCategoryId, costId, routes, messages } = props;
 
   const [fetchKey, setFetchKey] = useState(0);
 
@@ -81,7 +81,7 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
         costCategoryId,
         project,
         routes,
-        messages: props.messages,
+        messages,
         apiError,
         stepRoute,
         addNewItem: !costId,

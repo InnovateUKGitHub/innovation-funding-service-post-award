@@ -59,8 +59,6 @@ const PCRSpendProfileTravelAndSubsCostTable =
 const PCRSpendProfileOtherCosts = createTypedTable<Pick<PCRSpendProfileOtherCostsDto, "description" | "value">>();
 
 const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
-  // const { project, pcr, costCategory } = props;
-
   const { itemId, projectId, costCategoryId } = props;
 
   const { project, pcrItem, spendProfile, costCategory } = useSpendProfileCostsQuery(
@@ -83,7 +81,7 @@ const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSumma
     projectId: props.projectId,
     step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
   });
-  const costs = spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId); // as unknown as Costs[];
+  const costs = spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
   return (
     <Page
       backLink={
@@ -98,7 +96,6 @@ const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSumma
       <Section
         title={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
       >
-        {/* {renderViewTable(costs, costCategory)} */}
         <ViewTable costs={costs} costCategory={costCategory} />
       </Section>
     </Page>

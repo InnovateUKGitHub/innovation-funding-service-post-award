@@ -15,6 +15,7 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { PCRSpendProfileCostDto, PCRSpendProfileOtherCostsDto } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isOtherCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -66,7 +67,7 @@ export const OtherCostsFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<OtherCostsSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<OtherCostsSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -81,7 +82,7 @@ export const OtherCostsFormComponent = () => {
                   description: data.descriptionOfCost,
                   costCategoryId,
                   costCategory: costCategory.type,
-                  value: Number(data.estimatedCost.replace("£", "")),
+                  value: parseCurrency(data.estimatedCost),
                 }),
               },
             },

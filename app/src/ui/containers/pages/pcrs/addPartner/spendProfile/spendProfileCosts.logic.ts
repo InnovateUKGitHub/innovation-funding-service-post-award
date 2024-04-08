@@ -22,7 +22,7 @@ export const useSpendProfileCostsQuery = (
   projectId: ProjectId,
   pcrItemId: PcrItemId,
   costCategoryId: CostCategoryId,
-  costId: string | undefined,
+  costId: CostId | undefined | null,
   fetchKey: number | undefined,
 ) => {
   const data = useLazyLoadQuery<SpendProfileCostsQuery>(

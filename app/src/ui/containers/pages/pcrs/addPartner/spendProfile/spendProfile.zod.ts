@@ -58,7 +58,7 @@ export const subcontractingSchema = z.object({
   id: costIdValidation.nullable(),
   subcontractorName: z.string().min(1).max(255),
   subcontractorCountry: z.string().min(1).max(255),
-  subcontractorRoleAndDescription: z.string().min(1).max(131072),
+  subcontractorRoleAndDescription: description,
   subcontractorCost: currencyValidation,
 });
 

@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
 import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isLabourCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -79,9 +80,9 @@ export const LabourFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const totalCost = Number(watch("ratePerDay") ?? 0) * (watch("daysSpentOnProject") ?? 0);
+  const totalCost = parseCurrency(watch("ratePerDay") ?? 0) * Number(watch("daysSpentOnProject") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<LabourSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<LabourSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -97,8 +98,8 @@ export const LabourFormComponent = () => {
                   id: data.id ?? ("" as CostId),
                   costCategoryId,
                   costCategory: costCategory.type,
-                  grossCostOfRole: Number(data.grossCostOfRole),
-                  ratePerDay: Number(data.ratePerDay),
+                  grossCostOfRole: parseCurrency(data.grossCostOfRole),
+                  ratePerDay: parseCurrency(data.ratePerDay),
                   daysSpentOnProject: Number(data.daysSpentOnProject),
                   value: totalCost,
                 }),

@@ -56,7 +56,7 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
     itemId,
     pcrId,
     projectId,
-    step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
+    step: spendProfileStep?.stepNumber ?? undefined,
   });
 
   const costs = spendProfile.costs.filter(x => x.costCategoryId === costCategoryId);

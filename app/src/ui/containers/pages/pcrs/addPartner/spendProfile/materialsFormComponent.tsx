@@ -77,7 +77,7 @@ export const MaterialsFormComponent = () => {
 
   const totalCost = Number(watch("quantityOfMaterialItems") ?? 0) * Number(watch("costPerItem") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<MaterialsSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<MaterialsSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>

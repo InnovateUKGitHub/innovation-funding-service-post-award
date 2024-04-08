@@ -19,6 +19,7 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isTravelAndSubsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -74,9 +75,9 @@ export const TravelAndSubsFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const totalCost = Number(watch("numberOfTimes") ?? 0) * Number(watch("costOfEach") ?? 0);
+  const totalCost = Number(watch("numberOfTimes") ?? 0) * parseCurrency(watch("costOfEach") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<TravelAndASubsistenceSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<TravelAndASubsistenceSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -92,7 +93,7 @@ export const TravelAndSubsFormComponent = () => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   numberOfTimes: Number(data.numberOfTimes),
-                  costOfEach: Number(data.costOfEach),
+                  costOfEach: parseCurrency(data.costOfEach),
                   value: totalCost,
                 }),
               },

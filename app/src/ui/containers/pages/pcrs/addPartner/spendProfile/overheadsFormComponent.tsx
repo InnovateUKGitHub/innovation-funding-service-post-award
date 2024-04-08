@@ -1,6 +1,6 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
-import { roundCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
@@ -116,14 +116,12 @@ export const OverheadsFormComponent = ({}) => {
 
   const getOverheadsCostValue = (overheadRate: PCRSpendProfileOverheadRate) => {
     switch (overheadRate) {
-      case PCRSpendProfileOverheadRate.Unknown:
-        return 0;
       case PCRSpendProfileOverheadRate.Calculated:
         return Number(watch("calculatedValue")) ?? 0;
-      case PCRSpendProfileOverheadRate.Zero:
-        return 0;
       case PCRSpendProfileOverheadRate.Twenty:
         return roundCurrency((totalLabourCosts * 20) / 100);
+      case PCRSpendProfileOverheadRate.Unknown:
+      case PCRSpendProfileOverheadRate.Zero:
       default:
         return 0;
     }
@@ -143,7 +141,7 @@ export const OverheadsFormComponent = ({}) => {
   // If server rendering then always show hidden section
   const displayHiddenForm = !isClient || overheadRate === PCRSpendProfileOverheadRate.Calculated;
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationError<OverheadSchema>;
+  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<OverheadSchema>;
 
   const calculatedTotalCost = getOverheadsCostValue(overheadRate);
 
@@ -162,7 +160,7 @@ export const OverheadsFormComponent = ({}) => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   overheadRate: Number(data.overheadRate),
-                  value: data.calculatedValue ? Number(data.calculatedValue.replace("£", "")) : null,
+                  value: data.calculatedValue ? parseCurrency(data.calculatedValue) : null,
                 }),
               },
             },
