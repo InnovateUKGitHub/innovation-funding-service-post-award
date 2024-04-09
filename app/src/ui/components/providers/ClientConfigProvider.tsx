@@ -1,4 +1,4 @@
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../../../types/IClientConfig";
 import { createContext, ReactNode, useContext } from "react";
 
 const siteOptions = createContext<null | IClientConfig>(null);

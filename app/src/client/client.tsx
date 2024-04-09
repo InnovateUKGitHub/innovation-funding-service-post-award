@@ -24,7 +24,7 @@ import { RootState, rootReducer } from "@ui/redux/reducers/rootReducer";
 import { Result } from "@ui/validation/result";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../types/IClientConfig";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;

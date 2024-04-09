@@ -1,5 +1,5 @@
 import { IClientUser } from "@framework/types/IUser";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../../types/IClientConfig";
 import { RootState } from "./reducers/rootReducer";
 
 /**

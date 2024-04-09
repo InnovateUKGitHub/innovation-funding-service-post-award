@@ -17,7 +17,7 @@ import { initaliseAction } from "@ui/redux/actions/initalise";
 import { setupInitialState } from "@ui/redux/initialState";
 import { setupServerMiddleware } from "@ui/redux/middleware";
 import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../types/IClientConfig";
 import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
 import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { matchRoute } from "@ui/routing/matchRoute";

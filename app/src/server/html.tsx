@@ -6,7 +6,7 @@ import { PreloadedState } from "redux";
 import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../types/IClientConfig";
 
 let versionInformation = "";
 

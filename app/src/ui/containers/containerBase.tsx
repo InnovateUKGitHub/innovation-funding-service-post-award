@@ -1,5 +1,5 @@
 import React from "react";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../../types/IClientConfig";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { Copy } from "@copy/Copy";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";

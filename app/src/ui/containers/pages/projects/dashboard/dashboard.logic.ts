@@ -11,7 +11,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { CuratedSection, CuratedSections, FilterOptions, Partner, Project, Section } from "./Dashboard.interface";
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../../../../../types/IClientConfig";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 

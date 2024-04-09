@@ -9,7 +9,7 @@ import { errorReducer } from "./errorReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
 import { configReducer } from "./configReducer";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../../../types/IClientConfig";
 import { ZodIssue } from "zod";
 import { zodErrorReducer } from "./zodErrorReducer";
 import { previousReactHookFormInputReducer } from "./previousReactHookFormInputReducer";

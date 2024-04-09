@@ -7,7 +7,7 @@ import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
-import { IClientConfig } from "src/types/IClientConfig";
+import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
 
 export type TestBedStore = Partial<IStores>;

@@ -5,6 +5,7 @@ import { checkSalesforce, checkGoogleAnalytics, checkCompaniesHouse } from "./he
 import { HealthCheckResult } from "./healthCheck/checks";
 
 export const healthRouter: Router = Router();
+const healthCheckLogger = new Logger("Health check");
 
 const getHealthIndex = async (req: Request, res: Response) => {
   const { originalUrl } = req;
@@ -59,8 +60,6 @@ export const health = async (
 };
 
 const getHealthCheck = async (_req: Request, res: Response) => {
-  const healthCheckLogger = new Logger("Health check");
-
   const { status, response } = await health(healthCheckLogger);
 
   healthCheckLogger.debug("Health check completed.", { status, response });
