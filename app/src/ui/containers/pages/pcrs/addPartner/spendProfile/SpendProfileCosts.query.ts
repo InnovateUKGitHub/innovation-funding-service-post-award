@@ -31,6 +31,7 @@ export const spendProfileCostsQuery = graphql`
                 { Acc_ProjectChangeRequest__c: { eq: $pcrItemId } }
               ]
             }
+            orderBy: { CreatedDate: { order: ASC } }
             first: 2000
           ) {
             edges {
