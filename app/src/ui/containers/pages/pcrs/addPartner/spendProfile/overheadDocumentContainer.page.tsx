@@ -24,10 +24,9 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { FormTypes } from "@ui/zod/FormTypes";
 import { PCRItemType } from "@framework/constants/pcrConstants";
 import { useMessages } from "@framework/api-helpers/useMessages";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { noop } from "lodash";
@@ -48,7 +47,13 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
   const { getContent } = useContent();
   const { pcrId, itemId, projectId, routes, costCategoryId } = props;
 
-  const { project, spendProfile } = useSpendProfileCostsQuery(projectId, itemId, costCategoryId, undefined, undefined);
+  const { spendProfile, fragmentRef } = useSpendProfileCostsQuery(
+    projectId,
+    itemId,
+    costCategoryId,
+    undefined,
+    undefined,
+  );
 
   const cost = spendProfile.costs.find(x => x.costCategoryId === costCategoryId);
   if (!cost) throw new Error(`Cannot find cost matching ${costCategoryId}`);
@@ -120,9 +125,8 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
           <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       validationErrors={validationErrors}
-      projectId={projectId}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
       <Section>

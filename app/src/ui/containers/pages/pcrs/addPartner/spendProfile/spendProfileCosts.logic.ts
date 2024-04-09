@@ -160,6 +160,7 @@ type SpendProfileContextType = {
   apiError: IAppError<Results<ResultBase>> | null | undefined;
   stepRoute: ILinkInfo;
   addNewItem: boolean;
+  fragmentRef: unknown;
 };
 
 export const SpendProfileContext = createContext<SpendProfileContextType>({

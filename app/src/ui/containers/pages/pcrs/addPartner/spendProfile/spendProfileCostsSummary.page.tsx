@@ -11,12 +11,11 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -38,7 +37,7 @@ export interface PcrSpendProfileCostSummaryParams {
 const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
   const { pcrId, itemId, projectId, routes, costCategoryId } = props;
 
-  const { project, pcrItem, spendProfile, costCategory } = useSpendProfileCostsQuery(
+  const { project, pcrItem, spendProfile, costCategory, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
     itemId,
     costCategoryId,
@@ -80,8 +79,7 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
           <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      projectId={projectId}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
       <Section

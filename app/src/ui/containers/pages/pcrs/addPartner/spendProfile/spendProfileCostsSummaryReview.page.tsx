@@ -14,10 +14,9 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
@@ -61,7 +60,7 @@ const PCRSpendProfileOtherCosts = createTypedTable<Pick<PCRSpendProfileOtherCost
 const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
   const { itemId, projectId, costCategoryId } = props;
 
-  const { project, pcrItem, spendProfile, costCategory } = useSpendProfileCostsQuery(
+  const { pcrItem, spendProfile, costCategory, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
     itemId,
     costCategoryId,
@@ -89,8 +88,7 @@ const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSumma
           <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      projectId={projectId}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
       <Section

@@ -34,7 +34,7 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
 
   const [fetchKey, setFetchKey] = useState(0);
 
-  const { project, costCategory, spendProfile, pcrItem, cost, documents } = useSpendProfileCostsQuery(
+  const { project, costCategory, spendProfile, pcrItem, cost, documents, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
     itemId,
     costCategoryId,
@@ -85,6 +85,7 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
         apiError,
         stepRoute,
         addNewItem: !costId,
+        fragmentRef,
       }}
     >
       <SpendProfilePrepareFormSection />

@@ -2,9 +2,8 @@ import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { ReactNode, useContext, useMemo } from "react";
 import { AddPartnerStepNames } from "../addPartnerWorkflow";
 import { PcrWorkflow, WorkflowPcrType } from "../../pcrWorkflow";
@@ -27,10 +26,10 @@ export const SpendProfilePreparePage = ({
     pcrItem,
     routes,
     costCategoryId,
-    project,
     apiError,
     messages,
     costCategoryType,
+    fragmentRef,
   } = useContext(SpendProfileContext);
   const backLink = useMemo(() => {
     if (costCategory.type === CostCategoryType.Overheads) {
@@ -58,10 +57,9 @@ export const SpendProfilePreparePage = ({
           <Content value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })} />
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       apiError={apiError}
       validationErrors={validationErrors}
-      projectId={projectId}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={messages} />
       <Section

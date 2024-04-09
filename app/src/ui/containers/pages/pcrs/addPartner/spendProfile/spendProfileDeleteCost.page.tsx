@@ -18,7 +18,6 @@ import { CostCategoryList } from "@framework/types/CostCategory";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { DeleteCapitalUsageCostFormComponent } from "./deleteCapitalUsageCostFormComponent";
 import { DeleteLabourCostFormComponent } from "./deleteLabourCostFormComponent";
@@ -26,7 +25,7 @@ import { DeleteMaterialsCostFormComponent } from "./deleteMaterialCostFormCompon
 import { DeleteOtherCostFormComponent } from "./deleteOtherCostFormComponent";
 import { DeleteSubcontractingCostFormComponent } from "./deleteSubcontractingCostFormComponent";
 import { DeleteTravelAndSubsCostFormComponent } from "./deleteTravelAndSubsCostFormComponent";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -54,7 +53,7 @@ const SpendProfileDeleteCostPage = ({
   messages,
   ...props
 }: PcrDeleteSpendProfileCostParams & BaseProps) => {
-  const { project, costCategory, cost, spendProfile } = useSpendProfileCostsQuery(
+  const { costCategory, cost, spendProfile, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
     itemId,
     costCategoryId,
@@ -93,8 +92,7 @@ const SpendProfileDeleteCostPage = ({
           <Content value={x => x.pages.pcrSpendProfileDeleteCost.backLink({ costCategoryName: costCategory.name })} />
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectId={projectId}
+      fragmentRef={fragmentRef}
     >
       <Messages messages={messages} />
 

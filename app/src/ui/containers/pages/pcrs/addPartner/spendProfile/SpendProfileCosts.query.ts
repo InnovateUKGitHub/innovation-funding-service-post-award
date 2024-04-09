@@ -4,6 +4,7 @@ export const spendProfileCostsQuery = graphql`
   query SpendProfileCostsQuery($projectId: ID!, $pcrItemId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_CostCategory__c(first: 2000, orderBy: { Acc_DisplayOrder__c: { order: ASC } }) {
             edges {
@@ -200,12 +201,6 @@ export const spendProfileCostsQuery = graphql`
                   isAssociate
                 }
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
                 Acc_ProjectStatus__c {
