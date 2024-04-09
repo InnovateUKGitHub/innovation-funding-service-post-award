@@ -55,19 +55,14 @@ export const shouldShowCostCatTable = () => {
       ["Other costs 4", "£35,000.00", "£35,000.00", "£0.00"],
       ["Other costs 5", "£35,000.00", "£35,000.00", "£0.00"],
       ["Total", "£350,000.00", "£280,000.00", "£70,000.00"],
-    ].forEach(([costCat, eligibleCosts, claimedToDate, remainingEligibleCosts], rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(1)").contains(costCat);
-          cy.get("td:nth-child(2)").contains(eligibleCosts);
-          cy.get("td:nth-child(4)").contains(claimedToDate);
-          cy.get("td:nth-child(5)").contains(remainingEligibleCosts);
-        });
+    ].forEach(([costCat, eligibleCosts, claimedThisPeriod, remainingEligibleCosts], rowNumber = 0) => {
+      cy.getCellFromHeaderAndRow("Total eligible costs", costCat).contains(eligibleCosts);
+      cy.getCellFromHeaderAndRow("Costs claimed this period", costCat).contains(claimedThisPeriod);
+      cy.getCellFromHeaderAndRow("Remaining eligible costs", costCat).contains(remainingEligibleCosts);
     });
 };
 
-export const shouldShowCostsClaimedtoDateTable = () => {
+export const shouldShowCostsClaimedToDateTable = () => {
   [
     "Category",
     "Total eligible costs",
@@ -90,14 +85,13 @@ export const shouldShowCostsClaimedtoDateTable = () => {
     ["Other costs 4", "£35,000.00", "£2,000.30", "£32,999.70"],
     ["Other costs 5", "£35,000.00", "£666.66", "£34,333.34"],
     ["Total", "£350,000.00", "£54,667.46", "£295,332.54"],
-  ].forEach(([costCat, eligibleCosts, claimedToDate, remainingEligibleCosts], rowNumber = 0) => {
+  ].forEach(([costCat, eligibleCosts, claimedThisPeriod, remainingEligibleCosts], rowNumber = 0) => {
     cy.get("tr")
       .eq(rowNumber + 1)
       .within(() => {
-        cy.get("td:nth-child(1)").contains(costCat);
-        cy.get("td:nth-child(2)").contains(eligibleCosts);
-        cy.get("td:nth-child(3)").contains(claimedToDate);
-        cy.get("td:nth-child(5)").contains(remainingEligibleCosts);
+        cy.getCellFromHeaderAndRow("Total eligible costs", costCat).contains(eligibleCosts);
+        cy.getCellFromHeaderAndRow("Costs claimed this period", costCat).contains(claimedThisPeriod);
+        cy.getCellFromHeaderAndRow("Remaining eligible costs", costCat).contains(remainingEligibleCosts);
       });
   });
 };
