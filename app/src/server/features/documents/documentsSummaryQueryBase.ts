@@ -3,12 +3,13 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
 import { QueryBase } from "../common/queryBase";
 
 export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
-  public logger: Logger = new Logger("DocumentsSummaryQueryBase");
+  public logger: ILogger = new Logger("DocumentsSummaryQueryBase");
 
   constructor(protected readonly filter?: DocumentFilter) {
     super();

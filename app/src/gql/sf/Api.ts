@@ -2,6 +2,7 @@ import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common/config";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { mapStringInObject } from "@shared/mapStringInObject";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
@@ -24,7 +25,7 @@ export class Api {
   private readonly version: string;
   private readonly instanceUrl: string;
   private readonly accessToken: string;
-  private readonly logger: Logger = new Logger("Salesforce");
+  private readonly logger: ILogger = new Logger("Salesforce");
   public readonly email: string;
 
   constructor({

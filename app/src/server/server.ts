@@ -14,11 +14,12 @@ import { fetchCaches } from "@server/features/initialCache";
 import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
 import { developmentRouter } from "@server/developmentReloader";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
 
 export class Server {
   private readonly app: express.Express;
-  private readonly logger: Logger;
+  private readonly logger: ILogger;
 
   constructor(private readonly isDevelopment: boolean) {
     this.app = express();

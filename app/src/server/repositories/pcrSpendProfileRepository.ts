@@ -1,5 +1,5 @@
 import { Connection } from "jsforce";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 

@@ -8,6 +8,7 @@ import {
 import { configuration } from "@server/features/common/config";
 import { BadRequestError, ConfigurationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -27,7 +28,7 @@ export interface IVerifyBankCheckInputs {
 }
 
 export class BankCheckService {
-  private logger: Logger = new Logger("BankCheckService");
+  private logger: ILogger = new Logger("BankCheckService");
 
   /**
    * Ensure that input does not have masking characters, like those

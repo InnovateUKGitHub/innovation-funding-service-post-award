@@ -4,12 +4,13 @@ import { DocumentEntity } from "@framework/entities/document";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { QueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { mapToPartnerDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 
 export class GetAllPartnerDocumentsQuery extends QueryBase<AllPartnerDocumentSummaryDto> {
-  public logger: Logger = new Logger("GetAllPartnerDocumentsQuery");
+  public logger: ILogger = new Logger("GetAllPartnerDocumentsQuery");
 
   constructor(private readonly projectId: ProjectId) {
     super();

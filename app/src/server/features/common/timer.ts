@@ -1,5 +1,5 @@
 import { ITimer } from "@framework/types/IContext";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 
 export class Timer implements ITimer {
   private readonly start: Date;

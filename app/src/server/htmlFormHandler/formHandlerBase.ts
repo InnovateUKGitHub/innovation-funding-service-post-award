@@ -8,13 +8,14 @@ import { FormHandlerError } from "@server/features/common/appError";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { MulterError } from "multer";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";
 import { EditorStateKeys } from "@ui/redux/reducers/editorsReducer";
 import { EditorState } from "@ui/redux/reducers/rootReducer";
 import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
 
-const logger: Logger = new Logger("FormHandlerBase");
+const logger: ILogger = new Logger("FormHandlerBase");
 
 // TODO: review types in this file
 

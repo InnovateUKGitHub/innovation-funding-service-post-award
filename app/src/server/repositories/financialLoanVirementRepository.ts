@@ -1,4 +1,4 @@
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { Connection } from "jsforce";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { SalesforceFinancialLoanVirementMapper } from "./mappers/financialLoanVirementMapper";

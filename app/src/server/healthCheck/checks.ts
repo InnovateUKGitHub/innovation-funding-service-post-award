@@ -1,5 +1,5 @@
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { ErrorCode } from "@framework/constants/enums";
 import { configuration } from "@server/features/common/config";
 import { CompaniesHouse } from "@server/repositories/companiesRepository";

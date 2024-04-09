@@ -5,7 +5,7 @@ exports[`Context should contain the repositories 1`] = `
   "accounts": AccountsRepository {
     "getSalesforceConnection": [Function],
     "jesEnabled": "Yes",
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -25,7 +25,7 @@ exports[`Context should contain the repositories 1`] = `
   "claimDetails": ClaimDetailsRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -54,7 +54,7 @@ exports[`Context should contain the repositories 1`] = `
   "claimLineItems": ClaimLineItemRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -79,7 +79,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "claimStatusChanges": ClaimStatusChangeRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -103,7 +103,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "claimTotalCostCategory": ClaimTotalCostCategoryRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -123,7 +123,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "claims": ClaimRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -168,7 +168,7 @@ exports[`Context should contain the repositories 1`] = `
   "companies": CompaniesHouse {},
   "costCategories": CostCategoryRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -195,7 +195,7 @@ exports[`Context should contain the repositories 1`] = `
   "documents": DocumentsRepository {
     "contentDocumentLinkRepository": ContentDocumentLinkRepository {
       "getSalesforceConnection": [Function],
-      "logger": Logger {
+      "logger": ServerLogger {
         "identifier": "Context",
         "options": {
           "logLevel": "ERROR",
@@ -214,7 +214,7 @@ exports[`Context should contain the repositories 1`] = `
     },
     "contentDocumentRepository": ContentDocumentRepository {
       "getSalesforceConnection": [Function],
-      "logger": Logger {
+      "logger": ServerLogger {
         "identifier": "Context",
         "options": {
           "logLevel": "ERROR",
@@ -231,7 +231,7 @@ exports[`Context should contain the repositories 1`] = `
     },
     "contentVersionRepository": ContentVersionRepository {
       "getSalesforceConnection": [Function],
-      "logger": Logger {
+      "logger": ServerLogger {
         "identifier": "Context",
         "options": {
           "logLevel": "ERROR",
@@ -256,7 +256,7 @@ exports[`Context should contain the repositories 1`] = `
       ],
       "salesforceObjectName": "ContentVersion",
     },
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "DocumentsRepository",
       "options": {
         "logLevel": "ERROR",
@@ -265,7 +265,7 @@ exports[`Context should contain the repositories 1`] = `
     },
     "salesforceFeedAttachmentRepository": SalesforceFeedAttachmentRepository {
       "getSalesforceConnection": [Function],
-      "logger": Logger {
+      "logger": ServerLogger {
         "identifier": "Context",
         "options": {
           "logLevel": "ERROR",
@@ -285,7 +285,7 @@ exports[`Context should contain the repositories 1`] = `
   "financialLoanVirements": FinancialLoanVirementRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -312,7 +312,7 @@ exports[`Context should contain the repositories 1`] = `
   "financialVirements": FinancialVirementRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -343,7 +343,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "loans": LoanRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -371,7 +371,7 @@ exports[`Context should contain the repositories 1`] = `
   "monitoringReportHeader": MonitoringReportHeaderRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -397,7 +397,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "monitoringReportQuestions": MonitoringReportQuestionsRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -422,7 +422,7 @@ exports[`Context should contain the repositories 1`] = `
   "monitoringReportResponse": MonitoringReportResponseRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -443,7 +443,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "monitoringReportStatusChange": MonitoringReportStatusChangeRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -466,7 +466,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "partners": PartnerRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -550,7 +550,7 @@ exports[`Context should contain the repositories 1`] = `
   "pcrSpendProfile": PcrSpendProfileRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -590,7 +590,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "permissionGroups": PermissionGroupRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -613,7 +613,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "profileDetails": ProfileDetailsRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -639,7 +639,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "profileTotalCostCategory": ProfileTotalCostCategoryRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -664,7 +664,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "profileTotalPeriod": ProfileTotalPeriodRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -689,7 +689,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "projectChangeRequestStatusChange": ProjectChangeRequestStatusChangeRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -716,7 +716,7 @@ exports[`Context should contain the repositories 1`] = `
   "projectChangeRequests": ProjectChangeRequestRepository {
     "getRecordTypeId": [Function],
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -802,7 +802,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "projectContacts": ProjectContactsRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -832,7 +832,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "projects": ProjectRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",
@@ -884,7 +884,7 @@ exports[`Context should contain the repositories 1`] = `
   },
   "recordTypes": RecordTypeRepository {
     "getSalesforceConnection": [Function],
-    "logger": Logger {
+    "logger": ServerLogger {
       "identifier": "Context",
       "options": {
         "logLevel": "ERROR",

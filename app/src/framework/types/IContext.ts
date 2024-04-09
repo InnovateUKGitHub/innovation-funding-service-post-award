@@ -9,7 +9,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { Connection } from "jsforce";
 import { IConfig } from "@framework/types/IConfig";
 import { IAccountsRepository } from "@server/repositories/accountsRepository";

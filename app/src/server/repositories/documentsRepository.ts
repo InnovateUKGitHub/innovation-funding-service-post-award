@@ -3,7 +3,8 @@ import { Connection } from "jsforce";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
-import { ILogger, Logger } from "@shared/developmentLogger";
+import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
@@ -14,7 +15,7 @@ import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRe
 import { ForbiddenError } from "@shared/appError";
 
 export class DocumentsRepository {
-  private readonly logger: Logger = new Logger("DocumentsRepository");
+  private readonly logger: ILogger = new Logger("DocumentsRepository");
   private readonly contentVersionRepository: ContentVersionRepository;
   private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
   private readonly contentDocumentRepository: ContentDocumentRepository;

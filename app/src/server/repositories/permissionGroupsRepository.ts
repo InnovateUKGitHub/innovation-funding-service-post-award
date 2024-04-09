@@ -1,5 +1,5 @@
 import { PermissionGroup } from "@framework/entities/permissionGroup";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { SalesforcePermissionGroupMapper } from "./mappers/permissionGroupMapper";

@@ -24,11 +24,12 @@ import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber, parseNumber } from "@framework/util/numberHelper";
 import { merge } from "lodash";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   private mergedPartner: PartnerDto | null = null;
-  private readonly logger: Logger = new Logger("UpdatePartnerCommand");
+  private readonly logger: ILogger = new Logger("UpdatePartnerCommand");
 
   constructor(
     private readonly partner: PickRequiredFromPartial<PartnerDto, "id" | "projectId">,

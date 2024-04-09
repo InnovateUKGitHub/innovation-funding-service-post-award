@@ -4,6 +4,7 @@ import { ISession, ServerFileWrapper } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { ValidationError, ZodFormHandlerError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
@@ -26,7 +27,7 @@ abstract class ZodFormHandlerBase<
   public readonly route: IRouteDefinition<QueryParams>;
   public readonly routePath: string;
   public readonly forms: FormTypes[];
-  protected readonly logger: Logger;
+  protected readonly logger: ILogger;
   protected readonly copy: Copy;
 
   /**

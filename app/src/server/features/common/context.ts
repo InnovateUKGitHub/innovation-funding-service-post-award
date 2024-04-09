@@ -5,7 +5,8 @@ import { BankCheckService } from "@server/resources/bankCheckService";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
 import { SfdcServerError, AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
-import { ILogger, Logger } from "@shared/developmentLogger";
+import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
 import {

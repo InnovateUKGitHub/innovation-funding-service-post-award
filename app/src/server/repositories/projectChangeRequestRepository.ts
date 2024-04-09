@@ -1,4 +1,4 @@
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
 import { Connection } from "jsforce";

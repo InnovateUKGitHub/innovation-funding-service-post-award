@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import { ILogger, Logger } from "@shared/developmentLogger";
+import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
 import { checkSalesforce, checkGoogleAnalytics, checkCompaniesHouse } from "./healthCheck/checks";
 import { HealthCheckResult } from "./healthCheck/checks";

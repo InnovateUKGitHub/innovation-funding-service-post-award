@@ -132,6 +132,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
     plugins: [
       new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
       new NormalModuleReplacementPlugin(...getNormalReplacementParams("isomorphicFileWrapper.ts")),
+      new NormalModuleReplacementPlugin(...getNormalReplacementParams("developmentLogger.ts")),
       new MiniCssExtractPlugin({
         filename: "styles.css",
       }),
