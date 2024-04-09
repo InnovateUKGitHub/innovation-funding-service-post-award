@@ -60,7 +60,7 @@ export const OtherCostsFormComponent = () => {
 
   const { handleSubmit, watch, formState, register } = useForm<OtherCostsSchema>({
     defaultValues: {
-      id: defaultCost?.id ?? "",
+      id: defaultCost.id,
       descriptionOfCost: defaultCost?.description ?? "",
       estimatedCost: String(defaultCost?.value ?? ""),
     },
