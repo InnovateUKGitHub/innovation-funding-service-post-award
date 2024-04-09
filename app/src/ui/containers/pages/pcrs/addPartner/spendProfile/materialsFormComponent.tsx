@@ -17,7 +17,11 @@ import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useContext } from "react";
-import { PCRSpendProfileCostDto, PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileMaterialsCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 
@@ -43,11 +47,11 @@ export const MaterialsFormComponent = () => {
   } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  let defaultCost: PCRSpendProfileMaterialsCostDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileMaterialsCostDto>;
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       quantity: null,
       costPerItem: null,

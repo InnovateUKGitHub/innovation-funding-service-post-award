@@ -24,7 +24,11 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { isObject, sumBy } from "lodash";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { PCRSpendProfileCostDto, PCRSpendProfileOverheadsCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileOverheadsCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 const isOverheadsCostDto = function (
@@ -51,12 +55,12 @@ export const OverheadsFormComponent = ({}) => {
   } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  let defaultCost: PCRSpendProfileOverheadsCostDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileOverheadsCostDto>;
 
   if (addNewItem) {
     defaultCost = {
       description: "",
-      id: null as unknown as CostId,
+      id: null,
       overheadRate: PCRSpendProfileOverheadRate.Unknown,
       value: null,
       costCategoryId,

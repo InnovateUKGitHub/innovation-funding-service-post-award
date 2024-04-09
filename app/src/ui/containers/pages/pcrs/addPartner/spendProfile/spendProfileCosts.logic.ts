@@ -167,7 +167,7 @@ export const SpendProfileContext = createContext<SpendProfileContextType>({
   onUpdate: noop,
 } as SpendProfileContextType);
 
-export const appendOrMerge = <T extends { id?: string }>(costs: T[], cost: T) => {
+export const appendOrMerge = <T extends { id?: string | null }>(costs: T[], cost: T) => {
   const matchingIndex = costs.findIndex(x => x?.id === cost?.id);
   if (matchingIndex > -1) {
     const matchedCost = costs[matchingIndex];

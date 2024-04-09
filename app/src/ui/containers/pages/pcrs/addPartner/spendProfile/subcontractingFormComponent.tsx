@@ -1,4 +1,8 @@
-import { PCRSpendProfileCostDto, PCRSpendProfileSubcontractingCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileSubcontractingCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { useContext } from "react";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { useRhfErrors } from "@framework/util/errorHelpers";
@@ -41,11 +45,11 @@ export const SubcontractingFormComponent = () => {
     addNewItem,
   } = useContext(SpendProfileContext);
 
-  let defaultValues: PCRSpendProfileSubcontractingCostDto;
+  let defaultValues: MaybeNewCostDto<PCRSpendProfileSubcontractingCostDto>;
 
   if (addNewItem) {
     defaultValues = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       subcontractorCountry: null,
       subcontractorRoleAndDescription: null,

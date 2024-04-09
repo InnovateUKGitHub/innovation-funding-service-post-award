@@ -12,7 +12,11 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
-import { PCRSpendProfileCostDto, PCRSpendProfileOtherCostsDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileOtherCostsDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
@@ -38,11 +42,11 @@ export const OtherCostsFormComponent = () => {
     addNewItem,
   } = useContext(SpendProfileContext);
 
-  let defaultCost: PCRSpendProfileOtherCostsDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileOtherCostsDto>;
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       value: null,
       costCategoryId,
@@ -56,7 +60,7 @@ export const OtherCostsFormComponent = () => {
 
   const { handleSubmit, watch, formState, register } = useForm<OtherCostsSchema>({
     defaultValues: {
-      id: defaultCost?.id,
+      id: defaultCost?.id ?? "",
       descriptionOfCost: defaultCost?.description ?? "",
       estimatedCost: String(defaultCost?.value ?? ""),
     },

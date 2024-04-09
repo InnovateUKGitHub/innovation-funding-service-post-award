@@ -68,3 +68,5 @@ export interface PCRSpendProfileTravelAndSubsCostDto extends PCRSpendProfileBase
 }
 
 export type PCRSpendProfileOtherCostsDto = PCRSpendProfileBaseCostDto;
+
+export type MaybeNewCostDto<T extends PCRSpendProfileCostDto> = { [K in keyof T]: K extends "id" ? T[K] | null : T[K] };

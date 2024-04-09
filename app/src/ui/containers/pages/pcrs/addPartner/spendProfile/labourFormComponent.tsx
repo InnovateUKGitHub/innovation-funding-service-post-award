@@ -17,7 +17,11 @@ import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
-import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileLabourCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { parseCurrency } from "@framework/util/numberHelper";
 
@@ -44,11 +48,11 @@ export const LabourFormComponent = () => {
     addNewItem,
   } = useContext(SpendProfileContext);
 
-  let defaultCost: PCRSpendProfileLabourCostDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileLabourCostDto>;
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       grossCostOfRole: null,
       ratePerDay: null,

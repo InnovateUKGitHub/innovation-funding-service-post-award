@@ -19,7 +19,11 @@ import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
@@ -50,11 +54,11 @@ export const CapitalUsageFormComponent = () => {
   } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  let defaultCost: PCRSpendProfileCapitalUsageCostDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileCapitalUsageCostDto>;
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       depreciationPeriod: null,
       netPresentValue: null,

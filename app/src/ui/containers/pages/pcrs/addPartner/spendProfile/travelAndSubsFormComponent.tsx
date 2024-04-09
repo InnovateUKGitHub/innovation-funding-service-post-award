@@ -1,4 +1,8 @@
-import { PCRSpendProfileCostDto, PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  MaybeNewCostDto,
+  PCRSpendProfileCostDto,
+  PCRSpendProfileTravelAndSubsCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContext } from "react";
@@ -43,11 +47,11 @@ export const TravelAndSubsFormComponent = () => {
   } = useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
-  let defaultCost: PCRSpendProfileTravelAndSubsCostDto;
+  let defaultCost: MaybeNewCostDto<PCRSpendProfileTravelAndSubsCostDto>;
 
   if (addNewItem) {
     defaultCost = {
-      id: null as unknown as CostId,
+      id: null,
       description: null,
       numberOfTimes: null,
       costOfEach: null,
