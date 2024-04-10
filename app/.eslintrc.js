@@ -44,6 +44,7 @@ module.exports = {
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/ban-ts-comment": "warn",
       },
     },
     {
@@ -74,6 +75,7 @@ module.exports = {
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
         "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/ban-ts-comment": "warn",
       },
     },
     {
@@ -102,6 +104,7 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/ban-ts-comment": "warn",
         "jest/no-standalone-expect": [
           "warn",
           {
