@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
+import { BaseProps, defineRoute } from "../../containerBase";
 import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 import { PCRItemType, PCRStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
@@ -28,230 +28,295 @@ export interface PCRReviewParams {
   pcrId: PcrId;
 }
 
+type PcrReviewItem = Pick<PCRItemDto, "shortName" | "typeName" | "type" | "status" | "id">;
+
+type ReviewPcr = Pick<Omit<PCRDto, "items">, "requestNumber" | "reasoningStatus" | "comments" | "status"> & {
+  items: PcrReviewItem[];
+};
+
 interface Data {
-  project: Pending<ProjectDto>;
-  pcr: Pending<PCRDto>;
-  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  project: Pick<ProjectDto, "projectNumber" | "title">;
+  pcr: ReviewPcr;
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
   statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
-  editableItemTypes: Pending<PCRItemType[]>;
+  editableItemTypes: PCRItemType[];
 }
 
 interface Callbacks {
-  onChange: (save: boolean, dto: PCRDto) => void;
+  onChange: (save: boolean, dto: ReviewPcr) => void;
 }
 
-const Form = createTypedForm<PCRDto>();
+const Form = createTypedForm<ReviewPcr>();
 
-class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
-  render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      pcr: this.props.pcr,
-      editor: this.props.editor,
-      editableItemTypes: this.props.editableItemTypes,
-    });
-
-    return (
-      <PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)}
+const PCRReviewComponent = (props: BaseProps & PCRReviewParams & Data & Callbacks) => {
+  return (
+    <Page
+      backLink={
+        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId: props.projectId })}>
+          Back to project change requests
+        </BackLink>
+      }
+      pageTitle={<Title {...props.project} />}
+      validator={props.editor.validator}
+      error={props.editor.error}
+      projectId={props.projectId}
+    >
+      <Summary projectChangeRequest={props.pcr} />
+      <Tasks
+        projectChangeRequest={props.pcr}
+        editableItemTypes={props.editableItemTypes}
+        editor={props.editor}
+        routes={props.routes}
+        pcrId={props.pcrId}
+        projectId={props.projectId}
       />
-    );
-  }
+      <LogSection statusChanges={props.statusChanges} />
+      <ReviewForm editor={props.editor} onChange={props.onChange} />
+    </Page>
+  );
+};
 
-  private renderContents(
-    project: ProjectDto,
-    projectChangeRequest: PCRDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    editableItemTypes: PCRItemType[],
-  ) {
-    return (
-      <Page
-        backLink={
-          <BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
-            Back to project change requests
-          </BackLink>
-        }
-        pageTitle={<Title {...project} />}
-        validator={editor.validator}
-        error={editor.error}
-        projectId={this.props.projectId}
-        isActive // todo: use project value after migrating to gql
-      >
-        {this.renderSummary(projectChangeRequest)}
-        {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
-        {this.renderLog()}
-        {this.renderForm(editor)}
-      </Page>
-    );
-  }
-
-  private renderSummary(projectChangeRequest: PCRDto) {
-    return (
-      <Section title="Details">
-        <SummaryList qa="pcrDetails">
-          <SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <SummaryListItem
-            label="Types"
-            content={<LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
-            qa="typesRow"
-          />
-        </SummaryList>
-      </Section>
-    );
-  }
-
-  private renderTasks(
-    projectChangeRequest: PCRDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    editableItemTypes: PCRItemType[],
-  ) {
-    return (
-      <List qa="taskList">
-        {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
-        {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-      </List>
-    );
-  }
-
-  private renderForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const options: SelectOption[] = [
-      { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
-      { id: PCRStatus.SubmittedToInnovateUK.toString(), value: "Send for approval" },
-    ];
-
-    const selected = options.find(x => x.id === editor.data.status.toString());
-
-    return (
-      <Form.Form
-        editor={editor}
-        onChange={dto => this.props.onChange(false, dto)}
-        onSubmit={() => this.props.onChange(true, editor.data)}
-        qa="pcr-review-form"
-      >
-        <Form.Fieldset heading="How do you want to proceed?">
-          <Form.Radio
-            name="status"
-            inline={false}
-            options={options}
-            value={() => selected}
-            update={(m, v) => (m.status = parseInt((v && v.id) || "", 10) || PCRStatus.Unknown)}
-            validation={editor.validator.status}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading="Add your comments" isSubQuestion>
-          <Form.MultilineString
-            name="comments"
-            label=""
-            hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
-            value={m => m.comments}
-            update={(m, v) => (m.comments = v || "")}
-            validation={editor.validator.comments}
-            characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset qa="save-and-submit">
-          <Form.Submit>Submit</Form.Submit>
-        </Form.Fieldset>
-      </Form.Form>
-    );
-  }
-
-  private renderTaskListActions(
-    projectChangeRequest: PCRDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    editableItemTypes: PCRItemType[],
-  ) {
-    if (!editableItemTypes.length) return null;
-    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
-
-    return (
-      <TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
-        {editableItems.map((x, i) => this.getItemTasks(x, editor, i))}
-      </TaskListSection>
-    );
-  }
-
-  private renderTaskListReasoning(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
-    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
-    const stepCount = editableItems.length ? 2 : 1;
-
-    return (
-      <TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
-        <Task
-          name="Reasoning for Innovate UK"
-          status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={this.props.routes.pcrReviewReasoning.getLink({
-            projectId: this.props.projectId,
-            pcrId: this.props.pcrId,
-          })}
+const Summary = ({ projectChangeRequest }: { projectChangeRequest: Data["pcr"] }) => {
+  return (
+    <Section title="Details">
+      <SummaryList qa="pcrDetails">
+        <SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+        <SummaryListItem
+          label="Types"
+          content={<LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+          qa="typesRow"
         />
-      </TaskListSection>
-    );
-  }
-  private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
-    const validationErrors = editor.validator.items.results[index].errors;
+      </SummaryList>
+    </Section>
+  );
+};
 
-    return (
-      <Task
-        key={item.typeName}
-        name={item.typeName}
-        status={getPcrItemTaskStatus(item.status)}
-        route={this.props.routes.pcrReviewItem.getLink({
-          projectId: this.props.projectId,
-          pcrId: this.props.pcrId,
-          itemId: item.id,
-        })}
-        validation={validationErrors}
+const Tasks = ({
+  projectChangeRequest,
+  editor,
+  editableItemTypes,
+  routes,
+  pcrId,
+  projectId,
+}: {
+  projectChangeRequest: Data["pcr"];
+  editor: IEditorStore<ReviewPcr, PCRDtoValidator>;
+  editableItemTypes: PCRItemType[];
+  routes: BaseProps["routes"];
+  pcrId: PcrId;
+  projectId: ProjectId;
+}) => {
+  return (
+    <List qa="taskList">
+      <TaskListActions
+        projectChangeRequest={projectChangeRequest}
+        editableItemTypes={editableItemTypes}
+        editor={editor}
+        routes={routes}
+        projectId={projectId}
+        pcrId={pcrId}
       />
-    );
-  }
+      <TaskListReasoning
+        projectChangeRequest={projectChangeRequest}
+        editableItemTypes={editableItemTypes}
+        routes={routes}
+        projectId={projectId}
+        pcrId={pcrId}
+      />
+    </List>
+  );
+};
 
-  private renderLog() {
-    return (
-      <Section>
-        <Accordion>
-          <AccordionItem title="Status and comments log" qa="status-and-comments-log">
-            {/* Keeping logs inside loader because accordion defaults to closed*/}
-            <Loader
-              pending={this.props.statusChanges}
-              render={statusChanges => <Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
-            />
-          </AccordionItem>
-        </Accordion>
-      </Section>
-    );
-  }
-}
+const TaskListActions = ({
+  projectChangeRequest,
+  editableItemTypes,
+  editor,
+  routes,
+  projectId,
+  pcrId,
+}: {
+  projectChangeRequest: Data["pcr"];
+  editor: IEditorStore<ReviewPcr, PCRDtoValidator>;
+  editableItemTypes: PCRItemType[];
+  routes: BaseProps["routes"];
+  projectId: ProjectId;
+  pcrId: PcrId;
+}) => {
+  if (!editableItemTypes.length) return null;
+  const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+
+  return (
+    <TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
+      {editableItems.map((x, i) => (
+        <ItemTasks key={x.id} item={x} index={i} editor={editor} routes={routes} projectId={projectId} pcrId={pcrId} />
+      ))}
+    </TaskListSection>
+  );
+};
+
+const TaskListReasoning = ({
+  projectChangeRequest,
+  editableItemTypes,
+  routes,
+  projectId,
+  pcrId,
+}: {
+  projectChangeRequest: Data["pcr"];
+  editableItemTypes: PCRItemType[];
+  routes: BaseProps["routes"];
+  projectId: ProjectId;
+  pcrId: PcrId;
+}) => {
+  const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+  const stepCount = editableItems.length ? 2 : 1;
+
+  return (
+    <TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
+      <Task
+        name="Reasoning for Innovate UK"
+        status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
+        route={routes.pcrReviewReasoning.getLink({
+          projectId,
+          pcrId,
+        })}
+      />
+    </TaskListSection>
+  );
+};
+
+const ItemTasks = ({
+  item,
+  editor,
+  index,
+  routes,
+  projectId,
+  pcrId,
+}: {
+  item: Pick<PCRItemDto, "typeName" | "status" | "id">;
+  editor: IEditorStore<ReviewPcr, PCRDtoValidator>;
+  index: number;
+  routes: BaseProps["routes"];
+  projectId: ProjectId;
+  pcrId: PcrId;
+}) => {
+  const validationErrors = editor.validator.items.results[index].errors;
+
+  return (
+    <Task
+      key={item.typeName}
+      name={item.typeName}
+      status={getPcrItemTaskStatus(item.status)}
+      route={routes.pcrReviewItem.getLink({
+        projectId,
+        pcrId,
+        itemId: item.id,
+      })}
+      validation={validationErrors}
+    />
+  );
+};
+
+const LogSection = ({ statusChanges }: { statusChanges: Data["statusChanges"] }) => {
+  return (
+    <Section>
+      <Accordion>
+        <AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          {/* Keeping logs inside loader because accordion defaults to closed*/}
+          <Loader
+            pending={statusChanges}
+            render={statusChanges => <Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
+          />
+        </AccordionItem>
+      </Accordion>
+    </Section>
+  );
+};
+
+const ReviewForm = ({
+  editor,
+  onChange,
+}: {
+  editor: IEditorStore<ReviewPcr, PCRDtoValidator>;
+  onChange: Callbacks["onChange"];
+}) => {
+  const options: SelectOption[] = [
+    { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
+    { id: PCRStatus.SubmittedToInnovateUK.toString(), value: "Send for approval" },
+  ];
+
+  const selected = options.find(x => x.id === editor.data.status.toString());
+
+  return (
+    <Form.Form
+      editor={editor}
+      onChange={dto => onChange(false, dto)}
+      onSubmit={() => onChange(true, editor.data)}
+      qa="pcr-review-form"
+    >
+      <Form.Fieldset heading="How do you want to proceed?">
+        <Form.Radio
+          name="status"
+          inline={false}
+          options={options}
+          value={() => selected}
+          update={(m, v) => (m.status = parseInt((v && v.id) || "", 10) || PCRStatus.Unknown)}
+          validation={editor.validator.status}
+        />
+      </Form.Fieldset>
+      <Form.Fieldset heading="Add your comments" isSubQuestion>
+        <Form.MultilineString
+          name="comments"
+          label=""
+          hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
+          value={m => m.comments}
+          update={(m, v) => (m.comments = v || "")}
+          validation={editor.validator.comments}
+          characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
+        />
+      </Form.Fieldset>
+      <Form.Fieldset qa="save-and-submit">
+        <Form.Submit>Submit</Form.Submit>
+      </Form.Fieldset>
+    </Form.Form>
+  );
+};
 
 const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
   const navigate = useNavigate();
   const stores = useStores();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
+    editor: stores.projectChangeRequests.getPcrUpdateEditor(
+      props.projectId,
+      props.pcrId,
+      x => (x.status = PCRStatus.Unknown),
+    ),
+    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
+  });
+
+  const onChange = (save: boolean, dto: ReviewPcr) =>
+    stores.projectChangeRequests.updatePcrEditor({
+      saving: save,
+      projectId: props.projectId,
+      pcrStepType: PCRStepType.spendProfileStep,
+      dto: dto as PCRDto,
+      onComplete: () => {
+        navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);
+      },
+    });
   return (
-    <PCRReviewComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-      statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
-      // initalise editor pcr status to unknown to force state selection via form
-      editor={stores.projectChangeRequests.getPcrUpdateEditor(
-        props.projectId,
-        props.pcrId,
-        x => (x.status = PCRStatus.Unknown),
+    <PageLoader
+      pending={combined}
+      render={x => (
+        <PCRReviewComponent
+          onChange={onChange}
+          statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+          {...x}
+          {...props}
+        />
       )}
-      onChange={(save, dto) =>
-        stores.projectChangeRequests.updatePcrEditor({
-          saving: save,
-          projectId: props.projectId,
-          pcrStepType: PCRStepType.spendProfileStep,
-          dto,
-          onComplete: () => {
-            navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);
-          },
-        })
-      }
-      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
     />
   );
 };
