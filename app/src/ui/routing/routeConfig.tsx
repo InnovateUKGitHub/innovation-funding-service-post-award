@@ -51,7 +51,7 @@ import {
   PCRReviewReasoningRoute,
   PCRViewReasoningRoute,
 } from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
-import { PCRReviewRoute } from "@ui/containers/pages/pcrs/review";
+import { PCRReviewRoute } from "@ui/containers/pages/pcrs/pcrReview";
 import { ProjectDashboardRoute } from "@ui/containers/pages/projects/dashboard/Dashboard.page";
 import { ProjectDetailsRoute } from "@ui/containers/pages/projects/details/ProjectDetails.page";
 import { ProjectDocumentsRoute } from "@ui/containers/pages/projects/documents/projectDocuments.page";
