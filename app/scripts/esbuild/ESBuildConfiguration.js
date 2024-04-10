@@ -60,6 +60,9 @@ class ESBuildConfiguration {
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
       plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      banner: {
+        js: "const newrelic = process.env.NEW_RELIC_ENABLED === 'true' ? require('newrelic') : null;",
+      },
       loader: {
         ".apex": "text",
         ".gql": "text",

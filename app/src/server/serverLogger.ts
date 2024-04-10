@@ -1,7 +1,6 @@
 import { LogLevel } from "@framework/constants/enums";
 import { BaseLogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
-import type NewRelic from "newrelic";
 
 enum ForegroundColourCode {
   BLACK = 30,
@@ -208,17 +207,14 @@ export class ServerLogger extends BaseLogger {
     console.info(output);
   }
 
-  private static newrelic: typeof NewRelic | null = null;
   private async logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
-    if (ServerLogger.newrelic === null) {
-      ServerLogger.newrelic = (await import("newrelic")).default;
-    }
-
     const item = {
       message,
       params,
     };
     const output = JSON.stringify(item);
-    ServerLogger.newrelic.recordLogEvent({ level, message: output, timestamp: Date.now() });
+
+    // newrelic is a global variable instantiated as a banner of the webpack/esbuild build
+    if (newrelic) newrelic.recordLogEvent({ level, message: output, timestamp: Date.now() });
   }
 }
