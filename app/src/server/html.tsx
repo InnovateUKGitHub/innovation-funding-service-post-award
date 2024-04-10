@@ -1,6 +1,6 @@
 import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
-import * as pkg from "../../package.json";
+import pkg from "../../package.json";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { PreloadedState } from "redux";
 import { IAppError } from "@framework/types/IAppError";

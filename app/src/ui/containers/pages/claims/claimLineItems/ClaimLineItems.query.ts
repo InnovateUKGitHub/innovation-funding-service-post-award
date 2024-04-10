@@ -13,6 +13,7 @@ export const claimLineItemsQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...PageFragment
         ...AwardRateOverridesMessageFragment
         query {
           Acc_Profile__c(
@@ -190,12 +191,6 @@ export const claimLineItemsQuery = graphql`
                 Id
                 isActive
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
                 Acc_ProjectStatus__c {

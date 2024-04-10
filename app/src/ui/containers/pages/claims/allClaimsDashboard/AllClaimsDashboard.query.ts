@@ -4,6 +4,7 @@ export const allClaimsDashboardQuery = graphql`
     salesforce {
       uiapi {
         ...ProjectSuspensionMessageFragment
+        ...PageFragment
         query {
           Acc_Profile__c(
             where: {
@@ -106,12 +107,6 @@ export const allClaimsDashboardQuery = graphql`
                     isAssociate
                     partnerId
                   }
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
                 }
                 Acc_ProjectStatus__c {
                   value

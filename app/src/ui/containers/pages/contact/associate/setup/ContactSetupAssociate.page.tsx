@@ -23,11 +23,8 @@ import { contactSchemaErrorMap } from "@ui/zod/contactSchema.zod";
 import { useMemo } from "react";
 import { UseFormGetFieldState, UseFormRegister, useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  ContactSetupAssociateParams,
-  useContactSetupAssociatePageData,
-  useOnContactSetupAssociateSubmit,
-} from "./ContactSetupAssociate.logic";
+import { useContactSetupAssociatePageData, useOnContactSetupAssociateSubmit } from "./ContactSetupAssociate.logic";
+import type { ContactSetupAssociateParams } from "./ContactSetupAssociate.logic";
 import { ContactSetupAssociateSchemaType, contactSetupAssociateSchema } from "./ContactSetupAssociate.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 

@@ -69,5 +69,5 @@ export const useProjectDetailsQuery = (projectId: ProjectId) => {
     "projectId",
     "roleName",
   ]);
-  return { project, partners, contacts };
+  return { project, partners, contacts, fragmentRef: data?.salesforce?.uiapi };
 };

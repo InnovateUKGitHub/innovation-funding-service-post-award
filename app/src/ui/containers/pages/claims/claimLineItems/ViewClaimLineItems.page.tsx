@@ -2,20 +2,20 @@ import { ProjectRole } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { Helmet } from "react-helmet";
 import { ClaimLineItemNavigationArrows } from "./ClaimLineItemNavigationArrows";
-import { ClaimLineItemsParams, getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
+import { getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
+import type { ClaimLineItemsParams } from "./ClaimLineItems.logic";
 import { SupportingDocumentsSection } from "./SupportingDocumentsSection";
 import { ClaimLineItemsTable } from "./ClaimLineItemsTable";
 import { ClaimLineItemClaimDetailComments } from "./ClaimLineItemClaimDetailComments";
 
-interface ViewClaimLineItemsProps extends ClaimLineItemsParams {
+type ViewClaimLineItemsProps = ClaimLineItemsParams & {
   mode: "details" | "review";
-}
+};
 
 const ViewClaimLineItemsPage = ({
   projectId,
@@ -37,23 +37,22 @@ const ViewClaimLineItemsPage = ({
     fragmentRef,
   } = useClaimLineItemsData(projectId, partnerId, periodId, costCategoryId);
 
+  const pageTitleHeading =
+    mode === "details"
+      ? getContent(x => x.pages.claimLineItems.htmlViewTitle({ title: currentCostCategory.name.toLowerCase() }))
+      : mode === "review"
+      ? getContent(x => x.pages.claimLineItems.htmlReviewTitle({ title: currentCostCategory.name.toLowerCase() }))
+      : "";
+
   return (
     <Page
       backLink={<BackLink route={backLink}>{getContent(x => x.pages.claimLineItems.backLink)}</BackLink>}
-      pageTitle={
-        <Title title={project.title} projectNumber={project.projectNumber} heading={currentCostCategory.name} />
-      }
-      isActive={project.isActive}
       fragmentRef={fragmentRef}
+      heading={pageTitleHeading}
     >
       {/* Update the HTML title to include the costCategoryName */}
       <Helmet>
-        {mode === "details" && (
-          <title>{getContent(x => x.pages.claimLineItems.htmlViewTitle({ title: currentCostCategory.name }))}</title>
-        )}
-        {mode === "review" && (
-          <title>{getContent(x => x.pages.claimLineItems.htmlReviewTitle({ title: currentCostCategory.name }))}</title>
-        )}
+        <title>{pageTitleHeading}</title>
       </Helmet>
 
       <AwardRateOverridesMessage currentCostCategoryId={costCategoryId} currentPeriod={periodId} />

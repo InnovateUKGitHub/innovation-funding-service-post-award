@@ -3,7 +3,6 @@ export const claimReviewQuery = graphql`
   query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
-        ...TitleFragment
         ...PageFragment
         query {
           Acc_Profile__c(

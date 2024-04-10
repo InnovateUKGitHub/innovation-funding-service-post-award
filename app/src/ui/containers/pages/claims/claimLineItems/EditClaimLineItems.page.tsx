@@ -19,7 +19,8 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ClaimLineItemsParams, getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
+import { getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
+import type { ClaimLineItemsParams } from "./ClaimLineItems.logic";
 import { EditClaimLineItemsTable } from "./ClaimLineItemsTable";
 import { DeleteByEnteringZero, isNotAuthorOfLineItems } from "./DeleteByEnteringZero";
 import { DocumentUploadLinkGuidance } from "./DocumentUploadLinkGuidance";
@@ -35,9 +36,9 @@ import { useMapToInitialLineItems } from "./useMapToClaimLineItemTableDto";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-interface EditClaimLineItemsProps extends ClaimLineItemsParams {
+type EditClaimLineItemsProps = ClaimLineItemsParams & {
   mode: "prepare";
-}
+};
 
 const EditClaimLineItemsPage = ({
   projectId,
@@ -76,15 +77,20 @@ const EditClaimLineItemsPage = ({
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors(setError, formState.errors);
 
+  const pageTitleHeading = getContent(x =>
+    x.pages.claimLineItems.htmlPrepareTitle({ title: currentCostCategory.name.toLowerCase() }),
+  );
+
   return (
     <Page
       backLink={<BackLink route={backLink}>{getContent(x => x.pages.claimLineItems.backLink)}</BackLink>}
       fragmentRef={fragmentRef}
       validationErrors={allErrors}
+      heading={pageTitleHeading}
     >
-      {/* Update the HTML title to include the costCategoryName */}
+      {/* Update the HTML title to include the costCategoryName*/}
       <Helmet>
-        <title>{getContent(x => x.pages.claimLineItems.htmlPrepareTitle({ title: currentCostCategory.name }))}</title>
+        <title>{pageTitleHeading}</title>
       </Helmet>
 
       <AwardRateOverridesMessage currentCostCategoryId={costCategoryId} currentPeriod={periodId} />
@@ -125,12 +131,10 @@ const EditClaimLineItemsPage = ({
 
         <FormGroup hasError={!!getFieldState("comments").error}>
           <Legend>{getContent(x => x.pages.editClaimLineItems.headerAdditionalInformation)}</Legend>
-          <Hint id="hint-for-explaination">
-            {getContent(x => x.pages.editClaimLineItems.hintAdditionalInformation)}
-          </Hint>
+          <Hint id="hint-for-explanation">{getContent(x => x.pages.editClaimLineItems.hintAdditionalInformation)}</Hint>
           <ValidationError error={getFieldState("comments").error} />
           <CharacterCount count={watch("comments")?.length ?? 0} type="descending" maxValue={32768}>
-            <Textarea id="explaination" disabled={isFetching} {...register("comments")} />
+            <Textarea id="explanation" disabled={isFetching} {...register("comments")} />
           </CharacterCount>
         </FormGroup>
 

@@ -5,21 +5,19 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/emailContent";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PartnerContactRoleTable } from "@ui/components/atomicDesign/organisms/partners/ContactRoleTable/PartnerContactRoleTable";
 import { ContactsTable } from "@ui/components/atomicDesign/organisms/partners/ContactsTable/contactsTable";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { ShortDateRange, FullDate } from "@ui/components/atomicDesign/atoms/Date";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
-// import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
@@ -147,7 +145,7 @@ const getDetailsContactRole = getContactRole<
 >;
 
 const ProjectDetailsPage = (props: Props & BaseProps) => {
-  const { project, partners, contacts } = useProjectDetailsQuery(props.projectId);
+  const { project, partners, contacts, fragmentRef } = useProjectDetailsQuery(props.projectId);
   const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
 
   // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
@@ -168,12 +166,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
   });
 
   return (
-    <Page
-      backLink={<ProjectBackLink projectId={project.id} />}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectId={props.projectId}
-      isActive={project.isActive}
-    >
+    <Page fragmentRef={fragmentRef} backLink={<ProjectBackLink projectId={project.id} />}>
       <Section
         qa="period-information"
         title={x =>

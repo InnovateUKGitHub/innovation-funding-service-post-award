@@ -20,10 +20,9 @@ import {
   getClaimDetailsStatusType,
 } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IRoutes } from "@ui/routing/routeConfig";
@@ -78,12 +77,9 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
 
   return (
     <Page
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={<ProjectBackLink projectId={project.id} />}
       fragmentRef={fragmentRef}
-      projectId={props.projectId}
       partnerId={isLeadPartnerFc ? leadPartner.id : undefined}
-      isActive={project.isActive}
     >
       {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
 

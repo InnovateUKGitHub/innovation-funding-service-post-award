@@ -11,9 +11,9 @@ import { ContactSetupAssociateSchemaType } from "./ContactSetupAssociate.zod";
 import { ContactSetupAssociateQuery } from "./__generated__/ContactSetupAssociateQuery.graphql";
 import { Dispatch, SetStateAction, useState } from "react";
 
-interface ContactSetupAssociateParams {
+export type ContactSetupAssociateParams = {
   projectId: ProjectId;
-}
+};
 
 const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociateParams) => {
   const [fetchKey, setFetchKey] = useState(0);
@@ -59,4 +59,4 @@ const useOnContactSetupAssociateSubmit = ({
   });
 };
 
-export { ContactSetupAssociateParams, useContactSetupAssociatePageData, useOnContactSetupAssociateSubmit };
+export { useContactSetupAssociatePageData, useOnContactSetupAssociateSubmit };

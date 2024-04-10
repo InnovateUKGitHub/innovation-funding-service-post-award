@@ -7,6 +7,7 @@ export const projectOverviewQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...PageFragment
         ...ProjectSuspensionMessageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {

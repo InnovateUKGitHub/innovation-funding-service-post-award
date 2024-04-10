@@ -5,11 +5,10 @@ import ProjectOverviewTiles from "./projectOverviewTiles";
 import { useProjectOverviewData, isPartnerWithdrawn } from "./projectOverview.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { ShortDateRange } from "@ui/components/atomicDesign/atoms/Date";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 
 type Props = {
   projectId: ProjectId;
@@ -48,11 +47,8 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
           {<Content value={x => x.pages.projectOverview.backToProjects} />}
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       fragmentRef={fragmentRef}
-      projectId={props.projectId}
       partnerId={highlightedPartner?.id}
-      isActive={project.isActive}
     >
       <Section qa="period-information" className="govuk-!-padding-bottom-6" title={title} subtitle={subtitle}>
         {highlightedPartner && (project.roles.isPm || project.roles.isMo) ? (

@@ -13,14 +13,14 @@ import { useRoutes } from "@ui/redux/routesProvider";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 import { RouteState } from "@ui/containers/containerBase";
 
-interface ClaimLineItemsParams {
+export type ClaimLineItemsParams = {
   projectId: ProjectId;
   partnerId: PartnerId;
   costCategoryId: CostCategoryId;
   periodId: PeriodId;
-}
+};
 
-type ClaimLineItemMode = "prepare" | "review" | "details";
+export type ClaimLineItemMode = "prepare" | "review" | "details";
 
 const getParams = (route: RouteState): ClaimLineItemsParams => ({
   projectId: route.params.projectId as ProjectId,
@@ -44,7 +44,7 @@ const useClaimLineItemsData = (
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const project = mapToProjectDto(projectNode, ["id", "competitionType", "title", "projectNumber", "isActive"]);
+  const project = mapToProjectDto(projectNode, ["id", "competitionType"]);
 
   const partner = mapToPartnerDto(partnerNode, ["id", "organisationType", "overheadRate"], {});
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
@@ -134,4 +134,4 @@ const useBackLink = (
   throw new Error(`Cannot generate backLink because an invalid ClaimLineItems mode "${mode}" was passed`);
 };
 
-export { getParams, ClaimLineItemsParams, useClaimLineItemsData, useBackLink, ClaimLineItemMode };
+export { getParams, useClaimLineItemsData, useBackLink };

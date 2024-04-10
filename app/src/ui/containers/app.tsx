@@ -45,7 +45,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const stores = useStores();
   const location = useLocation();
 
-  const { params, routePathParams } = useMemo(
+  const { params } = useMemo(
     () => getParamsFromUrl(currentRoute.routePath, location.pathname, location.search),
     [currentRoute.routePath, location.pathname, location.search],
   );

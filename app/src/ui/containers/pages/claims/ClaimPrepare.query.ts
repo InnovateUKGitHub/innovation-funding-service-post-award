@@ -4,7 +4,7 @@ export const claimPrepareQuery = graphql`
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
-        ...TitleFragment
+        ...PageFragment
         ...AwardRateOverridesMessageFragment
         query {
           Acc_Profile__c(

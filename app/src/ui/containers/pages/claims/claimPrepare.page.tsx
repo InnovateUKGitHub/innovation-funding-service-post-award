@@ -11,8 +11,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimPreparePageData } from "./claimPrepare.logic";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
@@ -48,9 +47,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
           <Content value={x => x.pages.claimPrepare.backLink} />
         </BackLink>
       }
-      pageTitle={<Title />}
       fragmentRef={data?.fragmentRef}
-      isActive={data.project.isActive}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
       {isNonEditable && (
