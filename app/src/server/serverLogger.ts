@@ -207,7 +207,7 @@ export class ServerLogger extends BaseLogger {
     console.info(output);
   }
 
-  private async logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
+  private logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
     const item = {
       message,
       params,

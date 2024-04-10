@@ -97,21 +97,6 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       plugins: [new TsconfigPathsPlugin()],
       roots: [__dirname, path.resolve(__dirname, "public")],
     },
-    optimization: {
-      minimizer: [
-        "...",
-        new CssMinimizerPlugin({
-          minimizerOptions: {
-            preset: [
-              "default",
-              {
-                discardComments: { removeAll: true },
-              },
-            ],
-          },
-        }),
-      ],
-    },
     ...developmentConfig,
   };
 
@@ -138,6 +123,21 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       }),
       new ProvidePlugin({ React: "react" }),
     ],
+    optimization: {
+      minimizer: [
+        "...",
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: [
+              "default",
+              {
+                discardComments: { removeAll: true },
+              },
+            ],
+          },
+        }),
+      ],
+    },
     target: "web",
   };
 
@@ -162,6 +162,9 @@ const configGenerator = ({ env = "production", devtools = false }) => {
         raw: true,
       }),
     ],
+    optimization: {
+      minimize: false,
+    },
     target: "node",
     externals: [nodeExternals()],
   };
