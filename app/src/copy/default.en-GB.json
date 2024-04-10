@@ -1033,6 +1033,14 @@
     "pcrPrepareItem": {
       "title": "Prepare project change request item"
     },
+    "pcrReview": {
+      "statusTitle": "How do you want to proceed?",
+      "queryStatus": "Query the request",
+      "approveStatus": "Send for approval",
+      "submit": "Submit",
+      "addCommentsLabel": "Add your comments",
+      "backLink": "Back to project change requests"
+    },
     "pcrPrepareItemFilesForPartnerWithdrawal": {
       "guidanceHeading": "Upload withdrawal of partner certificate",
       "guidance": "You must upload these documents:\n\n* a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority\n* a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves\n* copies of signed letters from all other project partners to show they have agreed to this change"
@@ -1982,6 +1990,19 @@
           "errors": {
             "too_small": "You must reduce your claim to ensure the remaining eligible costs are zero or higher."
           }
+        }
+      }
+    },
+    "pcrReview": {
+      "comments": {
+        "errors": {
+          "too_big": "Comments must be a maximum of 1000 characters.",
+          "custom": "Comments are required if querying a claim."
+        }
+      },
+      "status": {
+        "errors": {
+          "too_small": "Select how you want to proceed"
         }
       }
     },
