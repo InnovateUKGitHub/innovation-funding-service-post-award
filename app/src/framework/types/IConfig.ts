@@ -36,19 +36,7 @@ export interface IConfig {
 
   readonly certificates: {
     salesforce: string;
-    saml: {
-      idp: {
-        public: string;
-      };
-      spSigning: {
-        public: string;
-        private: string;
-      };
-      spDecryption: {
-        public: string;
-        private: string;
-      };
-    };
+    shibboleth: string;
   };
 
   readonly features: IFeatureFlags;
