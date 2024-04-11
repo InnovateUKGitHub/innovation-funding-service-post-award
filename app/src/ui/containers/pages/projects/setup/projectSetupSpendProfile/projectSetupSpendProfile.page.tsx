@@ -35,7 +35,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
     projectParticipantId: partnerId,
   });
   const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
-  const { project } = data;
+  const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
   const { isPm } = getAuthRoles(project.roles);
@@ -85,9 +85,9 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
 
         <Section>
           <P data-qa="guidance">{getContent(x => x.pages.projectSetupSpendProfile.guidanceMessage)}</P>
-          {/* {partner.overheadRate !== null && (
+          {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
-          )} */}
+          )}
           <ForecastTable
             clientProfiles={watch("profile")}
             control={control}

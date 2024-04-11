@@ -17,6 +17,7 @@ export const newForecastTableFragment = graphql`
               isFc
               isPm
               isMo
+              isAssociate
             }
           }
         }

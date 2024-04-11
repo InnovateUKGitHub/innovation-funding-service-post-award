@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aa4b74090d316b8807bdc1a59fdf7bfc>>
+ * @generated SignedSource<<e24ebccf14d012cbebf4fd6f937cdcf0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -110,6 +110,7 @@ export type NewForecastTableFragment$data = {
             readonly value: number | null | undefined;
           } | null | undefined;
           readonly roles: {
+            readonly isAssociate: boolean;
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
@@ -340,6 +341,13 @@ return {
                           "args": null,
                           "kind": "ScalarField",
                           "name": "isMo",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "isAssociate",
                           "storageKey": null
                         }
                       ],
@@ -799,6 +807,6 @@ return {
 };
 })();
 
-(node as any).hash = "050bab9ef5c5dcf9d72db41af6f31b6d";
+(node as any).hash = "80c977d7f3cb0ccfe449ed6a23b7d4ff";
 
 export default node;
