@@ -492,14 +492,14 @@ const dateValidation = z.union([
       const year = Number(x.year);
       const month = Number(x.month);
       const day = Number(x.day);
-      const datetime = DateTime.local(year, month, day);
+      const datetime = DateTime.utc(year, month, day);
       if (!datetime.isValid) {
         ctx.addIssue({
           code: ZodIssueCode.invalid_date,
         });
       }
     })
-    .transform(x => DateTime.local(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
+    .transform(x => DateTime.utc(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
 ]);
 
 export {
