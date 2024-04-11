@@ -48,7 +48,7 @@ const ViewClaimLineItemsPage = ({
     <Page
       backLink={<BackLink route={backLink}>{getContent(x => x.pages.claimLineItems.backLink)}</BackLink>}
       fragmentRef={fragmentRef}
-      heading={pageTitleHeading}
+      heading={currentCostCategory.name}
     >
       {/* Update the HTML title to include the costCategoryName */}
       <Helmet>

@@ -86,7 +86,7 @@ const EditClaimLineItemsPage = ({
       backLink={<BackLink route={backLink}>{getContent(x => x.pages.claimLineItems.backLink)}</BackLink>}
       fragmentRef={fragmentRef}
       validationErrors={allErrors}
-      heading={pageTitleHeading}
+      heading={currentCostCategory.name}
     >
       {/* Update the HTML title to include the costCategoryName*/}
       <Helmet>
