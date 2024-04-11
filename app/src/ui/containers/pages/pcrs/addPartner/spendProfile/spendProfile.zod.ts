@@ -1,4 +1,5 @@
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
+import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import {
   costIdValidation,
@@ -79,12 +80,28 @@ export const capitalUsageSchema = z.object({
 
 export type CapitalUsageSchema = z.infer<typeof capitalUsageSchema>;
 
-export const travelAndASubsistenceSchema = z.object({
-  id: costIdValidation.nullable(),
-  descriptionOfCost: description,
-  numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
-  costOfEach: currencyValidation,
-});
+const maxTotalCost = 10_000_000_000_000;
+
+export const travelAndASubsistenceSchema = z
+  .object({
+    id: costIdValidation.nullable(),
+    descriptionOfCost: description,
+    numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
+    costOfEach: currencyValidation,
+    totalCost: z.number(),
+  })
+  .superRefine((data, ctx) => {
+    const totalCost = data.numberOfTimes * parseCurrency(data.costOfEach);
+    if (totalCost >= maxTotalCost) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        inclusive: false,
+        maximum: maxTotalCost,
+        type: "number",
+        path: ["totalCost"],
+      });
+    }
+  });
 
 export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSchema>;
 

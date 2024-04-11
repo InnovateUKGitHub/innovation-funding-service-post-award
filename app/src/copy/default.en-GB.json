@@ -2329,7 +2329,7 @@
               "too_small": "Enter gross cost of role.",
               "invalid_type": "Gross cost of role must be a number.",
               "invalid_string": { "regex": "Gross cost of role must be a number." },
-              "too_big": "Gross cost of role must be {{count}} or less.",
+              "too_big": "Gross cost of role must be {{count, currency}} or less.",
               "two_decimal_places": "Gross cost of role must be 2 decimal places or fewer."
             }
           },
@@ -2339,7 +2339,7 @@
               "invalid_type": "Rate per day must be a number.",
               "invalid_string": { "regex": "Rate per day must be a number." },
               "two_decimal_places": "Rate per day must be 2 decimal places or fewer.",
-              "too_big": "Rate per day must be {{count}} or less."
+              "too_big": "Rate per day must be {{count, currency}} or less."
             }
           },
           "daysSpentOnProject": {
@@ -2356,7 +2356,7 @@
               "too_small": "Enter total cost.",
               "invalid_type": "Total cost must be a number.",
               "invalid_string": { "regex": "Total cost must be a number." },
-              "too_big": "Total cost must be {{count}} or less.",
+              "too_big": "Total cost must be {{count, currency}} or less.",
               "two_decimal_places": "Total cost must be 2 decimal places or fewer."
             }
           },
@@ -2382,7 +2382,7 @@
             "errors": {
               "too_small": "Enter cost.",
               "invalid_type": "Cost must be a number.",
-              "too_big": "Cost must be {{count}} or less.",
+              "too_big": "Cost must be {{count, currency}} or less.",
               "invalid_string": { "regex": "Cost must be a number." },
               "two_decimal_places": "Cost must be 2 decimal places or fewer."
             }
@@ -2405,12 +2405,17 @@
               "too_big": "Number of times must be {{count}} or less."
             }
           },
+          "totalCost": {
+            "errors": {
+              "too_big": "Total cost must be less than {{count, currency}}."
+            }
+          },
           "costOfEach": {
             "errors": {
               "too_small": "Enter cost of each.",
               "invalid_type": "Cost of each must be a number.",
               "invalid_string": { "regex": "Cost of each must be a number." },
-              "too_big": "Cost of each must be {{count}} or less.",
+              "too_big": "Cost of each must be {{count, currency}} or less.",
               "two_decimal_places": "Cost of each must be 2 decimal places or fewer."
             }
           },
@@ -2445,7 +2450,7 @@
               "invalid_type": "Cost per item must be a number.",
               "invalid_string": { "regex": "Cost per item must be a number." },
               "too_small": "Enter cost per item.",
-              "too_big": "Cost per item must be {{count}} or less.",
+              "too_big": "Cost per item must be {{count, currency}} or less.",
               "two_decimal_places": "Cost per item must be 2 decimal places or fewer."
             }
           },
@@ -2462,7 +2467,7 @@
             "errors": {
               "too_small": "Enter net present value.",
               "invalid_type": "Net present value must be a number.",
-              "too_big": "Net present value must be {{count}} or less.",
+              "too_big": "Net present value must be {{count, currency}} or less.",
               "invalid_string": { "regex": "Net present value must be a number." },
               "two_decimal_places": "Net present value must be 2 decimal places or fewer."
             }
@@ -2472,7 +2477,7 @@
               "too_small": "Enter residual value.",
               "invalid_type": "Residual value must be a number.",
               "invalid_string": { "regex": "Residual value must be a number." },
-              "too_big": "Residual value must be {{count}} or less.",
+              "too_big": "Residual value must be {{count, currency}} or less.",
               "two_decimal_places": "Residual value must be 2 decimal places or fewer."
             }
           },
@@ -2489,7 +2494,7 @@
             "errors": {
               "too_small": "Enter estimated cost.",
               "invalid_type": "Estimated cost must be a number.",
-              "too_big": "Estimated cost must be {{count}} or less.",
+              "too_big": "Estimated cost must be {{count, currency}} or less.",
               "invalid_string": { "regex": "Estimated cost must be a number." },
               "two_decimal_places": "Estimated cost must be 2 decimal places or fewer."
             }

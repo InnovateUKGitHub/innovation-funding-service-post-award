@@ -24,6 +24,9 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 const isTravelAndSubsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -65,12 +68,13 @@ export const TravelAndSubsFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register } = useForm<TravelAndASubsistenceSchema>({
+  const { handleSubmit, watch, formState, register, trigger } = useForm<TravelAndASubsistenceSchema>({
     defaultValues: {
       id: defaultCost.id,
       descriptionOfCost: defaultCost.description ?? "",
       numberOfTimes: defaultCost.numberOfTimes ?? undefined,
       costOfEach: String(defaultCost.costOfEach ?? ""),
+      totalCost: defaultCost.value ?? 0,
     },
     resolver: zodResolver(travelAndASubsistenceSchema, {
       errorMap,
@@ -82,6 +86,7 @@ export const TravelAndSubsFormComponent = () => {
   const totalCost = Number(watch("numberOfTimes") ?? 0) * parseCurrency(watch("costOfEach") ?? 0);
 
   const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<TravelAndASubsistenceSchema>;
+  useFormRevalidate(watch, trigger);
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -141,9 +146,12 @@ export const TravelAndSubsFormComponent = () => {
         {isClient && (
           <Section>
             <H3>{getContent(x => x.pcrSpendProfileLabels.travelAndSubs.totalCost)}</H3>
-            <P>
-              <Currency value={totalCost} />
-            </P>
+            <FormGroup id="totalCost" hasError={!!validationErrors.totalCost}>
+              <ValidationError error={validationErrors.totalCost} />
+              <P>
+                <Currency value={totalCost} />
+              </P>
+            </FormGroup>
           </Section>
         )}
 

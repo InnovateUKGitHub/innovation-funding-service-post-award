@@ -15,6 +15,7 @@ export interface CurrencyProps extends CurrentArgs {
   bold?: boolean;
   noDefault?: boolean;
   id?: string;
+  hasError?: boolean;
 }
 
 /**
@@ -38,7 +39,16 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
 /**
  * Formatted currency component
  */
-export function Currency({ qa, value, bold, noDefault, fractionDigits = 2, className, ...props }: CurrencyProps) {
+export function Currency({
+  qa,
+  value,
+  bold,
+  hasError,
+  noDefault,
+  fractionDigits = 2,
+  className,
+  ...props
+}: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 
   // Enable word wrap if the value is above a trillion pounds.
@@ -54,7 +64,7 @@ export function Currency({ qa, value, bold, noDefault, fractionDigits = 2, class
     <span
       {...props}
       data-qa={qa}
-      className={cx("currency", { "govuk-!-font-weight-bold": bold }, className)}
+      className={cx("currency", { "govuk-!-font-weight-bold": bold, "govuk-error-message": hasError }, className)}
       style={{ ...props.style, whiteSpace: wordWrap }}
     >
       {shouldWordWrap
