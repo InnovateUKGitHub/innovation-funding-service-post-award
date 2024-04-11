@@ -1036,7 +1036,7 @@ export const jesDeleteCostCat = () => {
 
 export const addManyLines = () => {
   const wait = 250;
-  for (let i = 1; i < 40; i++) {
+  for (let i = 1; i < 21; i++) {
     let subtotal = 1332.66 * i;
     let GBPTotal = new Intl.NumberFormat("en-GB", {
       style: "currency",

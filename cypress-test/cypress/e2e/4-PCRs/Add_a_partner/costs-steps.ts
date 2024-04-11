@@ -668,3 +668,13 @@ export const checkDeleteOtherCostsItem = (pageNumber: OtherCostPages) => {
   const page = pageNumber === "1" ? "Other costs" : (("Other costs " + pageNumber) as Category);
   checkDeleteItem(page, "Other expenses 2", cost);
 };
+
+export const costsInCorrectOrder = () => {
+  for (let i = 1; i < 21; i++) {
+    cy.get("tr")
+      .eq(i)
+      .within(() => {
+        cy.tableCell(`Lorem ${i}`);
+      });
+  }
+};

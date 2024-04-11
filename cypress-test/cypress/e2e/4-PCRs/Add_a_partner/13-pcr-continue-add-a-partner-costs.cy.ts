@@ -29,6 +29,7 @@ import {
   checkDeleteSubcontractingItem,
   checkDeleteTravelAndSubsistenceItem,
   checkDeleteOtherCostsItem,
+  costsInCorrectOrder,
 } from "./costs-steps";
 
 import { addManyLines, deleteCost } from "./add-partner-e2e-steps";
@@ -126,5 +127,7 @@ describe("PCR > Add Partner > Business Costs", () => {
 
   it("Should access the cost category again and delete the line item", deleteCost);
 
-  it("Should enter 40 line items", addManyLines);
+  it("Should enter 20 line items", addManyLines);
+
+  it("should display 20 costs ordered by created date", costsInCorrectOrder);
 });
