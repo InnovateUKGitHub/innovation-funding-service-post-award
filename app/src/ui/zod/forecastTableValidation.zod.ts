@@ -10,6 +10,7 @@ import {
 import { z, ZodIssueCode } from "zod";
 import { FormTypes } from "./FormTypes";
 import {
+  booleanValidation,
   currencyValidation,
   partnerIdValidation,
   profileIdValidation,
@@ -30,7 +31,7 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ProjectSetupForecast),
       ]),
       profile: z.record(profileIdValidation, currencyValidation).optional(),
-      submit: z.coerce.boolean(),
+      submit: booleanValidation,
     })
     .superRefine(({ profile: clientProfiles, form, submit }, { addIssue, path }) => {
       const table = mapToForecastTableDto({ ...data, clientProfiles });
