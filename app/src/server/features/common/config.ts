@@ -77,7 +77,7 @@ const configuration: Readonly<IConfig> = {
     standardOverheadRate: floatEnv("STANDARD_OVERHEAD_RATE", 20),
     numberOfProjectsToSearch: intEnv("FEATURE_SEARCH_NUMBER_PROJECTS", 3),
     maxClaimLineItems: intEnv("FEATURE_MAX_CLAIM_LINE_ITEMS", 120),
-    nonJsMaxClaimLineItems: intEnv("NON_JS_FEATURE_MAX_CLAIM_LINE_ITEMS", 120),
+    nonJsMaxClaimLineItems: intEnv("NON_JS_FEATURE_MAX_CLAIM_LINE_ITEMS", 10),
   },
   salesforceServiceUser: {
     clientId: strEnv("SALESFORCE_CLIENT_ID"),

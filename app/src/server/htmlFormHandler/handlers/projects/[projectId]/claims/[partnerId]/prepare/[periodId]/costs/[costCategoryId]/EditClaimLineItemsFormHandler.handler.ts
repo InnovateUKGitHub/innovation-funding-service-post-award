@@ -19,6 +19,8 @@ import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
+const isNotEmptyField = (x: string | undefined | null) => typeof x === "string" && x.trim() !== "";
+
 class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItemsSchemaType, ClaimLineItemsParams> {
   constructor() {
     super({
@@ -45,7 +47,7 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
       const description = input[`lineItems.${i}.description`];
       const value = input[`lineItems.${i}.value`];
 
-      if (typeof description === "string" || typeof value === "string") {
+      if (isNotEmptyField(description) || isNotEmptyField(value)) {
         lineItems.push({
           id,
           description,
