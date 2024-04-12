@@ -31,7 +31,7 @@ export const overheadSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.overheadRate === PCRSpendProfileOverheadRate.Calculated) {
-      if (!data.calculatedValue) {
+      if (!data.calculatedValue && data.button_submit === "submit") {
         ctx.addIssue({
           code: z.ZodIssueCode.too_small,
           minimum: 0,

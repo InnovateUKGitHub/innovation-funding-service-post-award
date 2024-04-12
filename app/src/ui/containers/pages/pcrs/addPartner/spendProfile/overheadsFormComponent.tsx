@@ -164,7 +164,7 @@ export const OverheadsFormComponent = ({}) => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   overheadRate: Number(data.overheadRate),
-                  value: data.calculatedValue ? parseCurrency(data.calculatedValue) : null,
+                  value: data.calculatedValue ? parseCurrency(data.calculatedValue) : 0,
                 }),
               },
             },
