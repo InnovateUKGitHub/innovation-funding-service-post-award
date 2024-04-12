@@ -200,7 +200,7 @@ export const claimPrepareQuery = graphql`
                 Acc_TotalParticipantCosts__c {
                   value
                 }
-                Acc_TotalApprovedCosts__c {
+                Acc_TotalGrantApproved__c {
                   value
                 }
               }

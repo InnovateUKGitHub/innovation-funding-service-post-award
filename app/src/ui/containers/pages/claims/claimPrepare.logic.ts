@@ -43,7 +43,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
         "organisationType",
         "awardRate",
         "capLimitGrant",
-        "totalParticipantCostsClaimed",
+        "totalGrantApproved",
         "roles",
         "isWithdrawn",
         "partnerStatus",

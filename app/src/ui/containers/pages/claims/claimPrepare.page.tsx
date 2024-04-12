@@ -49,7 +49,12 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       }
       fragmentRef={data?.fragmentRef}
     >
-      <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
+      <ClaimRetentionMessage
+        claimDetails={data.claimDetails}
+        partner={data.partner}
+        claimOverrides={data.claimOverrides}
+        periodId={props.periodId}
+      />
       {isNonEditable && (
         <ValidationMessage message={getContent(x => x.pages.claimPrepare.readonlyMessage)} messageType="info" />
       )}
