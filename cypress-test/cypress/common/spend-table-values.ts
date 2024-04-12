@@ -1,3 +1,8 @@
+let newCurrency = new Intl.NumberFormat("en-GB", {
+  style: "currency",
+  currency: "GBP",
+});
+
 export const spendTableValues = () => {
   [
     "Labour Period 1",
@@ -31,7 +36,7 @@ export const spendTableValues = () => {
     "Overheads Period 11",
     "Overheads Period 12",
   ].forEach(overheadInput => {
-    cy.getByAriaLabel(overheadInput).should("have.value", 20);
+    cy.getByAriaLabel(overheadInput).contains(newCurrency.format(20));
     cy.get("td:nth-child(14)").contains("£120.00");
   });
   [

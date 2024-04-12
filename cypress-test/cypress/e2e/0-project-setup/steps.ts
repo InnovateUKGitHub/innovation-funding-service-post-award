@@ -149,12 +149,12 @@ export const spendProfileNullValidation = () => {
 };
 
 export const saveAndValidate = () => {
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("This is ready to submit");
-  cy.submitButton("Save and return to project setup").click;
+  cy.submitButton("Save and return to project setup").click();
   [
     "The total forecasts for labour must be the same as the total eligible costs",
-    "The total forecasts for overheads must be the same as the total eligible costs",
+    //"The total forecasts for overheads must be the same as the total eligible costs",
     "The total forecasts for materials must be the same as the total eligible costs",
     "The total forecasts for capital usage must be the same as the total eligible costs",
     "The total forecasts for subcontracting must be the same as the total eligible costs",
@@ -172,7 +172,7 @@ export const saveAndValidate = () => {
 export const saveAndRemoveValidationMsg = () => {
   [
     "The total forecasts for labour must be the same as the total eligible costs",
-    "The total forecasts for overheads must be the same as the total eligible costs",
+    //"The total forecasts for overheads must be the same as the total eligible costs",
     "The total forecasts for materials must be the same as the total eligible costs",
     "The total forecasts for capital usage must be the same as the total eligible costs",
     "The total forecasts for subcontracting must be the same as the total eligible costs",
@@ -240,7 +240,7 @@ export const spendLabourCalculateOH = () => {
       .within(() => {
         cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
       });
-    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.getByAriaLabel("Overheads Period 2").contains(newCurrency.format(overhead));
     cy.get("tr")
       .eq(5)
       .within(() => {

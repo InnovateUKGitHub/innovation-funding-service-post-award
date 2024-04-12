@@ -40,6 +40,10 @@ describe("Project setup > IFS > Set spend profile", () => {
     );
   });
 
+  it("Should have Overheads percentage displayed", () => {
+    cy.paragraph("Overheads costs: 20.00%");
+  });
+
   it("Should check for existing forecast figures", spendTableTidyUp);
 
   it("Should display the forecast table", correctSpendProfileTotals);
@@ -74,8 +78,8 @@ describe("Project setup > IFS > Set spend profile", () => {
   it("Should access the spend profile page again.", reaccessSpendProfile);
 
   it("Should untick the setup complete box", () => {
-    cy.get("h2").contains("Mark as complete");
-    cy.getByLabel("This is ready to submit").click();
+    cy.get("legend").contains("Mark as complete");
+    cy.getByLabel("This is ready to submit").uncheck();
   });
 
   it("Should clear the cost categories back to zero", revertSpendTableZero);
