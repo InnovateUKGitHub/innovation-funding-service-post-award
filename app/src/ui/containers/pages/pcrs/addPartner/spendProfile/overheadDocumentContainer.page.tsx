@@ -12,9 +12,8 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useForm } from "react-hook-form";
-import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { usePcrFilesQuery } from "../../filesStep/filesStep.logic";
@@ -80,7 +79,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     reset,
   } = useForm<z.output<PcrLevelUploadSchemaType>>({
     resolver: zodResolver(getPcrLevelUpload({ config: props.config.options }), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

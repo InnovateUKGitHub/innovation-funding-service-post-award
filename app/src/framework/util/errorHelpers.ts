@@ -44,20 +44,21 @@ const isNestedResult = (
 export const convertResultErrorsToReactHookFormFormat = (
   errors: Result[] | null | undefined,
   originalData: AnyObject = {},
+  nestedResultErrorOrder: "childrenFirst" | "parentFirst" = "childrenFirst",
 ): RhfErrors => {
   if (!errors || !errors.length) return null;
 
-  return errors.reduce(
-    (acc, cur) => ({
+  return errors.reduce((acc, cur) => {
+    return {
       ...acc,
-      [cur.key]: isNestedResult(cur)
-        ? cur.results.map(nestedResult =>
-            convertResultErrorsToReactHookFormFormat(nestedResult?.errors ?? [], nestedResult ?? {}),
-          )
-        : { message: cur.errorMessage, originalData },
-    }),
-    {},
-  );
+      [cur.key]:
+        isNestedResult(cur) && nestedResultErrorOrder === "childrenFirst"
+          ? cur.results.map(nestedResult =>
+              convertResultErrorsToReactHookFormFormat(nestedResult?.errors ?? [], nestedResult ?? {}),
+            )
+          : { message: cur.errorMessage, originalData },
+    };
+  }, {});
 };
 
 /**

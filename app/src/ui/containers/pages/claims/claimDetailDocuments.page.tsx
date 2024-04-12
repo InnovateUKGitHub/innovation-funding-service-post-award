@@ -18,12 +18,15 @@ import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { useClaimDetailDocumentsQuery } from "./claimDetailDocuments.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { ClaimDetailLevelUploadSchemaType, getClaimDetailLevelUpload } from "@ui/zod/documentValidators.zod";
+import {
+  ClaimDetailLevelUploadSchemaType,
+  documentsErrorMap,
+  getClaimDetailLevelUpload,
+} from "@ui/zod/documentValidators.zod";
 import { z } from "zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -67,7 +70,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
     z.output<ClaimDetailLevelUploadSchemaType>
   >({
     resolver: zodResolver(getClaimDetailLevelUpload({ config: config.options, project }), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

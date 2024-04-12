@@ -65,7 +65,7 @@ type ClaimLevelUploadSchemaType = ReturnType<typeof getClaimLevelUpload>;
 const documentsErrorMap = makeZodI18nMap({ keyPrefix: ["documents"] });
 const getClaimLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraProps) =>
   z.object({
-    form: z.literal(FormTypes.ClaimLevelUpload),
+    form: z.union([z.literal(FormTypes.ClaimLevelUpload), z.literal(FormTypes.ClaimReviewLevelUpload)]),
     projectId: projectIdValidation,
     partnerId: partnerIdValidation,
     description: z.union([
@@ -141,7 +141,7 @@ const partnerLevelDelete = z.object({
 });
 
 const claimLevelDelete = z.object({
-  form: z.literal(FormTypes.ClaimLevelDelete),
+  form: z.union([z.literal(FormTypes.ClaimLevelDelete), z.literal(FormTypes.ClaimReviewLevelDelete)]),
   projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   periodId: periodIdValidation,

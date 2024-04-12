@@ -146,6 +146,7 @@ export const createTypedForm = <T,>() => {
     hint?: React.ReactNode | ContentSelector;
     name: string;
     validation?: Result;
+    nestedResultErrorOrder?: "childrenFirst" | "parentFirst";
     placeholder?: string;
     id?: string;
   }
@@ -384,6 +385,7 @@ export const createTypedForm = <T,>() => {
     labelBold,
     field,
     validation,
+    nestedResultErrorOrder,
   }: InternalFieldProps & FieldComponentProps) => {
     // Obtain information about the form we are within
     const { disabled, formData, onChange, onSubmit } = useFormDataContext();
@@ -422,7 +424,7 @@ export const createTypedForm = <T,>() => {
           </HintElement>
         )}
 
-        {validation && <ValidationError error={validation} />}
+        {validation && <ValidationError error={validation} nestedResultErrorOrder={nestedResultErrorOrder} />}
 
         {field({ formData, disabled, hasError, onChange, onSubmit })}
       </div>

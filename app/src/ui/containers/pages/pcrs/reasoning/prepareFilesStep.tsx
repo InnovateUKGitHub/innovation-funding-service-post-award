@@ -12,9 +12,8 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useForm } from "react-hook-form";
-import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { z } from "zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
@@ -51,7 +50,7 @@ export const PCRPrepareReasoningFilesStep = () => {
     reset,
   } = useForm<z.output<PcrLevelUploadSchemaType>>({
     resolver: zodResolver(getPcrLevelUpload({ config: config.options }), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

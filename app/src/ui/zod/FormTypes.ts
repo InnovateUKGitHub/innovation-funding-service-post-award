@@ -21,6 +21,10 @@ enum FormTypes {
   ClaimDetailLevelUpload = "claimDetailLevelUpload",
   ClaimDetailLevelDelete = "claimDetailLevelDelete",
 
+  // Claim review page
+  ClaimReviewLevelUpload = "claimReviewLevelUpload",
+  ClaimReviewLevelDelete = "claimReviewLevelDelete",
+
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",
   ProjectChangeRequestUpdateTypes = "projectChangeRequestUpdateTypes",

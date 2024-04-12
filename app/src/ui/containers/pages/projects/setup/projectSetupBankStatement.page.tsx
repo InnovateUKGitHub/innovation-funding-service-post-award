@@ -20,9 +20,12 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useSetupBankStatementActions, useSetupBankStatementData } from "./projectSetupBankStatement.logic";
 import { z } from "zod";
-import { UploadBankStatementSchemaType, getBankStatementUpload } from "@ui/zod/documentValidators.zod";
+import {
+  UploadBankStatementSchemaType,
+  documentsErrorMap,
+  getBankStatementUpload,
+} from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
@@ -52,7 +55,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
     z.output<UploadBankStatementSchemaType>
   >({
     resolver: zodResolver(getBankStatementUpload(config.options), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

@@ -3,9 +3,10 @@ import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { NestedResult } from "@ui/validation/nestedResult";
 
-interface Props {
+interface ValidationErrorProps {
   error: Result | null | undefined;
   overrideMessage?: string;
+  nestedResultErrorOrder?: "childrenFirst" | "parentFirst";
 }
 
 const alignTextLeftStyle: React.CSSProperties = {
@@ -42,7 +43,11 @@ const ValidationErrorMessage = ({ id, message }: { id: string; message: string |
   </p>
 );
 
-export const ValidationError = ({ error, overrideMessage }: Props) => {
+export const ValidationError = ({
+  error,
+  overrideMessage,
+  nestedResultErrorOrder = "childrenFirst",
+}: ValidationErrorProps) => {
   if (!error || error.isValid || !error.showValidationErrors) {
     return null;
   }
@@ -53,16 +58,32 @@ export const ValidationError = ({ error, overrideMessage }: Props) => {
   const associated = error instanceof NestedResult ? (error as NestedResult<Results<ResultBase>>).listValidation : null;
   const validations: Result[] = [];
 
-  if (children && children.length > 0) {
-    validations.push(
-      ...children
-        .filter(x => !x.isValid && x.showValidationErrors)
-        .map(x => x.errors)
-        .reduce((a, b) => a.concat(b), []),
-    );
-  } else if (associated && !associated.isValid && associated.showValidationErrors) {
-    validations.push(associated);
+  const collateChildrenErrors = () => {
+    if (validations.length === 0 && children && children.length > 0) {
+      validations.push(
+        ...children
+          .filter(x => !x.isValid && x.showValidationErrors)
+          .map(x => x.errors)
+          .reduce((a, b) => a.concat(b), []),
+      );
+    }
+  };
+
+  const collateParentErrors = () => {
+    if (validations.length === 0 && associated && !associated.isValid && associated.showValidationErrors) {
+      validations.push(associated);
+    }
+  };
+
+  if (nestedResultErrorOrder === "childrenFirst") {
+    collateChildrenErrors();
+    collateParentErrors();
   } else {
+    collateParentErrors();
+    collateChildrenErrors();
+  }
+
+  if (validations.length === 0) {
     validations.push(error);
   }
 

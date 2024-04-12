@@ -14,7 +14,7 @@ import { useMessages } from "./useMessages";
 
 type InputOptions =
   | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
-  | ({ form: FormTypes.ClaimLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
+  | ({ form: FormTypes.ClaimLevelUpload | FormTypes.ClaimReviewLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
   | ({ form: FormTypes.ClaimDetailLevelUpload } & z.output<ClaimDetailLevelUploadSchemaType>)
   | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>);
 
@@ -22,7 +22,7 @@ const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevel
   data.form === FormTypes.ProjectLevelUpload;
 
 const isClaimLevelUpload = (data: InputOptions): data is z.output<ClaimLevelUploadSchemaType> =>
-  data.form === FormTypes.ClaimLevelUpload;
+  data.form === FormTypes.ClaimLevelUpload || data.form === FormTypes.ClaimReviewLevelUpload;
 
 const isClaimDetailLevelUpload = (data: InputOptions): data is z.output<ClaimDetailLevelUploadSchemaType> =>
   data.form === FormTypes.ClaimDetailLevelUpload;

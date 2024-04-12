@@ -52,6 +52,7 @@ export const useOnDelete = <
           return clientsideApiClient.documents.deletePartnerDocument({ documentId, partnerId, projectId });
         }
 
+        case FormTypes.ClaimReviewLevelDelete:
         case FormTypes.ClaimLevelDelete: {
           const { partnerId, periodId } = props;
           return clientsideApiClient.documents.deleteClaimDocument({

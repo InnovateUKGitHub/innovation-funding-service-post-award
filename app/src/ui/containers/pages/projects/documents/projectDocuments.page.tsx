@@ -4,8 +4,7 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dto
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
+import { documentsErrorMap, getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
@@ -62,7 +61,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
     z.output<ProjectLevelUploadSchemaType>
   >({
     resolver: zodResolver(getProjectLevelUpload(config.options), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

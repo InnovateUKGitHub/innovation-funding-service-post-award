@@ -1,7 +1,7 @@
 import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { useContent } from "@ui/hooks/content.hook";
-import React from "react";
+import React, { memo } from "react";
 import { SimpleString } from "../../../atoms/SimpleString/simpleString";
 import { H2 } from "../../../atoms/Heading/Heading.variants";
 import { useDocumentSearch } from "../utils/document-search.hook";
@@ -90,6 +90,8 @@ export const DocumentEdit = (props: DocumentEditProps<DocumentSummaryDto>) => {
     </DocumentDisplay>
   );
 };
+
+export const DocumentEditMemo = memo(DocumentEdit);
 
 export const PartnerDocumentEdit = (props: ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
   return (

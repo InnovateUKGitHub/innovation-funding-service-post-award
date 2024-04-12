@@ -16,9 +16,8 @@ import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
-import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { usePcrFilesQuery } from "./filesStep.logic";
@@ -67,7 +66,7 @@ export const FilesStep = ({
     reset,
   } = useForm<z.output<PcrLevelUploadSchemaType>>({
     resolver: zodResolver(getPcrLevelUpload({ config: config.options }), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 
