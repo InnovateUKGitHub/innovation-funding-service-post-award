@@ -1,13 +1,9 @@
 import { When } from "@badeball/cypress-cucumber-preprocessor";
-import { accProjectContactLinkBuilder, buildApex, competitionBuilder, contactBuilder } from "salesforce-factory";
-import { defaultAccProjectParticipant } from "salesforce-factory/dist/factory/ifspa/Acc_ProjectParticipant__c";
-import { defaultAccProject } from "salesforce-factory/dist/factory/ifspa/Acc_Project__c";
-import { defaultAccount } from "salesforce-factory/dist/factory/ifspa/Account";
-import { defaultUser } from "salesforce-factory/dist/factory/ifspa/User";
-
-When("Cypress tries to run Apex", function () {
-  cy.accTask("runApex", { apex: "System.debug('Hello World');" });
-});
+import { accProjectContactLinkBuilder, buildApex, competitionBuilder, contactBuilder } from "acc-factory";
+import { defaultAccProjectParticipant } from "acc-factory/dist/factory/ifspa/Acc_ProjectParticipant__c";
+import { defaultAccProject } from "acc-factory/dist/factory/ifspa/Acc_Project__c";
+import { defaultAccount } from "acc-factory/dist/factory/ifspa/Account";
+import { defaultUser } from "acc-factory/dist/factory/ifspa/User";
 
 When("Cypress tries to create a project", function () {
   const competition = competitionBuilder

@@ -1,12 +1,10 @@
 import { Envman } from "envman";
-import jwt, { SignOptions } from "jsonwebtoken";
-import jsforce, { Connection } from "jsforce";
-import { ExecuteAnonymousResult } from "jsforce/lib/api/tooling";
+import jwt from "jsonwebtoken";
+import { xml } from "./helpers/xml";
 
 const accCache = new Map<string, string>();
 
 let salesforceAccessToken: string | null = null;
-let jsforceConnection: Connection | null = null;
 
 interface SirtestalotTaskProps {
   cyEnv: Record<string, any>;
@@ -28,7 +26,7 @@ const tasks = {
     return envman.getEnv(key) ?? null;
   },
 
-  async runApex({ cyEnv, apex }: { apex: string } & SirtestalotTaskProps): Promise<ExecuteAnonymousResult> {
+  async runApex({ cyEnv, apex }: { apex: string } & SirtestalotTaskProps): Promise<unknown> {
     const envman = new Envman(cyEnv.SALESFORCE_ENVIRONMENT);
 
     const getSalesforceAccessToken = async () => {
@@ -61,29 +59,45 @@ const tasks = {
       salesforceAccessToken = await getSalesforceAccessToken();
       accCache.set("SALESFORCE_ACCESS_TOKEN", salesforceAccessToken);
     }
-    if (!jsforceConnection) {
-      jsforceConnection = new Connection({
-        accessToken: salesforceAccessToken,
-        serverUrl: envman.getEnv("SALESFORCE_CONNECTION_URL"),
-      });
-    }
 
-    const res = await jsforceConnection.tooling.executeAnonymous(apex);
+    const res = await fetch(envman.getEnv("SALESFORCE_CONNECTION_URL") + "/services/Soap/s/59.0", {
+      method: "POST",
+      body: xml`
+        <?xml version="1.0" encoding="UTF-8"?>
+        <env:Envelope
+          xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+          <env:Header>
+            <DebuggingHeader xmlns="http://soap.sforce.com/2006/08/apex">
+              <categories>
+                <category>Apex_code</category>
+                <level>FINEST</level>
+              </categories>
+              <debugLevel>DEBUGONLY</debugLevel>
+            </DebuggingHeader>
+            <SessionHeader xmlns="http://soap.sforce.com/2006/08/apex">
+              <sessionId>${salesforceAccessToken}</sessionId>
+            </SessionHeader>
+          </env:Header>
+          <env:Body>
+            <executeAnonymous xmlns="http://soap.sforce.com/2006/08/apex">
+              <String>${apex}</String>
+            </executeAnonymous>
+          </env:Body>
+        </env:Envelope>
+      `,
+      headers: {
+        "Content-Type": "text/xml",
+        SOAPAction: '""',
+      },
+    });
 
-    if (res.compiled && res.success) return res;
-
-    if (!res.compiled) {
-      throw new Error(
-        `accTask failed to compile the apex because of a compilation error at line ${res.line} column ${res.column}\n\n${res.compileProblem}`,
-      );
-    }
-
-    const errorMessage = res.exceptionMessage + "\n\n" + res.exceptionStackTrace;
-    console.log(errorMessage);
-    throw new Error(errorMessage);
+    throw new Error(await res.text());
   },
 };
 
 type SirtestalotTasks = typeof tasks;
 
-export { tasks, SirtestalotTasks, SirtestalotTaskProps };
+export { SirtestalotTaskProps, SirtestalotTasks, tasks };

@@ -20,7 +20,6 @@
     "acc-factory": "^1.0.0",
     "cypress": "^13.7.1",
     "envman": "^1.0.0",
-    "jsforce": "^3.0.0-next.2",
     "jsonwebtoken": "^9.0.2",
     "typescript": "^5.4.3"
   }
