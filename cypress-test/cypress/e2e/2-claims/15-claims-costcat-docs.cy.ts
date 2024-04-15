@@ -1,11 +1,8 @@
 import { visitApp } from "common/visit";
 import {
-  allowBatchFileUpload,
   backOutToClaimsPage,
-  deleteClaimDocument,
   downloadExceptionsStaff,
   downloadExceptionsStaffDocPage,
-  rejectElevenDocsAndShowError,
   documents as uploadDocuments,
 } from "./steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
@@ -17,6 +14,10 @@ import {
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   uploadFileNameTooShort,
+  allowBatchFileUpload,
+  rejectElevenDocsAndShowError,
+  displayBatchUpload,
+  deleteDocument,
 } from "common/fileComponentTests";
 import { fileTidyUp } from "common/filetidyup";
 import { seconds } from "common/seconds";
@@ -67,6 +68,10 @@ describe("Claims > Cost category document uploads", () => {
 
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
 
+  it("Should refresh the page to clear the previous validation messaging", () => {
+    cy.reload();
+  });
+
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
   it("Should validate uploading a single file that is too large", uploadFileTooLarge);
@@ -93,40 +98,13 @@ describe("Claims > Cost category document uploads", () => {
     cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
   });
 
-  it("Should ensure all uploaded documents are displayed correctly", () => {
-    cy.reload();
-
-    documents.forEach((document, tableRow) => {
-      cy.get("tr")
-        .eq(tableRow + 1)
-        .within(() => {
-          cy.tableCell(document);
-          cy.tableCell("Claim evidence");
-          cy.tableCell(uploadDate);
-          cy.tableCell("0KB");
-          cy.tableCell("Sarah Shuang");
-          cy.button("Remove");
-        });
-    });
-  });
+  it("Should ensure all uploaded documents are displayed correctly", () =>
+    displayBatchUpload("Claim evidence", "Sarah Shuang"));
 
   it("Should navigate back to the cost category page and check the files are correctly showing there", () => {
-    cy.clickOn("Back to Exceptions - Staff");
+    cy.backLink("Back to Exceptions - Staff").click();
     cy.heading("Exceptions - Staff");
-
-    documents.forEach((document, tableRow) => {
-      cy.getByQA("claim-line-item-documents-container").within(() => {
-        cy.get("tr")
-          .eq(tableRow + 1)
-          .within(() => {
-            cy.tableCell(document);
-            cy.tableCell("Claim evidence");
-            cy.tableCell(uploadDate);
-            cy.tableCell("0KB");
-            cy.tableCell("Sarah Shuang");
-          });
-      });
-    });
+    displayBatchUpload("Claim evidence", "Sarah Shuang");
   });
 
   it("Should navigate back to the documents section and delete all files", { retries: 0 }, () => {
@@ -134,7 +112,7 @@ describe("Claims > Cost category document uploads", () => {
     cy.heading("Exceptions - Staff documents");
 
     for (const document of documents) {
-      deleteClaimDocument(document);
+      deleteDocument(document);
     }
   });
 

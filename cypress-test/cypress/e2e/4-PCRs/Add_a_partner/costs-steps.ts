@@ -2,6 +2,7 @@ import { pounds } from "common/pounds";
 import { addPartnerLabourGuidance } from "../steps";
 import { visitApp } from "common/visit";
 import { loremIpsum131k, loremIpsum255Char } from "common/lorem";
+import { navigateToCostCat } from "./add-partner-e2e-steps";
 
 const refreshTest = () => {
   cy.get("main").then($main => {
@@ -677,4 +678,73 @@ export const costsInCorrectOrder = () => {
         cy.tableCell(`Lorem ${i}`);
       });
   }
+};
+
+/**
+ * Steps for Add partner > Calculated Overheads tests
+ */
+
+export const validateValueRequired = () => {
+  cy.clickOn("Save and return to project costs");
+  cy.validationLink("Enter total cost.");
+  cy.paragraph("Enter total cost.");
+};
+
+export const validateAlphaNotAllowed = () => {
+  cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("lorem");
+  cy.validationLink("Total cost must be a number");
+  cy.paragraph("Total cost must be a number");
+};
+
+export const validateThreeDecimalPlaces = () => {
+  cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("100.333");
+  cy.validationLink("Total cost must be 2 decimal places or fewer.");
+  cy.paragraph("Total cost must be 2 decimal places or fewer.");
+};
+
+export const calculateOverheadsDocsButton = () => {
+  cy.clickOn("Calculate overheads documents");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("h2").contains("Calculate overheads");
+};
+
+export const calculatedGuidance = () => {
+  cy.paragraph(
+    "If the new partner feels their overheads are higher than 20% they may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows which types of indirect costs associated with the project they may claim. For support with this option, contact our Customer Support Service.",
+  );
+  cy.paragraph(
+    "Any value claimed under this model will be subject to a review to assess the appropriateness of the claim.",
+  );
+};
+
+export const clickTwentyPercentAndSave = () => {
+  cy.getByLabel("20%").click();
+  cy.wait(500);
+  cy.clickOn("Save and return to project costs");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("h2").contains("Project costs for new partner");
+};
+
+export const clickCalculatedAccessDocs = () => {
+  cy.getByLabel("Calculated").click();
+  cy.clickOn("Calculate overheads documents");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("h2").contains("Calculate overheads");
+};
+
+export const saveAndReturnEnter10k = () => {
+  cy.clickOn("Save and return to overheads costs");
+  cy.get("h2").contains("Overheads");
+  cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("10000");
+  cy.clickOn("Save and return to project costs");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("h2").contains("Project costs for new partner");
+};
+
+export const navigateBackSelectZeroPercent = () => {
+  navigateToCostCat("Overheads", 2);
+  cy.getByLabel("0%").click();
+  cy.clickOn("Save and return to project costs");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("h2").contains("Project costs for new partner");
 };

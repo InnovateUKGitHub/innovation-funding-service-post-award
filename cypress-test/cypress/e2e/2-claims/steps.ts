@@ -198,35 +198,6 @@ export const documents = [
 
 const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
 
-export const rejectElevenDocsAndShowError = () => {
-  const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
-  cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
-  cy.clickOn("button", "Upload documents");
-  cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
-  cy.wait(1000);
-  cy.reload();
-};
-
-export const allowBatchFileUpload = (documentType: string) => () => {
-  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
-  cy.get(`input[type="file"]`)
-    .wait(seconds(1))
-    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
-  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
-  cy.wait("@filesUpload");
-};
-
-export const deleteClaimDocument = (document: string) => {
-  cy.get("tr").then($tr => {
-    if ($tr.text().includes(document)) {
-      cy.log(`Deleting existing ${document} document`);
-      cy.tableCell(document).parent().siblings().contains("button", "Remove").click({ force: true });
-      cy.button("Remove").should("be.disabled");
-      cy.getByAriaLabel("success message").contains(`'${document}' has been removed.`);
-    }
-  });
-};
-
 export const reflectCostAdded = () => {
   cy.get("tr.govuk-table__row").contains("Labour");
   cy.get("span.currency").contains("£1,000.00");

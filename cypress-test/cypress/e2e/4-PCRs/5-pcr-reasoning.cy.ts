@@ -14,9 +14,10 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
+  rejectElevenDocsAndShowError,
 } from "common/fileComponentTests";
 
-import { rejectElevenDocsAndShowError, uploadDate } from "e2e/2-claims/steps";
+import { uploadDate } from "e2e/2-claims/steps";
 
 const pmEmail = "james.black@euimeabs.test";
 

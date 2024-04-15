@@ -735,10 +735,7 @@ export const completeAddPartnerForMulti = () => {
 };
 
 export const navigateToPartnerCosts = () => {
-  cy.clickCheckBox("Add a partner");
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.clickOn("Create request");
-  cy.wait("@pcrPrepare");
+  cy.createPcr("Add a partner");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();

@@ -21,6 +21,17 @@ import {
 import { seconds } from "common/seconds";
 import { completeLabourForm, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
+import {
+  calculateOverheadsDocsButton,
+  calculatedGuidance,
+  clickCalculatedAccessDocs,
+  clickTwentyPercentAndSave,
+  navigateBackSelectZeroPercent,
+  saveAndReturnEnter10k,
+  validateAlphaNotAllowed,
+  validateThreeDecimalPlaces,
+  validateValueRequired,
+} from "./costs-steps";
 
 const pm = "james.black@euimeabs.test";
 
@@ -65,42 +76,22 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
     );
   });
 
-  it("Should validate that a value is needed when saving", () => {
-    cy.clickOn("Save and return to project costs");
-    cy.validationLink("Enter total cost.");
-    cy.paragraph("Enter total cost.");
-  });
+  it("Should validate that a value is required when saving", validateValueRequired);
 
-  it("Should validate that alpha characters are not allowed", () => {
-    cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("lorem");
-    cy.validationLink("Total cost must be a number");
-    cy.paragraph("Total cost must be a number");
-  });
+  it("Should validate that alpha characters are not allowed", validateAlphaNotAllowed);
 
-  it("Should validate 3 decimal places", () => {
-    cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("100.333");
-    cy.validationLink("Total cost must be 2 decimal places or fewer.");
-    cy.paragraph("Total cost must be 2 decimal places or fewer.");
-  });
+  it("Should validate 3 decimal places", validateThreeDecimalPlaces);
 
   it("Should clear the input field", () => {
     cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear();
   });
 
-  it("should click on 'Calculate overheads documents' and continue, ensuring no validation is present for the cost input", () => {
-    cy.clickOn("Calculate overheads documents");
-    cy.getByQA("validation-summary").should("not.exist");
-    cy.get("h2").contains("Calculate overheads");
-  });
+  it(
+    "should click on 'Calculate overheads documents' and continue, ensuring no validation is present for the cost input",
+    calculateOverheadsDocsButton,
+  );
 
-  it("should have full guidance for using calculated overheads", () => {
-    cy.paragraph(
-      "If the new partner feels their overheads are higher than 20% they may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows which types of indirect costs associated with the project they may claim. For support with this option, contact our Customer Support Service.",
-    );
-    cy.paragraph(
-      "Any value claimed under this model will be subject to a review to assess the appropriateness of the claim.",
-    );
-  });
+  it("should have full guidance for using calculated overheads", calculatedGuidance);
 
   it("should have a Templates subheading and a link to download the spreadsheet template", () => {
     cy.get("h3").contains("Templates");
@@ -154,22 +145,14 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
     cy.get("h2").contains("Overheads");
   });
 
-  it("Should click 20% and save and return to costs which should not cause validation", () => {
-    cy.getByLabel("20%").click();
-    cy.wait(500);
-    cy.clickOn("Save and return to project costs");
-    cy.getByQA("validation-summary").should("not.exist");
-    cy.get("h2").contains("Project costs for new partner");
-  });
+  it("Should click 20% and save and return to costs which should not cause validation", clickTwentyPercentAndSave);
 
   it("Should access the Overheads section", () => navigateToCostCat("Overheads", 2));
 
-  it("Should click 'Calculated' again and access the documents upload area again without validation", () => {
-    cy.getByLabel("Calculated").click();
-    cy.clickOn("Calculate overheads documents");
-    cy.getByQA("validation-summary").should("not.exist");
-    cy.get("h2").contains("Calculate overheads");
-  });
+  it(
+    "Should click 'Calculated' again and access the documents upload area again without validation",
+    clickCalculatedAccessDocs,
+  );
 
   it("Should delete all documents", () => {
     for (const document of documents) {
@@ -177,26 +160,13 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
     }
   });
 
-  it("Should save and erturn to Overheads and enter £10,000.00 into the calculated costs field", () => {
-    cy.clickOn("Save and return to overheads costs");
-    cy.get("h2").contains("Overheads");
-    cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("10000");
-    cy.clickOn("Save and return to project costs");
-    cy.getByQA("validation-summary").should("not.exist");
-    cy.get("h2").contains("Project costs for new partner");
-  });
+  it("Should save and return to Overheads and enter £10,000.00 into the calculated costs field", saveAndReturnEnter10k);
 
   it("Should display £10,000.00 for Overheads on the project costs", () => {
     cy.getCellFromHeaderAndRowNumber("Cost (£)", 2).contains("£10,000.00");
   });
 
-  it("Should navigate back to Overheads and select 0% and save and return", () => {
-    navigateToCostCat("Overheads", 2);
-    cy.getByLabel("0%").click();
-    cy.clickOn("Save and return to project costs");
-    cy.getByQA("validation-summary").should("not.exist");
-    cy.get("h2").contains("Project costs for new partner");
-  });
+  it("Should navigate back to Overheads and select 0% and save and return", navigateBackSelectZeroPercent);
 
   it("Should display £0.00 for Overheads on the project costs", () => {
     cy.getCellFromHeaderAndRowNumber("Cost (£)", 2).contains("£0.00");

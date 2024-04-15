@@ -1,3 +1,4 @@
+import { uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "./seconds";
 import { longFile, noFileName, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
 
@@ -30,23 +31,53 @@ export const learnFiles = () => {
 
 const largerDocs = ["11MB_1.txt", "11MB_2.txt", "11MB_3.txt", "testfile.doc"];
 
-const documentPaths = largerDocs.map(doc => `cypress/documents/${doc}`);
+const largeDocumentPaths = largerDocs.map(doc => `cypress/documents/${doc}`);
+
+export const documents = [
+  "testfile.doc",
+  "testfile2.doc",
+  "testfile3.doc",
+  "testfile4.doc",
+  "testfile5.doc",
+  "testfile6.doc",
+  "testfile7.doc",
+  "testfile8.doc",
+  "testfile9.doc",
+  "testfile10.doc",
+];
+
+const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
+
+export const allowBatchFileUpload = (documentType: string) => () => {
+  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
+  cy.get(`input[type="file"]`)
+    .wait(seconds(1))
+    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
+  cy.wait("@filesUpload");
+};
+
+export const displayBatchUpload = (documentType: string, user: string) => {
+  documents.forEach(document => {
+    cy.contains("td", document)
+      .parent()
+      .within(() => {
+        cy.tableCell(document);
+        cy.tableCell(documentType);
+        cy.tableCell(uploadDate);
+        cy.tableCell("0KB");
+        cy.tableCell(user);
+        cy.button("Remove");
+      });
+  });
+};
 
 export const allowLargerBatchFileUpload = () => {
   cy.get(`input[type="file"]`)
     .wait(seconds(1))
-    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+    .selectFile(largeDocumentPaths, { force: true, timeout: seconds(5) });
   cy.wait(seconds(1)).submitButton("Upload").trigger("focus").click();
 };
-
-//export const allowLargerBatchFileUpload = (documentType: string) => () => {
-//  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
-//  cy.get(`input[type="file"]`)
-//    .wait(seconds(1))
-//    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
-//  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
-//  cy.wait("@filesUpload");
-//};
 
 export const validationMessageCumulative = () => {
   cy.validationLink("You can only upload up to 32MB at the same time.");
@@ -136,4 +167,23 @@ export const accessControl = () => {
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and EUI Small Ent Health");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and A B Cad Services");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
+};
+
+export const rejectElevenDocsAndShowError = () => {
+  const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
+  cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
+  cy.clickOn("button", "Upload documents");
+  cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
+  cy.wait(1000);
+};
+
+export const deleteDocument = (document: string) => {
+  cy.get("tr").then($tr => {
+    if ($tr.text().includes(document)) {
+      cy.log(`Deleting existing ${document} document`);
+      cy.tableCell(document).parent().siblings().contains("button", "Remove").click({ force: true });
+      cy.button("Remove").should("be.disabled");
+      cy.getByAriaLabel("success message").contains(`'${document}' has been removed.`);
+    }
+  });
 };
