@@ -26,12 +26,15 @@ export const overheadSchema = z
   .object({
     id: costIdValidation.nullable(),
     overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
-    calculatedValue: currencyValidation.nullable(),
+    calculatedValue: z.union([currencyValidation.nullable().optional(), z.literal(""), z.string().regex(/^\s+$/)]),
     button_submit: z.string(),
   })
   .superRefine((data, ctx) => {
     if (data.overheadRate === PCRSpendProfileOverheadRate.Calculated) {
-      if (!data.calculatedValue && data.button_submit === "submit") {
+      if (
+        !(typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0) &&
+        data.button_submit === "submit"
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.too_small,
           minimum: 0,

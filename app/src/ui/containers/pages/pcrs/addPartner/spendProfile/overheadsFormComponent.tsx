@@ -30,6 +30,7 @@ import {
   PCRSpendProfileOverheadsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const isOverheadsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -95,7 +96,7 @@ export const OverheadsFormComponent = ({}) => {
     [getContent],
   );
 
-  const { handleSubmit, watch, formState, register, setValue } = useForm<OverheadSchema>({
+  const { handleSubmit, watch, formState, register, setValue, trigger } = useForm<OverheadSchema>({
     defaultValues: {
       id: defaultCost.id,
       calculatedValue: defaultCost.value ? String(defaultCost.value) : null,
@@ -149,6 +150,8 @@ export const OverheadsFormComponent = ({}) => {
 
   const calculatedTotalCost = getOverheadsCostValue(overheadRate);
 
+  useFormRevalidate(watch, trigger);
+
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
       <Form
@@ -164,7 +167,10 @@ export const OverheadsFormComponent = ({}) => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   overheadRate: Number(data.overheadRate),
-                  value: data.calculatedValue ? parseCurrency(data.calculatedValue) : 0,
+                  value:
+                    typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0
+                      ? parseCurrency(data.calculatedValue)
+                      : 0,
                 }),
               },
             },
