@@ -111,7 +111,7 @@ export const checkAddOverheadItem = () => {
     checkTotalCostEquals("£0.00");
     cy.getByLabel("20%").click();
     checkTotalCostEquals("£10,000.00");
-    cy.getByLabel("calculated").click();
+    cy.getByLabel("Calculated").click();
     checkTotalCostEquals("£0.00");
     cy.clickOn("Save and return to project costs");
     cy.validateCurrency("Total cost of overheads as calculated in the spreadsheet (£)", "Total cost", "15000");
