@@ -38,6 +38,7 @@ export const PcrPage = ({
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
       apiError={pcrLevelApiError ?? apiError}
+      heading={pcrItem.typeName}
     >
       <Messages messages={messages} />
 

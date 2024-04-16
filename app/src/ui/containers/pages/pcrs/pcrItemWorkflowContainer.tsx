@@ -1,5 +1,5 @@
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { IStores } from "@ui/redux/storesProvider";
+// import { IStores } from "@ui/redux/storesProvider";
 import { usePcrItemWorkflowQuery } from "./pcrItemWorkflow.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { PCRItemWorkflow } from "./pcrItemWorkflow";
@@ -45,17 +45,6 @@ export const PCRItemContainer = (
   );
 };
 
-const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemParams, stores: IStores) => {
-  const typeName = stores.projectChangeRequests
-    .getItemById(params.projectId, params.pcrId, params.itemId)
-    .then(x => x.typeName).data;
-
-  return {
-    htmlTitle: typeName ? `${typeName}` : defaultTitle,
-    displayTitle: typeName ? `${typeName}` : defaultTitle,
-  };
-};
-
 export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   allowRouteInActiveAccess: true,
   routeName: "pcrViewItem",
@@ -68,7 +57,6 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
   container: function PCRViewItemContainer(props) {
     return <PCRItemContainer {...props} mode="details" />;
   },
-  getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });
@@ -86,7 +74,6 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     pcrId: route.params.pcrId as PcrId,
     step: parseInt(route.params.step, 10),
   }),
-  getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
 });
 
@@ -103,11 +90,5 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     itemId: route.params.itemId as PcrItemId,
     step: parseInt(route.params.step, 10),
   }),
-  getTitle: ({ params, stores, content }) =>
-    getTitle(
-      content.getCopyString(x => x.pages.pcrPrepareItem.title),
-      params,
-      stores,
-    ),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

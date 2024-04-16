@@ -57,6 +57,9 @@ export const pcrItemWorkflowQuery = graphql`
                   DeveloperName {
                     value
                   }
+                  Name {
+                    value
+                  }
                 }
               }
             }

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4936d6c9a16a8ab1950f57e3b146903e>>
+ * @generated SignedSource<<8e2394bee27a0f6e99e342e8abc411ad>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -43,6 +43,9 @@ export type PcrItemWorkflowQuery$data = {
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+                readonly Name: {
                   readonly value: string | null | undefined;
                 } | null | undefined;
               } | null | undefined;
@@ -369,7 +372,17 @@ v14 = {
               "name": "RecordType",
               "plural": false,
               "selections": [
-                (v13/*: any*/)
+                (v13/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "Name",
+                  "plural": false,
+                  "selections": (v8/*: any*/),
+                  "storageKey": null
+                }
               ],
               "storageKey": null
             }
@@ -799,16 +812,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d9f9564c126cf9366959c7ba323f2357",
+    "cacheID": "d51be09a50d345a59858f241578e651b",
     "id": null,
     "metadata": {},
     "name": "PcrItemWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}, {Acc_RequestHeader__r: {Acc_Project__c: {eq: $projectId}}}]}) {\n          edges {\n            node {\n              Id\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}, {Acc_RequestHeader__r: {Acc_Project__c: {eq: $projectId}}}]}) {\n          edges {\n            node {\n              Id\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n                Name {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1aa563af026d64815ba2b5cbff1e329d";
+(node as any).hash = "2f19197f59ac7164de3b67412634bb67";
 
 export default node;

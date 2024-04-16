@@ -33,6 +33,7 @@ type Data = {
     | "organisationType"
     | "hasOtherFunding"
     | "status"
+    | "typeName"
   >;
   mode: Mode;
   fragmentRef: unknown;
