@@ -9,6 +9,7 @@ import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
+import { getDisplayName } from "./pcrItemWorkflow.logic";
 
 export const PcrPage = ({
   children,
@@ -38,7 +39,7 @@ export const PcrPage = ({
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
       apiError={pcrLevelApiError ?? apiError}
-      heading={pcrItem.typeName}
+      heading={getDisplayName(pcrItem.typeName)}
     >
       <Messages messages={messages} />
 

@@ -12,7 +12,7 @@ import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
-import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { useStores } from "@ui/redux/storesProvider";
 
 export const usePcrItemWorkflowQuery = (
@@ -114,4 +114,14 @@ export const useOnSavePcrItem = (
       navigate(context?.link?.path ?? "");
     },
   });
+};
+
+export const getDisplayName = (typeName: string) => {
+  const matchedItemType = pcrItemTypes.find(x => x.typeName === typeName);
+
+  if (matchedItemType && "displayName" in matchedItemType) {
+    return matchedItemType.displayName;
+  } else {
+    return typeName;
+  }
 };
