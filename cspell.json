@@ -63,6 +63,7 @@
         "pendings",
         "Picklist",
         "prioritised",
+        "recognised",
         "Restarter",
         "Sanitiser",
         "Sanitises",
@@ -95,6 +96,12 @@
         "Whitesource",
         "Withinable"
     ],
-    "ignoreWords": ["numberof", "nonfunded", "crnd", "paye", "ipms"],
+    "ignoreWords": [
+        "numberof",
+        "nonfunded",
+        "crnd",
+        "paye",
+        "ipms"
+    ],
     "import": []
 }

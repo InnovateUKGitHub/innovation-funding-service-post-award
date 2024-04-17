@@ -1,11 +1,32 @@
+import { Tag } from "support/tags";
 import { PcrType } from "./pcr";
 import { Tile } from "./tiles";
 
 /* eslint-disable no-unused-vars */
 export {};
-
 declare global {
   namespace Cypress {
+    interface SuiteConfigOverrides {
+      /**
+       * List of tags for this suite
+       * @example a single tag
+       *  describe('block with config tag', { tags: '@smoke' }, () => {})
+       * @example multiple tags
+       *  describe('block with config tag', { tags: ['@smoke', '@slow'] }, () => {})
+       */
+      tags: Tag | Tag[];
+    }
+
+    interface TestConfigOverrides {
+      /**
+       * List of tags for this test
+       * @example a single tag
+       *  it('logs in', { tags: '@smoke' }, () => { ... })
+       * @example multiple tags
+       *  it('works', { tags: ['@smoke', '@slow'] }, () => { ... })
+       */
+      tags: Tag | Tag[];
+    }
     interface Chainable {
       /**
        * Gets an element by following the label attribute.

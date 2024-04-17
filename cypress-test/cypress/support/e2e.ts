@@ -15,6 +15,10 @@
 
 // Import commands.js using ES2015 syntax:
 import "./commands.ts";
+// who knows?
+// @ts-expect-error '@cypress/grep/src/index.d.ts' is not a module.
+import registerCypressGrep from "@cypress/grep";
+registerCypressGrep();
 
 // Alternatively you can use CommonJS syntax:
 

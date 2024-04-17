@@ -11,7 +11,7 @@ import {
   projectDashboardFinancials,
 } from "./steps";
 
-describe("projects dashboard > general", () => {
+describe("projects dashboard > general", { tags: "smoke" }, () => {
   before(() => {
     visitApp({});
   });

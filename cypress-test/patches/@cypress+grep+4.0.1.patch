@@ -1,0 +1,22 @@
+diff --git a/node_modules/@cypress/grep/src/index.d.ts b/node_modules/@cypress/grep/src/index.d.ts
+index 8410b98..a245eea 100644
+--- a/node_modules/@cypress/grep/src/index.d.ts
++++ b/node_modules/@cypress/grep/src/index.d.ts
+@@ -9,7 +9,7 @@ declare namespace Cypress {
+      * @example multiple tags
+      *  describe('block with config tag', { tags: ['@smoke', '@slow'] }, () => {})
+      */
+-    tags?: string | string[]
++    // tags?: string | string[]
+   }
+ 
+   // specify additional properties in the TestConfig object
+@@ -22,7 +22,7 @@ declare namespace Cypress {
+      * @example multiple tags
+      *  it('works', { tags: ['@smoke', '@slow'] }, () => { ... })
+      */
+-    tags?: string | string[]
++    // tags?: string | string[]
+   }
+ 
+   interface Cypress {

@@ -1,5 +1,7 @@
 require("dotenv").config();
 import { defineConfig } from "cypress";
+import { Tag, tags } from "support/tags";
+
 const fs = require("fs");
 /**
  * To target specific deployment branches with ACC number
@@ -22,6 +24,18 @@ const fs = require("fs");
 
 const acc = process.env.ACC;
 let accDevUrl = `https://www-acc-${(acc ? `custom-${acc}` : "dev").trim()}.apps.ocp4.innovateuk.ukri.org`;
+
+const grepTags = process.env.TAGS ?? undefined;
+if (grepTags) {
+  grepTags
+    .split(",")
+    .map(x => x.trim())
+    .forEach(x => {
+      if (!tags.includes(x as Tag)) {
+        throw new Error(`"${x}" is not a recognised tag as specified in 'support/tags.ts' `);
+      }
+    });
+}
 
 /**
  * By default Cypress will run all tests in the e2e folder.
@@ -47,6 +61,12 @@ const baseUrl = process.env.TEST_URL || accDevUrl;
 
 console.info("*** Targeting url:", baseUrl);
 
+if (grepTags) {
+  console.info("Applying tags", grepTags);
+} else {
+  console.info("No tags are being applied");
+}
+
 export default defineConfig({
   reporter: "mochawesome",
   reporterOptions: {
@@ -59,7 +79,7 @@ export default defineConfig({
   video: isTrue(process.env.VIDEOS),
   e2e: {
     baseUrl,
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
       on("task", {
         deleteFile(path) {
           fs.unlinkSync(path);
@@ -67,6 +87,8 @@ export default defineConfig({
           return null;
         },
       });
+      require("@cypress/grep/src/plugin")(config);
+      return config;
     },
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
@@ -74,6 +96,7 @@ export default defineConfig({
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
       ABORT_EARLY: isTrue(process.env.ABORT_EARLY),
+      ...(!!grepTags && { grepFilterSpecs: true, grepOmitFiltered: true, grepTags }),
     },
     testIsolation: false,
   },
