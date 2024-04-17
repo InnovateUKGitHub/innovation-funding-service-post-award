@@ -23,6 +23,7 @@ import { z } from "zod";
 import { useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
 import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -86,7 +87,10 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
         <Section>
           <P data-qa="guidance">{getContent(x => x.pages.projectSetupSpendProfile.guidanceMessage)}</P>
           {partner.overheadRate !== null && (
-            <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
+            <>
+              <ValidationMessage messageType="info" message={getContent(x => x.pages.claimForecast.overheadsLocked)} />
+              <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
+            </>
           )}
           <ForecastTable
             clientProfiles={watch("profile")}
@@ -96,14 +100,6 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
             disabled={isFetching}
             isProjectSetup
           />
-          {/* <P>
-            {getContent(x => x.components.claimLastModified.message)}
-            {": "}
-            <FullDateTime
-              value={data.partner.forecastLastModifiedDate}
-              nullDisplay={getContent(x => x.components.claimLastModified.never)}
-            />
-          </P> */}
         </Section>
         <Section>
           <Fieldset>

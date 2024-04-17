@@ -532,6 +532,7 @@
       "buttonSaveAndReturn": "Save and return to claims",
       "buttonContinueToSummary": "Continue to summary",
       "overheadsCosts": "Overheads costs: {{ percentage, round(dp: 2) }}%",
+      "overheadsLocked": "The Overheads field is locked and cannot be edited. This is because it is calculated at a set percentage of your labour costs, as per your application.",
       "title": "Update forecast"
     },
     "claimSummary": {
