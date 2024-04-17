@@ -313,7 +313,9 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       throw new ValidationError(validationResult);
     }
 
-    const originalSpendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
+    const originalSpendProfiles = this.pcrItemId
+      ? await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId)
+      : [];
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
