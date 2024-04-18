@@ -33,7 +33,7 @@ describe("PCR > In Review", () => {
     [
       ["Draft with Project Manager", "James Black"],
       ["Submitted to Monitoring Officer", "James Black"],
-      ["Queried by Monitoring Officer", "Javier Baez"],
+      ["Queried to Project Manager", "Javier Baez"],
     ].forEach(([statusChange, user]) => {
       cy.get("td").contains(statusChange).siblings().contains(user);
     });

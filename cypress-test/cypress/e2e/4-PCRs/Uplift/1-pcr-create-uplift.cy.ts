@@ -8,6 +8,7 @@ import {
   validateEuiSmallEntUplift,
   validateSwindonDevUni,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 const pm = "james.black@euimeabs.test";
 const mo = "testman2@testing.com";
@@ -18,9 +19,7 @@ describe("PCR > Uplift > View", () => {
     visitApp({ asUser: pm, path: "projects/a0E2600000kTirsEAC/pcrs/dashboard" });
   });
 
-  it("Should display an Uplift PCR in progress.", displayUpliftInProgress);
-
-  it("Should click 'View' and load the PCR.", clickViewLoadUplift);
+  it("Should display an Uplift PCR in progress and click view to access it.", clickViewLoadUplift);
 
   it("Should display correct list items at the top of the page.", upliftListItems);
 

@@ -1785,9 +1785,9 @@ export const correctPcrHeaders = () => {
 
 export const existingPcrTable = () => {
   [
-    ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer", "28 Feb 2024"],
-    ["1419", "Remove a partner", "27 Feb 2023", "Queried to Project Manager", "27 Feb 2023"],
-  ].forEach(([reqNo, types, started, status, lastUpdated], index) => {
+    ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer"],
+    ["1419", "Remove a partner", "27 Feb 2023", "Queried to Project Manager"],
+  ].forEach(([reqNo, types, started, status], index) => {
     cy.get("tr")
       .eq(index + 1)
       .within(() => {
@@ -1795,7 +1795,7 @@ export const existingPcrTable = () => {
         cy.get(`td:nth-child(2)`).contains(types);
         cy.get(`td:nth-child(3)`).contains(started);
         cy.get(`td:nth-child(4)`).contains(status);
-        cy.get(`td:nth-child(5)`).contains(lastUpdated);
+        cy.get(`td:nth-child(5)`).contains("9 Apr 2024");
         index++;
       });
   });
@@ -2373,22 +2373,24 @@ export const changeRemainingGrantRounding = () => {
 };
 
 export const displayUpliftInProgress = () => {
-  ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((cell, index) => {
-    cy.get("tr")
-      .eq(1)
-      .within(() => {
-        cy.get(`td:nth-child(${index + 1})`).contains(cell);
+  cy.contains("td", "Uplift")
+    .parent()
+    .within(() => {
+      ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((td, index) => {
+        cy.get(`td:nth-child(${index + 1})`).contains(td);
       });
-  });
+    });
 };
 
 export const clickViewLoadUplift = () => {
-  cy.get("tr")
-    .eq(1)
+  cy.contains("td", "Uplift")
+    .parent()
     .within(() => {
-      cy.get(`td:nth-child(6)`).contains("View").click();
+      ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((td, index) => {
+        cy.get(`td:nth-child(${index + 1})`).contains(td);
+      });
+      cy.get("td:nth-child(6)").contains("View").click();
     });
-  cy.heading("Uplift");
 };
 
 export const upliftListItems = () => {

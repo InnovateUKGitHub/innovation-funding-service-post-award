@@ -2,7 +2,6 @@ import { fileTidyUp } from "common/filetidyup";
 import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
-  allowBatchFileUpload,
   claimCommentBox,
   forecastView,
   shouldShowProjectTitle,
@@ -20,6 +19,7 @@ import {
   impactGuidance,
 } from "./steps";
 import { testFileEUIFinance } from "common/testfileNames";
+import { allowBatchFileUpload } from "common/fileComponentTests";
 
 const fc = "james.black@euimeabs.test";
 

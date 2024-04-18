@@ -2,9 +2,11 @@ import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { PcrItemType, completeAddPartnerForMulti } from "../steps";
 
+const pm = "james.black@euimeabs.test";
+
 describe("PCR > Multiple add partner", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pm, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Draft");
   });
 
