@@ -19,7 +19,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         name: "Travel and Subsistence",
         type: CostCategoryType.Travel_And_Subsistence,
       });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileTravelAndSubsCostDto = {
         id: "" as CostId,
         value: 200,
@@ -56,7 +56,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         name: "Travel and Subsistence",
         type: CostCategoryType.Travel_And_Subsistence,
       });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs.push({
         id: "",
         value: 2000,
@@ -89,7 +89,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         name: "Materials",
         type: CostCategoryType.Travel_And_Subsistence,
       });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs.push({
         id: "",
         value: 12,

@@ -24,7 +24,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
 
     const addPartnerItems = pcrDto.items.filter(x => x.type === PCRItemType.PartnerAddition);
     for (const addPartnerItem of addPartnerItems) {
-      const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(addPartnerItem.id));
+      const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(this.projectId, addPartnerItem.id));
       (addPartnerItem as PCRItemForPartnerAdditionDto).spendProfile = spendProfile;
     }
 

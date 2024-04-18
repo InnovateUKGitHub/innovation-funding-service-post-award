@@ -28,7 +28,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const costCategory = context.testData.createCostCategory({ name: "Overheads", type: CostCategoryType.Overheads });
       context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
         id: "" as CostId,
         value: null,
@@ -59,7 +59,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         name: "Other",
         type: CostCategoryType.Other_Costs,
       });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
         id: "" as CostId,
         value: null,
@@ -125,7 +125,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Overheads,
       });
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
         id: "" as CostId,
         value: 30,
@@ -176,7 +176,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         name: "Overheads",
         type: CostCategoryType.Overheads,
       });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs = [
         {
           id: "" as CostId,
@@ -208,7 +208,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
       const costCategory = context.testData.createCostCategory({ name: "Overheads", type: CostCategoryType.Overheads });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const labourCosts: PCRSpendProfileLabourCostDto[] = [
         {
           id: "" as CostId,
@@ -265,7 +265,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         type: CostCategoryType.Overheads,
       });
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
         id: "" as CostId,
         value: null,
@@ -301,7 +301,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
       await context.runCommand(command);
 
-      const inserted = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const inserted = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       inserted.costs.push({
         id: "" as CostId,
         value: null,

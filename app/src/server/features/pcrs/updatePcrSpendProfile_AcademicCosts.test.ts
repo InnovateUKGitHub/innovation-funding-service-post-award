@@ -17,16 +17,16 @@ describe("UpdatePCRSpendProfileCommand", () => {
       isCommercialWork: true,
       partnerType: PCRPartnerType.Research,
     });
-    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
     return { context, project, pcrItem, spendProfileDto };
   };
 
   test("should throw error when project is inactive", async () => {
     const { context, project } = commonSetup("On Hold");
     const pcrItem = context.testData.createPCRItem();
-    await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+    await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
 
-    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
     const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);

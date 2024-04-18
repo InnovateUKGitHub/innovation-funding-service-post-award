@@ -314,7 +314,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
 
     const originalSpendProfiles = this.pcrItemId
-      ? await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId)
+      ? await context.repositories.pcrSpendProfile.getAllForPcr(this.projectId, this.pcrItemId)
       : [];
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
