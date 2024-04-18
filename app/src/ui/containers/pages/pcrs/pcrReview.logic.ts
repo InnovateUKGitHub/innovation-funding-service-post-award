@@ -18,7 +18,7 @@ export const usePcrReviewQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<PcrReviewQuery>(pcrReviewQuery, { projectId, pcrId }, { fetchPolicy: "network-only" });
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["status", "typeOfAid", "projectNumber", "title", "roles"]);
+  const project = mapToProjectDto(projectNode, ["typeOfAid", "roles"]);
 
   const pcr = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
@@ -46,7 +46,7 @@ export const usePcrReviewQuery = (projectId: ProjectId, pcrId: PcrId) => {
     { roles: project.roles },
   );
 
-  return { project, pcr, statusChanges, fragmentRef: data?.salesforce?.uiapi, editableItemTypes };
+  return { pcr, statusChanges, fragmentRef: data?.salesforce?.uiapi, editableItemTypes };
 };
 
 export const useOnUpdatePcrReview = (

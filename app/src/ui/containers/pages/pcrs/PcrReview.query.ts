@@ -4,6 +4,7 @@ export const pcrReviewQuery = graphql`
   query PcrReviewQuery($projectId: ID!, $pcrId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
@@ -19,15 +20,6 @@ export const pcrReviewQuery = graphql`
                   Acc_TypeofAid__c {
                     value
                   }
-                }
-                Acc_ProjectStatus__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
                 }
               }
             }

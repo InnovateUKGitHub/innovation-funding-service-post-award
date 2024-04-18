@@ -7,11 +7,10 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
@@ -50,10 +49,7 @@ interface Data {
 }
 
 const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
-  const { project, pcr, fragmentRef, statusChanges, editableItemTypes } = usePcrReviewQuery(
-    props.projectId,
-    props.pcrId,
-  );
+  const { pcr, fragmentRef, statusChanges, editableItemTypes } = usePcrReviewQuery(props.projectId, props.pcrId);
 
   const { getContent } = useContent();
 
@@ -75,9 +71,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
           {getContent(x => x.pages.pcrReview.backLink)}
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={validationErrors}
-      projectId={props.projectId}
       fragmentRef={fragmentRef}
       apiError={apiError}
     >
