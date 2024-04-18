@@ -52,8 +52,12 @@ export interface ISalesforcePcrSpendProfile {
   Acc_CostEach__c?: number;
 }
 
+interface ISalesforcePcrSpendProfileFilterableFields extends ISalesforcePcrSpendProfile {
+  "Acc_ProjectChangeRequest__r.Acc_Project__c": ProjectId;
+}
+
 export interface IPcrSpendProfileRepository {
-  getAllForPcr(pcrItemId: PcrItemId | undefined): Promise<PcrSpendProfileEntity[]>;
+  getAllForPcr(projectId: ProjectId, pcrItemId: PcrItemId | undefined): Promise<PcrSpendProfileEntity[]>;
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]): Promise<string[]>;
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   deleteSpendProfiles(items: string[]): Promise<void>;
@@ -62,7 +66,7 @@ export interface IPcrSpendProfileRepository {
 }
 
 export class PcrSpendProfileRepository
-  extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile>
+  extends SalesforceRepositoryBase<ISalesforcePcrSpendProfileFilterableFields>
   implements IPcrSpendProfileRepository
 {
   constructor(
@@ -109,10 +113,12 @@ export class PcrSpendProfileRepository
 
   private readonly recordType = "PCR Spend Profile";
 
-  public async getAllForPcr(pcrItemId: PcrItemId | undefined): Promise<PcrSpendProfileEntity[]> {
-    if (!pcrItemId) return [];
+  public async getAllForPcr(projectId: ProjectId, pcrItemId: PcrItemId | undefined): Promise<PcrSpendProfileEntity[]> {
+    if (!projectId) throw new Error("PcrSpendProfileRepository#getAllForPcr projectId must be defined");
+
     const pcrRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const records = await super.where({
+      "Acc_ProjectChangeRequest__r.Acc_Project__c": projectId,
       Acc_ProjectChangeRequest__c: pcrItemId,
       RecordTypeId: pcrRecordTypeId,
     });

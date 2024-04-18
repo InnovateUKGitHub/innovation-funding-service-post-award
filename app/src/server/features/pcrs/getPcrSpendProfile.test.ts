@@ -16,7 +16,7 @@ const setup = async () => {
 
 describe("getPcrSpendProfile", () => {
   it("should return costs", async () => {
-    const { context, pcrItem } = await setup();
+    const { context, pcrItem, project } = await setup();
     const costCategory = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
     await context.testData.createPcrSpendProfile({
       pcrItem,
@@ -26,7 +26,7 @@ describe("getPcrSpendProfile", () => {
         description: "First labour cost",
       },
     });
-    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
     expect(spendProfileDto.funds).toHaveLength(0);
     expect(spendProfileDto.costs).toHaveLength(1);
     const cost = spendProfileDto.costs[0];
@@ -36,7 +36,7 @@ describe("getPcrSpendProfile", () => {
     expect(cost.description).toEqual("First labour cost");
   });
   it("should return funds", async () => {
-    const { context, pcrItem } = await setup();
+    const { context, pcrItem, project } = await setup();
     const costCategory = context.testData.createCostCategory({
       name: "Other Funding",
       type: CostCategoryType.Other_Funding,
@@ -50,7 +50,7 @@ describe("getPcrSpendProfile", () => {
         dateOtherFundingSecured: DateTime.local(2020, 2, 1).toISODate() as string,
       },
     });
-    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+    const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
     expect(spendProfileDto.costs).toHaveLength(0);
     expect(spendProfileDto.funds).toHaveLength(1);
     const otherFunding = spendProfileDto.funds[0];

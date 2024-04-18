@@ -16,7 +16,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         partnerType: PCRPartnerType.Business,
       });
       const costCategory = context.testData.createCostCategory({ name: "Materials", type: CostCategoryType.Materials });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       const cost: PCRSpendProfileMaterialsCostDto = {
         id: "" as CostId,
         value: 200,
@@ -50,7 +50,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         partnerType: PCRPartnerType.Business,
       });
       const costCategory = context.testData.createCostCategory({ name: "Materials", type: CostCategoryType.Materials });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs.push({
         id: "",
         value: 2000,
@@ -80,7 +80,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         partnerType: PCRPartnerType.Business,
       });
       const costCategory = context.testData.createCostCategory({ name: "Materials", type: CostCategoryType.Materials });
-      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs.push({
         id: "",
         value: 12,

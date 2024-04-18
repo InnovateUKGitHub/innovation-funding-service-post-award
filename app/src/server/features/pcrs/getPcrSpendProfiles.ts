@@ -23,12 +23,12 @@ import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQue
 import { QueryBase } from "../common/queryBase";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
-  constructor(private readonly pcrItemId: PcrItemId) {
+  constructor(private readonly projectId: ProjectId, private readonly pcrItemId: PcrItemId) {
     super();
   }
 
   protected async run(context: IContext): Promise<PcrSpendProfileDto> {
-    const spendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
+    const spendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.projectId, this.pcrItemId);
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     return {
       pcrItemId: this.pcrItemId,

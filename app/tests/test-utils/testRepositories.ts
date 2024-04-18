@@ -862,7 +862,7 @@ class PcrSpendProfileTestRepository
   extends TestRepository<PcrSpendProfileEntity>
   implements IPcrSpendProfileRepository
 {
-  getAllForPcr(pcrItemId: PcrItemId): Promise<PcrSpendProfileEntity[]> {
+  getAllForPcr(_: ProjectId, pcrItemId: PcrItemId): Promise<PcrSpendProfileEntity[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
