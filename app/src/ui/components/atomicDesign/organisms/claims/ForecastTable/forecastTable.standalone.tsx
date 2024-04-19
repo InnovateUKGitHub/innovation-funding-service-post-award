@@ -8,6 +8,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { ForecastTableQuery } from "./__generated__/ForecastTableQuery.graphql";
 import { forecastTableQuery } from "./ForecastTable.query";
 import { Props as ForecastTableProps } from "./forecastTable";
+import { memo } from "react";
 
 interface ForecastTableStandaloneProps {
   queryOptions?: QueryOptions;
@@ -41,4 +42,6 @@ const ForecastTable = ({
   );
 };
 
-export { ForecastTable };
+const ForecastTableMemo = memo(ForecastTable);
+
+export { ForecastTable, ForecastTableMemo };

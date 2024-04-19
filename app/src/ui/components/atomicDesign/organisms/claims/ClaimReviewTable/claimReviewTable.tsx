@@ -1,13 +1,12 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { ClaimTableProps, ClaimTableRow, createTableData } from "../utils/costCategoryTableHelper";
+import { ClaimTableProps, ClaimTableRow, useCreateTableData } from "../utils/costCategoryTableHelper";
 
 const CostCategoriesTable = createTypedTable<ClaimTableRow>();
 
 export const ClaimReviewTable = (props: ClaimTableProps) => {
   const { getContent } = useContent();
-
-  const { costCategories } = createTableData(props);
+  const { costCategories } = useCreateTableData(props);
 
   return (
     <CostCategoriesTable.Table qa="cost-cat" data={costCategories} validationResult={props.validation}>

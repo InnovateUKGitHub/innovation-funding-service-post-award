@@ -6,7 +6,7 @@ import {
 import {
   mapToForecastTableDto,
   MapToForecastTableProps,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
+} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { z, ZodIssueCode } from "zod";
 import { FormTypes } from "./FormTypes";
 import {

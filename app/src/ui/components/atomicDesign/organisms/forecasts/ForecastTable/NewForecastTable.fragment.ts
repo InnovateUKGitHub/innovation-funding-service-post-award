@@ -45,7 +45,7 @@ export const newForecastTableFragment = graphql`
           RecordType: { DeveloperName: { eq: "Total_Project_Period" } }
         }
         orderBy: { Acc_ProjectPeriodNumber__c: { order: ASC } }
-        first: 100
+        first: 200
       ) {
         edges {
           node {
@@ -125,7 +125,7 @@ export const newForecastTableFragment = graphql`
           RecordType: { DeveloperName: { eq: "Total_Cost_Category" } }
         }
         orderBy: { Acc_CostCategory__r: { Acc_DisplayOrder__c: { order: ASC } } }
-        first: 100
+        first: 2000
       ) {
         edges {
           node {

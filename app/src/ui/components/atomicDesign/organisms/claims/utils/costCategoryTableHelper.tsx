@@ -10,6 +10,7 @@ import { roundCurrency, diffAsPercentage } from "@framework/util/numberHelper";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Result } from "@ui/validation/result";
+import { useMemo } from "react";
 
 export interface ClaimProps {
   project: ProjectDto;
@@ -196,6 +197,8 @@ function createRow(
 
 export type ClaimInfoProps = Pick<ClaimProps, "getLink" | "validation">;
 export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name">;
+
+export const useCreateTableData = (props: ClaimTableProps) => useMemo(() => createTableData(props), [props]);
 
 export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps, disabled?: boolean) => {
   const { getLink, validation } = claimInfo;

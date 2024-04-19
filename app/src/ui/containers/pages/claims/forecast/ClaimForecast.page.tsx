@@ -13,18 +13,20 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragme
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable.withFragment";
-import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
+import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
+import {
+  useMapToForecastTableDto,
+  useNewForecastTableData,
+} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useClaimForecastData } from "./ClaimForecast.logic";
-import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
-import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -37,14 +39,13 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
     projectId,
     projectParticipantId: partnerId,
   });
-  const data = useForecastTableFragment({ fragmentRef });
-  const tableData = useMapToForecastTableDto(data);
-  const { project, partner } = data;
+  const fragmentData = useNewForecastTableData({ fragmentRef, isProjectSetup: false });
+  const { project, partner } = fragmentData;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
   const { isPm } = getAuthRoles(project.roles);
 
-  const { errorMap, schema } = getForecastTableValidation(data);
+  const { errorMap, schema } = getForecastTableValidation(fragmentData);
   const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError, trigger } = useForm<
     z.output<ForecastTableSchemaType>
   >({
@@ -55,6 +56,9 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   });
   const routes = useRoutes();
   const { getContent } = useContent();
+
+  const tableData = useMapToForecastTableDto({ ...fragmentData, clientProfiles: watch("profile") });
+
   const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ periodId, isPm });
 
   useFormRevalidate(watch, trigger);
@@ -100,18 +104,19 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
           {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
           )}
-          <ForecastTable
-            clientProfiles={watch("profile")}
+          <NewForecastTable
+            tableData={tableData}
             control={control}
             getFieldState={getFieldState}
             disabled={isFetching}
             trigger={trigger}
+            isProjectSetup={false}
           />
           <P>
             {getContent(x => x.components.claimLastModified.message)}
             {": "}
             <FullDateTime
-              value={data.partner.forecastLastModifiedDate}
+              value={fragmentData.partner.forecastLastModifiedDate}
               nullDisplay={getContent(x => x.components.claimLastModified.never)}
             />
           </P>

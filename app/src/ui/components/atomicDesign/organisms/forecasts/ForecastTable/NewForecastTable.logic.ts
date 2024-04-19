@@ -1,3 +1,4 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
@@ -6,10 +7,25 @@ import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
-import { CostCategoryType } from "@framework/constants/enums";
 import { ReceivedStatus } from "@framework/entities/received-status";
-import { ProfilePeriodDetailsDtoMapping } from "@gql/dtoMapper/mapProfilePeriodDetail";
+import {
+  ProfilePeriodDetailsDtoMapping,
+  mapToProfilePeriodDetailsDtoArray,
+} from "@gql/dtoMapper/mapProfilePeriodDetail";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { mapToGolCostDtoArray as mapToProfileTotalCostCategoryDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { useFragment } from "react-relay";
+import { newForecastTableFragment } from "./NewForecastTable.fragment";
+import {
+  NewForecastTableFragment$key,
+  NewForecastTableFragment$data,
+} from "./__generated__/NewForecastTableFragment.graphql";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -318,4 +334,62 @@ const useMapToForecastTableDto = (props: MapToForecastTableProps): ForecastTable
   return useMemo(() => mapToForecastTableDto(props), [props]);
 };
 
-export { mapToForecastTableDto, useMapToForecastTableDto };
+const useNewForecastTableData = ({
+  fragmentRef,
+  isProjectSetup,
+}: {
+  fragmentRef: NewForecastTableFragment$key;
+  isProjectSetup: boolean;
+}) => {
+  const fragment: NewForecastTableFragment$data = useFragment(newForecastTableFragment, fragmentRef);
+
+  const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
+  const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_ProjectParticipant?.edges);
+
+  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
+  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
+  const claimTotalProjectPeriods = mapToClaimDtoArray(
+    fragment?.query?.ForecastTable_ClaimTotalProjectPeriods?.edges ?? [],
+    [
+      "periodId",
+      "status",
+      "iarStatus",
+      "isIarRequired",
+      "isApproved",
+      "periodStartDate",
+      "periodEndDate",
+      "isFinalClaim",
+    ],
+    {},
+  );
+  const claimDetails = mapToClaimDetailsDtoArray(
+    fragment?.query?.ForecastTable_ClaimDetails?.edges ?? [],
+    ["periodId", "costCategoryId", "value"],
+    {},
+  );
+  const profileTotalProjectPeriods = mapToProfilePeriodDetailsDtoArray(
+    fragment.query.ForecastTable_ProfileTotalProjectPeriod?.edges ?? [],
+    ["periodId", "periodStartDate", "periodEndDate"],
+  );
+  const profileTotalCostCategories = mapToProfileTotalCostCategoryDtoArray(
+    fragment?.query?.ForecastTable_ProfileTotalCostCategories?.edges ?? [],
+    ["value", "costCategoryId", "costCategoryName", "type"],
+  );
+  const profileDetails = mapToForecastDetailsDtoArray(
+    fragment?.query?.ForecastTable_ProfileDetails?.edges ?? [],
+    ["value", "periodId", "costCategoryId", "id"],
+    { isProjectSetup },
+  );
+
+  return {
+    project,
+    partner,
+    profileTotalProjectPeriods,
+    profileTotalCostCategories,
+    profileDetails,
+    claimTotalProjectPeriods,
+    claimDetails,
+  };
+};
+
+export { mapToForecastTableDto, useNewForecastTableData, useMapToForecastTableDto };

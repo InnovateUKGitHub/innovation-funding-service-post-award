@@ -10,7 +10,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable.withFragment";
+import { NewForecastTableWithFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.withFragment";
 import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
@@ -41,7 +41,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
-  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger } = useForm<
+  const { register, handleSubmit, control, formState, getFieldState, setError, trigger } = useForm<
     z.output<ForecastTableSchemaType>
   >({
     resolver: zodResolver(schema, {
@@ -91,8 +91,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
               <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
             </>
           )}
-          <ForecastTable
-            clientProfiles={watch("profile")}
+          <NewForecastTableWithFragment
             control={control}
             trigger={trigger}
             getFieldState={getFieldState}

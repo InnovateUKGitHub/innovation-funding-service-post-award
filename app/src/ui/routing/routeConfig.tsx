@@ -68,7 +68,7 @@ import { ProjectSetupPartnerPostcodeRoute } from "@ui/containers/pages/projects/
 import { ProjectSetupSpendProfileRoute } from "@ui/containers/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
 import { ClaimsDetailsRoute } from "@ui/containers/pages/claims/claimDetails.page";
 import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
-import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
+import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
 import { PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { ContactSetupAssociateRoute } from "@ui/containers/pages/contact/associate/setup/ContactSetupAssociate.page";

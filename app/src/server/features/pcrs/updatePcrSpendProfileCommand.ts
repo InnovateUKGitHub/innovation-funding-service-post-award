@@ -351,7 +351,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     // Chose not to make following requests in parallel as SF has struggled in the past (esp if roll-ups become involved)
     await context.repositories.pcrSpendProfile.insertSpendProfiles(newCostItems);
     await context.repositories.pcrSpendProfile.updateSpendProfiles(costsToUpdate);
-    // await context.repositories.pcrSpendProfile.deleteSpendProfiles(deletedCostItems);
+    await context.repositories.pcrSpendProfile.deleteSpendProfiles(deletedCostItems);
 
     return true;
   }

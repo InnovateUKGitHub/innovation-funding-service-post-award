@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { claimReviewQuery } from "./ClaimReview.query";
-import { ClaimReviewQuery } from "./__generated__/ClaimReviewQuery.graphql";
+import { ClaimReviewQuery } from "../__generated__/ClaimReviewQuery.graphql";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";

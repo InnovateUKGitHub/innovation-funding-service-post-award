@@ -13,17 +13,18 @@ import { z } from "zod";
 import { ForecastTableCurrencyInput } from "./ForecastTableCurrencyInput";
 import { forecastTableResize } from "./forecastTableResize";
 import { getForecastHeaderContent } from "./getForecastHeaderContent";
-import { ForecastTableDto } from "./useMapToForecastTableDto";
+import { ForecastTableDto } from "./NewForecastTable.logic";
 
-export interface ForecastTableProps {
+export interface NewForecastTableProps {
   control?: Control<z.output<ForecastTableSchemaType>>;
   trigger?: UseFormTrigger<z.output<ForecastTableSchemaType>>;
   getFieldState?: UseFormGetFieldState<FieldValues>;
   tableData: ForecastTableDto;
   disabled?: boolean;
+  isProjectSetup: boolean;
 }
 
-const ForecastTable = (props: ForecastTableProps) => {
+const NewForecastTable = (props: NewForecastTableProps) => {
   const { control, getFieldState, disabled, tableData, trigger } = props;
   const { getContent } = useContent();
 
@@ -211,4 +212,4 @@ const ForecastTable = (props: ForecastTableProps) => {
   );
 };
 
-export { ForecastTable };
+export { NewForecastTable };
