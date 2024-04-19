@@ -4,6 +4,7 @@ import {
   capPotMessageNotExist,
   clearCostCatReturn,
   period2AbCad,
+  reduceToBelowCapLimit,
   triggerCapPot,
 } from "./steps";
 import { retentionTidyUp } from "common/costCleanUp";
@@ -30,6 +31,16 @@ describe("claims > Trigger Cap Pot Message", () => {
   );
 
   it("Should show validation messaging around the project cap", capPotMessageDoesExist);
+
+  it(
+    "Should go in and reduce the value to just below the 90% cap limit and remove the retention message",
+    reduceToBelowCapLimit,
+  );
+
+  it(
+    "Should not display any cap pot messaging until costs are added to tip the total value over the cap limit",
+    capPotMessageNotExist,
+  );
 
   it("Should clear the cost category and navigate back to prepare screen", clearCostCatReturn);
 

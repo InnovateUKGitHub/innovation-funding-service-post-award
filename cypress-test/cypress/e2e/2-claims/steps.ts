@@ -774,12 +774,12 @@ export const capPotMessageNotExist = () => {
 };
 
 export const triggerCapPot = () => {
-  ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
+  ["Labour", "Materials"].forEach(costCat => {
     cy.clickOn(costCat);
     cy.heading(costCat);
     cy.clickOn("Add a cost");
     cy.get(`#lineItems_0_description`).clear().type(`Test line item`);
-    cy.get(`#lineItems_0_value`).clear().type("5001").wait(800);
+    cy.get(`#lineItems_0_value`).clear().type("7200.50").wait(800);
     cy.clickOn("Save and return to claims");
     cy.heading("Costs to be claimed");
   });
@@ -793,8 +793,16 @@ export const capPotMessageDoesExist = () => {
   );
 };
 
+export const reduceToBelowCapLimit = () => {
+  cy.clickOn("Labour");
+  cy.heading("Labour");
+  cy.get(`#lineItems_0_value`).clear().type("7199.50").wait(800);
+  cy.clickOn("Save and return to claims");
+  cy.heading("Costs to be claimed");
+};
+
 export const clearCostCatReturn = () => {
-  ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
+  ["Labour", "Materials"].forEach(costCat => {
     cy.clickOn("a", costCat);
     cy.heading(costCat);
     cy.clickOn("Remove");

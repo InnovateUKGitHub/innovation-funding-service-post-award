@@ -73,12 +73,11 @@ export const retentionTidyUp = () => {
   [
     ["1", "Labour"],
     ["3", "Materials"],
-    ["5", "Subcontracting"],
   ].forEach(([rowNum, catName]) => {
     cy.get("tr")
       .eq(Number(rowNum))
       .then($row => {
-        if ($row.text().includes("£5,001.00")) {
+        if ($row.text().includes("£7,200.50")) {
           cy.log("**Clearing cost category**");
           cy.get("a").contains(catName).click();
           cy.heading(catName);
