@@ -3,26 +3,17 @@ export const forecastDashboardQuery = graphql`
   query ForecastDashboardQuery($projectId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
                   isPm
                   isAssociate
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
                 Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }, first: 500) {
                   edges {

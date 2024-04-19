@@ -1,7 +1,7 @@
 import { ErrorPayload } from "@shared/create-error-payload";
 import { PageTitle } from "@ui/features/page-title";
 
-import { Page } from "../../../../components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "../../../../components/atomicDesign/molecules/Section/section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { Content } from "../../../../components/atomicDesign/molecules/Content/content";

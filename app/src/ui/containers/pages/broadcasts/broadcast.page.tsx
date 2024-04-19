@@ -6,7 +6,7 @@ import { useContent } from "@ui/hooks/content.hook";
 
 import { BroadcastDetail } from "./BroadcastDetail";
 import { useBroadcastDetailsQuery } from "./broadcastDetails.logic";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 
 interface BroadcastPageParams {

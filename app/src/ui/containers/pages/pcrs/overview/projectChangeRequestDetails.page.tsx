@@ -4,9 +4,9 @@ import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverv
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { usePCRDetailsQuery } from "./projectChangeRequestDetails.logic";
 import { ProjectRole } from "@framework/constants/project";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+
 import { useContent } from "@ui/hooks/content.hook";
 
 export interface ProjectChangeRequestDetailsParams {
@@ -15,23 +15,21 @@ export interface ProjectChangeRequestDetailsParams {
 }
 
 const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) => {
-  const { project, pcr, editableItemTypes, statusChanges } = usePCRDetailsQuery(props.projectId, props.pcrId);
+  const { pcr, editableItemTypes, statusChanges, fragmentRef } = usePCRDetailsQuery(props.projectId, props.pcrId);
   const { getContent } = useContent();
   return (
     <Page
+      fragmentRef={fragmentRef}
       backLink={
-        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId: project.id })}>
+        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId: props.projectId })}>
           {getContent(x => x.pages.pcrOverview.backToPcrs)}
         </BackLink>
       }
-      isActive={project.isActive}
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      projectId={props.projectId}
     >
-      <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} hideAddTypesLink />
+      <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={props.projectId} hideAddTypesLink />
       <ProjectChangeRequestOverviewTasks
         pcr={pcr}
-        projectId={project.id}
+        projectId={props.projectId}
         editableItemTypes={editableItemTypes}
         mode="details"
       />

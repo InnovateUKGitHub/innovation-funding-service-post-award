@@ -61,14 +61,11 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
 
   const project = mapToProjectDto(node, [
     "id",
-    "title",
     "periodStartDate",
     "periodEndDate",
     "periodId",
     "numberOfPeriods",
     "roles",
-    "projectNumber",
-    "isActive",
   ]);
 
   const partners: Partner[] = mapToPartnerDtoArray(

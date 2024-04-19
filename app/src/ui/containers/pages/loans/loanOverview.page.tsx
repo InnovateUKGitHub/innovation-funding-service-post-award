@@ -1,8 +1,7 @@
 import { LoanStatus } from "@framework/entities/loan-status";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
@@ -16,7 +15,7 @@ interface LoanOverviewParams {
 const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
   const { getContent } = useContent();
 
-  const { project, loans } = useLoanOverviewData(props.projectId);
+  const { project, loans, fragmentRef } = useLoanOverviewData(props.projectId);
   const pendingLoanIndex = loans.findIndex(x => x.status === LoanStatus.REQUESTED);
   const pendingLoan = loans[pendingLoanIndex];
 
@@ -24,13 +23,12 @@ const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
 
   return (
     <Page
+      fragmentRef={fragmentRef}
       backLink={
         <BackLink route={props.routes.projectOverview.getLink({ projectId: props.projectId })}>
           {getContent(x => x.pages.projectOverview.backToProjects)}
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      isActive={project.isActive}
     >
       <Section>
         {pendingLoan && (

@@ -4,14 +4,13 @@ import type { Partner } from "./financeSummary.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { ShortDateRange } from "@ui/components/atomicDesign/atoms/Date";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 
 type Props = {
@@ -36,11 +35,8 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
           {content.backToProjectOverview}
         </BackLink>
       }
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectId={props.projectId}
       partnerId={props.partnerId}
       fragmentRef={fragmentRef}
-      isActive={project.isActive}
     >
       <Section
         title={

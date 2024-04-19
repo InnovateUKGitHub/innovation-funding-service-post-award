@@ -3,7 +3,7 @@ export const claimDetailsQuery = graphql`
   query ClaimDetailsQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
-        ...TitleFragment
+        ...PageFragment
         ...ProjectSuspensionMessageFragment
         query {
           Acc_Profile__c(
@@ -301,7 +301,6 @@ export const claimDetailsQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc

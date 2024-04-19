@@ -1,4 +1,3 @@
-import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { monitoringReportDashboardQuery } from "./MonitoringReportDashboard.query";
 import { MonitoringReportDashboardQuery } from "./__generated__/MonitoringReportDashboardQuery.graphql";
@@ -6,7 +5,6 @@ import { useMemo } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { ProjectStatus } from "@framework/constants/project";
 import { mapToMonitoringReportDtoArray } from "@gql/dtoMapper/mapMonitoringReportDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 const currentStatuses = [
   MonitoringReportStatus.New,
@@ -45,10 +43,6 @@ export const useMonitoringReportDashboardQuery = (projectId: ProjectId) => {
   );
 
   return useMemo(() => {
-    const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-
-    const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "isActive"]);
-
     const reports = mapToMonitoringReportDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_MonitoringAnswer__c?.edges ?? [],
       ["headerId", "endDate", "lastUpdated", "periodId", "startDate", "projectId", "status", "statusName"],
@@ -69,6 +63,6 @@ export const useMonitoringReportDashboardQuery = (projectId: ProjectId) => {
       { open: [], archived: [] },
     );
 
-    return { project, reportSections };
+    return { reportSections, fragmentRef: data.salesforce.uiapi };
   }, []);
 };

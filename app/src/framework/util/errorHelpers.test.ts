@@ -3,7 +3,9 @@ import {
   convertErrorFormatFromRhfForErrorSummary,
   convertResultErrorsToReactHookFormFormat,
   convertResultErrorsToZodFormat,
+  convertZodErrorsToRhfFormat,
 } from "./errorHelpers";
+import { ZodError } from "zod";
 
 describe("convertResultErrorsToReactHookFormFormat", () => {
   it("should handle the simple case of converting a server side error to rhf format", () => {
@@ -126,6 +128,36 @@ describe("convertResultErrorsToReactHookFormFormat", () => {
         },
       ],
     });
+  });
+});
+
+describe("convertZodErrorsToRhfFormat", () => {
+  it("should convert a zod error into an rhf error", () => {
+    const zodError = {
+      issues: [
+        {
+          code: "custom",
+          message: "You should have eaten the lettuce",
+          path: ["lettuce"],
+        },
+        {
+          code: "custom",
+          message: "You should have had the pocari sweat",
+          path: ["pilk"],
+        },
+      ],
+    } as ZodError<{ lettuce: string; pilk: string }>;
+
+    const rhfError = {
+      lettuce: {
+        message: "You should have eaten the lettuce",
+      },
+      pilk: {
+        message: "You should have had the pocari sweat",
+      },
+    };
+
+    expect(convertZodErrorsToRhfFormat(zodError)).toEqual(rhfError);
   });
 });
 

@@ -9,9 +9,8 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
@@ -60,12 +59,7 @@ const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) =>
   const { project, partner, previousClaims, currentClaim, isMultipleParticipants, fragmentRef } = data;
 
   return (
-    <Page
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      backLink={<ProjectBackLink projectId={project.id} />}
-      fragmentRef={fragmentRef}
-      isActive={project.isActive}
-    >
+    <Page backLink={<ProjectBackLink projectId={project.id} />} fragmentRef={fragmentRef}>
       {isMultipleParticipants && (
         <ClaimsDashboardGuidance competitionType={project.competitionType} overdueProject={partner.overdueProject} />
       )}

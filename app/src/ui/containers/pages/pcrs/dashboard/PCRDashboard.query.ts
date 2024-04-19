@@ -4,6 +4,7 @@ const pcrDashboardQuery = graphql`
   query PCRDashboardQuery($projectId: ID) {
     salesforce {
       uiapi {
+        ...PageFragment
         ...ProjectSuspensionMessageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
@@ -12,12 +13,6 @@ const pcrDashboardQuery = graphql`
                 Id
                 isActive
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
                 Acc_ProjectParticipantsProject__r {

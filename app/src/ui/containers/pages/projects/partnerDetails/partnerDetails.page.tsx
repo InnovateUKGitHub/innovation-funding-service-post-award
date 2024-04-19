@@ -4,11 +4,10 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 
 interface Params {
   projectId: ProjectId;
@@ -16,7 +15,7 @@ interface Params {
 }
 
 const PartnerDetailsPage = (props: BaseProps & Params) => {
-  const { project, partner } = usePartnerDetailsQuery(props.projectId, props.partnerId);
+  const { partner, fragmentRef } = usePartnerDetailsQuery(props.projectId, props.partnerId);
   const { isFc, isPm } = getAuthRoles(partner.roles);
 
   const backToProjectDetailsLink = <Content value={x => x.pages.partnerDetails.backToProjectDetails} />;
@@ -24,15 +23,13 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
 
   return (
     <Page
+      fragmentRef={fragmentRef}
       backLink={
         <BackLink route={props.routes.projectDetails.getLink({ projectId: props.projectId })}>
           {backToProjectDetailsLink}
         </BackLink>
       }
-      pageTitle={<Title {...project} />}
-      projectId={props.projectId}
       partnerId={props.partnerId}
-      isActive={project.isActive}
     >
       <Section>
         <SummaryList qa="partner-details">

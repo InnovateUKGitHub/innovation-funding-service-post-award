@@ -25,16 +25,23 @@ interface ITask {
   route: ILinkInfo | null;
   status?: TaskStatus;
   validation?: Result[];
-  rhfError?: { key: string; message: string | null };
+  rhfError?: RhfError;
   id?: string;
+  disabled?: boolean;
 }
 
-export const Task = ({ route, name, status, validation, rhfError, id }: ITask) => {
+export const Task = ({ route, name, status, validation, rhfError, id, disabled }: ITask) => {
   const { getContent } = useContent();
   const hasError = !!validation?.find(x => !x.isValid) || !!rhfError;
 
   const link = typeof name === "string" ? name : getContent(name);
-  const taskName = route ? <Link route={route}>{link}</Link> : link;
+  const taskName = route ? (
+    <Link route={route} disabled={disabled}>
+      {link}
+    </Link>
+  ) : (
+    link
+  );
 
   return (
     <li className={cx("app-task-list__item", { "app-task-list__item--error": hasError })}>

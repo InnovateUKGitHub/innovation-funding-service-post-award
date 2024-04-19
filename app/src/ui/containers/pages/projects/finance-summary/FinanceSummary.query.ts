@@ -5,23 +5,17 @@ const financeSummaryQuery = graphql`
     salesforce {
       uiapi {
         ...ProjectSuspensionMessageFragment
+        ...PageFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc
                   isPm
                   isAssociate
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
                 }
                 Acc_CurrentPeriodNumber__c {
                   value

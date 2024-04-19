@@ -110,6 +110,26 @@ export const convertZodErrorsToResultsFormat = <TFormValues extends AnyObject>(e
 };
 
 /**
+ * In some cases we wish to validate errors directly from zod without going through
+ * react hook form, e.g. when validating directly on a dto.
+ *
+ * In this case the formats and responses are different.
+ *
+ *
+ */
+export const convertZodErrorsToRhfFormat = <TFormValues extends AnyObject>(errors: ZodError<TFormValues>) => {
+  return errors.issues.reduce(
+    (acc, cur) => ({
+      ...acc,
+      [cur.path[0]]: {
+        message: cur.message,
+      },
+    }),
+    {},
+  );
+};
+
+/**
  * `useValidationErrors` takes the react hook form errors, converts to our Results format and merges
  * with any server side rendering errors before returning.
  *
@@ -137,6 +157,7 @@ export const useRhfErrors = <TFormValues extends AnyObject>(errors: FieldErrors<
  * If not using rhf, then the errors come in the Zod format, rather than the hook form format, and so
  * a separate handler is used for these cases.
  */
+
 export const useZodFormatValidationErrors = (): [Results<{}>, (zodErrors: ZodError) => void] => {
   const serverFormErrors = useFormErrorContext();
   const [validatorErrors, setValidatorErrors] = useState(
@@ -148,6 +169,27 @@ export const useZodFormatValidationErrors = (): [Results<{}>, (zodErrors: ZodErr
     const combinedErrors = (validationErrors ?? []).concat(serverFormErrors ?? []);
     const errorResults = new Results({ model: {}, showValidationErrors: true, results: combinedErrors });
     setValidatorErrors(errorResults);
+  };
+
+  return [validatorErrors, setZodFormatErrors];
+};
+
+/**
+ * Sometimes validation will occur outside of a hook form, e.g. validating directly on a  partial dto.
+ * If not using rhf, then the errors come in the Zod format, rather than the hook form format, and so
+ * a separate handler is used for these cases.
+ */
+
+export const useZodFormatToRhfErrors = (): [RhfErrors, (zodErrors: ZodError) => void] => {
+  const serverFormErrors = useFormErrorContext();
+  const [validatorErrors, setValidatorErrors] = useState<RhfErrors>();
+
+  const setZodFormatErrors = (zodErrors: ZodError) => {
+    const validationErrors = convertZodErrorsToRhfFormat(zodErrors);
+    const serverErrors = convertResultErrorsToReactHookFormFormat(serverFormErrors ?? []);
+    const combinedErrors = Object.assign({}, validationErrors, serverErrors);
+
+    setValidatorErrors(combinedErrors);
   };
 
   return [validatorErrors, setZodFormatErrors];

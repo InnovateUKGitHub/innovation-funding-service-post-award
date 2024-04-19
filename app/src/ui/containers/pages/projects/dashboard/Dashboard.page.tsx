@@ -13,7 +13,7 @@ import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";

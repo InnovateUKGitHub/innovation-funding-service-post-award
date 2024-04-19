@@ -1,7 +1,7 @@
 import { Authorisation } from "@framework/types/authorisation";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import {
   NavigationCardsGrid,
   NavigationCard,

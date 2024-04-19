@@ -21,8 +21,7 @@ import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/C
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimDetailsPageData } from "./claimDetails.logic";
@@ -102,11 +101,8 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
           <Content value={x => x.pages.claimDetails.backLink} />
         </BackLink>
       }
-      pageTitle={<Title />}
       fragmentRef={data?.fragmentRef}
-      projectId={props.projectId}
       partnerId={props.partnerId}
-      isActive={data.project.isActive}
     >
       {/* If the partner is not withdrawn, and it's the final claim, show message. */}
       {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (

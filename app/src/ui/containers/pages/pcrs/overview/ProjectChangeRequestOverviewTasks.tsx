@@ -10,8 +10,8 @@ import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 
 export type TaskErrors = {
-  items?: { key: string; message: string | null }[];
-  reasoningStatus?: { key: string; message: string };
+  items?: RhfError[];
+  reasoningStatus?: RhfError;
 };
 
 interface ProjectChangeRequestOverviewTasksProps {

@@ -2,21 +2,19 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { TaskListSection, Task, TaskStatus } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useOnUpdateProjectSetup, useProjectSetupQuery } from "./projectSetup.logic";
-import { useZodFormatValidationErrors } from "@framework/util/errorHelpers";
-import { Result } from "@ui/validation/result";
-import { useMemo } from "react";
+import { useZodFormatToRhfErrors } from "@framework/util/errorHelpers";
 import { projectSetupErrorMap, projectSetupSchema } from "./projectSetup.zod";
 import { useContent } from "@ui/hooks/content.hook";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -34,66 +32,20 @@ type ProjectSetupPartnerDto = Pick<
   | "postcode"
 >;
 
-const Form = createTypedForm<ProjectSetupPartnerDto>();
-
 const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? "Complete" : "To do");
 
 const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
   const { getContent } = useContent();
   const { project, partner, fragmentRef } = useProjectSetupQuery(props.projectId, props.partnerId);
 
-  const [validatorErrors, setValidatorZodErrors] = useZodFormatValidationErrors();
+  const [validatorErrors, setValidatorZodErrors] = useZodFormatToRhfErrors();
 
-  const { onUpdate, apiError } = useOnUpdateProjectSetup(
+  const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetup(
     props.projectId,
     props.partnerId,
     partner,
     props.routes.projectDashboard.getLink({}).path,
   );
-
-  const getBankDetailsLink = (partner: ProjectSetupPartnerDto) => {
-    if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
-      return null;
-    }
-    switch (partner.bankCheckStatus) {
-      case BankCheckStatus.NotValidated: {
-        return props.routes.projectSetupBankDetails.getLink({
-          partnerId: props.partnerId,
-          projectId: props.projectId,
-        });
-      }
-      case BankCheckStatus.ValidationFailed:
-      case BankCheckStatus.VerificationFailed: {
-        return props.routes.projectSetupBankStatement.getLink({
-          partnerId: props.partnerId,
-          projectId: props.projectId,
-        });
-      }
-      case BankCheckStatus.ValidationPassed: {
-        return props.routes.projectSetupBankDetailsVerify.getLink({
-          partnerId: props.partnerId,
-          projectId: props.projectId,
-        });
-      }
-      case BankCheckStatus.VerificationPassed: {
-        return null;
-      }
-      default:
-        return null;
-    }
-  };
-
-  // this mapping is just for making it easier to pass into the Task items
-  const mappedErrors: {
-    postcode?: Result[] | undefined;
-    spendProfileStatus?: Result[] | undefined;
-    bankDetailsTaskStatus?: Result[] | undefined;
-  } = useMemo(() => {
-    if (validatorErrors && !validatorErrors?.isValid && validatorErrors?.results?.length) {
-      return validatorErrors?.results.reduce((acc, cur) => ({ ...acc, [String(cur.keyId)]: [cur] }), {});
-    }
-    return { postcode: undefined, spendProfileStatus: undefined, bankDetailsTaskStatus: undefined };
-  }, [validatorErrors]);
 
   return (
     <Page
@@ -102,11 +54,9 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
           <Content value={x => x.pages.projectSetup.backLink} />
         </BackLink>
       }
-      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      error={apiError}
-      validator={validatorErrors}
+      apiError={apiError}
+      validationErrors={validatorErrors}
       fragmentRef={fragmentRef}
-      isActive={project.isActive}
     >
       <Section qa="guidance">
         <P>{getContent(x => x.projectMessages.setupGuidance)}</P>
@@ -118,17 +68,19 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
             name={x => x.pages.projectSetup.setSpendProfile}
             status={partner.spendProfileStatusLabel as TaskStatus}
             route={props.routes.projectSetupSpendProfile.getLink({
-              partnerId: partner.id,
-              projectId: project.id,
+              partnerId: props.partnerId,
+              projectId: props.projectId,
             })}
-            validation={mappedErrors?.spendProfileStatus}
+            rhfError={validatorErrors?.spendProfileStatus as RhfError}
+            disabled={isFetching}
           />
 
           <Task
             name={x => x.pages.projectSetup.provideBankDetails}
             status={partner.bankDetailsTaskStatusLabel as TaskStatus}
-            route={getBankDetailsLink(partner)}
-            validation={mappedErrors?.bankDetailsTaskStatus}
+            route={getBankDetailsLink(partner, props.routes, props.projectId, props.partnerId)}
+            rhfError={validatorErrors?.bankDetailsTaskStatus as RhfError}
+            disabled={isFetching}
           />
 
           <Task
@@ -138,13 +90,14 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
               projectId: props.projectId,
               partnerId: props.partnerId,
             })}
-            validation={mappedErrors?.postcode}
+            rhfError={validatorErrors?.postcode as RhfError}
+            disabled={isFetching}
           />
         </TaskListSection>
       </List>
 
-      <Form.Form
-        data={partner}
+      <form
+        data-qa="projectSetupForm"
         onSubmit={() => {
           /*
            * First validate the partial partner dto to see if the necessary work has been completed
@@ -161,7 +114,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
           );
 
           /*
-           * if validation is failed then convert from zod format to Results format and set in the state
+           * if validation is failed then convert from zod format to Rhf format and set in the state
            */
           if (!result?.success) {
             setValidatorZodErrors(result.error);
@@ -172,20 +125,58 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
             onUpdate({ data: { partnerStatus: PartnerStatus.Active } });
           }
         }}
-        qa="projectSetupForm"
       >
-        <Form.Fieldset>
+        <Fieldset>
           {project.projectSource === "Manual" ? (
-            <Link route={props.routes.projectDashboard.getLink({})} styling="SecondaryButton">
+            <Link route={props.routes.projectDashboard.getLink({})} styling="SecondaryButton" disabled={isFetching}>
               {getContent(x => x.pages.projectSetup.manualComplete)}
             </Link>
           ) : (
-            <Form.Submit>{getContent(x => x.pages.projectSetup.complete)}</Form.Submit>
+            <Button type="submit" disabled={isFetching}>
+              {getContent(x => x.pages.projectSetup.complete)}
+            </Button>
           )}
-        </Form.Fieldset>
-      </Form.Form>
+        </Fieldset>
+      </form>
     </Page>
   );
+};
+
+const getBankDetailsLink = (
+  partner: ProjectSetupPartnerDto,
+  routes: BaseProps["routes"],
+  projectId: ProjectId,
+  partnerId: PartnerId,
+) => {
+  if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
+    return null;
+  }
+  switch (partner.bankCheckStatus) {
+    case BankCheckStatus.NotValidated: {
+      return routes.projectSetupBankDetails.getLink({
+        partnerId,
+        projectId,
+      });
+    }
+    case BankCheckStatus.ValidationFailed:
+    case BankCheckStatus.VerificationFailed: {
+      return routes.projectSetupBankStatement.getLink({
+        partnerId,
+        projectId,
+      });
+    }
+    case BankCheckStatus.ValidationPassed: {
+      return routes.projectSetupBankDetailsVerify.getLink({
+        partnerId,
+        projectId,
+      });
+    }
+    case BankCheckStatus.VerificationPassed: {
+      return null;
+    }
+    default:
+      return null;
+  }
 };
 
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({

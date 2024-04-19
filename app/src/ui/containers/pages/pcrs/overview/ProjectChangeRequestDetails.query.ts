@@ -4,6 +4,7 @@ const pcrDetailsQuery = graphql`
   query ProjectChangeRequestDetailsQuery($projectId: ID!, $pcrId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_StatusChange__c(
             where: {
@@ -46,26 +47,16 @@ const pcrDetailsQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isFc
                   isMo
                   isPm
                   isAssociate
                 }
-                Acc_ProjectNumber__c {
-                  value
-                }
                 Acc_CompetitionId__r {
                   Acc_TypeofAid__c {
                     value
                   }
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
-                  value
                 }
               }
             }

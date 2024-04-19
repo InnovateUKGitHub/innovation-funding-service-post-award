@@ -13,8 +13,7 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { useContent } from "@ui/hooks/content.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
@@ -72,7 +71,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         styling="PrimaryButton"
         disabled={allPcrItemTypesUnavailable}
       >
-        Create request
+        {getContent(x => x.pages.pcrsDashboard.create)}
       </Link>
     );
   };
@@ -179,17 +178,10 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const archived = pcrs.filter(x => archivedStatuses.some(y => y.status === x.status));
 
   return (
-    <Page
-      backLink={<ProjectBackLink projectId={project.id} />}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      fragmentRef={fragmentRef}
-      projectId={props.projectId}
-      isActive={project.isActive}
-    >
+    <Page backLink={<ProjectBackLink projectId={props.projectId} />} fragmentRef={fragmentRef}>
       {allPcrItemTypesUnavailable && (
         <ValidationMessage messageType="info" message={x => x.pages.pcrsDashboard.cannotCreatePcrMessage} />
       )}
-
       <Messages messages={props.messages} />
 
       <Section qa="pcr-table">

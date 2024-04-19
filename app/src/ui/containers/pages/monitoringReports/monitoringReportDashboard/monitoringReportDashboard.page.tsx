@@ -6,10 +6,9 @@ import { MonitoringReportStatus } from "@framework/constants/monitoringReportSta
 import { ProjectRole } from "@framework/constants/project";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
@@ -26,15 +25,10 @@ const editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, 
 const ReportsTable = createTypedTable<MonitoringReport>();
 
 const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & BaseProps) => {
-  const { project, reportSections } = useMonitoringReportDashboardQuery(props.projectId);
+  const { reportSections, fragmentRef } = useMonitoringReportDashboardQuery(props.projectId);
 
   return (
-    <Page
-      backLink={<ProjectBackLink projectId={project.id} />}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      projectId={props.projectId}
-      isActive={project.isActive}
-    >
+    <Page fragmentRef={fragmentRef} backLink={<ProjectBackLink projectId={props.projectId} />}>
       <Messages messages={props.messages} />
       <ValidationMessage
         qa="guidance-message"

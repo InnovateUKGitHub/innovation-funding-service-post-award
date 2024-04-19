@@ -4,6 +4,7 @@ export const monitoringReportDashboardQuery = graphql`
   query MonitoringReportDashboardQuery($projectId: ID!) {
     salesforce {
       uiapi {
+        ...PageFragment
         query {
           Acc_MonitoringAnswer__c(
             where: { Acc_Project__c: { eq: $projectId } }
@@ -33,29 +34,6 @@ export const monitoringReportDashboardQuery = graphql`
                   value
                 }
                 Acc_PeriodEndDate__c {
-                  value
-                }
-              }
-            }
-          }
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
-            edges {
-              node {
-                Id
-                roles {
-                  isMo
-                  isFc
-                  isPm
-                  isAssociate
-                }
-                isActive
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
-                Acc_ProjectStatus__c {
                   value
                 }
               }

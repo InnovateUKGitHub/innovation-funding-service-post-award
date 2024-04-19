@@ -16,15 +16,7 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, [
-    "id",
-    "isActive",
-    "title",
-    "status",
-    "projectNumber",
-    "typeOfAid",
-    "roles",
-  ]);
+  const project = mapToProjectDto(projectNode, ["id", "typeOfAid", "roles"]);
 
   const pcr = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
@@ -56,5 +48,10 @@ export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const editableItemTypes = getEditableItemTypes(pcr);
 
-  return { project, pcr, editableItemTypes, statusChanges };
+  return {
+    pcr,
+    editableItemTypes,
+    statusChanges,
+    fragmentRef: data.salesforce.uiapi,
+  };
 };

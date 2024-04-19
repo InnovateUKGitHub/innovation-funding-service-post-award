@@ -29,7 +29,7 @@ export type GetItemTaskProps = {
   projectId: ProjectId;
   pcrId: PcrId;
   mode: "details" | "prepare";
-  rhfErrors?: { items?: { key: string; message: string | null }[] };
+  rhfErrors?: { items?: RhfError[] };
 };
 
 const GetItemTasks = ({ editor, rhfErrors, index, item, projectId, pcrId, mode }: GetItemTaskProps) => {

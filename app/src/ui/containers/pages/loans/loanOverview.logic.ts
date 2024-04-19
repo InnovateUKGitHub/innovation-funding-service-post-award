@@ -36,6 +36,7 @@ export const useLoanOverviewData = (projectId: ProjectId) => {
     return {
       project,
       loans,
+      fragmentRef: data.salesforce.uiapi,
     };
   }, []);
 };

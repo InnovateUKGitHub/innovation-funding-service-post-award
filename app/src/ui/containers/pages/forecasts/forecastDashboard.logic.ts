@@ -30,6 +30,6 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
       {},
     );
 
-    return { project, partners: sortPartnersLeadFirst(partners) };
+    return { project, partners: sortPartnersLeadFirst(partners), fragmentRef: data?.salesforce?.uiapi };
   }, []);
 };
