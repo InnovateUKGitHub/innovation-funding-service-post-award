@@ -119,7 +119,7 @@ export const useOnSavePcrItem = (
 export const getDisplayName = (typeName: string) => {
   const matchedItemType = pcrItemTypes.find(x => x.typeName === typeName);
 
-  if (matchedItemType && "displayName" in matchedItemType) {
+  if (matchedItemType && "displayName" in matchedItemType && typeof matchedItemType.displayName === "string") {
     return matchedItemType.displayName;
   } else {
     return typeName;

@@ -18,7 +18,6 @@ import { useOnUpdatePcrReview, usePcrReviewQuery } from "./pcrReview.logic";
 import { PcrItemDtoMapping } from "@gql/dtoMapper/mapPcrDto";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { useForm } from "react-hook-form";
@@ -29,6 +28,8 @@ import { PcrReviewSchemaType, pcrReviewErrorMap, pcrReviewSchema } from "./pcrRe
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useContent } from "@ui/hooks/content.hook";
+import { getDisplayName } from "./pcrItemWorkflow.logic";
+import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 
 export interface PCRReviewParams {
   projectId: ProjectId;
@@ -87,7 +88,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
 
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>
-          <Legend>{getContent(x => x.pages.pcrReview.statusTitle)}</Legend>
+          <H2>{getContent(x => x.pages.pcrReview.statusTitle)}</H2>
 
           <FormGroup>
             <ValidationError error={validationErrors?.status as RhfError} />
@@ -110,6 +111,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
           {...register("comments")}
           id="comments"
           label={getContent(x => x.pages.pcrReview.addCommentsLabel)}
+          boldLabel
           characterCount={watch("comments")?.length ?? 0}
           characterCountType="descending"
           maxLength={1000}
@@ -138,7 +140,7 @@ const Summary = ({
         <SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
         <SummaryListItem
           label="Types"
-          content={<LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+          content={<LineBreakList items={projectChangeRequest.items.map(x => getDisplayName(x.shortName))} />}
           qa="typesRow"
         />
       </SummaryList>
@@ -249,14 +251,13 @@ const ItemTasks = ({
   return (
     <Task
       key={item.typeName}
-      name={item.typeName}
+      name={getDisplayName(item.typeName)}
       status={getPcrItemTaskStatus(item.status)}
       route={routes.pcrReviewItem.getLink({
         projectId,
         pcrId,
         itemId: item.id,
       })}
-      // validation={validationErrors}
     />
   );
 };
