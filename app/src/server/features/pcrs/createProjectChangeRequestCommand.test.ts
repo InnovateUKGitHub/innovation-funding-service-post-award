@@ -7,7 +7,7 @@ import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ValidationError } from "@shared/appError";
 
 describe("Create PCR Command", () => {
-  describe("with PCR Items based from existing PCR's", () => {
+  describe("with PCR Items based from existing PCRs", () => {
     describe("should throw a validation error with existing PCRs", () => {
       const setupExistingPcrItemTestBed = (pcrItemsToCheck: PCRItemType[]) => {
         const context = new TestContext();

@@ -318,8 +318,8 @@
         "title": "Filter options",
         "hint": "You can select more than one.",
         "search": "Search projects",
-        "pcrsToReview": "PCR's to review",
-        "pcrsBeingQueried": "PCR's being queried",
+        "pcrsToReview": "PCRs to review",
+        "pcrsBeingQueried": "PCRs being queried",
         "claimsToReview": "Claims to review",
         "claimsToSubmit": "Claims to submit",
         "claimsMissingDocuments": "Claims missing documents",
@@ -1051,7 +1051,7 @@
       "noAvailableDescription": "No public description available."
     },
     "pcrSuspendProjectDetails": {
-      "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or create and submit claims.",
+      "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCRs), update forecasts, or create and submit claims.",
       "firstDayOfPauseTitle": "First day of pause",
       "lastDayOfPauseTitle": "Last day of pause (if known)",
       "lastDayOfPauseHint": "This will happen on the last day of the month."

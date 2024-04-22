@@ -39,7 +39,7 @@
       "buttonSaveAndReturn": "Save and return to project costs"
     },
     "pcrSuspendProjectDetails": {
-      "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or submit costs."
+      "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCRs), update forecasts, or submit costs."
     },
     "projectDetails": {
       "financeContactInfo": "Only finance contacts can submit drawdown requests and costs.",
