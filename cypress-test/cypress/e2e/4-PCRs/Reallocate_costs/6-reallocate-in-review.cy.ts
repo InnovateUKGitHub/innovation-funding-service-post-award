@@ -11,7 +11,7 @@ import {
 
 const monitoringOfficer = "testman2@testing.com";
 
-describe("PCR > Reallocate Costs > 5 - Change remaining grant", () => {
+describe("PCR > Reallocate Costs > 6- Reallocate in review", () => {
   before(() => {
     visitApp({ asUser: monitoringOfficer, path: "projects/a0EAd0000026yoLMAQ/pcrs/dashboard" });
   });
