@@ -16,6 +16,7 @@ type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaE
   label?: string;
   id: string;
   name: string;
+  boldLabel?: boolean;
   characterCount: number;
   characterCountType?: "descending" | "ascending";
   characterCountMax?: number;
@@ -30,6 +31,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
       hint,
       disabled,
       label,
+      boldLabel,
       characterCount,
       characterCountType = "descending",
       characterCountMax = claimCommentsMaxLength,
@@ -49,7 +51,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
     return (
       <FormGroup hasError={!!error} data-qa={`field-${dataQa}`}>
         {label && (
-          <Label htmlFor={id} data-qa={`label-${dataQa}`}>
+          <Label bold={boldLabel} htmlFor={id} data-qa={`label-${dataQa}`}>
             {label}
           </Label>
         )}
