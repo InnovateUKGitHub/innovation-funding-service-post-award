@@ -24,7 +24,7 @@ const isNotEmptyField = (x: string | undefined | null) => typeof x === "string" 
 class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItemsSchemaType, ClaimLineItemsParams> {
   constructor() {
     super({
-      route: EditClaimLineItemsRoute,
+      routes: [EditClaimLineItemsRoute],
       forms: [FormTypes.ClaimLineItemSaveAndQuit, FormTypes.ClaimLineItemSaveAndDocuments],
     });
   }

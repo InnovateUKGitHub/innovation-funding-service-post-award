@@ -24,8 +24,8 @@ abstract class ZodFormHandlerBase<
   QueryParams extends AnyObject,
 > implements IFormHandler
 {
-  public readonly route: IRouteDefinition<QueryParams>;
-  public readonly routePath: string;
+  public readonly routes: IRouteDefinition<QueryParams>[];
+  public readonly routePath: string[];
   public readonly forms: FormTypes[];
   protected readonly logger: ILogger;
   protected readonly copy: Copy;
@@ -37,10 +37,10 @@ abstract class ZodFormHandlerBase<
    */
   public abstract readonly acceptFiles: boolean;
 
-  constructor({ route, forms }: { route: IRouteDefinition<QueryParams>; forms: FormTypes[] }) {
-    this.route = route;
-    this.routePath = route.routePath;
-    this.logger = new Logger(`${route.routeName} Form Handler`);
+  constructor({ routes, forms }: { routes: IRouteDefinition<QueryParams>[]; forms: FormTypes[] }) {
+    this.routes = routes;
+    this.routePath = this.routes.map(x => x.routePath);
+    this.logger = new Logger(`Zod Form Handler`);
     this.forms = forms;
     this.copy = new Copy();
   }

@@ -26,7 +26,7 @@ export interface RouteInfo<TParams> {
 }
 
 export interface IFormHandler {
-  readonly routePath: string;
+  readonly routePath: string | string[];
 
   // This handler can be used for both error handling and standard routing.
   // This is therefore a destructured object instead of positional arg based,

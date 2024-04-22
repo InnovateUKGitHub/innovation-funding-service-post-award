@@ -23,7 +23,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
 > {
   constructor() {
     super({
-      route: PCRPrepareItemRoute,
+      routes: [PCRPrepareItemRoute],
       forms: [FormTypes.PcrFinancialVirementsSummary],
     });
   }

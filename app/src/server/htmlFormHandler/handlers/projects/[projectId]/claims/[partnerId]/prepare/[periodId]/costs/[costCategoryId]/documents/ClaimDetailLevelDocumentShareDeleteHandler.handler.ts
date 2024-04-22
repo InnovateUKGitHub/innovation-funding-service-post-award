@@ -18,7 +18,7 @@ class ClaimDetailLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ClaimDetailDocumentsRoute,
+      routes: [ClaimDetailDocumentsRoute],
       forms: [FormTypes.ClaimDetailLevelDelete],
     });
   }

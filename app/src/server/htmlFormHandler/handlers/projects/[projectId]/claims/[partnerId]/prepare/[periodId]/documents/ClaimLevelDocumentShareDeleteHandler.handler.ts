@@ -2,6 +2,7 @@ import { IContext } from "@framework/types/IContext";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
 import {
   ClaimDocumentsPageParams,
   ClaimDocumentsRoute,
@@ -18,8 +19,8 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ClaimDocumentsRoute,
-      forms: [FormTypes.ClaimLevelDelete],
+      routes: [ClaimDocumentsRoute, ReviewClaimRoute],
+      forms: [FormTypes.ClaimLevelDelete, FormTypes.ClaimReviewLevelDelete],
     });
   }
 

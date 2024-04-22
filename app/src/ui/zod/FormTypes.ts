@@ -22,6 +22,7 @@ enum FormTypes {
   ClaimDetailLevelDelete = "claimDetailLevelDelete",
 
   // Claim review page
+  ClaimReviewLevelSaveAndContinue = "claimReviewSaveAndContinue",
   ClaimReviewLevelUpload = "claimReviewLevelUpload",
   ClaimReviewLevelDelete = "claimReviewLevelDelete",
 

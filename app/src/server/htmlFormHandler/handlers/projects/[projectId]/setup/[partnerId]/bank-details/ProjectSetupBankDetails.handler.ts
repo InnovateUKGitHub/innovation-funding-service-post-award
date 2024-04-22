@@ -23,7 +23,7 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ProjectSetupBankDetailsRoute,
+      routes: [ProjectSetupBankDetailsRoute],
       forms: [FormTypes.ProjectSetupBankDetails],
     });
   }

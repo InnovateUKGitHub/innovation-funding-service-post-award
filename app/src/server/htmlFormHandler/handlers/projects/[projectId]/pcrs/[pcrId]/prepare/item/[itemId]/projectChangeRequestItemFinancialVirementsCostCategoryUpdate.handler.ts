@@ -26,7 +26,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
 > {
   constructor() {
     super({
-      route: PartnerLevelFinancialVirementRoute,
+      routes: [PartnerLevelFinancialVirementRoute],
       forms: [FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue],
     });
   }

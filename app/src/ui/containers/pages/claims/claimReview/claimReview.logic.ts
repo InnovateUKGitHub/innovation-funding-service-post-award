@@ -1,34 +1,41 @@
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { Claims } from "@framework/constants/recordTypes";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
+import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
+import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { clientsideApiClient } from "@ui/apiClient";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRoutes } from "@ui/redux/routesProvider";
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
-import { getFirstEdge } from "@gql/selectors/edges";
-import { claimReviewQuery } from "./ClaimReview.query";
-import { ClaimReviewQuery } from "../__generated__/ClaimReviewQuery.graphql";
-import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
-import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
-import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
-import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
-import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { useNavigate } from "react-router-dom";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { clientsideApiClient } from "@ui/apiClient";
-import { ClaimDto } from "@framework/dtos/claimDto";
-import { useContent } from "@ui/hooks/content.hook";
-import { claimReviewSchema } from "./claimReview.zod";
 import { z } from "zod";
-import { Claims } from "@framework/constants/recordTypes";
+import { ClaimReviewQuery } from "../__generated__/ClaimReviewQuery.graphql";
+import { claimReviewQuery } from "./ClaimReview.query";
+import { ClaimReviewSchemaType } from "./claimReview.zod";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
-export const useClaimReviewPageData = (
-  projectId: ProjectId,
-  partnerId: PartnerId,
-  periodId: PeriodId,
-  queryOptions: QueryOptions = { fetchPolicy: "network-only" },
-) => {
+export const useClaimReviewPageData = ({
+  projectId,
+  partnerId,
+  periodId,
+  queryOptions = { fetchPolicy: "network-only" },
+}: {
+  projectId: ProjectId;
+  partnerId: PartnerId;
+  periodId: PeriodId;
+  queryOptions: QueryOptions;
+}) => {
   const data = useLazyLoadQuery<ClaimReviewQuery>(
     claimReviewQuery,
     { projectId, projectIdStr: projectId, partnerId, periodId },
@@ -150,26 +157,22 @@ export const useClaimReviewPageData = (
   }, [totalDocumentsLength]);
 };
 
-export const useOnUpdateClaimReview = (
-  partnerId: PartnerId,
-  projectId: ProjectId,
-  periodId: PeriodId,
-  navigateTo: string,
-  claim: PickRequiredFromPartial<ClaimDto, "id" | "partnerId">,
-) => {
+export const useOnUpdateClaimReview = ({ claim }: { claim: PickRequiredFromPartial<ClaimDto, "id" | "partnerId"> }) => {
   const navigate = useNavigate();
-  return useOnUpdate<z.output<typeof claimReviewSchema>, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
-    req(data) {
+  const routes = useRoutes();
+
+  return useOnUpdate<z.output<ClaimReviewSchemaType>, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
+    req({ projectId, partnerId, periodId, comments, status }) {
       return clientsideApiClient.claims.update({
-        partnerId,
         projectId,
+        partnerId,
         periodId,
-        claim: { ...claim, ...data } as ClaimDto,
+        claim: { ...claim, comments, status } as ClaimDto,
         isClaimSummary: false,
       });
     },
-    onSuccess() {
-      navigate(navigateTo);
+    onSuccess({ projectId }) {
+      navigate(routes.allClaimsDashboard.getLink({ projectId }).path);
     },
   });
 };
@@ -208,3 +211,7 @@ export function useReviewContent() {
     uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
   };
 }
+
+const validSubmittedClaimStatus = [ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IAR, ClaimStatus.AWAITING_IUK_APPROVAL];
+
+export { validSubmittedClaimStatus };

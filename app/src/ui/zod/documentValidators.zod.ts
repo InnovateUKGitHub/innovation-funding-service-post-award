@@ -140,6 +140,7 @@ const partnerLevelDelete = z.object({
   documentId: z.string(),
 });
 
+type ClaimLevelDeleteSchemaType = typeof claimLevelDelete;
 const claimLevelDelete = z.object({
   form: z.union([z.literal(FormTypes.ClaimLevelDelete), z.literal(FormTypes.ClaimReviewLevelDelete)]),
   projectId: projectIdValidation,
@@ -186,4 +187,5 @@ export type {
   UploadBankStatementSchemaType,
   PcrLevelUploadSchemaType,
   ClaimDetailLevelUploadSchemaType,
+  ClaimLevelDeleteSchemaType,
 };

@@ -55,7 +55,6 @@ const ClaimReviewDocuments = ({
 }: ClaimReviewDocumentProps) => {
   const content = useReviewContent();
   const { getContent } = useContent();
-
   const defaults = useServerInput<z.output<ClaimLevelUploadSchemaType>>();
 
   const documentDropdownOptions = useValidDocumentDropdownOptions(
@@ -74,7 +73,11 @@ const ClaimReviewDocuments = ({
       <Markdown trusted value={content.uploadInstruction} />
       <DocumentGuidance />
 
-      <Form onSubmit={documentForm.handleSubmit(data => onUploadUpdate({ data }))} data-qa="upload-form">
+      <Form
+        onSubmit={documentForm.handleSubmit(data => onUploadUpdate({ data }))}
+        data-qa="upload-form"
+        encType="multipart/form-data"
+      >
         <input type="hidden" value={FormTypes.ClaimReviewLevelUpload} {...documentForm.register("form")} />
         <input type="hidden" value={projectId} {...documentForm.register("projectId")} />
         <input type="hidden" value={partnerId} {...documentForm.register("partnerId")} />
@@ -136,7 +139,7 @@ const ClaimReviewDocuments = ({
           })
         }
         documents={documents}
-        formType={FormTypes.ProjectLevelDelete}
+        formType={FormTypes.ClaimReviewLevelDelete}
         disabled={disabled}
       />
     </AccordionItem>

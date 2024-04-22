@@ -23,7 +23,7 @@ class ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler extend
 > {
   constructor() {
     super({
-      route: PCRPrepareItemRoute,
+      routes: [PCRPrepareItemRoute],
       forms: [FormTypes.PcrApproveNewSubcontractorSummary],
     });
   }

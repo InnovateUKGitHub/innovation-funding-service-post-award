@@ -25,7 +25,7 @@ interface ClaimForecastFormHandlerParams {
 class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaType, ClaimForecastFormHandlerParams> {
   constructor() {
     super({
-      route: ClaimForecastRoute,
+      routes: [ClaimForecastRoute],
       forms: [FormTypes.ClaimForecastSaveAndContinue, FormTypes.ClaimForecastSaveAndQuit],
     });
   }

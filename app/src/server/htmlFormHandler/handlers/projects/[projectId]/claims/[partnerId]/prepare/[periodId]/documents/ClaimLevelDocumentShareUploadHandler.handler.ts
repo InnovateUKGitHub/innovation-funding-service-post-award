@@ -13,15 +13,16 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
 
 class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   ClaimLevelUploadSchemaType,
-  ClaimDocumentsPageParams
+  { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }
 > {
   constructor() {
     super({
-      route: ClaimDocumentsRoute,
-      forms: [FormTypes.ClaimLevelUpload],
+      routes: [ClaimDocumentsRoute, ReviewClaimRoute],
+      forms: [FormTypes.ClaimLevelUpload, FormTypes.ClaimReviewLevelUpload],
     });
   }
 

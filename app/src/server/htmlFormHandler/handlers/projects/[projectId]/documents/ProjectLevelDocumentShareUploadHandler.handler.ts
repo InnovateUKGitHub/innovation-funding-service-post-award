@@ -16,7 +16,7 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ProjectDocumentsRoute,
+      routes: [ProjectDocumentsRoute],
       forms: [FormTypes.ProjectLevelUpload],
     });
   }

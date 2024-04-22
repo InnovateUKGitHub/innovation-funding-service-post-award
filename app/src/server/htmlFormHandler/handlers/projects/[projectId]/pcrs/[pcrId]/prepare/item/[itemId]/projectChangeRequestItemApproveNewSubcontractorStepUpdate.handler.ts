@@ -21,7 +21,7 @@ class ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler extends Z
 > {
   constructor() {
     super({
-      route: PCRPrepareItemRoute,
+      routes: [PCRPrepareItemRoute],
       forms: [FormTypes.PcrApproveNewSubcontractorStep],
     });
   }

@@ -16,9 +16,7 @@ import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/c
 import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDeleteHandler.handler";
 import { ClaimLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareUploadHandler.handler";
 import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/prepareClaimFormHandler";
-import { ClaimReviewDocumentsDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/claimReviewDocumentsDeleteHandler";
-import { ClaimReviewDocumentsUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/claimReviewDocumentsUploadHandler";
-import { ReviewClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/reviewClaimFormHandler";
+import { ClaimReviewLevelFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/ClaimReviewLevelFormHandler.handler";
 import { UpdateForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/updateForecast/[periodId]/updateForecastFormHandler";
 import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDeleteHandler.handler";
 import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUploadHandler.handler";
@@ -87,9 +85,8 @@ export const standardFormHandlers = [
   new ClaimForecastFormHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
-  new ReviewClaimFormHandler(),
+  new ClaimReviewLevelFormHandler(),
   new UpdateForecastFormHandler(),
-  new ClaimReviewDocumentsDeleteHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPreparePeriodFormHandler(),
@@ -125,7 +122,6 @@ export const standardFormHandlers = [
 ] as const;
 
 export const multiFileFormHandlers = [
-  new ClaimReviewDocumentsUploadHandler(),
   new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),

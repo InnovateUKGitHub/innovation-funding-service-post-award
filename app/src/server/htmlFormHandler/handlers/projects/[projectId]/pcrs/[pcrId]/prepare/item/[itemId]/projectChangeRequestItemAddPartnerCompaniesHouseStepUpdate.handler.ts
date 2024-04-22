@@ -23,7 +23,7 @@ class ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler extends 
 > {
   constructor() {
     super({
-      route: PCRPrepareItemRoute,
+      routes: [PCRPrepareItemRoute],
       forms: [
         FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue,
         FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit,

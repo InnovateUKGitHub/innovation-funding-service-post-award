@@ -24,7 +24,7 @@ class ClaimDetailLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ClaimDetailDocumentsRoute,
+      routes: [ClaimDetailDocumentsRoute],
       forms: [FormTypes.ClaimDetailLevelUpload],
     });
   }

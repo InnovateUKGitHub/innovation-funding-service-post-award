@@ -48,6 +48,7 @@ type RadioListProps<TFormValues extends FieldValues> = {
   register: UseFormRegister<TFormValues>;
   inline?: boolean;
   children: ReactNode;
+  hasError?: boolean;
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 const RadioList = <TFormValues extends FieldValues>({
@@ -56,11 +57,15 @@ const RadioList = <TFormValues extends FieldValues>({
   children,
   name,
   register,
+  hasError,
   ...props
 }: RadioListProps<TFormValues>) => {
   return (
     <RadioListContext.Provider value={{ name, register: register as UseFormRegister<FieldValues> }}>
-      <div className={cx("govuk-radios", { "govuk-radios--inline": inline }, className)} {...props}>
+      <div
+        className={cx("govuk-radios", { "govuk-radios--inline": inline, "govuk-radios--error": hasError }, className)}
+        {...props}
+      >
         {children}
       </div>
     </RadioListContext.Provider>

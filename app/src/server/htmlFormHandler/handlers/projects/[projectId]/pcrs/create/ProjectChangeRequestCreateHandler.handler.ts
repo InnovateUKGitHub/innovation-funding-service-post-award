@@ -16,7 +16,7 @@ import { z } from "zod";
 class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSchemaType, PcrModifyParams> {
   constructor() {
     super({
-      route: PCRCreateRoute,
+      routes: [PCRCreateRoute],
       forms: [FormTypes.ProjectChangeRequestCreate],
     });
   }

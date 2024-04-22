@@ -1,21 +1,31 @@
 import { z } from "zod";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import {
+  claimIdValidation,
+  partnerIdValidation,
+  periodIdValidation,
+  projectIdValidation,
+} from "@ui/zod/helperValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 
-export const claimReviewErrorMap = makeZodI18nMap({ keyPrefix: ["claimReview"] });
-export const documentUploadErrorMap = makeZodI18nMap({ keyPrefix: ["uploadDocuments"] });
+const claimReviewErrorMap = makeZodI18nMap({ keyPrefix: ["claimReview"] });
+const claimReviewSchemaCommentsMax = 1000;
 
-export const claimReviewSchema = z
+const claimReviewSchema = z
   .object({
+    form: z.literal(FormTypes.ClaimReviewLevelSaveAndContinue),
+    projectId: projectIdValidation,
+    partnerId: partnerIdValidation,
+    periodId: periodIdValidation,
+    claimId: claimIdValidation,
     status: z.enum([ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL]),
-    comments: z.string().max(1000),
+    comments: z.string().max(claimReviewSchemaCommentsMax),
   })
   .refine(({ status, comments }) => status !== ClaimStatus.MO_QUERIED || comments?.length >= 1, {
     path: ["comments"],
   });
 
-export const documentUploadSchema = z.object({
-  attachment: z.object({
-    length: z.number().gt(0),
-  }),
-});
+type ClaimReviewSchemaType = typeof claimReviewSchema;
+
+export { claimReviewErrorMap, claimReviewSchema, ClaimReviewSchemaType, claimReviewSchemaCommentsMax };

@@ -1963,6 +1963,11 @@
       }
     },
     "claimReview": {
+      "status": {
+        "errors": {
+          "invalid": "You must choose whether to query or approve this claim."
+        }
+      },
       "comments": {
         "errors": {
           "too_big": "Comments must be a maximum of 1000 characters.",

@@ -15,7 +15,7 @@ import { ZodIssue } from "zod";
  */
 const useZodErrors = <T extends FieldValues>(
   setError: UseFormSetError<T>,
-  formErrors: FieldErrors,
+  formErrors: FieldErrors<T>,
   extraZodErrors?: ZodIssue[],
 ): RhfErrors => {
   const store = useStore<RootState>();

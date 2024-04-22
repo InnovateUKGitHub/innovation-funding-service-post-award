@@ -22,6 +22,7 @@ export interface NewForecastTableProps {
   tableData: ForecastTableDto;
   disabled?: boolean;
   isProjectSetup: boolean;
+  isOpen?: boolean;
 }
 
 const NewForecastTable = (props: NewForecastTableProps) => {
@@ -29,7 +30,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
   const { getContent } = useContent();
 
   // Resize the forecast table when the contents of the data changes
-  useEffect(forecastTableResize, [props.tableData]);
+  useEffect(forecastTableResize, [props.tableData, props.isOpen]);
 
   // Create the className required for standard columns
   const colClassName = (x: boolean | undefined = true, className?: string) =>

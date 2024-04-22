@@ -19,7 +19,7 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ProjectDocumentsRoute,
+      routes: [ProjectDocumentsRoute],
       forms: [FormTypes.ProjectLevelDelete, FormTypes.PartnerLevelDelete],
     });
   }

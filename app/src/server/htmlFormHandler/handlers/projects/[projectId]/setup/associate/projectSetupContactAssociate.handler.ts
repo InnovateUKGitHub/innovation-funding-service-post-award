@@ -18,7 +18,7 @@ class ProjectSetupContactAssociateHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ContactSetupAssociateRoute,
+      routes: [ContactSetupAssociateRoute],
       forms: [FormTypes.ProjectSetupContactAssociate],
     });
   }

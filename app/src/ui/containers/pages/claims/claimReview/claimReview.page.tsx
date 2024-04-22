@@ -18,7 +18,6 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
-import { NewForecastTableWithStandaloneMemo } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.standalone";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
@@ -30,6 +29,8 @@ import { claimReviewQuery } from "./ClaimReview.query";
 import { ClaimReviewApproval } from "./ClaimReviewApproval";
 import { ClaimReviewDocuments } from "./ClaimReviewDocuments";
 import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
+import { ClaimReviewSchemaType, claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
+import { NewForecastTableWithStandaloneMemo } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.standalone";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -49,16 +50,29 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
     periodId,
   });
 
-  const { project, claim, claimDetails, costCategories, documents, partner, fragmentRef } = useClaimReviewPageData(
+  const { project, claim, claimDetails, costCategories, documents, partner, fragmentRef } = useClaimReviewPageData({
     projectId,
     partnerId,
     periodId,
-    refreshedQueryOptions,
-  );
+    queryOptions: refreshedQueryOptions,
+  });
 
   const documentForm = useForm<z.output<ClaimLevelUploadSchemaType>>({
     resolver: zodResolver(getClaimLevelUpload({ config: options, project }), { errorMap: documentsErrorMap }),
   });
+  const claimReviewForm = useForm<z.output<ClaimReviewSchemaType>>({
+    resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
+  });
+
+  // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
+  const claimDocumentErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(
+    documentForm.setError,
+    documentForm.formState.errors,
+  );
+  const claimReviewErrors = useZodErrors<z.output<ClaimReviewSchemaType>>(
+    claimReviewForm.setError,
+    claimReviewForm.formState.errors,
+  );
 
   const {
     onUpdate: onUploadUpdate,
@@ -76,22 +90,12 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
     isProcessing: onDeleteProcessing,
   } = useOnDelete({ onSuccess: refresh });
 
-  const { onUpdate, apiError, isProcessing } = useOnUpdateClaimReview(
-    partnerId,
-    projectId,
-    periodId,
-    routes.allClaimsDashboard.getLink({ projectId }).path,
+  const { onUpdate, apiError, isProcessing } = useOnUpdateClaimReview({
     claim,
-  );
+  });
 
   const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
   const { isMo } = getAuthRoles(project.roles);
-
-  // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(
-    documentForm.setError,
-    documentForm.formState.errors,
-  );
 
   const disabled = isProcessing || onUploadProcessing || onDeleteProcessing;
 
@@ -100,7 +104,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
       backLink={<BackLink route={routes.allClaimsDashboard.getLink({ projectId })}>{content.backLink}</BackLink>}
       apiError={apiError ?? onUploadApiError ?? onDeleteApiError}
       fragmentRef={fragmentRef}
-      validationErrors={allErrors}
+      validationErrors={Object.assign({}, claimReviewErrors, claimDocumentErrors)}
     >
       <Messages messages={messages} />
 
@@ -192,7 +196,15 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
           />
         </Accordion>
 
-        <ClaimReviewApproval disabled={disabled} onUpdate={onUpdate} />
+        <ClaimReviewApproval
+          projectId={projectId}
+          partnerId={partnerId}
+          periodId={periodId}
+          claimId={claim.id}
+          disabled={disabled}
+          onUpdate={onUpdate}
+          claimReviewForm={claimReviewForm}
+        />
       </Section>
     </Page>
   );
