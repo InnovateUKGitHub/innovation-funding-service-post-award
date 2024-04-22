@@ -23,9 +23,9 @@ describe("projects dashboard > general", { tags: "smoke" }, () => {
   it("should show a list of project cards", shouldShowAListOfProjectCards);
 
   testEach([
-    ["PCR's being queried", "Project change request queried"],
+    ["PCRs being queried", "Project change request queried"],
     ["Claims to review", "Claims to review"],
-    ["PCR's to review", "Project change requests to review"],
+    ["PCRs to review", "Project change requests to review"],
     [
       "Not completed setup",
       /You need to set up your project|You need to provide confirmation of the associate's start date|You can update the associate's start date here/,
