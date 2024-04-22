@@ -40,8 +40,7 @@ export const reallocateRequestPage = () => {
     ["Query the request", "Send for approval"].forEach(label => {
       cy.getByLabel(label);
     });
-    cy.get("h3").contains("Add your comments");
-    cy.get("textarea");
+    cy.getByLabel("Add your comments");
     cy.paragraph("You have 1000 characters remaining");
   });
   cy.button("Submit");
