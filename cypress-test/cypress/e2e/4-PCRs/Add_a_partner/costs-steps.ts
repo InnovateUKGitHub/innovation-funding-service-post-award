@@ -316,8 +316,15 @@ export const checkAddTravelAndSubsistenceItem = () => {
       cy.validatePositiveWholeNumber("Number of times", "Number of times", "10000000000000000000");
       cy.validateCurrency("Cost of each (£)", "cost of each", "10000000000000000000");
       cy.clickOn("Save and return to travel and subsistence");
-      cy.validationLink("Cost of each must be 999999999999 or less.");
+      cy.validationLink("Cost of each must be £999,999,999,999.00 or less.");
+      cy.paragraph("Cost of each must be £999,999,999,999.00 or less.");
       cy.validationLink("Number of times must be 9999999999 or less.");
+      cy.paragraph("Number of times must be 9999999999 or less.");
+      cy.validatePositiveWholeNumber("Number of times", "Number of times", "999999999999");
+      cy.validateCurrency("Cost of each (£)", "cost of each", "999999999999");
+      cy.clickOn("Save and return to travel and subsistence");
+      cy.validationLink("Total cost must be less than £10,000,000,000,000.00.");
+      cy.paragraph("Total cost must be less than £10,000,000,000,000.00.");
       cy.getByLabel("Purpose of journey or description of subsistence cost").clear().type("Trip to las vegas");
       cy.validatePositiveWholeNumber("Number of times", "Number of times", "3");
       cy.validateCurrency("Cost of each (£)", "cost of each", "12000");
