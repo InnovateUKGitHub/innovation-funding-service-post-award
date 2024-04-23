@@ -113,5 +113,11 @@ export interface IConfig {
 
   readonly developer: {
     writeGraphQL: boolean;
+    oidc: {
+      enabled: boolean;
+      issuer: string;
+      clientId: string;
+      clientSecret: string;
+    };
   };
 }

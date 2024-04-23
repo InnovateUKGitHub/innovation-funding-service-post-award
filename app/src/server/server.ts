@@ -1,7 +1,7 @@
 import express from "express";
 import crypto from "crypto";
 
-import { router as authRouter } from "@server/auth";
+import { getAuthRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
 import { getServerRoutes, noAuthRouter } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
@@ -128,7 +128,7 @@ export class Server {
     this.app.use(useBasicAuth);
     this.app.use(noCache, noAuthRouter);
     this.app.use(noCache, cspRouter);
-    this.app.use(authRouter);
+    this.app.use(await getAuthRouter());
     this.app.use(internationalisationRouter);
     this.app.use(setOwaspHeaders, noCache, await getServerRoutes());
     this.app.disable("x-powered-by");

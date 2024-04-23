@@ -8,7 +8,7 @@ import { configuration } from "./features/common/config";
  */
 export const useBasicAuth = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
   // to be applied where sso does not provide security
-  if (!configuration.sso.enabled) {
+  if (!configuration.sso.enabled && !configuration.developer.oidc.enabled) {
     // allow some paths so that the home page can render nicely while waiting for credentials.
     const allowedPaths = [/^\/$/, /build/, /internationalisation/, /govuk\-frontend.*.min.js/, /api\/health\/version/];
     if (allowedPaths.some(path => path.test(req.path))) {

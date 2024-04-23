@@ -179,7 +179,8 @@
     "developerEnvironmentInformation": {
       "environment": "Environment",
       "route": "Route",
-      "user": "Logged in User",
+      "user": "Salesforce User",
+      "developerUser": "Developer User",
       "react": "ReactJS Loaded"
     },
     "userSwitcher": {

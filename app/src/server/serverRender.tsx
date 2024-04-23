@@ -303,6 +303,7 @@ function getClientConfig(context: IContext): IClientConfig {
     options: context.config.options,
     accEnvironment: context.config.accEnvironment,
     logLevel: context.config.logLevel,
+    developer: { oidc: { enabled: context.config.developer.oidc.enabled } },
   };
 }
 
