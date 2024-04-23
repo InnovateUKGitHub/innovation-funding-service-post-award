@@ -20,11 +20,18 @@ import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/C
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
-import { PcrReasoningSummarySchemaType, pcrReasoningErrorMap, pcrReasoningSummarySchema } from "./pcrReasoning.zod";
+import {
+  PcrReasoningSummarySchema,
+  PcrReasoningSummarySchemaType,
+  pcrReasoningErrorMap,
+  pcrReasoningSummarySchema,
+} from "./pcrReasoning.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { z } from "zod";
 
 export const PCRReasoningSummary = () => {
   const getPcrTypeName = useGetPcrTypeName();
@@ -47,7 +54,7 @@ export const PCRReasoningSummary = () => {
 
   const backLink = useGetBackLink();
 
-  const { register, handleSubmit, watch, formState } = useForm<PcrReasoningSummarySchemaType>({
+  const { register, handleSubmit, watch, formState, setError } = useForm<PcrReasoningSummarySchemaType>({
     defaultValues: {
       reasoningComments: pcr.reasoningComments,
       reasoningStatus: pcr.reasoningStatus === PCRItemStatus.Complete,
@@ -61,8 +68,7 @@ export const PCRReasoningSummary = () => {
 
   const watchedCheckbox = watch("reasoningStatus");
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
+  const validationErrors = useZodErrors<z.output<PcrReasoningSummarySchema>>(setError, formState.errors);
   useEffect(() => {
     setMarkedAsCompleteHasBeenChecked(watchedCheckbox);
   }, [watchedCheckbox]);
@@ -89,7 +95,6 @@ export const PCRReasoningSummary = () => {
                 </SimpleString>
               }
               qa="comments"
-              // validation={editor.validator.reasoningComments}
               action={
                 mode === "prepare" && (
                   <Link route={getStepLink(PCRStepType.reasoningStep, projectId, pcrId, routes)}>
@@ -135,6 +140,8 @@ export const PCRReasoningSummary = () => {
               });
             })}
           >
+            <input type="hidden" value={FormTypes.PcrPrepareReasoningSummary} {...register("form")} />
+            <input type="hidden" value={pcr.reasoningComments ?? ""} {...register("reasoningComments")} />
             <Fieldset>
               <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
               <FormGroup>
@@ -148,7 +155,7 @@ export const PCRReasoningSummary = () => {
               </FormGroup>
 
               <FormGroup>
-                <Button type="submit" disabled={isFetching}>
+                <Button type="submit" name="reasoningSummary" disabled={isFetching}>
                   {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
                 </Button>
               </FormGroup>

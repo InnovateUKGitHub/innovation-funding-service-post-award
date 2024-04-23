@@ -1,48 +1,79 @@
-import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
-import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IContext } from "@framework/types/IContext";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { configuration } from "@server/features/common/config";
+import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
+import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
-  ProjectChangeRequestPrepareReasoningParams,
   PCRPrepareReasoningRoute,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-
-interface Document extends MultipleDocumentUploadDto {
-  id: string;
-}
-
-export class ProjectChangeRequestReasoningDocumentDeleteHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareReasoningParams,
-  "multipleDocuments"
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
+import { messageSuccess } from "@ui/redux/actions/common/messageActions";
+import { documentsErrorMap, pcrLevelDelete } from "@ui/zod/documentValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import express from "express";
+import { z } from "zod";
+
+export class ProjectChangeRequestReasoningDocumentDeleteHandler extends ZodFormHandlerBase<
+  typeof pcrLevelDelete,
+  ProjectChangeRequestPrepareReasoningParams
 > {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["delete"], "multipleDocuments");
+    super({
+      route: PCRPrepareReasoningRoute,
+      forms: [FormTypes.PcrLevelDelete],
+    });
   }
 
-  protected getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton) {
-    return Promise.resolve({ id: button.value, files: [] });
+  public readonly acceptFiles = false;
+
+  protected async getZodSchema() {
+    return {
+      schema: pcrLevelDelete,
+      errorMap: documentsErrorMap,
+    };
   }
 
-  protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: Document) {
-    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
+  protected async mapToZod({
+    input,
+    params,
+  }: {
+    input: AnyObject;
+    params: ProjectChangeRequestPrepareReasoningParams;
+  }): Promise<z.input<typeof pcrLevelDelete>> {
+    return {
+      projectId: params.projectId,
+      projectChangeRequestIdOrItemId: params.pcrId,
+      documentId: input.documentId ?? input.button_documentId,
+      form: FormTypes.PcrLevelDelete,
+    };
   }
 
-  protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
-    return storeKeys.getPcrKey(params.projectId, params.pcrId);
-  }
+  protected async run({
+    res,
+    input,
+    context,
+  }: {
+    res: express.Response;
+    input: z.output<typeof pcrLevelDelete>;
+    context: IContext;
+  }): Promise<void> {
+    const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
 
-  protected async run(
-    context: IContext,
-    params: ProjectChangeRequestPrepareReasoningParams,
-    button: IFormButton,
-    dto: Document,
-  ): Promise<ILinkInfo> {
-    const command = new DeleteProjectChangeRequestDocumentOrItemDocument(dto.id, params.projectId, params.pcrId);
-    await context.runCommand(command);
-    return PCRPrepareReasoningRoute.getLink(params);
+    const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
+    await context.runCommand(
+      new DeleteProjectChangeRequestDocumentOrItemDocument(
+        input.documentId,
+        input.projectId,
+        input.projectChangeRequestIdOrItemId,
+      ),
+    );
+
+    // TODO: Actually use Redux instead of a temporary array
+    res.locals.preloadedReduxActions.push(
+      messageSuccess(
+        this.copy.getCopyString(x =>
+          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
+        ),
+      ),
+    );
   }
 }

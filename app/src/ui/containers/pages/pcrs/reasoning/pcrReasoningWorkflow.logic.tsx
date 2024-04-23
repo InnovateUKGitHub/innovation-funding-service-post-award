@@ -124,7 +124,7 @@ const createMinimalPcrUpdateDto = ({
   projectId: ProjectId;
   pcrId: PcrId;
   pcr: PcrDtoForReasoning;
-  data: Omit<PcrReasoningSchemaType, "markedAsCompleteHasBeenChecked">;
+  data: Omit<PcrReasoningSchemaType, "markedAsComplete" | "form">;
 }) => {
   return {
     ...pcr,
@@ -142,7 +142,7 @@ export const useOnSavePcrReasoning = (
 ) => {
   const navigate = useNavigate();
   const { clearMessages } = useMessages();
-  return useOnUpdate<Omit<PcrReasoningSchemaType, "markedAsCompleteHasBeenChecked">, PCRDto, { link: ILinkInfo }>({
+  return useOnUpdate<Omit<PcrReasoningSchemaType, "markedAsComplete" | "form">, PCRDto, { link: ILinkInfo }>({
     req: data => {
       return clientsideApiClient.pcrs.update({
         projectId,

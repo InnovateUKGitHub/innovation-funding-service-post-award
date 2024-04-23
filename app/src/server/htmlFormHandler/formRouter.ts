@@ -84,7 +84,6 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),
   new EditClaimLineItemsFormHandler(),
-
   new ClaimForecastFormHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
@@ -128,7 +127,6 @@ export const standardFormHandlers = [
 export const multiFileFormHandlers = [
   new ClaimReviewDocumentsUploadHandler(),
   new OverheadDocumentsUploadHandler(),
-  new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
   new LoanRequestDocumentUploadHandler(),
@@ -140,6 +138,7 @@ export const zodFormHandlers = [
   new ProjectLevelDocumentShareUploadHandler(),
   new ClaimLevelDocumentShareUploadHandler(),
   new ClaimDetailLevelDocumentShareUploadHandler(),
+  new ProjectChangeRequestReasoningDocumentUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {

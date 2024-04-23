@@ -1,69 +1,77 @@
-import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { reasoningWorkflowSteps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IFileWrapper } from "@framework/types/fileWapper";
 import { IContext } from "@framework/types/IContext";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { ServerFileWrapper } from "@server/apis/controllerBase";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { z } from "zod";
+import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import express from "express";
+import { messageSuccess } from "@ui/redux/actions/common/messageActions";
+
+import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 import {
-  ProjectChangeRequestPrepareReasoningParams,
   PCRPrepareReasoningRoute,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-
-export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectChangeRequestPrepareReasoningParams,
-  "multipleDocuments"
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
+import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
+
+export class ProjectChangeRequestReasoningDocumentUploadHandler extends ZodFormHandlerBase<
+  PcrLevelUploadSchemaType,
+  ProjectChangeRequestPrepareReasoningParams
 > {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["uploadFile", "uploadFileAndContinue"], "multipleDocuments");
-  }
-
-  protected async getDto(
-    context: IContext,
-    params: ProjectChangeRequestPrepareReasoningParams,
-    button: IFormButton,
-    body: IFormBody,
-    files: IFileWrapper[],
-  ): Promise<MultipleDocumentUploadDto> {
-    return {
-      files,
-      description: Number(body.description) || undefined,
-    };
-  }
-
-  protected async run(
-    context: IContext,
-    params: ProjectChangeRequestPrepareReasoningParams,
-    button: IFormButton,
-    dto: MultipleDocumentUploadDto,
-  ): Promise<ILinkInfo> {
-    if (button.name === "uploadFile" || dto.files.length) {
-      await context.runCommand(
-        new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.pcrId, dto),
-      );
-    }
-
-    const nextStep = reasoningWorkflowSteps.find(x => x.stepNumber === (params.step || 0) + 1);
-
-    return PCRPrepareReasoningRoute.getLink({
-      projectId: params.projectId,
-      pcrId: params.pcrId,
-      step: button.name === "uploadFile" ? params.step : nextStep && nextStep.stepNumber,
+    super({
+      route: PCRPrepareReasoningRoute,
+      forms: [FormTypes.PcrLevelUpload],
     });
   }
 
-  protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
-    return storeKeys.getPcrKey(params.projectId, params.pcrId);
+  public readonly acceptFiles = true;
+
+  protected async getZodSchema() {
+    return {
+      schema: getPcrLevelUpload({ config: configuration.options }),
+      errorMap: documentsErrorMap,
+    };
   }
 
-  protected createValidationResult(
-    params: ProjectChangeRequestPrepareReasoningParams,
-    dto: MultipleDocumentUploadDto,
-    button: IFormButton,
-  ) {
-    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
+  protected async mapToZod({
+    input,
+    files,
+  }: {
+    input: AnyObject;
+    files: ServerFileWrapper[];
+  }): Promise<z.input<PcrLevelUploadSchemaType>> {
+    return {
+      form: FormTypes.PcrLevelUpload,
+      files,
+      description: input.description,
+      projectId: input.projectId,
+      projectChangeRequestIdOrItemId: input.projectChangeRequestIdOrItemId,
+    };
+  }
+
+  protected async run({
+    res,
+    input,
+    context,
+  }: {
+    res: express.Response;
+    input: z.output<PcrLevelUploadSchemaType>;
+    context: IContext;
+  }): Promise<void> {
+    await context.runCommand(
+      new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+        input.projectId,
+        input.projectChangeRequestIdOrItemId,
+        input,
+      ),
+    );
+
+    // TODO: Actually use Redux instead of a temporary array
+    res.locals.preloadedReduxActions.push(
+      messageSuccess(
+        this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
+      ),
+    );
   }
 }

@@ -36,6 +36,10 @@ enum FormTypes {
 
   PcrAddPartnerCompaniesHouseStepSaveAndContinue = "pcrAddPartnerCompaniesHouseStepSaveAndContinue",
   PcrAddPartnerCompaniesHouseStepSaveAndQuit = "pcrAddPartnerCompaniesHouseStepSaveAndQuit",
+
+  PcrPrepareReasoningStep = "pcrPrepareReasoningStep",
+  PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
+  PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",
 }
 
 export { FormTypes };

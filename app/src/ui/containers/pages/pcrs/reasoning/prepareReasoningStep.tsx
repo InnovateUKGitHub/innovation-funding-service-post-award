@@ -7,23 +7,32 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { useForm } from "react-hook-form";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useGetBackLink, useNextReasoningLink } from "./pcrReasoningWorkflow.logic";
-import { PcrReasoningSchemaType, pcrReasoningErrorMap, pcrReasoningSchema } from "./pcrReasoning.zod";
+import {
+  PcrReasoningSchema,
+  PcrReasoningSchemaType,
+  pcrReasoningErrorMap,
+  pcrReasoningSchema,
+} from "./pcrReasoning.zod";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { z } from "zod";
 
 export const PCRPrepareReasoningStep = () => {
   const { pcr, isFetching, onUpdate, messages, fragmentRef, apiError, markedAsCompleteHasBeenChecked } =
     usePcrReasoningContext();
-  const { register, watch, handleSubmit, formState, trigger } = useForm<PcrReasoningSchemaType>({
+
+  const { register, watch, handleSubmit, formState, trigger, setError } = useForm<PcrReasoningSchemaType>({
     defaultValues: {
       reasoningComments: pcr.reasoningComments ?? "",
-      markedAsCompleteHasBeenChecked,
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      form: FormTypes.PcrPrepareReasoningStep,
     },
     resolver: zodResolver(pcrReasoningSchema, {
       errorMap: pcrReasoningErrorMap,
@@ -32,25 +41,26 @@ export const PCRPrepareReasoningStep = () => {
 
   const { getContent } = useContent();
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
   const nextLink = useNextReasoningLink();
 
   const backLink = useGetBackLink();
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
+  const validationErrors = useZodErrors<z.output<PcrReasoningSchema>>(setError, formState.errors);
+
   return (
     <Page validationErrors={validationErrors} backLink={backLink} fragmentRef={fragmentRef} apiError={apiError}>
       <Messages messages={messages} />
       <PcrItemListSection />
-
       <Section data-qa="reasoning-save-and-return">
         <Form
           onSubmit={handleSubmit(data =>
             onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
           )}
         >
+          <input type="hidden" value={FormTypes.PcrPrepareReasoningStep} {...register("form")} />
+          <input type="hidden" value={String(markedAsCompleteHasBeenChecked)} {...register("markedAsComplete")} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrReasoningPrepareReasoning.headingReasoning)}</Legend>
             <TextAreaField
@@ -64,6 +74,7 @@ export const PCRPrepareReasoningStep = () => {
               characterCountMax={32_000}
               aria-label={getContent(x => x.pages.pcrReasoningPrepareReasoning.headingReasoning)}
               rows={15}
+              defaultValue={pcr.reasoningComments ?? ""}
             />
           </Fieldset>
 

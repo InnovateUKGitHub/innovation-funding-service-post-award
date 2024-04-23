@@ -76,7 +76,7 @@ abstract class ZodFormHandlerBase<
         input: req.body,
         req,
         res,
-        params: req.params as QueryParams,
+        params: { ...req.params, ...req.query } as QueryParams,
         files,
         context,
       });
@@ -88,15 +88,21 @@ abstract class ZodFormHandlerBase<
         input: userInput,
         req,
         res,
-        params: req.params as QueryParams,
+        params: { ...req.params, ...req.query } as QueryParams,
         files,
         context,
       });
 
       const validData = schema.parse(userInput, { errorMap });
+
       this.logger.debug("Successfully parsed Zod input!", validData);
 
-      const newPath = await this.run({ input: validData, context, res, params: req.params as QueryParams });
+      const newPath = await this.run({
+        input: validData,
+        context,
+        res,
+        params: { ...req.params, ...req.query } as QueryParams,
+      });
 
       res.locals.isFormSuccess = true;
 
@@ -109,6 +115,7 @@ abstract class ZodFormHandlerBase<
     } catch (e) {
       if (e instanceof ZodError) {
         this.logger.debug("Failed to parse Zod input.", userInput, e);
+        console.error("Failed to parse Zod input.", userInput, e);
         next(new ZodFormHandlerError(userInput, e.message, e.issues));
       } else if (e instanceof ValidationError) {
         this.logger.debug("Failed to execute Zod form handler due to ValidationError", userInput, e);

@@ -1,53 +1,132 @@
-import { PCRItemStatus, PCRItemType, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
-import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { IContext } from "@framework/types/IContext";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
-  ProjectChangeRequestPrepareReasoningParams,
+  PcrReasoningFilesSchema,
+  PcrReasoningSchema,
+  PcrReasoningSummarySchema,
+  pcrReasoningErrorMap,
+  pcrReasoningFilesSchema,
+  pcrReasoningSchema,
+  pcrReasoningSummarySchema,
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoning.zod";
+import {
   PCRPrepareReasoningRoute,
+  ProjectChangeRequestPrepareReasoningParams,
 } from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { reasoningWorkflowSteps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
 
-export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<
-  ProjectChangeRequestPrepareReasoningParams,
-  "pcr"
+class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
+  PcrReasoningSchema | PcrReasoningSummarySchema | PcrReasoningFilesSchema,
+  ProjectChangeRequestPrepareReasoningParams
 > {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["default", "filesStep", "reasoningStep"], "pcr");
+    super({
+      route: PCRPrepareReasoningRoute,
+      forms: [
+        FormTypes.PcrPrepareReasoningStep,
+        FormTypes.PcrPrepareReasoningSummary,
+        FormTypes.PcrPrepareReasoningFilesStep,
+      ],
+    });
   }
 
-  protected async getDto(
-    context: IContext,
-    params: ProjectChangeRequestPrepareReasoningParams,
-    button: IFormButton,
-    body: IFormBody,
-  ): Promise<PCRDto> {
-    const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
+  public readonly acceptFiles = false;
 
-    dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-
-    if (button.name === "reasoningStep") {
-      dto.reasoningComments = body.reasoningComments;
+  protected async getZodSchema({ params }: { params: { step?: number } }) {
+    if (!params.step) {
+      return {
+        schema: pcrReasoningSummarySchema,
+        errorMap: pcrReasoningErrorMap,
+      };
+    } else if (Number(params.step) === 1) {
+      return {
+        schema: pcrReasoningSchema,
+        errorMap: pcrReasoningErrorMap,
+      };
+    } else {
+      return {
+        schema: pcrReasoningFilesSchema,
+        errorMap: pcrReasoningErrorMap,
+      };
     }
-
-    return dto;
   }
 
-  protected async run(
-    context: IContext,
-    params: ProjectChangeRequestPrepareReasoningParams,
-    button: IFormButton,
-    dto: PCRDto,
-  ): Promise<ILinkInfo> {
-    await context.runCommand(
-      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.pcrId, pcr: dto }),
-    );
+  protected async mapToZod({
+    input,
+    params,
+  }: {
+    input: AnyObject;
+    params: { step?: number };
+  }): Promise<z.input<PcrReasoningSchema | PcrReasoningSummarySchema | PcrReasoningFilesSchema>> {
+    if (Number(params.step) === 1) {
+      return {
+        form: input.form,
+        markedAsComplete: input.markedAsComplete === "true",
+        reasoningComments: input.reasoningComments ?? "",
+      };
+    } else if (Number(params.step) === 2) {
+      return {
+        form: input.form,
+      };
+    }
+    return {
+      form: input.form,
+      reasoningComments: input.reasoningComments ?? "",
+      reasoningStatus: input.reasoningStatus === "on",
+    };
+  }
+
+  protected async run({
+    input,
+    params,
+    context,
+  }: {
+    input: z.output<PcrReasoningSchema | PcrReasoningSummarySchema | PcrReasoningFilesSchema>;
+    params: ProjectChangeRequestPrepareReasoningParams;
+    context: IContext;
+  }): Promise<string> {
+    if (input.form === FormTypes.PcrPrepareReasoningStep) {
+      await context.runCommand(
+        new UpdatePCRCommand({
+          projectId: params.projectId,
+          projectChangeRequestId: params.pcrId,
+          pcr: {
+            projectId: params.projectId,
+            id: params.pcrId,
+            reasoningComments: input.reasoningComments ?? "",
+            reasoningStatus: PCRItemStatus.Incomplete,
+          },
+        }),
+      );
+    } else if (input.form === FormTypes.PcrPrepareReasoningSummary) {
+      await context.runCommand(
+        new UpdatePCRCommand({
+          projectId: params.projectId,
+          projectChangeRequestId: params.pcrId,
+          pcr: {
+            projectId: params.projectId,
+            id: params.pcrId,
+            reasoningStatus: input.reasoningStatus ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
+            reasoningComments: input.reasoningComments ?? "",
+          },
+        }),
+      );
+    } else {
+      new UpdatePCRCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
+        pcr: {
+          projectId: params.projectId,
+          id: params.pcrId,
+          reasoningStatus: PCRItemStatus.Incomplete,
+        },
+      });
+    }
 
     // If on the summary
     if (!params.step) {
@@ -55,37 +134,16 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
       return ProjectChangeRequestPrepareRoute.getLink({
         projectId: params.projectId,
         pcrId: params.pcrId,
-      });
+      }).path;
     }
     // If on the last step go to the summary
     // If not on the last step go to the next step
     return PCRPrepareReasoningRoute.getLink({
       projectId: params.projectId,
       pcrId: params.pcrId,
-      step: params.step === reasoningWorkflowSteps.length ? undefined : params.step + 1,
-    });
-  }
-
-  protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
-    return storeKeys.getPcrKey(params.projectId, params.pcrId);
-  }
-
-  protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: PCRDto) {
-    const projectChangeRequestItemTypes: PCRItemTypeDto[] = [
-      {
-        type: PCRItemType.AccountNameChange,
-        displayName: "",
-        recordTypeId: "",
-        enabled: false,
-        disabled: false,
-        disabledReason: PCRItemDisabledReason.None,
-        files: [],
-      },
-    ];
-    return new PCRDtoValidator({
-      model: dto,
-      original: dto,
-      recordTypes: projectChangeRequestItemTypes,
-    });
+      step: Number(params.step) === reasoningWorkflowSteps.length ? undefined : Number(params.step) + 1,
+    }).path;
   }
 }
+
+export { ProjectChangeRequestReasoningUpdateHandler };

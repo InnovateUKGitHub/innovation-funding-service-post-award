@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { PcrLevelUploadSchemaType, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { z } from "zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
@@ -28,6 +27,8 @@ import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
 import { useMessages } from "@framework/api-helpers/useMessages";
+import { PcrReasoningFilesSchema, PcrReasoningFilesSchemaType, pcrReasoningFilesSchema } from "./pcrReasoning.zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const PCRPrepareReasoningFilesStep = () => {
   const { getContent } = useContent();
@@ -68,11 +69,14 @@ export const PCRPrepareReasoningFilesStep = () => {
     },
   });
 
-  const { handleSubmit: handleFormSubmit } = useForm<{}>({
-    defaultValues: {},
+  const { handleSubmit: handleFormSubmit, setError } = useForm<PcrReasoningFilesSchemaType>({
+    defaultValues: {
+      form: FormTypes.PcrPrepareReasoningFilesStep,
+    },
+    resolver: zodResolver(pcrReasoningFilesSchema),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
+  const validationErrors = useZodErrors<z.output<PcrReasoningFilesSchema>>(setError, formState.errors);
 
   const { clearMessages } = useMessages();
 
@@ -85,6 +89,7 @@ export const PCRPrepareReasoningFilesStep = () => {
       <PcrItemListSection />
       <Section>
         <Form
+          method="POST"
           encType="multipart/form-data"
           onSubmit={handleDocumentSubmit(data => onFileUpload({ data }), clearMessages)}
           aria-disabled={disabled}
@@ -144,6 +149,7 @@ export const PCRPrepareReasoningFilesStep = () => {
           onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
         )}
       >
+        <input type="hidden" value={FormTypes.PcrPrepareReasoningFilesStep} {...register("form")} />
         <Fieldset>
           <Button disabled={disabled} type="submit">
             {getContent(x => x.pcrItem.submitButton)}
