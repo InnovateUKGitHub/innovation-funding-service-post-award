@@ -14,7 +14,7 @@ const logger = new Logger("passport-saml");
  */
 
 // Note: SAML IDP will post back to this route with credentials
-export const successfulValidationRoute = "/auth/success";
+export const passportSamlSuccessRoute = "/auth/success";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
 const samlConfig = {
@@ -49,7 +49,7 @@ export const getPassportSamlStrategy = () => {
 
       entryPoint: configuration.sso.providerUrl,
       issuer: configuration.webserver.url,
-      callbackUrl: configuration.webserver.url + successfulValidationRoute,
+      callbackUrl: configuration.webserver.url + passportSamlSuccessRoute,
 
       identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
       wantAuthnResponseSigned: false,

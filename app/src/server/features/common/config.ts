@@ -132,6 +132,12 @@ const configuration: Readonly<IConfig> = {
   },
   developer: {
     writeGraphQL: boolEnv("DEVELOPER_WRITE_GRAPHQL", false),
+    oidc: {
+      enabled: boolEnv("DEVELOPER_OIDC", false),
+      issuer: strEnv("DEVELOPER_OIDC_ISSUER", ""),
+      clientId: strEnv("DEVELOPER_OIDC_CLIENT_ID", ""),
+      clientSecret: strEnv("DEVELOPER_OIDC_CLIENT_SECRET", ""),
+    },
   },
 };
 

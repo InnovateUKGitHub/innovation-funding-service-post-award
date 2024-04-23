@@ -4,13 +4,14 @@ import { DeveloperCurrentUsername } from "../../atoms/DeveloperCurrentUsername/D
 import { useMounted } from "../../atoms/providers/Mounted/Mounted";
 import { SummaryList, SummaryListItem } from "../SummaryList/summaryList";
 import { AnyRouteDefinition } from "@ui/containers/containerBase";
+import { DeveloperCurrentDevelopmentUsername } from "../../atoms/DeveloperCurrentDevelopmentUsername/DeveloperCurrentDevelopmentUsername";
 
 interface DeveloperEnvironmentInformationProps {
   currentRoute: AnyRouteDefinition;
 }
 
 const DeveloperEnvironmentInformation = ({ currentRoute }: DeveloperEnvironmentInformationProps) => {
-  const { accEnvironment } = useClientConfig();
+  const { accEnvironment, developer } = useClientConfig();
   const { isClient } = useMounted();
 
   if (accEnvironment === AccEnvironment.PROD) return null;
@@ -26,6 +27,12 @@ const DeveloperEnvironmentInformation = ({ currentRoute }: DeveloperEnvironmentI
         label={x => x.components.developerEnvironmentInformation.user}
         content={<DeveloperCurrentUsername />}
       />
+      {developer.oidc.enabled && (
+        <SummaryListItem
+          label={x => x.components.developerEnvironmentInformation.developerUser}
+          content={<DeveloperCurrentDevelopmentUsername />}
+        />
+      )}
       <SummaryListItem
         qa={isClient ? "react-loaded-indicator" : "react-not-loaded-indicator"}
         label={x => x.components.developerEnvironmentInformation.react}

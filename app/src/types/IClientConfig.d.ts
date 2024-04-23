@@ -9,4 +9,9 @@ export interface IClientConfig {
   ssoEnabled: boolean;
   accEnvironment: AccEnvironment;
   logLevel: LogLevel | string;
+  developer: {
+    oidc: {
+      enabled: boolean;
+    };
+  };
 }
