@@ -88,6 +88,11 @@ export function TestBed({
     ssoEnabled: false,
     logLevel: "VERBOSE",
     accEnvironment: AccEnvironment.BASE,
+    developer: {
+      oidc: {
+        enabled: false,
+      },
+    },
   };
 
   // Modify the clientConfig if the TextBed wants to.

@@ -132,5 +132,11 @@ export class TestConfig implements IConfig {
 
   public developer = {
     writeGraphQL: false,
+    oidc: {
+      enabled: false,
+      issuer: "",
+      clientId: "",
+      clientSecret: "",
+    },
   };
 }
