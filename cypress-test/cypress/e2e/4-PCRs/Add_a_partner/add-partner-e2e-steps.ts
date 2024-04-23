@@ -485,7 +485,7 @@ export const validateNameForm = () => {
     ["Email", loremIpsum255Char],
   ].forEach(([input, copy]) => {
     cy.getByLabel(input).invoke("val", copy).trigger("input");
-    cy.wait(200);
+    cy.wait(500);
   });
   cy.clickOn("Save and return to summary");
   cy.getByQA("validation-summary").should("not.exist");
@@ -1084,7 +1084,9 @@ export const clearValidationAddManyOther = () => {
     });
   }
   cy.wait(1000);
+  cy.intercept("PUT", `/api/pcrs/**`).as("waitForLoad");
   cy.clickOn("Save and return to summary");
+  cy.wait("@waitForLoad");
 };
 
 export const otherFundingCorrectlyDisplayed = () => {
@@ -1115,7 +1117,9 @@ export const deleteOtherFundingLines = () => {
       } else if (rowNumber <= 3) {
         throw new Error("Test has failed as no line items are present to delete!");
       }
-      cy.button("Save and return to summary").click();
+      cy.intercept("PUT", `/api/pcrs/**`).as("waitForLoad");
+      cy.clickOn("Save and return to summary");
+      cy.wait("@waitForLoad");
       [
         ["Project costs for new partner", "£50,000.00"],
         ["Other sources of funding?", "Yes"],

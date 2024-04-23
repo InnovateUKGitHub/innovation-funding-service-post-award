@@ -922,7 +922,9 @@ export const addSourceOfFundingValidation = () => {
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.paragraph(message);
   });
-  cy.getCellFromHeaderAndRowNumber("Funding amount", 1).type("error").wait(500);
+  cy.getCellFromHeaderAndRowNumber("Funding amount (£)", 1, `[aria-label="funding amount for item 0"]`)
+    .type("error")
+    .wait(500);
   cy.validationLink("Funding amount must be a number");
   cy.paragraph("Funding amount must be a number");
   cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="year funding is secured for item 1"]')
