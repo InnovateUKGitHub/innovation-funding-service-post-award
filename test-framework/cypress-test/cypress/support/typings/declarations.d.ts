@@ -22,6 +22,7 @@ interface SirtestalotContext {
   userInfo?: LoginInfo;
   localFileInfo?: LocalFileInfo;
   remoteSha256?: string;
+  memory?: string;
 }
 
 declare namespace Mocha {

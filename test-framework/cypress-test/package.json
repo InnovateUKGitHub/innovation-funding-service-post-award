@@ -20,6 +20,7 @@
     "acc-factory": "^1.0.0",
     "cypress": "^13.7.1",
     "envman": "^1.0.0",
+    "fast-xml-parser": "^4.3.6",
     "jsonwebtoken": "^9.0.2",
     "typescript": "^5.4.3"
   }

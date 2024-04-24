@@ -10,84 +10,88 @@ import { accProjectParticipantBuilder } from "./Acc_ProjectParticipant__c";
 
 const competition = competitionBuilder
   .new()
-  .setField("Acc_CompetitionCode__c", "100")
-  .setField("Acc_CompetitionName__c", "Competition")
-  .setField("Acc_CompetitionType__c", "KTP");
+  .set({ Acc_CompetitionCode__c: "100", Acc_CompetitionName__c: "Competition", Acc_CompetitionType__c: "KTP" });
 
-const account = accountBuilder
-  .new()
-  .setField("OrgMigrationId__c", "001")
-  .setField("Name", "xgov")
-  .setField("BillingStreet", "North Star Avenue")
-  .setField("BillingCity", "Swindon")
-  .setField("BillingState", "Wiltshire")
-  .setField("BillingPostalCode", "SN2 1SZ")
-  .setField("BillingCountry", "United Kingdom");
+const account = accountBuilder.new().set({
+  OrgMigrationId__c: "001",
+  Name: "xgov",
+  BillingStreet: "North Star Avenue",
+  BillingCity: "Swindon",
+  BillingState: "Wiltshire",
+  BillingPostalCode: "SN2 1SZ",
+  BillingCountry: "United Kingdom",
+});
 
-const project = accProjectBuilder
-  .new()
-  .setRelationship("Acc_CompetitionId__c", competition)
-  .setField("Acc_StartDate__c", new Date("2024-01-16 12:59:42"))
-  .setField("Acc_Duration__c", 36)
-  .setField("Acc_ClaimFrequency__c", "Quarterly")
-  .setField("Acc_ProjectTitle__c", "Title")
-  .setField("Acc_ProjectNumber__c", "100")
-  .setField("Acc_LegacyID__c", "100")
-  .setField("Acc_WorkdayProjectSetupComplete__c", true)
-  .setField("Acc_NonFEC__c", false)
-  .setField("Acc_MonitoringLevel__c", "Platinum")
-  .setField("Acc_MonitoringReportSchedule__c", "Monthly")
-  .setField("Acc_ProjectStatus__c", "Live");
+const project = accProjectBuilder.new().set({
+  Acc_StartDate__c: new Date("2024-01-16 12:59:42"),
+  Acc_Duration__c: 36,
+  Acc_ClaimFrequency__c: "Quarterly",
+  Acc_ProjectTitle__c: "Title",
+  Acc_ProjectNumber__c: "100",
+  Acc_LegacyID__c: "100",
+  Acc_WorkdayProjectSetupComplete__c: true,
+  Acc_NonFEC__c: false,
+  Acc_MonitoringLevel__c: "Platinum",
+  Acc_MonitoringReportSchedule__c: "Monthly",
+  Acc_ProjectStatus__c: "Live",
+  Acc_CompetitionId__c: competition,
+});
 
-const contact = contactBuilder
-  .new()
-  .setRelationship("AccountId", account)
-  .setField("ContactMigrationId__c", "001")
-  .setField("Email", "austria@x.gov.uk")
-  .setField("FirstName", "Austria")
-  .setField("LastName", "Hedges");
+const contact = contactBuilder.new().set({
+  AccountId: account,
+  ContactMigrationId__c: "001",
+  Email: "austria@x.gov.uk",
+  FirstName: "Austria",
+  LastName: "Hedges",
+});
 
 const user = userBuilder
   .new()
-  .setRelationship("ContactId", contact)
-  .setField("Username", "austria@x.gov.uk")
-  .setField("Email", "austria@x.gov.uk")
-  .setField("FirstName", "Austria")
-  .setField("LastName", "Hedges")
-  .setField("Alias", "xgovuk")
-  .setField("CommunityNickname", "austria")
-  .setField("EmailEncodingKey", "UTF-8")
-  .setField("LocaleSidKey", "en_GB")
-  .setField("LanguageLocaleKey", "en_US")
-  .setField("TimeZoneSidKey", "Europe/London")
-  .setField("ProfileId", "00e58000001ITpLAAW");
+  .set({
+    ContactId: contact,
+    Username: "austria@x.gov.uk",
+    Email: "austria@x.gov.uk",
+    FirstName: "Austria",
+    LastName: "Hedges",
+    Alias: "xgovuk",
+    CommunityNickname: "austria",
+    EmailEncodingKey: "UTF-8",
+    LocaleSidKey: "en_GB",
+    LanguageLocaleKey: "en_US",
+    TimeZoneSidKey: "Europe/London",
+    ProfileId: "00e58000001ITpLAAW",
+  });
 
 const projectContactLink = accProjectContactLinkBuilder
   .new()
-  .setRelationship("Acc_AccountId__c", account)
-  .setRelationship("Acc_ContactId__c", contact)
-  .setRelationship("Acc_ProjectId__c", project)
-  .setField("Acc_EmailOfSFContact__c", "noemail@noemail.com")
-  .setField("Acc_Role__c", "Monitoring officer");
+  .set({
+    Acc_AccountId__c: account,
+    Acc_ContactId__c: contact,
+    Acc_ProjectId__c: project,
+    Acc_EmailOfSFContact__c: "noemail@noemail.com",
+    Acc_Role__c: "Monitoring officer",
+  });
 
 const projectParticipant = accProjectParticipantBuilder
   .new()
-  .setRelationship("Acc_AccountId__c", account)
-  .setRelationship("Acc_ProjectId__c", project)
-  .setField("ParticipantMigrationID__c", "004001")
-  .setField("Acc_ParticipantType__c", "Business")
-  .setField("Acc_ParticipantSize__c", "Medium")
-  .setField("Acc_ProjectRole__c", "Lead")
-  .setField("Acc_AuditReportFrequency__c", "With all claims")
-  .setField("Acc_ParticipantStatus__c", "Active")
-  .setField("Acc_Award_Rate__c", 50)
-  .setField("Acc_Cap_Limit__c", 50)
-  .setField("Acc_FlaggedParticipant__c", false)
-  .setField("Acc_OverheadRate__c", 20)
-  .setField("Acc_ParticipantProjectReportingType__c", "Public")
-  .setField("Acc_OrganisationType__c", "Industrial")
-  .setField("Acc_CreateProfiles__c", false)
-  .setField("Acc_CreateClaims__c", false);
+  .set({
+    Acc_AccountId__c: account,
+    Acc_ProjectId__c: project,
+    ParticipantMigrationID__c: "004001",
+    Acc_ParticipantType__c: "Business",
+    Acc_ParticipantSize__c: "Medium",
+    Acc_ProjectRole__c: "Lead",
+    Acc_AuditReportFrequency__c: "With all claims",
+    Acc_ParticipantStatus__c: "Active",
+    Acc_Award_Rate__c: 50,
+    Acc_Cap_Limit__c: 50,
+    Acc_FlaggedParticipant__c: false,
+    Acc_OverheadRate__c: 20,
+    Acc_ParticipantProjectReportingType__c: "Public",
+    Acc_OrganisationType__c: "Industrial",
+    Acc_CreateProfiles__c: false,
+    Acc_CreateClaims__c: false,
+  });
 
 describe("Project Builder", () => {
   test("Expect project to be built, linking correctly to competition", () => {

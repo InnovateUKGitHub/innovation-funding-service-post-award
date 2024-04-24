@@ -34,12 +34,12 @@ insert ${instanceName};
   ],
 );
 
-const defaultAccount = accountBuilder
-  .new()
-  .setField("BillingStreet", "North Star Avenue")
-  .setField("BillingCity", "Swindon")
-  .setField("BillingState", "Wiltshire")
-  .setField("BillingPostalCode", "SN2 1SZ")
-  .setField("BillingCountry", "United Kingdom");
+const defaultAccount = accountBuilder.new().set({
+  BillingStreet: "North Star Avenue",
+  BillingCity: "Swindon",
+  BillingState: "Wiltshire",
+  BillingPostalCode: "SN2 1SZ",
+  BillingCountry: "United Kingdom",
+});
 
 export { accountBuilder, defaultAccount };

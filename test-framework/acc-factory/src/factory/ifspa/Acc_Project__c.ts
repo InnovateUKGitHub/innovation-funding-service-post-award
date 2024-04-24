@@ -76,7 +76,12 @@ ${injectFieldToApex(options, instanceName, "Acc_Duration__c", fields.Acc_Duratio
 ${injectFieldToApex(options, instanceName, "Acc_ProjectTitle__c", fields.Acc_ProjectTitle__c)}
 ${injectFieldToApex(options, instanceName, "Acc_TSBProjectNumber__c", fields.Acc_TSBProjectNumber__c)}
 ${injectFieldToApex(options, instanceName, "Acc_LegacyID__c", fields.Acc_LegacyID__c)}
-${injectFieldToApex(options, instanceName, "Acc_WorkdayProjectSetupComplete__c", fields.Acc_WorkdayProjectSetupComplete__c)}
+${injectFieldToApex(
+  options,
+  instanceName,
+  "Acc_WorkdayProjectSetupComplete__c",
+  fields.Acc_WorkdayProjectSetupComplete__c,
+)}
 insert ${instanceName};
 `,
       priority: AccOrder.ACC_PROJECT_LOAD,
@@ -102,17 +107,19 @@ const currentDate = new Date();
 
 const defaultAccProject = accProjectBuilder
   .new()
-  .setField("Acc_StartDate__c", new Date(currentDate.getFullYear(), currentDate.getMonth(), 1))
-  .setField("Acc_Duration__c", 36)
-  .setField("Acc_ClaimFrequency__c", "Quarterly")
-  .setField("Acc_ProjectTitle__c", "Title")
-  .setField("Acc_ProjectNumber__c", "100")
-  .setField("Acc_LegacyID__c", "100")
-  .setField("Acc_WorkdayProjectSetupComplete__c", true)
-  .setField("Acc_NonFEC__c", false)
-  .setField("Acc_MonitoringLevel__c", "Platinum")
-  .setField("Acc_MonitoringReportSchedule__c", "Monthly")
-  .setField("Acc_ProjectStatus__c", "Live")
-  .setField("Acc_CurrentPeriodNumberHelper__c", 1);
+  .set({
+    Acc_StartDate__c: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+    Acc_Duration__c: 36,
+    Acc_ClaimFrequency__c: "Quarterly",
+    Acc_ProjectTitle__c: "Title",
+    Acc_ProjectNumber__c: "100",
+    Acc_LegacyID__c: "100",
+    Acc_WorkdayProjectSetupComplete__c: true,
+    Acc_NonFEC__c: false,
+    Acc_MonitoringLevel__c: "Platinum",
+    Acc_MonitoringReportSchedule__c: "Monthly",
+    Acc_ProjectStatus__c: "Live",
+    Acc_CurrentPeriodNumberHelper__c: 1,
+  });
 
 export { accProjectBuilder, defaultAccProject };

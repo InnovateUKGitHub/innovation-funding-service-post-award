@@ -1,9 +1,7 @@
 import { Envman } from "envman";
 import jwt from "jsonwebtoken";
-import { xml } from "./helpers/xml";
 
 const accCache = new Map<string, string>();
-
 let salesforceAccessToken: string | null = null;
 
 interface SirtestalotTaskProps {
@@ -60,41 +58,23 @@ const tasks = {
       accCache.set("SALESFORCE_ACCESS_TOKEN", salesforceAccessToken);
     }
 
-    const res = await fetch(envman.getEnv("SALESFORCE_CONNECTION_URL") + "/services/Soap/s/59.0", {
-      method: "POST",
-      body: xml`
-        <?xml version="1.0" encoding="UTF-8"?>
-        <env:Envelope
-          xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
-          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        >
-          <env:Header>
-            <DebuggingHeader xmlns="http://soap.sforce.com/2006/08/apex">
-              <categories>
-                <category>Apex_code</category>
-                <level>FINEST</level>
-              </categories>
-              <debugLevel>DEBUGONLY</debugLevel>
-            </DebuggingHeader>
-            <SessionHeader xmlns="http://soap.sforce.com/2006/08/apex">
-              <sessionId>${salesforceAccessToken}</sessionId>
-            </SessionHeader>
-          </env:Header>
-          <env:Body>
-            <executeAnonymous xmlns="http://soap.sforce.com/2006/08/apex">
-              <String>${apex}</String>
-            </executeAnonymous>
-          </env:Body>
-        </env:Envelope>
-      `,
+    const url = new URL("/services/data/v59.0/tooling/executeAnonymous", envman.getEnv("SALESFORCE_CONNECTION_URL"));
+    url.searchParams.append("anonymousApex", apex);
+
+    const res = await fetch(url, {
+      method: "GET",
       headers: {
-        "Content-Type": "text/xml",
-        SOAPAction: '""',
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${salesforceAccessToken}`,
       },
     });
 
-    throw new Error(await res.text());
+    if (res.status === 200) {
+      return null;
+    } else {
+      const text = await res.text();
+      throw new Error(text);
+    }
   },
 };
 

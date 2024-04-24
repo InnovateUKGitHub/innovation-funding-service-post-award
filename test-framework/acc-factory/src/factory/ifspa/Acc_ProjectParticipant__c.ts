@@ -116,20 +116,22 @@ insert ${instanceName};
 
 const defaultAccProjectParticipant = accProjectParticipantBuilder
   .new()
-  .setField("ParticipantMigrationID__c", "004001")
-  .setField("Acc_ParticipantType__c", "Business")
-  .setField("Acc_ParticipantSize__c", "Medium")
-  .setField("Acc_ProjectRole__c", "Lead")
-  .setField("Acc_AuditReportFrequency__c", "With all claims")
-  .setField("Acc_ParticipantStatus__c", "Active")
-  .setField("Acc_Award_Rate__c", 50)
-  .setField("Acc_Cap_Limit__c", 50)
-  .setField("Acc_FlaggedParticipant__c", false)
-  .setField("Acc_OverheadRate__c", 20)
-  .setField("Acc_ParticipantProjectReportingType__c", "Public")
-  .setField("Acc_OrganisationType__c", "Industrial")
-  .setField("Acc_CreateProfiles__c", false)
-  .setField("Acc_CreateClaims__c", false)
+  .set({
+    ParticipantMigrationID__c: "004001",
+    Acc_ParticipantType__c: "Business",
+    Acc_ParticipantSize__c: "Medium",
+    Acc_ProjectRole__c: "Lead",
+    Acc_AuditReportFrequency__c: "With all claims",
+    Acc_ParticipantStatus__c: "Active",
+    Acc_Award_Rate__c: 50,
+    Acc_Cap_Limit__c: 50,
+    Acc_FlaggedParticipant__c: false,
+    Acc_OverheadRate__c: 20,
+    Acc_ParticipantProjectReportingType__c: "Public",
+    Acc_OrganisationType__c: "Industrial",
+    Acc_CreateProfiles__c: false,
+    Acc_CreateClaims__c: false,
+  })
   .copy();
 
 export { accProjectParticipantBuilder, defaultAccProjectParticipant };

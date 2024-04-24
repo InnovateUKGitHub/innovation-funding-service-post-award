@@ -8,19 +8,11 @@ import { defaultUser } from "acc-factory/dist/factory/ifspa/User";
 When("Cypress tries to create a project", function () {
   const competition = competitionBuilder
     .new()
-    .setField("Acc_CompetitionCode__c", "100")
-    .setField("Acc_CompetitionName__c", "Competition")
-    .setField("Acc_CompetitionType__c", "CR&D");
+    .set({ Acc_CompetitionCode__c: "100", Acc_CompetitionName__c: "Competition", Acc_CompetitionType__c: "CR&D" });
 
-  const project = defaultAccProject.copy().setRelationship("Acc_CompetitionId__c", competition);
-  const mspAccount = defaultAccount
-    .copy()
-    .setField("OrgMigrationId__c", "0")
-    .setField("Name", "Hedge's Monitoring Ltd.");
-  const pmFcAccount = defaultAccount
-    .copy()
-    .setField("OrgMigrationId__c", "1")
-    .setField("Name", "Hedge's Consulting Ltd.");
+  const project = defaultAccProject.copy().set({ Acc_CompetitionId__c: competition });
+  const mspAccount = defaultAccount.copy().set({ OrgMigrationId__c: "0", Name: "Hedge's Monitoring Ltd." });
+  const pmFcAccount = defaultAccount.copy().set({ OrgMigrationId__c: "1", Name: "Hedge's Consulting Ltd." });
 
   const contacts = [
     ["0", mspAccount, "mo@x.gov.uk", "Matt", "Otrebski", "mo", "Monitoring officer"],
@@ -28,40 +20,37 @@ When("Cypress tries to create a project", function () {
     ["2", pmFcAccount, "fc@x.gov.uk", "Ferris", "Colton", "fc", "Finance contact"],
   ] as const;
 
-  const contactUserPclArray = contacts.flatMap(([id, account, email, firstName, lastName, alias, role]) => {
-    const contact = contactBuilder
-      .new()
-      .setRelationship("AccountId", account)
-      .setField("ContactMigrationId__c", id)
-      .setField("Email", email)
-      .setField("FirstName", firstName)
-      .setField("LastName", lastName);
+  const contactUserPclArray = contacts.flatMap(
+    ([ContactMigrationId__c, account, Email, FirstName, LastName, Alias, Acc_Role__c]) => {
+      const contact = contactBuilder
+        .new()
+        .set({ AccountId: account, ContactMigrationId__c, Email, FirstName, LastName });
 
-    const user = defaultUser
-      .copy()
-      .setRelationship("ContactId", contact)
-      .setField("Username", email)
-      .setField("Email", email)
-      .setField("FirstName", firstName)
-      .setField("LastName", lastName)
-      .setField("Alias", alias)
-      .setField("CommunityNickname", alias);
+      const user = defaultUser.copy().set({
+        ContactId: contact,
+        Username: Email,
+        Email,
+        FirstName,
+        LastName,
+        Alias,
+        CommunityNickname: Alias,
+      });
 
-    const pcl = accProjectContactLinkBuilder
-      .new()
-      .setRelationship("Acc_AccountId__c", account)
-      .setRelationship("Acc_ContactId__c", contact)
-      .setRelationship("Acc_ProjectId__c", project)
-      .setField("Acc_EmailOfSFContact__c", email)
-      .setField("Acc_Role__c", role);
+      const pcl = accProjectContactLinkBuilder.new().set({
+        Acc_AccountId__c: account,
+        Acc_ContactId__c: contact,
+        Acc_ProjectId__c: project,
+        Acc_EmailOfSFContact__c: Email,
+        Acc_Role__c: Acc_Role__c,
+      });
 
-    return [contact, user, pcl];
-  });
+      return [contact, user, pcl];
+    },
+  );
 
   const projectParticipant = defaultAccProjectParticipant
     .copy()
-    .setRelationship("Acc_AccountId__c", pmFcAccount)
-    .setRelationship("Acc_ProjectId__c", project);
+    .set({ Acc_AccountId__c: pmFcAccount, Acc_ProjectId__c: project });
 
   const prefix = Math.floor(Date.now() / 1000).toString() + ".";
 

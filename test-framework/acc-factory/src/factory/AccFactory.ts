@@ -62,20 +62,36 @@ class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
     this.instanceName = instanceName;
   }
 
-  setField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
+  private setField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
     sfdcName: Key,
     value: SffFieldTypeToJsType<Row>,
   ) {
-    // const field = this.definition.fields.find(x => x.sfdcName === sfdcName)! as Row;
     this.fields.set(sfdcName, value);
     return this;
   }
 
-  setRelationship<
+  private setRelationship<
     Key extends T["relationships"][number]["sfdcName"],
     Row extends { sfdcName: Key } & T["relationships"][number],
   >(sfdcName: Key, child: SffRelationshipToJsType<Row>) {
     this.relationships.set(sfdcName, child);
+    return this;
+  }
+
+  set<Key extends T["fields"][number]["sfdcName"] | T["relationships"][number]["sfdcName"]>(entries: {
+    [H in Key]:
+      | SffFieldTypeToJsType<{ sfdcName: H } & T["fields"][number]>
+      | SffRelationshipToJsType<{ sfdcName: H } & T["relationships"][number]>;
+  }) {
+    for (const [key, value] of Object.entries(entries)) {
+      if (this.definition.fields.some(field => field.sfdcName === key)) {
+        this.setField(key, value as any);
+      } else if (this.definition.relationships.some(relationship => relationship.sfdcName === key)) {
+        this.setRelationship(key, value as any);
+      } else {
+        throw new Error(`Cannot set key "${key}" because it is not in the definition`);
+      }
+    }
     return this;
   }
 

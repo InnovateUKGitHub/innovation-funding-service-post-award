@@ -13,7 +13,7 @@ const accTask = <T extends keyof SirtestalotTasks>(
   taskName: T,
   args: Omit<Parameters<SirtestalotTasks[T]>[0], keyof SirtestalotTaskProps>,
   options?: Partial<Cypress.Loggable & Cypress.Timeoutable>,
-): Cypress.Chainable<ReturnType<SirtestalotTasks[T]>> => {
+): Cypress.Chainable<Awaited<ReturnType<SirtestalotTasks[T]>>> => {
   return cy.task(taskName, Object.assign({ cyEnv: Cypress.env() }, args), options);
 };
 
