@@ -19,6 +19,7 @@ import { z } from "zod";
 import { useOnUpdateClaimReview, useReviewContent, validSubmittedClaimStatus } from "./claimReview.logic";
 import { ReviewClaimParams } from "./claimReview.page";
 import { ClaimReviewSchemaType, claimReviewSchemaCommentsMax } from "./claimReview.zod";
+import { useMessages } from "@framework/api-helpers/useMessages";
 
 interface ClaimReviewApprovalProps extends ReviewClaimParams {
   claimId: string;
@@ -39,6 +40,7 @@ const ClaimReviewApproval = ({
   const content = useReviewContent();
   const { isClient } = useMounted();
   const defaults = useServerInput<z.output<ClaimReviewSchemaType>>();
+  const { clearMessages } = useMessages();
 
   const watched = claimReviewForm.watch();
 
@@ -52,7 +54,7 @@ const ClaimReviewApproval = ({
   }, [watched, content, isClient]);
 
   return (
-    <Form onSubmit={claimReviewForm.handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
+    <Form onSubmit={claimReviewForm.handleSubmit(data => onUpdate({ data }), clearMessages)} data-qa="review-form">
       <input type="hidden" value={FormTypes.ClaimReviewLevelSaveAndContinue} {...claimReviewForm.register("form")} />
       <input type="hidden" value={projectId} {...claimReviewForm.register("projectId")} />
       <input type="hidden" value={partnerId} {...claimReviewForm.register("partnerId")} />

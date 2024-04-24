@@ -25,6 +25,7 @@ import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { useReviewContent } from "./claimReview.logic";
 import { ReviewClaimParams } from "./claimReview.page";
+import { useMessages } from "@framework/api-helpers/useMessages";
 
 interface ClaimReviewDocumentProps extends ReviewClaimParams {
   onUploadUpdate: ReturnType<typeof useOnUpload>["onUpdate"];
@@ -56,6 +57,7 @@ const ClaimReviewDocuments = ({
   const content = useReviewContent();
   const { getContent } = useContent();
   const defaults = useServerInput<z.output<ClaimLevelUploadSchemaType>>();
+  const { clearMessages } = useMessages();
 
   const documentDropdownOptions = useValidDocumentDropdownOptions(
     project.impactManagementParticipation === ImpactManagementParticipation.Yes
@@ -74,7 +76,7 @@ const ClaimReviewDocuments = ({
       <DocumentGuidance />
 
       <Form
-        onSubmit={documentForm.handleSubmit(data => onUploadUpdate({ data }))}
+        onSubmit={documentForm.handleSubmit(data => onUploadUpdate({ data }), clearMessages)}
         data-qa="upload-form"
         encType="multipart/form-data"
       >
