@@ -27,19 +27,23 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
       item => item.Acc_Profile__r?.Acc_ProjectParticipant__c === partnerItem.Acc_ProjectParticipant__c,
     );
 
+    const id = partnerItem.Id as FinancialVirementForParticipantId;
     return {
-      id: partnerItem.Id as FinancialVirementForParticipantId,
+      id,
       pcrItemId: partnerItem.Acc_ProjectChangeRequest__c as PcrItemId,
       partnerId: partnerItem.Acc_ProjectParticipant__c as PartnerId,
       newFundingLevel: partnerItem.Acc_NewAwardRate__c,
       originalFundingLevel: partnerItem.Acc_CurrentAwardRate__c,
       newEligibleCosts: partnerItem.Acc_NewTotalEligibleCosts__c,
       newRemainingGrant: partnerItem.Acc_NewRemainingGrant__c,
-      virements: filteredItems.map(x => this.mapVirement(x)),
+      virements: filteredItems.map(x => this.mapVirement(x, id)),
     };
   }
 
-  private mapVirement(costCategoryItem: ISalesforceFinancialVirement): CostCategoryFinancialVirement {
+  private mapVirement(
+    costCategoryItem: ISalesforceFinancialVirement,
+    parentId: FinancialVirementForParticipantId,
+  ): CostCategoryFinancialVirement {
     return {
       id: costCategoryItem.Id as FinancialVirementForCostsId,
       profileId: costCategoryItem.Acc_Profile__c,
@@ -47,7 +51,7 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
       originalEligibleCosts: costCategoryItem.Acc_CurrentCosts__c,
       originalCostsClaimedToDate: costCategoryItem.Acc_ClaimedCostsToDate__c,
       newEligibleCosts: costCategoryItem.Acc_NewCosts__c,
-      parentId: costCategoryItem.Acc_ParticipantVirement__c as FinancialVirementForParticipantId,
+      parentId,
     };
   }
 }
