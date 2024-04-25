@@ -1,6 +1,7 @@
 import { LoanDto } from "@framework/dtos/loanDto";
 import { LoanStatus } from "@framework/entities/loan-status";
 import { Clock } from "@framework/util/clock";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 const clock = new Clock();
 
@@ -18,17 +19,35 @@ const loanStatusFromSfMap = (fieldValue: string): LoanStatus => {
 type LoanNode = GQL.PartialNode<{
   Id: string;
   Acc_PeriodNumber__c: GQL.Value<number>;
+  Acc_GranttobePaid__c: GQL.Value<number>;
   Loan_DrawdownStatus__c: GQL.Value<string>;
   Loan_LatestForecastDrawdown__c: GQL.Value<number>;
   Loan_UserComments__c: GQL.Value<string>;
   Loan_PlannedDateForDrawdown__c: GQL.Value<string>;
+  Acc_ProjectParticipant__r: GQL.Maybe<{
+    Acc_TotalParticipantCosts__c: GQL.Value<number>;
+    Acc_TotalGrantApproved__c: GQL.Value<number>;
+  }>;
 }>;
 
-type LoanDtoMapping = Pick<LoanDto, "id" | "period" | "status" | "forecastAmount" | "comments" | "requestDate">;
+// removes undefined as option for totals derived from the LoanDto
+type LoanDtoMapping = Pick<
+  Omit<LoanDto, "totals"> & {
+    totals: {
+      remainingLoan: number;
+      totalLoan: number;
+      totalPaidToDate: number;
+    };
+  },
+  "id" | "period" | "status" | "forecastAmount" | "comments" | "requestDate" | "amount" | "totals"
+>;
 
 const mapper: GQL.DtoMapper<LoanDtoMapping, LoanNode> = {
   id(node) {
     return (node?.Id ?? "") as LoanId;
+  },
+  amount(node) {
+    return node?.Acc_GranttobePaid__c?.value ?? 0;
   },
   period(node) {
     return (node?.Acc_PeriodNumber__c?.value ?? 0) as PeriodId;
@@ -44,6 +63,22 @@ const mapper: GQL.DtoMapper<LoanDtoMapping, LoanNode> = {
   },
   requestDate(node) {
     return clock.parseOptionalSalesforceDateTime(node?.Loan_PlannedDateForDrawdown__c?.value ?? "");
+  },
+  totals(node) {
+    const totalLoan = node?.Acc_ProjectParticipant__r?.Acc_TotalParticipantCosts__c?.value ?? 0;
+    const totalPaidToDate = node?.Acc_ProjectParticipant__r?.Acc_TotalGrantApproved__c?.value ?? 0;
+    const forecastAmount = node?.Loan_LatestForecastDrawdown__c?.value ?? 0;
+    const totalRequestedIncForecast = roundCurrency(forecastAmount + totalPaidToDate);
+    const remainingLoan = roundCurrency(totalLoan - totalRequestedIncForecast);
+    const expectedTotal = forecastAmount + remainingLoan + totalPaidToDate;
+
+    if (totalLoan !== expectedTotal) throw Error("Loan totals do not match.");
+
+    return {
+      totalLoan,
+      totalPaidToDate,
+      remainingLoan,
+    };
   },
 };
 

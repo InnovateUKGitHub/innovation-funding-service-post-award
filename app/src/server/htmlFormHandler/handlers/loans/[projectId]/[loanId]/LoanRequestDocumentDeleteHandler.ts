@@ -4,7 +4,7 @@ import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocumen
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { configuration } from "@server/features/common/config";
-import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/request.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 

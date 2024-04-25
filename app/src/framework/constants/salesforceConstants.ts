@@ -9,6 +9,7 @@ enum SalesforcePrefixes {
   Acc_Virements__c = "a0R",
   Acc_ProjectContactLink__c = "a0C",
   Acc_IFSSpendProfile__c = "a08",
+  Acc_Prepayment__c = "a0H",
 }
 
 export { SalesforcePrefixes };

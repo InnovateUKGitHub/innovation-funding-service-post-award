@@ -466,7 +466,13 @@
       "currentAmountLabel": "Current amount",
       "newDateLabel": "New date",
       "newAmountLabel": "New amount",
-      "totalLabel": "Total"
+      "totalLabel": "Total",
+      "dueDate": "Due date",
+      "drawdownForecast": "Drawdown forecast",
+      "totalLoan": "Total loan",
+      "drawdownToDate": "Drawdown to date",
+      "drawdownAmount": "Drawdown Amount",
+      "remainingLoan": "Remaining loan"
     },
     "financeSummary": {
       "title": "Finance summary",
@@ -1972,6 +1978,13 @@
         "errors": {
           "too_big": "Comments must be a maximum of 1000 characters.",
           "custom": "Comments are required if querying a claim."
+        }
+      }
+    },
+    "loanRequest": {
+      "comments": {
+        "errors": {
+          "too_big": "Comments must be a maximum of {{count}} characters."
         }
       }
     },

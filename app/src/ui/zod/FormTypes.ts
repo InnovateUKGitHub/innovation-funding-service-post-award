@@ -46,6 +46,9 @@ enum FormTypes {
   PcrPrepareReasoningStep = "pcrPrepareReasoningStep",
   PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
   PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",
+
+  LoanLevelUpload = "loanLevelUpload",
+  LoanLevelDelete = "loanLevelDelete",
 }
 
 export { FormTypes };

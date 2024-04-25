@@ -4,6 +4,7 @@ import {
   allowedProjectLevelDocuments,
   DocumentDescription,
   allowedPcrLevelDocuments,
+  allowedLoanLevelDocuments,
 } from "@framework/constants/documentDescription";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { z } from "zod";
@@ -17,6 +18,7 @@ import {
   pcrItemIdValidation,
   costCategoryIdValidation,
   pcrIdValidation,
+  loanIdValidation,
 } from "./helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
@@ -167,6 +169,31 @@ const pcrLevelDelete = z.object({
 
 const projectOrPartnerLevelDelete = z.discriminatedUnion("form", [partnerLevelDelete, projectLevelDelete]);
 
+const getLoanLevelUpload = ({ config }: { config: IAppOptions }) =>
+  z.object({
+    form: z.literal(FormTypes.LoanLevelUpload),
+    projectId: projectIdValidation,
+    loanId: loanIdValidation,
+    description: z.union([
+      emptyStringToUndefinedValidation,
+      z.coerce
+        .number()
+        .refine(x => allowedLoanLevelDocuments.includes(x))
+        .optional()
+        .transform(x => x as DocumentDescription),
+    ]),
+    files: getMultiFileValidation(config),
+  });
+
+const loanLevelDelete = z.object({
+  form: z.literal(FormTypes.LoanLevelDelete),
+  projectId: projectIdValidation,
+  loanId: loanIdValidation,
+  documentId: z.string(),
+});
+
+type LoanLevelUploadSchemaType = ReturnType<typeof getLoanLevelUpload>;
+
 export {
   getPcrLevelUpload,
   getProjectLevelUpload,
@@ -174,9 +201,11 @@ export {
   partnerLevelDelete,
   getClaimLevelUpload,
   getClaimDetailLevelUpload,
+  getLoanLevelUpload,
   claimDetailLevelDelete,
   claimLevelDelete,
   pcrLevelDelete,
+  loanLevelDelete,
   projectOrPartnerLevelDelete,
   getBankStatementUpload,
   documentsErrorMap,
@@ -188,4 +217,5 @@ export type {
   PcrLevelUploadSchemaType,
   ClaimDetailLevelUploadSchemaType,
   ClaimLevelDeleteSchemaType,
+  LoanLevelUploadSchemaType,
 };

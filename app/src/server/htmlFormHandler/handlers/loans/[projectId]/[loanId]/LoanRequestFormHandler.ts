@@ -6,8 +6,8 @@ import { GetLoan } from "@server/features/loans/getLoan";
 import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
 import { LoanDto } from "@framework/dtos/loanDto";
-import { LoansSummaryRoute } from "@ui/containers/pages/loans/overview.page";
-import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/request.page";
+import { LoansSummaryRoute } from "@ui/containers/pages/loans/loanOverview.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
 
 export class LoanRequestFormHandler extends StandardFormHandlerBase<LoansRequestParams, "loan"> {
   constructor() {

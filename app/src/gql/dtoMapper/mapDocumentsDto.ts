@@ -50,13 +50,14 @@ const mapper: GQL.DtoMapper<
     periodId?: PeriodId;
     costCategoryId?: string;
     pcrId?: PcrId | PcrItemId;
-    type: "projects" | "partners" | "claims" | "claim details" | "pcr";
+    loanId?: LoanId;
+    type: "projects" | "partners" | "claims" | "claim details" | "pcr" | "loan";
   }
 > = {
   id(node) {
     return node?.node?.ContentDocument?.Id ?? "";
   },
-  link(node, { projectId, partnerId, periodId, type, costCategoryId, pcrId }) {
+  link(node, { projectId, partnerId, periodId, type, costCategoryId, pcrId, loanId }) {
     const fileId = node?.node?.ContentDocument?.LatestPublishedVersionId?.value ?? "";
     const linkedEntityId = node?.node?.LinkedEntityId?.value;
 
@@ -69,6 +70,8 @@ const mapper: GQL.DtoMapper<
         return `/api/documents/claims/${projectId}/${partnerId}/${periodId}/${fileId}/content`;
       case "claim details":
         return `/api/documents/claim-details/${projectId}/${partnerId}/${periodId}/${costCategoryId}/${fileId}/content`;
+      case "loan":
+        return `/api/documents/loans/${projectId}/${loanId}/${fileId}/content`;
       case "pcr":
         return `/api/documents/projectChangeRequests/${projectId}/${linkedEntityId ?? pcrId}/${fileId}/content`;
     }
@@ -128,7 +131,8 @@ export function mapToDocumentSummaryDto<
     periodId?: PeriodId;
     pcrId?: PcrId | PcrItemId;
     costCategoryId?: string;
-    type: "projects" | "partners" | "claims" | "claim details" | "pcr";
+    loanId?: LoanId;
+    type: "projects" | "partners" | "claims" | "claim details" | "pcr" | "loan";
   },
 ): Pick<PartnerDocumentSummaryDtoGql, PickList> {
   return pickList.reduce((dto, field) => {

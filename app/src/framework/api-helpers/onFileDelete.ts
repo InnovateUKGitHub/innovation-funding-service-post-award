@@ -14,6 +14,7 @@ import type {
   projectLevelDelete,
   pcrLevelDelete,
   claimDetailLevelDelete,
+  loanLevelDelete,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
@@ -24,6 +25,7 @@ export const useOnDelete = <
     | typeof claimLevelDelete
     | typeof pcrLevelDelete
     | typeof claimDetailLevelDelete
+    | typeof loanLevelDelete
   >,
 >({
   onSuccess,
@@ -77,6 +79,12 @@ export const useOnDelete = <
             projectChangeRequestIdOrItemId,
             projectId,
           });
+        }
+
+        case FormTypes.LoanLevelDelete: {
+          const { projectId, loanId, documentId } = props;
+
+          return clientsideApiClient.documents.deleteLoanDocument({ projectId, loanId, documentId });
         }
 
         default:

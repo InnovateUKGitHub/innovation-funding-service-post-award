@@ -9,6 +9,7 @@ import type {
   ClaimLevelUploadSchemaType,
   PcrLevelUploadSchemaType,
   ClaimDetailLevelUploadSchemaType,
+  LoanLevelUploadSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
@@ -16,7 +17,8 @@ type InputOptions =
   | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
   | ({ form: FormTypes.ClaimLevelUpload | FormTypes.ClaimReviewLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
   | ({ form: FormTypes.ClaimDetailLevelUpload } & z.output<ClaimDetailLevelUploadSchemaType>)
-  | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>);
+  | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>)
+  | ({ form: FormTypes.LoanLevelUpload } & z.output<LoanLevelUploadSchemaType>);
 
 const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
   data.form === FormTypes.ProjectLevelUpload;
@@ -29,6 +31,9 @@ const isClaimDetailLevelUpload = (data: InputOptions): data is z.output<ClaimDet
 
 const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSchemaType> =>
   data.form === FormTypes.PcrLevelUpload;
+
+const isLoanLevelUpload = (data: InputOptions): data is z.output<LoanLevelUploadSchemaType> =>
+  data.form === FormTypes.LoanLevelUpload;
 
 export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();
@@ -65,6 +70,15 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
         return clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
           projectId,
           projectChangeRequestIdOrItemId: data.projectChangeRequestIdOrItemId,
+          documents: {
+            files,
+            description,
+          },
+        });
+      } else if (isLoanLevelUpload(data)) {
+        return clientsideApiClient.documents.uploadLoanDocuments({
+          projectId,
+          loanId: data.loanId,
           documents: {
             files,
             description,

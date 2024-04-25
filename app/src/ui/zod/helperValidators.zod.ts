@@ -52,6 +52,11 @@ const costIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_IFSSpendProfile__c)
   .transform(x => x as CostId);
 
+const loanIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_Prepayment__c)
+  .transform(x => x as LoanId);
+
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
 
 const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
@@ -535,6 +540,7 @@ export {
   pclIdValidation,
   booleanValidation,
   currencyValidation,
+  loanIdValidation,
   costIdValidation,
   zeroOrGreaterCurrencyValidation,
   claimIdValidation,
