@@ -59,7 +59,7 @@ export class SalesforceFieldCustomValidationError extends SalesforceDetailedErro
 }
 
 export class SalesforceDataChangeError extends SalesforceDetailedErrorResponse {
-  constructor(message: string, errors: SfdcError[]) {
+  constructor(message: string, errors: (SfdcError | IAppDetailedError)[]) {
     super({ message, details: mapSfdcErrors(errors) });
   }
 }

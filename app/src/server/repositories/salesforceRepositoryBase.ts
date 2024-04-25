@@ -1,13 +1,5 @@
 import { Stream } from "stream";
-import {
-  Connection,
-  DescribeSObjectResult,
-  Field,
-  Query,
-  RecordResult,
-  SuccessResult,
-  Error as SfdcError,
-} from "jsforce";
+import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult } from "jsforce";
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
 import { createBatch } from "@shared/create-batch";
@@ -16,6 +8,8 @@ import { noop } from "lodash";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
 import { BadRequestError } from "@shared/appError";
+import { IAppDetailedError } from "@framework/types/IAppError";
+import { DetailedErrorCode } from "@framework/constants/enums";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
@@ -44,6 +38,8 @@ export abstract class RepositoryBase {
     e: unknown | Errors.SalesforceDetailedErrorResponse,
     soql = "No SOQL available for this query",
   ) {
+    if (e instanceof Errors.SalesforceDetailedErrorResponse) return e;
+
     if (Errors.isSalesforceErrorResponse(e)) {
       if (e.message.length < 10_000) {
         this.logger.error(
@@ -63,22 +59,22 @@ export abstract class RepositoryBase {
       }
 
       if (e.errorCode === "INVALID_FIELD") {
-        throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
+        new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
       }
       if (e.errorCode === "ERROR_HTTP_503") {
-        throw new Errors.SalesforceUnavailableError("Salesforce unavailable");
+        new Errors.SalesforceUnavailableError("Salesforce unavailable");
       }
       if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-        throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");
+        new Errors.SalesforceInvalidFilterError("Salesforce filter error");
       }
       if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
-        throw new Errors.FileTypeNotAllowedError(e.message);
+        new Errors.FileTypeNotAllowedError(e.message);
       }
       if (e.errorCode === "FIELD_CUSTOM_VALIDATION_EXCEPTION") {
-        throw new Errors.SalesforceFieldCustomValidationError({ message: e.message });
+        new Errors.SalesforceFieldCustomValidationError({ message: e.message });
       }
 
-      throw new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [] });
+      new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [] });
     }
     return e instanceof Error ? e : new Error(`${e}`);
   }
@@ -249,8 +245,16 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     return !result.success ? result.errors : [];
   }
 
-  private getDataChangeErrorMessages(results: RecordResult[]) {
-    return results.map(x => (!x.success ? x.errors : [])).reduce<SfdcError[]>((a, b) => a.concat(b), []);
+  private getDataChangeErrorMessages(results: RecordResult[], ids?: string[]) {
+    const ret: IAppDetailedError[] = [];
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+      const id = ids?.[i];
+      if (!result.success) {
+        ret.push({ code: DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY, id });
+      }
+    }
+    return ret;
   }
 
   protected async insertItem<Payload extends Partial<TSalesforce>>(inserts: Payload): Promise<string> {
@@ -325,20 +329,25 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
         const updateQuery = await connection.sobject<TSalesforce>(this.salesforceObjectName);
         const batchResults = await updateQuery.update(batch);
 
-        return batchResults.reduce<boolean>((_, result) => {
-          if (!result.success && !!result.errors.length) {
+        // If there are any errors in our batchResults, throw it
+        for (const result of batchResults) {
+          if (!result.success && result.errors.length) {
             throw new Errors.SalesforceDataChangeError(
-              "Failed to update to Salesforce",
-              this.getDataChangeErrorMessages(batchResults),
+              "Failed to delete from Salesforce",
+              this.getDataChangeErrorMessages(
+                batchResults,
+                batch.map(x => x.Id),
+              ),
             );
           }
+        }
 
-          return true;
-        }, false);
+        return true;
       });
 
       return updateBatchConfirmations.every(Boolean);
     } catch (error) {
+      if (error instanceof Errors.SalesforceDataChangeError) throw error;
       throw this.constructError(error);
     }
   }
@@ -361,7 +370,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
           if (!result.success && result.errors.length) {
             throw new Errors.SalesforceDataChangeError(
               "Failed to delete from Salesforce",
-              this.getDataChangeErrorMessages(batchResults),
+              this.getDataChangeErrorMessages(batchResults, batch),
             );
           }
         }

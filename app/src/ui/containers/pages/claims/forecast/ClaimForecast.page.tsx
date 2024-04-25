@@ -55,7 +55,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   });
   const routes = useRoutes();
   const { getContent } = useContent();
-  const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
+  const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ periodId, isPm });
 
   useFormRevalidate(watch, trigger);
 
@@ -77,6 +77,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
         </BackLink>
       }
       fragmentRef={fragmentRef}
+      apiError={apiError}
     >
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("projectId")} value={projectId} type="hidden" />
