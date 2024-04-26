@@ -9,7 +9,6 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";

@@ -12,7 +12,6 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragme
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable.withFragment";
 import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
