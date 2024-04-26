@@ -263,9 +263,12 @@ const loadAllData = async (store: Store, relayServerSSR: RelayServerSSR, render:
     store.dispatch(initaliseAction());
   });
 
-  // Rerender for nested "useLazyLoadQuery"
-  await relayServerSSR.getCache();
-  render();
+  // Re-render the page 4 more times to ensure all lazyLoadQuerys are completed
+  for (let i = 0; i < 4; i++) {
+    // Rerender for nested "useLazyLoadQuery"
+    await relayServerSSR.getCache();
+    render();
+  }
 };
 
 /**
