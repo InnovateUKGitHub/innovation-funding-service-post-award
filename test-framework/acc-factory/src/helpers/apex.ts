@@ -2,10 +2,10 @@ import { AccFactoryInstance } from "../factory/AccFactory";
 import {
   AccFactoryBuildOptions,
   FieldsToRecord,
-  SffField,
-  SffFieldType,
-  SffRelationship,
-} from "../types/SffFactoryDefinition";
+  AccField,
+  AccFieldType,
+  AccRelationship,
+} from "../types/AccFactoryDefinition";
 
 /**
  * Salesforce SQL Sanitiser
@@ -42,14 +42,14 @@ const injectFieldToApex = (
   options: AccFactoryBuildOptions,
   instanceName: string,
   instanceFieldName: string,
-  field: { value: unknown; meta: SffField },
+  field: { value: unknown; meta: AccField },
 ): string => {
   let value: any = field.value;
 
   if (
     typeof value === "string" &&
     typeof options.prefix === "string" &&
-    field.meta.sfdcType === SffFieldType.STRING &&
+    field.meta.sfdcType === AccFieldType.STRING &&
     field.meta.prefixed
   ) {
     value = options.prefix + value;
@@ -76,7 +76,7 @@ const injectFieldsToApex = (options: AccFactoryBuildOptions, instanceName: strin
 const injectRelationshipToApex = (
   instanceName: string,
   instanceRelFieldName: string,
-  relationship: { value: AccFactoryInstance<any>; meta: SffRelationship },
+  relationship: { value: AccFactoryInstance<any>; meta: AccRelationship },
 ): string | null => {
   if (!relationship.value) {
     if (relationship.meta.required) {

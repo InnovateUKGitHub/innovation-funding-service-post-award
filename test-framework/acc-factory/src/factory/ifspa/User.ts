@@ -1,6 +1,6 @@
 import { AccOrder } from "../../enum/AccOrder";
 import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { SffFieldType, SffRelationshipType } from "../../types/SffFactoryDefinition";
+import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
 import { AccFactory } from "../AccFactory";
 import { contactBuilder } from "./Contact";
 
@@ -9,20 +9,20 @@ const userBuilder = new AccFactory(
     definition: {
       sfdcName: "User",
       fields: [
-        { sfdcName: "Username", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
-        { sfdcName: "Email", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
-        { sfdcName: "FirstName", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "LastName", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "Alias", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "CommunityNickname", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
-        { sfdcName: "EmailEncodingKey", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "LocaleSidKey", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "LanguageLocaleKey", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "TimeZoneSidKey", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "ProfileId", sfdcType: SffFieldType.STRING, nullable: false },
+        { sfdcName: "Username", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "Email", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "FirstName", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "LastName", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "Alias", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "CommunityNickname", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "EmailEncodingKey", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "LocaleSidKey", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "LanguageLocaleKey", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "TimeZoneSidKey", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "ProfileId", sfdcType: AccFieldType.STRING, nullable: false },
       ],
       relationships: [
-        { sfdcName: "ContactId", sfdcType: SffRelationshipType.SINGLE, sffBuilder: contactBuilder, required: true },
+        { sfdcName: "ContactId", sfdcType: AccRelationshipType.SINGLE, sffBuilder: contactBuilder, required: true },
       ],
     },
     generator: {

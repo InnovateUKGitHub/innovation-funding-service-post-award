@@ -55,11 +55,10 @@ const tasks = {
 
     if (!salesforceAccessToken) {
       salesforceAccessToken = await getSalesforceAccessToken();
-      accCache.set("SALESFORCE_ACCESS_TOKEN", salesforceAccessToken);
     }
 
     const url = new URL("/services/data/v59.0/tooling/executeAnonymous", envman.getEnv("SALESFORCE_CONNECTION_URL"));
-    url.searchParams.append("anonymousApex", apex);
+    url.searchParams.append("anonymousBody", apex);
 
     const res = await fetch(url, {
       method: "GET",
@@ -69,12 +68,14 @@ const tasks = {
       },
     });
 
-    if (res.status === 200) {
-      return null;
-    } else {
-      const text = await res.text();
-      throw new Error(text);
+    const response = await res.json();
+
+    if (response.success === false) {
+      if (response.compileProblem) throw new Error("Apex compilation error: " + response.compileProblem);
+      throw new Error(JSON.stringify(response));
     }
+
+    return response;
   },
 };
 

@@ -1,6 +1,6 @@
 import { AccOrder } from "../../enum/AccOrder";
 import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { SffFieldType, SffRelationshipType } from "../../types/SffFactoryDefinition";
+import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
 import { AccFactory } from "../AccFactory";
 import { accProjectBuilder } from "./Acc_Project__c";
 import { accountBuilder } from "./Account";
@@ -14,7 +14,7 @@ const accProjectContactLinkBuilder = new AccFactory(
       fields: [
         {
           sfdcName: "Acc_Role__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: [
             "Finance contact",
             "Monitoring officer",
@@ -37,28 +37,28 @@ const accProjectContactLinkBuilder = new AccFactory(
           ],
           nullable: false,
         },
-        { sfdcName: "Acc_EmailOfSFContact__c", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "Acc_EmailOfSFContact__c", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
       ],
       relationships: [
         {
           sfdcName: "Acc_ProjectId__c",
-          sfdcType: SffRelationshipType.SINGLE,
+          sfdcType: AccRelationshipType.SINGLE,
           sffBuilder: accProjectBuilder,
           required: true,
         },
         {
           sfdcName: "Acc_AccountId__c",
-          sfdcType: SffRelationshipType.SINGLE,
+          sfdcType: AccRelationshipType.SINGLE,
           sffBuilder: accountBuilder,
           required: true,
         },
         {
           sfdcName: "Acc_ContactId__c",
-          sfdcType: SffRelationshipType.SINGLE,
+          sfdcType: AccRelationshipType.SINGLE,
           sffBuilder: contactBuilder,
           required: true,
         },
-        { sfdcName: "Acc_UserId__c", sfdcType: SffRelationshipType.SINGLE, sffBuilder: userBuilder, required: false },
+        { sfdcName: "Acc_UserId__c", sfdcType: AccRelationshipType.SINGLE, sffBuilder: userBuilder, required: false },
       ],
     },
     generator: {

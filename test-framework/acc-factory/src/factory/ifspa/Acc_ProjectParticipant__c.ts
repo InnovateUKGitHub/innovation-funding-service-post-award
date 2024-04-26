@@ -1,6 +1,6 @@
 import { AccOrder } from "../../enum/AccOrder";
 import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { SffFieldType, SffRelationshipType } from "../../types/SffFactoryDefinition";
+import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
 import { AccFactory } from "../AccFactory";
 import { accProjectBuilder } from "./Acc_Project__c";
 import { accountBuilder } from "./Account";
@@ -10,10 +10,10 @@ const accProjectParticipantBuilder = new AccFactory(
     definition: {
       sfdcName: "Acc_ProjectParticipant__c",
       fields: [
-        { sfdcName: "ParticipantMigrationID__c", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "ParticipantMigrationID__c", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
         {
           sfdcName: "Acc_ParticipantType__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: [
             "Business",
             "Knowledge base",
@@ -25,19 +25,19 @@ const accProjectParticipantBuilder = new AccFactory(
         },
         {
           sfdcName: "Acc_ParticipantSize__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: ["Small", "Medium", "Large", "Academic", "Unknown", "Micro", "Small1"],
           nullable: false,
         },
         {
           sfdcName: "Acc_ProjectRole__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: ["Collaborator", "Lead"],
           nullable: false,
         },
         {
           sfdcName: "Acc_AuditReportFrequency__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: [
             "Never, for this project",
             "With all claims",
@@ -50,7 +50,7 @@ const accProjectParticipantBuilder = new AccFactory(
         },
         {
           sfdcName: "Acc_ParticipantStatus__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: [
             "Pending",
             "Active",
@@ -62,35 +62,35 @@ const accProjectParticipantBuilder = new AccFactory(
           ],
           nullable: false,
         },
-        { sfdcName: "Acc_Award_Rate__c", sfdcType: SffFieldType.NUMBER, nullable: false },
-        { sfdcName: "Acc_Cap_Limit__c", sfdcType: SffFieldType.NUMBER, nullable: false },
-        { sfdcName: "Acc_FlaggedParticipant__c", sfdcType: SffFieldType.CHECKBOX, nullable: false },
-        { sfdcName: "Acc_OverheadRate__c", sfdcType: SffFieldType.NUMBER, nullable: false },
+        { sfdcName: "Acc_Award_Rate__c", sfdcType: AccFieldType.NUMBER, nullable: false },
+        { sfdcName: "Acc_Cap_Limit__c", sfdcType: AccFieldType.NUMBER, nullable: false },
+        { sfdcName: "Acc_FlaggedParticipant__c", sfdcType: AccFieldType.CHECKBOX, nullable: false },
+        { sfdcName: "Acc_OverheadRate__c", sfdcType: AccFieldType.NUMBER, nullable: false },
         {
           sfdcName: "Acc_ParticipantProjectReportingType__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: ["Public", "Private"],
           nullable: false,
         },
         {
           sfdcName: "Acc_OrganisationType__c",
-          sfdcType: SffFieldType.SINGLE_PICKLIST,
+          sfdcType: AccFieldType.SINGLE_PICKLIST,
           values: ["Industrial", "Academic"],
           nullable: false,
         },
-        { sfdcName: "Acc_CreateProfiles__c", sfdcType: SffFieldType.CHECKBOX, nullable: false },
-        { sfdcName: "Acc_CreateClaims__c", sfdcType: SffFieldType.CHECKBOX, nullable: false },
+        { sfdcName: "Acc_CreateProfiles__c", sfdcType: AccFieldType.CHECKBOX, nullable: false },
+        { sfdcName: "Acc_CreateClaims__c", sfdcType: AccFieldType.CHECKBOX, nullable: false },
       ],
       relationships: [
         {
           sfdcName: "Acc_ProjectId__c",
-          sfdcType: SffRelationshipType.SINGLE,
+          sfdcType: AccRelationshipType.SINGLE,
           sffBuilder: accProjectBuilder,
           required: true,
         },
         {
           sfdcName: "Acc_AccountId__c",
-          sfdcType: SffRelationshipType.SINGLE,
+          sfdcType: AccRelationshipType.SINGLE,
           sffBuilder: accountBuilder,
           required: true,
         },

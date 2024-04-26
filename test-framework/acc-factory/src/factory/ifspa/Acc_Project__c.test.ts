@@ -45,53 +45,47 @@ const contact = contactBuilder.new().set({
   LastName: "Hedges",
 });
 
-const user = userBuilder
-  .new()
-  .set({
-    ContactId: contact,
-    Username: "austria@x.gov.uk",
-    Email: "austria@x.gov.uk",
-    FirstName: "Austria",
-    LastName: "Hedges",
-    Alias: "xgovuk",
-    CommunityNickname: "austria",
-    EmailEncodingKey: "UTF-8",
-    LocaleSidKey: "en_GB",
-    LanguageLocaleKey: "en_US",
-    TimeZoneSidKey: "Europe/London",
-    ProfileId: "00e58000001ITpLAAW",
-  });
+const user = userBuilder.new().set({
+  ContactId: contact,
+  Username: "austria@x.gov.uk",
+  Email: "austria@x.gov.uk",
+  FirstName: "Austria",
+  LastName: "Hedges",
+  Alias: "xgovuk",
+  CommunityNickname: "austria",
+  EmailEncodingKey: "UTF-8",
+  LocaleSidKey: "en_GB",
+  LanguageLocaleKey: "en_US",
+  TimeZoneSidKey: "Europe/London",
+  ProfileId: "00e58000001ITpLAAW",
+});
 
-const projectContactLink = accProjectContactLinkBuilder
-  .new()
-  .set({
-    Acc_AccountId__c: account,
-    Acc_ContactId__c: contact,
-    Acc_ProjectId__c: project,
-    Acc_EmailOfSFContact__c: "noemail@noemail.com",
-    Acc_Role__c: "Monitoring officer",
-  });
+const projectContactLink = accProjectContactLinkBuilder.new().set({
+  Acc_AccountId__c: account,
+  Acc_ContactId__c: contact,
+  Acc_ProjectId__c: project,
+  Acc_EmailOfSFContact__c: "noemail@noemail.com",
+  Acc_Role__c: "Monitoring officer",
+});
 
-const projectParticipant = accProjectParticipantBuilder
-  .new()
-  .set({
-    Acc_AccountId__c: account,
-    Acc_ProjectId__c: project,
-    ParticipantMigrationID__c: "004001",
-    Acc_ParticipantType__c: "Business",
-    Acc_ParticipantSize__c: "Medium",
-    Acc_ProjectRole__c: "Lead",
-    Acc_AuditReportFrequency__c: "With all claims",
-    Acc_ParticipantStatus__c: "Active",
-    Acc_Award_Rate__c: 50,
-    Acc_Cap_Limit__c: 50,
-    Acc_FlaggedParticipant__c: false,
-    Acc_OverheadRate__c: 20,
-    Acc_ParticipantProjectReportingType__c: "Public",
-    Acc_OrganisationType__c: "Industrial",
-    Acc_CreateProfiles__c: false,
-    Acc_CreateClaims__c: false,
-  });
+const projectParticipant = accProjectParticipantBuilder.new().set({
+  Acc_AccountId__c: account,
+  Acc_ProjectId__c: project,
+  ParticipantMigrationID__c: "004001",
+  Acc_ParticipantType__c: "Business",
+  Acc_ParticipantSize__c: "Medium",
+  Acc_ProjectRole__c: "Lead",
+  Acc_AuditReportFrequency__c: "With all claims",
+  Acc_ParticipantStatus__c: "Active",
+  Acc_Award_Rate__c: 50,
+  Acc_Cap_Limit__c: 50,
+  Acc_FlaggedParticipant__c: false,
+  Acc_OverheadRate__c: 20,
+  Acc_ParticipantProjectReportingType__c: "Public",
+  Acc_OrganisationType__c: "Industrial",
+  Acc_CreateProfiles__c: false,
+  Acc_CreateClaims__c: false,
+});
 
 describe("Project Builder", () => {
   test("Expect project to be built, linking correctly to competition", () => {

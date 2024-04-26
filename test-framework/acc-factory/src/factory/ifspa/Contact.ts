@@ -1,6 +1,6 @@
 import { AccOrder } from "../../enum/AccOrder";
 import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { SffFieldType, SffRelationshipType } from "../../types/SffFactoryDefinition";
+import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
 import { AccFactory } from "../AccFactory";
 import { accountBuilder } from "./Account";
 
@@ -9,13 +9,13 @@ const contactBuilder = new AccFactory(
     definition: {
       sfdcName: "Contact",
       fields: [
-        { sfdcName: "ContactMigrationId__c", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
-        { sfdcName: "FirstName", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "LastName", sfdcType: SffFieldType.STRING, nullable: false },
-        { sfdcName: "Email", sfdcType: SffFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "ContactMigrationId__c", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "FirstName", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "LastName", sfdcType: AccFieldType.STRING, nullable: false },
+        { sfdcName: "Email", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
       ],
       relationships: [
-        { sfdcName: "AccountId", sfdcType: SffRelationshipType.SINGLE, sffBuilder: accountBuilder, required: true },
+        { sfdcName: "AccountId", sfdcType: AccRelationshipType.SINGLE, sffBuilder: accountBuilder, required: true },
       ],
     },
     generator: {

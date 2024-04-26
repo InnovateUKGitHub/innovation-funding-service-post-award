@@ -1,14 +1,14 @@
 import { describe, expect, test } from "@jest/globals";
 import { AccFactory } from "./AccFactory";
 import { buildApex, injectFieldsToApex, injectRelationshipToApex } from "../helpers/apex";
-import { SffFieldType, SffRelationshipType } from "../types/SffFactoryDefinition";
+import { AccFieldType, AccRelationshipType } from "../types/AccFactoryDefinition";
 
 describe("ACC Factory Builder", () => {
   const parentBuilder = new AccFactory(
     <const>{
       definition: {
         sfdcName: "Parent",
-        fields: [{ sfdcName: "var", sfdcType: SffFieldType.STRING, nullable: true }],
+        fields: [{ sfdcName: "var", sfdcType: AccFieldType.STRING, nullable: true }],
         relationships: [],
       },
       generator: {
@@ -33,9 +33,9 @@ describe("ACC Factory Builder", () => {
     <const>{
       definition: {
         sfdcName: "Child",
-        fields: [{ sfdcName: "var", sfdcType: SffFieldType.STRING, nullable: false }],
+        fields: [{ sfdcName: "var", sfdcType: AccFieldType.STRING, nullable: false }],
         relationships: [
-          { sfdcName: "parent", sfdcType: SffRelationshipType.SINGLE, sffBuilder: parentBuilder, required: true },
+          { sfdcName: "parent", sfdcType: AccRelationshipType.SINGLE, sffBuilder: parentBuilder, required: true },
         ],
       },
       generator: {
@@ -95,5 +95,9 @@ describe("ACC Factory Builder", () => {
 
     // The parent should also be passed in
     expect(() => buildApex({ instances: [child] })).toThrowError();
+  });
+
+  test("Expect getField to recall data", () => {
+    expect(parentBuilder.new().set({ var: "hello" }).getField("var")).toBe("hello");
   });
 });

@@ -1,12 +1,12 @@
 import {
-  SffFactoryObjectDefinition as AccFactoryObjectDefinition,
-  SffFieldTypeToJsType,
+  AccFactoryObjectDefinition as AccFactoryObjectDefinition,
+  AccFieldTypeToJsType,
   PipelineFunction,
-  SffRelationshipToJsType,
+  AccRelationshipToJsType,
   FieldsToRecord,
   RelationshipsToRecord,
   AccFactoryBuildOptions,
-} from "../types/SffFactoryDefinition";
+} from "../types/AccFactoryDefinition";
 
 interface AccFactoryProps<T extends AccFactoryObjectDefinition> {
   definition: Readonly<T>;
@@ -64,7 +64,7 @@ class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
 
   private setField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
     sfdcName: Key,
-    value: SffFieldTypeToJsType<Row>,
+    value: AccFieldTypeToJsType<Row>,
   ) {
     this.fields.set(sfdcName, value);
     return this;
@@ -73,15 +73,15 @@ class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
   private setRelationship<
     Key extends T["relationships"][number]["sfdcName"],
     Row extends { sfdcName: Key } & T["relationships"][number],
-  >(sfdcName: Key, child: SffRelationshipToJsType<Row>) {
+  >(sfdcName: Key, child: AccRelationshipToJsType<Row>) {
     this.relationships.set(sfdcName, child);
     return this;
   }
 
   set<Key extends T["fields"][number]["sfdcName"] | T["relationships"][number]["sfdcName"]>(entries: {
     [H in Key]:
-      | SffFieldTypeToJsType<{ sfdcName: H } & T["fields"][number]>
-      | SffRelationshipToJsType<{ sfdcName: H } & T["relationships"][number]>;
+      | AccFieldTypeToJsType<{ sfdcName: H } & T["fields"][number]>
+      | AccRelationshipToJsType<{ sfdcName: H } & T["relationships"][number]>;
   }) {
     for (const [key, value] of Object.entries(entries)) {
       if (this.definition.fields.some(field => field.sfdcName === key)) {
@@ -93,6 +93,13 @@ class AccFactoryInstance<T extends AccFactoryObjectDefinition> {
       }
     }
     return this;
+  }
+
+  getField<
+    Key extends T["fields"][number]["sfdcName"] | T["relationships"][number]["sfdcName"],
+    Row extends { sfdcName: Key } & T["fields"][number],
+  >(key: Key): Readonly<undefined | AccFieldTypeToJsType<Row>> {
+    return this.fields.get(key) ?? undefined;
   }
 
   copy(): AccFactoryInstance<T> {

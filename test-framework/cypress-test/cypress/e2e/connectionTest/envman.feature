@@ -8,3 +8,4 @@ Feature: envman Connection Test
   Scenario: Creating a basic project
     When Cypress tries to create a project
     Given the user is on the projects dashboard
+    Then the user sees the project

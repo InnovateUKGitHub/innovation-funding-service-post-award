@@ -1,4 +1,4 @@
-import { When } from "@badeball/cypress-cucumber-preprocessor";
+import { Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { accProjectContactLinkBuilder, buildApex, competitionBuilder, contactBuilder } from "acc-factory";
 import { defaultAccProjectParticipant } from "acc-factory/dist/factory/ifspa/Acc_ProjectParticipant__c";
 import { defaultAccProject } from "acc-factory/dist/factory/ifspa/Acc_Project__c";
@@ -63,4 +63,11 @@ When("Cypress tries to create a project", function () {
 
   cy.log(apex);
   cy.accTask("runApex", { apex });
+  cy.accTask("setCyCache", { key: "projectNumber", value: prefix + project.getField("Acc_ProjectNumber__c") });
+});
+
+Then("the user sees the project", function () {
+  cy.accTask("getCyCache", { key: "projectNumber" }).then(projectNumber => {
+    cy.getByQA(`project-${projectNumber}`).should("exist");
+  });
 });
