@@ -14,39 +14,33 @@ When("Cypress tries to create a project", function () {
   const mspAccount = defaultAccount.copy().set({ OrgMigrationId__c: "0", Name: "Hedge's Monitoring Ltd." });
   const pmFcAccount = defaultAccount.copy().set({ OrgMigrationId__c: "1", Name: "Hedge's Consulting Ltd." });
 
-  const contacts = [
+  const contactUserPclArray = (<const>[
     ["0", mspAccount, "mo@x.gov.uk", "Matt", "Otrebski", "mo", "Monitoring officer"],
     ["1", pmFcAccount, "pm@x.gov.uk", "Peter", "May", "pm", "Project Manager"],
     ["2", pmFcAccount, "fc@x.gov.uk", "Ferris", "Colton", "fc", "Finance contact"],
-  ] as const;
+  ]).flatMap(([ContactMigrationId__c, account, Email, FirstName, LastName, Alias, Acc_Role__c]) => {
+    const contact = contactBuilder.new().set({ AccountId: account, ContactMigrationId__c, Email, FirstName, LastName });
 
-  const contactUserPclArray = contacts.flatMap(
-    ([ContactMigrationId__c, account, Email, FirstName, LastName, Alias, Acc_Role__c]) => {
-      const contact = contactBuilder
-        .new()
-        .set({ AccountId: account, ContactMigrationId__c, Email, FirstName, LastName });
+    const user = defaultUser.copy().set({
+      ContactId: contact,
+      Username: Email,
+      Email,
+      FirstName,
+      LastName,
+      Alias,
+      CommunityNickname: Alias,
+    });
 
-      const user = defaultUser.copy().set({
-        ContactId: contact,
-        Username: Email,
-        Email,
-        FirstName,
-        LastName,
-        Alias,
-        CommunityNickname: Alias,
-      });
+    const pcl = accProjectContactLinkBuilder.new().set({
+      Acc_AccountId__c: account,
+      Acc_ContactId__c: contact,
+      Acc_ProjectId__c: project,
+      Acc_EmailOfSFContact__c: Email,
+      Acc_Role__c: Acc_Role__c,
+    });
 
-      const pcl = accProjectContactLinkBuilder.new().set({
-        Acc_AccountId__c: account,
-        Acc_ContactId__c: contact,
-        Acc_ProjectId__c: project,
-        Acc_EmailOfSFContact__c: Email,
-        Acc_Role__c: Acc_Role__c,
-      });
-
-      return [contact, user, pcl];
-    },
-  );
+    return [contact, user, pcl];
+  });
 
   const projectParticipant = defaultAccProjectParticipant
     .copy()

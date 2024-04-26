@@ -1,4 +1,4 @@
-Feature: envman Connection Test
+Feature: Project Factory - External UI Project Creation Tool
   This Gherkin syntax file is used to test the `cy.accTask("runApex")`
   If this fails, Cypress tests that depend on running Anonymous Apex will fail.
 
@@ -7,5 +7,5 @@ Feature: envman Connection Test
 
   Scenario: Creating a basic project
     When Cypress tries to create a project
-    Given the user is on the projects dashboard
+    And the user is on the projects dashboard
     Then the user sees the project
