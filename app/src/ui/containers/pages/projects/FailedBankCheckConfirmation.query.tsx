@@ -4,7 +4,7 @@ export const failedBankCheckConfirmationQuery = graphql`
   query FailedBankCheckConfirmationQuery($projectId: ID!) {
     salesforce {
       uiapi {
-        ...TitleFragment
+        ...PageFragment
         ...ProjectSuspensionMessageFragment
       }
     }
