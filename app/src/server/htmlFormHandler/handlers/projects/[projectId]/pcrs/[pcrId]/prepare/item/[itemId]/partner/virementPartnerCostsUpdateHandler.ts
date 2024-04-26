@@ -48,7 +48,10 @@ export class VirementPartnerCostsUpdateHandler extends ZodFormHandlerBase<
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<EditPartnerLevelSchemaType>> {
-    const partnerEntries = Object.entries(input).filter(([k]) => /partner/.test(k));
+    const MAX_NUMBER_ENTRIES = 360;
+    const partnerEntries = Object.entries(input)
+      .filter(([k]) => /partner/.test(k))
+      .slice(0, MAX_NUMBER_ENTRIES);
 
     const partners = partnerEntries.reduce((acc: PartnerData[], [k, v]) => {
       const [, indexStr, field] = k.split(".");
