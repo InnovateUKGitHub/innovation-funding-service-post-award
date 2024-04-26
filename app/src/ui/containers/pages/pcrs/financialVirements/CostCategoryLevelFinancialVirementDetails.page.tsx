@@ -146,7 +146,7 @@ const EditPage = ({
 
 const PartnerLevelFinancialVirementDetailsRoute = defineRoute({
   // pm reallocates costs for participant at cost category level
-  routeName: "partnerLevelFinancialVirementEdit",
+  routeName: "partnerLevelFinancialVirementDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/:mode/item/:itemId/financial/:partnerId",
   container: EditPage,
   getParams: route => ({

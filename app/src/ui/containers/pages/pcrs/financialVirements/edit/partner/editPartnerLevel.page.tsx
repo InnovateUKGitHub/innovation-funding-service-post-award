@@ -17,11 +17,12 @@ import { useForm } from "react-hook-form";
 import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { sumBy } from "lodash";
 import { useOnUpdatePartnerLevel, getPayload } from "./editPartnerLevel.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 /**
  * Hook returns content for edit partner view
@@ -87,21 +88,26 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
     pcrItemId: props.itemId,
   });
 
-  const { register, watch, formState, handleSubmit, getFieldState, setValue } = useForm<EditPartnerLevelSchema>({
-    defaultValues: {
-      partners: virementData.partners.map(x => ({
-        partnerId: x.partnerId,
-        newRemainingGrant: String(x.newRemainingGrant ?? 0),
-        newRemainingCosts: x.newRemainingCosts,
-      })),
-      originalRemainingGrant: virementData.originalRemainingGrant,
-      newRemainingGrant: virementData.newRemainingGrant,
-      newRemainingCosts: virementData.newRemainingCosts,
-    },
-    resolver: zodResolver(editPartnerLevelSchema, {
-      errorMap,
-    }),
-  });
+  const { register, watch, setError, formState, handleSubmit, getFieldState, setValue } =
+    useForm<EditPartnerLevelSchema>({
+      defaultValues: {
+        form: FormTypes.PcrFinancialVirementEditRemainingGrant,
+        partners: virementData.partners.map(x => ({
+          partnerId: x.partnerId,
+          newRemainingGrant: String(x.newRemainingGrant ?? 0),
+          newRemainingCosts: x.newRemainingCosts,
+          originalFundingLevel: x.originalFundingLevel,
+          originalRemainingCosts: x.originalRemainingCosts,
+          originalRemainingGrant: x.originalRemainingGrant,
+        })),
+        originalRemainingGrant: virementData.originalRemainingGrant,
+        newRemainingGrant: virementData.newRemainingGrant,
+        newRemainingCosts: virementData.newRemainingCosts,
+      },
+      resolver: zodResolver(editPartnerLevelSchema, {
+        errorMap,
+      }),
+    });
 
   const navigateTo = props.routes.pcrPrepareItem.getLink({
     projectId: props.projectId,
@@ -116,7 +122,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
     navigateTo,
   );
 
-  const validationErrors = useRhfErrors(formState?.errors) as EditPartnerLevelErrors;
+  const validationErrors = useZodErrors(setError, formState?.errors) as EditPartnerLevelErrors;
 
   const getNewFundingLevel = (index: number) => {
     const value = Number(watch(`partners.${index}.newRemainingGrant`));
@@ -163,6 +169,10 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
             }),
           )}
         >
+          <input type="hidden" value={FormTypes.PcrFinancialVirementEditRemainingGrant} {...register("form")} />
+          <input type="hidden" value={virementData.originalRemainingGrant} {...register("originalRemainingGrant")} />
+          <input type="hidden" value={virementData.newRemainingGrant} {...register("newRemainingGrant")} />
+          <input type="hidden" value={virementData.newRemainingCosts} {...register("newRemainingCosts")} />
           <Table data-qa="partner-virements">
             <THead>
               <TR>
@@ -180,17 +190,36 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
             <TBody>
               {virementData.partners.map((x, i) => (
                 <TR key={x.partnerId}>
-                  <TD dividerRight>{partners.find(p => p.id === x.partnerId)?.name}</TD>
+                  <TD dividerRight>
+                    <input type="hidden" value={x.partnerId} {...register(`partners.${i}.partnerId`)} />
+                    {partners.find(p => p.id === x.partnerId)?.name}
+                  </TD>
                   <TD numeric>
+                    <input
+                      type="hidden"
+                      value={x.originalRemainingCosts}
+                      {...register(`partners.${i}.originalRemainingCosts`)}
+                    />
                     <Currency value={x.originalRemainingCosts} />
                   </TD>
                   <TD numeric>
+                    <input
+                      type="hidden"
+                      value={x.originalRemainingGrant}
+                      {...register(`partners.${i}.originalRemainingGrant`)}
+                    />
                     <Currency value={x.originalRemainingGrant} />
                   </TD>
                   <TD numeric dividerRight>
+                    <input
+                      type="hidden"
+                      value={x.originalFundingLevel}
+                      {...register(`partners.${i}.originalFundingLevel`)}
+                    />
                     <Percentage defaultIfInfinite={0} value={x.originalFundingLevel} />
                   </TD>
                   <TD numeric>
+                    <input type="hidden" value={x.newRemainingCosts} {...register(`partners.${i}.newRemainingCosts`)} />
                     <Currency value={x.newRemainingCosts} />
                   </TD>
                   <TD numeric>
@@ -202,6 +231,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
                       hasError={!!validationErrors?.virements?.[i]?.newRemainingGrant}
                       {...register(`partners.${i}.newRemainingGrant`)}
                       disabled={isFetching}
+                      defaultValue={String(x.newRemainingGrant ?? 0)}
                     />
                   </TD>
                   <TD numeric>
@@ -236,7 +266,6 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
             </TFoot>
           </Table>
 
-          <input type="hidden" {...register("originalRemainingGrant")} />
           <Section>
             <Fieldset>
               <Button type="submit" disabled={isFetching}>

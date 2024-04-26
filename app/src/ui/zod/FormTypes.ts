@@ -30,6 +30,7 @@ enum FormTypes {
 
   PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
   PcrFinancialVirementsCostCategorySaveAndContinue = "pcrFinancialVirementsCostCategorySaveAndContinue",
+  PcrFinancialVirementEditRemainingGrant = "pcrFinancialVirementEditRemainingGrant",
 
   PcrApproveNewSubcontractorStep = "pcrApproveNewSubcontractorDetails",
   PcrApproveNewSubcontractorSummary = "pcrApproveNewSubcontractorSummary",
