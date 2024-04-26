@@ -58,23 +58,28 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
 
-    const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
-    await context.runCommand(
-      new DeleteClaimDocumentCommand(input.documentId, {
-        projectId: input.projectId,
-        partnerId: input.partnerId,
-        periodId: input.periodId,
-      }),
-    );
+    const fileExists = typeof documentInfo !== "undefined";
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x =>
-          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
+    if (fileExists) {
+      await context.runCommand(
+        new DeleteClaimDocumentCommand(input.documentId, {
+          projectId: input.projectId,
+          partnerId: input.partnerId,
+          periodId: input.periodId,
+        }),
+      );
+    }
+
+    const deletedFileName = fileExists ? mapToDocumentSummaryDto(documentInfo, "")?.fileName : undefined;
+
+    if (deletedFileName) {
+      // TODO: Actually use Redux instead of a temporary array
+      res.locals.preloadedReduxActions.push(
+        messageSuccess(
+          this.copy.getCopyString(x => x.forms.documents.files.messages.deletedDocument({ deletedFileName })),
         ),
-      ),
-    );
+      );
+    }
   }
 }
 
