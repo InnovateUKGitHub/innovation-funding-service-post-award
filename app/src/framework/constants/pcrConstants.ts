@@ -613,7 +613,7 @@ export const pcrItemTypes: IMetaValue[] = [
     ignoredCompetitions: [],
     i18nName: x => x.pcrTypes.projectSuspension,
     i18nDescription: x => x.pages.pcrModifyOptions.putProjectOnHoldMessage,
-    singleInstanceInAnyPcr: false,
+    singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
   },
   {
