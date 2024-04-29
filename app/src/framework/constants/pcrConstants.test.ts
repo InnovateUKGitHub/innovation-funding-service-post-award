@@ -26,51 +26,19 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
   });
 
   describe("with matrix cases", () => {
-    describe("returns with matching values", () => {
-      test("with reallocated project costs", () => {
-        const stubDraftPcrPartnerVirement = createPCRSummaryDto({
-          status: PCRStatus.DraftWithProjectManager,
-          items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement)],
-        });
-
-        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrPartnerVirement]);
-
-        expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement]);
-      });
-
-      test("with change project duration", () => {
-        const stubDraftPcrTimeExtension = createPCRSummaryDto({
-          status: PCRStatus.DraftWithProjectManager,
-          items: [stubItemType(PCRItemType.TimeExtension)],
-        });
-
-        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrTimeExtension]);
-
-        expect(filteredValues).toStrictEqual([PCRItemType.TimeExtension]);
-      });
-
-      test("with project scope change", () => {
-        const stubDraftPcrScopeChange = createPCRSummaryDto({
-          status: PCRStatus.DraftWithProjectManager,
-          items: [stubItemType(PCRItemType.ScopeChange)],
-        });
-
-        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrScopeChange]);
-
-        expect(filteredValues).toStrictEqual([PCRItemType.ScopeChange]);
-      });
-    });
-
     describe("returns with no matching values", () => {
       test.each`
-        name                         | itemTypeInput
-        ${"with Unknown"}            | ${PCRItemType.Unknown}
-        ${"with AccountNameChange"}  | ${PCRItemType.AccountNameChange}
-        ${"with PartnerAddition"}    | ${PCRItemType.PartnerAddition}
-        ${"with PartnerWithdrawal"}  | ${PCRItemType.PartnerWithdrawal}
-        ${"with ProjectSuspension"}  | ${PCRItemType.ProjectSuspension}
-        ${"with PeriodLengthChange"} | ${PCRItemType.PeriodLengthChange}
-      `("$name", ({ itemTypeInput }) => {
+        name                                       | itemTypeInput                                   | matchingValues
+        ${"with Unknown"}                          | ${PCRItemType.Unknown}                          | ${[]}
+        ${"with AccountNameChange"}                | ${PCRItemType.AccountNameChange}                | ${[]}
+        ${"with PartnerAddition"}                  | ${PCRItemType.PartnerAddition}                  | ${[]}
+        ${"with PartnerWithdrawal"}                | ${PCRItemType.PartnerWithdrawal}                | ${[]}
+        ${"with PeriodLengthChange"}               | ${PCRItemType.PeriodLengthChange}               | ${[]}
+        ${"with ProjectSuspension"}                | ${PCRItemType.ProjectSuspension}                | ${[PCRItemType.ProjectSuspension]}
+        ${"with MultiplePartnerFinancialVirement"} | ${PCRItemType.MultiplePartnerFinancialVirement} | ${[PCRItemType.MultiplePartnerFinancialVirement]}
+        ${"with TimeExtension"}                    | ${PCRItemType.TimeExtension}                    | ${[PCRItemType.TimeExtension]}
+        ${"with ScopeChange"}                      | ${PCRItemType.ScopeChange}                      | ${[PCRItemType.ScopeChange]}
+      `("$name", ({ itemTypeInput, matchingValues }) => {
         const stubSinglePcr = createPCRSummaryDto({
           status: PCRStatus.DraftWithProjectManager,
           items: [stubItemType(itemTypeInput)],
@@ -78,7 +46,7 @@ describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
 
         const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubSinglePcr]);
 
-        expect(filteredValues).toStrictEqual([]);
+        expect(filteredValues).toStrictEqual(matchingValues);
       });
     });
   });
