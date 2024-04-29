@@ -34,6 +34,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
 import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
@@ -60,7 +61,9 @@ export const FinancialVirementSummary = () => {
   });
   const defaults = useServerInput<z.output<FinancialVirementsSummaryValidatorSchema>>();
 
-  const { register, formState, handleSubmit, setError } = useForm<z.output<FinancialVirementsSummaryValidatorSchema>>({
+  const { register, formState, handleSubmit, setError, getFieldState } = useForm<
+    z.output<FinancialVirementsSummaryValidatorSchema>
+  >({
     resolver: zodResolver(
       getFinancialVirementsSummaryValidator({
         financialVirementsForCosts,
@@ -239,7 +242,8 @@ export const FinancialVirementSummary = () => {
                 <Hint id="hint-for-grantMovingOverFinancialYear">
                   {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
                 </Hint>
-                <FormGroup>
+                <FormGroup hasError={!!getFieldState("grantMovingOverFinancialYear").error}>
+                  <ValidationError error={getFieldState("grantMovingOverFinancialYear").error} />
                   <TextInput
                     {...register("grantMovingOverFinancialYear")}
                     defaultValue={
