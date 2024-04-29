@@ -2923,7 +2923,8 @@
               }
             },
             "errors": {
-              "invalid_date": "Enter a valid start date."
+              "invalid_date": "Enter a valid start date.",
+              "too_small": "The start date must be the same as or after 1 January 2000."
             }
           }
         }

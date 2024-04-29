@@ -10,6 +10,7 @@ import { validCurrencyRegex } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 
 const maxDefaultValue = 100_000_000_000;
+const y2k = new Date("2000-01-01");
 
 const projectIdValidation = z
   .string()
@@ -470,37 +471,48 @@ const percentageNumberInput = (
     }),
   ]);
 
-const dateValidation = z.union([
-  z.date(),
-  z
-    .object({
-      day: z
-        .string()
-        .max(2)
-        .regex(/^\d\d?$/),
-      month: z
-        .string()
-        .max(2)
-        .regex(/^\d\d?$/),
-      year: z
-        .string()
-        .min(4)
-        .max(4)
-        .regex(/^\d\d\d\d$/),
-    })
-    .superRefine((x, ctx) => {
-      const year = Number(x.year);
-      const month = Number(x.month);
-      const day = Number(x.day);
-      const datetime = DateTime.utc(year, month, day);
-      if (!datetime.isValid) {
-        ctx.addIssue({
-          code: ZodIssueCode.invalid_date,
-        });
-      }
-    })
-    .transform(x => DateTime.utc(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
-]);
+const dateValidation = z
+  .union([
+    z.date(),
+    z
+      .object({
+        day: z
+          .string()
+          .max(2)
+          .regex(/^\d\d?$/),
+        month: z
+          .string()
+          .max(2)
+          .regex(/^\d\d?$/),
+        year: z
+          .string()
+          .min(4)
+          .max(4)
+          .regex(/^\d\d\d\d$/),
+      })
+      .superRefine((x, ctx) => {
+        const year = Number(x.year);
+        const month = Number(x.month);
+        const day = Number(x.day);
+        const datetime = DateTime.utc(year, month, day);
+        if (!datetime.isValid) {
+          ctx.addIssue({
+            code: ZodIssueCode.invalid_date,
+          });
+        }
+      })
+      .transform(x => DateTime.utc(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
+  ])
+  .superRefine((x, ctx) => {
+    if (x < y2k) {
+      ctx.addIssue({
+        code: ZodIssueCode.too_small,
+        minimum: y2k.getTime(),
+        inclusive: false,
+        type: "date",
+      });
+    }
+  });
 
 export {
   projectIdValidation,
