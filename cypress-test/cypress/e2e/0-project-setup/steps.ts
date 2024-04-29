@@ -189,11 +189,13 @@ export const saveAndRemoveValidationMsg = () => {
 };
 
 export const spendTableTidyUp = () => {
-  cy.get("table").then($table => {
-    if ($table.text().includes("£1,200.00")) {
-      cy.wait(500);
-      revertSpendTableZero();
-    }
+  cy.get("main").within(() => {
+    cy.get("table").then($table => {
+      if ($table.text().includes("£6,999.98")) {
+        cy.wait(500);
+        revertSpendTableZero();
+      }
+    });
   });
 };
 

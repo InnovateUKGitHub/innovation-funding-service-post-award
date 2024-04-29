@@ -11,7 +11,7 @@ import { retentionTidyUp } from "common/costCleanUp";
 
 const fcEmail = "contact77@test.co.uk";
 
-describe("claims > Trigger Cap Pot Message", () => {
+describe("claims > Trigger Cap Pot Retention Message", () => {
   before(() => {
     visitApp({ asUser: fcEmail, path: "projects/a0E2600000kSvOGEA0/overview" });
   });

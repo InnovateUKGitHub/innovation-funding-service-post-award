@@ -117,10 +117,12 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   it("Should re-access A B Cad Services and reduce costs in line with total grant value", reaccessABCadReduce);
 
   it("Should no longer show validation message stating overspend", () => {
-    cy.getByQA("validation-message-content").should(
-      "not.have.text",
-      "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
-    );
+    cy.get("main").within(() => {
+      cy.getByQA("validation-message-content").should(
+        "not.have.text",
+        "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
+      );
+    });
   });
 
   it("Should navigate back into EUI and validate the inputs", validateCostUpdateInputs);

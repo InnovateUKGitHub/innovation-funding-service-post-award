@@ -1,3 +1,4 @@
+import { euiCostCleanUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   acceptLabourCalculateOH,
@@ -18,10 +19,13 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
     cy.navigateToProject("328407");
   });
 
-  it("Should select the Claims tile, edit the current claim and navigate to documents page", () => {
+  it("Should select the Claims tile, and edit the current claim ", () => {
     cy.selectTile("Claims");
     cy.clickOn("Edit");
+    cy.heading("Costs to be claimed");
+    euiCostCleanUp();
     cy.clickOn("Continue to claims documents");
+    cy.heading("Claim documents");
   });
 
   it("Should have a back option", () => {

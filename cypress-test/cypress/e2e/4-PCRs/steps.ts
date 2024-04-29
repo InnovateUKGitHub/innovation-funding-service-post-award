@@ -2296,7 +2296,9 @@ export const restoreRemainingGrant = () => {
   cy.wait(300);
   cy.clickOn("Save and return to reallocate project costs");
   cy.heading("Reallocate project costs");
-  cy.getByQA("validation-message-content").should("not.exist");
+  cy.get("main").within(() => {
+    cy.getByQA("validation-message-content").should("not.exist");
+  });
 };
 
 export const increaseSinglePartnerOver100 = () => {

@@ -85,9 +85,9 @@ export const shouldShowCostsClaimedToDateTable = () => {
     ["Other costs 4", "£35,000.00", "£2,000.30", "£32,999.70"],
     ["Other costs 5", "£35,000.00", "£666.66", "£34,333.34"],
     ["Total", "£350,000.00", "£54,667.46", "£295,332.54"],
-  ].forEach(([costCat, eligibleCosts, claimedThisPeriod, remainingEligibleCosts], rowNumber = 0) => {
+  ].forEach(([costCat, eligibleCosts, claimedToDate, remainingEligibleCosts]) => {
     cy.getCellFromHeaderAndRow("Total eligible costs", costCat).contains(eligibleCosts);
-    cy.getCellFromHeaderAndRow("Eligible costs claimed to date", costCat).contains(claimedThisPeriod);
+    cy.getCellFromHeaderAndRow("Eligible costs claimed to date", costCat).contains(claimedToDate);
     cy.getCellFromHeaderAndRow("Remaining eligible costs", costCat).contains(remainingEligibleCosts);
   });
 };
@@ -766,7 +766,9 @@ export const period2AbCad = () => {
 };
 
 export const capPotMessageNotExist = () => {
-  cy.getByQA("validation-message-content").should("not.exist");
+  cy.get("main").within(() => {
+    cy.getByQA("validation-message-content").should("not.exist");
+  });
 };
 
 export const triggerCapPot = () => {
@@ -774,8 +776,13 @@ export const triggerCapPot = () => {
     cy.clickOn(costCat);
     cy.heading(costCat);
     cy.clickOn("Add a cost");
-    cy.get(`#lineItems_0_description`).clear().type(`Test line item`);
-    cy.get(`#lineItems_0_value`).clear().type("7200.50").wait(800);
+    cy.getCellFromHeaderAndRowNumber("Description", 1, `[aria-label="Description of claim line item 0"]`)
+      .clear()
+      .type(`Test line item`);
+    cy.getCellFromHeaderAndRowNumber("Cost", 1, `[aria-label="Cost of claim line item 0"]`)
+      .clear()
+      .type("7200.50")
+      .wait(800);
     cy.clickOn("Save and return to claims");
     cy.heading("Costs to be claimed");
   });
@@ -792,7 +799,10 @@ export const capPotMessageDoesExist = () => {
 export const reduceToBelowCapLimit = () => {
   cy.clickOn("Labour");
   cy.heading("Labour");
-  cy.get(`#lineItems_0_value`).clear().type("7199.50").wait(800);
+  cy.getCellFromHeaderAndRowNumber("Cost", 1, `[aria-label="Cost of claim line item 0"]`)
+    .clear()
+    .type("7199.50")
+    .wait(800);
   cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");
 };

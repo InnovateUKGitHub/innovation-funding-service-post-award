@@ -5,7 +5,9 @@ export const onHoldMessage = () => {
 };
 
 export const onHoldShouldNotExist = () => {
-  cy.getByQA("validation-message-content").should("not.exist");
+  cy.get("main").within(() => {
+    cy.getByQA("validation-message-content").should("not.exist");
+  });
 };
 
 export const moOnHoldShouldNotExist = () => {
@@ -184,7 +186,7 @@ export const moAccessPcrCheckReview = <T>(fn: () => void) => {
     ["Query the request", "Send for approval"].forEach(label => {
       cy.getByLabel(label);
     });
-    cy.get("h3").contains("Add your comments");
+    cy.get("label").contains("Add your comments");
     cy.get("textarea");
     cy.paragraph("You have 1000 characters remaining");
   });

@@ -21,7 +21,7 @@ const fc = "james.black@euimeabs.test";
 const sysUser = "iuk.accproject@bjss.com.bjssdev";
 describe("claims > Editing a claim by accessing cost categories", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
+    visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
   });
 
   it("Should have a back option", () => {

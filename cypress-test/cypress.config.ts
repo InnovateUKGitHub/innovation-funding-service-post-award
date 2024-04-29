@@ -34,7 +34,8 @@ let accDevUrl = `https://www-acc-${(acc ? `custom-${acc}` : "dev").trim()}.apps.
 const grepTags = process.env.TAGS ?? process.env.tags ?? undefined;
 if (grepTags) {
   grepTags
-    .split(",")
+    .split(/[ ,]/)
+    .filter(x => x)
     .map(x => x.trim())
     .forEach(x => {
       if (!tags.includes(x as Tag)) {
