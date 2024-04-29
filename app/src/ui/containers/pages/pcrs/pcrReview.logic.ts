@@ -72,7 +72,6 @@ export const useOnUpdatePcrReview = (
         },
       };
 
-      console.log("updating", data);
       return clientsideApiClient.pcrs.update(payload);
     },
     onSuccess() {

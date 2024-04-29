@@ -1996,13 +1996,13 @@
     "pcrReview": {
       "comments": {
         "errors": {
-          "too_big": "Comments must be a maximum of 1000 characters.",
+          "too_big": "Comments must be a maximum of {{count}} characters.",
           "custom": "Comments are required if querying a claim."
         }
       },
       "status": {
         "errors": {
-          "too_small": "Select how you want to proceed"
+          "too_small": "Select how you want to proceed."
         }
       }
     },
