@@ -144,7 +144,7 @@ export const useClaimSummaryData = (
     },
   );
 
-  const totalCosts = useGetTotalCostsClaimed(data?.salesforce?.uiapi, project, partner, periodId);
+  const totalCosts = useGetTotalCostsClaimed(data, project, partner, periodId);
 
   return {
     project,

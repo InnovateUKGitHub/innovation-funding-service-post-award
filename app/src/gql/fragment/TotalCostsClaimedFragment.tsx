@@ -76,28 +76,6 @@ export const totalCostsClaimedFragment = graphql`
           }
         }
       }
-      TotalCostsClaimed_CostCategory: Acc_CostCategory__c(first: 2000) {
-        edges {
-          node {
-            Id
-            Acc_CostCategoryName__c {
-              value
-            }
-            Acc_DisplayOrder__c {
-              value
-            }
-            Acc_OrganisationType__c {
-              value
-            }
-            Acc_CompetitionType__c {
-              value
-            }
-            Acc_OverrideAwardRate__c {
-              value
-            }
-          }
-        }
-      }
     }
   }
 `;

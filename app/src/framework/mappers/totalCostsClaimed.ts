@@ -20,6 +20,7 @@ import { totalCostsClaimedFragment } from "@gql/fragment/TotalCostsClaimedFragme
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
+import { ClaimSummaryQuery$data } from "@ui/containers/pages/claims/__generated__/ClaimSummaryQuery.graphql";
 
 export const calculateClaimsTotalCosts = (
   claimDetails: Pick<CostsSummaryForPeriodDto, "costCategoryId" | "costsClaimedThisPeriod" | "overrideAwardRate">[],
@@ -81,12 +82,15 @@ const calculateCostsClaimed = (awardRate: number, costsClaimed: number): number 
 };
 
 export const useGetTotalCostsClaimed = (
-  fragmentRef: TotalCostsClaimedFragment$key,
+  data: ClaimSummaryQuery$data,
   project: Pick<ProjectDto, "isNonFec">,
   partner: Pick<PartnerDto, "awardRate">,
   periodId: PeriodId,
 ) => {
-  const fragment: TotalCostsClaimedFragment$data = useFragment(totalCostsClaimedFragment, fragmentRef);
+  const fragment: TotalCostsClaimedFragment$data = useFragment(
+    totalCostsClaimedFragment,
+    data?.salesforce?.uiapi as TotalCostsClaimedFragment$key,
+  );
 
   const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
     fragment?.query?.TotalCostsClaimed_ClaimDetails?.edges ?? [],
@@ -95,7 +99,7 @@ export const useGetTotalCostsClaimed = (
   );
 
   const claimDetailsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
-    fragment?.query?.TotalCostsClaimed_CostCategory?.edges ?? [],
+    data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
     ["overrideAwardRate", "costsClaimedThisPeriod", "costCategoryId"],
     {
       claimDetails: claimDetailsAllPeriods,

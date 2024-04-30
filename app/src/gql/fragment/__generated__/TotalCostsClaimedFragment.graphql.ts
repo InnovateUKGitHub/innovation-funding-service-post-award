@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d643396585a6ff1a418caad73d9bf358>>
+ * @generated SignedSource<<20af5a0d12ed0a67efc73f71d3c7e05e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -62,28 +62,6 @@ export type TotalCostsClaimedFragment$data = {
               readonly value: string | null | undefined;
             } | null | undefined;
           } | null | undefined;
-        } | null | undefined;
-      } | null | undefined> | null | undefined;
-    } | null | undefined;
-    readonly TotalCostsClaimed_CostCategory: {
-      readonly edges: ReadonlyArray<{
-        readonly node: {
-          readonly Acc_CompetitionType__c: {
-            readonly value: string | null | undefined;
-          } | null | undefined;
-          readonly Acc_CostCategoryName__c: {
-            readonly value: string | null | undefined;
-          } | null | undefined;
-          readonly Acc_DisplayOrder__c: {
-            readonly value: number | null | undefined;
-          } | null | undefined;
-          readonly Acc_OrganisationType__c: {
-            readonly value: string | null | undefined;
-          } | null | undefined;
-          readonly Acc_OverrideAwardRate__c: {
-            readonly value: number | null | undefined;
-          } | null | undefined;
-          readonly Id: string;
         } | null | undefined;
       } | null | undefined> | null | undefined;
     } | null | undefined;
@@ -179,26 +157,6 @@ v8 = {
   "concreteType": "DoubleValue",
   "kind": "LinkedField",
   "name": "Acc_ProjectPeriodNumber__c",
-  "plural": false,
-  "selections": (v5/*: any*/),
-  "storageKey": null
-},
-v9 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "StringValue",
-  "kind": "LinkedField",
-  "name": "Acc_CostCategoryName__c",
-  "plural": false,
-  "selections": (v5/*: any*/),
-  "storageKey": null
-},
-v10 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "PercentValue",
-  "kind": "LinkedField",
-  "name": "Acc_OverrideAwardRate__c",
   "plural": false,
   "selections": (v5/*: any*/),
   "storageKey": null
@@ -383,7 +341,16 @@ return {
                       "name": "Acc_CostCategory__r",
                       "plural": false,
                       "selections": [
-                        (v9/*: any*/)
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_CostCategoryName__c",
+                          "plural": false,
+                          "selections": (v5/*: any*/),
+                          "storageKey": null
+                        }
                       ],
                       "storageKey": null
                     },
@@ -397,7 +364,16 @@ return {
                       "selections": (v5/*: any*/),
                       "storageKey": null
                     },
-                    (v10/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "PercentValue",
+                      "kind": "LinkedField",
+                      "name": "Acc_OverrideAwardRate__c",
+                      "plural": false,
+                      "selections": (v5/*: any*/),
+                      "storageKey": null
+                    },
                     (v8/*: any*/),
                     {
                       "alias": null,
@@ -417,74 +393,6 @@ return {
             }
           ],
           "storageKey": null
-        },
-        {
-          "alias": "TotalCostsClaimed_CostCategory",
-          "args": [
-            (v0/*: any*/)
-          ],
-          "concreteType": "Acc_CostCategory__cConnection",
-          "kind": "LinkedField",
-          "name": "Acc_CostCategory__c",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "Acc_CostCategory__cEdge",
-              "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Acc_CostCategory__c",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    (v4/*: any*/),
-                    (v9/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "DoubleValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_DisplayOrder__c",
-                      "plural": false,
-                      "selections": (v5/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "StringValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_OrganisationType__c",
-                      "plural": false,
-                      "selections": (v5/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "PicklistValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_CompetitionType__c",
-                      "plural": false,
-                      "selections": (v5/*: any*/),
-                      "storageKey": null
-                    },
-                    (v10/*: any*/)
-                  ],
-                  "storageKey": null
-                }
-              ],
-              "storageKey": null
-            }
-          ],
-          "storageKey": "Acc_CostCategory__c(first:2000)"
         }
       ],
       "storageKey": null
@@ -495,6 +403,6 @@ return {
 };
 })();
 
-(node as any).hash = "90658a191e28302b1e058fb19ecad2f5";
+(node as any).hash = "d9d4849da9591a9bd875b368be410ff2";
 
 export default node;

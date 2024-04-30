@@ -251,6 +251,9 @@ export const claimSummaryQuery = graphql`
                 Acc_CompetitionType__c {
                   value
                 }
+                Acc_OverrideAwardRate__c {
+                  value
+                }
               }
             }
           }
