@@ -22,7 +22,7 @@ class ProjectSetupSpendProfileFormHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: ProjectSetupSpendProfileRoute,
+      routes: [ProjectSetupSpendProfileRoute],
       forms: [FormTypes.ProjectSetupForecast],
     });
   }

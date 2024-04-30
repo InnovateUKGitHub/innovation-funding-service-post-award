@@ -28,9 +28,9 @@ import { z } from "zod";
 import { claimReviewQuery } from "./ClaimReview.query";
 import { ClaimReviewApproval } from "./ClaimReviewApproval";
 import { ClaimReviewDocuments } from "./ClaimReviewDocuments";
+import { ClaimReviewForecastTable } from "./ClaimReviewForecastTable";
 import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
 import { ClaimReviewSchemaType, claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
-import { NewForecastTableWithStandaloneMemo } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.standalone";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -164,14 +164,12 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
 
       <Section>
         <Accordion>
-          <AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast}>
-            <NewForecastTableWithStandaloneMemo
-              projectId={projectId}
-              projectParticipantId={partnerId}
-              queryOptions={refreshedQueryOptions}
-              isProjectSetup={false}
-            />
-          </AccordionItem>
+          <ClaimReviewForecastTable
+            projectId={projectId}
+            partnerId={partnerId}
+            periodId={periodId}
+            refreshedQueryOptions={refreshedQueryOptions}
+          />
 
           <AccordionItem title={content.accordionTitleClaimLog} qa="log-accordion">
             <Logs

@@ -33,7 +33,7 @@ export class VirementPartnerCostsUpdateHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: FinancialVirementEditPartnerLevelRoute,
+      routes: [FinancialVirementEditPartnerLevelRoute],
       forms: [FormTypes.PcrFinancialVirementEditRemainingGrant],
     });
   }

@@ -18,7 +18,7 @@ export class ProjectChangeRequestReasoningDocumentDeleteHandler extends ZodFormH
 > {
   constructor() {
     super({
-      route: PCRPrepareReasoningRoute,
+      routes: [PCRPrepareReasoningRoute],
       forms: [FormTypes.PcrLevelDelete],
     });
   }

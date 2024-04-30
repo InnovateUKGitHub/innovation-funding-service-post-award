@@ -26,7 +26,7 @@ class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: PCRPrepareReasoningRoute,
+      routes: [PCRPrepareReasoningRoute],
       forms: [
         FormTypes.PcrPrepareReasoningStep,
         FormTypes.PcrPrepareReasoningSummary,

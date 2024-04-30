@@ -25,6 +25,7 @@ const ClaimReviewForecastTable = ({
         projectId={projectId}
         projectParticipantId={partnerId}
         queryOptions={refreshedQueryOptions}
+        isProjectSetup={false}
         isOpen={isOpen}
       />
     </AccordionItem>
