@@ -33,10 +33,10 @@ import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useMessages } from "@framework/api-helpers/useMessages";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { LoanRequestSchemaType, loanRequestErrorMap, loanRequestSchema } from "./loanRequest.zod";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { head } from "lodash";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
@@ -85,8 +85,6 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
     },
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
   const loan = head(loans);
   if (loans.length > 1) {
     throw new Error("something borked here with too many loans");
@@ -100,9 +98,11 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
     register: registerForm,
     watch,
     handleSubmit,
+    setError,
   } = useForm<z.output<LoanRequestSchemaType>>({
     defaultValues: {
       comments: loan?.comments ?? "",
+      form: FormTypes.LoanRequest,
     },
     resolver: zodResolver(loanRequestSchema, { errorMap: loanRequestErrorMap }),
   });
@@ -113,6 +113,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 
   const { onUpdate, isFetching } = useOnUpdateLoanRequest(props.projectId, props.loanId, loan, loansOverviewLink.path);
   const disabled = isDeleting || isUploading || isFetching;
+  const validationErrors = useZodErrors(setError, formState?.errors);
 
   return (
     <Page
@@ -250,6 +251,8 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
       {isFc && (
         <Section>
           <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
+            <input type="hidden" value={FormTypes.LoanRequest} {...register("form")} />
+
             <Fieldset>
               <Legend>{getContent(x => x.pages.loansRequest.commentTitle)}</Legend>
               <TextAreaField

@@ -1,55 +1,67 @@
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoanDocument";
-import { DocumentDescription } from "@framework/constants/documentDescription";
-import { IFileWrapper } from "@framework/types/fileWapper";
 import { IContext } from "@framework/types/IContext";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
+import express from "express";
 import { configuration } from "@server/features/common/config";
 import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { LoanLevelUploadSchemaType, documentsErrorMap, getLoanLevelUpload } from "@ui/zod/documentValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ServerFileWrapper } from "@server/apis/controllerBase";
+import { z } from "zod";
+import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 
-export class LoanRequestDocumentUploadHandler extends MultipleFileFormHandlerBase<
-  LoansRequestParams,
-  "multipleDocuments"
+export class LoanRequestDocumentUploadHandler extends ZodFormHandlerBase<
+  LoanLevelUploadSchemaType,
+  LoansRequestParams
 > {
   constructor() {
-    super(LoansRequestRoute, ["loan-document-upload"], "multipleDocuments");
-  }
-
-  protected getDto(
-    _context: IContext,
-    _params: LoansRequestParams,
-    _button: IFormButton,
-    _body: IFormBody,
-    files: IFileWrapper[],
-  ): Promise<MultipleDocumentUploadDto> {
-    return Promise.resolve({
-      files,
-      description: DocumentDescription.Loan,
+    super({
+      route: LoansRequestRoute,
+      forms: [FormTypes.LoanLevelUpload],
     });
   }
 
-  protected async run(
-    context: IContext,
-    params: LoansRequestParams,
-    _button: IFormButton,
-    dto: MultipleDocumentUploadDto,
-  ): Promise<ILinkInfo> {
-    await context.runCommand(new UploadLoanDocumentsCommand(dto, params.projectId, params.loanId));
+  public readonly acceptFiles = true;
 
-    return LoansRequestRoute.getLink(params);
+  protected async getZodSchema() {
+    return {
+      schema: getLoanLevelUpload({ config: configuration.options }),
+      errorMap: documentsErrorMap,
+    };
   }
 
-  protected getStoreKey(params: LoansRequestParams) {
-    return storeKeys.getLoanKey(params.projectId, params.loanId);
+  protected async mapToZod({
+    input,
+    files,
+  }: {
+    input: AnyObject;
+    files: ServerFileWrapper[];
+  }): Promise<z.input<LoanLevelUploadSchemaType>> {
+    return {
+      form: FormTypes.LoanLevelUpload,
+      files,
+      description: input.description,
+      projectId: input.projectId,
+      loanId: input.loanId,
+    };
   }
 
-  protected createValidationResult(
-    _params: LoansRequestParams,
-    dto: MultipleDocumentUploadDto,
-  ): MultipleDocumentUploadDtoValidator {
-    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, true, false, null);
+  protected async run({
+    res,
+    input,
+    context,
+  }: {
+    res: express.Response;
+    input: z.output<LoanLevelUploadSchemaType>;
+    context: IContext;
+  }): Promise<void> {
+    await context.runCommand(new UploadLoanDocumentsCommand(input, input.projectId, input.loanId));
+
+    // TODO: Actually use Redux instead of a temporary array
+    res.locals.preloadedReduxActions.push(
+      messageSuccess(
+        this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
+      ),
+    );
   }
 }

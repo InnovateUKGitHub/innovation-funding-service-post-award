@@ -1,42 +1,66 @@
-import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocument";
 import { IContext } from "@framework/types/IContext";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { configuration } from "@server/features/common/config";
 import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { documentsErrorMap, loanLevelDelete } from "@ui/zod/documentValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { messageSuccess } from "@ui/redux/actions/common/messageActions";
+import express from "express";
+import { z } from "zod";
+import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 
-interface Document extends MultipleDocumentUploadDto {
-  id: string;
-}
-
-export class LoanRequestDocumentDeleteHandler extends StandardFormHandlerBase<LoansRequestParams, "multipleDocuments"> {
+export class LoanRequestDocumentDeleteHandler extends ZodFormHandlerBase<typeof loanLevelDelete, LoansRequestParams> {
   constructor() {
-    super(LoansRequestRoute, ["delete"], "multipleDocuments");
+    super({
+      route: LoansRequestRoute,
+      forms: [FormTypes.LoanLevelDelete],
+    });
   }
 
-  protected getDto(_context: IContext, _params: LoansRequestParams, button: IFormButton) {
-    return Promise.resolve({ id: button.value, files: [] });
+  public readonly acceptFiles = false;
+
+  protected async getZodSchema() {
+    return {
+      schema: loanLevelDelete,
+      errorMap: documentsErrorMap,
+    };
   }
 
-  protected getStoreKey(params: LoansRequestParams) {
-    return storeKeys.getLoanKey(params.projectId, params.loanId);
+  protected async mapToZod({
+    input,
+    params,
+  }: {
+    input: AnyObject;
+    params: LoansRequestParams;
+  }): Promise<z.input<typeof loanLevelDelete>> {
+    return {
+      ...params,
+      documentId: input.documentId ?? input.button_documentId,
+      form: FormTypes.LoanLevelDelete,
+    };
   }
 
-  protected async run(
-    context: IContext,
-    params: LoansRequestParams,
-    _button: IFormButton,
-    dto: Document,
-  ): Promise<ILinkInfo> {
-    await context.runCommand(new DeleteLoanDocument(dto.id, params.projectId, params.loanId));
+  protected async run({
+    res,
+    input,
+    context,
+  }: {
+    res: express.Response;
+    input: z.output<typeof loanLevelDelete>;
+    context: IContext;
+  }): Promise<void> {
+    const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
 
-    return LoansRequestRoute.getLink(params);
-  }
+    const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
+    await context.runCommand(new DeleteLoanDocument(input.documentId, input.projectId, input.loanId));
 
-  protected createValidationResult(params: LoansRequestParams, dto: Document) {
-    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
+    // TODO: Actually use Redux instead of a temporary array
+    res.locals.preloadedReduxActions.push(
+      messageSuccess(
+        this.copy.getCopyString(x =>
+          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
+        ),
+      ),
+    );
   }
 }

@@ -14,7 +14,7 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
   constructor(
     protected readonly documents: MultipleDocumentUploadDto,
     private readonly projectId: ProjectId,
-    private readonly loanId: string,
+    private readonly loanId: LoanId,
   ) {
     super();
   }

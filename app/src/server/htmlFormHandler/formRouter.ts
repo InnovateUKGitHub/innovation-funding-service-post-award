@@ -125,7 +125,6 @@ export const multiFileFormHandlers = [
   new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
-  new LoanRequestDocumentUploadHandler(),
 ] as const;
 
 export const developerFormHandlers = [new DeveloperUserSwitcherHandler(), new DeveloperPageCrasherHandler()] as const;
@@ -135,6 +134,7 @@ export const zodFormHandlers = [
   new ClaimLevelDocumentShareUploadHandler(),
   new ClaimDetailLevelDocumentShareUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
+  new LoanRequestDocumentUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {

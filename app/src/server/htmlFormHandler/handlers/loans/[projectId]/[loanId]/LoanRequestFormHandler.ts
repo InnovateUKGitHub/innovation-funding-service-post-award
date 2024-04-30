@@ -1,51 +1,57 @@
-import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { GetLoan } from "@server/features/loans/getLoan";
-import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
-import { LoanDto } from "@framework/dtos/loanDto";
 import { LoansSummaryRoute } from "@ui/containers/pages/loans/loanOverview.page";
 import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import {
+  LoanRequestSchemaType,
+  loanRequestErrorMap,
+  loanRequestSchema,
+} from "@ui/containers/pages/loans/loanRequest.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
 
-export class LoanRequestFormHandler extends StandardFormHandlerBase<LoansRequestParams, "loan"> {
+export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchemaType, LoansRequestParams> {
   constructor() {
-    super(LoansRequestRoute, ["default"], "loan");
+    super({
+      route: LoansRequestRoute,
+      forms: [FormTypes.LoanRequest],
+    });
   }
 
-  protected async getDto(
-    context: IContext,
-    params: LoansRequestParams,
-    _button: IFormButton,
-    body: IFormBody,
-  ): Promise<LoanDto> {
-    const originalLoanQuery = new GetLoan(params.projectId, { loanId: params.loanId });
-    const originalLoan = await context.runQuery(originalLoanQuery);
+  public readonly acceptFiles = false;
 
+  protected async getZodSchema() {
     return {
-      ...originalLoan,
-      comments: body.comments,
+      schema: loanRequestSchema,
+      errorMap: loanRequestErrorMap,
     };
   }
 
-  protected async run(
-    context: IContext,
-    params: LoansRequestParams,
-    _button: IFormButton,
-    dto: LoanDto,
-  ): Promise<ILinkInfo> {
+  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<LoanRequestSchemaType>> {
+    return {
+      form: input.form,
+      comments: input.comments ?? "",
+    };
+  }
+
+  protected async run({
+    input,
+    params,
+    context,
+  }: {
+    input: z.output<LoanRequestSchemaType>;
+    params: LoansRequestParams;
+    context: IContext;
+  }): Promise<string> {
+    const originalLoanQuery = new GetLoan(params.projectId, { loanId: params.loanId });
+    const originalLoan = await context.runQuery(originalLoanQuery);
+
+    const dto = { ...originalLoan, comments: input.comments };
     const updateLoanQuery = new UpdateLoanCommand(params.projectId, params.loanId, dto);
     await context.runCommand(updateLoanQuery);
 
-    return LoansSummaryRoute.getLink(params);
-  }
-
-  protected getStoreKey(params: LoansRequestParams) {
-    return storeKeys.getLoanKey(params.projectId, params.loanId);
-  }
-
-  protected createValidationResult(_params: LoansRequestParams, dto: LoanDto) {
-    return new LoanDtoValidator(dto, [], false);
+    return LoansSummaryRoute.getLink(params).path;
   }
 }
