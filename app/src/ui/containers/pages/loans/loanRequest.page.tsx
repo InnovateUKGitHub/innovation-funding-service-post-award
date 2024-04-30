@@ -149,11 +149,11 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
             <TR>
               <TH>{getContent(x => x.pages.loansRequest.drawdownPeriodLabel)}</TH>
               <TH>{getContent(x => x.pages.loansRequest.dueDate)}</TH>
-              <TH>{getContent(x => x.pages.loansRequest.drawdownForecast)}</TH>
-              <TH>{getContent(x => x.pages.loansRequest.totalLoan)}</TH>
-              <TH>{getContent(x => x.pages.loansRequest.drawdownToDate)}</TH>
-              <TH>{getContent(x => x.pages.loansRequest.drawdownAmount)}</TH>
-              <TH>{getContent(x => x.pages.loansRequest.remainingLoan)}</TH>
+              <TH numeric>{getContent(x => x.pages.loansRequest.drawdownForecast)}</TH>
+              <TH numeric>{getContent(x => x.pages.loansRequest.totalLoan)}</TH>
+              <TH numeric>{getContent(x => x.pages.loansRequest.drawdownToDate)}</TH>
+              <TH numeric>{getContent(x => x.pages.loansRequest.drawdownAmount)}</TH>
+              <TH numeric>{getContent(x => x.pages.loansRequest.remainingLoan)}</TH>
             </TR>
           </THead>
           <TBody>
@@ -262,6 +262,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
                 characterCountMax={30000}
                 characterCount={characterCount}
                 characterCountType="ascending"
+                hint={getContent(x => x.pages.loansRequest.commentHint)}
               />
             </Fieldset>
 

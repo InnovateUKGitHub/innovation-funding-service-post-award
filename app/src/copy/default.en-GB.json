@@ -230,7 +230,7 @@
     "loansTable": {
       "drawdown": "Drawdown",
       "dueDate": "Due date",
-      "drawdownAmount": "Drawdown Amount",
+      "drawdownAmount": "Drawdown amount",
       "status": "Status",
       "request": "Request",
       "view": "View"
@@ -471,7 +471,7 @@
       "drawdownForecast": "Drawdown forecast",
       "totalLoan": "Total loan",
       "drawdownToDate": "Drawdown to date",
-      "drawdownAmount": "Drawdown Amount",
+      "drawdownAmount": "Drawdown amount",
       "remainingLoan": "Remaining loan"
     },
     "financeSummary": {
