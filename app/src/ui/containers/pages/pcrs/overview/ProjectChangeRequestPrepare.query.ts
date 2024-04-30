@@ -70,12 +70,31 @@ export const pcrPrepareQuery = graphql`
               }
             }
           }
-          OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
+          OtherPCRs: Acc_ProjectChangeRequest__c(
+            first: 2000
+            where: {
+              Acc_Project__c: { eq: $projectId }
+              Acc_Status__c: { nin: ["Actioned", "Approved", "Withdrawn", "Rejected"] }
+            }
+            orderBy: { Acc_RequestNumber__c: { order: DESC } }
+          ) {
             edges {
               node {
                 Id
                 Acc_Status__c {
                   value
+                }
+                Acc_Project_Change_Requests__r(first: 2000) {
+                  edges {
+                    node {
+                      Id
+                      RecordType {
+                        DeveloperName {
+                          value
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

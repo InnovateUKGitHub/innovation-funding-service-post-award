@@ -1,5 +1,5 @@
 import { ContentSelector } from "@copy/type";
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { SalesforceCompetitionTypes } from "./competitionTypes";
 
 export enum PCRStatus {
@@ -192,7 +192,7 @@ export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisa
  * Gets a list of PCR items that are not available
  */
 export const getPcrItemsSingleInstanceInAnyPcrViolations = (
-  pcrs: Pick<PCRSummaryDto, "status" | "items">[],
+  pcrs: (Pick<PCRSummaryDto, "status" | "id"> & { items: Pick<PCRItemSummaryDto, "type">[] })[],
 ): PCRItemType[] => {
   // Note: Avoid wasting time upfront
   if (!pcrs.length) return [];
@@ -262,7 +262,7 @@ export const getPcrItemsSingleInstanceInThisPcrViolations = (pcr?: {
  */
 export const getPcrItemsTooManyViolations = (
   numberOfPartners: number,
-  currentPcr?: Pick<PCRSummaryDto, "items">,
+  currentPcr?: Pick<PCRSummaryDto, "status" | "id"> & { items: Pick<PCRItemSummaryDto, "type">[] },
 ): PCRItemType[] => {
   if (!currentPcr) return [];
 

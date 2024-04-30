@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<202eab2e3bd312682f026d5dc667923a>>
+ * @generated SignedSource<<c03ca9edb4fc4adff2ec992b6fb284f1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -147,6 +147,18 @@ export type ProjectChangeRequestPrepareQuery$data = {
         readonly OtherPCRs: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_Project_Change_Requests__r: {
+                readonly edges: ReadonlyArray<{
+                  readonly node: {
+                    readonly Id: string;
+                    readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Acc_Status__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
@@ -527,7 +539,20 @@ v17 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v18 = {
+v18 = [
+  (v2/*: any*/)
+],
+v19 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "DeveloperName",
+  "plural": false,
+  "selections": (v9/*: any*/),
+  "storageKey": null
+},
+v20 = {
   "alias": "OtherPCRs",
   "args": [
     (v2/*: any*/),
@@ -537,6 +562,25 @@ v18 = {
       "value": {
         "Acc_RequestNumber__c": (v3/*: any*/)
       }
+    },
+    {
+      "fields": [
+        (v5/*: any*/),
+        {
+          "kind": "Literal",
+          "name": "Acc_Status__c",
+          "value": {
+            "nin": [
+              "Actioned",
+              "Approved",
+              "Withdrawn",
+              "Rejected"
+            ]
+          }
+        }
+      ],
+      "kind": "ObjectValue",
+      "name": "where"
     }
   ],
   "concreteType": "Acc_ProjectChangeRequest__cConnection",
@@ -561,7 +605,53 @@ v18 = {
           "plural": false,
           "selections": [
             (v7/*: any*/),
-            (v17/*: any*/)
+            (v17/*: any*/),
+            {
+              "alias": null,
+              "args": (v18/*: any*/),
+              "concreteType": "Acc_ProjectChangeRequest__cConnection",
+              "kind": "LinkedField",
+              "name": "Acc_Project_Change_Requests__r",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Acc_ProjectChangeRequest__cEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "Acc_ProjectChangeRequest__c",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v7/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "RecordType",
+                          "kind": "LinkedField",
+                          "name": "RecordType",
+                          "plural": false,
+                          "selections": [
+                            (v19/*: any*/)
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": "Acc_Project_Change_Requests__r(first:2000)"
+            }
           ],
           "storageKey": null
         }
@@ -569,14 +659,14 @@ v18 = {
       "storageKey": null
     }
   ],
-  "storageKey": "Acc_ProjectChangeRequest__c(first:2000,orderBy:{\"Acc_RequestNumber__c\":{\"order\":\"DESC\"}})"
+  "storageKey": null
 },
-v19 = {
+v21 = {
   "kind": "Literal",
   "name": "first",
   "value": 1
 },
-v20 = {
+v22 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -586,7 +676,7 @@ v20 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v21 = {
+v23 = {
   "alias": null,
   "args": null,
   "concreteType": "LongTextAreaValue",
@@ -596,10 +686,10 @@ v21 = {
   "selections": (v9/*: any*/),
   "storageKey": null
 },
-v22 = {
+v24 = {
   "alias": null,
   "args": [
-    (v19/*: any*/),
+    (v21/*: any*/),
     {
       "fields": [
         (v5/*: any*/),
@@ -665,13 +755,11 @@ v22 = {
               "selections": (v9/*: any*/),
               "storageKey": null
             },
-            (v20/*: any*/),
-            (v21/*: any*/),
+            (v22/*: any*/),
+            (v23/*: any*/),
             {
               "alias": null,
-              "args": [
-                (v2/*: any*/)
-              ],
+              "args": (v18/*: any*/),
               "concreteType": "Acc_ProjectChangeRequest__cConnection",
               "kind": "LinkedField",
               "name": "Acc_Project_Change_Requests__r",
@@ -694,9 +782,9 @@ v22 = {
                       "plural": false,
                       "selections": [
                         (v7/*: any*/),
-                        (v21/*: any*/),
+                        (v23/*: any*/),
                         (v17/*: any*/),
-                        (v20/*: any*/),
+                        (v22/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -804,16 +892,7 @@ v22 = {
                               ],
                               "storageKey": null
                             },
-                            {
-                              "alias": null,
-                              "args": null,
-                              "concreteType": "StringValue",
-                              "kind": "LinkedField",
-                              "name": "DeveloperName",
-                              "plural": false,
-                              "selections": (v9/*: any*/),
-                              "storageKey": null
-                            }
+                            (v19/*: any*/)
                           ],
                           "storageKey": null
                         }
@@ -835,7 +914,7 @@ v22 = {
   ],
   "storageKey": null
 },
-v23 = {
+v25 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -883,8 +962,8 @@ return {
                 "selections": [
                   (v10/*: any*/),
                   (v16/*: any*/),
-                  (v18/*: any*/),
-                  (v22/*: any*/)
+                  (v20/*: any*/),
+                  (v24/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -934,7 +1013,7 @@ return {
                   {
                     "alias": "Page",
                     "args": [
-                      (v19/*: any*/),
+                      (v21/*: any*/),
                       (v11/*: any*/)
                     ],
                     "concreteType": "Acc_Project__cConnection",
@@ -978,7 +1057,7 @@ return {
                                   (v12/*: any*/),
                                   (v14/*: any*/),
                                   (v15/*: any*/),
-                                  (v23/*: any*/),
+                                  (v25/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -991,7 +1070,7 @@ return {
                                       (v12/*: any*/),
                                       (v14/*: any*/),
                                       (v15/*: any*/),
-                                      (v23/*: any*/),
+                                      (v25/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -1100,8 +1179,8 @@ return {
                   },
                   (v10/*: any*/),
                   (v16/*: any*/),
-                  (v18/*: any*/),
-                  (v22/*: any*/)
+                  (v20/*: any*/),
+                  (v24/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1114,16 +1193,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "45d08b7ce47c937d7eab60d130e0b79a",
+    "cacheID": "af414518c938256a183368a27a658252",
     "id": null,
     "metadata": {},
     "name": "ProjectChangeRequestPrepareQuery",
     "operationKind": "query",
-    "text": "query ProjectChangeRequestPrepareQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_MonitoringLevel__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Comments__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Comments__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectChangeRequestPrepareQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_MonitoringLevel__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        OtherPCRs: Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, Acc_Status__c: {nin: [\"Actioned\", \"Approved\", \"Withdrawn\", \"Rejected\"]}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 1, where: {Id: {eq: $pcrId}, Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Comments__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Comments__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "96da5dc822f70f41a1d33c46d6397307";
+(node as any).hash = "b3f5236cf8323121cf21ef8afdb715a0";
 
 export default node;

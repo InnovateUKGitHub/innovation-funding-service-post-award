@@ -53,7 +53,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const pcrs = mapToPcrDtoArray(
     data.salesforce.uiapi.query.OtherPCRs?.edges ?? [],
     ["id", "status"],
-    ["id", "type", "typeName", "shortName"],
+    ["id", "type"],
     {},
   );
 

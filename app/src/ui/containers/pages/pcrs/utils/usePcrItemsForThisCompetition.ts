@@ -7,13 +7,13 @@ import {
   PCRItemDisabledReason,
   PCRItemType,
 } from "@framework/constants/pcrConstants";
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
 
 const usePcrItemsForThisCompetition = (
   competitionType: SalesforceCompetitionTypes,
-  allPcrs: Pick<PCRSummaryDto, "status" | "items" | "id">[],
+  allPcrs: (Pick<PCRSummaryDto, "status" | "id"> & { items: Pick<PCRItemSummaryDto, "type">[] })[],
   pcrId: PcrId | undefined,
   numberOfPartners: number,
 ) => {
