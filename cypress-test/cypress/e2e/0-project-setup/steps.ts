@@ -1,3 +1,4 @@
+import { loremIpsum100Char } from "common/lorem";
 import { revertSpendTableZero } from "common/spend-table-edit";
 
 export const shouldShowProjectTitle = () => {
@@ -277,4 +278,108 @@ export const manualTopThreeRows = () => {
         }
       });
   });
+};
+
+const associateValidationMessage = "The start date must be the same as or after 1 January 2000.";
+
+export const displayAssociateProjectCard = () => {
+  cy.getByQA("pending-and-open-projects").within(() => {
+    cy.getByQA("project-539538").within(() => {
+      cy.get("h3").contains("CYPRESS_KTP_ASSOCIATE_DO_NOT_TOUCH");
+      cy.get("div").contains("You can update the associate's start date here");
+    });
+  });
+};
+
+export const associateWorkingBacklink = () => {
+  cy.clickOn("Back to projects");
+  cy.heading("Dashboard");
+  cy.selectProject("539538");
+  cy.heading("Associate start date");
+};
+
+export const associateTable = () => {
+  [
+    ["Name", "Wednesday Addams"],
+    ["Role", "Associate"],
+    ["Email address", "wed.addams@test.test.co.uk"],
+  ].forEach(([key, listItem]) => {
+    cy.getListItemFromKey(key, listItem);
+  });
+};
+
+export const associateStartDate = () => {
+  ["Start date", "Day", "Month", "Year"].forEach(label => {
+    cy.getByLabel(label);
+  });
+};
+
+export const associateValidateNumericPastInput = () => {
+  cy.enter("Day", "01");
+  cy.enter("Month", "01");
+  ["0000", "0002", "0100", "1900", "1945", "1985"].forEach(year => {
+    cy.enter("Year", year);
+    cy.clickOn("Save and return to dashboard");
+    cy.validationLink(associateValidationMessage);
+    cy.paragraph(associateValidationMessage);
+    cy.getByLabel("Year").clear();
+  });
+};
+
+export const validateDayAndMonthFields = () => {
+  ["32", "32", "32", "31", "32", "31", "32", "32", "31", "32", "31", "32"].forEach((day, index) => {
+    let month = index + 1;
+    cy.enter("Day", day);
+    cy.enter("Month", month.toString());
+    cy.enter("Year", "2024");
+    cy.clickOn("Save and return to dashboard");
+    cy.validationLink("Enter a valid start date.");
+    cy.paragraph("Enter a valid start date.");
+    cy.getByLabel("Day").clear();
+    cy.getByLabel("Month").clear();
+  });
+};
+
+export const associateValidateAllowedInput = () => {
+  cy.enter("Day", "01");
+  cy.enter("Month", "01");
+  ["2000", "2010", "2020", "2024", "2025", "2030"].forEach(year => {
+    cy.enter("Year", year);
+    cy.clickOn("Save and return to dashboard");
+    cy.heading("Dashboard");
+    cy.selectProject("539538");
+    cy.heading("Associate start date");
+    cy.getByLabel("Year").clear();
+  });
+};
+
+export const associateValidateAlphaSpecialInput = () => {
+  cy.enter("Day", "01");
+  cy.enter("Month", "01");
+  ["Lorem", "!£$%^&*(", loremIpsum100Char].forEach(year => {
+    cy.enter("Year", year);
+    cy.clickOn("Save and return to dashboard");
+    cy.validationLink("Enter a valid start date.");
+    cy.paragraph("Enter a valid start date.");
+    cy.getByLabel("Year").clear();
+  });
+};
+
+export const associateUpdateAndSave = () => {
+  cy.enter("Day", "12");
+  cy.enter("Month", "6");
+  cy.enter("Year", "2024");
+  cy.clickOn("Save and return to dashboard");
+  cy.selectProject("539538");
+  cy.checkEntry("Day", "12");
+  cy.checkEntry("Month", "06");
+  cy.checkEntry("Year", "2024");
+  cy.enter("Day", "15");
+  cy.enter("Month", "1");
+  cy.enter("Year", "2025");
+  cy.clickOn("Save and return to dashboard");
+  cy.selectProject("539538");
+  cy.checkEntry("Day", "15");
+  cy.checkEntry("Month", "01");
+  cy.checkEntry("Year", "2025");
 };
