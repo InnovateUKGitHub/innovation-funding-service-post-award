@@ -87,7 +87,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
 
   const { virementData } = mapFinancialVirement(isServer ? defaults?.virements : watch("virements"));
 
-  const { onUpdate, isProcessing } = useOnUpdateCostCategoryLevel({
+  const { onUpdate, isProcessing, apiError } = useOnUpdateCostCategoryLevel({
     mapFinancialVirement,
   });
 
@@ -112,6 +112,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
       }
       validationErrors={validationErrors}
       fragmentRef={fragmentRef}
+      apiError={apiError}
     >
       <AwardRateOverridesMessage
         projectId={projectId}
