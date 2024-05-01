@@ -86,13 +86,9 @@ export const shouldShowCostsClaimedToDateTable = () => {
     ["Other costs 5", "£35,000.00", "£666.66", "£34,333.34"],
     ["Total", "£350,000.00", "£54,667.46", "£295,332.54"],
   ].forEach(([costCat, eligibleCosts, claimedThisPeriod, remainingEligibleCosts], rowNumber = 0) => {
-    cy.get("tr")
-      .eq(rowNumber + 1)
-      .within(() => {
-        cy.getCellFromHeaderAndRow("Total eligible costs", costCat).contains(eligibleCosts);
-        cy.getCellFromHeaderAndRow("Costs claimed this period", costCat).contains(claimedThisPeriod);
-        cy.getCellFromHeaderAndRow("Remaining eligible costs", costCat).contains(remainingEligibleCosts);
-      });
+    cy.getCellFromHeaderAndRow("Total eligible costs", costCat).contains(eligibleCosts);
+    cy.getCellFromHeaderAndRow("Eligible costs claimed to date", costCat).contains(claimedThisPeriod);
+    cy.getCellFromHeaderAndRow("Remaining eligible costs", costCat).contains(remainingEligibleCosts);
   });
 };
 
@@ -612,13 +608,13 @@ export const submittedCostCats = () => {
 export const queryTheClaim = () => {
   cy.getByQA("status_MO Queried").click({ force: true });
   cy.getByQA("additional-information-title").contains("Additional information");
-  cy.getByQA("field-comments").contains(
+  cy.get("#hint-for-comments").contains(
     "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
   );
   cy.get("textarea").clear().type(comments);
   cy.paragraph("You have");
   cy.paragraph("I am satisfied that the costs claimed appear to comply");
-  cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
+  cy.getByQA("reminder").contains("You must submit a monitoring report");
   cy.clickOn("Send query");
   cy.heading("Claims");
 };
@@ -894,7 +890,7 @@ export const ktpTopThreeRows = () => {
 };
 
 export const claimReviewTopThreeRows = () => {
-  cy.getByQA("forecast-table").within(() => {
+  cy.get("#ifspa-forecast-table").within(() => {
     [
       ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
       ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
@@ -926,7 +922,8 @@ export const claimReviewTopThreeRows = () => {
 };
 
 export const claimReviewDocArea = () => {
-  cy.getByQA("projectDocumentUpload").within(() => {
+  cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
+    cy.get("h2").contains("Supporting documents");
     cy.paragraph("You can upload and store any documents for this claim on this page.");
     cy.paragraph(
       "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
@@ -943,7 +940,7 @@ export const claimReviewExistingEvidence = () => {
     ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
     ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
   ].forEach(([claimDoc, type, date, size, uploadBy], rowNumber = 1) => {
-    cy.getByQA("claim-supporting-documents-container").within(() => {
+    cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
       cy.get("tr")
         .eq(rowNumber + 1)
         .within(() => {
@@ -958,7 +955,7 @@ export const claimReviewExistingEvidence = () => {
 };
 
 export const claimReviewCostCat = () => {
-  cy.getByQA("forecast-table").within(() => {
+  cy.get("#ifspa-forecast-table").within(() => {
     costCategories.forEach(forecastCostCat => {
       cy.tableCell(forecastCostCat);
     });
@@ -967,7 +964,7 @@ export const claimReviewCostCat = () => {
 };
 
 export const claimReviewForecastCostsClaiming = () => {
-  cy.getByQA("forecast-table").within(() => {
+  cy.get("#ifspa-forecast-table").within(() => {
     [
       "£2,000.00",
       "£100.00",
@@ -1004,7 +1001,7 @@ export const claimReviewForecastTotals = () => {
     ["£1,900.00", "£10,000.00", "-81.00%"],
     ["£2,000.00", "£10,000.00", "-80.00%"],
   ].forEach((cols, index) => {
-    cy.getByQA("forecast-table").within(() => {
+    cy.get("#ifspa-forecast-table").within(() => {
       cy.get("tr")
         .eq(index + 4)
         .within(() => {
@@ -1034,7 +1031,7 @@ export const claimReviewUploadDocument = () => {
 };
 
 export const claimReviewCheckForNewDoc = () => {
-  cy.getByQA("claim-supporting-documents-container").within(() => {
+  cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
     cy.get("tr")
       .eq(1)
       .within(() => {
@@ -1060,11 +1057,11 @@ export const claimReviewResubmit = () => {
 };
 
 export const claimReviewDeleteDoc = () => {
-  cy.getByQA("claim-supporting-documents-container").within(() => {
+  cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
     cy.get("tr")
       .eq(1)
       .within(() => {
-        cy.getByQA("button_delete-qa").contains("Remove").click();
+        cy.button("Remove").click();
       });
   });
   cy.button("Remove").should("be.disabled");

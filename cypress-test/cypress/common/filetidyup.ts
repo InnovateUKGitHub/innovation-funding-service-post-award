@@ -10,11 +10,9 @@ export const fileTidyUp = (name: string) => {
     cy.get("main").then($main => {
       if (fileNameRegExp.test($main.text())) {
         cy.log(`Deleting existing ${name} document`);
-        cy.get("tr")
-          .eq(1)
-          .within(() => {
-            cy.tableCell("Remove").click();
-          });
+        cy.contains("tr", name).within(() => {
+          cy.tableCell("Remove").click();
+        });
         cy.validationNotification("has been removed.");
         cy.wait(200);
       } else {
@@ -25,7 +23,7 @@ export const fileTidyUp = (name: string) => {
 };
 
 export const claimReviewFileTidyUp = (name: string) => {
-  cy.getByQA("claim-supporting-documents-container").within(() => {
+  cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
     cy.get("tr").then($container => {
       if ($container.text().includes(name)) {
         cy.log(`Deleting existing ${name} document`);
