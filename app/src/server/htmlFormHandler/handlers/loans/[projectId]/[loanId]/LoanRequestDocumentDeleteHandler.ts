@@ -12,7 +12,7 @@ import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumen
 export class LoanRequestDocumentDeleteHandler extends ZodFormHandlerBase<typeof loanLevelDelete, LoansRequestParams> {
   constructor() {
     super({
-      route: LoansRequestRoute,
+      routes: [LoansRequestRoute],
       forms: [FormTypes.LoanLevelDelete],
     });
   }

@@ -16,7 +16,7 @@ export class LoanRequestDocumentUploadHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      route: LoansRequestRoute,
+      routes: [LoansRequestRoute],
       forms: [FormTypes.LoanLevelUpload],
     });
   }

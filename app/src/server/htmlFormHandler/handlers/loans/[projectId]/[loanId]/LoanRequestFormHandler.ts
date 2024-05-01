@@ -15,7 +15,7 @@ import { z } from "zod";
 export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchemaType, LoansRequestParams> {
   constructor() {
     super({
-      route: LoansRequestRoute,
+      routes: [LoansRequestRoute],
       forms: [FormTypes.LoanRequest],
     });
   }
