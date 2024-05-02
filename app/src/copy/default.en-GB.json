@@ -1986,6 +1986,11 @@
         "errors": {
           "too_big": "Comments must be a maximum of {{count}} characters."
         }
+      },
+      "attachmentsCount": {
+        "errors": {
+          "too_small": "The request is only accepted when at least 1 document has been uploaded."
+        }
       }
     },
     "claimSummary": {

@@ -37,6 +37,7 @@ import { LoanRequestSchemaType, loanRequestErrorMap, loanRequestSchema } from ".
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { head } from "lodash";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useEffect } from "react";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
@@ -60,10 +61,11 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
   const { clearMessages } = useMessages();
 
   const {
-    register,
+    register: registerDocumentForm,
     handleSubmit: handleDocumentSubmit,
-    formState,
+    formState: documentFormState,
     getFieldState,
+    // watch: watchFiles,
     reset,
   } = useForm<z.output<LoanLevelUploadSchemaType>>({
     resolver: zodResolver(getLoanLevelUpload({ config: config.options }), {
@@ -87,21 +89,26 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 
   const loan = head(loans);
   if (loans.length > 1) {
-    throw new Error("something borked here with too many loans");
+    throw new Error("expected only one loan but received multiple");
   }
 
   if (!loan) {
-    throw new Error("something borked here with no loan");
+    throw new Error("could not find a matching loan");
   }
 
   const {
-    register: registerForm,
+    register,
     watch,
     handleSubmit,
+    setValue,
     setError,
+    formState,
+    trigger,
+    getFieldState: getFormFieldState,
   } = useForm<z.output<LoanRequestSchemaType>>({
     defaultValues: {
       comments: loan?.comments ?? "",
+      attachmentsCount: documents.length,
       form: FormTypes.LoanRequest,
     },
     resolver: zodResolver(loanRequestSchema, { errorMap: loanRequestErrorMap }),
@@ -113,7 +120,20 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 
   const { onUpdate, isFetching } = useOnUpdateLoanRequest(props.projectId, props.loanId, loan, loansOverviewLink.path);
   const disabled = isDeleting || isUploading || isFetching;
-  const validationErrors = useZodErrors(setError, formState?.errors);
+  const documentValidationErrors = useZodErrors(setError, documentFormState?.errors);
+  const formValidationErrors = useZodErrors(setError, formState?.errors);
+  const validationErrors = {
+    ...formValidationErrors,
+    ...documentValidationErrors,
+  };
+
+  // force validation that there is at least one document uploaded, and revalidate after submitted
+  useEffect(() => {
+    setValue("attachmentsCount", documents.length);
+    if (formState.isSubmitted) {
+      trigger();
+    }
+  }, [documents.length]);
 
   return (
     <Page
@@ -196,19 +216,20 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
             aria-disabled={disabled}
           >
             <Fieldset>
-              <input type="hidden" value={DocumentDescription.Loan} {...register("description")}></input>
-              <input type="hidden" value={props.projectId} {...register("projectId")} />
-              <input type="hidden" value={props.loanId} {...register("loanId")} />
-              <input type="hidden" value={FormTypes.LoanLevelUpload} {...register("form")} />
+              <input type="hidden" value={DocumentDescription.Loan} {...registerDocumentForm("description")}></input>
+              <input type="hidden" value={props.projectId} {...registerDocumentForm("projectId")} />
+              <input type="hidden" value={props.loanId} {...registerDocumentForm("loanId")} />
+              <input type="hidden" value={FormTypes.LoanLevelUpload} {...registerDocumentForm("form")} />
 
               <FormGroup hasError={!!getFieldState("files").error}>
                 <ValidationError error={getFieldState("files").error} />
+                <ValidationError error={getFormFieldState("attachmentsCount").error} />
                 <FileInput
                   disabled={disabled}
                   id="files"
                   hasError={!!getFieldState("files").error}
                   multiple
-                  {...register("files")}
+                  {...registerDocumentForm("files")}
                 />
               </FormGroup>
             </Fieldset>
@@ -252,17 +273,20 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
         <Section>
           <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
             <input type="hidden" value={FormTypes.LoanRequest} {...register("form")} />
+            <input type="hidden" value={documents.length} {...register("attachmentsCount")} />
 
             <Fieldset>
               <Legend>{getContent(x => x.pages.loansRequest.commentTitle)}</Legend>
               <TextAreaField
                 id="comments"
-                {...registerForm("comments")}
+                {...register("comments")}
+                error={getFormFieldState("comments").error as RhfError}
                 defaultValue={loan.comments ?? ""}
-                characterCountMax={30000}
+                characterCountMax={32768}
                 characterCount={characterCount}
                 characterCountType="ascending"
                 hint={getContent(x => x.pages.loansRequest.commentHint)}
+                disabled={disabled}
               />
             </Fieldset>
 

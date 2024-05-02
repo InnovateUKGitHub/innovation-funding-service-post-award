@@ -33,6 +33,7 @@ export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchema
     return {
       form: input.form,
       comments: input.comments ?? "",
+      attachmentsCount: input.attachmentsCount ?? 0,
     };
   }
 
