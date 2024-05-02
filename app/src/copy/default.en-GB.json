@@ -2388,6 +2388,11 @@
               "two_decimal_places": "Total cost must be 2 decimal places or fewer."
             }
           },
+          "overheadRate": {
+            "errors": {
+              "invalid_enum_value": "Select an overhead rate."
+            }
+          },
           "subcontractorCountry": {
             "errors": {
               "too_small": "Enter subcontractor country.",
