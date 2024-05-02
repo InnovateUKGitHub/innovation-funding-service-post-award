@@ -7,7 +7,7 @@ import {
   percentageNumberInput,
   requiredPositiveIntegerInput,
 } from "@ui/zod/helperValidators.zod";
-import { z } from "zod";
+import { ZodIssueCode, z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
@@ -31,7 +31,18 @@ export const overheadSchema = z
     button_submit: z.string(),
   })
   .superRefine((data, ctx) => {
-    if (data.overheadRate === PCRSpendProfileOverheadRate.Calculated) {
+    if (data.overheadRate === PCRSpendProfileOverheadRate.Unknown) {
+      ctx.addIssue({
+        code: ZodIssueCode.invalid_enum_value,
+        options: [
+          PCRSpendProfileOverheadRate.Zero,
+          PCRSpendProfileOverheadRate.Twenty,
+          PCRSpendProfileOverheadRate.Calculated,
+        ],
+        received: PCRSpendProfileOverheadRate.Unknown,
+        path: ["overheadRate"],
+      });
+    } else if (data.overheadRate === PCRSpendProfileOverheadRate.Calculated) {
       if (
         !(typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0) &&
         data.button_submit === "submit"
