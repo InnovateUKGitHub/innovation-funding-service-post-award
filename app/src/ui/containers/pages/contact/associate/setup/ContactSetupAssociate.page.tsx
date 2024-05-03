@@ -93,7 +93,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
     projectId: props.projectId,
   });
 
-  const { register, handleSubmit, setError, formState, getFieldState } = useForm<
+  const { register, handleSubmit, setError, formState, getFieldState, watch, trigger } = useForm<
     z.input<ContactSetupAssociateSchemaType>
   >({
     resolver: zodResolver(contactSetupAssociateSchema, {
@@ -106,6 +106,12 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
   const { isProcessing, apiError, onUpdate } = useOnContactSetupAssociateSubmit({
     projectId: props.projectId,
     setFetchKey,
+  });
+
+  watch(() => {
+    if (formState.isSubmitted) {
+      trigger();
+    }
   });
 
   return (
