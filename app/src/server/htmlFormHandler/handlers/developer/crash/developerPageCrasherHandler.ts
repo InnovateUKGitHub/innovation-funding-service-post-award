@@ -1,51 +1,65 @@
 import { ErrorCode } from "@framework/constants/enums";
+import { configuration } from "@server/features/common/config";
+import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   BadRequestError,
   ConfigurationError,
+  ForbiddenError,
   FormHandlerError,
   InActiveProjectError,
   NotFoundError,
   UnauthenticatedError,
-  ForbiddenError,
 } from "@shared/appError";
-import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";
-import express from "express";
-import { configuration } from "@server/features/common/config";
-import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";
+import {
+  PageCrasherValidCrashTypes,
+  PageCrasherValidationSchemaType,
+  pageCrasherValidationErrorMap,
+  pageCrasherValidationSchema,
+} from "@ui/containers/pages/developer/PageCrasher/PageCrasher.logic";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
 
-export class DeveloperPageCrasherHandler implements IFormHandler {
-  public readonly routePath = DeveloperPageCrasherPage.routePath;
-  public readonly middleware: express.RequestHandler[] = [];
+export class DeveloperPageCrasherHandler extends ZodFormHandlerBase<PageCrasherValidationSchemaType, never> {
+  constructor() {
+    super({
+      routes: configuration.sso.enabled ? "*" : [],
+      forms: [FormTypes.DeveloperPageCrasher],
+    });
+  }
 
-  public async handle({
-    req,
-    res,
-    next,
-  }: {
-    req: express.Request;
-    res: express.Response;
-    next: express.NextFunction;
-  }): Promise<void> {
-    // Pretend this handler does not exist if we happen to run it
-    // outside of a development environment.
-    if (configuration.sso.enabled) return next();
+  public acceptFiles = false;
 
-    switch (req.body.button_crashType) {
-      case "Error":
+  protected async getZodSchema() {
+    return {
+      schema: pageCrasherValidationSchema,
+      errorMap: pageCrasherValidationErrorMap,
+    };
+  }
+
+  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<PageCrasherValidationSchemaType>> {
+    return {
+      form: input.form,
+      crashType: input.crashType,
+    };
+  }
+
+  public async run({ input }: { input: z.output<PageCrasherValidationSchemaType> }): Promise<void> {
+    switch (input.crashType) {
+      case PageCrasherValidCrashTypes.Error:
         throw new Error("This page has crashed on purpose.");
-      case "NotFoundError":
+      case PageCrasherValidCrashTypes.NotFoundError:
         throw new NotFoundError();
-      case "ForbiddenError":
+      case PageCrasherValidCrashTypes.ForbiddenError:
         throw new ForbiddenError();
-      case "InActiveProjectError":
+      case PageCrasherValidCrashTypes.InActiveProjectError:
         throw new InActiveProjectError();
-      case "BadRequestError":
+      case PageCrasherValidCrashTypes.BadRequestError:
         throw new BadRequestError();
-      case "UnauthenticatedError":
+      case PageCrasherValidCrashTypes.UnauthenticatedError:
         throw new UnauthenticatedError();
-      case "ConfigurationError":
+      case PageCrasherValidCrashTypes.ConfigurationError:
         throw new ConfigurationError("This page has crashed on purpose.");
-      case "FormHandlerError":
+      case PageCrasherValidCrashTypes.FormHandlerError:
         throw new FormHandlerError("test", "test", null, null, {
           code: ErrorCode.UNKNOWN_ERROR,
           message: "This page has crashed on purpose.",
@@ -53,6 +67,6 @@ export class DeveloperPageCrasherHandler implements IFormHandler {
         });
     }
 
-    res.redirect(DeveloperPageCrasherPage.routePath);
+    return;
   }
 }

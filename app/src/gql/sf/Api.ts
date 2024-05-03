@@ -7,6 +7,7 @@ import { mapStringInObject } from "@shared/mapStringInObject";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
+import { PayloadError } from "relay-runtime";
 
 interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
@@ -25,7 +26,7 @@ export class Api {
   private readonly version: string;
   private readonly instanceUrl: string;
   private readonly accessToken: string;
-  private readonly logger: ILogger = new Logger("Salesforce");
+  private readonly logger: ILogger;
   public readonly email: string;
 
   constructor({
@@ -44,6 +45,7 @@ export class Api {
     this.instanceUrl = instanceUrl;
     this.accessToken = accessToken;
     this.email = email;
+    this.logger = new Logger("SFDC API", { prefixLines: [email] });
   }
 
   /**
@@ -127,8 +129,10 @@ export class Api {
     document,
     variables,
     decodeHTMLEntities,
-  }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
+  }: ExecutionRequest & ExecuteConfiguration): Promise<{ data: T; errors: PayloadError[] }> {
     const query = print(document);
+    const queryName = /query (\w+) {/.exec(query)?.[1];
+
     this.logger.debug("GraphQL Query", query, variables);
     // "graphql" is not part of the template string because our ESbuild/Relay GraphQL hack
     // does thinks our code is actually a query.
@@ -139,7 +143,11 @@ export class Api {
       decodeHTMLEntities,
     });
 
-    this.logger.debug("GraphQL Result", query, variables, data);
+    if (data.errors.length) {
+      this.logger.error("GraphQL Error", queryName, variables, data);
+    } else {
+      this.logger.debug("GraphQL Result", queryName, variables, data);
+    }
 
     return data;
   }

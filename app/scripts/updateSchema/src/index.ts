@@ -19,11 +19,6 @@ const getEnv = (key: string): string => {
 const main = async () => {
   const whitelist = getTypeWhitelist();
 
-  const executor: AsyncExecutor = async request => {
-    const data = await api.executeGraphQL<AnyObject>(request);
-    return data;
-  };
-
   const { accessToken, url } = await getSalesforceAccessToken({
     clientId: getEnv("SALESFORCE_CLIENT_ID"),
     connectionUrl: getEnv("SALESFORCE_CONNECTION_URL"),
@@ -36,7 +31,7 @@ const main = async () => {
     email: getEnv("SALESFORCE_USERNAME"),
   });
 
-  const salesforceSchema = await introspectSchema(executor);
+  const salesforceSchema = await introspectSchema(api.executeGraphQL as unknown as AsyncExecutor);
   const transformedSchema = {
     schema: salesforceSchema,
     transforms: [new FilterTypes(type => whitelist.includes(type.name))],

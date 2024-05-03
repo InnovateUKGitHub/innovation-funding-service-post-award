@@ -12,6 +12,9 @@ enum FormTypes {
   ClaimLineItemSaveAndDocuments = "claimLineItemSaveAndDocuments",
   ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
 
+  // Developer Options
+  DeveloperPageCrasher = "developerPageCrasher",
+
   // Project Setup
   ProjectSetupBankDetails = "projectSetupBankDetails",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",

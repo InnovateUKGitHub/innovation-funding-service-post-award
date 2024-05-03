@@ -3,7 +3,7 @@ import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { Page } from "@ui/components/bjss/Page/page";
 import { H1 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { defineRoute } from "@ui/containers/containerBase";
-import { PageCrasher } from "./PageCrasher";
+import { PageCrasher } from "./PageCrasher/PageCrasher";
 
 const PageCrasherPage = () => {
   return (

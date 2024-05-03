@@ -1,5 +1,5 @@
 import { LanguageChanger } from "@ui/containers/pages/developer/LanguageChanger";
-import { HiddenPageCrasher } from "@ui/containers/pages/developer/PageCrasher";
+import { HiddenPageCrasher } from "@ui/containers/pages/developer/PageCrasher/PageCrasher";
 import { HiddenUserSwitcher } from "@ui/containers/pages/developer/UserSwitcher";
 import { useContent } from "@ui/hooks/content.hook";
 import { H3 } from "../../atoms/Heading/Heading.variants";
