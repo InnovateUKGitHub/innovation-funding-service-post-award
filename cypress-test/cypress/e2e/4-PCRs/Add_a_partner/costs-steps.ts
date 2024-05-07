@@ -106,6 +106,9 @@ export const checkAddOverheadItem = () => {
     cy.contains(
       "If you feel your overheads are higher than 20% you may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows you which types of indirect costs associated with your project you may claim. For support with this option, please contact our Customer Support Service on 0300 321 4357. Any value claimed under this model will be subject to a review. This will assess the appropriateness of your claim if your grant application is successful.",
     );
+    cy.clickOn("Save and return to project costs");
+    cy.validationLink("Select an overhead rate.");
+    cy.paragraph("Select an overhead rate.");
     checkTotalCostEquals("£0.00");
     cy.getByLabel("0%").click();
     checkTotalCostEquals("£0.00");
