@@ -9,6 +9,7 @@ import {
   validateGrantMoving,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
+import { validateEmptyGrantMoving } from "./reallocate-steps";
 
 const projManager = "james.black@euimeabs.test";
 
@@ -85,7 +86,9 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
 
   it("Should validate the grant moving over financial year input", validateGrantMoving);
 
-  it("Clears the input and types a valid number", () => {
+  it("Should clear the input box, mark as complete and prompt a validation message", validateEmptyGrantMoving);
+
+  it("Types a valid number", () => {
     cy.get("input#grantMovingOverFinancialYear").type("10000");
   });
 

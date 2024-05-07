@@ -225,3 +225,12 @@ export const absEuiMediumCostsTable = () => {
     });
   });
 };
+
+export const validateEmptyGrantMoving = () => {
+  cy.get("input#grantMovingOverFinancialYear").clear();
+  cy.get("legend").contains("Mark as complete");
+  cy.clickCheckBox("I agree with this change");
+  cy.submitButton("Save and return to request");
+  cy.validationLink("Enter a grant moving over financial year.");
+  cy.paragraph("Enter a grant moving over financial year.");
+};
