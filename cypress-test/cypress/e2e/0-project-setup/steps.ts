@@ -383,3 +383,13 @@ export const associateUpdateAndSave = () => {
   cy.checkEntry("Month", "01");
   cy.checkEntry("Year", "2025");
 };
+
+export const validationDynamic = () => {
+  cy.getByLabel("Day").clear();
+  cy.enter("Month", "01");
+  cy.enter("Year", "2024");
+  cy.clickOn("Save and return to dashboard");
+  cy.validationLink("Enter a valid start date.");
+  cy.enter("Day", "01");
+  cy.getByQA("validation-summary").should("not.exist");
+};

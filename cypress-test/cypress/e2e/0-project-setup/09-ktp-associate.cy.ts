@@ -9,6 +9,7 @@ import {
   associateWorkingBacklink,
   displayAssociateProjectCard,
   validateDayAndMonthFields,
+  validationDynamic,
 } from "./steps";
 
 const pmEmail = "testman1@testing.com";
@@ -54,6 +55,8 @@ describe("Project setup > KTP Associate", () => {
   it("Should validate the day and month fields", validateDayAndMonthFields);
 
   it("Should validate alpha and special characters", associateValidateAlphaSpecialInput);
+
+  it("Should dynamically remove validation messaging when a valid date has been entered", validationDynamic);
 
   it("Should validate the date input fields with allowed dates and save correctly", associateValidateAllowedInput);
 
