@@ -14,6 +14,7 @@ export const editPartnerLevelSchema = z
         .object({
           newRemainingGrant: zeroOrGreaterCurrencyValidation,
           newRemainingCosts: z.number(),
+          newFundingLevel: z.number(),
           originalFundingLevel: z.number(),
           originalRemainingCosts: z.number(),
           originalRemainingGrant: z.number(),

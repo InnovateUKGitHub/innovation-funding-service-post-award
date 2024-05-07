@@ -54,7 +54,9 @@ export const getPayload = (
       if (!matchingPartner) throw new Error("cannot find matching partner id");
 
       const newRemainingGrant = Number(matchingPartner.newRemainingGrant.replace("£", ""));
-      const newFundingLevel = (newRemainingGrant / x.newRemainingCosts) * 100;
+      const newFundingLevel = !!x.newRemainingCosts
+        ? (newRemainingGrant / x.newRemainingCosts) * 100
+        : x.newFundingLevel;
 
       return {
         ...pick(x, [

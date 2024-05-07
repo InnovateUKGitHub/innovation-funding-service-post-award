@@ -96,6 +96,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
           partnerId: x.partnerId,
           newRemainingGrant: String(x.newRemainingGrant ?? 0),
           newRemainingCosts: x.newRemainingCosts,
+          newFundingLevel: x.newFundingLevel,
           originalFundingLevel: x.originalFundingLevel,
           originalRemainingCosts: x.originalRemainingCosts,
           originalRemainingGrant: x.originalRemainingGrant,
@@ -125,6 +126,9 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   const validationErrors = useZodErrors(setError, formState?.errors) as EditPartnerLevelErrors;
 
   const getNewFundingLevel = (index: number) => {
+    if (virementData.partners[index].newRemainingCosts === 0) {
+      return virementData.partners[index].newFundingLevel;
+    }
     const value = Number(watch(`partners.${index}.newRemainingGrant`));
     return (value / virementData.partners[index].newRemainingCosts) * 100;
   };
@@ -235,6 +239,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
                     />
                   </TD>
                   <TD numeric>
+                    <input type="hidden" value={x.newFundingLevel} {...register(`partners.${i}.newFundingLevel`)} />
                     <Percentage defaultIfInfinite={0} value={getNewFundingLevel(i)} />
                   </TD>
                 </TR>
