@@ -275,7 +275,6 @@ export class Context implements IContext {
    *
    * @param user The Salesforce user e-mail address
    * @returns An elevated IContext as the passed in user
-   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    */
   private elevateUserAs(user: string): IContext {
     if (this.user.email !== user) {
