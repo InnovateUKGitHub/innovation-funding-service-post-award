@@ -1,25 +1,28 @@
-import { ErrorCode } from "@framework/constants/enums";
-import { Authorisation } from "@framework/types/authorisation";
+import { DetailedErrorCode, ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
 import { IContext } from "@framework/types/IContext";
 import { IClientUser } from "@framework/types/IUser";
+import { Authorisation } from "@framework/types/authorisation";
 import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { Logger } from "@shared/developmentLogger";
+import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { App } from "@ui/containers/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
 import { FormErrorContextProvider } from "@ui/context/form-error";
+import { MessageContextProvider } from "@ui/context/messages";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { updateEditorAction, handleEditorSubmit, handleEditorError } from "@ui/redux/actions/common/editorActions";
+import { handleEditorError, handleEditorSubmit, updateEditorAction } from "@ui/redux/actions/common/editorActions";
 import { setError } from "@ui/redux/actions/common/errorActions";
+import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
+import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { setupInitialState } from "@ui/redux/initialState";
 import { setupServerMiddleware } from "@ui/redux/middleware";
 import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
-import { IClientConfig } from "../types/IClientConfig";
-import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
-import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
+import { RootState, rootReducer } from "@ui/redux/reducers/rootReducer";
+import { IStores, StoresProvider, createStores } from "@ui/redux/storesProvider";
 import { matchRoute } from "@ui/routing/matchRoute";
 import { routeConfig } from "@ui/routing/routeConfig";
 import { Result } from "@ui/validation/result";
@@ -30,18 +33,15 @@ import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
+import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 import { StaticRouter } from "react-router-dom/server";
-import { AnyAction, createStore, Store } from "redux";
+import { AnyAction, Store, createStore } from "redux";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
+import { IClientConfig } from "../types/IClientConfig";
 import { getErrorStatus } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError, ZodFormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
-import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
-import { MessageContextProvider } from "@ui/context/messages";
-import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
-import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
-import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 
 interface IServerApp {
   requestUrl: string;
@@ -215,6 +215,21 @@ const serverRender =
       // Wait until all Relay queries have been made.
       const relayData = await relayServerSSR.getCache();
       const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
+
+      const relayErrors = relayData.filter(([, data]) => data.errors && data?.errors.length > 0);
+
+      if (relayErrors.length) {
+        statusCode = 500;
+        renderUrl = routeConfig.error.getLink({}).path;
+        isErrorPage = true;
+        store.dispatch(
+          setError({
+            errorCode: ErrorCode.REQUEST_ERROR,
+            errorType: "",
+            errorDetails: [{ code: DetailedErrorCode.ACC_GRAPHQL_ERROR, data: relayErrors }],
+          }),
+        );
+      }
 
       res.status(statusCode).send(
         renderApp({

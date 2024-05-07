@@ -2,6 +2,7 @@ import { DetailedErrorCode } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks/content.hook";
 import { UL } from "../../atoms/List/list";
+import { Fragment } from "react";
 
 interface ErrorDetailProps {
   details: IAppDetailedError[];
@@ -30,6 +31,20 @@ const ErrorDetails = ({ details }: ErrorDetailProps) => {
                     x.components.errorSummary.details.SFDC_FIELD_CUSTOM_VALIDATION_EXCEPTION[detail.message](detail),
                   )}
                 </li>
+              );
+            }
+          case DetailedErrorCode.ACC_GRAPHQL_ERROR:
+            if ("data" in detail) {
+              return (
+                <Fragment key={i}>
+                  {detail.data.map(([name, query]) => (
+                    <li key={name}>
+                      {getContent(x => x.components.errorSummary.details.ACC_GRAPHQL_ERROR.invalid)}
+                      <br />
+                      <pre>{JSON.stringify(query.errors, null, 2)}</pre>
+                    </li>
+                  ))}
+                </Fragment>
               );
             }
           default:

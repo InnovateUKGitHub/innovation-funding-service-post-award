@@ -58,6 +58,9 @@
         "ACC_VALIDATION_ERROR": {
           "invalid": "{{ message }}"
         },
+        "ACC_GRAPHQL_ERROR": {
+          "invalid": "Something has gone wrong and we could not retrieve information for this page."
+        },
         "SFDC_SF_UPDATE_ALL_FAILURE": {
           "invalid": "Something went wrong and we could not update your forecast. Please click \u2018Save and return to project setup\u2019 again."
         },
