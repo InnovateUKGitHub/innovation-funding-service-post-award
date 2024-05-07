@@ -40,7 +40,7 @@ abstract class ZodFormHandlerBase<
   constructor({ routes, forms }: { routes: IRouteDefinition<QueryParams>[] | "*"; forms: FormTypes[] }) {
     this.routes = routes;
     this.routePath = routes === "*" ? ["*"] : routes.map(x => x.routePath);
-    this.logger = new Logger(`Zod Form Handler`);
+    this.logger = new Logger("Zod Form Handler");
     this.forms = forms;
     this.copy = new Copy();
   }
@@ -66,6 +66,8 @@ abstract class ZodFormHandlerBase<
       // If this form handler does not accept this form, skip to the next handler
       if (!this.forms.includes(req.body.form)) return next();
 
+      this.logger.debug(`Form ${req.body.form} matches this form handler`);
+
       // Only map `req.files` to ServerFileWrapper if the form handler requests it
       const files = this.acceptFiles && Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
 
@@ -81,7 +83,7 @@ abstract class ZodFormHandlerBase<
         context,
       });
 
-      this.logger.debug(req.url, userInput);
+      this.logger.trace(req.url, userInput);
 
       // TODO: Make `mapToRedirect` accept the Zod output instead of the req.body
       const { schema, errorMap } = await this.getZodSchema({
@@ -114,11 +116,10 @@ abstract class ZodFormHandlerBase<
       }
     } catch (e) {
       if (e instanceof ZodError) {
-        this.logger.debug("Failed to parse Zod input.", userInput, e);
-        console.error("Failed to parse Zod input.", userInput, e);
+        this.logger.error("Failed to parse Zod input.", userInput, e);
         next(new ZodFormHandlerError(userInput, e.message, e.issues));
       } else if (e instanceof ValidationError) {
-        this.logger.debug("Failed to execute Zod form handler due to ValidationError", userInput, e);
+        this.logger.error("Failed to execute Zod form handler due to ValidationError", userInput, e);
         next(new ZodFormHandlerError(userInput, e.message, convertResultErrorsToZodFormat(e.results.errors)));
       } else {
         this.logger.error("Failed to execute Zod form handler.", e);

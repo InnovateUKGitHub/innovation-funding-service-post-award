@@ -5,7 +5,7 @@ import { IFormHandler } from "./formHandlerBase";
 import { serverRender } from "@server/serverRender";
 import { GraphQLSchema } from "graphql";
 
-export class PostFormHandleHandler implements IFormHandler {
+export class FallbackFormHandler implements IFormHandler {
   public logger = new Logger("Bad Request");
   public routePath = "*";
   public middleware = [];
