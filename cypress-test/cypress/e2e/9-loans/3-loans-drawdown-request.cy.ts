@@ -9,6 +9,8 @@ import {
   requestDrawdown,
   sendYourRequestSection,
   uploadApprovalGuidance,
+  submitWithoutDocExceedChar,
+  deleteAllCharSubmitWith4,
 } from "./steps";
 import {
   learnFiles,
@@ -21,6 +23,8 @@ import {
 } from "common/fileComponentTests";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { seconds } from "common/seconds";
+import { fileTidyUp } from "common/filetidyup";
+import { loremIpsum32k, loremIpsum33k } from "common/lorem";
 
 const fcEmail = "wed.addams@test.test.co.uk";
 
@@ -80,9 +84,26 @@ describe("Loans project > Drawdown request", () => {
     fcFileUploadedSection,
   );
 
-  it("Should delete the file just uploaded", deleteFile);
+  it("Should delete the file just uploaded", () => fileTidyUp("Wednesday Addams"));
 
   it("Should have an additional information section and enter comments into the text box", additionalInfo);
 
+  it("Should validate the text area to 32768k characters", () => {
+    cy.get("textarea").invoke("val", loremIpsum33k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}t");
+    cy.get("textarea").type("{moveToEnd}{backSpace}");
+    cy.paragraph("You have 32769 characters");
+  });
+
   it("Should have a 'Now send your request' section with 'Accept and send' button", sendYourRequestSection);
+
+  it(
+    "Should attempt to submit the Drawdown without a document and too many characters, which prompts validation",
+    submitWithoutDocExceedChar,
+  );
+
+  it(
+    "Should delete all characters and enter a four-letter word prompting minimum validation",
+    deleteAllCharSubmitWith4,
+  );
 });

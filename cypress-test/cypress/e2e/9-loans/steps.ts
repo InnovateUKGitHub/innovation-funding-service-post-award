@@ -35,7 +35,7 @@ export const drawdownCard = () => {
 };
 
 export const drawdownTable = () => {
-  ["Drawdown", "Due date", "Drawdown Amount", "Status"].forEach((header, index) => {
+  ["Drawdown", "Due date", "Drawdown amount", "Status"].forEach((header, index) => {
     cy.get("tr")
       .eq(0)
       .within(() => {
@@ -64,7 +64,9 @@ export const drawdownTable = () => {
 };
 
 export const requestDrawdown = () => {
+  cy.intercept("GET", "/api/projects/*").as("drawdownPage");
   cy.get("a").contains("Request").click();
+  cy.wait("@drawdownPage");
   cy.heading("Drawdown");
 };
 
@@ -104,7 +106,7 @@ export const drawdownRequestTable = () => {
       .within(() => {
         cy.get(`th:nth-child(${index + 1})`).contains(requestCat);
       });
-    ["1", "2021", "£10,000", "£115,000", "£0", "£10,000", "£105,000"].forEach((value, index) => {
+    ["1", "2021", "£10,000.00", "£115,000.00", "£0.00", "£10,000.00", "£105,000.00"].forEach((value, index) => {
       cy.get("tr")
         .eq(1)
         .within(() => {
@@ -122,7 +124,7 @@ export const uploadApprovalGuidance = () => {
 export const drawdownFileUpload = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
-  cy.validationNotification("file has been uploaded");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const projCostsFileUpload = () => {
@@ -134,11 +136,14 @@ export const projCostsFileUpload = () => {
 export const fcFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
   cy.paragraph("All documents uploaded will be shown here.");
-  ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
-    docTableItem => {
-      cy.getByQA("loan-documents-editor-container").contains(docTableItem);
-    },
-  );
+  cy.getByQA("prepare-item-file-for-partner-documents-container").within(() => {
+    ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
+      cy.get(`th:nth-child(${index + 1})`).contains(header);
+    });
+  });
+  ["testfile.doc", "Drawdown approval", uploadDate, "0KB", "Wednesday Addams"].forEach((rowItem, index) => {
+    cy.get(`td:nth-child(${index + 1})`).contains(rowItem);
+  });
 };
 
 export const projCostsSelectFileDescription = () => {
@@ -189,14 +194,14 @@ export const deleteFile = () => {
 };
 
 export const additionalInfo = () => {
-  cy.get("h2").contains("Additional information (Optional)");
-  cy.paragraph("If you want to explain anything to Innovate UK, add it here.");
-  cy.getByQA("info-text-area").clear().type(standardComments);
-  cy.getByQA("field-comments").contains("You have 74 characters");
+  cy.get("legend").contains("Additional information (Optional)");
+  cy.get("#hint-for-comments").contains("If you want to explain anything to Innovate UK, add it here.");
+  cy.get("textarea").clear().type(standardComments);
+  cy.paragraph("You have 74 characters");
 };
 
 export const sendYourRequestSection = () => {
-  cy.get("h2").contains("Now send your request");
+  cy.get("legend").contains("Now send your request");
   cy.paragraph("By submitting this drawdown request I confirm that");
   cy.submitButton("Accept and send");
 };
@@ -951,4 +956,21 @@ export const backoutAndDelete = () => {
   cy.heading("Delete draft request");
   cy.button("Delete request").click();
   cy.heading("Project change requests");
+};
+
+export const submitWithoutDocExceedChar = () => {
+  cy.submitButton("Accept and send").click();
+  cy.validationLink("The request is only accepted when at least 1 document has been uploaded.");
+  cy.paragraph("The request is only accepted when at least 1 document has been uploaded.");
+  cy.validationLink("Comments must be a maximum of 32768 characters.");
+  cy.paragraph("Comments must be a maximum of 32768 characters.");
+};
+
+export const deleteAllCharSubmitWith4 = () => {
+  cy.get("textarea").clear().type("test");
+  cy.submitButton("Accept and send").click();
+  cy.validationLink("The request is only accepted when at least 1 document has been uploaded.");
+  cy.paragraph("The request is only accepted when at least 1 document has been uploaded.");
+  cy.validationLink("You must enter at least 5 characters as a comment.");
+  cy.paragraph("You must enter at least 5 characters as a comment.");
 };
