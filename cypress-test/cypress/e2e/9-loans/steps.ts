@@ -941,21 +941,46 @@ export const addRemainingPcrTypes = () => {
 export const backOutCreateProjectOnHold = () => {
   cy.backLink("Back to project change requests").click();
   cy.heading("Project change requests");
-  cy.get("a").contains("Create request").click();
-  cy.heading("Start a new request");
-  cy.getByLabel("Put project on hold").check();
-  cy.wait(500);
-  cy.button("Create request").click();
-  cy.heading("Request");
+  cy.getByQA("validation-message-content").contains(
+    "A new project change request cannot be created at this time because all available types are already in use. Existing requests must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
+  );
+  [
+    "Loan Drawdown Change",
+    "Reallocate project costs",
+    "Change project scope",
+    "Put project on hold",
+    "Change Loans Duration",
+  ].forEach(pcr => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(2)").contains(pcr);
+      });
+  });
+  cy.get("main").within(() => {
+    cy.get("button").should("not.contain", "Create request");
+  });
 };
 
-export const backoutAndDelete = () => {
-  cy.backLink("Back to project change requests").click();
-  cy.heading("Project change requests");
-  cy.get("a").contains("Delete").click();
-  cy.heading("Delete draft request");
-  cy.button("Delete request").click();
-  cy.heading("Project change requests");
+export const learnWhyPCRTypesMissing = () => {
+  cy.get("details").should("not.have.attr", "open");
+  cy.clickOn("Learn about why some PCR types are missing");
+  cy.get("details").should("have.attr", "open");
+  cy.paragraph("Some types are unavailable because they have already been added to another PCR.");
+  cy.paragraph(
+    "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
+  );
+  [
+    "Change Loans Duration",
+    "Change project scope",
+    "Loan Drawdown Change",
+    "Put project on hold",
+    "Reallocate project costs",
+  ].forEach(list => {
+    cy.list(list);
+  });
+  cy.clickOn("Learn about why some PCR types are missing");
+  cy.get("details").should("not.have.attr", "open");
 };
 
 export const submitWithoutDocExceedChar = () => {

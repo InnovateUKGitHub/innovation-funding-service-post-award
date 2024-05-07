@@ -3,8 +3,8 @@ import { visitApp } from "../../common/visit";
 import {
   addRemainingPcrTypes,
   backOutCreateProjectOnHold,
-  backoutAndDelete,
   createReallocatePartnerPcr,
+  learnWhyPCRTypesMissing,
 } from "./steps";
 const pmEmail = "james.black@euimeabs.test";
 
@@ -34,11 +34,13 @@ describe("Loans project > PCR", () => {
     cy.get("a").contains("Add types").should("not.exist");
   });
 
-  it("Should back out of this PCR and create a new one containing 'Put project on hold'", backOutCreateProjectOnHold);
+  it(
+    "Should back out of this PCR and assert that it is not possible to create another 'Put project on hold'",
+    backOutCreateProjectOnHold,
+  );
 
-  it("Add types link should no longer exist", () => {
-    cy.get("a").contains("Add types").should("not.exist");
+  it("Should have a greyed out Create request button", () => {
+    cy.get("a").should("not.contain", "Create request");
+    cy.contains("span", "Create request");
   });
-
-  it("Should back all the way out and delete this PCR", backoutAndDelete);
 });
