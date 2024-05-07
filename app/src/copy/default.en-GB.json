@@ -2691,6 +2691,7 @@
               "string": "Enter a grant moving over financial year.",
               "number": "Grant moving over financial year cannot be less than £0."
             },
+            "required": "Enter a grant moving over financial year.",
             "too_big": {
               "number": "Grant moving over financial year must be less than {{ count, currency }}."
             },
