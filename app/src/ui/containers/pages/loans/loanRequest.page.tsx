@@ -73,14 +73,22 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
     }),
   });
 
-  const { onUpdate: onFileDelete, isProcessing: isDeleting } = useOnDelete({
+  const {
+    onUpdate: onFileDelete,
+    isProcessing: isDeleting,
+    apiError: deleteApiError,
+  } = useOnDelete({
     async onSuccess() {
       await refresh();
       reset();
     },
   });
 
-  const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
+  const {
+    onUpdate: onFileUpload,
+    isProcessing: isUploading,
+    apiError: uploadApiError,
+  } = useOnUpload({
     async onSuccess() {
       await refresh();
       reset();
@@ -118,7 +126,12 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 
   const loansOverviewLink = props.routes.loansSummary.getLink({ projectId: props.projectId });
 
-  const { onUpdate, isFetching } = useOnUpdateLoanRequest(props.projectId, props.loanId, loan, loansOverviewLink.path);
+  const { onUpdate, isFetching, apiError } = useOnUpdateLoanRequest(
+    props.projectId,
+    props.loanId,
+    loan,
+    loansOverviewLink.path,
+  );
   const disabled = isDeleting || isUploading || isFetching;
   const documentValidationErrors = useZodErrors(setError, documentFormState?.errors);
   const formValidationErrors = useZodErrors(setError, formState?.errors);
@@ -144,6 +157,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
       }
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
+      apiError={apiError || deleteApiError || uploadApiError}
     >
       <Messages messages={props.messages} />
 

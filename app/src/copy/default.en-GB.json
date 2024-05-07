@@ -1984,6 +1984,7 @@
     "loanRequest": {
       "comments": {
         "errors": {
+          "too_small": "You must enter at least {{count}} characters as a comment.",
           "too_big": "Comments must be a maximum of {{count}} characters."
         }
       },

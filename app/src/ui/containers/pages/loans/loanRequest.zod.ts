@@ -5,7 +5,7 @@ import { z } from "zod";
 export const loanRequestErrorMap = makeZodI18nMap({ keyPrefix: ["loanRequest"] });
 
 export const loanRequestSchema = z.object({
-  comments: z.string().max(32768),
+  comments: z.string().min(5).max(32768),
   attachmentsCount: z.number().min(1),
   form: z.literal(FormTypes.LoanRequest),
 });
