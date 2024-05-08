@@ -251,7 +251,7 @@ const integerInput = z.union([
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         params: {
-          i18n: "not_integer",
+          i18n: "errors.not_integer",
         },
       });
     }
@@ -514,6 +514,16 @@ const dateValidation = z
     }
   });
 
+const integerRangeInput = (min: number, max: number) =>
+  integerInput.superRefine((n, ctx) => {
+    if (n === null) {
+      return ctx.addIssue({ code: ZodIssueCode.invalid_type, expected: "number", received: "null" });
+    }
+    if (!(n >= min && n <= max)) {
+      return ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.invalid_range", min, max } });
+    }
+  });
+
 export {
   projectIdValidation,
   pcrIdValidation,
@@ -530,6 +540,7 @@ export {
   claimIdValidation,
   costCategoryIdValidation,
   integerInput,
+  integerRangeInput,
   numberInput,
   percentageNumberInput,
   positiveNumberInput,
