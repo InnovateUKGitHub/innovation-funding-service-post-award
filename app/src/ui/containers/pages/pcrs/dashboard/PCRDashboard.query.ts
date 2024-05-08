@@ -11,11 +11,17 @@ const pcrDashboardQuery = graphql`
               node {
                 Id
                 isActive
+                Acc_CompetitionType__c {
+                  value
+                }
                 Acc_ProjectNumber__c {
                   value
                 }
                 Acc_ProjectTitle__c {
                   value
+                }
+                Acc_ProjectParticipantsProject__r {
+                  totalCount
                 }
               }
             }

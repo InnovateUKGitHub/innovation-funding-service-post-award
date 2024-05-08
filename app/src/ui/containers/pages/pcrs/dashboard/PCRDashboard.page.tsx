@@ -22,6 +22,8 @@ import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
 import { useProjectSuspensionMessageWithFragmentData } from "@ui/components/atomicDesign/organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.logic";
 import { PartnerStatus } from "@framework/constants/partner";
+import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
+import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -38,7 +40,7 @@ type PCRDashboardType = Merge<
 const PCRTable = createTypedTable<PCRDashboardType>();
 
 const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
-  const { project, pcrs, fragmentRef } = usePcrDashboardQuery(props.projectId);
+  const { project, pcrs, fragmentRef, numberOfPartners } = usePcrDashboardQuery(props.projectId);
   const { getContent } = useContent();
   const { getPcrItemContent, getPcrItemMetadata } = useGetPcrItemMetadata();
   const { getPcrStatusName, getPcrStatusMetadata, getPcrInternalStatusName } = useGetPcrStatusMetadata();
@@ -47,6 +49,12 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     partners,
   } = useProjectSuspensionMessageWithFragmentData(fragmentRef);
   const { isMo, isPmOrMo } = getAuthRoles(roles);
+  const availablePcrItems = usePcrItemsForThisCompetition(
+    mapToSalesforceCompetitionTypes(project.competitionType),
+    pcrs,
+    undefined,
+    numberOfPartners,
+  );
 
   const isPmAllowedToEdit = partnerRoles.some(
     x => x.isPm && partners.some(y => x.partnerId === y.id && y.partnerStatus !== PartnerStatus.OnHold),
@@ -54,6 +62,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 
   const renderStartANewRequestLink = () => {
     if (!isPmAllowedToEdit) return null;
+    if (availablePcrItems.every(x => x.disabled)) return null;
 
     return (
       <Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })} className="govuk-button">

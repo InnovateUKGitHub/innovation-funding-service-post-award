@@ -25,7 +25,15 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["id", "projectNumber", "roles", "title", "status", "isActive"]);
+  const project = mapToProjectDto(projectNode, [
+    "id",
+    "projectNumber",
+    "roles",
+    "title",
+    "status",
+    "isActive",
+    "competitionType",
+  ]);
 
   const pcrs = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
@@ -34,9 +42,12 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
     {},
   );
 
+  const numberOfPartners = projectNode?.Acc_ProjectParticipantsProject__r?.totalCount ?? 0;
+
   return {
     project,
     pcrs,
+    numberOfPartners,
     fragmentRef: data.salesforce.uiapi,
   };
 };
