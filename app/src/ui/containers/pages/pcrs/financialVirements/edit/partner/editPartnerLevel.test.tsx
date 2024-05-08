@@ -5,7 +5,7 @@ import { useChangeRemainingGrantContent } from "./editPartnerLevel.page";
 
 const stubContent = {
   pages: {
-    financialVirementEditPartnerLevel: {
+    changeRemainingGrant: {
       saveButton: "stub-saveButton",
       remainingGrantInfo: {
         intro: "stub-remainingGrantInfoIntro",
@@ -50,12 +50,12 @@ describe("useEditPartnerLevelContent()", () => {
       property,
     }: {
       name: string;
-      property: keyof typeof stubContent.pages.financialVirementEditPartnerLevel.remainingGrantInfo;
+      property: keyof typeof stubContent.pages.changeRemainingGrant.remainingGrantInfo;
     }) => {
       const { result } = renderPageContent();
 
       const content = (result.current as unknown as Record<string, string>)[name];
-      const expectedContent = stubContent.pages.financialVirementEditPartnerLevel.remainingGrantInfo[property];
+      const expectedContent = stubContent.pages.changeRemainingGrant.remainingGrantInfo[property];
 
       expect(content).toBe(expectedContent);
     },
@@ -88,6 +88,6 @@ describe("useEditPartnerLevelContent()", () => {
     const { result } = renderPageContent();
     const content = result.current.saveButton;
 
-    expect(content).toBe(stubContent.pages.financialVirementEditPartnerLevel.saveButton);
+    expect(content).toBe(stubContent.pages.changeRemainingGrant.saveButton);
   });
 });
