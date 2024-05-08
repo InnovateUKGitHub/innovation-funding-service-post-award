@@ -634,7 +634,7 @@
       "summaryTitle": "Summary of project costs",
       "saveButton": "Save and return to reallocate project costs"
     },
-    "financialVirementEditPartnerLevel": {
+    "changeRemainingGrant": {
       "title": "Change remaining grant",
       "saveButton": "Save and return to reallocate project costs",
       "remainingGrantInfo": {
@@ -2783,7 +2783,7 @@
           }
         }
       },
-      "editPartnerLevel": {
+      "changeRemainingGrant": {
         "partners": {
           "arrayType": {
             "newRemainingGrant": {

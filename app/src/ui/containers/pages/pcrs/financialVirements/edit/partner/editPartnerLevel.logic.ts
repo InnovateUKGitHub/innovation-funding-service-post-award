@@ -1,12 +1,12 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { roundCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { pick, sumBy } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
-import { EditPartnerLevelSchema } from "./editPartnerLevel.zod";
+import { ChangeRemainingGrantSchema } from "./editPartnerLevel.zod";
 
-export const useOnUpdatePartnerLevel = (
+export const useOnUpdateChangeRemainingGrant = (
   projectId: ProjectId,
   pcrId: PcrId,
   pcrItemId: PcrItemId,
@@ -27,12 +27,19 @@ export const useOnUpdatePartnerLevel = (
   });
 };
 
+export const getNewFundingLevel = (newRemainingCosts: number, newRemainingGrant: number, newFundingLevel: number) => {
+  if (!newRemainingGrant) {
+    return newFundingLevel;
+  }
+  return (newRemainingGrant / newRemainingCosts) * 100;
+};
+
 export const getPayload = (
-  data: EditPartnerLevelSchema,
+  data: ChangeRemainingGrantSchema,
   virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
   itemId: PcrItemId,
 ) => {
-  const newRemainingGrantTotal = roundCurrency(sumBy(data.partners, x => Number(x.newRemainingGrant.replace("£", ""))));
+  const newRemainingGrantTotal = roundCurrency(sumBy(data.partners, x => parseCurrency(x.newRemainingGrant)));
 
   const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
 
@@ -54,9 +61,8 @@ export const getPayload = (
       if (!matchingPartner) throw new Error("cannot find matching partner id");
 
       const newRemainingGrant = Number(matchingPartner.newRemainingGrant.replace("£", ""));
-      const newFundingLevel = !!x.newRemainingCosts
-        ? (newRemainingGrant / x.newRemainingCosts) * 100
-        : x.newFundingLevel;
+
+      const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newRemainingGrant, x.newFundingLevel);
 
       return {
         ...pick(x, [

@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
-import { useEditPartnerLevelContent } from "./editPartnerLevel.page";
+import { useChangeRemainingGrantContent } from "./editPartnerLevel.page";
 
 const stubContent = {
   pages: {
@@ -29,7 +29,7 @@ const stubContent = {
 };
 
 const renderPageContent = () => {
-  return renderHook(useEditPartnerLevelContent, hookTestBed({}));
+  return renderHook(useChangeRemainingGrantContent, hookTestBed({}));
 };
 
 describe("useEditPartnerLevelContent()", () => {

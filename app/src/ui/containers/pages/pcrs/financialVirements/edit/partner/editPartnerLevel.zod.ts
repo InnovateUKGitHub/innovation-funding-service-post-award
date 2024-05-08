@@ -4,11 +4,11 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { partnerIdValidation, zeroOrGreaterCurrencyValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "editPartnerLevel"] });
+export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "changeRemainingGrant"] });
 
-export const editPartnerLevelSchema = z
+export const changeRemainingGrantSchema = z
   .object({
-    form: z.literal(FormTypes.PcrFinancialVirementEditRemainingGrant),
+    form: z.literal(FormTypes.PcrReallocateCostsChangeRemainingGrant),
     partners: z.array(
       z
         .object({
@@ -49,5 +49,5 @@ export const editPartnerLevelSchema = z
     }
   });
 
-export type EditPartnerLevelSchemaType = typeof editPartnerLevelSchema;
-export type EditPartnerLevelSchema = z.infer<EditPartnerLevelSchemaType>;
+export type ChangeRemainingGrantSchemaType = typeof changeRemainingGrantSchema;
+export type ChangeRemainingGrantSchema = z.infer<ChangeRemainingGrantSchemaType>;

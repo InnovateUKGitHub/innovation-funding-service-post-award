@@ -29,7 +29,7 @@ import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectI
 import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestFormHandler";
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddTypeHandler.handler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
-import { VirementPartnerCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/virementPartnerCostsUpdateHandler";
+import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdateHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentDeleteHandler";
 import { ProjectChangeRequestItemDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentUploadHandler";
 import { ProjectChangeRequestItemUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemUpdateHandler";
@@ -110,7 +110,7 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
   new VirementLoanEditHandler(),
-  new VirementPartnerCostsUpdateHandler(),
+  new ChangeRemainingGrantUpdateHandler(),
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
   new ProjectSetupSpendProfileFormHandler(),

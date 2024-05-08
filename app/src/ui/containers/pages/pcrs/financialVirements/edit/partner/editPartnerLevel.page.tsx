@@ -14,11 +14,11 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { useForm } from "react-hook-form";
-import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
+import { ChangeRemainingGrantSchema, changeRemainingGrantSchema, errorMap } from "./editPartnerLevel.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { sumBy } from "lodash";
-import { useOnUpdatePartnerLevel, getPayload } from "./editPartnerLevel.logic";
+import { useOnUpdateChangeRemainingGrant, getPayload } from "./editPartnerLevel.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -27,21 +27,15 @@ import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 /**
  * Hook returns content for edit partner view
  */
-export function useEditPartnerLevelContent() {
+export function useChangeRemainingGrantContent() {
   const { getContent } = useContent();
 
   return {
-    saveButton: getContent(x => x.pages.financialVirementEditPartnerLevel.saveButton),
-    remainingGrantInfoIntro: getContent(x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.intro),
-    remainingGrantInfoCheckRules: getContent(
-      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.checkRules,
-    ),
-    remainingGrantInfoRemainingGrant: getContent(
-      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.remainingGrant,
-    ),
-    remainingGrantInfoFundingLevel: getContent(
-      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.fundingLevel,
-    ),
+    saveButton: getContent(x => x.pages.changeRemainingGrant.saveButton),
+    remainingGrantInfoIntro: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.intro),
+    remainingGrantInfoCheckRules: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.checkRules),
+    remainingGrantInfoRemainingGrant: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.remainingGrant),
+    remainingGrantInfoFundingLevel: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.fundingLevel),
     partnerName: getContent(x => x.financialVirementLabels.partnerName),
     partnerOriginalRemainingCosts: getContent(x => x.financialVirementLabels.partnerOriginalRemainingCosts),
     partnerOriginalRemainingGrant: getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant),
@@ -60,12 +54,12 @@ export interface FinancialVirementParams {
   itemId: PcrItemId;
 }
 
-type EditPartnerLevelErrors = {
+type ChangeRemainingGrantErrors = {
   virements: { newRemainingGrant: RhfError }[];
   newRemainingGrant: RhfError;
 };
 
-const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
+const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) => {
   const {
     project,
     financialVirementsForParticipants,
@@ -78,7 +72,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
     pcrId: props.pcrId,
     itemId: props.itemId,
   });
-  const content = useEditPartnerLevelContent();
+  const content = useChangeRemainingGrantContent();
 
   const { virementData } = useMapFinancialVirements({
     financialVirementsForCosts,
@@ -89,9 +83,9 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   });
 
   const { register, watch, setError, formState, handleSubmit, getFieldState, setValue } =
-    useForm<EditPartnerLevelSchema>({
+    useForm<ChangeRemainingGrantSchema>({
       defaultValues: {
-        form: FormTypes.PcrFinancialVirementEditRemainingGrant,
+        form: FormTypes.PcrReallocateCostsChangeRemainingGrant,
         partners: virementData.partners.map(x => ({
           partnerId: x.partnerId,
           newRemainingGrant: String(x.newRemainingGrant ?? 0),
@@ -105,7 +99,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
         newRemainingGrant: virementData.newRemainingGrant,
         newRemainingCosts: virementData.newRemainingCosts,
       },
-      resolver: zodResolver(editPartnerLevelSchema, {
+      resolver: zodResolver(changeRemainingGrantSchema, {
         errorMap,
       }),
     });
@@ -116,14 +110,14 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
     itemId: props.itemId,
   }).path;
 
-  const { isFetching, onUpdate, apiError } = useOnUpdatePartnerLevel(
+  const { isFetching, onUpdate, apiError } = useOnUpdateChangeRemainingGrant(
     props.projectId,
     props.pcrId,
     props.itemId,
     navigateTo,
   );
 
-  const validationErrors = useZodErrors(setError, formState?.errors) as EditPartnerLevelErrors;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ChangeRemainingGrantErrors;
 
   const getNewFundingLevel = (index: number) => {
     if (virementData.partners[index].newRemainingCosts === 0) {
@@ -173,7 +167,7 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
             }),
           )}
         >
-          <input type="hidden" value={FormTypes.PcrFinancialVirementEditRemainingGrant} {...register("form")} />
+          <input type="hidden" value={FormTypes.PcrReallocateCostsChangeRemainingGrant} {...register("form")} />
           <input type="hidden" value={virementData.originalRemainingGrant} {...register("originalRemainingGrant")} />
           <input type="hidden" value={virementData.newRemainingGrant} {...register("newRemainingGrant")} />
           <input type="hidden" value={virementData.newRemainingCosts} {...register("newRemainingCosts")} />
@@ -284,14 +278,14 @@ const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
   );
 };
 
-export const FinancialVirementEditPartnerLevelRoute = defineRoute({
-  routeName: "financial-virement-edit-partner-level",
+export const ChangeRemainingGrantRoute = defineRoute({
+  routeName: "change-remaining-grant",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/partner",
-  container: EditPartnerLevelPage,
+  container: ChangeRemainingGrantPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
   }),
-  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEditPartnerLevel.title),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.changeRemainingGrant.title),
 });
