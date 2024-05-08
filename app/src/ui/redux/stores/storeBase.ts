@@ -4,7 +4,6 @@ import { EditorStatus } from "@ui/redux/constants/enums";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
 import { LoadingStatus } from "@framework/constants/enums";
-import { IClientUser } from "@framework/types/IUser";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { DataLoadAction, dataLoadAction } from "../actions/common/dataLoad";
 import {
@@ -22,6 +21,7 @@ import { RootActionsOrThunk } from "../actions/root";
 import { IDataStore, DataStateKeys } from "../reducers/dataReducer";
 import { IEditorStore, EditorStateKeys } from "../reducers/editorsReducer";
 import { DataState, RootState, EditorState } from "../reducers/rootReducer";
+import { IRequest } from "@framework/types/IRequest";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
@@ -36,7 +36,7 @@ const conditionalLoad = <
 >(
   store: T,
   key: K,
-  load: (params: { user: IClientUser }) => Promise<TDto>,
+  load: (params: IRequest) => Promise<TDto>,
 ) => {
   // dispatch a thunk to get latest store...
   return (dispatch: (action: DataLoadAction) => void, getState: () => RootState) => {
@@ -63,7 +63,7 @@ const conditionalSave = <
   key: K,
   dto: TDto,
   getValidator: (show: boolean) => Pending<TVal> | TVal,
-  saveCall: (params: { user: IClientUser }) => Promise<TResult>,
+  saveCall: (params: IRequest) => Promise<TResult>,
   onComplete?: (result: TResult) => void,
   onError?: (e: unknown) => void,
 ) => {
@@ -118,7 +118,7 @@ const conditionalDelete = <
   key: K,
   dto: TDto,
   getValidator: () => Pending<TVal> | TVal,
-  deleteCall: (params: { user: IClientUser }) => Promise<TResult>,
+  deleteCall: (params: IRequest) => Promise<TResult>,
   onComplete: (result: TResult) => void,
 ) => {
   // dispatch a thunk to get latest store...
@@ -164,7 +164,7 @@ export class StoreBase {
     T extends DataStateKeys,
     K extends keyof DataState[T],
     TDto extends InferDataStore<DataState[T][K]>,
-  >(store: T, key: K, load: (params: { user: IClientUser }) => Promise<TDto>): Pending<TDto> {
+  >(store: T, key: K, load: (params: IRequest) => Promise<TDto>): Pending<TDto> {
     const existing = this.getState().data[store]?.[key as string];
     if (!existing || statesToReload.indexOf(existing.status) !== -1) {
       this.queue(conditionalLoad(store, key, load));
@@ -234,7 +234,7 @@ export class StoreBase {
     key: K,
     dto: TDto,
     getValidator: (showErrors: boolean) => Pending<TVal> | TVal,
-    saveCall: (p: { user: IClientUser }) => Promise<TResult>,
+    saveCall: (p: IRequest) => Promise<TResult>,
     onComplete?: (result: TResult) => void,
     onError?: (e: unknown) => void,
   ) {
@@ -252,7 +252,7 @@ export class StoreBase {
     key: K,
     dto: TDto,
     getValidator: () => Pending<TVal> | TVal,
-    deleteCall: (p: { user: IClientUser }) => Promise<TResult>,
+    deleteCall: (p: IRequest) => Promise<TResult>,
     onComplete: (result: TResult) => void,
   ) {
     this.queue(

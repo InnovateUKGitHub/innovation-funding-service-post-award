@@ -29,6 +29,7 @@ export interface RootState {
   loadStatus: number;
   messages: MessagesState;
   user: IClientUser;
+  requestId: string;
   config: IClientConfig;
   globalError: ErrorPayload["params"] | null;
   zodError: ZodIssue[];
@@ -42,6 +43,7 @@ export const rootReducer = combineReducers<RootState>({
   loadStatus: loadStatusReducer,
   messages: messagesReducer,
   user: userReducer,
+  requestId: <T>(a: T): T => a,
   config: configReducer,
   globalError: errorReducer,
   zodError: zodErrorReducer,

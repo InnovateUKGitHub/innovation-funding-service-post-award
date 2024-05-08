@@ -16,6 +16,7 @@ import { developmentRouter } from "@server/developmentReloader";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
+import { loggerSetupMiddleware } from "./loggerMiddleware";
 
 export class Server {
   private readonly app: express.Express;
@@ -124,6 +125,7 @@ export class Server {
   private async routing(): Promise<void> {
     this.app.use(this.setNonceValue);
     this.app.use(this.preloadReduxActions);
+    this.app.use(loggerSetupMiddleware);
     this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
     this.app.use(useBasicAuth);
     this.app.use(noCache, noAuthRouter);

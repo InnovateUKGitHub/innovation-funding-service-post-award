@@ -3,6 +3,7 @@ declare namespace Express {
     nonce: string;
     isMatchedRoute?: boolean;
     isFormSuccess?: boolean;
+    requestId: string;
     preloadedReduxActions: { type: string; payload?: unknown }[];
   }
 }

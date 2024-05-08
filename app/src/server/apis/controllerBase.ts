@@ -39,6 +39,7 @@ export class ServerFileWrapper implements IFileWrapper {
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
   user: ISessionUser;
+  requestId: string;
 }
 
 export type ApiParams<Context extends "client" | "server", T = undefined> = T extends undefined

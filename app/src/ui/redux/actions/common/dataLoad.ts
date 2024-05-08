@@ -1,8 +1,8 @@
 import { LoadingStatus } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
-import { IClientUser } from "@framework/types/IUser";
 import { IDataSelector } from "@ui/redux/selectors/common/data";
 import { AsyncThunk, createAction } from "./createAction";
+import { IRequest } from "@framework/types/IRequest";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
@@ -22,7 +22,7 @@ export function dataLoadAction(id: string, store: string, status: LoadingStatus,
  */
 export function conditionalLoad<T>(
   selector: IDataSelector<T>,
-  load: (params: { user: IClientUser }) => Promise<T>,
+  load: (params: IRequest) => Promise<T>,
 ): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => {
     const state = getState();
