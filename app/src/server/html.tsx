@@ -50,6 +50,7 @@ export function renderHtml({
   formError,
   apiError,
   clientConfig,
+  jsDisabled,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -59,6 +60,7 @@ export function renderHtml({
   formError: Result[] | undefined;
   apiError: IAppError | undefined;
   clientConfig: IClientConfig;
+  jsDisabled: boolean;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -110,7 +112,7 @@ export function renderHtml({
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
     configuration.build
   }"></script>
-          <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
+         ${!jsDisabled ? `<script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>` : ""}
       </body>
   </html>
 `;

@@ -100,6 +100,8 @@ const serverRender =
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;
 
+    const jsDisabled = req.headers["x-acc-js-disabled"] === "true";
+
     try {
       let auth: Authorisation;
       let user: IClientUser;
@@ -209,6 +211,7 @@ const serverRender =
           modalRegister,
           relayEnvironment: ServerGraphQLEnvironment,
           clientConfig,
+          jsDisabled,
         });
       });
 
@@ -228,6 +231,7 @@ const serverRender =
           formError,
           apiError,
           clientConfig,
+          jsDisabled,
         }),
       );
     } catch (renderError: unknown) {
@@ -285,6 +289,7 @@ function renderApp(props: {
   formError?: Result[] | undefined;
   apiError?: IAppError | undefined;
   clientConfig: IClientConfig;
+  jsDisabled: boolean;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -300,6 +305,7 @@ function renderApp(props: {
     formError: props.formError,
     apiError: props.apiError,
     clientConfig: props.clientConfig,
+    jsDisabled: props.jsDisabled,
   });
 }
 
