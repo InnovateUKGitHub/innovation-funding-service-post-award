@@ -16,6 +16,7 @@ const useProjectChangeRequestSubmittedForReviewQuery = ({
   const data = useLazyLoadQuery<ProjectChangeRequestSubmittedForReviewQuery>(
     projectChangeRequestSubmittedForReviewQuery,
     { projectId, pcrId },
+    { fetchPolicy: "network-only" },
   );
 
   const pcr = mapToPcrDto(
