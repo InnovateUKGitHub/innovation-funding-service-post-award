@@ -92,7 +92,10 @@ export default defineConfig({
     },
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
-    excludeSpecPattern: "cypress/e2e/2-claims/EXCLUDE-large-file-uploads-test.cy.ts",
+    excludeSpecPattern: [
+      "cypress/e2e/2-claims/EXCLUDE-large-file-uploads-test.cy.ts",
+      "cypress/e2e/12-js-disabled/**/*.cy.ts",
+    ],
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
       ABORT_EARLY: isTrue(process.env.ABORT_EARLY),
