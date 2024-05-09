@@ -1,23 +1,25 @@
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
-import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrScopeChangeSchema, scopeChangeErrorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
+import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { EditLink } from "../pcrItemSummaryLinks";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import { PcrScopeChangeSchemaType, pcrScopeChangeSchema, scopeChangeErrorMap } from "./scopeChange.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const ScopeChangeSummary = () => {
-  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch } = useForm<PcrScopeChangeSchemaType>({
+  const { register, handleSubmit, setError, formState, watch } = useForm<z.output<PcrScopeChangeSchemaType>>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       projectSummary: pcrItem.projectSummary ?? "",
@@ -28,7 +30,7 @@ export const ScopeChangeSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -62,12 +64,17 @@ export const ScopeChangeSummary = () => {
       </Section>
 
       {displayCompleteForm && (
-        <PcrItemSummaryForm<PcrScopeChangeSchemaType>
+        <PcrItemSummaryForm<z.output<PcrScopeChangeSchemaType>>
           register={register}
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" value={FormTypes.PcrChangeProjectScopeSummary} {...register("form")} />
+          <input type="hidden" value={projectId} {...register("projectId")} />
+          <input type="hidden" value={pcrId} {...register("pcrId")} />
+          <input type="hidden" value={itemId} {...register("pcrItemId")} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );

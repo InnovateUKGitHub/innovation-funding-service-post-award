@@ -43,6 +43,10 @@ enum FormTypes {
   PcrAddPartnerCompaniesHouseStepSaveAndContinue = "pcrAddPartnerCompaniesHouseStepSaveAndContinue",
   PcrAddPartnerCompaniesHouseStepSaveAndQuit = "pcrAddPartnerCompaniesHouseStepSaveAndQuit",
 
+  PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue = "pcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue",
+  PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue = "pcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue",
+  PcrChangeProjectScopeSummary = "pcrChangeProjectScopeSummary",
+
   PcrPrepareReasoningStep = "pcrPrepareReasoningStep",
   PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
   PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",

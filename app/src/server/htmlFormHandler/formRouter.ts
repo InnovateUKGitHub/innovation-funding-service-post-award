@@ -63,6 +63,9 @@ import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from
 import { ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemAddPartnerCompaniesHouseStepUpdate.handler";
 import { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsCostCategoryUpdate.handler";
 import { ProjectSetupContactAssociateHandler } from "./handlers/projects/[projectId]/setup/associate/projectSetupContactAssociate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -80,6 +83,9 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
+  new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
+  new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),
+  new ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),
   new EditClaimLineItemsFormHandler(),
   new ClaimForecastFormHandler(),

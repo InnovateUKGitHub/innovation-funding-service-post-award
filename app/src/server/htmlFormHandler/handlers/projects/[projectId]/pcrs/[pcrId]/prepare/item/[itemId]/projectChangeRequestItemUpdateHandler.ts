@@ -2,23 +2,22 @@ import { CostCategoryType } from "@framework/constants/enums";
 import {
   PCRItemStatus,
   PCRItemType,
-  PCRStepType,
-  getPCROrganisationType,
   PCROrganisationType,
   PCRParticipantSize,
+  PCRStepType,
+  getPCROrganisationType,
 } from "@framework/constants/pcrConstants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRDto,
-  PCRItemForProjectSuspensionDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
-  PCRItemForMultiplePartnerFinancialVirementDto,
-  PCRItemForPartnerWithdrawalDto,
-  PCRItemForPartnerAdditionDto,
   PCRItemForLoanDrawdownExtensionDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
+  PCRItemForPartnerAdditionDto,
+  PCRItemForPartnerWithdrawalDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForTimeExtensionDto,
 } from "@framework/dtos/pcrDtos";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
@@ -28,21 +27,20 @@ import { parseNumber } from "@framework/util/numberHelper";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
-import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerWorkflow";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
-  ProjectChangeRequestPrepareItemParams,
   PCRPrepareItemRoute,
+  ProjectChangeRequestPrepareItemParams,
 } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
-import { scopeChangeStepNames } from "@ui/containers/pages/pcrs/scopeChange/scopeChangeWorkflow";
+import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerWorkflow";
 import { SuspendProjectSteps } from "@ui/containers/pages/pcrs/suspendProject/suspendProjectWorkflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
@@ -80,9 +78,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.TimeExtension:
         await this.updateTimeExtension(item, body);
         break;
-      case PCRItemType.ScopeChange:
-        this.updateScopeChange(item, body, stepName as scopeChangeStepNames);
-        break;
       case PCRItemType.ProjectSuspension:
         this.updateProjectSuspension(item, body, stepName as SuspendProjectSteps);
         break;
@@ -105,6 +100,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.LoanDrawdownExtension:
         this.updateLoanExtension(item, body, stepName);
         break;
+
+      case PCRItemType.ScopeChange:
       case PCRItemType.ApproveNewSubcontractor:
         // It should not be possible for this handler to handle these
         // PCRs because it is dealt with in a separate form handler.
@@ -143,16 +140,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       } else {
         item.suspensionEndDate = null;
       }
-    }
-  }
-
-  private updateScopeChange(item: PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
-    if (stepName === PCRStepType.publicDescriptionStep) {
-      item.publicDescription = body.description;
-    }
-
-    if (stepName === PCRStepType.projectSummaryStep) {
-      item.projectSummary = body.summary;
     }
   }
 

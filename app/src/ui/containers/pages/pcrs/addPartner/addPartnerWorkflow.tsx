@@ -43,7 +43,7 @@ export type AddPartnerStepNames =
 
 export type AddPartnerWorkflowItem = Pick<
   PCRItemForPartnerAdditionDto,
-  "projectRole" | "partnerType" | "isCommercialWork" | "typeOfAid" | "organisationType" | "hasOtherFunding"
+  "projectRole" | "partnerType" | "isCommercialWork" | "typeOfAid" | "organisationType" | "hasOtherFunding" | "type"
 >;
 
 export const getAddPartnerWorkflow = (item: AddPartnerWorkflowItem, step: number | undefined): IPCRWorkflow => {

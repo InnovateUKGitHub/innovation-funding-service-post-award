@@ -14,7 +14,7 @@ import { upliftWorkflow } from "./uplift/upliftWorkflow";
 
 export type IPCRWorkflow = IWorkflow<PCRStepType>;
 
-export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
+export type WorkflowPcrType = { type: PCRItemType };
 
 export class PcrWorkflow extends WorkflowBase<PCRStepType> {
   public constructor(definition: IPCRWorkflow, stepNumber: number | undefined) {
@@ -40,7 +40,7 @@ export class PcrWorkflow extends WorkflowBase<PCRStepType> {
       case PCRItemType.PartnerWithdrawal:
         return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.PartnerAddition:
-        return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
+        return new PcrWorkflow(getAddPartnerWorkflow(pcrItem as AddPartnerWorkflowItem, step), step);
       case PCRItemType.ApproveNewSubcontractor:
         return new PcrWorkflow(approveNewSubcontractorWorkflow, step);
       case PCRItemType.Uplift:

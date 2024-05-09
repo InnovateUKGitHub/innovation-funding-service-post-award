@@ -1,27 +1,33 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useForm } from "react-hook-form";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { useContent } from "@ui/hooks/content.hook";
+import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
-import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrScopeChangePublicDescriptionSchema, scopeChangeErrorMap } from "./scopeChange.zod";
-import { useNextLink } from "../utils/useNextLink";
-import { z } from "zod";
-import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
+import { PcrPage } from "../pcrPage";
+import { useNextLink } from "../utils/useNextLink";
+import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import {
+  PcrScopeChangePublicDescriptionSchemaType,
+  getPcrScopeChangePublicDescriptionSchema,
+  scopeChangeErrorMap,
+} from "./scopeChange.zod";
 
 export const PublicDescriptionChangeStep = () => {
   const {
     projectId,
+    pcrId,
     itemId,
     fetchKey,
     isFetching,
@@ -31,14 +37,18 @@ export const PublicDescriptionChangeStep = () => {
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
-  const { register, handleSubmit, watch, formState, trigger } = useForm<
-    z.output<typeof pcrScopeChangePublicDescriptionSchema>
+  const defaults = useServerInput<z.output<PcrScopeChangePublicDescriptionSchemaType>>();
+  const { register, handleSubmit, watch, setError, formState, trigger } = useForm<
+    z.output<PcrScopeChangePublicDescriptionSchemaType>
   >({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
-      publicDescription: pcrItem.publicDescription ?? "",
+      form: FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue,
+      projectId,
+      pcrId,
+      pcrItemId: itemId,
+      publicDescription: defaults?.publicDescription ?? pcrItem.publicDescription ?? "",
     },
-    resolver: zodResolver(pcrScopeChangePublicDescriptionSchema, {
+    resolver: zodResolver(getPcrScopeChangePublicDescriptionSchema(markedAsCompleteHasBeenChecked), {
       errorMap: scopeChangeErrorMap,
     }),
   });
@@ -46,7 +56,10 @@ export const PublicDescriptionChangeStep = () => {
   const hint = getRequiredToCompleteMessage();
 
   const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors<z.output<PcrScopeChangePublicDescriptionSchemaType>>(
+    setError,
+    formState.errors,
+  );
   const nextLink = useNextLink();
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
@@ -59,6 +72,15 @@ export const PublicDescriptionChangeStep = () => {
             onSave({ data, context: { link: nextLink } });
           })}
         >
+          <input
+            type="hidden"
+            value={FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue}
+            {...register("form")}
+          />
+          <input type="hidden" value={projectId} {...register("projectId")} />
+          <input type="hidden" value={pcrId} {...register("pcrId")} />
+          <input type="hidden" value={itemId} {...register("pcrItemId")} />
+
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription)}</Legend>
             <Info summary={<Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}>
@@ -79,7 +101,7 @@ export const PublicDescriptionChangeStep = () => {
               characterCountType="descending"
               rows={15}
               characterCountMax={32_000}
-              defaultValue={pcrItem.publicDescription ?? ""}
+              defaultValue={defaults?.publicDescription ?? pcrItem.publicDescription ?? ""}
             />
           </Fieldset>
           <Button type="submit" disabled={isFetching}>
