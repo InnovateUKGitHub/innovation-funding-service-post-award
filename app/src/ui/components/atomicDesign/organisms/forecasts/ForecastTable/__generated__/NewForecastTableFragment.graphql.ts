@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<209b98b1d6f00c9c74008dff86c1eb21>>
+ * @generated SignedSource<<763ddc266e995766e59cc718f672c773>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -157,7 +157,7 @@ v2 = [
   {
     "kind": "Variable",
     "name": "eq",
-    "variableName": "projectParticipantId"
+    "variableName": "partnerId"
   }
 ],
 v3 = {
@@ -237,11 +237,11 @@ return {
   "argumentDefinitions": [
     {
       "kind": "RootArgument",
-      "name": "projectId"
+      "name": "partnerId"
     },
     {
       "kind": "RootArgument",
-      "name": "projectParticipantId"
+      "name": "projectId"
     }
   ],
   "kind": "Fragment",
@@ -810,6 +810,6 @@ return {
 };
 })();
 
-(node as any).hash = "3f36343d3c808959cde3cfffd8fea8c4";
+(node as any).hash = "d63484d70796366f90d74a24361b3600";
 
 export default node;

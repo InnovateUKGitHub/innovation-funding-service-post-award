@@ -23,10 +23,7 @@ export const newForecastTableFragment = graphql`
         }
       }
 
-      ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(
-        where: { Id: { eq: $projectParticipantId } }
-        first: 1
-      ) {
+      ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
         edges {
           node {
             Acc_ForecastLastModifiedDate__c {
@@ -41,7 +38,7 @@ export const newForecastTableFragment = graphql`
 
       ForecastTable_ClaimTotalProjectPeriods: Acc_Claims__c(
         where: {
-          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
+          Acc_ProjectParticipant__c: { eq: $partnerId }
           RecordType: { DeveloperName: { eq: "Total_Project_Period" } }
         }
         orderBy: { Acc_ProjectPeriodNumber__c: { order: ASC } }
@@ -75,10 +72,7 @@ export const newForecastTableFragment = graphql`
       }
 
       ForecastTable_ClaimDetails: Acc_Claims__c(
-        where: {
-          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
-          RecordType: { DeveloperName: { eq: "Claims_Detail" } }
-        }
+        where: { Acc_ProjectParticipant__c: { eq: $partnerId }, RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
         orderBy: { Acc_ProjectPeriodNumber__c: { order: ASC } }
         first: 2000
       ) {
@@ -99,7 +93,7 @@ export const newForecastTableFragment = graphql`
 
       ForecastTable_ProfileTotalProjectPeriod: Acc_Profile__c(
         where: {
-          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
+          Acc_ProjectParticipant__c: { eq: $partnerId }
           RecordType: { DeveloperName: { eq: "Total_Project_Period" } }
         }
         first: 100
@@ -121,7 +115,7 @@ export const newForecastTableFragment = graphql`
 
       ForecastTable_ProfileTotalCostCategories: Acc_Profile__c(
         where: {
-          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
+          Acc_ProjectParticipant__c: { eq: $partnerId }
           RecordType: { DeveloperName: { eq: "Total_Cost_Category" } }
         }
         orderBy: { Acc_CostCategory__r: { Acc_DisplayOrder__c: { order: ASC } } }
@@ -144,7 +138,7 @@ export const newForecastTableFragment = graphql`
 
       ForecastTable_ProfileDetails: Acc_Profile__c(
         where: {
-          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
+          Acc_ProjectParticipant__c: { eq: $partnerId }
           RecordType: { DeveloperName: { eq: "Profile_Detail" } }
         }
         orderBy: { Acc_ProjectPeriodNumber__c: { order: ASC } }

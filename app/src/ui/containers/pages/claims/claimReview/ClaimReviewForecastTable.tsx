@@ -23,7 +23,7 @@ const ClaimReviewForecastTable = ({
     <AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast} isOpen={isOpen} onClick={onClick}>
       <NewForecastTableWithStandaloneMemo
         projectId={projectId}
-        projectParticipantId={partnerId}
+        partnerId={partnerId}
         queryOptions={refreshedQueryOptions}
         isProjectSetup={false}
         isOpen={isOpen}

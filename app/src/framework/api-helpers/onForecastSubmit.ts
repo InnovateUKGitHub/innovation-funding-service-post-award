@@ -11,9 +11,11 @@ import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper"
 interface OnForecastSubmitProps {
   periodId?: PeriodId;
   isPm: boolean;
+  refresh?: () => Promise<void>;
 }
 
 export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaType>>({
+  refresh,
   periodId,
   isPm,
 }: OnForecastSubmitProps) => {
@@ -46,12 +48,15 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
             return await clientsideApiClient.initialForecastDetails.update(forecastDetails);
           case FormTypes.ClaimForecastSaveAndContinue:
           case FormTypes.ClaimForecastSaveAndQuit:
+          case FormTypes.ForecastTileForecast:
             return await clientsideApiClient.forecastDetails.update(forecastDetails);
         }
       }
     },
-    onSuccess(data) {
+    async onSuccess(data) {
       const { projectId, partnerId, form } = data;
+
+      await refresh?.();
 
       switch (form) {
         case FormTypes.ProjectSetupForecast:
@@ -67,6 +72,8 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
             navigate(routes.claimsDashboard.getLink({ projectId, partnerId }).path);
           }
           break;
+        case FormTypes.ForecastTileForecast:
+          navigate(routes.viewForecast.getLink({ projectId, partnerId }).path);
       }
     },
   });

@@ -32,7 +32,7 @@ export interface ProjectSetupSpendProfileParams {
 const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & ProjectSetupSpendProfileParams) => {
   const { fragmentRef } = useProjectSetupSpendProfileData({
     projectId,
-    projectParticipantId: partnerId,
+    partnerId,
   });
   const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
   const { project, partner } = data;

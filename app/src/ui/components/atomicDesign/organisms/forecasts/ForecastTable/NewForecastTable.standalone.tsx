@@ -10,15 +10,11 @@ import { NewForecastTableQuery } from "./__generated__/NewForecastTableQuery.gra
 interface ForecastTableStandaloneProps {
   queryOptions?: QueryOptions;
   projectId: ProjectId;
-  projectParticipantId: PartnerId;
+  partnerId: PartnerId;
 }
 
-const useNewForecastTableData = ({ projectId, projectParticipantId, queryOptions }: ForecastTableStandaloneProps) => {
-  const data = useLazyLoadQuery<NewForecastTableQuery>(
-    newForecastTableQuery,
-    { projectId, projectParticipantId },
-    queryOptions,
-  );
+const useNewForecastTableData = ({ projectId, partnerId, queryOptions }: ForecastTableStandaloneProps) => {
+  const data = useLazyLoadQuery<NewForecastTableQuery>(newForecastTableQuery, { projectId, partnerId }, queryOptions);
 
   return {
     fragmentRef: data?.salesforce?.uiapi,
@@ -27,11 +23,11 @@ const useNewForecastTableData = ({ projectId, projectParticipantId, queryOptions
 
 const NewForecastTableWithStandalone = ({
   projectId,
-  projectParticipantId,
+  partnerId,
   queryOptions = { fetchPolicy: "network-only" },
   ...rest
 }: ForecastTableStandaloneProps & Omit<NewForecastTableProps, "tableData">) => {
-  const { fragmentRef } = useNewForecastTableData({ projectId, projectParticipantId, queryOptions });
+  const { fragmentRef } = useNewForecastTableData({ projectId, partnerId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>
       <NewForecastTableWithFragment {...rest} />

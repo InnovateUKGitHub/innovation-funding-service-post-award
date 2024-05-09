@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
 const claimForecastQuery = graphql`
-  query ClaimForecastQuery($projectId: ID!, $projectParticipantId: ID!) {
+  query ClaimForecastQuery($projectId: ID!, $partnerId: ID!) {
     salesforce {
       uiapi {
         ...PageFragment
@@ -22,7 +22,7 @@ const claimForecastQuery = graphql`
               }
             }
           }
-          Acc_ProjectParticipant__c(where: { Id: { eq: $projectParticipantId } }, first: 1) {
+          Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
             edges {
               node {
                 Acc_ForecastLastModifiedDate__c {

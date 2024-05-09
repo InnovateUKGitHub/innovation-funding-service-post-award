@@ -16,10 +16,10 @@ import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/pages/develope
 import { DeveloperUserSwitcherPage } from "@ui/containers/pages/developer/UserSwitcher.page";
 import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers/errors.page";
 import { ForecastDashboardRoute } from "@ui/containers/pages/forecasts/forecastDashboard.page";
-import { UpdateForecastRoute } from "@ui/containers/pages/forecasts/updateForecast.page";
-import { ViewForecastRoute } from "@ui/containers/pages/forecasts/viewForecast.page";
 import { LoansSummaryRoute } from "@ui/containers/pages/loans/loanOverview.page";
 import { LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
+import { UpdateForecastRoute } from "@ui/containers/pages/forecasts/UpdateForecastTile.page";
+import { ViewForecastRoute } from "@ui/containers/pages/forecasts/ViewForecastTile.page";
 import { MonitoringReportCreateRoute } from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
 import { MonitoringReportDeleteRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDelete.page";
 import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";

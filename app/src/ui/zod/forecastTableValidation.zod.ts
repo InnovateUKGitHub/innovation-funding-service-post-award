@@ -29,6 +29,7 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ClaimForecastSaveAndContinue),
         z.literal(FormTypes.ClaimForecastSaveAndQuit),
         z.literal(FormTypes.ProjectSetupForecast),
+        z.literal(FormTypes.ForecastTileForecast),
       ]),
       profile: z.record(profileIdValidation, currencyValidation).optional(),
       submit: booleanValidation,

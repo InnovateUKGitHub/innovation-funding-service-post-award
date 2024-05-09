@@ -104,7 +104,7 @@ export interface ForecastTableDto {
   costCategories: CostCategoryRow[];
   totalRow: TotalRow;
   statusRow: StatusCell[];
-  finalClaimPeriodId: number | null;
+  isFinalClaim: boolean;
 }
 
 const mapToForecastTableDto = ({
@@ -315,6 +315,8 @@ const mapToForecastTableDto = ({
     costCatAccum.push(costCategoryRow);
   }
 
+  const isFinalClaim = !!finalClaim && getClaimStatusGroup(finalClaim.status) === ClaimStatusGroup.EDITABLE_CLAIMING;
+
   return {
     costCategories: costCatAccum,
     totalRow: {
@@ -324,7 +326,7 @@ const mapToForecastTableDto = ({
       difference: 100 * ((grandTotal - grandGolValue) / grandGolValue),
     },
     statusRow: statusCells,
-    finalClaimPeriodId: finalClaim?.periodId ?? null,
+    isFinalClaim,
   };
 };
 

@@ -10,14 +10,12 @@ import { DeveloperUserSwitcherHandler } from "./handlers/developer/userswitcher/
 import { LoanRequestDocumentDeleteHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentDeleteHandler";
 import { LoanRequestDocumentUploadHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentUploadHandler";
 import { LoanRequestFormHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestFormHandler";
-import { ClaimForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/ClaimForecastFormHandler.handler";
 import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/summary/claimSummaryFormHandler";
 import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/EditClaimLineItemsFormHandler.handler";
 import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDeleteHandler.handler";
 import { ClaimLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareUploadHandler.handler";
 import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/prepareClaimFormHandler";
 import { ClaimReviewLevelFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/ClaimReviewLevelFormHandler.handler";
-import { UpdateForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/updateForecast/[periodId]/updateForecastFormHandler";
 import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDeleteHandler.handler";
 import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUploadHandler.handler";
 import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateFormHandler";
@@ -53,7 +51,6 @@ import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[pr
 import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatementHandler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditFormHandler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupFormHandler";
-import { ProjectSetupSpendProfileFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupSpendProfile/projectSetupSpendProfile.handler";
 import { PostFormHandleHandler } from "./postFormHandleHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
@@ -66,6 +63,7 @@ import { ProjectSetupContactAssociateHandler } from "./handlers/projects/[projec
 import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
+import { ForecastHandler } from "./handlers/projects/Forecast.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -88,11 +86,10 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),
   new EditClaimLineItemsFormHandler(),
-  new ClaimForecastFormHandler(),
+  new ForecastHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
   new ClaimReviewLevelFormHandler(),
-  new UpdateForecastFormHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPreparePeriodFormHandler(),
@@ -119,7 +116,6 @@ export const standardFormHandlers = [
   new ChangeRemainingGrantUpdateHandler(),
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
-  new ProjectSetupSpendProfileFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
   new ProjectSetupBankDetailsVerifyHandler(),
