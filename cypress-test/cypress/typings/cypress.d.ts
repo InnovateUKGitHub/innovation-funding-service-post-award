@@ -14,7 +14,7 @@ declare global {
        * @example multiple tags
        *  describe('block with config tag', { tags: ['@smoke', '@slow'] }, () => {})
        */
-      tags: Tag | Tag[];
+      tags?: Tag | Tag[];
     }
 
     interface TestConfigOverrides {
@@ -25,7 +25,7 @@ declare global {
        * @example multiple tags
        *  it('works', { tags: ['@smoke', '@slow'] }, () => { ... })
        */
-      tags: Tag | Tag[];
+      tags?: Tag | Tag[];
     }
     interface Chainable {
       /**
@@ -84,7 +84,7 @@ declare global {
        * to enable testing with different access rights.
        * It appears to be more stable if done from the home page, before navigating away
        */
-      switchUserTo(email: string, newPath?: string): void;
+      switchUserTo(email: string, options?: { newPath?: string; jsDisabled?: boolean }): void;
 
       /**
        * Gets the back link element
@@ -295,6 +295,11 @@ declare global {
        * cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "50");
        */
       validatePositiveWholeNumber(label: string, errorLabel: string, validValue: string, submitLabel?: string): void;
+
+      /**
+       * disableJs must be added in the `beforeEach` hook for every test suite in which javascript should be disabled
+       */
+      disableJs(): void;
     }
   }
 }

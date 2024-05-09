@@ -17,7 +17,8 @@
     "lint": "eslint ./cypress/**/*.ts",
     "lint:staged": "lint-staged",
     "report:mac": "open mochawesome-report/mochawesome.html",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "typecheck": "tsc --watch --noEmit"
   },
   "author": "",
   "license": "ISC",

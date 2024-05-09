@@ -81,9 +81,43 @@ const userSwitcher = (email: string, newPath?: string) => {
   cy.wait(["@i18n"]);
 };
 
-const switchUserTo = (email: string, newPath?: string) => {
-  cy.log(`**switchUserTo:${email}**`);
-  userSwitcher(email, newPath);
+const userSwitcherJsDisabled = (email: string, newPath?: string) => {
+  // Intercept all future web requests, and inject our UserSwitcherJSDisabled(TM) header
+  cy.intercept(Cypress.config().baseUrl + "/**", req => {
+    req.headers["x-acc-userswitcher"] = email;
+    req.headers["x-acc-js-disabled"] = "true";
+    req.continue();
+  });
+
+  if (newPath) {
+    // Visit the new page
+    cy.log("js disabled visiting");
+    cy.visit(newPath, {
+      auth: { username, password },
+      headers: { "x-acc-userswitcher": email, "x-acc-js-disabled": "true" },
+    });
+  } else {
+    cy.reload();
+  }
+};
+
+const switchUserTo = (
+  email: string,
+  options: { newPath?: string; jsDisabled?: boolean } = { newPath: "", jsDisabled: false },
+) => {
+  cy.log(`**switchUserTo:${email} **`);
+  if (options.jsDisabled) {
+    userSwitcherJsDisabled(email, options.newPath);
+  } else {
+    userSwitcher(email, options.newPath);
+  }
+};
+
+const disableJs = () => {
+  cy.intercept(Cypress.config().baseUrl + "/**", req => {
+    req.headers["x-acc-js-disabled"] = "true";
+    req.continue();
+  });
 };
 
 const backLink = (name: string) => {
@@ -321,6 +355,7 @@ Cypress.Commands.add("getHintFromLabel", getHintFromLabel);
 Cypress.Commands.add("getErrorFromLabel", getErrorFromLabel);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
 Cypress.Commands.add("switchUserTo", switchUserTo);
+Cypress.Commands.add("disableJs", disableJs);
 Cypress.Commands.add("backLink", backLink);
 Cypress.Commands.add("submitButton", submitButton);
 Cypress.Commands.add("uploadButton", uploadButton);
