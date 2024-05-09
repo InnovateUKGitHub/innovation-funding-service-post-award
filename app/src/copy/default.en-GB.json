@@ -2002,7 +2002,7 @@
       "comments": {
         "errors": {
           "too_big": "Comments must be a maximum of {{count}} characters.",
-          "custom": "Comments are required if querying a claim."
+          "too_small": "Enter a comment."
         }
       },
       "status": {
