@@ -66,6 +66,7 @@ describe("js-disabled > projects dashboard > Project tile counters", { tags: "js
 
   it("Should switch user back to Sarah Shuang", () => {
     cy.wait(500);
+    cy.clearAllCookies();
     cy.switchUserTo(sarahShuang, { jsDisabled: true });
     cy.wait(500);
   });

@@ -25,7 +25,7 @@ const fs = require("fs");
 const acc = process.env.ACC;
 let accDevUrl = `https://www-acc-${(acc ? `custom-${acc}` : "dev").trim()}.apps.ocp4.innovateuk.ukri.org`;
 
-const grepTags = process.env.TAGS ?? undefined;
+const grepTags = process.env.TAGS ?? process.env.tags ?? undefined;
 if (grepTags) {
   grepTags
     .split(",")
@@ -92,10 +92,9 @@ export default defineConfig({
     },
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
-    excludeSpecPattern: [
-      "cypress/e2e/2-claims/EXCLUDE-large-file-uploads-test.cy.ts",
-      "cypress/e2e/12-js-disabled/**/*.cy.ts",
-    ],
+    excludeSpecPattern: ["cypress/e2e/2-claims/EXCLUDE-large-file-uploads-test.cy.ts"].concat(
+      !!grepTags && grepTags.includes("js-disabled") ? [] : ["cypress/e2e/12-js-disabled/**/*.cy.ts"],
+    ),
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
       ABORT_EARLY: isTrue(process.env.ABORT_EARLY),

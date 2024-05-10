@@ -1,4 +1,5 @@
 import "@testing-library/cypress/add-commands";
+import { seconds } from "common/seconds";
 import { visitApp } from "common/visit";
 import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
@@ -83,6 +84,7 @@ const userSwitcher = (email: string, newPath?: string) => {
 
 const userSwitcherJsDisabled = (email: string, newPath?: string) => {
   // Intercept all future web requests, and inject our UserSwitcherJSDisabled(TM) header
+  cy.clearAllCookies();
   cy.intercept(Cypress.config().baseUrl + "/**", req => {
     req.headers["x-acc-userswitcher"] = email;
     req.headers["x-acc-js-disabled"] = "true";
@@ -97,8 +99,9 @@ const userSwitcherJsDisabled = (email: string, newPath?: string) => {
       headers: { "x-acc-userswitcher": email, "x-acc-js-disabled": "true" },
     });
   } else {
-    cy.reload();
+    cy.reload(true);
   }
+  cy.wait(seconds(3));
 };
 
 const switchUserTo = (

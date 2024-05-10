@@ -94,7 +94,7 @@ export const switchUserTestLiveArea = () => {
   [fcOne, fcTwo, moEmail, fcFour, fcFive, fcSix, fcSeven, fcEight, fcNine, fcTen, fcEleven].forEach(contact => {
     cy.clearAllCookies();
     cy.wait(1000);
-    cy.switchUserTo(contact);
+    cy.switchUserTo(contact, { jsDisabled: true });
     cy.getByQA("pending-and-open-projects").contains("154870");
     cy.wait(1000);
   });
@@ -200,9 +200,7 @@ export const javierBaezCounters = () => {
 };
 
 export const access879546NavToClaims = () => {
-  cy.getByQA("project-879546").within(() => {
-    cy.get("a").contains("879546").click();
-  });
+  cy.selectProject("879546");
   cy.heading("Project overview");
   cy.selectTile("Claims");
   cy.heading("Claims");
@@ -251,12 +249,10 @@ export const switchToJavierCheckStatus = () => {
 };
 
 export const accessProjectSubmitToMO = () => {
-  cy.getByQA("project-879546").within(() => {
-    cy.get("a").contains("879546").click();
-  });
+  cy.selectProject("879546");
   cy.heading("Project overview");
   cy.selectTile("Claims");
-  cy.heading("Claim");
+  cy.heading("Claims");
   cy.get("a").contains("Edit").click();
   cy.heading("Costs to be claimed");
   otherCost5TidyUp();
@@ -280,9 +276,7 @@ export const backOutToDashCheckStatus = () => {
 };
 
 export const accessProjectCheckClaimsTile = () => {
-  cy.getByQA("project-879546").within(() => {
-    cy.get("a").contains("879546").click();
-  });
+  cy.selectProject("879546");
   cy.heading("Project overview");
   cy.getByQA("overview-link-allClaimsDashboard").contains("Claims to review: 2");
 };
@@ -296,9 +290,8 @@ export const accessClaimQuery = () => {
   cy.get("textarea").as("txt").wait(200);
   cy.get("@txt").clear();
   cy.get("@txt").type(comments);
-  cy.paragraph("You have");
   cy.paragraph("I am satisfied that the costs claimed appear to comply");
-  cy.clickOn("Send query");
+  cy.clickOn("Submit");
   cy.heading("Claims");
 };
 
