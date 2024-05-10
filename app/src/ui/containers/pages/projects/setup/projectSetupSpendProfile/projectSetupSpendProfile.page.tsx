@@ -41,7 +41,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
-  const { register, handleSubmit, control, formState, getFieldState, setError, trigger } = useForm<
+  const { register, handleSubmit, control, formState, getFieldState, setError, trigger, watch } = useForm<
     z.output<ForecastTableSchemaType>
   >({
     resolver: zodResolver(schema, {
@@ -96,6 +96,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
             trigger={trigger}
             getFieldState={getFieldState}
             disabled={isFetching}
+            clientProfiles={watch("profile")}
             isProjectSetup
           />
         </Section>

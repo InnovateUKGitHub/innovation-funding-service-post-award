@@ -4,7 +4,9 @@ import { NewForecastTableProps, NewForecastTable as NewForecastTableComponent } 
 import { mapToForecastTableDto, useNewForecastTableData } from "./NewForecastTable.logic";
 import { NewForecastTableFragment$key } from "./__generated__/NewForecastTableFragment.graphql";
 
-export const NewForecastTableWithFragment = (props: Omit<NewForecastTableProps, "tableData">) => {
+export const NewForecastTableWithFragment = (
+  props: Omit<NewForecastTableProps, "tableData"> & { clientProfiles?: Record<string, string> },
+) => {
   const fragmentRef = useFragmentContext();
 
   if (!isValidFragmentKey<NewForecastTableFragment$key>(fragmentRef, "NewForecastTableFragment")) {
@@ -12,7 +14,9 @@ export const NewForecastTableWithFragment = (props: Omit<NewForecastTableProps, 
   }
 
   const data = useNewForecastTableData({ fragmentRef, isProjectSetup: props.isProjectSetup });
-  const tableData = mapToForecastTableDto(data);
+  const tableData = mapToForecastTableDto(
+    props.clientProfiles ? { ...data, clientProfiles: props.clientProfiles } : data,
+  );
 
   return <NewForecastTableComponent tableData={tableData} {...props} />;
 };
