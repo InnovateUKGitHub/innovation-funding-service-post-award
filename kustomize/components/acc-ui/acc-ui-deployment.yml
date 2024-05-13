@@ -19,10 +19,10 @@ spec:
           image: acc-ui
           resources:
             requests:
-              memory: 256Mi
+              memory: 384Mi
               cpu: 100m
             limits:
-              memory: 512Mi
+              memory: 768Mi
               cpu: 200m
           ports:
             - containerPort: 8080
