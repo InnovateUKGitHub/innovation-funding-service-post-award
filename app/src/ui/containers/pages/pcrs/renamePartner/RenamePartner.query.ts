@@ -46,6 +46,9 @@ export const renamePartnerWorkflowQuery = graphql`
                 Acc_Status__c {
                   value
                 }
+                Acc_MarkedasComplete__c {
+                  value
+                }
                 RecordType {
                   Name {
                     value

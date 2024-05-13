@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f6453f514aae85dac01cab930f357879>>
+ * @generated SignedSource<<2558b4b2cafa5f739501aa626727d6be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,9 @@ export type RenamePartnerWorkflowQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ExistingPartnerName__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_MarkedasComplete__c: {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly Acc_NewOrganisationName__c: {
@@ -399,6 +402,16 @@ v9 = [
                           {
                             "alias": null,
                             "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_MarkedasComplete__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "RecordType",
                             "kind": "LinkedField",
                             "name": "RecordType",
@@ -742,16 +755,16 @@ return {
     "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "c22cda8053f6b3341720a0315f363740",
+    "cacheID": "48a0dceea154f2f0735a59cd7de3978d",
     "id": null,
     "metadata": {},
     "name": "RenamePartnerWorkflowQuery",
     "operationKind": "query",
-    "text": "query RenamePartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_Project_Participant__c {\n                value\n              }\n              Acc_ExistingPartnerName__c {\n                value\n              }\n              Acc_NewOrganisationName__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RenamePartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_Project_Participant__c {\n                value\n              }\n              Acc_ExistingPartnerName__c {\n                value\n              }\n              Acc_NewOrganisationName__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8496b1eca4e78d04ffd6fed3c582c7e1";
+(node as any).hash = "26cc04a597851b5070e5801cbf7a3b04";
 
 export default node;

@@ -18,7 +18,7 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
       markedAsComplete: z.boolean(),
       accountName: z.string().max(256).optional(),
       partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
-      form: z.literal(FormTypes.PcrRenamePartnerStep),
+      form: z.union([z.literal(FormTypes.PcrRenamePartnerSummary), z.literal(FormTypes.PcrRenamePartnerStep)]),
       projectId: projectIdValidation,
       pcrId: pcrIdValidation,
       pcrItemId: pcrItemIdValidation,

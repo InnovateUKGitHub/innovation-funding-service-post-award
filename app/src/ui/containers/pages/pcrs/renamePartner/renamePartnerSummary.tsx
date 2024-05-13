@@ -8,20 +8,21 @@ import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { useForm } from "react-hook-form";
 import { RenamePartnerSchemaType, getRenamePartnerSchema, renamePartnerErrorMap } from "./renamePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { PcrPage } from "../pcrPage";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const RenamePartnerSummary = () => {
-  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm, pcrId } = usePcrWorkflowContext();
 
   const { pcrItem, partners, documents } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
   const multiplePartnerProject = partners.length > 1;
 
-  const { register, handleSubmit, formState, watch, getFieldState } = useForm<RenamePartnerSchemaType>({
+  console.log("pcrItem", pcrItem);
+  const { register, handleSubmit, formState, watch, getFieldState, setError } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
-      // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       accountName: pcrItem.accountName ?? "",
       partnerId: pcrItem.partnerId as string,
@@ -31,7 +32,7 @@ export const RenamePartnerSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -72,7 +73,12 @@ export const RenamePartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" value={FormTypes.PcrRenamePartnerSummary} {...register("form")} />
+          <input type="hidden" value={projectId} {...register("projectId")} />
+          <input type="hidden" value={pcrId} {...register("pcrId")} />
+          <input type="hidden" value={itemId} {...register("pcrItemId")} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );
