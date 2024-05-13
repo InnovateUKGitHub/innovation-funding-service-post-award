@@ -278,13 +278,20 @@ const downloadFile = (href: string): ReturnType<Cypress.Chainable["downloadFile"
   });
 };
 
-const createPcr = (pcr: PcrType) => {
-  cy.wait(500);
-  cy.clickCheckBox(pcr);
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.wait(500);
-  cy.button("Create request").click();
-  cy.wait("@pcrPrepare");
+const createPcr = (pcr: PcrType, options?: { jsDisabled?: boolean }) => {
+  if (options?.jsDisabled) {
+    cy.wait(seconds(2));
+    cy.clickCheckBox(pcr);
+    cy.wait(seconds(3));
+    cy.button("Create request").click();
+  } else {
+    cy.wait(500);
+    cy.clickCheckBox(pcr);
+    cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
+    cy.wait(500);
+    cy.button("Create request").click();
+    cy.wait("@pcrPrepare");
+  }
 };
 
 function clickOn(...args: unknown[]) {

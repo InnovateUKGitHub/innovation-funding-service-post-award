@@ -207,7 +207,7 @@ declare global {
        * Creates a PCR from the PCR requests screen by passing in a correct PCR name
        */
 
-      createPcr(pcr: PcrType): Chainable<Element>;
+      createPcr(pcr: PcrType, options?: { jsDisabled?: boolean }): Chainable<Element>;
 
       /**
        * Finds an exact match for the inserted text and clicks on it.

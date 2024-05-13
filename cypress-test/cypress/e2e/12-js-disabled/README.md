@@ -48,3 +48,28 @@ with these in place, the tests will now run against a version of the app without
 Probably there is a `switchUserTo` or a `visitApp` without a `{jsDisabled: true}` option passed in.
 
 If still nothing, find a dev and try to obtain support.
+
+## cy.wait("{intercept alias}")
+
+Attempts to intercept a request and wait for it to resolve will fail with js disabled.
+Steps doing this should use "cy.wait(time)" instead
+Common functions should be extended to accept an options object in which `jsDisabled: true` is an option
+and use this to control how waits are handled.
+
+## Other suggestions
+
+Rename the description to include js disabled
+and also add `{ tags: "js-disabled" }` as the second argument in the description
+e.g.
+
+```typescript
+describe("my amazing test", function () {
+  /* test logic */
+});
+
+// becomes
+
+describe("js disabled > my amazing test", { tags: "js-disabled" }, function () {
+  /* test logic */
+});
+```
