@@ -14,17 +14,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNextLink } from "../utils/useNextLink";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRenamePartnerSchema, renamePartnerErrorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
   const {
     projectId,
     itemId,
+    pcrId,
     fetchKey,
     getRequiredToCompleteMessage,
     onSave,
@@ -34,19 +36,20 @@ export const RenamePartnerStep = () => {
 
   const { partners, pcrItem } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger, getFieldState, watch } = useForm<RenamePartnerSchemaType>({
-    defaultValues: {
-      // take the marked as complete state from the current checkbox state on the summary
-      markedAsComplete: markedAsCompleteHasBeenChecked,
-      accountName: pcrItem.accountName ?? "",
-      partnerId: pcrItem.partnerId as string,
-    },
-    resolver: zodResolver(getRenamePartnerSchema(partners), {
-      errorMap: renamePartnerErrorMap,
-    }),
-  });
+  const { handleSubmit, register, formState, setError, trigger, getFieldState, watch } =
+    useForm<RenamePartnerSchemaType>({
+      defaultValues: {
+        // take the marked as complete state from the current checkbox state on the summary
+        markedAsComplete: markedAsCompleteHasBeenChecked,
+        accountName: pcrItem.accountName ?? "",
+        partnerId: pcrItem.partnerId as string,
+      },
+      resolver: zodResolver(getRenamePartnerSchema(partners), {
+        errorMap: renamePartnerErrorMap,
+      }),
+    });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const partnerOptions = partners
@@ -65,13 +68,24 @@ export const RenamePartnerStep = () => {
             onSave({ data, context: { link: nextLink } });
           })}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrRenamePartnerStep} />
+          <input type="hidden" name="projectId" value={projectId} />
+          <input type="hidden" name="pcrId" value={pcrId} />
+          <input type="hidden" name="pcrItemId" value={itemId} />
+
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrNameChange.headingSelectPartner)}</Legend>
             <FormGroup hasError={!!getFieldState("partnerId").error}>
               <ValidationError error={getFieldState("partnerId").error} />
               <RadioList name="partnerId" register={register}>
                 {partnerOptions.map(partner => (
-                  <Radio key={partner.id} id={partner.id} label={partner.label} disabled={isFetching}></Radio>
+                  <Radio
+                    key={partner.id}
+                    id={partner.id}
+                    label={partner.label}
+                    disabled={isFetching}
+                    defaultChecked={!!pcrItem?.partnerId && pcrItem.partnerId === partner.id}
+                  ></Radio>
                 ))}
               </RadioList>
             </FormGroup>
@@ -82,7 +96,7 @@ export const RenamePartnerStep = () => {
             <FormGroup hasError={!!getFieldState("accountName").error}>
               <Hint id="hint-for-accountName">{getRequiredToCompleteMessage()}</Hint>
               <ValidationError error={getFieldState("accountName").error} />
-              <TextInput disabled={isFetching} {...register("accountName")} />
+              <TextInput disabled={isFetching} {...register("accountName")} defaultValue={pcrItem?.accountName ?? ""} />
             </FormGroup>
           </Fieldset>
 

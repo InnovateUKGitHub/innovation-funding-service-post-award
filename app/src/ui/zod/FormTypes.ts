@@ -50,6 +50,8 @@ enum FormTypes {
   PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue = "pcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue",
   PcrChangeProjectScopeSummary = "pcrChangeProjectScopeSummary",
 
+  PcrRenamePartnerStep = "pcrRenamePartnerStep",
+
   PcrPrepareReasoningStep = "pcrPrepareReasoningStep",
   PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
   PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",

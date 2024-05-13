@@ -64,6 +64,7 @@ import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStep
 import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
 import { ForecastHandler } from "./handlers/projects/Forecast.handler";
+import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerHandler";
 
 export const standardFormHandlers = [
   // Zod
@@ -82,6 +83,7 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
+  new PcrItemChangeRenamePartnerHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),
   new ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),

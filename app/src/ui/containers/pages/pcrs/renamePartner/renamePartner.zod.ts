@@ -1,7 +1,14 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
+import {
+  emptyStringToNullValidation,
+  partnerIdValidation,
+  pcrIdValidation,
+  pcrItemIdValidation,
+  projectIdValidation,
+} from "@ui/zod/helperValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
@@ -11,6 +18,10 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
       markedAsComplete: z.boolean(),
       accountName: z.string().max(256).optional(),
       partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
+      form: z.literal(FormTypes.PcrRenamePartnerStep),
+      projectId: projectIdValidation,
+      pcrId: pcrIdValidation,
+      pcrItemId: pcrItemIdValidation,
     })
     .superRefine((data, ctx) => {
       if (data.partnerId) {
@@ -44,4 +55,6 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
       }
     });
 
-export type RenamePartnerSchemaType = z.infer<ReturnType<typeof getRenamePartnerSchema>>;
+export type RenamePartnerSchema = ReturnType<typeof getRenamePartnerSchema>;
+
+export type RenamePartnerSchemaType = z.infer<RenamePartnerSchema>;
