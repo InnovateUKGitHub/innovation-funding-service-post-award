@@ -284,7 +284,8 @@
       "create": "Create request",
       "noOngoingRequests": "You have no ongoing requests.",
       "noPastRequests": "You have no past requests.",
-      "requestNumber": "Request number"
+      "requestNumber": "Request number",
+      "cannotCreatePcrMessage": "A new project change request cannot be created at this time because all available types are already in use. Existing requests must be deleted if still in draft, or concluded by Innovate UK before a new one can be started."
     },
     "projectsDashboard": {
       "title": "Dashboard",

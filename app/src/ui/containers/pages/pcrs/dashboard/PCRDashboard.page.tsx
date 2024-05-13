@@ -24,6 +24,7 @@ import { useProjectSuspensionMessageWithFragmentData } from "@ui/components/atom
 import { PartnerStatus } from "@framework/constants/partner";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -60,9 +61,11 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     x => x.isPm && partners.some(y => x.partnerId === y.id && y.partnerStatus !== PartnerStatus.OnHold),
   );
 
+  const allPcrItemTypesUnavailable = availablePcrItems.every(x => x.disabled);
+
   const renderStartANewRequestLink = () => {
     if (!isPmAllowedToEdit) return null;
-    if (availablePcrItems.every(x => x.disabled)) return null;
+    if (allPcrItemTypesUnavailable) return null;
 
     return (
       <Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })} className="govuk-button">
@@ -180,6 +183,10 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       projectId={props.projectId}
       isActive={project.isActive}
     >
+      {allPcrItemTypesUnavailable && (
+        <ValidationMessage messageType="info" message={x => x.pages.pcrsDashboard.cannotCreatePcrMessage} />
+      )}
+
       <Messages messages={props.messages} />
 
       <Section qa="pcr-table">
