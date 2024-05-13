@@ -1,7 +1,6 @@
 require("dotenv").config();
 import { defineConfig } from "cypress";
 import { Tag, tags } from "support/tags";
-
 const fs = require("fs");
 /**
  * To target specific deployment branches with ACC number
@@ -25,6 +24,13 @@ const fs = require("fs");
 const acc = process.env.ACC;
 let accDevUrl = `https://www-acc-${(acc ? `custom-${acc}` : "dev").trim()}.apps.ocp4.innovateuk.ukri.org`;
 
+/**
+ * Read any `TAGS` or `tags` from process env and ensure that they are valid.
+ * tags should be comma separated.
+ *
+ * @example
+ * TAGS=js-disabled,smoke
+ */
 const grepTags = process.env.TAGS ?? process.env.tags ?? undefined;
 if (grepTags) {
   grepTags
@@ -35,6 +41,12 @@ if (grepTags) {
         throw new Error(`"${x}" is not a recognised tag as specified in 'support/tags.ts' `);
       }
     });
+}
+
+if (grepTags) {
+  console.info("Applying tags", grepTags);
+} else {
+  console.info("No tags are being applied");
 }
 
 /**
@@ -55,17 +67,17 @@ console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n*
  */
 const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT ?? "4000");
 
+/**
+ * utility to evaluate if environment variable is true
+ */
 const isTrue = (s: string = "") => s.toLowerCase() === "true";
 
+/**
+ * Set base url from environment variable
+ */
 const baseUrl = process.env.TEST_URL || accDevUrl;
 
 console.info("*** Targeting url:", baseUrl);
-
-if (grepTags) {
-  console.info("Applying tags", grepTags);
-} else {
-  console.info("No tags are being applied");
-}
 
 export default defineConfig({
   reporter: "mochawesome",
