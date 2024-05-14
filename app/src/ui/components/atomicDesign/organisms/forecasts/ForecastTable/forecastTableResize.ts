@@ -17,9 +17,16 @@ const forecastTableResize = () => {
   resizeObserver.observe(document.body);
 
   const animate = () => {
-    const table = document.getElementById("ifspa-forecast-table") as HTMLTableElement;
-
+    const table = document.getElementById("ifspa-forecast-table") as HTMLTableElement | null;
     if (!table) return;
+    const tbody = table.querySelector("tbody");
+    if (!tbody) return;
+
+    const documentBounds = document.body.getBoundingClientRect();
+
+    // Enable our sticky-columns on a DESKTOP environment.
+    // Otherwise, revert back to mobile layout.
+    const desktopResolution = documentBounds.width > DESKTOP_BREAKPOINT;
 
     const tds: SideData[] = [
       {
@@ -48,11 +55,6 @@ const forecastTableResize = () => {
       },
     ];
 
-    // Enable our sticky-columns on a DESKTOP environment.
-    // Otherwise, revert back to mobile layout.
-    const documentBounds = document.body.getBoundingClientRect();
-    const desktopResolution = documentBounds.width > DESKTOP_BREAKPOINT;
-
     /**
      * Accumulated left/right width values to add a margin to the side of the table.
      * This margin allows us to slide in the sticky columns in the gap left behind.
@@ -62,26 +64,41 @@ const forecastTableResize = () => {
       right: 0,
     };
 
+    // Perform a full "system reset" of the table
     for (const { side, items } of tds) {
-      /**
-       * Run WIDTH calculations to calculate the width of the sticky column
-       *
-       * 1. Reset each TD in the column to make sure they are in the default size
-       * 2. Use a tape measure on each TD to find out their widths
-       * 3. With the greatest width, set values on the TD.
-       */
-      if (desktopResolution) {
+      for (const td of items) {
+        td.style[side] = "unset";
+        td.style.width = "unset";
+        td.style.height = "unset";
+        td.style.maxWidth = "unset";
+        td.style.minWidth = "unset";
+        td.style.display = "table-cell";
+        td.style.position = "sticky";
+      }
+    }
+
+    table.style.marginLeft = "unset";
+    table.style.marginRight = "unset";
+    table.style.width = "unset";
+    table.style.overflowX = "unset";
+
+    const tableBounds = table.getBoundingClientRect();
+    const tbodyBounds = tbody.getBoundingClientRect();
+
+    const tbodyCanFitInsideTable = tbodyBounds.width <= tableBounds.width;
+
+    if (desktopResolution && !tbodyCanFitInsideTable) {
+      for (const { side, items } of tds) {
+        /**
+         * Run WIDTH calculations to calculate the width of the sticky column
+         *
+         * 1. Reset each TD in the column to make sure they are in the default size
+         * 2. Use a tape measure on each TD to find out their widths
+         * 3. With the greatest width, set values on the TD.
+         */
         let maxWidthForColumn = 0;
 
         for (const td of items) {
-          td.style[side] = "unset";
-          td.style.width = "unset";
-          td.style.height = "unset";
-          td.style.maxWidth = "unset";
-          td.style.minWidth = "unset";
-          td.style.display = "unset";
-          td.style.position = "unset";
-
           const bounds = td.getBoundingClientRect();
           maxWidthForColumn = Math.max(maxWidthForColumn, bounds.width);
         }
@@ -96,28 +113,13 @@ const forecastTableResize = () => {
         }
 
         accum[side] += maxWidthForColumn;
-      } else {
-        for (const td of items) {
-          td.style[side] = "unset";
-          td.style.width = "unset";
-          td.style.height = "unset";
-          td.style.maxWidth = "unset";
-          td.style.minWidth = "unset";
-          td.style.display = "table-cell";
-          td.style.position = "sticky";
-        }
       }
-    }
 
-    if (desktopResolution) {
       // Create gap for sticky columns to fit within
       table.style.marginLeft = accum.left + "px";
       table.style.marginRight = accum.right + "px";
       table.style.width = `calc(100% - ${accum.left}px - ${accum.right}px)`;
-    } else {
-      table.style.marginLeft = "unset";
-      table.style.marginRight = "unset";
-      table.style.width = "unset";
+      table.style.overflowX = "scroll";
     }
 
     /**
