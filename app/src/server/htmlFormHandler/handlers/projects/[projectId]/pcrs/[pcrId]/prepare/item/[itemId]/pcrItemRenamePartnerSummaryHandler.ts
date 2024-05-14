@@ -73,7 +73,7 @@ export class PcrItemChangeRenamePartnerSummaryHandler extends ZodFormHandlerBase
     });
 
     return {
-      form: FormTypes.PcrRenamePartnerSummary,
+      form: input.form,
       projectId: input.projectId,
       pcrId: input.pcrId,
       pcrItemId: input.pcrItemId,

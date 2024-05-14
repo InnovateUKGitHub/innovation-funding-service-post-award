@@ -43,6 +43,10 @@ export const RenamePartnerStep = () => {
         markedAsComplete: markedAsCompleteHasBeenChecked,
         accountName: pcrItem.accountName ?? "",
         partnerId: pcrItem.partnerId as string,
+        form: FormTypes.PcrRenamePartnerStep,
+        pcrItemId: itemId,
+        projectId,
+        pcrId,
       },
       resolver: zodResolver(getRenamePartnerSchema(partners), {
         errorMap: renamePartnerErrorMap,

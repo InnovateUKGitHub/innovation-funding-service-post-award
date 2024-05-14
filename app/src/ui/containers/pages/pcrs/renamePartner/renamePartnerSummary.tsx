@@ -20,12 +20,12 @@ export const RenamePartnerSummary = () => {
   const { pcrItem, partners, documents } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
   const multiplePartnerProject = partners.length > 1;
 
-  console.log("pcrItem", pcrItem);
   const { register, handleSubmit, formState, watch, getFieldState, setError } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       accountName: pcrItem.accountName ?? "",
       partnerId: pcrItem.partnerId as string,
+      form: FormTypes.PcrRenamePartnerSummary,
     },
     resolver: zodResolver(getRenamePartnerSchema(partners), {
       errorMap: renamePartnerErrorMap,

@@ -14,6 +14,7 @@ import {
 
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+import { isNil } from "lodash";
 
 export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
   RenamePartnerSchema,
@@ -39,7 +40,7 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<RenamePartnerSchema>> {
     return {
-      form: FormTypes.PcrRenamePartnerStep,
+      form: input.form,
       projectId: input.projectId,
       pcrId: input.pcrId,
       pcrItemId: input.pcrItemId,
@@ -52,9 +53,11 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<RenamePartnerSchema>;
     context: IContext;
+    params: { step?: number };
   }): Promise<string> {
     await context.runCommand(
       new UpdatePCRCommand({
@@ -78,7 +81,7 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
       projectId: input.projectId,
       pcrId: input.pcrId,
       itemId: input.pcrItemId,
-      step: undefined,
+      step: isNil(params.step) ? undefined : Number(params.step) + 1,
     }).path;
   }
 }
