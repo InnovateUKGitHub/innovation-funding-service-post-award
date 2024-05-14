@@ -61,7 +61,6 @@ export const getPayload = (
       if (!matchingPartner) throw new Error("cannot find matching partner id");
 
       const newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant);
-
       const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newRemainingGrant, x.newFundingLevel);
 
       return {

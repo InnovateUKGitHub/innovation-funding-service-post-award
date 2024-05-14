@@ -40,6 +40,7 @@ describe("financialVirementDtoValidator", () => {
           const validation = new CostCategoryVirementDtoValidator({
             model: stubCostCategoryVirement,
             showValidationErrors: false,
+            submit: true,
           });
           expect(validation.newPartnerEligibleCosts.isValid).toBe(isValid);
         });
@@ -61,6 +62,7 @@ describe("financialVirementDtoValidator", () => {
           const validation = new PartnerVirementsDtoValidator({
             model: stubPartnerVirements,
             showValidationErrors: false,
+            submit: true,
           });
           expect(validation.newRemainingGrant.isValid).toBe(expectedResult);
         });

@@ -23,6 +23,7 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 /**
  * Hook returns content for edit partner view
@@ -123,11 +124,11 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
     if (virementData.partners[index].newRemainingCosts === 0) {
       return virementData.partners[index].newFundingLevel;
     }
-    const value = Number(watch(`partners.${index}.newRemainingGrant`));
+    const value = parseCurrency(watch(`partners.${index}.newRemainingGrant`));
     return (value / virementData.partners[index].newRemainingCosts) * 100;
   };
 
-  const newRemainingGrantTotal = sumBy(watch("partners"), x => Number(x.newRemainingGrant.replace("£", "")) || 0);
+  const newRemainingGrantTotal = sumBy(watch("partners"), x => parseCurrency(x.newRemainingGrant) || 0);
 
   useEffect(() => {
     setValue("newRemainingGrant", newRemainingGrantTotal, { shouldValidate: formState.isSubmitted });

@@ -2,6 +2,7 @@ import { IContext } from "@framework/types/IContext";
 import { GetClaimOverrideRates } from "@server/features/claims/getClaimOverrideRates";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
+import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   mapOverwrittenFinancialVirements,
@@ -46,21 +47,32 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
       input.pcrItemId as PcrItemId,
     );
     const claimOverrideAwardRatesPromise = context.runQuery(new GetClaimOverrideRates(input.partnerId as PartnerId));
-    const [partners, financialVirementsForParticipants, claimOverrideAwardRates] = await Promise.all([
+    const projectChangeRequestPromise = context.runQuery(
+      new GetPCRByIdQuery(input.projectId as ProjectId, input.pcrId as PcrId),
+    );
+
+    const [partners, financialVirementsForParticipants, claimOverrideAwardRates, pcr] = await Promise.all([
       partnersPromise,
       financialVirementsForParticipantsPromise,
       claimOverrideAwardRatesPromise,
+      projectChangeRequestPromise,
     ]);
+
+    const pcrItem = pcr.items.find(x => x.id === input.pcrItemId);
+
+    if (!pcrItem) throw new Error("cannae find pcr item");
 
     return {
       schema: getCostCategoryLevelFinancialVirementEditSchema({
-        partners,
-        financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
-          x.virements.map(y => ({ ...y, parentId: x.id })),
-        ),
-        financialVirementsForParticipants,
-        claimOverrideAwardRates,
-        pcrItemId: input.pcrItemId as PcrItemId,
+        mapFinancialVirementProps: {
+          partners,
+          financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
+            x.virements.map(y => ({ ...y, parentId: x.id })),
+          ),
+          financialVirementsForParticipants,
+          claimOverrideAwardRates,
+          pcrItemId: input.pcrItemId as PcrItemId,
+        },
       }),
       errorMap: costCategoryLevelFinancialVirementEditErrorMap,
     };

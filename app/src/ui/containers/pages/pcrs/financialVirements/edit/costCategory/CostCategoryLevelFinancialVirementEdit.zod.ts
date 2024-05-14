@@ -9,20 +9,18 @@ import {
   zeroOrGreaterCurrencyValidation,
 } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
-import { MapVirements, mapVirements } from "../../../utils/useMapFinancialVirements";
-import { patchFinancialVirementsForCosts } from "./CostCategoryLevelFinancialVirementEdit.logic";
+import { MapVirements } from "../../../utils/useMapFinancialVirements";
+import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelFinancialVirementEdit.logic";
 
 const costCategoryLevelFinancialVirementEditErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "financialVirements", "costCategoryLevel"],
 });
 
 const getCostCategoryLevelFinancialVirementEditSchema = ({
-  financialVirementsForCosts,
-  financialVirementsForParticipants,
-  claimOverrideAwardRates,
-  partners,
-  pcrItemId,
-}: MapVirements) =>
+  mapFinancialVirementProps,
+}: {
+  mapFinancialVirementProps: MapVirements;
+}) =>
   z
     .object({
       form: z.literal(FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue),
@@ -38,26 +36,21 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
       ),
     })
     .superRefine((data, ctx) => {
-      const { virementData } = mapVirements({
-        financialVirementsForCosts: patchFinancialVirementsForCosts(financialVirementsForCosts, data.virements),
-        financialVirementsForParticipants,
-        claimOverrideAwardRates,
-        partners,
-        pcrItemId,
-      });
+      const { virementData } = mapOverwrittenFinancialVirements(mapFinancialVirementProps)(data.virements);
 
-      const partner = virementData.partners.find(x => x.partnerId === data.partnerId)!;
-
-      data.virements.forEach(({ virementCostId }, i) => {
-        const costCategoryVirement = partner.virements.find(x => x.virementCostId === virementCostId)!;
-
-        if (costCategoryVirement.newEligibleCosts < costCategoryVirement.costsClaimedToDate) {
-          ctx.addIssue({
-            code: ZodIssueCode.custom,
-            path: ["virements", i, "newEligibleCosts"],
-            params: { i18n: "errors.costs_too_small", name: costCategoryVirement.costCategoryName },
-          });
-        }
+      virementData.partners.forEach(partner => {
+        partner.virements.forEach((costCategoryVirement, i) => {
+          if (
+            partner.partnerId === data.partnerId &&
+            costCategoryVirement.newEligibleCosts < costCategoryVirement.costsClaimedToDate
+          ) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              path: ["virements", i, "newEligibleCosts"],
+              params: { i18n: "errors.costs_too_small", name: costCategoryVirement.costCategoryName },
+            });
+          }
+        });
       });
     });
 

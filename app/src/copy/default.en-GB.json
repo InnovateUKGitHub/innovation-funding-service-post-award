@@ -2711,6 +2711,11 @@
         "errors": {
           "virement_too_big": "You must reduce your 'New remaining grant' project total to {{ total, currency }} or less, because you have exceeded it by {{ difference, abs, currency }}."
         },
+        "partner": {
+          "errors": {
+            "costs_too_small": "There was a problem validating the virement for {{ name }}."
+          }
+        },
         "grantMovingOverFinancialYear": {
           "errors": {
             "too_small": {

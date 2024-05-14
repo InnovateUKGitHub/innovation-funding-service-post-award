@@ -191,7 +191,12 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
   public readonly partners = Validation.optionalChild(
     this,
     this.filteredPartners(),
-    x => new PartnerVirementsDtoValidator({ model: x, showValidationErrors: this.showValidationErrors }),
+    x =>
+      new PartnerVirementsDtoValidator({
+        model: x,
+        showValidationErrors: this.showValidationErrors,
+        submit: this.submit,
+      }),
     this.model.currentPartnerId
       ? this.getContent(x => x.validation.financialVirementDtoValidator.generic)
       : this.getContent(x => x.validation.financialVirementDtoValidator.genericAll),
@@ -213,10 +218,30 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
 }
 
 export class PartnerVirementsDtoValidator extends Results<PartnerVirementsDto> {
+  private readonly submit: boolean;
+
+  constructor({
+    model,
+    showValidationErrors,
+    submit,
+  }: {
+    model: PartnerVirementsDto;
+    showValidationErrors: boolean;
+    readonly submit: boolean;
+  }) {
+    super({ model, showValidationErrors });
+    this.submit = submit;
+  }
+
   public readonly virements = Validation.optionalChild(
     this,
     this.model.virements,
-    x => new CostCategoryVirementDtoValidator({ model: x, showValidationErrors: this.showValidationErrors }),
+    x =>
+      new CostCategoryVirementDtoValidator({
+        model: x,
+        showValidationErrors: this.showValidationErrors,
+        submit: this.submit,
+      }),
   );
 
   public readonly newRemainingGrant = Validation.all(
@@ -237,39 +262,59 @@ export class PartnerVirementsDtoValidator extends Results<PartnerVirementsDto> {
 }
 
 export class CostCategoryVirementDtoValidator extends Results<CostCategoryVirementDto> {
-  public readonly newPartnerEligibleCosts = Validation.all(
-    this,
-    () =>
-      Validation.required(
-        this,
-        this.model.newEligibleCosts,
-        this.getContent(x => x.validation.financialVirementDtoValidator.costRequired),
-      ),
-    () =>
-      Validation.isTrue(
-        this,
-        this.model.newEligibleCosts >= this.model.costsClaimedToDate,
-        this.getContent(x =>
-          x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.costs_too_small({
-            name: this.model.costCategoryName,
-          }),
+  private readonly submit: boolean;
+  public readonly newPartnerEligibleCosts: Result;
+
+  constructor({
+    model,
+    showValidationErrors,
+    submit,
+  }: {
+    model: CostCategoryVirementDto;
+    showValidationErrors: boolean;
+    readonly submit: boolean;
+  }) {
+    super({ model, showValidationErrors });
+    this.submit = submit;
+
+    this.newPartnerEligibleCosts = Validation.all(
+      this,
+      () =>
+        Validation.required(
+          this,
+          this.model.newEligibleCosts,
+          this.getContent(x => x.validation.financialVirementDtoValidator.costRequired),
         ),
-      ),
-    () =>
-      Validation.isTrue(
-        this,
-        this.model.newEligibleCosts >= 0,
-        this.getContent(
-          x =>
-            x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.too_small
-              .number,
+      () =>
+        this.submit
+          ? Validation.isTrue(
+              this,
+              this.model.newEligibleCosts >= this.model.costsClaimedToDate,
+              this.getContent(x =>
+                x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.costs_too_small(
+                  {
+                    name: this.model.costCategoryName,
+                  },
+                ),
+              ),
+            )
+          : Validation.valid(this),
+      () =>
+        Validation.isTrue(
+          this,
+          this.model.newEligibleCosts >= 0,
+          this.getContent(
+            x =>
+              x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.too_small
+                .number,
+          ),
         ),
-      ),
-    () =>
-      Validation.isTrue(
-        this,
-        this.model.newEligibleCosts < BigInt("10000000000000000"),
-        this.getContent(x => x.validation.financialVirementDtoValidator.costTooBig),
-      ),
-  );
+      () =>
+        Validation.isTrue(
+          this,
+          this.model.newEligibleCosts < BigInt("10000000000000000"),
+          this.getContent(x => x.validation.financialVirementDtoValidator.costTooBig),
+        ),
+    );
+  }
 }

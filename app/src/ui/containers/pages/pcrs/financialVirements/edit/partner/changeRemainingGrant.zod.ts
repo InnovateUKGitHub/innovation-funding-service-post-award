@@ -32,7 +32,6 @@ export const changeRemainingGrantSchema = z
           }
         }),
     ),
-
     originalRemainingGrant: z.number(),
     newRemainingGrant: z.number(),
     newRemainingCosts: z.number(),

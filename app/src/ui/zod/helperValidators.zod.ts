@@ -6,7 +6,7 @@ import { validDocumentFilenameCharacters } from "@ui/validation/validators/docum
 import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types/fileWapper";
-import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 
 const maxDefaultValue = 100_000_000_000;
@@ -130,17 +130,10 @@ const currencyValidation = z
         },
       });
     }
-
-    if (!validCurrencyRegex.test(val)) {
-      return ctx.addIssue({
-        code: ZodIssueCode.invalid_string,
-        validation: "regex",
-      });
-    }
   });
 
 const zeroOrGreaterCurrencyValidation = currencyValidation.superRefine((val, ctx) => {
-  const currency = parseFloat(val.replaceAll("£", ""));
+  const currency = roundCurrency(parseCurrency(val));
 
   if (currency < 0) {
     return ctx.addIssue({

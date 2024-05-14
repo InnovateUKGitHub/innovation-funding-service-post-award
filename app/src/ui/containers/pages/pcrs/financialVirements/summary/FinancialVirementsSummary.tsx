@@ -40,16 +40,7 @@ export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
   const routes = useRoutes();
 
-  const {
-    projectId,
-    pcrId,
-    itemId,
-    onSave,
-    isFetching,
-    mode,
-    fetchKey,
-    // displayCompleteForm,
-  } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, onSave, isFetching, mode, fetchKey } = usePcrWorkflowContext();
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
     usePcrFinancialVirementData({ projectId, pcrId, itemId, fetchKey });
 
@@ -66,10 +57,12 @@ export const FinancialVirementSummary = () => {
   >({
     resolver: zodResolver(
       getFinancialVirementsSummaryValidator({
-        financialVirementsForCosts,
-        financialVirementsForParticipants,
-        partners,
-        pcrItemId: itemId,
+        mapFinancialVirementProps: {
+          financialVirementsForCosts,
+          financialVirementsForParticipants,
+          partners,
+          pcrItemId: itemId,
+        },
       }),
       { errorMap: financialVirementsSummaryErrorMap },
     ),
@@ -124,7 +117,11 @@ export const FinancialVirementSummary = () => {
           </THead>
           <TBody>
             {virementData.partners.map(x => (
-              <TR key={x.virementParticipantId}>
+              <TR
+                id={x.partnerId}
+                key={x.virementParticipantId}
+                hasError={!!allErrors?.partner && x.partnerId in allErrors.partner}
+              >
                 <TD className={colClass}>
                   <Link
                     route={routes.pcrFinancialVirementEditCostCategoryLevel.getLink({
@@ -133,6 +130,7 @@ export const FinancialVirementSummary = () => {
                       itemId,
                       pcrId,
                     })}
+                    disabled={isFetching}
                   >
                     {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}
                   </Link>
@@ -224,60 +222,59 @@ export const FinancialVirementSummary = () => {
                     pcrId,
                     itemId,
                   })}
+                  disabled={isFetching}
                 >
                   <Content value={x => x.pages.financialVirementSummary.linkChangeGrant} />
                 </Link>
               </Section>
             </>
           )}
-          {isSummaryValid && (
-            <Form onSubmit={handleSubmit(onSubmitUpdate)} aria-disabled={isFetching}>
-              <input type="hidden" value={FormTypes.PcrFinancialVirementsSummary} {...register("form")} />
-              <input type="hidden" value={projectId} {...register("projectId")} />
-              <input type="hidden" value={pcrId} {...register("pcrId")} />
-              <input type="hidden" value={itemId} {...register("pcrItemId")} />
+          <Form onSubmit={handleSubmit(onSubmitUpdate)} aria-disabled={isFetching}>
+            <input type="hidden" value={FormTypes.PcrFinancialVirementsSummary} {...register("form")} />
+            <input type="hidden" value={projectId} {...register("projectId")} />
+            <input type="hidden" value={pcrId} {...register("pcrId")} />
+            <input type="hidden" value={itemId} {...register("pcrItemId")} />
 
-              <Fieldset>
-                <Legend>{getContent(x => x.financialVirementLabels.grantMovingOverYear)}</Legend>
-                <Hint id="hint-for-grantMovingOverFinancialYear">
-                  {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
-                </Hint>
-                <FormGroup hasError={!!getFieldState("grantMovingOverFinancialYear").error}>
-                  <ValidationError error={getFieldState("grantMovingOverFinancialYear").error} />
-                  <TextInput
-                    {...register("grantMovingOverFinancialYear")}
-                    defaultValue={
-                      defaults?.grantMovingOverFinancialYear ?? pcrItem?.grantMovingOverFinancialYear ?? undefined
-                    }
-                    id="grantMovingOverFinancialYear"
-                    inputWidth={10}
+            <Fieldset>
+              <Legend>{getContent(x => x.financialVirementLabels.grantMovingOverYear)}</Legend>
+              <Hint id="hint-for-grantMovingOverFinancialYear">
+                {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
+              </Hint>
+              <FormGroup hasError={!!getFieldState("grantMovingOverFinancialYear").error}>
+                <ValidationError error={getFieldState("grantMovingOverFinancialYear").error} />
+                <TextInput
+                  {...register("grantMovingOverFinancialYear")}
+                  defaultValue={
+                    defaults?.grantMovingOverFinancialYear ?? pcrItem?.grantMovingOverFinancialYear ?? undefined
+                  }
+                  id="grantMovingOverFinancialYear"
+                  inputWidth={10}
+                  disabled={isFetching}
+                  numeric
+                />
+              </FormGroup>
+            </Fieldset>
+
+            <Fieldset>
+              <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
+              <FormGroup>
+                <CheckboxList name="markedAsComplete" register={register}>
+                  <Checkbox
+                    defaultChecked={defaults?.markedAsComplete ?? pcrItem?.status === PCRItemStatus.Complete}
+                    label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)}
+                    id="submit"
                     disabled={isFetching}
-                    numeric
                   />
-                </FormGroup>
-              </Fieldset>
+                </CheckboxList>
+              </FormGroup>
+            </Fieldset>
 
-              <Fieldset>
-                <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
-                <FormGroup>
-                  <CheckboxList name="markedAsComplete" register={register}>
-                    <Checkbox
-                      defaultChecked={defaults?.markedAsComplete ?? pcrItem?.status === PCRItemStatus.Complete}
-                      label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)}
-                      id="submit"
-                      disabled={isFetching}
-                    />
-                  </CheckboxList>
-                </FormGroup>
-              </Fieldset>
-
-              <Fieldset>
-                <Button styling="Primary" type="submit" disabled={isFetching}>
-                  {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
-                </Button>
-              </Fieldset>
-            </Form>
-          )}
+            <Fieldset>
+              <Button styling="Primary" type="submit" disabled={isFetching}>
+                {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
+              </Button>
+            </Fieldset>
+          </Form>
         </>
       )}
 

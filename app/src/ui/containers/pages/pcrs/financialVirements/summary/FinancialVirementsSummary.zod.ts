@@ -12,7 +12,11 @@ import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements
 
 const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
 
-const getFinancialVirementsSummaryValidator = (props: MapVirements) => {
+const getFinancialVirementsSummaryValidator = ({
+  mapFinancialVirementProps,
+}: {
+  mapFinancialVirementProps: MapVirements;
+}) => {
   return z
     .object({
       projectId: projectIdValidation,
@@ -23,9 +27,26 @@ const getFinancialVirementsSummaryValidator = (props: MapVirements) => {
       markedAsComplete: z.boolean(),
     })
     .superRefine((data, ctx) => {
-      const { isSummaryValid, virementMeta } = mapVirements(props);
+      const { isSummaryValid, virementData, virementMeta } = mapVirements(mapFinancialVirementProps);
 
       if (data.markedAsComplete) {
+        virementData.partners.forEach(partner => {
+          if (
+            partner.virements.some(
+              costCategoryVirement => costCategoryVirement.newEligibleCosts < costCategoryVirement.costsClaimedToDate,
+            )
+          ) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              path: ["partner", partner.partnerId],
+              params: {
+                i18n: "errors.costs_too_small",
+                name: partner.name,
+              },
+            });
+          }
+        });
+
         if (typeof data.grantMovingOverFinancialYear === "undefined") {
           ctx.addIssue({
             code: ZodIssueCode.custom,
@@ -35,17 +56,17 @@ const getFinancialVirementsSummaryValidator = (props: MapVirements) => {
             },
           });
         }
-      }
 
-      if (!isSummaryValid) {
-        ctx.addIssue({
-          code: ZodIssueCode.custom,
-          params: {
-            i18n: "errors.virement_too_big",
-            difference: virementMeta.grantDifference,
-            total: virementMeta.originalRemainingGrant,
-          },
-        });
+        if (!isSummaryValid) {
+          ctx.addIssue({
+            code: ZodIssueCode.custom,
+            params: {
+              i18n: "errors.virement_too_big",
+              difference: virementMeta.grantDifference,
+              total: virementMeta.originalRemainingGrant,
+            },
+          });
+        }
       }
     });
 };

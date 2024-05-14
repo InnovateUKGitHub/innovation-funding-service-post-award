@@ -2,6 +2,7 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
+import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
@@ -41,18 +42,28 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
     const financialVirementsForParticipantsPromise = await context.repositories.financialVirements.getAllForPcr(
       input.pcrItemId as PcrItemId,
     );
+    const projectChangeRequestPromise = context.runQuery(
+      new GetPCRByIdQuery(input.projectId as ProjectId, input.pcrId as PcrId),
+    );
 
-    const [partners, financialVirementsForParticipants] = await Promise.all([
+    const [partners, financialVirementsForParticipants, pcr] = await Promise.all([
       partnersPromise,
       financialVirementsForParticipantsPromise,
+      projectChangeRequestPromise,
     ]);
+
+    const pcrItem = pcr.items.find(x => x.id === input.pcrItemId);
+
+    if (!pcrItem) throw new Error("cannae find pcr item");
 
     return {
       schema: getFinancialVirementsSummaryValidator({
-        partners,
-        financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
-        financialVirementsForParticipants,
-        pcrItemId: input.pcrItemId as PcrItemId,
+        mapFinancialVirementProps: {
+          partners,
+          financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
+          financialVirementsForParticipants,
+          pcrItemId: input.pcrItemId as PcrItemId,
+        },
       }),
       errorMap: financialVirementsSummaryErrorMap,
     };

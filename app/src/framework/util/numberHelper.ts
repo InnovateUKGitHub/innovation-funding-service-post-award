@@ -76,7 +76,7 @@ export function parseNumber(x?: string | number | null) {
  * @returns Parsed number
  */
 export function parseCurrency(x?: string | number | null) {
-  if (typeof x === "string") return parseFloat(x.replaceAll("£", ""));
+  if (typeof x === "string") return parseFloat(x.trim().replaceAll("£", "").replaceAll(",", ""));
   if (typeof x === "number") return x;
   return NaN;
 }

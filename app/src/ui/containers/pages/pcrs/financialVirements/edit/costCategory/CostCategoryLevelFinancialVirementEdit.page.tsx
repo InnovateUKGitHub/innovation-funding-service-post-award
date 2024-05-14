@@ -2,8 +2,10 @@ import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodError
 import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { capitalizeFirstWord } from "@shared/string-helpers";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
@@ -36,8 +38,6 @@ import {
   costCategoryLevelFinancialVirementEditErrorMap,
   getCostCategoryLevelFinancialVirementEditSchema,
 } from "./CostCategoryLevelFinancialVirementEdit.zod";
-import { capitalizeFirstWord } from "@shared/string-helpers";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 
 interface PartnerLevelFinancialVirementParams {
   projectId: ProjectId;
@@ -77,9 +77,14 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
   const { register, watch, handleSubmit, setError, formState, getFieldState } = useForm<
     z.input<CostCategoryLevelFinancialVirementEditSchemaType>
   >({
-    resolver: zodResolver(getCostCategoryLevelFinancialVirementEditSchema(mapFinancialVirementProps), {
-      errorMap: costCategoryLevelFinancialVirementEditErrorMap,
-    }),
+    resolver: zodResolver(
+      getCostCategoryLevelFinancialVirementEditSchema({
+        mapFinancialVirementProps,
+      }),
+      {
+        errorMap: costCategoryLevelFinancialVirementEditErrorMap,
+      },
+    ),
   });
 
   const defaults = useServerInput();

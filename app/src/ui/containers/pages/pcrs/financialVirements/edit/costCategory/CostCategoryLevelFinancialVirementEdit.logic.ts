@@ -36,7 +36,7 @@ export const useOnUpdateCostCategoryLevel = ({
         pcrId: data.pcrId,
         pcrItemId: data.pcrItemId,
         financialVirement: mapFinancialVirement(data.virements).virementData,
-        submit: true,
+        submit: false,
       });
     },
     onSuccess: data =>
