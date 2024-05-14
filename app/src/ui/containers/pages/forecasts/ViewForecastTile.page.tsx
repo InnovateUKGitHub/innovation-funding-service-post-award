@@ -20,6 +20,7 @@ import { useUpdateForecastData } from "./ForecastTile.logic";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { ClaimStatusGroup } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 
 export interface ViewForecastParams {
   projectId: ProjectId;
@@ -54,7 +55,13 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
     >
       <ForecastClaimAdvice isFc={isFc} />
 
-      {tableData.isFinalClaim && <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />}
+      {tableData.finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING && (
+        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimNotSubmitted} />
+      )}
+      {(tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+        tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED) && (
+        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimSubmitted} />
+      )}
 
       <Section title={data.partner.name} qa="partner-forecast">
         <ForecastAgreedCostWarning

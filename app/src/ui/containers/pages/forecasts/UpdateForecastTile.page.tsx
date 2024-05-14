@@ -31,6 +31,7 @@ import { forecastTileQuery } from "./ForecastTile.query";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { ClaimStatusGroup } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -87,7 +88,14 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
     >
       <ForecastClaimAdvice isFc={isFc} />
 
-      {tableData.isFinalClaim && <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />}
+      {tableData.finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING && (
+        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimNotSubmitted} />
+      )}
+      {(tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+        tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED) && (
+        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimSubmitted} />
+      )}
+
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
@@ -129,7 +137,15 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
             />
           </P>
           <Fieldset>
-            <Button type="submit" styling="Primary" disabled={isProcessing}>
+            <Button
+              type="submit"
+              styling="Primary"
+              disabled={
+                isProcessing ||
+                tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+                tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
+              }
+            >
               {getContent(x => x.pages.forecastsUpdate.buttonSubmit)}
             </Button>
           </Fieldset>
