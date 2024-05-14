@@ -64,8 +64,10 @@ import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStep
 import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
 import { ForecastHandler } from "./handlers/projects/Forecast.handler";
-import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerHandler";
+import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartner.handler";
 import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerSummaryHandler";
+import { PcrItemLevelDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentUpload.handler";
+import { PcrLevelDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentDelete.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -74,6 +76,7 @@ export const standardFormHandlers = [
   new ClaimDetailLevelDocumentShareDeleteHandler(),
   new ProjectSetupContactAssociateHandler(),
   new ProjectSetupBankDetailsHandler(),
+  new PcrLevelDocumentDeleteHandler(),
 
   // Zod PCRs
   new ProjectChangeRequestCreateHandler(),
@@ -109,7 +112,7 @@ export const standardFormHandlers = [
   new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
-  new ProjectChangeRequestItemUpdateHandler(),
+  // new ProjectChangeRequestItemUpdateHandler(),
   new ProjectChangeRequestSpendProfileAddCostHandler(),
   new ProjectChangeRequestSpendProfileDeleteCostHandler(),
   new ProjectChangeRequestSpendProfileEditCostHandler(),
@@ -129,7 +132,7 @@ export const standardFormHandlers = [
 
 export const multiFileFormHandlers = [
   new OverheadDocumentsUploadHandler(),
-  new ProjectChangeRequestItemDocumentUploadHandler(),
+  // new ProjectChangeRequestItemDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
 ] as const;
 
@@ -141,6 +144,7 @@ export const zodFormHandlers = [
   new ClaimDetailLevelDocumentShareUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new LoanRequestDocumentUploadHandler(),
+  new PcrItemLevelDocumentUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {

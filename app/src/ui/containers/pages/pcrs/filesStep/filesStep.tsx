@@ -37,12 +37,14 @@ export const FilesStep = ({
   guidanceComponent: GuidanceComponent,
   documentDescription,
   returnToSummaryButton,
+  formType,
 }: {
   heading?: ContentSelector;
   guidance?: ContentSelector;
   guidanceComponent?: ReactNode;
   documentDescription: DocumentDescription;
   returnToSummaryButton?: boolean;
+  formType?: FormTypes;
 }) => {
   const { getContent } = useContent();
 
@@ -114,6 +116,7 @@ export const FilesStep = ({
             {!!heading && <Legend>{getContent(heading)}</Legend>}
             {typeof GuidanceComponent !== undefined && GuidanceComponent}
             {guidance && <Content markdown value={guidance} />}
+
             <input type="hidden" value={documentDescription} {...register("description")}></input>
             <input type="hidden" value={projectId} {...register("projectId")} />
             <input type="hidden" value={itemId} {...register("projectChangeRequestIdOrItemId")} />
@@ -169,6 +172,7 @@ export const FilesStep = ({
           }),
         )}
       >
+        <input type="hidden" value={formType} name="form" />
         <Fieldset>
           <Button disabled={disabled} type="submit" {...registerButton("submit")}>
             {getContent(x => x.pcrItem.submitButton)}
