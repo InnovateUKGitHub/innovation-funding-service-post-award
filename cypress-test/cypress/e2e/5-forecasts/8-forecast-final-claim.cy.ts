@@ -12,6 +12,7 @@ describe("Forecast > Final claim", () => {
 
   it("Should display the Forecast heading and guidance", () => {
     cy.heading("Forecast");
+    cy.get("h2").contains("Deep Rock Galactic");
     cy.paragraph(
       "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved).",
     );

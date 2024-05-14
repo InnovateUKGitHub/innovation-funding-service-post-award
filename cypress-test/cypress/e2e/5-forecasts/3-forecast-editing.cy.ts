@@ -6,6 +6,8 @@ import {
   revertCategoriesSubmit,
   updateLabourFields,
   submitCalculations,
+  enterExtremePositiveValue,
+  enterExtremeNegativeValue,
 } from "./steps";
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
@@ -19,8 +21,9 @@ describe("Forecast > edit", () => {
 
   it("should click the forecast tile", clickForecastTile);
 
-  it("Should display a page heading", () => {
+  it("Should display a page heading and partner heading", () => {
     cy.heading("Forecast");
+    cy.get("h2").contains("EUI Small Ent Health");
   });
 
   it("Should have an 'Update forecast' button", () => {
@@ -40,9 +43,13 @@ describe("Forecast > edit", () => {
   );
 
   it(
-    "Should clear the cost categories and submit with null values which should generate an error",
+    "Should clear the cost categories and submit with null values which should generate 6 separate validation messages",
     clearCostCategories,
   );
+
+  it("Should enter an extreme value of 17 digits and validate appropriately", enterExtremePositiveValue);
+
+  it("Should enter a large negative figure and save without validation", enterExtremeNegativeValue);
 
   it("Should revert the cost categories back to how they were and click submit", revertCategoriesSubmit);
 

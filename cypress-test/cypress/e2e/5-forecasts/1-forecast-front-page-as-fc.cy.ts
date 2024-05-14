@@ -22,6 +22,7 @@ describe("Forecast > front page as FC", () => {
 
   it("Should display a page heading", () => {
     cy.heading("Forecast");
+    cy.get("h2").contains("EUI Small Ent Health");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

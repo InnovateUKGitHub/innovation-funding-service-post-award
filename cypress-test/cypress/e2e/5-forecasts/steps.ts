@@ -1,3 +1,30 @@
+import { euiCostCleanUp } from "common/costCleanUp";
+import { visitApp } from "common/visit";
+
+export const ohForecastCleanup = () => {
+  cy.get("tr")
+    .eq(4)
+    .then($labour => {
+      if ($labour.text().includes("£1,000.00")) {
+        cy.log("**Cleaning up labour costs**");
+        cy.clickOn("Back to forecast");
+        cy.backLink("Back to forecasts").click();
+        cy.backLink("Back to project").click();
+        cy.heading("Project overview");
+        cy.selectTile("Claims");
+        cy.get("a").contains("Edit").click();
+        cy.heading("Costs to be claimed");
+        euiCostCleanUp();
+        cy.clickOn("Back to claims");
+        cy.heading("Claims");
+        cy.clickOn("Back to project");
+        cy.heading("Project overview");
+        clickForecastAccessEUI();
+        cy.clickOn("Edit forecast");
+      }
+    });
+};
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -80,13 +107,13 @@ export const updateLabourFields = () => {
     "Labour Period 6",
     "Labour Period 7",
   ].forEach(labourField => {
-    cy.getByAriaLabel(labourField).clear({ force: true }).type("10").wait(500);
+    cy.getByAriaLabel(labourField).clear({ force: true }).type("10").wait(200);
   });
 };
 
 export const exceedGrantValue = () => {
   cy.get("a").contains("Edit forecast").click();
-  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(500);
+  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(200);
   cy.getByQA("forecasts-warning-fc-content").contains(
     "The amount you are requesting is more than the agreed costs for:",
   );
@@ -104,17 +131,30 @@ export const clearCostCategories = () => {
     cy.getByAriaLabel(clearCost).clear({ force: true });
   });
   cy.submitButton("Submit changes").click();
-  cy.get("h2").contains("There is a problem");
+
+  cy.validationLink("Forecast is required.");
+  cy.get(`[data-qa="validation-summary"]`).within(() => {
+    cy.get("a").then($validationMsg => {
+      let msgNumber = $validationMsg.length;
+      if (msgNumber !== 6) {
+        cy.log(msgNumber.toString());
+        throw new Error();
+      } else if (msgNumber == 6) {
+        cy.log("Test passed because number of validation messages should be 6.");
+        cy.log(`Number of validation messages: ${msgNumber.toString()}`);
+      }
+    });
+  });
 };
 
 export const revertCategoriesSubmit = () => {
-  cy.getByAriaLabel("Labour Period 2").clear().type("11.10").wait(500);
-  cy.getByAriaLabel("Labour Period 3").clear().type("22.20").wait(500);
-  cy.getByAriaLabel("Labour Period 4").clear().type("33.30").wait(500);
-  cy.getByAriaLabel("Labour Period 5").clear().type("44.40").wait(500);
-  cy.getByAriaLabel("Labour Period 6").clear().type("55.55").wait(500);
-  cy.getByAriaLabel("Labour Period 7").clear().type("50.89").wait(500);
-  cy.getByAriaLabel("Labour Period 8").clear().type("777.00").wait(500);
+  cy.getByAriaLabel("Labour Period 2").clear().type("11.10").wait(200);
+  cy.getByAriaLabel("Labour Period 3").clear().type("22.20").wait(200);
+  cy.getByAriaLabel("Labour Period 4").clear().type("33.30").wait(200);
+  cy.getByAriaLabel("Labour Period 5").clear().type("44.40").wait(200);
+  cy.getByAriaLabel("Labour Period 6").clear().type("55.55").wait(200);
+  cy.getByAriaLabel("Labour Period 7").clear().type("50.89").wait(200);
+  cy.getByAriaLabel("Labour Period 8").clear().type("777.00").wait(200);
   cy.submitButton("Submit changes").click();
 };
 
@@ -284,7 +324,9 @@ export const submitCalculations = () => {
     .within(() => {
       cy.get("td:nth-child(14)").contains("£34,781.66");
     });
+  cy.intercept("/api/forecast-details/*").as("submitWait");
   cy.get("button").contains("Submit changes").click();
+  cy.wait("@submitWait");
   cy.get("a").contains("Edit forecast");
   cy.get("td:nth-child(4)").contains("111");
   cy.get("tr")
@@ -296,6 +338,7 @@ export const submitCalculations = () => {
 
 export const clickForecastAccessEUI = () => {
   cy.selectTile("Forecasts");
+  cy.heading("Forecasts");
   cy.get("td").contains("EUI Small Ent Health").siblings().contains("View forecast").click();
 };
 
@@ -306,8 +349,7 @@ export const clickEditForecastButton = () => {
 };
 
 export const displayCorrectOverheadRate = () => {
-  cy.getByQA("overhead-costs").contains("Overhead costs");
-  cy.getByQA("overhead-costs").contains("20.00%");
+  cy.paragraph("Overheads costs: 20.00%");
 };
 
 export const updateLabourCalculateOH = () => {
@@ -334,7 +376,7 @@ export const updateLabourCalculateOH = () => {
       .within(() => {
         cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
       });
-    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.getByAriaLabel("Overheads Period 2").should("have.text", newCurrency.format(overhead));
     cy.get("tr")
       .eq(5)
       .within(() => {
@@ -371,7 +413,7 @@ export const returnToForecastArea = () => {
 export const clickEditCheckValues = () => {
   cy.get("a").contains("Edit forecast").click();
   cy.heading("Update forecast");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.666");
+  cy.getByAriaLabel("Overheads Period 2").should("have.text", "£6.67");
 };
 
 export const topThreeRows = () => {
@@ -455,9 +497,9 @@ export const forecastValues = () => {
 };
 
 export const correctTableHeaders = () => {
-  cy.getByQA("total-header").contains("Total");
-  cy.getByQA("total-eligible-cost").contains("Total eligible costs");
-  cy.tableHeader("Difference");
+  ["Costs you are claiming", "Forecast", "Total", "Total eligible costs", "Difference"].forEach((header, index) => {
+    cy.get(`th:nth-child(${index + 2})`).contains(header);
+  });
 };
 
 export const correctForecastTotals = () => {
@@ -505,7 +547,7 @@ export const forecastPartnerTable = () => {
 
 export const saveNegativeValues = () => {
   cy.getByAriaLabel("Labour Period 2").clear().type("-3333.33");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "-666.666");
+  cy.getByAriaLabel("Overheads Period 2").should("have.text", "-£666.67");
   cy.clickOn("Submit changes");
   cy.get("tr")
     .eq(4)
@@ -517,4 +559,17 @@ export const saveNegativeValues = () => {
     .within(() => {
       cy.get("td:nth-child(3)").contains("-£666.67");
     });
+};
+
+export const enterExtremePositiveValue = () => {
+  cy.getByAriaLabel("Labour Period 3").clear().type("9999999999999");
+  cy.getByQA("validation-summary").should("not.contain", "A validation error occurred.");
+  cy.validationLink("Your overall total cannot be higher than your total eligible costs.");
+  cy.validationLink("Forecast must be less than £999,999,999,999.00.");
+};
+
+export const enterExtremeNegativeValue = () => {
+  cy.getByAriaLabel("Labour Period 3").clear().type("-9999999999999");
+  cy.getByQA("validation-summary").should("not.contain", "A validation error occurred.");
+  cy.validationLink("Forecast must be more than -£999,999,999,999.00.");
 };

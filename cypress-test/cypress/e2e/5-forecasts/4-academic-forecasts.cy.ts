@@ -12,6 +12,7 @@ describe("Forecast > Academic", () => {
   it("Should click the Forecast tile and continue to the Forecast page", () => {
     cy.selectTile("Forecast");
     cy.heading("Forecast");
+    cy.get("h2").contains("ABS EUI Medium Enterprise");
   });
 
   it("Should have a back option", () => {

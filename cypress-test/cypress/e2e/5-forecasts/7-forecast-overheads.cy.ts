@@ -9,6 +9,7 @@ import {
   submitForecastBackOut,
   updateLabourCalculateOH,
   saveNegativeValues,
+  ohForecastCleanup,
 } from "./steps";
 const fcEmail = "james.black@euimeabs.test";
 
@@ -24,6 +25,8 @@ describe("Forecast > edit", () => {
   it("Should click the update forecast button", clickEditForecastButton);
 
   it("Should display the correct overhead rate", displayCorrectOverheadRate);
+
+  it("Should check that no costs are present in claims column but if so, clean up", ohForecastCleanup);
 
   it(
     "Should update the labour with a value and auto-calculate the overheads to 2 decimal places",
