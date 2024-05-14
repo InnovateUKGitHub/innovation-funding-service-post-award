@@ -28,7 +28,7 @@ export const useOnUpdateChangeRemainingGrant = (
 };
 
 export const getNewFundingLevel = (newRemainingCosts: number, newRemainingGrant: number, newFundingLevel: number) => {
-  if (!newRemainingGrant) {
+  if (!newRemainingCosts) {
     return newFundingLevel;
   }
   return (newRemainingGrant / newRemainingCosts) * 100;
@@ -60,7 +60,7 @@ export const getPayload = (
       const matchingPartner = data.partners.find(v => v.partnerId === x.partnerId);
       if (!matchingPartner) throw new Error("cannot find matching partner id");
 
-      const newRemainingGrant = Number(matchingPartner.newRemainingGrant.replace("£", ""));
+      const newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant);
 
       const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newRemainingGrant, x.newFundingLevel);
 
