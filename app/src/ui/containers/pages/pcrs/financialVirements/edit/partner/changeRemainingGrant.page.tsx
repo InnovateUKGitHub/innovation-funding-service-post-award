@@ -14,11 +14,11 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { useForm } from "react-hook-form";
-import { ChangeRemainingGrantSchema, changeRemainingGrantSchema, errorMap } from "./editPartnerLevel.zod";
+import { ChangeRemainingGrantSchema, changeRemainingGrantSchema, errorMap } from "./changeRemainingGrant.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { sumBy } from "lodash";
-import { useOnUpdateChangeRemainingGrant, getPayload } from "./editPartnerLevel.logic";
+import { useOnUpdateChangeRemainingGrant, getPayload } from "./changeRemainingGrant.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
 import { FormTypes } from "@ui/zod/FormTypes";

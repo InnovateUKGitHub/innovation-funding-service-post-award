@@ -4,7 +4,7 @@ import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { pick, sumBy } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
-import { ChangeRemainingGrantSchema } from "./editPartnerLevel.zod";
+import { ChangeRemainingGrantSchema } from "./changeRemainingGrant.zod";
 
 export const useOnUpdateChangeRemainingGrant = (
   projectId: ProjectId,
