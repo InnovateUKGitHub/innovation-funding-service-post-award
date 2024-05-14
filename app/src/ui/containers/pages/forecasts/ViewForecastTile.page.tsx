@@ -30,7 +30,7 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
   const data = useUpdateForecastData({ projectId, partnerId });
   const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false });
 
-  const { isFc } = getAuthRoles(fragmentData.project.roles);
+  const { isFc, isPmOrMo } = getAuthRoles(fragmentData.project.roles);
 
   const routes = useRoutes();
   const { getContent } = useContent();
@@ -40,9 +40,15 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
   return (
     <Page
       backLink={
-        <BackLink route={routes.viewForecast.getLink({ projectId, partnerId })}>
-          <Content value={x => x.pages.forecastsUpdate.backLink} />
-        </BackLink>
+        isPmOrMo ? (
+          <BackLink route={routes.forecastDashboard.getLink({ projectId })}>
+            <Content value={x => x.pages.forecastsDetails.backLinkMoOrPm} />
+          </BackLink>
+        ) : (
+          <BackLink route={routes.projectOverview.getLink({ projectId })}>
+            <Content value={x => x.pages.forecastsDetails.backLink} />
+          </BackLink>
+        )
       }
       fragmentRef={data.fragmentRef}
     >
