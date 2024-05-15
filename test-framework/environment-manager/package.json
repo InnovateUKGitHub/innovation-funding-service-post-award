@@ -1,5 +1,5 @@
 {
-  "name": "envman",
+  "name": "environment-manager",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",

@@ -1,4 +1,4 @@
-import { Envman } from "envman";
+import { EnvironmentManager } from "environment-manager";
 import jwt from "jsonwebtoken";
 
 const accCache = new Map<string, string>();
@@ -19,13 +19,13 @@ const tasks = {
   },
 
   getSecret({ cyEnv, key }: { key: string } & SirtestalotTaskProps): string | null {
-    const envman = new Envman(cyEnv.SALESFORCE_ENVIRONMENT);
+    const envman = new EnvironmentManager(cyEnv.SALESFORCE_ENVIRONMENT);
 
     return envman.getEnv(key) ?? null;
   },
 
   async runApex({ cyEnv, apex }: { apex: string } & SirtestalotTaskProps): Promise<unknown> {
-    const envman = new Envman(cyEnv.SALESFORCE_ENVIRONMENT);
+    const envman = new EnvironmentManager(cyEnv.SALESFORCE_ENVIRONMENT);
 
     const getSalesforceAccessToken = async () => {
       const privateKey = envman.getEnv("SALESFORCE_PRIVATE_KEY");

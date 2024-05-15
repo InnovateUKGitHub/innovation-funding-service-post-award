@@ -1,5 +1,5 @@
 {
-  "name": "acc-cypress",
+  "name": "cypress-test",
   "private": true,
   "version": "1.0.0",
   "description": "",
@@ -18,7 +18,7 @@
     "@badeball/cypress-cucumber-preprocessor": "^18.0.6",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
     "cypress": "^13.7.1",
-    "envman": "^1.0.0",
+    "environment-manager": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "project-factory": "^1.0.0",
     "typescript": "^5.4.3"

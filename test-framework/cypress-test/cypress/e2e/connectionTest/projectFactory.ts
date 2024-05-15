@@ -7,7 +7,7 @@ import { defaultUser } from "project-factory/dist/factory/ifspa/User";
 
 When("Cypress tries to create a project", function () {
   const competition = competitionBuilder
-    .new()
+    .create()
     .set({ Acc_CompetitionCode__c: "100", Acc_CompetitionName__c: "Competition", Acc_CompetitionType__c: "CR&D" });
 
   const project = defaultAccProject.copy().set({ Acc_CompetitionId__c: competition });
@@ -19,7 +19,9 @@ When("Cypress tries to create a project", function () {
     ["1", pmFcAccount, "pm@x.gov.uk", "Peter", "May", "pm", "Project Manager"],
     ["2", pmFcAccount, "fc@x.gov.uk", "Ferris", "Colton", "fc", "Finance contact"],
   ]).flatMap(([ContactMigrationId__c, account, Email, FirstName, LastName, Alias, Acc_Role__c]) => {
-    const contact = contactBuilder.new().set({ AccountId: account, ContactMigrationId__c, Email, FirstName, LastName });
+    const contact = contactBuilder
+      .create()
+      .set({ AccountId: account, ContactMigrationId__c, Email, FirstName, LastName });
 
     const user = defaultUser.copy().set({
       ContactId: contact,
@@ -31,7 +33,7 @@ When("Cypress tries to create a project", function () {
       CommunityNickname: Alias,
     });
 
-    const pcl = accProjectContactLinkBuilder.new().set({
+    const pcl = accProjectContactLinkBuilder.create().set({
       Acc_AccountId__c: account,
       Acc_ContactId__c: contact,
       Acc_ProjectId__c: project,

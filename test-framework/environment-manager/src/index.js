@@ -2,7 +2,7 @@ const yaml = require("yaml");
 const childProcess = require("node:child_process");
 const path = require("node:path");
 
-class Envman {
+class EnvironmentManager {
   /**
    * @type Record<string, string>
    */
@@ -39,4 +39,4 @@ class Envman {
   }
 }
 
-module.exports = { Envman };
+module.exports = { EnvironmentManager };

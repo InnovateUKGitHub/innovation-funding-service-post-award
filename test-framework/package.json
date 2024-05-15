@@ -4,7 +4,7 @@
   "workspaces": [
     "./cypress-test",
     "./project-factory",
-    "./envman"
+    "./environment-manager"
   ],
   "scripts": {}
 }
