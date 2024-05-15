@@ -1,5 +1,6 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { FilesStep } from "../filesStep/filesStep";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const RemovePartnerFilesStep = () => {
   return (
@@ -7,6 +8,7 @@ export const RemovePartnerFilesStep = () => {
       guidance={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidance}
       heading={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidanceHeading}
       documentDescription={DocumentDescription.WithdrawalOfPartnerCertificate}
+      formType={FormTypes.PcrRemovePartnerFilesStep}
     />
   );
 };

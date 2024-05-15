@@ -2,6 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
 import { isNil } from "lodash";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const removePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
 
@@ -11,6 +12,7 @@ export const getRemovePartnerSchema = (numberOfPeriods: number) =>
       markedAsComplete: z.boolean(),
       removalPeriod: z.coerce.number().int().min(1).max(numberOfPeriods).nullable(),
       partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
+      form: z.union([z.literal(FormTypes.PcrRemovePartnerSummary), z.literal(FormTypes.PcrRemovePartnerStep)]),
     })
     .superRefine((data, ctx) => {
       if (data.markedAsComplete) {
@@ -36,4 +38,5 @@ export const getRemovePartnerSchema = (numberOfPeriods: number) =>
       }
     });
 
-export type RemovePartnerSchemaType = z.infer<ReturnType<typeof getRemovePartnerSchema>>;
+export type RemovePartnerSchema = ReturnType<typeof getRemovePartnerSchema>;
+export type RemovePartnerSchemaType = z.infer<RemovePartnerSchema>;

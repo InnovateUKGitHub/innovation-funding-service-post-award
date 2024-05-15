@@ -54,6 +54,10 @@ enum FormTypes {
   PcrRenamePartnerFilesStep = "pcrRenamePartnerFilesStep",
   PcrRenamePartnerSummary = "pcrRenamePartnerSummary",
 
+  PcrRemovePartnerStep = "pcrRemovePartnerStep",
+  PcrRemovePartnerFilesStep = "pcrRemovePartnerFilesStep",
+  PcrRemovePartnerSummary = "pcrRemovePartnerSummary",
+
   PcrPrepareReasoningStep = "pcrPrepareReasoningStep",
   PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
   PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",

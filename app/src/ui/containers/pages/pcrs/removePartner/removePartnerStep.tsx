@@ -13,12 +13,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNextLink } from "../utils/useNextLink";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRemovePartnerSchema, removePartnerErrorMap, RemovePartnerSchemaType } from "./removePartner.zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 
 export const RemovePartnerStep = () => {
   const { getContent } = useContent();
@@ -26,7 +28,7 @@ export const RemovePartnerStep = () => {
 
   const { partners, pcrItem, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger, watch } = useForm<RemovePartnerSchemaType>({
+  const { handleSubmit, register, formState, trigger, watch, setError } = useForm<RemovePartnerSchemaType>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
       removalPeriod: pcrItem.removalPeriod,
@@ -37,7 +39,7 @@ export const RemovePartnerStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const partnerOptions = partners
@@ -57,20 +59,29 @@ export const RemovePartnerStep = () => {
             onSave({ data, context: { link: nextLink } });
           })}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrRemovePartnerStep} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrRemovePartner.headingSelectPartner)}</Legend>
             <FormGroup>
               <RadioList name="partnerId" register={register}>
                 {partnerOptions.map(partner => (
-                  <Radio key={partner.id} id={partner.id} label={partner.label} disabled={isFetching}></Radio>
+                  <Radio
+                    key={partner.id}
+                    id={partner.id}
+                    label={partner.label}
+                    disabled={isFetching}
+                    defaultChecked={!!pcrItem?.partnerId && pcrItem.partnerId === partner.id}
+                  ></Radio>
                 ))}
               </RadioList>
             </FormGroup>
           </Fieldset>
 
           <Fieldset>
-            <Legend> {getContent(x => x.pages.pcrRemovePartner.headingRemovalPeriod)}</Legend>
             <FormGroup hasError={!!validationErrors?.removalPeriod}>
+              <Label bold htmlFor="removalPeriod">
+                {getContent(x => x.pages.pcrRemovePartner.headingRemovalPeriod)}
+              </Label>
               <Hint id="hint-for-removalPeriod">{getContent(x => x.pages.pcrRemovePartner.hintRemovalPeriod)}</Hint>
               <ValidationError error={validationErrors?.removalPeriod as RhfErrors} />
               <NumberInput
@@ -79,6 +90,7 @@ export const RemovePartnerStep = () => {
                 inputWidth={3}
                 id="removalPeriod"
                 disabled={isFetching}
+                defaultValue={pcrItem.removalPeriod ?? ""}
                 {...register("removalPeriod")}
               />
             </FormGroup>

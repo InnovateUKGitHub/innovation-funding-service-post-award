@@ -11,7 +11,7 @@ import { isNil } from "lodash";
 import { makeZodI18nMap } from "@shared/zodi18n";
 
 const filesSchema = z.object({
-  form: z.literal(FormTypes.PcrRenamePartnerFilesStep),
+  form: z.union([z.literal(FormTypes.PcrRenamePartnerFilesStep), z.literal(FormTypes.PcrRemovePartnerFilesStep)]),
 });
 
 type FilesSchema = typeof filesSchema;
@@ -20,7 +20,7 @@ export class PcrItemFilesStepHandler extends ZodFormHandlerBase<FilesSchema, Pro
   constructor() {
     super({
       routes: [PCRPrepareItemRoute],
-      forms: [FormTypes.PcrRenamePartnerFilesStep],
+      forms: [FormTypes.PcrRenamePartnerFilesStep, FormTypes.PcrRemovePartnerFilesStep],
     });
   }
 
@@ -48,7 +48,7 @@ export class PcrItemFilesStepHandler extends ZodFormHandlerBase<FilesSchema, Pro
   }): Promise<string> {
     let goToSummary = false;
 
-    if (input.form === FormTypes.PcrRenamePartnerFilesStep) {
+    if (input.form === FormTypes.PcrRenamePartnerFilesStep || input.form === FormTypes.PcrRemovePartnerFilesStep) {
       goToSummary = true;
     }
 

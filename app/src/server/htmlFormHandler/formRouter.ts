@@ -67,6 +67,8 @@ import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[p
 import { PcrItemLevelDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentUpload.handler";
 import { PcrLevelDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentDelete.handler";
 import { PcrItemFilesStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFilesStep.handler";
+import { PcrItemChangeRemovePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRemovePartnerSummaryHandler";
+import { PcrItemChangeRemovePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRemovePartner.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -87,6 +89,8 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
+  new PcrItemChangeRemovePartnerHandler(),
+  new PcrItemChangeRemovePartnerSummaryHandler(),
   new PcrItemChangeRenamePartnerHandler(),
   new PcrItemChangeRenamePartnerSummaryHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),

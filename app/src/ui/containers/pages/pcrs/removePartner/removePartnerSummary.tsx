@@ -8,17 +8,18 @@ import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { useForm } from "react-hook-form";
 import { RemovePartnerSchemaType, getRemovePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { PcrPage } from "../pcrPage";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const RemovePartnerSummary = () => {
   const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem, documents, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch, getFieldState } = useForm<RemovePartnerSchemaType>({
+  const { register, handleSubmit, formState, watch, getFieldState, setError } = useForm<RemovePartnerSchemaType>({
     defaultValues: {
       // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
@@ -30,7 +31,7 @@ export const RemovePartnerSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -71,7 +72,9 @@ export const RemovePartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrRemovePartnerSummary} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );
