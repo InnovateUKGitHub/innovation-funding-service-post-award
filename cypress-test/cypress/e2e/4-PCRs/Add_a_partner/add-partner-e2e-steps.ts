@@ -1206,3 +1206,43 @@ export const checkPcrForValidation = () => {
     cy.heading("Add a partner");
   });
 };
+
+export const clearSavetoSummary = () => {
+  ["Organisation name", "Registration number", "Registered address"].forEach(inputField => {
+    cy.getByLabel(inputField).clear();
+  });
+  cy.clickOn("Save and return to summary");
+  cy.get("h2").contains("Organisation");
+};
+
+export const markAsCompletePromptValidation = () => {
+  cy.getByLabel("I agree with this change").check();
+  cy.clickOn("Save and return to request");
+  [
+    "Enter a valid funding level.",
+    "Enter a finance contact email address.",
+    "Enter a finance contact name.",
+    "Enter a finance contact phone number.",
+    "Enter a finance contact surname.",
+    "Enter an organisation name.",
+    "Enter a project city.",
+    "Select a project location.",
+    "Enter a registered address.",
+    "Enter a registration number.",
+    "Enter the number of employees.",
+    "Enter a financial year end.",
+    "Enter a financial year end turnover.",
+  ].forEach(validationMsg => {
+    cy.validationLink(validationMsg);
+  });
+};
+
+export const accessCompanyHouseValidationPersists = () => {
+  cy.getListItemFromKey("Organisation name", "Edit").click();
+  cy.get("h2").contains("Company house");
+  ["Enter an organisation name.", "Enter a registration number.", "Enter a registered address."].forEach(
+    validationMsg => {
+      cy.validationLink(validationMsg);
+    },
+  );
+};

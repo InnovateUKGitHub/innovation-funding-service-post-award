@@ -12,6 +12,11 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { loremIpsum159Char } from "common/lorem";
+import {
+  accessCompanyHouseValidationPersists,
+  clearSavetoSummary,
+  markAsCompletePromptValidation,
+} from "./add-partner-e2e-steps";
 
 describe("PCR > Add partner > Continuing editing PCR Companies House section", () => {
   before(() => {
@@ -55,34 +60,41 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
   it("Should accept 159 characters", () => {
     cy.get("#search").clear().invoke("val", loremIpsum159Char).trigger("input");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
   it("Should increase character count to 160 characters", () => {
     cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
   it("Should have a value in the input box of 160 characters", () => {
     cy.get("#search").should("have.value", loremIpsum159Char + "t");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
   it("Should attempt to enter another character bringing it to 161 characters", () => {
     cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
   it("Should attempt to do so again bringing total to 162 characters", () => {
     cy.get("#search").type("{moveToEnd}t");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
   it("Should still only contain the 160 characters in the input", () => {
     cy.get("#search").should("have.value", loremIpsum159Char + "t");
     cy.getByQA("error-summary").should("not.exist");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
-  it("Should enter special characters and assert that no errors are thrown", specialCharInput);
+  it("Should enter special characters and assert that no errors are thrown", () =>
+    specialCharInput({ markComplete: false }));
 
   it(
     "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
@@ -95,4 +107,74 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
   );
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
+
+  it("Should clear the inputs and save and return to Summary", clearSavetoSummary);
+
+  it(
+    "Should tick the 'Mark as complete' box and click 'Save and return to request' - prompting validation",
+    markAsCompletePromptValidation,
+  );
+
+  it("Should access companies house again and assert validation persists", accessCompanyHouseValidationPersists);
+
+  it("Should accept 159 characters", () => {
+    cy.get("#search").clear().invoke("val", loremIpsum159Char).trigger("input");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should increase character count to 160 characters", () => {
+    cy.get("#search").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should have a value in the input box of 160 characters", () => {
+    cy.get("#search").should("have.value", loremIpsum159Char + "t");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should attempt to enter another character bringing it to 161 characters", () => {
+    cy.get("#search").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should attempt to do so again bringing total to 162 characters", () => {
+    cy.get("#search").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should still only contain the 160 characters in the input", () => {
+    cy.get("#search").should("have.value", loremIpsum159Char + "t");
+    cy.getByQA("error-summary").should("not.exist");
+    ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+      cy.getByQA("validation-summary").should("not.contain", error);
+    });
+  });
+
+  it("Should enter special characters and assert that no errors are thrown", () =>
+    specialCharInput({ markComplete: true }));
+
+  it(
+    "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
+    typeASearchResults,
+  );
+
+  it(
+    "Should auto-fill the 'Organisation name', 'Registration number' and 'Registered address' fields",
+    companyHouseAutofillAssert,
+  );
 });

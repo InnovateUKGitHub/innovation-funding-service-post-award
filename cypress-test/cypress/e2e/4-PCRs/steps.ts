@@ -325,11 +325,18 @@ export const searchCompanyHouseGuidance = () => {
   //cy.paragraph("Is your organisation not showing in these results?");
 };
 
-export const specialCharInput = () => {
-  ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|"].forEach(specChar => {
-    cy.get("#search").clear().type(specChar).wait(1000);
-    cy.getByQA("error-summary").should("not.exist");
-  });
+export const specialCharInput = (options?: { markComplete?: boolean }) => {
+  ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|", "777", "707", "12345", "98124"].forEach(
+    specChar => {
+      cy.get("#search").clear().type(specChar).wait(1000);
+      cy.getByQA("error-summary").should("not.exist");
+      if (options?.markComplete) {
+        ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
+          cy.getByQA("validation-summary").should("not.contain", error);
+        });
+      }
+    },
+  );
 };
 
 export const typeASearchResults = () => {
