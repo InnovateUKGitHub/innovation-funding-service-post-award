@@ -1,4 +1,4 @@
-enum AccOrder {
+enum ProjectFactoryApexInjectionOrder {
   // Doesn't matter
   ACCOUNT_LOAD,
   COMPETITION_LOAD,
@@ -22,4 +22,4 @@ enum AccOrder {
   ACC_PROJECT_POSTLOAD,
 }
 
-export { AccOrder };
+export { ProjectFactoryApexInjectionOrder };

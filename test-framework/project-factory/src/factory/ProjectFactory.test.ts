@@ -1,14 +1,14 @@
 import { describe, expect, test } from "@jest/globals";
-import { AccFactory } from "./AccFactory";
+import { ProjectFactory } from "./ProjectFactory";
 import { buildApex, injectFieldsToApex, injectRelationshipToApex } from "../helpers/apex";
-import { AccFieldType, AccRelationshipType } from "../types/AccFactoryDefinition";
+import { ProjectFactoryFieldType, ProjectFactoryRelationshipType } from "../types/ProjectFactoryDefinition";
 
 describe("ACC Factory Builder", () => {
-  const parentBuilder = new AccFactory(
+  const parentBuilder = new ProjectFactory(
     <const>{
       definition: {
         sfdcName: "Parent",
-        fields: [{ sfdcName: "var", sfdcType: AccFieldType.STRING, nullable: true }],
+        fields: [{ sfdcName: "var", sfdcType: ProjectFactoryFieldType.STRING, nullable: true }],
         relationships: [],
       },
       generator: {
@@ -29,13 +29,18 @@ describe("ACC Factory Builder", () => {
     },
   );
 
-  const childBuilder = new AccFactory(
+  const childBuilder = new ProjectFactory(
     <const>{
       definition: {
         sfdcName: "Child",
-        fields: [{ sfdcName: "var", sfdcType: AccFieldType.STRING, nullable: false }],
+        fields: [{ sfdcName: "var", sfdcType: ProjectFactoryFieldType.STRING, nullable: false }],
         relationships: [
-          { sfdcName: "parent", sfdcType: AccRelationshipType.SINGLE, sffBuilder: parentBuilder, required: true },
+          {
+            sfdcName: "parent",
+            sfdcType: ProjectFactoryRelationshipType.SINGLE,
+            sffBuilder: parentBuilder,
+            required: true,
+          },
         ],
       },
       generator: {

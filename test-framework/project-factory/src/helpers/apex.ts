@@ -1,11 +1,11 @@
-import { AccFactoryInstance } from "../factory/AccFactory";
+import { ProjectFactoryInstance } from "../factory/ProjectFactory";
 import {
-  AccFactoryBuildOptions,
-  FieldsToRecord,
-  AccField,
-  AccFieldType,
-  AccRelationship,
-} from "../types/AccFactoryDefinition";
+  ProjectFactoryBuildOptions,
+  ProjectFactoryField,
+  ProjectFactoryFieldsToRecord,
+  ProjectFactoryFieldType,
+  ProjectFactoryRelationship,
+} from "../types/ProjectFactoryDefinition";
 
 /**
  * Salesforce SQL Sanitiser
@@ -39,17 +39,17 @@ function sss(x: unknown): string {
 }
 
 const injectFieldToApex = (
-  options: AccFactoryBuildOptions,
+  options: ProjectFactoryBuildOptions,
   instanceName: string,
   instanceFieldName: string,
-  field: { value: unknown; meta: AccField },
+  field: { value: unknown; meta: ProjectFactoryField },
 ): string => {
   let value: any = field.value;
 
   if (
     typeof value === "string" &&
     typeof options.prefix === "string" &&
-    field.meta.sfdcType === AccFieldType.STRING &&
+    field.meta.sfdcType === ProjectFactoryFieldType.STRING &&
     field.meta.prefixed
   ) {
     value = options.prefix + value;
@@ -68,7 +68,11 @@ const injectFieldToApex = (
   return `${instanceName}.${instanceFieldName} = ${value};`;
 };
 
-const injectFieldsToApex = (options: AccFactoryBuildOptions, instanceName: string, fields: FieldsToRecord<any>) =>
+const injectFieldsToApex = (
+  options: ProjectFactoryBuildOptions,
+  instanceName: string,
+  fields: ProjectFactoryFieldsToRecord<any>,
+) =>
   Object.entries(fields)
     .map(([key, value]) => injectFieldToApex(options, instanceName, key, value))
     .join("\n");
@@ -76,7 +80,7 @@ const injectFieldsToApex = (options: AccFactoryBuildOptions, instanceName: strin
 const injectRelationshipToApex = (
   instanceName: string,
   instanceRelFieldName: string,
-  relationship: { value: AccFactoryInstance<any>; meta: AccRelationship },
+  relationship: { value: ProjectFactoryInstance<any>; meta: ProjectFactoryRelationship },
 ): string | null => {
   if (!relationship.value) {
     if (relationship.meta.required) {
@@ -92,8 +96,8 @@ const buildApex = ({
   instances,
   options,
 }: {
-  instances: AccFactoryInstance<any>[];
-  options?: AccFactoryBuildOptions;
+  instances: ProjectFactoryInstance<any>[];
+  options?: ProjectFactoryBuildOptions;
 }) => {
   const missingSet = new Set<string>();
 

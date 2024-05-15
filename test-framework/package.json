@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": [
     "./cypress-test",
-    "./acc-factory",
+    "./project-factory",
     "./envman"
   ],
   "scripts": {}

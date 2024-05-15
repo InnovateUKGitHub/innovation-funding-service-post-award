@@ -1,20 +1,20 @@
-import { AccOrder } from "../../enum/AccOrder";
+import { ProjectFactoryApexInjectionOrder } from "../../enum/ProjectFactoryApexInjectionOrder";
 import { injectFieldsToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
-import { AccFactory } from "../AccFactory";
+import { ProjectFactoryFieldType, ProjectFactoryRelationshipType } from "../../types/ProjectFactoryDefinition";
+import { ProjectFactory } from "../ProjectFactory";
 import { accProjectBuilder } from "./Acc_Project__c";
 import { accountBuilder } from "./Account";
 import { contactBuilder } from "./Contact";
 import { userBuilder } from "./User";
 
-const accProjectContactLinkBuilder = new AccFactory(
+const accProjectContactLinkBuilder = new ProjectFactory(
   <const>{
     definition: {
       sfdcName: "Acc_ProjectContactLink__c",
       fields: [
         {
           sfdcName: "Acc_Role__c",
-          sfdcType: AccFieldType.SINGLE_PICKLIST,
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           values: [
             "Finance contact",
             "Monitoring officer",
@@ -37,28 +37,38 @@ const accProjectContactLinkBuilder = new AccFactory(
           ],
           nullable: false,
         },
-        { sfdcName: "Acc_EmailOfSFContact__c", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
+        {
+          sfdcName: "Acc_EmailOfSFContact__c",
+          sfdcType: ProjectFactoryFieldType.STRING,
+          nullable: false,
+          prefixed: true,
+        },
       ],
       relationships: [
         {
           sfdcName: "Acc_ProjectId__c",
-          sfdcType: AccRelationshipType.SINGLE,
+          sfdcType: ProjectFactoryRelationshipType.SINGLE,
           sffBuilder: accProjectBuilder,
           required: true,
         },
         {
           sfdcName: "Acc_AccountId__c",
-          sfdcType: AccRelationshipType.SINGLE,
+          sfdcType: ProjectFactoryRelationshipType.SINGLE,
           sffBuilder: accountBuilder,
           required: true,
         },
         {
           sfdcName: "Acc_ContactId__c",
-          sfdcType: AccRelationshipType.SINGLE,
+          sfdcType: ProjectFactoryRelationshipType.SINGLE,
           sffBuilder: contactBuilder,
           required: true,
         },
-        { sfdcName: "Acc_UserId__c", sfdcType: AccRelationshipType.SINGLE, sffBuilder: userBuilder, required: false },
+        {
+          sfdcName: "Acc_UserId__c",
+          sfdcType: ProjectFactoryRelationshipType.SINGLE,
+          sffBuilder: userBuilder,
+          required: false,
+        },
       ],
     },
     generator: {
@@ -76,7 +86,7 @@ ${injectRelationshipToApex(instanceName, "Acc_ContactId__c", relationships.Acc_C
 ${injectRelationshipToApex(instanceName, "Acc_UserId__c", relationships.Acc_UserId__c)}
 insert ${instanceName};
       `,
-      priority: AccOrder.ACC_PROJECT_CONTACT_LINK_LOAD,
+      priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_CONTACT_LINK_LOAD,
     },
   ],
 );

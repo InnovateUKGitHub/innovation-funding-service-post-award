@@ -1,43 +1,43 @@
-import { AccOrder } from "../../enum/AccOrder";
+import { ProjectFactoryApexInjectionOrder } from "../../enum/ProjectFactoryApexInjectionOrder";
 import { injectFieldToApex, injectRelationshipToApex } from "../../helpers/apex";
-import { AccFieldType, AccRelationshipType } from "../../types/AccFactoryDefinition";
-import { AccFactory } from "../AccFactory";
+import { ProjectFactoryFieldType, ProjectFactoryRelationshipType } from "../../types/ProjectFactoryDefinition";
+import { ProjectFactory } from "../ProjectFactory";
 import { competitionBuilder } from "./Competition__c";
 
-const accProjectBuilder = new AccFactory(
+const accProjectBuilder = new ProjectFactory(
   <const>{
     definition: {
       sfdcName: "Acc_Project__c",
       fields: [
-        { sfdcName: "Acc_StartDate__c", sfdcType: AccFieldType.DATETIME, nullable: false },
-        { sfdcName: "Acc_Duration__c", sfdcType: AccFieldType.NUMBER, nullable: false },
+        { sfdcName: "Acc_StartDate__c", sfdcType: ProjectFactoryFieldType.DATETIME, nullable: false },
+        { sfdcName: "Acc_Duration__c", sfdcType: ProjectFactoryFieldType.NUMBER, nullable: false },
         {
           sfdcName: "Acc_ClaimFrequency__c",
-          sfdcType: AccFieldType.SINGLE_PICKLIST,
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           values: ["Monthly", "Quarterly"],
           nullable: false,
         },
-        { sfdcName: "Acc_ProjectTitle__c", sfdcType: AccFieldType.STRING, nullable: false },
-        { sfdcName: "Acc_ProjectNumber__c", sfdcType: AccFieldType.STRING, nullable: false, prefixed: true },
-        { sfdcName: "Acc_TSBProjectNumber__c", sfdcType: AccFieldType.NUMBER, nullable: true },
-        { sfdcName: "Acc_LegacyID__c", sfdcType: AccFieldType.STRING, nullable: true, prefixed: true },
-        { sfdcName: "Acc_WorkdayProjectSetupComplete__c", sfdcType: AccFieldType.CHECKBOX, nullable: false },
-        { sfdcName: "Acc_NonFEC__c", sfdcType: AccFieldType.CHECKBOX, nullable: false },
+        { sfdcName: "Acc_ProjectTitle__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: false },
+        { sfdcName: "Acc_ProjectNumber__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: false, prefixed: true },
+        { sfdcName: "Acc_TSBProjectNumber__c", sfdcType: ProjectFactoryFieldType.NUMBER, nullable: true },
+        { sfdcName: "Acc_LegacyID__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: true, prefixed: true },
+        { sfdcName: "Acc_WorkdayProjectSetupComplete__c", sfdcType: ProjectFactoryFieldType.CHECKBOX, nullable: false },
+        { sfdcName: "Acc_NonFEC__c", sfdcType: ProjectFactoryFieldType.CHECKBOX, nullable: false },
         {
           sfdcName: "Acc_MonitoringLevel__c",
-          sfdcType: AccFieldType.SINGLE_PICKLIST,
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           values: ["Platinum", "Gold", "Silver", "Bronze", "Internal Assurance"],
           nullable: false,
         },
         {
           sfdcName: "Acc_MonitoringReportSchedule__c",
-          sfdcType: AccFieldType.SINGLE_PICKLIST,
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           values: ["Monthly", "Quarterly", "6 Monthly", "Yearly", "Internal Assurance"],
           nullable: false,
         },
         {
           sfdcName: "Acc_ProjectStatus__c",
-          sfdcType: AccFieldType.SINGLE_PICKLIST,
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           values: [
             "Not set",
             "PCL Creation Complete",
@@ -50,13 +50,13 @@ const accProjectBuilder = new AccFactory(
           ],
           nullable: false,
         },
-        { sfdcName: "Acc_ClaimFrequency__c", sfdcType: AccFieldType.STRING, nullable: false },
-        { sfdcName: "Acc_CurrentPeriodNumberHelper__c", sfdcType: AccFieldType.NUMBER, nullable: true },
+        { sfdcName: "Acc_ClaimFrequency__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: false },
+        { sfdcName: "Acc_CurrentPeriodNumberHelper__c", sfdcType: ProjectFactoryFieldType.NUMBER, nullable: true },
       ],
       relationships: [
         {
           sfdcName: "Acc_CompetitionId__c",
-          sfdcType: AccRelationshipType.SINGLE,
+          sfdcType: ProjectFactoryRelationshipType.SINGLE,
           sffBuilder: competitionBuilder,
           required: true,
         },
@@ -84,7 +84,7 @@ ${injectFieldToApex(
 )}
 insert ${instanceName};
 `,
-      priority: AccOrder.ACC_PROJECT_LOAD,
+      priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_LOAD,
     },
     {
       code: `
@@ -98,7 +98,7 @@ upsert ${instanceName};
 new Acc_ProjectPeriodProcessor_Batch().start(null);
 Acc_ClaimsCreateBatch.start(null);
         `,
-      priority: AccOrder.ACC_PROJECT_POSTLOAD,
+      priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_POSTLOAD,
     },
   ],
 );

@@ -1,9 +1,9 @@
 import { Then, When } from "@badeball/cypress-cucumber-preprocessor";
-import { accProjectContactLinkBuilder, buildApex, competitionBuilder, contactBuilder } from "acc-factory";
-import { defaultAccProjectParticipant } from "acc-factory/dist/factory/ifspa/Acc_ProjectParticipant__c";
-import { defaultAccProject } from "acc-factory/dist/factory/ifspa/Acc_Project__c";
-import { defaultAccount } from "acc-factory/dist/factory/ifspa/Account";
-import { defaultUser } from "acc-factory/dist/factory/ifspa/User";
+import { accProjectContactLinkBuilder, buildApex, competitionBuilder, contactBuilder } from "project-factory";
+import { defaultAccProjectParticipant } from "project-factory/dist/factory/ifspa/Acc_ProjectParticipant__c";
+import { defaultAccProject } from "project-factory/dist/factory/ifspa/Acc_Project__c";
+import { defaultAccount } from "project-factory/dist/factory/ifspa/Account";
+import { defaultUser } from "project-factory/dist/factory/ifspa/User";
 
 When("Cypress tries to create a project", function () {
   const competition = competitionBuilder
