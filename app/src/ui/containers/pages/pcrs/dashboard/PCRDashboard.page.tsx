@@ -65,10 +65,13 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 
   const renderStartANewRequestLink = () => {
     if (!isPmAllowedToEdit) return null;
-    if (allPcrItemTypesUnavailable) return null;
 
     return (
-      <Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })} className="govuk-button">
+      <Link
+        route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}
+        styling="PrimaryButton"
+        disabled={allPcrItemTypesUnavailable}
+      >
         Create request
       </Link>
     );
