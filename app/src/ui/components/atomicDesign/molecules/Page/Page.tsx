@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from "react";
+import React, { useEffect, useRef } from "react";
 import { IAppError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
@@ -6,10 +6,15 @@ import { AriaLive } from "@ui/components/atomicDesign/atoms/AriaLive/ariaLive";
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorSummary";
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
-import { OverrideAccessContext } from "@ui/containers/app/override-access";
 import isNil from "lodash/isNil";
 import { ValidationSummary } from "../../atoms/validation/ValidationSummary/ValidationSummary";
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
+
+import { Helmet } from "react-helmet";
+import { useAppContext } from "@ui/containers/AppContext";
+import { useContent } from "@ui/hooks/content.hook";
+import { PageTitleProvider } from "@ui/features/page-title";
 
 export interface PageProps {
   pageTitle: React.ReactNode;
@@ -24,6 +29,8 @@ export interface PageProps {
   fragmentRef?: unknown;
   projectId?: ProjectId;
   partnerId?: PartnerId;
+  monitoringLevel?: ProjectMonitoringLevel;
+  competitionType?: string;
 }
 
 /**
@@ -40,12 +47,21 @@ export function Page({
   projectId,
   partnerId,
   isActive,
+  monitoringLevel,
+  competitionType,
   fragmentRef,
 }: PageProps) {
-  const displayAriaLive: boolean = !!apiError || !!validationErrors;
+  const baseProps = useAppContext();
 
-  const overrideAccess = useContext(OverrideAccessContext);
-  const displayActiveUi: boolean = overrideAccess || isActive;
+  const { getContent, copy } = useContent({
+    projectId,
+    monitoringLevel,
+    competitionType,
+  });
+  const displayAriaLive: boolean = !!apiError || !!validationErrors;
+  const titlePayload = baseProps.currentRoute.getTitle?.({ params: baseProps, content: copy });
+
+  const displayActiveUi: boolean = baseProps.currentRoute.allowRouteInActiveAccess || isActive;
   const validationErrorSize = isNil(validationErrors) ? 0 : Object.keys(validationErrors)?.length;
 
   // hasValidated tracks how many times the validation has occurred,
@@ -60,39 +76,48 @@ export function Page({
   }, [apiError, validationErrorSize]);
 
   return (
-    <FragmentContext.Provider value={fragmentRef}>
-      <GovWidthContainer qa={qa} className={className}>
-        {backLink && (
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-full" data-qa="page-backlink">
-              {backLink}
-            </div>
-          </div>
-        )}
+    <>
+      <Helmet
+        defaultTitle={getContent(x => x.site.title.siteName)}
+        titleTemplate={"%s - " + getContent(x => x.site.title.siteName)}
+        title={titlePayload?.htmlTitle}
+      />
+      <PageTitleProvider title={titlePayload?.displayTitle}>
+        <FragmentContext.Provider value={fragmentRef}>
+          <GovWidthContainer qa={qa} className={className}>
+            {backLink && (
+              <div className="govuk-grid-row">
+                <div className="govuk-grid-column-full" data-qa="page-backlink">
+                  {backLink}
+                </div>
+              </div>
+            )}
 
-        <main className="govuk-main-wrapper" id="main-content" role="main">
-          {displayActiveUi ? (
-            <>
-              {displayAriaLive && (
-                <AriaLive>
-                  {apiError && <ErrorSummary error={apiError} />}
-                  {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
-                </AriaLive>
+            <main className="govuk-main-wrapper" id="main-content" role="main">
+              {displayActiveUi ? (
+                <>
+                  {displayAriaLive && (
+                    <AriaLive>
+                      {apiError && <ErrorSummary error={apiError} />}
+                      {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
+                    </AriaLive>
+                  )}
+
+                  {pageTitle}
+
+                  {projectId && (
+                    <ProjectSuspensionMessageWithOptionalFragment projectId={projectId} partnerId={partnerId} />
+                  )}
+
+                  {children}
+                </>
+              ) : (
+                <ProjectInactive />
               )}
-
-              {pageTitle}
-
-              {projectId && (
-                <ProjectSuspensionMessageWithOptionalFragment projectId={projectId} partnerId={partnerId} />
-              )}
-
-              {children}
-            </>
-          ) : (
-            <ProjectInactive />
-          )}
-        </main>
-      </GovWidthContainer>
-    </FragmentContext.Provider>
+            </main>
+          </GovWidthContainer>
+        </FragmentContext.Provider>
+      </PageTitleProvider>{" "}
+    </>
   );
 }

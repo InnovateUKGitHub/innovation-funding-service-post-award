@@ -560,7 +560,9 @@
       "htmlViewTitle": "View costs for {{ title }}",
       "htmlReviewTitle": "Review costs for {{ title }}",
       "defaultHtmlReviewTitle": "Review costs",
-      "defaultDisplayReviewTitle": "Costs"
+      "defaultDisplayReviewTitle": "Costs",
+      "documentsTitle": "{{costCategoryName}} documents",
+      "documentsHtmlTitle": "Add documents for {{costCategoryName}}"
     },
     "editClaimLineItems": {
       "backLink": "Back to claims",

@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
-import { Helmet } from "react-helmet";
 import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { RelayEnvironmentProvider } from "react-relay";
 import { AnyRouteDefinition } from "@ui/containers/containerBase";
-import { ContentProvider } from "@ui/redux/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";
-import { PageTitleProvider } from "@ui/features/page-title";
-import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
@@ -27,7 +23,7 @@ import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
-import { OverrideAccessContext } from "./app/override-access";
+import { AppContext } from "./AppContext";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -50,13 +46,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const pathname = typeof window !== "undefined" ? window?.location?.pathname : "";
   useScrollToTopSmoothly([pathname]);
 
-  const content = useInitContent(params);
-
   const config = useClientConfig();
+
   const messages = stores.messages.messages();
-
-  const titlePayload = currentRoute.getTitle?.({ params, stores, content });
-
   const navigationType = useNavigationType();
 
   const baseProps: BaseProps = {
@@ -80,40 +72,27 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const PageContainer = currentRoute.container;
 
   return (
-    <>
-      <Helmet
-        defaultTitle={content.getCopyString(x => x.site.title.siteName)}
-        titleTemplate={"%s - " + content.getCopyString(x => x.site.title.siteName)}
-        title={titlePayload?.htmlTitle}
-      />
+    <AppContext.Provider value={baseProps}>
+      <FullHeight.Container data-page-qa={currentRoute.routeName}>
+        <a href="#main-content" className="govuk-skip-link">
+          Skip to main content
+        </a>
 
-      <ContentProvider value={content}>
-        <PageTitleProvider title={titlePayload?.displayTitle}>
-          <FullHeight.Container data-page-qa={currentRoute.routeName}>
-            <a href="#main-content" className="govuk-skip-link">
-              Skip to main content
-            </a>
+        <Header headingLink={`${config.ifsRoot}/competition/search`} />
+        <FullHeight.Content>
+          <GovWidthContainer>
+            <PhaseBanner />
+          </GovWidthContainer>
 
-            <Header headingLink={`${config.ifsRoot}/competition/search`} />
+          <SuspensePageLoader>
+            <PageContainer {...baseProps} />
+          </SuspensePageLoader>
+        </FullHeight.Content>
 
-            <FullHeight.Content>
-              <GovWidthContainer>
-                <PhaseBanner />
-              </GovWidthContainer>
-
-              <SuspensePageLoader>
-                <OverrideAccessContext.Provider value={!!currentRoute.allowRouteInActiveAccess}>
-                  <PageContainer {...baseProps} />
-                </OverrideAccessContext.Provider>
-              </SuspensePageLoader>
-            </FullHeight.Content>
-
-            {!config.ssoEnabled && <DeveloperSection currentRoute={currentRoute} />}
-            <Footer />
-          </FullHeight.Container>
-        </PageTitleProvider>
-      </ContentProvider>
-    </>
+        {!config.ssoEnabled && <DeveloperSection currentRoute={currentRoute} />}
+        <Footer />
+      </FullHeight.Container>
+    </AppContext.Provider>
   );
 }
 

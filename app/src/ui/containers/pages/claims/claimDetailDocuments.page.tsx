@@ -36,6 +36,7 @@ import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/File
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { claimDetailDocumentsQuery } from "./ClaimDetailDocuments.query";
+import { Helmet } from "react-helmet";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: ProjectId;
@@ -133,7 +134,15 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
       apiError={onUploadApiError ?? onDeleteApiError}
       fragmentRef={fragmentRef}
       partnerId={props.partnerId}
+      heading={getContent(x => x.pages.claimLineItems.documentsTitle({ costCategoryName: costCategory.name }))}
     >
+      {/* Update the HTML title to include the costCategoryName*/}
+      <Helmet>
+        <title>
+          {getContent(x => x.pages.claimLineItems.documentsHtmlTitle({ costCategoryName: costCategory.name }))}
+        </title>
+      </Helmet>
+
       {isCombinationOfSBRI ? (
         <>
           <SimpleString qa="sbriDocumentGuidance">
@@ -221,11 +230,4 @@ export const ClaimDetailDocumentsRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ params, stores }) => {
-    const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
-    return {
-      htmlTitle: costCatName ? `Add documents for ${costCatName}` : "Add documents",
-      displayTitle: costCatName ? `${costCatName} documents` : "Claim documents",
-    };
-  },
 });

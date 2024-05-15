@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4bd66d54ce156fad25763bd5387e6172>>
+ * @generated SignedSource<<097dd5abe89dbd151d8bdc5e79b7dfa5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,12 @@ export type PageFragment$data = {
     readonly Page: {
       readonly edges: ReadonlyArray<{
         readonly node: {
+          readonly Acc_CompetitionType__c: {
+            readonly value: string | null | undefined;
+          } | null | undefined;
+          readonly Acc_MonitoringLevel__c: {
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectNumber__c: {
             readonly value: string | null | undefined;
           } | null | undefined;
@@ -263,6 +269,26 @@ return {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "PicklistValue",
+                      "kind": "LinkedField",
+                      "name": "Acc_MonitoringLevel__c",
+                      "plural": false,
+                      "selections": (v6/*: any*/),
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "StringValue",
+                      "kind": "LinkedField",
+                      "name": "Acc_CompetitionType__c",
+                      "plural": false,
+                      "selections": (v6/*: any*/),
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "concreteType": "Acc_ProjectParticipant__cConnection",
                       "kind": "LinkedField",
                       "name": "Acc_ProjectParticipantsProject__r",
@@ -332,6 +358,6 @@ return {
 };
 })();
 
-(node as any).hash = "44d04b16271458b63cd60d5563ee30c4";
+(node as any).hash = "f6b1df4d4ec485c23c11323d0fe473db";
 
 export default node;

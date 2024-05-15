@@ -106,7 +106,6 @@ export const claimDashboardQuery = graphql`
             edges {
               node {
                 Id
-                isActive
                 roles {
                   isMo
                   isFc

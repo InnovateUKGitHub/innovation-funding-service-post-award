@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ef15097784692a774e99ebb1824b971b>>
+ * @generated SignedSource<<4b1f92d895d900bc6c204d83c2711134>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -333,6 +333,26 @@ return {
                                 "storageKey": null
                               },
                               (v13/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
+                                "plural": false,
+                                "selections": (v12/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_CompetitionType__c",
+                                "plural": false,
+                                "selections": (v12/*: any*/),
+                                "storageKey": null
+                              },
                               {
                                 "alias": null,
                                 "args": null,
@@ -746,12 +766,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "aeba5c2712b9a41117b254bde2d30be4",
+    "cacheID": "8671690ea1e00c342b9e80a326daafdd",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupBankStatementQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupBankStatementQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  currentUser {\n    userId\n  }\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectDocumentViewFragment\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDocumentViewFragment on UIAPI {\n  query {\n    ProjectDocumentView_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n    ProjectDocumentView_Partner: Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_AccountId__r {\n            Name {\n              value\n            }\n          }\n          Acc_AccountId__c {\n            value\n          }\n          ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n            edges {\n              node {\n                isFeedAttachment\n                isOwner\n                LinkedEntityId {\n                  value\n                }\n                ContentDocument {\n                  Id\n                  LastModifiedBy {\n                    ContactId {\n                      value\n                    }\n                  }\n                  LatestPublishedVersionId {\n                    value\n                  }\n                  Description {\n                    value\n                  }\n                  ContentSize {\n                    value\n                  }\n                  CreatedDate {\n                    value\n                  }\n                  FileType {\n                    value\n                  }\n                  FileExtension {\n                    value\n                  }\n                  Title {\n                    value\n                  }\n                  LastModifiedDate {\n                    value\n                  }\n                  CreatedBy {\n                    Id\n                    Name {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupBankStatementQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  currentUser {\n    userId\n  }\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectDocumentViewFragment\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_MonitoringLevel__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDocumentViewFragment on UIAPI {\n  query {\n    ProjectDocumentView_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n        }\n      }\n    }\n    ProjectDocumentView_Partner: Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_AccountId__r {\n            Name {\n              value\n            }\n          }\n          Acc_AccountId__c {\n            value\n          }\n          ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n            edges {\n              node {\n                isFeedAttachment\n                isOwner\n                LinkedEntityId {\n                  value\n                }\n                ContentDocument {\n                  Id\n                  LastModifiedBy {\n                    ContactId {\n                      value\n                    }\n                  }\n                  LatestPublishedVersionId {\n                    value\n                  }\n                  Description {\n                    value\n                  }\n                  ContentSize {\n                    value\n                  }\n                  CreatedDate {\n                    value\n                  }\n                  FileType {\n                    value\n                  }\n                  FileExtension {\n                    value\n                  }\n                  Title {\n                    value\n                  }\n                  LastModifiedDate {\n                    value\n                  }\n                  CreatedBy {\n                    Id\n                    Name {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

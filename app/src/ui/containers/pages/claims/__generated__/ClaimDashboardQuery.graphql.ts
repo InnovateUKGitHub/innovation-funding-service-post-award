@@ -142,7 +142,6 @@ export type ClaimDashboardQuery$data = {
                   } | null | undefined;
                 } | null | undefined> | null | undefined;
               } | null | undefined;
-              readonly isActive: boolean;
               readonly roles: {
                 readonly isAssociate: boolean;
                 readonly isFc: boolean;
@@ -700,6 +699,16 @@ v26 = {
 v27 = {
   "alias": null,
   "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "Acc_CompetitionType__c",
+  "plural": false,
+  "selections": (v7/*: any*/),
+  "storageKey": null
+},
+v27 = {
+  "alias": null,
+  "args": null,
   "concreteType": "PicklistValue",
   "kind": "LinkedField",
   "name": "Acc_ParticipantStatus__c",
@@ -1204,6 +1213,41 @@ return {
                                 ],
                                 "storageKey": null
                               },
+                              (v30/*: any*/)
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": "Page",
+                    "args": (v19/*: any*/),
+                    "concreteType": "Acc_Project__cConnection",
+                    "kind": "LinkedField",
+                    "name": "Acc_Project__c",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_Project__cEdge",
+                        "kind": "LinkedField",
+                        "name": "edges",
+                        "plural": true,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Acc_Project__c",
+                            "kind": "LinkedField",
+                            "name": "node",
+                            "plural": false,
+                            "selections": [
+                              (v13/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,

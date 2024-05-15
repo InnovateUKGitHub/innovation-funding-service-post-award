@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ecaa930ef698d76be7a6f7e34d7b0671>>
+ * @generated SignedSource<<09886960bfc152512b5e1ed2e27bf3e2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -564,6 +564,16 @@ v14 = {
 },
 v15 = {
   "alias": null,
+  "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "Acc_CompetitionType__c",
+  "plural": false,
+  "selections": (v6/*: any*/),
+  "storageKey": null
+},
+v16 = {
+  "alias": null,
   "args": (v9/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
@@ -618,16 +628,7 @@ v15 = {
               ],
               "storageKey": null
             },
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "StringValue",
-              "kind": "LinkedField",
-              "name": "Acc_CompetitionType__c",
-              "plural": false,
-              "selections": (v6/*: any*/),
-              "storageKey": null
-            },
+            (v15/*: any*/),
             (v7/*: any*/)
           ],
           "storageKey": null
@@ -638,7 +639,7 @@ v15 = {
   ],
   "storageKey": null
 },
-v16 = {
+v17 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -648,7 +649,7 @@ v16 = {
   "selections": (v6/*: any*/),
   "storageKey": null
 },
-v17 = {
+v18 = {
   "alias": null,
   "args": [
     (v3/*: any*/),
@@ -686,7 +687,7 @@ v17 = {
           "plural": false,
           "selections": [
             (v5/*: any*/),
-            (v16/*: any*/)
+            (v17/*: any*/)
           ],
           "storageKey": null
         }
@@ -696,7 +697,7 @@ v17 = {
   ],
   "storageKey": null
 },
-v18 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -744,8 +745,8 @@ return {
                 "plural": false,
                 "selections": [
                   (v8/*: any*/),
-                  (v15/*: any*/),
-                  (v17/*: any*/)
+                  (v16/*: any*/),
+                  (v18/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -837,7 +838,7 @@ return {
                                   (v11/*: any*/),
                                   (v12/*: any*/),
                                   (v13/*: any*/),
-                                  (v18/*: any*/),
+                                  (v19/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -850,7 +851,7 @@ return {
                                       (v11/*: any*/),
                                       (v12/*: any*/),
                                       (v13/*: any*/),
-                                      (v18/*: any*/),
+                                      (v19/*: any*/),
                                       (v14/*: any*/)
                                     ],
                                     "storageKey": null
@@ -891,6 +892,17 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
+                                "plural": false,
+                                "selections": (v6/*: any*/),
+                                "storageKey": null
+                              },
+                              (v15/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "Acc_ProjectParticipant__cConnection",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectParticipantsProject__r",
@@ -913,7 +925,7 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v5/*: any*/),
-                                          (v16/*: any*/),
+                                          (v17/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -943,8 +955,8 @@ return {
                     "storageKey": null
                   },
                   (v8/*: any*/),
-                  (v15/*: any*/),
-                  (v17/*: any*/)
+                  (v16/*: any*/),
+                  (v18/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -957,12 +969,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "260607b733c5866f717a5aa153eec187",
+    "cacheID": "75d7e98d9830ac8c1358fda7e63f849c",
     "id": null,
     "metadata": {},
     "name": "ClaimDocumentsQuery",
     "operationKind": "query",
-    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_MonitoringLevel__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

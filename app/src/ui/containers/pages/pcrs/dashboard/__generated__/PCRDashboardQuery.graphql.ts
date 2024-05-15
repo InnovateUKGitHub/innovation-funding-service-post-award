@@ -661,6 +661,26 @@ return {
                                 "storageKey": null
                               },
                               (v17/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
+                                "plural": false,
+                                "selections": (v8/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_CompetitionType__c",
+                                "plural": false,
+                                "selections": (v8/*: any*/),
+                                "storageKey": null
+                              },
                               (v18/*: any*/)
                             ],
                             "storageKey": null

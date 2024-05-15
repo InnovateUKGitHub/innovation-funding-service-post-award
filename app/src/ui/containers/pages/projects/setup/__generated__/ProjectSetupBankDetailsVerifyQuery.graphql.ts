@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<18068fcf0ea247695708199586cd06b1>>
+ * @generated SignedSource<<3679ae42a931d974a78953c2aa4f8ab6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -531,6 +531,26 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_CompetitionType__c",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "Acc_ProjectParticipant__cConnection",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectParticipantsProject__r",
@@ -604,12 +624,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7e2ddbaa51140173819a7d8b43b4e571",
+    "cacheID": "7e709065975acdd01d780fcb173c67fb",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupBankDetailsVerifyQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupBankDetailsVerifyQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountNumber__c {\n                value\n              }\n              Acc_AddressBuildingName__c {\n                value\n              }\n              Acc_AddressLocality__c {\n                value\n              }\n              Acc_AddressPostcode__c {\n                value\n              }\n              Acc_AddressStreet__c {\n                value\n              }\n              Acc_AddressTown__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_FirstName__c {\n                value\n              }\n              Acc_LastName__c {\n                value\n              }\n              Acc_SortCode__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupBankDetailsVerifyQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountNumber__c {\n                value\n              }\n              Acc_AddressBuildingName__c {\n                value\n              }\n              Acc_AddressLocality__c {\n                value\n              }\n              Acc_AddressPostcode__c {\n                value\n              }\n              Acc_AddressStreet__c {\n                value\n              }\n              Acc_AddressTown__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_FirstName__c {\n                value\n              }\n              Acc_LastName__c {\n                value\n              }\n              Acc_SortCode__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_MonitoringLevel__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

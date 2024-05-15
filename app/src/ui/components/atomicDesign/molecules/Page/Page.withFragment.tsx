@@ -31,7 +31,15 @@ export const Page = ({ fragmentRef, children, heading, partnerId, ...props }: Pa
 
   const { node: projectNode } = getFirstEdge(fragment?.query?.Page?.edges);
 
-  const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "isActive"]);
+  const project = mapToProjectDto(projectNode, [
+    "id",
+    "projectNumber",
+    "title",
+    "status",
+    "isActive",
+    "monitoringLevel",
+    "competitionType",
+  ]);
 
   return (
     <PageComponent
@@ -40,6 +48,8 @@ export const Page = ({ fragmentRef, children, heading, partnerId, ...props }: Pa
       projectId={project.id}
       partnerId={partnerId}
       isActive={project.isActive}
+      monitoringLevel={project.monitoringLevel}
+      competitionType={project.competitionType}
       {...props}
     >
       {children}

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c5c976241dfdc67b71168df6c792bb05>>
+ * @generated SignedSource<<9f45ee2bac8c0d0ca62e9ada0478ef2f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -1044,6 +1044,16 @@ v18 = {
 v19 = {
   "alias": null,
   "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "Acc_CompetitionType__c",
+  "plural": false,
+  "selections": (v6/*: any*/),
+  "storageKey": null
+},
+v20 = {
+  "alias": null,
+  "args": null,
   "concreteType": "PicklistValue",
   "kind": "LinkedField",
   "name": "Acc_ProjectStatus__c",
@@ -1051,7 +1061,7 @@ v19 = {
   "selections": (v6/*: any*/),
   "storageKey": null
 },
-v20 = {
+v21 = {
   "alias": null,
   "args": (v14/*: any*/),
   "concreteType": "Acc_Project__cConnection",
@@ -1091,17 +1101,8 @@ v20 = {
               ],
               "storageKey": null
             },
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "StringValue",
-              "kind": "LinkedField",
-              "name": "Acc_CompetitionType__c",
-              "plural": false,
-              "selections": (v6/*: any*/),
-              "storageKey": null
-            },
             (v19/*: any*/),
+            (v20/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1132,7 +1133,7 @@ v20 = {
   ],
   "storageKey": null
 },
-v21 = {
+v22 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -1181,7 +1182,7 @@ return {
                   (v7/*: any*/),
                   (v11/*: any*/),
                   (v13/*: any*/),
-                  (v20/*: any*/)
+                  (v21/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1272,7 +1273,7 @@ return {
                                   (v16/*: any*/),
                                   (v15/*: any*/),
                                   (v18/*: any*/),
-                                  (v21/*: any*/),
+                                  (v22/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -1285,7 +1286,7 @@ return {
                                       (v16/*: any*/),
                                       (v15/*: any*/),
                                       (v18/*: any*/),
-                                      (v21/*: any*/),
+                                      (v22/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -1315,6 +1316,17 @@ return {
                                 "concreteType": "StringValue",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectTitle__c",
+                                "plural": false,
+                                "selections": (v6/*: any*/),
+                                "storageKey": null
+                              },
+                              (v20/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
                                 "plural": false,
                                 "selections": (v6/*: any*/),
                                 "storageKey": null
@@ -1386,7 +1398,7 @@ return {
                   (v7/*: any*/),
                   (v11/*: any*/),
                   (v13/*: any*/),
-                  (v20/*: any*/)
+                  (v21/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1399,12 +1411,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a7a7a7cf78c33a780b44effa250087ab",
+    "cacheID": "6875ab5e80828762954c4192b48e418d",
     "id": null,
     "metadata": {},
     "name": "SpendProfileCostsQuery",
     "operationKind": "query",
-    "text": "query SpendProfileCostsQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_CostCategory__c(first: 2000, orderBy: {Acc_DisplayOrder__c: {order: ASC}}) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_IFSSpendProfile__c(where: {and: [{RecordType: {DeveloperName: {eq: \"PCR_Spend_Profile\"}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}}]}, orderBy: {CreatedDate: {order: ASC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryID__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_TotalCost__c {\n                value\n              }\n              Acc_ItemDescription__c {\n                value\n              }\n              Acc_DateSecured__c {\n                value\n              }\n              Acc_GrossCostOfRole__c {\n                value\n              }\n              Acc_DaysSpentOnProject__c {\n                value\n              }\n              Acc_Rate__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n              Acc_Quantity__c {\n                value\n              }\n              Acc_CostPerItem__c {\n                value\n              }\n              Acc_Country__c {\n                value\n              }\n              Acc_RoleAndDescription__c {\n                value\n              }\n              Acc_NewOrExisting__c {\n                value\n              }\n              Acc_DepreciationPeriod__c {\n                value\n              }\n              Acc_NetPresentValue__c {\n                value\n              }\n              Acc_ResidualValue__c {\n                value\n              }\n              Acc_Utilisation__c {\n                value\n              }\n              Acc_NumberOfTimes__c {\n                value\n              }\n              Acc_CostEach__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_OrganisationName__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SpendProfileCostsQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_CostCategory__c(first: 2000, orderBy: {Acc_DisplayOrder__c: {order: ASC}}) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_IFSSpendProfile__c(where: {and: [{RecordType: {DeveloperName: {eq: \"PCR_Spend_Profile\"}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}}]}, orderBy: {CreatedDate: {order: ASC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryID__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_TotalCost__c {\n                value\n              }\n              Acc_ItemDescription__c {\n                value\n              }\n              Acc_DateSecured__c {\n                value\n              }\n              Acc_GrossCostOfRole__c {\n                value\n              }\n              Acc_DaysSpentOnProject__c {\n                value\n              }\n              Acc_Rate__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n              Acc_Quantity__c {\n                value\n              }\n              Acc_CostPerItem__c {\n                value\n              }\n              Acc_Country__c {\n                value\n              }\n              Acc_RoleAndDescription__c {\n                value\n              }\n              Acc_NewOrExisting__c {\n                value\n              }\n              Acc_DepreciationPeriod__c {\n                value\n              }\n              Acc_NetPresentValue__c {\n                value\n              }\n              Acc_ResidualValue__c {\n                value\n              }\n              Acc_Utilisation__c {\n                value\n              }\n              Acc_NumberOfTimes__c {\n                value\n              }\n              Acc_CostEach__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_OrganisationName__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_MonitoringLevel__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

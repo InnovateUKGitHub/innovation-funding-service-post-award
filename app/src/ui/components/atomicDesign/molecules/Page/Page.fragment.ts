@@ -32,6 +32,12 @@ export const pageFragment = graphql`
             Acc_ProjectStatus__c {
               value
             }
+            Acc_MonitoringLevel__c {
+              value
+            }
+            Acc_CompetitionType__c {
+              value
+            }
             Acc_ProjectParticipantsProject__r {
               edges {
                 node {

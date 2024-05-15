@@ -16,7 +16,7 @@ describe("Forecast > Final claim", () => {
     cy.paragraph(
       "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved).",
     );
-    cy.getByQA("final-claim-message-FC-content").contains("You cannot change your forecast. You must ");
+    cy.getByQA("validation-message-content").contains("You cannot change your forecast. You must ");
     cy.get("a").contains("submit your final claim");
   });
 

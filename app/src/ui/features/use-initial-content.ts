@@ -1,7 +1,9 @@
 import { Copy } from "@copy/Copy";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { getPending } from "@ui/helpers/get-pending";
 import { Params } from "@ui/helpers/make-url";
 import { useStores } from "@ui/redux/storesProvider";
+import { useMemo } from "react";
 
 /**
  * @description Returns the content solution based on the availability of the projectId (used based on condition competitionType rendering)
@@ -17,3 +19,21 @@ export function useInitContent(params?: Params): Copy {
     return new Copy();
   }
 }
+
+export const useCopy = ({
+  projectId,
+  monitoringLevel,
+  competitionType,
+}: {
+  projectId?: ProjectId;
+  monitoringLevel?: ProjectMonitoringLevel;
+  competitionType?: string;
+}) => {
+  return useMemo(() => {
+    if (projectId) {
+      return new Copy({ competitionType, monitoringLevel });
+    } else {
+      return new Copy();
+    }
+  }, [projectId, monitoringLevel, competitionType]);
+};

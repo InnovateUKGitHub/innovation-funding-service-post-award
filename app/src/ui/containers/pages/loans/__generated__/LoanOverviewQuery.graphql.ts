@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4d070aa097be02a15f9dd08ef855692d>>
+ * @generated SignedSource<<0fe9f853ba678a15f44f269f7c059dfd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -496,6 +496,26 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "PicklistValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_MonitoringLevel__c",
+                                "plural": false,
+                                "selections": (v9/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Acc_CompetitionType__c",
+                                "plural": false,
+                                "selections": (v9/*: any*/),
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "Acc_ProjectParticipant__cConnection",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectParticipantsProject__r",
@@ -570,12 +590,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4f038fb6259869f3eac1526f505a5eb6",
+    "cacheID": "2cdc3f72e3921836ae5900db2d2cba60",
     "id": null,
     "metadata": {},
     "name": "LoanOverviewQuery",
     "operationKind": "query",
-    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, orderBy: {Acc_PeriodNumber__c: {order: ASC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, orderBy: {Acc_PeriodNumber__c: {order: ASC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_MonitoringLevel__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
