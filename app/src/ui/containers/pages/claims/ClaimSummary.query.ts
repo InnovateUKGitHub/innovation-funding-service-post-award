@@ -254,31 +254,6 @@ export const claimSummaryQuery = graphql`
               }
             }
           }
-          Acc_ProjectParticipant__c(
-            where: { and: [{ Acc_ProjectId__c: { eq: $projectId } }, { Id: { eq: $partnerId } }] }
-            first: 2000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_Award_Rate__c {
-                  value
-                }
-                Acc_TotalParticipantGrant__c {
-                  value
-                }
-                Acc_TotalFutureForecastsForParticipant__c {
-                  value
-                }
-                Acc_TotalApprovedCosts__c {
-                  value
-                }
-                Acc_TotalParticipantCosts__c {
-                  value
-                }
-              }
-            }
-          }
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
@@ -307,6 +282,28 @@ export const claimSummaryQuery = graphql`
                 }
                 Acc_MonitoringLevel__c {
                   value
+                }
+                Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 100) {
+                  edges {
+                    node {
+                      Id
+                      Acc_Award_Rate__c {
+                        value
+                      }
+                      Acc_TotalParticipantGrant__c {
+                        value
+                      }
+                      Acc_TotalFutureForecastsForParticipant__c {
+                        value
+                      }
+                      Acc_TotalApprovedCosts__c {
+                        value
+                      }
+                      Acc_TotalParticipantCosts__c {
+                        value
+                      }
+                    }
+                  }
                 }
               }
             }
