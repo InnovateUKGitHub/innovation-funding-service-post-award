@@ -15,6 +15,7 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { isNil } from "lodash";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
   RenamePartnerSchema,
@@ -44,7 +45,7 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
       projectId: input.projectId,
       pcrId: input.pcrId,
       pcrItemId: input.pcrItemId,
-      partnerId: input.partnerId,
+      partnerId: input.partnerId ?? null,
       accountName: input.accountName,
       markedAsComplete: input.markedAsComplete === "on",
     };
@@ -71,6 +72,7 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
               id: input.pcrItemId,
               accountName: input.accountName,
               partnerId: input.partnerId,
+              ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
             },
           ],
         },

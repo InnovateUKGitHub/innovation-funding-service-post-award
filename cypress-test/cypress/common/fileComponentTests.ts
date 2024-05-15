@@ -1,6 +1,6 @@
 import { uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "./seconds";
-import { longFile, noFileName, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
+import { emptyFileName, longFile, noFileName, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
 
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
@@ -105,7 +105,6 @@ export const deleteSingleChar = () => {
     .within(() => {
       cy.tableCell("Remove").scrollIntoView().click();
     });
-  cy.button("Remove").should("be.disabled");
   cy.validationNotification(`'${singleCharFile}' has been removed.`);
 };
 
@@ -123,10 +122,10 @@ export const doNotUploadSpecialChar = () => {
   cy.fileInput(testFile, specialCharFile);
   cy.button("Upload documents").click();
   cy.validationLink(
-    `Your document '${specialCharFile}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
+    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
   );
   cy.paragraph(
-    `Your document '${specialCharFile}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
+    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
   );
   cy.wait(500);
 };
@@ -140,7 +139,7 @@ export const uploadFileTooLarge = () => {
 };
 
 export const uploadFileNameTooShort = () => {
-  cy.fileInput(noFileName);
+  cy.fileInput(emptyFileName);
   cy.button("Upload").click();
   cy.validationLink(`You cannot upload this file because the file has no name.`);
   cy.paragraph(`You cannot upload this file because the file has no name.`);

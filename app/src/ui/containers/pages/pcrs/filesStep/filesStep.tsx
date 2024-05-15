@@ -18,7 +18,6 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
 import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { usePcrFilesQuery } from "./filesStep.logic";
 import { pcrFilesQuery } from "./PcrFiles.query";
@@ -30,6 +29,7 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ReactNode } from "react";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { useMessages } from "@framework/api-helpers/useMessages";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const FilesStep = ({
   heading,
@@ -66,6 +66,7 @@ export const FilesStep = ({
     formState,
     getFieldState,
     reset,
+    setError,
   } = useForm<z.output<PcrLevelUploadSchemaType>>({
     resolver: zodResolver(getPcrLevelUpload({ config: config.options }), {
       errorMap: documentsErrorMap,
@@ -96,7 +97,7 @@ export const FilesStep = ({
     },
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
+  const validationErrors = useZodErrors(setError, formState?.errors);
 
   const disabled = isFetching || isDeleting || isUploading;
 

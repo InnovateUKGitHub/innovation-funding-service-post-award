@@ -29,8 +29,6 @@ import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[project
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdateHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentDeleteHandler";
-import { ProjectChangeRequestItemDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentUploadHandler";
-import { ProjectChangeRequestItemUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemUpdateHandler";
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDeleteHandler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/spendProfileAddCostHandler";
@@ -68,6 +66,7 @@ import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectI
 import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerSummaryHandler";
 import { PcrItemLevelDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentUpload.handler";
 import { PcrLevelDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentDelete.handler";
+import { PcrItemFilesStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFilesStep.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -79,6 +78,7 @@ export const standardFormHandlers = [
   new PcrLevelDocumentDeleteHandler(),
 
   // Zod PCRs
+  new PcrItemFilesStepHandler(),
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
   new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
