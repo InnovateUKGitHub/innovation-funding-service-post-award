@@ -6,7 +6,7 @@ import { validDocumentFilenameCharacters } from "@ui/validation/validators/docum
 import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types/fileWapper";
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 
 const maxDefaultValue = 100_000_000_000;
@@ -92,7 +92,7 @@ const currencyValidation = z
   .string()
   .nonempty()
   .superRefine((val, ctx) => {
-    const currency = parseFloat(val.replaceAll("£", ""));
+    const currency = parseCurrency(val);
 
     // Check if the string can even be parsed
     if (isNaN(currency)) {
@@ -109,6 +109,15 @@ const currencyValidation = z
         code: ZodIssueCode.too_big,
         type: "number",
         maximum: 999_999_999_999,
+        inclusive: false,
+      });
+    }
+
+    if (currency < -999_999_999_999) {
+      return ctx.addIssue({
+        code: ZodIssueCode.too_small,
+        type: "number",
+        minimum: -999_999_999_999,
         inclusive: false,
       });
     }

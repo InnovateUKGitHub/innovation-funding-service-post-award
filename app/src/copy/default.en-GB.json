@@ -2902,7 +2902,13 @@
     "forecastTable": {
       "profile": {
         "errors": {
-          "too_small": "Forecast is required.",
+          "too_small": {
+            "string": "Forecast is required.",
+            "number": "Forecast must be more than {{ count, currency }}."
+          },
+          "too_big": {
+            "number": "Forecast must be less than {{ count, currency }}."
+          },
           "invalid_string": {
             "regex": "Forecast must be no more than 2 decimal places."
           },
