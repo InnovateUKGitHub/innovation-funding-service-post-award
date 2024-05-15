@@ -6,3 +6,4 @@ export const testFileABCad = "testfileABCadFc.doc";
 export const testFileEUIFinance = "testfileEUIfc.doc";
 export const testfileEUIProjectManager = "testfileEUIpm.doc";
 export const noFileName = ".txt";
+export const emptyFileName = " .txt";

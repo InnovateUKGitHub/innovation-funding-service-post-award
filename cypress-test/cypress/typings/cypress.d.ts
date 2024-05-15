@@ -159,7 +159,7 @@ declare global {
        */
       deletePcr(projectId: string): Chainable<Element>;
 
-      validationLink(message: string): Chainable<Element>;
+      validationLink(message: string | RegExp): Chainable<Element>;
 
       validationMessage(message: string): Chainable<Element>;
 
@@ -169,7 +169,7 @@ declare global {
        *
        * Finds text within a paragraph element
        */
-      paragraph(content: string): Chainable<Element>;
+      paragraph(content: string | RegExp): Chainable<Element>;
 
       /**
        *

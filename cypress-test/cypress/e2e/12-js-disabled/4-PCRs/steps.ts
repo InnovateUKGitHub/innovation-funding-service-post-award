@@ -1380,6 +1380,7 @@ export const validateChangeName = () => {
   cy.backLink("Back to request").click();
   cy.heading("Request");
   cy.get("a").contains("Change a partner's name").click();
+  cy.heading("Change a partner's name");
   cy.getByQA("newPartnerName").contains("Edit").click();
 };
 
@@ -1898,7 +1899,7 @@ export const changeNameClickEachEdit = () => {
     ["Proposed name", "Edit"],
   ].forEach(([key, edit]) => {
     cy.contains("dt", key).siblings().contains(edit).click();
-    cy.get("legend").contains("Enter new name");
+    cy.get("label").contains("Enter new name");
     cy.button("Save and continue").click();
     cy.get("legend").contains("Upload change of name certificate");
     cy.button("Save and continue").click();

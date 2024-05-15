@@ -1906,7 +1906,7 @@ export const changeNameClickEachEdit = () => {
     ["Proposed name", "Edit"],
   ].forEach(([key, edit]) => {
     cy.contains("dt", key).siblings().contains(edit).click();
-    cy.get("legend").contains("Enter new name");
+    cy.get("label").contains("Enter new name");
     cy.button("Save and continue").click();
     cy.get("legend").contains("Upload change of name certificate");
     cy.button("Save and continue").click();

@@ -212,7 +212,7 @@ const deletePcr = (projectId: string) => {
   cy.heading("Project change requests");
 };
 
-const validationLink = (message: string) => {
+const validationLink = (message: string | RegExp) => {
   cy.log("**validationLink**");
   cy.getByQA("validation-summary").contains("a", message);
 };
@@ -231,7 +231,7 @@ const heading = (title: string) => {
   cy.get("h1").contains(title, { timeout: 50000 });
 };
 
-const paragraph = (content: string) => {
+const paragraph = (content: string | RegExp) => {
   cy.log("**paragraph**");
   cy.get("p").contains(content);
 };

@@ -31,7 +31,7 @@ import {
   doNotUploadSpecialChar,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
-import { loremIpsum256Char } from "common/lorem";
+
 const projectManager = "james.black@euimeabs.test";
 
 describe("js disabled > PCR >  Change a partner's name > Create PCR", { tags: "js-disabled" }, () => {
@@ -90,8 +90,8 @@ describe("js disabled > PCR >  Change a partner's name > Create PCR", { tags: "j
   it("Should attempt to enter a name that is too long and receive a validation message", exceedNewNamePromptValidation);
 
   it("Should allow you to enter the new name", () => {
-    cy.get("legend").contains("Enter new name");
-    cy.get("#accountName").wait(500).clear().type("*$%^& Munce Inc");
+    cy.getByLabel("ABS EUI Medium Enterprise").click();
+    cy.getByLabel("Enter new name").wait(500).clear().type("*$%^& Munce Inc");
   });
 
   it("Should click the save and continue button to proceed", saveContinueProceed);

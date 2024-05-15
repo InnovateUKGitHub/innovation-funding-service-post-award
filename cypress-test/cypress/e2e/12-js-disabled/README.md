@@ -25,7 +25,7 @@ also any references to `visitApp` should include `jsDisabled: true` as an option
 e.g.
 
 ```typescript
-before(() => {
+before(function () {
   visitApp({ asUser: jamesBlack, jsDisabled: true });
 });
 ```
@@ -35,7 +35,7 @@ and finally every reference to `cy.switchUserTo` should include `jsDisabled: tru
 e.g.
 
 ```typescript
-it("Should now switch user to the same email address but with an uppercase first letter 'James.black@euimeabs.test'", () => {
+it("Should now switch user to the same email address but with an uppercase first letter 'James.black@euimeabs.test'", function () {
   cy.switchUserTo("James.black@euimeabs.test", { jsDisabled: true });
   cy.getByQA("pending-and-open-projects").contains("328407");
 });
@@ -55,6 +55,12 @@ Attempts to intercept a request and wait for it to resolve will fail with js dis
 Steps doing this should use "cy.wait(time)" instead
 Common functions should be extended to accept an options object in which `jsDisabled: true` is an option
 and use this to control how waits are handled.
+
+## disabled buttons and other dynamic behaviours
+
+With javascript enabled buttons and inputs should be disabled while requests are in flight.
+With javascript disabled this will not happen and any tests asserting this will fail and should be removed.
+Also textarea counts will not work with js disabled
 
 ## Other suggestions
 
