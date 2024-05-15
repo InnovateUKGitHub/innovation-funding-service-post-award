@@ -20,6 +20,7 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
@@ -96,11 +97,18 @@ export const RenamePartnerStep = () => {
           </Fieldset>
 
           <Fieldset>
-            <Legend>{getContent(x => x.pcrNameChangeLabels.enterName)}</Legend>
             <FormGroup hasError={!!getFieldState("accountName").error}>
+              <Label bold htmlFor="accountName">
+                {getContent(x => x.pcrNameChangeLabels.enterName)}
+              </Label>
               <Hint id="hint-for-accountName">{getRequiredToCompleteMessage()}</Hint>
               <ValidationError error={getFieldState("accountName").error} />
-              <TextInput disabled={isFetching} {...register("accountName")} defaultValue={pcrItem?.accountName ?? ""} />
+              <TextInput
+                id="accountName"
+                disabled={isFetching}
+                {...register("accountName")}
+                defaultValue={pcrItem?.accountName ?? ""}
+              />
             </FormGroup>
           </Fieldset>
 
