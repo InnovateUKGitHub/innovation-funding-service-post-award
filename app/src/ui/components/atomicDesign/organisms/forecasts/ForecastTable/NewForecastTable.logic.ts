@@ -45,7 +45,7 @@ type ProfileTotalProjectPeriodsInfo = Pick<
   "periodId" | "periodStartDate" | "periodEndDate"
 >;
 
-export interface MapToForecastTableProps {
+interface MapToForecastTableProps {
   project: Pick<ProjectDto, "numberOfPeriods">;
   partner: Pick<PartnerDtoGql, "overheadRate">;
   claimTotalProjectPeriods: ClaimTotalProjectPeriodsInfo[];
@@ -104,7 +104,7 @@ export interface ForecastTableDto {
   costCategories: CostCategoryRow[];
   totalRow: TotalRow;
   statusRow: StatusCell[];
-  finalClaimStatusGroup: ClaimStatusGroup | null;
+  finalClaim: ClaimTotalProjectPeriodsInfo | null;
 }
 
 const mapToForecastTableDto = ({
@@ -315,8 +315,6 @@ const mapToForecastTableDto = ({
     costCatAccum.push(costCategoryRow);
   }
 
-  const finalClaimStatusGroup = finalClaim ? getClaimStatusGroup(finalClaim.status) : null;
-
   return {
     costCategories: costCatAccum,
     totalRow: {
@@ -326,7 +324,7 @@ const mapToForecastTableDto = ({
       difference: 100 * ((grandTotal - grandGolValue) / grandGolValue),
     },
     statusRow: statusCells,
-    finalClaimStatusGroup,
+    finalClaim: finalClaim ?? null,
   };
 };
 
@@ -394,4 +392,10 @@ const useNewForecastTableData = ({
   };
 };
 
-export { mapToForecastTableDto, useNewForecastTableData, useMapToForecastTableDto };
+export {
+  mapToForecastTableDto,
+  useNewForecastTableData,
+  useMapToForecastTableDto,
+  MapToForecastTableProps,
+  ClaimTotalProjectPeriodsInfo,
+};

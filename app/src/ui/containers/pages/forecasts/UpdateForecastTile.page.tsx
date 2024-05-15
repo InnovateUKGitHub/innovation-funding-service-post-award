@@ -13,11 +13,16 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
 import {
   useMapToForecastTableDto,
   useNewForecastTableData,
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import {
+  ClaimStatusGroup,
+  getClaimStatusGroup,
+} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
@@ -28,10 +33,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useUpdateForecastData } from "./ForecastTile.logic";
 import { forecastTileQuery } from "./ForecastTile.query";
+import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
-import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimStatusGroup } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -72,6 +75,8 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
 
   useFormRevalidate(watch, trigger);
 
+  const finalClaimStatusGroup = tableData.finalClaim ? getClaimStatusGroup(tableData.finalClaim.status) : null;
+
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const validationErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
 
@@ -87,14 +92,13 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
       fragmentRef={data.fragmentRef}
     >
       <ForecastClaimAdvice isFc={isFc} />
-
-      {tableData.finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING && (
-        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimNotSubmitted} />
-      )}
-      {(tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-        tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED) && (
-        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimSubmitted} />
-      )}
+      <FinalClaimMessage
+        isFc={isFc}
+        projectId={projectId}
+        partnerId={partnerId}
+        finalClaim={tableData.finalClaim}
+        finalClaimStatusGroup={finalClaimStatusGroup}
+      />
 
       <Form
         onSubmit={handleSubmit(data =>
@@ -142,8 +146,9 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
               styling="Primary"
               disabled={
                 isProcessing ||
-                tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-                tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
+                finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
+                finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+                finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
               }
             >
               {getContent(x => x.pages.forecastsUpdate.buttonSubmit)}

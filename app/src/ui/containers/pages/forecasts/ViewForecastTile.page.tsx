@@ -8,6 +8,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
 import {
   useMapToForecastTableDto,
@@ -17,10 +18,12 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { useUpdateForecastData } from "./ForecastTile.logic";
+import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
-import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimStatusGroup } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import {
+  ClaimStatusGroup,
+  getClaimStatusGroup,
+} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 
 export interface ViewForecastParams {
   projectId: ProjectId;
@@ -38,6 +41,8 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
 
   const tableData = useMapToForecastTableDto(fragmentData);
 
+  const finalClaimStatusGroup = tableData.finalClaim ? getClaimStatusGroup(tableData.finalClaim.status) : null;
+
   return (
     <Page
       backLink={
@@ -54,14 +59,13 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
       fragmentRef={data.fragmentRef}
     >
       <ForecastClaimAdvice isFc={isFc} />
-
-      {tableData.finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING && (
-        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimNotSubmitted} />
-      )}
-      {(tableData.finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-        tableData.finalClaimStatusGroup === ClaimStatusGroup.CLAIMED) && (
-        <ValidationMessage messageType="info" message={x => x.forecastsMessages.projectFinalClaimSubmitted} />
-      )}
+      <FinalClaimMessage
+        isFc={isFc}
+        projectId={projectId}
+        partnerId={partnerId}
+        finalClaim={tableData.finalClaim}
+        finalClaimStatusGroup={finalClaimStatusGroup}
+      />
 
       <Section title={data.partner.name} qa="partner-forecast">
         <ForecastAgreedCostWarning
@@ -84,13 +88,30 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
             nullDisplay={getContent(x => x.components.claimLastModified.never)}
           />
         </P>
-        <Fieldset>
-          <Link route={routes.forecastUpdate.getLink({ projectId, partnerId })}>
-            <Button type="submit" styling="Primary">
-              {getContent(x => x.pages.forecastsDetails.linkUpdateForecast)}
-            </Button>
-          </Link>
-        </Fieldset>
+        {isFc && (
+          <Fieldset>
+            <Link
+              route={routes.forecastUpdate.getLink({ projectId, partnerId })}
+              disabled={
+                finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
+                finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+                finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
+              }
+            >
+              <Button
+                type="submit"
+                styling="Primary"
+                disabled={
+                  finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
+                  finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+                  finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
+                }
+              >
+                {getContent(x => x.pages.forecastsDetails.linkUpdateForecast)}
+              </Button>
+            </Link>
+          </Fieldset>
+        )}
       </Section>
     </Page>
   );
