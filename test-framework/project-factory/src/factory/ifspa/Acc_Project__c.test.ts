@@ -9,10 +9,10 @@ import { accProjectContactLinkBuilder } from "./Acc_ProjectContactLink__c";
 import { accProjectParticipantBuilder } from "./Acc_ProjectParticipant__c";
 
 const competition = competitionBuilder
-  .new()
+  .create()
   .set({ Acc_CompetitionCode__c: "100", Acc_CompetitionName__c: "Competition", Acc_CompetitionType__c: "KTP" });
 
-const account = accountBuilder.new().set({
+const account = accountBuilder.create().set({
   OrgMigrationId__c: "001",
   Name: "xgov",
   BillingStreet: "North Star Avenue",
@@ -22,7 +22,7 @@ const account = accountBuilder.new().set({
   BillingCountry: "United Kingdom",
 });
 
-const project = accProjectBuilder.new().set({
+const project = accProjectBuilder.create().set({
   Acc_StartDate__c: new Date("2024-01-16 12:59:42"),
   Acc_Duration__c: 36,
   Acc_ClaimFrequency__c: "Quarterly",
@@ -37,7 +37,7 @@ const project = accProjectBuilder.new().set({
   Acc_CompetitionId__c: competition,
 });
 
-const contact = contactBuilder.new().set({
+const contact = contactBuilder.create().set({
   AccountId: account,
   ContactMigrationId__c: "001",
   Email: "austria@x.gov.uk",
@@ -45,7 +45,7 @@ const contact = contactBuilder.new().set({
   LastName: "Hedges",
 });
 
-const user = userBuilder.new().set({
+const user = userBuilder.create().set({
   ContactId: contact,
   Username: "austria@x.gov.uk",
   Email: "austria@x.gov.uk",
@@ -60,7 +60,7 @@ const user = userBuilder.new().set({
   ProfileId: "00e58000001ITpLAAW",
 });
 
-const projectContactLink = accProjectContactLinkBuilder.new().set({
+const projectContactLink = accProjectContactLinkBuilder.create().set({
   Acc_AccountId__c: account,
   Acc_ContactId__c: contact,
   Acc_ProjectId__c: project,
@@ -68,7 +68,7 @@ const projectContactLink = accProjectContactLinkBuilder.new().set({
   Acc_Role__c: "Monitoring officer",
 });
 
-const projectParticipant = accProjectParticipantBuilder.new().set({
+const projectParticipant = accProjectParticipantBuilder.create().set({
   Acc_AccountId__c: account,
   Acc_ProjectId__c: project,
   ParticipantMigrationID__c: "004001",

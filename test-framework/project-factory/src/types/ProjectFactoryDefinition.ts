@@ -116,7 +116,7 @@ interface ProjectFactorySingleRelationship extends ProjectFactoryRelationshipBas
 type ProjectFactoryRelationship = ProjectFactorySingleRelationship;
 
 type ProjectFactoryRelationshipToJavaScriptType<T extends ProjectFactoryRelationship> =
-  T extends ProjectFactorySingleRelationship ? ReturnType<T["sffBuilder"]["new"]> : never;
+  T extends ProjectFactorySingleRelationship ? ReturnType<T["sffBuilder"]["create"]> : never;
 
 interface ProjectFactoryCodeBlock {
   code: string;

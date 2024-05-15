@@ -47,7 +47,7 @@ insert ${instanceName};
   ],
 );
 
-const defaultUser = userBuilder.new().set({
+const defaultUser = userBuilder.create().set({
   Username: "austria@x.gov.uk",
   Email: "austria@x.gov.uk",
   FirstName: "Austria",

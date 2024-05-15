@@ -63,46 +63,46 @@ describe("ACC Factory Builder", () => {
   );
 
   test("Expect apex to be built with no variables", () => {
-    const parent = parentBuilder.new();
+    const parent = parentBuilder.create();
     expect(parent.build()).toMatchSnapshot();
   });
 
   test("Expect apex to be built with a single variable", () => {
-    const parent = parentBuilder.new().set({ var: "My fancy title" });
+    const parent = parentBuilder.create().set({ var: "My fancy title" });
     expect(parent.build()).toMatchSnapshot();
   });
 
   test("Expect apex to be built with a copy", () => {
-    const parent = parentBuilder.new().set({ var: "My fancy title" });
+    const parent = parentBuilder.create().set({ var: "My fancy title" });
     const parentCopy = parent.copy();
     expect(parentCopy.build()).toMatchSnapshot();
   });
 
   test("Expect apex to be built with parent/child relationships", () => {
-    const parent = parentBuilder.new().set({ var: "My fancy title" });
-    const child1 = childBuilder.new().set({ var: "My child 1", parent });
-    const child2 = childBuilder.new().set({ var: "My child 2", parent });
-    const child3 = childBuilder.new().set({ var: "My child 3", parent });
+    const parent = parentBuilder.create().set({ var: "My fancy title" });
+    const child1 = childBuilder.create().set({ var: "My child 1", parent });
+    const child2 = childBuilder.create().set({ var: "My child 2", parent });
+    const child3 = childBuilder.create().set({ var: "My child 3", parent });
 
     expect(buildApex({ instances: [parent, child1, child2, child3] })).toMatchSnapshot();
   });
 
   test("Expect apex to NOT be built with missing relationship in build", () => {
-    const child = childBuilder.new().set({ var: "Bad Apple" });
+    const child = childBuilder.create().set({ var: "Bad Apple" });
 
     // The child has no "parent" assigned
     expect(() => buildApex({ instances: [child] })).toThrowError();
   });
 
   test("Expect apex to NOT be built with missing parent in build", () => {
-    const parent = parentBuilder.new().set({ var: "My fancy title" });
-    const child = childBuilder.new().set({ var: "My child 1", parent });
+    const parent = parentBuilder.create().set({ var: "My fancy title" });
+    const child = childBuilder.create().set({ var: "My child 1", parent });
 
     // The parent should also be passed in
     expect(() => buildApex({ instances: [child] })).toThrowError();
   });
 
   test("Expect getField to recall data", () => {
-    expect(parentBuilder.new().set({ var: "hello" }).getField("var")).toBe("hello");
+    expect(parentBuilder.create().set({ var: "hello" }).getField("var")).toBe("hello");
   });
 });

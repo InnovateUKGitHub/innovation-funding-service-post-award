@@ -30,7 +30,7 @@ class ProjectFactory<T extends ProjectFactoryObjectDefinition> {
     this.fnNumber = 0;
   }
 
-  new() {
+  create() {
     return new ProjectFactoryInstance({
       builder: this,
       definition: this.definition,

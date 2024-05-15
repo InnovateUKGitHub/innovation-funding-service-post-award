@@ -105,7 +105,7 @@ Acc_ClaimsCreateBatch.start(null);
 
 const currentDate = new Date();
 
-const defaultAccProject = accProjectBuilder.new().set({
+const defaultAccProject = accProjectBuilder.create().set({
   Acc_StartDate__c: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
   Acc_Duration__c: 36,
   Acc_ClaimFrequency__c: "Quarterly",

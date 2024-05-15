@@ -34,7 +34,7 @@ insert ${instanceName};
   ],
 );
 
-const defaultAccount = accountBuilder.new().set({
+const defaultAccount = accountBuilder.create().set({
   BillingStreet: "North Star Avenue",
   BillingCity: "Swindon",
   BillingState: "Wiltshire",

@@ -120,7 +120,7 @@ insert ${instanceName};
 );
 
 const defaultAccProjectParticipant = accProjectParticipantBuilder
-  .new()
+  .create()
   .set({
     ParticipantMigrationID__c: "004001",
     Acc_ParticipantType__c: "Business",
