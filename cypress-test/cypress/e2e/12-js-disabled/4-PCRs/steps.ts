@@ -61,11 +61,8 @@ export const shouldShowPastRequestsAccordion = () => {
   cy.get("span").contains("Hide");
 };
 
-export const statusAndCommentsAccordion = () => {
-  cy.get("span").should("not.have.text", "Show all sections");
-  cy.get("span").contains("Show");
-  cy.button("Status and comments log").click();
-  cy.get("span").contains("Hide");
+export const statusAndCommentsLog = () => {
+  cy.contains("h2", "Status and comments log");
 };
 
 export const createRequestButton = () => {
@@ -509,7 +506,7 @@ export const validatePeriodBox = () => {
 
 export const clickPartnerAddPeriod = () => {
   cy.getByLabel("EUI Small Ent Health").click();
-  cy.get("#removalPeriod").clear().type("3");
+  cy.getByLabel("When is their last period?").clear().type("3");
   cy.clickOn("Save and continue");
   cy.get("legend").contains("Upload withdrawal of partner certificate");
 };
@@ -540,7 +537,7 @@ export const removePartnerEditLinks = () => {
     ["Documents", "Upload withdrawal of partner certificate"],
   ].forEach(([key, subheading]) => {
     cy.getListItemFromKey(key, "Edit").click();
-    cy.get("legend").contains(subheading);
+    cy.contains(subheading);
     cy.backLink("Back to request").click();
     cy.get("a").contains("Remove a partner").click();
     cy.get("legend").contains("Mark as complete");
