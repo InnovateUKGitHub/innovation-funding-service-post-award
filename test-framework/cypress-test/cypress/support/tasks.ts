@@ -19,13 +19,13 @@ const tasks = {
   },
 
   getSecret({ cyEnv, key }: { key: string } & SirtestalotTaskProps): string | null {
-    const envman = new EnvironmentManager(cyEnv.SALESFORCE_ENVIRONMENT);
+    const envman = new EnvironmentManager(cyEnv.SALESFORCE_SANDBOX);
 
     return envman.getEnv(key) ?? null;
   },
 
   async runApex({ cyEnv, apex }: { apex: string } & SirtestalotTaskProps): Promise<unknown> {
-    const envman = new EnvironmentManager(cyEnv.SALESFORCE_ENVIRONMENT);
+    const envman = new EnvironmentManager(cyEnv.SALESFORCE_SANDBOX);
 
     const getSalesforceAccessToken = async () => {
       const privateKey = envman.getEnv("SALESFORCE_PRIVATE_KEY");

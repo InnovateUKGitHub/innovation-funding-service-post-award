@@ -6,5 +6,17 @@
     "./project-factory",
     "./environment-manager"
   ],
-  "scripts": {}
+  "scripts": {
+    "build": "turbo build",
+    "test": "turbo test",
+    "cypress": "turbo cypress",
+    "open": "turbo open",
+    "open:dev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo open",
+    "open:bjssdev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo open",
+    "open:at": "CYPRESS_SALESFORCE_SANDBOX=at turbo open",
+    "run": "turbo run"
+  },
+  "dependencies": {
+    "turbo": "^1.13.3"
+  }
 }

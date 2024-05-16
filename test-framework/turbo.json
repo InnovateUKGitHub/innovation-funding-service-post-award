@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "cypress": {
+      "persistent": true,
+      "env": ["CYPRESS_SALESFORCE_SANDBOX"]
+    },
+    "open": {
+      "persistent": true,
+      "env": ["CYPRESS_SALESFORCE_SANDBOX"]
+    }
+  }
+}

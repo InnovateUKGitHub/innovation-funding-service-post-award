@@ -24,22 +24,22 @@ async function setupNodeEvents(
 }
 
 const makeUrl = (): string => {
-  const { ACC, SANDBOX } = process.env;
+  const { ACC, CYPRESS_SALESFORCE_SANDBOX } = process.env;
 
   if (ACC === "local") {
     return "http://127.0.0.1:3000";
   }
 
-  if (ACC && SANDBOX) {
-    return `https://www-acc-custom-${SANDBOX}-${ACC}.apps.ocp4.innovateuk.ukri.org`;
+  if (ACC && CYPRESS_SALESFORCE_SANDBOX) {
+    return `https://www-acc-custom-${CYPRESS_SALESFORCE_SANDBOX}-${ACC}.apps.ocp4.innovateuk.ukri.org`;
   }
 
   if (ACC) {
     return `https://www-acc-custom-${ACC}.apps.ocp4.innovateuk.ukri.org`;
   }
 
-  if (SANDBOX) {
-    return `https://www-acc-${SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
+  if (CYPRESS_SALESFORCE_SANDBOX) {
+    return `https://www-acc-${CYPRESS_SALESFORCE_SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
   }
 
   return "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org";
