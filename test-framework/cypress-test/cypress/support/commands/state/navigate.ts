@@ -42,7 +42,7 @@ const goToProjectOverview = (ctx: SirtestalotContext, cacheOptions?: CacheOption
     ["goToProjectOverview", ctx.userInfo.project.number],
     () => {
       cy.goToProjectsDashboard();
-      cy.selectProjectCard(ctx.userInfo.project.number);
+      cy.getProjectDashboardCard({ projectNumber: ctx.userInfo.project.number }).click();
       cy.waitForPageHeading("Project overview").should("exist");
       return cy.location("pathname");
     },
@@ -58,7 +58,7 @@ const goToMspDocumentShare = (ctx: SirtestalotContext, cacheOptions?: CacheOptio
     ["goToMspDocumentShare", ctx.userInfo.project.number],
     () => {
       cy.goToProjectOverview(ctx);
-      cy.selectTile("Documents");
+      cy.getTile({ label: "Documents" });
       cy.waitForPageHeading("Project documents").should("exist");
       return cy.location("pathname");
     },

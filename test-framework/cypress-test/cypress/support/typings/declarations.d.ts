@@ -18,11 +18,18 @@ interface LocalFileInfo extends FileInfo {
   path: string;
 }
 
+interface ProjectFactoryInfo {
+  project: {
+    number: string;
+  };
+}
+
 interface SirtestalotContext {
   userInfo?: LoginInfo;
   localFileInfo?: LocalFileInfo;
   remoteSha256?: string;
   memory?: string;
+  project?: ProjectFactoryInfo;
 }
 
 declare namespace Mocha {

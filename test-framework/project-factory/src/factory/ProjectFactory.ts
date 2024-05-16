@@ -31,7 +31,7 @@ class ProjectFactory<T extends ProjectFactoryObjectDefinition> {
   }
 
   create() {
-    return new ProjectFactoryInstance({
+    return new ProjectFactoryInstance<T>({
       builder: this,
       definition: this.definition,
       instanceName: this.getInstanceName(),
@@ -99,11 +99,17 @@ class ProjectFactoryInstance<T extends ProjectFactoryObjectDefinition> {
     return this;
   }
 
-  getField<
-    Key extends T["fields"][number]["sfdcName"] | T["relationships"][number]["sfdcName"],
-    Row extends { sfdcName: Key } & T["fields"][number],
-  >(key: Key): Readonly<undefined | ProjectFactoryFieldTypeToJavaScriptType<Row>> {
+  getField<Key extends T["fields"][number]["sfdcName"], Row extends { sfdcName: Key } & T["fields"][number]>(
+    key: Key,
+  ): Readonly<undefined | ProjectFactoryFieldTypeToJavaScriptType<Row>> {
     return this.fields.get(key) ?? undefined;
+  }
+
+  getRelationship<
+    Key extends T["relationships"][number]["sfdcName"],
+    Row extends { sfdcName: Key } & T["relationships"][number],
+  >(key: Key) {
+    return (this.relationships.get(key) ?? undefined) as ReturnType<Row["sffBuilder"]["create"]> | undefined;
   }
 
   copy(): ProjectFactoryInstance<T> {

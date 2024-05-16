@@ -4,6 +4,7 @@ Feature: Developer homepage
   Background: The user has accessed the first page in acc-dev
     Given the user is on the developer homepage
     Then the page header is "Home"
+    Then the user sees 2 tiles
 
   Scenario: Content solution does nothing
     When the user clicks the "Content solution" tile

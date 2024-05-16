@@ -24,26 +24,26 @@ Then("the file can be downloaded from the user's partner documents", function ()
 });
 
 Then("the file is rejected because it is too long", function () {
-  cy.getValidationMessage().should(
+  cy.getValidationError().should(
     "contain.text",
     `You cannot upload '${this.localFileInfo.name}' because the name of the file must be shorter than 80 characters.`,
   );
 });
 
 Then("the file is rejected because it has the wrong extension", function () {
-  cy.getValidationMessage().should(
+  cy.getValidationError().should(
     "contain.text",
     `You cannot upload '${this.localFileInfo.name}' because it is the wrong file type.`,
   );
 });
 
 Then("the file is rejected because it has forbidden characters", function () {
-  cy.getValidationMessage().should(
+  cy.getValidationError().should(
     "contain.text",
     `Your document '${this.localFileInfo.name}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
   );
 });
 
 Then("the file is rejected because it has no name", function () {
-  cy.getValidationMessage().should("contain.text", `You cannot upload this file because the file has no name.`);
+  cy.getValidationError().should("contain.text", `You cannot upload this file because the file has no name.`);
 });

@@ -1,6 +1,9 @@
 Feature: MSP Document Share
+  Background: Project Setup
+    Given a standard CR&D project exists
+
   Scenario: Uploading a document
-    Given the user is an FC
+    Given the user is the FC
     And the user is on the MSP document share
     When the user uploads a file named "very silly fc file.txt" with no type
     Then the file can be downloaded from the user's partner documents

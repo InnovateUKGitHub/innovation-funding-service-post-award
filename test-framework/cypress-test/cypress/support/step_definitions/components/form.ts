@@ -4,7 +4,8 @@ const uploadFile = (path: string) =>
   function (name: string, type?: string) {
     cy.setFileFromDisk(path, name);
     cy.getByLabel("Type").select(type ?? "");
-    cy.getForm().submit({ timeout: Cypress.env("SALESFORCE_TIMEOUT") });
+    cy.getForm().submit();
+
     this.localFileInfo = {
       name,
       type,
@@ -21,7 +22,7 @@ When("the user uploads a file named {string} as type {string}", function (name: 
 });
 
 Then("the upload succeeds", function () {
-  cy.getSuccessMessage();
+  cy.getSuccessMessage().should("exist");
 });
 
 Then("the upload fails because the file name is too long", function () {});

@@ -17,35 +17,14 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
 };
 
 {
-  const project = {
-    number: PREFIX + "001001",
-    title: "ACC-9810 / KTP Project",
-  };
-
-  const partner = {
-    title: "ACC-9810 / Account 1",
-  };
+  Given("the user is the PM", function () {
+    cy.recallProject().then(project => {
+      project.pcl.find(x => x.role === "");
+    });
+  });
 
   Given(
-    "the user is a PMFC Hybrid",
-    changeUser({
-      username: lowercasePrefix + "autoimport.austria@innovateuk.gov.uk",
-      project,
-      partner,
-    }),
-  );
-
-  Given(
-    "the user is a PM",
-    changeUser({
-      username: lowercasePrefix + "autoimport.belgium@innovateuk.gov.uk",
-      project,
-      partner,
-    }),
-  );
-
-  Given(
-    "the user is an FC",
+    "the user is the FC",
     changeUser({
       username: lowercasePrefix + "autoimport.canada@innovateuk.gov.uk",
       project,
@@ -54,7 +33,7 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
   );
 
   Given(
-    "the user is an MO",
+    "the user is the MO",
     changeUser({
       username: lowercasePrefix + "autoimport.denmark@innovateuk.gov.uk",
       project,
