@@ -9,6 +9,9 @@ import {
   shouldShowProjectTitle,
   showPartnerTableHeadings,
   forecastPartnerTable,
+  accessAbCadForecast,
+  displayAbCadForecast,
+  noEditForecastLink,
 } from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
@@ -35,6 +38,20 @@ describe("Forecast front page as PM", () => {
   it("Should display the partner table", showPartnerTableHeadings);
 
   it("Should show all partners on the project and an overview of finances", forecastPartnerTable);
+
+  it("Should access the forecast for A B Cad Services", accessAbCadForecast);
+
+  it("Should display the correct Forecast table for A B Cad Services", displayAbCadForecast);
+
+  it("Should not have an edit button", () => {
+    cy.get("a").should("not.contain", "Edit forecast");
+    cy.get("a").should("not.contain", "Update forecast");
+  });
+
+  it("Should click 'Back to forecasts' backlink", () => {
+    cy.backLink("Back to forecasts").click();
+    cy.heading("Forecasts");
+  });
 
   it("Should click into the forecast for EUI Small Ent Health", () => {
     cy.get("tr")
@@ -65,7 +82,9 @@ describe("Forecast front page as PM", () => {
 
   it("Should display the correct totals", correctForecastTotals);
 
-  it("Should have an 'Update forecast' button", () => {
-    cy.get("a").contains("Update forecast").should("not.exist");
+  it("Should have an 'Update forecast' button", noEditForecastLink);
+
+  it("Should have a Changes last saved message", () => {
+    cy.paragraph("Changes last saved");
   });
 });

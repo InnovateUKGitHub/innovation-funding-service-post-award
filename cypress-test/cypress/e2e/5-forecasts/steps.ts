@@ -545,6 +545,40 @@ export const forecastPartnerTable = () => {
   });
 };
 
+export const accessAbCadForecast = () => {
+  cy.get("tr")
+    .eq(2)
+    .within(() => {
+      cy.get("td:nth-child(6)").contains("View forecast").click();
+    });
+};
+
+export const displayAbCadForecast = () => {
+  cy.get("h2").contains("A B Cad Services");
+  ["Labour", "£42,400.00", "£0.00", "£3,000.00", "£3,000.00"].forEach((field, index) => {
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(field);
+      });
+  });
+  [
+    ["£48,400.00", "£50,000.00", "-3.20%"],
+    ["£0.00", "£0.00", "0.00%"],
+    ["£5,000.00", "£20,000.00", "-75.00%"],
+    ["£0.00", "£0.00", "0.00%"],
+    ["£12,000.00", "£12,000.00", "0.00%"],
+  ].forEach(([total, totalEligible, difference], index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get(`td:nth-child(14)`).contains(total);
+        cy.get(`td:nth-child(15)`).contains(totalEligible);
+        cy.get(`td:nth-child(16)`).contains(difference);
+      });
+  });
+};
+
 export const saveNegativeValues = () => {
   cy.getByAriaLabel("Labour Period 2").clear().type("-3333.33");
   cy.getByAriaLabel("Overheads Period 2").should("have.text", "-£666.67");
@@ -572,4 +606,87 @@ export const enterExtremeNegativeValue = () => {
   cy.getByAriaLabel("Labour Period 3").clear().type("-9999999999999");
   cy.getByQA("validation-summary").should("not.contain", "A validation error occurred.");
   cy.validationLink("Forecast must be more than -£999,999,999,999.00.");
+};
+
+export const accessEuiSmallEntHealthForecast = () => {
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("a").contains("View forecast").click();
+    });
+  cy.get("h2").contains("EUI Small Ent Health");
+};
+
+export const displayEUIForecast = () => {
+  [
+    ["Labour", "£0.00", "-£3,333.33"],
+    ["Overheads", "£0.00", "-£666.67"],
+    ["Materials", "£35,000.00", "£0.00"],
+    ["Capital usage", "£35,000.00", "£0.00"],
+    ["Subcontracting", "£0.00", "£0.00"],
+    ["Travel and subsistence", "£35,000.00", "£0.00"],
+    ["Other costs", "£35,000.00", "£0.00"],
+    ["Other costs 2", "£35,000.00", "£0.00"],
+    ["Other costs 3", "£35,000.00", "£0.00"],
+    ["Other costs 4", "£35,000.00", "£0.00"],
+    ["Other costs 5", "£35,000.00", "£0.00"],
+  ].forEach(([costCat, costsClaiming, period1], index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(costCat);
+        cy.get("td:nth-child(2)").contains(costsClaiming);
+        cy.get("td:nth-child(3)").contains(period1);
+      });
+  });
+  [
+    ["-£3,333.33", "£35,000.00", "-109.52%"],
+    ["-£666.67", "£35,000.00", "-101.90%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£0.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+  ].forEach(([total, totalEligible, difference], index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(total);
+        cy.get("td:nth-child(15)").contains(totalEligible);
+        cy.get("td:nth-child(16)").contains(difference);
+      });
+  });
+};
+
+export const viewAbCadForecast = () => {
+  [
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£17,500.00", "-100.00%"],
+    ["£0.00", "£0.00", "0.00%"],
+  ].forEach(([total, totalEligible, difference], index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(total);
+        cy.get("td:nth-child(15)").contains(totalEligible);
+        cy.get("td:nth-child(16)").contains(difference);
+      });
+  });
+};
+
+export const noEditForecastLink = () => {
+  cy.get("a").should("not.contain", "Edit forecast");
+  cy.get("a").should("not.contain", "Update forecast");
 };
