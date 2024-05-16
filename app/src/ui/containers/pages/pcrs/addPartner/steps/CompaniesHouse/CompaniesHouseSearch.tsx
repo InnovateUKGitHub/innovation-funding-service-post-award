@@ -20,6 +20,7 @@ import {
 import { companiesHouseSearchQuery } from "./CompaniesHouseSearch.query";
 import { useDefaultCompaniesHouseResult } from "./CompaniesHouseStep.logic";
 import { CompaniesHouseSearchQuery } from "./__generated__/CompaniesHouseSearchQuery.graphql";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 interface CompaniesHouseSearchProps {
   searchQuery?: string;
@@ -33,7 +34,7 @@ interface CompaniesHouseSearchQueryProps {
 
 const CompaniesHouseSearchResults = ({ searchQuery, setCompanyInfo }: CompaniesHouseSearchQueryProps) => {
   const { getContent } = useContent();
-  const { step, search: defaultSearchResult } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId: pcrItemId, step, search: defaultSearchResult } = usePcrWorkflowContext();
   const defaultCompaniesHouseResult = useDefaultCompaniesHouseResult();
   const { isServer } = useMounted();
   const { register, handleSubmit, watch } = useForm<{
@@ -52,13 +53,18 @@ const CompaniesHouseSearchResults = ({ searchQuery, setCompanyInfo }: CompaniesH
       try {
         const selectedOption = JSON.parse(radioValue) as DeserialisedCompaniesHouseSearchData;
         setCompanyInfo({
+          // N.B. It doesn't matter what form we use - it's overwritten when someone clicks a button
+          form: FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue,
+          projectId,
+          pcrId,
+          pcrItemId,
           organisationName: selectedOption?.title,
           registeredAddress: selectedOption?.addressFull,
           registrationNumber: selectedOption?.registrationNumber,
         });
       } catch {}
     }
-  }, [handleSubmit, radioValue, setCompanyInfo]);
+  }, [handleSubmit, radioValue, setCompanyInfo, projectId, pcrId, pcrItemId]);
 
   if (data.companies.length === 0) {
     return <P>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}</P>;
