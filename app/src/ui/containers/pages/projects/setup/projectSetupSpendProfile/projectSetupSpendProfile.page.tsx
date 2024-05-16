@@ -98,6 +98,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
             disabled={isFetching}
             clientProfiles={watch("profile")}
             isProjectSetup
+            partnerId={partnerId}
           />
         </Section>
         <Section>

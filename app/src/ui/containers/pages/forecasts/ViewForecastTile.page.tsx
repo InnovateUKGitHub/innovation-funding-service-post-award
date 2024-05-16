@@ -24,6 +24,8 @@ import {
   ClaimStatusGroup,
   getClaimStatusGroup,
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { PartnerStatus } from "@framework/constants/partner";
 
 export interface ViewForecastParams {
   projectId: ProjectId;
@@ -32,9 +34,10 @@ export interface ViewForecastParams {
 
 const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BaseProps) => {
   const data = useUpdateForecastData({ projectId, partnerId });
-  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false });
+  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
 
-  const { isFc, isPmOrMo } = getAuthRoles(fragmentData.project.roles);
+  const { isPmOrMo } = getAuthRoles(fragmentData.project.roles);
+  const { isFc: isPartnerFc } = getAuthRoles(fragmentData.partner.roles);
 
   const routes = useRoutes();
   const { getContent } = useContent();
@@ -42,6 +45,17 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
   const tableData = useMapToForecastTableDto(fragmentData);
 
   const finalClaimStatusGroup = tableData.finalClaim ? getClaimStatusGroup(tableData.finalClaim.status) : null;
+
+  const showUpdateSection =
+    data.project.isActive &&
+    isPartnerFc &&
+    !data.partner.isWithdrawn &&
+    data.partner.partnerStatus !== PartnerStatus.OnHold;
+
+  const disableUpdateSection =
+    finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
+    finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+    finalClaimStatusGroup === ClaimStatusGroup.CLAIMED;
 
   return (
     <Page
@@ -58,9 +72,9 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
       }
       fragmentRef={data.fragmentRef}
     >
-      <ForecastClaimAdvice isFc={isFc} />
+      <ForecastClaimAdvice isFc={isPartnerFc} />
       <FinalClaimMessage
-        isFc={isFc}
+        isFc={isPartnerFc}
         projectId={projectId}
         partnerId={partnerId}
         finalClaim={tableData.finalClaim}
@@ -69,11 +83,18 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
 
       <Section title={data.partner.name} qa="partner-forecast">
         <ForecastAgreedCostWarning
-          isFc={isFc}
+          isFc={isPartnerFc}
           costCategories={tableData.costCategories
             .filter(x => x.greaterThanAllocatedCosts)
             .map(x => x.costCategoryName)}
         />
+        {isPartnerFc && data.partner.newForecastNeeded && (
+          <ValidationMessage
+            qa="period-change-warning"
+            messageType="info"
+            message={x => x.forecastsMessages.warningPeriodChange}
+          />
+        )}
         {fragmentData.partner.overheadRate !== null && (
           <P>
             {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}
@@ -88,25 +109,10 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
             nullDisplay={getContent(x => x.components.claimLastModified.never)}
           />
         </P>
-        {isFc && (
+        {showUpdateSection && (
           <Fieldset>
-            <Link
-              route={routes.forecastUpdate.getLink({ projectId, partnerId })}
-              disabled={
-                finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
-                finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-                finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
-              }
-            >
-              <Button
-                type="submit"
-                styling="Primary"
-                disabled={
-                  finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
-                  finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-                  finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
-                }
-              >
+            <Link route={routes.forecastUpdate.getLink({ projectId, partnerId })} disabled={disableUpdateSection}>
+              <Button type="submit" styling="Primary" disabled={disableUpdateSection}>
                 {getContent(x => x.pages.forecastsDetails.linkUpdateForecast)}
               </Button>
             </Link>

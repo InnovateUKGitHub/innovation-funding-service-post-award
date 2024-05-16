@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<763ddc266e995766e59cc718f672c773>>
+ * @generated SignedSource<<cba6763afc50207f3913e94cfdca6370>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -114,6 +114,13 @@ export type NewForecastTableFragment$data = {
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
+            readonly partnerRoles: ReadonlyArray<{
+              readonly isAssociate: boolean;
+              readonly isFc: boolean;
+              readonly isMo: boolean;
+              readonly isPm: boolean;
+              readonly partnerId: string;
+            }>;
           };
         } | null | undefined;
       } | null | undefined> | null | undefined;
@@ -153,31 +160,59 @@ v1 = [
     "storageKey": null
   }
 ],
-v2 = [
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isPm",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isMo",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v6 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "partnerId"
   }
 ],
-v3 = {
+v7 = {
   "order": "ASC"
 },
-v4 = {
+v8 = {
   "kind": "Literal",
   "name": "orderBy",
   "value": {
-    "Acc_ProjectPeriodNumber__c": (v3/*: any*/)
+    "Acc_ProjectPeriodNumber__c": (v7/*: any*/)
   }
 },
-v5 = {
-  "fields": (v2/*: any*/),
+v9 = {
+  "fields": (v6/*: any*/),
   "kind": "ObjectValue",
   "name": "Acc_ProjectParticipant__c"
 },
-v6 = {
+v10 = {
   "fields": [
-    (v5/*: any*/),
+    (v9/*: any*/),
     {
       "kind": "Literal",
       "name": "RecordType",
@@ -191,7 +226,7 @@ v6 = {
   "kind": "ObjectValue",
   "name": "where"
 },
-v7 = {
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
@@ -201,7 +236,7 @@ v7 = {
   "selections": (v1/*: any*/),
   "storageKey": null
 },
-v8 = {
+v12 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -211,7 +246,7 @@ v8 = {
   "selections": (v1/*: any*/),
   "storageKey": null
 },
-v9 = {
+v13 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -221,12 +256,12 @@ v9 = {
   "selections": (v1/*: any*/),
   "storageKey": null
 },
-v10 = {
+v14 = {
   "kind": "Literal",
   "name": "first",
   "value": 2000
 },
-v11 = {
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -317,32 +352,30 @@ return {
                       "name": "roles",
                       "plural": false,
                       "selections": [
+                        (v2/*: any*/),
+                        (v3/*: any*/),
+                        (v4/*: any*/),
+                        (v5/*: any*/),
                         {
                           "alias": null,
                           "args": null,
-                          "kind": "ScalarField",
-                          "name": "isFc",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isPm",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isMo",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "isAssociate",
+                          "concreteType": "Ext_Partner_Roles",
+                          "kind": "LinkedField",
+                          "name": "partnerRoles",
+                          "plural": true,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "partnerId",
+                              "storageKey": null
+                            },
+                            (v2/*: any*/),
+                            (v3/*: any*/),
+                            (v4/*: any*/),
+                            (v5/*: any*/)
+                          ],
                           "storageKey": null
                         }
                       ],
@@ -364,7 +397,7 @@ return {
             {
               "fields": [
                 {
-                  "fields": (v2/*: any*/),
+                  "fields": (v6/*: any*/),
                   "kind": "ObjectValue",
                   "name": "Id"
                 }
@@ -431,8 +464,8 @@ return {
               "name": "first",
               "value": 200
             },
-            (v4/*: any*/),
-            (v6/*: any*/)
+            (v8/*: any*/),
+            (v10/*: any*/)
           ],
           "concreteType": "Acc_Claims__cConnection",
           "kind": "LinkedField",
@@ -455,7 +488,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v11/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -486,8 +519,8 @@ return {
                       "selections": (v1/*: any*/),
                       "storageKey": null
                     },
-                    (v8/*: any*/),
-                    (v9/*: any*/),
+                    (v12/*: any*/),
+                    (v13/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -510,11 +543,11 @@ return {
         {
           "alias": "ForecastTable_ClaimDetails",
           "args": [
-            (v10/*: any*/),
-            (v4/*: any*/),
+            (v14/*: any*/),
+            (v8/*: any*/),
             {
               "fields": [
-                (v5/*: any*/),
+                (v9/*: any*/),
                 {
                   "kind": "Literal",
                   "name": "RecordType",
@@ -550,7 +583,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v11/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -588,7 +621,7 @@ return {
               "name": "first",
               "value": 100
             },
-            (v6/*: any*/)
+            (v10/*: any*/)
           ],
           "concreteType": "Acc_Profile__cConnection",
           "kind": "LinkedField",
@@ -611,9 +644,9 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
-                    (v8/*: any*/),
-                    (v9/*: any*/)
+                    (v11/*: any*/),
+                    (v12/*: any*/),
+                    (v13/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -626,19 +659,19 @@ return {
         {
           "alias": "ForecastTable_ProfileTotalCostCategories",
           "args": [
-            (v10/*: any*/),
+            (v14/*: any*/),
             {
               "kind": "Literal",
               "name": "orderBy",
               "value": {
                 "Acc_CostCategory__r": {
-                  "Acc_DisplayOrder__c": (v3/*: any*/)
+                  "Acc_DisplayOrder__c": (v7/*: any*/)
                 }
               }
             },
             {
               "fields": [
-                (v5/*: any*/),
+                (v9/*: any*/),
                 {
                   "kind": "Literal",
                   "name": "RecordType",
@@ -692,7 +725,7 @@ return {
                       "name": "Acc_CostCategory__r",
                       "plural": false,
                       "selections": [
-                        (v11/*: any*/),
+                        (v15/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -718,11 +751,11 @@ return {
         {
           "alias": "ForecastTable_ProfileDetails",
           "args": [
-            (v10/*: any*/),
-            (v4/*: any*/),
+            (v14/*: any*/),
+            (v8/*: any*/),
             {
               "fields": [
-                (v5/*: any*/),
+                (v9/*: any*/),
                 {
                   "kind": "Literal",
                   "name": "RecordType",
@@ -758,7 +791,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v11/*: any*/),
+                    (v15/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -779,7 +812,7 @@ return {
                       "selections": (v1/*: any*/),
                       "storageKey": null
                     },
-                    (v7/*: any*/),
+                    (v11/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -788,7 +821,7 @@ return {
                       "name": "Acc_CostCategory__r",
                       "plural": false,
                       "selections": [
-                        (v11/*: any*/)
+                        (v15/*: any*/)
                       ],
                       "storageKey": null
                     }
@@ -810,6 +843,6 @@ return {
 };
 })();
 
-(node as any).hash = "d63484d70796366f90d74a24361b3600";
+(node as any).hash = "809bc0d9f3a89d70b681b854fde309db";
 
 export default node;

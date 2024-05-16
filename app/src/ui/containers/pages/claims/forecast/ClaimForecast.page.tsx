@@ -39,7 +39,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
     projectId,
     partnerId,
   });
-  const fragmentData = useNewForecastTableData({ fragmentRef, isProjectSetup: false });
+  const fragmentData = useNewForecastTableData({ fragmentRef, isProjectSetup: false, partnerId });
   const { project, partner } = fragmentData;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();

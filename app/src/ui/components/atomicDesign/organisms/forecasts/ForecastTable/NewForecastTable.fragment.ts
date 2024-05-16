@@ -18,6 +18,13 @@ export const newForecastTableFragment = graphql`
               isPm
               isMo
               isAssociate
+              partnerRoles {
+                partnerId
+                isFc
+                isPm
+                isMo
+                isAssociate
+              }
             }
           }
         }

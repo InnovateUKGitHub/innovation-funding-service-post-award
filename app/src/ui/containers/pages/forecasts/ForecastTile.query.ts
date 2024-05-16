@@ -7,6 +7,13 @@ export const forecastTileQuery = graphql`
         ...PageFragment
         ...NewForecastTableFragment
         query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
+            edges {
+              node {
+                isActive
+              }
+            }
+          }
           Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
             edges {
               node {
@@ -14,6 +21,12 @@ export const forecastTileQuery = graphql`
                   Name {
                     value
                   }
+                }
+                Acc_NewForecastNeeded__c {
+                  value
+                }
+                Acc_ParticipantStatus__c {
+                  value
                 }
               }
             }

@@ -35,6 +35,8 @@ import { useUpdateForecastData } from "./ForecastTile.logic";
 import { forecastTileQuery } from "./ForecastTile.query";
 import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { PartnerStatus } from "@framework/constants/partner";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -47,10 +49,11 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
     partnerId,
   });
   const data = useUpdateForecastData({ projectId, partnerId, refreshedQueryOptions });
-  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false });
+  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
-  const { isPm, isFc } = getAuthRoles(fragmentData.project.roles);
+  const { isPm } = getAuthRoles(fragmentData.project.roles);
+  const { isFc: isPartnerFc } = getAuthRoles(fragmentData.partner.roles);
 
   const { errorMap, schema } = getForecastTableValidation(fragmentData);
   const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger } = useForm<
@@ -77,6 +80,18 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
 
   const finalClaimStatusGroup = tableData.finalClaim ? getClaimStatusGroup(tableData.finalClaim.status) : null;
 
+  const showUpdateSection =
+    data.project.isActive &&
+    isPartnerFc &&
+    !data.partner.isWithdrawn &&
+    data.partner.partnerStatus !== PartnerStatus.OnHold;
+
+  const disableUpdateSection =
+    isProcessing ||
+    finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
+    finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
+    finalClaimStatusGroup === ClaimStatusGroup.CLAIMED;
+
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const validationErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
 
@@ -91,9 +106,9 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
       apiError={apiError}
       fragmentRef={data.fragmentRef}
     >
-      <ForecastClaimAdvice isFc={isFc} />
+      <ForecastClaimAdvice isFc={isPartnerFc} />
       <FinalClaimMessage
-        isFc={isFc}
+        isFc={isPartnerFc}
         projectId={projectId}
         partnerId={partnerId}
         finalClaim={tableData.finalClaim}
@@ -114,11 +129,18 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
 
         <Section title={data.partner.name} qa="partner-forecast">
           <ForecastAgreedCostWarning
-            isFc={isFc}
+            isFc={isPartnerFc}
             costCategories={tableData.costCategories
               .filter(x => x.greaterThanAllocatedCosts)
               .map(x => x.costCategoryName)}
           />
+          {isPartnerFc && data.partner.newForecastNeeded && (
+            <ValidationMessage
+              qa="period-change-warning"
+              messageType="info"
+              message={x => x.forecastsMessages.warningPeriodChange}
+            />
+          )}
           {fragmentData.partner.overheadRate !== null && (
             <P>
               {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}
@@ -140,20 +162,13 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
               nullDisplay={getContent(x => x.components.claimLastModified.never)}
             />
           </P>
-          <Fieldset>
-            <Button
-              type="submit"
-              styling="Primary"
-              disabled={
-                isProcessing ||
-                finalClaimStatusGroup === ClaimStatusGroup.EDITABLE_CLAIMING ||
-                finalClaimStatusGroup === ClaimStatusGroup.SUBMITTED_CLAIMING ||
-                finalClaimStatusGroup === ClaimStatusGroup.CLAIMED
-              }
-            >
-              {getContent(x => x.pages.forecastsUpdate.buttonSubmit)}
-            </Button>
-          </Fieldset>
+          {showUpdateSection && (
+            <Fieldset>
+              <Button type="submit" styling="Primary" disabled={disableUpdateSection}>
+                {getContent(x => x.pages.forecastsUpdate.buttonSubmit)}
+              </Button>
+            </Fieldset>
+          )}
         </Section>
       </Form>
     </Page>

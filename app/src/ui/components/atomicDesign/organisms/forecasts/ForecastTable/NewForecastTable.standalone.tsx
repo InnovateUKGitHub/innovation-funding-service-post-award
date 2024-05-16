@@ -30,7 +30,7 @@ const NewForecastTableWithStandalone = ({
   const { fragmentRef } = useNewForecastTableData({ projectId, partnerId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>
-      <NewForecastTableWithFragment {...rest} />
+      <NewForecastTableWithFragment {...rest} partnerId={partnerId} />
     </FragmentContextProvider>
   );
 };

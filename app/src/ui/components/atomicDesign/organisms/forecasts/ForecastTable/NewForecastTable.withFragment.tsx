@@ -5,7 +5,7 @@ import { mapToForecastTableDto, useNewForecastTableData } from "./NewForecastTab
 import { NewForecastTableFragment$key } from "./__generated__/NewForecastTableFragment.graphql";
 
 export const NewForecastTableWithFragment = (
-  props: Omit<NewForecastTableProps, "tableData"> & { clientProfiles?: Record<string, string> },
+  props: Omit<NewForecastTableProps, "tableData"> & { clientProfiles?: Record<string, string>; partnerId: PartnerId },
 ) => {
   const fragmentRef = useFragmentContext();
 
@@ -13,7 +13,11 @@ export const NewForecastTableWithFragment = (
     throw new Error("New Forecast Table is missing a NewForecastTableFragment reference");
   }
 
-  const data = useNewForecastTableData({ fragmentRef, isProjectSetup: props.isProjectSetup });
+  const data = useNewForecastTableData({
+    fragmentRef,
+    isProjectSetup: props.isProjectSetup,
+    partnerId: props.partnerId,
+  });
   const tableData = mapToForecastTableDto(
     props.clientProfiles ? { ...data, clientProfiles: props.clientProfiles } : data,
   );

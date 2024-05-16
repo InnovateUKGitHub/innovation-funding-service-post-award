@@ -17,7 +17,7 @@ import { mapToGolCostDtoArray as mapToProfileTotalCostCategoryDtoArray } from "@
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { getPartnerRoles, mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useFragment } from "react-relay";
@@ -337,17 +337,21 @@ const useMapToForecastTableDto = (props: MapToForecastTableProps): ForecastTable
 const useNewForecastTableData = ({
   fragmentRef,
   isProjectSetup,
+  partnerId,
 }: {
   fragmentRef: NewForecastTableFragment$key;
   isProjectSetup: boolean;
+  partnerId: PartnerId;
 }) => {
   const fragment: NewForecastTableFragment$data = useFragment(newForecastTableFragment, fragmentRef);
 
   const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
   const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_ProjectParticipant?.edges);
 
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
-  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
+  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles", "partnerRoles"]);
+  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate", "roles"], {
+    roles: getPartnerRoles(project.partnerRoles, partnerId),
+  });
   const claimTotalProjectPeriods = mapToClaimDtoArray(
     fragment?.query?.ForecastTable_ClaimTotalProjectPeriods?.edges ?? [],
     [
