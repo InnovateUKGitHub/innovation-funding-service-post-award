@@ -114,7 +114,6 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
           boldLabel
           characterCount={watch("comments")?.length ?? 0}
           characterCountType="descending"
-          maxLength={1000}
           disabled={isFetching}
           error={validationErrors?.comments as RhfError}
         />
