@@ -63,11 +63,11 @@ import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpd
 import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
 import { ForecastHandler } from "./handlers/projects/Forecast.handler";
 import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartner.handler";
-import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerSummaryHandler";
+import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerSummary.handler";
 import { PcrItemLevelDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentUpload.handler";
 import { PcrLevelDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLevelDocumentDelete.handler";
 import { PcrItemFilesStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFilesStep.handler";
-import { PcrItemChangeRemovePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRemovePartnerSummaryHandler";
+import { PcrItemChangeRemovePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRemovePartnerSummary.handler";
 import { PcrItemChangeRemovePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRemovePartner.handler";
 
 export const standardFormHandlers = [
