@@ -21,7 +21,7 @@ import { uploadDate } from "e2e/2-claims/steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("PCR > Reasoning section", () => {
+describe("PCR > Reasoning section", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard", asUser: pmEmail });
     createTestFile("bigger_test", 33);

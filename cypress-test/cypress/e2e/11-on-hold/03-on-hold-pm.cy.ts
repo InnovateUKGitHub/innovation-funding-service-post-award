@@ -14,7 +14,7 @@ import {
 
 const pm = "james.black@euimeabs.test";
 
-describe("On hold project > Flagged participant > MO view.", () => {
+describe("On hold project > Flagged participant > MO view.", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: pm, path: "projects/dashboard" });
   });

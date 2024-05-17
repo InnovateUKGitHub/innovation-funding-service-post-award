@@ -2,7 +2,7 @@ import { visitApp } from "../../common/visit";
 import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { accessEUIOpenClaim, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
-describe("claims > edit claims as FC", () => {
+describe("claims > edit claims as FC", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
   });

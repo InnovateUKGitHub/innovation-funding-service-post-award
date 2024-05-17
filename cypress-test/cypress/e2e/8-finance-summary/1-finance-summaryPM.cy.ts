@@ -3,7 +3,7 @@ import { partnerFinanceDetails, periodSubWithDate, projCostsToDate, whenIarNeede
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Finance summary > As Project Manager", () => {
+describe("Finance summary > As Project Manager", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: pmEmail });
     cy.navigateToProject("328407");

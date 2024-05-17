@@ -7,7 +7,7 @@ import {
   drgSummaryPageValidation,
 } from "./steps";
 
-describe("Impact Management > Claim - PCF received", () => {
+describe("Impact Management > Claim - PCF received", { tags: "smoke" }, () => {
   before(() => {
     visitApp({});
     cy.navigateToProject("663878");

@@ -3,7 +3,7 @@ import { academicCosts, updateAcademicCosts } from "./steps";
 
 const fcContact = "s.shuang@irc.trde.org.uk.test";
 
-describe("Forecast > Academic", () => {
+describe("Forecast > Academic", { tags: "smoke" }, () => {
   before(() => {
     // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ asUser: fcContact, path: "/projects/a0E2600000kSotUEAS/overview" });

@@ -32,7 +32,7 @@ import {
 
 const moContactEmail = "testman2@testing.com";
 
-describe("MO report > Complete all sections, navigate sections", () => {
+describe("MO report > Complete all sections, navigate sections", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
     cy.navigateToProject("328407");

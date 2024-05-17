@@ -9,7 +9,7 @@ import {
 
 const projectManagerFinanceContactEmail = "james.black@euimeabs.test";
 
-describe("projects dashboard > Project Manager - Finance Contact", () => {
+describe("projects dashboard > Project Manager - Finance Contact", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: projectManagerFinanceContactEmail });
   });

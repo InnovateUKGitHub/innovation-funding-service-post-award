@@ -28,7 +28,7 @@ import { loremIpsum32k, loremIpsum33k } from "common/lorem";
 
 const fcEmail = "wed.addams@test.test.co.uk";
 
-describe("Loans project > Drawdown request", () => {
+describe("Loans project > Drawdown request", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: fcEmail, path: "/loans/a0E2600000kTcmIEAS" });
     createTestFile("bigger_test", 33);

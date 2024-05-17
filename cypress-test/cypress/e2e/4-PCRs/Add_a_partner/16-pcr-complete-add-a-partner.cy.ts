@@ -17,7 +17,7 @@ import {
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 
-describe("PCR > Add partner > Complete add a partner", () => {
+describe("PCR > Add partner > Complete add a partner", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     createTestFile("bigger_test", 33);

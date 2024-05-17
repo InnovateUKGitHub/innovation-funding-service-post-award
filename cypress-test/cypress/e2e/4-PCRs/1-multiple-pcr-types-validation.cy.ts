@@ -11,7 +11,7 @@ import {
   assertForMissingTypesReaccessed,
 } from "./steps";
 
-describe("PCR > Multiple add types", () => {
+describe("PCR > Multiple add types", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Draft");

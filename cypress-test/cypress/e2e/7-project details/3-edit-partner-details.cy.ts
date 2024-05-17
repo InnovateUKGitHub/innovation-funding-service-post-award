@@ -10,7 +10,7 @@ import {
 } from "./steps";
 import { partnerValidation } from "./steps";
 
-describe("Project details > Edit partner information", () => {
+describe("Project details > Edit partner information", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/details" });
   });
