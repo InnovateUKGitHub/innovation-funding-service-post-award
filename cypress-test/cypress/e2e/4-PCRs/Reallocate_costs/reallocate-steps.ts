@@ -234,3 +234,74 @@ export const validateEmptyGrantMoving = () => {
   cy.validationLink("Enter a grant moving over financial year.");
   cy.paragraph("Enter a grant moving over financial year.");
 };
+
+export const accessReallocateCosts = () => {
+  cy.get("a").contains("Reallocate project costs").click();
+  cy.heading("Reallocate project costs");
+  cy.get("a").contains("EUI Small Ent Health (Lead)").click();
+  cy.get("h2").contains("EUI Small Ent Health");
+};
+
+export const reallocateLabourToMaterials = () => {
+  cy.getByAriaLabel("Labour").clear().type("34000");
+  cy.getCellFromHeaderAndRowNumber("Costs reallocated", 1).contains("-£1,000.00");
+  cy.getByAriaLabel("Materials").clear().type("36000");
+  cy.getCellFromHeaderAndRowNumber("Costs reallocated", 3).contains("£1,000.00");
+};
+
+export const clickSaveAndReturn = (options?: { expectValidation: boolean }) => {
+  cy.get("#grantMovingOverFinancialYear").type("0");
+  cy.getByLabel("I agree with this change").check();
+  cy.clickOn("Save and return to request");
+  if (options?.expectValidation) {
+    cy.validationLink("There was a problem validating the virement for A B Cad Services.");
+  }
+};
+
+export const accessAbCadCheckValidation = () => {
+  cy.get("td").contains("A B Cad Services").click();
+  cy.get("h2").contains("A B Cad Services");
+  cy.clickOn("Save and return to reallocate project costs");
+  [
+    ["1", "Labour", "£35,001.00"],
+    ["6", "Travel and subsistence", "£35,000.01"],
+  ].forEach(([rowNum, costCat, overspend]) => {
+    let row = Math.floor(parseInt(rowNum));
+
+    cy.get("tr")
+      .eq(row)
+      .within(() => {
+        cy.get("td:nth-child(4)").contains(`${costCat} must be ${overspend} or more.`);
+      });
+    cy.validationLink(`${costCat} must be ${overspend} or more.`);
+  });
+};
+
+export const reallocateMatsToLabourRemoveVal = () => {
+  cy.getByAriaLabel("Materials").clear().type("33998.99");
+  cy.getByAriaLabel("Labour").clear().type("35001");
+  cy.getByAriaLabel("Travel and subsistence").clear().type("35000.01");
+  cy.getByQA("validation-summary").should("not.exist");
+  cy.get("p").should("not.contain", "Eligible costs must be greater than amount already claimed for Labour.");
+};
+
+export const revertToIncomplete = () => {
+  cy.get("a").contains("Reallocate project costs").click();
+  cy.heading("Reallocate project costs");
+  cy.getByLabel("I agree with this change").uncheck();
+  cy.clickOn("Save and return to request");
+  cy.heading("Request");
+  cy.get("strong").contains("Incomplete");
+};
+
+export const reAccessAbCadCheckValidation = () => {
+  cy.get("a").contains("Reallocate project costs").click();
+  cy.heading("Reallocate project costs");
+  cy.get("a").contains("A B Cad Services").click();
+  cy.get("h2").contains("A B Cad Services");
+  cy.getByAriaLabel("Materials").clear().type("35000");
+  cy.getByAriaLabel("Labour").clear().type("35000");
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.validationLink("Labour must be £35,001.00 or more.");
+  cy.getCellFromHeaderAndRowNumber("New total eligible costs", 1).contains("Labour must be £35,001.00 or more.");
+};
