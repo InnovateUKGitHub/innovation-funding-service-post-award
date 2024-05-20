@@ -2,7 +2,7 @@ import { PcrType } from "typings/pcr";
 import { documents, uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "common/seconds";
 import { testFile } from "common/testfileNames";
-import { loremIpsum256Char } from "common/lorem";
+import { loremIpsum256Char, loremIpsum1k } from "common/lorem";
 
 let date = new Date();
 let createdDay = date.getDate();
@@ -1700,9 +1700,8 @@ export const switchUserMoReviewPcr = () => {
 };
 
 export const leaveCommentQuery = () => {
-  cy.getByLabel("Query the request").click();
-  cy.wait(500);
   cy.get("textarea").clear().type(comments);
+  cy.getByQA("validation-summary").should("not.exist");
   cy.button("Submit").click();
   cy.get("h1").contains("Project change requests");
 };
@@ -2850,4 +2849,14 @@ export const validateSwindonDevUni = () => {
       cy.get(`td:nth-child(${index + 1})`).contains(footer);
     });
   });
+};
+
+export const validateQueryBox = () => {
+  cy.getByLabel("Query the request").click();
+  cy.get("textarea").invoke("val", loremIpsum1k).trigger("input");
+  cy.get("textarea").type("{moveToEnd}t");
+  cy.paragraph("You have 1 character too many");
+  cy.clickOn("Submit");
+  cy.validationLink("Comments must be a maximum of 1000 characters");
+  cy.paragraph("Comments must be a maximum of 1000 characters");
 };

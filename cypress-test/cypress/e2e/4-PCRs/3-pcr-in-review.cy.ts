@@ -8,8 +8,10 @@ import {
   enterCommentsSubmit,
   switchToMoCheckComments,
   shouldShowProjectTitle,
+  validateQueryBox,
 } from "./steps";
 import { uploadDate } from "e2e/2-claims/steps";
+import { loremIpsum1k } from "common/lorem";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -22,6 +24,8 @@ describe("PCR > In Review", () => {
   it("Should switch user to Monitoring Officer and open the submitted PCR", switchUserMoReviewPcr);
 
   it("Should check that more than 10 status changes are displayed for the MO", pcrStatusTable);
+
+  it("Should validate the query comment box to 1000 characters", validateQueryBox);
 
   it("Should leave a comment and query the PCR", leaveCommentQuery);
 
