@@ -2,7 +2,7 @@ import { fileTidyUp } from "common/filetidyup";
 import { visitApp } from "../../common/visit";
 import { manyPartnerDocDelete, manyPartnerUpload, shouldShowProjectTitle } from "./steps";
 
-describe("Project Documents page > Uploading to many partners", () => {
+describe("Project Documents page > Uploading to many partners", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kTirsEAC/documents" });
     fileTidyUp("testfile.doc");

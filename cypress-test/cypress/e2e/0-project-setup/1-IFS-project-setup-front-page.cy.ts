@@ -3,7 +3,7 @@ import { giveUsInformation, shouldShowProjectTitle } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Project setup > IFS > general", () => {
+describe("Project setup > IFS > general", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");

@@ -39,7 +39,7 @@ import {
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { seconds } from "common/seconds";
 
-describe("Claims > Review as MO", () => {
+describe("Claims > Review as MO", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSvOGEA0/claims/dashboard" });
     createTestFile("bigger_test", 33);

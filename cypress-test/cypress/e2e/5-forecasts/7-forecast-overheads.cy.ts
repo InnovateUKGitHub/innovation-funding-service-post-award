@@ -13,7 +13,7 @@ import {
 } from "./steps";
 const fcEmail = "james.black@euimeabs.test";
 
-describe("Forecast > edit", () => {
+describe("Forecast > edit", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: fcEmail });
 

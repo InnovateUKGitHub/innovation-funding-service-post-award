@@ -15,7 +15,7 @@ import { loremIpsum1k } from "common/lorem";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("PCR > In Review", () => {
+describe("PCR > In Review", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSvOGEA0/pcrs/dashboard" });
     pcrStatusChange("Queried to Project Manager");

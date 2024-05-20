@@ -10,7 +10,7 @@ import {
 
 const fcEmail = "this'is'a'test@innovateuk.gov.uk.bjssdev";
 
-describe("Impact Management > Claim - PCF not received", () => {
+describe("Impact Management > Claim - PCF not received", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: fcEmail });
     cy.navigateToProject("663878");
