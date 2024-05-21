@@ -139,6 +139,10 @@ describe("claims > Editing a claim by accessing cost categories", () => {
     cy.getByQA("claim-warning-content").should("not.exist");
   });
 
+  it("Should switch user back to FC", () => {
+    cy.switchUserTo(fc);
+  });
+
   it("Should clear the cost category line item and delete the file that was uploaded", clearUpLabourCostCat);
 
   it("Should return you to the cost category page", returnToCostCatPage);

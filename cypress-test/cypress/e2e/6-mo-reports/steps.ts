@@ -668,11 +668,12 @@ export const validateMoReport = () => {
 
 export const validatePeriodBox = () => {
   cy.getByLabel("Period");
-  cy.get("input#period").clear().type("NaN");
+  cy.get("input#period").clear().type("Lorem");
   cy.wait(500);
   cy.button("Continue").click();
   cy.validationMessage("There is a problem");
-  cy.validationLink("Period must be a whole number, like 3.");
+  cy.validationLink("Enter a valid period.");
+  cy.paragraph("Enter a valid period.");
   cy.get("input#period").clear().type("1");
   cy.wait(500);
 };
