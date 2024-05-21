@@ -28,6 +28,7 @@ import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { OverrideAccessContext } from "./app/override-access";
+import { useMessageContext } from "@ui/context/messages";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -53,7 +54,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const content = useInitContent(params);
 
   const config = useClientConfig();
-  const messages = stores.messages.messages();
+  const { messages } = useMessageContext();
 
   const titlePayload = currentRoute.getTitle?.({ params, stores, content });
 

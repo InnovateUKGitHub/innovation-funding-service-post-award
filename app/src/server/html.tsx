@@ -51,6 +51,7 @@ export function renderHtml({
   apiError,
   clientConfig,
   jsDisabled,
+  messages,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -61,6 +62,7 @@ export function renderHtml({
   apiError: IAppError | undefined;
   clientConfig: IClientConfig;
   jsDisabled: boolean;
+  messages?: string[];
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -104,6 +106,7 @@ export function renderHtml({
             }, 10);
             window.__CLIENT_CONFIG__ = ${injectJson(clientConfig)}
             window.__PRELOADED_STATE__ = ${injectJson(preloadedState)}
+            window.__PRELOADED_MESSAGES__ = ${messages && messages.length ? injectJson(messages) : undefined}
             window.__RELAY_BOOTSTRAP_DATA__ = ${injectJson(relayData)}
             window.__PRELOADED_FORM_ERRORS__ = ${formError ? injectJson(formError) : undefined}
             window.__PRELOADED_API_ERRORS__ = ${apiError ? injectJson(apiError) : undefined}

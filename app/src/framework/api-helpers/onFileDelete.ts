@@ -2,10 +2,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useContent } from "@ui/hooks/content.hook";
-import { removeMessages, messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useStore } from "react-redux";
 import { useOnUpdate } from "./onUpdate";
 import type { z } from "zod";
 import type {
@@ -32,11 +29,9 @@ export const useOnDelete = <
 }: {
   onSuccess: () => void | Promise<void>;
 }) => {
-  const store = useStore<RootState>();
-
   const { getContent } = useContent();
 
-  const { clearMessages } = useMessages();
+  const { clearMessages, setSuccessMessage } = useMessages();
 
   return useOnUpdate<Inputs, unknown, DocumentSummaryDto>({
     req(props) {
@@ -95,8 +90,7 @@ export const useOnDelete = <
     async onSuccess(input, _, ctx) {
       await onSuccess();
       const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: ctx?.fileName }));
-      store.dispatch(removeMessages());
-      store.dispatch(messageSuccess(successMessage));
+      setSuccessMessage(successMessage);
       scrollToTheTopSmoothly();
     },
   });

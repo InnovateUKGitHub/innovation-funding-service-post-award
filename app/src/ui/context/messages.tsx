@@ -5,24 +5,31 @@ import { createContext, useContext, ReactNode, useState } from "react";
 type TMessageContext = {
   messages: string[];
   clearMessages: () => void;
-  pushMessage: (message: string) => void;
+  setSuccessMessage: (message: string) => void;
 };
 
 const MessageContext = createContext<TMessageContext>({
   messages: [],
   clearMessages: noop,
-  pushMessage: noop,
+  setSuccessMessage: noop,
 } as TMessageContext);
 
-export const MessageContextProvider = ({ children }: { children: ReactNode }) => {
-  const [messages, setMessages] = useState<string[]>([]);
+export const MessageContextProvider = ({
+  children,
+  preloadedMessages,
+}: {
+  children: ReactNode;
+  preloadedMessages: Nullable<string[]>;
+}) => {
+  const [messages, setMessages] = useState<string[]>(preloadedMessages ?? []);
+
   const messageContext: TMessageContext = {
     messages,
     clearMessages() {
-      setMessages([]);
+      setMessages(() => []);
     },
-    pushMessage(message) {
-      setMessages([...messages, message]);
+    setSuccessMessage(message) {
+      setMessages(state => [...state, message]);
       scrollToTheTopSmoothly();
     },
   };

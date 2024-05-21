@@ -6,7 +6,6 @@ import {
   PCRPrepareItemRoute,
   ProjectChangeRequestPrepareItemParams,
 } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { documentsErrorMap, pcrLevelDelete } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
@@ -67,12 +66,9 @@ export class PcrLevelDocumentDeleteHandler extends ZodFormHandlerBase<
       ),
     );
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x =>
-          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
-        ),
+    res.locals.messages.push(
+      this.copy.getCopyString(x =>
+        x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
       ),
     );
   }

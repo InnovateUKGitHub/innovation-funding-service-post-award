@@ -121,9 +121,15 @@ export class Server {
     next();
   };
 
+  private readonly messages = (_req: express.Request, res: express.Response, next: express.NextFunction): void => {
+    res.locals.messages = [];
+    next();
+  };
+
   private async routing(): Promise<void> {
     this.app.use(this.setNonceValue);
     this.app.use(this.preloadReduxActions);
+    this.app.use(this.messages);
     this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
     this.app.use(useBasicAuth);
     this.app.use(noCache, noAuthRouter);

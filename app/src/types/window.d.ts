@@ -13,5 +13,6 @@ declare global {
     __PAGE_LOAD_STATUS__: boolean;
     __PRELOADED_FORM_ERRORS__: Result[];
     __PRELOADED_API_ERRORS__: IAppError;
+    __PRELOADED_MESSAGES__: string[] | undefined;
   }
 }

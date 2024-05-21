@@ -50,18 +50,28 @@ interface IServerApp {
   formError?: Result[];
   apiError?: IAppError;
   clientConfig: IClientConfig;
+  messages?: string[] | null;
 }
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({ requestUrl, store, stores, relayEnvironment, formError, apiError, clientConfig }: IServerApp) => (
+const ServerApp = ({
+  requestUrl,
+  store,
+  stores,
+  relayEnvironment,
+  formError,
+  apiError,
+  clientConfig,
+  messages,
+}: IServerApp) => (
   <ClientConfigProvider config={clientConfig}>
     <ApiErrorContextProvider value={apiError}>
       <FormErrorContextProvider value={formError}>
         <Provider store={store}>
           <StaticRouter location={requestUrl}>
             <StoresProvider value={stores}>
-              <MessageContextProvider>
+              <MessageContextProvider preloadedMessages={messages}>
                 <App store={store} relayEnvironment={relayEnvironment} />
               </MessageContextProvider>
             </StoresProvider>
@@ -197,6 +207,7 @@ const serverRender =
           relayEnvironment: ServerGraphQLEnvironment,
           clientConfig,
           jsDisabled,
+          messages: res.locals.messages,
         });
       });
 
@@ -216,6 +227,7 @@ const serverRender =
           apiError,
           clientConfig,
           jsDisabled,
+          messages: res.locals.messages,
         }),
       );
     } catch (renderError: unknown) {
@@ -273,6 +285,7 @@ function renderApp(props: {
   apiError?: IAppError | undefined;
   clientConfig: IClientConfig;
   jsDisabled: boolean;
+  messages?: string[];
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -289,6 +302,7 @@ function renderApp(props: {
     apiError: props.apiError,
     clientConfig: props.clientConfig,
     jsDisabled: props.jsDisabled,
+    messages: props.messages,
   });
 }
 

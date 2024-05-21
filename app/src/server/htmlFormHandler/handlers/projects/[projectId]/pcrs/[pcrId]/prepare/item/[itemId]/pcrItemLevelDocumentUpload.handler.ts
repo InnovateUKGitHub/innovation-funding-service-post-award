@@ -4,7 +4,6 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
 import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
@@ -68,11 +67,8 @@ export class PcrItemLevelDocumentUploadHandler extends ZodFormHandlerBase<
       ),
     );
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
-      ),
+    res.locals.messages.push(
+      this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
     );
   }
 }

@@ -4,5 +4,6 @@ declare namespace Express {
     isMatchedRoute?: boolean;
     isFormSuccess?: boolean;
     preloadedReduxActions: { type: string; payload?: unknown }[];
+    messages: string[];
   }
 }

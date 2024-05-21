@@ -30,6 +30,8 @@ const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientC
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
 const formErrors = processDto(window.__PRELOADED_FORM_ERRORS__) as unknown as Result[] | undefined;
 const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as IAppError | null;
+const preloadedMessages = (processDto(window.__PRELOADED_MESSAGES__) || null) as unknown as string[] | null;
+
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
@@ -73,7 +75,7 @@ const Client = () => {
       <ClientConfigProvider config={clientConfig}>
         <ApiErrorContextProvider value={apiErrors}>
           <FormErrorContextProvider value={formErrors}>
-            <MessageContextProvider>
+            <MessageContextProvider preloadedMessages={preloadedMessages}>
               <BrowserRouter>
                 <StoresProvider value={getStores()}>
                   <App store={store} relayEnvironment={ClientGraphQLEnvironment} />

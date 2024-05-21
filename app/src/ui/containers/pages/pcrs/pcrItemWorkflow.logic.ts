@@ -13,7 +13,6 @@ import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
 import { PCRItemStatus, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
-import { useStores } from "@ui/redux/storesProvider";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -87,7 +86,6 @@ export const useOnSavePcrItem = (
   pcrType: PCRItemType,
 ) => {
   const navigate = useNavigate();
-  const stores = useStores();
 
   const { clearMessages } = useMessageContext();
   return useOnUpdate<Partial<FullPCRItemDto>, PCRDto, { link: ILinkInfo }>({
@@ -108,7 +106,6 @@ export const useOnSavePcrItem = (
         await refreshItemWorkflowQuery();
       }
 
-      stores.messages.clearMessages();
       clearMessages();
       setFetchKey(k => k + 1);
       navigate(context?.link?.path ?? "");
