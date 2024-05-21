@@ -10,7 +10,6 @@ import { BaseProps } from "@ui/containers/containerBase";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { noop } from "@ui/helpers/noop";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
@@ -21,9 +20,7 @@ import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthCon
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
 import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
 import { SuspensePageLoader } from "@ui/components/bjss/loading";
-import { PrivateModal } from "@ui/components/atomicDesign/molecules/Modal/modal";
 import { routeTransition } from "@ui/redux/actions/common/transitionActions";
-import { useModal } from "@ui/redux/modalProvider";
 import { RoutesProvider } from "@ui/redux/routesProvider";
 import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
@@ -54,7 +51,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   useScrollToTopSmoothly([pathname]);
 
   const content = useInitContent(params);
-  const modalRegister = useModal();
 
   const config = useClientConfig();
   const messages = stores.messages.messages();
@@ -63,14 +59,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
   const navigationType = useNavigationType();
 
-  // Note: Modals are rarely used, but leaving support currently
-  useEffect(() => {
-    modalRegister.subscribe("app", noop);
-  }, [modalRegister]);
-
-  // TODO: Deprecating 'config' and pulling from redux store via 'useSelector' prop drilling :(
-  // TODO: Deprecating 'messages' and pulling from redux store via 'useSelector' prop drilling :(
-  // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
   const baseProps: BaseProps = {
     messages,
     config,
@@ -122,10 +110,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
             {!config.ssoEnabled && <DeveloperSection currentRoute={currentRoute} />}
             <Footer />
-
-            {modalRegister.getModals().map(modal => (
-              <PrivateModal key={modal.id} {...modal} />
-            ))}
           </FullHeight.Container>
         </PageTitleProvider>
       </ContentProvider>
