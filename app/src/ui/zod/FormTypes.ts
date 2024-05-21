@@ -62,6 +62,12 @@ enum FormTypes {
   PcrPrepareReasoningFilesStep = "pcrPrepareReasoningFilesStep",
   PcrPrepareReasoningSummary = "pcrPrepareReasoningSummary",
 
+  PcrProjectSuspensionStep = "pcrProjectSuspensionStep",
+  PcrProjectSuspensionSummary = "pcrProjectSuspensionSummary",
+
+  PcrChangeDurationStep = "pcrChangeDurationStep",
+  PcrChangeDurationSummary = "pcrChangeDurationSummary",
+
   LoanLevelUpload = "loanLevelUpload",
   LoanLevelDelete = "loanLevelDelete",
   LoanRequest = "loanRequest",

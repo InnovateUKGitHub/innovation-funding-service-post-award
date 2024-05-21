@@ -22,8 +22,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const SuspendProjectStep = () => {
   const { getContent } = useContent();
@@ -48,9 +49,10 @@ export const SuspendProjectStep = () => {
   const lastDayOfPauseHint = getContent(x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseHint);
   const saveAndContinue = getContent(x => x.pages.pcrTimeExtensionStep.saveAndContinue);
 
-  const { handleSubmit, register, formState, watch, trigger } = useForm<ProjectSuspensionSchemaType>({
+  const { handleSubmit, register, formState, watch, trigger, setError } = useForm<ProjectSuspensionSchemaType>({
     defaultValues: {
-      markedAsCompleteHasBeenChecked,
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      form: FormTypes.PcrProjectSuspensionStep,
       suspensionStartDate_month: getMonth(pcrItem.suspensionStartDate),
       suspensionStartDate_year: getYear(pcrItem.suspensionStartDate),
       suspensionEndDate_month: getMonth(pcrItem.suspensionEndDate),
@@ -64,7 +66,7 @@ export const SuspendProjectStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   return (
@@ -88,14 +90,25 @@ export const SuspendProjectStep = () => {
             });
           })}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrProjectSuspensionStep} />
           <Fieldset>
             <Legend>{firstDayOfPauseTitle}</Legend>
             <Hint id="hint-for-suspensionStartDate">{getRequiredToCompleteMessage()} </Hint>
 
             <DateInputGroup id="suspensionStartDate" error={validationErrors?.suspensionStartDate as RhfError}>
-              <DateInput type="month" {...register("suspensionStartDate_month")} disabled={isFetching} />
+              <DateInput
+                type="month"
+                defaultValue={getMonth(pcrItem.suspensionStartDate)}
+                {...register("suspensionStartDate_month")}
+                disabled={isFetching}
+              />
 
-              <DateInput type="year" {...register("suspensionStartDate_year")} disabled={isFetching} />
+              <DateInput
+                type="year"
+                defaultValue={getYear(pcrItem.suspensionStartDate)}
+                {...register("suspensionStartDate_year")}
+                disabled={isFetching}
+              />
             </DateInputGroup>
           </Fieldset>
 
@@ -104,9 +117,17 @@ export const SuspendProjectStep = () => {
             <Hint id="hint-for-suspensionEndDate">{lastDayOfPauseHint} </Hint>
 
             <DateInputGroup id="suspensionEndDate" error={validationErrors?.suspensionEndDate as RhfError}>
-              <DateInput type="month" {...register("suspensionEndDate_month")} />
+              <DateInput
+                type="month"
+                defaultValue={getMonth(pcrItem.suspensionEndDate)}
+                {...register("suspensionEndDate_month")}
+              />
 
-              <DateInput type="year" {...register("suspensionEndDate_year")} />
+              <DateInput
+                type="year"
+                defaultValue={getYear(pcrItem.suspensionEndDate)}
+                {...register("suspensionEndDate_year")}
+              />
             </DateInputGroup>
           </Fieldset>
 

@@ -19,10 +19,11 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useNextLink } from "../utils/useNextLink";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrTimeExtensionSchema, errorMap } from "./timeExtension.zod";
+import { pcrTimeExtensionSchema, errorMap, TimeExtensionSchemaType } from "./timeExtension.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const TimeExtensionStep = () => {
   const { getContent } = useContent();
@@ -60,15 +61,11 @@ export const TimeExtensionStep = () => {
     throw new Error("You are not able to change the project duration");
   }
 
-  const { register, handleSubmit, watch, formState, trigger } = useForm<{
-    timeExtension: string;
-    offsetMonths: number;
-    markedAsComplete: boolean;
-  }>({
+  const { register, handleSubmit, watch, formState, trigger, setError } = useForm<TimeExtensionSchemaType>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
       timeExtension: String(pcrItem.offsetMonths),
-      offsetMonths: pcrItem.offsetMonths,
+      form: FormTypes.PcrChangeDurationStep,
     },
     resolver: zodResolver(pcrTimeExtensionSchema, {
       errorMap,
@@ -81,7 +78,7 @@ export const TimeExtensionStep = () => {
 
   const newProjectDuration = (newOffset ?? 0) + pcrItem.projectDurationSnapshot;
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -106,6 +103,7 @@ export const TimeExtensionStep = () => {
           onSave({ data: { offsetMonths: newOffset }, context: { link: nextLink } });
         })}
       >
+        <input type="hidden" name="form" value={FormTypes.PcrChangeDurationStep} />
         <Fieldset>
           <Legend>{proposedProjectHeading}</Legend>
           <FormGroup hasError={!!validationErrors?.timeExtension}>

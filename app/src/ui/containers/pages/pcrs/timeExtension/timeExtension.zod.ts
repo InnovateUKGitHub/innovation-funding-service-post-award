@@ -1,10 +1,12 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "timeExtension"] });
 
 export const pcrTimeExtensionSchema = z
   .object({
+    form: z.union([z.literal(FormTypes.PcrChangeDurationSummary), z.literal(FormTypes.PcrChangeDurationStep)]),
     markedAsComplete: z.boolean(),
     timeExtension: z.string(),
   })
@@ -17,4 +19,5 @@ export const pcrTimeExtensionSchema = z
     }
   });
 
-export type TimeExtensionSchemaType = z.infer<typeof pcrTimeExtensionSchema>;
+export type TimeExtensionSchema = typeof pcrTimeExtensionSchema;
+export type TimeExtensionSchemaType = z.infer<TimeExtensionSchema>;

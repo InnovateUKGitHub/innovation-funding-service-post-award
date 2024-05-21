@@ -1,23 +1,25 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { endDateIsBeforeStart, isValidMonth, isValidYear, isEmptyDate } from "@framework/validation-helpers/date";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const pcrProjectSuspensionErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "projectSuspension"] });
 
 export const pcrProjectSuspensionSchema = z
   .object({
-    markedAsCompleteHasBeenChecked: z.boolean(),
+    markedAsComplete: z.boolean(),
     suspensionStartDate_month: z.string().optional(),
     suspensionStartDate_year: z.string().optional(),
     suspensionEndDate_month: z.string().optional(),
     suspensionEndDate_year: z.string().optional(),
+    form: z.literal(FormTypes.PcrProjectSuspensionStep),
 
     // these just used to allow the error to have a position in the form type
     suspensionStartDate: z.string(),
     suspensionEndDate: z.string(),
   })
   .superRefine((data, ctx) => {
-    if (data.markedAsCompleteHasBeenChecked) {
+    if (data.markedAsComplete) {
       if (isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -66,10 +68,13 @@ export const pcrProjectSuspensionSchema = z
     }
   });
 
-export type ProjectSuspensionSchemaType = z.infer<typeof pcrProjectSuspensionSchema>;
+export type ProjectSuspensionSchema = typeof pcrProjectSuspensionSchema;
+
+export type ProjectSuspensionSchemaType = z.infer<ProjectSuspensionSchema>;
 
 export const pcrProjectSuspensionSummarySchema = z
   .object({
+    form: z.literal(FormTypes.PcrProjectSuspensionSummary),
     markedAsComplete: z.boolean(),
     suspensionStartDate: z.date().nullable(),
   })
@@ -77,4 +82,5 @@ export const pcrProjectSuspensionSummarySchema = z
     path: ["suspensionStartDate"],
   });
 
-export type ProjectSuspensionSummarySchemaType = z.infer<typeof pcrProjectSuspensionSummarySchema>;
+export type ProjectSuspensionSummarySchema = typeof pcrProjectSuspensionSummarySchema;
+export type ProjectSuspensionSummarySchemaType = z.infer<ProjectSuspensionSummarySchema>;

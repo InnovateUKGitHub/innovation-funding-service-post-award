@@ -11,7 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TimeExtensionSchemaType, errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const TimeExtensionSummary = () => {
   const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
@@ -21,8 +22,9 @@ export const TimeExtensionSummary = () => {
   const newProjectDuration = (x: Pick<FullPCRItemDto, "offsetMonths" | "projectDurationSnapshot">) =>
     !!x.offsetMonths || x.offsetMonths === 0 ? x.offsetMonths + x.projectDurationSnapshot : null;
 
-  const { register, handleSubmit, formState, watch } = useForm<TimeExtensionSchemaType>({
+  const { register, handleSubmit, formState, watch, setError } = useForm<TimeExtensionSchemaType>({
     defaultValues: {
+      form: FormTypes.PcrChangeDurationSummary,
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       timeExtension: String(pcrItem.offsetMonths ?? 0),
     },
@@ -31,7 +33,7 @@ export const TimeExtensionSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
+  const validationErrors = useZodErrors(setError, formState?.errors);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -75,7 +77,10 @@ export const TimeExtensionSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" name="form" value={FormTypes.PcrChangeDurationSummary} />
+          <input type="hidden" name="timeExtension" value={String(pcrItem.offsetMonths ?? 0)} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );

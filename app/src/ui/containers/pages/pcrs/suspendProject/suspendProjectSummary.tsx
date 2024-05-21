@@ -14,24 +14,26 @@ import {
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const SuspendProjectSummary = () => {
   const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem } = usePcrSuspendProjectWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch } = useForm<ProjectSuspensionSummarySchemaType>({
+  const { register, handleSubmit, formState, watch, setError } = useForm<ProjectSuspensionSummarySchemaType>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       suspensionStartDate: pcrItem.suspensionStartDate,
+      form: FormTypes.PcrProjectSuspensionSummary,
     },
     resolver: zodResolver(pcrProjectSuspensionSummarySchema, {
       errorMap: pcrProjectSuspensionErrorMap,
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   const lastDayContent = pcrItem.suspensionEndDate ? <ShortDate value={pcrItem.suspensionEndDate} /> : "Not set";
 
@@ -64,7 +66,10 @@ export const SuspendProjectSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" name="suspensionStartDate" value={pcrItem.suspensionStartDate?.toISOString()} />
+          <input type="hidden" name="form" value={FormTypes.PcrProjectSuspensionSummary} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );
