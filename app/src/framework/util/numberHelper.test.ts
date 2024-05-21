@@ -2,6 +2,7 @@ import {
   calcPercentage,
   diffAsPercentage,
   isNumber,
+  parseCurrency,
   parseNumber,
   roundCurrency,
   sumBy,
@@ -113,6 +114,23 @@ describe("numberHelper", () => {
       const value = parseNumber(inputValue);
 
       expect(value).toBe(expectedValue);
+    });
+  });
+
+  describe("parseCurrency()", () => {
+    test.each([
+      ["£5", 5],
+      ["£2.99", 2.99],
+      ["0.1234", 0.1234],
+      [" £ 123,45,67,89.12  ", 123456789.12],
+      [" -12.99 ", -12.99],
+      ["what", NaN],
+      ["the", NaN],
+      ["pilk", NaN],
+      ["", NaN],
+    ])("parses $s", (input, output) => {
+      const value = parseCurrency(input);
+      expect(value).toBe(output);
     });
   });
 
