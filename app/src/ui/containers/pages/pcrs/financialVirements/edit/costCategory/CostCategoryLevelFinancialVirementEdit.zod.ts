@@ -47,7 +47,11 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
             ctx.addIssue({
               code: ZodIssueCode.custom,
               path: ["virements", i, "newEligibleCosts"],
-              params: { i18n: "errors.costs_too_small", name: costCategoryVirement.costCategoryName },
+              params: {
+                i18n: "errors.costs_too_small",
+                name: costCategoryVirement.costCategoryName,
+                costsClaimedToDate: costCategoryVirement.costsClaimedToDate,
+              },
             });
           }
         });

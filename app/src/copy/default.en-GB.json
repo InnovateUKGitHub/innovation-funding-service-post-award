@@ -2744,7 +2744,7 @@
                     "number": "Eligible costs cannot be less than £0."
                   },
                   "too_big": "Eligible costs must be less than {{ count, currency }}.",
-                  "costs_too_small": "Eligible costs must be greater than amount already claimed for {{ name }}.",
+                  "costs_too_small": "{{ name }} must be {{ costsClaimedToDate, currency }} or more.",
                   "invalid_string": {
                     "regex": "Eligible costs must be 2 decimal places or fewer."
                   },

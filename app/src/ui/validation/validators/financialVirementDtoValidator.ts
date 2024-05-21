@@ -294,6 +294,7 @@ export class CostCategoryVirementDtoValidator extends Results<CostCategoryVireme
                 x.forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.costs_too_small(
                   {
                     name: this.model.costCategoryName,
+                    costsClaimedToDate: this.model.costsClaimedToDate,
                   },
                 ),
               ),
