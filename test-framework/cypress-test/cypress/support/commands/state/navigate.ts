@@ -34,39 +34,25 @@ const goToProjectsDashboard = () => {
 };
 
 const goToProjectOverview = (ctx: SirtestalotContext, cacheOptions?: CacheOptions) => {
-  if (!ctx.userInfo.project) {
-    throw new Error("This user does not have an associated project");
-  }
+  cy.recallProject().then(data => {
+    if (!data) {
+      throw new Error("This user does not have an associated project");
+    }
 
-  cy.cache(
-    ["goToProjectOverview", ctx.userInfo.project.number],
-    () => {
-      cy.goToProjectsDashboard();
-      cy.getProjectDashboardCard({ projectNumber: ctx.userInfo.project.number }).click();
-      cy.waitForPageHeading("Project overview").should("exist");
-      return cy.location("pathname");
-    },
-    url => {
-      cy.goToPage(url);
-    },
-    cacheOptions,
-  );
-};
-
-const goToMspDocumentShare = (ctx: SirtestalotContext, cacheOptions?: CacheOptions) => {
-  cy.cache(
-    ["goToMspDocumentShare", ctx.userInfo.project.number],
-    () => {
-      cy.goToProjectOverview(ctx);
-      cy.getTile({ label: "Documents" });
-      cy.waitForPageHeading("Project documents").should("exist");
-      return cy.location("pathname");
-    },
-    url => {
-      cy.goToPage(url);
-    },
-    cacheOptions,
-  );
+    cy.cache(
+      ["goToProjectOverview", data.project.number],
+      () => {
+        cy.goToProjectsDashboard();
+        cy.getProjectDashboardCard({ projectNumber: data.project.number }).find("a").click();
+        cy.waitForPageHeading("Project overview").should("exist");
+        return cy.location("pathname");
+      },
+      url => {
+        cy.goToPage(url);
+      },
+      cacheOptions,
+    );
+  });
 };
 
 const goToBroadcastPage = (cacheOptions?: CacheOptions) => {
@@ -85,6 +71,36 @@ const goToBroadcastPage = (cacheOptions?: CacheOptions) => {
   );
 };
 
+const goFromProjectOverview =
+  (key: string, tile: string, newTitle: string) => (ctx: SirtestalotContext, cacheOptions?: CacheOptions) => {
+    cy.recallProject().then(data => {
+      if (!data) {
+        throw new Error("This user does not have an associated project");
+      }
+
+      cy.cache(
+        [key, data.project.number],
+        () => {
+          cy.goToProjectOverview(ctx);
+          cy.getTile(tile).click();
+          cy.waitForPageHeading(newTitle).should("exist");
+          return cy.location("pathname");
+        },
+        url => {
+          cy.goToPage(url);
+        },
+        cacheOptions,
+      );
+    });
+  };
+
+const goToMspDocumentShare = goFromProjectOverview("goToMspDocumentShare", "Documents", "Project documents");
+const goToMspMonitoringReport = goFromProjectOverview(
+  "goToMspMonitoringReport",
+  "Monitoring reports",
+  "Monitoring reports",
+);
+
 const goToCommands = {
   waitForPageHeading,
   goToPage,
@@ -92,6 +108,7 @@ const goToCommands = {
   goToProjectsDashboard,
   goToProjectOverview,
   goToMspDocumentShare,
+  goToMspMonitoringReport,
   goToBroadcastPage,
 };
 

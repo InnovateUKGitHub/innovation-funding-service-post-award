@@ -1,4 +1,4 @@
-import { ProjectFactory } from "../factory/ProjectFactory";
+import { ProjectFactory, ProjectFactoryInstance } from "../factory/ProjectFactory";
 
 interface ProjectFactoryFieldBase {
   sfdcName: string;
@@ -127,6 +127,8 @@ interface ProjectFactoryBuildOptions {
   prefix?: string;
 }
 
+type ProjectFactoryInstanceType<T> = T extends ProjectFactory<infer T> ? ProjectFactoryInstance<T> : never;
+
 export {
   ProjectFactoryObjectDefinition,
   ProjectFactoryFieldBase,
@@ -142,4 +144,5 @@ export {
   ProjectFactorySingleRelationship,
   ProjectFactoryCodeBlock,
   ProjectFactoryBuildOptions,
+  ProjectFactoryInstanceType,
 };

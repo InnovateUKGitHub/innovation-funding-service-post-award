@@ -1,13 +1,15 @@
+import { GetOptions } from "./component";
+
 /**
  * Yeilds the HTML element labelled by the specified text
  * @param label The contents of the LABEL element
  */
-const getByLabel = (label: string) => {
+const getByLabel = (label: string | number | RegExp) => {
   return cy
     .contains("label", label)
     .invoke("attr", "for")
     .then(id => {
-      cy.get("#" + id);
+      cy.get("#" + id.replaceAll(".", "\\."));
     });
 };
 
@@ -31,9 +33,9 @@ const getListItemFromKey = (label: string) => {
  * Yeilds the element with the specified QA property
  * @param tag The value of the HTML `data-qa=` property
  */
-const getByQA = (tag: string) => {
+const getByQA = (tag: string, opt?: GetOptions) => {
   cy.log("**getByQA**");
-  return cy.get(`[data-qa="${tag}"]`);
+  return cy.get(`[data-qa="${tag}"]`, opt);
 };
 
 /**
@@ -101,6 +103,34 @@ const getTableRow = (category: string) => {
   return cy.get("table tr").contains(category).parent();
 };
 
+type TableData = (string | undefined | RegExp)[][];
+
+interface TableShape {
+  head?: TableData;
+  body?: TableData;
+  footer?: TableData;
+}
+
+const getTableShape = (dataQa: string, shape: TableShape) => {
+  cy.getByQA(dataQa)
+    .find("table")
+    .within($table => {
+      const checkTable = (section: "thead" | "tbody" | "tfoot", cells: string, data: TableData) => {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].length; j++) {
+            if (data[i][j]) {
+              cy.wrap($table).find(section).find("tr").eq(i).find(cells).eq(j).contains(data[i][j]);
+            }
+          }
+        }
+      };
+
+      if (shape.head) checkTable("thead", "th,td", shape.head);
+      if (shape.body) checkTable("tbody", "th,td", shape.body);
+      if (shape.footer) checkTable("tfoot", "th,td", shape.footer);
+    });
+};
+
 /**
  * Yeilds the H1 HTML element with the specified content
  * @param title The contents of the H1 element
@@ -157,10 +187,10 @@ const getCommands = {
   getTableHeader,
   getTableRow,
   getPageHeading,
-  getHeading,
   getParagraph,
   getList,
   getCaption,
+  getTableShape,
 } as const;
 
 export { getCommands };

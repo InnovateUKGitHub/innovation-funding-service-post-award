@@ -4,7 +4,7 @@ const uploadFile = (path: string) =>
   function (name: string, type?: string) {
     cy.setFileFromDisk(path, name);
     cy.getByLabel("Type").select(type ?? "");
-    cy.getForm().submit();
+    cy.getForm().contains("form", "Upload documents").submit();
 
     this.localFileInfo = {
       name,

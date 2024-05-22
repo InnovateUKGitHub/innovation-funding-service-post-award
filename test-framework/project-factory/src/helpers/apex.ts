@@ -38,6 +38,12 @@ function sss(x: unknown): string {
   throw new Error("Cannot convert value " + String(x));
 }
 
+const injectRecordTypeId = (instanceName: string, objectName: string, recordType: string): string => {
+  return `${instanceName}.RecordTypeId = Schema.SObjectType.${objectName}.getRecordTypeInfosByDeveloperName().get(${sss(
+    recordType,
+  )}).getRecordTypeId();`;
+};
+
 const injectFieldToApex = (
   options: ProjectFactoryBuildOptions,
   instanceName: string,
@@ -116,7 +122,7 @@ const buildApex = ({
     throw new Error(`Missing values in missingSet: ${[...missingSet].join(", ")}`);
   }
 
-  const code = instances
+  const code = [...new Set(instances)]
     .flatMap(x => x.build(options))
     .sort((a, b) => a.priority - b.priority)
     .map(x => formatApex(x.code))
@@ -150,4 +156,12 @@ const formatApex = (apex: string) => {
   return lines.map(line => line.substring(indent)).join("\n");
 };
 
-export { sss, injectFieldToApex, injectFieldsToApex, injectRelationshipToApex, buildApex, formatApex };
+export {
+  sss,
+  injectFieldToApex,
+  injectFieldsToApex,
+  injectRelationshipToApex,
+  injectRecordTypeId,
+  buildApex,
+  formatApex,
+};

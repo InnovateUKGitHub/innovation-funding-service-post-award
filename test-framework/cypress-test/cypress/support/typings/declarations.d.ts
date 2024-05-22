@@ -1,9 +1,18 @@
-interface LoginInfo {
-  username: string | null;
+interface ProjectFactoryData {
+  prefix: string;
   project: {
     number: string;
     title: string;
-  } | null;
+  };
+  pcl: {
+    role: string;
+    username: string;
+    participantName: string;
+  }[];
+}
+
+interface LoginInfo {
+  username: string | null;
   partner: {
     title: string;
   } | null;
@@ -18,18 +27,11 @@ interface LocalFileInfo extends FileInfo {
   path: string;
 }
 
-interface ProjectFactoryInfo {
-  project: {
-    number: string;
-  };
-}
-
 interface SirtestalotContext {
   userInfo?: LoginInfo;
   localFileInfo?: LocalFileInfo;
   remoteSha256?: string;
-  memory?: string;
-  project?: ProjectFactoryInfo;
+  projectCreated?: string;
 }
 
 declare namespace Mocha {

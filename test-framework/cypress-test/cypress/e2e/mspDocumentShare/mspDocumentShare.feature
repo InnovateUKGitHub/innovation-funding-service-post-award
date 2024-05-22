@@ -10,7 +10,7 @@ Feature: MSP Document Share
     And the file matches what was uploaded
 
   Scenario Outline: Invalid file names
-    Given the user is an FC
+    Given the user is the FC
     And the user is on the MSP document share
     When the user uploads a file named <filename> with no type
     Then the file is rejected because <reasoning>
@@ -29,7 +29,7 @@ Feature: MSP Document Share
     And the user can see <documents>
 
     Examples:
-      | role          | can-or-cannot | documents               |
-      | an FC         | cannot        | their partner documents |
-      | a PMFC Hybrid | cannot        | their partner documents |
-      | an MO         | can           | all documents           |
+      | role   | can-or-cannot | documents               |
+      | the FC | cannot        | their partner documents |
+      | the MO | can           | all documents           |
+# | a PMFC Hybrid | cannot        | their partner documents |

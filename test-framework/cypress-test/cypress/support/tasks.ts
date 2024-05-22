@@ -57,7 +57,7 @@ const tasks = {
       salesforceAccessToken = await getSalesforceAccessToken();
     }
 
-    const url = new URL("/services/data/v59.0/tooling/executeAnonymous", envman.getEnv("SALESFORCE_CONNECTION_URL"));
+    const url = new URL("/services/data/v60.0/tooling/executeAnonymous", envman.getEnv("SALESFORCE_CONNECTION_URL"));
     url.searchParams.append("anonymousBody", apex);
 
     const res = await fetch(url, {

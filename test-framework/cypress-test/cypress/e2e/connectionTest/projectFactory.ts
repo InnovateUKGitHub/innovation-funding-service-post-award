@@ -1,8 +1,4 @@
-import { Then, When } from "@badeball/cypress-cucumber-preprocessor";
-
-When("Cypress tries to create a project", function () {
-  cy.createProject();
-});
+import { Then } from "@badeball/cypress-cucumber-preprocessor";
 
 Then("the user sees the project", function () {
   cy.recallProject().then(x => {

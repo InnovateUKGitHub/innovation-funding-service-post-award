@@ -5,9 +5,13 @@ Then("the user sees {int} tile(s)", (int: number) => {
 });
 
 Then("the user sees the {string} tile", (title: string) => {
-  cy.getTile({ label: title }).should("contain.text", title);
+  cy.getTile(title).should("contain.text", title);
+});
+
+Then("the user does not see the {string} tile", (title: string) => {
+  cy.getTile(title).should("not.exist");
 });
 
 When("the user clicks the {string} tile", (title: string) => {
-  cy.getTile({ label: title }).click();
+  cy.getTile(title).click();
 });

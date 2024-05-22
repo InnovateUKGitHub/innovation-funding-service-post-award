@@ -16,6 +16,10 @@ Given("the user is on the MSP document share", function () {
   cy.goToMspDocumentShare(this);
 });
 
+Given("the user is on the MSP monitoring reports", function () {
+  cy.goToMspMonitoringReport(this);
+});
+
 Given("the user is on the broadcast page", function (title: string) {
   cy.goToBroadcastPage();
 });

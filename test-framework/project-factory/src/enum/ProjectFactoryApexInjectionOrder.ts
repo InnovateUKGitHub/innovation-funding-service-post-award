@@ -2,6 +2,7 @@ enum ProjectFactoryApexInjectionOrder {
   // Doesn't matter
   ACCOUNT_LOAD,
   COMPETITION_LOAD,
+  COST_CATEGORIES_LOAD,
 
   // Depends on User
   CONTACT_LOAD,
@@ -20,6 +21,10 @@ enum ProjectFactoryApexInjectionOrder {
 
   // Needs contacts/pcls loaded in project first
   ACC_PROJECT_POSTLOAD,
+
+  // PCRs
+  ACC_PROJECT_CHANGE_REQUEST_REQUEST_HEADER,
+  ACC_PROJECT_CHANGE_REQUEST_REMOVE_PROJECT_PARTICIPANT,
 }
 
 export { ProjectFactoryApexInjectionOrder };
