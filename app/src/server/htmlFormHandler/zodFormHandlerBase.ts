@@ -114,11 +114,10 @@ abstract class ZodFormHandlerBase<
       }
     } catch (e) {
       if (e instanceof ZodError) {
-        this.logger.debug("Failed to parse Zod input.", userInput, e);
-        console.error("Failed to parse Zod input.", userInput, e);
+        this.logger.warn("Failed to parse Zod input.", userInput, e);
         next(new ZodFormHandlerError(userInput, e.message, e.issues));
       } else if (e instanceof ValidationError) {
-        this.logger.debug("Failed to execute Zod form handler due to ValidationError", userInput, e);
+        this.logger.warn("Failed to execute Zod form handler due to ValidationError", userInput, e);
         next(new ZodFormHandlerError(userInput, e.message, convertResultErrorsToZodFormat(e.results.errors)));
       } else {
         this.logger.error("Failed to execute Zod form handler.", e);

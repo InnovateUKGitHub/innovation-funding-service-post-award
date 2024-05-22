@@ -3,6 +3,7 @@ import { useFormErrorContext } from "@ui/context/form-error";
 import { IAppError } from "@framework/types/IAppError";
 import { ZodError, ZodIssue } from "zod";
 import { useState } from "react";
+import { set } from "lodash";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { NestedResult } from "@ui/validation/nestedResult";
@@ -230,7 +231,7 @@ export function convertErrorFormatFromRhfForErrorSummary(
       if (path === "files") {
         key = "files";
       } else if (path) {
-        key = `${path}_${i}`;
+        key = `${path}.${i}`;
       } else {
         key = `${i}`;
       }
@@ -242,7 +243,7 @@ export function convertErrorFormatFromRhfForErrorSummary(
     });
   } else {
     Object.entries(errors).forEach(([key, value]) =>
-      convertErrorFormatFromRhfForErrorSummary(value as RhfError, path ? `${path}_${key}` : key, validationErrors),
+      convertErrorFormatFromRhfForErrorSummary(value as RhfError, path ? `${path}.${key}` : key, validationErrors),
     );
   }
 
@@ -260,8 +261,8 @@ export const convertZodIssueToRhf = <T extends FieldValues>(
   for (const error of zodIssues) {
     const rhfError = { message: error.message, type: error.code };
     setError(error.path.join(".") as Path<T>, rhfError);
-    collatedErrors[error.path.join("_").replaceAll(".", "_")] = rhfError;
-  }
 
+    collatedErrors = set(collatedErrors, error.path, rhfError);
+  }
   return collatedErrors;
 };
