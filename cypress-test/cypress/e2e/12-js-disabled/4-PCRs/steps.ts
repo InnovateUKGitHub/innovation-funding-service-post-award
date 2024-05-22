@@ -1485,7 +1485,6 @@ export const validatePcrDurationPage = () => {
   cy.validationLink("Change project duration must be complete.");
   cy.paragraph("Reasons entry must be complete.");
   cy.paragraph("Change project duration must be complete.");
-  cy.reload();
 };
 
 export enum PcrItemType {
