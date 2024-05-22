@@ -1,31 +1,44 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { pcrItemIdValidation } from "@ui/zod/helperValidators.zod";
 
 export const pcrPrepareErrorMap = makeZodI18nMap({ keyPrefix: ["pcrPrepare"] });
 
-export const pcrPrepareSchema = z.discriminatedUnion("button_submit", [
-  z.object({
-    button_submit: z.literal("submit"),
+export const pcrPrepareSchema = z
+  .object({
+    button_submit: z.string(),
+    form: z.literal(FormTypes.PcrPrepare),
     items: z
       .object({
         status: z.string(),
         shortName: z.string(),
-      })
-      // refine here rather than simply use z.enum in order to make sure the data gets passed through to i18n
-      .refine(({ status }) => status === "Complete")
-      .array(),
-    reasoningStatus: z.enum(["Complete"]),
-    comments: z.string().max(1000).optional(),
-  }),
-  z.object({
-    button_submit: z.literal("save-and-return"),
-    items: z
-      .object({
-        status: z.string().optional(),
-        shortName: z.string().optional(),
+        id: pcrItemIdValidation,
       })
       .array(),
     reasoningStatus: z.string().optional(),
     comments: z.string().max(1000).optional(),
-  }),
-]);
+  })
+  .superRefine((data, ctx) => {
+    if (data.button_submit === "submit") {
+      if (data.reasoningStatus !== "Complete") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          params: { i18n: "errors.invalid_enum_value" },
+          path: ["reasoningStatus"],
+        });
+      }
+
+      data.items.forEach((item, i) => {
+        if (item.status !== "Complete") {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            params: { i18n: "errors.invalid_enum_value", label: item.shortName },
+            path: ["items", i, "status"],
+          });
+        }
+      });
+    }
+  });
+
+export type PcrPrepareSchema = typeof pcrPrepareSchema;

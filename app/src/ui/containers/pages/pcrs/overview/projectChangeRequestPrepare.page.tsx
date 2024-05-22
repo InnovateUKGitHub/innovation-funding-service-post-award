@@ -16,14 +16,16 @@ import { GetItemTaskProps } from "./GetItemTasks";
 import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewLog";
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks, TaskErrors } from "./ProjectChangeRequestOverviewTasks";
-import { FormValues, useOnUpdatePcrPrepare, usePCRPrepareQuery } from "./projectChangeRequestPrepare.logic";
-import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrepare.zod";
+import { useOnUpdatePcrPrepare, usePCRPrepareQuery } from "./projectChangeRequestPrepare.logic";
+import { PcrPrepareSchema, pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrepare.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -47,6 +49,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
   const pcrItems = pcr.items.map(x => ({
     shortName: getPcrItemContent(x.shortName).name,
     status: getPcrItemTaskStatus(x.status),
+    id: x.id,
   }));
 
   const availablePcrItems = usePcrItemsForThisCompetition(
@@ -56,12 +59,13 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     numberOfPartners,
   );
 
-  const { register, formState, handleSubmit, watch, setValue } = useForm<FormValues>({
+  const { register, formState, handleSubmit, watch, setValue } = useForm<z.infer<PcrPrepareSchema>>({
     defaultValues: {
+      form: FormTypes.PcrPrepare,
       comments: pcr.comments ?? "",
       items: pcrItems,
       reasoningStatus: getPcrItemTaskStatus(pcr.reasoningStatus),
-      button_submit: "submit",
+      button_submit: "save-and-return",
     },
     resolver: zodResolver(pcrPrepareSchema, { errorMap: pcrPrepareErrorMap }),
   });
@@ -102,6 +106,9 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
 
       <Form data-qa="prepare-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
+        <input type="hidden" name="form" value={FormTypes.PcrPrepare} />
+        <input type="hidden" {...register("reasoningStatus")} value={getPcrItemTaskStatus(pcr.reasoningStatus)} />
+        <input type="hidden" name="items" value={JSON.stringify(pcrItems)} />
         <Fieldset>
           <Legend>{getContent(x => x.pages.pcrOverview.addComments)}</Legend>
           <TextAreaField

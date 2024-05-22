@@ -14,6 +14,8 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
+import { z } from "zod";
+import { PcrPrepareSchema } from "./projectChangeRequestPrepare.zod";
 
 export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestPrepareQuery>(
@@ -80,18 +82,11 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   };
 };
 
-export type FormValues = {
-  comments: string;
-  items: { [k: string]: string }[];
-  reasoningStatus: string;
-  button_submit: string;
-};
-
 const getPayload = (
   saveAndContinue: boolean,
   project: Pick<ProjectDto, "monitoringLevel" | "id">,
   pcr: Pick<PCRDto, "status" | "id">,
-  data: Pick<FormValues, "comments">,
+  data: Pick<z.output<PcrPrepareSchema>, "comments">,
 ) => {
   const payload = { ...pcr, comments: data.comments, projectId: project.id };
   if (saveAndContinue) {
@@ -125,7 +120,7 @@ export const useOnUpdatePcrPrepare = (
   const navigate = useNavigate();
   const { id: projectId } = project;
 
-  return useOnUpdate<FormValues, PCRDto>({
+  return useOnUpdate<z.output<PcrPrepareSchema>, PCRDto>({
     req(data) {
       const payload = {
         projectId,

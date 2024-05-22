@@ -2043,8 +2043,14 @@
           "invalid_enum_value": "Reasons entry must be complete."
         }
       },
-      "errors": {
-        "custom": "{{input.shortName}} must be complete."
+      "items": {
+        "arrayType": {
+          "status": {
+            "errors": {
+              "invalid_enum_value": "{{issue.params.label}} must be complete."
+            }
+          }
+        }
       }
     },
     "monitoringReportCreate": {
