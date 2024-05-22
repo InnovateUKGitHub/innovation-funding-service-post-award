@@ -9,6 +9,7 @@ import {
   loremIpsum256Char,
 } from "common/lorem";
 import { testFile } from "common/testfileNames";
+import { PcrItemType } from "../steps";
 let newCurrency = new Intl.NumberFormat("en-GB", {
   style: "currency",
   currency: "GBP",
