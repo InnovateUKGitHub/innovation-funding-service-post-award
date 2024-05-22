@@ -1,6 +1,5 @@
 import { ProjectRole } from "@framework/constants/project";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -26,6 +25,7 @@ import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitio
 import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -59,7 +59,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     numberOfPartners,
   );
 
-  const { register, formState, handleSubmit, watch, setValue } = useForm<z.infer<PcrPrepareSchema>>({
+  const { register, formState, handleSubmit, watch, setValue, setError } = useForm<z.infer<PcrPrepareSchema>>({
     defaultValues: {
       form: FormTypes.PcrPrepare,
       comments: pcr.comments ?? "",
@@ -77,7 +77,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
   const { getContent } = useContent();
   const characterCount = watch("comments")?.length ?? 0;
 
-  const validatorErrors = useRhfErrors(formState.errors);
+  const validatorErrors = useZodErrors(setError, formState.errors);
 
   return (
     <Page

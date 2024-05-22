@@ -3,9 +3,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { useContent } from "@ui/hooks/content.hook";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 
@@ -17,7 +15,6 @@ export type TaskErrors = {
 interface ProjectChangeRequestOverviewTasksProps {
   pcr: Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] };
   projectId: ProjectId;
-  editor?: IEditorStore<PCRDto, PCRDtoValidator>;
   editableItemTypes: PCRItemType[];
   mode: "details" | "prepare";
   rhfErrors?: TaskErrors;
@@ -35,7 +32,6 @@ const ProjectChangeRequestOverviewTasks = (props: ProjectChangeRequestOverviewTa
 const ProjectChangeRequestOverviewTasksActions = ({
   pcr,
   projectId,
-  editor,
   editableItemTypes,
   mode,
   rhfErrors,
@@ -52,12 +48,12 @@ const ProjectChangeRequestOverviewTasksActions = ({
         <GetItemTasks
           item={x}
           rhfErrors={rhfErrors}
-          editor={editor}
           index={i}
           pcrId={pcr.id}
           projectId={projectId}
           key={i}
           mode={mode}
+          id={`items.${i}.status`}
         />
       ))}
     </TaskListSection>
@@ -67,7 +63,6 @@ const ProjectChangeRequestOverviewTasksActions = ({
 const ProjectChangeRequestOverviewTasksReasoning = ({
   pcr,
   projectId,
-  editor,
   editableItemTypes,
   mode,
   rhfErrors,
@@ -95,7 +90,6 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
         name={getContent(x => x.taskList.provideReasoning)}
         status={getPcrItemTaskStatus(pcr.reasoningStatus)}
         route={route}
-        validation={editor ? [editor.validator.reasoningStatus, editor.validator.reasoningComments] : undefined}
         rhfError={rhfError}
         id="reasoningStatus"
       />

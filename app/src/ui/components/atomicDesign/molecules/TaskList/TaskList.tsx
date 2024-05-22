@@ -1,6 +1,5 @@
 import React from "react";
 import cx from "classnames";
-import { v4 as uuid } from "uuid";
 import type { ContentSelector } from "@copy/type";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { useContent } from "@ui/hooks/content.hook";
@@ -24,15 +23,14 @@ interface ITask {
   name: string | ContentSelector;
   route: ILinkInfo | null;
   status?: TaskStatus;
-  validation?: Result[];
   rhfError?: RhfError;
   id?: string;
   disabled?: boolean;
 }
 
-export const Task = ({ route, name, status, validation, rhfError, id, disabled }: ITask) => {
+export const Task = ({ route, name, status, rhfError, id, disabled }: ITask) => {
   const { getContent } = useContent();
-  const hasError = !!validation?.find(x => !x.isValid) || !!rhfError;
+  const hasError = !!rhfError;
 
   const link = typeof name === "string" ? name : getContent(name);
   const taskName = route ? (
@@ -45,10 +43,6 @@ export const Task = ({ route, name, status, validation, rhfError, id, disabled }
 
   return (
     <li className={cx("app-task-list__item", { "app-task-list__item--error": hasError })}>
-      {validation?.map(v => (
-        <ValidationError error={v} key={uuid()} />
-      ))}
-
       <RhfValidationError error={rhfError} />
 
       <span id={id} className="app-task-list__task-name">
