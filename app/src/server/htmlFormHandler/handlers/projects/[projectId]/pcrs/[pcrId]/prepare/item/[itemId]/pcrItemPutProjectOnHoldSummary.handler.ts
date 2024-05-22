@@ -41,7 +41,10 @@ export class PcrItemPutProjectOnHoldSummaryHandler extends ZodFormHandlerBase<
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ProjectSuspensionSummarySchema>> {
     return {
       form: input.form,
-      suspensionStartDate: new Date(input.suspensionStartDate),
+      suspensionStartDate:
+        !input.suspensionStartDate || input.suspensionStartDate.trim() === ""
+          ? null
+          : new Date(input.suspensionStartDate),
       markedAsComplete: input.markedAsComplete === "on",
     };
   }

@@ -16,7 +16,7 @@ export const pcrPrepareSchema = z
         id: pcrItemIdValidation,
       })
       .array(),
-    reasoningStatus: z.string().optional(),
+    reasoningStatus: z.enum(["Complete", "Incomplete", "To do"]).optional(),
     comments: z.string().max(1000).optional(),
   })
   .superRefine((data, ctx) => {
