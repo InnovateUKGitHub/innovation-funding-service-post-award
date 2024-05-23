@@ -264,10 +264,10 @@ describe("convertErrorFormatFromRhfForErrorSummary", () => {
     };
 
     expect(convertErrorFormatFromRhfForErrorSummary(rhfError)).toEqual([
-      { key: "details_firstName", message: "enter your first name" },
-      { key: "details_lastName", message: "enter your last name" },
-      { key: "bank_sortcode", message: "enter a sort code" },
-      { key: "bank_accountNumber", message: "enter your account number" },
+      { key: "details.firstName", message: "enter your first name" },
+      { key: "details.lastName", message: "enter your last name" },
+      { key: "bank.sortcode", message: "enter a sort code" },
+      { key: "bank.accountNumber", message: "enter your account number" },
     ]);
   });
 
@@ -300,11 +300,11 @@ describe("convertErrorFormatFromRhfForErrorSummary", () => {
 
     expect(convertErrorFormatFromRhfForErrorSummary(formErrors)).toEqual([
       { key: "reasoningStatus", message: "Reasons entry must be complete." },
-      { key: "items_0", message: null },
-      { key: "items_1", message: "Change project duration must be complete." },
-      { key: "items_2", message: "Add a partner must be complete." },
-      { key: "items_3", message: "Add a partner must be complete." },
-      { key: "items_4", message: "Change a partner's name must be complete." },
+      { key: "items.0", message: null },
+      { key: "items.1", message: "Change project duration must be complete." },
+      { key: "items.2", message: "Add a partner must be complete." },
+      { key: "items.3", message: "Add a partner must be complete." },
+      { key: "items.4", message: "Change a partner's name must be complete." },
     ]);
   });
 
@@ -337,10 +337,10 @@ describe("convertErrorFormatFromRhfForErrorSummary", () => {
 
     expect(convertErrorFormatFromRhfForErrorSummary(formErrors)).toEqual([
       { key: "reasoningStatus", message: "Reasons entry must be complete." },
-      { key: "questions_0", message: null },
-      { key: "questions_1_comments", message: "Comment is too long" },
-      { key: "questions_1_optionId", message: "Select an option" },
-      { key: "questions_2_comments", message: "Comment is too small" },
+      { key: "questions.0", message: null },
+      { key: "questions.1.comments", message: "Comment is too long" },
+      { key: "questions.1.optionId", message: "Select an option" },
+      { key: "questions.2.comments", message: "Comment is too small" },
     ]);
   });
 });
