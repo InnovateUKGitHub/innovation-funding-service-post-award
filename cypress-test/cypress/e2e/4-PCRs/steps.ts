@@ -1262,7 +1262,7 @@ export const changeNameValidateManyPartners = () => {
 
 export const existingProjectDetails = () => {
   cy.get("h2").contains("Existing project details");
-  ["2023", "2024"].forEach(date => {
+  ["2024", "2025"].forEach(date => {
     cy.getByLabel("Start and end date").contains(date);
     cy.getByLabel("Duration");
     cy.getByLabel("Duration").contains("12 months");
@@ -1270,14 +1270,14 @@ export const existingProjectDetails = () => {
 };
 
 export const selectDateDropdown = () => {
-  cy.getByLabel("Please select a new date from the available list").select("December 2024");
+  cy.getByLabel("Please select a new date from the available list").select("December 2025");
   cy.getByLabel("Duration");
   cy.get("#proposed-duration").contains("22 months");
 };
 
 export const existingSubheadings = () => {
   cy.get("h2").contains("Existing project details");
-  ["Start and end date", "2023"].forEach(date => {
+  ["Start and end date", "2024"].forEach(date => {
     cy.getByQA("currentStartToEndDate").contains(date);
   });
   ["Duration", "12 months"].forEach(duration => {

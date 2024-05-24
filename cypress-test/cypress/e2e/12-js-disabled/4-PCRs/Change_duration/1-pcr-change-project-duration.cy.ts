@@ -25,7 +25,7 @@ describe("js disabled > PCR >  Change project duration > Create PCR", { tags: "j
   });
 
   after(() => {
-    cy.deletePcr("328407");
+    // cy.deletePcr("328407");
   });
 
   it("Should display the create PCR heading", () => {
@@ -89,7 +89,7 @@ describe("js disabled > PCR >  Change project duration > Create PCR", { tags: "j
     cy.heading("Change project duration");
   });
 
-  it("Should select March 2024 from the dropdown box", selectDateDropdown);
+  it("Should select December 2025 from the dropdown box", selectDateDropdown);
 
   it("Should then click 'Save and continue' to proceed to the summary page", () => {
     cy.clickOn("Save and continue");

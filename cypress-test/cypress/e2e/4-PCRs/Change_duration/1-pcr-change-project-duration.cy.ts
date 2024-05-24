@@ -85,7 +85,7 @@ describe("PCR >  Change project duration > Create PCR", () => {
     cy.heading("Change project duration");
   });
 
-  it("Should select March 2024 from the dropdown box", selectDateDropdown);
+  it("Should select December 2025 from the dropdown box", selectDateDropdown);
 
   it("Should then click 'Save and continue' to proceed to the summary page", () => {
     cy.get("button").contains("Save and continue").click();

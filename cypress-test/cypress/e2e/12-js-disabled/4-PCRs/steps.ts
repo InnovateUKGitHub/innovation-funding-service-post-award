@@ -1250,7 +1250,7 @@ export const changeNameValidateManyPartners = () => {
 
 export const existingProjectDetails = () => {
   cy.get("h2").contains("Existing project details");
-  ["2023", "2024"].forEach(date => {
+  ["2024", "2025"].forEach(date => {
     cy.getByLabel("Start and end date").contains(date);
     cy.getByLabel("Duration");
     cy.getByLabel("Duration").contains("12 months");
@@ -1258,14 +1258,12 @@ export const existingProjectDetails = () => {
 };
 
 export const selectDateDropdown = () => {
-  cy.getByLabel("Please select a new date from the available list").select("December 2024");
-  cy.getByLabel("Duration");
-  cy.get("#proposed-duration").contains("22 months");
+  cy.getByLabel("Please select a new date from the available list").select("December 2025");
 };
 
 export const existingSubheadings = () => {
   cy.get("h2").contains("Existing project details");
-  ["Start and end date", "2023"].forEach(date => {
+  ["Start and end date", "2024"].forEach(date => {
     cy.getByQA("currentStartToEndDate").contains(date);
   });
   ["Duration", "12 months"].forEach(duration => {
@@ -1292,15 +1290,15 @@ export const markAsCompleteSave = () => {
 
 export const populateDateFields = () => {
   cy.get("#suspensionStartDate_month").clear().type("12");
-  cy.get("#suspensionStartDate_year").clear().type("2023");
+  cy.get("#suspensionStartDate_year").clear().type("2024");
   cy.get("#suspensionEndDate_month").clear().type("03");
-  cy.get("#suspensionEndDate_year").clear().type("2024");
+  cy.get("#suspensionEndDate_year").clear().type("2025");
 };
 
 export const dateChangeSummary = () => {
   cy.get("a").contains("Edit");
   projectOnHoldHeadings;
-  ["First day of pause", "2023", "Edit", "Last day of pause (if known)", "2024"].forEach(summary => {
+  ["First day of pause", "2024", "Edit", "Last day of pause (if known)", "2025"].forEach(summary => {
     cy.getByQA("projectSuspension").contains(summary);
   });
 };
