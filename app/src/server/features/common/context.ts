@@ -130,7 +130,7 @@ export class Context implements IContext {
     };
 
     this.logger = new Logger("Context", {
-      prefixLines: [user && user.email],
+      prefixLines: [user.email],
     });
 
     this.caches = cachesImplementation;

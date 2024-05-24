@@ -2,7 +2,7 @@ import { LogLevel } from "@framework/constants/enums";
 import { getLogLevelNumber, parseLogLevel } from "@framework/types/logLevel";
 
 interface LoggerOptions {
-  prefixLines: string[];
+  prefixLines: (string | AnyObject)[];
   logLevel: LogLevel;
 }
 
@@ -100,7 +100,7 @@ abstract class BaseLogger implements ILogger {
     return this.options.logLevel ?? BaseLogger.defaultOptions.logLevel;
   }
 
-  get prefixLines(): string[] {
+  get prefixLines(): (string | AnyObject)[] {
     return this.options.prefixLines ?? BaseLogger.defaultOptions.prefixLines;
   }
 }

@@ -1,4 +1,4 @@
-import { ErrorCode } from "@framework/constants/enums";
+import { DetailedErrorCode, ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
 import { IAppError } from "@framework/types/IAppError";
 import { IContext } from "@framework/types/IContext";
@@ -214,6 +214,21 @@ const serverRender =
       // Wait until all Relay queries have been made.
       const relayData = await relayServerSSR.getCache();
       const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
+
+      const relayErrors = relayData.filter(([, data]) => data.errors && data.errors.length > 0);
+
+      if (relayErrors.length) {
+        statusCode = 500;
+        renderUrl = routeConfig.error.getLink({}).path;
+        isErrorPage = true;
+        store.dispatch(
+          setError({
+            errorCode: ErrorCode.REQUEST_ERROR,
+            errorType: "",
+            errorDetails: [{ code: DetailedErrorCode.ACC_GRAPHQL_ERROR, data: relayErrors }],
+          }),
+        );
+      }
 
       res.status(statusCode).send(
         renderApp({

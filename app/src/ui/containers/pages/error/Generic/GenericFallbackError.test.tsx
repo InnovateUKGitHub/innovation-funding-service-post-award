@@ -38,7 +38,7 @@ describe("<GenericFallbackError />", () => {
     });
 
     describe("with developer error", () => {
-      test("without errorMessage", () => {
+      test("without errorMessage or errorStack", () => {
         const { container } = setup({
           errorCode: ErrorCode.UNKNOWN_ERROR,
           errorType: "stub-errorType",
@@ -54,6 +54,18 @@ describe("<GenericFallbackError />", () => {
           errorCode: ErrorCode.UNKNOWN_ERROR,
           errorType: "stub-errorType",
           errorMessage: stubDeveloperError,
+        });
+
+        expect(queryByText(stubDeveloperError, { selector: "p" })).toBeInTheDocument();
+      });
+
+      test("with errorStack", () => {
+        const stubDeveloperError = "stub-developer-error";
+
+        const { queryByText } = setup({
+          errorCode: ErrorCode.UNKNOWN_ERROR,
+          errorType: "stub-errorType",
+          errorStack: stubDeveloperError,
         });
 
         expect(queryByText(stubDeveloperError, { selector: "pre" })).toBeInTheDocument();

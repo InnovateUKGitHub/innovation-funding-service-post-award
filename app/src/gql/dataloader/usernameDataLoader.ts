@@ -32,7 +32,7 @@ interface RolesData {
  */
 const getUsernameDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, UserData | null>(async contacts => {
-    const { data } = await ctx.api.executeGraphQL<{ data: RolesData }>({
+    const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`
         query UsernameQuery($contacts: [ID!]!) {
           uiapi {

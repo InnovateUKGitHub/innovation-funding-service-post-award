@@ -9,6 +9,7 @@ export interface ErrorPayload {
     errorType: ErrorTypes | string;
     errorMessage?: IAppError["message"];
     errorStack?: IAppError["stack"];
+    errorDetails?: IAppError["details"];
   };
   path: string;
 }

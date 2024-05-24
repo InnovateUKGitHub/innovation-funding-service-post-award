@@ -59,6 +59,9 @@
         "ACC_VALIDATION_ERROR": {
           "invalid": "{{ message }}"
         },
+        "ACC_GRAPHQL_ERROR": {
+          "invalid": "{{ message }}"
+        },
         "SFDC_SF_UPDATE_ALL_FAILURE": {
           "invalid": "Something went wrong and we could not update your forecast. Please click \u2018Save and return to project setup\u2019 again."
         },

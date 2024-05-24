@@ -1,6 +1,7 @@
 import { DetailedErrorCode, ErrorCode, SfdcFieldCustomValidationException } from "@framework/constants/enums";
 import { Results } from "@ui/validation/results";
 import type { Error as SfdcError } from "jsforce";
+import { QueryPayload } from "react-relay-network-modern";
 
 export interface IAppError<T extends Results<ResultBase> = Results<ResultBase>> {
   code: ErrorCode;
@@ -18,6 +19,11 @@ interface IAppDetailedAccValidationError extends IAppDetailedBaseError {
   code: DetailedErrorCode.ACC_VALIDATION_ERROR;
   message: string;
   key?: string;
+}
+
+interface IAppDetailedAccGraphQLError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.ACC_GRAPHQL_ERROR;
+  data: [string, QueryPayload][];
 }
 
 interface IAppDetailedSfdcCannotUseRecordType extends IAppDetailedBaseError {
@@ -56,6 +62,7 @@ interface IAppDetailedSfdcGenericError extends IAppDetailedBaseError {
 
 export type IAppDetailedError =
   | IAppDetailedAccValidationError
+  | IAppDetailedAccGraphQLError
   | IAppDetailedSfdcCannotUseRecordType
   | IAppDetailedSfdcStringTooLongError
   | IAppDetailedSfdcSfUpdateAllFailureError

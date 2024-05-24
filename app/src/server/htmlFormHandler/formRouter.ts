@@ -49,7 +49,7 @@ import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[pr
 import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatementHandler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditFormHandler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupFormHandler";
-import { PostFormHandleHandler } from "./postFormHandleHandler";
+import { FallbackFormHandler } from "./FallbackFormHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
 import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsSummaryUpdate.handler";
@@ -202,7 +202,7 @@ export const configureFormRouter = ({
   csrfProtection: RequestHandler;
 }) => {
   const result = express.Router();
-  const finalHandler = new PostFormHandleHandler({ schema });
+  const finalHandler = new FallbackFormHandler({ schema });
 
   for (const x of zodFormHandlers) {
     result.post(

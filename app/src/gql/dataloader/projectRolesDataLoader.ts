@@ -55,7 +55,7 @@ interface RolesData {
  */
 const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, ProjectData | null>(async keys => {
-    const { data } = await ctx.api.executeGraphQL<{ data: RolesData }>({
+    const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`
         query UserRolesQuery($keys: [ID]) {
           uiapi {

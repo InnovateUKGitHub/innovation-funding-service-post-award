@@ -1,5 +1,6 @@
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common/config";
+import { Timer } from "@server/features/common/timer";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
@@ -7,6 +8,7 @@ import { mapStringInObject } from "@shared/mapStringInObject";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
+import { PayloadError } from "relay-runtime";
 
 interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
@@ -25,7 +27,7 @@ export class Api {
   private readonly version: string;
   private readonly instanceUrl: string;
   private readonly accessToken: string;
-  private readonly logger: ILogger = new Logger("Salesforce");
+  private readonly logger: ILogger;
   public readonly email: string;
 
   constructor({
@@ -44,6 +46,11 @@ export class Api {
     this.instanceUrl = instanceUrl;
     this.accessToken = accessToken;
     this.email = email;
+    this.logger = new Logger("Salesforce API", { prefixLines: [email] });
+  }
+
+  private startTimer(message: string) {
+    return new Timer(this.logger, message);
   }
 
   /**
@@ -54,7 +61,6 @@ export class Api {
    */
   public static async asUser(email: string) {
     const { accessToken, url } = await getCachedSalesforceAccessToken({
-      // const { accessToken, url } = await getSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
       serviceUsername: configuration.salesforceServiceUser.serviceUsername,
@@ -127,8 +133,12 @@ export class Api {
     document,
     variables,
     decodeHTMLEntities,
-  }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
+  }: ExecutionRequest & ExecuteConfiguration): Promise<{ data: T; errors: PayloadError[] }> {
     const query = print(document);
+    const queryName = /query (\w+)[\s(]/.exec(query)?.[1];
+
+    const timer = this.startTimer(queryName ?? "Anonymous GraphQL Query");
+
     this.logger.debug("GraphQL Query", query, variables);
     // "graphql" is not part of the template string because our ESbuild/Relay GraphQL hack
     // does thinks our code is actually a query.
@@ -139,7 +149,13 @@ export class Api {
       decodeHTMLEntities,
     });
 
-    this.logger.debug("GraphQL Result", query, variables, data);
+    if (data.errors.length) {
+      this.logger.error("GraphQL Error", queryName, variables, data);
+    } else {
+      this.logger.debug("GraphQL Result", queryName, variables, data);
+    }
+
+    timer.finish();
 
     return data;
   }
@@ -151,6 +167,7 @@ export class Api {
    */
   public async executeSOQL<T>({ query }: { query: string }): Promise<T> {
     this.logger.debug("SOQL Query", query);
+    const timer = this.startTimer(query);
     const data = this.fetch(`/services/data/${this.version}/query`, {
       method: "GET",
       searchParams: {
@@ -158,6 +175,7 @@ export class Api {
       },
     });
     this.logger.debug("SOQL Query Return", query, await data);
+    timer.finish();
     return data;
   }
 }
