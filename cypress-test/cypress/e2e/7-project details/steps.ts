@@ -1,5 +1,7 @@
+import { nextYear, uploadDate } from "e2e/2-claims/steps";
+
 var currentYear = new Date();
-var thisYear = currentYear.getFullYear();
+var thisProjectYear = currentYear.getFullYear() + 1;
 
 const partners = ["EUI Small Ent Health", "ABS EUI Medium Enterprise", "A B Cad Services"] as const;
 
@@ -9,7 +11,7 @@ export const shouldShowProjectTitle = () => {
 
 export const projectPeriodSubHeading = () => {
   cy.get("h2").contains("Project period");
-  cy.get("span").contains(thisYear);
+  cy.get("span").contains(thisProjectYear);
 };
 
 export const moDetailsSection = () => {
@@ -225,21 +227,15 @@ export const detailsGuidanceMessage = () => {
  */
 export const projectInfoSection = () => {
   [
-    "Competition name",
-    "Competition type",
-    "Project start date",
-    "Project end date",
-    "Duration",
-    "Number of periods",
-    "Project scope statement",
-    "a002600000C6rp9",
-    "CR&D",
-    "12 months",
-    "Howdy! I am the public summary for this Cypress project.",
-    "2023",
-    "2024",
-  ].forEach(projInfo => {
-    cy.getByQA("project-details").contains(projInfo);
+    ["Competition name", "a002600000C6rp9"],
+    ["Competition type", "CR&D"],
+    ["Project start date", uploadDate],
+    ["Project end date", nextYear.toString()],
+    ["Duration", "12 months"],
+    ["Number of periods", "12"],
+    ["Project scope statement", "Howdy! I am the public summary for this Cypress project."],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key, item);
   });
 };
 

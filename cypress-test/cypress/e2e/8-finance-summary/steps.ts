@@ -1,5 +1,5 @@
 let currentYear = new Date();
-let thisYear = currentYear.getFullYear();
+let currentProjectYear = currentYear.getFullYear() + 1;
 
 export const projCostsToDate = () => {
   [
@@ -211,7 +211,7 @@ export const manyWhenIarNeeded = () => {
 
 export const periodSubWithDate = () => {
   cy.get("h2").contains("Project period");
-  cy.get("span").contains(thisYear);
+  cy.get("span").contains(currentProjectYear);
 };
 
 export const projCostsHeaders = () => {

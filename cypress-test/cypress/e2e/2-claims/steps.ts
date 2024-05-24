@@ -6,6 +6,7 @@ let date = new Date();
 let comments = JSON.stringify(date);
 
 export const uploadDate = new Date().getFullYear().toString();
+export const nextYear = new Date().getFullYear() + 1;
 
 export const costCategories = [
   "Labour",
@@ -859,18 +860,18 @@ export const topThreeRows = () => {
     ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
     [
       "Month",
-      "Mar 2023",
-      "Apr 2023",
-      "May 2023",
-      "Jun 2023",
-      "Jul 2023",
-      "Aug 2023",
-      "Sep 2023",
-      "Oct 2023",
-      "Nov 2023",
-      "Dec 2023",
-      "Jan 2024",
-      "Feb 2024",
+      `Mar ${uploadDate}`,
+      `Apr ${uploadDate}`,
+      `May ${uploadDate}`,
+      `Jun ${uploadDate}`,
+      `Jul ${uploadDate}`,
+      `Aug ${uploadDate}`,
+      `Sep ${uploadDate}`,
+      `Oct ${uploadDate}`,
+      `Nov ${uploadDate}`,
+      `Dec ${uploadDate}`,
+      `Jan ${nextYear.toString()}`,
+      `Feb ${nextYear.toString()}`,
     ],
   ].forEach((cols, rowNumber = 0) => {
     cy.get("tr")

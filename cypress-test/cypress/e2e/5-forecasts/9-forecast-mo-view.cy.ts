@@ -66,8 +66,6 @@ describe("Forecast front page as PM", () => {
   it("Should display the correct totals", correctForecastTotals);
 
   it("Should not have an edit forecast button", () => {
-    cy.get("main").within(() => {
-      cy.get("a").should("not.contain", "Edit forecast");
-    });
+    cy.get("a").should("not.contain", "Edit forecast");
   });
 });
