@@ -1,5 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
+  clickEditCheckValMessage,
   partnerRadioButtons,
   removePartnerContinueNoEdit,
   removePartnerPromptValidation,
@@ -51,10 +52,7 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
 
   it("Should mark as complete and attempt to save prompting validation", removePartnerPromptValidation);
 
-  it("Should use the edit button next to 'Partner being removed' to navigate back", () => {
-    cy.getListItemFromKey("Partner being removed", "Edit").click();
-    cy.get("legend").contains("Select partner to remove");
-  });
+  it("Should use the edit button next to 'Partner being removed' to navigate back", clickEditCheckValMessage);
 
   it("Should validate the period box", validatePeriodBox);
 

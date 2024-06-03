@@ -488,6 +488,17 @@ export const removePartnerPromptValidation = () => {
   cy.validationLink("Select a partner to remove from this project.");
 };
 
+export const clickEditCheckValMessage = () => {
+  cy.getListItemFromKey("Partner being removed", "Edit").click();
+  cy.get("legend").contains("Select partner to remove");
+  ["Select a partner to remove from this project.", "Enter a valid removal period."].forEach(message => {
+    cy.validationLink(message);
+  });
+  [`A Zod`, 'z.literal("")', `was not passed into this form.`, "Zod"].forEach(badMessage => {
+    cy.getByQA("validation-summary").should("not.contain", badMessage);
+  });
+};
+
 export const validatePeriodBox = () => {
   cy.getByAriaLabel("Removal period").clear().type("13");
   cy.wait(1000);
