@@ -33,6 +33,7 @@ export const RemovePartnerStep = () => {
       markedAsComplete: markedAsCompleteHasBeenChecked,
       removalPeriod: pcrItem.removalPeriod,
       partnerId: pcrItem.partnerId,
+      form: FormTypes.PcrRemovePartnerStep,
     },
     resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
       errorMap: removePartnerErrorMap,
@@ -40,6 +41,7 @@ export const RemovePartnerStep = () => {
   });
 
   const validationErrors = useZodErrors(setError, formState.errors);
+
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const partnerOptions = partners
@@ -59,7 +61,7 @@ export const RemovePartnerStep = () => {
             onSave({ data, context: { link: nextLink } });
           })}
         >
-          <input type="hidden" {...register("form")} value={FormTypes.PcrRemovePartnerStep} />
+          <input type="hidden" name="form" value={FormTypes.PcrRemovePartnerStep} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrRemovePartner.headingSelectPartner)}</Legend>
             <FormGroup>
