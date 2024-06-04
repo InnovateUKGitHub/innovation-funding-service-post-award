@@ -1,4 +1,3 @@
-import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { Logger } from "@shared/developmentLogger";
 import i18next, { TFunctionDetailedResult } from "i18next";
 import { ContentSelectorFunctionParser } from "./ContentSelectorFunctionParser";
@@ -14,7 +13,6 @@ export class CopyContentInvalidInputKeyError extends Error {}
 
 interface ICopy {
   competitionType?: string;
-  monitoringLevel?: ProjectMonitoringLevel;
 }
 
 const isI18nDetailedResult = (
@@ -29,11 +27,9 @@ const isI18nDetailedResult = (
 class Copy {
   private logger = new Logger("Copy");
   protected competitionType?: string;
-  protected monitoringLevel?: ProjectMonitoringLevel;
 
-  constructor({ competitionType, monitoringLevel }: ICopy = {}) {
+  constructor({ competitionType }: ICopy = {}) {
     this.competitionType = competitionType?.replace(/ /g, "-").toLowerCase();
-    this.monitoringLevel = monitoringLevel;
   }
 
   /**
@@ -45,12 +41,6 @@ class Copy {
   public getContentCall(fullKey: ContentSelector | TitleContentSelector | string): ContentSelectorCallInformation {
     let i18nKey: string;
     const data: DataOption = {};
-
-    if (this.monitoringLevel) {
-      Object.assign(data, {
-        context: this.monitoringLevel,
-      });
-    }
 
     // If the input key was a string...
     if (typeof fullKey === "string") {
