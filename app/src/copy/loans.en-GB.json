@@ -1,4 +1,5 @@
 {
+  "docType": "loans",
   "pages": {
     "projectOverview": {
       "claimsLink": "Project Costs"

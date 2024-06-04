@@ -1,4 +1,5 @@
 {
+  "docType": "ktp",
   "claimsMessages": {
     "iarRequiredAdvice": "You must upload a Schedule 3 with this claim.",
     "finalClaimIarAdvice": "You also need to complete your final report on the KTP Portal before we can make your final payment.",

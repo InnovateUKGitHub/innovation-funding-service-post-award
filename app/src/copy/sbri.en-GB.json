@@ -1,4 +1,5 @@
 {
+  "docType": "sbri",
   "claimsMessages": {
     "guidanceMessage": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
     "editClaimLineItemOtherCostsTotalCosts": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
