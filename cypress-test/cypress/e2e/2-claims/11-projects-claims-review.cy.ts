@@ -161,10 +161,10 @@ describe("Claims > Review as MO", { tags: "smoke" }, () => {
 
   it("Should switch the user to the MO", () => {
     cy.switchUserTo("testman2@testing.com");
+    cy.heading("Project overview");
   });
 
   it("Should access the claims area again", () => {
-    cy.wait(500);
     cy.selectTile("Claims");
     cy.heading("Claims");
   });

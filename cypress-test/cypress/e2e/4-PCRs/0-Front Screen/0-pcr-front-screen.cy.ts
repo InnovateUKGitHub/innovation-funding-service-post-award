@@ -46,7 +46,7 @@ describe("PCR > Project Change Request front page", () => {
   });
 
   it("Should check for existing PCRs and start creating a PCR", () => {
-    pcrTidyUp("Reallocate project costs");
+    pcrTidyUp("Draft");
   });
 
   it("Should display the project title", shouldShowProjectTitle);
