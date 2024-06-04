@@ -1,6 +1,7 @@
 import "@testing-library/cypress/add-commands";
 import { seconds } from "common/seconds";
 import { visitApp } from "common/visit";
+import { Headings } from "typings/headings";
 import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
 
@@ -226,9 +227,9 @@ const validationNotification = (message: string) => {
   cy.getByQA("validation-message-content").contains(message);
 };
 
-const heading = (title: string) => {
+const heading = (title: Headings) => {
   cy.log("**heading**");
-  cy.get("h1").contains(title, { timeout: 50000 });
+  cy.get("h1").should("have.text", title, { timeout: 50000 });
 };
 
 const paragraph = (content: string | RegExp) => {
