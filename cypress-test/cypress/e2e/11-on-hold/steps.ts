@@ -138,7 +138,11 @@ export const moAccessClaimCheckforMessaging = (fn: () => void) => {
   cy.selectTile("Claims");
   cy.heading("Claims");
   fn();
-  cy.get("a").contains("View").click();
+  cy.get("tr")
+    .eq(2)
+    .within(() => {
+      cy.get("a").contains("View").click();
+    });
   cy.heading("Claim");
   fn();
   cy.clickOn("Back to claims");

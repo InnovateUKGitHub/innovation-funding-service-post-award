@@ -57,7 +57,7 @@ export const allowBatchFileUpload = (documentType: string) => () => {
   cy.wait("@filesUpload");
 };
 
-export const displayBatchUpload = (documentType: string, user: string) => {
+export const displayBatchUpload = (documentType: string, user: string, removeButton: boolean) => {
   documents.forEach(document => {
     cy.contains("td", document)
       .parent()
@@ -67,7 +67,9 @@ export const displayBatchUpload = (documentType: string, user: string) => {
         cy.tableCell(uploadDate);
         cy.tableCell("0KB");
         cy.tableCell(user);
-        cy.button("Remove");
+        if (removeButton) {
+          cy.button("Remove");
+        }
       });
   });
 };

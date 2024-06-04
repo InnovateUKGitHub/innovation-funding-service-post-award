@@ -138,7 +138,7 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
   });
 
   it("Should display the 10 documents correctly", () =>
-    displayBatchUpload("Overhead calculation spreadsheet", "James Black"));
+    displayBatchUpload("Overhead calculation spreadsheet", "James Black", true));
 
   it("Should navigate back to the Overheads page", () => {
     cy.clickOn("Save and return to overheads costs");

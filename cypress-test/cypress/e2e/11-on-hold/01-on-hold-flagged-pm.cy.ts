@@ -14,12 +14,12 @@ import {
 
 const pm = "james.black@euimeabs.test";
 
-describe("On hold project > Flagged participant > MO view.", { tags: "smoke" }, () => {
+describe("On hold project > Flagged participant > PM view.", { tags: "smoke" }, () => {
   before(() => {
     visitApp({ asUser: pm, path: "projects/dashboard" });
   });
 
-  it("Should display the project card for 569082 and access the project", () => accessProjectCard("874195"));
+  it("Should display the project card for 569082 and access the project", () => accessProjectCard("569082"));
 
   it("Should display an on hold warning message", () => {
     onHoldMessage();

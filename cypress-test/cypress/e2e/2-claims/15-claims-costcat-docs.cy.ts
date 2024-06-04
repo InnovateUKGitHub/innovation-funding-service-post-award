@@ -99,12 +99,12 @@ describe("Claims > Cost category document uploads", () => {
   });
 
   it("Should ensure all uploaded documents are displayed correctly", () =>
-    displayBatchUpload("Claim evidence", "Sarah Shuang"));
+    displayBatchUpload("Claim evidence", "Sarah Shuang", true));
 
   it("Should navigate back to the cost category page and check the files are correctly showing there", () => {
     cy.backLink("Back to Exceptions - Staff").click();
     cy.heading("Exceptions - Staff");
-    displayBatchUpload("Claim evidence", "Sarah Shuang");
+    displayBatchUpload("Claim evidence", "Sarah Shuang", false);
   });
 
   it("Should navigate back to the documents section and delete all files", { retries: 0 }, () => {

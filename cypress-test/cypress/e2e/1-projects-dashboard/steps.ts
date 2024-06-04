@@ -1,6 +1,7 @@
 import { otherCost5TidyUp } from "common/costCleanUp";
 import { fileTidyUp } from "common/filetidyup";
 import { uploadIAR } from "e2e/2-claims/steps";
+import { Headings } from "typings/headings";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "328407";
@@ -119,7 +120,7 @@ export const hasLimitedBroadcasts = () => {
   });
 };
 
-export const accessBroadCastMessageAndAssert = (message: string) => {
+export const accessBroadCastMessageAndAssert = (message: Headings) => {
   cy.get("p").contains(message).siblings().contains("Read more").click();
 
   cy.heading(message);
@@ -253,7 +254,7 @@ export const accessProjectSubmitToMO = () => {
   });
   cy.heading("Project overview");
   cy.selectTile("Claims");
-  cy.heading("Claim");
+  cy.heading("Claims");
   cy.get("a").contains("Edit").click();
   cy.heading("Costs to be claimed");
   otherCost5TidyUp();

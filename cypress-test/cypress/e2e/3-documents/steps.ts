@@ -85,6 +85,7 @@ export const uploadToEUI = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
+  cy.validationNotification("Your document has been uploaded");
 };
 
 export const fcUploadToEUI = () => {
@@ -106,7 +107,6 @@ export const pmUploadToEUI = () => {
 export const displayEUIFile = () => {
   cy.reload();
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
-  cy.reload();
   cy.getByQA("partner-documents-container").within(() => {
     cy.get("tr")
       .eq(1)
