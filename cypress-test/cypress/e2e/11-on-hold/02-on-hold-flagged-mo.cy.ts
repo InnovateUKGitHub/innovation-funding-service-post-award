@@ -19,7 +19,7 @@ describe("On hold project > Flagged participant > MO view.", () => {
     visitApp({ asUser: mo, path: "projects/dashboard" });
   });
 
-  it("Should display the project card for 569082 and access the project", () => accessProjectCard("569082"));
+  it("Should display the correct project card and access the project", () => accessProjectCard("569082"));
 
   it("Should display suspension notification details", () => {
     moSuspensionNotification();

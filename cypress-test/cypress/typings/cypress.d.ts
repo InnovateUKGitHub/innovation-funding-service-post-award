@@ -1,7 +1,7 @@
 import { Tag } from "support/tags";
 import { PcrType } from "./pcr";
 import { Tile } from "./tiles";
-import { Headings } from "./headings";
+import { Heading } from "./headings";
 import { CostCategory } from "./costCategory";
 
 /* eslint-disable no-unused-vars */
@@ -165,7 +165,7 @@ declare global {
 
       validationMessage(message: string): Chainable<Element>;
 
-      heading(title: Headings | Tile | CostCategory): Chainable<Element>;
+      heading(title: Heading | Tile | CostCategory): Chainable<Element>;
 
       /**
        *

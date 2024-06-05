@@ -2,7 +2,7 @@ import "@testing-library/cypress/add-commands";
 import { seconds } from "common/seconds";
 import { visitApp } from "common/visit";
 import { CostCategory } from "typings/costCategory";
-import { Headings } from "typings/headings";
+import { Heading } from "typings/headings";
 import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
 
@@ -228,7 +228,7 @@ const validationNotification = (message: string) => {
   cy.getByQA("validation-message-content").contains(message);
 };
 
-const heading = (title: Headings | Tile | CostCategory) => {
+const heading = (title: Heading | Tile | CostCategory) => {
   cy.log("**heading**");
   cy.get("h1").should("have.text", title, { timeout: 50000 });
 };

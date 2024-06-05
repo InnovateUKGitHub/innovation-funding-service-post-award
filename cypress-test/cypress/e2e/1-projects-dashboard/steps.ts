@@ -1,7 +1,6 @@
 import { otherCost5TidyUp } from "common/costCleanUp";
 import { fileTidyUp } from "common/filetidyup";
 import { uploadIAR } from "e2e/2-claims/steps";
-import { Headings } from "typings/headings";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "328407";
@@ -120,10 +119,10 @@ export const hasLimitedBroadcasts = () => {
   });
 };
 
-export const accessBroadCastMessageAndAssert = (message: Headings) => {
+export const accessBroadCastMessageAndAssert = (message: string) => {
   cy.get("p").contains(message).siblings().contains("Read more").click();
 
-  cy.heading(message);
+  cy.get("h1").should("have.text", message);
   ["Details", "Message"].forEach(subheader => {
     cy.get("h2").contains(subheader);
   });

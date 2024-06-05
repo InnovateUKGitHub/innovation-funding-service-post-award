@@ -18,7 +18,7 @@ describe("On hold project > MO view.", () => {
     visitApp({ asUser: mo, path: "projects/dashboard" });
   });
 
-  it("Should display the project card for 569082 and access the project", () => accessProjectCard("874195"));
+  it("Should display the correct project card and access the project", () => accessProjectCard("874195"));
 
   it("Should not display an on hold warning message", () => {
     suspensionNotificationShouldNotExist();
