@@ -8,3 +8,4 @@ data:
   USE_SSO: "false"
   NEW_RELIC_ENABLED: "false"
   FEATURE_DETAILED_ERROR_SUMMARY_COMPONENT: "true"
+  DEVELOPER_OIDC: "true"
