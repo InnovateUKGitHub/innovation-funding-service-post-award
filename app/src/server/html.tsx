@@ -10,10 +10,10 @@ import { IClientConfig } from "../types/IClientConfig";
 
 let versionInformation = "";
 
-const { ACC_BUILD_EPOCH, ACC_BUILD_TAG } = process.env;
+const { timestamp: buildTimestamp, version: buildVersion } = configuration.build;
 
-const BUILD_DATETIME = ACC_BUILD_EPOCH
-  ? new Date(parseInt(ACC_BUILD_EPOCH, 10) * 1000).toLocaleDateString("en-GB", {
+const buildDate = buildTimestamp
+  ? new Date(buildTimestamp * 1000).toLocaleDateString("en-GB", {
       weekday: "long",
       year: "numeric",
       month: "numeric",
@@ -31,8 +31,8 @@ versionInformation = `
     Innovation Funding Service (Post Award)
     Innovate UK, UK Research and Innovation
   
-    Built on ${BUILD_DATETIME}
-    ${ACC_BUILD_TAG ?? "(unknown build tag)"}
+    Built on ${buildDate}
+    ${buildVersion ?? "(unknown build tag)"}
   -->
   `;
 
@@ -87,7 +87,7 @@ export function renderHtml({
           <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
           <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
-          <link href="/build/styles.css?build=${configuration.build}" rel="stylesheet" />
+          <link href="/build/styles.css?build=${configuration.build.version}" rel="stylesheet" />
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
@@ -110,9 +110,13 @@ export function renderHtml({
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
-    configuration.build
+    configuration.build.version
   }"></script>
-         ${!jsDisabled ? `<script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>` : ""}
+         ${
+           !jsDisabled
+             ? `<script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build.version}"></script>`
+             : ""
+         }
       </body>
   </html>
 `;

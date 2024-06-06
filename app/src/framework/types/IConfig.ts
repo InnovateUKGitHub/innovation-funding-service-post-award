@@ -13,7 +13,11 @@ export interface IConfig {
    * Build information
    * @default Date.now()
    */
-  readonly build: string;
+  readonly build: {
+    timestamp: number;
+    version: string;
+  };
+
   readonly accEnvironment: AccEnvironment;
 
   /**

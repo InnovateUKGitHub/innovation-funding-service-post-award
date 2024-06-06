@@ -2,7 +2,10 @@ import { AccEnvironment, LogLevel } from "@framework/constants/enums";
 import { IConfig } from "@framework/types/IConfig";
 
 export class TestConfig implements IConfig {
-  public build = `test${Date.now()}`;
+  public build = {
+    timestamp: Math.floor(Date.now() / 1000),
+    version: `ACC-${Date.now()}`,
+  };
 
   public salesforceQueryLimit = 195;
 

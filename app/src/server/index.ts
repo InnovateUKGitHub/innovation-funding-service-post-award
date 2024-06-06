@@ -5,18 +5,13 @@ import "reflect-metadata";
 
 import { Command } from "commander";
 import { Server } from "./server";
-import { healthCheck } from "./healthCheck";
-import { configuration } from "./features/common/config";
+import { Logger } from "@shared/developmentLogger";
 
-// Set up New Relic to monitor app when deployed
-if (configuration.newRelic.enabled) {
-  setInterval(healthCheck, 60000);
-}
+const logger = new Logger("Welcome");
+logger.info("Welcome to IFS Post Award!");
 
 interface CustomProcessArgs {
-  secure?: boolean;
   dev?: boolean;
-  port?: number;
 }
 
 const program = new Command();
@@ -26,6 +21,4 @@ program.parse();
 const { dev } = program.opts() as CustomProcessArgs;
 
 const server = new Server(dev ?? false);
-
-// Use HTTPS if --secure flag set
 server.start();

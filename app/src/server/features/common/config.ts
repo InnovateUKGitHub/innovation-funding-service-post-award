@@ -15,7 +15,10 @@ import {
 } from "@framework/util/envHelpers";
 
 const configuration: Readonly<IConfig> = {
-  build: strEnv("BUILD", String(Date.now())),
+  build: {
+    timestamp: intEnv("ACC_BUILD_EPOCH", Date.now()),
+    version: strEnv("ACC_BUILD_TAG", ""),
+  },
   salesforceQueryLimit: intEnv("SALESFORCE_QUERY_LIMIT", 195),
   disableCsp: boolEnv("DISABLE_CSP", false),
   cookie: {

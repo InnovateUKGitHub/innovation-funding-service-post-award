@@ -1,75 +1,48 @@
 import { Router, Request, Response } from "express";
 import { Logger } from "@shared/developmentLogger";
-import { ILogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
-import { checkSalesforce, checkGoogleAnalytics, checkCompaniesHouse } from "./healthCheck/checks";
-import { HealthCheckResult } from "./healthCheck/checks";
+import {
+  checkSalesforce,
+  checkGoogleAnalytics,
+  checkCompaniesHouse,
+  CombinedHealthCheckResult,
+} from "./healthCheck/checks";
+import { Cache } from "./features/common/cache";
 
 export const healthRouter: Router = Router();
 const healthCheckLogger = new Logger("Health check");
 
-const getHealthIndex = async (req: Request, res: Response) => {
-  const { originalUrl } = req;
+// Ensure Health Check can only be checked every 3 minutes
+const healthCheckCache = new Cache<CombinedHealthCheckResult>(3);
 
-  const healthDirectory = [
-    {
-      name: "Health Directory",
-      endpoint: originalUrl,
-    },
-    {
-      name: "details",
-      endpoint: originalUrl + "details",
-    },
-    {
-      name: "version",
-      endpoint: originalUrl + "version",
-    },
-  ];
+const health = async (): Promise<CombinedHealthCheckResult> => {
+  const [salesforce, googleAnalytics, companiesHouse] = await Promise.all([
+    checkSalesforce(healthCheckLogger),
+    checkGoogleAnalytics(healthCheckLogger),
+    checkCompaniesHouse(healthCheckLogger),
+  ]);
 
-  res.json(healthDirectory);
+  const results = { salesforce, googleAnalytics, companiesHouse };
+  const success = [salesforce, googleAnalytics, companiesHouse].every(x => x.status === "Success");
+
+  if (newrelic) {
+    newrelic.recordCustomEvent("ACCHealthCheck", {
+      env: configuration.newRelic.appName,
+      results: JSON.stringify(results),
+      success,
+    });
+  }
+
+  healthCheckLogger.info("Health check complete:", { results, success });
+
+  return { results, success, lastChecked: new Date() };
 };
 
-export const health = async (
-  logger: ILogger,
-): Promise<{
-  status: number;
-  response: Record<string, HealthCheckResult>;
-}> => {
-  const healthEndpoints: Promise<HealthCheckResult>[] = [
-    checkSalesforce(logger),
-    checkGoogleAnalytics(logger),
-    checkCompaniesHouse(logger),
-  ];
-
-  const settledResponse = (await Promise.allSettled(healthEndpoints)) as PromiseFulfilledResult<HealthCheckResult>[];
-  const hasInvalidResponse = settledResponse.some(result => result.value.status === "Failed");
-
-  // Note: Derive order from array index and payload from HealthCheckResult
-  const response = settledResponse.reduce((results, { value }) => {
-    const { id, ...payload } = value;
-    return { ...results, [id]: payload };
-  }, {});
-
-  const healthCheckResponse = {
-    status: hasInvalidResponse ? 500 : 200,
-    response,
-  };
-
-  if (hasInvalidResponse) logger.error("A health check has failed to execute.", healthCheckResponse);
-
-  return healthCheckResponse;
-};
-
-const getHealthCheck = async (_req: Request, res: Response) => {
-  const { status, response } = await health(healthCheckLogger);
-
-  healthCheckLogger.debug("Health check completed.", { status, response });
-
-  return res.status(status).json(response);
-};
-
-const getBuildVersion = (_req: Request, res: Response) => res.send(configuration.build);
-
-healthRouter.get("/", getHealthIndex);
-healthRouter.get("/details", getHealthCheck);
-healthRouter.get("/version", getBuildVersion);
+healthRouter
+  .get("/details", async (_req: Request, res: Response) => {
+    const healthCheck = await healthCheckCache.fetchAsync("health", health);
+    return res.status(healthCheck.success ? 200 : 500).json(healthCheck);
+  })
+  .get("/version", (req, res) => {
+    res.json(configuration.build);
+  });

@@ -53,6 +53,8 @@ class Restarter {
         env: {
           ...process.env,
           NODE_ENV: process.env.NODE_ENV || "development",
+          ACC_BUILD_EPOCH: process.env.ACC_BUILD_EPOCH || String(Math.floor(Date.now() / 1000)),
+          ACC_BUILD_TAG: process.env.ACC_BUILD_TAG || "esbuild",
         },
       });
 

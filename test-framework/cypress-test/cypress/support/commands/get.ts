@@ -103,7 +103,7 @@ const getTableRow = (category: string) => {
   return cy.get("table tr").contains(category).parent();
 };
 
-type TableData = (string | undefined | RegExp)[][];
+type TableData = (string | undefined | number | RegExp)[][];
 
 interface TableShape {
   head?: TableData;

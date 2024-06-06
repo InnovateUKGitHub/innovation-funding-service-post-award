@@ -11,6 +11,12 @@ export interface HealthCheckResult {
   error?: unknown;
 }
 
+export interface CombinedHealthCheckResult {
+  results: { salesforce: HealthCheckResult; googleAnalytics: HealthCheckResult; companiesHouse: HealthCheckResult };
+  success: boolean;
+  lastChecked: Date;
+}
+
 /**
  * Checks the health of the salesforce connection
  */
