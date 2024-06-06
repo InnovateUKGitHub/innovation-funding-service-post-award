@@ -1965,6 +1965,21 @@
       "invalid": "A validation error occurred.",
       "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form."
     },
+    "generic": {
+      "currency": {
+        "errors": {
+          "required": "Enter {{label, lowercase}}.",
+          "invalid_type": "{{issue.params.label}} must be a number.",
+          "invalid_string": "{{label}} must be a number.",
+          "not_a_number": "{{label}} must be a number.",
+          "too_big": "{{label}} must be {{count, currency}} or less.",
+          "too_small": "{{label}} must be {{count, currency}} or more.",
+          "two_decimal_places": "{{label}} must be 2 decimal places or fewer.",
+          "invalid_currency": "{{label}} must be a valid currency.",
+          "not_pounds": "{{label}} must be in pounds (£)."
+        }
+      }
+    },
     "partnerDetailsEdit": {
       "postcode": {
         "errors": {

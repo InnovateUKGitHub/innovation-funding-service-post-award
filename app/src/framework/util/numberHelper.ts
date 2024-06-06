@@ -35,7 +35,7 @@ export const validTypingCurrencyRegex = /^-?£?(?:\d+|\d*\.\d{0,2})?$/;
 /**
  * Regular expression to validate currency input
  */
-export const validCurrencyRegex = /^-?£?(?:\d+|\d*\.\d{0,2})$/;
+export const validCurrencyRegex = /^-?£?(((\d{1,3}(,\d{3})*)|\d+)(\.\d{1,2})?)$/;
 
 /**
  * returns difference between two numbers as a percentage to two decimal points

@@ -1,0 +1,201 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generic currency validator accept 0 1`] = `
+{
+  "data": "0",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 1 1`] = `
+{
+  "data": "1",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 1.01 1`] = `
+{
+  "data": "1.01",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 2 1`] = `
+{
+  "data": "2",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 3 1`] = `
+{
+  "data": "3",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 5 1`] = `
+{
+  "data": "5",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept 500 1`] = `
+{
+  "data": "500",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept too few dp 1`] = `
+{
+  "data": "£12.2",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £0 1`] = `
+{
+  "data": "£0",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £1 1`] = `
+{
+  "data": "£1",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £1.01 1`] = `
+{
+  "data": "£1.01",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £2 1`] = `
+{
+  "data": "£2",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £3 1`] = `
+{
+  "data": "£3",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £5 1`] = `
+{
+  "data": "£5",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator accept £500 1`] = `
+{
+  "data": "£500",
+  "success": true,
+}
+`;
+
+exports[`generic currency validator decline bad input 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "label": "Lottery winnings",
+      "generic": [
+        "currency"
+      ],
+      "i18n": "errors.not_a_number"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic currency validator decline infinity 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "number",
+    "path": [],
+    "message": "Expected string, received number"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic currency validator decline too big 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "label": "Lottery winnings",
+      "generic": [
+        "currency"
+      ],
+      "i18n": "errors.too_big"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic currency validator decline too little 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "label": "Lottery winnings",
+      "generic": [
+        "currency"
+      ],
+      "i18n": "errors.too_small"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic currency validator decline too many dp 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "label": "Lottery winnings",
+      "generic": [
+        "currency"
+      ],
+      "i18n": "errors.two_decimal_places"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
