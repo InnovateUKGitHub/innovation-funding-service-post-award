@@ -64,9 +64,7 @@ export const drawdownTable = () => {
 };
 
 export const requestDrawdown = () => {
-  cy.intercept("GET", "/api/projects/*").as("drawdownPage");
   cy.get("a").contains("Request").click();
-  cy.wait("@drawdownPage");
   cy.heading("Drawdown");
 };
 
