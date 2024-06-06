@@ -19,7 +19,6 @@ import { ForecastDetailsStore } from "./stores/forecastDetailsStore";
 import { ForecastGolCostsStore } from "./stores/forecastGolCostsStore";
 import { LoanDocumentsStore } from "./stores/loanDocumentsStore";
 import { LoansStore } from "./stores/loanStore";
-import { MessagesStore } from "./stores/messagesStore";
 import { MonitoringReportsStore } from "./stores/monitoringReportsStore";
 import { PartnerDocumentsStore } from "./stores/partnerDocumentsStore";
 import { PartnersStore } from "./stores/partnersStore";
@@ -78,7 +77,6 @@ export const createStores = ({
     financialVirements: new FinancialVirementsStore(getState, dispatch),
     financialLoanVirements: new FinancialLoanVirementsStore(getState, dispatch),
     forecastGolCosts,
-    messages: new MessagesStore(getState, dispatch),
     monitoringReports: new MonitoringReportsStore(projects, getState, dispatch),
     projectChangeRequestDocuments: new ProjectChangeRequestDocumentsStore(getState, dispatch),
     projectChangeRequests: new ProjectChangeRequestStore(projects, partners, getState, dispatch),
