@@ -1968,15 +1968,15 @@
     "generic": {
       "currency": {
         "errors": {
-          "required": "Enter {{label, lowercase}}.",
-          "invalid_type": "{{issue.params.label}} must be a number.",
-          "invalid_string": "{{label}} must be a number.",
-          "not_a_number": "{{label}} must be a number.",
-          "too_big": "{{label}} must be {{count, currency}} or less.",
-          "too_small": "{{label}} must be {{count, currency}} or more.",
-          "two_decimal_places": "{{label}} must be 2 decimal places or fewer.",
-          "invalid_currency": "{{label}} must be a valid currency.",
-          "not_pounds": "{{label}} must be in pounds (£)."
+          "required": "Enter {{label, key, lowercase}}.",
+          "invalid_type": "{{issue.params.label, key}} must be a number.",
+          "invalid_string": "{{label, key}} must be a number.",
+          "not_a_number": "{{label, key}} must be a number.",
+          "too_big": "{{label, key}} must be {{count, currency}} or less.",
+          "too_small": "{{label, key}} must be {{count, currency}} or more.",
+          "two_decimal_places": "{{label, key}} must be 2 decimal places or fewer.",
+          "invalid_currency": "{{label, key}} must be a valid currency.",
+          "not_pounds": "{{label, key}} must be in pounds (£)."
         }
       }
     },
@@ -2270,12 +2270,7 @@
           }
         },
         "financialYearEndTurnover": {
-          "errors": {
-            "invalid_type_received_null": "Enter a financial year end turnover.",
-            "invalid_type_received_string": "Enter a valid financial year end turnover.",
-            "too_small": "Enter a valid financial year end turnover.",
-            "too_big": "Financial year end turnover must be {{count}} or less."
-          }
+          "label": "Financial year end turnover"
         },
         "financialYearEndDate": {
           "errors": {

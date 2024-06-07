@@ -38,7 +38,7 @@ export type ZodI18nMapOption = {
   context?: unknown;
 };
 
-const defaultNs = "zod";
+const defaultNs = "default";
 
 export const makeZodI18nMap =
   (option?: ZodI18nMapOption): ZodErrorMap =>

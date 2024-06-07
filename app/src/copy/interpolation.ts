@@ -5,7 +5,23 @@ import i18next, { InterpolationOptions } from "i18next";
 const registerIntlFormatter = () => {
   i18next.services.formatter?.add("lookup", (value, _, options) => {
     const { within, from, to, context } = options ?? {};
+
     return context?.[within]?.find?.((x: AnyObject) => x?.[from] === value)?.[to] ?? "< i18n: missing value >";
+  });
+
+  i18next.services.formatter?.add("key", (value, _, options) => {
+    /**
+     * interpolator will replace a key, which should be a path to a label in the copy document with the value.
+     *
+     * e.g. "forms.pcr.financialTurnover.label" // "Financial turnover"
+     *
+     * when labels are language or namespace (e.g. KTP) dependent, will need to extend to read from options
+     */
+    const resource = i18next.getResource("en-GB", "default", options.label);
+    if (!resource) {
+      return value;
+    }
+    return resource;
   });
 
   i18next.services.formatter?.add("remove", (value, _, options) => {
