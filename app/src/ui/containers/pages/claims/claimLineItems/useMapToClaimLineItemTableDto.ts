@@ -10,13 +10,13 @@ import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 interface LineItem {
   id?: string;
   description?: string;
-  value?: string;
+  value: string | null;
 }
 
 interface InitialLineItem {
   id?: string;
   description?: string;
-  value?: string | number;
+  value: string | number | null;
 }
 
 interface MapToClaimLineItemTableProps {

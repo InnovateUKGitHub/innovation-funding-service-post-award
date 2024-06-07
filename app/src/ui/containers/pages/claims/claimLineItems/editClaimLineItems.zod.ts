@@ -4,10 +4,10 @@ import {
   claimLineItemDescriptionMaxLength,
 } from "@ui/validation/validators/claimDetailsValidator";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import {
   claimIdValidation,
   costCategoryIdValidation,
-  currencyValidation,
   emptyStringToUndefinedValidation,
   partnerIdValidation,
   periodIdValidation,
@@ -20,7 +20,11 @@ export const editClaimLineItemErrorMap = makeZodI18nMap({ keyPrefix: ["claimLine
 const editClaimLineItemLineItemSchema = z
   .object({
     id: z.union([claimIdValidation, emptyStringToUndefinedValidation]),
-    value: z.union([currencyValidation, emptyStringToUndefinedValidation]),
+    value: getGenericCurrencyValidation({
+      label: "forms.claimLineItems.lineItems.arrayType.value.label",
+      min: -1_000_000,
+      required: true,
+    }),
     description: z.union([z.string().min(1).max(claimLineItemDescriptionMaxLength), emptyStringToUndefinedValidation]),
   })
   .superRefine(({ description, value }, ctx) => {

@@ -1,12 +1,8 @@
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import {
-  costIdValidation,
-  currencyValidation,
-  percentageNumberInput,
-  requiredPositiveIntegerInput,
-} from "@ui/zod/helperValidators.zod";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { costIdValidation, percentageNumberInput, requiredPositiveIntegerInput } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
@@ -16,8 +12,14 @@ const description = z.string().min(1).max(131072);
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
   descriptionOfRole: description,
-  grossCostOfRole: currencyValidation,
-  ratePerDay: currencyValidation,
+  grossCostOfRole: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.grossCostOfRole.label",
+    required: true,
+  }),
+  ratePerDay: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.ratePerDay.label",
+    required: true,
+  }),
   daysSpentOnProject: requiredPositiveIntegerInput({ max: 1000000 }),
 });
 
@@ -27,7 +29,13 @@ export const overheadSchema = z
   .object({
     id: costIdValidation.nullable(),
     overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
-    calculatedValue: z.union([currencyValidation.nullable().optional(), z.literal(""), z.string().regex(/^\s+$/)]),
+    calculatedValue: z.union([
+      getGenericCurrencyValidation({ label: "forms.pcr.addPartner.spendProfile.calculateValue.label" })
+        .nullable()
+        .optional(),
+      z.literal(""),
+      z.string().regex(/^\s+$/),
+    ]),
     button_submit: z.string(),
   })
   .superRefine((data, ctx) => {
@@ -63,7 +71,10 @@ export type OverheadSchema = z.infer<typeof overheadSchema>;
 export const materialsSchema = z.object({
   id: costIdValidation.nullable(),
   materialsDescription: description,
-  costPerItem: currencyValidation,
+  costPerItem: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.costPerItem.label",
+    required: true,
+  }),
   quantityOfMaterialItems: requiredPositiveIntegerInput({ min: 0 }),
 });
 
@@ -74,7 +85,10 @@ export const subcontractingSchema = z.object({
   subcontractorName: z.string().min(1).max(255),
   subcontractorCountry: z.string().min(1).max(255),
   subcontractorRoleAndDescription: description,
-  subcontractorCost: currencyValidation,
+  subcontractorCost: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.subcontractorCost.label",
+    required: true,
+  }),
 });
 
 export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
@@ -84,8 +98,14 @@ export const capitalUsageSchema = z.object({
   capitalUsageDescription: description,
   depreciationPeriod: requiredPositiveIntegerInput({}),
   itemType: z.coerce.number().min(1),
-  netPresentValue: currencyValidation,
-  residualValue: currencyValidation,
+  netPresentValue: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.netPresentValue.label",
+    required: true,
+  }),
+  residualValue: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.residualValue.label",
+    required: true,
+  }),
   utilisation: percentageNumberInput({ max: 99.99, min: 0, required: true }),
 });
 
@@ -98,7 +118,10 @@ export const travelAndASubsistenceSchema = z
     id: costIdValidation.nullable(),
     descriptionOfCost: description,
     numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
-    costOfEach: currencyValidation,
+    costOfEach: getGenericCurrencyValidation({
+      label: "forms.pcr.addPartner.spendProfile.costOfEach.label",
+      required: true,
+    }),
     totalCost: z.number(),
   })
   .superRefine((data, ctx) => {
@@ -119,7 +142,10 @@ export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSc
 export const otherCostsSchema = z.object({
   id: costIdValidation.nullable(),
   descriptionOfCost: description,
-  estimatedCost: currencyValidation,
+  estimatedCost: getGenericCurrencyValidation({
+    label: "forms.pcr.addPartner.spendProfile.estimatedCost.label",
+    required: true,
+  }),
 });
 
 export type OtherCostsSchema = z.infer<typeof otherCostsSchema>;

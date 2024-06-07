@@ -2296,10 +2296,7 @@
               }
             },
             "value": {
-              "errors": {
-                "too_small": "Funding amount is required.",
-                "invalid_type": "Funding amount must be a number."
-              }
+              "label": "Funding amount"
             }
           }
         },
@@ -2395,22 +2392,10 @@
             }
           },
           "grossCostOfRole": {
-            "errors": {
-              "too_small": "Enter gross cost of role.",
-              "invalid_type": "Gross cost of role must be a number.",
-              "invalid_string": { "regex": "Gross cost of role must be a number." },
-              "too_big": "Gross cost of role must be {{count, currency}} or less.",
-              "two_decimal_places": "Gross cost of role must be 2 decimal places or fewer."
-            }
+            "label": "Gross cost of role"
           },
           "ratePerDay": {
-            "errors": {
-              "too_small": "Enter rate per day.",
-              "invalid_type": "Rate per day must be a number.",
-              "invalid_string": { "regex": "Rate per day must be a number." },
-              "two_decimal_places": "Rate per day must be 2 decimal places or fewer.",
-              "too_big": "Rate per day must be {{count, currency}} or less."
-            }
+            "label": "Rate per day"
           },
           "daysSpentOnProject": {
             "errors": {
@@ -2422,13 +2407,7 @@
             }
           },
           "calculatedValue": {
-            "errors": {
-              "too_small": "Enter total cost.",
-              "invalid_type": "Total cost must be a number.",
-              "invalid_string": { "regex": "Total cost must be a number." },
-              "too_big": "Total cost must be {{count, currency}} or less.",
-              "two_decimal_places": "Total cost must be 2 decimal places or fewer."
-            }
+            "label": "Total cost"
           },
           "overheadRate": {
             "errors": {
@@ -2454,13 +2433,7 @@
             }
           },
           "subcontractorCost": {
-            "errors": {
-              "too_small": "Enter cost.",
-              "invalid_type": "Cost must be a number.",
-              "too_big": "Cost must be {{count, currency}} or less.",
-              "invalid_string": { "regex": "Cost must be a number." },
-              "two_decimal_places": "Cost must be 2 decimal places or fewer."
-            }
+            "label": "Cost of subcontractor"
           },
           "descriptionOfCost": {
             "errors": {
@@ -2486,13 +2459,7 @@
             }
           },
           "costOfEach": {
-            "errors": {
-              "too_small": "Enter cost of each.",
-              "invalid_type": "Cost of each must be a number.",
-              "invalid_string": { "regex": "Cost of each must be a number." },
-              "too_big": "Cost of each must be {{count, currency}} or less.",
-              "two_decimal_places": "Cost of each must be 2 decimal places or fewer."
-            }
+            "label": "Cost of each"
           },
           "capitalUsageDescription": {
             "errors": {
@@ -2521,13 +2488,7 @@
             }
           },
           "costPerItem": {
-            "errors": {
-              "invalid_type": "Cost per item must be a number.",
-              "invalid_string": { "regex": "Cost per item must be a number." },
-              "too_small": "Enter cost per item.",
-              "too_big": "Cost per item must be {{count, currency}} or less.",
-              "two_decimal_places": "Cost per item must be 2 decimal places or fewer."
-            }
+            "label": "Cost per item"
           },
           "depreciationPeriod": {
             "errors": {
@@ -2539,22 +2500,10 @@
             }
           },
           "netPresentValue": {
-            "errors": {
-              "too_small": "Enter net present value.",
-              "invalid_type": "Net present value must be a number.",
-              "too_big": "Net present value must be {{count, currency}} or less.",
-              "invalid_string": { "regex": "Net present value must be a number." },
-              "two_decimal_places": "Net present value must be 2 decimal places or fewer."
-            }
+            "label": "Net present value"
           },
           "residualValue": {
-            "errors": {
-              "too_small": "Enter residual value.",
-              "invalid_type": "Residual value must be a number.",
-              "invalid_string": { "regex": "Residual value must be a number." },
-              "too_big": "Residual value must be {{count, currency}} or less.",
-              "two_decimal_places": "Residual value must be 2 decimal places or fewer."
-            }
+            "label": "Residual value"
           },
           "utilisation": {
             "errors": {
@@ -2566,13 +2515,7 @@
             }
           },
           "estimatedCost": {
-            "errors": {
-              "too_small": "Enter estimated cost.",
-              "invalid_type": "Estimated cost must be a number.",
-              "too_big": "Estimated cost must be {{count, currency}} or less.",
-              "invalid_string": { "regex": "Estimated cost must be a number." },
-              "two_decimal_places": "Estimated cost must be 2 decimal places or fewer."
-            }
+            "label": "Estimated cost"
           }
         },
         "tsbReference": {
@@ -2819,13 +2762,12 @@
           }
         },
         "subcontractorCost": {
+          "label": "Cost of work",
           "errors": {
             "too_small": {
               "string": "Enter the cost of work to be carried out by the new subcontractor.",
               "number": "Subcontractor cost must be 0 or more."
-            },
-            "too_big": "Enter a real subcontractor cost.",
-            "invalid": "Enter a valid cost of work."
+            }
           }
         }
       },
@@ -2833,13 +2775,7 @@
         "partners": {
           "arrayType": {
             "newRemainingGrant": {
-              "errors": {
-                "invalid_type": "New remaining grant must be a valid currency value.",
-                "invalid_string": { "regex": "New remaining grant must be a valid currency value." },
-                "two_decimal_places": "New remaining grant must be 2 decimal places or fewer.",
-                "too_big": "The grant cannot exceed the remaining grant for any individual partner.",
-                "too_small": "Grant cannot be less than zero."
-              }
+              "label": "New remaining grant"
             }
           }
         },
@@ -2902,15 +2838,7 @@
       "lineItems": {
         "arrayType": {
           "value": {
-            "errors": {
-              "too_small": "Enter a cost.",
-              "too_big": "Enter a real cost.",
-              "invalid_string": {
-                "regex": "Costs must be no more than 2 decimal places."
-              },
-              "two_decimal_places": "Costs must be 2 decimal places or fewer.",
-              "invalid_type_received_nan": "Costs must be a number."
-            }
+            "label": "Costs"
           },
           "description": {
             "errors": {

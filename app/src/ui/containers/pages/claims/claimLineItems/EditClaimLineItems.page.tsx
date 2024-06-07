@@ -57,7 +57,7 @@ const EditClaimLineItemsPage = ({
   );
 
   const previousInputs = useServerInput<z.output<EditClaimLineItemsSchemaType>>();
-  const initialLineItems = useMapToInitialLineItems(previousInputs?.lineItems ?? claimDetails.lineItems);
+  const initialLineItems = useMapToInitialLineItems(previousInputs?.lineItems ?? claimDetails.lineItems ?? []);
   const formMethods = useForm<z.output<EditClaimLineItemsSchemaType>>({
     resolver: zodResolver(editClaimLineItemsSchema, { errorMap: editClaimLineItemErrorMap }),
     defaultValues: {

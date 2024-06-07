@@ -1,5 +1,5 @@
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
-import { positiveNumberInput } from "@ui/zod/helperValidators.zod";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { z } from "zod";
 
 /**
@@ -69,13 +69,18 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
     ? z
         .object({
           button_submit: z.string(),
-          financialYearEndTurnover: positiveNumberInput,
+          financialYearEndTurnover: getGenericCurrencyValidation({
+            label: "forms.pcr.addPartner.financialYearEndTurnover.label",
+            required: true,
+          }),
         })
         .and(dateSecuredRequired)
     : z
         .object({
           button_submit: z.string(),
-          financialYearEndTurnover: positiveNumberInput.nullable(),
+          financialYearEndTurnover: getGenericCurrencyValidation({
+            label: "forms.pcr.addPartner.financialYearEndTurnover.label",
+          }),
         })
         .and(dateSecuredOptional);
 

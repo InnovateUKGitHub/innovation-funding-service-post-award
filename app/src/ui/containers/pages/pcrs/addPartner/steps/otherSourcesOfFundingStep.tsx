@@ -31,6 +31,7 @@ import { useMemo } from "react";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -71,7 +72,7 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
   dateSecured_month: getMonth(fund.dateSecured),
   dateSecured_year: getYear(fund.dateSecured),
   dateSecured: fund.dateSecured,
-  value: fund.value ?? undefined,
+  value: String(fund.value ?? ""),
   id: fund.id ?? "",
   costCategoryId: fund.costCategoryId,
   costCategory: fund.costCategory,
@@ -134,7 +135,7 @@ export const OtherSourcesOfFundingStep = () => {
                   ...spendProfile,
                   funds: data.funds.map(x => ({
                     description: x.description,
-                    value: Number(x.value),
+                    value: parseCurrency(x.value),
                     dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
                     costCategory: x.costCategory,
                     costCategoryId: x.costCategoryId,
@@ -257,7 +258,7 @@ export const OtherSourcesOfFundingStep = () => {
                             dateSecured: null,
                             dateSecured_month: "",
                             dateSecured_year: "",
-                            value: undefined as unknown as number,
+                            value: "",
                           };
 
                           append(emptyFund);

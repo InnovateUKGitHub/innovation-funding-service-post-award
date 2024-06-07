@@ -1,7 +1,8 @@
 import { roundCurrency, parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { partnerIdValidation, zeroOrGreaterCurrencyValidation } from "@ui/zod/helperValidators.zod";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { partnerIdValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "changeRemainingGrant"] });
@@ -12,7 +13,9 @@ export const changeRemainingGrantSchema = z
     partners: z.array(
       z
         .object({
-          newRemainingGrant: zeroOrGreaterCurrencyValidation,
+          newRemainingGrant: getGenericCurrencyValidation({
+            label: "forms.pcr.changeRemainingGrant.partners.arrayType.newRemainingGrant.label",
+          }),
           newRemainingCosts: z.number(),
           newFundingLevel: z.number(),
           originalFundingLevel: z.number(),

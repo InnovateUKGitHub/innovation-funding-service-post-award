@@ -1,12 +1,11 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import {
   booleanValidation,
-  emptyStringToUndefinedValidation,
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
-  zeroOrGreaterCurrencyValidation,
 } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
@@ -35,7 +34,9 @@ const approveNewSubcontractorSchema = z
     subcontractorLocation: z.string().max(subcontractorLocationMaxChars),
     subcontractorDescription: z.string().max(subcontractorDescriptionMaxChars),
     subcontractorJustification: z.string().max(subcontractorJustificationMaxChars),
-    subcontractorCost: z.union([zeroOrGreaterCurrencyValidation, emptyStringToUndefinedValidation]),
+    subcontractorCost: getGenericCurrencyValidation({
+      label: "forms.pcr.approveNewSubcontractor.subcontractorCost.label",
+    }),
     markedAsComplete: z.boolean(),
   })
   .superRefine((data, ctx) => {

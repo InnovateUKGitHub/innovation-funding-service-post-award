@@ -5,12 +5,26 @@ import { z, ZodIssueCode } from "zod";
 const defaultMaxCurrency = 999_999_999_999;
 const defaultMinCurrency = 0;
 
+/**
+ * ### getGenericCurrencyValidation
+ *
+ *
+ * this will match a set of validations and
+ * also error messaging to ensure consistency across the app
+ * and compliance with GDS
+ *
+ * the `label` can be either a raw string, or if it is a path that matches
+ * an item in the copy document, it will be interpolated
+ */
 export const getGenericCurrencyValidation = ({
   label,
   max = defaultMaxCurrency,
   min = defaultMinCurrency,
   required = false,
 }: {
+  /**
+   * path to value in copy document to be interpolated, or if not matched, then the label will be shown as is
+   */
   label: string;
   max?: number;
   min?: number;
@@ -107,6 +121,6 @@ export const getGenericCurrencyValidation = ({
       if ((typeof x === "string" && x.trim() === "") || isNil(x)) {
         return null;
       }
-      return parseCurrency(x);
+      return x;
     });
 };

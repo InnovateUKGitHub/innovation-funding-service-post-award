@@ -23,6 +23,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { FinanceDetailsSchema, getFinanceDetailsSchema } from "./schemas/financialDetails.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export const FinanceDetailsStep = () => {
   const { getContent } = useContent();
@@ -35,7 +36,7 @@ export const FinanceDetailsStep = () => {
   const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<FinanceDetailsSchema>({
     defaultValues: {
       button_submit: "submit",
-      financialYearEndTurnover: pcrItem.financialYearEndTurnover,
+      financialYearEndTurnover: String(pcrItem.financialYearEndTurnover ?? ""),
       financialYearEndDate_month: getMonth(pcrItem.financialYearEndDate),
       financialYearEndDate_year: getYear(pcrItem.financialYearEndDate),
     },
@@ -63,7 +64,7 @@ export const FinanceDetailsStep = () => {
                   data.financialYearEndDate_year,
                   false,
                 ),
-                financialYearEndTurnover: data.financialYearEndTurnover,
+                financialYearEndTurnover: parseCurrency(data.financialYearEndTurnover),
               },
               context: link(data),
             }),
