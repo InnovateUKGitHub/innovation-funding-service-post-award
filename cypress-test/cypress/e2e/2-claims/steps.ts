@@ -197,7 +197,7 @@ export const reflectCostAdded = () => {
 export const clearUpLabourCostCat = () => {
   cy.wait(3000);
   cy.clickOn("Upload and remove documents");
-  cy.heading("Labour documents");
+  cy.get("h1").contains("Labour documents");
   cy.clickOn("Remove");
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
@@ -775,7 +775,7 @@ export const capPotMessageNotExist = () => {
 export const triggerCapPot = () => {
   ["Labour", "Materials"].forEach(costCat => {
     cy.clickOn(costCat);
-    cy.heading(costCat);
+    cy.get("h1").contains(costCat);
     cy.clickOn("Add a cost");
     cy.getCellFromHeaderAndRowNumber("Description", 1, `[aria-label="Description of claim line item 0"]`)
       .clear()
@@ -811,7 +811,7 @@ export const reduceToBelowCapLimit = () => {
 export const clearCostCatReturn = () => {
   ["Labour", "Materials"].forEach(costCat => {
     cy.clickOn("a", costCat);
-    cy.heading(costCat);
+    cy.get("h1").contains(costCat);
     cy.clickOn("Remove");
     cy.clickOn("Save and return to claims");
     cy.get("h1").contains("Costs to be claimed");

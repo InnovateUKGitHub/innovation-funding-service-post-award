@@ -1,6 +1,7 @@
 import { uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "./seconds";
 import { emptyFileName, longFile, noFileName, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
+import { Heading } from "typings/headings";
 
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
@@ -99,6 +100,14 @@ export const uploadSingleChar = () => {
   cy.button("Upload documents").click();
   cy.validationNotification(`Your document has been uploaded.`);
   cy.wait(1000);
+};
+
+export const checkFileUploadSuccessDisappears = (suffix: string, headerAssertion: Heading) => {
+  cy.backLink(`Back to ${suffix}`).click();
+  cy.heading(headerAssertion);
+  cy.get("main").within(() => {
+    cy.getByQA("validation-message-content").should("not.exist");
+  });
 };
 
 export const deleteSingleChar = () => {

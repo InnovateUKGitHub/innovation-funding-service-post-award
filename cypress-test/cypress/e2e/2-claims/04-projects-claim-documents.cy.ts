@@ -13,6 +13,7 @@ import {
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   uploadFileNameTooShort,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 const pmEmail = "james.black@euimeabs.test";
@@ -53,6 +54,19 @@ describe("claims > documents upload screen", () => {
 
   it("Should display a document upload validation message", () => {
     cy.validationNotification("Your document has been uploaded.");
+  });
+
+  it("Should ensure the upload notification does NOT persist", () =>
+    checkFileUploadSuccessDisappears("costs to be claimed", "Costs to be claimed"));
+
+  it("Should back out further and assert notification does NOT persist", () =>
+    checkFileUploadSuccessDisappears("claims", "Claims"));
+
+  it("Should access the claim again", () => {
+    cy.get("a").contains("Edit").click();
+    cy.heading("Costs to be claimed");
+    cy.clickOn("Continue to claims documents");
+    cy.heading("Claim documents");
   });
 
   it("Should display the Files uploaded heading", () => {

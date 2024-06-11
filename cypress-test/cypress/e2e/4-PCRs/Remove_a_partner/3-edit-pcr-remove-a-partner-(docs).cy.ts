@@ -23,6 +23,7 @@ import {
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   rejectElevenDocsAndShowError,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -88,6 +89,14 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should check that success notification does not persist", () =>
+    checkFileUploadSuccessDisappears("request", "Request"));
+
+  it("Should re-access Remove partner document section", () => {
+    cy.get("a").contains("Remove a partner").click();
+    cy.getListItemFromKey("Documents", "Edit").click();
+  });
 
   it("Should delete the file with the very short file name", deleteSingleChar);
 

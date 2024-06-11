@@ -29,6 +29,7 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 import { loremIpsum256Char } from "common/lorem";
@@ -109,6 +110,15 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
   );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should back out and ensure the notification does NOT persist", () =>
+    checkFileUploadSuccessDisappears("request", "Request"));
+
+  it("Should re-access the PCR and navigate to document section again", () => {
+    cy.get("a").contains("Change a partner's name").click();
+    cy.getListItemFromKey("Change of name certificate", "Edit").click();
+    cy.get("legend").contains("Upload change of name certificate");
+  });
 
   it("Should delete the file with the very short file name", deleteSingleChar);
 

@@ -26,6 +26,7 @@ import {
   selectFileDescription,
   validateExcessiveFileName,
   uploadSingleChar,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 
@@ -81,6 +82,14 @@ describe("Project Documents page", () => {
   it("Should display the correct validation messaging", validationMessageCumulative);
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should back out and assert that the upload message does NOT persist on other pages after uploading a file.", () =>
+    checkFileUploadSuccessDisappears("project", "Project overview"));
+
+  it("Should return to the documents page", () => {
+    cy.selectTile("Documents");
+    cy.heading("Project documents");
+  });
 
   it("Should delete the file with the very short file name", deleteSingleChar);
 

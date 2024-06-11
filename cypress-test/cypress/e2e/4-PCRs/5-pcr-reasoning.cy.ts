@@ -1,6 +1,6 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { shouldShowProjectTitle, pcrAllowBatchFileUpload } from "./steps";
+import { shouldShowProjectTitle, pcrAllowBatchFileUpload, accessReasoning } from "./steps";
 import { loremIpsum32k, loremIpsum30k } from "common/lorem";
 import { testFile } from "common/testfileNames";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
@@ -15,6 +15,7 @@ import {
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   rejectElevenDocsAndShowError,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 
 import { uploadDate } from "e2e/2-claims/steps";
@@ -43,11 +44,7 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
     cy.createPcr("Add a partner");
   });
 
-  it("Should click into the Reasoning section", () => {
-    cy.get("a").contains("Provide reasons to Innovate UK").click();
-    cy.heading("Provide reasons to Innovate UK");
-    cy.reload();
-  });
+  it("Should click into the Reasoning section", accessReasoning);
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -124,6 +121,14 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
   );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should back out and ensure the notification does NOT persist", () =>
+    checkFileUploadSuccessDisappears("request", "Request"));
+
+  it("Should re-access the Reasoning document section", () => {
+    accessReasoning();
+    cy.getListItemFromKey("Files", "Edit").click();
+  });
 
   it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 

@@ -173,6 +173,13 @@ export const addPartnerDocUpload = () => {
   cy.validationNotification("Your document has been uploaded.");
 };
 
+export const navigateToPartnerAgreement = () => {
+  cy.get("a").contains("Add a partner").click();
+  cy.heading("Add a partner");
+  cy.getListItemFromKey("Partner agreement", "Edit").click();
+  cy.get("legend").contains("Upload partner agreement");
+};
+
 const uploadedDocs = documents.reverse();
 
 export const removePartnerFileTable = () => {
@@ -1897,7 +1904,7 @@ export const onHoldRequestDetails = () => {
 export const workingPreviousArrow = (name: string) => {
   cy.getByQA("arrow-right").contains("Previous");
   cy.getByQA("arrow-right").contains(name).click();
-  cy.heading(name);
+  cy.get("h1").contains(name);
 };
 
 export const changeNameListItems = () => {
@@ -2870,4 +2877,9 @@ export const validateQueryBox = () => {
   cy.clickOn("Submit");
   cy.validationLink("Comments must be a maximum of 1000 characters");
   cy.paragraph("Comments must be a maximum of 1000 characters");
+};
+
+export const accessReasoning = () => {
+  cy.get("a").contains("Provide reasons to Innovate UK").click();
+  cy.heading("Provide reasons to Innovate UK");
 };

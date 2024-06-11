@@ -7,6 +7,7 @@ import {
   addPartnerSummaryTable,
   fundingLevelPercentage,
   validateFundingLevelInput,
+  navigateToPartnerAgreement,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
@@ -14,6 +15,7 @@ import {
   allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
+  checkFileUploadSuccessDisappears,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 
@@ -72,8 +74,12 @@ describe("PCR > Add partner > Complete add a partner", { tags: "smoke" }, () => 
 
   it("Should upload a file", addPartnerDocUpload);
 
+  it("Should ensure doc upload message does NOT persist when navigating away", () =>
+    checkFileUploadSuccessDisappears("request", "Request"));
+
+  it("Should navigate forward to the partner agreement section", navigateToPartnerAgreement);
+
   it("Should save and continue", () => {
-    cy.validationNotification("Your document has been uploaded");
     cy.clickOn("Save and continue");
   });
 
