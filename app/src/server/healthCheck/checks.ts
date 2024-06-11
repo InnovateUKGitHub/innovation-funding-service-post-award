@@ -1,9 +1,10 @@
-import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
-import { ILogger } from "@shared/logger";
 import { ErrorCode } from "@framework/constants/enums";
+import { Api } from "@gql/sf/Api";
 import { configuration } from "@server/features/common/config";
 import { CompaniesHouse } from "@server/repositories/companiesRepository";
 import { AppError } from "@shared/appError";
+import { ILogger } from "@shared/logger";
+import gql from "graphql-tag";
 
 export interface HealthCheckResult {
   id: string;
@@ -23,19 +24,59 @@ export interface CombinedHealthCheckResult {
 export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResult> {
   const check = { id: "salesforce" };
 
-  const tokenPayload = {
-    clientId: configuration.salesforceServiceUser.clientId,
-    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
-    currentUsername: configuration.salesforceServiceUser.serviceUsername,
-  };
-
   try {
-    await getSalesforceAccessToken(tokenPayload);
+    const api = await Api.asSystemUser();
+    const soqlTestPromise = api.executeSOQL<{ totalSize: number; done: boolean; records: { Id: string }[] }>({
+      query: "SELECT Id FROM User LIMIT 1",
+    });
+    const gqlTestPromise = api.executeGraphQL<{
+      data: { uiapi: { query: { User: { edges: { node: { Id: string } }[] } } } };
+    }>({
+      document: gql`
+        query AccHealthCheckQuery {
+          uiapi {
+            query {
+              User(first: 1) {
+                edges {
+                  node {
+                    Id
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+    });
+
+    const [soqlTest, gqlTest] = await Promise.all([soqlTestPromise, gqlTestPromise]);
+
+    if (!gqlTest?.data?.uiapi?.query?.User?.edges?.length) {
+      logger.error("Salesforce Health Check GQL failure");
+
+      return {
+        ...check,
+        status: "Failed",
+        error: "Failed to execute GQL",
+      };
+    }
+
+    if (!soqlTest.done) {
+      logger.error("Salesforce Health Check SOQL failure");
+
+      return {
+        ...check,
+        status: "Failed",
+        error: "Failed to execute SOQL",
+      };
+    }
+
+    logger.info("Salesforce Health Check success!");
 
     return { ...check, status: "Success" };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.tokenError, error));
+    logger.error("Salesforce Health Check exception", error);
 
     return {
       ...check,

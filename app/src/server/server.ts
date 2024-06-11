@@ -124,9 +124,9 @@ export class Server {
   private async routing(): Promise<void> {
     this.app.use(this.setNonceValue);
     this.app.use(this.preloadReduxActions);
+    this.app.use(noCache, noAuthRouter);
     this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
     this.app.use(useBasicAuth);
-    this.app.use(noCache, noAuthRouter);
     this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);

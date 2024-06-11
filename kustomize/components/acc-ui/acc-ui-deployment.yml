@@ -25,27 +25,24 @@ spec:
               memory: 768Mi
               cpu: 200m
           ports:
-            - containerPort: 8080
+            - name: acc-port
+              containerPort: 8080
           envFrom:
             - configMapRef:
                 name: acc-ui-configmap
             - secretRef:
                 name: acc-ui-secrets
+          # N.B. Checking external services (like Salesforce) with k8s is usually a BAD IDEA
+          # We've done it because it's a necessary evil :(
           livenessProbe:
             httpGet:
-              path: /api/health/version
-              port: 8080
-          readinessProbe:
-            httpGet:
-              path: /api/health/version
-              port: 8080
-            initialDelaySeconds: 10
+              path: /api/health/details
+              port: acc-port
+            failureThreshold: 3
             periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
           startupProbe:
             httpGet:
-              path: /api/health/version
-              port: 8080
+              path: /api/health/details
+              port: acc-port
             failureThreshold: 30
             periodSeconds: 10

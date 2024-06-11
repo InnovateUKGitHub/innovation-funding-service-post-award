@@ -12,8 +12,8 @@ import { Cache } from "./features/common/cache";
 export const healthRouter: Router = Router();
 const healthCheckLogger = new Logger("Health check");
 
-// Ensure Health Check can only be checked every 3 minutes
-const healthCheckCache = new Cache<CombinedHealthCheckResult>(3);
+// Ensure Health Check can only be checked every 8 seconds
+const healthCheckCache = new Cache<CombinedHealthCheckResult>(8 / 60);
 
 const health = async (): Promise<CombinedHealthCheckResult> => {
   const [salesforce, googleAnalytics, companiesHouse] = await Promise.all([
