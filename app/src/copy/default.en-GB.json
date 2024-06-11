@@ -2254,6 +2254,7 @@
           "arrayType": {
             "value": {
               "aria_label": "value of academic cost item {{costCategory}}",
+              "label": "Cost",
               "errors": {
                 "too_small": {
                   "string": "Enter a cost.",
@@ -2658,6 +2659,7 @@
               }
             },
             "newValue": {
+              "label": "New value",
               "errors": {
                 "invalid_type": "Amount must be a valid number.",
                 "invalid_string": { "regex": "Amount must be a number." }
@@ -2681,38 +2683,22 @@
           }
         },
         "grantMovingOverFinancialYear": {
+          "label": "Grant moving over financial year",
           "errors": {
-            "too_small": {
-              "string": "Enter a grant moving over financial year.",
-              "number": "Grant moving over financial year cannot be less than £0."
-            },
-            "required": "Enter a grant moving over financial year.",
-            "too_big": {
-              "number": "Grant moving over financial year must be less than {{ count, currency }}."
-            },
-            "costs_too_small": "Grant moving over financial year must be greater than amount already claimed for {{ name }}.",
-            "invalid_string": {
-              "regex": "Grant moving over financial year must be 2 decimal places or fewer."
-            },
-            "two_decimal_places": " Grant moving over financial year must be 2 decimal places or fewer.",
-            "invalid_type_received_nan": "Enter a valid grant moving over financial year."
+            "costs_too_small": "There was a problem validating the virement for {{ name }}."
           }
         },
         "costCategoryLevel": {
           "virements": {
             "arrayType": {
               "newEligibleCosts": {
+                "label": "New total eligible costs",
                 "errors": {
                   "too_small": {
                     "string": "Enter a new total eligible cost.",
                     "number": "Eligible costs cannot be less than £0."
                   },
-                  "too_big": "Eligible costs must be less than {{ count, currency }}.",
-                  "costs_too_small": "{{ name }} must be {{ costsClaimedToDate, currency }} or more.",
-                  "invalid_string": {
-                    "regex": "Eligible costs must be 2 decimal places or fewer."
-                  },
-                  "invalid_type_received_nan": "Enter a valid total eligible cost."
+                  "costs_too_small": "{{ name }} must be {{ costsClaimedToDate, currency }} or more."
                 }
               }
             }
@@ -2762,13 +2748,7 @@
           }
         },
         "subcontractorCost": {
-          "label": "Cost of work",
-          "errors": {
-            "too_small": {
-              "string": "Enter the cost of work to be carried out by the new subcontractor.",
-              "number": "Subcontractor cost must be 0 or more."
-            }
-          }
+          "label": "The cost of work to be carried out by the new subcontractor"
         }
       },
       "changeRemainingGrant": {
@@ -2856,6 +2836,7 @@
     },
     "forecastTable": {
       "profile": {
+        "label": "Forecast",
         "errors": {
           "too_small": {
             "string": "Forecast is required.",

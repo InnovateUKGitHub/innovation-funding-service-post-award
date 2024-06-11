@@ -1,5 +1,5 @@
 import { CostCategoryType } from "@framework/constants/enums";
-import { currencyValidation } from "@ui/zod/helperValidators.zod";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { z } from "zod";
 
 export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
@@ -9,7 +9,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         tsbReference: z.string().min(1),
         costs: z.array(
           z.object({
-            value: currencyValidation,
+            value: getGenericCurrencyValidation({ label: "forms.pcr.addPartner.funds.arrayType.value.label" }),
             costCategoryId: z.string(),
             id: z.string(),
             description: z.string(),
@@ -22,7 +22,10 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         tsbReference: z.string(),
         costs: z.array(
           z.object({
-            value: currencyValidation,
+            value: getGenericCurrencyValidation({
+              label: "forms.pcr.addPartner.funds.arrayType.value.label",
+              required: true,
+            }),
             costCategoryId: z.string(),
             id: z.string(),
             description: z.string(),

@@ -11,11 +11,12 @@ import { z, ZodIssueCode } from "zod";
 import { FormTypes } from "./FormTypes";
 import {
   booleanValidation,
-  currencyValidation,
+  // currencyValidation,
   partnerIdValidation,
   profileIdValidation,
   projectIdValidation,
 } from "./helperValidators.zod";
+import { getGenericCurrencyValidation } from "./currencyValidator.zod";
 
 type ForecastTableSchemaType = ReturnType<typeof getForecastTableValidation>["schema"];
 const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientProfiles">) => {
@@ -31,7 +32,9 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ProjectSetupForecast),
         z.literal(FormTypes.ForecastTileForecast),
       ]),
-      profile: z.record(profileIdValidation, currencyValidation).optional(),
+      profile: z
+        .record(profileIdValidation, getGenericCurrencyValidation({ label: "forms.forecastTable.profile.label" }))
+        .optional(),
       submit: booleanValidation,
     })
     .superRefine(({ profile: clientProfiles, form, submit }, { addIssue, path }) => {

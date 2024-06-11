@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { sumBy } from "lodash";
+import { isNil, sumBy } from "lodash";
 import { combineDayMonthYear, validateDayMonthYear } from "@ui/components/atomicDesign/atoms/Date";
-import { currencyValidation } from "@ui/zod/helperValidators.zod";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "loanDrawdownChange"] });
 
@@ -18,13 +19,15 @@ export const loanDrawdownChangeSchema = z
         newDate_day: z.string().regex(/^\d\d?$/),
         newDate_month: z.string().regex(/^\d\d?$/),
         newDate_year: z.string().regex(/^\d\d\d\d$/),
-        newValue: currencyValidation,
+        newValue: getGenericCurrencyValidation({
+          label: "forms.pcr.loanDrawdownChange.loans.arrayType.newValue.label",
+        }),
       }),
     ),
   })
   .superRefine((data, ctx) => {
     const currentTotal = sumBy(data.loans, x => x.currentValue);
-    const newTotal = sumBy(data.loans, x => Number(x.newValue.replace("£", "")));
+    const newTotal = sumBy(data.loans, x => (isNil(x.newValue) ? 0 : parseCurrency(x.newValue)));
 
     if (newTotal > currentTotal) {
       ctx.addIssue({

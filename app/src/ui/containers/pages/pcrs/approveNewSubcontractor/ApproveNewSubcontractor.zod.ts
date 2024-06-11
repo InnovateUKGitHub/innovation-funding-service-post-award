@@ -57,7 +57,11 @@ const approveNewSubcontractorSchema = z
       checkIfFalsy("subcontractorRegistrationNumber", data.subcontractorRegistrationNumber);
       checkIfFalsy("subcontractorLocation", data.subcontractorLocation);
       checkIfFalsy("subcontractorDescription", data.subcontractorDescription);
-      checkIfFalsy("subcontractorCost", data.subcontractorCost);
+      getGenericCurrencyValidation({
+        label: "forms.pcr.approveNewSubcontractor.subcontractorCost.label",
+        required: true,
+      }).parse(data.subcontractorCost, { errorMap: approveNewSubcontractorErrorMap, path: ["subcontractorCost"] });
+
       checkIfFalsy("subcontractorJustification", data.subcontractorJustification);
       if (data.subcontractorRelationship) {
         checkIfFalsy("subcontractorRelationshipJustification", data.subcontractorRelationshipJustification);

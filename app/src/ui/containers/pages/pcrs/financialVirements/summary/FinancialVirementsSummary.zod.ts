@@ -1,16 +1,13 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  emptyStringToUndefinedValidation,
-  pcrIdValidation,
-  pcrItemIdValidation,
-  projectIdValidation,
-  zeroOrGreaterCurrencyValidation,
-} from "@ui/zod/helperValidators.zod";
+import { pcrIdValidation, pcrItemIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
+import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
 const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
+
+const grantMovingOverFinancialYearLabel = "forms.pcr.grantMovingOverFinancialYear.label";
 
 const getFinancialVirementsSummaryValidator = ({
   mapFinancialVirementProps,
@@ -23,7 +20,10 @@ const getFinancialVirementsSummaryValidator = ({
       pcrId: pcrIdValidation,
       pcrItemId: pcrItemIdValidation,
       form: z.literal(FormTypes.PcrFinancialVirementsSummary),
-      grantMovingOverFinancialYear: z.union([zeroOrGreaterCurrencyValidation, emptyStringToUndefinedValidation]),
+      grantMovingOverFinancialYear: getGenericCurrencyValidation({
+        label: grantMovingOverFinancialYearLabel,
+        required: false,
+      }),
       markedAsComplete: z.boolean(),
     })
     .superRefine((data, ctx) => {
@@ -47,15 +47,10 @@ const getFinancialVirementsSummaryValidator = ({
           }
         });
 
-        if (typeof data.grantMovingOverFinancialYear === "undefined") {
-          ctx.addIssue({
-            code: ZodIssueCode.custom,
-            path: ["grantMovingOverFinancialYear"],
-            params: {
-              i18n: "errors.required",
-            },
-          });
-        }
+        getGenericCurrencyValidation({ label: grantMovingOverFinancialYearLabel, required: true }).parse(
+          data.grantMovingOverFinancialYear,
+          { errorMap: financialVirementsSummaryErrorMap, path: ["grantMovingOverFinancialYear"] },
+        );
 
         if (!isSummaryValid) {
           ctx.addIssue({

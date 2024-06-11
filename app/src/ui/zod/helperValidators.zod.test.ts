@@ -1,7 +1,6 @@
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { TestConfig } from "@tests/test-utils/testConfig";
 import {
-  currencyValidation,
   emptyStringToUndefinedValidation,
   getSingleFileValidation,
   partnerIdValidation,
@@ -91,36 +90,6 @@ describe("helperValidators", () => {
       ["crazy characters file", { fileName: '*&"£&.pptx', size: 4353 }, false],
     ])("%s", (name, input: IFileWrapper, accept) => {
       const parse = singleFileValidation.safeParse(input);
-      expect(parse.success).toBe(accept);
-      expect(parse as unknown).toMatchSnapshot();
-    });
-  });
-
-  describe("currencyValidation", () => {
-    test.each([
-      ["accept 0", "0", true],
-      ["accept 1", "1", true],
-      ["accept 2", "2", true],
-      ["accept 3", "3", true],
-      ["accept 5", "5", true],
-      ["accept 1.01", "1.01", true],
-      ["accept 500", "500", true],
-      ["accept £0", "£0", true],
-      ["accept £1", "£1", true],
-      ["accept £2", "£2", true],
-      ["accept £3", "£3", true],
-      ["accept £5", "£5", true],
-      ["accept £1.01", "£1.01", true],
-      ["accept £500", "£500", true],
-      ["decline infinity", Infinity, false],
-      ["decline bad input", "IUK MO Company", false],
-      ["decline too big", "£999999999999999999999999", false],
-      ["decline too little", "-9999999999999999999999999", false],
-      ["decline too many dp", "£12,345.777", false],
-      ["accept too few dp", "£12.2", true],
-      ["strip out extra chars", "    ££££12,,,3.3,,,,£££", true],
-    ])("%s", (name, input, accept) => {
-      const parse = currencyValidation.safeParse(input);
       expect(parse.success).toBe(accept);
       expect(parse as unknown).toMatchSnapshot();
     });
