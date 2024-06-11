@@ -27,8 +27,8 @@ import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
-import { OverrideAccessContext } from "./app/override-access";
 import { useMessageContext } from "@ui/context/messages";
+import { BasePropsContext } from "@framework/api-helpers/useBaseProps";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -103,9 +103,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </GovWidthContainer>
 
               <SuspensePageLoader>
-                <OverrideAccessContext.Provider value={!!currentRoute.allowRouteInActiveAccess}>
+                <BasePropsContext.Provider value={baseProps}>
                   <PageContainer {...baseProps} />
-                </OverrideAccessContext.Provider>
+                </BasePropsContext.Provider>
               </SuspensePageLoader>
             </FullHeight.Content>
 

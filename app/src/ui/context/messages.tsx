@@ -1,6 +1,6 @@
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { noop } from "@ui/helpers/noop";
-import { createContext, useContext, ReactNode, useState } from "react";
+import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 
 type TMessageContext = {
   messages: string[];
@@ -37,3 +37,14 @@ export const MessageContextProvider = ({
 };
 
 export const useMessageContext = () => useContext(MessageContext);
+
+/**
+ * Hook will clear all messages on route change
+ * @param routePath The path of the current route
+ */
+export const useClearMessagesOnRouteChange = (routePath: string) => {
+  const { clearMessages } = useMessageContext();
+  useEffect(() => {
+    clearMessages();
+  }, [routePath]);
+};

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from "react";
+import React, { useEffect, useRef } from "react";
 import { IAppError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
@@ -6,10 +6,11 @@ import { AriaLive } from "@ui/components/atomicDesign/atoms/AriaLive/ariaLive";
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorSummary";
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
-import { OverrideAccessContext } from "@ui/containers/app/override-access";
 import isNil from "lodash/isNil";
 import { ValidationSummary } from "../../atoms/validation/ValidationSummary/ValidationSummary";
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
+import { useClearMessagesOnRouteChange } from "@ui/context/messages";
+import { useBaseProps } from "@framework/api-helpers/useBaseProps";
 
 export interface PageProps {
   pageTitle: React.ReactNode;
@@ -44,14 +45,17 @@ export function Page({
 }: PageProps) {
   const displayAriaLive: boolean = !!apiError || !!validationErrors;
 
-  const overrideAccess = useContext(OverrideAccessContext);
-  const displayActiveUi: boolean = overrideAccess || isActive;
+  const baseProps = useBaseProps();
+
+  useClearMessagesOnRouteChange(baseProps?.currentRoute?.routePath ?? "/");
+  const displayActiveUi: boolean = !!baseProps?.currentRoute?.allowRouteInActiveAccess || isActive;
   const validationErrorSize = isNil(validationErrors) ? 0 : Object.keys(validationErrors)?.length;
 
   // hasValidated tracks how many times the validation has occurred,
   // so that scroll to top is only called after the first time validation
   // messages appear
   const hasValidated = useRef(false);
+
   useEffect(() => {
     if (!hasValidated.current && validationErrorSize > 0) {
       scrollToTheTopSmoothly();
