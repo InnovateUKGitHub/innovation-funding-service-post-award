@@ -22,6 +22,7 @@ import { ProjectSetupSpendProfileRoute } from "@ui/containers/pages/projects/set
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
 import { ViewForecastRoute } from "@ui/containers/pages/forecasts/ViewForecastTile.page";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 interface ForecastHandlerParams {
   projectId: ProjectId;
@@ -108,7 +109,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
             input.partnerId,
             Object.entries(input.profile).map(([id, value]) => ({
               id,
-              value: parseFloat(value),
+              value: parseCurrency(value),
             })),
             false,
           ),
@@ -120,7 +121,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
             input.partnerId,
             Object.entries(input.profile).map(([id, value]) => ({
               id,
-              value: parseFloat(value),
+              value: parseCurrency(value),
             })),
             false,
           ),

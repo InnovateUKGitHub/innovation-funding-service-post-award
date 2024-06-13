@@ -53,7 +53,7 @@ interface MapToForecastTableProps {
   profileTotalProjectPeriods?: ProfileTotalProjectPeriodsInfo[];
   profileTotalCostCategories: GOLCostDto[];
   profileDetails: ProfileInfo[];
-  clientProfiles?: Record<string, string>;
+  clientProfiles?: Record<string, string | null>;
 }
 
 interface BaseCellData {
@@ -248,8 +248,8 @@ const mapToForecastTableDto = ({
           // We shouldn't be having weird rounding here.
 
           if (clientProfiles) {
-            const clientProfile: string | undefined = clientProfiles?.[labourProfile.id];
-            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[0] ?? "";
+            const clientProfile: Nullable<string> = clientProfiles?.[labourProfile.id];
+            const numberComponent = validCurrencyRegex.exec(clientProfile ?? "")?.[0] ?? "";
             value = multiplyCurrency(parseCurrency(numberComponent), partner.overheadRate, 1);
             displayValue = isNaN(value) ? "" : String(value);
           } else {
@@ -261,10 +261,10 @@ const mapToForecastTableDto = ({
           isCalculatedCostCategory = true;
         } else {
           if (clientProfiles) {
-            const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
-            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[0] ?? "";
+            const clientProfile: Nullable<string> = clientProfiles?.[forecastProfile.id];
+            const numberComponent = validCurrencyRegex.exec(clientProfile ?? "")?.[0] ?? "";
             value = parseCurrency(numberComponent);
-            displayValue = clientProfile;
+            displayValue = clientProfile ?? "";
           } else {
             value = roundCurrency(forecastProfile.value);
             displayValue = String(value);

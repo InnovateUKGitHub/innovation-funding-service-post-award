@@ -147,6 +147,7 @@ exports[`generic currency validator decline too big 1`] = `
     "code": "custom",
     "params": {
       "label": "Lottery winnings",
+      "count": 1000000,
       "generic": [
         "currency"
       ],
@@ -167,6 +168,7 @@ exports[`generic currency validator decline too little 1`] = `
     "code": "custom",
     "params": {
       "label": "Lottery winnings",
+      "count": 0,
       "generic": [
         "currency"
       ],

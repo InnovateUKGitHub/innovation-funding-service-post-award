@@ -5,7 +5,10 @@ import { mapToForecastTableDto, useNewForecastTableData } from "./NewForecastTab
 import { NewForecastTableFragment$key } from "./__generated__/NewForecastTableFragment.graphql";
 
 export const NewForecastTableWithFragment = (
-  props: Omit<NewForecastTableProps, "tableData"> & { clientProfiles?: Record<string, string>; partnerId: PartnerId },
+  props: Omit<NewForecastTableProps, "tableData"> & {
+    clientProfiles?: Record<string, string | null>;
+    partnerId: PartnerId;
+  },
 ) => {
   const fragmentRef = useFragmentContext();
 

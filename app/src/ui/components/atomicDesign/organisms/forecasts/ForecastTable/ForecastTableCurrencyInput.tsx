@@ -47,7 +47,7 @@ const ForecastTableCurrencyInput = ({
             }
           }}
           onBlur={onBlur}
-          value={value}
+          value={value ?? undefined}
           name={name}
           ref={ref}
           hasError={invalid}

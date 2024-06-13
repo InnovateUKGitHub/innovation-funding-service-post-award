@@ -28,7 +28,7 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
 
       if (profile) {
         const forecasts: Pick<ForecastDetailsDTO, "id" | "value">[] = Object.entries(profile).map(([id, forecast]) => {
-          const numberComponent = validCurrencyRegex.exec(forecast)?.[0] ?? "";
+          const numberComponent = validCurrencyRegex.exec(forecast ?? "")?.[0] ?? "";
 
           return {
             id,
