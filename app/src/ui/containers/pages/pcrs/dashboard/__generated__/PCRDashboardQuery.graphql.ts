@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a874f359d49a008980d411bcdcc533df>>
+ * @generated SignedSource<<07e1c32914054270e8aee50e9c9dd2d6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -93,17 +93,24 @@ v1 = [
     "variableName": "projectId"
   }
 ],
-v2 = {
-  "fields": [
-    {
-      "fields": (v1/*: any*/),
-      "kind": "ObjectValue",
-      "name": "Id"
-    }
-  ],
-  "kind": "ObjectValue",
-  "name": "where"
-},
+v2 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 1
+  },
+  {
+    "fields": [
+      {
+        "fields": (v1/*: any*/),
+        "kind": "ObjectValue",
+        "name": "Id"
+      }
+    ],
+    "kind": "ObjectValue",
+    "name": "where"
+  }
+],
 v3 = {
   "alias": null,
   "args": null,
@@ -129,9 +136,7 @@ v5 = [
 ],
 v6 = {
   "alias": null,
-  "args": [
-    (v2/*: any*/)
-  ],
+  "args": (v2/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
   "name": "Acc_Project__c",
@@ -381,57 +386,49 @@ v9 = {
   ],
   "storageKey": null
 },
-v10 = [
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 1
-  },
-  (v2/*: any*/)
-],
-v11 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v12 = {
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v13 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v14 = {
+v13 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v15 = {
+v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isSalesforceSystemUser",
   "storageKey": null
 },
-v16 = {
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "partnerId",
   "storageKey": null
 },
-v17 = {
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -441,9 +438,15 @@ v17 = {
   "selections": (v5/*: any*/),
   "storageKey": null
 },
-v18 = {
+v17 = {
   "alias": null,
-  "args": null,
+  "args": [
+    {
+      "kind": "Literal",
+      "name": "first",
+      "value": 200
+    }
+  ],
   "concreteType": "Acc_ProjectParticipant__cConnection",
   "kind": "LinkedField",
   "name": "Acc_ProjectParticipantsProject__r",
@@ -493,7 +496,7 @@ v18 = {
       "storageKey": null
     }
   ],
-  "storageKey": null
+  "storageKey": "Acc_ProjectParticipantsProject__r(first:200)"
 };
 return {
   "fragment": {
@@ -583,7 +586,7 @@ return {
                 "selections": [
                   {
                     "alias": "Page",
-                    "args": (v10/*: any*/),
+                    "args": (v2/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -615,11 +618,11 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
+                                  (v10/*: any*/),
                                   (v11/*: any*/),
                                   (v12/*: any*/),
                                   (v13/*: any*/),
                                   (v14/*: any*/),
-                                  (v15/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -628,12 +631,12 @@ return {
                                     "name": "partnerRoles",
                                     "plural": true,
                                     "selections": [
+                                      (v10/*: any*/),
                                       (v11/*: any*/),
                                       (v12/*: any*/),
                                       (v13/*: any*/),
                                       (v14/*: any*/),
-                                      (v15/*: any*/),
-                                      (v16/*: any*/)
+                                      (v15/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
@@ -660,8 +663,8 @@ return {
                                 "selections": (v5/*: any*/),
                                 "storageKey": null
                               },
-                              (v17/*: any*/),
-                              (v18/*: any*/)
+                              (v16/*: any*/),
+                              (v17/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -673,7 +676,7 @@ return {
                   },
                   {
                     "alias": "ProjectSuspensionProject",
-                    "args": (v10/*: any*/),
+                    "args": (v2/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -696,7 +699,7 @@ return {
                             "plural": false,
                             "selections": [
                               (v3/*: any*/),
-                              (v17/*: any*/),
+                              (v16/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -705,11 +708,11 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
-                                  (v13/*: any*/),
                                   (v12/*: any*/),
                                   (v11/*: any*/),
+                                  (v10/*: any*/),
+                                  (v13/*: any*/),
                                   (v14/*: any*/),
-                                  (v15/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -718,19 +721,19 @@ return {
                                     "name": "partnerRoles",
                                     "plural": true,
                                     "selections": [
-                                      (v12/*: any*/),
                                       (v11/*: any*/),
-                                      (v13/*: any*/),
-                                      (v15/*: any*/),
+                                      (v10/*: any*/),
+                                      (v12/*: any*/),
                                       (v14/*: any*/),
-                                      (v16/*: any*/)
+                                      (v13/*: any*/),
+                                      (v15/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
                                 ],
                                 "storageKey": null
                               },
-                              (v18/*: any*/)
+                              (v17/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -754,16 +757,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b19d35fa6ef541bf8527b20120af7174",
+    "cacheID": "323f8548de8f46b69c7eb79401d39606",
     "id": null,
     "metadata": {},
     "name": "PCRDashboardQuery",
     "operationKind": "query",
-    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, RecordType: {DeveloperName: {eq: \"Acc_RequestHeader\"}}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "88b4d0dda797e7f424059dfa0b64bfed";
+(node as any).hash = "d67a59eb3127fc49e95ecda4900b729b";
 
 export default node;

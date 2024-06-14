@@ -25,7 +25,7 @@ export const projectSuspensionMessageFragment = graphql`
                 partnerId
               }
             }
-            Acc_ProjectParticipantsProject__r {
+            Acc_ProjectParticipantsProject__r(first: 200) {
               edges {
                 node {
                   Id

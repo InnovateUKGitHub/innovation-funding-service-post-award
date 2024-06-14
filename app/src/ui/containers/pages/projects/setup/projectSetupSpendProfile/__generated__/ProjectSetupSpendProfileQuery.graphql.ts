@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2c35dd40810a92c7beec42715650eff2>>
+ * @generated SignedSource<<b85207446a18a6a4dcfd1813701b77c2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -114,23 +114,28 @@ v10 = [
   }
 ],
 v11 = {
-  "order": "ASC"
+  "kind": "Literal",
+  "name": "first",
+  "value": 200
 },
 v12 = {
+  "order": "ASC"
+},
+v13 = {
   "kind": "Literal",
   "name": "orderBy",
   "value": {
-    "Acc_ProjectPeriodNumber__c": (v11/*: any*/)
+    "Acc_ProjectPeriodNumber__c": (v12/*: any*/)
   }
 },
-v13 = {
+v14 = {
   "fields": (v10/*: any*/),
   "kind": "ObjectValue",
   "name": "Acc_ProjectParticipant__c"
 },
-v14 = {
+v15 = {
   "fields": [
-    (v13/*: any*/),
+    (v14/*: any*/),
     {
       "kind": "Literal",
       "name": "RecordType",
@@ -144,7 +149,7 @@ v14 = {
   "kind": "ObjectValue",
   "name": "where"
 },
-v15 = {
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
@@ -154,7 +159,7 @@ v15 = {
   "selections": (v4/*: any*/),
   "storageKey": null
 },
-v16 = {
+v17 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -164,7 +169,7 @@ v16 = {
   "selections": (v4/*: any*/),
   "storageKey": null
 },
-v17 = {
+v18 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -174,19 +179,19 @@ v17 = {
   "selections": (v4/*: any*/),
   "storageKey": null
 },
-v18 = {
+v19 = {
   "kind": "Literal",
   "name": "first",
   "value": 2000
 },
-v19 = {
+v20 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v20 = {
+v21 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -415,13 +420,9 @@ return {
                   {
                     "alias": "ForecastTable_ClaimTotalProjectPeriods",
                     "args": [
-                      {
-                        "kind": "Literal",
-                        "name": "first",
-                        "value": 200
-                      },
-                      (v12/*: any*/),
-                      (v14/*: any*/)
+                      (v11/*: any*/),
+                      (v13/*: any*/),
+                      (v15/*: any*/)
                     ],
                     "concreteType": "Acc_Claims__cConnection",
                     "kind": "LinkedField",
@@ -444,7 +445,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v15/*: any*/),
+                              (v16/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -475,8 +476,8 @@ return {
                                 "selections": (v4/*: any*/),
                                 "storageKey": null
                               },
-                              (v16/*: any*/),
                               (v17/*: any*/),
+                              (v18/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -499,11 +500,11 @@ return {
                   {
                     "alias": "ForecastTable_ClaimDetails",
                     "args": [
-                      (v18/*: any*/),
-                      (v12/*: any*/),
+                      (v19/*: any*/),
+                      (v13/*: any*/),
                       {
                         "fields": [
-                          (v13/*: any*/),
+                          (v14/*: any*/),
                           {
                             "kind": "Literal",
                             "name": "RecordType",
@@ -539,7 +540,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v15/*: any*/),
+                              (v16/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -577,7 +578,7 @@ return {
                         "name": "first",
                         "value": 100
                       },
-                      (v14/*: any*/)
+                      (v15/*: any*/)
                     ],
                     "concreteType": "Acc_Profile__cConnection",
                     "kind": "LinkedField",
@@ -600,9 +601,9 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v15/*: any*/),
                               (v16/*: any*/),
-                              (v17/*: any*/)
+                              (v17/*: any*/),
+                              (v18/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -615,19 +616,19 @@ return {
                   {
                     "alias": "ForecastTable_ProfileTotalCostCategories",
                     "args": [
-                      (v18/*: any*/),
+                      (v19/*: any*/),
                       {
                         "kind": "Literal",
                         "name": "orderBy",
                         "value": {
                           "Acc_CostCategory__r": {
-                            "Acc_DisplayOrder__c": (v11/*: any*/)
+                            "Acc_DisplayOrder__c": (v12/*: any*/)
                           }
                         }
                       },
                       {
                         "fields": [
-                          (v13/*: any*/),
+                          (v14/*: any*/),
                           {
                             "kind": "Literal",
                             "name": "RecordType",
@@ -681,7 +682,7 @@ return {
                                 "name": "Acc_CostCategory__r",
                                 "plural": false,
                                 "selections": [
-                                  (v19/*: any*/),
+                                  (v20/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -707,11 +708,11 @@ return {
                   {
                     "alias": "ForecastTable_ProfileDetails",
                     "args": [
-                      (v18/*: any*/),
-                      (v12/*: any*/),
+                      (v19/*: any*/),
+                      (v13/*: any*/),
                       {
                         "fields": [
-                          (v13/*: any*/),
+                          (v14/*: any*/),
                           {
                             "kind": "Literal",
                             "name": "RecordType",
@@ -747,7 +748,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v19/*: any*/),
+                              (v20/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -768,7 +769,7 @@ return {
                                 "selections": (v4/*: any*/),
                                 "storageKey": null
                               },
-                              (v15/*: any*/),
+                              (v16/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -777,7 +778,7 @@ return {
                                 "name": "Acc_CostCategory__r",
                                 "plural": false,
                                 "selections": [
-                                  (v19/*: any*/)
+                                  (v20/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -814,7 +815,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v19/*: any*/),
+                              (v20/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -834,7 +835,7 @@ return {
                                   (v5/*: any*/),
                                   (v6/*: any*/),
                                   (v8/*: any*/),
-                                  (v20/*: any*/),
+                                  (v21/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -847,7 +848,7 @@ return {
                                       (v5/*: any*/),
                                       (v6/*: any*/),
                                       (v8/*: any*/),
-                                      (v20/*: any*/),
+                                      (v21/*: any*/),
                                       (v9/*: any*/)
                                     ],
                                     "storageKey": null
@@ -887,7 +888,9 @@ return {
                               },
                               {
                                 "alias": null,
-                                "args": null,
+                                "args": [
+                                  (v11/*: any*/)
+                                ],
                                 "concreteType": "Acc_ProjectParticipant__cConnection",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectParticipantsProject__r",
@@ -909,7 +912,7 @@ return {
                                         "name": "node",
                                         "plural": false,
                                         "selections": [
-                                          (v19/*: any*/),
+                                          (v20/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -937,7 +940,7 @@ return {
                                     "storageKey": null
                                   }
                                 ],
-                                "storageKey": null
+                                "storageKey": "Acc_ProjectParticipantsProject__r(first:200)"
                               }
                             ],
                             "storageKey": null
@@ -960,12 +963,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1cd9162f7c8597dc92c47843f1415cbc",
+    "cacheID": "1af0d4fc9e9912fc47d49bb9f4711ed0",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupSpendProfileQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupSpendProfileQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...NewForecastTableFragment\n      ...PageFragment\n    }\n  }\n}\n\nfragment NewForecastTableFragment on UIAPI {\n  query {\n    ForecastTable_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_NumberofPeriods__c {\n            value\n          }\n          roles {\n            isFc\n            isPm\n            isMo\n            isAssociate\n            partnerRoles {\n              partnerId\n              isFc\n              isPm\n              isMo\n              isAssociate\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n      edges {\n        node {\n          Acc_ForecastLastModifiedDate__c {\n            value\n          }\n          Acc_OverheadRate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimTotalProjectPeriods: Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 200) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_IAR_Status__c {\n            value\n          }\n          Acc_IARRequired__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_FinalClaim__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimDetails: Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 2000) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n          Acc_CostCategory__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileTotalProjectPeriod: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 100) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileTotalCostCategories: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}, orderBy: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}, first: 2000) {\n      edges {\n        node {\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          Acc_CostCategory__r {\n            Id\n            Acc_CostCategoryName__c {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileDetails: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_InitialForecastCost__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_CostCategory__r {\n            Id\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupSpendProfileQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...NewForecastTableFragment\n      ...PageFragment\n    }\n  }\n}\n\nfragment NewForecastTableFragment on UIAPI {\n  query {\n    ForecastTable_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_NumberofPeriods__c {\n            value\n          }\n          roles {\n            isFc\n            isPm\n            isMo\n            isAssociate\n            partnerRoles {\n              partnerId\n              isFc\n              isPm\n              isMo\n              isAssociate\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n      edges {\n        node {\n          Acc_ForecastLastModifiedDate__c {\n            value\n          }\n          Acc_OverheadRate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimTotalProjectPeriods: Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 200) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_IAR_Status__c {\n            value\n          }\n          Acc_IARRequired__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_FinalClaim__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimDetails: Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 2000) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n          Acc_CostCategory__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileTotalProjectPeriod: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 100) {\n      edges {\n        node {\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileTotalCostCategories: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}, orderBy: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}, first: 2000) {\n      edges {\n        node {\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          Acc_CostCategory__r {\n            Id\n            Acc_CostCategoryName__c {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_ProfileDetails: Acc_Profile__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, orderBy: {Acc_ProjectPeriodNumber__c: {order: ASC}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_InitialForecastCost__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_CostCategory__r {\n            Id\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
