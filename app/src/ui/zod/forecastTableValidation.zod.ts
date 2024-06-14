@@ -31,12 +31,14 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ProjectSetupForecast),
         z.literal(FormTypes.ForecastTileForecast),
       ]),
-      profile: z
-        .record(
-          profileIdValidation,
-          getGenericCurrencyValidation({ label: "forms.forecastTable.profile.label", required: true }),
-        )
-        .optional(),
+      profile: z.record(
+        profileIdValidation,
+        getGenericCurrencyValidation({
+          label: "forms.forecastTable.profile.label",
+          min: -1_000_000_000,
+          required: true,
+        }),
+      ),
       submit: booleanValidation,
     })
     .superRefine(({ profile: clientProfiles, form, submit }, { addIssue, path }) => {
