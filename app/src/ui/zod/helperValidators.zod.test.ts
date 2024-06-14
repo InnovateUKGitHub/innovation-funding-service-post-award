@@ -2,11 +2,13 @@ import { IFileWrapper } from "@framework/types/fileWapper";
 import { TestConfig } from "@tests/test-utils/testConfig";
 import {
   emptyStringToUndefinedValidation,
+  evaluateObject,
   getSingleFileValidation,
   partnerIdValidation,
   periodIdValidation,
   projectIdValidation,
 } from "./helperValidators.zod";
+import { z } from "zod";
 
 describe("helperValidators", () => {
   describe("projectIdValidation", () => {
@@ -92,6 +94,29 @@ describe("helperValidators", () => {
       const parse = singleFileValidation.safeParse(input);
       expect(parse.success).toBe(accept);
       expect(parse as unknown).toMatchSnapshot();
+    });
+  });
+
+  describe("evaluateObject", () => {
+    test.each([
+      ["Valid 'marked as complete'", { something: "APPLE", markedAsComplete: true }, true],
+      ["Invalid 'marked as complete'", { something: "APPLE", markedAsComplete: false }, false],
+      ["Invalid 'NOT marked as complete'", { something: "BANANA", markedAsComplete: true }, false],
+      ["Valid 'NOT marked as complete'", { something: "BANANA", markedAsComplete: false }, true],
+      ["Invalid", { something: "DURIAN", markedAsComplete: true }, false],
+      ["Mal", { something: "DURIAN", markedAsComplete: false }, false],
+    ])("%s", (name, objectToValidate, accept) => {
+      type ValidationData = { markedAsComplete: boolean; something: string };
+
+      const schema = evaluateObject((data: ValidationData) => ({
+        something: data.markedAsComplete ? z.literal("APPLE") : z.literal("BANANA"),
+        markedAsComplete: z.boolean(),
+      }));
+
+      const markedAsCompleteResult = schema.safeParse(objectToValidate);
+
+      expect(markedAsCompleteResult.success).toBe(accept);
+      expect(markedAsCompleteResult as unknown).toMatchSnapshot();
     });
   });
 });

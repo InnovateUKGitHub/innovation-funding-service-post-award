@@ -1,6 +1,6 @@
 import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 import { ClientFileWrapper } from "@client/clientFileWrapper";
-import { z, ZodIssueCode } from "zod";
+import { z, ZodIssueCode, ZodRawShape } from "zod";
 import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
 import { getFileExtension, getFileName } from "@framework/util/files";
@@ -534,6 +534,32 @@ const integerRangeInput = (min: number, max: number) =>
     }
   });
 
+/**
+ * ## evaluateObject
+ *
+ * This function can be used for dynamically created objects in which some fields
+ * are dependent on the outcome of other fields
+ *
+ * most notably `markedAsComplete`
+ *
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validator: T) => {
+  return z.any().superRefine((data, ctx) => {
+    const objectSchema = z.object(validator(data));
+
+    const results = objectSchema.safeParse(data);
+
+    if (!results.success) {
+      results.error.issues
+        .map(x => ({ ...x, message: undefined })) // the applied default message is messing up the error mapping
+        .forEach(problem => {
+          ctx.addIssue(problem);
+        });
+    }
+  }) as unknown as z.ZodObject<ReturnType<T>>;
+};
+
 export {
   projectIdValidation,
   pcrIdValidation,
@@ -563,4 +589,5 @@ export {
   getSingleFileValidation,
   getMultiFileValidation,
   dateValidation,
+  evaluateObject,
 };

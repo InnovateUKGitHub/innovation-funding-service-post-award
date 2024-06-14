@@ -42,6 +42,94 @@ exports[`helperValidators emptyStringToUndefinedValidation decline number 1`] = 
 }
 `;
 
+exports[`helperValidators evaluateObject Invalid 'NOT marked as complete' 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "received": "BANANA",
+    "code": "invalid_literal",
+    "expected": "APPLE",
+    "path": [
+      "something"
+    ],
+    "message": "Invalid literal value, expected \\"APPLE\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators evaluateObject Invalid 'marked as complete' 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "received": "APPLE",
+    "code": "invalid_literal",
+    "expected": "BANANA",
+    "path": [
+      "something"
+    ],
+    "message": "Invalid literal value, expected \\"BANANA\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators evaluateObject Invalid 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "received": "DURIAN",
+    "code": "invalid_literal",
+    "expected": "APPLE",
+    "path": [
+      "something"
+    ],
+    "message": "Invalid literal value, expected \\"APPLE\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators evaluateObject Mal 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "received": "DURIAN",
+    "code": "invalid_literal",
+    "expected": "BANANA",
+    "path": [
+      "something"
+    ],
+    "message": "Invalid literal value, expected \\"BANANA\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators evaluateObject Valid 'NOT marked as complete' 1`] = `
+{
+  "data": {
+    "markedAsComplete": false,
+    "something": "BANANA",
+  },
+  "success": true,
+}
+`;
+
+exports[`helperValidators evaluateObject Valid 'marked as complete' 1`] = `
+{
+  "data": {
+    "markedAsComplete": true,
+    "something": "APPLE",
+  },
+  "success": true,
+}
+`;
+
 exports[`helperValidators getSingleFileValidation .docm 1`] = `
 {
   "error": [ZodError: [
