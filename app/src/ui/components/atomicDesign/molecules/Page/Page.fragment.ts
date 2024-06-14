@@ -32,7 +32,7 @@ export const pageFragment = graphql`
             Acc_ProjectStatus__c {
               value
             }
-            Acc_ProjectParticipantsProject__r {
+            Acc_ProjectParticipantsProject__r(first: 200) {
               edges {
                 node {
                   Id
