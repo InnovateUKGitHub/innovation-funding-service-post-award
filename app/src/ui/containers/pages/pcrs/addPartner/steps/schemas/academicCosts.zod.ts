@@ -9,7 +9,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         tsbReference: z.string().min(1),
         costs: z.array(
           z.object({
-            value: getGenericCurrencyValidation({ label: "forms.pcr.addPartner.funds.arrayType.value.label" }),
+            value: getGenericCurrencyValidation({ label: "forms.pcr.addPartner.costs.arrayType.value.label" }),
             costCategoryId: z.string(),
             id: z.string(),
             description: z.string(),
@@ -23,7 +23,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         costs: z.array(
           z.object({
             value: getGenericCurrencyValidation({
-              label: "forms.pcr.addPartner.funds.arrayType.value.label",
+              label: "forms.pcr.addPartner.costs.arrayType.value.label",
               required: true,
             }),
             costCategoryId: z.string(),

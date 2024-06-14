@@ -32,7 +32,10 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ForecastTileForecast),
       ]),
       profile: z
-        .record(profileIdValidation, getGenericCurrencyValidation({ label: "forms.forecastTable.profile.label" }))
+        .record(
+          profileIdValidation,
+          getGenericCurrencyValidation({ label: "forms.forecastTable.profile.label", required: true }),
+        )
         .optional(),
       submit: booleanValidation,
     })

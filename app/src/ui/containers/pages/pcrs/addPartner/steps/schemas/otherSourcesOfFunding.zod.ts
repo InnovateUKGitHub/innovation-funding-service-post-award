@@ -6,6 +6,7 @@ import { z } from "zod";
 const valueDescription = z.object({
   value: getGenericCurrencyValidation({
     label: "forms.pcr.addPartner.funds.arrayType.value.label",
+    required: true,
   }),
   description: z.string().min(1),
   id: z.string(),

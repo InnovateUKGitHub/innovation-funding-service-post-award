@@ -2254,19 +2254,7 @@
           "arrayType": {
             "value": {
               "aria_label": "value of academic cost item {{costCategory}}",
-              "label": "Cost",
-              "errors": {
-                "too_small": {
-                  "string": "Enter a cost.",
-                  "number": "Cost cannot be less than £0."
-                },
-                "too_big": "Cost must be less than {{ count, currency }}.",
-                "invalid_string": {
-                  "regex": "Cost must be 2 decimal places or fewer."
-                },
-                "invalid_type_received_nan": "Enter a valid cost.",
-                "two_decimal_places": "Value must be 2 decimal places or fewer."
-              }
+              "label": "Cost"
             }
           }
         },
@@ -2301,7 +2289,6 @@
             }
           }
         },
-
         "isCommercialWork": {
           "errors": {
             "invalid_type": "Select a project output.",
@@ -2408,7 +2395,7 @@
             }
           },
           "calculatedValue": {
-            "label": "Total cost"
+            "label": "Total cost of overheads"
           },
           "overheadRate": {
             "errors": {
@@ -2683,7 +2670,7 @@
           }
         },
         "grantMovingOverFinancialYear": {
-          "label": "Grant moving over financial year",
+          "label": "Grant value moving over financial year end",
           "errors": {
             "costs_too_small": "There was a problem validating the virement for {{ name }}."
           }

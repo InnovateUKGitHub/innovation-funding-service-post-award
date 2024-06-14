@@ -12,7 +12,7 @@ import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
 const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
 
-const grantMovingOverFinancialYearLabel = "forms.pcr.grantMovingOverFinancialYear.label";
+const grantMovingOverFinancialYearLabel = "forms.pcr.financialVirements.grantMovingOverFinancialYear.label";
 
 const getFinancialVirementsSummaryValidator = ({
   mapFinancialVirementProps,

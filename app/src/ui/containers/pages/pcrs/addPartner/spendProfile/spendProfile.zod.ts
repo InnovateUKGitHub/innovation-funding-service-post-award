@@ -2,7 +2,12 @@ import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
-import { costIdValidation, percentageNumberInput, requiredPositiveIntegerInput } from "@ui/zod/helperValidators.zod";
+import {
+  costIdValidation,
+  evaluateObject,
+  percentageNumberInput,
+  requiredPositiveIntegerInput,
+} from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
@@ -25,46 +30,30 @@ export const labourSchema = z.object({
 
 export type LabourSchema = z.infer<typeof labourSchema>;
 
-export const overheadSchema = z
-  .object({
+export const overheadSchema = evaluateObject((data: { overheadRate: PCRSpendProfileOverheadRate }) => {
+  return {
     id: costIdValidation.nullable(),
     overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
-    calculatedValue: z.union([
-      getGenericCurrencyValidation({ label: "forms.pcr.addPartner.spendProfile.calculateValue.label" })
-        .nullable()
-        .optional(),
-      z.literal(""),
-      z.string().regex(/^\s+$/),
-    ]),
+    calculatedValue: getGenericCurrencyValidation({
+      label: "forms.pcr.addPartner.spendProfile.calculatedValue.label",
+      required: Number(data.overheadRate) === PCRSpendProfileOverheadRate.Calculated,
+    }),
     button_submit: z.string(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.overheadRate === PCRSpendProfileOverheadRate.Unknown) {
-      ctx.addIssue({
-        code: ZodIssueCode.invalid_enum_value,
-        options: [
-          PCRSpendProfileOverheadRate.Zero,
-          PCRSpendProfileOverheadRate.Twenty,
-          PCRSpendProfileOverheadRate.Calculated,
-        ],
-        received: PCRSpendProfileOverheadRate.Unknown,
-        path: ["overheadRate"],
-      });
-    } else if (data.overheadRate === PCRSpendProfileOverheadRate.Calculated) {
-      if (
-        !(typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0) &&
-        data.button_submit === "submit"
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: 0,
-          inclusive: false,
-          type: "number",
-          path: ["calculatedValue"],
-        });
-      }
-    }
-  });
+  };
+}).superRefine((data, ctx) => {
+  if (data.overheadRate === PCRSpendProfileOverheadRate.Unknown) {
+    ctx.addIssue({
+      code: ZodIssueCode.invalid_enum_value,
+      options: [
+        PCRSpendProfileOverheadRate.Zero,
+        PCRSpendProfileOverheadRate.Twenty,
+        PCRSpendProfileOverheadRate.Calculated,
+      ],
+      received: PCRSpendProfileOverheadRate.Unknown,
+      path: ["overheadRate"],
+    });
+  }
+});
 
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
