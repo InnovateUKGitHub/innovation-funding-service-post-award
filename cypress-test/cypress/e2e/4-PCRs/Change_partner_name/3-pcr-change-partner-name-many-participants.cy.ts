@@ -2,7 +2,7 @@ import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { createTestFile } from "common/createTestFile";
 import { changeNamePcrType, changeNameHeadings, changeNameValidateManyPartners } from "../steps";
-const projectManager = "james.black@euimeabs.test";
+const projectManager = "b.potter@test.co.uk";
 
 describe("PCR >  Change a partner's name > Many partners", () => {
   before(() => {

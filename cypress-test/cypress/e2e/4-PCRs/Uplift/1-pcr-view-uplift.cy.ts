@@ -10,7 +10,7 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
-const pm = "james.black@euimeabs.test";
+const pm = "b.potter@test.co.uk";
 const mo = "testman2@testing.com";
 const fc = "contact77@test.co.uk";
 

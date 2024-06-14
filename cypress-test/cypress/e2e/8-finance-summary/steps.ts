@@ -103,7 +103,7 @@ export const partnerFinanceDetails = () => {
 
 export const manyPartnerFinanceDetails = () => {
   [
-    ["EUI Small Ent Health", "£384,000.00", "65.00%", "£247,650.00"],
+    ["Gorcium Management Services Ltd.", "£389,000.00", "75.00%", "£291,750.00"],
     ["A B Cad Services", "£386,000.00", "66.00%", "£254,760.00"],
     ["ABS EUI Medium Enterprise", "£385,000.00", "67.00%", "£257,950.00"],
     ["Auto Corporation Ltd", "£381,000.00", "68.00%", "£259,080.00"],
@@ -113,7 +113,7 @@ export const manyPartnerFinanceDetails = () => {
     ["Brown and co", "£35,000.00", "72.00%", "£25,200.00"],
     ["Deep Rock Galactic", "£390,000.00", "73.00%", "£284,700.00"],
     ["EUI Micro Research Co.", "£416,000.00", "74.00%", "£307,840.00"],
-    ["Gorcium Management Services Ltd.", "£389,000.00", "75.00%", "£291,750.00"],
+    ["EUI Small Ent Health", "£384,000.00", "65.00%", "£247,650.00"],
     ["Hedges' Hedges Ltd", "£414,000.00", "76.00%", "£314,640.00"],
     ["Hyperion Corporation", "£400,000.00", "77.00%", "£308,000.00"],
     ["Image Development Society", "£267,160.50", "78.00%", "£208,385.19"],

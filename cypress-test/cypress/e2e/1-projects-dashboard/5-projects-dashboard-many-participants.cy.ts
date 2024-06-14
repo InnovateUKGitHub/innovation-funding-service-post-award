@@ -1,10 +1,10 @@
 import { visitApp } from "common/visit";
-import { pmEmail, switchUserTestLiveArea } from "./steps";
-
+import { switchUserTestLiveArea } from "./steps";
+const pm = "b.potter@test.co.uk";
 describe("projects dashboard > 10+ Participants", () => {
   before(() => {
     cy.clearAllCookies();
-    visitApp({ path: "projects/dashboard", asUser: pmEmail });
+    visitApp({ path: "projects/dashboard", asUser: pm });
   });
 
   it("Should check the pending and open projects section which should contain '154870'", () => {

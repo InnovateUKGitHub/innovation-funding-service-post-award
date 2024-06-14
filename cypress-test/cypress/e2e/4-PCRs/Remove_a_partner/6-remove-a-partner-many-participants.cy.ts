@@ -2,7 +2,7 @@ import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { removeManyPartners, shouldShowProjectTitle } from "../steps";
 import {} from "e2e/9-loans/steps";
-const pm = "james.black@euimeabs.test";
+const pm = "b.potter@test.co.uk";
 
 describe("PCR > Remove partner > Many partners", () => {
   before(() => {
