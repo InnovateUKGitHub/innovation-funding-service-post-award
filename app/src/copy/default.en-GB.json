@@ -2057,10 +2057,11 @@
     "monitoringReportCreate": {
       "period": {
         "errors": {
-          "invalid_type_received_string": "Enter a valid period.",
+          "invalid_type_received_string": "Period must be a whole number, like 3.",
           "invalid_type_received_null": "Enter a period.",
           "not_integer": "Period must be a whole number, like 3.",
-          "invalid_range": "Period must be between {{ min }} and {{ max }}."
+          "invalid_range_one": "Period must be 1.",
+          "invalid_range_other": "Period must be between {{ min }} and {{ max }}."
         }
       }
     },

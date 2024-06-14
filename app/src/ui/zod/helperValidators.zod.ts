@@ -527,7 +527,10 @@ const integerRangeInput = (min: number, max: number) =>
       return ctx.addIssue({ code: ZodIssueCode.invalid_type, expected: "number", received: "null" });
     }
     if (!(n >= min && n <= max)) {
-      return ctx.addIssue({ code: ZodIssueCode.custom, params: { i18n: "errors.invalid_range", min, max } });
+      return ctx.addIssue({
+        code: ZodIssueCode.custom,
+        params: { i18n: "errors.invalid_range", min, max, count: min === 1 && max === 1 ? 1 : 2 },
+      });
     }
   });
 
