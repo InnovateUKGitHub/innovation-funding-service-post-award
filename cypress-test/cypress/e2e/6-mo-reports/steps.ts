@@ -667,15 +667,29 @@ export const validateMoReport = () => {
 };
 
 export const validatePeriodBox = () => {
-  cy.getByLabel("Period");
-  cy.get("input#period").clear().type("Lorem");
-  cy.wait(500);
+  cy.get("input#period").clear();
   cy.button("Continue").click();
   cy.validationMessage("There is a problem");
-  cy.validationLink("Enter a valid period.");
-  cy.paragraph("Enter a valid period.");
+  cy.validationLink("Enter a period");
+  cy.paragraph("Enter a period");
+  ["Lorem", "-", "1.1", "0.5", "100.5", "3000.5", "£$%^&*()", "dasq123cc", "1asd", "asff1"].forEach(invalidNum => {
+    cy.getByLabel("Period");
+    cy.get("input#period").clear().type(invalidNum);
+    cy.wait(500);
+    cy.button("Continue").click();
+    cy.validationMessage("There is a problem");
+    cy.validationLink("Period must be a whole number, like 3.");
+    cy.paragraph("Period must be a whole number, like 3.");
+  });
+  ["-1", "-999999999999", "0", "12", "100", "99999999999999999999999999999999999999999"].forEach(invalidNum => {
+    cy.get("input#period").clear().type(invalidNum);
+    cy.wait(500);
+    cy.button("Continue").click();
+    cy.validationMessage("There is a problem");
+    cy.validationLink("Period must be between 1 and 11.");
+    cy.paragraph("Period must be between 1 and 11.");
+  });
   cy.get("input#period").clear().type("1");
-  cy.wait(500);
 };
 
 export const saveSectionOneAndCheckSummary = () => {
