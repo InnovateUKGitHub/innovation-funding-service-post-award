@@ -67,7 +67,6 @@ class MonitoringReportPrepareFormHandler extends ZodFormHandlerBase<
     );
 
     return {
-      form: input.form,
       button_submit: input.button_submit,
       questions,
     };

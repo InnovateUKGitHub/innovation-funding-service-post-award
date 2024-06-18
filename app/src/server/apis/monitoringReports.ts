@@ -3,9 +3,9 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
 import { processDto } from "../../shared/processResponse";
-import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
+import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 
 export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   createMonitoringReport: (
@@ -17,7 +17,10 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   saveMonitoringReport: (
     params: ApiParams<
       Context,
-      { monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+      {
+        monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
+        submit: boolean;
+      }
     >,
   ) => Promise<MonitoringReportDto>;
   deleteMonitoringReport: (
@@ -52,12 +55,14 @@ class Controller
   public async saveMonitoringReport(
     params: ApiParams<
       "server",
-      { monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+      {
+        monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
+        submit: boolean;
+      }
     >,
   ) {
     const { monitoringReportDto, submit } = params;
     const context = await contextProvider.start(params);
-
     await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit));
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
   }

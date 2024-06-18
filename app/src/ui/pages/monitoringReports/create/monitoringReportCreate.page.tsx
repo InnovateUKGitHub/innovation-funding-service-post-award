@@ -70,7 +70,7 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
             onUpdate({ data });
           })}
         >
-          <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportCreate} />
+          <input type="hidden" name="form" value={FormTypes.MonitoringReportCreate} />
           <Field labelBold label="Period" id="period" error={validatorErrors?.period as RhfError}>
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>

@@ -21,6 +21,7 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
 export const MonitoringReportSummary = () => {
   const {
@@ -80,8 +81,11 @@ const ReportForm = () => {
   const { getContent } = useContent();
   return (
     <Section>
-      <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(data => onUpdate({ data }))}>
-        <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportSummary} />
+      <Form
+        data-qa="monitoringReportCreateForm"
+        onSubmit={handleSubmit(data => onUpdate({ data }), scrollToTheTopSmoothly)}
+      >
+        <input type="hidden" name="form" value={FormTypes.MonitoringReportSummary} />
         <Fieldset data-qa="additional-comments-section">
           <Legend>{getContent(x => x.monitoringReportsLabels.additionalComments)}</Legend>
 

@@ -50,9 +50,13 @@ class MonitoringReportSummaryFormHandler extends ZodFormHandlerBase<
     this.monitoringReport = await context.runQuery(new GetMonitoringReportById(params.projectId, params.id));
 
     return {
-      form: input.form,
       button_submit: input.button_submit,
-      ...this.monitoringReport,
+      questions: this.monitoringReport.questions.map(x => ({
+        optionId: x.optionId ?? "",
+        comments: x.comments,
+        title: x.title,
+      })),
+      periodId: this.monitoringReport.periodId,
       addComments: input.addComments,
     };
   }

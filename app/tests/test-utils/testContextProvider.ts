@@ -49,6 +49,7 @@ export class TestContext implements IContext {
   public runCommand<TResult>(
     command: AuthorisedAsyncCommandBase<TResult> | AsyncCommandBase<TResult>,
   ): Promise<TResult> {
+    // @ts-expect-error freaking out because of thrown error in async zod command base
     return command.execute(this).catch(e => {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation ERROR", [e.results]);

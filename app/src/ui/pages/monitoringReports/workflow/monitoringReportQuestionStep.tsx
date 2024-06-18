@@ -57,7 +57,6 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
       })),
       periodId: report.periodId,
       button_submit: "submit",
-      form: FormTypes.MonitoringReportQuestion,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionNumber]);
@@ -80,7 +79,7 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
       </H2>
       <Section>
         <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="monitoringReportQuestionForm">
-          <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportQuestion} />
+          <input type="hidden" name="form" value={FormTypes.MonitoringReportQuestion} />
           <H3>
             {getContent(x =>
               x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length }),

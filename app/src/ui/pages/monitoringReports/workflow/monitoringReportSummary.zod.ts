@@ -1,5 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { FormTypes } from "@ui/zod/FormTypes";
+import { evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -7,50 +7,36 @@ export const monitoringReportSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["mon
 
 const sectionsWithoutOptionId = ["Summary", "Issues and actions"];
 
-export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit", [
-  z.object({
-    button_submit: z.literal("submit"),
-    form: z.literal(FormTypes.MonitoringReportSummary),
+export const monitoringReportSummarySchema = evaluateObject(
+  ({ button_submit }: { button_submit: "submit" | "saveAndReturnToSummary" }) => ({
+    button_submit: z.union([z.literal("submit"), z.literal("saveAndReturnToSummary")]),
     questions: z.array(
       z
         .object({
           optionId: z.string(),
-          comments: getTextValidation({ required: true, minLength: 1, maxLength: 32000 }),
+          comments: getTextValidation({ required: button_submit === "submit", minLength: 1, maxLength: 32000 }),
           title: z.string(),
         })
         .superRefine((data, ctx) => {
-          if (data.optionId.length < 1 && !sectionsWithoutOptionId.includes(data.title)) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.too_small,
-              minimum: 1,
-              type: "string",
-              inclusive: true,
-              path: ["optionId"],
-            });
+          if (button_submit === "submit") {
+            if (data.optionId.length < 1 && !sectionsWithoutOptionId.includes(data.title)) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.too_small,
+                minimum: 1,
+                type: "string",
+                inclusive: true,
+                path: ["optionId"],
+              });
+            }
           }
         }),
     ),
     periodId: z.number(),
     addComments: getTextValidation({
       maxLength: 5000,
-      required: true,
+      required: button_submit === "submit",
     }),
   }),
-  z.object({
-    button_submit: z.literal("saveAndReturnToSummary"),
-    form: z.literal(FormTypes.MonitoringReportSummary),
-    questions: z.array(
-      z.object({
-        optionId: z.string().optional().nullable(),
-        comments: getTextValidation({ required: false, maxLength: 32000 }),
-      }),
-    ),
-    periodId: z.number(),
-    addComments: getTextValidation({
-      maxLength: 5000,
-      required: false,
-    }),
-  }),
-]);
+);
 
 export type MonitoringReportSummarySchema = typeof monitoringReportSummarySchema;
