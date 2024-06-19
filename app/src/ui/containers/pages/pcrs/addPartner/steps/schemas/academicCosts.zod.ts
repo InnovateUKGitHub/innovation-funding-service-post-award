@@ -1,10 +1,13 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
   markedAsComplete
     ? z.object({
+        form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
+        markedAsComplete: z.string(),
         button_submit: z.string(),
         tsbReference: z.string().min(1),
         costs: z.array(
@@ -21,7 +24,9 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         ),
       })
     : z.object({
+        form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
         button_submit: z.string(),
+        markedAsComplete: z.string(),
         tsbReference: z.string(),
         costs: z.array(
           z.object({
@@ -37,4 +42,5 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         ),
       });
 
-export type AcademicCostsSchema = z.infer<ReturnType<typeof getAcademicCostsSchema>>;
+export type AcademicCostsSchemaType = ReturnType<typeof getAcademicCostsSchema>;
+export type AcademicCostsSchema = z.infer<AcademicCostsSchemaType>;

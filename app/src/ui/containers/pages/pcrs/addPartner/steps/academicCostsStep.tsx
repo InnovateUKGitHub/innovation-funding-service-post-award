@@ -9,7 +9,6 @@ import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { getInitialAcademicCosts, useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
@@ -27,6 +26,8 @@ import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 type AcademicCostsRhfError = {
   tsbReference: RhfError;
@@ -47,8 +48,10 @@ export const AcademicCostsStep = () => {
   const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
   const initialCosts = getInitialAcademicCosts(spendProfile, academicCostCategories);
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
+  const { handleSubmit, register, setError, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
     defaultValues: {
+      form: FormTypes.PcrAddPartnerAcademicCostsStep,
+      markedAsComplete: String(markedAsCompleteHasBeenChecked),
       button_submit: "submit",
       tsbReference: pcrItem.tsbReference ?? "",
       costs: initialCosts,
@@ -58,7 +61,7 @@ export const AcademicCostsStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors) as AcademicCostsRhfError;
+  const validationErrors = useZodErrors(setError, formState.errors) as AcademicCostsRhfError;
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -87,6 +90,8 @@ export const AcademicCostsStep = () => {
             });
           })}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerAcademicCostsStep} />
+          <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.tsbReferenceHeading)}</Legend>
             <FormGroup hasError={!!validationErrors?.tsbReference}>
@@ -98,6 +103,7 @@ export const AcademicCostsStep = () => {
                 inputWidth="one-third"
                 {...register("tsbReference")}
                 disabled={isFetching}
+                defaultValue={pcrItem.tsbReference ?? ""}
               />
             </FormGroup>
           </Fieldset>
@@ -121,6 +127,10 @@ export const AcademicCostsStep = () => {
                 <TR key={cat.description}>
                   <TD>
                     <P>{cat.description}</P>
+                    <input type="hidden" name={`costs.${i}.costCategory`} value={cat.costCategory} />
+                    <input type="hidden" name={`costs.${i}.costCategoryId`} value={cat.costCategoryId} />
+                    <input type="hidden" name={`costs.${i}.id`} value={cat.id} />
+                    <input type="hidden" name={`costs.${i}.description`} value={cat.description} />
                   </TD>
                   <TD>
                     <ValidationError error={validationErrors?.costs?.[i]?.value as RhfError} />
@@ -131,6 +141,7 @@ export const AcademicCostsStep = () => {
                       )}
                       disabled={isFetching}
                       {...register(`costs.${i}.value`)}
+                      defaultValue={cat.value ?? ""}
                     />
                   </TD>
                 </TR>

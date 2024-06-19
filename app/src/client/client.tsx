@@ -30,6 +30,7 @@ import { UserProvider } from "@ui/context/user";
 import { ZodIssue } from "zod";
 import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
+import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -40,6 +41,7 @@ const preloadedMessages = (processDto(window.__PRELOADED_MESSAGES__) || null) as
 const userConfig = processDto(window.__USER_CONFIG__) as unknown as IClientUser;
 const serverZodErrors = processDto(window.__PRELOADED_SERVER_ZOD_ERRORS__ || []) as unknown as ZodIssue[];
 const serverInput = processDto(window.__PRELOADED_SERVER_INPUT__ || null) as unknown as AnyObject;
+const preloadedData = (processDto(window.__PRELOADED_DATA__) || null) as AnyObject | null;
 
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
@@ -88,13 +90,15 @@ const Client = () => {
               <ClientConfigProvider config={clientConfig}>
                 <ApiErrorContextProvider value={apiErrors}>
                   <FormErrorContextProvider value={formErrors}>
-                    <MessageContextProvider preloadedMessages={preloadedMessages}>
-                      <BrowserRouter>
-                        <StoresProvider value={getStores()}>
-                          <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                        </StoresProvider>
-                      </BrowserRouter>
-                    </MessageContextProvider>
+                    <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
+                      <MessageContextProvider preloadedMessages={preloadedMessages}>
+                        <BrowserRouter>
+                          <StoresProvider value={getStores()}>
+                            <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                          </StoresProvider>
+                        </BrowserRouter>
+                      </MessageContextProvider>
+                    </PreloadedDataContextProvider>
                   </FormErrorContextProvider>
                 </ApiErrorContextProvider>
               </ClientConfigProvider>

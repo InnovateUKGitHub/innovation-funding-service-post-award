@@ -5,6 +5,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { LinksList } from "@ui/components/atomicDesign/atoms/LinksList/linksList";
 import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 const DeMinimisGuidance = () => {
   const { getContent } = useContent();
@@ -40,6 +41,7 @@ export const DeMinimisStep = () => {
       documentDescription={DocumentDescription.DeMinimisDeclarationForm}
       guidanceComponent={<DeMinimisGuidance />}
       returnToSummaryButton
+      formType={FormTypes.PcrAddPartnerDeMinimisFilesStep}
     />
   );
 };

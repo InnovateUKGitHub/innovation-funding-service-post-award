@@ -20,6 +20,7 @@ abstract class ZodFormHandlerBase<
   Schema extends
     | z.ZodObject<AnyForm>
     | z.ZodEffects<z.ZodObject<AnyForm>>
+    | z.ZodIntersection<ZodTypeAny, ZodTypeAny>
     | z.ZodDiscriminatedUnion<string, z.ZodObject<AnyForm>[]>,
   QueryParams extends AnyObject,
 > implements IFormHandler

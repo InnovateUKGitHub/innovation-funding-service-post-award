@@ -2377,6 +2377,11 @@
             "too_big": "Registration number must be {{ count }} characters or less."
           }
         },
+        "searchJesOrganisations": {
+          "errors": {
+            "too_big": "Name of organisation must be {{ count }} characters or less."
+          }
+        },
         "spendProfile": {
           "description": {
             "errors": {

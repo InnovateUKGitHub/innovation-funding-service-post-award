@@ -7,7 +7,6 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -22,6 +21,9 @@ import { PCRParticipantSize } from "@framework/constants/pcrConstants";
 import { OrganisationDetailsSchema, getOrganisationDetailsSchema } from "./schemas/organisationDetails.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { isNil } from "lodash";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const OrganisationDetailsStep = () => {
   const { getContent } = useContent();
@@ -31,18 +33,20 @@ export const OrganisationDetailsStep = () => {
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<OrganisationDetailsSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<OrganisationDetailsSchema>({
     defaultValues: {
       button_submit: "submit",
       numberOfEmployees: pcrItem.numberOfEmployees,
       participantSize: pcrItem.participantSize,
+      form: FormTypes.PcrAddPartnerOrganisationDetailsStep,
+      markedAsComplete: String(markedAsCompleteHasBeenChecked),
     },
     resolver: zodResolver(getOrganisationDetailsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -52,6 +56,8 @@ export const OrganisationDetailsStep = () => {
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerOrganisationDetails.sectionTitle)}</H2>
         <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+          <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerOrganisationDetailsStep} />
+          <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.organisationSizeHeading)}</Legend>
             <FormGroup>
@@ -96,6 +102,7 @@ export const OrganisationDetailsStep = () => {
                 {...register("numberOfEmployees")}
                 disabled={isFetching}
                 aria-label={getContent(x => x.forms.pcr.addPartner.numberOfEmployees.aria_label)}
+                defaultValue={isNil(pcrItem.numberOfEmployees) ? "" : String(pcrItem.numberOfEmployees)}
               />
             </FormGroup>
           </Fieldset>

@@ -15,6 +15,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 const useJesContent = () => {
   const { getContent } = useContent();
@@ -96,6 +97,7 @@ export const JeSStep = () => {
       heading={x => x.pcrAddPartnerLabels.jesHeading}
       documentDescription={DocumentDescription.JeSForm}
       guidanceComponent={<JesGuidance />}
+      formType={FormTypes.PcrAddPartnerJesFormStep}
       returnToSummaryButton
     />
   );

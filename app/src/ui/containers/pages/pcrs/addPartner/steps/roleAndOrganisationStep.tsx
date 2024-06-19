@@ -8,7 +8,6 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useForm } from "react-hook-form";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useLinks } from "../../utils/useNextLink";
 import { PcrPage } from "../../pcrPage";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -32,8 +31,10 @@ import {
 } from "@framework/constants/pcrConstants";
 import { RoleAndOrganisationSchema, roleAndOrganisationSchema } from "./schemas/roleAndOrganisation.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
-const setData = (data: RoleAndOrganisationSchema) => {
+export const setData = (data: RoleAndOrganisationSchema) => {
   // It's not possible to come back to this page after it's submitted
   // so we can assume that the participant size hasn't explicitly been set by the user yet
   // and it's safe for us to reset it
@@ -63,8 +64,9 @@ export const RoleAndOrganisationStep = () => {
   const formHasBeenFilled =
     pcrItem.projectRole !== PCRProjectRole.Unknown && pcrItem.partnerType !== PCRPartnerType.Unknown;
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<RoleAndOrganisationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<RoleAndOrganisationSchema>({
     defaultValues: {
+      form: FormTypes.PcrAddPartnerRoleAndOrganisationStep,
       isCommercialWork: pcrItem.isCommercialWork === null ? undefined : pcrItem.isCommercialWork ? "true" : "false",
       projectRole: pcrItem.projectRole,
       partnerType: pcrItem.partnerType,
@@ -76,7 +78,7 @@ export const RoleAndOrganisationStep = () => {
 
   const disabled = formHasBeenFilled || isFetching;
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -111,6 +113,8 @@ export const RoleAndOrganisationStep = () => {
             }).then(() => refreshItemWorkflowQuery()),
           )}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerRoleAndOrganisationStep} />
+
           {formHasBeenFilled ? (
             <ValidationMessage
               messageType="info"

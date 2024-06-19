@@ -9,7 +9,6 @@ import { useSummaryLink } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
@@ -21,6 +20,8 @@ import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { useMemo } from "react";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
@@ -42,8 +43,9 @@ export const OtherFundingStep = () => {
   }, [itemId, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem]);
 
   const summaryLink = useSummaryLink();
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<OtherFundingSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<OtherFundingSchema>({
     defaultValues: {
+      form: FormTypes.PcrAddPartnerOtherFundingStep,
       button_submit: "submit",
       hasOtherFunding: pcrItem.hasOtherFunding ? "true" : "false",
     },
@@ -52,7 +54,7 @@ export const OtherFundingStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -101,6 +103,7 @@ export const OtherFundingStep = () => {
             });
           })}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerOtherFundingStep} />
           <Fieldset>
             <FormGroup>
               <RadioList
@@ -113,12 +116,14 @@ export const OtherFundingStep = () => {
                   value="true"
                   label={<Content value={x => x.pcrAddPartnerLabels.otherFundsYes} />}
                   disabled={isFetching}
+                  defaultChecked={!!pcrItem.hasOtherFunding}
                 />
                 <Radio
                   id="false"
                   value="false"
                   label={<Content value={x => x.pcrAddPartnerLabels.otherFundsNo} />}
                   disabled={isFetching}
+                  defaultChecked={!pcrItem.hasOtherFunding}
                 />
               </RadioList>
             </FormGroup>

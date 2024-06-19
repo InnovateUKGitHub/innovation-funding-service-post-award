@@ -6,6 +6,7 @@ declare namespace Express {
     isMatchedRoute?: boolean;
     isFormSuccess?: boolean;
     preloadedReduxActions: { type: string; payload?: unknown }[];
+    preloadedData: AnyObject;
     messages: string[];
     serverZodErrors: ZodIssue[];
   }

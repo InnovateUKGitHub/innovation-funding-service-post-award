@@ -15,7 +15,6 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { AddPartnerSchema, addPartnerErrorMap, getAddPartnerSummarySchema } from "./addPartnerSummary.zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
@@ -23,6 +22,8 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { useMemo } from "react";
 import { useContent } from "@ui/hooks/content.hook";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const AddPartnerSummary = () => {
   const { projectId, itemId, fetchKey, mode, displayCompleteForm } = usePcrWorkflowContext();
@@ -33,12 +34,12 @@ export const AddPartnerSummary = () => {
     fetchKey,
   );
 
-  const { handleSubmit, register, formState, watch } = useForm<AddPartnerSchema>({
+  const { handleSubmit, register, formState, watch, setError } = useForm<AddPartnerSchema>({
     // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
     // @ts-expect-error it's so annoying but boolean type is freaking out over the literal false and true in the discriminated union
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
-      button_submit: "submit",
+      form: FormTypes.PcrAddPartnerSummary,
       ...pcrItem,
     },
     resolver: zodResolver(
@@ -56,7 +57,7 @@ export const AddPartnerSummary = () => {
       ? getContent(x => x.pages.pcrAddPartnerRoleAndOrganisation.lead)
       : pcrItem.projectRoleLabel;
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   // Used to determine items displayed for industrial org vs academic org
   const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
@@ -412,7 +413,11 @@ export const AddPartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" name="projectRole" value={pcrItem.projectRole} />
+          <input type="hidden" name="organisationType" value={pcrItem.organisationType} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSummary} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );

@@ -12,7 +12,6 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
@@ -24,6 +23,8 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { ProjectManagerSchema, getProjectManagerSchema } from "./schemas/projectManager.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const ProjectManagerDetailsStep = () => {
   const { getContent } = useContent();
@@ -33,20 +34,23 @@ export const ProjectManagerDetailsStep = () => {
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, reset, watch } = useForm<ProjectManagerSchema>({
-    defaultValues: {
-      button_submit: "submit",
-      contact2Forename: pcrItem.contact2Forename ?? "",
-      contact2Surname: pcrItem.contact2Surname ?? "",
-      contact2Phone: pcrItem.contact2Phone ?? "",
-      contact2Email: pcrItem.contact2Email ?? "",
-    },
-    resolver: zodResolver(getProjectManagerSchema(markedAsCompleteHasBeenChecked), {
-      errorMap: addPartnerErrorMap,
-    }),
-  });
+  const { handleSubmit, register, formState, trigger, setValue, reset, watch, setError } =
+    useForm<ProjectManagerSchema>({
+      defaultValues: {
+        button_submit: "submit",
+        contact2Forename: pcrItem.contact2Forename ?? "",
+        contact2Surname: pcrItem.contact2Surname ?? "",
+        contact2Phone: pcrItem.contact2Phone ?? "",
+        contact2Email: pcrItem.contact2Email ?? "",
+        form: FormTypes.PcrAddPartnerProjectManagerStep,
+        markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      },
+      resolver: zodResolver(getProjectManagerSchema(markedAsCompleteHasBeenChecked), {
+        errorMap: addPartnerErrorMap,
+      }),
+    });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -70,6 +74,8 @@ export const ProjectManagerDetailsStep = () => {
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.projectLeadContactHeading)}</Legend>
             <input type="hidden" name="contact2ProjectRole" value={PCRContactRole.ProjectManager} />
+            <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerProjectManagerStep} />
+            <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
 
             {isClient && (
               <Button
@@ -147,7 +153,7 @@ export const ProjectManagerDetailsStep = () => {
             <Button type="submit" disabled={isFetching} {...registerButton("submit")}>
               {getContent(x => x.pcrItem.submitButton)}
             </Button>
-            <Button type="submit" secondary disabled={isFetching} {...registerButton("saveAndReturnToSummary")}>
+            <Button type="submit" secondary disabled={isFetching} {...registerButton("returnToSummary")}>
               {getContent(x => x.pcrItem.saveAndReturnToSummaryButton)}
             </Button>
           </Fieldset>

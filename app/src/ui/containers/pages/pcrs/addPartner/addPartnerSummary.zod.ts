@@ -1,6 +1,7 @@
 import { ZodRawShape, z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
@@ -40,6 +41,7 @@ const submitAddPartnerSummarySchema = <
     projectRole: z.number().gt(0),
     ...tsbReference,
     markedAsComplete: z.literal(true),
+    form: z.literal(FormTypes.PcrAddPartnerSummary),
   });
 
 const saveAddPartnerSummarySchema = z.object({
@@ -66,8 +68,6 @@ const saveAddPartnerSummarySchema = z.object({
   contact2Phone: z.string().nullable().optional(),
   contact2Email: z.string().nullable().optional(),
   awardRate: z.number().nullable().optional(),
-
-  button_submit: z.string(),
   partnerType: z.number().gt(0),
   projectRole: z.number().gt(0),
   isCommercialWork: z.boolean(),
@@ -75,6 +75,7 @@ const saveAddPartnerSummarySchema = z.object({
   organisationType: z.string().min(1),
   tsbReference: z.string().nullable().optional(),
   markedAsComplete: z.literal(false),
+  form: z.literal(FormTypes.PcrAddPartnerSummary),
 });
 
 export const getAddPartnerSummarySchema = ({
@@ -105,6 +106,7 @@ export const getAddPartnerSummarySchema = ({
   return z.discriminatedUnion("markedAsComplete", [saveAddPartnerSummarySchema, markedAsCompleteSchema]);
 };
 
+export type AddPartnerSchemaType = ReturnType<typeof getAddPartnerSummarySchema>;
 export type AddPartnerSchema = Omit<z.output<ReturnType<typeof getAddPartnerSummarySchema>>, "markedAsComplete"> & {
   markedAsComplete: boolean;
 };

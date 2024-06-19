@@ -1,6 +1,7 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 const valueDescription = z.object({
@@ -9,7 +10,7 @@ const valueDescription = z.object({
     required: true,
   }),
   description: z.string().min(1),
-  id: z.string(),
+  id: z.string().transform(x => x as CostId),
   costCategory: z.number().transform(x => x as CostCategoryType),
   costCategoryId: z.string().transform(x => x as CostCategoryId),
 });
@@ -54,8 +55,10 @@ export const fundingSchema = z.object({
 const baseSchema = z.object({
   button_submit: z.string(),
   itemsLength: z.string(),
+  form: z.literal(FormTypes.PcrAddPartnerOtherSourcesOfFundingStep),
 });
 
 export const otherSourcesOfFundingSchema = baseSchema.and(fundingSchema);
 
+export type OtherSourcesOfFundingSchemaType = typeof otherSourcesOfFundingSchema;
 export type OtherSourcesOfFundingSchema = z.infer<typeof otherSourcesOfFundingSchema>;

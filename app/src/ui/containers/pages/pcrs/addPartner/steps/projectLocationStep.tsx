@@ -15,13 +15,14 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { ProjectLocationSchema, getProjectLocationSchema } from "./schemas/projectLocation.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const pcrProjectLocation = [
   {
@@ -46,19 +47,21 @@ export const ProjectLocationStep = () => {
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<ProjectLocationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<ProjectLocationSchema>({
     defaultValues: {
       button_submit: "submit",
       projectLocation: pcrItem.projectLocation ?? 0,
       projectPostcode: pcrItem.projectPostcode ?? "",
       projectCity: pcrItem.projectCity ?? "",
+      form: FormTypes.PcrAddPartnerProjectLocationStep,
+      markedAsComplete: String(markedAsCompleteHasBeenChecked),
     },
     resolver: zodResolver(getProjectLocationSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -76,6 +79,9 @@ export const ProjectLocationStep = () => {
             }),
           )}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerProjectLocationStep} />
+          <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
+
           <Fieldset>
             <FormGroup hasError={!!validationErrors?.projectLocation}>
               <Hint id="hint-for-project-location">
@@ -113,6 +119,7 @@ export const ProjectLocationStep = () => {
                 id="project-city"
                 {...register("projectCity")}
                 disabled={isFetching}
+                defaultValue={pcrItem.projectCity ?? ""}
               />
             </FormGroup>
           </Fieldset>
@@ -131,6 +138,7 @@ export const ProjectLocationStep = () => {
                 id="project-postcode"
                 {...register("projectPostcode")}
                 disabled={isFetching}
+                defaultValue={pcrItem.projectPostcode ?? ""}
               />
             </FormGroup>
           </Fieldset>

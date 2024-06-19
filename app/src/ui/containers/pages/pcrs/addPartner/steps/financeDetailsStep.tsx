@@ -5,7 +5,6 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
@@ -24,6 +23,8 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { FinanceDetailsSchema, getFinanceDetailsSchema } from "./schemas/financialDetails.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const FinanceDetailsStep = () => {
   const { getContent } = useContent();
@@ -33,8 +34,10 @@ export const FinanceDetailsStep = () => {
 
   const link = useLinks();
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<FinanceDetailsSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<FinanceDetailsSchema>({
     defaultValues: {
+      form: FormTypes.PcrAddPartnerFinancialDetailsStep,
+      markedAsComplete: String(markedAsCompleteHasBeenChecked),
       button_submit: "submit",
       financialYearEndTurnover: String(pcrItem.financialYearEndTurnover ?? ""),
       financialYearEndDate_month: getMonth(pcrItem.financialYearEndDate),
@@ -45,7 +48,7 @@ export const FinanceDetailsStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -70,6 +73,9 @@ export const FinanceDetailsStep = () => {
             }),
           )}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerFinancialDetailsStep} />
+          <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
+
           <Fieldset data-qa="endOfFinancialYear">
             <Legend>{getContent(x => x.pcrAddPartnerLabels.financialYearEndHeading)}</Legend>
 
@@ -82,9 +88,19 @@ export const FinanceDetailsStep = () => {
                 </Hint>
               }
             >
-              <DateInput type="month" {...register("financialYearEndDate_month")} disabled={isFetching} />
+              <DateInput
+                type="month"
+                {...register("financialYearEndDate_month")}
+                disabled={isFetching}
+                defaultValue={String(getMonth(pcrItem.financialYearEndDate) ?? "")}
+              />
 
-              <DateInput type="year" {...register("financialYearEndDate_year")} disabled={isFetching} />
+              <DateInput
+                type="year"
+                {...register("financialYearEndDate_year")}
+                disabled={isFetching}
+                defaultValue={String(getYear(pcrItem.financialYearEndDate) ?? "")}
+              />
             </DateInputGroup>
           </Fieldset>
 
@@ -96,6 +112,7 @@ export const FinanceDetailsStep = () => {
               <NumberInput
                 hasError={!!validationErrors?.financialYearEndTurnover}
                 inputWidth="one-third"
+                defaultValue={String(pcrItem.financialYearEndTurnover ?? "")}
                 {...register("financialYearEndTurnover")}
                 disabled={isFetching}
               />

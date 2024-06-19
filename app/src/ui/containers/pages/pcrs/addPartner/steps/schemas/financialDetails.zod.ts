@@ -1,5 +1,6 @@
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 /**
@@ -68,6 +69,8 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
   markedAsComplete
     ? z
         .object({
+          markedAsComplete: z.string(),
+          form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({
             label: "forms.pcr.addPartner.financialYearEndTurnover.label",
@@ -77,6 +80,8 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
         .and(dateSecuredRequired)
     : z
         .object({
+          markedAsComplete: z.string(),
+          form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({
             label: "forms.pcr.addPartner.financialYearEndTurnover.label",
@@ -84,4 +89,5 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
         })
         .and(dateSecuredOptional);
 
-export type FinanceDetailsSchema = z.infer<ReturnType<typeof getFinanceDetailsSchema>>;
+export type FinanceDetailsSchemaType = ReturnType<typeof getFinanceDetailsSchema>;
+export type FinanceDetailsSchema = z.infer<FinanceDetailsSchemaType>;

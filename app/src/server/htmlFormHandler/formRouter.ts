@@ -27,8 +27,8 @@ import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectI
 import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestFormHandler";
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddTypeHandler.handler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
-import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdateHandler";
-import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentDeleteHandler";
+import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
+import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemDocumentDeleteHandler";
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDeleteHandler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/spendProfileAddCostHandler";
@@ -52,15 +52,15 @@ import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[
 import { FallbackFormHandler } from "./FallbackFormHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
-import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsSummaryUpdate.handler";
-import { ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorSummaryUpdate.handler";
-import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorStepUpdate.handler";
-import { ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemAddPartnerCompaniesHouseStepUpdate.handler";
-import { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsCostCategoryUpdate.handler";
+import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFinancialVirementsSummaryUpdate.handler";
+import { ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemApproveNewSubcontractorSummaryUpdate.handler";
+import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemApproveNewSubcontractorStepUpdate.handler";
+import { ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerCompaniesHouseStepUpdate.handler";
+import { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFinancialVirementsCostCategoryUpdate.handler";
 import { ProjectSetupContactAssociateHandler } from "./handlers/projects/[projectId]/setup/associate/projectSetupContactAssociate.handler";
-import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdate.handler";
-import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
-import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemChangeProjectScopeSummaryUpdate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectScopeProposedPublicDescriptionStepUpdate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
+import { ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectScopeSummaryUpdate.handler";
 import { ForecastHandler } from "./handlers/projects/Forecast.handler";
 import { PcrItemChangeRenamePartnerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartner.handler";
 import { PcrItemChangeRenamePartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemRenamePartnerSummary.handler";
@@ -73,6 +73,19 @@ import { PcrItemPutProjectOnHoldHandler } from "./handlers/projects/[projectId]/
 import { PcrItemPutProjectOnHoldSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemPutProjectOnHoldSummary.handler";
 import { PcrChangeDurationSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectDurationSummary.handler";
 import { PcrChangeDurationHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectDuration.handler";
+import { PcrItemAddPartnerRoleAndOrganisationHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerRoleAndOrganisation.handler";
+import { PcrItemAddPartnerOrganisationDetailsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerOrganisationDetails.handler";
+import { PcrItemAddPartnerFinancialDetailsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerFinancialDetails.handler";
+import { PcrItemAddPartnerProjectLocationHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerProjectLocation.handler";
+import { PcrItemAddPartnerFinanceContactHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerFinanceContact.handler";
+import { PcrItemAddPartnerOtherFundingHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerOtherFunding.handler";
+import { PcrItemAddPartnerOtherSourcesOfFundingHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcritemAddPartnerOtherSourcesOfFunding.handler";
+import { PcrItemAddPartnerProjectManagerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerProjectManager.handler";
+import { PcrItemAddPartnerAwardRateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAwardRate.handler";
+import { PcrItemAddPartnerAcademicOrganisationStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationStep.handler";
+import { PcrItemAddPartnerAcademicOrganisationSearchStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationSearchStep.handler";
+import { PcrItemAddPartnerAcademicCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicCostsStep.handler";
+import { PcrAddPartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerSummary.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -92,13 +105,26 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
+  new PcrItemAddPartnerAcademicOrganisationSearchStepHandler(),
+  new PcrItemAddPartnerRoleAndOrganisationHandler(),
+  new PcrItemAddPartnerFinancialDetailsHandler(),
+  new PcrItemAddPartnerProjectLocationHandler(),
+  new PcrItemAddPartnerFinanceContactHandler(),
+  new PcrItemAddPartnerProjectManagerHandler(),
+  new PcrItemAddPartnerOtherFundingHandler(),
+  new PcrItemAddPartnerAwardRateHandler(),
+  new PcrItemAddPartnerAcademicCostsHandler(),
+  new PcrItemAddPartnerOtherSourcesOfFundingHandler(),
+  new PcrAddPartnerSummaryHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
   new PcrItemChangeRemovePartnerHandler(),
   new PcrItemChangeRemovePartnerSummaryHandler(),
   new PcrItemChangeRenamePartnerHandler(),
   new PcrItemChangeRenamePartnerSummaryHandler(),
+  new PcrItemAddPartnerOrganisationDetailsHandler(),
   new PcrItemPutProjectOnHoldHandler(),
   new PcrItemPutProjectOnHoldSummaryHandler(),
+  new PcrItemAddPartnerAcademicOrganisationStepHandler(),
   new PcrChangeDurationSummaryHandler(),
   new PcrChangeDurationHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),
