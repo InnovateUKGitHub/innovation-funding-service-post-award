@@ -941,11 +941,9 @@ export const otherFundingTable = () => {
 export const addSourceOfFundingValidation = () => {
   cy.button("Add another source of funding").click().wait(500);
   cy.clickOn("Save and continue");
-  ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
-    cy.validationLink(message);
-  });
-  ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
-    cy.paragraph(message);
+  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(valMsge => {
+    cy.validationLink(valMsge);
+    cy.paragraph(valMsge);
   });
   cy.getCellFromHeaderAndRowNumber("Funding amount (£)", 1, `[aria-label="funding amount for item 0"]`)
     .type("error")
@@ -1489,22 +1487,25 @@ export const validateGrantMoving = () => {
   cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.validationLink("Enter a valid grant moving over financial year.");
-  cy.paragraph("Enter a valid grant moving over financial year.");
+  cy.validationLink("Grant value moving over financial year end must be a number.");
+  cy.paragraph("Grant value moving over financial year end must be a number.");
   cy.clickCheckBox("I agree with this change");
   cy.get("legend").contains("Grant value moving over the financial year end");
   cy.get("#grantMovingOverFinancialYear").clear().type("10000000000000000000");
   cy.clickOn("Save and return to request");
-  cy.validationLink("Grant moving over financial year must be less than £999,999,999,999.00.");
-  cy.paragraph("Grant moving over financial year must be less than £999,999,999,999.00.");
+  cy.validationLink("Grant value moving over financial year end must be £999,999,999,999.00 or less.");
+  cy.paragraph("Grant value moving over financial year end must be £999,999,999,999.00 or less.");
   cy.get("#grantMovingOverFinancialYear").clear().type("-100");
   cy.clickOn("Save and return to request");
-  cy.validationLink("Grant moving over financial year cannot be less than £0.");
-  cy.paragraph("Grant moving over financial year cannot be less than £0.");
+  cy.validationLink("Grant value moving over financial year end must be £0.00 or more.");
+  cy.paragraph("Grant value moving over financial year end must be £0.00 or more.");
   cy.get("#grantMovingOverFinancialYear").clear().type("1000.333");
   cy.clickOn("Save and return to request");
-  cy.validationLink("Grant moving over financial year must be 2 decimal places or fewer.");
-  cy.paragraph("Grant moving over financial year must be 2 decimal places or fewer.");
+  cy.validationLink("Grant value moving over financial year end must be 2 decimal places or fewer.");
+  cy.paragraph("Grant value moving over financial year end must be 2 decimal places or fewer.");
+  cy.get("#grantMovingOverFinancialYear").clear().type("$");
+  cy.validationLink("Grant value moving over financial year end must be in pounds (£).");
+  cy.paragraph("Grant value moving over financial year end must be in pounds (£).");
   cy.get("input#grantMovingOverFinancialYear").clear().type("0");
 };
 
@@ -1963,7 +1964,8 @@ export const validateCostUpdateInputs = () => {
   cy.getByAriaLabel("Labour").clear().type("10000000000000000");
   cy.wait(500);
   cy.clickOn("Save and return to reallocate project costs");
-  cy.validationLink("Eligible costs must be less than £999,999,999,999.00.");
+  cy.validationLink("New total eligible costs must be £999,999,999,999.00 or less.");
+  cy.paragraph("New total eligible costs must be £999,999,999,999.00 or less.");
 };
 
 export const reallocateDecimals = () => {
@@ -2288,14 +2290,15 @@ export const saveReflectSurplus = () => {
 export const negativeGrantChange = () => {
   cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("-1000");
   cy.button("Save and return to reallocate project costs").click();
-  cy.validationLink("Grant cannot be less than zero.");
+  cy.validationLink("New remaining grant must be £0.00 or more.");
+  cy.paragraph("New remaining grant must be £0.00 or more.");
 };
 
 export const validateAlphaCharacters = () => {
   cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("lorem");
   cy.button("Save and return to reallocate project costs").click();
-  cy.validationLink("New remaining grant must be a valid currency value.");
-  cy.paragraph("New remaining grant must be a valid currency value.");
+  cy.validationLink("New remaining grant must be a number.");
+  cy.paragraph("New remaining grant must be a number.");
 };
 
 export const saveZeroValue = () => {

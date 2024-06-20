@@ -717,7 +717,7 @@ export const validateLineItem = () => {
     });
   cy.clickOn("Save and return to claims");
 
-  cy.validationLink("Costs must be a number");
+  cy.validationLink("Cost must be a number");
   cy.get("tr")
     .eq(1)
     .within(() => {
@@ -730,7 +730,7 @@ export const validateLineItem = () => {
 export const validateForecast = () => {
   cy.getByAriaLabel("Labour Period 2").clear().wait(500);
   cy.clickOn("Save and return to claims");
-  cy.validationLink("Forecast is required");
+  cy.validationLink("Enter forecast.");
 };
 
 export const academicForecastNavigate = () => {

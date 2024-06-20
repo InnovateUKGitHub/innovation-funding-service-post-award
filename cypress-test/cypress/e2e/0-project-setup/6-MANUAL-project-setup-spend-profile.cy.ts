@@ -44,7 +44,7 @@ describe("Project setup > Manual > Set spend profile", () => {
     cy.paragraph("Overheads costs: 20.00%");
   });
 
-  it("Should check for existing forecast figures", spendTableTidyUp);
+  it("Should check for existing forecast figures", () => spendTableTidyUp("£6,999.98"));
 
   it("Should display the forecast table", correctSpendProfileTotals);
 

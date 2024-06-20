@@ -31,8 +31,8 @@ describe("Forecast > Academic", { tags: "smoke" }, () => {
     cy.getByAriaLabel("Directly incurred - Staff Period 3").clear();
     cy.wait(500);
     cy.submitButton("Submit changes").click();
-    cy.validationLink("Forecast is required.");
-    cy.get("a").contains("Forecast is required.");
+    cy.validationLink("Enter forecast.");
+    cy.get("a").contains("Enter forecast.");
   });
 
   it("Should click 'Back to project'", () => {

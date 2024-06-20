@@ -145,7 +145,7 @@ export const spendProfileNullValidation = () => {
   cy.getByAriaLabel("Labour Period 1").clear();
   cy.wait(500);
   cy.submitButton("Save and return to project setup").click();
-  cy.validationMessage("Forecast is required");
+  cy.validationMessage("Enter forecast.");
   cy.getByAriaLabel("Labour Period 1").type("0");
 };
 
@@ -188,10 +188,10 @@ export const saveAndRemoveValidationMsg = () => {
   });
 };
 
-export const spendTableTidyUp = () => {
+export const spendTableTidyUp = (valueSearch: string) => {
   cy.get("main").within(() => {
     cy.get("table").then($table => {
-      if ($table.text().includes("£6,999.98")) {
+      if ($table.text().includes(valueSearch)) {
         cy.wait(500);
         revertSpendTableZero();
       }

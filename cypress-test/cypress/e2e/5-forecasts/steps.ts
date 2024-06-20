@@ -132,7 +132,7 @@ export const clearCostCategories = () => {
   });
   cy.submitButton("Submit changes").click();
 
-  cy.validationLink("Forecast is required.");
+  cy.validationLink("Enter forecast.");
   cy.get(`[data-qa="validation-summary"]`).within(() => {
     cy.get("a").then($validationMsg => {
       let msgNumber = $validationMsg.length;
@@ -599,13 +599,13 @@ export const enterExtremePositiveValue = () => {
   cy.getByAriaLabel("Labour Period 3").clear().type("9999999999999");
   cy.getByQA("validation-summary").should("not.contain", "A validation error occurred.");
   cy.validationLink("Your overall total cannot be higher than your total eligible costs.");
-  cy.validationLink("Forecast must be less than £999,999,999,999.00.");
+  cy.validationLink("Forecast must be £999,999,999,999.00 or less.");
 };
 
 export const enterExtremeNegativeValue = () => {
   cy.getByAriaLabel("Labour Period 3").clear().type("-9999999999999");
   cy.getByQA("validation-summary").should("not.contain", "A validation error occurred.");
-  cy.validationLink("Forecast must be more than -£999,999,999,999.00.");
+  cy.validationLink("Forecast must be -£1,000,000,000.00 or more.");
 };
 
 export const accessEuiSmallEntHealthForecast = () => {

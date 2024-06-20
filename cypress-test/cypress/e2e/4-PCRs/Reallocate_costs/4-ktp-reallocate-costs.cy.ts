@@ -43,6 +43,13 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
     });
   });
 
+  it("Should validate an empty 'New total eligible costs'", () => {
+    cy.getByAriaLabel("Associate Employment").clear();
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.validationLink("Enter new total eligible costs.");
+    cy.paragraph("Enter new total eligible costs.");
+  });
+
   it("Should show a table for reallocating costs and a summary table", ktpCostsTable);
 
   it("Should update figures and calculate the changes", ktpUpdateVirement);

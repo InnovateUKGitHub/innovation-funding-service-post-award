@@ -117,7 +117,11 @@ export const checkAddOverheadItem = () => {
     cy.getByLabel("Calculated").click();
     checkTotalCostEquals("£0.00");
     cy.clickOn("Save and return to project costs");
-    cy.validateCurrency("Total cost of overheads as calculated in the spreadsheet (£)", "Total cost", "15000");
+    cy.validateCurrency(
+      "Total cost of overheads as calculated in the spreadsheet (£)",
+      "Total cost of overheads",
+      "15000",
+    );
     checkTotalCostEquals(pounds(cost));
     cy.clickOn("Save and return to project costs");
     cy.get("h2").contains("Project costs for new partner");
@@ -242,7 +246,7 @@ export const checkAddSubcontractingItem = () => {
       cy.validationLink("Enter subcontractor name.");
       cy.validationLink("Enter subcontractor country.");
       cy.validationLink("Enter role and description.");
-      cy.validationLink("Enter cost.");
+      cy.validationLink("Enter cost of subcontractor.");
       cy.getByLabel("Subcontractor name").invoke("val", loremIpsum255Char).trigger("input");
       cy.getByLabel("Subcontractor name").type("{moveToEnd}tt");
       cy.getByLabel("Country where the subcontractor will work").invoke("val", loremIpsum255Char).trigger("input");
@@ -280,7 +284,7 @@ export const checkAddSubcontractingItem = () => {
       cy.paragraph("You have 16 characters");
       cy.getByLabel("Subcontractor name").clear().type("Donald duck");
       cy.getByLabel("Country where the subcontractor will work").clear().type("USA");
-      cy.validateCurrency("Cost (£)", "cost", String(cost));
+      cy.validateCurrency("Cost (£)", "cost of subcontractor", String(cost));
       checkSummary("Subcontracting", "Donald duck", cost, categoryTotal, totalCost);
     });
   });
@@ -701,20 +705,20 @@ export const costsInCorrectOrder = () => {
 
 export const validateValueRequired = () => {
   cy.clickOn("Save and return to project costs");
-  cy.validationLink("Enter total cost.");
-  cy.paragraph("Enter total cost.");
+  cy.validationLink("Enter total cost of overheads.");
+  cy.paragraph("Enter total cost of overheads.");
 };
 
 export const validateAlphaNotAllowed = () => {
   cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("lorem");
-  cy.validationLink("Total cost must be a number");
-  cy.paragraph("Total cost must be a number");
+  cy.validationLink("Total cost of overheads must be a number");
+  cy.paragraph("Total cost of overheads must be a number");
 };
 
 export const validateThreeDecimalPlaces = () => {
   cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear().type("100.333");
-  cy.validationLink("Total cost must be 2 decimal places or fewer.");
-  cy.paragraph("Total cost must be 2 decimal places or fewer.");
+  cy.validationLink("Total cost of overheads must be 2 decimal places or fewer.");
+  cy.paragraph("Total cost of overheads must be 2 decimal places or fewer.");
 };
 
 export const calculateOverheadsDocsButton = () => {

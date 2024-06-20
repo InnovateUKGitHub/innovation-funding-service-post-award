@@ -73,6 +73,14 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   /**
    * This assumes the value in the current box is 35000 as per project creation script
    */
+
+  it("Should validate an empty 'New total eligible costs'", () => {
+    cy.getByAriaLabel("Labour").clear();
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.validationLink("Enter new total eligible costs.");
+    cy.paragraph("Enter new total eligible costs.");
+  });
+
   it(
     "Should confirm that decimals are saving and rounding correctly in conjunction with grant calculation.",
     reallocateDecimals,
@@ -147,6 +155,31 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   });
 
   it("Should verify the correct copy exists and the partner table", changeRemainingGrantPage);
+
+  it("Should validate an empty 'New remaining grant' field", () => {
+    cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear();
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.validationLink("Enter new remaining grant.");
+    cy.paragraph("Enter new remaining grant.");
+    cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type("-1000");
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.validationLink("New remaining grant must be £0.00 or more.");
+    cy.paragraph("New remaining grant must be £0.00 or more.");
+    ["lorem", "&", "!£%^&*"].forEach(input => {
+      cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type(input);
+      cy.validationLink("New remaining grant must be a number.");
+      cy.paragraph("New remaining grant must be a number.");
+    });
+    ["€", "$"].forEach(currency => {
+      cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type(currency);
+      cy.validationLink("New remaining grant must be in pounds (£).");
+      cy.paragraph("New remaining grant must be in pounds (£).");
+    });
+    cy.backLink("Back to summary").click();
+    cy.heading("Reallocate project costs");
+    cy.clickOn("Change remaining grant");
+    cy.heading("Change remaining grant");
+  });
 
   it(
     "Should update the New remaining grant values which in turn, update the New funding level percentages",

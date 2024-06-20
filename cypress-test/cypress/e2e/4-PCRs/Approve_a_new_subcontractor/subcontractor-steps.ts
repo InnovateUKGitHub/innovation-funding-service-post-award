@@ -53,8 +53,8 @@ export const approveSubcontractorPromptValidation = () => {
     "description of work to be carried out by the subcontractor.",
     "cost of work to be carried out by the new subcontractor.",
     "justification for including the subcontractor.",
-  ].forEach(pcrtype => {
-    cy.validationLink(`Enter the ${pcrtype}`);
+  ].forEach(msg => {
+    cy.validationLink(`Enter the ${msg}`);
   });
 };
 
@@ -236,11 +236,25 @@ export const briefDescriptionSaved = () => {
 
 export const validateNumericCurrency = () => {
   cy.get(".govuk-input__prefix").should("have.text", "£");
-  ["Lorem ipsum", "$^*", "*()", "/``/q", "99.999"].forEach(input => {
+  ["Lorem ipsum", "^*", "*()", "/``/q"].forEach(input => {
     cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(input);
     cy.button("Save and continue").click();
-    cy.validationLink("Enter a valid cost of work.");
-    cy.paragraph("Enter a valid cost of work.");
+    cy.validationLink("The cost of work to be carried out by the new subcontractor must be a number.");
+    cy.paragraph("The cost of work to be carried out by the new subcontractor must be a number.");
+    cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear();
+  });
+  ["$1", "€1"].forEach(currency => {
+    cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(currency);
+    cy.button("Save and continue").click();
+    cy.validationLink("The cost of work to be carried out by the new subcontractor must be in pounds (£).");
+    cy.paragraph("The cost of work to be carried out by the new subcontractor must be in pounds (£).");
+    cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear();
+  });
+  ["99.999", "8.888", "0.111"].forEach(input => {
+    cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(input);
+    cy.button("Save and continue").click();
+    cy.validationLink("The cost of work to be carried out by the new subcontractor must be 2 decimal places or fewer.");
+    cy.paragraph("The cost of work to be carried out by the new subcontractor must be 2 decimal places or fewer.");
     cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear();
   });
 };
@@ -248,8 +262,8 @@ export const validateNumericCurrency = () => {
 export const currencyLengthValidation = () => {
   cy.getByLabel("Cost of work to be carried out by the new subcontractor").type("9999999999999");
   cy.button("Save and continue").click();
-  cy.validationLink("Enter a real subcontractor cost.");
-  cy.paragraph("Enter a real subcontractor cost.");
+  cy.validationLink("The cost of work to be carried out by the new subcontractor must be £999,999,999,999.00 or less.");
+  cy.paragraph("The cost of work to be carried out by the new subcontractor must be £999,999,999,999.00 or less.");
   cy.getByLabel("Cost of work to be carried out by the new subcontractor").type("{moveToEnd}{backspace}");
   cy.button("Save and continue").click();
   cy.getListItemFromKey("Cost of work to be carried out by the new subcontractor", "£999,999,999,999.00");

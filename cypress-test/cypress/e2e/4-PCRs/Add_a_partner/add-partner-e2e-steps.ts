@@ -341,15 +341,23 @@ export const validateTurnoverInput = () => {
   ["99999999999999999999999999", "1000000000000", "1000000000001", "9000000000001"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Financial year end turnover must be 100000000000 or less.");
-    cy.paragraph("Financial year end turnover must be 100000000000 or less.");
+    cy.validationLink("Financial year end turnover must be £999,999,999,999.00 or less.");
+    cy.paragraph("Financial year end turnover must be £999,999,999,999.00 or less.");
   });
-  ["-1", "test copy", `"£$%%*"`].forEach(input => {
+  ["test copy", "%^()!"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Enter a valid financial year end turnover.");
-    cy.paragraph("Enter a valid financial year end turnover.");
+    cy.validationLink("Financial year end turnover must be a number.");
+    cy.paragraph("Financial year end turnover must be a number.");
   });
+  cy.get("#financialYearEndTurnover").clear().type("-1");
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Financial year end turnover must be £0.00 or more.");
+  cy.paragraph("Financial year end turnover must be £0.00 or more.");
+  cy.get("#financialYearEndTurnover").clear().type("$");
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Financial year end turnover must be in pounds (£).");
+  cy.paragraph("Financial year end turnover must be in pounds (£).");
 };
 
 export const completeDateAndTurnover = () => {
@@ -357,7 +365,7 @@ export const completeDateAndTurnover = () => {
   cy.wait(200);
   cy.getByLabel("Year").clear().type("2024");
   cy.wait(200);
-  cy.get("#financialYearEndTurnover").clear().type("300000");
+  cy.get("#financialYearEndTurnover").clear().type("£300000");
   cy.wait(200);
   cy.clickOn("Save and return to summary");
   cy.get("dt").contains("Project role");
@@ -875,8 +883,10 @@ export const accessOtherPublicFunding = () => {
 export const validateOtherSourceInput = () => {
   cy.clickOn("Add another source of funding");
   cy.clickOn("Save and return to summary");
-  cy.validationLink("Source of funding is required.");
-  cy.paragraph("Source of funding is required.");
+  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(valMsge => {
+    cy.validationLink(valMsge);
+    cy.paragraph(valMsge);
+  });
   [
     ["source of funding item 1", loremIpsum50Char],
     ["month funding is secured for item 1", loremIpsum20Char],
@@ -1173,14 +1183,15 @@ export const validateJesCostsFields = () => {
       });
 
     cy.button("Save and continue").click();
-    cy.validationLink("Cost must be less than £999,999,999,999.00.");
+    cy.validationLink("Cost must be £999,999,999,999.00 or less.");
     cy.get("tr")
       .eq(index + 1)
       .within(() => {
-        cy.paragraph("Cost must be less than £999,999,999,999.00.");
+        cy.paragraph("Cost must be £999,999,999,999.00 or less.");
         cy.getByAriaLabel(input).clear();
-        cy.paragraph("Enter a cost");
+        cy.paragraph("Enter cost.");
       });
+    cy.validationLink("Enter cost.");
   });
   cy.reload();
 };
