@@ -30,17 +30,20 @@ export const labourSchema = z.object({
 
 export type LabourSchema = z.infer<typeof labourSchema>;
 
-export const overheadSchema = evaluateObject((data: { overheadRate: PCRSpendProfileOverheadRate }) => {
-  return {
-    id: costIdValidation.nullable(),
-    overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
-    calculatedValue: getGenericCurrencyValidation({
-      label: "forms.pcr.addPartner.spendProfile.calculatedValue.label",
-      required: Number(data.overheadRate) === PCRSpendProfileOverheadRate.Calculated,
-    }),
-    button_submit: z.string(),
-  };
-}).superRefine((data, ctx) => {
+export const overheadSchema = evaluateObject(
+  (data: { overheadRate: PCRSpendProfileOverheadRate; button_submit: string }) => {
+    return {
+      id: costIdValidation.nullable(),
+      overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
+      calculatedValue: getGenericCurrencyValidation({
+        label: "forms.pcr.addPartner.spendProfile.calculatedValue.label",
+        required:
+          Number(data.overheadRate) === PCRSpendProfileOverheadRate.Calculated && data.button_submit === "submit",
+      }),
+      button_submit: z.string(),
+    };
+  },
+).superRefine((data, ctx) => {
   if (data.overheadRate === PCRSpendProfileOverheadRate.Unknown) {
     ctx.addIssue({
       code: ZodIssueCode.invalid_enum_value,

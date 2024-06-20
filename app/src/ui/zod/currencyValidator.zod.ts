@@ -29,8 +29,8 @@ export const getGenericCurrencyValidation = ({
   max?: number;
   min?: number;
   required?: boolean;
-}) => {
-  return z
+}) =>
+  z
     .string()
     .nullable()
     .superRefine((val, ctx) => {
@@ -123,4 +123,3 @@ export const getGenericCurrencyValidation = ({
       }
       return x;
     });
-};

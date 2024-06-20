@@ -2259,7 +2259,13 @@
           }
         },
         "financialYearEndTurnover": {
-          "label": "Financial year end turnover"
+          "label": "The financial year end turnover",
+          "errors": {
+            "invalid_type_received_null": "Enter a financial year end turnover.",
+            "invalid_type_received_string": "Enter a valid financial year end turnover.",
+            "too_small": "Enter a valid financial year end turnover.",
+            "too_big": "Financial year end turnover must be {{count}} or less."
+          }
         },
         "financialYearEndDate": {
           "errors": {
@@ -2273,13 +2279,13 @@
           "arrayType": {
             "description": {
               "errors": {
-                "too_small": "Source of funding is required.",
+                "too_small": "Enter source of funding.",
                 "invalid_type": "Source of funding is required."
               }
             },
             "dateSecured": {
               "errors": {
-                "custom": "Date secured is required.",
+                "custom": "Enter date secured.",
                 "invalid_date": "Date secured must be a date.",
                 "invalid_type": "Date secured must be a date."
               }
@@ -2742,7 +2748,10 @@
         "partners": {
           "arrayType": {
             "newRemainingGrant": {
-              "label": "New remaining grant"
+              "label": "New remaining grant",
+              "errors": {
+                "too_big": "The grant cannot exceed the remaining grant for any individual partner."
+              }
             }
           }
         },
