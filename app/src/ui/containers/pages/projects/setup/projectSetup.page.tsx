@@ -98,7 +98,10 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
 
       <form
         data-qa="projectSetupForm"
-        onSubmit={() => {
+        method="POST"
+        onSubmit={e => {
+          e.preventDefault();
+
           /*
            * First validate the partial partner dto to see if the necessary work has been completed
            */
