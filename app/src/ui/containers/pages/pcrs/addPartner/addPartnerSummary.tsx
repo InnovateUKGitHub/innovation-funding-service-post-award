@@ -34,9 +34,9 @@ export const AddPartnerSummary = () => {
   );
 
   const { handleSubmit, register, formState, watch } = useForm<AddPartnerSchema>({
+    // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
+    // @ts-expect-error it's so annoying but boolean type is freaking out over the literal false and true in the discriminated union
     defaultValues: {
-      // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
-      // @ts-expect-error it's so annoying but boolean type is freaking out over the literal false and true in the discriminated union
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       button_submit: "submit",
       ...pcrItem,

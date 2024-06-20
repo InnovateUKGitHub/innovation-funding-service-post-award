@@ -1,59 +1,55 @@
-import { z } from "zod";
+import { ZodRawShape, z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
-const projectManagerDetailsSchema = z.object({
-  contact2Email: z.string().min(1),
-  contact2Forename: z.string().min(1),
-  contact2Phone: z.string().min(1),
-  contact2Surname: z.string().min(1),
-});
-
-const submitAddPartnerSummarySchema = z.object({
-  button_submit: z.string(),
-  awardRate: z.number(),
-  isCommercialWork: z.boolean(),
-  contact1Email: z.string().min(1),
-  contact1Forename: z.string().min(1),
-  contact1Phone: z.string().min(1),
-  contact1Surname: z.string().min(1),
-  hasOtherFunding: z.boolean(),
-  organisationName: z.string(),
-  organisationType: z.string(),
-  participantSize: z.number().gt(0),
-  partnerType: z.number().gt(0),
-  projectCity: z.string().min(1),
-  projectLocation: z
-    .number()
-    .gt(0)
-    .transform(x => x as PCRProjectLocation),
-  projectPostcode: z.string().max(10).optional().nullable(),
-  projectRole: z.number().gt(0),
-});
+const submitAddPartnerSummarySchema = <
+  RegNumberAndAddress extends ZodRawShape,
+  IndustrialSize extends ZodRawShape,
+  ProjectManager extends ZodRawShape,
+  TsbReference extends ZodRawShape,
+>(
+  regNumberAndAddress: RegNumberAndAddress,
+  industrialSize: IndustrialSize,
+  projectManager: ProjectManager,
+  tsbReference: TsbReference,
+) =>
+  z.object({
+    organisationName: z.string(),
+    ...regNumberAndAddress,
+    participantSize: z.number().gt(0),
+    ...industrialSize,
+    projectCity: z.string().min(1),
+    projectLocation: z
+      .number()
+      .gt(0)
+      .transform(x => x as PCRProjectLocation),
+    projectPostcode: z.string().max(10).optional().nullable(),
+    contact1Forename: z.string().min(1),
+    contact1Surname: z.string().min(1),
+    contact1Phone: z.string().min(1),
+    contact1Email: z.string().min(1),
+    ...projectManager,
+    awardRate: z.number(),
+    button_submit: z.string(),
+    isCommercialWork: z.boolean(),
+    hasOtherFunding: z.boolean(),
+    organisationType: z.string(),
+    partnerType: z.number().gt(0),
+    projectRole: z.number().gt(0),
+    ...tsbReference,
+    markedAsComplete: z.literal(true),
+  });
 
 const saveAddPartnerSummarySchema = z.object({
-  button_submit: z.string(),
-  partnerType: z.number().gt(0),
-  projectRole: z.number().gt(0),
-  isCommercialWork: z.boolean(),
-  awardRate: z.number().nullable().optional(),
-  contact1Email: z.string().nullable().optional(),
-  contact1Forename: z.string().nullable().optional(),
-  contact1Phone: z.string().nullable().optional(),
-  contact1Surname: z.string().nullable().optional(),
-  contact2Email: z.string().nullable().optional(),
-  contact2Forename: z.string().nullable().optional(),
-  contact2Phone: z.string().nullable().optional(),
-  contact2Surname: z.string().nullable().optional(),
+  organisationName: z.string().nullable().optional(),
+  registrationNumber: z.string().nullable().optional(),
+  registeredAddress: z.string().nullable().optional(),
+  participantSize: z.number().nullable().optional(),
+  numberOfEmployees: z.number().nullable().optional(),
   financialYearEndDate: z.date().nullable().optional(),
   financialYearEndTurnover: z.number().nullable().optional(),
-  hasOtherFunding: z.boolean().nullable().optional(),
-  numberOfEmployees: z.number().nullable().optional(),
-  organisationName: z.string().nullable().optional(),
-  organisationType: z.string().min(1),
-  participantSize: z.number().nullable().optional(),
   projectCity: z.string().nullable().optional(),
   projectLocation: z
     .number()
@@ -61,21 +57,24 @@ const saveAddPartnerSummarySchema = z.object({
     .nullable()
     .optional(),
   projectPostcode: z.string().max(10).nullable().optional(),
-  registeredAddress: z.string().nullable().optional(),
-  registrationNumber: z.string().nullable().optional(),
+  contact1Forename: z.string().nullable().optional(),
+  contact1Surname: z.string().nullable().optional(),
+  contact1Phone: z.string().nullable().optional(),
+  contact1Email: z.string().nullable().optional(),
+  contact2Forename: z.string().nullable().optional(),
+  contact2Surname: z.string().nullable().optional(),
+  contact2Phone: z.string().nullable().optional(),
+  contact2Email: z.string().nullable().optional(),
+  awardRate: z.number().nullable().optional(),
+
+  button_submit: z.string(),
+  partnerType: z.number().gt(0),
+  projectRole: z.number().gt(0),
+  isCommercialWork: z.boolean(),
+  hasOtherFunding: z.boolean().nullable().optional(),
+  organisationType: z.string().min(1),
   tsbReference: z.string().nullable().optional(),
-});
-
-const academicPartnerSummarySchema = z.object({
-  tsbReference: z.string().min(1),
-});
-
-const industrialPartnerSummarySchema = z.object({
-  registeredAddress: z.string(),
-  registrationNumber: z.string(),
-  numberOfEmployees: z.number(),
-  financialYearEndDate: z.date(),
-  financialYearEndTurnover: z.number().min(0),
+  markedAsComplete: z.literal(false),
 });
 
 export const getAddPartnerSummarySchema = ({
@@ -85,32 +84,27 @@ export const getAddPartnerSummarySchema = ({
   projectRole: PCRProjectRole;
   organisationType: PCROrganisationType;
 }) => {
-  let markedAsCompleteSchema = submitAddPartnerSummarySchema;
+  const markedAsCompleteSchema = submitAddPartnerSummarySchema(
+    organisationType === PCROrganisationType.Industrial
+      ? { registrationNumber: z.string(), registeredAddress: z.string() }
+      : {},
+    organisationType === PCROrganisationType.Industrial
+      ? { numberOfEmployees: z.number(), financialYearEndDate: z.date(), financialYearEndTurnover: z.number().min(0) }
+      : {},
+    projectRole === PCRProjectRole.ProjectLead
+      ? {
+          contact2Email: z.string().min(1),
+          contact2Forename: z.string().min(1),
+          contact2Phone: z.string().min(1),
+          contact2Surname: z.string().min(1),
+        }
+      : {},
+    organisationType === PCROrganisationType.Academic ? { tsbReference: z.string().min(1) } : {},
+  );
 
-  if (projectRole === PCRProjectRole.ProjectLead) {
-    markedAsCompleteSchema = markedAsCompleteSchema.merge(projectManagerDetailsSchema);
-  }
-
-  if (organisationType === PCROrganisationType.Academic) {
-    markedAsCompleteSchema = markedAsCompleteSchema.merge(academicPartnerSummarySchema);
-  }
-
-  if (organisationType === PCROrganisationType.Industrial) {
-    markedAsCompleteSchema = markedAsCompleteSchema.merge(industrialPartnerSummarySchema);
-  }
-
-  return z.discriminatedUnion("markedAsComplete", [
-    z
-      .object({
-        markedAsComplete: z.literal(false),
-      })
-      .merge(saveAddPartnerSummarySchema),
-    z
-      .object({
-        markedAsComplete: z.literal(true),
-      })
-      .merge(markedAsCompleteSchema),
-  ]);
+  return z.discriminatedUnion("markedAsComplete", [saveAddPartnerSummarySchema, markedAsCompleteSchema]);
 };
 
-export type AddPartnerSchema = z.infer<ReturnType<typeof getAddPartnerSummarySchema>>;
+export type AddPartnerSchema = Omit<z.output<ReturnType<typeof getAddPartnerSummarySchema>>, "markedAsComplete"> & {
+  markedAsComplete: boolean;
+};
