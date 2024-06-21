@@ -545,7 +545,7 @@ const integerRangeInput = (min: number, max: number) =>
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validator: T) => {
-  return z.any().superRefine((data, ctx) => {
+  return z.any().transform((data, ctx) => {
     const objectSchema = z.object(validator(data));
 
     const results = objectSchema.safeParse(data);
@@ -556,7 +556,9 @@ const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validato
         .forEach(problem => {
           ctx.addIssue(problem);
         });
+      return z.NEVER;
     }
+    return results.data;
   }) as unknown as z.ZodObject<ReturnType<T>>;
 };
 
