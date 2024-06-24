@@ -1,30 +1,31 @@
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { RegisterButton, createRegisterButton } from "@framework/util/registerButton";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowDef } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { useContent } from "@ui/hooks/content.hook";
+import { noop } from "lodash";
+import { createContext } from "react";
+import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormWatch, useForm } from "react-hook-form";
 import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBackLink";
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
-import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
-import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
-import { createContext, useState } from "react";
-import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
-import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
 import {
   FormValues,
   useMonitoringReportWorkflowQuery,
   useOnMonitoringReportUpdateWorkflow,
 } from "./monitoringReportWorkflow.logic";
-import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormWatch, useForm } from "react-hook-form";
-import { noop } from "lodash";
-import { useRhfErrors } from "@framework/util/errorHelpers";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from "./monitoringReportWorkflow.zod";
-import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
-import { RegisterButton, createRegisterButton } from "@framework/util/registerButton";
-import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
+import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
 
 type MonitoringReportContextType = {
   projectId: ProjectId;
@@ -77,7 +78,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
   /**
    * fetchKey is incremented and reset whenever a gql update is required
    */
-  const [fetchKey, setFetchKey] = useState(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
 
   const { report, statusChanges, fragmentRef } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
 

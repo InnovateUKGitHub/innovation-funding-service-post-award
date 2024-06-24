@@ -24,6 +24,7 @@ import { Result } from "@ui/validation/result";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
+import { FetchKeyProvider } from "@ui/components/providers/FetchKeyProvider";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -72,19 +73,21 @@ const Client = () => {
 
   return (
     <Provider store={store}>
-      <ClientConfigProvider config={clientConfig}>
-        <ApiErrorContextProvider value={apiErrors}>
-          <FormErrorContextProvider value={formErrors}>
-            <MessageContextProvider preloadedMessages={preloadedMessages}>
-              <BrowserRouter>
-                <StoresProvider value={getStores()}>
-                  <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                </StoresProvider>
-              </BrowserRouter>
-            </MessageContextProvider>
-          </FormErrorContextProvider>
-        </ApiErrorContextProvider>
-      </ClientConfigProvider>
+      <FetchKeyProvider>
+        <ClientConfigProvider config={clientConfig}>
+          <ApiErrorContextProvider value={apiErrors}>
+            <FormErrorContextProvider value={formErrors}>
+              <MessageContextProvider preloadedMessages={preloadedMessages}>
+                <BrowserRouter>
+                  <StoresProvider value={getStores()}>
+                    <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                  </StoresProvider>
+                </BrowserRouter>
+              </MessageContextProvider>
+            </FormErrorContextProvider>
+          </ApiErrorContextProvider>
+        </ClientConfigProvider>
+      </FetchKeyProvider>
     </Provider>
   );
 };

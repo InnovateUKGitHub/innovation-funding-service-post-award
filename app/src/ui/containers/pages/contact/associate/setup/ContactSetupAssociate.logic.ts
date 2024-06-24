@@ -2,21 +2,22 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
 import { useRoutes } from "@ui/redux/routesProvider";
+import { Dispatch, SetStateAction } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { contactSetupAssociateQuery } from "./ContactSetupAssociate.query";
 import { ContactSetupAssociateSchemaType } from "./ContactSetupAssociate.zod";
 import { ContactSetupAssociateQuery } from "./__generated__/ContactSetupAssociateQuery.graphql";
-import { Dispatch, SetStateAction, useState } from "react";
 
 export type ContactSetupAssociateParams = {
   projectId: ProjectId;
 };
 
 const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociateParams) => {
-  const [fetchKey, setFetchKey] = useState(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
   const data = useLazyLoadQuery<ContactSetupAssociateQuery>(
     contactSetupAssociateQuery,
     { projectId },

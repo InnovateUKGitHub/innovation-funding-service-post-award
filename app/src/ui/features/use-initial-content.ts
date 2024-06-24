@@ -1,10 +1,11 @@
 import { Copy } from "@copy/Copy";
-import { Params } from "@ui/helpers/make-url";
-import { useEffect, useRef, useState } from "react";
-import { initialContentQuery } from "./InitialContent.query";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { InitialContentQuery } from "./__generated__/InitialContentQuery.graphql";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { Params } from "@ui/helpers/make-url";
+import { useEffect, useRef } from "react";
+import { initialContentQuery } from "./InitialContent.query";
+import { InitialContentQuery } from "./__generated__/InitialContentQuery.graphql";
 
 type CopyRef = {
   copy: Copy;
@@ -18,7 +19,7 @@ type CopyRef = {
 export function useInitContent(params?: Params): Copy {
   const projectId = params?.projectId ?? ("" as ProjectId);
 
-  const [fetchKey, setFetchKey] = useState<number>(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
 
   const { data } = useQuery<InitialContentQuery>(initialContentQuery, { projectId }, { fetchKey });
   const project = mapToProjectDto(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges?.[0]?.node, [

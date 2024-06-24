@@ -1,9 +1,16 @@
+import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { IAppError } from "@framework/types/IAppError";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+import { Results } from "@ui/validation/results";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import { Helmet } from "react-helmet";
+import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import {
   Mode,
   ProjectChangeRequestPrepareItemParams,
@@ -11,12 +18,6 @@ import {
 } from "./pcrItemWorkflowContainer";
 import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
-import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
-import { Results } from "@ui/validation/results";
-import { IAppError } from "@framework/types/IAppError";
-import { Helmet } from "react-helmet";
 import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
 
 type Data = {
@@ -96,7 +97,7 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
     throw new Error("missing a workflow in pcrItemWorkflow");
   }
 
-  const [fetchKey, setFetchKey] = useState<number>(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
   const [markedAsCompleteHasBeenChecked, setMarkedAsCompleteHasBeenChecked] = useState(
     props.pcrItem.status === PCRItemStatus.Complete,
   );

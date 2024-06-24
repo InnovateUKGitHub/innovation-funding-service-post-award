@@ -3,19 +3,20 @@ import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryList } from "@framework/types/CostCategory";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+import { useContext } from "react";
+import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
 import { LabourFormComponent } from "./labourFormComponent";
 import { MaterialsFormComponent } from "./materialsFormComponent";
 import { OtherCostsFormComponent } from "./otherCostsFormComponent";
 import { OverheadsFormComponent } from "./overheadsFormComponent";
+import { SpendProfileContext, useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { SubcontractingFormComponent } from "./subcontractingFormComponent";
 import { TravelAndSubsFormComponent } from "./travelAndSubsFormComponent";
-import { useContext, useState } from "react";
-import { SpendProfileContext, useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: ProjectId;
@@ -32,7 +33,7 @@ export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostPar
 const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BaseProps) => {
   const { itemId, pcrId, projectId, costCategoryId, costId, routes, messages } = props;
 
-  const [fetchKey, setFetchKey] = useState(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
 
   const { project, costCategory, spendProfile, pcrItem, cost, documents, fragmentRef } = useSpendProfileCostsQuery(
     projectId,

@@ -1,18 +1,19 @@
 import { ProjectRole } from "@framework/constants/project";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { PCRReasoningSummary } from "./pcrReasoningSummary";
+import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
 import {
   IReasoningWorkflowMetadata,
   reasoningWorkflowSteps,
 } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
-import { BaseProps, defineRoute } from "../../../containerBase";
-import { Mode, useOnSavePcrReasoning, usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
-import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
-import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { useState } from "react";
+import { BaseProps, defineRoute } from "../../../containerBase";
+import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 import { PcrReasoningContext, usePcrReasoningContext } from "./pcrReasoningContext";
+import { PCRReasoningSummary } from "./pcrReasoningSummary";
+import { Mode, useOnSavePcrReasoning, usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
@@ -22,7 +23,7 @@ export interface ProjectChangeRequestPrepareReasoningParams {
 
 const PcrReasoningWorkflow = (props: BaseProps & ProjectChangeRequestPrepareReasoningParams & { mode: Mode }) => {
   useScrollToTopSmoothly([props.step]);
-  const [fetchKey, setFetchKey] = useState<number>(0);
+  const [fetchKey, setFetchKey] = useFetchKey();
 
   const { pcr, documents, editableItemTypes, fragmentRef } = usePcrReasoningQuery(
     props.projectId,
