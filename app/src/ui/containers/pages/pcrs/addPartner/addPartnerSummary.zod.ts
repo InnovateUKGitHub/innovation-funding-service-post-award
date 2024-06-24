@@ -20,11 +20,11 @@ const submitAddPartnerSummarySchema = <
     ...regNumberAndAddress,
     participantSize: z.number().gt(0),
     ...industrialSize,
-    projectCity: z.string().min(1),
     projectLocation: z
       .number()
       .gt(0)
       .transform(x => x as PCRProjectLocation),
+    projectCity: z.string().min(1),
     projectPostcode: z.string().max(10).optional().nullable(),
     contact1Forename: z.string().min(1),
     contact1Surname: z.string().min(1),
