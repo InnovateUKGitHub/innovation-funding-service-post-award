@@ -46,6 +46,7 @@ export const AwardRateStep = () => {
     <PcrPage validationErrors={validationErrors}>
       <Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
         <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />
+        <br />
         <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
           <Fieldset>
             <FormGroup hasError={!!validationErrors?.awardRate}>
