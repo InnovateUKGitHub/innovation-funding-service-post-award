@@ -13,7 +13,9 @@ import {
 import { pcrTidyUp } from "common/pcrtidyup";
 import { loremIpsum159Char } from "common/lorem";
 import {
+  accessAndClearCompanyHouse,
   accessCompanyHouseValidationPersists,
+  backOutReAccessCompanyHouse,
   clearSavetoSummary,
   markAsCompletePromptValidation,
 } from "./add-partner-e2e-steps";
@@ -116,6 +118,13 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
   );
 
   it("Should access companies house again and assert validation persists", accessCompanyHouseValidationPersists);
+
+  it(
+    "Should back out to Request page then re-access and complete section having marked as complete again ensuring it saves",
+    backOutReAccessCompanyHouse,
+  );
+
+  it("Should re-access company house, clear contents of saved organisation and save blank", accessAndClearCompanyHouse);
 
   it("Should accept 159 characters", () => {
     cy.get("#search").clear().invoke("val", loremIpsum159Char).trigger("input");

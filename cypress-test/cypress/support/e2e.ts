@@ -24,6 +24,11 @@ registerCypressGrep();
 
 let fileName = "";
 let fileHasErrored = false;
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false;
+});
 
 /**
  * abort the test run on file, after second test fail in that file

@@ -1194,6 +1194,8 @@ export const validateJesCostsFields = () => {
     cy.validationLink("Enter cost.");
   });
   cy.reload();
+  cy.get("legend").contains("Project costs");
+  cy.getByAriaLabel("value of academic cost item Directly incurred - Staff").should("have.value", 0);
 };
 
 export const checkPcrForValidation = () => {
@@ -1257,4 +1259,40 @@ export const accessCompanyHouseValidationPersists = () => {
       cy.validationLink(validationMsg);
     },
   );
+};
+
+export const backOutReAccessCompanyHouse = () => {
+  cy.backLink("Back to request").click();
+  cy.heading("Request");
+  cy.get("a").contains("Add a partner").click();
+  cy.heading("Add a partner");
+  cy.getByLabel("I agree with this change.").click();
+  cy.button("Save and return to request").click();
+  cy.getListItemFromKey("Organisation name", "Edit").click();
+  cy.get("h2").contains("Company house");
+  cy.get("#search").type("Test");
+  cy.get("h2").contains("Companies house search results");
+  cy.getByLabel("TEST LIMITED").click();
+  cy.get(`input[id="organisationName"], [value="TEST LIMITED"]`);
+  cy.get(`input[id="registrationNumber"], [value="04301762"]`);
+  cy.get(`input[id="registeredAddress"], [value="The Resource Centre"]`);
+  cy.button("Save and return to summary").click();
+  cy.get("h2").contains("Organisation");
+  cy.getListItemFromKey("Organisation name", "TEST LIMITED");
+  cy.getListItemFromKey("Registration number", "04301762");
+  cy.getListItemFromKey("Registered address", "The Resource Centre");
+};
+
+export const accessAndClearCompanyHouse = () => {
+  cy.getListItemFromKey("Organisation name", "Edit").click();
+  cy.get("h2").contains("Company house");
+  cy.get(`input[id="organisationName"]`).clear();
+  cy.get(`input[id="registrationNumber"]`).clear();
+  cy.get(`input[id="registeredAddress"]`).clear();
+  cy.button("Save and return to summary").click();
+  cy.getByLabel("I agree with this change.").click();
+  cy.button("Save and return to request").click();
+  cy.validationLink("Enter an organisation name.");
+  cy.getListItemFromKey("Organisation name", "Edit").click();
+  cy.get("h2").contains("Company house");
 };
