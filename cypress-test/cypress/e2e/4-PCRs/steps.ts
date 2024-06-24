@@ -360,9 +360,17 @@ export const swindonUniResults = () => {
 };
 
 export const companyHouseAutofillAssert = () => {
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
+  const vals = [
+    ["organisationName", "A LIMITED"],
+    ["registrationNumber", "11790215"],
+    ["registeredAddress", "38 Springfield Road, Gillingham, Kent, England, ME7 1YJ"],
+  ] as const;
+
+  vals.forEach(([id, value]) => {
+    cy.get(`input#${id}`).should($input => {
+      expect($input.val()).to.include(value);
+    });
+  });
 };
 
 export const projectRoleRadios = () => {

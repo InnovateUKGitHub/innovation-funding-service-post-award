@@ -1,8 +1,7 @@
-import { visitApp } from "../../../common/visit";
+import { visitApp } from "common/visit";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
   shouldShowProjectTitle,
-  statusAndCommentsAccordion,
   pcrCommentBox,
   characterCount,
   correctPcrType,
@@ -76,11 +75,15 @@ import { learnFiles } from "common/fileComponentTests";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("PCR >  Add a partner > E2E: non-Je-S", () => {
+describe("PCR >  Add a partner > E2E: non-Je-S", { tags: "js-disabled" }, () => {
   before(() => {
-    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard", jsDisabled: true });
     pcrTidyUp("Add a partner");
     createTestFile("bigger_test", 33);
+  });
+
+  beforeEach(() => {
+    cy.disableJs();
   });
 
   after(() => {
@@ -89,7 +92,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   });
 
   it("Should create an Add partner PCR", () => {
-    cy.createPcr("Add a partner");
+    cy.createPcr("Add a partner", { jsDisabled: true });
   });
 
   it("Should show the correct PCR type", correctPcrType);
@@ -104,11 +107,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
     explainChangesReasoning,
   );
 
-  it("Should display accordions", statusAndCommentsAccordion);
-
   it("Should have comments box at the bottom of the page and allow text to be entered", pcrCommentBox);
-
-  it("Should count how many characters you have used", characterCount);
 
   it("Should attempt to submit prompting validation", attemptToPromptValidation);
 
@@ -127,12 +126,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   it("Should expand 'What are the different types' section and check contents are correct", theDifferentTypes);
 
-  it("Should click the Project role radio buttons in turn which will remove validation message", projectRoleRadio);
-
-  it(
-    "Should still show the partner validation until the Partner type radio buttons are selected",
-    partnerRadioValidation,
-  );
+  it("Should click the Project role radio buttons in turn", projectRoleRadio);
 
   it(
     "Should select role 'Collaborator' and type 'Business' then 'Save and return to summary'",
@@ -198,9 +192,9 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   /**
    * Size section
    */
-  it("Should display copy directing user to Select participant size and enter number of employees", () => {
-    ["Select a participant size.", "Enter the number of employees."].forEach(direction => {
-      cy.paragraph(direction);
+  it("Should display inputs for size of organisation", () => {
+    ["Size", "Number of full time employees"].forEach(label => {
+      cy.contains("legend", label);
     });
   });
 

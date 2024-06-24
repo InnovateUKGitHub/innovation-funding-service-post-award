@@ -3,6 +3,9 @@ import { documents, uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "common/seconds";
 import { testFile } from "common/testfileNames";
 import { loremIpsum256Char } from "common/lorem";
+import { Heading } from "typings/headings";
+import { Tile } from "typings/tiles";
+import { CostCategory } from "typings/costCategory";
 
 let date = new Date();
 let createdDay = date.getDate();
@@ -331,6 +334,7 @@ export const specialCharInput = () => {
 
 export const typeASearchResults = () => {
   cy.get("#search").clear().type("A").wait(500);
+  cy.clickOn("button", "Search");
   cy.get("h2").contains("Companies house search results");
   cy.getByLabel("A LIMITED").click();
 };
@@ -343,9 +347,18 @@ export const swindonUniResults = () => {
 };
 
 export const companyHouseAutofillAssert = () => {
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
+  cy.clickOn("Autofill result");
+  const vals = [
+    ["organisationName", "A LIMITED"],
+    ["registrationNumber", "11790215"],
+    ["registeredAddress", "38 Springfield Road, Gillingham, Kent, England, ME7 1YJ"],
+  ] as const;
+
+  vals.forEach(([id, value]) => {
+    cy.get(`input#${id}`).should($input => {
+      expect($input.val()).to.include(value);
+    });
+  });
 };
 
 export const projectRoleRadios = () => {
@@ -1870,7 +1883,7 @@ export const onHoldRequestDetails = () => {
   });
 };
 
-export const workingPreviousArrow = (name: string) => {
+export const workingPreviousArrow = (name: Heading | Tile | CostCategory) => {
   cy.getByQA("arrow-right").contains("Previous");
   cy.getByQA("arrow-right").contains(name).click();
   cy.heading(name);

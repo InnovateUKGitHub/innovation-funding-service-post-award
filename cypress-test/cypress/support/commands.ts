@@ -155,7 +155,8 @@ const tableHeader = (name: string) => {
 };
 
 const getTableRow = <T extends string>(category: T) => {
-  cy.get("table tr").contains(category).parent();
+  cy.log(`** getTableRow for ${category} **`);
+  cy.get("table tr").contains(category).parents("tr");
 };
 
 const getCellFromHeaderAndRow = <T extends string, U extends string>(header: T, row: U) => {
