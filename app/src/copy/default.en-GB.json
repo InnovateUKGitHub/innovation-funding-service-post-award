@@ -2188,6 +2188,7 @@
       "addPartner": {
         "awardRate": {
           "errors": {
+            "required": "Enter a funding level.",
             "too_small": "Enter a valid funding level.",
             "invalid_type": "Enter a valid funding level.",
             "too_big": "Enter a funding level up to {{count}}%.",
