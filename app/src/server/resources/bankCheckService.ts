@@ -9,6 +9,8 @@ import { configuration } from "@server/features/common/config";
 import { BadRequestError, ConfigurationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
+import { fetch } from "undici";
+import { mtlsFetchAgent } from "./mtlsFetchAgent";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -79,10 +81,11 @@ export class BankCheckService {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      dispatcher: mtlsFetchAgent,
     });
 
     if (request.ok) {
-      return await request.json();
+      return (await request.json()) as Promise<U>;
     } else {
       this.logger.error(
         "Failed querying Experian via Integration Platform",

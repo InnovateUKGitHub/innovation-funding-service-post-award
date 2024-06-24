@@ -33,6 +33,13 @@ export class TestConfig implements IConfig {
         private: "spd-private",
       },
     },
+    hydraMtls: {
+      certificationAuthority: "hydraMtls-ca",
+      public: "hydraMtls-public",
+      private: "hydraMtls-private",
+      serverName: "acc-ui",
+      rejectUnauthorised: false,
+    },
   };
 
   public basicAuth = { credentials: ["bananaman:hello"] };
