@@ -64,7 +64,8 @@ export const RemovePartnerStep = () => {
           <input type="hidden" name="form" value={FormTypes.PcrRemovePartnerStep} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrRemovePartner.headingSelectPartner)}</Legend>
-            <FormGroup>
+            <FormGroup hasError={!!validationErrors?.partnerId}>
+              <ValidationError error={validationErrors?.partnerId as RhfErrors} />
               <RadioList name="partnerId" register={register}>
                 {partnerOptions.map(partner => (
                   <Radio
