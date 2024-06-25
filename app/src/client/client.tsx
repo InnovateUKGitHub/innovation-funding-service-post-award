@@ -25,6 +25,8 @@ import { initaliseAction } from "@ui/redux/actions/initalise";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { FetchKeyProvider } from "@ui/components/providers/FetchKeyProvider";
+import { IClientUser } from "@framework/types/IUser";
+import { UserProvider } from "@ui/context/user";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -32,7 +34,7 @@ const serverState = processDto(window.__PRELOADED_STATE__) as unknown as Preload
 const formErrors = processDto(window.__PRELOADED_FORM_ERRORS__) as unknown as Result[] | undefined;
 const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as IAppError | null;
 const preloadedMessages = (processDto(window.__PRELOADED_MESSAGES__) || null) as unknown as string[] | null;
-
+const userConfig = processDto(window.__USER_CONFIG__) as unknown as IClientUser;
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
@@ -72,23 +74,25 @@ const Client = () => {
   }, []);
 
   return (
-    <Provider store={store}>
+    <UserProvider value={userConfig}>
       <FetchKeyProvider>
-        <ClientConfigProvider config={clientConfig}>
-          <ApiErrorContextProvider value={apiErrors}>
-            <FormErrorContextProvider value={formErrors}>
-              <MessageContextProvider preloadedMessages={preloadedMessages}>
-                <BrowserRouter>
-                  <StoresProvider value={getStores()}>
-                    <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                  </StoresProvider>
-                </BrowserRouter>
-              </MessageContextProvider>
-            </FormErrorContextProvider>
-          </ApiErrorContextProvider>
-        </ClientConfigProvider>
+        <Provider store={store}>
+          <ClientConfigProvider config={clientConfig}>
+            <ApiErrorContextProvider value={apiErrors}>
+              <FormErrorContextProvider value={formErrors}>
+                <MessageContextProvider preloadedMessages={preloadedMessages}>
+                  <BrowserRouter>
+                    <StoresProvider value={getStores()}>
+                      <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                    </StoresProvider>
+                  </BrowserRouter>
+                </MessageContextProvider>
+              </FormErrorContextProvider>
+            </ApiErrorContextProvider>
+          </ClientConfigProvider>
+        </Provider>
       </FetchKeyProvider>
-    </Provider>
+    </UserProvider>
   );
 };
 

@@ -41,6 +41,7 @@ import { MessageContextProvider } from "@ui/context/messages";
 import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
 import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
+import { UserProvider } from "@ui/context/user";
 
 interface IServerApp {
   requestUrl: string;
@@ -51,6 +52,7 @@ interface IServerApp {
   apiError?: IAppError;
   clientConfig: IClientConfig;
   messages?: string[] | null;
+  userConfig: IClientUser;
 }
 
 const logger = new Logger("HTML Render");
@@ -64,22 +66,25 @@ const ServerApp = ({
   apiError,
   clientConfig,
   messages,
+  userConfig,
 }: IServerApp) => (
-  <ClientConfigProvider config={clientConfig}>
-    <ApiErrorContextProvider value={apiError}>
-      <FormErrorContextProvider value={formError}>
-        <Provider store={store}>
-          <StaticRouter location={requestUrl}>
-            <StoresProvider value={stores}>
-              <MessageContextProvider preloadedMessages={messages}>
-                <App store={store} relayEnvironment={relayEnvironment} />
-              </MessageContextProvider>
-            </StoresProvider>
-          </StaticRouter>
-        </Provider>
-      </FormErrorContextProvider>
-    </ApiErrorContextProvider>
-  </ClientConfigProvider>
+  <UserProvider value={userConfig}>
+    <ClientConfigProvider config={clientConfig}>
+      <ApiErrorContextProvider value={apiError}>
+        <FormErrorContextProvider value={formError}>
+          <Provider store={store}>
+            <StaticRouter location={requestUrl}>
+              <StoresProvider value={stores}>
+                <MessageContextProvider preloadedMessages={messages}>
+                  <App store={store} relayEnvironment={relayEnvironment} />
+                </MessageContextProvider>
+              </StoresProvider>
+            </StaticRouter>
+          </Provider>
+        </FormErrorContextProvider>
+      </ApiErrorContextProvider>
+    </ClientConfigProvider>
+  </UserProvider>
 );
 
 /**
@@ -208,6 +213,7 @@ const serverRender =
           clientConfig,
           jsDisabled,
           messages: res.locals.messages,
+          userConfig: user,
         });
       });
 
@@ -242,6 +248,7 @@ const serverRender =
           apiError,
           clientConfig,
           jsDisabled,
+          userConfig: user,
           messages: res.locals.messages,
         }),
       );
@@ -301,6 +308,7 @@ function renderApp(props: {
   clientConfig: IClientConfig;
   jsDisabled: boolean;
   messages?: string[];
+  userConfig: IClientUser;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -318,6 +326,7 @@ function renderApp(props: {
     clientConfig: props.clientConfig,
     jsDisabled: props.jsDisabled,
     messages: props.messages,
+    userConfig: props.userConfig,
   });
 }
 
