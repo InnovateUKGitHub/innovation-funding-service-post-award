@@ -1,6 +1,6 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { shouldShowProjectTitle, navigateToPartnerCosts, addPartnerCostCat } from "../steps";
+import { shouldShowProjectTitle, addPartnerCostCat } from "../steps";
 
 import {
   checkAddLabourItem,
@@ -32,7 +32,7 @@ import {
   costsInCorrectOrder,
 } from "./costs-steps";
 
-import { addManyLines, deleteCost } from "./add-partner-e2e-steps";
+import { addManyLines, collaboratorAndBusiness, deleteCost, navigateToPartnerCosts } from "./add-partner-e2e-steps";
 
 const pm = "james.black@euimeabs.test";
 
@@ -55,6 +55,14 @@ describe("PCR > Add Partner > Business Costs", () => {
   after(() => {
     cy.deletePcr("328407");
   });
+
+  it("Should create an add partner PCR and access Add a partner", () => {
+    cy.createPcr("Add a partner");
+    cy.get("a").contains("Add a partner").click();
+    cy.heading("Add a partner");
+  });
+
+  it("Should complete as a collaborator and business", collaboratorAndBusiness);
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 

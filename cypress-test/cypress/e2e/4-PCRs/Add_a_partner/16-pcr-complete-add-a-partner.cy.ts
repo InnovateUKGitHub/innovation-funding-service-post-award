@@ -2,12 +2,12 @@ import { visitApp } from "../../../common/visit";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
   shouldShowProjectTitle,
-  navigateToPartnerCosts,
   addPartnerDocUpload,
   addPartnerSummaryTable,
   fundingLevelPercentage,
   validateFundingLevelInput,
   navigateToPartnerAgreement,
+  navigateToFundingLevel,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
@@ -37,15 +37,17 @@ describe("PCR > Add partner > Complete add a partner", { tags: "smoke" }, () => 
     deleteTestFile("11MB_3");
   });
 
-  it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
+  it("Should validate and navigate to the 'Funding level' page", navigateToFundingLevel);
 
-  it("Should click 'Save and continue'", () => {
-    cy.clickOn("Save and continue");
+  it("Should enter a figure in funding level field to remove validation", () => {
+    cy.get("#awardRate").type("100");
+    cy.getByQA("validation-summary").should("not.exist");
   });
 
-  it("Should click the 'No' radio button and then save and continue", () => {
-    cy.getByLabel("No").click();
-    cy.clickOn("Save and continue");
+  it("Should remove the figure and correct validation should return", () => {
+    cy.get("#awardRate").clear();
+    cy.validationLink("Enter a funding level.");
+    cy.paragraph("Enter a funding level.");
   });
 
   it("Should validate the Funding level input", validateFundingLevelInput);

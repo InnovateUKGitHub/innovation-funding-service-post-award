@@ -759,7 +759,7 @@ export const completeAddPartnerForMulti = () => {
   cy.get("h2").contains("Add person to organisation");
 };
 
-export const navigateToPartnerCosts = () => {
+export const navigateToFundingLevel = () => {
   cy.createPcr("Add a partner");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
@@ -767,8 +767,13 @@ export const navigateToPartnerCosts = () => {
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
   cy.clickOn("Save and return to summary");
-  cy.getListItemFromKey("Project costs for new partner", "Edit").click();
-  cy.get("h2").contains("Project costs for new partner");
+  cy.get("h2").contains("Organisation");
+  cy.getByLabel("I agree with this change.").click();
+  cy.button("Save and return to request").click();
+  cy.validationLink("Enter a funding level.");
+  cy.getListItemFromKey("Funding level", "Edit").click();
+  cy.get("h2").contains("Funding level");
+  cy.validationLink("Enter a funding level.");
 };
 
 export const pcrNewCostCatLineItem = () => {

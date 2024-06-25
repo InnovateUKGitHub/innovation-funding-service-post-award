@@ -1,6 +1,5 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { navigateToPartnerCosts } from "../steps";
 import {
   allowBatchFileUpload,
   allowLargerBatchFileUpload,
@@ -19,7 +18,13 @@ import {
   validationMessageCumulative,
 } from "common/fileComponentTests";
 import { seconds } from "common/seconds";
-import { completeLabourForm, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
+import {
+  collaboratorAndBusiness,
+  completeLabourForm,
+  displayCostCatTable,
+  navigateToCostCat,
+  navigateToPartnerCosts,
+} from "./add-partner-e2e-steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
   calculateOverheadsDocsButton,
@@ -52,6 +57,14 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
     deleteTestFile("11MB_2");
     deleteTestFile("11MB_3");
   });
+
+  it("Should create an add partner PCR and access Add a partner", () => {
+    cy.createPcr("Add a partner");
+    cy.get("a").contains("Add a partner").click();
+    cy.heading("Add a partner");
+  });
+
+  it("Should complete as a collaborator and business", collaboratorAndBusiness);
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 

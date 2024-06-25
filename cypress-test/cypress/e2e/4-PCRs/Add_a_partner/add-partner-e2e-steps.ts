@@ -126,7 +126,7 @@ export const saveAndReturnPromptingValidation = () => {
     "Enter a project city.",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -165,7 +165,7 @@ export const saveJeSReturnPromptingValidation = () => {
     "Enter a project manager email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -199,7 +199,7 @@ export const validateWithoutOrganisation = () => {
     "Enter a project city.",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -220,7 +220,7 @@ export const jeSValidationNoOrganisation = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -242,7 +242,7 @@ export const jeSValidationNoLocation = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -260,7 +260,7 @@ export const jeSValidationNoFCName = () => {
     "Enter a project manager surname.",
     "Enter a project manager phone number.",
     "Enter a project manager email address.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
     "Enter the TSB reference",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
@@ -273,7 +273,7 @@ export const jeSValidationNoFCName = () => {
 export const jeSValidationNoPMName = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
-  ["Enter a valid funding level.", "Enter the TSB reference"].forEach(valMsg => {
+  ["Enter a funding level.", "Enter the TSB reference"].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
   ["Funding level", "TSB reference"].forEach(section => {
@@ -309,7 +309,7 @@ export const validateWithoutSize = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -381,7 +381,7 @@ export const validateWithoutFY = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -436,7 +436,7 @@ export const validateWithoutLocation = () => {
     "Enter a finance contact surname.",
     "Enter a finance contact phone number.",
     "Enter a finance contact email address.",
-    "Enter a valid funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -518,7 +518,7 @@ export const completeNameForm = () => {
 export const validateWithoutName = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
-  ["Enter a valid funding level."].forEach(valMsg => {
+  ["Enter a funding level."].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
   [
@@ -1233,7 +1233,7 @@ export const markAsCompletePromptValidation = () => {
   cy.getByLabel("I agree with this change").check();
   cy.clickOn("Save and return to request");
   [
-    "Enter a valid funding level.",
+    "Enter a funding level.",
     "Enter a finance contact email address.",
     "Enter a finance contact name.",
     "Enter a finance contact phone number.",
@@ -1295,4 +1295,9 @@ export const accessAndClearCompanyHouse = () => {
   cy.validationLink("Enter an organisation name.");
   cy.getListItemFromKey("Organisation name", "Edit").click();
   cy.get("h2").contains("Company house");
+};
+
+export const navigateToPartnerCosts = () => {
+  cy.getListItemFromKey("Project costs for new partner", "Edit").click();
+  cy.get("h2").contains("Project costs for new partner");
 };

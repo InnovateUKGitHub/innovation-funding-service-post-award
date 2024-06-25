@@ -2,7 +2,6 @@ import { testFile } from "common/testfileNames";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  navigateToPartnerCosts,
   addPartnerDocUpload,
   pcrFileTable,
   otherFundingTable,
@@ -16,10 +15,12 @@ import { pcrTidyUp } from "common/pcrtidyup";
 import { learnFiles } from "common/fileComponentTests";
 import {
   clearValidationAddManyOther,
+  collaboratorAndBusiness,
   deleteCost,
   deleteOtherFundingLines,
   displayCostCatTable,
   navigateToCostCat,
+  navigateToPartnerCosts,
   otherFundingCorrectlyDisplayed,
   otherSourcesLineItemsSaved,
 } from "./add-partner-e2e-steps";
@@ -35,6 +36,14 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
   after(() => {
     cy.deletePcr("328407");
   });
+
+  it("Should create an add partner PCR and access Add a partner", () => {
+    cy.createPcr("Add a partner");
+    cy.get("a").contains("Add a partner").click();
+    cy.heading("Add a partner");
+  });
+
+  it("Should complete as a collaborator and business", collaboratorAndBusiness);
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
