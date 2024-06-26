@@ -109,6 +109,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.getTravelAndSubsCost(baseCostDto, costCategory.type, body);
       case CostCategoryGroupType.Other_Costs:
+      default:
         return this.getOtherCost(baseCostDto, costCategory.type);
     }
   }

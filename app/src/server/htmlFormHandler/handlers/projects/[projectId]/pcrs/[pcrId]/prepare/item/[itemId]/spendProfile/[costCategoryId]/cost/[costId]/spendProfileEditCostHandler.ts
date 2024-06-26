@@ -103,6 +103,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
       case CostCategoryGroupType.Other_Costs:
+      default:
         return this.updateOtherCost(cost as PCRSpendProfileOtherCostsDto, body);
     }
   }

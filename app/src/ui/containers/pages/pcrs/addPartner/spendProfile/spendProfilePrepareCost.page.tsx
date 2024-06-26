@@ -125,9 +125,8 @@ const SpendProfilePrepareFormSection = () => {
     case CostCategoryGroupType.Travel_And_Subsistence:
       return <TravelAndSubsFormComponent />;
     case CostCategoryGroupType.Other_Costs:
-      return <OtherCostsFormComponent />;
     default:
-      return null;
+      return <OtherCostsFormComponent />;
   }
 };
 

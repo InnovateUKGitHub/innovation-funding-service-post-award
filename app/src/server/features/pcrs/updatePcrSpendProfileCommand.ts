@@ -82,9 +82,8 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.mapTravelAndSubs(dto as PCRSpendProfileTravelAndSubsCostDto, init);
       case CostCategoryGroupType.Other_Costs:
-        return this.mapOtherCosts(dto, init);
       default:
-        throw new BadRequestError("Cost category type not supported");
+        return this.mapOtherCosts(dto, init);
     }
   }
 

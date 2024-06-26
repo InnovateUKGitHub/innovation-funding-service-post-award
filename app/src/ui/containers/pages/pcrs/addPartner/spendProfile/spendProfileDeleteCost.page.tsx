@@ -167,9 +167,8 @@ const SwitchComponent = ({
         />
       );
     case CostCategoryGroupType.Other_Costs:
-      return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
     default:
-      return null;
+      return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
   }
 };
 

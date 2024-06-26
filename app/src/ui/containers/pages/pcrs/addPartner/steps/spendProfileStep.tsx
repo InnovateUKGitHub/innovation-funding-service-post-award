@@ -1,19 +1,20 @@
-import { CostCategoryType } from "@framework/constants/enums";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
-import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
-import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
-import { useContent } from "@ui/hooks/content.hook";
-import { PcrPage } from "../../pcrPage";
-import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { useMemo } from "react";
+import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryList } from "@framework/types/CostCategory";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
-import { sumBy } from "lodash";
+import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { useContent } from "@ui/hooks/content.hook";
+import { sumBy } from "lodash";
+import { useMemo } from "react";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
+import { PcrPage } from "../../pcrPage";
+import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
+import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 
 export const SpendProfileStep = () => {
   const { getContent } = useContent();
@@ -34,7 +35,10 @@ export const SpendProfileStep = () => {
         .reduce((t, v) => t + (v.value || 0), 0),
     }));
     return {
-      overheadsCostId: spendProfile.costs.find(x => x.costCategory === CostCategoryType.Overheads)?.id ?? null,
+      overheadsCostId:
+        spendProfile.costs.find(
+          x => new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Overheads,
+        )?.id ?? null,
       costCategories,
       total: sumBy(costCategories, "cost"),
     };
@@ -122,10 +126,11 @@ const LinkToCostSummary = ({
   overheadCostId: CostId | null;
 }) => {
   const { mode, routes, itemId, pcrId, projectId } = usePcrWorkflowContext();
+  const costCategoryGroup = new CostCategoryList().fromId(costCategoryType);
 
   // If in review, render view summary links for all cost categories except overheads
   if (mode === "review") {
-    if (costCategoryType === CostCategoryType.Overheads) {
+    if (costCategoryGroup.group === CostCategoryGroupType.Overheads) {
       return null;
     }
     return (
@@ -142,7 +147,7 @@ const LinkToCostSummary = ({
     );
   }
   // For all other cost categories go to the summary page
-  if (costCategoryType !== CostCategoryType.Overheads) {
+  if (costCategoryGroup.group !== CostCategoryGroupType.Overheads) {
     return (
       <Link
         route={routes.pcrSpendProfileCostsSummary.getLink({
