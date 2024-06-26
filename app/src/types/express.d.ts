@@ -1,3 +1,5 @@
+import { ZodIssue } from "zod";
+
 declare namespace Express {
   export interface Locals {
     nonce: string;
@@ -5,5 +7,6 @@ declare namespace Express {
     isFormSuccess?: boolean;
     preloadedReduxActions: { type: string; payload?: unknown }[];
     messages: string[];
+    serverZodErrors: ZodIssue[];
   }
 }

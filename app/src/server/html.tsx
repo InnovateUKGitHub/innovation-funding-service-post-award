@@ -8,6 +8,7 @@ import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
 import { IClientConfig } from "../types/IClientConfig";
 import { IClientUser } from "@framework/types/IUser";
+import { ZodIssue } from "zod";
 
 let versionInformation = "";
 
@@ -54,6 +55,7 @@ export function renderHtml({
   jsDisabled,
   messages,
   userConfig,
+  serverZodErrors,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -66,6 +68,7 @@ export function renderHtml({
   jsDisabled: boolean;
   messages?: string[];
   userConfig: IClientUser;
+  serverZodErrors: ZodIssue[];
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -114,6 +117,7 @@ export function renderHtml({
             window.__PRELOADED_FORM_ERRORS__ = ${formError ? injectJson(formError) : undefined}
             window.__PRELOADED_API_ERRORS__ = ${apiError ? injectJson(apiError) : undefined}
             window.__USER_CONFIG__ = ${userConfig ? injectJson(userConfig) : undefined}
+            window.__PRELOADED_SERVER_ZOD_ERRORS__ = ${serverZodErrors ? injectJson(serverZodErrors) : undefined}
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

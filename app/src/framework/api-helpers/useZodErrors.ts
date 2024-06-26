@@ -1,5 +1,6 @@
 import { convertZodIssueToRhf } from "@framework/util/errorHelpers";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useServerZodError } from "@ui/context/server-zod-error";
 import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FieldErrors, FieldValues, UseFormSetError } from "react-hook-form";
 import { useStore } from "react-redux";
@@ -18,11 +19,9 @@ const useZodErrors = <T extends FieldValues>(
   formErrors: FieldErrors<T>,
   extraZodErrors?: ZodIssue[],
 ): RhfErrors => {
-  const store = useStore<RootState>();
   const { isServer } = useMounted();
-
+  const errors = useServerZodError();
   if (isServer) {
-    const errors = store.getState().zodError as ZodIssue[] | undefined;
     const collatedErrors: RhfErrors = {};
     convertZodIssueToRhf(errors, collatedErrors, setError);
     convertZodIssueToRhf(extraZodErrors, collatedErrors, setError);

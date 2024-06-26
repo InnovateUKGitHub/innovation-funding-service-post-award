@@ -4,6 +4,7 @@ import { Result } from "@ui/validation/result";
 import { i18n } from "i18next";
 import { SSRCache } from "react-relay-network-modern-ssr/node8/server";
 import { IClientUser } from "@framework/types/IUser";
+import { ZodIssue } from "zod";
 
 declare global {
   interface Window {
@@ -16,5 +17,6 @@ declare global {
     __PRELOADED_API_ERRORS__: IAppError;
     __PRELOADED_MESSAGES__: string[] | undefined;
     __USER_CONFIG__: IClientUser;
+    __PRELOADED_SERVER_ZOD_ERRORS__: ZodIssue[] | undefined;
   }
 }

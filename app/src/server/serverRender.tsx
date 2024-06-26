@@ -42,6 +42,8 @@ import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
 import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 import { UserProvider } from "@ui/context/user";
+import { ZodIssue } from "zod";
+import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 
 interface IServerApp {
   requestUrl: string;
@@ -53,6 +55,7 @@ interface IServerApp {
   clientConfig: IClientConfig;
   messages?: string[] | null;
   userConfig: IClientUser;
+  serverZodErrors: ZodIssue[];
 }
 
 const logger = new Logger("HTML Render");
@@ -67,24 +70,27 @@ const ServerApp = ({
   clientConfig,
   messages,
   userConfig,
+  serverZodErrors,
 }: IServerApp) => (
-  <UserProvider value={userConfig}>
-    <ClientConfigProvider config={clientConfig}>
-      <ApiErrorContextProvider value={apiError}>
-        <FormErrorContextProvider value={formError}>
-          <Provider store={store}>
-            <StaticRouter location={requestUrl}>
-              <StoresProvider value={stores}>
-                <MessageContextProvider preloadedMessages={messages}>
-                  <App store={store} relayEnvironment={relayEnvironment} />
-                </MessageContextProvider>
-              </StoresProvider>
-            </StaticRouter>
-          </Provider>
-        </FormErrorContextProvider>
-      </ApiErrorContextProvider>
-    </ClientConfigProvider>
-  </UserProvider>
+  <ServerZodErrorProvider value={serverZodErrors}>
+    <UserProvider value={userConfig}>
+      <ClientConfigProvider config={clientConfig}>
+        <ApiErrorContextProvider value={apiError}>
+          <FormErrorContextProvider value={formError}>
+            <Provider store={store}>
+              <StaticRouter location={requestUrl}>
+                <StoresProvider value={stores}>
+                  <MessageContextProvider preloadedMessages={messages}>
+                    <App store={store} relayEnvironment={relayEnvironment} />
+                  </MessageContextProvider>
+                </StoresProvider>
+              </StaticRouter>
+            </Provider>
+          </FormErrorContextProvider>
+        </ApiErrorContextProvider>
+      </ClientConfigProvider>
+    </UserProvider>
+  </ServerZodErrorProvider>
 );
 
 /**
@@ -146,6 +152,8 @@ const serverRender =
           // Dispatch the Zod issues we have into Redux, such that they are
           // available on page load.
           store.dispatch(setZodError(err.zodIssues));
+
+          res.locals.serverZodErrors = err.zodIssues;
 
           // If a DTO is provided, add to Redux state so that it may be used
           // to repopulate the user's input form.
@@ -214,6 +222,7 @@ const serverRender =
           jsDisabled,
           messages: res.locals.messages,
           userConfig: user,
+          serverZodErrors: res.locals.serverZodErrors,
         });
       });
 
@@ -250,6 +259,7 @@ const serverRender =
           jsDisabled,
           userConfig: user,
           messages: res.locals.messages,
+          serverZodErrors: res.locals.serverZodErrors,
         }),
       );
     } catch (renderError: unknown) {
@@ -309,6 +319,7 @@ function renderApp(props: {
   jsDisabled: boolean;
   messages?: string[];
   userConfig: IClientUser;
+  serverZodErrors: ZodIssue[];
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -327,6 +338,7 @@ function renderApp(props: {
     jsDisabled: props.jsDisabled,
     messages: props.messages,
     userConfig: props.userConfig,
+    serverZodErrors: props.serverZodErrors,
   });
 }
 
