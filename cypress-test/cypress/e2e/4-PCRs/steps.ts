@@ -197,15 +197,6 @@ export const pcrFileTable = (fileName: string, uploadedBy: string) => {
   });
 };
 
-export const learnOrganisations = () => {
-  cy.get("span").contains("What are the different types?").click();
-  ["Business", "Research", "Research and technology organisation (RTO)", "Public sector, charity or non Je-S"].forEach(
-    organisation => {
-      cy.paragraph(organisation);
-    },
-  );
-};
-
 export const completeNewPartnerInfoAsBus = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -292,14 +283,14 @@ export const organisationRadios = () => {
   cy.getByLabel("Public Sector, charity or non Je-S").click();
 };
 
-export const saveContinueSaveSummary = () => {
-  cy.contains("Save and continue");
-  cy.contains("Save and return to summary");
-};
-
 export const stateAidAddPartnerHeading = () => {
   cy.heading("Add a partner");
   cy.get("h2").contains("State aid eligibility");
+};
+
+export const saveContinueSaveSummary = () => {
+  cy.contains("Save and continue");
+  cy.contains("Save and return to summary");
 };
 
 export const nonAidAddPartnerHeading = () => {
@@ -976,9 +967,9 @@ export const otherFundingTable = () => {
 export const addSourceOfFundingValidation = () => {
   cy.button("Add another source of funding").click().wait(500);
   cy.clickOn("Save and continue");
-  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(valMsge => {
-    cy.validationLink(valMsge);
-    cy.paragraph(valMsge);
+  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(message => {
+    cy.validationLink(message);
+    cy.paragraph(message);
   });
   cy.getCellFromHeaderAndRowNumber("Funding amount (£)", 1, `[aria-label="funding amount for item 0"]`)
     .type("error")

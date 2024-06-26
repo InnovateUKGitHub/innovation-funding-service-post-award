@@ -9,6 +9,7 @@ import {
   giveUsInfoTodo,
   explainChangesReasoning,
   swindonUniResults,
+  requestHeadingDetailsHeading,
 } from "../steps";
 import {
   validateFileUpload,
@@ -77,6 +78,18 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
 
   it("Should show the correct PCR type", correctPcrType);
 
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
+
+  it("Should show the project title", shouldShowProjectTitle);
+
+  it("Should display a 'Request' heading and 'Details' heading", requestHeadingDetailsHeading);
+
+  it("Should show the Request number", () => {
+    cy.get("dt.govuk-summary-list__key").contains("Request number");
+  });
+
   it(
     "Should show a 'Give us information' section with the Add a partner PCR type listed and 'TO DO' listed beneath",
     giveUsInfoTodo,
@@ -131,9 +144,9 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
    */
   it("Should access 'Eligibility of aid declaration' section", () => {
     cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
-    cy.get("h2").contains("Non-aid funding");
+    cy.get("h2").contains("State aid eligibility");
     cy.paragraph(
-      "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
+      "If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer.",
     );
   });
 

@@ -50,6 +50,9 @@ export const saveAndSummary = () => {
 };
 
 export const theDifferentTypes = () => {
+  cy.get("#hint-for-partner-type").contains(
+    "If the new partner's organisation type is not listed, contact your monitoring officer.",
+  );
   cy.get("span").contains("What are the different types?").click();
   [
     "Business",
@@ -87,7 +90,7 @@ export const partnerRadioValidation = () => {
 };
 
 export const collaboratorAndBusiness = () => {
-  ["Collaborator", "Business"].forEach(radio => {
+  ["Collaborator", "Yes", "Business"].forEach(radio => {
     cy.getByLabel(radio).click();
   });
   cy.clickOn("Save and return to summary");
@@ -884,9 +887,9 @@ export const accessOtherPublicFunding = () => {
 export const validateOtherSourceInput = () => {
   cy.clickOn("Add another source of funding");
   cy.clickOn("Save and return to summary");
-  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(valMsge => {
-    cy.validationLink(valMsge);
-    cy.paragraph(valMsge);
+  ["Enter source of funding.", "Enter date secured.", "Enter funding amount."].forEach(valMsg => {
+    cy.validationLink(valMsg);
+    cy.paragraph(valMsg);
   });
   [
     ["source of funding item 1", loremIpsum50Char],
