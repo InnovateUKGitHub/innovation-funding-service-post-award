@@ -23,8 +23,6 @@ interface ICostCategoryTypeCompetitionOverridable extends ICostCategoryType {
  * Contains information on how to process the cost category,
  * such as which guidance message to use, what input fields it may share and
  * what ID the CostCategory has.
- *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
 class CostCategoryItem {
   id: CostCategoryType;
@@ -338,6 +336,69 @@ const items: ICostCategoryTypeCompetitionOverridable[] = [
     name: "Loans costs for Industrial participants",
     guidanceMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
     showGuidance: false,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Other_Costs,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Labour,
+    name: "R & D labour",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Labour,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Overheads,
+    name: "R & D overheads",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Overheads,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Materials,
+    name: "R & D materials",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Materials,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Subcontracting,
+    name: "R & D subcontracting",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Subcontracting,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Travel_And_Subsistence,
+    name: "R & D travel and subsistence",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Travel_And_Subsistence,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Capital_Usage,
+    name: "R & D capital usage",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
+    showPreGuidanceWarning: false,
+    group: CostCategoryGroupType.Capital_Usage,
+  },
+  {
+    id: CostCategoryType.Research_and_Development_Other_Costs,
+    name: "R & D other costs",
+    guidanceMessageKey: x => x.spendProfileMessages.costGuidanceLabour,
+    showGuidance: true,
     preGuidanceWarningMessageKey: x => x.spendProfileMessages.costGuidanceDefault,
     showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,

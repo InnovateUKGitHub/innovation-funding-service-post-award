@@ -1,4 +1,4 @@
-import { CostCategoryType, CostCategoryGroupType } from "@framework/constants/enums";
+import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import {
   PCRSpendProfileAcademicCostDto,
@@ -25,30 +25,32 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   }
 
   private getCostValidator(cost: PCRSpendProfileCostDto) {
-    switch (cost.costCategory) {
-      case CostCategoryType.Academic:
+    const ccInfo = new CostCategoryList().fromId(cost.costCategory);
+    switch (ccInfo.group) {
+      case CostCategoryGroupType.Academic:
         return new PCRAcademicCostDtoValidator(cost, this.showValidationErrors);
-      case CostCategoryType.Labour:
+      case CostCategoryGroupType.Labour:
         return new PCRLabourCostDtoValidator(cost as PCRSpendProfileLabourCostDto, this.showValidationErrors);
-      case CostCategoryType.Overheads:
+      case CostCategoryGroupType.Overheads:
         return new PCROverheadsCostDtoValidator(cost as PCRSpendProfileOverheadsCostDto, this.showValidationErrors);
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         return new PCRMaterialsCostDtoValidator(cost as PCRSpendProfileMaterialsCostDto, this.showValidationErrors);
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         return new PCRSubcontractingCostDtoValidator(
           cost as PCRSpendProfileSubcontractingCostDto,
           this.showValidationErrors,
         );
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         return new PCRCapitalUsageCostDtoValidator(
           cost as PCRSpendProfileCapitalUsageCostDto,
           this.showValidationErrors,
         );
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         return new PCRTravelAndSubsCostDtoValidator(
           cost as PCRSpendProfileTravelAndSubsCostDto,
           this.showValidationErrors,
         );
+      case CostCategoryGroupType.Other_Costs:
       default:
         return new PCROtherCostsDtoValidator(cost, this.showValidationErrors);
     }

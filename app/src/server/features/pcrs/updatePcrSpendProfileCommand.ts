@@ -82,9 +82,8 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.mapTravelAndSubs(dto as PCRSpendProfileTravelAndSubsCostDto, init);
       case CostCategoryGroupType.Other_Costs:
-        return this.mapOtherCosts(dto, init);
       default:
-        throw new BadRequestError("Cost category type not supported");
+        return this.mapOtherCosts(dto, init);
     }
   }
 
@@ -180,7 +179,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   ) {
     // Validation has already ensured there is at most one overheads cost
     const overheadsCostDto = this.spendProfileDto.costs.find(
-      x => x.costCategory === CostCategoryType.Overheads,
+      x => new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Overheads,
     ) as PCRSpendProfileOverheadsCostDto;
     if (!overheadsCostDto || !overheadsCostDto.overheadRate) return;
 
@@ -202,11 +201,17 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     costCategories: CostCategoryDto[],
     items: PcrSpendProfileEntity[],
   ) {
-    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour);
-    if (!labourCostCategory) throw new Error(`Cannot find labourCostCategory matching ${CostCategoryType.Labour}`);
+    const labourCostCategory = costCategories.find(
+      x => new CostCategoryList().fromId(x.type).group === CostCategoryGroupType.Labour,
+    );
+    if (!labourCostCategory) throw new Error(`Cannot find any labour cost categories`);
 
     const labourCosts = items
-      .filter(x => x.costCategory === CostCategoryType.Labour)
+      .filter(x =>
+        x.costCategory
+          ? new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Labour
+          : undefined,
+      )
       .reduce((acc, item) => acc + (item.value || 0), 0);
 
     switch (overheadsCostDto.overheadRate) {
@@ -321,7 +326,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 
     const mappedEntities = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]
-      .filter(x => x.costCategory !== CostCategoryType.Overheads)
+      .filter(x => new CostCategoryList().fromId(x.costCategory).group !== CostCategoryGroupType.Overheads)
       .map(x => this.mapPcrSpendProfileDtoToEntity(context, x));
 
     this.addOverheads(costCategories, mappedEntities, overheadsRates);

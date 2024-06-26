@@ -1,4 +1,4 @@
-import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryGroupType } from "@framework/constants/enums";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
@@ -26,6 +26,7 @@ import {
   NewForecastTableFragment$key,
   NewForecastTableFragment$data,
 } from "./__generated__/NewForecastTableFragment.graphql";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -199,9 +200,13 @@ const mapToForecastTableDto = ({
     });
   }
 
-  const labourCostCategory = profileTotalCostCategories.find(x => x.type === CostCategoryType.Labour);
+  const labourCostCategory = profileTotalCostCategories.find(
+    x => new CostCategoryList().fromId(x.type).group === CostCategoryGroupType.Labour,
+  );
 
   for (const costCategory of profileTotalCostCategories) {
+    const costCategoryInfo = new CostCategoryList().fromId(costCategory.type);
+
     const costCategoryProfiles: CostCategoryCellData[] = [];
     let total = 0;
     let isCalculatedCostCategory = false;
@@ -243,7 +248,11 @@ const mapToForecastTableDto = ({
       let calculatedField = false;
 
       if (forecast && forecastProfile) {
-        if (costCategory.type === CostCategoryType.Overheads && labourProfile && partner.overheadRate !== null) {
+        if (
+          costCategoryInfo.group === CostCategoryGroupType.Overheads &&
+          labourProfile &&
+          partner.overheadRate !== null
+        ) {
           // TODO: Round the values in a way that is agreed by the business.
           // We shouldn't be having weird rounding here.
 

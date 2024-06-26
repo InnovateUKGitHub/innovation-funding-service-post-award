@@ -82,6 +82,14 @@ export enum CostCategoryType {
   Indirect_costs,
   Knowledge_base_supervisor,
   Loans_costs_for_Industrial_participants,
+
+  Research_and_Development_Labour,
+  Research_and_Development_Overheads,
+  Research_and_Development_Materials,
+  Research_and_Development_Subcontracting,
+  Research_and_Development_Travel_And_Subsistence,
+  Research_and_Development_Capital_Usage,
+  Research_and_Development_Other_Costs,
 }
 
 export enum CostCategoryGroupType {

@@ -8,8 +8,9 @@ import { ReactNode, useContext, useMemo } from "react";
 import { AddPartnerStepNames } from "../addPartnerWorkflow";
 import { PcrWorkflow, WorkflowPcrType } from "../../pcrWorkflow";
 import { PCRStepType } from "@framework/constants/pcrConstants";
-import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryGroupType } from "@framework/constants/enums";
 import { SpendProfileContext } from "./spendProfileCosts.logic";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 export const SpendProfilePreparePage = ({
   validationErrors,
@@ -31,8 +32,13 @@ export const SpendProfilePreparePage = ({
     costCategoryType,
     fragmentRef,
   } = useContext(SpendProfileContext);
+  const isOverheads = useMemo(
+    () => new CostCategoryList().fromId(costCategory.type).group === CostCategoryGroupType.Overheads,
+    [costCategory],
+  );
+
   const backLink = useMemo(() => {
-    if (costCategory.type === CostCategoryType.Overheads) {
+    if (isOverheads) {
       return routes.pcrPrepareItem.getLink({
         itemId,
         pcrId,
@@ -65,7 +71,7 @@ export const SpendProfilePreparePage = ({
       <Section
         title={x => x.pages.pcrSpendProfilePrepareCost.sectionTitleCost({ costCategoryName: costCategory.name })}
       >
-        {costCategoryType.id === CostCategoryType.Overheads && (
+        {isOverheads && (
           <Info
             summary={
               <Content

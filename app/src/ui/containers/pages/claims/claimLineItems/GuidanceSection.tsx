@@ -1,6 +1,7 @@
-import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
+import { CostCategoryList } from "@framework/types/CostCategory";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -16,7 +17,8 @@ const GuidanceSection = ({ project, costCategory }: GuidanceSectionProps) => {
   const { getContent } = useContent();
   const { isClient, isServer } = useMounted();
   const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
-  const isOtherCosts = costCategory.type === CostCategoryType.Other_Costs;
+  const costCategoryInfo = new CostCategoryList(project.competitionType).fromId(costCategory.type);
+  const isOtherCosts = costCategoryInfo.group === CostCategoryGroupType.Other_Costs;
   const isVAT = costCategory.type === CostCategoryType.VAT;
 
   return (

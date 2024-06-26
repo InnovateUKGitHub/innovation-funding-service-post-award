@@ -1,4 +1,4 @@
-import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
@@ -31,6 +31,7 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 const isOverheadsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -113,7 +114,9 @@ export const OverheadsFormComponent = ({}) => {
   const totalLabourCosts = useMemo(
     () =>
       sumBy(
-        spendProfile.costs.filter(x => x.costCategory === CostCategoryType.Labour),
+        spendProfile.costs.filter(
+          x => new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Labour,
+        ),
         x => x?.value ?? 0,
       ),
     [spendProfile],

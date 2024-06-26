@@ -1,4 +1,4 @@
-import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PartnerStatus } from "@framework/constants/partner";
 import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
@@ -26,6 +26,7 @@ import { Percentage } from "../../../atoms/Percentage/percentage";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { TD, TH } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -794,11 +795,15 @@ function getOverheadRate(
     x => x.competitionType === project.competitionType && x.organisationType === organisationType,
   );
 
-  const overheadsCategory = filteredCostCategories.find(x => x.type === CostCategoryType.Overheads);
+  const overheadsCategory = filteredCostCategories.find(
+    x => new CostCategoryList().fromId(x.type).group === CostCategoryGroupType.Overheads,
+  );
 
   if (!overheadsCategory) return null;
 
-  const labourCategory = filteredCostCategories.find(x => x.type === CostCategoryType.Labour);
+  const labourCategory = filteredCostCategories.find(
+    x => new CostCategoryList().fromId(x.type).group === CostCategoryGroupType.Labour,
+  );
 
   const overheadsData = data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === cell.periodId);
 
