@@ -110,7 +110,7 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
       if (project.claimsToReview) {
         messages.push(getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.claimsToReview })));
       }
-      if (project.claimsOverdue) {
+      if (project.partners.some(x => x.claimStatus === PartnerClaimStatus.ClaimsOverdue)) {
         const content = getContent(x => x.projectMessages.claimOverdueMessage);
         if (!messages.includes(content)) messages.push(content);
       }
