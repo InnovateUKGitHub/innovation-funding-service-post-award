@@ -56,6 +56,7 @@ export function renderHtml({
   messages,
   userConfig,
   serverZodErrors,
+  preloadedServerInput,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -69,6 +70,7 @@ export function renderHtml({
   messages?: string[];
   userConfig: IClientUser;
   serverZodErrors: ZodIssue[];
+  preloadedServerInput: AnyObject | undefined;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -118,6 +120,7 @@ export function renderHtml({
             window.__PRELOADED_API_ERRORS__ = ${apiError ? injectJson(apiError) : undefined}
             window.__USER_CONFIG__ = ${userConfig ? injectJson(userConfig) : undefined}
             window.__PRELOADED_SERVER_ZOD_ERRORS__ = ${serverZodErrors ? injectJson(serverZodErrors) : undefined}
+            window.__PRELOADED_SERVER_INPUT__ = ${preloadedServerInput ? injectJson(preloadedServerInput) : undefined}
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

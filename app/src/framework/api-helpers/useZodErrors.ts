@@ -1,9 +1,8 @@
 import { convertZodIssueToRhf } from "@framework/util/errorHelpers";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useServerInputContext } from "@ui/context/server-input";
 import { useServerZodError } from "@ui/context/server-zod-error";
-import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FieldErrors, FieldValues, UseFormSetError } from "react-hook-form";
-import { useStore } from "react-redux";
 import { ZodIssue } from "zod";
 
 /**
@@ -38,10 +37,8 @@ const useZodErrors = <T extends FieldValues>(
  * @returns The contents of the previous form that was submitted
  */
 const useServerInput = <T extends FieldValues>() => {
-  const store = useStore<RootState>();
-  const previousInput = store.getState().previousReactHookFormInput as T | null;
-
-  return previousInput;
+  const previousInput = useServerInputContext();
+  return previousInput as T | null;
 };
 
 export { useZodErrors, useServerInput };

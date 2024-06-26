@@ -44,6 +44,7 @@ import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 import { UserProvider } from "@ui/context/user";
 import { ZodIssue } from "zod";
 import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
+import { ServerInputContextProvider } from "@ui/context/server-input";
 
 interface IServerApp {
   requestUrl: string;
@@ -56,6 +57,7 @@ interface IServerApp {
   messages?: string[] | null;
   userConfig: IClientUser;
   serverZodErrors: ZodIssue[];
+  preloadedServerInput: AnyObject | undefined;
 }
 
 const logger = new Logger("HTML Render");
@@ -71,26 +73,29 @@ const ServerApp = ({
   messages,
   userConfig,
   serverZodErrors,
+  preloadedServerInput,
 }: IServerApp) => (
-  <ServerZodErrorProvider value={serverZodErrors}>
-    <UserProvider value={userConfig}>
-      <ClientConfigProvider config={clientConfig}>
-        <ApiErrorContextProvider value={apiError}>
-          <FormErrorContextProvider value={formError}>
-            <Provider store={store}>
-              <StaticRouter location={requestUrl}>
-                <StoresProvider value={stores}>
-                  <MessageContextProvider preloadedMessages={messages}>
-                    <App store={store} relayEnvironment={relayEnvironment} />
-                  </MessageContextProvider>
-                </StoresProvider>
-              </StaticRouter>
-            </Provider>
-          </FormErrorContextProvider>
-        </ApiErrorContextProvider>
-      </ClientConfigProvider>
-    </UserProvider>
-  </ServerZodErrorProvider>
+  <ServerInputContextProvider value={preloadedServerInput}>
+    <ServerZodErrorProvider value={serverZodErrors}>
+      <UserProvider value={userConfig}>
+        <ClientConfigProvider config={clientConfig}>
+          <ApiErrorContextProvider value={apiError}>
+            <FormErrorContextProvider value={formError}>
+              <Provider store={store}>
+                <StaticRouter location={requestUrl}>
+                  <StoresProvider value={stores}>
+                    <MessageContextProvider preloadedMessages={messages}>
+                      <App store={store} relayEnvironment={relayEnvironment} />
+                    </MessageContextProvider>
+                  </StoresProvider>
+                </StaticRouter>
+              </Provider>
+            </FormErrorContextProvider>
+          </ApiErrorContextProvider>
+        </ClientConfigProvider>
+      </UserProvider>
+    </ServerZodErrorProvider>
+  </ServerInputContextProvider>
 );
 
 /**
@@ -157,7 +162,10 @@ const serverRender =
 
           // If a DTO is provided, add to Redux state so that it may be used
           // to repopulate the user's input form.
-          if (err.dto) store.dispatch(setPreviousReactHookFormInput(err.dto));
+          if (err.dto) {
+            store.dispatch(setPreviousReactHookFormInput(err.dto));
+            res.locals.preloadedServerInput = err.dto;
+          }
         } else if (err instanceof FormHandlerError) {
           // Mark the error message that we obtained into the Redux store.
           if (err?.code === ErrorCode.VALIDATION_ERROR) {
@@ -223,6 +231,7 @@ const serverRender =
           messages: res.locals.messages,
           userConfig: user,
           serverZodErrors: res.locals.serverZodErrors,
+          preloadedServerInput: res.locals.preloadedServerInput,
         });
       });
 
@@ -260,6 +269,7 @@ const serverRender =
           userConfig: user,
           messages: res.locals.messages,
           serverZodErrors: res.locals.serverZodErrors,
+          preloadedServerInput: res.locals.preloadedServerInput,
         }),
       );
     } catch (renderError: unknown) {
@@ -320,6 +330,7 @@ function renderApp(props: {
   messages?: string[];
   userConfig: IClientUser;
   serverZodErrors: ZodIssue[];
+  preloadedServerInput: AnyObject | undefined;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -339,6 +350,7 @@ function renderApp(props: {
     messages: props.messages,
     userConfig: props.userConfig,
     serverZodErrors: props.serverZodErrors,
+    preloadedServerInput: props.preloadedServerInput,
   });
 }
 

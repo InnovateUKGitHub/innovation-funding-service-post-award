@@ -29,6 +29,7 @@ import { IClientUser } from "@framework/types/IUser";
 import { UserProvider } from "@ui/context/user";
 import { ZodIssue } from "zod";
 import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
+import { ServerInputContextProvider } from "@ui/context/server-input";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -38,6 +39,7 @@ const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unkno
 const preloadedMessages = (processDto(window.__PRELOADED_MESSAGES__) || null) as unknown as string[] | null;
 const userConfig = processDto(window.__USER_CONFIG__) as unknown as IClientUser;
 const serverZodErrors = processDto(window.__PRELOADED_SERVER_ZOD_ERRORS__ || []) as unknown as ZodIssue[];
+const serverInput = processDto(window.__PRELOADED_SERVER_INPUT__ || null) as unknown as AnyObject;
 
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
@@ -78,27 +80,29 @@ const Client = () => {
   }, []);
 
   return (
-    <ServerZodErrorProvider value={serverZodErrors}>
-      <UserProvider value={userConfig}>
-        <FetchKeyProvider>
-          <Provider store={store}>
-            <ClientConfigProvider config={clientConfig}>
-              <ApiErrorContextProvider value={apiErrors}>
-                <FormErrorContextProvider value={formErrors}>
-                  <MessageContextProvider preloadedMessages={preloadedMessages}>
-                    <BrowserRouter>
-                      <StoresProvider value={getStores()}>
-                        <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                      </StoresProvider>
-                    </BrowserRouter>
-                  </MessageContextProvider>
-                </FormErrorContextProvider>
-              </ApiErrorContextProvider>
-            </ClientConfigProvider>
-          </Provider>
-        </FetchKeyProvider>
-      </UserProvider>
-    </ServerZodErrorProvider>
+    <ServerInputContextProvider value={serverInput ?? {}}>
+      <ServerZodErrorProvider value={serverZodErrors}>
+        <UserProvider value={userConfig}>
+          <FetchKeyProvider>
+            <Provider store={store}>
+              <ClientConfigProvider config={clientConfig}>
+                <ApiErrorContextProvider value={apiErrors}>
+                  <FormErrorContextProvider value={formErrors}>
+                    <MessageContextProvider preloadedMessages={preloadedMessages}>
+                      <BrowserRouter>
+                        <StoresProvider value={getStores()}>
+                          <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                        </StoresProvider>
+                      </BrowserRouter>
+                    </MessageContextProvider>
+                  </FormErrorContextProvider>
+                </ApiErrorContextProvider>
+              </ClientConfigProvider>
+            </Provider>
+          </FetchKeyProvider>
+        </UserProvider>
+      </ServerZodErrorProvider>
+    </ServerInputContextProvider>
   );
 };
 

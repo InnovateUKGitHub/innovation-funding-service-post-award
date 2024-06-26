@@ -18,5 +18,6 @@ declare global {
     __PRELOADED_MESSAGES__: string[] | undefined;
     __USER_CONFIG__: IClientUser;
     __PRELOADED_SERVER_ZOD_ERRORS__: ZodIssue[] | undefined;
+    __PRELOADED_SERVER_INPUT__?: AnyObject;
   }
 }
