@@ -102,6 +102,9 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
         return this.updateCapitalUsageCost(cost as PCRSpendProfileCapitalUsageCostDto, body);
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
+      case CostCategoryGroupType.Academic:
+      case CostCategoryGroupType.Other_Funding:
+        return;
       case CostCategoryGroupType.Other_Costs:
       default:
         return this.updateOtherCost(cost as PCRSpendProfileOtherCostsDto, body);

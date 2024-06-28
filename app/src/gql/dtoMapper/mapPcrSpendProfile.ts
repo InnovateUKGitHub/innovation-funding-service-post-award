@@ -211,6 +211,8 @@ export class SpendProfile {
         return this.mapCapitalUsageCosts(spendProfiles, costCategoryType.id);
       case CostCategoryGroupType.Travel_And_Subsistence:
         return this.mapTravelAndSubsCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Other_Funding:
+        return [];
       case CostCategoryGroupType.Other_Costs:
       default:
         return this.mapOtherCosts(spendProfiles, costCategoryType.id);
