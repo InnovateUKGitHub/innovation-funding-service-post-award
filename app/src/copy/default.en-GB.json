@@ -2814,7 +2814,7 @@
       "lineItems": {
         "arrayType": {
           "value": {
-            "label": "Costs"
+            "label": "Cost"
           },
           "description": {
             "errors": {
