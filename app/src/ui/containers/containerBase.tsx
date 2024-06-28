@@ -4,7 +4,6 @@ import { IRoutes } from "@ui/routing/routeConfig";
 import { Copy } from "@copy/Copy";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
-import { IStores } from "@ui/redux/storesProvider";
 import { Authorisation } from "@framework/types/authorisation";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IClientUser } from "@framework/types/IUser";
@@ -68,7 +67,7 @@ interface IRouteOptions<TParams> {
   getParams: (route: RouteState) => TParams;
 
   accessControl?: (auth: Authorisation, params: TParams, accessControlOptions: IAccessControlOptions) => boolean;
-  getTitle?: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
+  getTitle?: (getTitleArgs: { params: TParams; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
   };

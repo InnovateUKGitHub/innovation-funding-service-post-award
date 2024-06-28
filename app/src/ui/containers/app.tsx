@@ -22,7 +22,6 @@ import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/p
 import { SuspensePageLoader } from "@ui/components/bjss/loading";
 import { routeTransition } from "@ui/redux/actions/common/transitionActions";
 import { RoutesProvider } from "@ui/redux/routesProvider";
-import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
@@ -40,7 +39,6 @@ interface IAppProps {
  * Handles providers, helmet and layout
  */
 function AppView({ currentRoute, dispatch }: IAppProps) {
-  const stores = useStores();
   const location = useLocation();
 
   const { params } = useMemo(
@@ -56,7 +54,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const config = useClientConfig();
   const { messages } = useMessageContext();
 
-  const titlePayload = currentRoute.getTitle?.({ params, stores, content });
+  const titlePayload = currentRoute.getTitle?.({ params, content });
 
   const navigationType = useNavigationType();
 

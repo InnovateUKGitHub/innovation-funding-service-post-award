@@ -537,7 +537,11 @@
       },
       "backLink": "Back to claims",
       "costsAndGrantSummaryTitle": "Summary",
-      "sectionTitleComments": "Comments"
+      "sectionTitleComments": "Comments",
+      "htmlPrepareTitle": "Add documents for {{ title, lowercase }}",
+      "defaultHtmlTitle": "Add documents",
+      "displayPrepareTitle": "{{title}} documents",
+      "defaultDisplayTitle": "Claim documents"
     },
     "claimForecast": {
       "backLink": "Back to claims documents",
