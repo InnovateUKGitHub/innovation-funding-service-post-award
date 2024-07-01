@@ -179,7 +179,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   ) {
     // Validation has already ensured there is at most one overheads cost
     const overheadsCostDto = this.spendProfileDto.costs.find(
-      x => x.costCategory === CostCategoryType.Overheads,
+      x => new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Overheads,
     ) as PCRSpendProfileOverheadsCostDto;
     if (!overheadsCostDto || !overheadsCostDto.overheadRate) return;
 
@@ -320,7 +320,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 
     const mappedEntities = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]
-      .filter(x => x.costCategory !== CostCategoryType.Overheads)
+      .filter(x => new CostCategoryList().fromId(x.costCategory).group !== CostCategoryGroupType.Overheads)
       .map(x => this.mapPcrSpendProfileDtoToEntity(context, x));
 
     this.addOverheads(costCategories, mappedEntities, overheadsRates);
