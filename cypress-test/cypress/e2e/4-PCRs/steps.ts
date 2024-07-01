@@ -883,6 +883,28 @@ export const addPartnerCostCat = () => {
   ].forEach(cat => cy.tableCell(cat));
 };
 
+export const combinedCapitalAddPartnerCostCat = () => {
+  cy.tableHeader("Category");
+  cy.tableHeader("Cost (£)");
+  [
+    "R & D labour",
+    "R & D overheads",
+    "R & D materials",
+    "R & D capital usage",
+    "R & D subcontracting",
+    "R & D travel and subsistence",
+    "R & D other costs",
+    "Capital purchase (inf)",
+    "Property capital costs (inf)",
+    "Other capital costs (other)",
+    "Capitalised labour (inf)",
+    "Property capital costs (other)",
+    "Other capital costs (inf)",
+    "Capital purchase (other)",
+    "Capitalised labour (other)",
+  ].forEach(cat => cy.tableCell(cat));
+};
+
 export const ktpAddPartnerCostCat = () => {
   cy.tableHeader("Category");
   cy.tableHeader("Cost (£)");
@@ -1534,7 +1556,7 @@ export enum PcrItemType {
   PutAProjectOnHold = "Put project on hold",
 }
 
-const pcrArray = [
+export const pcrArray = [
   PcrItemType.ReallocateProjectCosts,
   PcrItemType.RemoveAPartner,
   PcrItemType.AddAPartner,
