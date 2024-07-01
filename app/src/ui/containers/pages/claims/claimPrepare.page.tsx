@@ -14,7 +14,6 @@ import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTa
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimPreparePageData } from "./claimPrepare.logic";
-import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useContent } from "@ui/hooks/content.hook";
 import { ClaimRetentionMessage } from "@ui/components/atomicDesign/organisms/claims/ClaimRetentionMessage/ClaimRetentionMessage";
@@ -74,8 +73,6 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
             })
           }
         />
-
-        <ClaimDrawdownTable {...data.project} requiredPeriod={props.periodId} />
 
         <Accordion>
           <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
