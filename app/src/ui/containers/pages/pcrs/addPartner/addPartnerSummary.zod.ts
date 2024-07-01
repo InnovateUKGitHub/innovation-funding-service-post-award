@@ -33,7 +33,6 @@ const submitAddPartnerSummarySchema = <
     contact1Email: z.string().min(1),
     ...projectManager,
     awardRate: z.number(),
-    button_submit: z.string(),
     isCommercialWork: z.boolean(),
     hasOtherFunding: z.boolean(),
     organisationType: z.string(),
