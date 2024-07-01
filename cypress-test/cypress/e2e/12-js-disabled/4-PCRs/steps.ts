@@ -340,7 +340,8 @@ export const typeASearchResults = () => {
 };
 
 export const swindonUniResults = () => {
-  cy.get("#searchJesOrganisations").clear().type("University").wait(500);
+  cy.get("#searchJesOrganisations").clear().type("University");
+  cy.clickOn("Search");
   cy.get("h2").contains("Je-S search results");
   cy.getByLabel("University of Bristol");
   cy.getByLabel("Swindon University").click();

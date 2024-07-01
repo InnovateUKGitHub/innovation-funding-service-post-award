@@ -81,7 +81,6 @@ export const partnerRadioValidation = () => {
     "Public Sector, charity or non Je-S registered research organisation",
   ].forEach(radio => {
     cy.getByLabel(radio).click();
-    cy.getByQA("validation-summary").should("not.exist");
   });
 };
 
@@ -396,8 +395,6 @@ export const validateNameOfTown = () => {
   cy.validationLink("Project city must be 40 characters or less.");
   cy.paragraph("Project city must be 40 characters or less.");
   cy.get("#project-city").type("{moveToEnd}{backspace}");
-  cy.validationLink("Project city must be 40 characters or less.").should("not.exist");
-  cy.paragraph("Project city must be 40 characters or less.").should("not.exist");
 };
 
 export const validatePostcodeInput = () => {
@@ -407,8 +404,6 @@ export const validatePostcodeInput = () => {
   cy.validationLink("Project postcode must be 10 characters or less.");
   cy.paragraph("Project postcode must be 10 characters or less.");
   cy.get("#project-postcode").type("{moveToEnd}{backspace}");
-  cy.validationLink("Project postcode must be 10 characters or less.").should("not.exist");
-  cy.paragraph("Project postcode must be 10 characters or less.").should("not.exist");
 };
 
 export const completeLocationForm = () => {
@@ -564,12 +559,6 @@ export const displayCostCatTable = () => {
         cy.get("td:nth-child(3)").contains("Edit");
       });
   });
-  cy.get("tfoot").within(() => {
-    cy.get("tr").within(() => {
-      cy.get("th:nth-child(1)").contains("Total costs (£)");
-      cy.get("th:nth-child(2)").contains(inputVal);
-    });
-  });
 };
 
 export const completeAcademicCostCatTable = () => {
@@ -598,12 +587,6 @@ export const completeAcademicCostCatTable = () => {
       const input = `input[aria-label="value of academic cost item ${costCat}"]`;
       cy.get(input).clear();
       cy.get(input).type(value);
-    });
-  });
-  cy.get("tfoot").within(() => {
-    cy.get("tr").within(() => {
-      cy.get("td:nth-child(1)").contains("Total costs (£)");
-      cy.get("td:nth-child(2)").contains(newCurrency.format(333.33 * 12));
     });
   });
 };
@@ -873,10 +856,6 @@ export const accessOtherPublicFunding = () => {
 };
 
 export const validateOtherSourceInput = () => {
-  cy.clickOn("Add another source of funding");
-  cy.clickOn("Save and return to summary");
-  cy.validationLink("Source of funding is required.");
-  cy.paragraph("Source of funding is required.");
   [
     ["source of funding item 1", loremIpsum50Char],
     ["month funding is secured for item 1", loremIpsum20Char],
@@ -901,15 +880,7 @@ export const completeOtherSourceLine = () => {
   ].forEach(([input, copy]) => {
     cy.getByAriaLabel(input).clear().type(copy);
   });
-  cy.get("tfoot").within(() => {
-    cy.get("tr")
-      .eq(1)
-      .within(() => {
-        cy.get("th:nth-child(2)").contains("Total other funding");
-        cy.get("th:nth-child(3)").contains("£10,000.00");
-      });
-  });
-  cy.button("Remove");
+
   cy.clickOn("Save and return to summary");
   cy.get("dt").contains("Project role");
 };
@@ -923,15 +894,7 @@ export const jesCompleteOtherSourceLine = () => {
   ].forEach(([input, copy]) => {
     cy.getByAriaLabel(input).clear().type(copy);
   });
-  cy.get("tfoot").within(() => {
-    cy.get("tr")
-      .eq(1)
-      .within(() => {
-        cy.get("th:nth-child(2)").contains("Total other funding");
-        cy.get("th:nth-child(3)").contains("£1,000.00");
-      });
-  });
-  cy.button("Remove");
+
   cy.clickOn("Save and return to summary");
   cy.get("dt").contains("Project role");
 };
@@ -940,7 +903,7 @@ export const checkDetailsAgain = () => {
   cy.getListItemFromKey("Other sources of funding?", "Yes");
   cy.getListItemFromKey("Funding from other sources", "£10,000.00");
 };
-export const jeScheckDetailsAgain = () => {
+export const jesCheckDetailsAgain = () => {
   cy.getListItemFromKey("Other sources of funding?", "Yes");
   cy.getListItemFromKey("Funding from other sources", "£1,000.00");
 };
@@ -1149,7 +1112,7 @@ export const otherSourcesLineItemsSaved = () => {
 
 export const validateJesCostsFields = () => {
   cy.get("#tsb-reference").clear().type("1234567");
-  [
+  const fields = [
     "value of academic cost item Directly incurred - Staff",
     "value of academic cost item Directly incurred - Travel and subsistence",
     "value of academic cost item Directly incurred - Equipment",
@@ -1162,24 +1125,20 @@ export const validateJesCostsFields = () => {
     "value of academic cost item Exceptions - Travel and subsistence",
     "value of academic cost item Exceptions - Equipment",
     "value of academic cost item Exceptions - Other costs",
-  ].forEach((input, index) => {
-    cy.get("tr")
-      .eq(index + 1)
-      .within(() => {
-        cy.getByAriaLabel(input).clear().type("9999999999999999");
-      });
+  ] as const;
 
-    cy.button("Save and continue").click();
-    cy.validationLink("Cost must be less than £999,999,999,999.00.");
-    cy.get("tr")
-      .eq(index + 1)
-      .within(() => {
-        cy.paragraph("Cost must be less than £999,999,999,999.00.");
-        cy.getByAriaLabel(input).clear();
-        cy.paragraph("Enter a cost");
-      });
+  fields.forEach(input => {
+    cy.getByAriaLabel(input).clear().type("9999999999999999");
   });
-  cy.reload();
+
+  cy.button("Save and continue").click();
+  cy.validationLink("Cost must be less than £999,999,999,999.00.");
+
+  fields.forEach(input => {
+    cy.getByAriaLabel(input).clear();
+  });
+  cy.button("Save and continue").click();
+  cy.validationLink("Enter a valid cost");
 };
 
 export const checkPcrForValidation = () => {

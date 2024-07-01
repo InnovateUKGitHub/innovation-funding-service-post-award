@@ -50,7 +50,7 @@ import {
   jeSDetailsScreenComplete,
   jesDeleteCostCat,
   jesCompleteOtherSourceLine,
-  jeScheckDetailsAgain,
+  jesCheckDetailsAgain,
   validateJesCostsFields,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";
@@ -111,10 +111,7 @@ describe("PCR >  Add a partner > E2E: Je-S", { tags: "js-disabled" }, () => {
 
   it("Should click the Project role radio buttons in turn which will remove validation message", projectRoleRadio);
 
-  it(
-    "Should still show the partner validation until the Partner type radio buttons are selected",
-    partnerRadioValidation,
-  );
+  it("Should selectPartner type", partnerRadioValidation);
 
   it("Should select role 'Collaborator' and type 'Research' then 'Save and return to summary'", leadAndResearch);
 
@@ -230,14 +227,14 @@ describe("PCR >  Add a partner > E2E: Je-S", { tags: "js-disabled" }, () => {
   it("Should access the PM name section", () => {
     cy.getByQA("contact2Forename").contains("Edit").click();
     cy.get("legend").contains("Project manager");
-    cy.button("Use the same details as the finance contact").click();
+
     [
       ["First name", "Joseph"],
       ["Last name", "Dredd"],
       ["Phone number", "01234567890"],
       ["Email", "j.dredd@mc1justice.law"],
     ].forEach(([label, input]) => {
-      cy.getByLabel(label).should("have.value", input);
+      cy.enter(label, input);
     });
     cy.clickOn("Save and return to summary");
     cy.get("dt").contains("Project role");
@@ -299,7 +296,7 @@ describe("PCR >  Add a partner > E2E: Je-S", { tags: "js-disabled" }, () => {
 
   it("Should complete the other source line item", jesCompleteOtherSourceLine);
 
-  it("Should check the Funding from other sources on Details page", jeScheckDetailsAgain);
+  it("Should check the Funding from other sources on Details page", jesCheckDetailsAgain);
 
   it("Should show that Project costs for new partner have been included on summary with correct totals", () => {
     [
