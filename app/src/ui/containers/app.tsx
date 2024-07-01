@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { Helmet } from "react-helmet";
-import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
-import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { RelayEnvironmentProvider } from "react-relay";
 import { AnyRouteDefinition } from "@ui/containers/containerBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
@@ -20,7 +19,6 @@ import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthCon
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
 import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
 import { SuspensePageLoader } from "@ui/components/bjss/loading";
-import { routeTransition } from "@ui/redux/actions/common/transitionActions";
 import { RoutesProvider } from "@ui/redux/routesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
@@ -28,9 +26,9 @@ import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { useMessageContext } from "@ui/context/messages";
 import { BasePropsContext } from "@framework/api-helpers/useBaseProps";
+import { useServerErrorContext } from "@ui/context/server-error";
 
 interface IAppProps {
-  dispatch: Dispatch;
   currentRoute: AnyRouteDefinition;
 }
 
@@ -38,7 +36,7 @@ interface IAppProps {
  * `<AppView />`
  * Handles providers, helmet and layout
  */
-function AppView({ currentRoute, dispatch }: IAppProps) {
+function AppView({ currentRoute }: IAppProps) {
   const location = useLocation();
 
   const { params } = useMemo(
@@ -56,8 +54,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
   const titlePayload = currentRoute.getTitle?.({ params, content });
 
-  const navigationType = useNavigationType();
-
   const baseProps: BaseProps = {
     messages,
     config,
@@ -65,16 +61,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     currentRoute,
     ...params,
   };
-
-  const isAlreadyMounted = useRef(false);
-
-  useEffect(() => {
-    if (isAlreadyMounted.current) {
-      dispatch(routeTransition(navigationType));
-    } else {
-      isAlreadyMounted.current = true;
-    }
-  }, [location.pathname, navigationType, dispatch]);
 
   const PageContainer = currentRoute.container;
 
@@ -117,7 +103,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 }
 
 interface AppRoute {
-  store: Store;
   relayEnvironment: RelayModernEnvironment;
 }
 
@@ -125,10 +110,9 @@ interface AppRoute {
  * `<App />`
  * Handles routes and error boundary
  */
-export function App({ store, relayEnvironment }: AppRoute) {
+export function App({ relayEnvironment }: AppRoute) {
   const routesList = getRoutes();
-  const error = store.getState().globalError;
-
+  const error = useServerErrorContext();
   return (
     <RelayEnvironmentProvider environment={relayEnvironment}>
       <ErrorBoundary
@@ -142,18 +126,14 @@ export function App({ store, relayEnvironment }: AppRoute) {
           <MountedProvider>
             <Routes>
               {error ? (
-                <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={store.dispatch} />} />
+                <Route path="*" element={<AppView currentRoute={ErrorRoute} />} />
               ) : (
                 <>
                   {routesList.map(([routeKey, route]) => (
-                    <Route
-                      key={routeKey}
-                      path={route.routePath}
-                      element={<AppView currentRoute={route} dispatch={store.dispatch} />}
-                    />
+                    <Route key={routeKey} path={route.routePath} element={<AppView currentRoute={route} />} />
                   ))}
 
-                  <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={store.dispatch} />} />
+                  <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} />} />
                 </>
               )}
             </Routes>

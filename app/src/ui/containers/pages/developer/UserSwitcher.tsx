@@ -10,7 +10,6 @@ import { H4, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.varian
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
-import { useStores } from "@ui/redux/storesProvider";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
@@ -21,6 +20,7 @@ import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQ
 import { decode as decodeHTMLEntities } from "html-entities";
 import { DeveloperCurrentUsername } from "@ui/components/atomicDesign/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
 import { PlainList } from "@ui/components/atomicDesign/atoms/List/list";
+import { useUserContext } from "@ui/context/user";
 
 /**
  * Get the link to the current page
@@ -203,7 +203,8 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 const UserSwitcherProjectSelector = () => {
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
-  const user = useStores().users.getCurrentUser();
+  const user = useUserContext();
+
   const { projectId: currentRouteProjectId } = useParams();
 
   const {
@@ -341,7 +342,7 @@ const UserSwitcherReset = () => {
 const UserSwitcherManualEmailEntry = () => {
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
-  const { email: initialEmailState } = useStores().users.getCurrentUser();
+  const { email: initialEmailState } = useUserContext();
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
 
   return (

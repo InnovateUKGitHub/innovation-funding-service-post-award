@@ -2,7 +2,6 @@ import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
 import pkg from "../../package.json";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { PreloadedState } from "redux";
 import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
@@ -47,7 +46,6 @@ const injectJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003
 export function renderHtml({
   HelmetInstance,
   html,
-  preloadedState = {},
   nonce,
   relayData = [],
   formError,
@@ -63,7 +61,6 @@ export function renderHtml({
 }: {
   HelmetInstance: HelmetData;
   html: string;
-  preloadedState: PreloadedState<AnyObject>;
   nonce: string;
   relayData?: SSRCache;
   formError: Result[] | undefined;
@@ -118,7 +115,6 @@ export function renderHtml({
               document.body.style.visibility = "visible";
             }, 10);
             window.__CLIENT_CONFIG__ = ${injectJson(clientConfig)}
-            window.__PRELOADED_STATE__ = ${injectJson(preloadedState)}
             window.__PRELOADED_MESSAGES__ = ${messages && messages.length ? injectJson(messages) : undefined}
             window.__RELAY_BOOTSTRAP_DATA__ = ${injectJson(relayData)}
             window.__PRELOADED_FORM_ERRORS__ = ${formError ? injectJson(formError) : undefined}
