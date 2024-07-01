@@ -1,7 +1,7 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";

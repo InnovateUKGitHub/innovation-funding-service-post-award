@@ -10,7 +10,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { PcrReviewSchemaType } from "./pcrReview.zod";
 import { PCRStatus } from "@framework/constants/pcrConstants";
 

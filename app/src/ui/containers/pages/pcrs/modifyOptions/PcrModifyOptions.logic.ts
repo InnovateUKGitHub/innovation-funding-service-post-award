@@ -5,7 +5,7 @@ import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { PcrModifyTypesSchemaType } from "@ui/zod/pcrValidator.zod";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";

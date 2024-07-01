@@ -18,7 +18,7 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragme
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { contactSchemaErrorMap } from "@ui/zod/contactSchema.zod";
 import { useMemo } from "react";
 import { UseFormGetFieldState, UseFormRegister, useForm } from "react-hook-form";

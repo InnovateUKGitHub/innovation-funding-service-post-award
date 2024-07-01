@@ -4,7 +4,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { BankCheckStatus } from "@framework/constants/partner";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { FailedBankCheckConfirmationQuery } from "./__generated__/FailedBankCheckConfirmationQuery.graphql";
 import { failedBankCheckConfirmationQuery } from "./FailedBankCheckConfirmation.query";
 

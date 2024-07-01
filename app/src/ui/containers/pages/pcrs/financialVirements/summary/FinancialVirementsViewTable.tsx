@@ -3,7 +3,7 @@ import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percent
 import { Table, THead, TR, TH, TBody, TD, TFoot } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { MappedFinancialVirements } from "../../utils/useMapFinancialVirements";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 
 interface FinancialVirementsViewTableProps {

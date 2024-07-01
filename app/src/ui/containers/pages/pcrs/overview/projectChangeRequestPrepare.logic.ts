@@ -12,7 +12,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 import { z } from "zod";
 import { PcrPrepareSchema } from "./projectChangeRequestPrepare.zod";

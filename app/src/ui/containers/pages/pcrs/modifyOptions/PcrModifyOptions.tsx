@@ -11,7 +11,7 @@ import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   getPcrModifyTypesSchema,

@@ -3,7 +3,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 

@@ -2,7 +2,7 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditClaimLineItemsSchemaType } from "@ui/containers/pages/claims/claimLineItems/editClaimLineItems.zod";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useNavigate } from "react-router-dom";
 import type { z } from "zod";

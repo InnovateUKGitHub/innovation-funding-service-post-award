@@ -27,7 +27,7 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/emailContent";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";

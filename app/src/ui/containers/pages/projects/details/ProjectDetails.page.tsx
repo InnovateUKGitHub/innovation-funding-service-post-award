@@ -18,7 +18,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
 import { getContactRole } from "@ui/components/atomicDesign/organisms/partners/utils/getContactRole";

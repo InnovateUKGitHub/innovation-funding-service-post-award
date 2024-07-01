@@ -7,7 +7,7 @@ import { Propagation, useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { ErrorCode } from "@framework/constants/enums";
 import { ValidationError } from "@shared/appError";

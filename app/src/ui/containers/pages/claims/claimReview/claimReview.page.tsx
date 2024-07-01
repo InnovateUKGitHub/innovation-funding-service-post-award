@@ -21,7 +21,7 @@ import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/C
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { ClaimLevelUploadSchemaType, documentsErrorMap, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

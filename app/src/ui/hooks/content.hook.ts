@@ -1,6 +1,6 @@
 import { useContext, isValidElement } from "react";
 import type { ContentSelector, TranslationResult, ContentSelectorCallInformation } from "@copy/type";
-import { contentContext } from "@ui/redux/contentProvider";
+import { contentContext } from "@ui/context/contentProvider";
 
 /**
  * Test an input to see if it matches a ContentSelector shape.

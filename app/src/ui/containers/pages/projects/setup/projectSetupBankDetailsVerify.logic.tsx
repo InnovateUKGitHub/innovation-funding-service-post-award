@@ -8,7 +8,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { BankCheckStatus } from "@framework/constants/partner";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 
 export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupBankDetailsVerifyQuery>(

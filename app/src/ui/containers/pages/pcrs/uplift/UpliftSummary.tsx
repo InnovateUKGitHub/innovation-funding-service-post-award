@@ -7,7 +7,7 @@ import { PcrBackLink, PcrPage } from "../pcrPage";
 import { FinancialVirementsViewTable } from "../financialVirements/summary/FinancialVirementsViewTable";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 
 const UpliftSummary = () => {
   const { projectId, pcrId, itemId, mode } = usePcrWorkflowContext();

@@ -1,5 +1,5 @@
 import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
-import { ContentProvider } from "@ui/redux/contentProvider";
+import { ContentProvider } from "@ui/context/contentProvider";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./utils/error.config";

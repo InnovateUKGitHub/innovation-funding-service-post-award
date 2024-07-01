@@ -21,7 +21,7 @@ import {
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";

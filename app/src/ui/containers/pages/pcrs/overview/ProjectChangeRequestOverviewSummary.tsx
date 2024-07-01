@@ -4,7 +4,7 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 
 const ProjectChangeRequestOverviewSummary = ({

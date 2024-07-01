@@ -15,7 +15,7 @@ import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";

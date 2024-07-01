@@ -9,7 +9,7 @@ import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsD
 import { claimLineItemsQuery } from "./ClaimLineItems.query";
 import { ClaimLineItemsQuery } from "./__generated__/ClaimLineItemsQuery.graphql";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 import { RouteState } from "@ui/containers/containerBase";
 

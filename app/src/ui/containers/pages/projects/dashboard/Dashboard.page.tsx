@@ -18,7 +18,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 
 interface ProjectDashboardParams {
   search?: string | number;

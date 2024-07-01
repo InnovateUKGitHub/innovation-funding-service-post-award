@@ -5,7 +5,7 @@ import type { z } from "zod";
 import { useOnUpdate } from "./onUpdate";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { useNavigate } from "react-router-dom";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 
 interface OnForecastSubmitProps {

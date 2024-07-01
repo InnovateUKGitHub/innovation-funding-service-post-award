@@ -4,7 +4,7 @@ import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
 import { mountedContext } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { ContentProvider } from "@ui/redux/contentProvider";
+import { ContentProvider } from "@ui/context/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";

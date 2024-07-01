@@ -4,7 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { RelayEnvironmentProvider } from "react-relay";
 import { AnyRouteDefinition } from "@ui/containers/containerBase";
-import { ContentProvider } from "@ui/redux/contentProvider";
+import { ContentProvider } from "@ui/context/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
@@ -19,7 +19,7 @@ import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthCon
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
 import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
 import { SuspensePageLoader } from "@ui/components/bjss/loading";
-import { RoutesProvider } from "@ui/redux/routesProvider";
+import { RoutesProvider } from "@ui/context/routesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";

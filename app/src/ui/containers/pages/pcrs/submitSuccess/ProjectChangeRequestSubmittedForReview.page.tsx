@@ -6,7 +6,7 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragme
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useProjectChangeRequestSubmittedForReviewQuery } from "./ProjectChangeRequestSubmittedForReview.logic";
 import { FullDate } from "@ui/components/atomicDesign/atoms/Date";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";

@@ -9,7 +9,7 @@ import { AwardRateOverrideLabel } from "@ui/components/atomicDesign/organisms/cl
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { mapVirements } from "../utils/useMapFinancialVirements";
 import { usePcrPartnerFinancialVirementData } from "./PcrFinancialVirement.logic";
 import { getAuthRoles } from "@framework/types/authorisation";

@@ -16,7 +16,7 @@ import {
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useUpdateForecastData } from "./ForecastTile.logic";
 import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";

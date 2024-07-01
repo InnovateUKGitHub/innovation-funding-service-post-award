@@ -2,7 +2,7 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 

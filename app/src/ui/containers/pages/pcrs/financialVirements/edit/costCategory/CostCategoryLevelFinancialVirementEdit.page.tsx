@@ -24,7 +24,7 @@ import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

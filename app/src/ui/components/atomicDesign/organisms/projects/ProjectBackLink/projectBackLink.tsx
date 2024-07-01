@@ -1,5 +1,5 @@
 import { BackLink } from "../../../atoms/Links/links";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 
 interface Props {
   projectId: ProjectId;

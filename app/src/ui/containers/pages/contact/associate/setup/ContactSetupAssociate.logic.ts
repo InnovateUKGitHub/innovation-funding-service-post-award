@@ -3,7 +3,7 @@ import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
-import { useRoutes } from "@ui/redux/routesProvider";
+import { useRoutes } from "@ui/context/routesProvider";
 import { Dispatch, SetStateAction } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
