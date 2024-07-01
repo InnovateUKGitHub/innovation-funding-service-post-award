@@ -45,6 +45,7 @@ import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
+import { ServerError, ServerErrorContextProvider } from "@ui/context/server-error";
 
 interface IServerApp {
   requestUrl: string;
@@ -59,6 +60,7 @@ interface IServerApp {
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
+  preloadedServerErrors: ServerError | null;
 }
 
 const logger = new Logger("HTML Render");
@@ -76,30 +78,33 @@ const ServerApp = ({
   serverZodErrors,
   preloadedServerInput,
   preloadedData,
+  preloadedServerErrors,
 }: IServerApp) => (
-  <ServerInputContextProvider value={preloadedServerInput}>
-    <ServerZodErrorProvider value={serverZodErrors}>
-      <UserProvider value={userConfig}>
-        <ClientConfigProvider config={clientConfig}>
-          <ApiErrorContextProvider value={apiError}>
-            <FormErrorContextProvider value={formError}>
-              <Provider store={store}>
-                <StaticRouter location={requestUrl}>
-                  <StoresProvider value={stores}>
-                    <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
-                      <MessageContextProvider preloadedMessages={messages}>
-                        <App store={store} relayEnvironment={relayEnvironment} />
-                      </MessageContextProvider>
-                    </PreloadedDataContextProvider>
-                  </StoresProvider>
-                </StaticRouter>
-              </Provider>
-            </FormErrorContextProvider>
-          </ApiErrorContextProvider>
-        </ClientConfigProvider>
-      </UserProvider>
-    </ServerZodErrorProvider>
-  </ServerInputContextProvider>
+  <ServerErrorContextProvider value={preloadedServerErrors}>
+    <ServerInputContextProvider value={preloadedServerInput}>
+      <ServerZodErrorProvider value={serverZodErrors}>
+        <UserProvider value={userConfig}>
+          <ClientConfigProvider config={clientConfig}>
+            <ApiErrorContextProvider value={apiError}>
+              <FormErrorContextProvider value={formError}>
+                <Provider store={store}>
+                  <StaticRouter location={requestUrl}>
+                    <StoresProvider value={stores}>
+                      <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
+                        <MessageContextProvider preloadedMessages={messages}>
+                          <App store={store} relayEnvironment={relayEnvironment} />
+                        </MessageContextProvider>
+                      </PreloadedDataContextProvider>
+                    </StoresProvider>
+                  </StaticRouter>
+                </Provider>
+              </FormErrorContextProvider>
+            </ApiErrorContextProvider>
+          </ClientConfigProvider>
+        </UserProvider>
+      </ServerZodErrorProvider>
+    </ServerInputContextProvider>
+  </ServerErrorContextProvider>
 );
 
 /**
@@ -196,6 +201,7 @@ const serverRender =
           // We cannot handle these beautifully.
           statusCode = getErrorStatus(err);
           const errorPayload = createErrorPayload(err, false).params;
+          res.locals.preloadedServerErrors = errorPayload;
           store.dispatch(setError(errorPayload));
           renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
@@ -237,6 +243,7 @@ const serverRender =
           serverZodErrors: res.locals.serverZodErrors,
           preloadedServerInput: res.locals.preloadedServerInput,
           preloadedData: res.locals.preloadedData,
+          preloadedServerErrors: res.locals.preloadedServerErrors,
         });
       });
 
@@ -276,6 +283,7 @@ const serverRender =
           serverZodErrors: res.locals.serverZodErrors,
           preloadedServerInput: res.locals.preloadedServerInput,
           preloadedData: res.locals.preloadedData,
+          preloadedServerErrors: res.locals.preloadedServerErrors,
         }),
       );
     } catch (renderError: unknown) {
@@ -338,6 +346,7 @@ function renderApp(props: {
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
+  preloadedServerErrors: ServerError | null;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -359,6 +368,7 @@ function renderApp(props: {
     serverZodErrors: props.serverZodErrors,
     preloadedServerInput: props.preloadedServerInput,
     preloadedData: props.preloadedData,
+    preloadedServerErrors: props.preloadedServerErrors,
   });
 }
 

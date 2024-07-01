@@ -1,7 +1,7 @@
 import { ErrorContainer } from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
 import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
-import { useStores } from "@ui/redux/storesProvider";
 import { defineRoute } from "./containerBase";
+import { useServerErrorContext } from "@ui/context/server-error";
 
 /**
  * Error Route Container
@@ -11,8 +11,7 @@ import { defineRoute } from "./containerBase";
  * defaults to "Unknown Error"
  */
 function ErrorRouteContainer() {
-  const stores = useStores();
-  const errorPayload = stores.errorDetails.errors() ?? { errorCode: 1, errorType: "UNKNOWN ERROR" };
+  const errorPayload = useServerErrorContext() ?? { errorCode: 1, errorType: "UNKNOWN ERROR" };
 
   return <ErrorContainer {...errorPayload} />;
 }

@@ -9,6 +9,7 @@ import { configuration } from "./features/common/config";
 import { IClientConfig } from "../types/IClientConfig";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
+import { ServerError } from "@ui/context/server-error";
 
 let versionInformation = "";
 
@@ -58,6 +59,7 @@ export function renderHtml({
   serverZodErrors,
   preloadedServerInput,
   preloadedData,
+  preloadedServerErrors,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -73,6 +75,7 @@ export function renderHtml({
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
+  preloadedServerErrors: ServerError;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -124,6 +127,9 @@ export function renderHtml({
             window.__PRELOADED_SERVER_ZOD_ERRORS__ = ${serverZodErrors ? injectJson(serverZodErrors) : undefined}
             window.__PRELOADED_SERVER_INPUT__ = ${preloadedServerInput ? injectJson(preloadedServerInput) : undefined}
             window.__PRELOADED_DATA__ = ${!!preloadedData ? injectJson(preloadedData) : undefined}
+            window.__PRELOADED_SERVER_ERRORS__ = ${
+              preloadedServerErrors ? injectJson(preloadedServerErrors) : undefined
+            }
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

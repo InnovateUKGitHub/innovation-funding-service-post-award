@@ -5,6 +5,7 @@ import { i18n } from "i18next";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
+import { ServerError } from "@ui/context/server-error";
 
 declare global {
   interface Window {
@@ -20,5 +21,6 @@ declare global {
     __PRELOADED_SERVER_ZOD_ERRORS__: ZodIssue[] | undefined;
     __PRELOADED_SERVER_INPUT__?: AnyObject;
     __PRELOADED_DATA__: AnyObject | undefined;
+    __PRELOADED_SERVER_ERRORS__?: ServerError;
   }
 }
