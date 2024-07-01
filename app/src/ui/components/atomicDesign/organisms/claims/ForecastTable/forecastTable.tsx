@@ -9,12 +9,6 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { numberComparator } from "@framework/util/comparator";
 import { diffAsPercentage, roundCurrency } from "@framework/util/numberHelper";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import {
-  IForecastDetailsDtosValidator,
-  IForecastDetailsDtoValidator,
-} from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { default as classNames, default as cx } from "classnames";
 import React from "react";
 import { Content } from "../../../molecules/Content/content";
@@ -63,7 +57,6 @@ interface TableRow {
   golCosts: number;
   total: number;
   difference: number;
-  validators: IForecastDetailsDtoValidator[];
 }
 
 interface Index {
@@ -74,7 +67,6 @@ interface Index {
 export interface Props {
   hideValidation?: boolean;
   data: ForecastDataForTableLayout;
-  editor?: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   onChange?: (data: ForecastDetailsDTO[]) => void;
   isSubmitting?: boolean;
   allowRetroactiveForecastEdit?: boolean;
@@ -219,12 +211,11 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   public render() {
-    const { data, hideValidation, isSubmitting, editor } = this.props;
+    const { data, hideValidation, isSubmitting } = this.props;
 
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
     const intervals = this.calculateClaimPeriods(data);
-    const tableRows = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
-    const isEditing = !!editor;
+    const tableRows = this.parseClaimData(data, periodId, data.project.numberOfPeriods);
 
     if (!tableRows.length) {
       throw new Error("Unable to display the spend profile table, has the project been correctly set up?");
@@ -259,33 +250,20 @@ export class ForecastTable extends React.Component<Props> {
               data.IARDueOnClaimPeriods ?? [],
               noClaimsOrForecastsAvailable,
             )}
-            footers={this.renderTableFooters(
-              periods,
-              periodId,
-              tableRows,
-              hideValidation !== true && editor ? editor.validator : undefined,
-              noClaimsOrForecastsAvailable,
-            )}
+            footers={this.renderTableFooters(periods, periodId, tableRows, noClaimsOrForecastsAvailable)}
             headerRowClass="govuk-body-s govuk-table__header--light"
             bodyRowClass={x =>
               classNames("govuk-body-s", {
                 "table__row--warning": !hideValidation && x.total > x.golCosts,
-                "table__row--error": !hideValidation && x.validators.some(v => !v.isValid),
               })
             }
             className="acc-sticky-table"
-            validationResult={!hideValidation ? editor && editor.validator.costCategoryForecasts.results : undefined}
           >
             <Table.String
               header="Month"
               value={x => x.categoryName}
               colClassName={() => "sticky-col sticky-col-left-1"}
               qa="category-name"
-              cellClassName={() =>
-                cx({
-                  "sticky-data-editor": isEditing,
-                })
-              }
             />
 
             {noClaimsOrForecastsAvailable ? (
@@ -301,11 +279,6 @@ export class ForecastTable extends React.Component<Props> {
                 value={x => x.claims[p]}
                 qa={!!data.claim && i === claims.length - 1 ? "current-claim" : "category-claim" + i}
                 isDivider={isDivider(i) ? "normal" : undefined}
-                cellClassName={() =>
-                  cx({
-                    "sticky-data-editor": isEditing,
-                  })
-                }
               />
             ))}
 
@@ -319,15 +292,9 @@ export class ForecastTable extends React.Component<Props> {
                     parseInt(p, 10),
                     index,
                     data,
-                    editor,
                     isSubmitting || false,
                     this.props.allowRetroactiveForecastEdit ?? false,
                   )
-                }
-                cellClassName={() =>
-                  cx("govuk-table__cell--numeric", {
-                    "sticky-data-editor": isEditing,
-                  })
                 }
                 classSuffix="numeric"
                 qa={"category-forecast" + i}
@@ -342,11 +309,6 @@ export class ForecastTable extends React.Component<Props> {
               value={x => x.total}
               qa="category-total"
               isDivider="normal"
-              cellClassName={() =>
-                cx({
-                  "sticky-data-editor": isEditing,
-                })
-              }
             />
             <Table.Currency
               colClassName={() => "sticky-col sticky-col-right-2"}
@@ -355,11 +317,6 @@ export class ForecastTable extends React.Component<Props> {
               value={x => x.golCosts}
               qa="category-gol-costs"
               isDivider="normal"
-              cellClassName={() =>
-                cx({
-                  "sticky-data-editor": isEditing,
-                })
-              }
             />
             <Table.Percentage
               colClassName={() => "sticky-col sticky-col-right-1"}
@@ -367,11 +324,6 @@ export class ForecastTable extends React.Component<Props> {
               hideHeader
               value={x => x.difference}
               qa="category-difference"
-              cellClassName={() =>
-                cx({
-                  "sticky-data-editor": isEditing,
-                })
-              }
             />
           </Table.Table>
         </div>
@@ -379,25 +331,14 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(
-    data: ForecastDataForTableLayout,
-    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
-    periodId: number,
-    numberOfPeriods: number | null,
-  ) {
+  private parseClaimData(data: ForecastDataForTableLayout, periodId: number, numberOfPeriods: number | null) {
     const tableRows: TableRow[] = [];
-    const forecasts = editor ? editor.data : data.forecastDetails;
+    const forecasts = data.forecastDetails;
     const costCategories = data.costCategories.filter(
       x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType,
     );
 
     costCategories.forEach(category => {
-      const validators =
-        editor &&
-        editor.validator.items.results
-          .filter(x => x.model.costCategoryId === category.id)
-          .sort((a, b) => a.model.periodId - b.model.periodId);
-
       const row: TableRow = {
         categoryId: category.id,
         categoryName: category.name,
@@ -406,7 +347,6 @@ export class ForecastTable extends React.Component<Props> {
         golCosts: 0,
         total: 0,
         difference: 0,
-        validators: validators || [],
       };
 
       let currentPeriodId = 1;
@@ -479,19 +419,15 @@ export class ForecastTable extends React.Component<Props> {
     periodId: number,
     index: Index,
     data: ForecastDataForTableLayout,
-    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
     isSubmitting: boolean,
     allowRetroactiveForecastEdit?: boolean,
   ) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
-    const validator = forecastRow.validators.find(x => x.model.periodId === periodId);
-    const error = validator && validator.value;
     const isPending = data.partner.partnerStatus === PartnerStatus.Pending;
 
     if (
       (costCategory && costCategory.isCalculated) ||
-      !editor ||
       (periodId < data.project.periodId && !isPending && !allowRetroactiveForecastEdit) ||
       (periodId === data.project.periodId && !isPending && !isSubmitting && !allowRetroactiveForecastEdit)
     ) {
@@ -501,15 +437,10 @@ export class ForecastTable extends React.Component<Props> {
     return (
       <span>
         <NumberInput
-          invalid={!!error && !error?.isValid}
           name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${periodId}`}
-          onChange={val =>
-            this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => (dto.value = val as number))
-          }
           className="govuk-!-font-size-16"
-          disabled={editor.status === EditorStatus.Saving}
           enforceValidInput
         />
       </span>
@@ -685,7 +616,6 @@ export class ForecastTable extends React.Component<Props> {
     periods: string[],
     claimPeriod: number,
     parsed: TableRow[],
-    validator: IForecastDetailsDtosValidator | undefined,
     noClaimsOrForecastsAvailable: boolean,
   ) {
     const cells = [];
@@ -698,9 +628,6 @@ export class ForecastTable extends React.Component<Props> {
         return total + value;
       }, 0),
     );
-
-    const warning = !!validator && validator.showValidationErrors && !validator.totalCosts.isValid;
-    const warningId = !!validator && warning ? validator.totalCosts.key : "";
 
     cells.push(
       <th
@@ -745,11 +672,7 @@ export class ForecastTable extends React.Component<Props> {
     );
 
     return [
-      <tr
-        id={warningId}
-        key="footer1"
-        className={classNames("govuk-table__row", "govuk-body-s", { "table__row--error": warning })}
-      >
+      <tr key="footer1" className={classNames("govuk-table__row", "govuk-body-s")}>
         {cells}
       </tr>,
     ];
