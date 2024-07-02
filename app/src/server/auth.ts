@@ -78,7 +78,7 @@ const getAuthRouter = async () => {
 
         req.session ??= {};
         req.session.user ??= {};
-        req.session.user.developer_oidc_username = payload.email;
+        req.session.user.developer_oidc_username = payload.preferred_username;
         req.session.last_reset = getCookieTimestamp();
 
         // redirect to original location if it starts with a / otherwise use server root
