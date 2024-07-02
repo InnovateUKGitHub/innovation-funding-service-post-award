@@ -2427,7 +2427,10 @@
             }
           },
           "subcontractorCost": {
-            "label": "Cost of subcontractor"
+            "label": "Cost of subcontractor",
+            "errors": {
+              "too_small": "Enter the cost of work to be carried out by the new subcontractor."
+            }
           },
           "descriptionOfCost": {
             "errors": {
@@ -2741,7 +2744,10 @@
           }
         },
         "subcontractorCost": {
-          "label": "The cost of work to be carried out by the new subcontractor"
+          "label": "The cost of work to be carried out by the new subcontractor",
+          "errors": {
+            "too_small": "Enter the cost of work to be carried out by the new subcontractor."
+          }
         }
       },
       "changeRemainingGrant": {
