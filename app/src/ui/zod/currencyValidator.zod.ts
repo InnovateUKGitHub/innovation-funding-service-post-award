@@ -32,6 +32,7 @@ export const getGenericCurrencyValidation = ({
 }) =>
   z
     .string()
+    .trim()
     .nullable()
     .superRefine((val, ctx) => {
       const currency = parseCurrency(val);
