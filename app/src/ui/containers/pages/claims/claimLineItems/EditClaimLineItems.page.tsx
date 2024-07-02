@@ -67,7 +67,7 @@ const EditClaimLineItemsPage = ({
   });
   const { register, handleSubmit, setValue, setError, formState, watch, getFieldState } = formMethods;
   const registerButton = createRegisterButton<z.output<EditClaimLineItemsSchemaType>>(setValue, "form");
-  const { onUpdate, isFetching } = useOnClaimLineItemsSubmit();
+  const { onUpdate, isFetching, apiError } = useOnClaimLineItemsSubmit();
   const onSubmitUpdate = (dto: z.output<EditClaimLineItemsSchemaType>) => {
     onUpdate({
       data: dto,
@@ -87,6 +87,7 @@ const EditClaimLineItemsPage = ({
       fragmentRef={fragmentRef}
       validationErrors={allErrors}
       heading={currentCostCategory.name}
+      apiError={apiError}
     >
       {/* Update the HTML title to include the costCategoryName*/}
       <Helmet>
