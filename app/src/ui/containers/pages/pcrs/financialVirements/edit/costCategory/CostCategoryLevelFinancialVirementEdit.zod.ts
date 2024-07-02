@@ -36,6 +36,7 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
           virementCostId: financialVirementForCostsIdValidation,
           newEligibleCosts: getGenericCurrencyValidation({
             label: newEligibleCostsLabel,
+            required: true,
           }),
         }),
       ),
