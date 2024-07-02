@@ -188,7 +188,6 @@ export const javierBaezCounters = () => {
     ["879546", "Claim overdue"],
     ["597638", "Project change requests to review: 2"],
     ["191431", "Claim overdue"],
-    ["271316", "Claim overdue"],
     ["223377", "Claim overdue"],
     ["663878", "Claim overdue"],
   ].forEach(([project, counter]) => {
