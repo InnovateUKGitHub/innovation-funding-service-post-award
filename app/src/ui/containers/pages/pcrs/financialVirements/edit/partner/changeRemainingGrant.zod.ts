@@ -15,6 +15,7 @@ export const changeRemainingGrantSchema = z
         .object({
           newRemainingGrant: getGenericCurrencyValidation({
             label: "forms.pcr.changeRemainingGrant.partners.arrayType.newRemainingGrant.label",
+            required: true,
           }),
           newRemainingCosts: z.number(),
           newFundingLevel: z.number(),
