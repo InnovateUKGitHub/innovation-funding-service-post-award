@@ -1,7 +1,7 @@
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 import classNames from "classnames";
-import { DetailedHTMLProps, HTMLAttributes } from "react";
+import { DetailedHTMLProps, HTMLAttributes, useState } from "react";
 
 export interface IMarkdownProps extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
   value: string;
@@ -18,8 +18,8 @@ const linkRenderer = renderer.link;
 
 // ...and overwrite it, by calling it, and replacing it's output.
 // https://github.com/markedjs/marked/issues/655#issuecomment-383226346
-renderer.link = (href, title, text) => {
-  const html = linkRenderer.call(renderer, href, title, text);
+renderer.link = ({ href, title, text, raw, tokens, type }) => {
+  const html = linkRenderer.call(renderer, { href, title, text, type, raw, tokens });
   return html.replace(/^<a /, '<a target="_blank" ');
 };
 
@@ -81,6 +81,14 @@ export function Markdown({ value, trusted = false, verticalScrollbar, ...props }
       ],
     });
   }
+  const [markdown, setMarkdown] = useState("");
+
+  const contentResponse = marked.parse(content, { renderer });
+  if (typeof contentResponse === "string") {
+    setMarkdown(contentResponse);
+  } else {
+    contentResponse.then(res => setMarkdown(res));
+  }
 
   return (
     <span
@@ -88,7 +96,7 @@ export function Markdown({ value, trusted = false, verticalScrollbar, ...props }
       className={classNames("govuk-body", "markdown", {
         "acc-height-container acc-vertical-scrollbar": verticalScrollbar,
       })}
-      dangerouslySetInnerHTML={{ __html: marked.parse(content, { renderer }) }}
+      dangerouslySetInnerHTML={{ __html: markdown }}
     />
   );
 }

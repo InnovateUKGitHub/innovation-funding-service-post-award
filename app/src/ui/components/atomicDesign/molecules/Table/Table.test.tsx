@@ -1,4 +1,4 @@
-import _isEqual from "lodash.isequal";
+import _isEqual from "lodash/isequal";
 import { act, render } from "@testing-library/react";
 import fireEvent from "@testing-library/user-event";
 
@@ -176,7 +176,7 @@ describe("Table", () => {
       it("with no sortable columns", () => {
         const testData = [{ name: "Superman", age: 34 }];
 
-        const NumericTable = createTypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -199,7 +199,7 @@ describe("Table", () => {
           { name: "Flash", age: 28 },
         ];
 
-        const NumericTable = createTypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -240,7 +240,7 @@ describe("Table", () => {
           { name: "Superman", age: 99 },
         ];
 
-        const NumericTable = createTypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -311,7 +311,7 @@ describe("Table", () => {
           { name: "Superman", age: 99 },
         ];
 
-        const NumericTable = createTypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">

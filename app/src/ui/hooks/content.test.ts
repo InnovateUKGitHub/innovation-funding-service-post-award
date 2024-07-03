@@ -1,5 +1,4 @@
 import { PossibleCopyFunctions } from "@copy/type";
-import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
@@ -17,7 +16,7 @@ describe("useContent()", () => {
   type PossibleTestCopyKeys = typeof stubTestContent;
   type PossibleTestCopyFunctions = PossibleCopyFunctions<PossibleTestCopyKeys>;
 
-  const render = renderHook(useContent, hookTestBed({}));
+  const render = renderHook(useContent, {});
 
   beforeAll(async () => {
     await initStubTestIntl(stubTestContent);

@@ -2,7 +2,6 @@ import { TestBed } from "@shared/TestBed";
 import { render } from "@testing-library/react";
 import { Loan } from "../loanOverview.logic";
 import { LoansTable, LoansTableProps } from "@ui/containers/pages/loans/components/LoansTable";
-import { v4 as uuid } from "uuid";
 import { LoanStatus } from "@framework/entities/loan-status";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 
@@ -37,7 +36,7 @@ describe("<LoansTable />", () => {
 
   describe("@returns", () => {
     const stubLoanItem: Loan = {
-      id: uuid() as LoanId,
+      id: "2345678909876" as LoanId,
       status: LoanStatus.REQUESTED,
       period: 1,
       requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -55,7 +54,7 @@ describe("<LoansTable />", () => {
 
     test("with single item defined", () => {
       const stubItem: Loan = {
-        id: uuid() as LoanId,
+        id: "234567909876" as LoanId,
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -82,7 +81,7 @@ describe("<LoansTable />", () => {
 
     test("with multiple items defined", () => {
       const stubFirstItem: Loan = {
-        id: uuid() as LoanId,
+        id: "4567898" as LoanId,
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -91,7 +90,7 @@ describe("<LoansTable />", () => {
       };
 
       const stubSecondItem: Loan = {
-        id: uuid() as LoanId,
+        id: "3456789" as LoanId,
         status: LoanStatus.PLANNED,
         period: 2,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
@@ -138,7 +137,7 @@ describe("<LoansTable />", () => {
   describe("@events", () => {
     test("with no call to createLink as status is not 'PLANNED'", () => {
       const stubItem: Loan = {
-        id: uuid() as LoanId,
+        id: "3456789" as LoanId,
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),

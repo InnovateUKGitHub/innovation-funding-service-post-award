@@ -1,5 +1,4 @@
 import { renderHook, act } from "@testing-library/react";
-import { v4 as uuid } from "uuid";
 import { hookTestBed, HookTestBedProps } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/atomicDesign/organisms/documents/utils/document-search.hook";
 import { DocumentsBase } from "@ui/components/atomicDesign/organisms/documents/utils/documents.interface";
@@ -12,7 +11,7 @@ describe("useDocumentSearch()", () => {
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",
     link: "stub-link",
-    id: uuid(),
+    id: "34567890",
     fileSize: 1024,
     dateCreated: new Date(Date.UTC(2021, 10, 1)),
     uploadedBy: "stub-uploadedBy",
@@ -179,7 +178,7 @@ describe("useDocumentSearch()", () => {
             stubBaseDocument,
             {
               ...stubBaseDocument,
-              id: uuid(),
+              id: "34567890",
               fileName: stubUnSearchableFileName,
             },
           ];
@@ -199,17 +198,17 @@ describe("useDocumentSearch()", () => {
           const stubDocs = [
             {
               ...stubBaseDocument,
-              id: uuid(),
+              id: "4567890",
               fileName: `${stubCommonPartFileName} 1`,
             },
             {
               ...stubBaseDocument,
-              id: uuid(),
+              id: "4567890",
               fileName: `${stubCommonPartFileName} 2`,
             },
             {
               ...stubBaseDocument,
-              id: uuid(),
+              id: "4567890",
               fileName: stubNonMatchingFileName,
             },
           ];
@@ -235,19 +234,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "4567890-",
                 fileName: "Document 1",
                 dateCreated: new Date(Date.UTC(2021, 1)),
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "4567890-",
                 fileName: "Document 2",
                 dateCreated: new Date(Date.UTC(2021, 2)),
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "4567890",
                 fileName: "Document 3",
                 dateCreated: new Date(Date.UTC(2020, 2)),
               },
@@ -271,19 +270,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "567890",
                 fileName: "Document 1",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "567890-",
                 fileName: "Document 2",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "567890",
                 fileName: "Document 3",
                 fileSize: 205732,
               },
@@ -307,19 +306,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "4567890",
                 fileName: "Document 1",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "567890-",
                 fileName: "Document 2",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: uuid(),
+                id: "567890",
                 fileName: "Document 3",
                 uploadedBy: "Elton John",
               },

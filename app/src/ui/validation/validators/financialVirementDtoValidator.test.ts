@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import {
   CostCategoryVirementDtoValidator,
   FinancialLoanVirementDtoValidator,
@@ -135,7 +134,7 @@ describe("financialVirementDtoValidator", () => {
       const currentDate = new Date(Date.UTC(2022, 1));
 
       return {
-        id: uuid() as LoanId,
+        id: "34567ghjklkjhgfghjkl" as LoanId,
         isEditable: true,
         period: 1 as PeriodId as PeriodId,
         status: LoanStatus.PLANNED,

@@ -6,6 +6,7 @@ type OptionProps = ComponentProps<"option">;
 type DropdownProps = ComponentPropsWithRef<"select"> & {
   hasEmptyOption?: boolean;
   options: OptionProps[];
+  placeholder?: string;
 };
 
 const DropdownSelect = forwardRef<HTMLSelectElement, DropdownProps>(

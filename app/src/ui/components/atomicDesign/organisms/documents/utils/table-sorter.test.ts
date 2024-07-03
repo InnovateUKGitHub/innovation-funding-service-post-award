@@ -1,4 +1,4 @@
-import _isEqual from "lodash.isequal";
+import _isEqual from "lodash/isequal";
 import { renderHook, act } from "@testing-library/react";
 
 import { hookTestBed } from "@shared/TestBed";
@@ -54,7 +54,7 @@ describe("useTableSorter()", () => {
     },
   ];
 
-  const stubNoColumnsSorted: (keyof typeof stubTableData[0] | null)[] = [null, null, null, null, null, null, null];
+  const stubNoColumnsSorted: (keyof (typeof stubTableData)[0] | null)[] = [null, null, null, null, null, null, null];
 
   const setup = (sortKeys: (keyof TableDataItem | null)[], tableRows: TableDataItem[], isServer?: boolean) =>
     renderHook(() => useTableSorter({ sortKeys, tableRows }), hookTestBed({ isServer }));
@@ -83,7 +83,7 @@ describe("useTableSorter()", () => {
         });
 
         test("when only fileName is selected", () => {
-          const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+          const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
             "fileName",
             null,
             null,
@@ -105,7 +105,7 @@ describe("useTableSorter()", () => {
         });
 
         test("when fileName + uploadedBy are selected", () => {
-          const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+          const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
             "fileName",
             null,
             null,
@@ -127,7 +127,7 @@ describe("useTableSorter()", () => {
       });
 
       describe("with column sort state updating", () => {
-        const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+        const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
           "fileName",
           null,
           null,
@@ -138,7 +138,7 @@ describe("useTableSorter()", () => {
         ];
 
         test("when column state resets after another column is changed", () => {
-          const stubTwoSortColumns: (keyof typeof stubTableData[0] | null)[] = [
+          const stubTwoSortColumns: (keyof (typeof stubTableData)[0] | null)[] = [
             "fileName",
             null,
             null,
@@ -292,7 +292,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubOneSortedColumns: (keyof typeof stubTableData[0] | null)[] = [
+        const stubOneSortedColumns: (keyof (typeof stubTableData)[0] | null)[] = [
           null,
           null,
           null,
@@ -382,7 +382,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubTwoSortedColumns: (keyof typeof stubTableData[0] | null)[] = [
+        const stubTwoSortedColumns: (keyof (typeof stubTableData)[0] | null)[] = [
           "fileName",
           null,
           null,
@@ -495,7 +495,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+        const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
           "fileName",
           null,
           null,
@@ -567,7 +567,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+        const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
           null,
           null,
           null,
@@ -666,7 +666,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+        const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
           null,
           null,
           "fileSize",
@@ -765,7 +765,7 @@ describe("useTableSorter()", () => {
           },
         ];
 
-        const stubFileNameOnlySort: (keyof typeof stubTableData[0] | null)[] = [
+        const stubFileNameOnlySort: (keyof (typeof stubTableData)[0] | null)[] = [
           null,
           null,
           null,

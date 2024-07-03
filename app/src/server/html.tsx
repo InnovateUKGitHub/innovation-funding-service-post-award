@@ -127,8 +127,8 @@ export function renderHtml({
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
-    configuration.build
-  }"></script>
+            configuration.build
+          }"></script>
          ${!jsDisabled ? `<script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>` : ""}
       </body>
   </html>

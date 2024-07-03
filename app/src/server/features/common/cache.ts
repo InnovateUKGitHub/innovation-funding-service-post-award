@@ -2,7 +2,7 @@ import { ICache } from "@framework/types/ICache";
 
 export class Cache<T> implements ICache<T> {
   private readonly store: Record<string, T> = {};
-  private readonly timeouts: Record<string, NodeJS.Timer> = {};
+  private readonly timeouts: Record<string, NodeJS.Timeout> = {};
 
   constructor(private readonly minutes: number) {}
 

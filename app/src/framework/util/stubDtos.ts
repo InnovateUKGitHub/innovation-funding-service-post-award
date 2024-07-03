@@ -1,4 +1,4 @@
-import _merge from "lodash.merge";
+import _merge from "lodash/merge";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { CostCategoryType } from "@framework/constants/enums";

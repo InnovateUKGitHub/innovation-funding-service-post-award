@@ -1,6 +1,6 @@
 import React, { createContext, isValidElement, useContext, useMemo, ReactElement, Fragment } from "react";
 import cx from "classnames";
-import _isPlainObject from "lodash.isplainobject";
+import _isPlainObject from "lodash/isPlainObject";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import * as colour from "@ui/styles/colours";

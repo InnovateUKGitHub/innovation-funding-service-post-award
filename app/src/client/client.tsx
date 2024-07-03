@@ -14,7 +14,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import type { PreloadedState } from "redux";
 import { AnyAction, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import { clientInternationalisation } from "./clientInternationalisation";
 import { getPolyfills } from "./polyfill";
 import { setupClientMiddleware } from "@ui/redux/middleware";

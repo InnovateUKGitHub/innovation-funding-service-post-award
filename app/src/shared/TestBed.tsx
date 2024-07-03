@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "history";
-import _merge from "lodash.merge";
+import _merge from "lodash/merge";
 import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
 import { mountedContext } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
@@ -9,6 +9,9 @@ import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
+import { ReactNode } from "react";
+import { JsxElement } from "typescript";
+import { RenderHookOptions } from "@testing-library/react";
 
 export type TestBedStore = Partial<IStores>;
 
@@ -126,8 +129,9 @@ export function TestBed({
 
 export type HookTestBedProps = Omit<ITestBedProps, "children">;
 
-export const hookTestBed = (props: HookTestBedProps) => ({
-  wrapper: (wrapperProps: ITestBedProps) => <TestBed {...props} {...wrapperProps} />,
-});
+export const hookTestBed = (props: HookTestBedProps) =>
+  ({
+    wrapper: (wrapperProps: ITestBedProps) => <TestBed {...props} {...wrapperProps} />,
+  }) as RenderHookOptions<ITestBedProps>;
 
 export default TestBed;

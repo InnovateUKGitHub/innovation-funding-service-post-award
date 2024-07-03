@@ -35,7 +35,7 @@ export interface RootState {
   previousReactHookFormInput: AnyObject | null;
 }
 
-export const rootReducer = combineReducers<RootState>({
+const combinedReducers = {
   data: dataReducer,
   editors: editorReducer,
   history: historyReducer,
@@ -46,4 +46,6 @@ export const rootReducer = combineReducers<RootState>({
   globalError: errorReducer,
   zodError: zodErrorReducer,
   previousReactHookFormInput: previousReactHookFormInputReducer,
-});
+};
+
+export const rootReducer = combineReducers<RootState>(combinedReducers);

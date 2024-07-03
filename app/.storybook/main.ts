@@ -1,8 +1,6 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
-import { Configuration } from "webpack";
+import { Configuration, RuleSetRule } from "webpack";
 import custom from "../webpack.config.js";
-import util from "util";
-import path from "path";
 
 const [clientWebpackConfig] = custom({ env: "development", devtools: true });
 
@@ -27,7 +25,7 @@ const config: StorybookConfig = {
         ...config.module,
         rules: [
           ...(config?.module?.rules?.filter(rule =>
-            rule === "..." ? false : rule?.test?.toString().includes("mdx"),
+            rule === "..." ? false : (rule as RuleSetRule)?.test?.toString().includes("mdx"),
           ) ?? []),
           ...(clientWebpackConfig?.module?.rules ?? []),
         ],

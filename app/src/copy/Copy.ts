@@ -9,6 +9,7 @@ import {
   TitleContentSelector,
   TitleContentResult,
 } from "./type";
+import { isString } from "lodash";
 
 export class CopyContentInvalidInputKeyError extends Error {}
 
@@ -130,10 +131,17 @@ class Copy {
     // Fetch the fallback title.
     const titleOnly = i18next.t(i18nKey, dataOption);
 
-    return {
-      htmlTitle: htmlTitle || titleOnly,
-      displayTitle: displayTitle || titleOnly,
-    };
+    if (isString(htmlTitle) && isString(displayTitle) && isString(titleOnly)) {
+      return {
+        htmlTitle: htmlTitle || titleOnly,
+        displayTitle: displayTitle || titleOnly,
+      };
+    } else {
+      return {
+        htmlTitle: htmlTitle?.toString() || titleOnly?.toString() || "",
+        displayTitle: displayTitle?.toString() || titleOnly?.toString() || "",
+      };
+    }
   }
 }
 

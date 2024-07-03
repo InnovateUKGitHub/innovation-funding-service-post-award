@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react";
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/components/PcrSummary/pcr-summary.interface";
@@ -45,6 +44,7 @@ describe("PcrSummary", () => {
   describe("usePcrSummaryContext()", () => {
     const setupContextEnv = (props: PcrSummaryProps) =>
       renderHook(usePcrSummaryContext, {
+        // @ts-expect-error - some over-tight and possibly wrong types here
         wrapper: (hookProps: { children: React.ReactElement }) => (
           <PcrSummaryProvider {...props}>{hookProps.children}</PcrSummaryProvider>
         ),

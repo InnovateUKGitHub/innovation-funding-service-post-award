@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore } from "redux";
+import { applyMiddleware, legacy_createStore as createStore } from "redux";
 import thunk from "redux-thunk";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import getRootState from "@ui/redux/stores/getRootState";
