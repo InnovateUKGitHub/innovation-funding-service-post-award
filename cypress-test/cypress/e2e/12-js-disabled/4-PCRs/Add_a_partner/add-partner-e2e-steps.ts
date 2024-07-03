@@ -1138,7 +1138,7 @@ export const validateJesCostsFields = () => {
     cy.getByAriaLabel(input).clear();
   });
   cy.button("Save and continue").click();
-  cy.validationLink("Enter a valid cost");
+  cy.validationLink("Enter a cost");
 };
 
 export const checkPcrForValidation = () => {
