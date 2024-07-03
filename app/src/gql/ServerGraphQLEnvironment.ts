@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { GraphQLSchema } from "graphql";
-import RelayClientSSR from "react-relay-network-modern-ssr/node8/client";
-import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/node8/server";
-import { RelayNetworkLayer } from "react-relay-network-modern/node8";
+import RelayClientSSR from "react-relay-network-modern-ssr/lib/client";
+import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
+import { RelayNetworkLayer } from "react-relay-network-modern";
 import { Environment, RecordSource, Store } from "relay-runtime";
 import { createContext } from "./GraphQLContext";
 

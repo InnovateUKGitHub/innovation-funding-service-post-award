@@ -28,7 +28,6 @@ import { GraphQLSchema } from "graphql";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
-import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { StaticRouter } from "react-router-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
@@ -40,12 +39,12 @@ import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvi
 import { MessageContextProvider } from "@ui/context/messages";
 import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
-import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 import { UserProvider } from "@ui/context/user";
 import { ZodIssue } from "zod";
 import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
+import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 
 interface IServerApp {
   requestUrl: string;

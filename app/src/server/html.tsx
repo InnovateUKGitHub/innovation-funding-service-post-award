@@ -2,7 +2,7 @@ import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
 import pkg from "../../package.json";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { PreloadedState } from "redux";
+import { PreloadedStateShapeFromReducersMapObject } from "redux";
 import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
@@ -61,7 +61,7 @@ export function renderHtml({
 }: {
   HelmetInstance: HelmetData;
   html: string;
-  preloadedState: PreloadedState<AnyObject>;
+  preloadedState: PreloadedStateShapeFromReducersMapObject<AnyObject>;
   nonce: string;
   relayData?: SSRCache;
   formError: Result[] | undefined;
