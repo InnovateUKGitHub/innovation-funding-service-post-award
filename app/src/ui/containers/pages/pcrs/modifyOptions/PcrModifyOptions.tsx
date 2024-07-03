@@ -111,9 +111,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
             <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestUpdateTypes} />
           </>
         ) : (
-          <>
-            <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestCreate} />
-          </>
+          <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestCreate} />
         )}
 
         <Field
@@ -140,7 +138,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
                       </>
                     }
                     value={item.type}
-                    defaultChecked={defaults?.types.includes(item.type)}
+                    defaultChecked={defaults?.types?.includes(item.type)}
                   ></Checkbox>
                 );
               })}
