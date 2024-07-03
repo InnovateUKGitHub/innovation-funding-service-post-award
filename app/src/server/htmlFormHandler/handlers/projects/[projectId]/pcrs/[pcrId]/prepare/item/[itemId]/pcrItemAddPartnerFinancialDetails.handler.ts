@@ -14,6 +14,7 @@ import {
   getFinanceDetailsSchema,
 } from "@ui/containers/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
 import { combineDate } from "@ui/components/atomicDesign/atoms/Date";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export class PcrItemAddPartnerFinancialDetailsHandler extends ZodFormHandlerBase<
   FinanceDetailsSchemaType,
@@ -60,7 +61,7 @@ export class PcrItemAddPartnerFinancialDetailsHandler extends ZodFormHandlerBase
       context,
       data: {
         financialYearEndDate: combineDate(input.financialYearEndDate_month, input.financialYearEndDate_year, false),
-        financialYearEndTurnover: input.financialYearEndTurnover,
+        financialYearEndTurnover: parseCurrency(input.financialYearEndTurnover),
       },
     });
 

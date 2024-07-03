@@ -72,7 +72,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
       .map(x => ({
         ...x,
         costCategory: Number(x.costCategory),
-        value: parseCurrency(x.value),
+        value: x.value,
         dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
       }));
 
@@ -101,7 +101,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
       data: {
         spendProfile: {
           ...spendProfile,
-          funds: input.funds.map(x => ({ ...x, value: Number(x.value) })) as PcrSpendProfileDto["funds"],
+          funds: input.funds.map(x => ({ ...x, value: parseCurrency(x.value) })) as PcrSpendProfileDto["funds"],
         },
       },
     });
