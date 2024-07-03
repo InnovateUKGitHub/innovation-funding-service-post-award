@@ -124,6 +124,7 @@ const getAuthRouter = async () => {
       }
 
       const { salesforceServiceUser, sso, developer } = configuration;
+
       if (sso.enabled && req.url === "/") {
         return res.redirect("/projects/dashboard");
       }
@@ -149,7 +150,7 @@ const getAuthRouter = async () => {
         }
 
         // User is successfully logged in :)
-        next();
+        return next();
       }
 
       if (developer.oidc.enabled) {
