@@ -1,3 +1,5 @@
+import { accProfileDetailBuilder } from "../factory/ifspa/Acc_Profile__c.Profile_Detail";
+import { accProfileTotalCostCategoryBuilder } from "../factory/ifspa/Acc_Profile__c.Total_Cost_Category";
 import { accPcrRemovePartnerBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RemovePartner";
 import { accPcrHeaderBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RequestHeader";
 import { accProjectContactLinkBuilder } from "../factory/ifspa/Acc_ProjectContactLink__c";
@@ -6,6 +8,7 @@ import { accProjectBuilder, defaultAccProject } from "../factory/ifspa/Acc_Proje
 import { accountBuilder, defaultAccount } from "../factory/ifspa/Account";
 import { competitionBuilder } from "../factory/ifspa/Competition__c";
 import { contactBuilder } from "../factory/ifspa/Contact";
+import { projectFactoryProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ProfilesHelper";
 import { userBuilder, defaultUser } from "../factory/ifspa/User";
 import { ProjectFactoryInstanceType } from "../types/ProjectFactoryDefinition";
 
@@ -23,6 +26,11 @@ interface CreateProjectProps {
   };
   competition: ProjectFactoryInstanceType<typeof competitionBuilder>;
   projectParticipant: ProjectFactoryInstanceType<typeof accProjectParticipantBuilder>;
+  profiles: {
+    projectFactoryHelper: ProjectFactoryInstanceType<typeof projectFactoryProfilesHelperBuilder>;
+    details: ProjectFactoryInstanceType<typeof accProfileDetailBuilder>[];
+    totalCostCategories: ProjectFactoryInstanceType<typeof accProfileTotalCostCategoryBuilder>[];
+  };
 }
 
 const makeBaseProject = (): CreateProjectProps => {
@@ -64,9 +72,36 @@ const makeBaseProject = (): CreateProjectProps => {
     return [contact, user, pcl];
   });
 
-  const projectParticipant = defaultAccProjectParticipant
-    .copy()
-    .set({ Acc_AccountId__c: pmFcAccount, Acc_ProjectId__c: project });
+  const projectParticipant = defaultAccProjectParticipant.copy().set({
+    Acc_AccountId__c: pmFcAccount,
+    Acc_ProjectId__c: project,
+    Acc_CreateProfiles__c: false,
+    Acc_CreateClaims__c: true,
+  });
+
+  const helper = projectFactoryProfilesHelperBuilder.create().set({
+    ProjectFactory_ProjectParticipant: projectParticipant,
+    ProjectFactory_Competition: competition,
+    ProjectFactory_NumberOfPeriods: 12,
+  });
+
+  const profileDetails = [
+    accProfileDetailBuilder.create().set({
+      ProjectFactory_ProfileHelper: helper,
+      Acc_CostCategoryDescription__c: "Labour",
+      Acc_ProjectPeriodNumber__c: 1,
+      Acc_InitialForecastCost__c: 100.46,
+      Acc_LatestForecastCost__c: 95.53,
+    }),
+  ];
+
+  const totalCostCategories = [
+    accProfileTotalCostCategoryBuilder.create().set({
+      ProjectFactory_ProfileHelper: helper,
+      Acc_CostCategoryDescription__c: "Labour",
+      Acc_CostCategoryGOLCost__c: 50_000,
+    }),
+  ];
 
   return {
     competition,
@@ -81,6 +116,11 @@ const makeBaseProject = (): CreateProjectProps => {
       removePartner: [],
     },
     projectParticipant,
+    profiles: {
+      projectFactoryHelper: helper,
+      details: profileDetails,
+      totalCostCategories: totalCostCategories,
+    },
   };
 };
 

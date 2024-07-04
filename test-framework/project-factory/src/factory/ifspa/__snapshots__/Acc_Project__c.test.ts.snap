@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Project Builder Expect everything to be harmonious 1`] = `
+exports[`Project Builder Expect project to be built 1`] = `
 "
 Account account1 = new Account();
 account1.OrgMigrationId__c = '001';
@@ -24,6 +24,7 @@ contact0.FirstName = 'Austria';
 contact0.LastName = 'Hedges';
 contact0.Email = 'austria@x.gov.uk';
 contact0.AccountId = account1.Id;
+contact0.Account = account1;
 insert contact0;
       
 User user1 = new User();
@@ -39,17 +40,22 @@ user1.LanguageLocaleKey = 'en_US';
 user1.TimeZoneSidKey = 'Europe/London';
 user1.ProfileId = '00e58000001ITpLAAW';
 user1.ContactId = contact0.Id;
+user1.Contact = contact0;
 insert user1;
       
 Acc_Project__c project1 = new Acc_Project__c();
 project1.Acc_CompetitionId__c = competition0.Id;
+project1.Acc_CompetitionId__r = competition0;
 project1.Acc_StartDate__c = date.valueOf('2024-01-16 12:59:42');
 project1.Acc_Duration__c = 36;
 project1.Acc_ProjectTitle__c = 'Title';
 // project1.Acc_TSBProjectNumber__c field is not defined
 project1.Acc_LegacyID__c = '100';
+// project1.Acc_ProjectSource__c field is not defined
 project1.Acc_WorkdayProjectSetupComplete__c = true;
+
 insert project1;
+Formula.recalculateFormulas(new List<Acc_Project__c> { project1 });
 
 Acc_ProjectParticipant__c projectParticipant2 = new Acc_ProjectParticipant__c();
 projectParticipant2.ParticipantMigrationID__c = '004001';
@@ -67,15 +73,20 @@ projectParticipant2.Acc_OrganisationType__c = 'Industrial';
 projectParticipant2.Acc_CreateProfiles__c = false;
 projectParticipant2.Acc_CreateClaims__c = false;
 projectParticipant2.Acc_ProjectId__c = project1.Id;
+projectParticipant2.Acc_ProjectId__r = project1;
 projectParticipant2.Acc_AccountId__c = account1.Id;
+projectParticipant2.Acc_AccountId__r = account1;
 insert projectParticipant2;
       
 Acc_ProjectContactLink__c pcl0 = new Acc_ProjectContactLink__c();
 pcl0.Acc_Role__c = 'Monitoring officer';
 pcl0.Acc_EmailOfSFContact__c = 'noemail@noemail.com';
 pcl0.Acc_ProjectId__c = project1.Id;
+pcl0.Acc_ProjectId__r = project1;
 pcl0.Acc_AccountId__c = account1.Id;
+pcl0.Acc_AccountId__r = account1;
 pcl0.Acc_ContactId__c = contact0.Id;
+pcl0.Acc_ContactId__r = contact0;
 // pcl0.Acc_UserId__c relationship is not defined
 insert pcl0;
       
@@ -86,12 +97,13 @@ project1.Acc_MonitoringReportSchedule__c = 'Monthly';
 project1.Acc_ProjectStatus__c = 'Live';
 // project1.Acc_CurrentPeriodNumberHelper__c field is not defined
 upsert project1;
+ProjectTriggerHelper.isFirstTime = true;
 new Acc_ProjectPeriodProcessor_Batch().start(null);
 Acc_ClaimsCreateBatch.start(null);
         "
 `;
 
-exports[`Project Builder Expect everything to be harmonious with a prefix 1`] = `
+exports[`Project Builder Expect project to be built with prefix 1`] = `
 "
 Account account1 = new Account();
 account1.OrgMigrationId__c = 'hello.001';
@@ -115,6 +127,7 @@ contact0.FirstName = 'Austria';
 contact0.LastName = 'Hedges';
 contact0.Email = 'hello.austria@x.gov.uk';
 contact0.AccountId = account1.Id;
+contact0.Account = account1;
 insert contact0;
       
 User user1 = new User();
@@ -130,17 +143,22 @@ user1.LanguageLocaleKey = 'en_US';
 user1.TimeZoneSidKey = 'Europe/London';
 user1.ProfileId = '00e58000001ITpLAAW';
 user1.ContactId = contact0.Id;
+user1.Contact = contact0;
 insert user1;
       
 Acc_Project__c project1 = new Acc_Project__c();
 project1.Acc_CompetitionId__c = competition0.Id;
+project1.Acc_CompetitionId__r = competition0;
 project1.Acc_StartDate__c = date.valueOf('2024-01-16 12:59:42');
 project1.Acc_Duration__c = 36;
 project1.Acc_ProjectTitle__c = 'Title';
 // project1.Acc_TSBProjectNumber__c field is not defined
 project1.Acc_LegacyID__c = 'hello.100';
+// project1.Acc_ProjectSource__c field is not defined
 project1.Acc_WorkdayProjectSetupComplete__c = true;
+
 insert project1;
+Formula.recalculateFormulas(new List<Acc_Project__c> { project1 });
 
 Acc_ProjectParticipant__c projectParticipant2 = new Acc_ProjectParticipant__c();
 projectParticipant2.ParticipantMigrationID__c = 'hello.004001';
@@ -158,15 +176,20 @@ projectParticipant2.Acc_OrganisationType__c = 'Industrial';
 projectParticipant2.Acc_CreateProfiles__c = false;
 projectParticipant2.Acc_CreateClaims__c = false;
 projectParticipant2.Acc_ProjectId__c = project1.Id;
+projectParticipant2.Acc_ProjectId__r = project1;
 projectParticipant2.Acc_AccountId__c = account1.Id;
+projectParticipant2.Acc_AccountId__r = account1;
 insert projectParticipant2;
       
 Acc_ProjectContactLink__c pcl0 = new Acc_ProjectContactLink__c();
 pcl0.Acc_Role__c = 'Monitoring officer';
 pcl0.Acc_EmailOfSFContact__c = 'hello.noemail@noemail.com';
 pcl0.Acc_ProjectId__c = project1.Id;
+pcl0.Acc_ProjectId__r = project1;
 pcl0.Acc_AccountId__c = account1.Id;
+pcl0.Acc_AccountId__r = account1;
 pcl0.Acc_ContactId__c = contact0.Id;
+pcl0.Acc_ContactId__r = contact0;
 // pcl0.Acc_UserId__c relationship is not defined
 insert pcl0;
       
@@ -177,8 +200,191 @@ project1.Acc_MonitoringReportSchedule__c = 'Monthly';
 project1.Acc_ProjectStatus__c = 'Live';
 // project1.Acc_CurrentPeriodNumberHelper__c field is not defined
 upsert project1;
+ProjectTriggerHelper.isFirstTime = true;
 new Acc_ProjectPeriodProcessor_Batch().start(null);
 Acc_ClaimsCreateBatch.start(null);
+        "
+`;
+
+exports[`Project Builder Expect project to be built with profiles 1`] = `
+"
+Account account1 = new Account();
+account1.OrgMigrationId__c = '001';
+account1.Name = 'xgov';
+account1.BillingStreet = 'North Star Avenue';
+account1.BillingCity = 'Swindon';
+account1.BillingState = 'Wiltshire';
+account1.BillingPostalCode = 'SN2 1SZ';
+account1.BillingCountry = 'United Kingdom';
+insert account1;
+      
+Competition__c competition0 = new Competition__c();
+competition0.Acc_CompetitionCode__c = '100';
+competition0.Acc_CompetitionType__c = 'KTP';
+competition0.Acc_CompetitionName__c = 'Competition';
+insert competition0;
+      
+Contact contact0 = new Contact();
+contact0.ContactMigrationId__c = '001';
+contact0.FirstName = 'Austria';
+contact0.LastName = 'Hedges';
+contact0.Email = 'austria@x.gov.uk';
+contact0.AccountId = account1.Id;
+contact0.Account = account1;
+insert contact0;
+      
+User user1 = new User();
+user1.Username = 'austria@x.gov.uk';
+user1.Email = 'austria@x.gov.uk';
+user1.FirstName = 'Austria';
+user1.LastName = 'Hedges';
+user1.Alias = 'xgovuk';
+user1.CommunityNickname = 'austria';
+user1.EmailEncodingKey = 'UTF-8';
+user1.LocaleSidKey = 'en_GB';
+user1.LanguageLocaleKey = 'en_US';
+user1.TimeZoneSidKey = 'Europe/London';
+user1.ProfileId = '00e58000001ITpLAAW';
+user1.ContactId = contact0.Id;
+user1.Contact = contact0;
+insert user1;
+      
+Acc_Project__c project1 = new Acc_Project__c();
+project1.Acc_CompetitionId__c = competition0.Id;
+project1.Acc_CompetitionId__r = competition0;
+project1.Acc_StartDate__c = date.valueOf('2024-01-16 12:59:42');
+project1.Acc_Duration__c = 36;
+project1.Acc_ProjectTitle__c = 'Title';
+// project1.Acc_TSBProjectNumber__c field is not defined
+project1.Acc_LegacyID__c = '100';
+// project1.Acc_ProjectSource__c field is not defined
+project1.Acc_WorkdayProjectSetupComplete__c = true;
+
+insert project1;
+Formula.recalculateFormulas(new List<Acc_Project__c> { project1 });
+
+Acc_ProjectParticipant__c projectParticipant2 = new Acc_ProjectParticipant__c();
+projectParticipant2.ParticipantMigrationID__c = '004001';
+projectParticipant2.Acc_ParticipantType__c = 'Business';
+projectParticipant2.Acc_ParticipantSize__c = 'Medium';
+projectParticipant2.Acc_ProjectRole__c = 'Lead';
+projectParticipant2.Acc_AuditReportFrequency__c = 'With all claims';
+projectParticipant2.Acc_ParticipantStatus__c = 'Active';
+projectParticipant2.Acc_Award_Rate__c = 50;
+projectParticipant2.Acc_Cap_Limit__c = 50;
+projectParticipant2.Acc_FlaggedParticipant__c = false;
+projectParticipant2.Acc_OverheadRate__c = 20;
+projectParticipant2.Acc_ParticipantProjectReportingType__c = 'Public';
+projectParticipant2.Acc_OrganisationType__c = 'Industrial';
+projectParticipant2.Acc_CreateProfiles__c = false;
+projectParticipant2.Acc_CreateClaims__c = false;
+projectParticipant2.Acc_ProjectId__c = project1.Id;
+projectParticipant2.Acc_ProjectId__r = project1;
+projectParticipant2.Acc_AccountId__c = account1.Id;
+projectParticipant2.Acc_AccountId__r = account1;
+insert projectParticipant2;
+      
+Acc_ProjectContactLink__c pcl0 = new Acc_ProjectContactLink__c();
+pcl0.Acc_Role__c = 'Monitoring officer';
+pcl0.Acc_EmailOfSFContact__c = 'noemail@noemail.com';
+pcl0.Acc_ProjectId__c = project1.Id;
+pcl0.Acc_ProjectId__r = project1;
+pcl0.Acc_AccountId__c = account1.Id;
+pcl0.Acc_AccountId__r = account1;
+pcl0.Acc_ContactId__c = contact0.Id;
+pcl0.Acc_ContactId__r = contact0;
+// pcl0.Acc_UserId__c relationship is not defined
+insert pcl0;
+      
+project1.Acc_ClaimFrequency__c = 'Quarterly';
+project1.Acc_NonFEC__c = false;
+project1.Acc_MonitoringLevel__c = 'Platinum';
+project1.Acc_MonitoringReportSchedule__c = 'Monthly';
+project1.Acc_ProjectStatus__c = 'Live';
+// project1.Acc_CurrentPeriodNumberHelper__c field is not defined
+upsert project1;
+ProjectTriggerHelper.isFirstTime = true;
+new Acc_ProjectPeriodProcessor_Batch().start(null);
+Acc_ClaimsCreateBatch.start(null);
+        
+List<Acc_CostCategory__c> allProfiles0CostCategoriesList = [
+  SELECT
+    Id,
+    Acc_CompetitionType__c,
+    Acc_CostCategoryName__c,
+    Acc_OrganisationType__c
+  FROM
+    Acc_CostCategory__c
+  WHERE
+    Acc_CompetitionType__c = :competition0.Acc_CompetitionType__c AND
+    Acc_OrganisationType__c = :projectParticipant2.Acc_OrganisationType__c
+];
+List<Acc_Profile__c> allProfiles0DetailList = new List<Acc_Profile__c>();
+List<Acc_Profile__c> allProfiles0CostCatList = new List<Acc_Profile__c>();
+List<Acc_Profile__c> allProfiles0EmptyList = new List<Acc_Profile__c>();
+public class CannotFindProfileException extends Exception {}
+
+for(Acc_CostCategory__c costCategory : allProfiles0CostCategoriesList){
+  Acc_Profile__c profileCostCategory = new Acc_Profile__c();
+  profileCostCategory.Acc_InitialForecastCost__c = 0;
+  profileCostCategory.Acc_LatestForecastCost__c = 0;
+  profileCostCategory.Acc_ProjectParticipant__c = projectParticipant2.Id;
+  profileCostCategory.Acc_ProjectParticipant__r = projectParticipant2;
+  profileCostCategory.Acc_CostCategory__c = costCategory.Id;
+  profileCostCategory.Acc_CostCategory__r = costCategory;
+  profileCostCategory.RecordTypeId = Schema.SObjectType.Acc_Profile__c.getRecordTypeInfosByName().get('Total Cost Category').getRecordTypeId();
+  allProfiles0CostCatList.add(profileCostCategory);
+
+  for(Integer i = 0; i < undefined; i++){
+    Acc_Profile__c profileDetail = new Acc_Profile__c();
+    profileDetail.Acc_ProjectPeriodNumber__c = i + 1;
+    profileDetail.Acc_InitialForecastCost__c = 0;
+    profileDetail.Acc_LatestForecastCost__c = 0;
+    profileDetail.Acc_ProjectParticipant__c = projectParticipant2.Id;
+    profileDetail.Acc_ProjectParticipant__r = projectParticipant2;
+    profileDetail.Acc_CostCategory__c = costCategory.Id;
+    profileDetail.Acc_CostCategory__r = costCategory;
+    profileDetail.RecordTypeId = Schema.SObjectType.Acc_Profile__c.getRecordTypeInfosByName().get('Profile Detail').getRecordTypeId();
+    allProfiles0DetailList.add(profileDetail);
+  }
+}
+
+Acc_CreateProfileProcessor allProfiles0createProfileProcessor = new Acc_CreateProfileProcessor();
+List<Acc_Profile__c> allProfiles0ProjectPeriodList = allProfiles0createProfileProcessor.runTotalProjectPeriodCreationProcess(allProfiles0DetailList, allProfiles0EmptyList);
+
+Acc_Profile__c allProfiles0CostCategory(String costCategory) {
+  for (Acc_Profile__c profile : allProfiles0CostCatList) {
+    if (profile.Acc_CostCategory__r.Acc_CostCategoryName__c == costCategory) {
+      return profile;
+    }
+  }
+
+  throw new CannotFindProfileException('Cannot find Profile Cost Category for ' + costCategory + ' in the list of ' + allProfiles0CostCatList.size() + ' profiles.');
+}
+
+Acc_Profile__c allProfiles0ProfileDetail(String costCategory, Integer periodId) {
+  for (Acc_Profile__c profile : allProfiles0DetailList) {
+    if (
+      profile.Acc_CostCategory__r.Acc_CostCategoryName__c == costCategory &&
+      profile.Acc_ProjectPeriodNumber__c == periodId
+    ) {
+      return profile;
+    }
+  }
+
+  throw new CannotFindProfileException('Cannot find Profile Detail for ' + costCategory + ' period ' + periodId + ' in the list of ' + allProfiles0DetailList.size() + ' profiles.');
+}
+        
+Acc_Profile__c profileDetail0 = allProfiles0ProfileDetail('Labour', 4);
+profileDetail0.Acc_InitialForecastCost__c = 200;
+profileDetail0.Acc_LatestForecastCost__c = 210.49;
+    
+ProfileTriggerHandler.isTriggerDisabled = TRUE;
+List<Acc_Profile__c> allProfiles0CombinedList = new List<Acc_Profile__c>();
+allProfiles0CombinedList.addAll(allProfiles0CostCatList);
+allProfiles0CombinedList.addAll(allProfiles0ProjectPeriodList);
+allProfiles0CombinedList.addAll(allProfiles0DetailList);
+insert allProfiles0CombinedList;
         "
 `;
 
@@ -192,13 +398,17 @@ insert competition0;
       
 Acc_Project__c project1 = new Acc_Project__c();
 project1.Acc_CompetitionId__c = competition0.Id;
+project1.Acc_CompetitionId__r = competition0;
 project1.Acc_StartDate__c = date.valueOf('2024-01-16 12:59:42');
 project1.Acc_Duration__c = 36;
 project1.Acc_ProjectTitle__c = 'Title';
 // project1.Acc_TSBProjectNumber__c field is not defined
 project1.Acc_LegacyID__c = '100';
+// project1.Acc_ProjectSource__c field is not defined
 project1.Acc_WorkdayProjectSetupComplete__c = true;
+
 insert project1;
+Formula.recalculateFormulas(new List<Acc_Project__c> { project1 });
 
 project1.Acc_ClaimFrequency__c = 'Quarterly';
 project1.Acc_NonFEC__c = false;
@@ -207,6 +417,7 @@ project1.Acc_MonitoringReportSchedule__c = 'Monthly';
 project1.Acc_ProjectStatus__c = 'Live';
 // project1.Acc_CurrentPeriodNumberHelper__c field is not defined
 upsert project1;
+ProjectTriggerHelper.isFirstTime = true;
 new Acc_ProjectPeriodProcessor_Batch().start(null);
 Acc_ClaimsCreateBatch.start(null);
         "

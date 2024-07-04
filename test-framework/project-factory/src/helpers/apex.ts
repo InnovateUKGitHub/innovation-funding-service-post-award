@@ -38,11 +38,10 @@ function sss(x: unknown): string {
   throw new Error("Cannot convert value " + String(x));
 }
 
-const injectRecordTypeId = (instanceName: string, objectName: string, recordType: string): string => {
-  return `${instanceName}.RecordTypeId = Schema.SObjectType.${objectName}.getRecordTypeInfosByDeveloperName().get(${sss(
+const injectRecordTypeId = (instanceName: string, objectName: string, recordType: string): string =>
+  `${instanceName}.RecordTypeId = Schema.SObjectType.${objectName}.getRecordTypeInfosByDeveloperName().get(${sss(
     recordType,
   )}).getRecordTypeId();`;
-};
 
 const injectFieldToApex = (
   options: ProjectFactoryBuildOptions,
@@ -87,7 +86,7 @@ const injectRelationshipToApex = (
   instanceName: string,
   instanceRelFieldName: string,
   relationship: { value: ProjectFactoryInstance<any>; meta: ProjectFactoryRelationship },
-): string | null => {
+): string => {
   if (!relationship.value) {
     if (relationship.meta.required) {
       throw new Error(`Cannot find the required relationship of ${instanceName}.${instanceRelFieldName}`);
@@ -95,7 +94,19 @@ const injectRelationshipToApex = (
       return `// ${instanceName}.${instanceRelFieldName} relationship is not defined`;
     }
   }
-  return `${instanceName}.${instanceRelFieldName} = ${relationship.value.instanceName}.Id;`;
+
+  const relationshipRelFieldName = instanceRelFieldName.replace(/Id$/, "").replace(/__c$/, "__r");
+
+  return `${instanceName}.${instanceRelFieldName} = ${relationship.value.instanceName}.Id;
+${instanceName}.${relationshipRelFieldName} = ${relationship.value.instanceName};`;
+};
+
+const injectApexFunctionCall = (
+  relationship: { value: ProjectFactoryInstance<any>; meta: ProjectFactoryRelationship },
+  functionSuffix: string,
+  fields: { value: unknown; meta: ProjectFactoryField }[],
+): string => {
+  return `${relationship.value.instanceName}${functionSuffix}(${fields.map(x => sss(x.value)).join(", ")})`;
 };
 
 const buildApex = ({
@@ -162,6 +173,7 @@ export {
   injectFieldsToApex,
   injectRelationshipToApex,
   injectRecordTypeId,
+  injectApexFunctionCall,
   buildApex,
   formatApex,
 };

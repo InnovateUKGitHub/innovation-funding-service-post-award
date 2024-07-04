@@ -1,5 +1,9 @@
 import { EnvironmentManager } from "environment-manager";
 import jwt from "jsonwebtoken";
+import { createClientAsync } from "./sfdc/soapClient/toolingwsdl";
+import { BearerSecurity } from "soap";
+import path from "path";
+import { xml } from "./helpers/xml";
 
 const accCache = new Map<string, string>();
 let salesforceAccessToken: string | null = null;
@@ -26,13 +30,16 @@ const tasks = {
 
   async runApex({ cyEnv, apex }: { apex: string } & SirtestalotTaskProps): Promise<unknown> {
     const envman = new EnvironmentManager(cyEnv.SALESFORCE_SANDBOX);
+    const privateKey = envman.getEnv("SALESFORCE_PRIVATE_KEY");
+    const username = envman.getEnv("SALESFORCE_USERNAME");
+    const clientId = envman.getEnv("SALESFORCE_CLIENT_ID");
+    const mySiteConnectionUrl = envman.getEnv("SALESFORCE_CONNECTION_URL");
 
     const getSalesforceAccessToken = async () => {
-      const privateKey = envman.getEnv("SALESFORCE_PRIVATE_KEY");
-      const jwtPayload = { prn: envman.getEnv("SALESFORCE_USERNAME") };
+      const jwtPayload = { prn: username };
       const jwtOptions = {
-        issuer: envman.getEnv("SALESFORCE_CLIENT_ID"),
-        audience: envman.getEnv("SALESFORCE_CONNECTION_URL"),
+        issuer: clientId,
+        audience: mySiteConnectionUrl,
         expiresIn: 10,
         algorithm: "RS256",
       };
@@ -44,7 +51,7 @@ const tasks = {
       body.append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
       body.append("assertion", jwtToken);
 
-      const request = await fetch(`${envman.getEnv("SALESFORCE_CONNECTION_URL")}/services/oauth2/token`, {
+      const request = await fetch(`${mySiteConnectionUrl}/services/oauth2/token`, {
         method: "POST",
         body,
       });
@@ -57,25 +64,47 @@ const tasks = {
       salesforceAccessToken = await getSalesforceAccessToken();
     }
 
-    const url = new URL("/services/data/v60.0/tooling/executeAnonymous", envman.getEnv("SALESFORCE_CONNECTION_URL"));
-    url.searchParams.append("anonymousBody", apex);
-
-    const res = await fetch(url, {
-      method: "GET",
+    const res = await fetch(mySiteConnectionUrl + "/services/Soap/T/61.0", {
+      method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${salesforceAccessToken}`,
+        Accept: "text/xml",
+        "Content-Type": "text/xml",
+        SOAPAction: "blargh",
       },
+      body: xml`
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:tns="urn:tooling.soap.sforce.com"
+>
+  <soap:Header>
+    <tns:DebuggingHeader>
+      <tns:categories>
+        <tns:category>apex_code</tns:category>
+        <tns:level>FINEST</tns:level>
+      </tns:categories>
+      <tns:debugLevel>DETAIL</tns:debugLevel>
+    </tns:DebuggingHeader>
+    <tns:SessionHeader>
+      <tns:sessionId>${salesforceAccessToken}</tns:sessionId>
+    </tns:SessionHeader>
+  </soap:Header>
+  <soap:Body>
+    <tns:executeAnonymous>
+      <tns:String>${apex}</tns:String>
+    </tns:executeAnonymous>
+  </soap:Body>
+</soap:Envelope>
+      `,
     });
 
-    const response = await res.json();
-
-    if (response.success === false) {
-      if (response.compileProblem) throw new Error("Apex compilation error: " + response.compileProblem);
-      throw new Error(JSON.stringify(response));
+    const text = await res.text();
+    if (!res.ok) {
+      throw new Error(text);
     }
+    console.error(text);
 
-    return response;
+    return "";
   },
 };
 

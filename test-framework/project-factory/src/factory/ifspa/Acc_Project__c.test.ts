@@ -7,6 +7,8 @@ import { userBuilder } from "./User";
 import { contactBuilder } from "./Contact";
 import { accProjectContactLinkBuilder } from "./Acc_ProjectContactLink__c";
 import { accProjectParticipantBuilder } from "./Acc_ProjectParticipant__c";
+import { projectFactoryProfilesHelperBuilder } from "./ProjectFactory.ProfilesHelper";
+import { accProfileDetailBuilder } from "./Acc_Profile__c.Profile_Detail";
 
 const competition = competitionBuilder
   .create()
@@ -87,23 +89,53 @@ const projectParticipant = accProjectParticipantBuilder.create().set({
   Acc_CreateClaims__c: false,
 });
 
+const profileHelper = projectFactoryProfilesHelperBuilder.create().set({
+  ProjectFactory_ProjectParticipant: projectParticipant,
+  ProjectFactory_Competition: competition,
+});
+
+const profileDetail = accProfileDetailBuilder.create().set({
+  Acc_ProjectPeriodNumber__c: 4,
+  Acc_CostCategoryDescription__c: "Labour",
+  ProjectFactory_ProfileHelper: profileHelper,
+  Acc_InitialForecastCost__c: 200,
+  Acc_LatestForecastCost__c: 210.49,
+});
+
 describe("Project Builder", () => {
   test("Expect project to be built, linking correctly to competition", () => {
     const code = buildApex({ instances: [project, competition] });
     expect(code).toMatchSnapshot();
   });
 
-  test("Expect everything to be harmonious", () => {
+  test("Expect project to be built", () => {
     const code = buildApex({
       instances: [project, competition, account, contact, user, projectContactLink, projectParticipant],
     });
     expect(code).toMatchSnapshot();
   });
 
-  test("Expect everything to be harmonious with a prefix", () => {
+  test("Expect project to be built with prefix", () => {
     const code = buildApex({
       instances: [project, competition, account, contact, user, projectContactLink, projectParticipant],
       options: { prefix: "hello." },
+    });
+    expect(code).toMatchSnapshot();
+  });
+
+  test("Expect project to be built with profiles", () => {
+    const code = buildApex({
+      instances: [
+        project,
+        competition,
+        account,
+        contact,
+        user,
+        projectContactLink,
+        projectParticipant,
+        profileDetail,
+        profileHelper,
+      ],
     });
     expect(code).toMatchSnapshot();
   });

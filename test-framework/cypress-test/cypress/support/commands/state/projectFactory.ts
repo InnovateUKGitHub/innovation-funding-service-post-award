@@ -10,6 +10,9 @@ const createProject = (data: CreateProjectProps) => {
       ...data.pcrs.removePartner,
       ...data.logins.map(x => [x.account, x.contact, x.pcl, x.user]),
       data.competition,
+      data.profiles.projectFactoryHelper,
+      ...data.profiles.details,
+      ...data.profiles.totalCostCategories,
     ].flat(),
     options: {
       prefix,

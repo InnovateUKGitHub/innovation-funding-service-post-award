@@ -45,19 +45,22 @@ Parent parent4 = new Parent();
 parent4.var = 'My fancy title';
 insert parent4;
 
-Child child0 = new Child();
-child0.var = 'My child 1';
-child0.parent = parent4.Id;
-insert child0;
-
-Child child1 = new Child();
-child1.var = 'My child 2';
-child1.parent = parent4.Id;
-insert child1;
-
-Child child2 = new Child();
-child2.var = 'My child 3';
-child2.parent = parent4.Id;
-insert child2;
-"
+            Child child0 = new Child();
+            child0.var = 'My child 1';
+            child0.parent = parent4.Id;
+child0.parent = parent4;
+            insert child0;
+          
+            Child child1 = new Child();
+            child1.var = 'My child 2';
+            child1.parent = parent4.Id;
+child1.parent = parent4;
+            insert child1;
+          
+            Child child2 = new Child();
+            child2.var = 'My child 3';
+            child2.parent = parent4.Id;
+child2.parent = parent4;
+            insert child2;
+          "
 `;

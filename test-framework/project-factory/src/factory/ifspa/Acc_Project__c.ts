@@ -52,6 +52,12 @@ const accProjectBuilder = new ProjectFactory(
         },
         { sfdcName: "Acc_ClaimFrequency__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: false },
         { sfdcName: "Acc_CurrentPeriodNumberHelper__c", sfdcType: ProjectFactoryFieldType.NUMBER, nullable: true },
+        {
+          sfdcName: "Acc_ProjectSource__c",
+          sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
+          nullable: true,
+          values: ["Manual", "IFS", "Grants"],
+        },
       ],
       relationships: [
         {
@@ -76,13 +82,16 @@ ${injectFieldToApex(options, instanceName, "Acc_Duration__c", fields.Acc_Duratio
 ${injectFieldToApex(options, instanceName, "Acc_ProjectTitle__c", fields.Acc_ProjectTitle__c)}
 ${injectFieldToApex(options, instanceName, "Acc_TSBProjectNumber__c", fields.Acc_TSBProjectNumber__c)}
 ${injectFieldToApex(options, instanceName, "Acc_LegacyID__c", fields.Acc_LegacyID__c)}
+${injectFieldToApex(options, instanceName, "Acc_ProjectSource__c", fields.Acc_ProjectSource__c)}
 ${injectFieldToApex(
   options,
   instanceName,
   "Acc_WorkdayProjectSetupComplete__c",
   fields.Acc_WorkdayProjectSetupComplete__c,
 )}
+
 insert ${instanceName};
+Formula.recalculateFormulas(new List<Acc_Project__c> { ${instanceName} });
 `,
       priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_LOAD,
     },
@@ -95,9 +104,9 @@ ${injectFieldToApex(options, instanceName, "Acc_MonitoringReportSchedule__c", fi
 ${injectFieldToApex(options, instanceName, "Acc_ProjectStatus__c", fields.Acc_ProjectStatus__c)}
 ${injectFieldToApex(options, instanceName, "Acc_CurrentPeriodNumberHelper__c", fields.Acc_CurrentPeriodNumberHelper__c)}
 upsert ${instanceName};
+ProjectTriggerHelper.isFirstTime = true;
 new Acc_ProjectPeriodProcessor_Batch().start(null);
 Acc_ClaimsCreateBatch.start(null);
-Acc_AsyncNonIFSProfCreationBatch.start(null);
         `,
       priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_POSTLOAD,
     },
@@ -119,6 +128,7 @@ const defaultAccProject = accProjectBuilder.create().set({
   Acc_MonitoringReportSchedule__c: "Monthly",
   Acc_ProjectStatus__c: "Live",
   Acc_CurrentPeriodNumberHelper__c: 1,
+  Acc_ProjectSource__c: "Manual",
 });
 
 export { accProjectBuilder, defaultAccProject };
