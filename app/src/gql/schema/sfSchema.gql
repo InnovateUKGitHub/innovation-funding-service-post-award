@@ -1,4 +1,3 @@
-"""Entry point for read operations to the schema."""
 type Query {
   uiapi: UIAPI!
 }
@@ -2680,6 +2679,7 @@ type Acc_ProjectContactLink__c {
 
   """parentRelationship"""
   Acc_UserId__r: User
+  Associate_End_Date__c: DateValue
   LastViewedDate: DateTimeValue
   SystemModstamp: DateTimeValue
   Associate_Start_Date__c: DateValue
@@ -2747,6 +2747,7 @@ input Acc_ProjectContactLink__c_Filter {
   Acc_Internal_User__c: BooleanOperators
   Acc_UserId__c: IdOperators
   Acc_UserId__r: User_Filter
+  Associate_End_Date__c: DateOperators
   LastViewedDate: DateTimeOperators
   SystemModstamp: DateTimeOperators
   Associate_Start_Date__c: DateOperators
@@ -2781,6 +2782,7 @@ input Acc_ProjectContactLink__c_GroupBy {
   Acc_Internal_User__c: GroupByClause
   Acc_UserId__c: GroupByClause
   Acc_UserId__r: User_GroupBy
+  Associate_End_Date__c: GroupByClause
   LastViewedDate: GroupByDateFunction
   SystemModstamp: GroupByDateFunction
   Associate_Start_Date__c: GroupByClause
@@ -2814,6 +2816,7 @@ input Acc_ProjectContactLink__c_OrderBy {
   Acc_Internal_User__c: NoFunctionAggregateOrderByClause
   Acc_UserId__c: NoFunctionAggregateOrderByClause
   Acc_UserId__r: User_OrderBy
+  Associate_End_Date__c: AggregateOrderByStringClause
   LastViewedDate: AggregateOrderByStringClause
   SystemModstamp: AggregateOrderByStringClause
   Associate_Start_Date__c: AggregateOrderByStringClause
@@ -6024,29 +6027,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  LAST_QUARTER
-  NEXT_FISCAL_QUARTER
-  LAST_FISCAL_YEAR
-  LAST_MONTH
   YESTERDAY
-  NEXT_MONTH
-  TODAY
-  THIS_WEEK
-  NEXT_90_DAYS
-  NEXT_WEEK
-  LAST_FISCAL_QUARTER
-  LAST_YEAR
-  NEXT_QUARTER
   THIS_MONTH
-  TOMORROW
-  THIS_QUARTER
-  LAST_90_DAYS
-  NEXT_FISCAL_YEAR
-  THIS_FISCAL_YEAR
+  TODAY
   LAST_WEEK
+  NEXT_QUARTER
+  NEXT_MONTH
   THIS_FISCAL_QUARTER
-  THIS_YEAR
+  LAST_FISCAL_YEAR
+  NEXT_FISCAL_YEAR
+  NEXT_90_DAYS
+  LAST_90_DAYS
+  LAST_QUARTER
+  LAST_YEAR
+  THIS_FISCAL_YEAR
+  TOMORROW
+  THIS_WEEK
   NEXT_YEAR
+  THIS_QUARTER
+  LAST_MONTH
+  NEXT_FISCAL_QUARTER
+  LAST_FISCAL_QUARTER
+  NEXT_WEEK
+  THIS_YEAR
 }
 
 input DateOperators {

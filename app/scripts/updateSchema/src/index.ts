@@ -1,7 +1,8 @@
 import { Api } from "@gql/sf/Api";
 import { stitchSchemas } from "@graphql-tools/stitch";
 import { AsyncExecutor } from "@graphql-tools/utils";
-import { FilterTypes, introspectSchema } from "@graphql-tools/wrap";
+import { FilterTypes, schemaFromExecutor } from "@graphql-tools/wrap";
+import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import fs from "fs";
 import { printSchema } from "graphql";
@@ -31,7 +32,8 @@ const main = async () => {
     email: getEnv("SALESFORCE_USERNAME"),
   });
 
-  const salesforceSchema = await introspectSchema(api.executeGraphQL as unknown as AsyncExecutor);
+  const salesforceSchema = await schemaFromExecutor(api.executeGraphQL.bind(api) as unknown as AsyncExecutor);
+
   const transformedSchema = {
     schema: salesforceSchema,
     transforms: [new FilterTypes(type => whitelist.includes(type.name))],
