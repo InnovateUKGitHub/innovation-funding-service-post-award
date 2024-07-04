@@ -802,7 +802,7 @@ export const loansForecastEmptyCell = () => {
   cy.getByAriaLabel("Loans costs for Industrial participants Period 2").clear();
   cy.wait(500);
   cy.button("Continue to summary").click();
-  cy.validationLink("Forecast is required.");
+  cy.validationLink("Enter forecast.");
 };
 
 /**
@@ -817,7 +817,7 @@ export const loansForecastCopyPaste = () => {
     .trigger("input");
   cy.wait(200);
   cy.button("Continue to summary").click();
-  cy.validationLink("Forecast is required.");
+  cy.validationLink("Enter forecast.");
 };
 
 export const loansCostsPageNavigate = () => {

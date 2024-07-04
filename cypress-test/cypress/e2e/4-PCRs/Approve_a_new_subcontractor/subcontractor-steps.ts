@@ -84,7 +84,6 @@ export const validateSubcontractorName = () => {
 
 export const validateRegistrationNumber = () => {
   cy.getByLabel("Company registration number");
-  cy.reload();
   cy.getByLabel("Company registration number").clear().type("123456789123456789012");
   cy.button("Save and continue").click();
   cy.validationLink("Subcontractor's registration number must be 20 characters or less.");
