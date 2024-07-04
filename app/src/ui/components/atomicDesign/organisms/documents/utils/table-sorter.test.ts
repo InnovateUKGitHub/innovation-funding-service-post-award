@@ -1,4 +1,4 @@
-import _isEqual from "lodash/isequal";
+import _isEqual from "lodash/isEqual";
 import { renderHook, act } from "@testing-library/react";
 
 import { hookTestBed } from "@shared/TestBed";

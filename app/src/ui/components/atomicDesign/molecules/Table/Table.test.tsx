@@ -1,4 +1,4 @@
-import _isEqual from "lodash/isequal";
+import _isEqual from "lodash/isEqual";
 import { act, render } from "@testing-library/react";
 import fireEvent from "@testing-library/user-event";
 

@@ -1,0 +1,15 @@
+diff --git a/node_modules/tsconfig-paths-webpack-plugin/lib/plugin.d.ts b/node_modules/tsconfig-paths-webpack-plugin/lib/plugin.d.ts
+index 72711b7..c8d9a14 100644
+--- a/node_modules/tsconfig-paths-webpack-plugin/lib/plugin.d.ts
++++ b/node_modules/tsconfig-paths-webpack-plugin/lib/plugin.d.ts
+@@ -52,7 +52,9 @@ export interface Callback {
+     stack?: string;
+     missing?: string;
+ }
+-export declare class TsconfigPathsPlugin implements ResolvePluginInstance {
++// export declare class TsconfigPathsPlugin implements ResolvePluginInstance {
++// patching the original because current version of webpack type ResolvePluginInstance cannot be `implemented`
++export declare class TsconfigPathsPlugin {
+     source: string;
+     target: string;
+     log: Logger.Logger;
