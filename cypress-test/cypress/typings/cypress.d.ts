@@ -165,7 +165,7 @@ declare global {
 
       validationMessage(message: string): Chainable<Element>;
 
-      heading(title: Heading | Tile | CostCategory): Chainable<Element>;
+      heading(title: Heading | Tile | CostCategory | string): Chainable<Element>;
 
       /**
        *

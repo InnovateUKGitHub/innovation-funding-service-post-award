@@ -229,7 +229,7 @@ const validationNotification = (message: string) => {
   cy.getByQA("validation-message-content").contains(message);
 };
 
-const heading = (title: Heading | Tile | CostCategory) => {
+const heading = (title: Heading | Tile | CostCategory | string) => {
   cy.log("**heading**");
   cy.get("h1").should("have.text", title, { timeout: 50000 });
 };

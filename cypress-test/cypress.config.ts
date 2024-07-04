@@ -115,7 +115,7 @@ export default defineConfig({
     },
     testIsolation: false,
   },
-  retries: { openMode: null, runMode: 1 },
+  retries: { openMode: 0, runMode: 1 },
   redirectionLimit: 35,
   experimentalWebKitSupport: true,
 });

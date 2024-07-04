@@ -1,3 +1,5 @@
+import { CostCategory } from "./costCategory";
+
 export type Heading =
   | "Add a partner"
   | "Add types"
@@ -30,6 +32,7 @@ export type Heading =
   | "Forecast"
   | "Forecasts"
   | "Labour"
+  | "Labour documents"
   | "Loan Drawdown Change"
   | "Loans costs for Industrial participants"
   | "Materials"

@@ -70,10 +70,12 @@ export const loansProjCostCleanUp = () => {
 };
 
 export const retentionTidyUp = () => {
-  [
-    ["1", "Labour"],
-    ["3", "Materials"],
-  ].forEach(([rowNum, catName]) => {
+  (
+    [
+      ["1", "Labour"],
+      ["3", "Materials"],
+    ] as const
+  ).forEach(([rowNum, catName]) => {
     cy.get("tr")
       .eq(Number(rowNum))
       .then($row => {
