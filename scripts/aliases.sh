@@ -199,3 +199,8 @@ docker_upload_node() {
   docker tag node:$VERSION docker-ifs.devops.innovateuk.org/acc/node:$VERSION
   docker push docker-ifs.devops.innovateuk.org/acc/node:$VERSION
 }
+
+acc_clone_secrets() {
+  # Clone or Git Pull the latest acc-secrets
+  git -C kustomize/acc-secrets/ pull || git clone https://bitbucket.org/ukri-ddat/acc-secrets.git kustomize/acc-secrets
+}

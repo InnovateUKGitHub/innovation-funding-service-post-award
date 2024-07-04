@@ -1,3 +1,0 @@
-[submodule "kustomize/acc-secrets"]
-	path = kustomize/acc-secrets
-	url = ../acc-secrets
