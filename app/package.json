@@ -120,7 +120,7 @@
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@graphql-tools/schema": "^10.0.4",
-    "@jgoz/esbuild-plugin-typecheck": "^4.0.0",
+    "@jgoz/esbuild-plugin-typecheck": "^3.1.3",
     "@storybook/addon-essentials": "7.5.x",
     "@storybook/addon-interactions": "7.5.x",
     "@storybook/addon-links": "7.5.x",

@@ -209,7 +209,7 @@ export class ServerLogger extends BaseLogger {
 
   private logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
     // newrelic is a global variable instantiated as a banner of the webpack/esbuild build
-    // @ts-ignore TODO: Additional values are allowed to be passed to newrelic#recordLogEvent
+    // @ts-expect-error TODO: Additional values are allowed to be passed to newrelic#recordLogEvent
     if (newrelic) newrelic.recordLogEvent({ level, timestamp: Date.now(), message, params });
   }
 }

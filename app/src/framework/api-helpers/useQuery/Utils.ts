@@ -21,7 +21,9 @@ export const isStorePolicy = (policy: FetchPolicy): boolean => {
 
 export const forceCache = { force: true };
 
-// Fetcher
+/**
+ * returns OperationDescriptor
+ */
 export function createOperation(
   gqlQuery: GraphQLTaggedNode,
   variables: Variables,
