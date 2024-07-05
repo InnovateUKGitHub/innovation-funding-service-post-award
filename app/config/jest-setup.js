@@ -1,10 +1,12 @@
-import "@testing-library/jest-dom";
-import { configure } from "@testing-library/react";
-import React from "react";
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/naming-convention */
+require("@testing-library/jest-dom");
 
+const React = require("react");
 global.React = React;
 
-configure({ testIdAttribute: "data-qa" });
+const ReactTestingLibrary = require("@testing-library/react");
+
+ReactTestingLibrary.configure({ testIdAttribute: "data-qa" });
 
 // TODO: Delete the next few lines...
 // https://github.com/kkomelin/isomorphic-dompurify/issues/91#issuecomment-1012645198

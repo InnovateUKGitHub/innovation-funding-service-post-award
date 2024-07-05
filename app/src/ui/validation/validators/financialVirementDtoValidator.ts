@@ -25,6 +25,7 @@ export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVire
 
   public readonly totals = this.validateTotals();
   public readonly totalValue = this.validateTotalValue();
+
   public readonly items = this.validateItems();
 
   private validateTotals() {

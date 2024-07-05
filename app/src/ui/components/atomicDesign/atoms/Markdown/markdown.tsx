@@ -1,7 +1,7 @@
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 import classNames from "classnames";
-import { DetailedHTMLProps, HTMLAttributes, useState } from "react";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
 
 export interface IMarkdownProps extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {
   value: string;
@@ -31,7 +31,6 @@ renderer.link = ({ href, title, text, raw, tokens, type }) => {
  * and parents. E.g. if `<Content>` wrapped in `<SimpleString>`
  */
 export function Markdown({ value, trusted = false, verticalScrollbar, ...props }: IMarkdownProps) {
-  const [markdown, setMarkdown] = useState("");
   if (!value.length) return null;
 
   let content = value;
@@ -84,10 +83,11 @@ export function Markdown({ value, trusted = false, verticalScrollbar, ...props }
   }
 
   const contentResponse = marked.parse(content, { renderer });
+  let markdown: string = "";
   if (typeof contentResponse === "string") {
-    setMarkdown(contentResponse);
+    markdown = contentResponse;
   } else {
-    contentResponse.then(res => setMarkdown(res));
+    contentResponse.then(res => (markdown = res));
   }
 
   return (

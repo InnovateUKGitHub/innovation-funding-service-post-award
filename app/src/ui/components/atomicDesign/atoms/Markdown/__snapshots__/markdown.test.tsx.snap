@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Markdown @renders with converted markdown parsed correctly with headings 1`] = `
-"<span class="govuk-body markdown"><h2 id="heading-test">Heading Test</h2>
+"<span class="govuk-body markdown"><h2>Heading Test</h2>
 </span>"
 `;
 

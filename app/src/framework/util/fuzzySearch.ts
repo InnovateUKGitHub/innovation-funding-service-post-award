@@ -11,7 +11,6 @@ import Fuse from "fuse.js";
 const fuzzySearch = <T>(value: string, items: T[], keysToSearch: string[]) => {
   const valueToSearch = value.trim();
 
-  // TODO: reconfirm this value after migrating to Node16
   const scoreThreshold = 0.19;
 
   const fusedQuery = new Fuse(items, {

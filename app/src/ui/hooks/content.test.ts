@@ -3,6 +3,7 @@ import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "./content.hook";
+import { hookTestBed } from "@shared/TestBed";
 
 describe("useContent()", () => {
   const stubTestContent = {
@@ -16,7 +17,7 @@ describe("useContent()", () => {
   type PossibleTestCopyKeys = typeof stubTestContent;
   type PossibleTestCopyFunctions = PossibleCopyFunctions<PossibleTestCopyKeys>;
 
-  const render = renderHook(useContent, {});
+  const render = renderHook(useContent, hookTestBed({}));
 
   beforeAll(async () => {
     await initStubTestIntl(stubTestContent);

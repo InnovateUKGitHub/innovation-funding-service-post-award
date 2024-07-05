@@ -12,6 +12,7 @@ import {
 } from "@framework/dtos/financialVirementDto";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
 import { LoanStatus } from "@framework/entities/loan-status";
+import { generateId } from "@tests/test-utils/generateId";
 
 describe("financialVirementDtoValidator", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {
@@ -134,7 +135,7 @@ describe("financialVirementDtoValidator", () => {
       const currentDate = new Date(Date.UTC(2022, 1));
 
       return {
-        id: "34567ghjklkjhgfghjkl" as LoanId,
+        id: generateId("LoanId"),
         isEditable: true,
         period: 1 as PeriodId as PeriodId,
         status: LoanStatus.PLANNED,
@@ -347,6 +348,8 @@ describe("financialVirementDtoValidator", () => {
                 newDate: new Date(Date.UTC(stubInvalidPreviousYear, 1)),
               },
             ];
+
+            console.log("StubData", JSON.stringify(stubData));
 
             const stubPayload = createItemsStub(stubData);
             const validation = new FinancialLoanVirementDtoValidator(stubPayload, true, true);

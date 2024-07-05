@@ -1706,7 +1706,7 @@ exports[`Storyshots IFSPA Renderer/Markdown Trusted 1`] = `
     className="govuk-body markdown"
     dangerouslySetInnerHTML={
       {
-        "__html": "<h1 id="markdown">Markdown</h1>
+        "__html": "<h1>Markdown</h1>
 <p>A button should appear because it is trusted.  </p>
 <p><button>This button is trusted!</button>
     </p>
@@ -1726,7 +1726,7 @@ exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
     className="govuk-body markdown"
     dangerouslySetInnerHTML={
       {
-        "__html": "<h1 id="markdown">Markdown</h1>
+        "__html": "<h1>Markdown</h1>
 <p>A button should not appear because it is not trusted.<br>Instead, the text content of the button should show.</p>
 <p>This button is trusted!</p>
 ",

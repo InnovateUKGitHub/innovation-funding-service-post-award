@@ -3,6 +3,7 @@ import { hookTestBed, HookTestBedProps } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/atomicDesign/organisms/documents/utils/document-search.hook";
 import { DocumentsBase } from "@ui/components/atomicDesign/organisms/documents/utils/documents.interface";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { generateId } from "@tests/test-utils/generateId";
 
 describe("useDocumentSearch()", () => {
   const setup = (disableSearch: boolean, originalDocuments: DocumentsBase["documents"], options?: HookTestBedProps) =>
@@ -11,7 +12,7 @@ describe("useDocumentSearch()", () => {
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",
     link: "stub-link",
-    id: "34567890",
+    id: generateId("DocumentId"),
     fileSize: 1024,
     dateCreated: new Date(Date.UTC(2021, 10, 1)),
     uploadedBy: "stub-uploadedBy",
@@ -178,7 +179,7 @@ describe("useDocumentSearch()", () => {
             stubBaseDocument,
             {
               ...stubBaseDocument,
-              id: "34567890",
+              id: generateId("DocumentId"),
               fileName: stubUnSearchableFileName,
             },
           ];
@@ -198,17 +199,17 @@ describe("useDocumentSearch()", () => {
           const stubDocs = [
             {
               ...stubBaseDocument,
-              id: "4567890",
+              id: generateId("DocumentId"),
               fileName: `${stubCommonPartFileName} 1`,
             },
             {
               ...stubBaseDocument,
-              id: "4567890",
+              id: generateId("DocumentId"),
               fileName: `${stubCommonPartFileName} 2`,
             },
             {
               ...stubBaseDocument,
-              id: "4567890",
+              id: generateId("DocumentId"),
               fileName: stubNonMatchingFileName,
             },
           ];
@@ -234,19 +235,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: "4567890-",
+                id: generateId("DocumentId"),
                 fileName: "Document 1",
                 dateCreated: new Date(Date.UTC(2021, 1)),
               },
               {
                 ...stubBaseDocument,
-                id: "4567890-",
+                id: generateId("DocumentId"),
                 fileName: "Document 2",
                 dateCreated: new Date(Date.UTC(2021, 2)),
               },
               {
                 ...stubBaseDocument,
-                id: "4567890",
+                id: generateId("DocumentId"),
                 fileName: "Document 3",
                 dateCreated: new Date(Date.UTC(2020, 2)),
               },
@@ -270,19 +271,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: "567890",
+                id: generateId("DocumentId"),
                 fileName: "Document 1",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: "567890-",
+                id: generateId("DocumentId"),
                 fileName: "Document 2",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: "567890",
+                id: generateId("DocumentId"),
                 fileName: "Document 3",
                 fileSize: 205732,
               },
@@ -306,19 +307,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: "4567890",
+                id: generateId("DocumentId"),
                 fileName: "Document 1",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: "567890-",
+                id: generateId("DocumentId"),
                 fileName: "Document 2",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: "567890",
+                id: generateId("DocumentId"),
                 fileName: "Document 3",
                 uploadedBy: "Elton John",
               },
