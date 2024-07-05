@@ -3,7 +3,11 @@ import { Authorisation } from "@framework/types/authorisation";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetPartnerDocumentQuery extends DocumentQueryBase {
-  constructor(private readonly projectId: ProjectId, private readonly partnerId: PartnerId, documentId: string) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
+    documentId: string,
+  ) {
     super(documentId);
   }
 

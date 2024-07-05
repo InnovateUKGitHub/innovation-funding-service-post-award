@@ -6,7 +6,10 @@ import { BadRequestError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 
 export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: ProjectId, private readonly pcrId: PcrId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly pcrId: PcrId,
+  ) {
     super();
   }
 

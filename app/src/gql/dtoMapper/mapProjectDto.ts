@@ -291,8 +291,11 @@ export function mapToProjectDto<T extends ProjectNode, PickList extends keyof Pr
   node: T,
   pickList: PickList[],
 ): Pick<ProjectDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
-    return dto;
-  }, {} as Pick<ProjectDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node);
+      return dto;
+    },
+    {} as Pick<ProjectDtoMapping, PickList>,
+  );
 }

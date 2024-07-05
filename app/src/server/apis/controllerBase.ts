@@ -46,8 +46,8 @@ export type ApiParams<Context extends "client" | "server", T = undefined> = T ex
     ? EmptyObject
     : ISession
   : Context extends "client"
-  ? T
-  : Merge<T, ISession>;
+    ? T
+    : Merge<T, ISession>;
 
 interface UrlParamsBase {
   [key: string]: string;

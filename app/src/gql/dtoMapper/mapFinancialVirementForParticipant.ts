@@ -56,10 +56,13 @@ const mapToFinancialVirementForParticipantDto = <
   financialVirementForCostNode: TNode,
   pickList: TPickList[],
 ): Pick<FinancialVirementForParticipantMapping, TPickList> => {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](financialVirementForCostNode);
-    return dto;
-  }, {} as Pick<FinancialVirementForParticipantMapping, TPickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](financialVirementForCostNode);
+      return dto;
+    },
+    {} as Pick<FinancialVirementForParticipantMapping, TPickList>,
+  );
 };
 
 const mapToFinancialVirementForParticipantDtoArray = <

@@ -7,7 +7,7 @@ const successMessage = (message: string) =>
   ({
     type: "MESSAGE_SUCCESS",
     payload: message,
-  } as RootActions);
+  }) as RootActions;
 
 const navigate = () => routeTransition();
 

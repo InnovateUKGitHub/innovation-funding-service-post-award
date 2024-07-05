@@ -5,7 +5,10 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetClaimDetailDocumentQuery extends DocumentQueryBase {
-  constructor(private readonly claimKey: ClaimDetailKey, documentId: string) {
+  constructor(
+    private readonly claimKey: ClaimDetailKey,
+    documentId: string,
+  ) {
     super(documentId);
   }
 

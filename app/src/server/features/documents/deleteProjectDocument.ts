@@ -4,7 +4,10 @@ import { IContext } from "@framework/types/IContext";
 import { CommandBase } from "../common/commandBase";
 
 export class DeleteProjectDocumentCommand extends CommandBase<void> {
-  constructor(private readonly projectId: ProjectId, private readonly documentId: string) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly documentId: string,
+  ) {
     super();
   }
 

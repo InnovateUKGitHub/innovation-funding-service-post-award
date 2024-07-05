@@ -37,7 +37,7 @@ describe("dataLoadAction", () => {
 });
 
 describe("conditionalLoad", () => {
-  const getState = () => ({} as RootState);
+  const getState = () => ({}) as RootState;
 
   it("should return a thunk", () => {
     const result = conditionalLoad({} as IDataSelector<unknown>, jest.fn());

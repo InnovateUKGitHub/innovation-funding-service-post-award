@@ -8,19 +8,29 @@ export class AppError<T extends Results<ResultBase> = Results<ResultBase>> exten
   public results: T | null = null;
   public details: IAppDetailedError[] = [];
 
-  constructor(public code: ErrorCode, public message: string, public original?: Error) {
+  constructor(
+    public code: ErrorCode,
+    public message: string,
+    public original?: Error,
+  ) {
     super();
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(details?: string, readonly original?: Error) {
+  constructor(
+    details?: string,
+    readonly original?: Error,
+  ) {
     super(ErrorCode.REQUEST_ERROR, details || "Not Found", original);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(details?: string, readonly original?: Error) {
+  constructor(
+    details?: string,
+    readonly original?: Error,
+  ) {
     super(ErrorCode.FORBIDDEN_ERROR, details || "Forbidden", original);
   }
 }
@@ -52,19 +62,29 @@ export class FormHandlerError extends AppError {
 }
 
 export class ZodFormHandlerError extends AppError {
-  constructor(public dto: AnyObject | null, message: string, public zodIssues: ZodIssue[]) {
+  constructor(
+    public dto: AnyObject | null,
+    message: string,
+    public zodIssues: ZodIssue[],
+  ) {
     super(ErrorCode.VALIDATION_ERROR, message);
   }
 }
 
 export class BadRequestError extends AppError {
-  constructor(details?: string, readonly original?: Error) {
+  constructor(
+    details?: string,
+    readonly original?: Error,
+  ) {
     super(ErrorCode.BAD_REQUEST_ERROR, details || "Invalid Request", original);
   }
 }
 
 export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>> extends AppError<T> {
-  constructor(results: T, readonly original?: Error) {
+  constructor(
+    results: T,
+    readonly original?: Error,
+  ) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
     this.results = results;
     this.details = mapValidationResultErrors(results);

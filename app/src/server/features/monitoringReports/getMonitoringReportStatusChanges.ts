@@ -11,7 +11,10 @@ import { QueryBase } from "../common/queryBase";
 import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
-  constructor(private readonly projectId: ProjectId, private readonly reportId: string) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly reportId: string,
+  ) {
     super();
   }
 

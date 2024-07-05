@@ -51,7 +51,7 @@ describe("Create PCR Command", () => {
               status: PCRItemStatus.ToDo,
               accountName: "stub-accountName",
               partnerId: partner.id,
-            } as PCRItemDto),
+            }) as PCRItemDto,
         );
 
         return {

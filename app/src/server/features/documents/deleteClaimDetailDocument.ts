@@ -5,7 +5,10 @@ import { IContext } from "@framework/types/IContext";
 import { CommandBase } from "../common/commandBase";
 
 export class DeleteClaimDetailDocumentCommand extends CommandBase<void> {
-  constructor(private readonly documentId: string, private readonly claimDetailKey: ClaimDetailKey) {
+  constructor(
+    private readonly documentId: string,
+    private readonly claimDetailKey: ClaimDetailKey,
+  ) {
     super();
   }
 

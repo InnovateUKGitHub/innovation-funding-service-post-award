@@ -9,8 +9,6 @@ import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
-import { ReactNode } from "react";
-import { JsxElement } from "typescript";
 import { RenderHookOptions } from "@testing-library/react";
 
 export type TestBedStore = Partial<IStores>;

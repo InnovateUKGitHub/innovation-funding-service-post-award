@@ -356,7 +356,10 @@ export function permittedValues<T>(
 }
 
 export class ChildValidators<T> {
-  constructor(private readonly parent: Results<ResultBase>, private readonly items: T[]) {}
+  constructor(
+    private readonly parent: Results<ResultBase>,
+    private readonly items: T[],
+  ) {}
 
   private expected<TValue>(test: (items: T[]) => TValue, expected: TValue, message: string, isRequired?: boolean) {
     return new Result(

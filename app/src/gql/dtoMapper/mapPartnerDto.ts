@@ -318,10 +318,13 @@ export function mapToPartnerDto<TNode extends PartnerNode, TPickList extends key
   pickList: TPickList[],
   additionalData: PartnerAdditionalData<TPickList>,
 ): Pick<PartnerDtoMapping, TPickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](projectNode, additionalData);
-    return dto;
-  }, {} as Pick<PartnerDtoMapping, TPickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](projectNode, additionalData);
+      return dto;
+    },
+    {} as Pick<PartnerDtoMapping, TPickList>,
+  );
 }
 
 /**

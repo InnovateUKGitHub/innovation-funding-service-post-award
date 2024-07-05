@@ -15,7 +15,10 @@ import { GetAllForProjectQuery } from "../projectContacts/getAllForProjectQuery"
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 
 export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
-  constructor(private readonly projectId: ProjectId, private readonly pcrId?: PcrId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly pcrId?: PcrId,
+  ) {
     super();
   }
 

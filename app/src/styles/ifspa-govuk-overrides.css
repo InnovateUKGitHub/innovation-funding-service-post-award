@@ -199,7 +199,9 @@ body,
 .table-sort-button:focus {
   background-color: #fd0;
   color: #0b0c0c;
-  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  box-shadow:
+    0 -2px #fd0,
+    0 4px #0b0c0c;
   outline: none;
 }
 

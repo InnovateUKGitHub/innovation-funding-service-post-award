@@ -85,14 +85,17 @@ export function mapToMonitoringReportDto<
   T extends MonitoringReportNode,
   TPickList extends keyof MonitoringReportDtoMapping,
 >(node: T, pickList: TPickList[]): Pick<MonitoringReportDtoMapping, TPickList> {
-  return pickList.reduce((dto, field) => {
-    if (field === "questions") return dto;
+  return pickList.reduce(
+    (dto, field) => {
+      if (field === "questions") return dto;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore don't know how to let it know that "questions" will never be applied here
-    dto[field] = headerMapper[field as Exclude<TPickList, "questions">](node);
-    return dto;
-  }, {} as Pick<MonitoringReportDtoMapping, TPickList>);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore don't know how to let it know that "questions" will never be applied here
+      dto[field] = headerMapper[field as Exclude<TPickList, "questions">](node);
+      return dto;
+    },
+    {} as Pick<MonitoringReportDtoMapping, TPickList>,
+  );
 }
 
 /**

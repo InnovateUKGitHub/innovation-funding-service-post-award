@@ -76,10 +76,13 @@ export function mapToClaimStatusChangeDto<T extends ClaimStatusChangeNode, PickL
   pickList: PickList[],
   additionalData: ClaimStatusChangeAdditionalData<PickList>,
 ): Pick<ClaimStatusChangeDto, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<ClaimStatusChangeDto, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<ClaimStatusChangeDto, PickList>,
+  );
 }
 
 /**

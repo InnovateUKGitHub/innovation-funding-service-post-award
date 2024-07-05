@@ -10,7 +10,10 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
   protected filesRequired = true;
   protected showValidationErrors = true;
 
-  constructor(private readonly projectId: ProjectId, protected readonly documents: MultipleDocumentUploadDto) {
+  constructor(
+    private readonly projectId: ProjectId,
+    protected readonly documents: MultipleDocumentUploadDto,
+  ) {
     super();
   }
 

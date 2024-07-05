@@ -41,8 +41,8 @@ const ViewClaimLineItemsPage = ({
     mode === "details"
       ? getContent(x => x.pages.claimLineItems.htmlViewTitle({ title: currentCostCategory.name.toLowerCase() }))
       : mode === "review"
-      ? getContent(x => x.pages.claimLineItems.htmlReviewTitle({ title: currentCostCategory.name.toLowerCase() }))
-      : "";
+        ? getContent(x => x.pages.claimLineItems.htmlReviewTitle({ title: currentCostCategory.name.toLowerCase() }))
+        : "";
 
   return (
     <Page

@@ -9,7 +9,10 @@ import { mapToPcrDto } from "./mapToPCRDto";
 import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
 
 export class GetPCRByIdQuery extends QueryBase<PCRDto> {
-  constructor(private readonly projectId: ProjectId, private readonly id: PcrId | PcrItemId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly id: PcrId | PcrItemId,
+  ) {
     super();
   }
 

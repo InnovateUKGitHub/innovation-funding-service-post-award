@@ -12,7 +12,10 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
   protected filesRequired = true;
   protected showValidationErrors = true;
 
-  constructor(private readonly claimKey: ClaimKey, protected readonly documents: MultipleDocumentUploadDto) {
+  constructor(
+    private readonly claimKey: ClaimKey,
+    protected readonly documents: MultipleDocumentUploadDto,
+  ) {
     super();
   }
 

@@ -4,7 +4,10 @@ import { ILogger } from "@shared/logger";
 export class Timer implements ITimer {
   private readonly start: Date;
 
-  constructor(private readonly logger: ILogger, private readonly message: string) {
+  constructor(
+    private readonly logger: ILogger,
+    private readonly message: string,
+  ) {
     this.start = new Date();
   }
 

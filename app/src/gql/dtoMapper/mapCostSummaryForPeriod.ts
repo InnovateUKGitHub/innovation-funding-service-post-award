@@ -87,10 +87,13 @@ export function mapToCostSummaryForPeriodDto<
   pickList: PickList[],
   additionalData: CostsSummaryAdditionalData<PickList>,
 ): Pick<CostsSummaryForPeriodDto, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<CostsSummaryForPeriodDto, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<CostsSummaryForPeriodDto, PickList>,
+  );
 }
 
 /**

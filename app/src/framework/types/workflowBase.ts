@@ -34,7 +34,10 @@ export abstract class WorkflowBase<TStepNames extends string> implements ICallab
 
   private readonly summary?: ISummary | undefined;
 
-  protected constructor(definition: IWorkflow<TStepNames>, private readonly stepNumber: number | undefined) {
+  protected constructor(
+    definition: IWorkflow<TStepNames>,
+    private readonly stepNumber: number | undefined,
+  ) {
     this.steps = definition.steps;
     this.steps.sort((a, b) => numberComparator(a.stepNumber, b.stepNumber));
     this.summary = definition.summary;

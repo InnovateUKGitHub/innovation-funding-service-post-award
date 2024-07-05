@@ -53,10 +53,13 @@ export function mapToGolCostDto<
   PickList extends keyof GolCostDtoMapping,
   AdditionalData extends { costCategories?: { id: CostCategoryId; name: string }[] },
 >(node: T, pickList: PickList[], additionalData: AdditionalData): Pick<GolCostDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<GolCostDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<GolCostDtoMapping, PickList>,
+  );
 }
 
 /**

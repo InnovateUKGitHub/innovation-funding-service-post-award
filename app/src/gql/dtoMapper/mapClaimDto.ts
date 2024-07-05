@@ -228,10 +228,13 @@ export function mapToClaimDto<T extends ClaimNode, PickList extends keyof ClaimD
   pickList: PickList[],
   additionalData: ClaimsAdditionalData<PickList>,
 ): Pick<ClaimDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<ClaimDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<ClaimDtoMapping, PickList>,
+  );
 }
 
 /**

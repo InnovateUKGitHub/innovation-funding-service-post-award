@@ -23,7 +23,10 @@ import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQue
 import { QueryBase } from "../common/queryBase";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
-  constructor(private readonly projectId: ProjectId, private readonly pcrItemId: PcrItemId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly pcrItemId: PcrItemId,
+  ) {
     super();
   }
 

@@ -213,12 +213,15 @@ const getSingleFileValidation = (options: IAppOptions) => {
 
 const getMultiFileValidation = (options: IAppOptions) =>
   z
-    .preprocess((x: unknown) => {
-      // Map to ClientFileWrapper/ServerFileWrapper
-      if (Array.isArray(x) && x.every(x => x instanceof IsomorphicFileWrapper)) return x;
-      if ("FileList" in globalThis && x instanceof FileList) return [...x].map(x => new ClientFileWrapper(x));
-      return null;
-    }, z.array(getSingleFileValidation(options)).min(1).max(options.maxUploadFileCount))
+    .preprocess(
+      (x: unknown) => {
+        // Map to ClientFileWrapper/ServerFileWrapper
+        if (Array.isArray(x) && x.every(x => x instanceof IsomorphicFileWrapper)) return x;
+        if ("FileList" in globalThis && x instanceof FileList) return [...x].map(x => new ClientFileWrapper(x));
+        return null;
+      },
+      z.array(getSingleFileValidation(options)).min(1).max(options.maxUploadFileCount),
+    )
     .superRefine((files, ctx) => {
       let anyFileTooBig = false;
       let total = 0;

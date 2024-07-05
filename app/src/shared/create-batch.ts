@@ -10,7 +10,7 @@ export function createBatch<T>(payload: T[], batchSize: number): T[][] {
     return !totalItems ? [] : [payload];
   }
 
-  const newPayload: typeof payload[] = [];
+  const newPayload: (typeof payload)[] = [];
   let loopCount = 0;
   let batchIndex = 0;
 

@@ -13,7 +13,7 @@ describe("<LinksList />", () => {
       );
 
     it("with an empty array", () => {
-      const stubEmptyList = [] as typeof Link[];
+      const stubEmptyList = [] as (typeof Link)[];
       const { container } = setup({ links: stubEmptyList } as unknown as LinksListProps);
 
       expect(container.firstChild).toBeNull();

@@ -49,10 +49,13 @@ export function mapToProfilePeriodDetailsDto<
   T extends ProfilePeriodDetailsNode,
   PickList extends keyof ProfilePeriodDetailsDtoMapping,
 >(node: T, pickList: PickList[]): Pick<ProfilePeriodDetailsDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
-    return dto;
-  }, {} as Pick<ProfilePeriodDetailsDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node);
+      return dto;
+    },
+    {} as Pick<ProfilePeriodDetailsDtoMapping, PickList>,
+  );
 }
 
 /**

@@ -18,7 +18,10 @@ import { CommandDocumentBase } from "../common/commandBase";
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
   protected showValidationErrors = true;
 
-  constructor(private readonly claimKey: ClaimKey, protected readonly document: DocumentUploadDto) {
+  constructor(
+    private readonly claimKey: ClaimKey,
+    protected readonly document: DocumentUploadDto,
+  ) {
     super();
   }
 

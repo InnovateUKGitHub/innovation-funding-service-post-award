@@ -44,7 +44,10 @@ import { RecordType } from "@framework/entities/recordType";
 import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 export class TestData {
-  constructor(private readonly repositories: ITestRepositories, private readonly getCurrentUser: () => IClientUser) {}
+  constructor(
+    private readonly repositories: ITestRepositories,
+    private readonly getCurrentUser: () => IClientUser,
+  ) {}
 
   public range<T>(no: number, create: (seed: number, index: number) => T) {
     return Array.from({ length: no }, (_, i) => create(i + 1, i));
@@ -948,7 +951,11 @@ export class TestData {
 }
 
 export class TestFileWrapper implements IFileWrapper {
-  constructor(public fileName: string, public content: string, public description?: DocumentDescription) {}
+  constructor(
+    public fileName: string,
+    public content: string,
+    public description?: DocumentDescription,
+  ) {}
 
   public get size(): number {
     return (this.content && this.content.length) || 0;

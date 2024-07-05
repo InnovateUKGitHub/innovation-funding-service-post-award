@@ -14,7 +14,7 @@ type CspPolicySources =
   | "report-uri"
   | "frame-src";
 
-export const policyConfig = (nonce: string): Record<CspPolicySources, (string | typeof cspSourceKeyWords[0])[]> => ({
+export const policyConfig = (nonce: string): Record<CspPolicySources, (string | (typeof cspSourceKeyWords)[0])[]> => ({
   "default-src": ["self"],
   "base-uri": ["self"],
   "object-src": ["none"],

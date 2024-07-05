@@ -6,8 +6,8 @@ declare type AnyObject = Record<string, any>;
 declare type Merge<A, B> = A extends EmptyObject
   ? B
   : B extends EmptyObject
-  ? A
-  : { [P in keyof A | keyof B]: P extends keyof A ? A[P] : P extends keyof B ? B[P] : never };
+    ? A
+    : { [P in keyof A | keyof B]: P extends keyof A ? A[P] : P extends keyof B ? B[P] : never };
 
 declare type ContentJson = { [key: string]: string | undefined | ContentJson | ContentJson[] };
 
@@ -79,11 +79,12 @@ declare type SetIntersection<A, B> = A extends B ? A : never;
 declare type AdditionalDataType<
   TPickList,
   TAdditionalData extends [keyNameFromPickList: string, additionalDataObjectKey: string, additionalDataType: unknown][],
-> = SetIntersection<TPickList, TAdditionalData[number][0]> extends never
-  ? EmptyObject
-  : {
-      [P in TAdditionalData[number] as P[0] extends TPickList ? P[1] : never]: P[2];
-    };
+> =
+  SetIntersection<TPickList, TAdditionalData[number][0]> extends never
+    ? EmptyObject
+    : {
+        [P in TAdditionalData[number] as P[0] extends TPickList ? P[1] : never]: P[2];
+      };
 
 /**
  * use with picklist where one field is required to be present.

@@ -150,7 +150,10 @@ const conditionalDelete = <
 };
 
 export class StoreBase {
-  constructor(protected getState: () => RootState, protected queue: (action: RootActionsOrThunk) => void) {}
+  constructor(
+    protected getState: () => RootState,
+    protected queue: (action: RootActionsOrThunk) => void,
+  ) {}
 
   protected markStale<
     T extends DataStateKeys,

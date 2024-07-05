@@ -17,8 +17,8 @@ type DeepReplace<T, M extends [any, any]> = {
   [P in keyof T as P extends `${infer B}_one` ? B : P]: T[P] extends M[0]
     ? Replacement<M, T[P]>
     : T[P] extends object
-    ? DeepReplace<T[P], M>
-    : T[P];
+      ? DeepReplace<T[P], M>
+      : T[P];
 };
 
 // Describes a translation that requires input before text can be returned.

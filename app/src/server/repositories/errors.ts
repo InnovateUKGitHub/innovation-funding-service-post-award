@@ -4,7 +4,10 @@ import { mapSfdcErrors, mapSfdcFieldCustomValidation } from "@shared/mapAppError
 import { Error as SfdcError } from "jsforce";
 
 export class BadSalesforceQuery extends Error {
-  constructor(public errorReason: string = "FAILED_SOQL_QUERY", public errorDetail?: unknown) {
+  constructor(
+    public errorReason: string = "FAILED_SOQL_QUERY",
+    public errorDetail?: unknown,
+  ) {
     super(errorReason);
   }
 }

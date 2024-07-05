@@ -5,7 +5,10 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetLoanDocumentsQuery extends DocumentsSummaryQueryBase {
-  constructor(private readonly projectId: ProjectId, private readonly loanId: string) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly loanId: string,
+  ) {
     super();
   }
 

@@ -81,10 +81,13 @@ export function mapToPcrStatusDto<T extends PcrStatusNode, PickList extends keyo
   pickList: PickList[],
   additionalData: PcrStatusAdditionalData<PickList>,
 ): Pick<PcrStatusDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<PcrStatusDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<PcrStatusDtoMapping, PickList>,
+  );
 }
 
 /**

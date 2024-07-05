@@ -15,7 +15,10 @@ import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
-  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: CreatePcrDto) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly projectChangeRequestDto: CreatePcrDto,
+  ) {
     super();
   }
 

@@ -5,7 +5,10 @@ import { IContext } from "@framework/types/IContext";
 import { QueryBase } from "../common/queryBase";
 
 export class GetFinancialLoanVirementQuery extends QueryBase<FinancialLoanVirementDto> {
-  constructor(private readonly projectId: ProjectId, private readonly pcrItemId: PcrItemId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly pcrItemId: PcrItemId,
+  ) {
     super();
   }
 

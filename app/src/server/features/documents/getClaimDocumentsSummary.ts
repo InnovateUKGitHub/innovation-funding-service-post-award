@@ -7,7 +7,10 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
-  constructor(private readonly claimKey: ClaimKey, filter?: DocumentFilter) {
+  constructor(
+    private readonly claimKey: ClaimKey,
+    filter?: DocumentFilter,
+  ) {
     super(filter);
   }
 

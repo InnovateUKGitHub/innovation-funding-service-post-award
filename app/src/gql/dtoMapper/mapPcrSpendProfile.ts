@@ -141,10 +141,13 @@ export function mapPcrSpendProfileDto<T extends PcrSpendProfileNode, PickList ex
   node: T,
   pickList: PickList[],
 ): Pick<PcrSpendProfileEntity, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = itemMapper[field](node);
-    return dto;
-  }, {} as Pick<PcrSpendProfileEntity, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = itemMapper[field](node);
+      return dto;
+    },
+    {} as Pick<PcrSpendProfileEntity, PickList>,
+  );
 }
 
 /**

@@ -4,8 +4,8 @@ declare namespace GQL {
   }
     ? NodeValue<Node>
     : T extends { readonly node: infer U }
-    ? U
-    : null;
+      ? U
+      : null;
 
   /**
    * Type will extract type of object node from generated gql type files
@@ -16,12 +16,12 @@ declare namespace GQL {
   type NodeSelector<T, Field extends string> = T extends { readonly salesforce: AnyObject }
     ? NodeSelector<T["salesforce"], Field>
     : T extends { readonly uiapi: AnyObject }
-    ? NodeSelector<T["uiapi"], Field>
-    : T extends { readonly query: AnyObject }
-    ? NodeSelector<T["query"], Field>
-    : Field extends keyof T
-    ? NodeValue<T[Field]>
-    : never;
+      ? NodeSelector<T["uiapi"], Field>
+      : T extends { readonly query: AnyObject }
+        ? NodeSelector<T["query"], Field>
+        : Field extends keyof T
+          ? NodeValue<T[Field]>
+          : never;
 
   type Maybe<T> = T | null | undefined;
 

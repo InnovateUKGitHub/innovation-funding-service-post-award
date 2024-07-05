@@ -5,7 +5,10 @@ import { BadRequestError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 
 export class DeleteMonitoringReportCommand extends CommandBase<void> {
-  constructor(private readonly projectId: ProjectId, private readonly reportId: MonitoringReportId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly reportId: MonitoringReportId,
+  ) {
     super();
   }
 

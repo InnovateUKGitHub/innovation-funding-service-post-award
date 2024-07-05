@@ -4,7 +4,10 @@ import { Authorisation } from "@framework/types/authorisation";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
-  constructor(private readonly projectId: ProjectId, private readonly partnerId: PartnerId) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
+  ) {
     super();
   }
 

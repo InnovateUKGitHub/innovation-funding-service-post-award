@@ -54,10 +54,13 @@ export function mapToMonitoringReportQuestionDto<
   T extends MonitoringReportQuestionNode,
   PickList extends keyof MonitoringReportQuestionMapping,
 >(node: T, pickList: PickList[]): Pick<MonitoringReportQuestionMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
-    return dto;
-  }, {} as Pick<MonitoringReportQuestionMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node);
+      return dto;
+    },
+    {} as Pick<MonitoringReportQuestionMapping, PickList>,
+  );
 }
 
 /**

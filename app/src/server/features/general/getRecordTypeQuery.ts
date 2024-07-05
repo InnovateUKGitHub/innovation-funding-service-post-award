@@ -5,7 +5,10 @@ import { QueryBase } from "../common/queryBase";
 import { GetAllRecordTypesQuery } from "./getAllRecordTypesQuery";
 
 export class GetRecordTypeQuery extends QueryBase<RecordType> {
-  constructor(private readonly parent: string, private readonly type: string) {
+  constructor(
+    private readonly parent: string,
+    private readonly type: string,
+  ) {
     super();
   }
 

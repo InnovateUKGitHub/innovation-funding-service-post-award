@@ -90,10 +90,13 @@ export function mapToLoanDto<T extends LoanNode, PickList extends keyof LoanDtoM
   loanNode: T,
   pickList: PickList[],
 ): Pick<LoanDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](loanNode);
-    return dto;
-  }, {} as Pick<LoanDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](loanNode);
+      return dto;
+    },
+    {} as Pick<LoanDtoMapping, PickList>,
+  );
 }
 
 /**

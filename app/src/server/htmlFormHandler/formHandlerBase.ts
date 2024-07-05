@@ -58,7 +58,11 @@ type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 type AnyEditor = InferEditorStoreDto<any>;
 
 abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
-  protected constructor(routeInfo: RouteInfo<TParams>, buttons: (string | IFormButton)[], protected store: TStore) {
+  protected constructor(
+    routeInfo: RouteInfo<TParams>,
+    buttons: (string | IFormButton)[],
+    protected store: TStore,
+  ) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;

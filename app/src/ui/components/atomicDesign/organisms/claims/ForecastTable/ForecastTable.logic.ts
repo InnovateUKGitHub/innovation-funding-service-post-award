@@ -50,7 +50,7 @@ const useForecastTableFragment = ({
 
     const costCategoriesOrder = costCategories.map(y => y.id);
 
-    let claim: typeof claims[0] | null;
+    let claim: (typeof claims)[0] | null;
     if (selectCurrentClaimByApprovedStatus) {
       claim = claims.find(claim => !claim.isApproved) ?? null;
     } else {

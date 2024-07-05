@@ -127,7 +127,7 @@ describe("UpdatePCRCommand", () => {
               status: PCRItemStatus.ToDo,
               accountName: "stub-accountName",
               partnerId: partner.id,
-            } as PCRItemDto),
+            }) as PCRItemDto,
         );
 
         return {

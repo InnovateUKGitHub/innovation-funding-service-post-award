@@ -30,7 +30,7 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
   // Note: The first request will always be available (when PLANNED)
   const canRequestLoan = isFirstLoanRequest ? true : hasPreviousApprovedLoan;
 
-  const getRowClassName = (loan: typeof items[0]) => {
+  const getRowClassName = (loan: (typeof items)[0]) => {
     const isAvailable = nextLoan?.id === loan.id;
     const isLocked = loan.status === LoanStatus.APPROVED;
     const isUnknown = loan.status === LoanStatus.UNKNOWN;

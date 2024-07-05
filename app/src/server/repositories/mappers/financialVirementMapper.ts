@@ -6,7 +6,10 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
   ISalesforceFinancialVirement[],
   PartnerFinancialVirement[]
 > {
-  constructor(private readonly partnerLevelRecordType: string, private readonly costCategoryLevelRecordType: string) {
+  constructor(
+    private readonly partnerLevelRecordType: string,
+    private readonly costCategoryLevelRecordType: string,
+  ) {
     super();
   }
 

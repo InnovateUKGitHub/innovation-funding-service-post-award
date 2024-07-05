@@ -61,10 +61,13 @@ export function mapToBroadcastDto<T extends BroadcastNode, PickList extends keyo
   node: T,
   pickList: PickList[],
 ): Pick<BroadcastDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
-    return dto;
-  }, {} as Pick<BroadcastDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node);
+      return dto;
+    },
+    {} as Pick<BroadcastDtoMapping, PickList>,
+  );
 }
 
 /**

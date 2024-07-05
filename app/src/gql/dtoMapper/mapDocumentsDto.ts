@@ -135,10 +135,13 @@ export function mapToDocumentSummaryDto<
     type: "projects" | "partners" | "claims" | "claim details" | "pcr" | "loan";
   },
 ): Pick<PartnerDocumentSummaryDtoGql, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<PartnerDocumentSummaryDtoGql, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<PartnerDocumentSummaryDtoGql, PickList>,
+  );
 }
 
 /**

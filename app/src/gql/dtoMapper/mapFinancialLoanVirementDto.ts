@@ -63,10 +63,13 @@ export function mapLoanFinancialVirementDto<
   T extends FinancialLoanVirementNode,
   PickList extends keyof LoanFinancialVirement,
 >(node: T, pickList: PickList[]): Pick<LoanFinancialVirement, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = itemMapper[field](node);
-    return dto;
-  }, {} as Pick<LoanFinancialVirement, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = itemMapper[field](node);
+      return dto;
+    },
+    {} as Pick<LoanFinancialVirement, PickList>,
+  );
 }
 
 /**

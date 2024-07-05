@@ -71,10 +71,13 @@ export function mapToCostCategoryDto<T extends CostCategoryNode, PickList extend
   node: T,
   pickList: PickList[],
 ): Pick<CostCategoryDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
-    return dto;
-  }, {} as Pick<CostCategoryDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node);
+      return dto;
+    },
+    {} as Pick<CostCategoryDtoMapping, PickList>,
+  );
 }
 
 /**

@@ -405,8 +405,8 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return additionalData?.typeOfAid === undefined
       ? TypeOfAid.Unknown
       : typeof additionalData.typeOfAid === "string"
-      ? mapTypeOfAidToEnum(additionalData?.typeOfAid)
-      : additionalData.typeOfAid;
+        ? mapTypeOfAidToEnum(additionalData?.typeOfAid)
+        : additionalData.typeOfAid;
   },
   subcontractorName(node) {
     return node?.New_company_subcontractor_name__c?.value ?? null;
@@ -497,10 +497,13 @@ export function mapPcrItemDto<T extends PcrNode, PickList extends keyof PcrItemD
   pickList: PickList[],
   additionalData: PcrAdditionalData<PickList>,
 ): Pick<PcrItemDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = itemMapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<PcrItemDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = itemMapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<PcrItemDtoMapping, PickList>,
+  );
 }
 
 /**
@@ -512,10 +515,13 @@ export function mapPcrItemsDtos<ItemPickList extends keyof PcrItemDtoMapping>(
   additionalData: PcrAdditionalData<ItemPickList>,
 ) {
   return items.map(item =>
-    pickList.reduce((dto, field) => {
-      dto[field] = itemMapper[field](item, additionalData);
-      return dto;
-    }, {} as Pick<PcrItemDtoMapping, ItemPickList>),
+    pickList.reduce(
+      (dto, field) => {
+        dto[field] = itemMapper[field](item, additionalData);
+        return dto;
+      },
+      {} as Pick<PcrItemDtoMapping, ItemPickList>,
+    ),
   );
 }
 
@@ -532,12 +538,15 @@ export function mapToPcrDto<
   itemsPickList: ItemPickList[],
   additionalData: PcrAdditionalData<ItemPickList>,
 ): PcrDtoWithItems<PickList, ItemPickList> {
-  const dtoWithoutItems = pickList.reduce((dto, field) => {
-    {
-      dto[field] = headMapper[field](pcr.head);
-    }
-    return dto;
-  }, {} as Pick<PcrDtoMapping, PickList>);
+  const dtoWithoutItems = pickList.reduce(
+    (dto, field) => {
+      {
+        dto[field] = headMapper[field](pcr.head);
+      }
+      return dto;
+    },
+    {} as Pick<PcrDtoMapping, PickList>,
+  );
 
   const dtoWithItems = {
     ...dtoWithoutItems,

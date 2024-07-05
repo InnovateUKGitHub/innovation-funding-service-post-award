@@ -71,10 +71,13 @@ export function mapToContactDto<T extends ContactNode, PickList extends keyof Co
   loanNode: T,
   pickList: PickList[],
 ): Pick<ContactDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](loanNode);
-    return dto;
-  }, {} as Pick<ContactDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](loanNode);
+      return dto;
+    },
+    {} as Pick<ContactDtoMapping, PickList>,
+  );
 }
 
 /**

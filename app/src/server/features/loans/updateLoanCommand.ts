@@ -12,7 +12,11 @@ import { GetLoanDocumentsQuery } from "../documents/getLoanDocuments";
 import { GetLoan } from "./getLoan";
 
 export class UpdateLoanCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: ProjectId, private readonly loanId: string, private readonly loan: LoanDto) {
+  constructor(
+    private readonly projectId: ProjectId,
+    private readonly loanId: string,
+    private readonly loan: LoanDto,
+  ) {
     super();
   }
 

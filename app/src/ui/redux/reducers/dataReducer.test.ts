@@ -13,7 +13,7 @@ const claimDataAction = (id: number, data: unknown, status = 1, error: unknown =
       status,
       error,
     },
-  } as unknown as DataLoadAction);
+  }) as unknown as DataLoadAction;
 
 const state = {} as ReturnType<typeof dataReducer>;
 

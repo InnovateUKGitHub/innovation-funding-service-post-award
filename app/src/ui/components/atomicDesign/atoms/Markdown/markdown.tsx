@@ -31,6 +31,7 @@ renderer.link = ({ href, title, text, raw, tokens, type }) => {
  * and parents. E.g. if `<Content>` wrapped in `<SimpleString>`
  */
 export function Markdown({ value, trusted = false, verticalScrollbar, ...props }: IMarkdownProps) {
+  const [markdown, setMarkdown] = useState("");
   if (!value.length) return null;
 
   let content = value;
@@ -81,7 +82,6 @@ export function Markdown({ value, trusted = false, verticalScrollbar, ...props }
       ],
     });
   }
-  const [markdown, setMarkdown] = useState("");
 
   const contentResponse = marked.parse(content, { renderer });
   if (typeof contentResponse === "string") {

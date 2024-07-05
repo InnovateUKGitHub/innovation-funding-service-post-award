@@ -64,10 +64,13 @@ export function mapToForecastDetailsDto<
   pickList: PickList[],
   additionalData = { isProjectSetup: false },
 ): Pick<ForecastDetailsDtoMapping, PickList> {
-  return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node, additionalData);
-    return dto;
-  }, {} as Pick<ForecastDetailsDtoMapping, PickList>);
+  return pickList.reduce(
+    (dto, field) => {
+      dto[field] = mapper[field](node, additionalData);
+      return dto;
+    },
+    {} as Pick<ForecastDetailsDtoMapping, PickList>,
+  );
 }
 
 /**
