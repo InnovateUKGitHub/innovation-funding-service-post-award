@@ -144,9 +144,9 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
    */
   it("Should access 'Eligibility of aid declaration' section", () => {
     cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
-    cy.get("h2").contains("State aid eligibility");
+    cy.get("h2").contains("Non-aid funding");
     cy.paragraph(
-      "If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer.",
+      "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
     );
   });
 
@@ -330,6 +330,7 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
 
   it("Should go into costs again", () => {
     cy.getListItemFromKey("Project costs for new partner", "Edit").click();
+    cy.get("h2").contains("Project costs for new partner");
   });
 
   it("Should reduce a cost category by £333.33 ", jesDeleteCostCat);

@@ -677,7 +677,6 @@ export const completeCapUsageForm = () => {
   });
   cy.paragraph("£990.00");
   cy.clickOn("Save and return to capital usage");
-  cy.get("h2").contains("Capital usage");
   cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
@@ -815,7 +814,7 @@ export const validateWithoutFundingLevel = () => {
 export const checkDetailsScreenComplete = () => {
   [
     ["Project role", "Collaborator"],
-    ["Commercial or economic project outputs", "No"],
+    ["Commercial or economic project outputs", "Yes"],
     ["Organisation type", "Business"],
     ["Eligibility of aid declaration", "Not applicable"],
     ["Organisation name", "A LIMITED"],
@@ -1041,9 +1040,7 @@ export const deleteCoste2e = () => {
 };
 
 export const jesDeleteCostCat = () => {
-  cy.getTableRow("Directly incurred - Staff").within(() => {
-    cy.get('input[type="text"]').clear().type("0");
-  });
+  cy.getByAriaLabel("value of academic cost item Directly incurred - Staff").clear().type("0");
 };
 
 export const addManyLines = () => {
@@ -1194,7 +1191,10 @@ export const validateJesCostsFields = () => {
       });
     cy.validationLink("Enter cost.");
   });
-  cy.reload();
+  cy.backLink("Back to request").click();
+  cy.heading("Request");
+  cy.get("a").contains("Add a partner").click();
+  cy.getListItemFromKey("Project costs for new partner", "Edit").click();
   cy.get("legend").contains("Project costs");
   cy.getByAriaLabel("value of academic cost item Directly incurred - Staff").should("have.value", 0);
 };

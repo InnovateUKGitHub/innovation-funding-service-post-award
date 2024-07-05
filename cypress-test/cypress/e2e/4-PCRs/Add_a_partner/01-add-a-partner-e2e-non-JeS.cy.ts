@@ -11,6 +11,7 @@ import {
   typeASearchResults,
   companyHouseAutofillAssert,
   PcrItemType,
+  addPartnerSizeOptions,
 } from "../steps";
 import {
   validateFileUpload,
@@ -151,9 +152,9 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
    */
   it("Should access 'Eligibility of aid declaration' section", () => {
     cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
-    cy.get("h2").contains("Non-aid funding");
+    cy.get("h2").contains("State aid eligibility");
     cy.paragraph(
-      "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
+      "If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer.",
     );
   });
 
@@ -205,6 +206,8 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   });
 
   it("Validate the input box", validateSizeInput);
+
+  it("Should have 'Small', 'Medium' and 'Large' radio button options and click in turn", addPartnerSizeOptions);
 
   it("Should select 'Medium' size and enter 100 employees", medium100Employees);
 
