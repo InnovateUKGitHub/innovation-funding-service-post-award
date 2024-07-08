@@ -10,4 +10,4 @@ data:
   NEW_RELIC_ENABLED: "true"
   SSO_PROVIDER_URL: https://auth.apply-for-innovation-funding.service.gov.uk/idp/profile/SAML2/Redirect/SSO
   SSO_SIGNOUT_URL: https://apply-for-innovation-funding.service.gov.uk/Logout/
-  COOKIE_TIMEOUT_MINUTES: "10"
+  COOKIE_TIMEOUT_MINUTES: "30"
