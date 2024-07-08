@@ -9,8 +9,10 @@ type CostsSummaryForPeriodNode = GQL.PartialNode<{
   Acc_OverrideAwardRate__c: GQL.Value<number>;
 }>;
 
+type CostsSummaryForPeriodMapping = CostsSummaryForPeriodDto & { overrideAwardRate: number };
+
 const mapper: GQL.DtoMapper<
-  CostsSummaryForPeriodDto,
+  CostsSummaryForPeriodMapping,
   CostsSummaryForPeriodNode,
   {
     forecastDetails?: { value: number; costCategoryId: CostCategoryId; periodId: PeriodId }[];

@@ -44,4 +44,10 @@ declare namespace GQL {
           additionalData: AdditionalData extends undefined ? never : AdditionalData,
         ) => Dto[Key];
       };
+
+  type NullableRequired<T extends AnyObject> = {
+    [K in keyof Required<T>]: T[K] | null | undefined;
+  };
 }
+
+type X = GQL.NullableRequired<{ a?: string; b?: number }>;

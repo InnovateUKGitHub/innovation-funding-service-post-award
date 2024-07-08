@@ -132,7 +132,8 @@ type PartnerDtoMapping = Pick<
   | "totalParticipantGrant"
   | "totalPrepayment"
   | "type"
->;
+> &
+  GQL.NullableRequired<Pick<PartnerDtoGql, "competitionName">>;
 
 const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; competitionName?: string }> = {
   id(node) {

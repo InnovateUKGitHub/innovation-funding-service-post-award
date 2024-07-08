@@ -23,7 +23,8 @@ export type FinancialVirementForParticipantMapping = Pick<
   | "originalFundingLevel"
   | "newEligibleCosts"
   | "newRemainingGrant"
->;
+> &
+  Required<Pick<PartnerFinancialVirement, "newEligibleCosts" | "newRemainingGrant">>;
 
 const mapper: GQL.DtoMapper<FinancialVirementForParticipantMapping, FinancialVirementForParticipantNode> = {
   id(node) {

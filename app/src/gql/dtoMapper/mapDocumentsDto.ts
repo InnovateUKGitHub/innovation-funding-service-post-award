@@ -1,4 +1,4 @@
-import { DocumentDescriptionMapper } from "@framework/constants/documentDescription";
+import { DocumentDescription, DocumentDescriptionMapper } from "@framework/constants/documentDescription";
 import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 
 export type DocumentSummaryNode = GQL.PartialNode<{
@@ -38,7 +38,7 @@ type PartnerDocumentsArrayNode = GQL.Maybe<{
   }>;
 }>;
 
-type DocumentSummaryDtoMapping = PartnerDocumentSummaryDtoGql;
+type DocumentSummaryDtoMapping = PartnerDocumentSummaryDtoGql & { description: DocumentDescription | null };
 
 const mapper: GQL.DtoMapper<
   DocumentSummaryDtoMapping,

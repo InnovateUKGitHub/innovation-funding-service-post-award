@@ -28,7 +28,7 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
     currency: "GBP",
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
-  };
+  } as const;
 
   const currencyValue = new Intl.NumberFormat(currentLocale, currencyOptions);
   const formatValue = isNumber(value) ? value : 0;

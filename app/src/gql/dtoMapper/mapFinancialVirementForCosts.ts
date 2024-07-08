@@ -21,7 +21,8 @@ type FinancialVirementForCostsNode = GQL.PartialNode<{
   Acc_NewCosts__c: GQL.Value<number>;
 }>;
 
-export type FinancialVirementForCostsMapping = CostCategoryFinancialVirement;
+export type FinancialVirementForCostsMapping = CostCategoryFinancialVirement &
+  Required<Pick<CostCategoryFinancialVirement, "costCategoryName">>;
 
 const mapper: GQL.DtoMapper<FinancialVirementForCostsMapping, FinancialVirementForCostsNode> = {
   id(node) {

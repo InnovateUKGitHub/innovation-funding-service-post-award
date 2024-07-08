@@ -6,14 +6,13 @@ import {
   PartnerVirementsDto,
 } from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities/financialVirement";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
-import { FinancialVirementForCostsMapping } from "@gql/dtoMapper/mapFinancialVirementForCosts";
-import { FinancialVirementForParticipantMapping } from "@gql/dtoMapper/mapFinancialVirementForParticipant";
 import { useMemo } from "react";
 
 type FinancialVirementForCost = Pick<
-  FinancialVirementForCostsMapping,
+  CostCategoryFinancialVirement,
   | "costCategoryId"
   | "costCategoryName"
   | "id"
@@ -24,7 +23,7 @@ type FinancialVirementForCost = Pick<
   | "parentId"
 >;
 type FinancialVirementForParticipant = Pick<
-  FinancialVirementForParticipantMapping,
+  PartnerFinancialVirement,
   "id" | "newEligibleCosts" | "partnerId" | "newFundingLevel" | "originalFundingLevel" | "newRemainingGrant"
 >;
 type Partner = Pick<PartnerDto, "id" | "name" | "isLead">;

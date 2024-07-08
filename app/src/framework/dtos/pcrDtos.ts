@@ -238,7 +238,7 @@ export type FullPCRItemDto = {
   financialYearEndDate: Date | null;
   financialYearEndTurnover: number | null;
   grantMovingOverFinancialYear: number | null;
-  guidance?: string;
+  guidance: string | undefined;
   hasOtherFunding: boolean | null;
   id: PcrItemId;
   isCommercialWork: boolean | null;

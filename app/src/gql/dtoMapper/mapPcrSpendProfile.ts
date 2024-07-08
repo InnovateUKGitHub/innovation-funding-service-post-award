@@ -61,7 +61,34 @@ export type PcrSpendProfileNode = GQL.PartialNode<{
   Acc_CostEach__c: GQL.Value<number>;
 }>;
 
-const itemMapper: GQL.DtoMapper<PcrSpendProfileEntity, PcrSpendProfileNode> = {
+type PCRSpendProfileMapping = Omit<
+  PcrSpendProfileEntity &
+    GQL.NullableRequired<
+      Pick<
+        PcrSpendProfileEntity,
+        | "capitalUsageType"
+        | "costOfEach"
+        | "costPerItem"
+        | "dateOtherFundingSecured"
+        | "daysSpentOnProject"
+        | "depreciationPeriod"
+        | "grossCostOfRole"
+        | "netPresentValue"
+        | "numberOfTimes"
+        | "overheadRate"
+        | "quantity"
+        | "ratePerDay"
+        | "residualValue"
+        | "subcontractorCountry"
+        | "subcontractorRoleAndDescription"
+        | "typeLabel"
+        | "utilisation"
+      >
+    >,
+  "costCategory"
+>;
+
+const itemMapper: GQL.DtoMapper<PCRSpendProfileMapping, PcrSpendProfileNode> = {
   id(node) {
     return node?.Id as CostId;
   },
@@ -137,26 +164,26 @@ const itemMapper: GQL.DtoMapper<PcrSpendProfileEntity, PcrSpendProfileNode> = {
 /**
  * maps for a single pcr spend profile item
  */
-export function mapPcrSpendProfileDto<T extends PcrSpendProfileNode, PickList extends keyof PcrSpendProfileEntity>(
+export function mapPcrSpendProfileDto<T extends PcrSpendProfileNode, PickList extends keyof PCRSpendProfileMapping>(
   node: T,
   pickList: PickList[],
-): Pick<PcrSpendProfileEntity, PickList> {
+): Pick<PCRSpendProfileMapping, PickList> {
   return pickList.reduce(
     (dto, field) => {
       dto[field] = itemMapper[field](node);
       return dto;
     },
-    {} as Pick<PcrSpendProfileEntity, PickList>,
+    {} as Pick<PCRSpendProfileMapping, PickList>,
   );
 }
 
 /**
  * maps for an array of spendProfiles
  */
-export function mapPcrSpendProfileArray<T extends PcrSpendProfileNode, PickList extends keyof PcrSpendProfileEntity>(
+export function mapPcrSpendProfileArray<T extends PcrSpendProfileNode, PickList extends keyof PCRSpendProfileMapping>(
   edges: ReadonlyArray<Readonly<GQL.Maybe<{ node: T | null }>>>,
   pickList: PickList[],
-): Pick<PcrSpendProfileEntity, PickList>[] {
+): Pick<PCRSpendProfileMapping, PickList>[] {
   return (
     edges?.map(node => {
       return mapPcrSpendProfileDto(node?.node ?? null, pickList);
