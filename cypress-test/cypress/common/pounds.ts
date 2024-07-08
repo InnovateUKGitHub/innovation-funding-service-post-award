@@ -5,7 +5,7 @@ export function pounds(value: number): string {
     currency: "GBP",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  };
+  } as const;
 
   const currencyValue = new Intl.NumberFormat(currentLocale, currencyOptions);
   return currencyValue.format(value);
