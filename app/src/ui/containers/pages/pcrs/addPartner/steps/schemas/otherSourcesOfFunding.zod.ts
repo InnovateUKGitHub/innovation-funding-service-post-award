@@ -2,6 +2,7 @@ import { CostCategoryType } from "@framework/constants/enums";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { costIdValidation } from "@ui/zod/helperValidators.zod";
 import { z } from "zod";
 
 const valueDescription = z.object({
@@ -10,7 +11,7 @@ const valueDescription = z.object({
     required: true,
   }),
   description: z.string().min(1),
-  id: z.string().transform(x => x as CostId),
+  id: z.union([z.literal("").transform(x => x as CostId), costIdValidation]),
   costCategory: z.number().transform(x => x as CostCategoryType),
   costCategoryId: z.string().transform(x => x as CostCategoryId),
 });
