@@ -4,11 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "cypress": "cypress",
-    "open": "cypress open",
-    "run": "cypress run"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "MIT",

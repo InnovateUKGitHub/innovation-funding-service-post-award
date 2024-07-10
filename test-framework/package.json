@@ -4,7 +4,8 @@
   "workspaces": [
     "./cypress-test",
     "./project-factory",
-    "./environment-manager"
+    "./environment-manager",
+    "./playwright-test"
   ],
   "scripts": {
     "build": "turbo build",

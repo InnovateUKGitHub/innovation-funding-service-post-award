@@ -1,0 +1,20 @@
+{
+  "name": "playwright-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "bddgen",
+    "open": "playwright test --ui",
+    "run": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.8.0",
+    "@playwright/test": "^1.45.1",
+    "@types/node": "^20.14.10",
+    "playwright-bdd": "^6.6.0"
+  }
+}
