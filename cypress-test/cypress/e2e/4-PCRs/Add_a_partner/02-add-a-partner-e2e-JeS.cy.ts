@@ -55,7 +55,6 @@ import {
   jeScheckDetailsAgain,
   validateJesCostsFields,
 } from "./add-partner-e2e-steps";
-import { learnFiles } from "common/fileComponentTests";
 import { newCurrency } from "common/currency";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -346,21 +345,9 @@ describe("PCR >  Add a partner > E2E: Je-S", () => {
    */
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+  it("Should display a clickable 'Learn more about files you can upload' message", () => {
+    cy.learnFiles();
+  });
 
   it("Should upload a testfile and check it appears", uploadTestFile);
 

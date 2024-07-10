@@ -13,21 +13,9 @@ import {
 } from "./steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { deleteDocFromArea } from "e2e/3-documents/steps";
-import { fileTidyUp } from "common/filetidyup";
-import { learnFiles } from "common/fileComponentTests";
-import {
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  deleteSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  allowLargerBatchFileUpload,
-} from "common/fileComponentTests";
-import { seconds } from "common/seconds";
-
+import { Intercepts } from "common/intercepts";
 const fc = "s.shuang@irc.trde.org.uk.test";
+
 describe("Loans > Project Costs & Documents", () => {
   before(() => {
     visitApp({ asUser: fc });
@@ -50,23 +38,21 @@ describe("Loans > Project Costs & Documents", () => {
   });
 
   it("Should display the Project Costs heading and Open/Closed subheadings", () => {
-    cy.heading("Project costs");
+    cy.heading("Claims");
     cy.get("h2").contains("Open");
     cy.get("h2").contains("Closed");
   });
 
-  it("Should have a backlink", () => {
-    cy.backLink("Back to project");
-  });
-
-  it("Should have correct project title", shouldShowProjectTitle);
-
-  it("Should display the Project Costs period table", projCostsPeriodTable);
-
-  it("Should access the EUI Project Cost", () => {
+  it("Should access the open Project cost", () => {
     cy.get("a").contains("Edit").click();
     cy.heading("Costs for this period");
   });
+
+  it("Should have a backlink", () => {
+    cy.backLink("Back to claims");
+  });
+
+  it("Should have correct project title", shouldShowProjectTitle);
 
   it("Should display claim retention information", () => {
     cy.validationNotification(
@@ -99,28 +85,18 @@ describe("Loans > Project Costs & Documents", () => {
 
   it("Should have correct project title", shouldShowProjectTitle);
 
-  it("Should check for existing files and clean up where needed", () => fileTidyUp("testfile.doc"));
-
-  it("Should have a 'Learn more about files you can upload' section", learnFiles);
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-  it(
-    "Should attempt to upload three files totalling 33MB",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "Sarah Shuang",
+      "costs to be claimed",
+      "Costs for this period",
+      "Continue to costs documents",
+      Intercepts.loans,
+      true,
+      false,
+      true,
+    );
+  });
 
   it("Should ensure the File description is working correctly.", projCostsSelectFileDescription);
 

@@ -4,21 +4,8 @@ import { shouldShowProjectTitle, pcrAllowBatchFileUpload, accessReasoning } from
 import { loremIpsum32k, loremIpsum30k } from "common/lorem";
 import { testFile } from "common/testfileNames";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import { seconds } from "common/seconds";
-import {
-  learnFiles,
-  allowLargerBatchFileUpload,
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  rejectElevenDocsAndShowError,
-  checkFileUploadSuccessDisappears,
-} from "common/fileComponentTests";
-
 import { uploadDate } from "e2e/2-claims/steps";
+import { Intercepts } from "common/intercepts";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -106,40 +93,18 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
     cy.get("legend").contains("Upload documents");
   });
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB prompting validation",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should back out and ensure the notification does NOT persist", () =>
-    checkFileUploadSuccessDisappears("request", "Request"));
-
-  it("Should re-access the Reasoning document section", () => {
-    accessReasoning();
-    cy.getListItemFromKey("Files", "Edit").click();
-  });
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
-
-  it("Should upload a batch of 10 documents", { retries: 0 }, () => pcrAllowBatchFileUpload("projectChangeRequests"));
-
-  it("Should see a success message for '10 documents have been uploaded'", { retries: 2 }, () => {
-    cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "James Black",
+      "request",
+      "Request",
+      "Provide reasons",
+      Intercepts.PCR,
+      false,
+      true,
+      false,
+      "Files",
+    );
   });
 
   it("Should upload a file", () => {
@@ -161,7 +126,6 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
       "testfile8.doc",
       "testfile9.doc",
       "testfile10.doc",
-      "T.doc",
     ].forEach(doc => {
       const rowData = ["PCR evidence", uploadDate, "0KB", "James Black", "Remove"];
       rowData.forEach((data, index) => {

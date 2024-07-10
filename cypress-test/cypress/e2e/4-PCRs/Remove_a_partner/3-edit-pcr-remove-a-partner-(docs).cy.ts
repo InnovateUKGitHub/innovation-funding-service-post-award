@@ -1,3 +1,4 @@
+import { Intercepts } from "common/intercepts";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
@@ -5,26 +6,10 @@ import {
   removePartnerFileTable,
   clickPartnerAddPeriod,
   removePartnerGuidanceInfo,
-  pcrAllowBatchFileUpload,
   removeFileDelete,
 } from "../steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import { fileTidyUp } from "common/filetidyup";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { seconds } from "common/seconds";
-import {
-  learnFiles,
-  allowLargerBatchFileUpload,
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  deleteSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  rejectElevenDocsAndShowError,
-  checkFileUploadSuccessDisappears,
-} from "common/fileComponentTests";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -68,48 +53,18 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should have guidance information on what is required", removePartnerGuidanceInfo);
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
-  it("Should ensure no files are present and delete any that are", () => fileTidyUp("James Black"));
-
-  it("Should have 'No documents uploaded.' message at the bottom", () => {
-    cy.paragraph("No documents uploaded.");
-  });
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB prompting validation",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should check that success notification does not persist", () =>
-    checkFileUploadSuccessDisappears("request", "Request"));
-
-  it("Should re-access Remove partner document section", () => {
-    cy.get("a").contains("Remove a partner").click();
-    cy.getListItemFromKey("Documents", "Edit").click();
-  });
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
-
-  it("Should upload a batch of 10 documents", { retries: 0 }, () => pcrAllowBatchFileUpload("projectChangeRequests"));
-
-  it("Should see a success message for '10 documents have been uploaded'", { retries: 2 }, () => {
-    cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "James Black",
+      "request",
+      "Request",
+      "Remove a partner",
+      Intercepts.PCR,
+      false,
+      false,
+      true,
+      "Documents",
+    );
   });
 
   it("Should allow a single file upload", pcrDocUpload);

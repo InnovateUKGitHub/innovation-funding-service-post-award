@@ -6,21 +6,9 @@ import {
   documents as uploadDocuments,
 } from "./steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import {
-  allowLargerBatchFileUpload,
-  learnFiles,
-  validateFileUpload,
-  uploadFileTooLarge,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  uploadFileNameTooShort,
-  allowBatchFileUpload,
-  rejectElevenDocsAndShowError,
-  displayBatchUpload,
-  deleteDocument,
-} from "common/fileComponentTests";
+import { displayBatchUpload, deleteDocument } from "common/fileComponentTests";
 import { fileTidyUp } from "common/filetidyup";
-import { seconds } from "common/seconds";
+import { Intercepts } from "common/intercepts";
 
 const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
@@ -60,42 +48,17 @@ describe("Claims > Cost category document uploads", () => {
     fileTidyUp("Sarah Shuang");
   });
 
-  it("Should display guidance on how downloads work", () => {
-    cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
-  });
-
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
-  it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
-
-  it("Should refresh the page to clear the previous validation messaging", () => {
-    cy.reload();
-  });
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it(
-    "Should upload a batch of 10 documents",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowBatchFileUpload("claim-details"),
-  );
-
-  it("Should see a success message for '10 documents have been uploaded'", () => {
-    cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "Sarah Shuang",
+      "Exceptions - Staff",
+      "Exceptions - Staff",
+      "Upload and remove documents",
+      Intercepts.lineItem,
+      false,
+      false,
+      false,
+    );
   });
 
   it("Should ensure all uploaded documents are displayed correctly", () =>

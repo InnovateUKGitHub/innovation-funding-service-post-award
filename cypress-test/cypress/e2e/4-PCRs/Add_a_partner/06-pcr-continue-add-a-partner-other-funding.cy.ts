@@ -12,7 +12,6 @@ import {
   pcrNewCostCatLineItem,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { learnFiles } from "common/fileComponentTests";
 import {
   clearValidationAddManyOther,
   collaboratorAndBusiness,
@@ -164,7 +163,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs (other fundin
     cy.heading("Add a partner");
   });
 
-  it("Should click the 'Learn more about files you can upload' and display information", learnFiles);
+  it("Should click the 'Learn more about files you can upload' and display information", () => {
+    cy.learnFiles();
+  });
 
   it("Should upload a file", addPartnerDocUpload);
 

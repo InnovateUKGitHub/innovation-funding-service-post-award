@@ -13,7 +13,6 @@ import { fileTidyUp } from "common/filetidyup";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { seconds } from "common/seconds";
 import {
-  learnFiles,
   allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
@@ -74,7 +73,9 @@ describe(
 
     it("Should have guidance information on what is required", removePartnerGuidanceInfo);
 
-    it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
+    it("Should display a clickable 'Learn more about files you can upload' message", () => {
+      cy.learnFiles();
+    });
 
     it("Should ensure no files are present and delete any that are", () => fileTidyUp("James Black"));
 

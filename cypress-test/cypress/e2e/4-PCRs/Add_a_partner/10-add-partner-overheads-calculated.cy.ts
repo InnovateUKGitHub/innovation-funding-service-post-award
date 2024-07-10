@@ -8,7 +8,6 @@ import {
   displayBatchUpload,
   doNotUploadSpecialChar,
   documents,
-  learnFiles,
   rejectElevenDocsAndShowError,
   uploadFileNameTooShort,
   uploadFileTooLarge,
@@ -113,7 +112,7 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
 
   it("Should have an`Upload completed overhead calculation spreadsheet` subheading and file guidance", () => {
     cy.get("legend").contains("Upload completed overhead calculation spreadsheet");
-    learnFiles();
+    cy.learnFiles();
   });
 
   it("should validate uploading without choosing a file", validateFileUpload);

@@ -71,7 +71,6 @@ import {
   deleteCoste2e,
   checkPcrForValidation,
 } from "./add-partner-e2e-steps";
-import { learnFiles } from "common/fileComponentTests";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -418,7 +417,9 @@ describe("PCR >  Add a partner > E2E: non-Je-S", { tags: "js-disabled" }, () => 
 
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
+  it("Should display a clickable 'Learn more about files you can upload' message", () => {
+    cy.learnFiles();
+  });
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 

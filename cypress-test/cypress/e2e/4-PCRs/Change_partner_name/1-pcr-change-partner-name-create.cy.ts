@@ -19,20 +19,7 @@ import {
 } from "../steps";
 import { testFile } from "common/testfileNames";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import {
-  learnFiles,
-  allowLargerBatchFileUpload,
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  deleteSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  checkFileUploadSuccessDisappears,
-} from "common/fileComponentTests";
-import { seconds } from "common/seconds";
-import { loremIpsum256Char } from "common/lorem";
+import { Intercepts } from "common/intercepts";
 const projectManager = "james.black@euimeabs.test";
 
 describe("PCR >  Change a partner's name > Create PCR", () => {
@@ -92,41 +79,19 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should click the save and continue button to proceed", saveContinueProceed);
 
-  it("Should contain a 'Learn more about files you can upload' section", learnFiles);
-
-  it("Should show a files uploaded area with no files", () => {
-    cy.get("h2").contains("Files uploaded");
-    cy.paragraph("No documents uploaded.");
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "James Black",
+      "request",
+      "Request",
+      "Change a partner's name",
+      Intercepts.PCR,
+      true,
+      true,
+      false,
+      "Change of name certificate",
+    );
   });
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB prompting validation",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should back out and ensure the notification does NOT persist", () =>
-    checkFileUploadSuccessDisappears("request", "Request"));
-
-  it("Should re-access the PCR and navigate to document section again", () => {
-    cy.get("a").contains("Change a partner's name").click();
-    cy.getListItemFromKey("Change of name certificate", "Edit").click();
-    cy.get("legend").contains("Upload change of name certificate");
-  });
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
 
   it("Should upload a file", uploadNameChange);
 

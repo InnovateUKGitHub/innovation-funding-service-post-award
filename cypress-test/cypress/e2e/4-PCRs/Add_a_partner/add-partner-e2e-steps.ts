@@ -961,6 +961,9 @@ export const jeScheckDetailsAgain = () => {
 export const accessPartnerAgreement = () => {
   cy.getListItemFromKey("Partner agreement", "Edit").click();
   cy.get("legend").contains("Upload partner agreement");
+  cy.paragraph(
+    "You must upload copies of signed letters from all other project partners to show they have agreed to this change",
+  );
 };
 
 export const uploadTestFile = () => {

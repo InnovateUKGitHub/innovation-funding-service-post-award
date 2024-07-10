@@ -12,28 +12,13 @@ import {
   uploadToEUIMed,
   uploadToMO,
 } from "./steps";
-import { fileTidyUp } from "common/filetidyup";
-import {
-  learnFiles,
-  allowLargerBatchFileUpload,
-  validationMessageCumulative,
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadFileNameTooShort,
-  accessControl,
-  deleteSingleChar,
-  doNotUploadSpecialChar,
-  selectFileDescription,
-  validateExcessiveFileName,
-  uploadSingleChar,
-  checkFileUploadSuccessDisappears,
-} from "common/fileComponentTests";
-import { seconds } from "common/seconds";
+import { accessControl, selectFileDescription } from "common/fileComponentTests";
+import { Intercepts } from "common/intercepts";
 
 describe("Project Documents page", () => {
   before(() => {
     visitApp({ asUser: "testman2@testing.com", path: "projects/a0E2600000kSotUEAS/documents" });
-    fileTidyUp("testfile.doc");
+    cy.fileTidyUp("testfile.doc");
     createTestFile("bigger_test", 33);
     createTestFile("11MB_1", 11);
     createTestFile("11MB_2", 11);
@@ -63,41 +48,22 @@ describe("Project Documents page", () => {
     );
   });
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
   it("Should have an access control drop-down", accessControl);
 
   it("Should have file description drop-down", selectFileDescription);
 
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should display the correct validation messaging", validationMessageCumulative);
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should back out and assert that the upload message does NOT persist on other pages after uploading a file.", () =>
-    checkFileUploadSuccessDisappears("project", "Project overview"));
-
-  it("Should return to the documents page", () => {
-    cy.selectTile("Documents");
-    cy.heading("Project documents");
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "Javier Baez",
+      "project",
+      "Project overview",
+      "Documents",
+      Intercepts.project,
+      true,
+      false,
+      false,
+    );
   });
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
 
   /**
    * Upload to IUK and MO Only

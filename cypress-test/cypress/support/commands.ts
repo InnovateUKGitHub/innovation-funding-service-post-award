@@ -5,6 +5,9 @@ import { CostCategory } from "typings/costCategory";
 import { Heading } from "typings/headings";
 import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
+import { emptyFileName, longFile, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
+import { documents } from "common/fileComponentTests";
+import { Intercepts } from "common/intercepts";
 
 const [username, password] = Cypress.env("BASIC_AUTH").split(":");
 
@@ -359,6 +362,198 @@ const validatePositiveWholeNumber = (label: string, errorLabel: string, validVal
   cy.getByLabel(label).clear().type(validValue);
 };
 
+const learnFiles = () => {
+  cy.get("span").contains("Learn more about files you can upload").click();
+  [
+    "You can upload up to 10 documents at a time. The documents must:",
+    "There is no limit to the number of files you can upload in total.",
+    "You can upload these file types:",
+  ].forEach(para => {
+    cy.paragraph(para);
+  });
+  [
+    "total no more than 32MB in file size",
+    "each have a unique file name that describes its contents",
+    "PDF",
+    "(pdf, xps)",
+    "(doc, docx, rtf, txt, odt)",
+    "text",
+    "presentation",
+    "(ppt, pptx, odp)",
+    "spreadsheet",
+    "(csv, xls, xlsx, ods)",
+    "images",
+    "(jpg, jpeg, png, odg)",
+  ].forEach(fileInfo => {
+    cy.get("li").contains(fileInfo);
+  });
+};
+
+const fileTidyUp = (name: string) => {
+  cy.wait(500);
+  for (let i = 1; i < 25; i++) {
+    const fileNameRegExp = new RegExp(`[^']${name}[^']`);
+    cy.get("main").then($main => {
+      if (fileNameRegExp.test($main.text())) {
+        cy.log(`Deleting existing ${name} document`);
+        cy.contains("tr", name).within(() => {
+          cy.tableCell("Remove").click();
+        });
+        cy.validationNotification("has been removed.");
+        cy.wait(200);
+      } else {
+        cy.get("h2").contains("Files uploaded");
+      }
+    });
+  }
+};
+
+const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
+const largerDocs = ["11MB_1.txt", "11MB_2.txt", "11MB_3.txt", "testfile.doc"];
+const largeDocumentPaths = largerDocs.map(doc => `cypress/documents/${doc}`);
+/**
+ * List of api doc intercepts to use for waits.
+ * These need to be passed into the testFileComponent in the form of an index e.g. Intercepts.project)
+ */
+const testFileComponent = (
+  loggedInAs: string,
+  suffix: string,
+  headerAssertion: string,
+  access: string,
+  intercept: Intercepts,
+  cleanup: boolean,
+  pcr: boolean,
+  loans: boolean,
+  pcrArea?: string,
+) => {
+  cy.get("h2").contains("Files uploaded");
+  if (pcr) {
+    cy.get("h1").contains(access);
+  } else {
+    cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
+  }
+  cy.log("Checking for 'Learn more about files you can upload' section");
+  cy.learnFiles;
+  cy.log("Clearing up any files that shouldn't be there.");
+  cy.fileTidyUp(loggedInAs);
+  cy.paragraph("No documents uploaded.");
+  cy.log("Validating upload button without document selected and then uploading a document");
+  cy.button("Upload documents").click();
+  cy.validationLink("Choose a file to upload");
+  cy.fileInput(testFile);
+  cy.button("Upload documents").click();
+  cy.validationNotification("has been uploaded.");
+  cy.log(
+    "Checking that the validation message does not persist when navigating back using 'suffix' and 'headerAssertion",
+  );
+  if (pcr) {
+    cy.backLink(`Back to ${suffix}`).click();
+    cy.get("h1").contains(headerAssertion);
+    cy.get("main").within(() => {
+      cy.getByQA("validation-message-content").should("not.exist");
+    });
+    cy.log("Moving forward to the document area again");
+    cy.get("a").contains(access).click();
+    cy.wait(1000);
+    cy.log(pcrArea);
+    cy.getListItemFromKey(pcrArea, "Edit").click();
+  } else if (loans) {
+    cy.backLink(`Back to ${suffix}`).click();
+    cy.get("h1").contains(headerAssertion);
+    cy.get("main").within(() => {
+      cy.getByQA("validation-message-content").should("not.contain", "has been uploaded.");
+    });
+    cy.log("Moving forward to the document area again");
+    cy.clickOn(access);
+  } else {
+    cy.backLink(`Back to ${suffix}`).click();
+    cy.get("h1").contains(headerAssertion);
+    cy.get("main").within(() => {
+      cy.getByQA("validation-message-content").should("not.exist");
+    });
+    cy.log("Moving forward to the document area again");
+    cy.clickOn(access);
+  }
+  cy.get("h2").contains("Files uploaded");
+  cy.log("Checking for the presence of a document upload table");
+  ["File name", "Type", "Date uploaded", "Uploaded by"].forEach(header => {
+    cy.tableHeader(header);
+  });
+  cy.get("a.govuk-link").contains(testFile);
+  cy.log("Deleting document");
+  cy.clickOn("Remove");
+  cy.button("Remove").should("be.disabled");
+  cy.validationNotification(`'${testFile}' has been removed.`);
+  cy.log("Attempting to upload a file that is larger than 32MB");
+  cy.fileInput("bigger_test.txt");
+  cy.button("Upload").click();
+  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
+  cy.paragraph("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
+  cy.wait(500);
+  cy.log("Attempting to upload a batch of docs cumulatively larger than 32MB");
+  cy.get(`input[type="file"]`)
+    .wait(seconds(1))
+    .selectFile(largeDocumentPaths, { force: true, timeout: seconds(5) });
+  cy.wait(seconds(1)).submitButton("Upload").trigger("focus").click();
+  cy.log("Uploading a single character file");
+  cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  cy.log(intercept);
+  cy.fileInput(singleCharFile);
+  cy.wait(500);
+  cy.button("Upload documents").click();
+  cy.wait("@filesUpload");
+  cy.validationNotification(`Your document has been uploaded.`);
+  cy.wait(500);
+  cy.log("Deleting the single character file");
+  cy.contains("tr", singleCharFile).within(() => {
+    cy.tableCell("Remove").scrollIntoView().click();
+  });
+  cy.validationNotification(`'${singleCharFile}' has been removed.`);
+  cy.log("Validating a file with too long a name (over 80 characters)");
+  cy.wait(500);
+  cy.fileInput(longFile);
+  cy.wait(500);
+  cy.button("Upload documents").click();
+  cy.validationLink(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
+  cy.paragraph(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
+  cy.wait(500);
+  cy.log("Validating a file with special characters");
+  cy.fileInput(testFile, specialCharFile);
+  cy.button("Upload documents").click();
+  cy.validationLink(
+    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
+  );
+  cy.paragraph(
+    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
+  );
+  cy.wait(500);
+  cy.log("Validating a file with an empty name");
+  cy.fileInput(emptyFileName);
+  cy.button("Upload").click();
+  cy.validationLink(`You cannot upload this file because the file has no name.`);
+  cy.paragraph(`You cannot upload this file because the file has no name.`);
+  cy.wait(500);
+  cy.log("Validating that maximum batch of documents is 10");
+  const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
+  cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
+  cy.clickOn("button", "Upload documents");
+  cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
+  cy.wait(1000);
+  cy.log("Uploading a batch of 10 documents");
+  cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  cy.get(`input[type="file"]`)
+    .wait(seconds(1))
+    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
+  cy.wait("@filesUpload");
+  cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
+  cy.log("Deleting documents");
+  if (cleanup) {
+    cy.log("Cleaning up files");
+    cy.fileTidyUp(loggedInAs);
+  }
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -401,3 +596,6 @@ Cypress.Commands.add("checkTotalFor", checkTotalFor);
 Cypress.Commands.add("clickLink", clickLink);
 Cypress.Commands.add("validateCurrency", validateCurrency);
 Cypress.Commands.add("validatePositiveWholeNumber", validatePositiveWholeNumber);
+Cypress.Commands.add("learnFiles", learnFiles);
+Cypress.Commands.add("fileTidyUp", fileTidyUp);
+Cypress.Commands.add("testFileComponent", testFileComponent);

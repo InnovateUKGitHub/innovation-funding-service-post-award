@@ -1,7 +1,6 @@
 import { visitApp } from "../../common/visit";
 import {
   additionalInfo,
-  deleteFile,
   drawdownFileUpload,
   fcDrawdownGuidance,
   drawdownRequestTable,
@@ -12,21 +11,12 @@ import {
   submitWithoutDocExceedChar,
   deleteAllCharSubmitWith4,
 } from "./steps";
-import {
-  learnFiles,
-  allowLargerBatchFileUpload,
-  validateFileUpload,
-  uploadFileTooLarge,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-  uploadFileNameTooShort,
-} from "common/fileComponentTests";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import { seconds } from "common/seconds";
 import { fileTidyUp } from "common/filetidyup";
-import { loremIpsum32k, loremIpsum33k } from "common/lorem";
+import { Intercepts } from "common/intercepts";
+import { loremIpsum33k } from "common/lorem";
 
-const fcEmail = "wed.addams@test.test.co.uk";
+const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
 describe("Loans project > Drawdown request", { tags: "smoke" }, () => {
   before(() => {
@@ -60,22 +50,18 @@ describe("Loans project > Drawdown request", { tags: "smoke" }, () => {
 
   it("Should show the 'Upload drawdown approval request' heading with guidance", uploadApprovalGuidance);
 
-  it("Should click the 'Learn more about files you can upload' link and check messaging", learnFiles);
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
-
-  it(
-    "Should attempt to upload three files totalling 33MB",
-    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload,
-  );
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "Sarah Shuang",
+      "loans summary page",
+      "Drawdowns",
+      "Request",
+      Intercepts.loans,
+      true,
+      false,
+      true,
+    );
+  });
 
   it("Should upload a file and display validation message", drawdownFileUpload);
 
@@ -84,7 +70,7 @@ describe("Loans project > Drawdown request", { tags: "smoke" }, () => {
     fcFileUploadedSection,
   );
 
-  it("Should delete the file just uploaded", () => fileTidyUp("Wednesday Addams"));
+  it("Should delete the file just uploaded", () => fileTidyUp("Sarah Shuang"));
 
   it("Should have an additional information section and enter comments into the text box", additionalInfo);
 

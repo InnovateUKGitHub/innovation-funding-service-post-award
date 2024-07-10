@@ -3,33 +3,6 @@ import { seconds } from "./seconds";
 import { emptyFileName, longFile, noFileName, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
 import { Heading } from "typings/headings";
 
-export const learnFiles = () => {
-  cy.get("span").contains("Learn more about files you can upload").click();
-  [
-    "You can upload up to 10 documents at a time. The documents must:",
-    "There is no limit to the number of files you can upload in total.",
-    "You can upload these file types:",
-  ].forEach(para => {
-    cy.paragraph(para);
-  });
-  [
-    "total no more than 32MB in file size",
-    "each have a unique file name that describes its contents",
-    "PDF",
-    "(pdf, xps)",
-    "(doc, docx, rtf, txt, odt)",
-    "text",
-    "presentation",
-    "(ppt, pptx, odp)",
-    "spreadsheet",
-    "(csv, xls, xlsx, ods)",
-    "images",
-    "(jpg, jpeg, png, odg)",
-  ].forEach(fileInfo => {
-    cy.get("li").contains(fileInfo);
-  });
-};
-
 const largerDocs = ["11MB_1.txt", "11MB_2.txt", "11MB_3.txt", "testfile.doc"];
 
 const largeDocumentPaths = largerDocs.map(doc => `cypress/documents/${doc}`);

@@ -3,6 +3,7 @@ import { PcrType } from "./pcr";
 import { Tile } from "./tiles";
 import { Heading } from "./headings";
 import { CostCategory } from "./costCategory";
+import { Intercepts } from "common/intercepts";
 
 /* eslint-disable no-unused-vars */
 export {};
@@ -302,6 +303,32 @@ declare global {
        * disableJs must be added in the `beforeEach` hook for every test suite in which javascript should be disabled
        */
       disableJs(): void;
+      /**
+       * Checks for presence and contents of the dropdown 'Learn about files you can upload' section
+       */
+      learnFiles(): void;
+      /**
+       * Checks for presence of a user name and deletes all files uploaded by them
+       */
+      fileTidyUp(name: string): void;
+      /**
+       * Tests the file component on the page with validation, upload and deletion checks.
+       * User name, backlink suffix, header, re-navigation, API intercept, cleanup and if PCR must be passed in.
+       * 'waitIntercepts' is a list of api Intercepts used to pass in different api calls
+       * @example
+       * cy.testFileComponent("James Black", "costs to be claimed", "Costs to be claimed", "Continue to documents", Intercepts.claims, true, true, false)
+       */
+      testFileComponent(
+        loggedInAs: string,
+        suffix: string,
+        headerAssertion: string,
+        access: string,
+        intercept: Intercepts,
+        cleanup: boolean,
+        pcr: boolean,
+        loans: boolean,
+        pcrArea?: string,
+      ): void;
     }
   }
 }

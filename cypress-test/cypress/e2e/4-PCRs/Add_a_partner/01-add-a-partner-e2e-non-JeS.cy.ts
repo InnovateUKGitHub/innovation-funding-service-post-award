@@ -13,15 +13,6 @@ import {
   PcrItemType,
   addPartnerSizeOptions,
 } from "../steps";
-import {
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  deleteSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-} from "common/fileComponentTests";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
   addPartnerContinue,
@@ -73,7 +64,7 @@ import {
   deleteCoste2e,
   checkPcrForValidation,
 } from "./add-partner-e2e-steps";
-import { learnFiles } from "common/fileComponentTests";
+import { Intercepts } from "common/intercepts";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -82,10 +73,16 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
     cy.deletePcr("328407");
   });
 
@@ -427,21 +424,19 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
-
-  it("Should validate when uploading without choosing a file.", validateFileUpload);
-
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
-
-  it("Should upload a file with a single character as the name", uploadSingleChar);
-
-  it("Should delete the file with the very short file name", deleteSingleChar);
-
-  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
-
-  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
-
-  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+  it("Should test the file components", () => {
+    cy.testFileComponent(
+      "James Black",
+      "request",
+      "Request",
+      "Add a partner",
+      Intercepts.PCR,
+      true,
+      true,
+      false,
+      "Partner agreement",
+    );
+  });
 
   it("Should upload a testfile and check it appears", uploadTestFile);
 

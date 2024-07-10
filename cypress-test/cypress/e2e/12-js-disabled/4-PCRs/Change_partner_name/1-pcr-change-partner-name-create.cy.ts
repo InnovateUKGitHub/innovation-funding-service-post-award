@@ -20,7 +20,6 @@ import {
 import { testFile } from "common/testfileNames";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
-  learnFiles,
   allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
@@ -96,7 +95,9 @@ describe("js disabled > PCR >  Change a partner's name > Create PCR", { tags: "j
 
   it("Should click the save and continue button to proceed", saveContinueProceed);
 
-  it("Should contain a 'Learn more about files you can upload' section", learnFiles);
+  it("Should contain a 'Learn more about files you can upload' section", () => {
+    cy.learnFiles();
+  });
 
   it("Should show a files uploaded area with no files", () => {
     cy.get("h2").contains("Files uploaded");

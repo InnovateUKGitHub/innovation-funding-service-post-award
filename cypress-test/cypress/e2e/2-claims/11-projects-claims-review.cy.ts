@@ -28,7 +28,6 @@ import {
   reviewLabourRightLeft,
 } from "./steps";
 import {
-  learnFiles,
   allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
@@ -112,7 +111,9 @@ describe("Claims > Review as MO", { tags: "smoke" }, () => {
 
   it("Should have a documents area with correct copy", claimReviewDocArea);
 
-  it("Should have a learn about files section", learnFiles);
+  it("Should have a learn about files section", () => {
+    cy.learnFiles();
+  });
 
   it("Should have a documents area with existing evidence", claimReviewExistingEvidence);
 

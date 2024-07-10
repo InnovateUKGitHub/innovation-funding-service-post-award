@@ -139,7 +139,7 @@ export const fcFileUploadedSection = () => {
       cy.get(`th:nth-child(${index + 1})`).contains(header);
     });
   });
-  ["testfile.doc", "Drawdown approval", uploadDate, "0KB", "Wednesday Addams"].forEach((rowItem, index) => {
+  ["testfile.doc", "Drawdown approval", uploadDate, "0KB", "Sarah Shuang"].forEach((rowItem, index) => {
     cy.get(`td:nth-child(${index + 1})`).contains(rowItem);
   });
 };
