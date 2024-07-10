@@ -14,7 +14,7 @@ COPY --chown=node:node app /app
 
 EXPOSE 8080
 
-RUN npm run lint && npm run tsc && npm run test && npm run build
+RUN npm run lint && npm run esbuild:tsc && npm run test && npm run build
 
 ARG ACC_BUILD_TAG
 ENV ACC_BUILD_TAG $ACC_BUILD_TAG
