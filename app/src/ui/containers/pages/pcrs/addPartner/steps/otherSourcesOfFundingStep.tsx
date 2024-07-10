@@ -310,7 +310,6 @@ export const OtherSourcesOfFundingStep = () => {
 
   const total = watch("funds").reduce((acc, cur) => acc + Number(cur.value), 0);
 
-  // const rows = useRows(isClient, fields, costCategories);
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
