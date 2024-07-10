@@ -60,6 +60,7 @@ export const AwardRateStep = () => {
               <NumberInput
                 hasError={!!validationErrors?.awardRate}
                 inputWidth={4}
+                defaultValue={String(pcrItem.awardRate)}
                 {...register("awardRate")}
                 disabled={isFetching}
               />
