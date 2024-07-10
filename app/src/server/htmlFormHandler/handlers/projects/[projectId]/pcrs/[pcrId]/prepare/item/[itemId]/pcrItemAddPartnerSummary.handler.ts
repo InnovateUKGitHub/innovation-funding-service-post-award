@@ -75,7 +75,6 @@ export class PcrAddPartnerSummaryHandler extends ZodFormHandlerBase<
       pcrItemId: params.itemId,
     });
 
-    // @ts-expect-error doesn't like differentiated unions
     return {
       form: FormTypes.PcrAddPartnerSummary,
       ...pcrItem,
