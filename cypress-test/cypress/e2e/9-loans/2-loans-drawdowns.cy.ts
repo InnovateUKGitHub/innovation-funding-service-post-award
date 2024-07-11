@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import { drawdownCard, drawdownTable } from "./steps";
 
-const fcEmail = "wed.addams@test.test.co.uk";
+const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
 describe("Loans project > Drawdowns", () => {
   before(() => {

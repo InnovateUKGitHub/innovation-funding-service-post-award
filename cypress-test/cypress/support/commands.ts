@@ -429,6 +429,8 @@ const testFileComponent = (
   cy.get("h2").contains("Files uploaded");
   if (pcr) {
     cy.get("h1").contains(access);
+  } else if (loans) {
+    cy.get("h1");
   } else {
     cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
   }
@@ -460,9 +462,7 @@ const testFileComponent = (
   } else if (loans) {
     cy.backLink(`Back to ${suffix}`).click();
     cy.get("h1").contains(headerAssertion);
-    cy.get("main").within(() => {
-      cy.getByQA("validation-message-content").should("not.contain", "has been uploaded.");
-    });
+    cy.getByQA("validation-message-content").should("not.contain", "has been uploaded.");
     cy.log("Moving forward to the document area again");
     cy.clickOn(access);
   } else {

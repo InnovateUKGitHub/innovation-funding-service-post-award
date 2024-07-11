@@ -1,11 +1,6 @@
 import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../common/visit";
-import {
-  addRemainingPcrTypes,
-  backOutCreateProjectOnHold,
-  createReallocatePartnerPcr,
-  learnWhyPCRTypesMissing,
-} from "./steps";
+import { addRemainingPcrTypes, backOutCreateProjectOnHold, createReallocatePartnerPcr } from "./steps";
 const pmEmail = "james.black@euimeabs.test";
 
 describe("Loans project > PCR", () => {

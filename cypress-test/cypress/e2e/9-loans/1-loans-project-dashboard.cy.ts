@@ -7,9 +7,11 @@ import {
 } from "./steps";
 import { testEach } from "support/methods";
 
+const mo = "testman2@testing.com";
+
 describe("Loans project > dashboard > general", () => {
   before(() => {
-    visitApp({ path: "/projects/dashboard" });
+    visitApp({ asUser: mo, path: "/projects/dashboard" });
     navigateToLoansProject;
   });
 

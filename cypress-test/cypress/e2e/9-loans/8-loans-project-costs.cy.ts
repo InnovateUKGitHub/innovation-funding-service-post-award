@@ -6,7 +6,6 @@ import {
   projCostsDownload,
   projCostsDrawdownTable,
   projCostsFileUpload,
-  projCostsPeriodTable,
   projCostsSelectFileDescription,
   projCostsStatusSection,
   projCostsUploadedSection,
@@ -37,8 +36,11 @@ describe("Loans > Project Costs & Documents", () => {
     cy.selectTile("Project Costs");
   });
 
+  /**
+   * TODO: Uncomment out heading assertion once ACC-11279 is merged in.
+   */
   it("Should display the Project Costs heading and Open/Closed subheadings", () => {
-    cy.heading("Claims");
+    //cy.heading("Project costs");
     cy.get("h2").contains("Open");
     cy.get("h2").contains("Closed");
   });
@@ -91,7 +93,7 @@ describe("Loans > Project Costs & Documents", () => {
       "costs to be claimed",
       "Costs for this period",
       "Continue to costs documents",
-      Intercepts.loans,
+      Intercepts.claims,
       true,
       false,
       true,

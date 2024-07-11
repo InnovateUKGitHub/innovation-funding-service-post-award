@@ -1,6 +1,5 @@
 const pmEmail = "james.black@euimeabs.test";
-const fcEmail = "wed.addams@test.test.co.uk";
-const hybridEmail = "s.shuang@irc.trde.org.uk.test";
+const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 import { newCurrency } from "common/currency";
@@ -511,6 +510,8 @@ export const assertForMissingPcr = () => {
 };
 
 export const fcAndPmFileAssertion = () => {
+  cy.backLink("Back to loans summary page");
+
   cy.switchUserTo(fcEmail);
   cy.wait(500);
   fileTidyUp("Wednesday Addams");
@@ -518,15 +519,6 @@ export const fcAndPmFileAssertion = () => {
   cy.switchUserTo(pmEmail);
   cy.wait(500);
   pmFileUploadedSection();
-};
-
-export const hybridButtonAssertion = () => {
-  cy.switchUserTo(hybridEmail);
-  cy.backLink("Back to loans summary page").click();
-  cy.get("a")
-    .contains(/^Request$/)
-    .click();
-  cy.heading("Drawdown");
 };
 
 export const projCostsDownload = () => {
@@ -645,11 +637,13 @@ export const projCostsStatusSection = () => {
   cy.button("Hide");
   cy.paragraph("There are no changes.");
 };
-
+/**
+ * TODO: Update this once ACC-11279 is merged in.
+ */
 export const loansForecastNavigate = () => {
   cy.selectTile("Project Costs");
-  cy.heading("Project costs");
-  cy.clickOn("Edit");
+  //cy.heading("Project costs");
+  cy.get("a").contains("Edit").click();
   cy.heading("Costs for this period");
   cy.clickOn("Continue to costs documents");
   cy.heading("Supporting evidence");

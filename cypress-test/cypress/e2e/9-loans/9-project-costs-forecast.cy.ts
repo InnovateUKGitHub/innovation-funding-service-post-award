@@ -12,12 +12,15 @@ import {
 } from "./steps";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
-describe("Loans > Project Costs & Documents", () => {
+describe("Loans > Forecast", () => {
   before(() => {
     visitApp({ asUser: fc });
     cy.navigateToProject("191431");
   });
 
+  /**
+   * TODO: This steps function needs updating once ACC-11279 as it currently skips the header for Project costs assertion.
+   */
   it(
     "Should click the Project Costs tile and navigate to forecast section of the open Project cost",
     loansForecastNavigate,

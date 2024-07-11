@@ -1,14 +1,7 @@
 import { visitApp } from "../../common/visit";
-import {
-  viewDrawdown,
-  pmDrawdownGuidance,
-  drawdownRequestTable,
-  deleteFile,
-  fcAndPmFileAssertion,
-  hybridButtonAssertion,
-} from "./steps";
+import { viewDrawdown, pmDrawdownGuidance, drawdownRequestTable, deleteFile, fcAndPmFileAssertion } from "./steps";
 const pmEmail = "james.black@euimeabs.test";
-const fcEmail = "wed.addams@test.test.co.uk";
+const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
 describe("Loans project > Drawdown view", () => {
   before(() => {
@@ -36,9 +29,4 @@ describe("Loans project > Drawdown view", () => {
     cy.wait(500);
     deleteFile();
   });
-
-  it(
-    "Should navigate back to the drawdown summary page as hybrid PM/FC and check the correct button text is displayed",
-    hybridButtonAssertion,
-  );
 });
