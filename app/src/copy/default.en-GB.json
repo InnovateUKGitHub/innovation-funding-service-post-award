@@ -2001,6 +2001,13 @@
           "invalid_currency": "{{label, key}} must be a valid currency.",
           "not_pounds": "{{label, key}} must be in pounds (£)."
         }
+      },
+      "textarea": {
+        "errors": {
+          "required": "Enter {{label, key, lowercase}}.",
+          "too_big": "{{label, key}} must be {{count}} characters or less.",
+          "too_small": "{{label, key}} must be {{count}} characters or more."
+        }
       }
     },
     "partnerDetailsEdit": {
