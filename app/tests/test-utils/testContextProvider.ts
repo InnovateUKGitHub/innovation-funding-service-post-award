@@ -12,14 +12,12 @@ import { TestData } from "./testData";
 import { TestInternationalisation } from "./testInternationalisation";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestResources } from "./testResources";
-import { TestStore } from "./testStore";
 import { TestUser } from "./testUser";
 
 export class TestContext implements IContext {
   constructor() {
     this.repositories = createTestRepositories();
     this.testData = new TestData(this.repositories, () => this.user);
-    this.testStore = new TestStore(this);
   }
 
   public clock = new TestClock();
@@ -27,7 +25,6 @@ export class TestContext implements IContext {
   public repositories: ITestRepositories;
   public user = new TestUser();
   public testData: TestData;
-  public testStore: TestStore;
 
   public internationalisation = new TestInternationalisation();
 

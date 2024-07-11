@@ -1,28 +1,10 @@
-import { createStore } from "redux";
 import { render } from "@testing-library/react";
-import { IStores } from "@ui/redux/storesProvider";
 import { TestBed } from "@shared/TestBed";
-import { ProjectRole } from "@framework/constants/project";
-import { IClientUser } from "@framework/types/IUser";
 import { NavigationArrows } from "./navigationArrows";
-import { rootReducer } from "@ui/redux/reducers/rootReducer";
 import { routeConfig } from "@ui/routing/routeConfig";
 
 describe("<NavigationArrows />", () => {
   const routes = routeConfig;
-
-  const store = createStore(rootReducer, {
-    user: {
-      email: "iuk.accproject@bjss.com.bjsspoc2",
-      roleInfo: {
-        a0C0Q000001tr5yUAA: {
-          projectRoles: ProjectRole.MonitoringOfficer,
-          partnerRoles: {},
-        },
-      },
-      csrf: "CSFR",
-    } as IClientUser,
-  }) as IStores;
 
   const previousLink = {
     label: "Overheads",
@@ -44,7 +26,7 @@ describe("<NavigationArrows />", () => {
     }),
   };
 
-  const setup = (element: React.ReactElement) => render(<TestBed stores={store}>{element}</TestBed>);
+  const setup = (element: React.ReactElement) => render(<TestBed>{element}</TestBed>);
 
   describe("@returns", () => {
     test("with next link only", () => {

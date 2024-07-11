@@ -1,22 +1,17 @@
 import { createMemoryHistory } from "history";
-import _merge from "lodash/merge";
 import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
 import { mountedContext } from "@ui/context/Mounted";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/context/contentProvider";
-import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
 import { RenderHookOptions } from "@testing-library/react";
 
-export type TestBedStore = Partial<IStores>;
-
 export interface ITestBedProps {
   children: React.ReactElement;
   competitionType?: string;
-  stores?: TestBedStore;
   isServer?: boolean;
   pageTitle?: string;
   /**
@@ -36,26 +31,12 @@ export interface ITestBedProps {
  */
 export function TestBed({
   isServer = false,
-  stores,
   competitionType,
   children,
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
   extendClientConfig,
 }: ITestBedProps) {
-  const stubStores = {
-    users: {
-      getCurrentUser: () => ({ csrf: "stub-csrf" }),
-    },
-    navigation: {
-      getPageTitle: () => ({
-        displayTitle: "stub-displayTitle",
-      }),
-    },
-  };
-
-  const storesValue = _merge(stubStores, stores) as Required<TestBedStore>;
-
   const clientConfig = {
     features: {
       changePeriodLengthWorkflow: false,
@@ -108,9 +89,7 @@ export function TestBed({
     <mountedContext.Provider value={testBedMountState}>
       <ClientConfigProvider config={clientConfig}>
         <PageTitleProvider title={pageTitle}>
-          <StoresProvider value={storesValue}>
-            <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
-          </StoresProvider>
+          <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
         </PageTitleProvider>
       </ClientConfigProvider>
     </mountedContext.Provider>
