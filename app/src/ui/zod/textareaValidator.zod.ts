@@ -25,8 +25,8 @@ export const getTextareaValidation = ({
    * path to value in copy document to be interpolated, or if not matched, then the label will be shown as is
    */
   label: string;
-  maxLength: number;
-  minLength: number;
+  maxLength?: number;
+  minLength?: number;
   required?: boolean;
 }) =>
   z

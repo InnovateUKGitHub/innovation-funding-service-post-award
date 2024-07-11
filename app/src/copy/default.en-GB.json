@@ -2025,10 +2025,7 @@
         }
       },
       "comments": {
-        "errors": {
-          "too_big": "Comments must be a maximum of 1000 characters.",
-          "custom": "Comments are required if querying a claim."
-        }
+        "label": "Comments"
       }
     },
     "loanRequest": {
@@ -2125,6 +2122,7 @@
             }
           },
           "comments": {
+            "label": "Comments",
             "errors": {
               "too_big": "Maximum of 32,000 characters"
             }
@@ -2139,6 +2137,7 @@
         }
       },
       "addComments": {
+        "label": "Comments",
         "errors": {
           "too_big": "Maximum of 5000 characters"
         }
@@ -2151,6 +2150,7 @@
             }
           },
           "comments": {
+            "label": "Comments",
             "errors": {
               "too_small": "Enter comments for {{input.title, lowercase}}."
             }
@@ -2566,6 +2566,7 @@
       },
       "pcrReasoning": {
         "reasoningComments": {
+          "label": "Reasoning",
           "required": "Enter reasoning for the request.",
           "errors": {
             "too_big": "Reasoning can be a maximum of {{count}} characters."

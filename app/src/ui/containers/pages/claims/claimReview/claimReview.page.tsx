@@ -31,6 +31,7 @@ import { ClaimReviewDocuments } from "./ClaimReviewDocuments";
 import { ClaimReviewForecastTable } from "./ClaimReviewForecastTable";
 import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
 import { ClaimReviewSchemaType, claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -63,6 +64,8 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
   const claimReviewForm = useForm<z.output<ClaimReviewSchemaType>>({
     resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
   });
+
+  useFormRevalidate(claimReviewForm.watch, claimReviewForm.trigger);
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const claimDocumentErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(
