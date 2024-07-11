@@ -1532,7 +1532,7 @@ export const validateGrantMoving = () => {
   cy.get("#grantMovingOverFinancialYear").clear().type("$");
   cy.validationLink("Grant value moving over financial year end must be in pounds (£).");
   cy.paragraph("Grant value moving over financial year end must be in pounds (£).");
-  cy.get("input#grantMovingOverFinancialYear").clear().type("0");
+  cy.get("input#grantMovingOverFinancialYear").clear().type("£100");
 };
 
 export const validatePcrDurationPage = () => {
