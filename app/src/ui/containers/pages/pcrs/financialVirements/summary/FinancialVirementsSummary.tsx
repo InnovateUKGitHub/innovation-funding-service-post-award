@@ -35,6 +35,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
 import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
@@ -77,7 +78,7 @@ export const FinancialVirementSummary = () => {
       data: {
         id: itemId,
         grantMovingOverFinancialYear: dto?.grantMovingOverFinancialYear
-          ? parseFloat(dto.grantMovingOverFinancialYear)
+          ? parseCurrency(dto.grantMovingOverFinancialYear)
           : undefined,
         status: dto?.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
       },
