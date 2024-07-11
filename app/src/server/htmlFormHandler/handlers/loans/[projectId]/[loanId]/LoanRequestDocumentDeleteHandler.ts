@@ -4,7 +4,6 @@ import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loan
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { documentsErrorMap, loanLevelDelete } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
@@ -54,13 +53,10 @@ export class LoanRequestDocumentDeleteHandler extends ZodFormHandlerBase<typeof 
     const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
     await context.runCommand(new DeleteLoanDocument(input.documentId, input.projectId, input.loanId));
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x =>
-          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
-        ),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }

@@ -4,7 +4,6 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
 import { ClaimLevelUploadSchemaType, documentsErrorMap, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import {
   ClaimDocumentsPageParams,
@@ -70,12 +69,11 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
       ),
     );
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }
 

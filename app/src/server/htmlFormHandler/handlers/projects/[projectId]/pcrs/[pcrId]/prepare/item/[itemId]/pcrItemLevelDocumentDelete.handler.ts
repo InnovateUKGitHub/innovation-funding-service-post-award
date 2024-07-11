@@ -66,10 +66,10 @@ export class PcrLevelDocumentDeleteHandler extends ZodFormHandlerBase<
       ),
     );
 
-    res.locals.messages.push(
-      this.copy.getCopyString(x =>
-        x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }

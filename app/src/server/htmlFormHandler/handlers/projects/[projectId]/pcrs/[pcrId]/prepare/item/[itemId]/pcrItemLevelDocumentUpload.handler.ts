@@ -67,8 +67,10 @@ export class PcrItemLevelDocumentUploadHandler extends ZodFormHandlerBase<
       ),
     );
 
-    res.locals.messages.push(
-      this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }

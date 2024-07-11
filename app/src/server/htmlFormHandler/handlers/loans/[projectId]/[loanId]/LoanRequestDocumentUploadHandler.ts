@@ -8,7 +8,6 @@ import { LoanLevelUploadSchemaType, documentsErrorMap, getLoanLevelUpload } from
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { z } from "zod";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 
 export class LoanRequestDocumentUploadHandler extends ZodFormHandlerBase<
   LoanLevelUploadSchemaType,
@@ -57,11 +56,10 @@ export class LoanRequestDocumentUploadHandler extends ZodFormHandlerBase<
   }): Promise<void> {
     await context.runCommand(new UploadLoanDocumentsCommand(input, input.projectId, input.loanId));
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x => x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length })),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }

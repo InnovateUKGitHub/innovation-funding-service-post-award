@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
 import { documentsErrorMap, projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
@@ -64,14 +63,11 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
       await context.runCommand(new DeleteProjectDocumentCommand(input.projectId, input.documentId));
     }
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x =>
-          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
-        ),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }
 

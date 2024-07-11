@@ -28,7 +28,6 @@ import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[proj
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddTypeHandler.handler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
-import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemDocumentDeleteHandler";
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDeleteHandler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/spendProfileAddCostHandler";
@@ -154,7 +153,6 @@ export const standardFormHandlers = [
   new ProjectChangeRequestSpendProfileDeleteCostHandler(),
   new ProjectChangeRequestSpendProfileEditCostHandler(),
   new ProjectChangeRequestSpendProfileCostsSummaryHandler(),
-  new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
   new VirementLoanEditHandler(),
   new ChangeRemainingGrantUpdateHandler(),

@@ -6,7 +6,6 @@ import {
   ClaimDetailDocumentsRoute,
   ClaimDetailDocumentsPageParams,
 } from "@ui/containers/pages/claims/claimDetailDocuments.page";
-import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { claimDetailLevelDelete, documentsErrorMap } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
@@ -67,14 +66,11 @@ class ClaimDetailLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
       }),
     );
 
-    // TODO: Actually use Redux instead of a temporary array
-    res.locals.preloadedReduxActions.push(
-      messageSuccess(
-        this.copy.getCopyString(x =>
-          x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
-        ),
-      ),
+    const message = this.copy.getCopyString(x =>
+      x.forms.documents.files.messages.deletedDocument({ deletedFileName: documentSummaryInfo.fileName }),
     );
+
+    Array.isArray(res.locals.messages) ? res.locals.messages.push(message) : (res.locals.messages = [message]);
   }
 }
 
