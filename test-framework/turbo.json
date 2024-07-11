@@ -10,12 +10,12 @@
     },
     "cypress": {
       "persistent": true,
-      "env": ["CYPRESS_SALESFORCE_SANDBOX"],
+      "env": ["TEST_SALESFORCE_SANDBOX"],
       "dependsOn": ["build"]
     },
     "open": {
       "persistent": true,
-      "env": ["CYPRESS_SALESFORCE_SANDBOX"],
+      "env": ["TEST_SALESFORCE_SANDBOX"],
       "dependsOn": ["build"]
     }
   }

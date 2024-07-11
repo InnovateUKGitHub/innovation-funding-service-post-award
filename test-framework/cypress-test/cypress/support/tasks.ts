@@ -1,8 +1,5 @@
 import { EnvironmentManager } from "environment-manager";
 import jwt from "jsonwebtoken";
-import { createClientAsync } from "./sfdc/soapClient/toolingwsdl";
-import { BearerSecurity } from "soap";
-import path from "path";
 import { xml } from "./helpers/xml";
 
 const accCache = new Map<string, string>();

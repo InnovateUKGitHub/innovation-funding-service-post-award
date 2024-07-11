@@ -12,13 +12,13 @@
     "test": "turbo test",
     "cypress": "turbo cypress",
     "open": "turbo open",
-    "open:dev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo open",
-    "open:bjssdev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo open",
-    "open:at": "CYPRESS_SALESFORCE_SANDBOX=at turbo open",
+    "open:dev": "TEST_SALESFORCE_SANDBOX=dev turbo open",
+    "open:bjssdev": "TEST_SALESFORCE_SANDBOX=dev turbo open",
+    "open:at": "TEST_SALESFORCE_SANDBOX=at turbo open",
     "run": "turbo run",
-    "run:dev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo run",
-    "run:bjssdev": "CYPRESS_SALESFORCE_SANDBOX=dev turbo run",
-    "run:at": "CYPRESS_SALESFORCE_SANDBOX=at turbo run"
+    "run:dev": "TEST_SALESFORCE_SANDBOX=dev turbo run",
+    "run:bjssdev": "TEST_SALESFORCE_SANDBOX=dev turbo run",
+    "run:at": "TEST_SALESFORCE_SANDBOX=at turbo run"
   },
   "dependencies": {
     "turbo": "^2.0.6"

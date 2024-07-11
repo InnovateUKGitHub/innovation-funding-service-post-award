@@ -1,9 +1,24 @@
 import { defineConfig, devices } from "@playwright/test";
+import { EnvironmentManager } from "environment-manager";
 import { defineBddConfig } from "playwright-bdd";
 
+const envman = new EnvironmentManager(process.env.TEST_SALESFORCE_SANDBOX);
+const creds = envman
+  .getEnv("BASIC_AUTH")
+  ?.split(/[:|]/g)
+  ?.map(x => x.trim());
+
+const httpCredentials =
+  creds?.length >= 2
+    ? {
+        username: creds[0],
+        password: creds[1],
+      }
+    : undefined;
+
 const testDir = defineBddConfig({
-  importTestFrom: "./src/fixtures.ts",
-  paths: ["./src/feature-files/sample.feature"],
+  steps: "./src/fixtures/index.ts",
+  paths: ["./src/features/**/*.feature"],
 });
 
 /**
@@ -30,11 +45,10 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    baseURL: "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org",
+    httpCredentials,
     trace: "on-first-retry",
+    testIdAttribute: "data-qa",
   },
 
   /* Configure projects for major browsers */

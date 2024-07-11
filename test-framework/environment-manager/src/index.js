@@ -35,7 +35,9 @@ class EnvironmentManager {
    * @returns {string | undefined} The text value of the environment variable
    */
   getEnv(key) {
-    return this.sopsEnv[key] ?? process.env[key] ?? undefined;
+    return (
+      this.sopsEnv[key] ?? process.env[key] ?? console.error(`Cannot find environment variable associated with ${key}`)
+    );
   }
 }
 
