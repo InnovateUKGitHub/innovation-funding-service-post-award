@@ -8,7 +8,7 @@ import {
   PartnerDetailsParams,
   PartnerDetailsEditRoute,
 } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 

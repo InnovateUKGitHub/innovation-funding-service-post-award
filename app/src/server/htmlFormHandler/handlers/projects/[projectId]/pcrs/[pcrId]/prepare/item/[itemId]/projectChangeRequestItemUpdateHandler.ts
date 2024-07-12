@@ -42,7 +42,7 @@ import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkf
 import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
 import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerWorkflow";
 import { SuspendProjectSteps } from "@ui/containers/pages/pcrs/suspendProject/suspendProjectWorkflow";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { DateTime } from "luxon";
 

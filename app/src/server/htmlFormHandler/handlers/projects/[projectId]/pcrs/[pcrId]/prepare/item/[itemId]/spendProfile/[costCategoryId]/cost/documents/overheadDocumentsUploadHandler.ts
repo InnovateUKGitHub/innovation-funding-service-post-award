@@ -1,6 +1,6 @@
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { IContext } from "@framework/types/IContext";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFileWrapper } from "@framework/types/fileWapper";

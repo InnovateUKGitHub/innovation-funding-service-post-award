@@ -1,7 +1,7 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { MonitoringReportWorkflowDef } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";

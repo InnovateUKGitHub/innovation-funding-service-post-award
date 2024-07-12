@@ -13,7 +13,7 @@ import {
   PartnerLevelFinancialVirementRoute,
 } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 
 export class VirementCostsUpdateHandler extends StandardFormHandlerBase<

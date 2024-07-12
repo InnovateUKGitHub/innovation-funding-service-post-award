@@ -6,7 +6,7 @@ import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCom
 import { PartnerDetailsParams } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
 import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
 import { ProjectSetupPartnerPostcodeRoute } from "@ui/containers/pages/projects/setup/projectSetupPartnerPostcode.page";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 

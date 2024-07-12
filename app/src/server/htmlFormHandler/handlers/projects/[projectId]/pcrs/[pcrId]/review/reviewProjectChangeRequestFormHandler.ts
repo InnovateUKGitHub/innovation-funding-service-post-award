@@ -7,7 +7,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
 import { PCRReviewParams, PCRReviewRoute } from "@ui/containers/pages/pcrs/pcrReview";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBase<PCRReviewParams, PCRDto> {

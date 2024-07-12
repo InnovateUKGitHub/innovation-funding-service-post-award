@@ -3,7 +3,7 @@ import { CostCategory } from "@framework/entities/costCategory";
 import { IContext } from "@framework/types/IContext";
 import { numberComparator } from "@framework/util/comparator";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { QueryBase } from "../common/queryBase";
 
 /**

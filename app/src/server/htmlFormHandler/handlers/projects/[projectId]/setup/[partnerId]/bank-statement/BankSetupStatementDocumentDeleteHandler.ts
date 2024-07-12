@@ -1,5 +1,5 @@
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IContext } from "@framework/types/IContext";

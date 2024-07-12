@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";

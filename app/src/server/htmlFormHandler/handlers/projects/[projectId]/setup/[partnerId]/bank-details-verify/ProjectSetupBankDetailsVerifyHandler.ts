@@ -12,7 +12,7 @@ import {
   ProjectSetupBankDetailsVerifyParams,
   ProjectSetupBankDetailsVerifyRoute,
 } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 

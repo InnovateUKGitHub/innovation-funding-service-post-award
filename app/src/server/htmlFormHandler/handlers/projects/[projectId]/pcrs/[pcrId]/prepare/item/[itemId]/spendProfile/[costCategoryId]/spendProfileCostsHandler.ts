@@ -12,7 +12,7 @@ import {
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<
