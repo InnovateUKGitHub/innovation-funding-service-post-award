@@ -28,6 +28,7 @@ import { isObject } from "lodash";
 import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isCapitalUsageCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -113,7 +114,8 @@ export const CapitalUsageFormComponent = () => {
 
   const values = watch();
 
-  const netCost = (Number(values.netPresentValue) - Number(values.residualValue)) * (Number(values.utilisation) / 100);
+  const netCost =
+    (parseCurrency(values.netPresentValue) - parseCurrency(values.residualValue)) * (Number(values.utilisation) / 100);
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
       <Form
@@ -129,8 +131,8 @@ export const CapitalUsageFormComponent = () => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   depreciationPeriod: Number(data.depreciationPeriod),
-                  netPresentValue: Number(data.netPresentValue),
-                  residualValue: Number(data.residualValue),
+                  netPresentValue: parseCurrency(data.netPresentValue),
+                  residualValue: parseCurrency(data.residualValue),
                   utilisation: Number(data.utilisation),
                   typeLabel: typeOptions.find(x => x.value === Number(data.itemType))?.label ?? "",
                   value: netCost,

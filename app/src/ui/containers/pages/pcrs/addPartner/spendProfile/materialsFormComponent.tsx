@@ -24,6 +24,7 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 const isMaterialsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -79,7 +80,7 @@ export const MaterialsFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const totalCost = Number(watch("quantityOfMaterialItems") ?? 0) * Number(watch("costPerItem") ?? 0);
+  const totalCost = Number(watch("quantityOfMaterialItems") ?? 0) * parseCurrency(watch("costPerItem") ?? 0);
 
   const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<MaterialsSchema>;
 
@@ -97,7 +98,7 @@ export const MaterialsFormComponent = () => {
                   costCategoryId,
                   costCategory: costCategory.type,
                   quantity: Number(data.quantityOfMaterialItems),
-                  costPerItem: Number(data.costPerItem),
+                  costPerItem: parseCurrency(data.costPerItem),
                   value: totalCost,
                 }),
               },
