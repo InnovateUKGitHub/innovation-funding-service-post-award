@@ -9,7 +9,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimKey } from "@framework/types/ClaimKey";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IContext } from "@framework/types/IContext";
 import { UpdateClaimCommand } from "../claims/updateClaim";
 import { BadRequestError, ValidationError } from "../common/appError";

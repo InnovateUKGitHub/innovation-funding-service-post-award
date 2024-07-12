@@ -1,4 +1,4 @@
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { configuration } from "@server/features/common/config";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
 import { FileDtoValidator } from "./documentUploadValidator";

@@ -8,7 +8,7 @@ import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { MulterError } from "multer";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IAppError } from "@framework/types/IAppError";
 import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
 

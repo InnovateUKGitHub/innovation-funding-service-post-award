@@ -10,7 +10,7 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
 import { ForbiddenError } from "@shared/appError";
 

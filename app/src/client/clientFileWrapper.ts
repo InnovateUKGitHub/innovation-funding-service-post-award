@@ -1,4 +1,4 @@
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 
 export class ClientFileWrapper implements IFileWrapper {
   constructor(public readonly file: File) {

@@ -5,7 +5,7 @@ import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
 import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 

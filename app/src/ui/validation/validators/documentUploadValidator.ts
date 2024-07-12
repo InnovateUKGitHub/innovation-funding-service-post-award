@@ -4,7 +4,7 @@ import * as Validation from "./common";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IAppOptions, IAppPermittedTypes } from "@framework/types/IAppOptions";
 import { getFileSize, getFileExtension, getFileName } from "@framework/util/files";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";

@@ -3,7 +3,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { configuration } from "@server/features/common/config";

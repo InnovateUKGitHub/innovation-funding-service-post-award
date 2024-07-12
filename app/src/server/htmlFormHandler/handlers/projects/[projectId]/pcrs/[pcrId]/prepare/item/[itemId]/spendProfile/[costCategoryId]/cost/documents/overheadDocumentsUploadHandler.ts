@@ -3,7 +3,7 @@ import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { configuration } from "@server/features/common/config";
 import {

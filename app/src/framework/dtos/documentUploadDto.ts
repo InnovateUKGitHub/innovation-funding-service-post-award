@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import multer from "multer";
 
 export interface DocumentUploadDto {

@@ -21,7 +21,7 @@ import {
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestStatusChangeEntity,
 } from "@framework/entities/projectChangeRequest";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IClientUser } from "@framework/types/IUser";
 import { CostCategory } from "@framework/entities/costCategory";
 import { Partner } from "@framework/entities/partner";

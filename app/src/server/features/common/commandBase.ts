@@ -2,7 +2,7 @@
 import { ValidationError } from "@server/features/common/appError";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { Authorisation } from "@framework/types/authorisation";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IContext } from "@framework/types/IContext";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import {

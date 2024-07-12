@@ -1,4 +1,4 @@
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { TestConfig } from "@tests/test-utils/testConfig";
 import {
   emptyStringToUndefinedValidation,

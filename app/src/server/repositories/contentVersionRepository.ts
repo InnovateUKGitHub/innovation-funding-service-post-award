@@ -4,7 +4,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 
 export interface ISalesforceDocument {
   Id: string;

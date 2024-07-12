@@ -5,7 +5,7 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../htmlFormHandler/diskStorage";
-import { IFileWrapper } from "@framework/types/fileWapper";
+import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IAppError } from "@framework/types/IAppError";
 import { ISessionUser } from "@framework/types/IUser";
 import { configuration } from "@server/features/common/config";
