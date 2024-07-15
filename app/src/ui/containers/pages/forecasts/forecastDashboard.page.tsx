@@ -41,7 +41,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
           />
           <Table.Currency
             header={x => x.pages.forecastsDashboard.headerUnderspend}
-            value={x => roundCurrency(x.totalParticipantGrant ?? 0 - x.forecastsAndCosts)}
+            value={x => roundCurrency((x.totalParticipantGrant ?? 0) - x.forecastsAndCosts)}
             qa="underspend"
           />
           <Table.ShortDate
