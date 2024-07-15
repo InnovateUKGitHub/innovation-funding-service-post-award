@@ -15,7 +15,16 @@
     },
     "open": {
       "persistent": true,
-      "env": ["TEST_SALESFORCE_SANDBOX"],
+      "env": [
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "DISPLAY",
+        "BASIC_AUTH",
+        "TEST_SALESFORCE_SANDBOX",
+        "SALESFORCE_PRIVATE_KEY",
+        "SALESFORCE_USERNAME",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CONNECTION_URL"
+      ],
       "dependsOn": ["build"]
     }
   }
