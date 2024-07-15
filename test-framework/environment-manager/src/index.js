@@ -1,6 +1,7 @@
 const yaml = require("yaml");
 const childProcess = require("node:child_process");
 const path = require("node:path");
+const fs = require("fs");
 
 class EnvironmentManager {
   /**
@@ -19,14 +20,19 @@ class EnvironmentManager {
       `acc-ui-secrets.${environment}.yml`,
     );
 
-    console.log("Attempting to read SOPS YAML file at", sopsFile);
+    if (fs.existsSync(sopsFile)) {
+      console.log("Attempting to read SOPS YAML file at", sopsFile);
 
-    const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
-      stdio: "pipe",
-      encoding: "utf-8",
-    });
+      const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
+        stdio: "pipe",
+        encoding: "utf-8",
+      });
 
-    this.sopsEnv = sops.stdout ? yaml.parse(sops.stdout).stringData : {};
+      this.sopsEnv = sops.stdout ? yaml.parse(sops.stdout).stringData : {};
+    } else {
+      console.log(`Cannot open ${sopsFile} - Will read env vars only`);
+      this.sopsEnv = {};
+    }
   }
 
   /**
