@@ -2,7 +2,7 @@ import { Page, expect } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
 import { BackButton } from "../../components/BackButton";
 import { PageHeading } from "../../components/PageHeading";
-import { ProjectCard } from "../../components/ProjectCard";
+import { DashboardTile } from "../../components/DashboardTile";
 
 export
 @Fixture("projectOverview")
@@ -24,7 +24,7 @@ class ProjectOverview {
 
   @When("the user selects the {string} tile")
   async selectTile(tileName: string) {
-    await ProjectCard.fromTitle(this.page, tileName).click();
+    await DashboardTile.fromTitle(this.page, tileName).click();
   }
 
   @Then("the user sees the project overview")

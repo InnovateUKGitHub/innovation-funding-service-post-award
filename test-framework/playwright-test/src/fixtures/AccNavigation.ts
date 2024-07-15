@@ -8,7 +8,8 @@ import { ProjectCard } from "../components/ProjectCard";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { DashboardTile } from "../components/DashboardTile";
-import { ReactLoadedIndicator } from "../components/ReactLoadedIndicator";
+import { DevTools } from "../components/DevTools";
+import { switchUserTo } from "../helpers/userSwitcher";
 
 export
 @Fixture("accNavigation")
@@ -47,7 +48,7 @@ class AccNavigation {
   @Given("the user is on the developer homepage")
   async gotoDeveloperHomepage() {
     await this.page.goto("/");
-    await ReactLoadedIndicator.isLoaded(this.page);
+    await DevTools.isLoaded(this.page);
   }
 
   @Given("the user is on the project dashboard")
@@ -71,6 +72,15 @@ class AccNavigation {
       },
     );
 
+    await this.projectOverview.isPage();
+  }
+
+  @Given("the user is on the project overview as a {string}")
+  async gotoProjectOverviewAsUser(
+    userType: "Monitoring Officer" | "Project Manager" | "Financial Consultant" | "MO" | "PM" | "FC",
+  ) {
+    await this.gotoProjectOverview();
+    await switchUserTo(this.page, this.projectState, userType);
     await this.projectOverview.isPage();
   }
 

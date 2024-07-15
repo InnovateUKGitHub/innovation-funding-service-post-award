@@ -1,9 +1,8 @@
-import { Page } from "@playwright/test";
+import { Page, Browser } from "@playwright/test";
 import { EnvironmentManager } from "environment-manager";
 import jwt from "jsonwebtoken";
 import { CreateProjectProps, buildApex } from "project-factory";
 import { xml } from "../../helpers/xml";
-import { AccNavigation } from "../AccNavigation";
 import { ProjectState } from "./ProjectState";
 
 export abstract class ProjectFactory {
