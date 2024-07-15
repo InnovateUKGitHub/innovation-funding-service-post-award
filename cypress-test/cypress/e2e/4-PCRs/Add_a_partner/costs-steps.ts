@@ -81,8 +81,8 @@ export function checkAddLabourItem() {
       cy.validationLink("Enter rate per day.");
       cy.validationLink("Enter days spent on project.");
       cy.getByLabel("Role within project").type("Law keeper");
-      cy.validateCurrency("Gross employee cost", "Gross cost of role", "50000");
-      cy.validateCurrency("Rate (£/day)", "rate per day", "500");
+      cy.validateCurrency("Gross employee cost", "Gross cost of role", "£50000");
+      cy.validateCurrency("Rate (£/day)", "rate per day", "£500");
       cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "100");
       checkTotalCostEquals(pounds(cost));
       checkSummary("Labour", "Law keeper", cost, categoryTotal, totalCost);
@@ -160,7 +160,7 @@ export const checkAddMaterialsItem = () => {
       cy.validationLink("Enter item description.");
       cy.getByLabel("Item").clear().type("dinosaur toys");
       cy.validatePositiveWholeNumber("Quantity", "Quantity", String(quantity));
-      cy.validateCurrency("Cost per item (£)", "cost per item", String(costPerItem));
+      cy.validateCurrency("Cost per item (£)", "cost per item", String(`£${costPerItem}`));
       checkTotalCostEquals(pounds(cost));
       checkSummary("Materials", "dinosaur toys", cost, categoryTotal, totalCost);
     });
@@ -197,8 +197,8 @@ export const checkAddCapitalUsageItem = () => {
       cy.getByLabel("Item").clear().type("Slush fund usage");
       cy.getByLabel("New").click();
       cy.validatePositiveWholeNumber("Depreciation period (months)", "Depreciation period", "24");
-      cy.validateCurrency("Net present value (£)", "net present value", "25000");
-      cy.validateCurrency("Residual value at end of project (£)", "residual value", "9000");
+      cy.validateCurrency("Net present value (£)", "net present value", "£25000");
+      cy.validateCurrency("Residual value at end of project (£)", "residual value", "£9000");
       cy.getByLabel("Utilisation (%)").clear().type("banana");
       cy.validationLink("Utilisation must be a number.");
       cy.getByLabel("Utilisation (%)").clear().type("-23");
@@ -284,7 +284,7 @@ export const checkAddSubcontractingItem = () => {
       cy.paragraph("You have 16 characters");
       cy.getByLabel("Subcontractor name").clear().type("Donald duck");
       cy.getByLabel("Country where the subcontractor will work").clear().type("USA");
-      cy.validateCurrency("Cost (£)", "cost of subcontractor", String(cost));
+      cy.validateCurrency("Cost (£)", "cost of subcontractor", String(`£${cost}`));
       checkSummary("Subcontracting", "Donald duck", cost, categoryTotal, totalCost);
     });
   });
@@ -334,7 +334,7 @@ export const checkAddTravelAndSubsistenceItem = () => {
       cy.paragraph("Total cost must be less than £10,000,000,000,000.00.");
       cy.getByLabel("Purpose of journey or description of subsistence cost").clear().type("Trip to las vegas");
       cy.validatePositiveWholeNumber("Number of times", "Number of times", "3");
-      cy.validateCurrency("Cost of each (£)", "cost of each", "12000");
+      cy.validateCurrency("Cost of each (£)", "cost of each", "£12000");
       checkTotalCostEquals(pounds(cost));
       checkSummary("Travel and subsistence", "Trip to las vegas", cost, categoryTotal, totalCost);
     });
@@ -400,7 +400,7 @@ export const checkAddOtherCostsItem = (pageNumber: OtherCostPages) => {
       cy.getByLabel("Description and justification of the cost").type("{backspace}");
       cy.getByQA("validation-summary").should("not.contain", "Description of cost must be 131072 or fewer.");
       cy.getByLabel("Description and justification of the cost").clear().type("Other expenses");
-      cy.validateCurrency("Estimated cost (£)", "estimated cost", String(cost));
+      cy.validateCurrency("Estimated cost (£)", "estimated cost", String(`£${cost}`));
       checkSummary(page, "Other expenses", cost, categoryTotal, totalCost);
     });
   });
