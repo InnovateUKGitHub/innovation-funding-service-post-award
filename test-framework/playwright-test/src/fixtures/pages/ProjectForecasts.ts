@@ -1,7 +1,7 @@
 import { Page, expect } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
 import { PageHeading } from "../../components/PageHeading";
-import { Commands } from "../CypressCommands";
+import { Commands } from "../Commands";
 
 export
 @Fixture("projectForecasts")
@@ -19,10 +19,10 @@ class ProjectForecasts {
 
   @Then("the user sees the project forecasts")
   async isPage() {
-    await expect(this.pageTitle.selector()).toBeVisible();
+    await expect(this.pageTitle.get()).toBeVisible();
   }
 
-  @When("the user views the project forecast for {string}")
+  @When("the user selects the project forecast for {string}")
   async viewForecastForPartner(partnerName: string) {
     await this.commands.getLinkInRow(partnerName, "View forecast").click();
   }

@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { BaseAccComponent } from "./BaseAccComponent";
+import { BaseComponent } from "./BaseComponent";
 
-class PageHeading extends BaseAccComponent {
+class PageHeading extends BaseComponent {
   private readonly title: string;
 
   constructor({ page, title }: { page: Page; title: string }) {
@@ -9,7 +9,7 @@ class PageHeading extends BaseAccComponent {
     this.title = title;
   }
 
-  selector() {
+  get() {
     return this.page.locator("h1").filter({ hasText: this.title });
   }
 

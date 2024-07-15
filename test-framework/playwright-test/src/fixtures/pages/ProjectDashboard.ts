@@ -23,6 +23,6 @@ class ProjectDashboard {
 
   @Then("the user sees the project dashboard")
   async isPage() {
-    await expect(this.pageTitle.selector()).toBeVisible();
+    await expect(this.pageTitle.get()).toBeVisible();
   }
 }

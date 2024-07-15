@@ -1,15 +1,15 @@
-interface CypressCacheOptions {
+interface TestCacheOptions {
   cache?: "use" | "ignore";
 }
 
-class CypressCache {
+class TestCache {
   private readonly localCache = new Map<string, string>();
 
   async cache(
     keygen: string | string[],
     longTask: () => Promise<string>,
     shortTask: (memo: string) => Promise<void>,
-    options: CypressCacheOptions = { cache: "use" },
+    options: TestCacheOptions = { cache: "use" },
   ): Promise<void> {
     const key = JSON.stringify(keygen);
     const cachedValue = this.localCache.get(key);
@@ -23,4 +23,4 @@ class CypressCache {
   }
 }
 
-export { CypressCache };
+export { TestCache };

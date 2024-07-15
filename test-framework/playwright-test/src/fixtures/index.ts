@@ -8,8 +8,9 @@ import { AccNavigation } from "./AccNavigation";
 import { ProjectState } from "./projectFactory/ProjectState";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
-import { Commands } from "./CypressCommands";
+import { Commands } from "./Commands";
 import { ViewForecast } from "./pages/ViewForecast";
+import { MonitoringReports } from "./pages/MonitoringReports";
 
 type AccFixtures = {
   // Pages
@@ -18,6 +19,7 @@ type AccFixtures = {
   projectOverview: ProjectOverview;
   projectForecasts: ProjectForecasts;
   viewForecast: ViewForecast;
+  monitoringReports: MonitoringReports;
 
   // Project Factory
   accProjectBase: AccProjectBase;
@@ -36,7 +38,7 @@ export const test = base.extend<AccFixtures>({
   projectOverview: ({ page }, use) => use(new ProjectOverview({ page })),
   projectForecasts: ({ page, commands }, use) => use(new ProjectForecasts({ page, commands })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
-
+  monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   // Project Factory
   accProjectBase: ({ page, playwright, projectState }, use) =>
     use(new AccProjectBase({ page, playwright, projectState })),

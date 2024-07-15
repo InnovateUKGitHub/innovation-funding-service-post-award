@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { BaseAccClickableComponent, BaseAccComponent } from "./BaseAccComponent";
+import { BaseClickableComponent } from "./BaseComponent";
 
-class DashboardCard extends BaseAccComponent {
+class ProjectCard extends BaseClickableComponent {
   private readonly title: string;
 
   constructor({ page, title }: { page: Page; title: string }) {
@@ -9,17 +9,17 @@ class DashboardCard extends BaseAccComponent {
     this.title = title;
   }
 
-  selector() {
+  get() {
     return this.page.locator(".acc-list-item").filter({ hasText: this.title });
   }
 
   click() {
-    return this.selector().locator("a").click();
+    return this.get().locator("a").click();
   }
 
   static fromTitle(page: Page, title: string) {
-    return new DashboardCard({ page, title });
+    return new ProjectCard({ page, title });
   }
 }
 
-export { DashboardCard };
+export { ProjectCard };

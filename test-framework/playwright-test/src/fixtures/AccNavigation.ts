@@ -2,12 +2,13 @@ import { Fixture, Given } from "playwright-bdd/decorators";
 import { Page } from "@playwright/test";
 import { DeveloperHomepage } from "./pages/DeveloperHomepage";
 import { ProjectDashboard } from "./pages/ProjectDashboard";
-import { CypressCache } from "../helpers/CypressCache";
+import { TestCache } from "../helpers/TestCache";
 import { ProjectState } from "./projectFactory/ProjectState";
-import { DashboardCard } from "../components/DashboardCard";
+import { ProjectCard } from "../components/ProjectCard";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { DashboardTile } from "../components/DashboardTile";
+import { ReactLoadedIndicator } from "../components/ReactLoadedIndicator";
 
 export
 @Fixture("accNavigation")
@@ -17,7 +18,7 @@ class AccNavigation {
   private readonly projectDashboard: ProjectDashboard;
   private readonly projectOverview: ProjectOverview;
   private readonly projectForecasts: ProjectForecasts;
-  private readonly cyCache = new CypressCache();
+  private readonly testCache = new TestCache();
   private readonly projectState: ProjectState;
 
   constructor({
@@ -46,6 +47,7 @@ class AccNavigation {
   @Given("the user is on the developer homepage")
   async gotoDeveloperHomepage() {
     await this.page.goto("/");
+    await ReactLoadedIndicator.isLoaded(this.page);
   }
 
   @Given("the user is on the project dashboard")
@@ -57,11 +59,11 @@ class AccNavigation {
 
   @Given("the user is on the project overview")
   async gotoProjectOverview() {
-    await this.cyCache.cache(
+    await this.testCache.cache(
       ["gotoProjectOverview", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectDashboard();
-        await DashboardCard.fromTitle(this.page, this.projectState.prefixedProjectNumber()).click();
+        await ProjectCard.fromTitle(this.page, this.projectState.prefixedProjectNumber()).click();
         return this.page.url();
       },
       async url => {
@@ -78,7 +80,7 @@ class AccNavigation {
    */
   @Given("the user is on the project forecasts")
   async gotoProjectForecasts() {
-    await this.cyCache.cache(
+    await this.testCache.cache(
       ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();

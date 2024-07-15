@@ -30,6 +30,6 @@ class DeveloperHomepage {
 
   @Then("the user sees the developer homepage")
   async isPage() {
-    await expect(this.pageTitle.selector()).toBeVisible();
+    await expect(this.pageTitle.get()).toBeVisible();
   }
 }

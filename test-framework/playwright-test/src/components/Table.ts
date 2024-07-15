@@ -13,7 +13,7 @@ class Table<Columns extends Record<string, Column>> {
     this.columns = columns;
   }
 
-  async vlookup<Column extends keyof Columns>(lookupColumn: Column, lookupValue: string) {}
+  async lookup<Column extends keyof Columns>(lookupColumn: Column, lookupValue: string) {}
 }
 
 export { Table };

@@ -1,7 +1,7 @@
-import { BaseAccClickableComponent } from "./BaseAccComponent";
+import { BaseClickableComponent } from "./BaseComponent";
 
-class BackButton extends BaseAccClickableComponent {
-  selector() {
+class BackButton extends BaseClickableComponent {
+  get() {
     return this.page.locator(".govuk-back-link");
   }
 }

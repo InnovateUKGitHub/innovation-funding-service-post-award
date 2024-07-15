@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { BaseAccClickableComponent } from "./BaseAccComponent";
+import { BaseClickableComponent } from "./BaseComponent";
 
-class DashboardTile extends BaseAccClickableComponent {
+class DashboardTile extends BaseClickableComponent {
   private readonly title: string;
 
   constructor({ page, title }: { page: Page; title: string }) {
@@ -9,7 +9,7 @@ class DashboardTile extends BaseAccClickableComponent {
     this.title = title;
   }
 
-  selector() {
+  get() {
     return this.page.locator(".govuk-link.card-link__link").filter({ hasText: this.title });
   }
 

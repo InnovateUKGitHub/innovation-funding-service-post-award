@@ -12,7 +12,7 @@ export abstract class ProjectFactory {
   private salesforceAccessToken: string | null = null;
   protected readonly page: Page;
   protected prefix: string | null = null;
-  private readonly projectState: ProjectState;
+  protected readonly projectState: ProjectState;
 
   constructor({
     page,
