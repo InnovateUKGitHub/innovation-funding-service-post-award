@@ -1,12 +1,9 @@
-import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
 import { DeveloperPageCrasherPage } from "./PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "./PageCrasherForbidden.page";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-
-const PageCrasherForm = createTypedForm();
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 
 const crashTypes = [
   "Error",
@@ -24,13 +21,13 @@ const PageCrasher = () => {
 
   return (
     <Section title={getContent(x => x.components.pageCrasher.sectionTitle)}>
-      <PageCrasherForm.Form action={DeveloperPageCrasherPage.routePath} data={null}>
+      <form action={DeveloperPageCrasherPage.routePath}>
         {crashTypes.map(name => (
-          <PageCrasherForm.Button name="crashType" value={name} key={name}>
+          <Button name="crashType" value={name} key={name}>
             {getContent(x => x.components.pageCrasher.throw({ name }))}
-          </PageCrasherForm.Button>
+          </Button>
         ))}
-      </PageCrasherForm.Form>
+      </form>
       <a href={DeveloperPageCrasherForbiddenPage.routePath}>
         <Button styling="Secondary">{getContent(x => x.components.pageCrasher.accessControl)}</Button>
       </a>
