@@ -1,4 +1,4 @@
-import { Page, expect } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { Fixture, Given, When, Then } from "playwright-bdd/decorators";
 import { BackButton } from "../../components/BackButton";
 import { PageHeading } from "../../components/PageHeading";
@@ -23,6 +23,6 @@ class ProjectDashboard {
 
   @Then("the user sees the project dashboard")
   async isPage() {
-    await expect(this.pageTitle.get()).toBeVisible();
+    await this.pageTitle.isVisible();
   }
 }

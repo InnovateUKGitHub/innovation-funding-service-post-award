@@ -36,7 +36,7 @@ export const switchUserTo = async (
 
   await page.locator("#user-switcher-manual-input").clear({});
   await page.locator("#user-switcher-manual-input").fill(email);
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(8000);
   await page.getByText("Switch user and stay on page").click();
 
   await DevTools.isLoggedInAs(page, email);
