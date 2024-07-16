@@ -26,6 +26,19 @@
         "SALESFORCE_CONNECTION_URL"
       ],
       "dependsOn": ["build"]
+    },
+    "run": {
+      "persistent": true,
+      "env": [
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "BASIC_AUTH",
+        "TEST_SALESFORCE_SANDBOX",
+        "SALESFORCE_PRIVATE_KEY",
+        "SALESFORCE_USERNAME",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CONNECTION_URL"
+      ],
+      "dependsOn": ["build"]
     }
   }
 }
