@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { noop } from "@ui/helpers/noop";
 import { useMountedState } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { PageTitle } from "@ui/features/page-title";
 import { BroadcastsViewer } from "@ui/components/atomicDesign/organisms/BroadcastViewer/BroadcastsViewer";
@@ -12,13 +11,22 @@ import { generateFilteredProjects, useAvailableProjectFilters, useProjectsDashbo
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { useForm } from "react-hook-form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 
 interface ProjectDashboardParams {
   search?: string | number;
@@ -27,43 +35,47 @@ interface ProjectDashboardParams {
 
 interface IProjectDashboardForm {
   searchValue: string;
-  filterValue: FilterOptions[];
+  arrayFilters: FilterOptions[];
 }
-
-const Form = createTypedForm<IProjectDashboardForm>();
 
 const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: ProjectDashboardParams & BaseProps) => {
   const navigate = useNavigate();
   const { getContent } = useContent();
   const routes = useRoutes();
 
-  const { projects, unfilteredObjects, displaySearch, broadcasts } = useProjectsDashboardData(searchQuery, config);
+  const preloadedSearch = searchQuery ? String(searchQuery) : "";
 
-  const onSearch = (searchParams: { search?: string | number; arrayFilters: FilterOptions[] }) => {
+  const { projects, unfilteredObjects, displaySearch, broadcasts } = useProjectsDashboardData(searchQuery, config);
+  const onSearch = useCallback((searchParams: { search?: string | number; arrayFilters: FilterOptions[] }) => {
     const routeInfo = routes.projectDashboard.getLink(searchParams);
     return navigate(routeInfo.path, { replace: true });
-  };
+  }, []);
 
-  // TODO: Ideally this would be an api which would be non-js / js agnostic
   // Note: 'unfilteredObjects' is needed as the filter options are derived from projects, when filtered there could be nothing to search.
   const filterOptions = useAvailableProjectFilters(unfilteredObjects);
   const search = searchQuery === undefined ? "" : "" + searchQuery;
 
   const { isServer } = useMountedState();
-  const [arrayFilters, setFilters] = useState<FilterOptions[]>(props.arrayFilters ?? []);
-  const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects);
 
-  const searchFilterState = {
-    searchValue: search,
-    filterValue: arrayFilters,
-  };
+  // const previousInputs = useServerInput<IProjectDashboardForm>();
+
+  const { register, watch } = useForm<IProjectDashboardForm>({
+    defaultValues: { arrayFilters: props.arrayFilters ?? [], searchValue: preloadedSearch },
+  });
+
+  const arrayFilters = watch("arrayFilters");
+  const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects);
 
   const projectListProps = {
     routes: props.routes,
     isFiltering: !!search || !!arrayFilters.length,
   };
 
-  const options: SelectOption[] = filterOptions.map(x => ({ id: x.id, value: x.label }));
+  const [searchInputValue, setSearchInputValue] = useState<string>(preloadedSearch);
+
+  useEffect(() => {
+    onSearch({ search: searchInputValue, arrayFilters });
+  }, [searchInputValue, arrayFilters, onSearch]);
 
   return (
     <Page
@@ -89,47 +101,47 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
       </H2>
 
       {displaySearch && (
-        <Form.Form
-          data={searchFilterState}
-          qa="projectSearch"
-          isGet
-          onSubmit={noop}
-          onChange={model =>
-            onSearch({
-              search: model.searchValue,
-              arrayFilters,
-            })
-          }
-        >
-          <Form.Fieldset>
-            <Form.Search
-              width="one-half"
-              hint={x => x.pages.projectsDashboard.searchHint}
-              label={x => x.pages.projectsDashboard.searchLabel}
-              labelBold
-              name="search"
-              value={x => x.searchValue}
-              update={(x, v) => (x.searchValue = v?.substring(0, 100) ?? "")}
-            />
-          </Form.Fieldset>
+        <Form data-qa="projectSearch" method="GET">
+          <Fieldset>
+            <FormGroup>
+              <Label bold htmlFor="search">
+                {getContent(x => x.pages.projectsDashboard.searchLabel)}
+              </Label>
+              <Hint id="hint-for-search">{getContent(x => x.pages.projectsDashboard.searchHint)}</Hint>
+              <SearchInput
+                ariaDescribedBy="hint-for-search"
+                width="one-half"
+                name="search"
+                value={searchInputValue}
+                onChange={searchValue => setSearchInputValue(searchValue?.trim() || "")}
+                maxLength={100}
+              />
+            </FormGroup>
+          </Fieldset>
 
-          <Form.Fieldset heading={getContent(x => x.pages.projectsDashboard.filterOptions.title)}>
-            <Form.Checkboxes
-              hint={getContent(x => x.pages.projectsDashboard.filterOptions.hint)}
-              name="arrayFilters"
-              options={options}
-              value={() =>
-                arrayFilters.length ? options.filter(x => arrayFilters.includes(x.id as FilterOptions)) : null
-              }
-              update={(_, selectOptions) => {
-                const latestFilters = selectOptions?.map(x => x.id) as FilterOptions[];
-                setFilters(latestFilters);
-              }}
-            />
-          </Form.Fieldset>
+          <Fieldset>
+            <FormGroup>
+              <Legend>{getContent(x => x.pages.projectsDashboard.filterOptions.title)}</Legend>
+              <CheckboxList name="arrayFilters" register={register} id="arrayFilters">
+                {filterOptions.map(x => (
+                  <Checkbox
+                    key={x.id}
+                    label={x.label}
+                    id={x.id}
+                    value={x.id}
+                    defaultChecked={(props.arrayFilters ?? []).includes(x.id)}
+                  />
+                ))}
+              </CheckboxList>
+            </FormGroup>
+          </Fieldset>
 
-          {isServer && <Form.Submit>{getContent(x => x.pages.projectsDashboard.filterOptions.search)}</Form.Submit>}
-        </Form.Form>
+          {isServer && (
+            <Button type="submit" name="button_default">
+              {getContent(x => x.pages.projectsDashboard.filterOptions.search)}
+            </Button>
+          )}
+        </Form>
       )}
 
       <DashboardProjectCount curatedTotals={curatedTotals} totalProjectCount={totalProjects} />
