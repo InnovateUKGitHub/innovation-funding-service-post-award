@@ -4,6 +4,12 @@
     "projectOverview": {
       "claimsLink": "Project Costs"
     },
+    "claimsDashboard": {
+      "title": {
+        "html": "Project Costs - View project",
+        "display": "Project Costs"
+      }
+    },
     "allClaimsDashboard": {
       "title": "Project costs"
     },
