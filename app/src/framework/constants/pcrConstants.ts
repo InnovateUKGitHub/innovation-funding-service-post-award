@@ -544,7 +544,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.PartnerWithdrawal,
     typeName: "Remove a partner",
-    ignoredCompetitions: [SalesforceCompetitionTypes.loans],
+    ignoredCompetitions: [SalesforceCompetitionTypes.loans, SalesforceCompetitionTypes.horizonEurope],
     i18nName: x => x.pcrTypes.partnerWithdrawal,
     i18nDescription: x => x.pages.pcrModifyOptions.removePartnerMessage,
     singleInstanceInAnyPcr: false,
@@ -555,7 +555,7 @@ export const pcrItemTypes: IMetaValue[] = [
     typeName: "Add a partner",
     files: ["de-minimis-declaration.odt"],
     guidance: partnerAdditionGuidance,
-    ignoredCompetitions: [SalesforceCompetitionTypes.loans],
+    ignoredCompetitions: [SalesforceCompetitionTypes.loans, SalesforceCompetitionTypes.horizonEurope],
     i18nName: x => x.pcrTypes.partnerAddition,
     i18nDescription: x => x.pages.pcrModifyOptions.addPartnerMessage,
     singleInstanceInAnyPcr: false,
