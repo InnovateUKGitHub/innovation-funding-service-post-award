@@ -1,8 +1,8 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { DropdownOption } from "@ui/components/bjss/form/form";
-import React from "react";
+import React, { ComponentProps } from "react";
 import { useEnumDocuments } from "./allowed-documents.hook";
 
+type DropdownOption = ComponentProps<"option">;
 interface EnumDocumentsProps {
   documentsToCheck: Readonly<DocumentDescription[]>;
   children: (documents: DropdownOption[]) => React.ReactElement;

@@ -1,8 +1,10 @@
 import { DocumentDescription, getDocumentDescriptionContentSelector } from "@framework/constants/documentDescription";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { DropdownOption } from "@ui/components/bjss/form/form";
 
 import { useContent } from "@ui/hooks/content.hook";
+import { ComponentProps } from "react";
+
+type DropdownOption = ComponentProps<"option">;
 
 /**
  * ### useEnumDocuments

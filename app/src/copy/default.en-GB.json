@@ -388,7 +388,8 @@
       "projectLevelSubtitle": "Documents shared with Innovate UK and Monitoring Officer",
       "projectLevelSubtitle_InternalAssurance": "Documents shared with Innovate UK",
       "partnerLevelSubtitle": "Documents shared with Innovate UK and partners",
-      "partnerSelfLevelSubtitle": "Documents for {{partnerName}}"
+      "partnerSelfLevelSubtitle": "Documents for {{partnerName}}",
+      "buttonRemove": "Remove"
     },
     "projectSetupPostcodeDetails": {
       "title": {

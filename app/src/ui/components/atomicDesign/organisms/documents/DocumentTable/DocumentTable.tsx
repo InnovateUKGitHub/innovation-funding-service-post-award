@@ -4,11 +4,14 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { createTypedForm } from "../../../../bjss/form/form";
+// import { createTypedForm } from "../../../../bjss/form/form";
 import { DocumentsBase } from "../utils/documents.interface";
 import { DocumentsUnavailable } from "../DocumentsUnavailable/DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "../DocumentView/DocumentView";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
   customContent?: (
@@ -16,7 +19,7 @@ export interface DocumentTableProps<T extends DocumentSummaryDto> extends Docume
   ) => UnwrapArray<Parameters<ReturnType<typeof createTypedTable<T>>["Table"]>["0"]["children"]>;
 }
 
-const Form = createTypedForm<DocumentSummaryDto[]>();
+// const Form = createTypedForm<DocumentSummaryDto[]>();
 
 export const DocumentTable = <T extends DocumentSummaryDto>({
   documents = [],
@@ -94,11 +97,12 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
   disabled,
   formType,
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
+  const { getContent } = useContent();
   if (!documents.length) return <DocumentsUnavailable />;
 
   return (
-    <Form.Form data={documents}>
-      {formType && <Form.Hidden name="form" value={() => formType} />}
+    <Form>
+      {formType && <input type="hidden" name="form" value={formType} />}
       <DocumentTable
         qa={qa}
         documents={documents}
@@ -109,7 +113,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
               if (hideRemove && hideRemove(x)) return null;
 
               return (
-                <Form.Button
+                <Button
                   name={formType ? "documentId" : "delete"} // "documentId" for RHF, "delete" for old forms
                   styling="Link"
                   style={{ marginLeft: "15px" }}
@@ -117,14 +121,14 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
                   value={x.id}
                   disabled={!x.isOwner || disabled}
                 >
-                  Remove
-                </Form.Button>
+                  {getContent(x => x.pages.projectDocuments.buttonRemove)}
+                </Button>
               );
             }}
           />
         )}
       />
-    </Form.Form>
+    </Form>
   );
 };
 
@@ -139,9 +143,10 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
   disabled,
 }: DocumentTableWithDeleteProps<PartnerDocumentSummaryDto> &
   ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
+  const { getContent } = useContent();
   if (!documents.length) return <DocumentsUnavailable />;
 
-  const Form = createTypedForm<PartnerDocumentSummaryDto[]>();
+  // const Form = createTypedForm<PartnerDocumentSummaryDto[]>();
   const { isMo } = getAuthRoles(project.roles);
 
   return (
@@ -165,8 +170,8 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
             if (hideRemove && hideRemove(x)) return null;
 
             return (
-              <Form.Form data={documents} qa={`${qa}-form`}>
-                <Form.Button
+              <Form data-qa={`${qa}-form`}>
+                <Button
                   name="documentId"
                   styling="Link"
                   style={{ marginLeft: "15px" }}
@@ -174,11 +179,11 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                   value={x.id}
                   disabled={!x.isOwner || disabled}
                 >
-                  Remove
-                </Form.Button>
-                <Form.Hidden name="partnerId" value={() => x.partnerId} />
-                <Form.Hidden name="form" value={() => FormTypes.PartnerLevelDelete} />
-              </Form.Form>
+                  {getContent(x => x.pages.projectDocuments.buttonRemove)}
+                </Button>
+                <input type="hidden" name="partnerId" value={x.partnerId} />
+                <input type="hidden" name="form" value={FormTypes.PartnerLevelDelete} />
+              </Form>
             );
           }}
         />,
