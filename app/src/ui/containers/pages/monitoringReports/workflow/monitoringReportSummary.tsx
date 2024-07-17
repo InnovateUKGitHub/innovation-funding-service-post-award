@@ -249,7 +249,7 @@ const Response = ({
     | { optionId?: RhfError; comments?: RhfError }
     | undefined;
 
-  const id = `questions_${question.displayOrder - 1}_`;
+  const id = `questions.${question.displayOrder - 1}.`;
 
   return (
     <Section>
