@@ -1,8 +1,11 @@
 import { visitApp } from "common/visit";
 import {
   accessAbCadForecast,
+  accessEUIRemoveUnderspend,
   accessEuiSmallEntHealthForecast,
   displayEUIForecast,
+  hybridForecastPartnerTable,
+  hybridUpdateCostsReflect,
   noEditForecastLink,
   viewAbCadForecast,
 } from "./steps";
@@ -18,6 +21,8 @@ describe("View forecast as hybrid PM/FC user", () => {
     cy.heading("Forecasts");
   });
 
+  it("Should display the project forecast partner table", hybridForecastPartnerTable);
+
   it("Should access EUI Small Ent Health Forecast", accessEuiSmallEntHealthForecast);
 
   it("Should display the correct EUI Small Ent Health forecast data", displayEUIForecast);
@@ -27,12 +32,11 @@ describe("View forecast as hybrid PM/FC user", () => {
     cy.getByAriaLabel("Labour Period 2").should("have.value", "-3333.33");
   });
 
-  it("Should click the backlink and access A B Cad Services", () => {
-    cy.backLink("Back to forecast").click();
-    cy.backLink("Back to forecasts").click();
-    cy.heading("Forecast");
-    accessAbCadForecast();
-  });
+  it("Should update the Materials costs, saving and reflecting on partner table", hybridUpdateCostsReflect);
+
+  it("Should access EUI again and remove the updated forecast", accessEUIRemoveUnderspend);
+
+  it("Should access A B Cad Services", accessAbCadForecast);
 
   it("Should see data for A B Cad", viewAbCadForecast);
 

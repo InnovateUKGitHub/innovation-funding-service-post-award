@@ -529,10 +529,10 @@ export const correctForecastTotals = () => {
 
 export const forecastPartnerTable = () => {
   [
-    ["EUI Small Ent Health (Lead)", "£350,000.00", "£349,939.05", "£350,000.00"],
-    ["A B Cad Services", "£82,000.00", "£59,400.00", "£82,000.00"],
-    ["ABS EUI Medium Enterprise", "£101,000.00", "£17,900.00", "£101,000.00"],
-    ["Deep Rock Galactic", "£350,000.00", "£54,667.46", "£350,000.00"],
+    ["EUI Small Ent Health (Lead)", "£350,000.00", "£349,939.05", "£60.95"],
+    ["A B Cad Services", "£82,000.00", "£59,400.00", "£22,600.00"],
+    ["ABS EUI Medium Enterprise", "£101,000.00", "£17,900.00", "£83,100.00"],
+    ["Deep Rock Galactic", "£350,000.00", "£54,667.46", "£295,332.54"],
   ].forEach(([partner, totalEligible, forecasts, underspend], index) => {
     cy.get("tr")
       .eq(index + 1)
@@ -555,7 +555,7 @@ export const accessAbCadForecast = () => {
 
 export const displayAbCadForecast = () => {
   cy.get("h2").contains("A B Cad Services");
-  ["Labour", "£42,400.00", "£0.00", "£3,000.00", "£3,000.00"].forEach((field, index) => {
+  ["Labour", "£42,400.00", "£7,200.50", "£3,000.00", "£3,000.00"].forEach((field, index) => {
     cy.get("tr")
       .eq(4)
       .within(() => {
@@ -563,9 +563,9 @@ export const displayAbCadForecast = () => {
       });
   });
   [
-    ["£48,400.00", "£50,000.00", "-3.20%"],
+    ["£55,600.50", "£50,000.00", "11.20%"],
     ["£0.00", "£0.00", "0.00%"],
-    ["£5,000.00", "£20,000.00", "-75.00%"],
+    ["£12,200.50", "£20,000.00", "-39.00%"],
     ["£0.00", "£0.00", "0.00%"],
     ["£12,000.00", "£12,000.00", "0.00%"],
   ].forEach(([total, totalEligible, difference], index) => {
@@ -689,4 +689,57 @@ export const viewAbCadForecast = () => {
 export const noEditForecastLink = () => {
   cy.get("a").should("not.contain", "Edit forecast");
   cy.get("a").should("not.contain", "Update forecast");
+};
+
+export const hybridForecastPartnerTable = () => {
+  [
+    ["EUI Small Ent Health (Lead)", "£350,000.00", "£276,000.00", "£74,000.00"],
+    ["A B Cad Services", "£175,000.00", "£0.00", "£175,000.00"],
+    ["ABS EUI Medium Enterprise", "£50,000.00", "£49,000.00", "£1,000.00"],
+  ].forEach(([partner, totalEl, forecastAndCosts, underspend], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(partner);
+        cy.get("td:nth-child(2)").contains(totalEl);
+        cy.get("td:nth-child(3)").contains(forecastAndCosts);
+        cy.get("td:nth-child(4)").contains(underspend);
+      });
+  });
+};
+
+export const hybridUpdateCostsReflect = () => {
+  ["-1000.05", "-1000.07"].forEach((cost, index) => {
+    cy.getByAriaLabel(`Materials Period ${index + 2}`)
+      .clear()
+      .type(cost);
+  });
+  cy.clickOn("Submit changes");
+  cy.button("Edit forecast");
+  cy.backLink("Back to forecasts").click();
+  cy.heading("Forecasts");
+  [["EUI Small Ent Health (Lead)", "£350,000.00", "£273,999.88", "£76,000.12"]].forEach(
+    ([partner, totalEl, forecastAndCosts, underspend]) => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(partner);
+          cy.get("td:nth-child(2)").contains(totalEl);
+          cy.get("td:nth-child(3)").contains(forecastAndCosts);
+          cy.get("td:nth-child(4)").contains(underspend);
+        });
+    },
+  );
+};
+
+export const accessEUIRemoveUnderspend = () => {
+  accessEuiSmallEntHealthForecast();
+  cy.clickOn("Edit forecast");
+  cy.getByAriaLabel(`Materials Period 2`).clear().type("0");
+  cy.getByAriaLabel(`Materials Period 3`).clear().type("0");
+  cy.button("Submit changes").click();
+  cy.button("Edit forecast");
+  cy.backLink("Back to forecasts").click();
+  cy.heading("Forecasts");
+  hybridForecastPartnerTable();
 };
