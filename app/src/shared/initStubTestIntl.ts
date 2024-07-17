@@ -1,4 +1,13 @@
-import { CopyLanguages, CopyNamespaces, enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
+import {
+  CopyLanguages,
+  CopyNamespaces,
+  enCopy,
+  ktpEnCopy,
+  loansEnCopy,
+  sbriEnCopy,
+  sbriIfsEnCopy,
+  horizonEuropeParticipationEnCopy,
+} from "@copy/data";
 import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 import i18next, { ResourceKey } from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -34,6 +43,7 @@ const initFullTestIntl = async () => {
         [CopyNamespaces.LOANS]: loansEnCopy,
         [CopyNamespaces.SBRI_IFS]: sbriEnCopy,
         [CopyNamespaces.SBRI]: sbriIfsEnCopy,
+        [CopyNamespaces.HORIZON_EUROPE_PARTICIPATION]: horizonEuropeParticipationEnCopy,
       },
     },
   });

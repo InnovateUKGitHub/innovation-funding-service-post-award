@@ -1,4 +1,12 @@
-import { enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
+import {
+  enCopy,
+  ktpEnCopy,
+  loansEnCopy,
+  sbriEnCopy,
+  sbriIfsEnCopy,
+  horizonEuropeParticipationEnCopy,
+  CopyNamespaces,
+} from "@copy/data";
 import { IContext } from "@framework/types/IContext";
 import { NonAuthorisedCommandBase } from "../common/commandBase";
 
@@ -53,10 +61,14 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
   }
 
   private setCompetitionContent(context: IContext): void {
-    context.internationalisation.addResourceBundle(ktpEnCopy, "ktp");
-    context.internationalisation.addResourceBundle(sbriEnCopy, "sbri");
-    context.internationalisation.addResourceBundle(sbriIfsEnCopy, "sbri-ifs");
-    context.internationalisation.addResourceBundle(loansEnCopy, "loans");
+    context.internationalisation.addResourceBundle(ktpEnCopy, CopyNamespaces.KTP);
+    context.internationalisation.addResourceBundle(sbriEnCopy, CopyNamespaces.LOANS);
+    context.internationalisation.addResourceBundle(sbriIfsEnCopy, CopyNamespaces.SBRI_IFS);
+    context.internationalisation.addResourceBundle(loansEnCopy, CopyNamespaces.SBRI);
+    context.internationalisation.addResourceBundle(
+      horizonEuropeParticipationEnCopy,
+      CopyNamespaces.HORIZON_EUROPE_PARTICIPATION,
+    );
     context.logger.info("Set crd content", context.caches.contentStoreLastUpdated);
   }
 }

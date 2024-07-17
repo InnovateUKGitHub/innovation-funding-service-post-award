@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
+import {
+  enCopy,
+  horizonEuropeParticipationEnCopy,
+  ktpEnCopy,
+  loansEnCopy,
+  sbriEnCopy,
+  sbriIfsEnCopy,
+} from "@copy/data";
 
 // The type that is returned from fetching a translation from the JSON.
 export type TranslationResult = string;
@@ -29,7 +36,8 @@ export type PossibleCopyStrings = typeof enCopy &
   typeof ktpEnCopy &
   typeof sbriEnCopy &
   typeof sbriIfsEnCopy &
-  typeof loansEnCopy;
+  typeof loansEnCopy &
+  typeof horizonEuropeParticipationEnCopy;
 
 // An interface-like-type with ALL possible copy keys, mapped from key -> TranslationResultFunction
 // This means that users will have to pass in a ContentSelector to consume the Content.

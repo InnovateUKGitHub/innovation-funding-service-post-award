@@ -4,6 +4,7 @@ import ktpEnCopy from "./ktp.en-GB.json";
 import sbriEnCopy from "./sbri.en-GB.json";
 import sbriIfsEnCopy from "./sbri-ifs.en-GB.json";
 import loansEnCopy from "./loans.en-GB.json";
+import horizonEuropeParticipationEnCopy from "./horizonEurope.en-GB.json";
 
 enum CopyNamespaces {
   DEFAULT = "default",
@@ -11,6 +12,7 @@ enum CopyNamespaces {
   LOANS = "loans",
   SBRI_IFS = "sbri-ifs",
   SBRI = "sbri",
+  HORIZON_EUROPE_PARTICIPATION = "horizon-europe-participation",
 }
 
 enum CopyLanguages {
@@ -24,6 +26,7 @@ const allNamespaces = [
   CopyNamespaces.LOANS,
   CopyNamespaces.SBRI_IFS,
   CopyNamespaces.SBRI,
+  CopyNamespaces.HORIZON_EUROPE_PARTICIPATION,
 ] as const;
 
 const allLanguages = [CopyLanguages.en_GB, CopyLanguages.ifspa_TEST];
@@ -34,6 +37,7 @@ export {
   sbriEnCopy,
   sbriIfsEnCopy,
   loansEnCopy,
+  horizonEuropeParticipationEnCopy,
   CopyNamespaces,
   allNamespaces,
   CopyLanguages,
