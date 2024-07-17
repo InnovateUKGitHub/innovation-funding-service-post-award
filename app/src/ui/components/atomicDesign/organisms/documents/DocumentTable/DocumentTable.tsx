@@ -4,7 +4,6 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-// import { createTypedForm } from "../../../../bjss/form/form";
 import { DocumentsBase } from "../utils/documents.interface";
 import { DocumentsUnavailable } from "../DocumentsUnavailable/DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "../DocumentView/DocumentView";
@@ -18,8 +17,6 @@ export interface DocumentTableProps<T extends DocumentSummaryDto> extends Docume
     table: ReturnType<typeof createTypedTable<T>>,
   ) => UnwrapArray<Parameters<ReturnType<typeof createTypedTable<T>>["Table"]>["0"]["children"]>;
 }
-
-// const Form = createTypedForm<DocumentSummaryDto[]>();
 
 export const DocumentTable = <T extends DocumentSummaryDto>({
   documents = [],
@@ -146,7 +143,6 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
   const { getContent } = useContent();
   if (!documents.length) return <DocumentsUnavailable />;
 
-  // const Form = createTypedForm<PartnerDocumentSummaryDto[]>();
   const { isMo } = getAuthRoles(project.roles);
 
   return (
