@@ -5,7 +5,7 @@ import { DevTools } from "../components/DevTools";
 export const switchUserTo = async (
   page: Page,
   projectState: ProjectState,
-  userType: "Monitoring Officer" | "Project Manager" | "Financial Consultant" | "MO" | "PM" | "FC",
+  userType: "Monitoring Officer" | "Project Manager" | "Finance Contact" | "MO" | "PM" | "FC",
 ) => {
   const projectNumber = projectState.prefix;
   let userTypeShort = "";
@@ -21,7 +21,7 @@ export const switchUserTo = async (
       userTypeShort = "pm";
       break;
 
-    case "Financial Consultant":
+    case "Finance Contact":
     case "FC":
       userTypeShort = "fc";
       break;

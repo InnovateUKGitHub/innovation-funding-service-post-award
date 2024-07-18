@@ -77,7 +77,7 @@ class AccNavigation {
 
   @Given("the user is on the project overview as a {string}")
   async gotoProjectOverviewAsUser(
-    userType: "Monitoring Officer" | "Project Manager" | "Financial Consultant" | "MO" | "PM" | "FC",
+    userType: "Monitoring Officer" | "Project Manager" | "Finance Contact" | "MO" | "PM" | "FC",
   ) {
     await this.gotoProjectOverview();
     await switchUserTo(this.page, this.projectState, userType);
