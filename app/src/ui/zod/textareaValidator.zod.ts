@@ -75,7 +75,7 @@ export const getTextareaValidation = ({
     })
     .transform(x => {
       if ((typeof x === "string" && x.trim() === "") || isNil(x)) {
-        return null;
+        return undefined;
       }
       return x;
     });

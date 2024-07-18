@@ -35,7 +35,7 @@ export const pcrReasoningSummarySchema = evaluateObject((data: { reasoningStatus
     required: data.reasoningStatus,
   }),
   reasoningStatus: z.boolean(),
-  form: z.literal(FormTypes.PcrPrepareReasoningStep),
+  form: z.literal(FormTypes.PcrPrepareReasoningSummary),
 }));
 
 export type PcrReasoningSummarySchema = typeof pcrReasoningSummarySchema;

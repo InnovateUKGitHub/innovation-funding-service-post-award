@@ -86,7 +86,7 @@ class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
     params,
     context,
   }: {
-    input: z.output<PcrReasoningSchema | PcrReasoningSummarySchema | PcrReasoningFilesSchema>;
+    input: z.output<PcrReasoningSchema> | z.output<PcrReasoningSummarySchema> | z.output<PcrReasoningFilesSchema>;
     params: ProjectChangeRequestPrepareReasoningParams;
     context: IContext;
   }): Promise<string> {
