@@ -4,7 +4,7 @@ module.exports = {
   src: "./src/",
   schema: path.join("src", "gql", "schema", "fullSchema.gql"),
   language: "typescript",
-  customScalars: {
+  customScalarTypes: {
     String: "string",
     EncryptedString: "string",
     Boolean: "boolean",
