@@ -480,6 +480,13 @@
       "drawdownAmount": "Drawdown amount",
       "remainingLoan": "Remaining loan"
     },
+    "claimDrawdownTable": {
+      "currentDrawdown": "Current drawdown",
+      "totalLoanAmount": "Total loan amount",
+      "drawdownsToDate": "Drawdowns to date",
+      "drawdownThisPeriod": "Drawdown this period",
+      "remainingLoanAmount": "Remaining loan amount"
+    },
     "financeSummary": {
       "title": "Finance summary",
       "totalsFooter": "Totals",

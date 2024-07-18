@@ -14,10 +14,12 @@ import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTa
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimPreparePageData } from "./claimPrepare.logic";
+import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useContent } from "@ui/hooks/content.hook";
 import { ClaimRetentionMessage } from "@ui/components/atomicDesign/organisms/claims/ClaimRetentionMessage/ClaimRetentionMessage";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -34,6 +36,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
   const { getContent } = useContent();
 
   const { isPm } = getAuthRoles(data.project.roles);
+  const { isLoans } = checkProjectCompetition(data.project.competitionType);
 
   const backLink = isPm
     ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
@@ -73,6 +76,15 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
             })
           }
         />
+
+        {isLoans && (
+          <ClaimDrawdownTable
+            {...data.project}
+            requiredPeriod={props.periodId}
+            projectId={props.projectId}
+            periodId={props.periodId}
+          />
+        )}
 
         <Accordion>
           <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
