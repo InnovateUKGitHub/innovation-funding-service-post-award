@@ -1,5 +1,5 @@
 {
-  "name": "test-framework",
+  "name": "@innovateuk/acc-test-framework",
   "private": true,
   "workspaces": [
     "./cypress-test",

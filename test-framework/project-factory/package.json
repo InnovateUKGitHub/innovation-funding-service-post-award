@@ -1,8 +1,8 @@
 {
-  "name": "project-factory",
+  "name": "@innovateuk/project-factory",
+  "private": true,
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

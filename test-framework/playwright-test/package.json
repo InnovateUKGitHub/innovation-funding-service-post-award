@@ -1,5 +1,6 @@
 {
-  "name": "playwright-test",
+  "name": "@innovateuk/playwright-test",
+  "private": true,
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -17,7 +18,7 @@
     "playwright-bdd": "^7.0.0-1"
   },
   "dependencies": {
-    "jsonwebtoken": "^9.0.2",
-    "project-factory": "^1.0.0"
+    "@innovateuk/project-factory": "*",
+    "jsonwebtoken": "^9.0.2"
   }
 }
