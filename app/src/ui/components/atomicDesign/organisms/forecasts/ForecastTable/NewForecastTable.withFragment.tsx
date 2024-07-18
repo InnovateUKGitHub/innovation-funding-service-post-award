@@ -1,8 +1,9 @@
 import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import { NewForecastTableProps, NewForecastTable as NewForecastTableComponent } from "./NewForecastTable";
-import { mapToForecastTableDto, useNewForecastTableData } from "./NewForecastTable.logic";
+import { mapToForecastTableDto } from "./NewForecastTable.logic";
 import { NewForecastTableFragment$key } from "./__generated__/NewForecastTableFragment.graphql";
+import { useForecastTableFragment } from "./useForecastTableFragment";
 
 export const NewForecastTableWithFragment = (
   props: Omit<NewForecastTableProps, "tableData"> & {
@@ -16,7 +17,7 @@ export const NewForecastTableWithFragment = (
     throw new Error("New Forecast Table is missing a NewForecastTableFragment reference");
   }
 
-  const data = useNewForecastTableData({
+  const data = useForecastTableFragment({
     fragmentRef,
     isProjectSetup: props.isProjectSetup,
     partnerId: props.partnerId,

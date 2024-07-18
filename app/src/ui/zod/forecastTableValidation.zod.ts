@@ -51,7 +51,7 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
       if (form === FormTypes.ProjectSetupForecast) {
         if (submit) {
           for (const costCategory of table.costCategories) {
-            if (costCategory.differentThanAllocatedCosts && !costCategory.isCalculated) {
+            if (costCategory.differentThanAllocatedCosts && !costCategory.isCalculated && costCategory.costCategoryId) {
               addIssue({
                 code: ZodIssueCode.custom,
                 path: [...path, "costCategory", costCategory.costCategoryId],

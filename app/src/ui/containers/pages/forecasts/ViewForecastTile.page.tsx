@@ -1,3 +1,4 @@
+import { PartnerStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
@@ -9,23 +10,21 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
+import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import {
-  useMapToForecastTableDto,
-  useNewForecastTableData,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+  ClaimStatusGroup,
+  getClaimStatusGroup,
+} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { useUpdateForecastData } from "./ForecastTile.logic";
 import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
-import {
-  ClaimStatusGroup,
-  getClaimStatusGroup,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { PartnerStatus } from "@framework/constants/partner";
+import { ForecastHiddenCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastHiddenClaimWarning/ForecastHiddenClaimWarning";
 
 export interface ViewForecastParams {
   projectId: ProjectId;
@@ -34,7 +33,7 @@ export interface ViewForecastParams {
 
 const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BaseProps) => {
   const data = useUpdateForecastData({ projectId, partnerId });
-  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
+  const fragmentData = useForecastTableFragment({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
 
   const { isPmOrMo } = getAuthRoles(fragmentData.project.roles);
   const { isFc: isPartnerFc } = getAuthRoles(fragmentData.partner.roles);
@@ -85,8 +84,8 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
         <ForecastAgreedCostWarning
           isFc={isPartnerFc}
           costCategories={tableData.costCategories
-            .filter(x => x.greaterThanAllocatedCosts)
-            .map(x => x.costCategoryName)}
+            .filter(x => x.greaterThanAllocatedCosts && x.costCategoryName)
+            .map(x => x.costCategoryName as string)}
         />
         {isPartnerFc && data.partner.newForecastNeeded && (
           <ValidationMessage
@@ -95,6 +94,7 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
             message={x => x.forecastsMessages.warningPeriodChange}
           />
         )}
+        <ForecastHiddenCostWarning costCategories={tableData.costCategories} />
         {fragmentData.partner.overheadRate !== null && (
           <P>
             {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}

@@ -139,7 +139,10 @@ const NewForecastTable = (props: NewForecastTableProps) => {
               key={costCategory.costCategoryId}
               hasWarning={costCategory.greaterThanAllocatedCosts}
               id={`costCategory_${costCategory.costCategoryId}`}
-              hasError={getFieldState?.(`costCategory.${costCategory.costCategoryId}`).invalid}
+              hasError={
+                costCategory.isInvalidCostCategory ||
+                getFieldState?.(`costCategory.${costCategory.costCategoryId}`).invalid
+              }
             >
               <TD className={stickyColClassName("left", 1)}>{costCategory.costCategoryName}</TD>
               {costCategory.profiles.map(profile => {
@@ -150,26 +153,38 @@ const NewForecastTable = (props: NewForecastTableProps) => {
                   }),
                 );
 
+                let displayedElement = null;
+
+                if (
+                  control &&
+                  trigger &&
+                  profile.forecastMode &&
+                  !costCategory.isInvalidCostCategory &&
+                  costCategory.costCategoryId
+                ) {
+                  displayedElement = (
+                    <ForecastTableCurrencyInput
+                      costCategoryId={costCategory.costCategoryId}
+                      periodId={profile.periodId}
+                      profileId={profile.profileId}
+                      defaultValue={String(profile.value)}
+                      control={control}
+                      trigger={trigger}
+                      disabled={disabled}
+                      aria-label={ariaLabel}
+                    />
+                  );
+                } else if (!costCategory.isInvalidCostCategory || profile.valueVisible) {
+                  displayedElement = <Currency value={profile.value} aria-label={ariaLabel} />;
+                }
+
                 return (
                   <TD
                     data-qa={`forecast-${costCategory.costCategoryId}-${profile.periodId}-cell`}
                     key={profile.periodId}
                     className={colClassName(profile.rhc)}
                   >
-                    {control && trigger && profile.forecastMode && !profile.calculatedField ? (
-                      <ForecastTableCurrencyInput
-                        costCategoryId={costCategory.costCategoryId}
-                        periodId={profile.periodId}
-                        profileId={profile.profileId}
-                        defaultValue={String(profile.value)}
-                        control={control}
-                        trigger={trigger}
-                        disabled={disabled}
-                        aria-label={ariaLabel}
-                      />
-                    ) : (
-                      <Currency value={profile.value} aria-label={ariaLabel} />
-                    )}
+                    {displayedElement}
                   </TD>
                 );
               })}

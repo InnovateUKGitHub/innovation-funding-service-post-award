@@ -13,6 +13,18 @@ export const newForecastTableFragment = graphql`
             Acc_NumberofPeriods__c {
               value
             }
+            Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 1) {
+              edges {
+                node {
+                  Acc_ForecastLastModifiedDate__c {
+                    value
+                  }
+                  Acc_OverheadRate__c {
+                    value
+                  }
+                }
+              }
+            }
             roles {
               isFc
               isPm
@@ -25,19 +37,6 @@ export const newForecastTableFragment = graphql`
                 isMo
                 isAssociate
               }
-            }
-          }
-        }
-      }
-
-      ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
-        edges {
-          node {
-            Acc_ForecastLastModifiedDate__c {
-              value
-            }
-            Acc_OverheadRate__c {
-              value
             }
           }
         }
@@ -93,6 +92,26 @@ export const newForecastTableFragment = graphql`
             }
             Acc_CostCategory__c {
               value
+            }
+          }
+        }
+      }
+
+      ForecastTable_ClaimTotalCostCategories: Acc_Claims__c(
+        where: {
+          Acc_ProjectParticipant__c: { eq: $partnerId }
+          RecordType: { DeveloperName: { eq: "Total_Cost_Category" } }
+        }
+        orderBy: { Acc_CostCategory__r: { Acc_DisplayOrder__c: { order: ASC } } }
+        first: 2000
+      ) {
+        edges {
+          node {
+            Acc_CostCategory__r {
+              Id
+              Acc_CostCategoryName__c {
+                value
+              }
             }
           }
         }

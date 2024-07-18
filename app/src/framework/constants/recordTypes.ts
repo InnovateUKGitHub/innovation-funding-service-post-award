@@ -2,6 +2,7 @@ export const enum Claims {
   claimsDetail = "Claims_Detail",
   totalProjectPeriod = "Total_Project_Period",
   claimsLineItem = "Claims_Line_Item",
+  totalCostCategory = "Total_Cost_Category",
 }
 
 export const enum Profile {

@@ -1,5 +1,6 @@
 import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { PartnerStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
@@ -14,15 +15,14 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
-import {
-  useMapToForecastTableDto,
-  useNewForecastTableData,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import {
   ClaimStatusGroup,
   getClaimStatusGroup,
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
@@ -35,8 +35,7 @@ import { useUpdateForecastData } from "./ForecastTile.logic";
 import { forecastTileQuery } from "./ForecastTile.query";
 import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { PartnerStatus } from "@framework/constants/partner";
+import { ForecastHiddenCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastHiddenClaimWarning/ForecastHiddenClaimWarning";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -49,7 +48,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
     partnerId,
   });
   const data = useUpdateForecastData({ projectId, partnerId, refreshedQueryOptions });
-  const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
+  const fragmentData = useForecastTableFragment({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
   const { isPm } = getAuthRoles(fragmentData.project.roles);
@@ -131,8 +130,8 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
           <ForecastAgreedCostWarning
             isFc={isPartnerFc}
             costCategories={tableData.costCategories
-              .filter(x => x.greaterThanAllocatedCosts)
-              .map(x => x.costCategoryName)}
+              .filter(x => x.greaterThanAllocatedCosts && x.costCategoryName)
+              .map(x => x.costCategoryName as string)}
           />
           {isPartnerFc && data.partner.newForecastNeeded && (
             <ValidationMessage
@@ -141,6 +140,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
               message={x => x.forecastsMessages.warningPeriodChange}
             />
           )}
+          <ForecastHiddenCostWarning costCategories={tableData.costCategories} />
           {fragmentData.partner.overheadRate !== null && (
             <P>
               {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}

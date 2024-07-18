@@ -148,7 +148,8 @@
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
       "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
       "contactMessage_InternalAssurance": "Innovate UK will let you know if they have any concerns.",
-      "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
+      "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:",
+      "forecastHiddenClaimWarning": "The forecast table is incomplete because there is a claim made in a cost category that you do not have access to. Contact Innovate UK for more information."
     },
     "projectInactiveContent": {
       "projectInactiveMessage": "This project is currently inactive, you can't edit this project so you have been prevented from viewing this page.",

@@ -14,10 +14,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
-import {
-  useMapToForecastTableDto,
-  useNewForecastTableData,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
@@ -27,6 +24,8 @@ import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/for
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useClaimForecastData } from "./ClaimForecast.logic";
+import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
+import { ForecastHiddenCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastHiddenClaimWarning/ForecastHiddenClaimWarning";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -39,7 +38,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
     projectId,
     partnerId,
   });
-  const fragmentData = useNewForecastTableData({ fragmentRef, isProjectSetup: false, partnerId });
+  const fragmentData = useForecastTableFragment({ fragmentRef, isProjectSetup: false, partnerId });
   const { project, partner } = fragmentData;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
@@ -98,9 +97,10 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
           <ForecastAgreedCostWarning
             isFc={isFc}
             costCategories={tableData.costCategories
-              .filter(x => x.greaterThanAllocatedCosts)
-              .map(x => x.costCategoryName)}
+              .filter(x => x.greaterThanAllocatedCosts && x.costCategoryName)
+              .map<string>(x => x.costCategoryName as string)}
           />
+          <ForecastHiddenCostWarning costCategories={tableData.costCategories} />
           {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
           )}

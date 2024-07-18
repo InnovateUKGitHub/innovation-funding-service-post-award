@@ -1,32 +1,16 @@
-import { CostCategoryGroupType } from "@framework/constants/enums";
+import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { multiplyCurrency, parseCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
-import { useMemo } from "react";
-import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
-import {
-  ProfilePeriodDetailsDtoMapping,
-  mapToProfilePeriodDetailsDtoArray,
-} from "@gql/dtoMapper/mapProfilePeriodDetail";
-import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
-import { mapToGolCostDtoArray as mapToProfileTotalCostCategoryDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
-import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
-import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { getPartnerRoles, mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { getFirstEdge } from "@gql/selectors/edges";
-import { useFragment } from "react-relay";
-import { newForecastTableFragment } from "./NewForecastTable.fragment";
-import {
-  NewForecastTableFragment$key,
-  NewForecastTableFragment$data,
-} from "./__generated__/NewForecastTableFragment.graphql";
 import { CostCategoryList } from "@framework/types/CostCategory";
+import { multiplyCurrency, parseCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
+import { ProfilePeriodDetailsDtoMapping } from "@gql/dtoMapper/mapProfilePeriodDetail";
+import { useMemo } from "react";
+import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -41,15 +25,19 @@ type ClaimTotalProjectPeriodsInfo = Pick<
   | "periodEndDate"
   | "isFinalClaim"
 >;
+type ClaimTotalCostCategoryInfo = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "type">;
 type ProfileTotalProjectPeriodsInfo = Pick<
   ProfilePeriodDetailsDtoMapping,
   "periodId" | "periodStartDate" | "periodEndDate"
 >;
 
+type CostCategoryInfo = ClaimTotalCostCategoryInfo & { value: number | null };
+
 interface MapToForecastTableProps {
   project: Pick<ProjectDto, "numberOfPeriods">;
   partner: Pick<PartnerDtoGql, "overheadRate">;
   claimTotalProjectPeriods: ClaimTotalProjectPeriodsInfo[];
+  claimTotalCostCategories: ClaimTotalCostCategoryInfo[];
   claimDetails: ClaimDetailInfo[];
   profileTotalProjectPeriods?: ProfileTotalProjectPeriodsInfo[];
   profileTotalCostCategories: GOLCostDto[];
@@ -71,7 +59,7 @@ interface StatusCell {
 
 interface CostCategoryCellData extends BaseCellData {
   forecastMode: boolean;
-  calculatedField: boolean;
+  valueVisible: boolean;
   displayValue: string;
   profileId: string;
 }
@@ -89,9 +77,10 @@ interface TableCraftRow {
 }
 
 interface CostCategoryRow extends TableCraftRow {
-  costCategoryId: string;
-  costCategoryName: string;
+  costCategoryId: string | null;
+  costCategoryName: string | null;
   isCalculated: boolean;
+  isInvalidCostCategory: boolean;
   profiles: CostCategoryCellData[];
   greaterThanAllocatedCosts: boolean;
   differentThanAllocatedCosts: boolean;
@@ -115,6 +104,7 @@ const mapToForecastTableDto = ({
   profileTotalCostCategories,
   profileDetails,
   claimTotalProjectPeriods,
+  claimTotalCostCategories,
   claimDetails,
   clientProfiles,
 }: MapToForecastTableProps): ForecastTableDto => {
@@ -204,21 +194,47 @@ const mapToForecastTableDto = ({
     x => new CostCategoryList().fromId(x.type).group === CostCategoryGroupType.Labour,
   );
 
+  // Setup a map of claim details (to avoid looping over the claimDetails array again)
+  const claimDetailsMap = new Map<`${PeriodId},${CostCategoryId | undefined}`, ClaimDetailInfo>();
+  const allCostCategories = new Map<CostCategoryId, CostCategoryInfo>();
+
+  for (const claimDetail of claimDetails) {
+    claimDetailsMap.set(`${claimDetail.periodId},${claimDetail.costCategoryId}`, claimDetail);
+    // Keep track of cost categories we retrieve from claim details
+    allCostCategories.set(claimDetail.costCategoryId, {
+      costCategoryId: claimDetail.costCategoryId,
+      costCategoryName: "",
+      type: CostCategoryType.Unknown,
+      value: null,
+    });
+  }
+
+  for (const costCategory of claimTotalCostCategories) {
+    // Set definitions of cost categories
+    allCostCategories.set(costCategory.costCategoryId, {
+      ...costCategory,
+      value: null,
+    });
+  }
+
   for (const costCategory of profileTotalCostCategories) {
-    const costCategoryInfo = new CostCategoryList().fromId(costCategory.type);
+    // Set definitions of cost categories
+    allCostCategories.set(costCategory.costCategoryId, costCategory);
+  }
+
+  for (const [costCategoryId, costCategory] of allCostCategories.entries()) {
+    const costCategoryGroup = new CostCategoryList().fromId(costCategory.type).group;
 
     const costCategoryProfiles: CostCategoryCellData[] = [];
     let total = 0;
     let isCalculatedCostCategory = false;
 
-    for (let i = 1; i <= project.numberOfPeriods; i++) {
-      const forecastProfile = profileDetails.find(
-        x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId,
-      );
+    for (let i = 1 as PeriodId; i <= project.numberOfPeriods; i++) {
+      const forecastProfile = profileDetails.find(x => x.periodId === i && x.costCategoryId === costCategoryId);
       const labourProfile = labourCostCategory
         ? profileDetails.find(x => x.periodId === i && x.costCategoryId === labourCostCategory.costCategoryId)
         : undefined;
-      const claimProfile = claimDetails.find(x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId);
+      const claimProfile = claimDetailsMap.get(`${i},${costCategoryId}`);
       const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
 
       const forecast =
@@ -245,14 +261,10 @@ const mapToForecastTableDto = ({
       let value: number = 0;
       let displayValue: string = "";
       let profileId = "";
-      let calculatedField = false;
+      let valueVisible = false;
 
       if (forecast && forecastProfile) {
-        if (
-          costCategoryInfo.group === CostCategoryGroupType.Overheads &&
-          labourProfile &&
-          partner.overheadRate !== null
-        ) {
+        if (costCategoryGroup === CostCategoryGroupType.Overheads && labourProfile && partner.overheadRate !== null) {
           // TODO: Round the values in a way that is agreed by the business.
           // We shouldn't be having weird rounding here.
 
@@ -265,8 +277,6 @@ const mapToForecastTableDto = ({
             value = multiplyCurrency(labourProfile.value, partner.overheadRate, 1);
             displayValue = String(value);
           }
-          profileId = forecastProfile.id;
-          calculatedField = true;
           isCalculatedCostCategory = true;
         } else {
           if (clientProfiles) {
@@ -278,11 +288,13 @@ const mapToForecastTableDto = ({
             value = roundCurrency(forecastProfile.value);
             displayValue = String(value);
           }
-          profileId = forecastProfile.id;
         }
+        profileId = forecastProfile.id;
+        valueVisible = true;
       } else if (claimProfile) {
         value = roundCurrency(claimProfile.value);
         displayValue = String(value);
+        valueVisible = true;
       }
 
       costCategoryProfiles.push({
@@ -290,7 +302,7 @@ const mapToForecastTableDto = ({
         value,
         displayValue,
         forecastMode: forecast,
-        calculatedField,
+        valueVisible,
         profileId,
         rhc: periodTotals[i - 1].rhc,
       });
@@ -304,24 +316,42 @@ const mapToForecastTableDto = ({
       }
     }
 
-    grandGolValue = roundCurrency(grandGolValue + costCategory.value);
+    if (costCategory.value !== null) {
+      grandGolValue = roundCurrency(grandGolValue + costCategory.value);
 
-    const costCategoryRow: CostCategoryRow = {
-      costCategoryId: costCategory.costCategoryId,
-      costCategoryName: costCategory.costCategoryName,
-      isCalculated: isCalculatedCostCategory,
-      golCost: costCategory.value,
-      profiles: costCategoryProfiles,
-      total,
-      greaterThanAllocatedCosts: total > costCategory.value,
-      differentThanAllocatedCosts: total !== roundCurrency(costCategory.value),
-      difference:
-        costCategory.value < 0.01 // If denominator is very small, show 0% difference.
-          ? 0
-          : 100 * ((total - costCategory.value) / costCategory.value),
-    };
+      const costCategoryRow: CostCategoryRow = {
+        costCategoryId,
+        costCategoryName: costCategory?.costCategoryName,
+        isCalculated: isCalculatedCostCategory,
+        isInvalidCostCategory: false,
+        golCost: costCategory?.value ?? 0,
+        profiles: costCategoryProfiles,
+        total,
+        greaterThanAllocatedCosts: costCategory ? total > costCategory.value : false,
+        differentThanAllocatedCosts: costCategory ? total !== roundCurrency(costCategory.value) : false,
+        difference:
+          !costCategory || costCategory.value < 0.01 // If denominator is very small, show 0% difference.
+            ? 0
+            : 100 * ((total - costCategory.value) / costCategory.value),
+      };
 
-    costCatAccum.push(costCategoryRow);
+      costCatAccum.push(costCategoryRow);
+    } else {
+      const costCategoryRow: CostCategoryRow = {
+        costCategoryId,
+        costCategoryName: costCategory.costCategoryName,
+        isCalculated: isCalculatedCostCategory,
+        isInvalidCostCategory: true,
+        golCost: 0,
+        profiles: costCategoryProfiles,
+        total,
+        greaterThanAllocatedCosts: false,
+        differentThanAllocatedCosts: false,
+        difference: 0,
+      };
+
+      costCatAccum.push(costCategoryRow);
+    }
   }
 
   return {
@@ -343,72 +373,4 @@ const useMapToForecastTableDto = (props: MapToForecastTableProps): ForecastTable
   return useMemo(() => mapToForecastTableDto(props), [props]);
 };
 
-const useNewForecastTableData = ({
-  fragmentRef,
-  isProjectSetup,
-  partnerId,
-}: {
-  fragmentRef: NewForecastTableFragment$key;
-  isProjectSetup: boolean;
-  partnerId: PartnerId;
-}) => {
-  const fragment: NewForecastTableFragment$data = useFragment(newForecastTableFragment, fragmentRef);
-
-  const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
-  const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_ProjectParticipant?.edges);
-
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles", "partnerRoles"]);
-  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate", "roles"], {
-    roles: getPartnerRoles(project.partnerRoles, partnerId),
-  });
-  const claimTotalProjectPeriods = mapToClaimDtoArray(
-    fragment?.query?.ForecastTable_ClaimTotalProjectPeriods?.edges ?? [],
-    [
-      "periodId",
-      "status",
-      "iarStatus",
-      "isIarRequired",
-      "isApproved",
-      "periodStartDate",
-      "periodEndDate",
-      "isFinalClaim",
-    ],
-    {},
-  );
-  const claimDetails = mapToClaimDetailsDtoArray(
-    fragment?.query?.ForecastTable_ClaimDetails?.edges ?? [],
-    ["periodId", "costCategoryId", "value"],
-    {},
-  );
-  const profileTotalProjectPeriods = mapToProfilePeriodDetailsDtoArray(
-    fragment.query.ForecastTable_ProfileTotalProjectPeriod?.edges ?? [],
-    ["periodId", "periodStartDate", "periodEndDate"],
-  );
-  const profileTotalCostCategories = mapToProfileTotalCostCategoryDtoArray(
-    fragment?.query?.ForecastTable_ProfileTotalCostCategories?.edges ?? [],
-    ["value", "costCategoryId", "costCategoryName", "type"],
-  );
-  const profileDetails = mapToForecastDetailsDtoArray(
-    fragment?.query?.ForecastTable_ProfileDetails?.edges ?? [],
-    ["value", "periodId", "costCategoryId", "id"],
-    { isProjectSetup },
-  );
-
-  return {
-    project,
-    partner,
-    profileTotalProjectPeriods,
-    profileTotalCostCategories,
-    profileDetails,
-    claimTotalProjectPeriods,
-    claimDetails,
-  };
-};
-
-export {
-  mapToForecastTableDto,
-  useNewForecastTableData,
-  useMapToForecastTableDto,
-  MapToForecastTableProps,
-  ClaimTotalProjectPeriodsInfo,
-};
+export { ClaimTotalProjectPeriodsInfo, mapToForecastTableDto, MapToForecastTableProps, useMapToForecastTableDto };

@@ -34,7 +34,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
     projectId,
     partnerId,
   });
-  const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
+  const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true, partnerId });
   const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
