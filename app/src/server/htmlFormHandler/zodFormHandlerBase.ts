@@ -12,6 +12,29 @@ import { z, ZodError, ZodTypeAny } from "zod";
 import { IFormHandler } from "./formHandlerBase";
 import { convertResultErrorsToZodFormat } from "@framework/util/errorHelpers";
 
+/**
+ * will generate different route definitions if passed in an array of different definition param types
+ *
+ * @example
+ *
+ * RouteDefinitions<{projectId: ProjectId; pcrId: PcrId}> // IRouteDefinitions<{projectId: ProjectId; pcrId: PcrId}>[]
+ *
+ * RouteDefinitions<[{projectId: ProjectId; pcrId: PcrId}, {projectId: ProjectId; pcrId: PcrId, pcrItemId: PcrItemId}]> // [IRouteDefinitions<{projectId: ProjectId; pcrId: PcrId}>,IRouteDefinitions<{projectId: ProjectId; pcrId: PcrId, pcrItemId: PcrItemId}> ]
+ */
+
+type RouteDefinitions<T extends AnyObject, R extends AnyObject[] = []> = T extends AnyObject[]
+  ? T extends [infer A, ...infer Rest]
+    ? RouteDefinitions<Rest, [...R, IRouteDefinition<A>]>
+    : T extends [infer A]
+      ? [...R, IRouteDefinition<A>]
+      : R
+  : IRouteDefinition<T>[];
+
+/**
+ * converts results of above operation into union of types
+ */
+type QueryParams<T extends AnyObject> = T extends AnyObject[] ? T[number] : T;
+
 // Ensure that the Schema passed into the ZodFormHandlerBase
 // has the "form" form/button discriminator
 type AnyForm = { form: ZodTypeAny };
@@ -22,10 +45,11 @@ abstract class ZodFormHandlerBase<
     | z.ZodEffects<z.ZodObject<AnyForm>>
     | z.ZodIntersection<ZodTypeAny, ZodTypeAny>
     | z.ZodDiscriminatedUnion<string, z.ZodObject<AnyForm>[]>,
-  QueryParams extends AnyObject,
+  QParams extends AnyObject,
 > implements IFormHandler
 {
-  public readonly routes: IRouteDefinition<QueryParams>[];
+  // public readonly routes:  IRouteDefinition<QueryParams>[];
+  public readonly routes: RouteDefinitions<QParams>;
   public readonly routePath: string[];
   public readonly forms: FormTypes[];
   protected readonly logger: ILogger;
@@ -38,7 +62,7 @@ abstract class ZodFormHandlerBase<
    */
   public abstract readonly acceptFiles: boolean;
 
-  constructor({ routes, forms }: { routes: IRouteDefinition<QueryParams>[]; forms: FormTypes[] }) {
+  constructor({ routes, forms }: { routes: RouteDefinitions<QParams>; forms: FormTypes[] }) {
     this.routes = routes;
     this.routePath = this.routes.map(x => x.routePath);
     this.logger = new Logger(`Zod Form Handler`);
@@ -77,7 +101,7 @@ abstract class ZodFormHandlerBase<
         input: req.body,
         req,
         res,
-        params: { ...req.params, ...req.query } as QueryParams,
+        params: { ...req.params, ...req.query } as QueryParams<QParams>,
         files,
         context,
       });
@@ -89,7 +113,7 @@ abstract class ZodFormHandlerBase<
         input: userInput,
         req,
         res,
-        params: { ...req.params, ...req.query } as QueryParams,
+        params: { ...req.params, ...req.query } as QueryParams<QParams>,
         files,
         context,
       });
@@ -102,7 +126,7 @@ abstract class ZodFormHandlerBase<
         input: validData,
         context,
         res,
-        params: { ...req.params, ...req.query } as QueryParams,
+        params: { ...req.params, ...req.query } as QueryParams<QParams>,
       });
 
       res.locals.isFormSuccess = true;
@@ -138,7 +162,7 @@ abstract class ZodFormHandlerBase<
     input: z.input<Schema>;
     req: express.Request;
     res: express.Response;
-    params: QueryParams;
+    params: QueryParams<QParams>;
     files: ServerFileWrapper[];
     context: IContext;
   }): Promise<{ schema: Schema; errorMap: z.ZodErrorMap }>;
@@ -158,7 +182,7 @@ abstract class ZodFormHandlerBase<
     input: AnyObject;
     req: express.Request;
     res: express.Response;
-    params: QueryParams;
+    params: QueryParams<QParams>;
     files: ServerFileWrapper[];
     context: IContext;
   }): Promise<z.input<Schema>>;
@@ -177,7 +201,7 @@ abstract class ZodFormHandlerBase<
     input: z.output<Schema>;
     context: IContext;
     res: express.Response;
-    params: QueryParams;
+    params: QueryParams<QParams>;
   }): Promise<void | string>;
 }
 

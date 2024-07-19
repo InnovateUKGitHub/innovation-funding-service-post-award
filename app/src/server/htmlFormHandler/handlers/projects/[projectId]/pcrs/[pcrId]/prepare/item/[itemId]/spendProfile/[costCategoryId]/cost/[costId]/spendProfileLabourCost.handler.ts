@@ -10,7 +10,9 @@ import {
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
+  PcrEditSpendProfileCostParams,
   PCRSpendProfileAddCostRoute,
+  PCRSpendProfileEditCostRoute,
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
@@ -19,11 +21,11 @@ import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHandlerBase<
   LabourSchemaType,
-  PcrAddSpendProfileCostParams
+  [PcrAddSpendProfileCostParams, PcrEditSpendProfileCostParams]
 > {
   constructor() {
     super({
-      routes: [PCRSpendProfileAddCostRoute],
+      routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
       forms: [FormTypes.PcrAddPartnerSpendProfileLabourCost],
     });
   }
@@ -56,7 +58,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
   }: {
     input: z.output<LabourSchemaType>;
     context: IContext;
-    params: PcrAddSpendProfileCostParams;
+    params: PcrAddSpendProfileCostParams | PcrEditSpendProfileCostParams;
   }): Promise<string> {
     const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
 

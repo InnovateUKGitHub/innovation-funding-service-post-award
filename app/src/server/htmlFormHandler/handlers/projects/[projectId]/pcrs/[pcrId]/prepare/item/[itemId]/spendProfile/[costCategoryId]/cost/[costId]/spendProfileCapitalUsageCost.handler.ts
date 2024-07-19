@@ -10,7 +10,9 @@ import {
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
+  PcrEditSpendProfileCostParams,
   PCRSpendProfileAddCostRoute,
+  PCRSpendProfileEditCostRoute,
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
@@ -19,11 +21,11 @@ import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFormHandlerBase<
   CapitalUsageSchemaType,
-  PcrAddSpendProfileCostParams
+  [PcrAddSpendProfileCostParams, PcrEditSpendProfileCostParams]
 > {
   constructor() {
     super({
-      routes: [PCRSpendProfileAddCostRoute],
+      routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
       forms: [FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost],
     });
   }
