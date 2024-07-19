@@ -197,7 +197,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
    * Size section
    */
   it("Should display copy directing user to Select participant size and enter number of employees", () => {
-    ["Select a participant size.", "Enter the number of employees."].forEach(direction => {
+    ["Select participant size.", "Enter number of employees."].forEach(direction => {
       cy.paragraph(direction);
     });
   });
@@ -252,8 +252,8 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
 
   it("Should click 'Save and return', prompting validation", () => {
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Select a project location.");
-    cy.paragraph("Select a project location.");
+    cy.validationLink("Select project location.");
+    cy.paragraph("Select project location.");
   });
 
   it("Should select Inside and Outside the United Kingdom in turn", () => {

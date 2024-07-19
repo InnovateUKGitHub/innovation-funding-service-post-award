@@ -306,9 +306,9 @@ export const ensureTableIsPopulated = () => {
 export const partnerValidation = () => {
   cy.getByQA("partner-information").contains(partners[0]).click();
   cy.get("a").contains("Edit").click();
+  cy.textValidation("Project location postcode", 10, "Save and return to partner information", false, "New location");
   cy.get("#postcode").clear().type("SN123456789");
-  cy.submitButton("Save and return to partner information").click();
-  cy.validationMessage("Your location entry must be no more than 10 characters.");
+  cy.get("a").contains("Edit").click();
   cy.get("#postcode").clear().type("SN2");
   cy.submitButton("Save and return to partner information").click();
   cy.backLink("Back to project details").click();

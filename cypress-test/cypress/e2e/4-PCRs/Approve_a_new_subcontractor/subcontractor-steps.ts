@@ -51,10 +51,10 @@ export const approveSubcontractorPromptValidation = () => {
     "subcontractor's registration number",
     "country where the subcontractor's work will be carried out.",
     "description of work to be carried out by the subcontractor.",
-    "cost of work to be carried out by the new subcontractor.",
+    "the cost of work to be carried out by the new subcontractor.",
     "justification for including the subcontractor.",
   ].forEach(msg => {
-    cy.validationLink(`Enter the ${msg}`);
+    cy.validationLink(`Enter ${msg}`);
   });
 };
 

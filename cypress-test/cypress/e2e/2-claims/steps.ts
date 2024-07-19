@@ -165,6 +165,10 @@ export const newCostCatLineItem = () => {
     });
   cy.clickOn("Add a cost");
   cy.wait(200);
+  cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
+  cy.textValidation("Description", 250, "Save and return to claims", false, "Description of claim line item 0");
+  cy.heading("Costs to be claimed");
+  cy.get("a").contains("Labour").click();
   cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
   cy.inputPrefix("£", 1);
@@ -736,7 +740,7 @@ export const validateForecast = () => {
 };
 
 export const academicForecastNavigate = () => {
-  cy.clickOn("Back to claim");
+  cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
@@ -1103,31 +1107,11 @@ export const summaryTotalCostsList = () => {
   });
 };
 
-export const summaryCommentsAdd = () => {
-  cy.get("textarea").clear().invoke("val", loremIpsum1k).trigger("input");
-  cy.get("textarea").type("{moveToEnd}").type("t");
-  cy.get("textarea").type("{backSpace}");
-  cy.paragraph("You have 0 characters remaining");
-};
-
-export const loansSummaryCommentsTooMany = () => {
-  cy.get("textarea").type("{moveToEnd}").type("t");
-  cy.paragraph("You have 1 character too many");
-  cy.clickOn("Save and return to project costs");
-  cy.validationLink("Comments must be a maximum of 1000 characters");
-};
-
 export const summaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
   cy.clickOn("Save and return to claims");
   cy.validationLink("Comments must be a maximum of 1000 characters");
-};
-
-export const summaryCommentsDeleteOne = () => {
-  cy.get("textarea").type("{moveToEnd}");
-  cy.get("textarea").type("{backSpace}");
-  cy.paragraph("You have 0 characters remaining");
 };
 
 export const summaryReaccessClaim = () => {

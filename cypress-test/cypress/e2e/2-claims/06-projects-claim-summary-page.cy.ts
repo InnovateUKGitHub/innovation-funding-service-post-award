@@ -2,16 +2,12 @@ import { fileTidyUp } from "common/filetidyup";
 import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
-  claimCommentBox,
   forecastView,
   shouldShowProjectTitle,
   summaryAccessDocsDelete,
   summaryCheckForCostRemoval,
   summaryClearCommentsSave,
   summaryClearCostCats,
-  summaryCommentsAdd,
-  summaryCommentsDeleteOne,
-  summaryCommentsTooMany,
   summaryDocTable,
   summaryReaccessClaim,
   summaryTotalCostsList,
@@ -130,13 +126,24 @@ describe("claims > Claim summary", () => {
     cy.heading("Claim summary");
   });
 
-  it("Should have an 'Add comments' box with correct title character counter", claimCommentBox);
+  it("Should validate the text area input for maximum characters", () => {
+    cy.textValidation("Comments", 1000, "Save and return to claims", true);
+  });
 
-  it("Should populate the comments box with 1000 characters and count the characters entered", summaryCommentsAdd);
+  it("Should display the Claims heading and then re-access the claim", () => {
+    cy.heading("Claims");
+    visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
+    cy.heading("Costs to be claimed");
+  });
 
-  it("Should attempt to add one too many characters and validate on save", summaryCommentsTooMany);
-
-  it("Should delete the additional character", summaryCommentsDeleteOne);
+  it("Should access summary page by navigating through the claim", () => {
+    cy.clickOn("Continue to claims documents");
+    cy.heading("Claim documents");
+    cy.clickOn("Continue to update forecast");
+    cy.heading("Update forecast");
+    cy.clickOn("Continue to summary");
+    cy.heading("Claim summary");
+  });
 
   it("Should have pre-submission confirmation message", () => {
     cy.paragraph(

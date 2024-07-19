@@ -488,8 +488,8 @@ export const removePartnerPromptValidation = () => {
   cy.getByLabel("I agree with this change").click();
   cy.wait(500);
   cy.button("Save and return to request").click();
-  cy.validationLink("Enter a valid removal period");
-  cy.validationLink("Select a partner to remove from this project.");
+  cy.validationLink("Enter removal period");
+  cy.validationLink("Select existing partner to remove from this project.");
 };
 
 export const validatePeriodBox = () => {
@@ -513,8 +513,8 @@ export const validatePeriodBox = () => {
     cy.getByAriaLabel("Removal period").clear().type(negative);
     cy.wait(1000);
     cy.button("Save and continue").click();
-    cy.validationLink("Enter a valid removal period");
-    cy.paragraph("Enter a valid removal period");
+    cy.validationLink("Enter removal period");
+    cy.paragraph("Enter removal period");
   });
 };
 
@@ -546,7 +546,7 @@ export const removePartnerTable = () => {
 
 export const removePartnerEditLinks = () => {
   [
-    ["Partner being removed", "Select partner to remove"],
+    ["Partner being removed", "Select existing partner to remove"],
     ["Last period", "When is their last period?"],
     ["Documents", "Upload withdrawal of partner certificate"],
   ].forEach(([key, subheading]) => {
@@ -969,15 +969,15 @@ export const validateFundingLevelInput = () => {
   ["200", "2000", "101", "100.01"].forEach(input => {
     cy.get("#awardRate").clear().type(input);
     cy.clickOn("Save and continue");
-    cy.validationLink("Enter a funding level up to 100%.");
-    cy.paragraph("Enter a funding level up to 100%.");
+    cy.validationLink("Enter funding level up to 100%.");
+    cy.paragraph("Enter funding level up to 100%.");
   });
 
   ["Lorem", "one hundred", "1 0 0", "£$%^*", "-100", "This is far too long for a percentage input"].forEach(input => {
     cy.get("#awardRate").clear().type(input);
     cy.clickOn("Save and continue");
-    cy.validationLink("Enter a valid funding level.");
-    cy.paragraph("Enter a valid funding level.");
+    cy.validationLink("Enter funding level.");
+    cy.paragraph("Enter funding level.");
   });
 };
 
@@ -1207,8 +1207,8 @@ export const exceedNewNamePromptValidation = () => {
   cy.wait(1000);
   cy.get("#accountName").wait(500).type("{moveToEnd}tt");
   cy.button("Save and continue").click();
-  cy.validationLink("New partner name can be a maximum of 256 characters");
-  cy.paragraph("New partner name can be a maximum of 256 characters");
+  cy.validationLink("New partner name must be 256 characters or less");
+  cy.paragraph("New partner name must be 256 characters or less");
 };
 
 export const saveContinueProceed = () => {
@@ -1321,7 +1321,7 @@ export const validateAddPerson = () => {
   ["First name", "Last name"].forEach(field => {
     cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
     cy.clickOn("Save and continue");
-    cy.validationLink("Finance contact name must be 50 characters or less.");
+    cy.validationLink("Finance contact first name must be 50 characters or less.");
   }),
     cy.getByLabel("Phone number").clear().type("012345678910111213141");
   cy.getHintFromLabel("Phone number").contains(
@@ -1338,10 +1338,10 @@ export const validateAddPerson = () => {
       "ThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThis",
     );
   cy.button("Save and continue").click();
-  cy.validationLink("Email address must be 255 characters or less.");
-  cy.getErrorFromLabel("Email").contains("Email address must be 255 characters or less.");
-  cy.getErrorFromLabel("First name").contains("Finance contact name must be 50 characters or less.");
-  cy.getErrorFromLabel("Last name").contains("Finance contact surname must be 50 characters or less.");
+  cy.validationLink("Finance contact email address must be 255 characters or less.");
+  cy.getErrorFromLabel("Email").contains("Finance contact email address must be 255 characters or less.");
+  cy.getErrorFromLabel("First name").contains("Finance contact first name must be 50 characters or less.");
+  cy.getErrorFromLabel("Last name").contains("Finance contact last name must be 50 characters or less.");
 };
 
 export const clearAndEnterValidPersonInfo = () => {
@@ -1354,10 +1354,10 @@ export const clearAndEnterValidPersonInfo = () => {
 
 export const newInfoValidation = () => {
   cy.clickOn("Save and continue");
-  cy.validationLink("Select a project role");
-  cy.validationLink("Select a partner type");
-  cy.paragraph("Select a project role.");
-  cy.paragraph("Select a partner type.");
+  cy.validationLink("Select project role");
+  cy.validationLink("Select partner type");
+  cy.paragraph("Select project role.");
+  cy.paragraph("Select partner type.");
 };
 
 export const displayLocationWithGuidance = () => {
@@ -1384,8 +1384,8 @@ export const validateChangeName = () => {
   cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
   cy.button("Save and return to request").click();
-  cy.validationLink("Enter a new partner name.");
-  cy.validationLink("Select partner to change.");
+  cy.validationLink("Enter new partner name.");
+  cy.validationLink("Select existing partner to change.");
   cy.backLink("Back to request").click();
   cy.heading("Request");
   cy.get("a").contains("Change a partner's name").click();
@@ -1404,8 +1404,8 @@ export const clearAndValidate = () => {
   cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.validationLink("Enter a project summary");
-  cy.validationLink("Enter a public description");
+  cy.validationLink("Enter project summary");
+  cy.validationLink("Enter public description");
   cy.getByQA("newPublicDescription").contains("Edit").click();
 };
 
@@ -1419,10 +1419,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("Error");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a valid project suspension end date.");
-  cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a valid project suspension end date.");
+  cy.validationLink("Enter project suspension start date.");
+  cy.validationLink("Enter project suspension end date.");
+  cy.paragraph("Enter project suspension start date.");
+  cy.paragraph("Enter project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1433,10 +1433,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("200");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a valid project suspension end date.");
-  cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a valid project suspension end date.");
+  cy.validationLink("Enter project suspension start date.");
+  cy.validationLink("Enter project suspension end date.");
+  cy.paragraph("Enter project suspension start date.");
+  cy.paragraph("Enter project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1447,10 +1447,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("-200");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a valid project suspension end date.");
-  cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a valid project suspension end date.");
+  cy.validationLink("Enter project suspension start date.");
+  cy.validationLink("Enter project suspension end date.");
+  cy.paragraph("Enter project suspension start date.");
+  cy.paragraph("Enter project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1461,10 +1461,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("%^&*");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a valid project suspension end date.");
-  cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a valid project suspension end date.");
+  cy.validationLink("Enter project suspension start date.");
+  cy.validationLink("Enter project suspension end date.");
+  cy.paragraph("Enter project suspension start date.");
+  cy.paragraph("Enter project suspension end date.");
 };
 
 export const validateGrantMoving = () => {
@@ -1472,8 +1472,8 @@ export const validateGrantMoving = () => {
   cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.validationLink("Enter a valid grant moving over financial year.");
-  cy.paragraph("Enter a valid grant moving over financial year.");
+  cy.validationLink("Enter grant moving over financial year.");
+  cy.paragraph("Enter grant moving over financial year.");
   cy.clickCheckBox("I agree with this change");
   cy.get("legend").contains("Grant value moving over the financial year end");
   cy.get("#grantMovingOverFinancialYear").clear().type("10000000000000000000");
@@ -1824,11 +1824,11 @@ export const validatePartialDate = () => {
   cy.get("#suspensionEndDate_month").clear().type("03");
   cy.get("#suspensionEndDate_year").clear().type("2024");
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter a valid project suspension start date.");
+  cy.validationLink("Enter project suspension start date.");
   cy.get("a").each($a => {
     cy.wrap($a).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
   });
-  cy.paragraph("Enter a valid project suspension start date.");
+  cy.paragraph("Enter project suspension start date.");
   cy.get("a").each($p => {
     cy.wrap($p).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
   });

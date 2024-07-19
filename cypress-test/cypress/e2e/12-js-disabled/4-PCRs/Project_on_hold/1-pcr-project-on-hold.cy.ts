@@ -70,7 +70,7 @@ describe("js disabled >PCR >  Put project on hold > Create PCR", { tags: "js-dis
   it("Should mark as complete and attempt to save, prompting validation", () => {
     cy.getByLabel("I agree with this change").click();
     cy.clickOn("Save and return to request");
-    cy.validationLink("Enter a valid project suspension start date.");
+    cy.validationLink("Enter project suspension start date.");
   });
 
   it("Should return to editing the request", () => {
@@ -83,7 +83,7 @@ describe("js disabled >PCR >  Put project on hold > Create PCR", { tags: "js-dis
     cy.get("#suspensionStartDate_year").clear().type("2024");
     cy.get("#suspensionEndDate_month").clear();
     cy.get("a").each($a => {
-      cy.wrap($a).should("not.have.text", "Enter a valid project suspension start date.");
+      cy.wrap($a).should("not.have.text", "Enter project suspension start date.");
     });
   });
 

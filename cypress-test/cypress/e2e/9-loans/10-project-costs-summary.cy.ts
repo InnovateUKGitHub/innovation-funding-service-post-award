@@ -14,7 +14,6 @@ import {
   workingBackLink,
 } from "./steps";
 import { shouldShowProjectTitle } from "e2e/2-claims/steps";
-import { summaryCommentsAdd, loansSummaryCommentsTooMany, summaryCommentsDeleteOne } from "e2e/2-claims/steps";
 import { loansProjCostCleanUp } from "common/costCleanUp";
 import { fileTidyUp } from "common/filetidyup";
 
@@ -101,11 +100,18 @@ describe("Loans > Project costs > Summary", () => {
     );
   });
 
-  it("Should populate the comments box with 1000 characters and count the characters entered", summaryCommentsAdd);
-
-  it("Should attempt to add one too many characters and validate on save", loansSummaryCommentsTooMany);
-
-  it("Should delete the additional character", summaryCommentsDeleteOne);
+  it("Should validate the text area input for maximum characters", () => {
+    cy.textValidation("Comments", 1000, "Save and return to project costs", true);
+    cy.heading("Project costs");
+    cy.get("a").contains("Edit").click();
+    cy.heading("Costs for this period");
+    cy.clickOn("Continue to costs documents");
+    cy.heading("Supporting evidence");
+    cy.clickOn("Continue to update forecast");
+    cy.heading("Update forecast");
+    cy.clickOn("Continue to summary");
+    cy.heading("Costs summary");
+  });
 
   it("Should have pre-submission confirmation message", () => {
     cy.paragraph(

@@ -338,6 +338,10 @@ declare global {
        * Gets input suffix class and asserts of existence and counts number on page
        */
       inputSuffix(label: string, n: number): void;
+      /**
+       * Tests a textarea input for maximum length of characters,
+       */
+      textValidation(message: string, length: number, buttonName: string, textarea: boolean, label?: string): void;
     }
   }
 }

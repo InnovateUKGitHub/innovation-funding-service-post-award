@@ -77,7 +77,7 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
 
   it("Should not let you save and continue due to character limit and validate with a message", () => {
     cy.button("Save and continue").click();
-    cy.validationLink("Reasoning can be a maximum of 32000 characters");
+    cy.validationLink("Reasoning must be 32000 characters or less.");
   });
 
   it("Should reduce the characters by 1", () => {
@@ -188,31 +188,11 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
     cy.get("p").contains("You have 2000 characters remaining");
   });
 
-  it("Should populate the comments box with 32,001 characters", () => {
-    cy.get("textarea").clear().invoke("val", loremIpsum32k).trigger("input");
-    cy.get("textarea").type("{moveToEnd}").type("t");
-  });
-
-  it("Should display remaining characters as one too many", () => {
-    cy.paragraph("You have 1 character too many");
-  });
-
-  it("Should validate that this is too many characters when you click save", () => {
-    cy.clickOn("Save and continue");
-
-    cy.validationLink("Reasoning can be a maximum of 32000 characters");
-  });
-
-  it("Should reduce the characters by 1", () => {
-    cy.get("textarea").type("{moveToEnd}").type("{backspace}");
-  });
-
-  it("Should display the number of remaining characters", () => {
-    cy.paragraph("You have 0 characters remaining");
+  it("Should validate the maximum text allowed in the reasoning box", () => {
+    cy.textValidation("Reasoning", 32000, "Save and continue", true, "Reasons");
   });
 
   it("Should save the comments and proceed", () => {
-    cy.clickOn("Save and continue");
     cy.get("legend").contains("Upload documents");
   });
 });

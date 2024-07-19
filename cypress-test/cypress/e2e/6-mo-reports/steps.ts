@@ -267,6 +267,7 @@ export const startNewReportButton = () => {
 };
 
 export const clickStartNewReportButton = () => {
+  cy.heading("Monitoring reports");
   moReportTidyup("Draft");
   cy.get("a").contains("Start a new report").click();
 };
@@ -278,7 +279,7 @@ export const openReportTable = () => {
 };
 
 export const characterCount = () => {
-  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 74 characters");
+  cy.paragraph("You have 31926 characters remaining");
 };
 
 export const q1SelectEachRadioButton = () => {
@@ -611,28 +612,6 @@ export const reflectSection4Changes = () => {
   );
 };
 
-export const validateMoCommentBoxMaximum = () => {
-  cy.get("textarea").clear();
-  cy.get("textarea").invoke("val", loremIpsum32k);
-  cy.get("textarea").type("{moveToEnd}");
-  cy.wait(500);
-  cy.get("textarea").type(".");
-  cy.paragraph("You have 32001 characters");
-  cy.button("Save and return to summary").click();
-  cy.validationLink("Maximum of 32,000 characters");
-};
-
-export const editSection5WithTooMuchCopy = () => {
-  cy.getByQA("summary-question-5").contains("Edit").click();
-  cy.get("legend").contains("Risk management");
-  cy.get("textarea").clear();
-  cy.get("textarea").invoke("val", loremIpsum32k);
-  cy.get("textarea").type("{moveToEnd}");
-  cy.wait(500);
-  cy.get("textarea").type(".");
-  cy.paragraph("You have 32001 characters");
-};
-
 export const reflectSection5Changes = () => {
   cy.get("h3").contains("Risk management");
   ["Score", "Comments", "1 - Unacceptable", "Pippin's", "office", "Swindon", "lovely"].forEach(section5Item => {
@@ -670,8 +649,8 @@ export const validatePeriodBox = () => {
   cy.get("input#period").clear();
   cy.button("Continue").click();
   cy.validationMessage("There is a problem");
-  cy.validationLink("Enter a period");
-  cy.paragraph("Enter a period");
+  cy.validationLink("Enter period");
+  cy.paragraph("Enter period");
   ["Lorem", "-", "1.1", "0.5", "100.5", "3000.5", "£$%^&*()", "dasq123cc", "1asd", "asff1"].forEach(invalidNum => {
     cy.getByLabel("Period");
     cy.get("input#period").clear().type(invalidNum);
@@ -742,4 +721,18 @@ export const checkCommentsSaved = () => {
   cy.get("a").contains("Edit").click();
   cy.heading("Monitoring report");
   cy.get("textarea").should("have.value", standardComments);
+};
+
+export const validateMORSection = (section: string, name: string, scoredSection: boolean) => {
+  cy.textValidation(`Comments for ${name}`, 32000, "Save and return to summary", true);
+  if (scoredSection) {
+    cy.getByQA(`question-${section}-score`).within(() => {
+      cy.get("a").contains("Edit").click();
+    });
+  } else {
+    cy.getByQA(`questions-${section}-comments`).within(() => {
+      cy.get("a").contains("Edit").click();
+    });
+  }
+  cy.get("h3").contains(`Section ${section}`);
 };

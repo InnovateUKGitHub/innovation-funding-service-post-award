@@ -245,8 +245,8 @@ describe("PCR >  Add a partner > E2E: non-Je-S", { tags: "js-disabled" }, () => 
 
   it("Should click 'Save and return', prompting validation", () => {
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Select a project location.");
-    cy.paragraph("Select a project location.");
+    cy.validationLink("Select project location.");
+    cy.paragraph("Select project location.");
   });
 
   it("Should select Inside and Outside the United Kingdom in turn", () => {

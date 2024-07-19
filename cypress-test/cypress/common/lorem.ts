@@ -1,12 +1,12 @@
 export const baseLorem =
-  "If you ever need a reason to go to the office in Swindon, consider the fact that every third wednesday of the month, Pippin's donuts comes into the office and sells its lovely goods.\n";
+  "If you ever need a reason to go to the office in Swindon, consider the fact that every third wednesday of the month, Pippin's donuts comes into the office and sells its lovely goods.";
 
 /**
  * Generate a lorem-ipsum string.
  * @param chars Number of characters in your lorem ipsum string
  * @returns A string with the specified number of characters.
  */
-const getLorem = (chars: number): string => {
+export const getLorem = (chars: number): string => {
   const repeats = Math.floor(chars / baseLorem.length);
   const leftOver = chars % baseLorem.length;
 

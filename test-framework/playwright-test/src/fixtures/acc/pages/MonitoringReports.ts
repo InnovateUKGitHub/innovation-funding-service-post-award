@@ -48,7 +48,7 @@ class MonitoringReports {
     this.guidanceCopyTwo =
       "For each section score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.";
     this.period = this.page.getByLabel("Period");
-    this.periodValidationMessage = ValidationMessage.getByMessage(page, "Enter a period");
+    this.periodValidationMessage = ValidationMessage.getByMessage(page, "Enter period");
     this.invalidPeriodCharMsg = ValidationMessage.getByMessage(page, "Period must be a whole number, like 3.");
     this.invalidPeriodNumMsg = ValidationMessage.getByMessage(page, "Period must be between 1 and 11.");
     this.comments = this.page.getByRole("textbox");

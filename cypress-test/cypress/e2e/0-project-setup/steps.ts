@@ -101,13 +101,15 @@ export const clearAndSubmit = () => {
 export const enterInvalidPostcode = () => {
   cy.getByLabel("New location").type("SN123456789");
   cy.submitButton("Save and return to project setup").click();
-  cy.validationMessage("Your location entry must be no more than 10 characters.");
+  cy.validationMessage("Project location postcode must be 10 characters or less.");
+  cy.paragraph("Project location postcode must be 10 characters or less.");
 };
 
 export const enterNullPostcode = () => {
   cy.getByLabel("New location").clear();
   cy.submitButton("Save and return to project setup").click();
-  cy.validationMessage("You must provide your project location postcode.");
+  cy.validationMessage("Enter project location postcode.");
+  cy.paragraph("Enter project location postcode.");
 };
 
 export const enterValidPostcode = () => {
@@ -274,6 +276,36 @@ export const manualTopThreeRows = () => {
   ].forEach((cols, index) => {
     cy.get("tr")
       .eq(index + 1)
+      .within(() => {
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
+        }
+      });
+  });
+};
+
+export const ifsTopThreeRows = () => {
+  [
+    ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
+    [
+      "Month",
+      "Feb 2023",
+      "Mar 2023",
+      "Apr 2023",
+      "May 2023",
+      "Jun 2023",
+      "Jul 2023",
+      "Aug 2023",
+      "Sep 2023",
+      "Oct 2023",
+      "Nov 2023",
+      "Dec 2023",
+      "Jan 2024",
+    ],
+  ].forEach((cols, rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
       .within(() => {
         for (let i = 0; i < cols.length; i++) {
           cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);

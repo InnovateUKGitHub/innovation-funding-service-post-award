@@ -32,7 +32,7 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should have a subheading for 'Select partner to remove'", () => {
+  it("Should have a subheading for 'Select existing partner to remove'", () => {
     cy.get("legend").contains("Select partner to remove");
   });
 

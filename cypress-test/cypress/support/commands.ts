@@ -8,6 +8,7 @@ import { Tile } from "typings/tiles";
 import { emptyFileName, longFile, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
 import { documents } from "common/fileComponentTests";
 import { Intercepts } from "common/intercepts";
+import { getLorem } from "common/lorem";
 
 const [username, password] = Cypress.env("BASIC_AUTH").split(":");
 
@@ -580,6 +581,33 @@ const inputSuffix = (label: string, n: number) => {
     });
 };
 
+const textValidation = (message: string, length: number, buttonName: string, textarea: boolean, label?: string) => {
+  let largeText = getLorem(length);
+  if (textarea) {
+    cy.get("textarea").clear().invoke("val", largeText).trigger("input");
+    cy.get("textarea").type("{moveToEnd}t");
+    cy.get("p").contains("You have 1 character too many");
+  } else {
+    cy.getByAriaLabel(label).clear().invoke("val", largeText).trigger("input");
+    cy.getByAriaLabel(label).type("{moveToEnd}t");
+  }
+  cy.clickOn(buttonName);
+  if (textarea) {
+    cy.validationLink(`${message} must be ${length} characters or less.`);
+  } else {
+    cy.validationLink(`${message} must be ${length} characters or less.`);
+    cy.paragraph(`${message} must be ${length} characters or less.`);
+  }
+  if (textarea) {
+    cy.get("textarea").type("{backSpace}");
+    cy.get("p").contains("You have 0 characters remaining");
+  } else {
+    cy.getByAriaLabel(label).type("{backSpace}");
+  }
+  cy.clickOn(buttonName);
+  cy.getByQA("validation-summary").should("not.exist");
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -627,3 +655,4 @@ Cypress.Commands.add("fileTidyUp", fileTidyUp);
 Cypress.Commands.add("testFileComponent", testFileComponent);
 Cypress.Commands.add("inputPrefix", inputPrefix);
 Cypress.Commands.add("inputSuffix", inputSuffix);
+Cypress.Commands.add("textValidation", textValidation);

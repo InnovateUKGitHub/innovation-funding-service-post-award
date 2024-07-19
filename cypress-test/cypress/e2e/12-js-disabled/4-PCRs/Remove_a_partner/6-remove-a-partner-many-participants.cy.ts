@@ -28,8 +28,8 @@ describe("js disabled > PCR > Remove partner > Many partners", { tags: "js-disab
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should have a subheading for 'Select partner to remove'", () => {
-    cy.get("legend").contains("Select partner to remove");
+  it("Should have a subheading for 'Select existing partner to remove'", () => {
+    cy.get("legend").contains("Select existing partner to remove");
   });
 
   it(

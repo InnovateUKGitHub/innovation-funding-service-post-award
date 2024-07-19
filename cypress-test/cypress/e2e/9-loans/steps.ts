@@ -975,8 +975,8 @@ export const submitWithoutDocExceedChar = () => {
   cy.submitButton("Accept and send").click();
   cy.validationLink("The request is only accepted when at least 1 document has been uploaded.");
   cy.paragraph("The request is only accepted when at least 1 document has been uploaded.");
-  cy.validationLink("Comments must be a maximum of 32768 characters.");
-  cy.paragraph("Comments must be a maximum of 32768 characters.");
+  cy.validationLink("Comments must be between 5 and 32768 characters.");
+  cy.paragraph("Comments must be between 5 and 32768 characters.");
 };
 
 export const deleteAllCharSubmitWith4 = () => {
@@ -984,6 +984,6 @@ export const deleteAllCharSubmitWith4 = () => {
   cy.submitButton("Accept and send").click();
   cy.validationLink("The request is only accepted when at least 1 document has been uploaded.");
   cy.paragraph("The request is only accepted when at least 1 document has been uploaded.");
-  cy.validationLink("You must enter at least 5 characters as a comment.");
-  cy.paragraph("You must enter at least 5 characters as a comment.");
+  cy.validationLink("Comments must be between 5 and 32768 characters.");
+  cy.paragraph("Comments must be between 5 and 32768 characters.");
 };

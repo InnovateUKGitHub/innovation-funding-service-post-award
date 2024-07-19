@@ -244,9 +244,9 @@ export const checkAddSubcontractingItem = () => {
       cy.validationLink("Enter role and description.");
       cy.validationLink("Enter cost of subcontractor.");
       cy.getByLabel("Subcontractor name").invoke("val", loremIpsum255Char).trigger("input");
-      cy.getByLabel("Subcontractor name").type("{moveToEnd}tt");
+      cy.getByLabel("Subcontractor name").type("{moveToEnd}t");
       cy.getByLabel("Country where the subcontractor will work").invoke("val", loremIpsum255Char).trigger("input");
-      cy.getByLabel("Country where the subcontractor will work").type("{moveToEnd}tt");
+      cy.getByLabel("Country where the subcontractor will work").type("{moveToEnd}t");
       cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do")
         .invoke("val", loremIpsum131k)
         .trigger("input");

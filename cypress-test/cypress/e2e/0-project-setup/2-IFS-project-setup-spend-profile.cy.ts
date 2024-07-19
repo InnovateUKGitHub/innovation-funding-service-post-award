@@ -3,6 +3,8 @@ import { visitApp } from "../../common/visit";
 import {
   checkSpendProfileIncomplete,
   correctSpendProfileTotals,
+  ifsTopThreeRows,
+  manualTopThreeRows,
   reaccessSpendProfile,
   saveAndRemoveValidationMsg,
   saveAndValidate,
@@ -48,7 +50,7 @@ describe("Project setup > IFS > Set spend profile", () => {
 
   it("Should display the forecast table", correctSpendProfileTotals);
 
-  it("Should display the correct top three rows including IAR frequency", topThreeRows);
+  it("Should display the correct top three rows including IAR frequency", ifsTopThreeRows);
 
   it("Should correctly calculate overheads against labour input", spendLabourCalculateOH);
 

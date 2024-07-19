@@ -11,7 +11,7 @@ import {
   standardComments,
   deleteMoReport,
   assertSectionCommentsAndScore,
-  validateMoCommentBoxMaximum,
+  validateMORSection,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -58,7 +58,7 @@ describe("MO report > section 4 - can continue a report", () => {
     cy.get("label").contains("Comment");
   });
 
-  it("Should validate maximum number of characters", validateMoCommentBoxMaximum);
+  it("Should validate maximum number of characters", () => validateMORSection("4", "exploitation", true));
 
   it("Should clear the text box and enter standard", () => {
     cy.get("textarea").clear().type(standardComments);

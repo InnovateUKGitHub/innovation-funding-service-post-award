@@ -66,7 +66,7 @@ Then("the user sees a period {string} report in {string}", function (period: str
 });
 
 Then("the period is rejected because a period has not been entered", function () {
-  cy.getValidationError().should("contain.text", "Enter a period.");
+  cy.getValidationError().should("contain.text", "Enter period.");
 });
 
 Then("the period is rejected because the period is out of range", function () {
@@ -75,7 +75,7 @@ Then("the period is rejected because the period is out of range", function () {
 });
 
 Then("the period is rejected because the period is invalid", function () {
-  cy.getValidationError().should("contain.text", "Enter a valid period.");
+  cy.getValidationError().should("contain.text", "Enter period.");
 });
 
 Then("the period is rejected because the period is a non-integer", function () {

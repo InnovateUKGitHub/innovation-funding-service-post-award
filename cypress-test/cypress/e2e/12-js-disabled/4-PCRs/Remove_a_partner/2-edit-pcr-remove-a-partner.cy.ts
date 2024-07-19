@@ -38,8 +38,8 @@ describe(
 
     it("Should show the project title", shouldShowProjectTitle);
 
-    it("Should have a subheading for 'Select partner to remove'", () => {
-      cy.get("legend").contains("Select partner to remove");
+    it("Should have a subheading for 'Select existing partner to remove'", () => {
+      cy.get("legend").contains("Select existing partner to remove");
     });
 
     it("Should have a list of partners and the option to select which partner you wish to remove", partnerRadioButtons);
@@ -60,7 +60,7 @@ describe(
 
     it("Should use the edit button next to 'Partner being removed' to navigate back", () => {
       cy.getListItemFromKey("Partner being removed", "Edit").click();
-      cy.get("legend").contains("Select partner to remove");
+      cy.get("legend").contains("Select existing partner to remove");
     });
 
     it("Should validate the period box", validatePeriodBox);

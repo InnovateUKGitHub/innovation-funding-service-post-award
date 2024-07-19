@@ -104,11 +104,9 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
   it("Should validate the free-text box", () => {
-    cy.get("textarea").clear().invoke("val", loremIpsum33k).trigger("input");
-    cy.get("textarea").type("{moveToEnd}");
-    cy.clickOn("Save and return to claims");
-    cy.validationLink("Comment can be a maximum of 32768 characters.");
-    cy.paragraph("Comment can be a maximum of 32768 characters.");
+    cy.textValidation("Comments", 32768, "Save and return to claims", true);
+    cy.get("a").contains("Labour").click();
+    cy.heading("Labour");
   });
 
   it("Should reduce the character length to 32768 and remove validation", () => {
