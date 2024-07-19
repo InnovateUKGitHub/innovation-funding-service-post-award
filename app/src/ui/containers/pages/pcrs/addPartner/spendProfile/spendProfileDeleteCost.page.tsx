@@ -68,7 +68,7 @@ const SpendProfileDeleteCostPage = ({
 
   const { getContent } = useContent();
 
-  const { onUpdate, isFetching } = useOnSavePcrItem(
+  const { onUpdate, isFetching, apiError } = useOnSavePcrItem(
     projectId,
     pcrId,
     itemId,
@@ -93,6 +93,7 @@ const SpendProfileDeleteCostPage = ({
           <Content value={x => x.pages.pcrSpendProfileDeleteCost.backLink({ costCategoryName: costCategory.name })} />
         </BackLink>
       }
+      apiError={apiError}
       fragmentRef={fragmentRef}
     >
       <Messages messages={messages} />
