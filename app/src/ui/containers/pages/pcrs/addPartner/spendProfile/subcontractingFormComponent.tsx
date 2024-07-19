@@ -115,7 +115,12 @@ export const SubcontractingFormComponent = () => {
             id="subcontractorName"
             label={getContent(x => x.pcrSpendProfileLabels.subcontracting.subcontractorName)}
           >
-            <TextInput inputWidth="one-half" {...register("subcontractorName")} disabled={isFetching} />
+            <TextInput
+              inputWidth="one-half"
+              {...register("subcontractorName")}
+              disabled={isFetching}
+              defaultValue={String(defaultValues.description ?? "")}
+            />
           </Field>
 
           <Field
@@ -123,7 +128,12 @@ export const SubcontractingFormComponent = () => {
             id="subcontractorCountry"
             label={getContent(x => x.pcrSpendProfileLabels.subcontracting.subcontractorCountry)}
           >
-            <TextInput inputWidth="one-half" {...register("subcontractorCountry")} disabled={isFetching} />
+            <TextInput
+              inputWidth="one-half"
+              {...register("subcontractorCountry")}
+              disabled={isFetching}
+              defaultValue={String(defaultValues.subcontractorCountry ?? "")}
+            />
           </Field>
 
           <TextAreaField
@@ -147,6 +157,7 @@ export const SubcontractingFormComponent = () => {
               {...register("subcontractorCost")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultValues.value ?? "")}
             />
           </Field>
         </Fieldset>

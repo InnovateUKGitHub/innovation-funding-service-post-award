@@ -126,7 +126,12 @@ export const LabourFormComponent = () => {
             label={getContent(x => x.pcrSpendProfileLabels.labour.role)}
             id="descriptionOfRole"
           >
-            <TextInput disabled={isFetching} inputWidth="one-third" {...register("descriptionOfRole")} />
+            <TextInput
+              disabled={isFetching}
+              inputWidth="one-third"
+              {...register("descriptionOfRole")}
+              defaultValue={defaultCost.description ?? ""}
+            />
           </Field>
 
           <Field
@@ -139,6 +144,7 @@ export const LabourFormComponent = () => {
               inputWidth={10}
               {...register("grossCostOfRole")}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.grossCostOfRole ?? "")}
             />
           </Field>
 
@@ -154,6 +160,7 @@ export const LabourFormComponent = () => {
               {...register("ratePerDay")}
               prefix={getContent(x => x.forms.prefix.gbp)}
               suffix={getContent(x => x.forms.suffix.perDay)}
+              defaultValue={String(defaultCost.ratePerDay ?? "")}
             />
           </Field>
 
@@ -162,7 +169,12 @@ export const LabourFormComponent = () => {
             label={getContent(x => x.pcrSpendProfileLabels.labour.daysSpentOnProject)}
             id="daysSpentOnProject"
           >
-            <NumberInput disabled={isFetching} inputWidth={3} {...register("daysSpentOnProject")} />
+            <NumberInput
+              disabled={isFetching}
+              inputWidth={3}
+              {...register("daysSpentOnProject")}
+              defaultValue={String(defaultCost.daysSpentOnProject ?? "")}
+            />
           </Field>
 
           {isClient && (

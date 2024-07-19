@@ -110,6 +110,7 @@ export const OtherCostsFormComponent = () => {
               disabled={isFetching}
               characterCount={watch("descriptionOfCost")?.length ?? 0}
               characterCountType="ascending"
+              defaultValue={String(defaultCost.description ?? "")}
             />
           </FormGroup>
 
@@ -123,6 +124,7 @@ export const OtherCostsFormComponent = () => {
               {...register("estimatedCost")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.value ?? "")}
             />
           </Field>
         </Fieldset>

@@ -159,6 +159,7 @@ export const CapitalUsageFormComponent = () => {
               disabled={isFetching}
               characterCount={watch("capitalUsageDescription")?.length ?? 0}
               characterCountType="ascending"
+              defaultValue={String(defaultCost.description ?? "")}
             />
           </FormGroup>
 
@@ -189,6 +190,7 @@ export const CapitalUsageFormComponent = () => {
               {...register("depreciationPeriod")}
               disabled={isFetching}
               suffix={getContent(x => x.forms.suffix.months)}
+              defaultValue={String(defaultCost.depreciationPeriod ?? "")}
             />
           </Field>
 
@@ -203,6 +205,7 @@ export const CapitalUsageFormComponent = () => {
               {...register("netPresentValue")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.netPresentValue ?? "")}
             />
           </Field>
 
@@ -216,6 +219,7 @@ export const CapitalUsageFormComponent = () => {
               {...register("residualValue")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.residualValue ?? "")}
             />
           </Field>
 
@@ -224,7 +228,13 @@ export const CapitalUsageFormComponent = () => {
             id="utilisation"
             label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.utilisation)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("utilisation")} disabled={isFetching} suffix="%" />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("utilisation")}
+              disabled={isFetching}
+              defaultValue={String(defaultCost.utilisation ?? "")}
+              suffix="%"
+            />
           </Field>
         </Fieldset>
 

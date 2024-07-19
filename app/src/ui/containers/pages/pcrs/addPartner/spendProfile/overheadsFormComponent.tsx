@@ -235,6 +235,7 @@ export const OverheadsFormComponent = ({}) => {
                 inputWidth="one-quarter"
                 disabled={isFetching}
                 prefix={getContent(x => x.forms.prefix.gbp)}
+                defaultValue={String(defaultCost.value ?? "")}
               />
             </FormGroup>
           </Fieldset>

@@ -132,6 +132,7 @@ export const TravelAndSubsFormComponent = () => {
               id="description"
               {...register("descriptionOfCost")}
               disabled={isFetching}
+              defaultValue={String(defaultCost.description ?? "")}
             />
           </Field>
 
@@ -140,7 +141,12 @@ export const TravelAndSubsFormComponent = () => {
             id="numberOfTimes"
             label={getContent(x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes)}
           >
-            <NumberInput inputWidth="one-third" {...register("numberOfTimes")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-third"
+              {...register("numberOfTimes")}
+              disabled={isFetching}
+              defaultValue={String(defaultCost.numberOfTimes ?? "")}
+            />
           </Field>
 
           <Field
@@ -153,6 +159,7 @@ export const TravelAndSubsFormComponent = () => {
               {...register("costOfEach")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.costOfEach ?? "")}
             />
           </Field>
         </Fieldset>

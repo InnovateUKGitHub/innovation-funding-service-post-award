@@ -119,7 +119,12 @@ export const MaterialsFormComponent = () => {
             id="materialsDescription"
             label={getContent(x => x.pcrSpendProfileLabels.materials.item)}
           >
-            <TextInput inputWidth="one-third" {...register("materialsDescription")} disabled={isFetching} />
+            <TextInput
+              inputWidth="one-third"
+              {...register("materialsDescription")}
+              disabled={isFetching}
+              defaultValue={String(defaultCost.description ?? "")}
+            />
           </Field>
 
           <Field
@@ -127,7 +132,12 @@ export const MaterialsFormComponent = () => {
             id="quantity"
             label={getContent(x => x.pcrSpendProfileLabels.materials.quantity)}
           >
-            <NumberInput inputWidth="one-third" {...register("quantityOfMaterialItems")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-third"
+              {...register("quantityOfMaterialItems")}
+              disabled={isFetching}
+              defaultValue={String(defaultCost.quantity ?? "")}
+            />
           </Field>
 
           <Field
@@ -140,6 +150,7 @@ export const MaterialsFormComponent = () => {
               {...register("costPerItem")}
               disabled={isFetching}
               prefix={getContent(x => x.forms.prefix.gbp)}
+              defaultValue={String(defaultCost.costPerItem ?? "")}
             />
           </Field>
         </Fieldset>
