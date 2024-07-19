@@ -85,6 +85,7 @@ import { PcrItemAddPartnerAcademicOrganisationStepHandler } from "./handlers/pro
 import { PcrItemAddPartnerAcademicOrganisationSearchStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationSearchStep.handler";
 import { PcrItemAddPartnerAcademicCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicCostsStep.handler";
 import { PcrAddPartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerSummary.handler";
+import { PcrItemAddPartnerSpendProfileLabourCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileLabourCostHandler";
 
 export const standardFormHandlers = [
   // Zod
@@ -115,6 +116,7 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerAcademicCostsHandler(),
   new PcrItemAddPartnerOtherSourcesOfFundingHandler(),
   new PcrAddPartnerSummaryHandler(),
+  new PcrItemAddPartnerSpendProfileLabourCostsHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
   new PcrItemChangeRemovePartnerHandler(),
   new PcrItemChangeRemovePartnerSummaryHandler(),

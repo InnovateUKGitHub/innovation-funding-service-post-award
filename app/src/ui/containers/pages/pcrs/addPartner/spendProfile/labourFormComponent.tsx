@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
 import {
@@ -24,6 +23,8 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isLabourCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -69,13 +70,15 @@ export const LabourFormComponent = () => {
 
   const { isClient } = useMounted();
 
-  const { handleSubmit, watch, formState, register } = useForm<LabourSchema>({
+  const { handleSubmit, watch, formState, register, setError } = useForm<LabourSchema>({
     defaultValues: {
-      id: defaultCost.id,
+      id: defaultCost.id ?? "",
+      form: FormTypes.PcrAddPartnerSpendProfileLabourCost,
       descriptionOfRole: defaultCost.description ?? "",
       grossCostOfRole: String(defaultCost.grossCostOfRole ?? ""),
       ratePerDay: String(defaultCost.ratePerDay ?? ""),
       daysSpentOnProject: defaultCost.daysSpentOnProject ?? undefined,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(labourSchema, {
       errorMap,
@@ -86,7 +89,7 @@ export const LabourFormComponent = () => {
 
   const totalCost = parseCurrency(watch("ratePerDay") ?? 0) * Number(watch("daysSpentOnProject") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<LabourSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<LabourSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -99,7 +102,7 @@ export const LabourFormComponent = () => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   description: data.descriptionOfRole,
-                  id: data.id ?? ("" as CostId),
+                  id: data.id as CostId,
                   costCategoryId,
                   costCategory: costCategory.type,
                   grossCostOfRole: parseCurrency(data.grossCostOfRole),
@@ -113,8 +116,10 @@ export const LabourFormComponent = () => {
           }),
         )}
       >
+        <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileLabourCost} />
         <Fieldset data-qa="labour-costs">
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
 
           <Field
             error={validationErrors?.descriptionOfRole}

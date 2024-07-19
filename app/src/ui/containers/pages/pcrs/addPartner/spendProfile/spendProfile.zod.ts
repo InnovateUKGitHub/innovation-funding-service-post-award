@@ -1,7 +1,9 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 import {
   costIdValidation,
   evaluateObject,
@@ -15,7 +17,8 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spend
 const description = z.string().min(1).max(131072);
 
 export const labourSchema = z.object({
-  id: costIdValidation.nullable(),
+  id: z.union([costIdValidation, z.literal("")]),
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileLabourCost),
   descriptionOfRole: description,
   grossCostOfRole: getGenericCurrencyValidation({
     required: true,
@@ -24,8 +27,10 @@ export const labourSchema = z.object({
     required: true,
   }),
   daysSpentOnProject: requiredPositiveIntegerInput({ max: 1000000 }),
+  costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
+export type LabourSchemaType = typeof labourSchema;
 export type LabourSchema = z.infer<typeof labourSchema>;
 
 export const overheadSchema = evaluateObject(

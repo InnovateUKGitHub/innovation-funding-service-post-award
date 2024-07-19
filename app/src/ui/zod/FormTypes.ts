@@ -80,6 +80,8 @@ enum FormTypes {
   PcrAddPartnerDeMinimisFilesStep = "pcrAddPartnerDeMinimisFilesStep",
   PcrAddPartnerSummary = "pcrAddPartnerSummary",
 
+  PcrAddPartnerSpendProfileLabourCost = "pcrAddPartnerSpendProfileLabourCost",
+
   PcrProjectSuspensionStep = "pcrProjectSuspensionStep",
   PcrProjectSuspensionSummary = "pcrProjectSuspensionSummary",
 
