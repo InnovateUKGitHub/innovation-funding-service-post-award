@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -25,6 +24,8 @@ import {
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 const isMaterialsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -66,12 +67,14 @@ export const MaterialsFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register } = useForm<MaterialsSchema>({
+  const { handleSubmit, watch, formState, register, setError } = useForm<MaterialsSchema>({
     defaultValues: {
       id: defaultCost.id,
       materialsDescription: defaultCost.description ?? "",
       quantityOfMaterialItems: defaultCost.quantity ?? undefined,
       costPerItem: String(defaultCost.costPerItem ?? ""),
+      form: FormTypes.PcrAddPartnerSpendProfileMaterialsCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(materialsSchema, {
       errorMap,
@@ -82,7 +85,7 @@ export const MaterialsFormComponent = () => {
 
   const totalCost = Number(watch("quantityOfMaterialItems") ?? 0) * parseCurrency(watch("costPerItem") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<MaterialsSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<MaterialsSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -108,7 +111,9 @@ export const MaterialsFormComponent = () => {
         )}
       >
         <Fieldset data-qa="materials-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileMaterialsCost} />
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <Field
             error={validationErrors?.materialsDescription}
             id="materialsDescription"

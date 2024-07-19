@@ -72,8 +72,11 @@ export const materialsSchema = z.object({
     required: true,
   }),
   quantityOfMaterialItems: requiredPositiveIntegerInput({ min: 0 }),
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileMaterialsCost),
+  costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
+export type MaterialsSchemaType = typeof materialsSchema;
 export type MaterialsSchema = z.infer<typeof materialsSchema>;
 
 export const subcontractingSchema = z.object({
