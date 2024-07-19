@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -27,6 +26,8 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isTravelAndSubsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -68,13 +69,15 @@ export const TravelAndSubsFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register, trigger } = useForm<TravelAndASubsistenceSchema>({
+  const { handleSubmit, watch, formState, register, trigger, setError } = useForm<TravelAndASubsistenceSchema>({
     defaultValues: {
       id: defaultCost.id,
       descriptionOfCost: defaultCost.description ?? "",
       numberOfTimes: defaultCost.numberOfTimes ?? undefined,
       costOfEach: String(defaultCost.costOfEach ?? ""),
       totalCost: defaultCost.value ?? 0,
+      form: FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(travelAndASubsistenceSchema, {
       errorMap,
@@ -85,7 +88,10 @@ export const TravelAndSubsFormComponent = () => {
 
   const totalCost = Number(watch("numberOfTimes") ?? 0) * parseCurrency(watch("costOfEach") ?? 0);
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<TravelAndASubsistenceSchema>;
+  const validationErrors = useZodErrors(
+    setError,
+    formState?.errors,
+  ) as ValidationErrorType<TravelAndASubsistenceSchema>;
   useFormRevalidate(watch, trigger);
 
   return (
@@ -112,7 +118,10 @@ export const TravelAndSubsFormComponent = () => {
         )}
       >
         <Fieldset data-qa="travel-and-subs-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost} />
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
+
           <Field
             error={validationErrors.descriptionOfCost}
             id="descriptionOfCost"

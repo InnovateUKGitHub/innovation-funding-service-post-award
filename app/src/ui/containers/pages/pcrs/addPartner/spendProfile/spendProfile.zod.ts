@@ -124,6 +124,8 @@ export const travelAndASubsistenceSchema = z
       required: true,
     }),
     totalCost: z.number(),
+    form: z.literal(FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost),
+    costCategoryType: z.nativeEnum(CostCategoryType),
   })
   .superRefine((data, ctx) => {
     const totalCost = data.numberOfTimes * parseCurrency(data.costOfEach);
@@ -138,6 +140,7 @@ export const travelAndASubsistenceSchema = z
     }
   });
 
+export type TravelAndSubsistenceSchemaType = typeof travelAndASubsistenceSchema;
 export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSchema>;
 
 export const otherCostsSchema = z.object({
