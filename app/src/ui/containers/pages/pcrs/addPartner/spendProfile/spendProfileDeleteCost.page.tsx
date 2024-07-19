@@ -34,6 +34,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { noop } from "lodash";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: CostId;
@@ -117,6 +118,7 @@ const SpendProfileDeleteCostPage = ({
             }),
           )}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSPendProfileDeleteItem} />
           <input type="hidden" name="id" value={cost?.id} />
           <SwitchComponent cost={cost} costCategory={costCategory} />
           <Fieldset>

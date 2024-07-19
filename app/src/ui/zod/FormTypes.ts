@@ -88,6 +88,8 @@ enum FormTypes {
   PcrAddPartnerSpendProfileTravelAndSubsistenceCost = "pcrAddPartnerSpendProfileTravelAndSubsistenceCost",
   PcrAddPartnerSpendProfileOtherCost = "pcrAddPartnerSpendProfileOtherCost",
 
+  PcrAddPartnerSPendProfileDeleteItem = "pcrAddPartnerSpendProfileDeleteItem",
+
   PcrProjectSuspensionStep = "pcrProjectSuspensionStep",
   PcrProjectSuspensionSummary = "pcrProjectSuspensionSummary",
 

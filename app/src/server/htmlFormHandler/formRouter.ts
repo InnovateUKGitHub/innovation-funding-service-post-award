@@ -92,6 +92,7 @@ import { PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler } from "./handler
 import { PcrItemAddPartnerSpendProfileSubcontractingCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileSubcontractingCosts.handler";
 import { PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileTravelAndSubs.handler";
 import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOtherCosts.handler";
+import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -129,6 +130,7 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerSpendProfileSubcontractingCostsHandler(),
   new PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler(),
   new PcrItemAddPartnerSpendProfileOtherCostsHandler(),
+  new PcrItemAddPartnerSpendProfileDeleteItemHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
   new PcrItemChangeRemovePartnerHandler(),
   new PcrItemChangeRemovePartnerSummaryHandler(),
