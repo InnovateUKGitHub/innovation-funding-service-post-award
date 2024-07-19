@@ -1,7 +1,6 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
 
 import { useClaimDrawdownTableData } from "./claimDrawdownTable.logic";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";

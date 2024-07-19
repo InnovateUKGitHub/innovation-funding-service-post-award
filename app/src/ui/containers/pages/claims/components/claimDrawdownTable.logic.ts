@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
-import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToLoanDtoArray } from "@gql/dtoMapper/mapLoanDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { claimDrawdownTableQuery } from "./ClaimDrawdownTable.query";
 import { ClaimDrawdownTableQuery } from "./__generated__/ClaimDrawdownTableQuery.graphql";
 
