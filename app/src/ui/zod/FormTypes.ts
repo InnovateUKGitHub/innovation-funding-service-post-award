@@ -84,6 +84,9 @@ enum FormTypes {
   PcrAddPartnerSpendProfileOverheadCost = "pcrAddPartnerSpendProfileOverheadCost",
   PcrAddPartnerSpendProfileMaterialsCost = "pcrAddPartnerSpendProfileMaterialsCost",
   PcrAddPartnerSpendProfileCapitalUsageCost = "pcrAddPartnerSpendProfileCapitalUsageCost",
+  PcrAddPartnerSpendProfileSubcontractingCost = "pcrAddPartnerSpendProfileSubcontractingCost",
+  PcrAddPartnerSpendProfileTravelAndSubsistenceCost = "pcrAddPartnerSpendProfileTravelAndSubsistenceCost",
+  PcrAddPartnerSpendProfileOtherCost = "pcrAddPartnerSpendProfileOtherCost",
 
   PcrProjectSuspensionStep = "pcrProjectSuspensionStep",
   PcrProjectSuspensionSummary = "pcrProjectSuspensionSummary",

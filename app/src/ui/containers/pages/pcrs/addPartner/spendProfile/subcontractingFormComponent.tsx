@@ -5,7 +5,6 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { useContext } from "react";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,6 +19,8 @@ import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isSubcontractingCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -63,13 +64,15 @@ export const SubcontractingFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, formState, register, watch } = useForm<SubcontractingSchema>({
+  const { handleSubmit, formState, register, watch, setError } = useForm<SubcontractingSchema>({
     defaultValues: {
       id: defaultValues.id,
       subcontractorName: defaultValues.description ?? "",
       subcontractorCountry: defaultValues.subcontractorCountry ?? "",
       subcontractorRoleAndDescription: defaultValues.subcontractorRoleAndDescription ?? "",
       subcontractorCost: String(defaultValues.value ?? ""),
+      form: FormTypes.PcrAddPartnerSpendProfileSubcontractingCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(subcontractingSchema, {
       errorMap,
@@ -78,7 +81,7 @@ export const SubcontractingFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<SubcontractingSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<SubcontractingSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -103,7 +106,9 @@ export const SubcontractingFormComponent = () => {
         )}
       >
         <Fieldset data-qa="subcontracting-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileSubcontractingCost} />
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
 
           <Field
             error={validationErrors?.subcontractorName}

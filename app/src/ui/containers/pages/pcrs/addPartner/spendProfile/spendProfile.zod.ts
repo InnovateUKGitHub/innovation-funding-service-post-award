@@ -87,8 +87,11 @@ export const subcontractingSchema = z.object({
   subcontractorCost: getGenericCurrencyValidation({
     required: true,
   }),
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileSubcontractingCost),
+  costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
+export type SubcontractingSchemaType = typeof subcontractingSchema;
 export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
 
 export const capitalUsageSchema = z.object({
