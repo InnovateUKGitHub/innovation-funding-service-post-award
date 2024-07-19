@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-
+import { useCallback, useState } from "react";
 import { noop } from "@ui/helpers/noop";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { useDidUpdate } from "@ui/hooks/generic.hook";
 
 export interface DocumentFilterProps {
   value: string;
@@ -24,9 +24,10 @@ export const DocumentFilter = ({
 
   const [searchInputValue, setSearchInputValue] = useState<string>(value);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     handleOnSearch(searchInputValue);
   }, [searchInputValue, handleOnSearch]);
+
   return (
     <Form data-qa={qa} onSubmit={noop}>
       <FormGroup>
