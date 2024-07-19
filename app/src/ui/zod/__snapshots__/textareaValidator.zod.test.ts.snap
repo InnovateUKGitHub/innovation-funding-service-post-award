@@ -9,7 +9,7 @@ exports[`generic textarea validator acceptable 1`] = `
 
 exports[`generic textarea validator non required empty 1`] = `
 {
-  "data": null,
+  "data": undefined,
   "success": true,
 }
 `;
