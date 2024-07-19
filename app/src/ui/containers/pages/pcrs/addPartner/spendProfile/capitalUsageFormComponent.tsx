@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { CapitalUsageSchema, capitalUsageSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -29,6 +28,8 @@ import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstan
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isCapitalUsageCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -77,7 +78,7 @@ export const CapitalUsageFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register } = useForm<CapitalUsageSchema>({
+  const { handleSubmit, watch, formState, register, setError } = useForm<CapitalUsageSchema>({
     defaultValues: {
       id: defaultCost.id,
       capitalUsageDescription: defaultCost.description ?? "",
@@ -86,6 +87,8 @@ export const CapitalUsageFormComponent = () => {
       residualValue: String(defaultCost.residualValue ?? ""),
       utilisation: defaultCost.utilisation ?? undefined,
       itemType: defaultCost.type ?? PCRSpendProfileCapitalUsageType.Unknown,
+      form: FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(capitalUsageSchema, {
       errorMap,
@@ -110,7 +113,7 @@ export const CapitalUsageFormComponent = () => {
     [getContent],
   );
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<CapitalUsageSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<CapitalUsageSchema>;
 
   const values = watch();
 
@@ -144,8 +147,9 @@ export const CapitalUsageFormComponent = () => {
         )}
       >
         <Fieldset data-qa="capital-usage-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost} />
           <input type="hidden" name="id" value={cost?.id} />
-
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <FormGroup>
             <TextAreaField
               {...register("capitalUsageDescription")}

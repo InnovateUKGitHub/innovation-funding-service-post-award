@@ -103,8 +103,11 @@ export const capitalUsageSchema = z.object({
     required: true,
   }),
   utilisation: percentageNumberInput({ max: 99.99, min: 0, required: true }),
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost),
+  costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
+export type CapitalUsageSchemaType = typeof capitalUsageSchema;
 export type CapitalUsageSchema = z.infer<typeof capitalUsageSchema>;
 
 const maxTotalCost = 10_000_000_000_000;
