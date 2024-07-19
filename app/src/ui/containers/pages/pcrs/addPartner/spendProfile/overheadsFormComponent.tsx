@@ -15,7 +15,6 @@ import { OverheadSchema, overheadSchema, errorMap } from "./spendProfile.zod";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
@@ -32,6 +31,8 @@ import {
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { CostCategoryList } from "@framework/types/CostCategory";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isOverheadsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -97,12 +98,14 @@ export const OverheadsFormComponent = ({}) => {
     [getContent],
   );
 
-  const { handleSubmit, watch, formState, register, setValue, trigger } = useForm<OverheadSchema>({
+  const { handleSubmit, watch, formState, register, setValue, trigger, setError } = useForm<OverheadSchema>({
     defaultValues: {
       id: defaultCost.id,
       calculatedValue: defaultCost.value ? String(defaultCost.value) : null,
       overheadRate: defaultCost?.overheadRate ?? PCRSpendProfileOverheadRate.Unknown,
       button_submit: "submit",
+      form: FormTypes.PcrAddPartnerSpendProfileOverheadCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(overheadSchema, {
       errorMap,
@@ -149,7 +152,7 @@ export const OverheadsFormComponent = ({}) => {
   // If server rendering then always show hidden section
   const displayHiddenForm = !isClient || overheadRate === PCRSpendProfileOverheadRate.Calculated;
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<OverheadSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<OverheadSchema>;
 
   const calculatedTotalCost = getOverheadsCostValue(overheadRate);
 
@@ -185,7 +188,9 @@ export const OverheadsFormComponent = ({}) => {
         data-qa="overheadsForm"
       >
         <Fieldset data-qa="overhead-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOverheadCost} />
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <FormGroup hasError={!!validationErrors.overheadRate}>
             <ValidationError error={validationErrors?.overheadRate} />
             <RadioList register={register} name="overheadRate">

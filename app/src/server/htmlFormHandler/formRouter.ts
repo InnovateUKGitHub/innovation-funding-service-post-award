@@ -85,7 +85,8 @@ import { PcrItemAddPartnerAcademicOrganisationStepHandler } from "./handlers/pro
 import { PcrItemAddPartnerAcademicOrganisationSearchStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationSearchStep.handler";
 import { PcrItemAddPartnerAcademicCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicCostsStep.handler";
 import { PcrAddPartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerSummary.handler";
-import { PcrItemAddPartnerSpendProfileLabourCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileLabourCostHandler";
+import { PcrItemAddPartnerSpendProfileLabourCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileLabourCost.handler";
+import { PcrItemAddPartnerSpendProfileOverheadCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOverheadCost.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -117,6 +118,7 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerOtherSourcesOfFundingHandler(),
   new PcrAddPartnerSummaryHandler(),
   new PcrItemAddPartnerSpendProfileLabourCostsHandler(),
+  new PcrItemAddPartnerSpendProfileOverheadCostsHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
   new PcrItemChangeRemovePartnerHandler(),
   new PcrItemChangeRemovePartnerSummaryHandler(),

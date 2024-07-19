@@ -37,12 +37,14 @@ export const overheadSchema = evaluateObject(
   (data: { overheadRate: PCRSpendProfileOverheadRate; button_submit: string }) => {
     return {
       id: costIdValidation.nullable(),
+      form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadCost),
       overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
       calculatedValue: getGenericCurrencyValidation({
         required:
           Number(data.overheadRate) === PCRSpendProfileOverheadRate.Calculated && data.button_submit === "submit",
       }),
       button_submit: z.string(),
+      costCategoryType: z.nativeEnum(CostCategoryType),
     };
   },
 ).superRefine((data, ctx) => {
@@ -60,6 +62,7 @@ export const overheadSchema = evaluateObject(
   }
 });
 
+export type OverheadSchemaType = typeof overheadSchema;
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
 export const materialsSchema = z.object({
