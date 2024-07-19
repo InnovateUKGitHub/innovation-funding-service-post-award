@@ -149,6 +149,9 @@ export const otherCostsSchema = z.object({
   estimatedCost: getGenericCurrencyValidation({
     required: true,
   }),
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOtherCost),
+  costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
+export type OtherCostsSchemaType = typeof otherCostsSchema;
 export type OtherCostsSchema = z.infer<typeof otherCostsSchema>;

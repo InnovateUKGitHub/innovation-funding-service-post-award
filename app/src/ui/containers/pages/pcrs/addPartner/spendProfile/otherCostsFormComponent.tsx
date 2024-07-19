@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { OtherCostsSchema, otherCostsSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -20,6 +19,8 @@ import {
 import { isObject } from "lodash";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 const isOtherCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -58,11 +59,13 @@ export const OtherCostsFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register } = useForm<OtherCostsSchema>({
+  const { handleSubmit, watch, formState, register, setError } = useForm<OtherCostsSchema>({
     defaultValues: {
       id: defaultCost.id,
       descriptionOfCost: defaultCost?.description ?? "",
       estimatedCost: String(defaultCost?.value ?? ""),
+      form: FormTypes.PcrAddPartnerSpendProfileOtherCost,
+      costCategoryType: costCategory.type,
     },
     resolver: zodResolver(otherCostsSchema, {
       errorMap,
@@ -71,7 +74,7 @@ export const OtherCostsFormComponent = () => {
 
   const { getContent } = useContent();
 
-  const validationErrors = useRhfErrors(formState?.errors) as ValidationErrorType<OtherCostsSchema>;
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<OtherCostsSchema>;
 
   return (
     <SpendProfilePreparePage validationErrors={validationErrors}>
@@ -95,7 +98,9 @@ export const OtherCostsFormComponent = () => {
         )}
       >
         <Fieldset data-qa="other-costs">
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOtherCost} />
           <input type="hidden" name="id" value={cost?.id} />
+          <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <FormGroup hasError={!!validationErrors.descriptionOfCost}>
             <TextAreaField
               {...register("descriptionOfCost")}
