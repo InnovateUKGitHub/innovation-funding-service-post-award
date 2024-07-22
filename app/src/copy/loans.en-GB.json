@@ -2,12 +2,12 @@
   "docType": "loans",
   "pages": {
     "projectOverview": {
-      "claimsLink": "Project Costs"
+      "claimsLink": "Project costs"
     },
     "claimsDashboard": {
       "title": {
-        "html": "Project Costs - View project",
-        "display": "Project Costs"
+        "html": "Project costs - View project",
+        "display": "Project costs"
       }
     },
     "allClaimsDashboard": {
