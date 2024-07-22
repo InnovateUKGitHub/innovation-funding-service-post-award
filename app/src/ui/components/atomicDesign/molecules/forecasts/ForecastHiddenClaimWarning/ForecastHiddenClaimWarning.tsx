@@ -7,7 +7,11 @@ const ForecastHiddenCostWarning = ({ costCategories }: { costCategories: Forecas
   if (badCostCategories.length === 0) return null;
 
   return (
-    <ValidationMessage messageType="error" message={x => x.components.warningContent.forecastHiddenClaimWarning} />
+    <ValidationMessage
+      markdown
+      messageType="error"
+      message={x => x.components.warningContent.forecastHiddenClaimWarning}
+    />
   );
 };
 
