@@ -1,15 +1,15 @@
-import { Fixture, Given } from "playwright-bdd/decorators";
 import { Page } from "@playwright/test";
+import { Fixture, Given } from "playwright-bdd/decorators";
+import { DashboardTile } from "../../components/DashboardTile";
+import { DevTools } from "../../components/DevTools";
+import { ProjectCard } from "../../components/ProjectCard";
+import { TestCache } from "../../helpers/TestCache";
+import { ProjectState } from "../projectFactory/ProjectState";
 import { DeveloperHomepage } from "./pages/DeveloperHomepage";
+import { MonitoringReports } from "./pages/MonitoringReports";
 import { ProjectDashboard } from "./pages/ProjectDashboard";
-import { TestCache } from "../helpers/TestCache";
-import { ProjectState } from "./projectFactory/ProjectState";
-import { ProjectCard } from "../components/ProjectCard";
-import { ProjectOverview } from "./pages/ProjectOverview";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
-import { DashboardTile } from "../components/DashboardTile";
-import { DevTools } from "../components/DevTools";
-import { switchUserTo } from "../helpers/userSwitcher";
+import { ProjectOverview } from "./pages/ProjectOverview";
 
 export
 @Fixture("accNavigation")
@@ -19,8 +19,10 @@ class AccNavigation {
   private readonly projectDashboard: ProjectDashboard;
   private readonly projectOverview: ProjectOverview;
   private readonly projectForecasts: ProjectForecasts;
-  private readonly testCache = new TestCache();
+  private readonly monitoringReports: MonitoringReports;
   private readonly projectState: ProjectState;
+  private readonly testCache = new TestCache();
+  private readonly devtools: DevTools;
 
   constructor({
     page,
@@ -29,6 +31,7 @@ class AccNavigation {
     projectOverview,
     projectForecasts,
     projectState,
+    monitoringReports,
   }: {
     page: Page;
     developerHomepage: DeveloperHomepage;
@@ -36,6 +39,7 @@ class AccNavigation {
     projectOverview: ProjectOverview;
     projectForecasts: ProjectForecasts;
     projectState: ProjectState;
+    monitoringReports: MonitoringReports;
   }) {
     this.page = page;
     this.developerHomepage = developerHomepage;
@@ -43,12 +47,14 @@ class AccNavigation {
     this.projectOverview = projectOverview;
     this.projectForecasts = projectForecasts;
     this.projectState = projectState;
+    this.monitoringReports = monitoringReports;
+    this.devtools = new DevTools({ page });
   }
 
   @Given("the user is on the developer homepage")
   async gotoDeveloperHomepage() {
     await this.page.goto("/");
-    await DevTools.isLoaded(this.page);
+    await this.devtools.isLoaded();
   }
 
   @Given("the user is on the project dashboard")
@@ -72,15 +78,7 @@ class AccNavigation {
       },
     );
 
-    await this.projectOverview.isPage();
-  }
-
-  @Given("the user is on the project overview as a {string}")
-  async gotoProjectOverviewAsUser(
-    userType: "Monitoring Officer" | "Project Manager" | "Finance Contact" | "MO" | "PM" | "FC",
-  ) {
-    await this.gotoProjectOverview();
-    await switchUserTo(this.page, this.projectState, userType);
+    await this.devtools.isLoaded();
     await this.projectOverview.isPage();
   }
 
@@ -102,6 +100,25 @@ class AccNavigation {
       },
     );
 
+    await this.devtools.isLoaded();
     await this.projectForecasts.isPage();
+  }
+
+  @Given("the user is on the monitoring reports page")
+  async gotoMonitoringReports() {
+    await this.testCache.cache(
+      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Monitoring reports").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.devtools.isLoaded();
+    await this.monitoringReports.isPage();
   }
 }

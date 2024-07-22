@@ -20,16 +20,12 @@ class DevTools extends BaseComponent {
     return this.page.getByTestId("react-loaded-indicator").locator("dd.govuk-summary-list__value");
   }
 
-  static async isLoaded(page: Page) {
-    const devTools = new DevTools({ page });
-
-    return expect(await devTools.getReactLoadedIndicator().innerText()).toBe("Loaded");
+  async isLoaded() {
+    return expect(await this.getReactLoadedIndicator().innerText()).toBe("Loaded");
   }
 
-  static async isLoggedInAs(page: Page, user: string) {
-    const devTools = new DevTools({ page });
-
-    return expect(await devTools.getLoggedInUser().innerText()).toBe(user);
+  async isLoggedInAs(user: string) {
+    return expect(await this.getLoggedInUser().innerText()).toBe(user);
   }
 }
 

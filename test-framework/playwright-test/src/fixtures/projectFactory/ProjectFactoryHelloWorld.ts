@@ -10,6 +10,6 @@ class ProjectFactoryHelloWorld extends ProjectFactory {
 
   @Given("a connection to Salesforce exists")
   async create() {
-    await this.runApex("System.debug('Hello world!');");
+    await this.sfdcApi.runApex("System.debug('Hello world!');");
   }
 }

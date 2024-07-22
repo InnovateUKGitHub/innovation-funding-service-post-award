@@ -1,8 +1,8 @@
 import { Page, expect } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
-import { BackButton } from "../../components/BackButton";
-import { PageHeading } from "../../components/PageHeading";
-import { DashboardTile } from "../../components/DashboardTile";
+import { BackButton } from "../../../components/BackButton";
+import { PageHeading } from "../../../components/PageHeading";
+import { DashboardTile } from "../../../components/DashboardTile";
 
 export
 @Fixture("projectOverview")

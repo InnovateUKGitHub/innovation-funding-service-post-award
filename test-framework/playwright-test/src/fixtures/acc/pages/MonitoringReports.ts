@@ -1,9 +1,9 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
-import { PageHeading } from "../../components/PageHeading";
-import { Button } from "../../components/Button";
-import { ValidationMessage } from "../../components/ValidationMessage";
-import { moAnswers } from "../../components/MonitoringAnswers";
+import { PageHeading } from "../../../components/PageHeading";
+import { Button } from "../../../components/Button";
+import { ValidationMessage } from "../../../components/ValidationMessage";
+import { moAnswers } from "../../../components/MonitoringAnswers";
 
 export
 @Fixture("monitoringReports")
@@ -57,7 +57,7 @@ class MonitoringReports {
     this.submitButton = this.page.getByRole("button", { name: "Submit report" });
   }
 
-  @Then("the user sees the Monitoring Reports page")
+  @Then("the user sees the monitoring reports page")
   async isPage() {
     await expect(this.dashboardTitle.get()).toBeVisible();
     await expect(this.startButton).toBeVisible();
@@ -84,8 +84,20 @@ class MonitoringReports {
     await expect(this.periodSubheading).toContainText("Period 1");
   }
 
-  @Then("the user can complete section {int}, {string}")
-  async validRadioButtons(n: number, section: keyof typeof moAnswers) {
+  @Then("the user can complete the monitoring report")
+  async completeAllMonitoringReportSections() {
+    await this.completeNumberedMonitoringReportSection("Scope");
+    await this.completeNumberedMonitoringReportSection("Time");
+    await this.completeNumberedMonitoringReportSection("Cost");
+    await this.completeNumberedMonitoringReportSection("Exploitation");
+    await this.completeNumberedMonitoringReportSection("Risk");
+    await this.completeNumberedMonitoringReportSection("planning");
+    await this.completeMonitoringReportSection("Summary");
+    await this.completeMonitoringReportSection("Issues and actions");
+  }
+
+  @Then("the user can complete the monitoring report numbered section {int}, {string}")
+  async completeNumberedMonitoringReportSection(section: keyof typeof moAnswers) {
     await expect(this.periodSubheading).toBeVisible();
     await expect(this.legend).toContainText(section);
     for (const answer of moAnswers[section]) {
@@ -97,10 +109,9 @@ class MonitoringReports {
     await this.continueButton.click();
   }
 
-  @Then("the user can complete {string}")
-  async fillOutText(section: string) {
+  @Then("the user can complete the monitoring report section {string}")
+  async completeMonitoringReportSection(section: string) {
     await expect(this.periodSubheading).toBeVisible();
-    await expect(this.legend).toContainText(section);
     await expect(this.legend).toContainText(section);
     await this.comments.fill(`These are comments for ${String(section)}`);
     await this.continueButton.click();
@@ -113,10 +124,10 @@ class MonitoringReports {
     await this.submitButton.click();
   }
 
-  @Then("the user will see the report status {string}")
+  @Then("the user sees the report status is {string}")
   async submittedStatus(status: string) {
     await expect(this.dashboardTitle.get()).toBeVisible();
-    expect(this.page.getByRole("table")).toContainText(status);
+    await expect(this.page.getByRole("table")).toContainText(status);
   }
 }
 

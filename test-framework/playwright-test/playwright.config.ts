@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { EnvironmentManager } from "environment-manager";
+import { EnvironmentManager } from "@innovateuk/environment-manager";
 import { defineBddConfig } from "playwright-bdd";
 
 const envman = new EnvironmentManager(process.env.TEST_SALESFORCE_SANDBOX);
@@ -62,15 +62,16 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    /* Test against other web browsers */
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
 
     /* Test against mobile viewports. */
     // {

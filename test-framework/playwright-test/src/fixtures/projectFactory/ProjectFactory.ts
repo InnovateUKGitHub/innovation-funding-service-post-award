@@ -1,116 +1,30 @@
-import { Page, Browser } from "@playwright/test";
-import { EnvironmentManager } from "environment-manager";
-import jwt from "jsonwebtoken";
-import { CreateProjectProps, buildApex } from "project-factory";
-import { xml } from "../../helpers/xml";
+import { CreateProjectProps, buildApex } from "@innovateuk/project-factory";
+import { sleep } from "../../helpers/sleep";
+import { SfdcApi } from "../sfdc/SfdcApi";
 import { ProjectState } from "./ProjectState";
 
 export abstract class ProjectFactory {
-  private readonly playwright: typeof import("playwright-core");
-  private readonly envman: EnvironmentManager;
-  private salesforceAccessToken: string | null = null;
-  protected readonly page: Page;
+  protected readonly sfdcApi: SfdcApi;
+  public static projectState: ProjectState | null;
+  protected projectState: ProjectState | null;
   protected prefix: string | null = null;
-  protected readonly projectState: ProjectState;
 
-  constructor({
-    page,
-    playwright,
-    projectState,
-  }: {
-    page: Page;
-    playwright: typeof import("playwright-core");
-    projectState: ProjectState;
-  }) {
-    this.page = page;
-    this.playwright = playwright;
-    this.envman = new EnvironmentManager(process.env.TEST_SALESFORCE_SANDBOX);
+  constructor({ projectState, sfdcApi }: { projectState: ProjectState; sfdcApi: SfdcApi }) {
+    this.sfdcApi = sfdcApi;
     this.projectState = projectState;
-  }
-
-  private async getRequestContext(baseURL: string) {
-    return await this.playwright.request.newContext({
-      baseURL,
-    });
-  }
-
-  private async getSalesforceToken(): Promise<string> {
-    if (this.salesforceAccessToken) return this.salesforceAccessToken;
-
-    const privateKey = this.envman.getEnv("SALESFORCE_PRIVATE_KEY");
-    const username = this.envman.getEnv("SALESFORCE_USERNAME");
-    const clientId = this.envman.getEnv("SALESFORCE_CLIENT_ID");
-    const connectionUrl = this.envman.getEnv("SALESFORCE_CONNECTION_URL");
-    const reqCtx = await this.getRequestContext(connectionUrl);
-
-    const jwtToken = jwt.sign({ prn: username }, privateKey, {
-      issuer: clientId,
-      audience: connectionUrl,
-      expiresIn: 10,
-      algorithm: "RS256",
-    });
-
-    const request = await reqCtx.post(`${connectionUrl}/services/oauth2/token`, {
-      form: {
-        grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        assertion: jwtToken,
-      },
-    });
-    const tokenQuery = await request.json();
-
-    this.salesforceAccessToken = tokenQuery.access_token;
-    return this.salesforceAccessToken;
-  }
-
-  protected async runApex(apex: string): Promise<void> {
-    const connectionUrl = this.envman.getEnv("SALESFORCE_CONNECTION_URL");
-    const reqCtx = await this.getRequestContext(connectionUrl);
-    const salesforceAccessToken = await this.getSalesforceToken();
-
-    const res = await reqCtx.post(connectionUrl + "/services/Soap/T/61.0", {
-      headers: {
-        Accept: "text/xml",
-        "Content-Type": "text/xml",
-        SOAPAction: "blargh",
-      },
-      data: xml`
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope
-  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-  xmlns:tns="urn:tooling.soap.sforce.com"
->
-  <soap:Header>
-    <tns:DebuggingHeader>
-      <tns:categories>
-        <tns:category>apex_code</tns:category>
-        <tns:level>FINEST</tns:level>
-      </tns:categories>
-      <tns:debugLevel>DETAIL</tns:debugLevel>
-    </tns:DebuggingHeader>
-    <tns:SessionHeader>
-      <tns:sessionId>${salesforceAccessToken}</tns:sessionId>
-    </tns:SessionHeader>
-  </soap:Header>
-  <soap:Body>
-    <tns:executeAnonymous>
-      <tns:String>${apex}</tns:String>
-    </tns:executeAnonymous>
-  </soap:Body>
-</soap:Envelope>
-      `,
-    });
-
-    const text = await res.text();
-    if (!res.ok) {
-      throw new Error(text);
-    }
   }
 
   protected abstract getProject(): CreateProjectProps;
 
   protected async createProject() {
+    this.prefix = Math.floor(Date.now() / 1000).toString() + ".";
+
+    if (ProjectFactory.projectState) {
+      this.projectState = ProjectFactory.projectState;
+      return;
+    }
+
     const data = this.getProject();
-    const prefix = Math.floor(Date.now() / 1000).toString() + ".";
     const apex = buildApex({
       instances: [
         data.project,
@@ -124,16 +38,26 @@ export abstract class ProjectFactory {
         ...data.profiles.totalCostCategories,
       ].flat(),
       options: {
-        prefix,
+        prefix: this.prefix,
       },
     });
 
-    this.prefix = prefix;
-    this.projectState.prefix = prefix;
+    this.projectState.prefix = this.prefix;
     this.projectState.project = {
       number: data.project.getField("Acc_ProjectNumber__c"),
       title: data.project.getField("Acc_ProjectTitle__c"),
     };
-    return this.runApex(apex);
+    this.projectState.usernames = data.logins.map(x => x.user.getField("Username"));
+    ProjectFactory.projectState = this.projectState;
+    await this.sfdcApi.runApex(apex);
+
+    while (true) {
+      try {
+        // Wait until a login is successful
+        await this.sfdcApi.getSalesforceToken(this.prefix + data.logins[0].user.getField("Username"));
+        break;
+      } catch {}
+      await sleep(2000);
+    }
   }
 }

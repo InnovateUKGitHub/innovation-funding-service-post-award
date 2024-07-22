@@ -5,7 +5,7 @@ interface TestCacheOptions {
 class TestCache {
   private readonly localCache = new Map<string, string>();
 
-  async cache(
+  public async cache(
     keygen: string | string[],
     longTask: () => Promise<string>,
     shortTask: (memo: string) => Promise<void>,
@@ -21,6 +21,16 @@ class TestCache {
       this.localCache.set(key, newValue);
     }
   }
+
+  public set(key: string, value: string) {
+    this.localCache.set(key, value);
+  }
+
+  public get(key: string) {
+    return this.localCache.get(key);
+  }
 }
 
-export { TestCache };
+const testCache = new TestCache();
+
+export { TestCache, testCache };

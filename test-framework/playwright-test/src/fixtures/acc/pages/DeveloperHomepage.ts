@@ -1,7 +1,7 @@
 import { Page, expect } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
-import { DashboardTile } from "../../components/DashboardTile";
-import { PageHeading } from "../../components/PageHeading";
+import { DashboardTile } from "../../../components/DashboardTile";
+import { PageHeading } from "../../../components/PageHeading";
 
 export
 @Fixture("developerHomepage")

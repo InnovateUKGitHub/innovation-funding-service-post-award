@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "Node16",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["es2021"]
   }
 }

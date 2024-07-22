@@ -1,16 +1,23 @@
 // fixtures.ts
 import { test as base } from "playwright-bdd";
-import { DeveloperHomepage } from "./pages/DeveloperHomepage";
-import { ProjectDashboard } from "./pages/ProjectDashboard";
+import { DeveloperHomepage } from "./acc/pages/DeveloperHomepage";
+import { ProjectDashboard } from "./acc/pages/ProjectDashboard";
 import { AccProjectBase } from "./projectFactory/AccProjectBase";
 import { ProjectFactoryHelloWorld } from "./projectFactory/ProjectFactoryHelloWorld";
-import { AccNavigation } from "./AccNavigation";
+import { AccNavigation } from "./acc/AccNavigation";
 import { ProjectState } from "./projectFactory/ProjectState";
-import { ProjectOverview } from "./pages/ProjectOverview";
-import { ProjectForecasts } from "./pages/ProjectForecasts";
+import { ProjectOverview } from "./acc/pages/ProjectOverview";
+import { ProjectForecasts } from "./acc/pages/ProjectForecasts";
 import { Commands } from "./Commands";
-import { ViewForecast } from "./pages/ViewForecast";
-import { MonitoringReports } from "./pages/MonitoringReports";
+import { ViewForecast } from "./acc/pages/ViewForecast";
+import { MonitoringReports } from "./acc/pages/MonitoringReports";
+import { SfdcLightningPage } from "./sfdc/SfdcLightningPage";
+import { SfdcApi } from "./sfdc/SfdcApi";
+import { SfdcIfspaAppDashboard } from "./sfdc/pages/SfdcIfspaAppDashboard";
+import { AccUserSwitcher } from "./acc/AccUserSwitcher";
+import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
+import { SfdcNavigation } from "./sfdc/SfdcNavigation";
+import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 
 type AccFixtures = {
   // Pages
@@ -21,17 +28,30 @@ type AccFixtures = {
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
 
-  // Project Factory
-  accProjectBase: AccProjectBase;
-  projectFactoryHelloWorld: ProjectFactoryHelloWorld;
-
   // Misc
   accNavigation: AccNavigation;
-  projectState: ProjectState;
   commands: Commands;
+
+  // ACC
+  accUserSwitcher: AccUserSwitcher;
+
+  // Salesforce (dot com)
+  sfdcPage: SfdcLightningPage;
+  sfdcTab: SfdcLightningPage;
+  sfdcIfspaAppDashboard: SfdcIfspaAppDashboard;
+  sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage;
+  sfdcNavigation: SfdcNavigation;
+  sfdcSearchResultsPage: SfdcSearchResultsPage;
 };
 
-export const test = base.extend<AccFixtures>({
+interface Workers {
+  sfdcApi: SfdcApi;
+  accProjectBase: AccProjectBase;
+  projectFactoryHelloWorld: ProjectFactoryHelloWorld;
+  projectState: ProjectState;
+}
+
+export const test = base.extend<AccFixtures, Workers>({
   // Pages
   developerHomepage: ({ page }, use) => use(new DeveloperHomepage({ page })),
   projectDashboard: ({ page }, use) => use(new ProjectDashboard({ page })),
@@ -40,21 +60,42 @@ export const test = base.extend<AccFixtures>({
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   // Project Factory
-  accProjectBase: ({ page, playwright, projectState }, use) =>
-    use(new AccProjectBase({ page, playwright, projectState })),
-  projectFactoryHelloWorld: ({ page, playwright, projectState }, use) =>
-    use(new ProjectFactoryHelloWorld({ page, playwright, projectState })),
+  accProjectBase: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  projectFactoryHelloWorld: [
+    ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
 
   // Misc
   accNavigation: (
-    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState },
+    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState, monitoringReports },
     use,
   ) =>
     use(
-      new AccNavigation({ page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState }),
+      new AccNavigation({
+        page,
+        developerHomepage,
+        projectDashboard,
+        projectOverview,
+        projectForecasts,
+        projectState,
+        monitoringReports,
+      }),
     ),
-  projectState: ({}, use) => use(new ProjectState()),
+  projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
+  accUserSwitcher: ({ page, context, projectState }, use) => use(new AccUserSwitcher({ page, context, projectState })),
+  // Salesforce (dot com)
+  sfdcApi: [SfdcApi.create, { scope: "worker" }],
+  sfdcPage: SfdcLightningPage.create,
+  sfdcTab: SfdcLightningPage.createNewTab,
+  sfdcIfspaAppDashboard: SfdcIfspaAppDashboard.create,
+  sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage.create,
+  sfdcNavigation: SfdcNavigation.create,
+  sfdcSearchResultsPage: SfdcSearchResultsPage.create,
 });
 
 export { AccFixtures };
