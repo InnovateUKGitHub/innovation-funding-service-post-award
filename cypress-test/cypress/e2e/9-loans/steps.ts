@@ -611,16 +611,14 @@ export const projCostsDrawdownTable = () => {
     "Drawdown this period",
     "Remaining loan amount",
   ].forEach(header => {
-    cy.getByQA("period-loan-table").within(() => {
-      cy.get("thead").within(() => {
-        cy.get(`th:nth-child(${i})`).contains(header);
-        i++;
-      });
+    cy.contains("table", "Current drawdown").within(() => {
+      cy.get(`th:nth-child(${i})`).contains(header);
+      i++;
     });
   });
   let a = 1;
   ["1", "£115,000.00", "£0.00", "£10,000.00", "£105,000.00"].forEach(rowItem => {
-    cy.getByQA("period-loan-table").within(() => {
+    cy.contains("table", "Current drawdown").within(() => {
       cy.get("tr")
         .eq(1)
         .within(() => {
