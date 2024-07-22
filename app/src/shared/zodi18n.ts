@@ -85,7 +85,42 @@ export const makeZodI18nMap =
 
       const isArrayTypeError = fullPrefix.some(x => /^\d+$/.test(String(x)));
 
-      if (issue.code === ZodIssueCode.custom && !!issue?.params?.generic?.length) {
+      const isGeneric = issue.code === ZodIssueCode.custom && !!issue?.params?.generic?.length;
+
+      for (let i = fullPrefix.length; i >= (isGeneric ? 1 : 0); i--) {
+        for (const key of alternativeKeys) {
+          const path = ["forms", ...fullPrefix.slice(0, i), key].join(".");
+
+          if ("type" in issue) {
+            paths.push(path + "." + issue.type);
+          }
+
+          paths.push(path);
+
+          /*
+           * in the event this is an array type error, as well as making paths for each index, there is also a generic
+           * key made with "arrayType" in the place where the array index would have been.
+           *
+           * This means for array type errors where there is only a simple variation that can passed in as a variable
+           * we can reuse copy.
+           *
+           * e.g.
+           * ["questions.1.comments.error.too_big", "questions.3.comments.error.too_big", "questions.arrayType.comments.error.too_big"]
+           */
+          if (isArrayTypeError) {
+            const basicArrayTypePath = path.replace(/\.\d+\./g, ".arrayType.");
+            if (!paths.includes(basicArrayTypePath)) {
+              if ("type" in issue) {
+                paths.push(basicArrayTypePath + "." + issue.type);
+              }
+
+              paths.push(basicArrayTypePath);
+            }
+          }
+        }
+      }
+
+      if (isGeneric) {
         /**
          * if the code is a custom type (the only type whose type allows arbitrary params)
          * and the params includes a generic property with an array of length 1 or more
@@ -96,39 +131,6 @@ export const makeZodI18nMap =
         alternativeKeys.forEach(key => {
           paths.push("forms.generic." + issue.params?.generic?.join(".") + "." + key);
         });
-      } else {
-        for (let i = fullPrefix.length; i >= 0; i--) {
-          for (const key of alternativeKeys) {
-            const path = ["forms", ...fullPrefix.slice(0, i), key].join(".");
-
-            if ("type" in issue) {
-              paths.push(path + "." + issue.type);
-            }
-
-            paths.push(path);
-
-            /*
-             * in the event this is an array type error, as well as making paths for each index, there is also a generic
-             * key made with "arrayType" in the place where the array index would have been.
-             *
-             * This means for array type errors where there is only a simple variation that can passed in as a variable
-             * we can reuse copy.
-             *
-             * e.g.
-             * ["questions.1.comments.error.too_big", "questions.3.comments.error.too_big", "questions.arrayType.comments.error.too_big"]
-             */
-            if (isArrayTypeError) {
-              const basicArrayTypePath = path.replace(/\.\d+\./g, ".arrayType.");
-              if (!paths.includes(basicArrayTypePath)) {
-                if ("type" in issue) {
-                  paths.push(basicArrayTypePath + "." + issue.type);
-                }
-
-                paths.push(basicArrayTypePath);
-              }
-            }
-          }
-        }
       }
 
       logger.debug("Translating error with one of the following keys", paths, issue, interpValues);
