@@ -61,8 +61,8 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
       "Remove a partner",
       Intercepts.PCR,
       false,
-      false,
       true,
+      false,
       "Documents",
     );
   });

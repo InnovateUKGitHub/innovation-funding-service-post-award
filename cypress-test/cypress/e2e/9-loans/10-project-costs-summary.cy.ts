@@ -20,22 +20,16 @@ import { fileTidyUp } from "common/filetidyup";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
 
-describe("Loans > Project Costs > Summary", () => {
+describe("Loans > Project costs > Summary", () => {
   before(() => {
     visitApp({ asUser: fc });
     cy.navigateToProject("191431");
   });
 
-  /**
-   * TODO: This needs to be re-enabled once ticket ACC-11279
-   */
-  //it("Should click the Project Costs tile and display the correct heading navigate to the Costs for period page", loansCostsPageNavigate);
-
-  it("Should click the Project costs tile", () => {
-    cy.selectTile("Project Costs");
-    cy.get("a").contains("Edit").click();
-    cy.heading("Costs for this period");
-  });
+  it(
+    "Should click the Project costs tile and display the correct heading navigate to the Costs for period page",
+    loansCostsPageNavigate,
+  );
 
   it("Should check the first line costs are correct", loansProjCostCleanUp);
 
@@ -123,12 +117,9 @@ describe("Loans > Project Costs > Summary", () => {
     cy.button("Submit costs");
   });
 
-  /**
-   * TODO: This needs re-enabling once ACC-11279 is fixed
-   */
   it("Should Save and return to project costs", () => {
     cy.button("Save and return to project costs").click();
-    //cy.heading("Project costs");
+    cy.heading("Project costs");
   });
 
   it("Should re-access the period costs and reset the costs for 'Loans cost' category'", resetCosts);

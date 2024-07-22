@@ -33,14 +33,11 @@ describe("Loans > Project Costs & Documents", () => {
   });
 
   it("Should click the Project Costs tile", () => {
-    cy.selectTile("Project Costs");
+    cy.selectTile("Project costs");
   });
 
-  /**
-   * TODO: Uncomment out heading assertion once ACC-11279 is merged in.
-   */
-  it("Should display the Project Costs heading and Open/Closed subheadings", () => {
-    //cy.heading("Project costs");
+  it("Should display the Project costs heading and Open/Closed subheadings", () => {
+    cy.heading("Project costs");
     cy.get("h2").contains("Open");
     cy.get("h2").contains("Closed");
   });

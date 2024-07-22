@@ -637,12 +637,10 @@ export const projCostsStatusSection = () => {
   cy.button("Hide");
   cy.paragraph("There are no changes.");
 };
-/**
- * TODO: Update this once ACC-11279 is merged in.
- */
+
 export const loansForecastNavigate = () => {
-  cy.selectTile("Project Costs");
-  //cy.heading("Project costs");
+  cy.selectTile("Project costs");
+  cy.heading("Project costs");
   cy.get("a").contains("Edit").click();
   cy.heading("Costs for this period");
   cy.clickOn("Continue to costs documents");
@@ -815,7 +813,7 @@ export const loansForecastCopyPaste = () => {
 };
 
 export const loansCostsPageNavigate = () => {
-  cy.selectTile("Project Costs");
+  cy.selectTile("Project costs");
   cy.heading("Project costs");
   cy.get("a").contains("Edit").click();
   cy.heading("Costs for this period");

@@ -18,11 +18,8 @@ describe("Loans > Forecast", () => {
     cy.navigateToProject("191431");
   });
 
-  /**
-   * TODO: This steps function needs updating once ACC-11279 as it currently skips the header for Project costs assertion.
-   */
   it(
-    "Should click the Project Costs tile and navigate to forecast section of the open Project cost",
+    "Should click the Project costs tile and navigate to forecast section of the open Project cost",
     loansForecastNavigate,
   );
 
