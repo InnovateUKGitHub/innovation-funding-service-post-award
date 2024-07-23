@@ -2025,7 +2025,10 @@
         }
       },
       "comments": {
-        "label": "Comments"
+        "label": "Comments",
+        "errors": {
+          "required": "Comments are required if querying a claim."
+        }
       }
     },
     "loanRequest": {
@@ -2043,10 +2046,7 @@
     },
     "claimSummary": {
       "comments": {
-        "errors": {
-          "too_big": "Comments must be a maximum of 1000 characters.",
-          "custom": "Comments are required if querying a claim."
-        }
+        "label": "Comments"
       },
       "documents": {
         "errors": {
@@ -2580,17 +2580,15 @@
       },
       "scopeChange": {
         "publicDescription": {
+          "label": "Public description",
           "errors": {
-            "too_big": "Public description can be a maximum of {{ count }} characters",
-            "too_small": "Enter a public description",
             "invalid_type": "Enter a public description",
             "readonly": "Public description cannot be changed."
           }
         },
         "projectSummary": {
+          "label": "Project summary",
           "errors": {
-            "too_big": "Project summary can be a maximum of {{ count }} characters",
-            "too_small": "Enter a project summary",
             "invalid_type": "Enter a project summary",
             "readonly": "Project summary cannot be changed."
           }
@@ -2603,10 +2601,9 @@
           }
         },
         "accountName": {
+          "label": "New partner name",
           "errors": {
-            "custom": "The proposed name of the partner must be different to the existing one.",
-            "too_small": "Enter a new partner name.",
-            "too_big": "New partner name can be a maximum of {{ count }} characters."
+            "custom": "The proposed name of the partner must be different to the existing one."
           }
         }
       },
@@ -2869,9 +2866,7 @@
         }
       },
       "comments": {
-        "errors": {
-          "too_big": "Comment can be a maximum of {{ count }} characters."
-        }
+        "label": "Comments"
       }
     },
     "forecastTable": {

@@ -32,6 +32,7 @@ export const getTextareaValidation = ({
   z
     .string()
     .trim()
+    .optional()
     .nullable()
     .superRefine((val, ctx) => {
       const isEmpty = (typeof val === "string" && val.trim() === "") || isNil(val);

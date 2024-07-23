@@ -97,7 +97,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   const registerButton = createRegisterButton(setValue, "button_submit");
 
   const validationErrors = useRhfErrors(formState.errors);
-  const commentsCharacterCount = watch("comments").length;
+  const commentsCharacterCount = watch("comments")?.length ?? 0;
 
   return (
     <Page

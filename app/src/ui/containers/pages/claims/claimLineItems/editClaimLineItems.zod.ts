@@ -13,6 +13,7 @@ import {
   periodIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const editClaimLineItemErrorMap = makeZodI18nMap({ keyPrefix: ["claimLineItems"] });
@@ -25,7 +26,11 @@ const editClaimLineItemLineItemSchema = z
       min: -1_000_000,
       required: true,
     }),
-    description: z.union([z.string().min(1).max(claimLineItemDescriptionMaxLength), emptyStringToUndefinedValidation]),
+    description: getTextareaValidation({
+      label: "forms.claimLineItems.lineItems.arrayType.description.label",
+      maxLength: claimLineItemDescriptionMaxLength,
+      required: false,
+    }),
   })
   .superRefine(({ description, value }, ctx) => {
     if (typeof description === "undefined" && typeof value !== "undefined") {
@@ -55,7 +60,11 @@ const editClaimLineItemsSchema = z.object({
   periodId: periodIdValidation,
   costCategoryId: costCategoryIdValidation,
   lineItems: editClaimLineItemLineItemSchema.array(),
-  comments: z.string().max(claimDetailsCommentsMaxLength),
+  comments: getTextareaValidation({
+    label: "forms.claimLineItems.comments.label",
+    maxLength: claimDetailsCommentsMaxLength,
+    required: true,
+  }),
 });
 
 type EditClaimLineItemsSchemaType = typeof editClaimLineItemsSchema;
