@@ -219,7 +219,7 @@ const ApproveNewSubcontractorStep = () => {
               <ValidationError error={getFieldState("subcontractorCost").error} />
               <TextInput
                 numeric
-                prefix="£"
+                prefix={getContent(x => x.forms.prefix.gbp)}
                 id="subcontractorCost"
                 disabled={isFetching}
                 inputWidth="one-quarter"

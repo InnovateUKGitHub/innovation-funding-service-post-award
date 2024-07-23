@@ -113,7 +113,12 @@ export const OtherCostsFormComponent = () => {
             id="estimatedCost"
             label={getContent(x => x.pcrSpendProfileLabels.otherCosts.totalCost)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("estimatedCost")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("estimatedCost")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
         </Fieldset>
 

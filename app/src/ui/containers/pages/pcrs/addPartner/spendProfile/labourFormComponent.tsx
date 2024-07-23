@@ -129,7 +129,12 @@ export const LabourFormComponent = () => {
             label={getContent(x => x.pcrSpendProfileLabels.labour.grossCost)}
             id="grossCostOfRole"
           >
-            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("grossCostOfRole")} />
+            <NumberInput
+              disabled={isFetching}
+              inputWidth={10}
+              {...register("grossCostOfRole")}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
 
           <Field
@@ -138,7 +143,13 @@ export const LabourFormComponent = () => {
             id="ratePerDay"
             hint={getContent(x => x.pcrSpendProfileLabels.labour.rateHint)}
           >
-            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("ratePerDay")} />
+            <NumberInput
+              disabled={isFetching}
+              inputWidth={5}
+              {...register("ratePerDay")}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+              suffix={getContent(x => x.forms.suffix.perDay)}
+            />
           </Field>
 
           <Field
@@ -146,7 +157,7 @@ export const LabourFormComponent = () => {
             label={getContent(x => x.pcrSpendProfileLabels.labour.daysSpentOnProject)}
             id="daysSpentOnProject"
           >
-            <NumberInput disabled={isFetching} inputWidth="one-third" {...register("daysSpentOnProject")} />
+            <NumberInput disabled={isFetching} inputWidth={3} {...register("daysSpentOnProject")} />
           </Field>
 
           {isClient && (

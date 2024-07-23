@@ -142,6 +142,7 @@ export const AcademicCostsStep = () => {
                       disabled={isFetching}
                       {...register(`costs.${i}.value`)}
                       defaultValue={cat.value ?? ""}
+                      prefix={getContent(x => x.forms.prefix.gbp)}
                     />
                   </TD>
                 </TR>

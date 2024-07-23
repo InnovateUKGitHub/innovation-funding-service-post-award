@@ -189,6 +189,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
                           hasError={!!getFieldState(`virements.${i}.newEligibleCosts`).error}
                           defaultValue={isNaN(defaultValue) ? undefined : defaultValue}
                           aria-label={x.costCategoryName}
+                          prefix={getContent(x => x.forms.prefix.gbp)}
                         />
                       </Fieldset>
                     </TD>

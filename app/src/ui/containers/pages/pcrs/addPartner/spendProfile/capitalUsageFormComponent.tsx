@@ -180,7 +180,12 @@ export const CapitalUsageFormComponent = () => {
             id="depreciationPeriod"
             label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.depreciationPeriod)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("depreciationPeriod")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("depreciationPeriod")}
+              disabled={isFetching}
+              suffix={getContent(x => x.forms.suffix.months)}
+            />
           </Field>
 
           <Field
@@ -189,7 +194,12 @@ export const CapitalUsageFormComponent = () => {
             id="netPresentValue"
             label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.netPresentValue)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("netPresentValue")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("netPresentValue")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
 
           <Field
@@ -197,7 +207,12 @@ export const CapitalUsageFormComponent = () => {
             id="residualValue"
             label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.residualValue)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("residualValue")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("residualValue")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
 
           <Field
@@ -205,7 +220,7 @@ export const CapitalUsageFormComponent = () => {
             id="utilisation"
             label={getContent(x => x.pcrSpendProfileLabels.capitalUsage.utilisation)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("utilisation")} disabled={isFetching} />
+            <NumberInput inputWidth="one-quarter" {...register("utilisation")} disabled={isFetching} suffix="%" />
           </Field>
         </Fieldset>
 

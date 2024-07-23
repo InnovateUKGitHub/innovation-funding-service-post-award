@@ -130,7 +130,12 @@ export const MaterialsFormComponent = () => {
             label={getContent(x => x.pcrSpendProfileLabels.materials.costPerItem)}
             id="costPerItem"
           >
-            <NumberInput inputWidth="one-third" {...register("costPerItem")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-third"
+              {...register("costPerItem")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
         </Fieldset>
 

@@ -252,6 +252,7 @@ export const FinancialVirementSummary = () => {
                   inputWidth={10}
                   disabled={isFetching}
                   numeric
+                  prefix={getContent(x => x.forms.prefix.gbp)}
                 />
               </FormGroup>
             </Fieldset>

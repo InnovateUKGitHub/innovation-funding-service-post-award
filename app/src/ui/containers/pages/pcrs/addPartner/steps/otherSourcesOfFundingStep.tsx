@@ -88,6 +88,7 @@ const NoJsSourcesOfFundingRows = ({
   costCategories: Pick<CostCategoryDto, "id" | "type">[];
   validationErrors: FundingSourceRhfError;
 }) => {
+  const { getContent } = useContent();
   const otherFundingCostCategory = getOtherFundingCostCategory(costCategories);
   const extraRows = rows.length <= 7 ? 10 - rows.length : 3;
   const extraFundItems: SourceOfFundingRow[] = range(extraRows).map(() => getEmptyFund(otherFundingCostCategory.id));
@@ -150,6 +151,7 @@ const NoJsSourcesOfFundingRows = ({
                 name={`funds.${i}.value`}
                 inputMode="numeric"
                 defaultValue={x.value ?? ""}
+                prefix={getContent(x => x.forms.prefix.gbp)}
               />
             </FormGroup>
           </TD>
@@ -238,6 +240,7 @@ const SourcesOfFundingRows = ({
                 disabled={isFetching}
                 inputMode="numeric"
                 defaultValue={String(x.value ?? "")}
+                prefix={getContent(x => x.forms.prefix.gbp)}
               />
             </FormGroup>
           </TD>

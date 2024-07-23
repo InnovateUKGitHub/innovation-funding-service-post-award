@@ -139,7 +139,12 @@ export const TravelAndSubsFormComponent = () => {
             id="costOfEach"
             label={getContent(x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach)}
           >
-            <NumberInput inputWidth="one-third" {...register("costOfEach")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-third"
+              {...register("costOfEach")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
         </Fieldset>
 

@@ -570,7 +570,7 @@
       "forecastCostTitle": "Forecast costs",
       "differenceTitle": "Difference",
       "descriptionHeader": "Description",
-      "costHeader": "Cost (£)",
+      "costHeader": "Cost",
       "lastUpdatedHeader": "Last updated",
       "htmlPrepareTitle": "Add costs for {{ title }}",
       "htmlViewTitle": "View costs for {{ title }}",
@@ -582,7 +582,7 @@
       "backLink": "Back to claims",
       "headerDescription": "Description",
       "headerLastUpdated": "Last updated",
-      "headerCost": "Cost (£)",
+      "headerCost": "Cost",
       "headerAction": "Action",
       "buttonSaveAndReturn": "Save and return to claims",
       "headerAdditionalInformation": "Additional information",
@@ -955,7 +955,7 @@
       "costsSectionTitle": "Project costs",
       "costsGuidance": "Enter the figures from the summary of resources section of the Je-S form.",
       "categoryHeading": "Category",
-      "costHeading": "Cost (£)",
+      "costHeading": "Cost",
       "totalCosts": "Total costs (£)"
     },
     "pcrAddPartnerAcademicOrganisation": {
@@ -984,7 +984,7 @@
     "pcrAddPartnerFinanceDetails": {
       "sectionTitle": "Financial details",
       "hintYearEnd": "This is the end of the last financial year for which you have your turnover.",
-      "headingTurnover": "Turnover (£)"
+      "headingTurnover": "Turnover"
     },
     "pcrAddPartnerJes": {
       "jesIntroduction": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:",
@@ -1017,7 +1017,7 @@
       "guidance": "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
       "columnHeaderDescription": "Source of funding",
       "columnHeaderDate": "Date secured (MM YYYY)",
-      "columnHeaderValue": "Funding amount (£)",
+      "columnHeaderValue": "Funding amount",
       "buttonRemove": "Remove",
       "buttonAdd": "Add another source of funding",
       "footerLabelTotal": "Total other funding",
@@ -1164,13 +1164,13 @@
     "actionHeader": "Action"
   },
   "pcrSpendProfileLabels": {
-    "cost": "Cost (£)",
+    "cost": "Cost",
     "totalCosts": "Total {{costCategoryName, lowercase}}",
     "description": "Description",
     "labour": {
       "role": "Role within project",
       "grossCost": "Gross employee cost",
-      "rate": "Rate (£/day)",
+      "rate": "Rate",
       "rateHint": "This should be calculated from the number of working days for this role per year.",
       "daysSpentOnProject": "Days to be spent by all staff with this role",
       "totalCost": "Total cost",
@@ -1178,7 +1178,7 @@
     },
     "overheads": {
       "totalCost": "Total cost",
-      "calculatedCost": "Total cost of overheads as calculated in the spreadsheet (£)",
+      "calculatedCost": "Total cost of overheads as calculated in the spreadsheet",
       "linkDocumentsUpload": "Calculate overheads documents",
       "zeroPercent": "0%",
       "twentyPercent": "20%",
@@ -1187,23 +1187,23 @@
     "materials": {
       "item": "Item",
       "quantity": "Quantity",
-      "costPerItem": "Cost per item (£)",
+      "costPerItem": "Cost per item",
       "totalCost": "Total cost"
     },
     "subcontracting": {
       "subcontractorName": "Subcontractor name",
       "subcontractorCountry": "Country where the subcontractor will work",
       "subcontractorRoleAndDescription": "Role of the the subcontractor in the project and description of the work they will do",
-      "cost": "Cost (£)"
+      "cost": "Cost"
     },
     "capitalUsage": {
       "description": "Item description",
       "type": "New or existing item?",
       "depreciationPeriod": "Depreciation period (months)",
-      "netPresentValue": "Net present value (£)",
+      "netPresentValue": "Net present value",
       "netPresentValueHint": "Either the current net present value or the price you bought it for",
-      "residualValue": "Residual value at end of project (£)",
-      "utilisation": "Utilisation (%)",
+      "residualValue": "Residual value at end of project",
+      "utilisation": "Utilisation",
       "netCost": "Net cost:",
       "new": "New",
       "existing": "Existing"
@@ -1211,12 +1211,12 @@
     "travelAndSubs": {
       "description": "Purpose of journey or description of subsistence cost",
       "numberOfTimes": "Number of times",
-      "costOfEach": "Cost of each (£)",
+      "costOfEach": "Cost of each",
       "totalCost": "Total cost"
     },
     "otherCosts": {
       "description": "Description and justification of the cost",
-      "totalCost": "Estimated cost (£)"
+      "totalCost": "Estimated cost"
     }
   },
   "projectMessages": {
@@ -1973,6 +1973,16 @@
     }
   },
   "forms": {
+    "prefix": {
+      "gbp": "£"
+    },
+    "suffix": {
+      "perItem": "per item",
+      "perDay": "per day",
+      "percent": "%",
+      "days": "days",
+      "months": "months"
+    },
     "errors": {
       "invalid": "A validation error occurred.",
       "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form."

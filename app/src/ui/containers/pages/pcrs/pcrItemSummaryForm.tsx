@@ -63,7 +63,12 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
           <Hint id="hint-for-grantMovingOverFinancialYear">
             {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
           </Hint>
-          <NumberInput id="grantMovingOverFinancialYear" name="grantMovingOverFinancialYear" width={10} />
+          <NumberInput
+            id="grantMovingOverFinancialYear"
+            name="grantMovingOverFinancialYear"
+            width={10}
+            prefix={getContent(x => x.forms.prefix.gbp)}
+          />
         </Fieldset>
       )}
 

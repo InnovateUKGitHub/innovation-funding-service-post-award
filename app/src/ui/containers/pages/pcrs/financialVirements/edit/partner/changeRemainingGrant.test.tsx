@@ -26,6 +26,11 @@ const stubContent = {
     backToSummary: "stub-backToSummary",
     projectTotals: "stub-projectTotals",
   },
+  forms: {
+    prefix: {
+      gbp: "Queen Elizabeth II face cash",
+    },
+  },
 };
 
 const renderPageContent = () => {

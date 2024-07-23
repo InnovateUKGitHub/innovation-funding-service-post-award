@@ -108,6 +108,7 @@ const EditClaimLineItemsTable = ({
                   aria-label={getContent(x => x.pages.editClaimLineItems.costAriaLabel({ count: i }))}
                   numeric
                   {...(x.jsDisabledRow ? { name: `lineItems.${i}.value` } : register(`lineItems.${i}.value`))}
+                  prefix={getContent(x => x.forms.prefix.gbp)}
                 />
               </TD>
 

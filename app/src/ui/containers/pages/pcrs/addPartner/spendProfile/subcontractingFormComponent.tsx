@@ -137,7 +137,12 @@ export const SubcontractingFormComponent = () => {
             id="value"
             label={getContent(x => x.pcrSpendProfileLabels.subcontracting.cost)}
           >
-            <NumberInput inputWidth="one-quarter" {...register("subcontractorCost")} disabled={isFetching} />
+            <NumberInput
+              inputWidth="one-quarter"
+              {...register("subcontractorCost")}
+              disabled={isFetching}
+              prefix={getContent(x => x.forms.prefix.gbp)}
+            />
           </Field>
         </Fieldset>
 

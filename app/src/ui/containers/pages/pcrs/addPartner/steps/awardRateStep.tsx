@@ -63,6 +63,7 @@ export const AwardRateStep = () => {
                 defaultValue={String(pcrItem.awardRate)}
                 {...register("awardRate")}
                 disabled={isFetching}
+                suffix={getContent(x => x.forms.suffix.percent)}
               />
             </FormGroup>
           </Fieldset>

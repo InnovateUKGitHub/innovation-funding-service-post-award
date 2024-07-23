@@ -115,6 +115,7 @@ export const FinanceDetailsStep = () => {
                 defaultValue={String(pcrItem.financialYearEndTurnover ?? "")}
                 {...register("financialYearEndTurnover")}
                 disabled={isFetching}
+                prefix={getContent(x => x.forms.prefix.gbp)}
               />
             </FormGroup>
           </Fieldset>

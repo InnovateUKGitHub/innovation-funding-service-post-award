@@ -229,6 +229,7 @@ export const OverheadsFormComponent = ({}) => {
                 {...register("calculatedValue")}
                 inputWidth="one-quarter"
                 disabled={isFetching}
+                prefix={getContent(x => x.forms.prefix.gbp)}
               />
             </FormGroup>
           </Fieldset>

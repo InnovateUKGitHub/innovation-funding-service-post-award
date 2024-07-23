@@ -46,6 +46,7 @@ export function useChangeRemainingGrantContent() {
     newFundingLevel: getContent(x => x.financialVirementLabels.newFundingLevel),
     projectTotals: getContent(x => x.financialVirementLabels.projectTotals),
     backToSummary: getContent(x => x.financialVirementLabels.backToSummary),
+    gbp: getContent(x => x.forms.prefix.gbp),
   };
 }
 
@@ -231,6 +232,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                       {...register(`partners.${i}.newRemainingGrant`)}
                       disabled={isFetching}
                       defaultValue={String(x.newRemainingGrant ?? 0)}
+                      prefix={content.gbp}
                     />
                   </TD>
                   <TD numeric>
