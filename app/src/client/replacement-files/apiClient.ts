@@ -210,9 +210,6 @@ const clientApi: IApiClient<"client"> = {
         params.partnerDto,
       ),
   },
-  users: {
-    getCurrent: () => ajaxJson("/api/users/current"),
-  },
 };
 
 const getJsonHeaders = () => {

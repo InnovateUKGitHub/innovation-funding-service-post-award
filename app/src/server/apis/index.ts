@@ -20,7 +20,6 @@ import * as pcrs from "./pcrs";
 import * as partners from "./partners";
 import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
-import * as users from "./users";
 
 export interface IApiClient<Context extends "client" | "server"> {
   accounts: accounts.IAccountsApi<Context>;
@@ -42,7 +41,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   projects: projects.IProjectsApi<Context>;
   projectContacts: projectContacts.IProjectContactsApi<Context>;
   partners: partners.IPartnersApi<Context>;
-  users: users.IUserApi<Context>;
 }
 
 export const serverApis = {
@@ -65,7 +63,6 @@ export const serverApis = {
   partners: partners.controller,
   projects: projects.controller,
   projectContacts: projectContacts.controller,
-  users: users.controller,
 } as const;
 
 export const router = express.Router();
