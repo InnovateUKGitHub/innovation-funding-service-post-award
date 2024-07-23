@@ -24,12 +24,12 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
     const dto = {
       user: req.body.user,
       projectId: req.body.project_id,
-      buttonStay: req.body.button_stay === "",
-      buttonHome: req.body.button_home === "",
-      isSearch: req.body.button_search === "",
+      buttonStay: req.body.stay === "",
+      buttonHome: req.body.home === "",
+      isSearch: req.body.search === "",
       isReset: req.body.reset === "",
-      isResetSearchProjects: req.body.button_reset_search_projects === "",
-      isSearchProjects: req.body.button_search_projects === "",
+      isResetSearchProjects: req.body.reset_search_projects === "",
+      isSearchProjects: req.body.search_projects === "",
       searchQuery: req.body.search_query ?? "",
       currentUrl: req.body.current_url,
     };
