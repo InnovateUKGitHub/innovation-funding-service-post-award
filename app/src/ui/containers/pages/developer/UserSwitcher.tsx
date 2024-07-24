@@ -297,9 +297,8 @@ const UserSwitcherProjectSelector = () => {
             )}
           </section>
         )}
-
-        {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
       </Form>
+      {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
     </>
   );
 };
