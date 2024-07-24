@@ -554,6 +554,20 @@ const testFileComponent = (
   }
 };
 
+const inputPrefix = (label: string, count: boolean, n: number) => {
+  cy.get(".govuk-input__prefix").should("have.text", label);
+  if (count) {
+    cy.get(".govuk-input__prefix").should("have.length", n);
+  }
+};
+
+const inputSuffix = (label: string, count: boolean, n?: number) => {
+  cy.get(".govuk-input__suffix").should("have.text", label);
+  if (count) {
+    cy.get(".govuk-input__suffix").should("have.length", n);
+  }
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -599,3 +613,5 @@ Cypress.Commands.add("validatePositiveWholeNumber", validatePositiveWholeNumber)
 Cypress.Commands.add("learnFiles", learnFiles);
 Cypress.Commands.add("fileTidyUp", fileTidyUp);
 Cypress.Commands.add("testFileComponent", testFileComponent);
+Cypress.Commands.add("inputPrefix", inputPrefix);
+Cypress.Commands.add("inputSuffix", inputSuffix);

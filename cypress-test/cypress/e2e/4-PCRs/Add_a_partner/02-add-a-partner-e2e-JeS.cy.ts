@@ -11,15 +11,6 @@ import {
   swindonUniResults,
   requestHeadingDetailsHeading,
 } from "../steps";
-import {
-  validateFileUpload,
-  uploadFileTooLarge,
-  uploadSingleChar,
-  deleteSingleChar,
-  uploadFileNameTooShort,
-  validateExcessiveFileName,
-  doNotUploadSpecialChar,
-} from "common/fileComponentTests";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
   addPartnerContinue,

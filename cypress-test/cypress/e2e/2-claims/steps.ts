@@ -125,7 +125,7 @@ export const shouldShowAcademicCostCatTable = () => {
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const correctTableHeaders = () => {
-  ["Description", "Cost (£)", "Last updated", "Total costs", "Forecast costs", "Difference"].forEach(header => {
+  ["Description", "Cost", "Last updated", "Total costs", "Forecast costs", "Difference"].forEach(header => {
     cy.tableHeader(header);
   });
 };
@@ -155,6 +155,7 @@ export const newCostCatLineItem = () => {
   /**
    * click remove first if there is already a line item
    */
+  cy.wait(1000);
   cy.getByQA("current-claim-summary-table")
     .find("tbody.govuk-table__body")
     .then($table => {
@@ -166,6 +167,7 @@ export const newCostCatLineItem = () => {
   cy.wait(200);
   cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
+  cy.inputPrefix("£", false);
 };
 
 export const allowFileUpload = () => {
@@ -1442,7 +1444,7 @@ export const reviewLabourFCCopy = () => {
 };
 
 export const reviewLabourCostCat = () => {
-  ["Description", "Cost (£)", "Last updated"].forEach(header => {
+  ["Description", "Cost", "Last updated"].forEach(header => {
     cy.tableHeader(header);
   });
   [

@@ -234,7 +234,7 @@ export const briefDescriptionSaved = () => {
 };
 
 export const validateNumericCurrency = () => {
-  cy.get(".govuk-input__prefix").should("have.text", "£");
+  cy.inputPrefix("£", false);
   ["Lorem ipsum", "^*", "*()", "/``/q"].forEach(input => {
     cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(input);
     cy.button("Save and continue").click();

@@ -213,7 +213,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
   it("Should access the 'End of financial year' section", () => {
     cy.getListItemFromKey("End of financial year", "Edit").click();
     cy.get("h2").contains("Financial details");
-    ["End of financial year", "Turnover (£)"].forEach(subheading => {
+    ["End of financial year", "Turnover"].forEach(subheading => {
       cy.get("legend").contains(subheading);
     });
   });

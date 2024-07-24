@@ -95,7 +95,7 @@ describe("PCR > Add Partner > Calculated Overheads", () => {
   it("Should validate 3 decimal places", validateThreeDecimalPlaces);
 
   it("Should clear the input field", () => {
-    cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").clear();
+    cy.getByLabel("Total cost of overheads as calculated in the spreadsheet").clear();
   });
 
   it(

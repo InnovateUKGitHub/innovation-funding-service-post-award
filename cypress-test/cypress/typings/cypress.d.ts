@@ -329,6 +329,15 @@ declare global {
         loans: boolean,
         pcrArea?: string,
       ): void;
+
+      /**
+       * Gets input prefix class and asserts of existence with option to count number on page
+       */
+      inputPrefix(label: string, count: boolean, n?: number): void;
+      /**
+       * Gets input suffix class and asserts of existence with option to count number on page
+       */
+      inputSuffix(label: string, count: boolean, n?: number): void;
     }
   }
 }

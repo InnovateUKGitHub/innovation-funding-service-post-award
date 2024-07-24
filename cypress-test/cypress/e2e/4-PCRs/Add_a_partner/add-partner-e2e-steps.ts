@@ -343,6 +343,7 @@ export const validateMonthYearInput = () => {
 export const validateTurnoverInput = () => {
   ["99999999999999999999999999", "1000000000000", "1000000000001", "9000000000001"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
+    cy.inputPrefix("£", false);
     cy.clickOn("Save and return to summary");
     cy.validationLink("Financial year end turnover must be £999,999,999,999.00 or less.");
     cy.paragraph("Financial year end turnover must be £999,999,999,999.00 or less.");
@@ -585,7 +586,7 @@ export const displayCostCatTable = () => {
 };
 
 export const completeAcademicCostCatTable = () => {
-  ["Category", "Cost (£)"].forEach(head => {
+  ["Category", "Cost"].forEach(head => {
     cy.tableHeader(head);
   });
   let baseNumber = 333.33;
@@ -618,6 +619,7 @@ export const completeAcademicCostCatTable = () => {
       cy.get("td:nth-child(2)").contains(newCurrency.format(333.33 * 12));
     });
   });
+  cy.inputPrefix("£", true, 12);
 };
 
 export const completeLabourForm = () => {
@@ -625,11 +627,13 @@ export const completeLabourForm = () => {
   [
     ["Role within project", "Test"],
     ["Gross employee cost", "6666.66"],
-    ["Rate (£/day)", "222.22"],
+    ["Rate", "222.22"],
     ["Days to be spent by all staff with this role", "30"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
+  cy.inputPrefix("£", true, 2);
+  cy.inputSuffix("per day", false);
   cy.paragraph("£6,666.60");
   cy.clickOn("Save and return to labour");
   cy.get("h2").contains("Labour");
@@ -650,11 +654,12 @@ export const completeMaterialsForm = () => {
   [
     ["Item", "Hammer"],
     ["Quantity", "666"],
-    ["Cost per item (£)", "10.01"],
+    ["Cost per item", "10.01"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.paragraph("£6,666.66");
+  cy.inputPrefix("£", false);
   cy.clickOn("Save and return to materials");
   cy.get("h2").contains("Materials");
   cy.wait(1000);
@@ -668,14 +673,17 @@ export const completeCapUsageForm = () => {
   cy.get("#type_10").click();
   //cy.getByLabel("New").click();
   [
-    ["Depreciation period (months)", "20"],
-    ["Net present value (£)", "2000"],
-    ["Residual value at end of project (£)", "1000"],
-    ["Utilisation (%)", "99"],
+    ["Depreciation period", "20"],
+    ["Net present value", "2000"],
+    ["Residual value at end of project", "1000"],
+    ["Utilisation", "99"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.paragraph("£990.00");
+  cy.inputPrefix("£", true, 2);
+  cy.inputSuffix("%", false);
+  cy.inputSuffix("months", false);
   cy.clickOn("Save and return to capital usage");
   cy.wait(1000);
   cy.clickOn("Save and return to project costs");
@@ -691,11 +699,12 @@ export const completeSubcontractingForm = () => {
       "Role of the the subcontractor in the project and description of the work they will do",
       "Resyk into canned form for Megacity 1.",
     ],
-    ["Cost (£)", "3000"],
+    ["Cost", "3000"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.wait(500);
+  cy.inputPrefix("£", false);
   cy.clickOn("Save and return to subcontracting");
   cy.get("th").contains("Description");
   cy.wait(1000);
@@ -708,12 +717,13 @@ export const completeTandSForm = () => {
   [
     ["Purpose of journey or description of subsistence cost", "Journeying into the cursed earth."],
     ["Number of times", "2"],
-    ["Cost of each (£)", "500"],
+    ["Cost of each", "500"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.paragraph("£1,000.00");
   cy.wait(500);
+  cy.inputPrefix("£", false);
   cy.clickOn("Save and return to travel and subsistence");
   cy.tableHeader("Description");
   cy.wait(1000);
@@ -732,11 +742,12 @@ export const completeOtherCostsForm = (costsNumber?: string) => {
       "Description and justification of the cost",
       "500x Lawgiver Mk2 standard execution rounds, 200x Lawgiver Mk2 hi-ex rounds, 10x stumm grenades",
     ],
-    ["Estimated cost (£)", "1000"],
+    ["Estimated cost", "1000"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).type(input);
   });
   cy.wait(500);
+  cy.inputPrefix("£", false);
   cy.get("button").contains(`Save and return to other costs${costsNumber}`).click();
   cy.get("h2").contains(`Other costs`);
   cy.clickOn("Save and return to project costs");
@@ -767,7 +778,7 @@ export const completedCostCatProfiles = () => {
   });
   cy.get("tfoot").within(() => {
     cy.get("tr").within(() => {
-      cy.get("th:nth-child(1)").contains("Total costs (£)");
+      cy.get("th:nth-child(1)").contains("Total costs");
       cy.get("th:nth-child(2)").contains("£24,656.58");
     });
   });
@@ -795,6 +806,7 @@ export const fundingLevelInputValidation = () => {
   ].forEach(([input, message]) => {
     cy.get("#awardRate").clear().type(input);
     cy.wait(500);
+    cy.inputPrefix("£", false);
     cy.clickOn("Save and return to summary");
     cy.validationLink(message);
   });
@@ -878,7 +890,7 @@ export const accessOtherPublicFunding = () => {
   cy.paragraph(
     "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
   );
-  ["Source of funding", "Date secured (MM YYYY)", "Funding amount (£)"].forEach(header => {
+  ["Source of funding", "Date secured (MM YYYY)", "Funding amount"].forEach(header => {
     cy.tableHeader(header);
   });
 };
@@ -914,6 +926,7 @@ export const completeOtherSourceLine = () => {
   ].forEach(([input, copy]) => {
     cy.getByAriaLabel(input).clear().type(copy);
   });
+  cy.inputPrefix("£", false);
   cy.get("tfoot").within(() => {
     cy.get("tr")
       .eq(1)
@@ -1032,7 +1045,7 @@ export const deleteCoste2e = () => {
   [
     ["Role within project", "Test"],
     ["Gross employee cost", "£6,666.66"],
-    ["Rate (£/day)", "£222.22"],
+    ["Rate", "£222.22"],
     ["Days to be spent by all staff with this role", "30"],
   ].forEach(([key, item]) => {
     cy.getListItemFromKey(key, item);
@@ -1061,7 +1074,7 @@ export const addManyLines = () => {
     cy.wait(wait);
     cy.getByLabel("Gross employee cost").type("1000");
     cy.wait(wait);
-    cy.getByLabel("Rate (£/day)").type("666.33");
+    cy.getByLabel("Rate").type("666.33");
     cy.wait(wait);
     cy.getByLabel("Days to be spent by all staff with this role").type("2");
     cy.wait(wait);
@@ -1182,7 +1195,6 @@ export const validateJesCostsFields = () => {
       .within(() => {
         cy.getByAriaLabel(input).clear().type("9999999999999999");
       });
-
     cy.button("Save and continue").click();
     cy.validationLink("Cost must be £999,999,999,999.00 or less.");
     cy.get("tr")
