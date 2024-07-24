@@ -196,7 +196,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button disabled={disabled} name="button_default" styling="Secondary" type="submit">
+            <Button disabled={disabled} styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>

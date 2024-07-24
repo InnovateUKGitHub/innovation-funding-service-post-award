@@ -98,7 +98,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
   if (!documents.length) return <DocumentsUnavailable />;
 
   return (
-    <Form>
+    <Form onSubmit={formType ? e => e.preventDefault() : undefined}>
       {formType && <input type="hidden" name="form" value={formType} />}
       <DocumentTable
         qa={qa}
@@ -138,6 +138,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
   hideRemove,
   onRemove,
   disabled,
+  formType,
 }: DocumentTableWithDeleteProps<PartnerDocumentSummaryDto> &
   ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
   const { getContent } = useContent();
@@ -166,9 +167,9 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
             if (hideRemove && hideRemove(x)) return null;
 
             return (
-              <Form data-qa={`${qa}-form`}>
+              <Form data-qa={`${qa}-form`} onSubmit={formType ? e => e.preventDefault() : undefined}>
                 <Button
-                  name="documentId"
+                  name={formType ? "documentId" : "delete"} // "documentId" for RHF, "delete" for old forms
                   styling="Link"
                   style={{ marginLeft: "15px" }}
                   onClick={() => onRemove(x)}
