@@ -2012,9 +2012,10 @@
     },
     "partnerDetailsEdit": {
       "postcode": {
+        "label": "Project location postcode",
         "errors": {
-          "too_small": "You must provide your project location postcode.",
-          "too_big": "Your location entry must be no more than {{ count }} characters."
+          "too_small": "Project location postcode must be {{ count }} characters or more.",
+          "too_big": "Project location postcode must {{ count }} characters or less."
         }
       }
     },
@@ -2033,10 +2034,7 @@
     },
     "loanRequest": {
       "comments": {
-        "errors": {
-          "too_small": "You must enter at least {{count}} characters as a comment.",
-          "too_big": "Comments must be a maximum of {{count}} characters."
-        }
+        "label": "Comments"
       },
       "attachmentsCount": {
         "errors": {
@@ -2566,11 +2564,7 @@
       },
       "pcrReasoning": {
         "reasoningComments": {
-          "label": "Reasoning",
-          "required": "Enter reasoning for the request.",
-          "errors": {
-            "too_big": "Reasoning can be a maximum of {{count}} characters."
-          }
+          "label": "Reasoning"
         }
       },
       "timeExtension": {
@@ -2858,10 +2852,7 @@
             "label": "Cost"
           },
           "description": {
-            "errors": {
-              "too_small": "Enter a description.",
-              "too_big": "Description can be a maximum of {{ count }} characters."
-            }
+            "label": "Description"
           }
         }
       },

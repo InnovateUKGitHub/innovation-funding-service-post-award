@@ -1,3 +1,4 @@
+import { PossibleCopyKeys } from "@copy/type";
 import { isNil } from "lodash";
 import { z, ZodIssueCode } from "zod";
 
@@ -15,26 +16,25 @@ const defaultMinLength = 0;
  * the `label` can be either a raw string, or if it is a path that matches
  * an item in the copy document, it will be interpolated
  */
-export const getTextareaValidation = ({
+export const getTextareaValidation = <T = PossibleCopyKeys, Required extends boolean = false>({
   label,
   maxLength = defaultMaxLength,
   minLength = defaultMinLength,
-  required = false,
+  required,
 }: {
   /**
    * path to value in copy document to be interpolated, or if not matched, then the label will be shown as is
    */
-  label: string;
+  label: T;
   maxLength?: number;
   minLength?: number;
-  required?: boolean;
-}) =>
-  z
+  required: Required;
+}) => {
+  const validationRule = z
     .string()
     .trim()
     .optional()
-    .nullable()
-    .superRefine((val, ctx) => {
+    .transform((val, ctx) => {
       const isEmpty = (typeof val === "string" && val.trim() === "") || isNil(val);
       if (required && isEmpty) {
         return ctx.addIssue({
@@ -73,10 +73,15 @@ export const getTextareaValidation = ({
           });
         }
       }
-    })
-    .transform(x => {
-      if ((typeof x === "string" && x.trim() === "") || isNil(x)) {
+
+      if ((typeof val === "string" && val.trim() === "") || isNil(val)) {
         return undefined;
       }
-      return x;
+
+      return val;
     });
+
+  return validationRule as unknown as Required extends true
+    ? z.ZodEffects<z.ZodString, string, string | undefined>
+    : z.ZodEffects<z.ZodString, string | undefined, string | undefined>;
+};
