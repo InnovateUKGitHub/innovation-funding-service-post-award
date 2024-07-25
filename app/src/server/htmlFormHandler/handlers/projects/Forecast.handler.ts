@@ -73,6 +73,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
       partner,
       claimDetails,
       claimTotalProjectPeriods,
+      claimTotalCostCategories: [],
       profileTotalCostCategories,
       profileDetails,
     });
