@@ -1,6 +1,7 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { pcrIdValidation, pcrItemIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 const pcrAddPartnerCompaniesHouseStepSearchMaxLength = 159;
@@ -12,7 +13,10 @@ const pcrAddPartnerCompaniesHouseStepErrorMap = makeZodI18nMap({ keyPrefix: ["pc
 
 const pcrAddPartnerCompaniesHouseStepSearchSchema = z.object({
   step: z.number(),
-  search: z.string().max(pcrAddPartnerCompaniesHouseStepSearchMaxLength).optional(),
+  search: getTextareaValidation({
+    maxLength: pcrAddPartnerCompaniesHouseStepSearchMaxLength,
+    required: false,
+  }),
 });
 
 const pcrAddPartnerCompaniesHouseStepSearchSelectSchema = z.object({
@@ -30,15 +34,18 @@ const getPcrAddPartnerCompaniesHouseStepSchema = (markedAsComplete: boolean) =>
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
-    organisationName: markedAsComplete
-      ? z.string().min(1).max(pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength)
-      : z.string().max(pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength),
-    registrationNumber: markedAsComplete
-      ? z.string().min(1).max(pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength)
-      : z.string().max(pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength),
-    registeredAddress: markedAsComplete
-      ? z.string().min(1).max(pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength)
-      : z.string().max(pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength),
+    organisationName: getTextareaValidation({
+      maxLength: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
+      required: markedAsComplete,
+    }),
+    registrationNumber: getTextareaValidation({
+      maxLength: pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
+      required: markedAsComplete,
+    }),
+    registeredAddress: getTextareaValidation({
+      maxLength: pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
+      required: markedAsComplete,
+    }),
   });
 
 type PcrAddPartnerCompaniesHouseStepSearchSchemaType = typeof pcrAddPartnerCompaniesHouseStepSearchSchema;

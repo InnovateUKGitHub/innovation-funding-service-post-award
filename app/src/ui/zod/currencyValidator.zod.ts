@@ -12,23 +12,15 @@ const defaultMinCurrency = 0;
  * this will match a set of validations and
  * also error messaging to ensure consistency across the app
  * and compliance with GDS
- *
- * the `label` can be either a raw string, or if it is a path that matches
- * an item in the copy document, it will be interpolated
  */
 export const getGenericCurrencyValidation = ({
-  label,
   max = defaultMaxCurrency,
   min = defaultMinCurrency,
-  required = false,
+  required,
 }: {
-  /**
-   * path to value in copy document to be interpolated, or if not matched, then the label will be shown as is
-   */
-  label: string;
   max?: number;
   min?: number;
-  required?: boolean;
+  required: boolean;
 }) =>
   z
     .string()
@@ -41,9 +33,8 @@ export const getGenericCurrencyValidation = ({
         return ctx.addIssue({
           code: ZodIssueCode.custom,
           params: {
-            label,
-            generic: ["currency"],
-            i18n: "errors.required",
+            generic: true,
+            i18n: "errors.generic.currency.required",
           },
         });
       }
@@ -53,9 +44,8 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              generic: ["currency"],
-              i18n: "errors.not_pounds",
+              generic: true,
+              i18n: "errors.generic.currency.not_pounds",
             },
           });
         }
@@ -64,9 +54,8 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              generic: ["currency"],
-              i18n: "errors.not_a_number",
+              generic: true,
+              i18n: "errors.generic.currency.not_a_number",
             },
           });
         }
@@ -76,10 +65,9 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
               count: max,
-              generic: ["currency"],
-              i18n: "errors.too_big",
+              generic: true,
+              i18n: "errors.generic.currency.too_big",
             },
           });
         }
@@ -88,10 +76,9 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
               count: min,
-              generic: ["currency"],
-              i18n: "errors.too_small",
+              generic: true,
+              i18n: "errors.generic.currency.too_small",
             },
           });
         }
@@ -99,9 +86,8 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              generic: ["currency"],
-              i18n: "errors.two_decimal_places",
+              generic: true,
+              i18n: "errors.generic.currency.two_decimal_places",
             },
           });
         }
@@ -110,9 +96,8 @@ export const getGenericCurrencyValidation = ({
           return ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              generic: ["currency"],
-              i18n: "errors.invalid_currency",
+              generic: true,
+              i18n: "errors.generic.currency.invalid_currency",
             },
           });
         }

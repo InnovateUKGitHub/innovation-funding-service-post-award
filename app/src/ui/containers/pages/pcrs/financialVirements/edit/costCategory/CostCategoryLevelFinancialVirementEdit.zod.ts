@@ -12,9 +12,6 @@ import { MapVirements } from "../../../utils/useMapFinancialVirements";
 import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelFinancialVirementEdit.logic";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
-const newEligibleCostsLabel =
-  "forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.label";
-
 const costCategoryLevelFinancialVirementEditErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "financialVirements", "costCategoryLevel"],
 });
@@ -35,7 +32,6 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
         z.object({
           virementCostId: financialVirementForCostsIdValidation,
           newEligibleCosts: getGenericCurrencyValidation({
-            label: newEligibleCostsLabel,
             required: true,
           }),
         }),

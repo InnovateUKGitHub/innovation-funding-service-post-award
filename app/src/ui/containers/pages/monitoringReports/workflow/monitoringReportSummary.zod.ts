@@ -1,4 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const monitoringReportSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["monitoringReportSummary"] });
@@ -38,7 +39,10 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
         }),
     ),
     periodId: z.number(),
-    addComments: z.string().max(5000).optional(),
+    addComments: getTextareaValidation({
+      maxLength: 5000,
+      required: false,
+    }),
   }),
   z.object({
     button_submit: z.literal("saveAndReturnToSummary"),
@@ -49,6 +53,9 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
       }),
     ),
     periodId: z.number(),
-    addComments: z.string().max(5000),
+    addComments: getTextareaValidation({
+      maxLength: 5000,
+      required: true,
+    }),
   }),
 ]);

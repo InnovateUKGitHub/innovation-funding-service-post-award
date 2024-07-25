@@ -12,8 +12,6 @@ import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
 const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
 
-const grantMovingOverFinancialYearLabel = "forms.pcr.financialVirements.grantMovingOverFinancialYear.label";
-
 const getFinancialVirementsSummaryValidator = ({
   mapFinancialVirementProps,
 }: {
@@ -25,7 +23,6 @@ const getFinancialVirementsSummaryValidator = ({
     pcrItemId: pcrItemIdValidation,
     form: z.literal(FormTypes.PcrFinancialVirementsSummary),
     grantMovingOverFinancialYear: getGenericCurrencyValidation({
-      label: grantMovingOverFinancialYearLabel,
       required: data.markedAsComplete,
     }),
     markedAsComplete: z.boolean(),

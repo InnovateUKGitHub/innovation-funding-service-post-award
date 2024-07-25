@@ -13,7 +13,6 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         costs: z.array(
           z.object({
             value: getGenericCurrencyValidation({
-              label: "forms.pcr.addPartner.costs.arrayType.value.label",
               required: true,
             }),
             costCategoryId: z.string(),
@@ -31,7 +30,6 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         costs: z.array(
           z.object({
             value: getGenericCurrencyValidation({
-              label: "forms.pcr.addPartner.costs.arrayType.value.label",
               required: true,
             }),
             costCategoryId: z.string(),

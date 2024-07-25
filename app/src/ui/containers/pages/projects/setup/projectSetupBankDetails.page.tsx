@@ -1,36 +1,35 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UseFormRegister, useForm } from "react-hook-form";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { TValidationError } from "@framework/mappers/mapRhfError";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { useContent } from "@ui/hooks/content.hook";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { UseFormRegister, useForm } from "react-hook-form";
+import { z } from "zod";
+import { useOnUpdateProjectSetupBankDetails, useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
 import {
   ProjectSetupBankDetailsSchemaType,
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
-  projectSetupBankDetailsMaxLength,
 } from "./projectSetupBankDetails.zod";
-import { useOnUpdateProjectSetupBankDetails, useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
-import { useContent } from "@ui/hooks/content.hook";
-import { z } from "zod";
-import { FormTypes } from "@ui/zod/FormTypes";
-import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { TValidationError } from "@framework/mappers/mapRhfError";
 
 export interface ProjectSetupBankDetailsParams {
   projectId: ProjectId;
@@ -100,7 +99,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("companyNumber")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.companyNumber ?? partner.bankDetails.companyNumber ?? undefined}
                 hasError={!!getFieldState("companyNumber").error}
               />
@@ -139,7 +137,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("accountBuilding")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.accountBuilding ?? partner.bankDetails.address.accountBuilding ?? undefined}
                 hasError={!!getFieldState("accountBuilding").error}
               />
@@ -152,7 +149,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("accountStreet")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.accountStreet ?? partner.bankDetails.address.accountStreet ?? undefined}
                 hasError={!!getFieldState("accountStreet").error}
               />
@@ -165,7 +161,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("accountLocality")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.accountLocality ?? partner.bankDetails.address.accountLocality ?? undefined}
                 hasError={!!getFieldState("accountLocality").error}
               />
@@ -178,7 +173,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("accountTownOrCity")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.accountTownOrCity ?? partner.bankDetails.address.accountTownOrCity ?? undefined}
                 hasError={!!getFieldState("accountTownOrCity").error}
               />
@@ -191,7 +185,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 disabled={isFetching}
                 inputWidth="one-third"
                 {...register("accountPostcode")}
-                maxLength={projectSetupBankDetailsMaxLength}
                 defaultValue={defaults?.accountPostcode ?? partner.bankDetails.address.accountPostcode ?? undefined}
               />
             </FormGroup>

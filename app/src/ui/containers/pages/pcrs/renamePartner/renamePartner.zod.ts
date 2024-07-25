@@ -18,7 +18,6 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
   evaluateObject(data => ({
     markedAsComplete: z.boolean(),
     accountName: getTextareaValidation({
-      label: "forms.pcr.renamePartner.accountName.label",
       maxLength: 256,
       required: data.markedAsComplete,
     }),

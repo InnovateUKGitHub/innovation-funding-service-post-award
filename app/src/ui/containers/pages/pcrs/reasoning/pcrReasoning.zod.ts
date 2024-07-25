@@ -10,7 +10,6 @@ const reasoningMaxChars = 32_000 as const;
 
 export const pcrReasoningSchema = evaluateObject((data: { markedAsComplete: boolean }) => ({
   reasoningComments: getTextareaValidation({
-    label: "forms.pcr.pcrReasoning.reasoningComments.label",
     maxLength: reasoningMaxChars,
     required: data.markedAsComplete,
   }),
@@ -30,7 +29,6 @@ export type PcrReasoningFilesSchemaType = z.infer<PcrReasoningFilesSchema>;
 
 export const pcrReasoningSummarySchema = evaluateObject((data: { reasoningStatus: boolean }) => ({
   reasoningComments: getTextareaValidation({
-    label: "forms.pcr.pcrReasoning.reasoningComments.label",
     maxLength: reasoningMaxChars,
     required: data.reasoningStatus,
   }),

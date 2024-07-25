@@ -9,7 +9,6 @@ describe("generic textarea validator", () => {
     ["acceptable", "acceptable", true, true],
   ])("%s", (name, input, required, accept) => {
     const parse = getTextareaValidation({
-      label: "description",
       maxLength: 20,
       minLength: 5,
       required: required,

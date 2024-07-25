@@ -24,9 +24,6 @@
 
 import i18next, { i18n } from "i18next";
 import { ZodErrorMap, ZodIssueCode, defaultErrorMap } from "zod";
-import { Logger } from "./developmentLogger";
-
-const logger = new Logger("zodi18n");
 
 const joinValues = <T extends unknown[]>(array: T, separator = " | "): string =>
   array.map(val => (typeof val === "string" ? `'${val}'` : val)).join(separator);
@@ -40,9 +37,113 @@ export type ZodI18nMapOption = {
 
 const defaultNs = "default";
 
+const flattenCopyString = (key: (string | number | (string | number)[])[]): string =>
+  key
+    .map(x => (Array.isArray(x) ? flattenCopyString(x) : x))
+    .filter(x => x !== "")
+    .join(".");
+
+const convertCopyKeyToArrayType = (key: (string | number)[]): string[] =>
+  key.map(x => (typeof x === "number" || /^\d+$/.test(x) ? "arrayType" : String(x)));
+
+/**
+ * ## generatePossibleCopyStrings
+ * Create every possible ContentSelector automatically by returning an
+ * array of all possible fullKey combinations (keyPrefix + issue.path)
+ *
+ * ### Scenario
+ * ```js
+ * makeZodI18nMap({ keyPrefix: ['abcd', 'efgh' ]});
+ *
+ * z.object({
+ *   money: z.number() // Error lies here
+ * });
+ * ```
+ *
+ * An error in the above `money` object would look something like this...
+ * ```text
+ * | namespace | keyPrefix | issue.path | issue code          | issue type  |
+ * | forms     | abcd.efgh |   money    | errors.invalid_type | number      |
+ * | --------- | ---------------------- | ------------------- | ----------- |
+ * |           |        fullKey         |                     |             |
+ * | forms     |     abcd.efgh.money    | errors.invalid_type | number      |
+ * ```
+ *
+ * Which this function would then return...
+ * 1. `forms.abcd.efgh.money.errors.invalid_type.number`
+ * 1. `forms.abcd.efgh.money.errors.invalid_type`
+ * 1. `forms.abcd.efgh.errors.invalid_type.number`
+ * 1. `forms.abcd.efgh.errors.invalid_type`
+ * 1. `forms.abcd.errors.invalid_type.number`
+ * 1. `forms.abcd.errors.invalid_type`
+ * 1. `forms.errors.invalid_type.number`
+ * 1. `forms.errors.invalid_type`
+ */
+const generatePossibleCopyStrings = ({
+  namespace,
+  fullKey,
+  issueCodes,
+  issueType,
+}: {
+  namespace: string;
+  fullKey: (string | number)[];
+  issueCodes: string[];
+  issueType?: string;
+}) => {
+  /**
+   * 1. Try with `issue.type` and not manipulating the `fullKey`
+   * 2. Try without `issue.type` and not manipulating the `fullKey`
+   * 3. Try with `issue.type` and replacing numbers with `arrayType`
+   * 4. Try without `issue.type` and replacing numbers with `arrayType`
+   *
+   * Go to 1, but remove the last item in fullKey to look further up.
+   */
+
+  const paths: string[] = [];
+
+  const addToPath = (x: (string | number | (string | number)[])[]) => paths.push(flattenCopyString(x));
+
+  // Cut down on the search by reducing the number of bits of the
+  // `fullKey` we are looking for.
+  for (let i = fullKey.length; i >= 0; i--) {
+    const subsection = fullKey.slice(0, i);
+    const hasNumberKey = subsection.some(x => typeof x === "number" || /^\d+$/.test(x));
+
+    // Run a round without replacing numbers with `arrayType`
+    // Then, run a round with replacing.
+    const shouldConvertArrayTypesCombinations = hasNumberKey ? [false, true] : [false];
+    for (const shouldConvertArrayTypes of shouldConvertArrayTypesCombinations) {
+      const convertedSubsection = shouldConvertArrayTypes ? convertCopyKeyToArrayType(subsection) : subsection;
+
+      // If an issueType exists...
+      // Run a round with the issueType at the end, then a round without.
+      // Otherwise, run a round without.
+      const shouldAppendIssueTypeCombinations = typeof issueType === "string" ? [true, false] : [false];
+      for (const shouldAppendIssueType of shouldAppendIssueTypeCombinations) {
+        // Try each possible issueCode
+        for (const issueCode of issueCodes) {
+          const key: (string | number | (string | number)[])[] = [];
+
+          key.push(namespace);
+          key.push(convertedSubsection);
+          key.push(issueCode);
+          if (shouldAppendIssueType && typeof issueType === "string") {
+            key.push(issueType);
+          }
+
+          addToPath(key);
+        }
+      }
+    }
+  }
+
+  return paths;
+};
+
 export const makeZodI18nMap =
   (option?: ZodI18nMapOption): ZodErrorMap =>
   (issue, zodIssueContext) => {
+    // Set default options
     const { t, ns, keyPrefix, context } = {
       t: i18next.t,
       ns: defaultNs,
@@ -51,91 +152,25 @@ export const makeZodI18nMap =
       ...option,
     };
 
-    const interpValues = {
+    // Setup interpreted values
+    const baseInterpValues = {
       ns,
       input: zodIssueContext.data,
       context,
       issue,
     };
 
-    /**
-     * Create all permutations of valid i18n translation keys.
-     * e.g. if the prefix was "agadoo.push.pineapple" and keys[] was ["hello", "world"]
-     *
-     * ```
-     * 1. "agadoo.push.pineapple.hello"
-     * 2. "agadoo.push.pineapple.world"
-     * 3. "agadoo.push.hello"
-     * 4. "agadoo.push.world"
-     * 5. "agadoo.hello"
-     * 6. "agadoo.world"
-     * 7. "errors.invalid"
-     * ```
-     *
-     * @param keys List of keys to attempt.
-     * @returns An array of all combinations of keys to attempt to use to translate.
-     */
-    const makeKey = (...keys: string[]): string[] => {
-      const paths: string[] = [];
+    const makeKey = (...issueCodes: string[]) =>
+      generatePossibleCopyStrings({
+        namespace: "forms",
+        fullKey: [...keyPrefix, ...issue.path],
+        issueCodes,
+        issueType: "type" in issue ? issue.type : undefined,
+      });
 
-      // N.B. params only exists on custom types
-
-      const alternativeKeys = [...keys, "errors.invalid"];
-      const fullPrefix = [...keyPrefix, ...issue.path];
-
-      const isArrayTypeError = fullPrefix.some(x => /^\d+$/.test(String(x)));
-
-      const isGeneric = issue.code === ZodIssueCode.custom && !!issue?.params?.generic?.length;
-
-      for (let i = fullPrefix.length; i >= (isGeneric ? 1 : 0); i--) {
-        for (const key of alternativeKeys) {
-          const path = ["forms", ...fullPrefix.slice(0, i), key].join(".");
-
-          if ("type" in issue) {
-            paths.push(path + "." + issue.type);
-          }
-
-          paths.push(path);
-
-          /*
-           * in the event this is an array type error, as well as making paths for each index, there is also a generic
-           * key made with "arrayType" in the place where the array index would have been.
-           *
-           * This means for array type errors where there is only a simple variation that can passed in as a variable
-           * we can reuse copy.
-           *
-           * e.g.
-           * ["questions.1.comments.error.too_big", "questions.3.comments.error.too_big", "questions.arrayType.comments.error.too_big"]
-           */
-          if (isArrayTypeError) {
-            const basicArrayTypePath = path.replace(/\.\d+\./g, ".arrayType.");
-            if (!paths.includes(basicArrayTypePath)) {
-              if ("type" in issue) {
-                paths.push(basicArrayTypePath + "." + issue.type);
-              }
-
-              paths.push(basicArrayTypePath);
-            }
-          }
-        }
-      }
-
-      if (isGeneric) {
-        /**
-         * if the code is a custom type (the only type whose type allows arbitrary params)
-         * and the params includes a generic property with an array of length 1 or more
-         *
-         * then we assume that this is a generic issue and we create a path to the generic section
-         * of the copy file
-         */
-        alternativeKeys.forEach(key => {
-          paths.push("forms.generic." + issue.params?.generic?.join(".") + "." + key);
-        });
-      }
-
-      logger.debug("Translating error with one of the following keys", paths, issue, interpValues);
-
-      return paths;
+    const interpValues = {
+      ...baseInterpValues,
+      label: t(makeKey("label"), { ...baseInterpValues }),
     };
 
     let message: string;
@@ -204,12 +239,12 @@ export const makeZodI18nMap =
       case ZodIssueCode.invalid_string:
         if (typeof issue.validation === "object") {
           if ("startsWith" in issue.validation) {
-            message = t(makeKey(`errors.invalid_string.startsWith`), {
+            message = t(makeKey("errors.invalid_string.startsWith"), {
               startsWith: issue.validation.startsWith,
               ...interpValues,
             });
           } else if ("endsWith" in issue.validation) {
-            message = t(makeKey(`errors.invalid_string.endsWith`), {
+            message = t(makeKey("errors.invalid_string.endsWith"), {
               endsWith: issue.validation.endsWith,
               ...interpValues,
             });
@@ -226,7 +261,7 @@ export const makeZodI18nMap =
         break;
       case ZodIssueCode.too_small:
         const minimum = issue.type === "date" ? new Date(issue.minimum as number) : issue.minimum;
-        message = t(makeKey(`errors.too_small`), {
+        message = t(makeKey("errors.too_small"), {
           minimum,
           count: typeof minimum === "number" ? minimum : undefined,
           ...interpValues,
@@ -234,7 +269,7 @@ export const makeZodI18nMap =
         break;
       case ZodIssueCode.too_big:
         const maximum = issue.type === "date" ? new Date(issue.maximum as number) : issue.maximum;
-        message = t(makeKey(`errors.too_big`), {
+        message = t(makeKey("errors.too_big"), {
           maximum,
           count: typeof maximum === "number" ? maximum : undefined,
           ...interpValues,
@@ -267,3 +302,5 @@ export const makeZodI18nMap =
 
     return { message };
   };
+
+export { flattenCopyString, convertCopyKeyToArrayType, generatePossibleCopyStrings };

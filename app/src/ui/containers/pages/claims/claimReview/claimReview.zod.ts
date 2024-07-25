@@ -22,7 +22,6 @@ const claimReviewSchema = evaluateObject((data: { status: ClaimStatus }) => ({
   claimId: claimIdValidation,
   status: z.enum([ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL]),
   comments: getTextareaValidation({
-    label: "forms.claimReview.comments.label",
     maxLength: claimReviewSchemaCommentsMax,
     required: data.status === ClaimStatus.MO_QUERIED,
   }),

@@ -28,21 +28,6 @@ type DeepReplace<T, M extends [any, any]> = {
       : T[P];
 };
 
-type StopTypes = string;
-type ExcludedTypes = (...args: any[]) => any;
-type Dot<T extends string, U extends string> = "" extends U ? T : `${T}.${U}`;
-type GetKeys<T> = T extends StopTypes
-  ? ""
-  : T extends readonly unknown[]
-    ? GetKeys<T[number]>
-    : {
-        [K in keyof T & string]: T[K] extends StopTypes
-          ? K
-          : T[K] extends ExcludedTypes
-            ? never
-            : K | Dot<K, GetKeys<T[K]>>;
-      }[keyof T & string];
-
 // Describes a translation that requires input before text can be returned.
 export type TranslationResultFunction = (options: DataOption) => TranslationResult;
 
@@ -66,8 +51,6 @@ export type PossibleCopyFunctions<T = PossibleCopyStrings> = DeepReplace<
 export type ContentSelector<T = PossibleCopyStrings> = (
   content: PossibleCopyFunctions<T>,
 ) => TranslationResult | TranslationResultFunction;
-
-export type PossibleCopyKeys = GetKeys<PossibleCopyStrings>;
 
 // Parameters that could POSSIBLY be passed into a translation.
 export interface DataOption {

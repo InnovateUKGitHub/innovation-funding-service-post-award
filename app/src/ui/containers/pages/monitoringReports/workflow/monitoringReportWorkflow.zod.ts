@@ -12,8 +12,7 @@ export const monitoringReportWorkflowSchema = z.object({
         optionId: z.string(),
         comments: getTextareaValidation({
           maxLength: 32_000,
-          label: "forms.monitoringReportWorkflow.questions.arrayType.comments.label",
-          required: true,
+          required: false,
         }),
         title: z.string(),
       })

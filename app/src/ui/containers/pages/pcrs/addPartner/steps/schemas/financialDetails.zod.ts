@@ -73,7 +73,6 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
           form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({
-            label: "forms.pcr.addPartner.financialYearEndTurnover.label",
             required: true,
           }),
         })
@@ -84,7 +83,7 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
           form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({
-            label: "forms.pcr.addPartner.financialYearEndTurnover.label",
+            required: false,
           }),
         })
         .and(dateSecuredOptional);

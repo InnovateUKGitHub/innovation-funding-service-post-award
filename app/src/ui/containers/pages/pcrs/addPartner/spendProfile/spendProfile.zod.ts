@@ -18,11 +18,9 @@ export const labourSchema = z.object({
   id: costIdValidation.nullable(),
   descriptionOfRole: description,
   grossCostOfRole: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.grossCostOfRole.label",
     required: true,
   }),
   ratePerDay: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.ratePerDay.label",
     required: true,
   }),
   daysSpentOnProject: requiredPositiveIntegerInput({ max: 1000000 }),
@@ -36,7 +34,6 @@ export const overheadSchema = evaluateObject(
       id: costIdValidation.nullable(),
       overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
       calculatedValue: getGenericCurrencyValidation({
-        label: "forms.pcr.addPartner.spendProfile.calculatedValue.label",
         required:
           Number(data.overheadRate) === PCRSpendProfileOverheadRate.Calculated && data.button_submit === "submit",
       }),
@@ -64,7 +61,6 @@ export const materialsSchema = z.object({
   id: costIdValidation.nullable(),
   materialsDescription: description,
   costPerItem: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.costPerItem.label",
     required: true,
   }),
   quantityOfMaterialItems: requiredPositiveIntegerInput({ min: 0 }),
@@ -78,7 +74,6 @@ export const subcontractingSchema = z.object({
   subcontractorCountry: z.string().min(1).max(255),
   subcontractorRoleAndDescription: description,
   subcontractorCost: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.subcontractorCost.label",
     required: true,
   }),
 });
@@ -91,11 +86,9 @@ export const capitalUsageSchema = z.object({
   depreciationPeriod: requiredPositiveIntegerInput({}),
   itemType: z.coerce.number().min(1),
   netPresentValue: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.netPresentValue.label",
     required: true,
   }),
   residualValue: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.residualValue.label",
     required: true,
   }),
   utilisation: percentageNumberInput({ max: 99.99, min: 0, required: true }),
@@ -111,7 +104,6 @@ export const travelAndASubsistenceSchema = z
     descriptionOfCost: description,
     numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
     costOfEach: getGenericCurrencyValidation({
-      label: "forms.pcr.addPartner.spendProfile.costOfEach.label",
       required: true,
     }),
     totalCost: z.number(),
@@ -135,7 +127,6 @@ export const otherCostsSchema = z.object({
   id: costIdValidation.nullable(),
   descriptionOfCost: description,
   estimatedCost: getGenericCurrencyValidation({
-    label: "forms.pcr.addPartner.spendProfile.estimatedCost.label",
     required: true,
   }),
 });

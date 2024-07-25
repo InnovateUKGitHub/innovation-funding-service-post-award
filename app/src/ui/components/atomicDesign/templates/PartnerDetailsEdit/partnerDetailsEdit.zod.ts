@@ -7,7 +7,6 @@ export const partnerDetailsEditErrorMap = makeZodI18nMap({ keyPrefix: ["partnerD
 
 export const partnerDetailsEditSchema = z.object({
   postcode: getTextareaValidation({
-    label: "forms.partnerDetailsEdit.postcode.label",
     minLength: 1,
     maxLength: 10,
     required: true,
@@ -16,7 +15,6 @@ export const partnerDetailsEditSchema = z.object({
 
 export const partnerDetailsOptionalSchema = z.object({
   postcode: getTextareaValidation({
-    label: "forms.partnerDetailsEdit.postcode.label",
     minLength: 1,
     maxLength: 10,
     required: true,
@@ -26,7 +24,6 @@ export const partnerDetailsOptionalSchema = z.object({
 export const postcodeSetupSchema = z
   .object({
     postcode: getTextareaValidation({
-      label: "forms.partnerDetailsEdit.postcode.label",
       maxLength: 10,
       required: false,
     }),

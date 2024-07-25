@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`zodi18n generatePossibleCopyStrings create all possible copy content selectors 1`] = `
+[
+  "namespace.key1.key2.key3.issueCode1.issueType",
+  "namespace.key1.key2.key3.issueCode2.issueType",
+  "namespace.key1.key2.key3.issueCode1",
+  "namespace.key1.key2.key3.issueCode2",
+  "namespace.key1.key2.issueCode1.issueType",
+  "namespace.key1.key2.issueCode2.issueType",
+  "namespace.key1.key2.issueCode1",
+  "namespace.key1.key2.issueCode2",
+  "namespace.key1.issueCode1.issueType",
+  "namespace.key1.issueCode2.issueType",
+  "namespace.key1.issueCode1",
+  "namespace.key1.issueCode2",
+  "namespace.issueCode1.issueType",
+  "namespace.issueCode2.issueType",
+  "namespace.issueCode1",
+  "namespace.issueCode2",
+]
+`;
+
+exports[`zodi18n generatePossibleCopyStrings create all possible copy content selectors 2`] = `
+[
+  "forms.pcr.financialVirements.costCategoryLevel.virements.6.newEligibleCosts.errors.generic.currency.required",
+  "forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.newEligibleCosts.errors.generic.currency.required",
+  "forms.pcr.financialVirements.costCategoryLevel.virements.6.errors.generic.currency.required",
+  "forms.pcr.financialVirements.costCategoryLevel.virements.arrayType.errors.generic.currency.required",
+  "forms.pcr.financialVirements.costCategoryLevel.virements.errors.generic.currency.required",
+  "forms.pcr.financialVirements.costCategoryLevel.errors.generic.currency.required",
+  "forms.pcr.financialVirements.errors.generic.currency.required",
+  "forms.pcr.errors.generic.currency.required",
+  "forms.errors.generic.currency.required",
+]
+`;

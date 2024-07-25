@@ -66,7 +66,6 @@ export const getClaimSummarySchema = ({
         }
       }),
       comments: getTextareaValidation({
-        label: "forms.claimSummary.comments.label",
         maxLength: 1000,
         required: true,
       }),
@@ -112,7 +111,6 @@ export const getClaimSummarySchema = ({
       button_submit: z.literal("saveAndReturnToClaims"),
       status: z.string(),
       comments: getTextareaValidation({
-        label: "forms.claimSummary.comments.label",
         maxLength: 1000,
         required: true,
       }),

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { pcrItemIdValidation } from "@ui/zod/helperValidators.zod";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 
 export const pcrPrepareErrorMap = makeZodI18nMap({ keyPrefix: ["pcrPrepare"] });
 
@@ -17,7 +18,10 @@ export const pcrPrepareSchema = z
       })
       .array(),
     reasoningStatus: z.enum(["Complete", "Incomplete", "To do"]).optional(),
-    comments: z.string().max(1000).optional(),
+    comments: getTextareaValidation({
+      maxLength: 1000,
+      required: false,
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.button_submit === "submit") {

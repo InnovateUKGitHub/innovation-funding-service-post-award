@@ -9,7 +9,6 @@ export const loanRequestSchema = z.object({
   comments: getTextareaValidation({
     minLength: 5,
     maxLength: 32768,
-    label: "forms.loanRequest.comments.label",
     required: true,
   }),
   attachmentsCount: z.number().min(1),

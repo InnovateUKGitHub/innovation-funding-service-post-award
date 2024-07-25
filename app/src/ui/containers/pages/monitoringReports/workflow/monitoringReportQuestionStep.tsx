@@ -98,7 +98,8 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
             disabled={isFetching || disabledForm}
             characterCount={watch(commentFieldName)?.length ?? 0}
             data-qa={commentFieldName}
-            characterCountType="ascending"
+            characterCountType="descending"
+            characterCountMax={32_000}
             defaultValue={defaultCommentValue}
           />
 

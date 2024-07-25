@@ -1,4 +1,3 @@
-import { PossibleCopyKeys } from "@copy/type";
 import { isNil } from "lodash";
 import { z, ZodIssueCode } from "zod";
 
@@ -16,16 +15,11 @@ const defaultMinLength = 0;
  * the `label` can be either a raw string, or if it is a path that matches
  * an item in the copy document, it will be interpolated
  */
-export const getTextareaValidation = <T = PossibleCopyKeys, Required extends boolean = false>({
-  label,
+export const getTextareaValidation = <Required extends boolean = false>({
   maxLength = defaultMaxLength,
   minLength = defaultMinLength,
   required,
 }: {
-  /**
-   * path to value in copy document to be interpolated, or if not matched, then the label will be shown as is
-   */
-  label: T;
   maxLength?: number;
   minLength?: number;
   required: Required;
@@ -37,40 +31,65 @@ export const getTextareaValidation = <T = PossibleCopyKeys, Required extends boo
     .transform((val, ctx) => {
       const isEmpty = (typeof val === "string" && val.trim() === "") || isNil(val);
       if (required && isEmpty) {
-        return ctx.addIssue({
+        ctx.addIssue({
           code: ZodIssueCode.custom,
           params: {
-            label,
-            generic: ["textarea"],
-            i18n: "errors.required",
+            generic: true,
+            i18n: "errors.generic.textarea.required",
           },
         });
+        return z.NEVER;
       }
 
       if (!isEmpty) {
-        // Make sure our currency isn't so big as to break our server
-        if (val?.length > maxLength) {
-          return ctx.addIssue({
+        const len = val.length;
+
+        // Something can be too big if there is some kind of limit.
+        const canBeTooBig = typeof maxLength === "number";
+        const tooBig = canBeTooBig && len > maxLength;
+
+        // Something can be too small if it is not 0 characters long.
+        const canBeTooSmall = typeof minLength === "number" && minLength !== 0;
+        const tooSmall = len < minLength;
+
+        if (canBeTooBig && canBeTooSmall && (tooBig || tooSmall)) {
+          ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              count: maxLength,
-              generic: ["textarea"],
-              i18n: "errors.too_big",
+              min: minLength,
+              max: maxLength,
+              count: minLength === 1 && maxLength == 1 ? 1 : 2,
+              generic: true,
+              i18n: "errors.generic.textarea.invalid_range",
             },
           });
+
+          return z.NEVER;
         }
 
-        if (val?.length < minLength) {
-          return ctx.addIssue({
+        // Make sure our currency isn't so big as to break our server
+        if (canBeTooBig && tooBig) {
+          ctx.addIssue({
             code: ZodIssueCode.custom,
             params: {
-              label,
-              count: minLength,
-              generic: ["textarea"],
-              i18n: "errors.too_small",
+              count: maxLength,
+              generic: true,
+              i18n: "errors.generic.textarea.too_big",
             },
           });
+          return z.NEVER;
+        }
+
+        if (canBeTooSmall && tooSmall) {
+          ctx.addIssue({
+            code: ZodIssueCode.custom,
+            params: {
+              count: minLength,
+              generic: true,
+              i18n: "errors.generic.textarea.too_small",
+            },
+          });
+          return z.NEVER;
         }
       }
 

@@ -3,10 +3,16 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { partnerIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 
 const projectSetupBankDetailsErrorMap = makeZodI18nMap({ keyPrefix: ["projectSetupBankDetails"] });
 
 const projectSetupBankDetailsMaxLength = 255 as const;
+
+const projectSetupBankDetailsValidation = getTextareaValidation({
+  maxLength: projectSetupBankDetailsMaxLength,
+  required: true,
+});
 
 const getProjectSetupBankDetailsSchema = (
   bankVerifiedStatus: BankCheckStatus,
@@ -19,12 +25,12 @@ const validatedProjectSetupBankDetailsSchema = z.object({
   projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   form: z.literal(FormTypes.ProjectSetupBankDetails),
-  companyNumber: z.string().max(projectSetupBankDetailsMaxLength),
-  accountBuilding: z.string().max(projectSetupBankDetailsMaxLength),
-  accountStreet: z.string().max(projectSetupBankDetailsMaxLength),
-  accountLocality: z.string().max(projectSetupBankDetailsMaxLength),
-  accountTownOrCity: z.string().max(projectSetupBankDetailsMaxLength),
-  accountPostcode: z.string().max(projectSetupBankDetailsMaxLength),
+  companyNumber: projectSetupBankDetailsValidation,
+  accountBuilding: projectSetupBankDetailsValidation,
+  accountStreet: projectSetupBankDetailsValidation,
+  accountLocality: projectSetupBankDetailsValidation,
+  accountTownOrCity: projectSetupBankDetailsValidation,
+  accountPostcode: projectSetupBankDetailsValidation,
   bankCheckValidation: z.undefined(),
 });
 

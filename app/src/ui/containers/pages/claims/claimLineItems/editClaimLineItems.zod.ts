@@ -22,12 +22,10 @@ const editClaimLineItemLineItemSchema = z
   .object({
     id: z.union([claimIdValidation, emptyStringToUndefinedValidation]),
     value: getGenericCurrencyValidation({
-      label: "forms.claimLineItems.lineItems.arrayType.value.label",
       min: -1_000_000,
       required: true,
     }),
     description: getTextareaValidation({
-      label: "forms.claimLineItems.lineItems.arrayType.description.label",
       maxLength: claimLineItemDescriptionMaxLength,
       required: false,
     }),
@@ -61,7 +59,6 @@ const editClaimLineItemsSchema = z.object({
   costCategoryId: costCategoryIdValidation,
   lineItems: editClaimLineItemLineItemSchema.array(),
   comments: getTextareaValidation({
-    label: "forms.claimLineItems.comments.label",
     maxLength: claimDetailsCommentsMaxLength,
     required: true,
   }),

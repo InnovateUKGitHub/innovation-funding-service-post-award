@@ -35,7 +35,7 @@ const approveNewSubcontractorSchema = z
     subcontractorDescription: z.string().max(subcontractorDescriptionMaxChars),
     subcontractorJustification: z.string().max(subcontractorJustificationMaxChars),
     subcontractorCost: getGenericCurrencyValidation({
-      label: "forms.pcr.approveNewSubcontractor.subcontractorCost.label",
+      required: false,
     }),
     markedAsComplete: z.boolean(),
   })

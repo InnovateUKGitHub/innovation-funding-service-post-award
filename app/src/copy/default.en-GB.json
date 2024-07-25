@@ -1986,11 +1986,15 @@
     },
     "errors": {
       "invalid": "A validation error occurred.",
-      "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form."
-    },
-    "generic": {
-      "currency": {
-        "errors": {
+      "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form.",
+      "generic": {
+        "textarea": {
+          "required": "Enter {{label, key, lowercase}}.",
+          "too_big": "{{label, key}} must be {{count}} characters or less.",
+          "too_small": "{{label, key}} must be {{count}} characters or more.",
+          "invalid_range": "{{ label, key }} must be between {{ min }} and {{ max }} characters"
+        },
+        "currency": {
           "required": "Enter {{label, key, lowercase}}.",
           "invalid_type": "{{issue.params.label, key}} must be a number.",
           "invalid_string": "{{label, key}} must be a number.",
@@ -2000,13 +2004,6 @@
           "two_decimal_places": "{{label, key}} must be 2 decimal places or fewer.",
           "invalid_currency": "{{label, key}} must be a valid currency.",
           "not_pounds": "{{label, key}} must be in pounds (£)."
-        }
-      },
-      "textarea": {
-        "errors": {
-          "required": "Enter {{label, key, lowercase}}.",
-          "too_big": "{{label, key}} must be {{count}} characters or less.",
-          "too_small": "{{label, key}} must be {{count}} characters or more."
         }
       }
     },
@@ -2077,10 +2074,7 @@
     },
     "pcrPrepare": {
       "comments": {
-        "errors": {
-          "too_big": "Comments must be a maximum of 1000 characters.",
-          "custom": "Comments are required if querying a claim."
-        }
+        "label": "Comments"
       },
       "reasoningStatus": {
         "errors": {
@@ -2135,10 +2129,7 @@
         }
       },
       "addComments": {
-        "label": "Comments",
-        "errors": {
-          "too_big": "Maximum of 5000 characters"
-        }
+        "label": "Comments"
       },
       "questions": {
         "arrayType": {
@@ -2343,11 +2334,7 @@
           }
         },
         "organisationName": {
-          "errors": {
-            "too_small": "Enter an organisation name.",
-            "invalid_type": "Enter an organisation name.",
-            "too_big": "Organisation name must be {{ count }} or less."
-          }
+          "label": "Organisation name"
         },
         "participantSize": {
           "errors": {
@@ -2361,11 +2348,7 @@
           }
         },
         "projectCity": {
-          "errors": {
-            "invalid_type": "Enter a project city.",
-            "too_small": "Enter a project city.",
-            "too_big": "Project city must be {{ count }} characters or less."
-          }
+          "label": "Project city"
         },
         "projectLocation": {
           "errors": {
@@ -2374,11 +2357,7 @@
           }
         },
         "projectPostcode": {
-          "errors": {
-            "invalid_type": "Select a project postcode.",
-            "too_small": "Select a project postcode.",
-            "too_big": "Project postcode must be {{ count }} characters or less."
-          }
+          "label": "Project postcode"
         },
         "projectRole": {
           "errors": {
@@ -2387,18 +2366,10 @@
           }
         },
         "registeredAddress": {
-          "errors": {
-            "too_small": "Enter a registered address.",
-            "invalid_type": "Enter a registered address.",
-            "too_big": "Registered address must be {{ count }} characters or less."
-          }
+          "label": "Registered address"
         },
         "registrationNumber": {
-          "errors": {
-            "too_small": "Enter a registration number.",
-            "invalid_type": "Enter a registration number.",
-            "too_big": "Registration number must be {{ count }} characters or less."
-          }
+          "label": "Registration number"
         },
         "searchJesOrganisations": {
           "errors": {
@@ -2557,9 +2528,7 @@
           }
         },
         "search": {
-          "errors": {
-            "too_big": "Search must be {{ count }} characters or less."
-          }
+          "label": "Search query"
         }
       },
       "pcrReasoning": {
@@ -2798,11 +2767,6 @@
       }
     },
     "projectSetupBankDetails": {
-      "companyNumber": {
-        "errors": {
-          "too_big": "Company number must be {{ count }} characters or less."
-        }
-      },
       "accountNumber": {
         "errors": {
           "too_small": "Account number cannot be empty.",
@@ -2819,31 +2783,12 @@
           }
         }
       },
-      "accountBuilding": {
-        "errors": {
-          "too_big": "Building must be {{ count }} characters or less."
-        }
-      },
-      "accountStreet": {
-        "errors": {
-          "too_big": "Street must be {{ count }} characters or less."
-        }
-      },
-      "accountLocality": {
-        "errors": {
-          "too_big": "Locality must be {{ count }} characters or less."
-        }
-      },
-      "accountTownOrCity": {
-        "errors": {
-          "too_big": "Town or city must be {{ count }} characters or less."
-        }
-      },
-      "accountPostcode": {
-        "errors": {
-          "too_big": "Postcode must be {{ count }} characters or less."
-        }
-      }
+      "companyNumber": { "label": "Company number" },
+      "accountBuilding": { "label": "Building" },
+      "accountStreet": { "label": "Street" },
+      "accountLocality": { "label": "Locality" },
+      "accountTownOrCity": { "label": "Town or city" },
+      "accountPostcode": { "label": "Postcode" }
     },
     "claimLineItems": {
       "lineItems": {

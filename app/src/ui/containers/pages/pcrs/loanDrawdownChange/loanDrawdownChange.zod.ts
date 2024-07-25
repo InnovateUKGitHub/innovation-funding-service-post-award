@@ -20,8 +20,8 @@ export const loanDrawdownChangeSchema = z
         newDate_month: z.string().regex(/^\d\d?$/),
         newDate_year: z.string().regex(/^\d\d\d\d$/),
         newValue: getGenericCurrencyValidation({
-          label: "forms.pcr.loanDrawdownChange.loans.arrayType.newValue.label",
           min: -1_000_000_000,
+          required: false,
         }),
       }),
     ),

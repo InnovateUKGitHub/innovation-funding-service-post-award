@@ -18,12 +18,10 @@ export const pcrScopeChangeSchema = evaluateObject(data => ({
   pcrItemId: pcrItemIdValidation,
   markedAsComplete: z.boolean(),
   projectSummary: getTextareaValidation({
-    label: "forms.pcr.scopeChange.projectSummary.label",
     maxLength: 32_000,
     required: data.markedAsComplete,
   }),
   publicDescription: getTextareaValidation({
-    label: "forms.pcr.scopeChange.publicDescription.label",
     maxLength: 32_000,
     required: data.markedAsComplete,
   }),
@@ -36,7 +34,6 @@ export const getPcrScopeChangeProjectSummarySchema = (markedAsComplete: boolean)
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
     projectSummary: getTextareaValidation({
-      label: "forms.pcr.scopeChange.projectSummary.label",
       maxLength: 32_000,
       required: markedAsComplete,
     }),
@@ -49,7 +46,6 @@ export const getPcrScopeChangePublicDescriptionSchema = (markedAsComplete: boole
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
     publicDescription: getTextareaValidation({
-      label: "forms.pcr.scopeChange.publicDescription.label",
       maxLength: 32_000,
       required: markedAsComplete,
     }),
