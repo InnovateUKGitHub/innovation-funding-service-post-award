@@ -5,6 +5,7 @@ import {
   clearCostCatReturn,
   period2AbCad,
   reduceToBelowCapLimit,
+  restoreCostCatReturn,
   triggerCapPot,
 } from "./steps";
 import { retentionTidyUp } from "common/costCleanUp";
@@ -45,4 +46,6 @@ describe("claims > Trigger Cap Pot Retention Message", () => {
   it("Should clear the cost category and navigate back to prepare screen", clearCostCatReturn);
 
   it("Should no longer display cap pot messaging as cost category has been deleted", capPotMessageNotExist);
+
+  it("Should restore cost categories of Labour and Materials", restoreCostCatReturn);
 });

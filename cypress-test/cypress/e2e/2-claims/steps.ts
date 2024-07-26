@@ -818,6 +818,18 @@ export const clearCostCatReturn = () => {
   });
 };
 
+export const restoreCostCatReturn = () => {
+  ["Labour", "Materials"].forEach(costCat => {
+    cy.clickOn("a", costCat);
+    cy.get("h1").contains(costCat);
+    cy.clickOn("Add a cost");
+    cy.getByAriaLabel("Description of claim line item 0").clear().type("Test");
+    cy.getByAriaLabel("Cost of claim line item 0").clear().type("7200.50");
+    cy.clickOn("Save and return to claims");
+    cy.get("h1").contains("Costs to be claimed");
+  });
+};
+
 export const acceptLabourCalculateOH = () => {
   [
     [-10000, -2000],
