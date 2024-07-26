@@ -89,6 +89,7 @@ export const uploadToEUI = () => {
 };
 
 export const fcUploadToEUI = () => {
+  cy.fileTidyUp("Wednesday Addams");
   cy.fileInput("testfileEUIfc.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
