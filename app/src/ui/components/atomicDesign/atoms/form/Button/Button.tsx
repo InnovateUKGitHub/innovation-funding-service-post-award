@@ -37,6 +37,7 @@ export const Button = ({
   secondary,
   link,
   warning,
+  disabled,
   ...props
 }: ButtonProps & {}) => {
   let styleTag = styling;
@@ -51,7 +52,14 @@ export const Button = ({
   const { setRef } = useGovFrontend("Button");
   const buttonStyling = getButtonTypeClass(styleTag);
   return (
-    <button ref={setRef} name={name} className={cx(buttonStyling, className)} data-module="govuk-button" {...props} />
+    <button
+      ref={setRef}
+      name={name}
+      className={cx(buttonStyling, { ["govuk-button--disabled"]: disabled }, className)}
+      disabled={disabled}
+      data-module="govuk-button"
+      {...props}
+    />
   );
 };
 
