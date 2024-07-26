@@ -265,6 +265,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
           documents={partnerDocuments}
           project={project}
           disabled={disabled}
+          formType={FormTypes.PartnerLevelDelete}
         />
       </Section>
     </Page>

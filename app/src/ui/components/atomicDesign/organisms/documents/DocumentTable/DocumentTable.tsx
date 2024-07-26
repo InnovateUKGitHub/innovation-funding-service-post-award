@@ -79,6 +79,7 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
   disabled?: boolean;
   formType?:
     | FormTypes.ProjectLevelDelete
+    | FormTypes.PartnerLevelDelete
     | FormTypes.ClaimLevelDelete
     | FormTypes.PcrLevelDelete
     | FormTypes.ClaimDetailLevelDelete
@@ -179,7 +180,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                   {getContent(x => x.pages.projectDocuments.buttonRemove)}
                 </Button>
                 <input type="hidden" name="partnerId" value={x.partnerId} />
-                <input type="hidden" name="form" value={FormTypes.PartnerLevelDelete} />
+                <input type="hidden" name="form" value={formType} />
               </Form>
             );
           }}
