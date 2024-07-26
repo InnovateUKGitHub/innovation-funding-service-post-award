@@ -46,7 +46,7 @@ export const AcademicOrganisationStep = () => {
         form: FormTypes.PcrAddPartnerAcademicOrganisationStep,
         markedAsComplete: String(markedAsCompleteHasBeenChecked),
         button_submit: "submit",
-        organisationName: pcrItem.organisationName,
+        organisationName: pcrItem.organisationName ?? undefined,
       },
       resolver: zodResolver(getAcademicOrganisationSchema(markedAsCompleteHasBeenChecked), {
         errorMap: addPartnerErrorMap,

@@ -1273,7 +1273,8 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.organisationName,
         pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
         this.getContent(x =>
-          x.forms.pcr.addPartner.organisationName.errors.too_big({
+          x.forms.errors.generic.textarea.too_big({
+            label: this.getContent(y => y.forms.pcr.addPartner.organisationName.label),
             count: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
           }),
         ),
@@ -1299,8 +1300,9 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.registeredAddress,
         pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
         this.getContent(x =>
-          x.forms.pcr.addPartner.registeredAddress.errors.too_big({
-            count: pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
+          x.forms.errors.generic.textarea.too_big({
+            label: this.getContent(y => y.forms.pcr.addPartner.registeredAddress.label),
+            count: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
           }),
         ),
       ),
@@ -1325,8 +1327,9 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.registrationNumber,
         pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
         this.getContent(x =>
-          x.forms.pcr.addPartner.registrationNumber.errors.too_big({
-            count: pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
+          x.forms.errors.generic.textarea.too_big({
+            label: this.getContent(y => y.forms.pcr.addPartner.registrationNumber.label),
+            count: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
           }),
         ),
       ),

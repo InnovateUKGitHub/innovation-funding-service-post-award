@@ -13,7 +13,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
       z
         .object({
           optionId: z.string(),
-          comments: z.string().max(32_000),
+          comments: getTextareaValidation({ required: true, minLength: 1, maxLength: 32000 }),
           title: z.string(),
         })
         .superRefine((data, ctx) => {
@@ -24,16 +24,6 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
               type: "string",
               inclusive: true,
               path: ["optionId"],
-            });
-          }
-          // need to use super refine to ensure title is in the scope for i18n
-          if (data.comments.length < 1) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.too_small,
-              minimum: 1,
-              type: "string",
-              inclusive: true,
-              path: ["comments"],
             });
           }
         }),
@@ -49,7 +39,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     questions: z.array(
       z.object({
         optionId: z.string().optional(),
-        comments: z.string().max(32_000).optional(),
+        comments: getTextareaValidation({ required: false, maxLength: 32000 }),
       }),
     ),
     periodId: z.number(),

@@ -20,14 +20,11 @@ exports[`generic textarea validator required empty 1`] = `
   {
     "code": "custom",
     "params": {
-      "label": "description",
-      "generic": [
-        "textarea"
-      ],
-      "i18n": "errors.required"
+      "generic": true,
+      "i18n": "errors.generic.textarea.required"
     },
     "path": [],
-    "message": "Invalid input"
+    "message": "ARTMS required!"
   }
 ]],
   "success": false,
@@ -40,15 +37,14 @@ exports[`generic textarea validator too big 1`] = `
   {
     "code": "custom",
     "params": {
-      "label": "description",
-      "count": 20,
-      "generic": [
-        "textarea"
-      ],
-      "i18n": "errors.too_big"
+      "min": 5,
+      "max": 20,
+      "count": 35,
+      "generic": true,
+      "i18n": "errors.generic.textarea.invalid_range"
     },
     "path": [],
-    "message": "Invalid input"
+    "message": "ARTMS 35 not between 5 20!"
   }
 ]],
   "success": false,
@@ -61,15 +57,14 @@ exports[`generic textarea validator too small 1`] = `
   {
     "code": "custom",
     "params": {
-      "label": "description",
-      "count": 5,
-      "generic": [
-        "textarea"
-      ],
-      "i18n": "errors.too_small"
+      "min": 5,
+      "max": 20,
+      "count": 3,
+      "generic": true,
+      "i18n": "errors.generic.textarea.invalid_range"
     },
     "path": [],
-    "message": "Invalid input"
+    "message": "ARTMS 3 not between 5 20!"
   }
 ]],
   "success": false,

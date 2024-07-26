@@ -3,10 +3,12 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import {
   booleanValidation,
+  evaluateObject,
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 const approveNewSubcontractorErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "approveNewSubcontractor"] });
@@ -18,65 +20,41 @@ const subcontractorLocationMaxChars = 100 as const;
 const subcontractorDescriptionMaxChars = 255 as const;
 const subcontractorJustificationMaxChars = 32000 as const;
 
-const approveNewSubcontractorSchema = z
-  .object({
-    projectId: projectIdValidation,
-    pcrId: pcrIdValidation,
-    pcrItemId: pcrItemIdValidation,
-    form: z.union([
-      z.literal(FormTypes.PcrApproveNewSubcontractorStep),
-      z.literal(FormTypes.PcrApproveNewSubcontractorSummary),
-    ]),
-    subcontractorName: z.string().max(subcontractorNameMaxChars),
-    subcontractorRegistrationNumber: z.string().max(subcontractorRegistrationNumberMaxChars),
-    subcontractorRelationship: booleanValidation,
-    subcontractorRelationshipJustification: z.string(),
-    subcontractorLocation: z.string().max(subcontractorLocationMaxChars),
-    subcontractorDescription: z.string().max(subcontractorDescriptionMaxChars),
-    subcontractorJustification: z.string().max(subcontractorJustificationMaxChars),
-    subcontractorCost: getGenericCurrencyValidation({
-      required: false,
-    }),
-    markedAsComplete: z.boolean(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.markedAsComplete) {
-      const checkIfFalsy = <T extends keyof typeof data>(key: T, value: unknown) => {
-        if (!value) {
-          ctx.addIssue({
-            type: "string",
-            code: z.ZodIssueCode.too_small,
-            minimum: 1,
-            inclusive: true,
-            path: [key],
-          });
-        }
-      };
-      console.log("data", data);
-
-      checkIfFalsy("subcontractorName", data.subcontractorName);
-      checkIfFalsy("subcontractorRegistrationNumber", data.subcontractorRegistrationNumber);
-      checkIfFalsy("subcontractorLocation", data.subcontractorLocation);
-      checkIfFalsy("subcontractorDescription", data.subcontractorDescription);
-      checkIfFalsy("subcontractorJustification", data.subcontractorJustification);
-      checkIfFalsy("subcontractorCost", data.subcontractorCost);
-      if (data.subcontractorRelationship) {
-        checkIfFalsy("subcontractorRelationshipJustification", data.subcontractorRelationshipJustification);
-      }
-    }
-
-    if (data.subcontractorRelationship) {
-      if (data.subcontractorRelationshipJustification.length > subcontractorRelationshipJustificationMaxChars) {
-        ctx.addIssue({
-          type: "string",
-          code: z.ZodIssueCode.too_big,
-          maximum: subcontractorRelationshipJustificationMaxChars,
-          inclusive: true,
-          path: ["subcontractorRelationshipJustification"],
-        });
-      }
-    }
-  });
+const approveNewSubcontractorSchema = evaluateObject(data => ({
+  projectId: projectIdValidation,
+  pcrId: pcrIdValidation,
+  pcrItemId: pcrItemIdValidation,
+  form: z.union([
+    z.literal(FormTypes.PcrApproveNewSubcontractorStep),
+    z.literal(FormTypes.PcrApproveNewSubcontractorSummary),
+  ]),
+  subcontractorName: getTextareaValidation({ required: data.markedAsComplete, maxLength: subcontractorNameMaxChars }),
+  subcontractorRegistrationNumber: getTextareaValidation({
+    required: data.markedAsComplete,
+    maxLength: subcontractorRegistrationNumberMaxChars,
+  }),
+  subcontractorRelationship: booleanValidation,
+  subcontractorRelationshipJustification: getTextareaValidation({
+    required: data.markedAsComplete && data.subcontractorRelationship,
+    maxLength: subcontractorRelationshipJustificationMaxChars,
+  }),
+  subcontractorLocation: getTextareaValidation({
+    required: data.markedAsComplete,
+    maxLength: subcontractorLocationMaxChars,
+  }),
+  subcontractorDescription: getTextareaValidation({
+    required: data.markedAsComplete,
+    maxLength: subcontractorDescriptionMaxChars,
+  }),
+  subcontractorJustification: getTextareaValidation({
+    required: data.markedAsComplete,
+    maxLength: subcontractorJustificationMaxChars,
+  }),
+  subcontractorCost: getGenericCurrencyValidation({
+    required: data.markedAsComplete,
+  }),
+  markedAsComplete: z.boolean(),
+}));
 
 type ApproveNewSubcontractorSchemaType = typeof approveNewSubcontractorSchema;
 

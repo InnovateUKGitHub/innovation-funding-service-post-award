@@ -2061,10 +2061,7 @@
     },
     "pcrReview": {
       "comments": {
-        "errors": {
-          "too_big": "Comments must be a maximum of {{count}} characters.",
-          "too_small": "Enter a comment."
-        }
+        "label": "Comments"
       },
       "status": {
         "errors": {
@@ -2139,10 +2136,7 @@
             }
           },
           "comments": {
-            "label": "Comments",
-            "errors": {
-              "too_small": "Enter comments for {{input.title, lowercase}}."
-            }
+            "label": "Comments"
           }
         }
       }

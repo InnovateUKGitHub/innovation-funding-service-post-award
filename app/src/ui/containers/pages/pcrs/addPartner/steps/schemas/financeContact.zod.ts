@@ -1,26 +1,17 @@
 import { FormTypes } from "@ui/zod/FormTypes";
+import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const getFinanceContactSchema = (markedAsComplete: boolean) =>
-  markedAsComplete
-    ? z.object({
-        form: z.literal(FormTypes.PcrAddPartnerFinanceContactStep),
-        markedAsComplete: z.string(),
-        button_submit: z.string(),
-        contact1Email: z.string().max(255).min(1),
-        contact1Forename: z.string().max(50).min(1),
-        contact1Surname: z.string().max(50).min(1),
-        contact1Phone: z.string().max(20).min(1),
-      })
-    : z.object({
-        form: z.literal(FormTypes.PcrAddPartnerFinanceContactStep),
-        markedAsComplete: z.string(),
-        button_submit: z.string(),
-        contact1Email: z.string().max(255),
-        contact1Forename: z.string().max(50),
-        contact1Surname: z.string().max(50),
-        contact1Phone: z.string().max(20),
-      });
+  z.object({
+    form: z.literal(FormTypes.PcrAddPartnerFinanceContactStep),
+    markedAsComplete: z.string(),
+    button_submit: z.string(),
+    contact1Forename: getTextareaValidation({ required: markedAsComplete, maxLength: 50 }),
+    contact1Surname: getTextareaValidation({ required: markedAsComplete, maxLength: 50 }),
+    contact1Phone: getTextareaValidation({ required: markedAsComplete, maxLength: 20 }),
+    contact1Email: getTextareaValidation({ required: markedAsComplete, maxLength: 255 }),
+  });
 
 export type FinanceContactSchemaType = ReturnType<typeof getFinanceContactSchema>;
 export type FinanceContactSchema = z.infer<FinanceContactSchemaType>;

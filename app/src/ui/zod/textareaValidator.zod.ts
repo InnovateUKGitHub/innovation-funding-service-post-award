@@ -28,6 +28,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
     .string()
     .trim()
     .optional()
+    .nullable()
     .transform((val, ctx) => {
       const isEmpty = (typeof val === "string" && val.trim() === "") || isNil(val);
       if (required && isEmpty) {
@@ -58,7 +59,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
             params: {
               min: minLength,
               max: maxLength,
-              count: minLength === 1 && maxLength == 1 ? 1 : 2,
+              count: len,
               generic: true,
               i18n: "errors.generic.textarea.invalid_range",
             },
@@ -101,6 +102,6 @@ export const getTextareaValidation = <Required extends boolean = false>({
     });
 
   return validationRule as unknown as Required extends true
-    ? z.ZodEffects<z.ZodString, string, string | undefined>
-    : z.ZodEffects<z.ZodString, string | undefined, string | undefined>;
+    ? z.ZodEffects<z.ZodString, string, string | undefined | null>
+    : z.ZodEffects<z.ZodString, string | undefined, string | undefined | null>;
 };
