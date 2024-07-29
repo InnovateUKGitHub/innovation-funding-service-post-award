@@ -1,5 +1,5 @@
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
-import { accPcrHeaderBuilder, accPcrRemovePartnerBuilder, makeBaseProject } from "project-factory";
+import { accPcrHeaderBuilder, accPcrRemovePartnerBuilder, makeBaseProject } from "@innovateuk/project-factory";
 
 Given("a standard CR&D project exists", function () {
   if (this.projectCreated !== "CR&D") {

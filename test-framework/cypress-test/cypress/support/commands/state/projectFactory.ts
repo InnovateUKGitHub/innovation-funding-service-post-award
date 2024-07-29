@@ -1,4 +1,4 @@
-import { CreateProjectProps, buildApex } from "project-factory";
+import { CreateProjectProps, buildApex } from "@innovateuk/project-factory";
 
 const createProject = (data: CreateProjectProps) => {
   const prefix = Math.floor(Date.now() / 1000).toString() + ".";

@@ -1,4 +1,4 @@
-import { EnvironmentManager } from "environment-manager";
+import { EnvironmentManager } from "@innovateuk/environment-manager";
 import jwt from "jsonwebtoken";
 import { xml } from "./helpers/xml";
 
