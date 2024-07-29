@@ -68,7 +68,7 @@ describe("claims > MO view of closed claim", () => {
   });
 
   it("should show the expected details", () => {
-    cy.getCellFromHeaderAndRow("Cost (£)", "Labour").should("have.text", "£42,400.00");
+    cy.getCellFromHeaderAndRow("Cost", "Labour").should("have.text", "£42,400.00");
     cy.getTableRow("Total costs").contains("£42,400.00");
     cy.getTableRow("Forecast costs").contains("£0.00");
     cy.getTableRow("Difference").contains("0.00%");
@@ -86,7 +86,7 @@ describe("claims > MO view of closed claim", () => {
   it("should navigate to the materials page when Next > Materials is clicked", () => {
     cy.contains("Next").contains("Materials").click();
     cy.heading("Materials");
-    cy.getCellFromHeaderAndRow("Cost (£)", "Gubbins").should("have.text", "£5,000.00");
+    cy.getCellFromHeaderAndRow("Cost", "Gubbins").should("have.text", "£5,000.00");
     cy.getTableRow("Total costs").contains("£5,000.00");
     cy.getTableRow("Forecast costs").contains("£0.00");
     cy.getTableRow("Difference").contains("0.00%");
@@ -100,7 +100,7 @@ describe("claims > MO view of closed claim", () => {
   it("should navigate back to the subcontracting page when Previous > Subcontracting is clicked", () => {
     cy.contains("Previous").contains("Subcontracting").click();
     cy.heading("Subcontracting");
-    cy.getCellFromHeaderAndRow("Cost (£)", "Palming off work to 3rd party").should("have.text", "£12,000.00");
+    cy.getCellFromHeaderAndRow("Cost", "Palming off work to 3rd party").should("have.text", "£12,000.00");
     cy.getTableRow("Total costs").contains("£12,000.00");
     cy.getTableRow("Forecast costs").contains("£0.00");
     cy.getTableRow("Difference").contains("0.00%");

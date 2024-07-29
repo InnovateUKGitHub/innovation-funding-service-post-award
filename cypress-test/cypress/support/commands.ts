@@ -554,18 +554,22 @@ const testFileComponent = (
   }
 };
 
-const inputPrefix = (label: string, count: boolean, n: number) => {
-  cy.get(".govuk-input__prefix").should("have.text", label);
-  if (count) {
-    cy.get(".govuk-input__prefix").should("have.length", n);
-  }
+const inputPrefix = (label: string, n: number) => {
+  //cy.contains(".govuk-input__prefix", label);
+  cy.get(".govuk-input__prefix")
+    .should("have.length", n)
+    .then(() => {
+      cy.contains(".govuk-input__prefix", label);
+    });
 };
 
-const inputSuffix = (label: string, count: boolean, n?: number) => {
-  cy.get(".govuk-input__suffix").should("have.text", label);
-  if (count) {
-    cy.get(".govuk-input__suffix").should("have.length", n);
-  }
+const inputSuffix = (label: string, n: number) => {
+  //cy.contains(".govuk-input__suffix", label);
+  cy.get(".govuk-input__suffix")
+    .should("have.length", n)
+    .then(() => {
+      cy.contains(".govuk-input__suffix", label);
+    });
 };
 
 Cypress.Commands.add("getByLabel", getByLabel);

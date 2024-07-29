@@ -787,9 +787,9 @@ export const pcrNewCostCatLineItem = () => {
   cy.wait(200);
   cy.getByLabel("Gross employee cost").type("50000");
   cy.wait(200);
-  cy.getByLabel("Rate (£/day)").type("500");
+  cy.getByLabel("Rate").type("500");
   cy.wait(200);
-  cy.getHintFromLabel("Rate (£/day)").contains(
+  cy.getHintFromLabel("Rate").contains(
     "This should be calculated from the number of working days for this role per year.",
   );
   cy.wait(200);
@@ -960,7 +960,7 @@ export const addPartnerLabourCost = () => {
 export const otherFundingTable = () => {
   cy.tableHeader("Source of funding");
   cy.tableHeader("Date secured (MM YYYY)");
-  cy.tableHeader("Funding amount (£)");
+  cy.tableHeader("Funding amount");
   cy.tableHeader("Total other funding");
 };
 
@@ -971,7 +971,7 @@ export const addSourceOfFundingValidation = () => {
     cy.validationLink(message);
     cy.paragraph(message);
   });
-  cy.getCellFromHeaderAndRowNumber("Funding amount (£)", 1, `[aria-label="funding amount for item 0"]`)
+  cy.getCellFromHeaderAndRowNumber("Funding amount", 1, `[aria-label="funding amount for item 0"]`)
     .type("error")
     .wait(500);
   cy.validationLink("Funding amount must be a number");
@@ -1143,6 +1143,14 @@ export const ktpCostsTable = () => {
     "Other costs",
     "Additional associate support",
     "Subcontracting",
+  ].forEach(costCat => {
+    cy.contains("tr", costCat).within(() => {
+      cy.get("td:nth-child(4)").within(() => {
+        cy.inputPrefix("£", 1);
+      });
+    });
+  });
+  [
     "Partner totals",
     "Cost category",
     "Total eligible costs",
@@ -2044,6 +2052,9 @@ export const updateEUICosts = () => {
       .eq(index + 1)
       .within(() => {
         cy.get("td:nth-child(5)").contains(calculation);
+        cy.get("td:nth-child(4)").within(() => {
+          cy.inputPrefix("£", 1);
+        });
       });
   });
   cy.wait(500);

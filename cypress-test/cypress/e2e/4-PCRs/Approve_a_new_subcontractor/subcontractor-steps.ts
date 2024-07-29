@@ -234,7 +234,7 @@ export const briefDescriptionSaved = () => {
 };
 
 export const validateNumericCurrency = () => {
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   ["Lorem ipsum", "^*", "*()", "/``/q"].forEach(input => {
     cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(input);
     cy.button("Save and continue").click();

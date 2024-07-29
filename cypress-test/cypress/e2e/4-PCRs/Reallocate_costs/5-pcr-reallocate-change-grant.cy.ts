@@ -41,10 +41,25 @@ describe("PCR > Reallocate Costs > 5 - Change remaining grant", () => {
     ].forEach(([euiVal, aBCadVal, aBSEuiVal], index) => {
       cy.log(`**Attempt number ${index + 1}**`);
       cy.getByAriaLabel("EUI Small Ent Health new remaining grant").clear().type(euiVal);
+      cy.contains("tr", "EUI Small Ent Health").within(() => {
+        cy.get("td:nth-child(6)").within(() => {
+          cy.inputPrefix("£", 1);
+        });
+      });
       cy.wait(500);
       cy.getByAriaLabel("A B Cad Services new remaining grant").clear().type(aBCadVal);
+      cy.contains("tr", "A B Cad Services").within(() => {
+        cy.get("td:nth-child(6)").within(() => {
+          cy.inputPrefix("£", 1);
+        });
+      });
       cy.wait(500);
       cy.getByAriaLabel("ABS EUI Medium Enterprise new remaining grant").clear().type(aBSEuiVal);
+      cy.contains("tr", "ABS EUI Medium Enterprise").within(() => {
+        cy.get("td:nth-child(6)").within(() => {
+          cy.inputPrefix("£", 1);
+        });
+      });
       cy.wait(500);
       cy.get("tfoot").within(() => {
         cy.get("th:nth-child(6)").contains("£341,900.00");

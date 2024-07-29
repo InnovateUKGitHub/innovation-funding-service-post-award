@@ -167,7 +167,7 @@ export const newCostCatLineItem = () => {
   cy.wait(200);
   cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
 };
 
 export const allowFileUpload = () => {

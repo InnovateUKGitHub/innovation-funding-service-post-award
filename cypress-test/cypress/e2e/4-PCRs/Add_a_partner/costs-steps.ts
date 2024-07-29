@@ -117,11 +117,7 @@ export const checkAddOverheadItem = () => {
     cy.getByLabel("Calculated").click();
     checkTotalCostEquals("£0.00");
     cy.clickOn("Save and return to project costs");
-    cy.validateCurrency(
-      "Total cost of overheads as calculated in the spreadsheet (£)",
-      "Total cost of overheads",
-      "15000",
-    );
+    cy.validateCurrency("Total cost of overheads as calculated in the spreadsheet", "Total cost of overheads", "15000");
     checkTotalCostEquals(pounds(cost));
     cy.clickOn("Save and return to project costs");
     cy.get("h2").contains("Project costs for new partner");
@@ -465,7 +461,7 @@ export const checkAddAdditionalCapitalUsageItem = () => {
       cy.getByLabel("Existing").click();
       cy.getByLabel("Depreciation period").type("24");
       cy.getByLabel("Net present value").type("2000000");
-      cy.getByLabel("Residual value at end of project (£)").type("1500000");
+      cy.getByLabel("Residual value at end of project").type("1500000");
       cy.getByLabel("Utilisation").type("50");
       checkTotalCostEquals(pounds(cost), "Net cost");
       checkSummary("Capital usage", "credit swap", cost, categoryTotal, totalCost);
@@ -703,7 +699,7 @@ export const validateValueRequired = () => {
 
 export const validateAlphaNotAllowed = () => {
   cy.getByLabel("Total cost of overheads as calculated in the spreadsheet").clear().type("lorem");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.validationLink("Total cost of overheads must be a number");
   cy.paragraph("Total cost of overheads must be a number");
 };

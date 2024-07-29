@@ -59,8 +59,8 @@ export const labourLineAdd = (costcat: string) => {
   cy.getByLabel("Rate").clear().type("500");
   cy.getByLabel("Days to be spent by all staff with this role").clear().type("100");
   cy.paragraph("£50,000.00");
-  cy.inputPrefix("£", true, 2);
-  cy.inputSuffix("per day", false);
+  cy.inputPrefix("£", 2);
+  cy.inputSuffix("per day", 1);
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -90,7 +90,7 @@ export const materialsLineAdd = (costcat: string) => {
   cy.getByLabel("Quantity").clear().type("1000");
   cy.getByLabel("Cost per item").clear().type("0.50");
   cy.paragraph("£500.00");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -110,7 +110,7 @@ export const subcontractingLineAdd = (costcat: string) => {
     .clear()
     .type("building");
   cy.getByLabel("Cost").type("2000");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -126,9 +126,9 @@ export const travelAndSubLineAdd = (costcat: string) => {
   cy.get("h2").contains(costcat);
   cy.getByLabel("Purpose of journey or description of subsistence cost").clear().type("collecting pizza");
   cy.getByLabel("Number of times").clear().type("2");
-  cy.getByLabel("Cost of each (£)").clear().type("100");
+  cy.getByLabel("Cost of each").clear().type("100");
   cy.paragraph("£200.00");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -149,9 +149,10 @@ export const capUsageLineAdd = (costcat: string) => {
   cy.getByLabel("Residual value at end of project").clear().type("1000");
   cy.getByLabel("Utilisation").clear().type("25");
   cy.paragraph("£750.00");
-  cy.inputPrefix("£", true, 2);
-  cy.inputSuffix("%", false);
-  cy.inputSuffix("Months", false);
+  cy.inputPrefix("£", 2);
+  ["%", "months"].forEach(suffix => {
+    cy.inputSuffix(suffix, 2);
+  });
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -167,7 +168,7 @@ export const otherCostsLineAdd = (costcat: string) => {
   cy.get("h2").contains(costcat);
   cy.getByLabel("Description and justification of the cost").clear().type("D&D books for morale");
   cy.getByLabel("Estimated cost").clear().type("100");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.get("main").within(() => {
     cy.submitButton("Save and return").click();
   });
@@ -226,7 +227,7 @@ export const updateOverheadsCalculated = () => {
   cy.getByLabel("Calculated").click();
   cy.getByLabel("Total cost of overheads as calculated in the spreadsheet").clear().type("66666");
   cy.paragraph("£66,666.00");
-  cy.inputPrefix("£", false);
+  cy.inputPrefix("£", 1);
   cy.button("Calculate overheads documents").click();
   cy.get("h2").contains("Calculate overheads");
   cy.fileInput("testfile.doc");
@@ -237,7 +238,8 @@ export const updateOverheadsCalculated = () => {
   cy.get("h2").contains("R & D overheads");
   cy.getByLabel("Calculated").should("have.attr", "checked");
   cy.tableCell("testfile.doc");
-  cy.getByLabel("Total cost of overheads as calculated in the spreadsheet (£)").should("have.value", "66666");
+  cy.getByLabel("Total cost of overheads as calculated in the spreadsheet").should("have.value", "66666");
+  cy.inputPrefix("£", 1);
   cy.paragraph("£66,666.00");
   cy.button("Save and return to project costs").click();
   cy.get("h2").contains("Project costs for new partner");

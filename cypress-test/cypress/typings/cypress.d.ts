@@ -331,13 +331,13 @@ declare global {
       ): void;
 
       /**
-       * Gets input prefix class and asserts of existence with option to count number on page
+       * Gets input prefix class and asserts of existence and counts number on page
        */
-      inputPrefix(label: string, count: boolean, n?: number): void;
+      inputPrefix(label: string, n: number): void;
       /**
-       * Gets input suffix class and asserts of existence with option to count number on page
+       * Gets input suffix class and asserts of existence and counts number on page
        */
-      inputSuffix(label: string, count: boolean, n?: number): void;
+      inputSuffix(label: string, n: number): void;
     }
   }
 }
