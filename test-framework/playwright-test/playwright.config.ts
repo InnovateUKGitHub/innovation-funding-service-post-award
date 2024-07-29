@@ -21,12 +21,17 @@ const testDir = defineBddConfig({
   paths: ["./src/features/**/*.feature"],
 });
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+let baseURL: string | undefined = undefined;
+
+switch (process.env.TEST_SALESFORCE_SANDBOX) {
+  case "dev":
+  case "demo":
+    baseURL = `https://www-acc-${process.env.TEST_SALESFORCE_SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
+    break;
+  case "sysint":
+    baseURL = `https://www-acc-${process.env.TEST_SALESFORCE_SANDBOX}.apps.org-env-0.org.innovateuk.ukri.org`;
+    break;
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -45,7 +50,7 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org",
+    baseURL,
     httpCredentials,
     trace: "on-first-retry",
     testIdAttribute: "data-qa",

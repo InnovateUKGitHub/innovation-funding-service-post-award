@@ -59,8 +59,7 @@ class AccNavigation {
 
   @Given("the user is on the project dashboard")
   async gotoProjectDashboard() {
-    await this.gotoDeveloperHomepage();
-    await this.developerHomepage.selectProjectTile();
+    await this.page.goto("/projects/dashboard");
     await this.projectDashboard.isPage();
   }
 

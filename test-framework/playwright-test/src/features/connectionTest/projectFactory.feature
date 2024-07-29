@@ -7,6 +7,7 @@ Feature: Project Factory - External UI Project Creation Tool
 
   Scenario: Creating a basic project
     Given a standard CR&D project exists
+    And the user is a project manager
     When the user is on the project dashboard
 # Then the user sees the project
 

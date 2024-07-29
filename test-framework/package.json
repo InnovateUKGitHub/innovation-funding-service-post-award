@@ -15,10 +15,8 @@
     "open:dev": "TEST_SALESFORCE_SANDBOX=dev turbo open",
     "open:bjssdev": "TEST_SALESFORCE_SANDBOX=dev turbo open",
     "open:at": "TEST_SALESFORCE_SANDBOX=at turbo open",
-    "run": "turbo run",
-    "run:dev": "TEST_SALESFORCE_SANDBOX=dev turbo run",
-    "run:bjssdev": "TEST_SALESFORCE_SANDBOX=dev turbo run",
-    "run:at": "TEST_SALESFORCE_SANDBOX=at turbo run"
+    "open:sysint": "TEST_SALESFORCE_SANDBOX=sysint turbo open",
+    "run": "turbo run"
   },
   "dependencies": {
     "turbo": "^2.0.6"

@@ -18,6 +18,7 @@ import { AccUserSwitcher } from "./acc/AccUserSwitcher";
 import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
+import { IfsAuthLoginPage } from "./ifs/auth/pages/IfsAuthLoginPage";
 
 type AccFixtures = {
   // Pages
@@ -42,6 +43,9 @@ type AccFixtures = {
   sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage;
   sfdcNavigation: SfdcNavigation;
   sfdcSearchResultsPage: SfdcSearchResultsPage;
+
+  // IFS Auth
+  ifsAuthLoginPage: IfsAuthLoginPage;
 };
 
 interface Workers {
@@ -87,7 +91,8 @@ export const test = base.extend<AccFixtures, Workers>({
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
-  accUserSwitcher: ({ page, context, projectState }, use) => use(new AccUserSwitcher({ page, context, projectState })),
+  accUserSwitcher: ({ page, context, projectState, ifsAuthLoginPage }, use) =>
+    use(new AccUserSwitcher({ page, context, projectState, ifsAuthLoginPage })),
   // Salesforce (dot com)
   sfdcApi: [SfdcApi.create, { scope: "worker" }],
   sfdcPage: SfdcLightningPage.create,
@@ -96,6 +101,7 @@ export const test = base.extend<AccFixtures, Workers>({
   sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage.create,
   sfdcNavigation: SfdcNavigation.create,
   sfdcSearchResultsPage: SfdcSearchResultsPage.create,
+  ifsAuthLoginPage: IfsAuthLoginPage.create,
 });
 
 export { AccFixtures };
