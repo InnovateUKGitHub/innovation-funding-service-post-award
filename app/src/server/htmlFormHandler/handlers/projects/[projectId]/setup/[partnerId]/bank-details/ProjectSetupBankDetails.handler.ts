@@ -68,12 +68,12 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
   ): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
 
-    dto.bankDetails.companyNumber = input.companyNumber;
-    dto.bankDetails.address.accountBuilding = input.accountBuilding;
-    dto.bankDetails.address.accountLocality = input.accountLocality;
-    dto.bankDetails.address.accountPostcode = input.accountPostcode;
-    dto.bankDetails.address.accountStreet = input.accountStreet;
-    dto.bankDetails.address.accountTownOrCity = input.accountTownOrCity;
+    dto.bankDetails.companyNumber = input.companyNumber ?? null;
+    dto.bankDetails.address.accountBuilding = input.accountBuilding ?? null;
+    dto.bankDetails.address.accountLocality = input.accountLocality ?? null;
+    dto.bankDetails.address.accountPostcode = input.accountPostcode ?? null;
+    dto.bankDetails.address.accountStreet = input.accountStreet ?? null;
+    dto.bankDetails.address.accountTownOrCity = input.accountTownOrCity ?? null;
 
     if ("sortCode" in input) {
       dto.bankDetails.sortCode = input.sortCode;

@@ -11,7 +11,7 @@ const projectSetupBankDetailsMaxLength = 255 as const;
 
 const projectSetupBankDetailsValidation = getTextareaValidation({
   maxLength: projectSetupBankDetailsMaxLength,
-  required: true,
+  required: false,
 });
 
 const getProjectSetupBankDetailsSchema = (
