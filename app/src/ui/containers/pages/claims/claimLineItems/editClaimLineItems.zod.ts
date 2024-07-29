@@ -60,7 +60,7 @@ const editClaimLineItemsSchema = z.object({
   lineItems: editClaimLineItemLineItemSchema.array(),
   comments: getTextareaValidation({
     maxLength: claimDetailsCommentsMaxLength,
-    required: true,
+    required: false,
   }),
 });
 
