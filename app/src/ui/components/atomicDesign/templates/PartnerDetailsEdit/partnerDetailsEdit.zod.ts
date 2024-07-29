@@ -15,7 +15,6 @@ export const partnerDetailsEditSchema = z.object({
 
 export const partnerDetailsOptionalSchema = z.object({
   postcode: getTextareaValidation({
-    minLength: 1,
     maxLength: 10,
     required: true,
   }),
@@ -24,6 +23,7 @@ export const partnerDetailsOptionalSchema = z.object({
 export const postcodeSetupSchema = z
   .object({
     postcode: getTextareaValidation({
+      minLength: 1,
       maxLength: 10,
       required: false,
     }),
