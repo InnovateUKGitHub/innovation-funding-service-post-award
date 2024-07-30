@@ -6,9 +6,6 @@ import { processDto } from "@shared/processResponse";
 import { ControllerBase, ApiParams } from "./controllerBase";
 
 export interface IFinancialVirement<Context extends "client" | "server"> {
-  get(
-    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; partnerId?: PartnerId }>,
-  ): Promise<FinancialVirementDto>;
   update(
     params: ApiParams<
       Context,
@@ -28,11 +25,6 @@ class Controller extends ControllerBase<"server", FinancialVirementDto> {
   constructor() {
     super("financial-virements");
 
-    this.getItem(
-      "/:projectId/:pcrId/:pcrItemId",
-      (p, q) => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, partnerId: q.partnerId }),
-      p => this.get(p),
-    );
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId",
       (p, q, b: FinancialVirementDto) => ({
@@ -45,13 +37,6 @@ class Controller extends ControllerBase<"server", FinancialVirementDto> {
       }),
       p => this.update(p),
     );
-  }
-
-  async get(
-    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; partnerId?: PartnerId }>,
-  ): Promise<FinancialVirementDto> {
-    const query = new GetFinancialVirementQuery(params.projectId, params.pcrItemId, params.partnerId);
-    return contextProvider.start(params).runQuery(query);
   }
 
   async update(

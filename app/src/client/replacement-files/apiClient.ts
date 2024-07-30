@@ -65,10 +65,6 @@ const clientApi: IApiClient<"client"> = {
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
   financialVirements: {
-    get: params =>
-      ajaxJson(
-        `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}`,
-      ),
     update: params =>
       ajaxPut(
         `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}&submit=${params.submit}`,
