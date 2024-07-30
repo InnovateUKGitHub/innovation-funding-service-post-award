@@ -105,35 +105,13 @@ const clientApi: IApiClient<"client"> = {
   },
   pcrs: {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
-    getAll: params => ajax(`/api/pcrs?projectId=${params.projectId}`),
-    get: params => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
-    getTypes: params => ajax(`/api/pcrs/all-types/${params.projectId}`),
-    getAvailableTypes: params => ajax(`/api/pcrs/available-types?projectId=${params.projectId}&pcrId=${params.pcrId}`),
-    getTimeExtensionOptions: params => ajax(`/api/pcrs/time-extension-options?projectId=${params.projectId}`),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
-    getStatusChanges: params => ajax(`/api/pcrs/status-changes/${params.projectId}/${params.projectChangeRequestId}`),
-    getPcrProjectRoles: () => ajax("/api/pcrs/project-roles"),
-    getPcrPartnerTypes: () => ajax("/api/pcrs/partner-types"),
-    getParticipantSizes: () => ajax("/api/pcrs/participant-sizes"),
-    getProjectLocations: () => ajax("/api/pcrs/project-locations"),
-    getCapitalUsageTypes: () => ajax("/api/pcrs/capital-usage-types"),
-    getOverheadRateOptions: () => ajax("/api/pcrs/overhead-rate-options"),
-  },
-  projects: {
-    get: params => ajaxJson(`/api/projects/${params.projectId}`),
-    getAll: () => ajaxJson("/api/projects"),
-    getAllAsDeveloper: () => ajaxJson("/api/projects/allAsDeveloper"),
-    isProjectActive: params => ajaxJson(`/api/projects/project-active/${params.projectId}`),
   },
   projectContacts: {
-    getAllByProjectId: params => ajaxJson(`/api/project-contacts/${params.projectId}`),
     update: params => ajaxPut(`/api/project-contacts/${params.projectId}`, params.contacts),
   },
   partners: {
-    get: params => ajaxJson(`/api/partners/${params.partnerId}`),
-    getAll: () => ajaxJson("/api/partners"),
-    getAllByProjectId: params => ajaxJson(`/api/partners?projectId=${params.projectId}`),
     updatePartner: params =>
       ajaxPut(
         `/api/partners/${params.partnerId}?validateBankDetails=${params.validateBankDetails}&verifyBankDetails=${params.verifyBankDetails}`,

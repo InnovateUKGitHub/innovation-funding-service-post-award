@@ -6,7 +6,6 @@ import { processDto } from "@shared/processResponse";
 import { UpdateProjectContactsCommand } from "@server/features/projectContacts/updateProjectContactsCommand";
 
 export interface IProjectContactsApi<Context extends "client" | "server"> {
-  getAllByProjectId: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<ProjectContactDto[]>;
   update: (
     params: ApiParams<
       Context,
@@ -19,11 +18,6 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
   constructor() {
     super("project-contacts");
 
-    this.getItems(
-      "/:projectId",
-      p => ({ projectId: p.projectId }),
-      p => this.getAllByProjectId(p),
-    );
     this.putItems(
       "/:projectId",
       (p, _, b: Pick<ProjectContactDto, "id" | "associateStartDate">[]) => ({
@@ -34,7 +28,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     );
   }
 
-  public async getAllByProjectId(params: ApiParams<"server", { projectId: ProjectId }>) {
+  private async getAllByProjectId(params: ApiParams<"server", { projectId: ProjectId }>) {
     const query = new GetAllForProjectQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }

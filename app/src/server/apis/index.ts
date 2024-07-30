@@ -12,7 +12,6 @@ import * as loans from "./loans";
 import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
 import * as partners from "./partners";
-import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 
 export interface IApiClient<Context extends "client" | "server"> {
@@ -26,7 +25,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   loans: loans.ILoansApi<Context>;
   monitoringReports: monitoringReports.IMonitoringReportsApi<Context>;
   pcrs: pcrs.IPCRsApi<Context>;
-  projects: projects.IProjectsApi<Context>;
   projectContacts: projectContacts.IProjectContactsApi<Context>;
   partners: partners.IPartnersApi<Context>;
 }
@@ -43,7 +41,6 @@ export const serverApis = {
   monitoringReports: monitoringReports.controller,
   pcrs: pcrs.controller,
   partners: partners.controller,
-  projects: projects.controller,
   projectContacts: projectContacts.controller,
 } as const;
 
