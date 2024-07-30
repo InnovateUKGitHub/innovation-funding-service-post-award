@@ -49,8 +49,8 @@ export const getTextareaValidation = <Required extends boolean = false>({
         const canBeTooBig = typeof maxLength === "number";
         const tooBig = canBeTooBig && len > maxLength;
 
-        // Something can be too small if it is not 0 characters long.
-        const canBeTooSmall = typeof minLength === "number" && minLength !== 0;
+        // Something can be too small if the minimum length is not (0 or required and 1)
+        const canBeTooSmall = typeof minLength === "number" && !(minLength === 0 || (required && minLength === 1));
         const tooSmall = len < minLength;
 
         if (canBeTooBig && canBeTooSmall && (tooBig || tooSmall)) {

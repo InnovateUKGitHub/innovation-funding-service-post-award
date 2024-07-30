@@ -1,20 +1,114 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generic textarea validator acceptable 1`] = `
+exports[`generic textarea validator max length validation 3 chars long 1`] = `
+{
+  "data": {
+    "organisationName": "ops",
+  },
+  "success": true,
+}
+`;
+
+exports[`generic textarea validator max length validation 10 chars long 1`] = `
+{
+  "data": {
+    "organisationName": "acceptable",
+  },
+  "success": true,
+}
+`;
+
+exports[`generic textarea validator max length validation 35 chars long 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 20,
+      "generic": true,
+      "i18n": "errors.generic.textarea.too_big"
+    },
+    "path": [
+      "organisationName"
+    ],
+    "message": "Organisation name must be smaller than 20!"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic textarea validator max length validation non required empty 1`] = `
+{
+  "data": {
+    "organisationName": undefined,
+  },
+  "success": true,
+}
+`;
+
+exports[`generic textarea validator max length validation required empty 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.textarea.required"
+    },
+    "path": [
+      "organisationName"
+    ],
+    "message": "Organisation name required!"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic textarea validator max length validation spaces are not allowed 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.textarea.required"
+    },
+    "path": [
+      "organisationName"
+    ],
+    "message": "Organisation name required!"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic textarea validator max length validation spaces are treated as undefined 1`] = `
+{
+  "data": {
+    "organisationName": undefined,
+  },
+  "success": true,
+}
+`;
+
+exports[`generic textarea validator ranged validation acceptable 1`] = `
 {
   "data": "acceptable",
   "success": true,
 }
 `;
 
-exports[`generic textarea validator non required empty 1`] = `
+exports[`generic textarea validator ranged validation non required empty 1`] = `
 {
   "data": undefined,
   "success": true,
 }
 `;
 
-exports[`generic textarea validator required empty 1`] = `
+exports[`generic textarea validator ranged validation required empty 1`] = `
 {
   "error": [ZodError: [
   {
@@ -31,7 +125,31 @@ exports[`generic textarea validator required empty 1`] = `
 }
 `;
 
-exports[`generic textarea validator too big 1`] = `
+exports[`generic textarea validator ranged validation spaces are not allowed 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.textarea.required"
+    },
+    "path": [],
+    "message": "ARTMS required!"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`generic textarea validator ranged validation spaces are treated as undefined 1`] = `
+{
+  "data": undefined,
+  "success": true,
+}
+`;
+
+exports[`generic textarea validator ranged validation too big 1`] = `
 {
   "error": [ZodError: [
   {
@@ -51,7 +169,7 @@ exports[`generic textarea validator too big 1`] = `
 }
 `;
 
-exports[`generic textarea validator too small 1`] = `
+exports[`generic textarea validator ranged validation too small 1`] = `
 {
   "error": [ZodError: [
   {
