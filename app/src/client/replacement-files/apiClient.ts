@@ -93,8 +93,6 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   loans: {
-    getAll: params => ajax(`/api/loans/${params.projectId}`),
-    get: params => ajax(`/api/loans/get/${params.projectId}/?loanId=${params.loanId}&periodId=${params.periodId}`),
     update: params => ajaxPut(`/api/loans/${params.projectId}/${params.loanId}`, params.loan),
   },
   monitoringReports: {
