@@ -15,12 +15,6 @@ const clientApi: IApiClient<"client"> = {
         params.claim,
       ),
   },
-  costsSummary: {
-    getAllByPartnerIdForPeriod: params =>
-      ajaxJson(
-        `/api/costs-summary?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}`,
-      ),
-  },
   claimDetails: {
     saveClaimDetails: params =>
       ajaxPut(

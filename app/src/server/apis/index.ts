@@ -3,7 +3,6 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
-import * as costsSummary from "./costsSummary";
 import * as costCategories from "./costCategories";
 import * as documents from "./documents";
 import * as financialVirements from "./financialVirements";
@@ -20,7 +19,6 @@ import * as projectContacts from "./projectContacts";
 
 export interface IApiClient<Context extends "client" | "server"> {
   claimDetails: claimDetails.IClaimDetailsApi<Context>;
-  costsSummary: costsSummary.ICostsSummaryApi<Context>;
   claims: claims.IClaimsApi<Context>;
   costCategories: costCategories.ICostCategoriesApi<Context>;
   documents: documents.IDocumentsApi<Context>;
@@ -40,7 +38,6 @@ export interface IApiClient<Context extends "client" | "server"> {
 export const serverApis = {
   claims: claims.controller,
   claimDetails: claimDetails.controller,
-  costsSummary: costsSummary.controller,
   costCategories: costCategories.controller,
   documents: documents.controller,
   financialVirements: financialVirements.controller,
