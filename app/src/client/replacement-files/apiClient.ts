@@ -72,7 +72,6 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   financialLoanVirements: {
-    get: params => ajaxJson(`/api/financial-loan-virements/${params.projectId}/${params.pcrItemId}`),
     update: params =>
       ajaxPut(
         `/api/financial-loan-virements/${params.projectId}/${params.pcrItemId}?submit=${params.submit}`,

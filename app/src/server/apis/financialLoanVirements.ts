@@ -6,9 +6,6 @@ import { processDto } from "@shared/processResponse";
 import { ControllerBase, ApiParams } from "./controllerBase";
 
 export interface IFinancialLoanVirement<Context extends "client" | "server"> {
-  get: (
-    params: ApiParams<Context, { projectId: ProjectId; pcrItemId: PcrItemId }>,
-  ) => Promise<FinancialLoanVirementDto>;
   update: (
     params: ApiParams<
       Context,
@@ -29,15 +26,6 @@ class Controller
   constructor() {
     super("financial-loan-virements");
 
-    this.getItem(
-      "/:projectId/:pcrItemId",
-      p => ({
-        projectId: p.projectId,
-        pcrItemId: p.pcrItemId,
-      }),
-      this.get,
-    );
-
     this.putItem(
       "/:projectId/:pcrItemId",
       (p, q, b: FinancialLoanVirementDto) => ({
@@ -48,14 +36,6 @@ class Controller
       }),
       this.update,
     );
-  }
-
-  async get(
-    params: ApiParams<"server", { projectId: ProjectId; pcrItemId: PcrItemId }>,
-  ): Promise<FinancialLoanVirementDto> {
-    const virementQuery = new GetFinancialLoanVirementQuery(params.projectId, params.pcrItemId);
-
-    return contextProvider.start(params).runQuery(virementQuery);
   }
 
   async update(
