@@ -22,10 +22,6 @@ const clientApi: IApiClient<"client"> = {
         params.claimDetails,
       ),
   },
-  costCategories: {
-    getAll: () => ajaxJson("/api/cost-categories"),
-    getAllFiltered: params => ajaxJson(`/api/cost-categories/filtered/${params.partnerId}`),
-  },
   documents: {
     getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
     uploadLoanDocuments: params =>
