@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 import { RootActionsOrThunk } from "./actions/root";
 import { RootState } from "./reducers/rootReducer";
-import { AccountsStore } from "./stores/accountsStore";
 import { ClaimDetailDocumentsStore } from "./stores/claimDetailDocumentsStore";
 import { ClaimsDetailsStore } from "./stores/claimDetailsStore";
 import { ClaimDocumentsStore } from "./stores/claimDocumentsStore";
@@ -53,7 +52,6 @@ export const createStores = ({
   const loans = new LoansStore(loanDocuments, getState, dispatch);
 
   return {
-    accounts: new AccountsStore(getState, dispatch),
     claimDetailDocuments: new ClaimDetailDocumentsStore(getState, dispatch),
     claimDetails,
     claimDocuments,

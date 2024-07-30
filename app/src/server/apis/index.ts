@@ -1,7 +1,6 @@
 import express from "express";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
-import * as accounts from "./accounts";
 import * as claims from "./claims";
 import * as claimOverrides from "./claimOverrides";
 import * as claimDetails from "./claimDetails";
@@ -22,7 +21,6 @@ import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 
 export interface IApiClient<Context extends "client" | "server"> {
-  accounts: accounts.IAccountsApi<Context>;
   claimDetails: claimDetails.IClaimDetailsApi<Context>;
   costsSummary: costsSummary.ICostsSummaryApi<Context>;
   companies: companiesHouse.ICompaniesApi<Context>;
@@ -44,7 +42,6 @@ export interface IApiClient<Context extends "client" | "server"> {
 }
 
 export const serverApis = {
-  accounts: accounts.controller,
   claims: claims.controller,
   claimOverrides: claimOverrides.controller,
   claimDetails: claimDetails.controller,

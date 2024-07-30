@@ -6,9 +6,6 @@ import { removeUndefinedString } from "@shared/string-helpers";
 import { ClientFileWrapper } from "../clientFileWrapper";
 
 const clientApi: IApiClient<"client"> = {
-  accounts: {
-    getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${encodeURIComponent(params.searchString ?? "")}`),
-  },
   claims: {
     getAllByProjectId: params => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: params => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
