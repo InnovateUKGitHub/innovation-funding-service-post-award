@@ -86,7 +86,6 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   initialForecastDetails: {
-    getAllByPartnerId: params => ajaxJson(`/api/initial-forecast-details/?partnerId=${params.partnerId}`),
     update: params =>
       ajaxPut(
         `/api/initial-forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}&submit=${params.submit}`,

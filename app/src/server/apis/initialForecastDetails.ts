@@ -6,7 +6,6 @@ import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IInitialForecastDetailsApi<Context extends "client" | "server"> {
-  getAllByPartnerId: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
   update: (
     params: ApiParams<
       Context,
@@ -29,15 +28,9 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
       }),
       p => this.update(p),
     );
-
-    this.getItems(
-      "/",
-      (p, q) => ({ partnerId: q.partnerId }),
-      p => this.getAllByPartnerId(p),
-    );
   }
 
-  public async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
+  private async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const query = new GetAllInitialForecastsForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
