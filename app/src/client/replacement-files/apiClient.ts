@@ -92,9 +92,6 @@ const clientApi: IApiClient<"client"> = {
         params.forecasts,
       ),
   },
-  forecastGolCosts: {
-    getAllByPartnerId: params => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`),
-  },
   loans: {
     getAll: params => ajax(`/api/loans/${params.projectId}`),
     get: params => ajax(`/api/loans/get/${params.projectId}/?loanId=${params.loanId}&periodId=${params.periodId}`),

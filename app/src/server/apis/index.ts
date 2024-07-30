@@ -8,7 +8,6 @@ import * as financialVirements from "./financialVirements";
 import * as financialLoanVirements from "./financialLoanVirements";
 import * as forecastDetails from "./forecastDetails";
 import * as initialForecastDetails from "./initialForecastDetails";
-import * as forecastGolCosts from "./forecastGolCosts";
 import * as loans from "./loans";
 import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
@@ -24,7 +23,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   financialLoanVirements: financialLoanVirements.IFinancialLoanVirement<Context>;
   forecastDetails: forecastDetails.IForecastDetailsApi<Context>;
   initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi<Context>;
-  forecastGolCosts: forecastGolCosts.IForecastGolCostsApi<Context>;
   loans: loans.ILoansApi<Context>;
   monitoringReports: monitoringReports.IMonitoringReportsApi<Context>;
   pcrs: pcrs.IPCRsApi<Context>;
@@ -41,7 +39,6 @@ export const serverApis = {
   financialLoanVirements: financialLoanVirements.controller,
   forecastDetails: forecastDetails.controller,
   initialForecastDetails: initialForecastDetails.controller,
-  forecastGolCosts: forecastGolCosts.controller,
   loans: loans.controller,
   monitoringReports: monitoringReports.controller,
   pcrs: pcrs.controller,
