@@ -1,0 +1,14 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: acc-ui-internal-route
+spec:
+  host: www-acc-prod.apps.org-env-0.org.innovateuk.ukri.org
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: acc-ui-service
+  tls:
+    termination: edge
+  wildcardPolicy: None
