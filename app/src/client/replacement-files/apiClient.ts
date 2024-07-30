@@ -15,14 +15,6 @@ const clientApi: IApiClient<"client"> = {
         params.claim,
       ),
   },
-  companies: {
-    searchCompany: params =>
-      ajaxJson(
-        `/api/companies?searchString=${encodeURIComponent(params.searchString)}&itemsPerPage=${
-          params.itemsPerPage
-        }&startIndex=${params.startIndex}`,
-      ),
-  },
   costsSummary: {
     getAllByPartnerIdForPeriod: params =>
       ajaxJson(
