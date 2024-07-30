@@ -1,16 +1,11 @@
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
-import { GetForecastDetailQuery } from "@server/features/forecastDetails/getForecastDetailQuery";
 import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IForecastDetailsApi<Context extends "client" | "server"> {
-  getAllByPartnerId: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
-  get: (
-    params: ApiParams<Context, { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>,
-  ) => Promise<ForecastDetailsDTO>;
   update: (
     params: ApiParams<
       Context,
@@ -33,29 +28,10 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
       }),
       p => this.update(p),
     );
-
-    this.getItems(
-      "/",
-      (p, q) => ({ partnerId: q.partnerId }),
-      p => this.getAllByPartnerId(p),
-    );
-
-    this.getItem(
-      "/:partnerId/:periodId/:costCategoryId",
-      p => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }),
-      p => this.get(p),
-    );
   }
 
-  public async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
+  private async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const query = new GetAllForecastsForPartnerQuery(params.partnerId);
-    return contextProvider.start(params).runQuery(query);
-  }
-
-  public async get(
-    params: ApiParams<"server", { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>,
-  ) {
-    const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 

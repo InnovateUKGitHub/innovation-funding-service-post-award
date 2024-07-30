@@ -79,8 +79,6 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   forecastDetails: {
-    getAllByPartnerId: params => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
-    get: params => ajaxJson(`/api/forecast-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
     update: params =>
       ajaxPut(
         `/api/forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}&submit=${params.submit}`,
@@ -254,4 +252,4 @@ const ajaxPut = <T>(url: string, body: AnyObject, opts?: RequestInit) => {
 const clientsideApiClient = clientApi as unknown as IApiClient<"server">;
 const apiClient = clientApi as unknown as IApiClient<"server">;
 
-export { clientsideApiClient, apiClient };
+export { apiClient, clientsideApiClient };
