@@ -23,26 +23,10 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   documents: {
-    getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
     uploadLoanDocuments: params =>
       ajaxPostFiles(`/api/documents/loans/${params.projectId}/${params.loanId}`, params.documents),
     deleteLoanDocument: p =>
       ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}`, { method: "DELETE" }),
-    getClaimDocuments: params =>
-      ajaxJson(
-        `/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${
-          params.description || ""
-        }`,
-      ),
-    getClaimDetailDocuments: ({ claimDetailKey }) =>
-      ajaxJson(
-        `/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`,
-      ),
-    getProjectChangeRequestDocumentsOrItemDocuments: params =>
-      ajaxJson(`/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}`),
-    getProjectDocuments: params => ajaxJson(`/api/documents/projects/${params.projectId}`),
-    getPartnerDocuments: params => ajaxJson(`/api/documents/partners/${params.projectId}/${params.partnerId}`),
-    getAllPartnerDocuments: params => ajaxJson(`/api/documents/partners/${params.projectId}`),
     deleteProjectChangeRequestDocumentOrItemDocument: params =>
       ajaxJson(
         `/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}/${params.documentId}`,

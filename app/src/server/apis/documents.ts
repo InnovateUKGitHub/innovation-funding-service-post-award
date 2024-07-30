@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { DocumentSummaryDto, AllPartnerDocumentSummaryDto, DocumentDto } from "@framework/dtos/documentDto";
+import { DocumentSummaryDto, DocumentDto } from "@framework/dtos/documentDto";
 import { MultipleDocumentUploadDto, DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { ClaimKey } from "@framework/types/ClaimKey";
@@ -33,33 +33,6 @@ import { UploadProjectDocumentCommand } from "@server/features/documents/uploadP
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IDocumentsApi<Context extends "client" | "server"> {
-  getClaimDocuments: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        partnerId: PartnerId;
-        periodId: number;
-        description?: DocumentDescription;
-      }
-    >,
-  ) => Promise<DocumentSummaryDto[]>;
-  getClaimDetailDocuments: (
-    params: ApiParams<Context, { claimDetailKey: ClaimDetailKey }>,
-  ) => Promise<DocumentSummaryDto[]>;
-  getProjectChangeRequestDocumentsOrItemDocuments: (
-    params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestIdOrItemId: string }>,
-  ) => Promise<DocumentSummaryDto[]>;
-  getProjectDocuments: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<DocumentSummaryDto[]>;
-  getPartnerDocuments: (
-    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId }>,
-  ) => Promise<DocumentSummaryDto[]>;
-  getAllPartnerDocuments: (
-    params: ApiParams<Context, { projectId: ProjectId }>,
-  ) => Promise<AllPartnerDocumentSummaryDto>;
-  getLoanDocuments: (
-    params: ApiParams<Context, { projectId: ProjectId; loanId: string }>,
-  ) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (
     params: ApiParams<Context, { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
