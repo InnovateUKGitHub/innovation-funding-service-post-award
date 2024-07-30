@@ -98,14 +98,10 @@ const clientApi: IApiClient<"client"> = {
   monitoringReports: {
     createMonitoringReport: params =>
       ajaxPost(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
-    get: params => ajaxJson(`/api/monitoring-reports/${params.projectId}/${params.reportId}`),
-    getAllForProject: params => ajax(`/api/monitoring-reports/?projectId=${params.projectId}`),
     saveMonitoringReport: params =>
       ajaxPut(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
     deleteMonitoringReport: params =>
       ajax(`/api/monitoring-reports/${params.projectId}/${params.reportId}`, { method: "DELETE" }),
-    getActiveQuestions: () => ajax("/api/monitoring-reports/questions"),
-    getStatusChanges: params => ajax(`/api/monitoring-reports/status-changes/${params.projectId}/${params.reportId}`),
   },
   pcrs: {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
