@@ -10,9 +10,9 @@ import { PCRReviewParams, PCRReviewRoute } from "@ui/containers/pages/pcrs/pcrRe
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
-export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBase<PCRReviewParams, "pcr"> {
+export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBase<PCRReviewParams, PCRDto> {
   constructor() {
-    super(PCRReviewRoute, ["default"], "pcr");
+    super(PCRReviewRoute, ["default"]);
   }
 
   protected async getDto(

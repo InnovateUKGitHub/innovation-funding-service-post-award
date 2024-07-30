@@ -50,7 +50,6 @@ export class ActiveProjectError extends ForbiddenError {
 export class FormHandlerError extends AppError {
   constructor(
     public key: string,
-    public store: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public dto: any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

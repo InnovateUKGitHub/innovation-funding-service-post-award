@@ -15,10 +15,10 @@ import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringRe
 
 export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<
   MonitoringReportPreparePeriodParams,
-  "monitoringReport"
+  MonitoringReportDto
 > {
   constructor() {
-    super(MonitoringReportPreparePeriodRoute, ["submit"], "monitoringReport");
+    super(MonitoringReportPreparePeriodRoute, ["submit"]);
   }
 
   protected async getDto(

@@ -2,7 +2,6 @@ import express from "express";
 import { Params } from "react-router-dom";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { FormHandlerError } from "@server/features/common/appError";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
@@ -11,8 +10,6 @@ import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";
-import { EditorStateKeys } from "@ui/redux/reducers/editorsReducer";
-import { EditorState } from "@ui/redux/reducers/rootReducer";
 import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
 
 const logger: ILogger = new Logger("FormHandlerBase");
@@ -52,17 +49,9 @@ export interface IFormButton {
 export type IFormBody = {
   [key: string]: string;
 } & { partnerId: PartnerId; projectId: ProjectId; pcrId: PcrId; itemId: PcrItemId };
-type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyEditor = InferEditorStoreDto<any>;
-
-abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
-  protected constructor(
-    routeInfo: RouteInfo<TParams>,
-    buttons: (string | IFormButton)[],
-    protected store: TStore,
-  ) {
+abstract class FormHandlerBase<TParams, TDto extends AnyObject> implements IFormHandler {
+  protected constructor(routeInfo: RouteInfo<TParams>, buttons: (string | IFormButton)[]) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;
@@ -91,7 +80,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     // Used by BadRequestHandler to determine that the route has been matched
     res.locals.isMatchedRoute = true;
 
-    if (err instanceof MulterError && this.store === "multipleDocuments") {
+    if (err instanceof MulterError) {
       // Stub Multer errors with a stub button.
       // We don't know what the button is because we don't have any body anymore (great!)
       logger.error("A multer error occurred!", err);
@@ -123,18 +112,18 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     const session: ISession = { user: req.session?.user };
     const context = contextProvider.start(session);
 
-    let dto: AnyEditor;
+    let dto: TDto;
 
     if (err instanceof MulterError) {
       dto = {
         multerError: err.code,
-      };
+      } as unknown as TDto;
     } else {
       try {
-        dto = (await this.createDto(context, params, button, body, req)) || ({} as AnyEditor);
+        dto = (await this.createDto(context, params, button, body, req)) || ({} as TDto);
       } catch (error) {
         context.logger.error("Error creating dto in form submission", error);
-        dto = {} as AnyEditor;
+        dto = {} as TDto;
       }
     }
 
@@ -147,15 +136,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       context.logger.error("Error handling form submission", error);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const key = this.getStoreKey(params, dto as any);
-      next(
-        new FormHandlerError(
-          key,
-          this.store,
-          dto,
-          this.createValidationResult(params, dto, button),
-          error as IAppError,
-        ),
-      );
+      next(new FormHandlerError(key, dto, this.createValidationResult(params, dto, button), error as IAppError));
     }
   }
 
@@ -165,46 +146,22 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     button: IFormButton,
     body: IFormBody,
     req: express.Request,
-  ): Promise<AnyEditor>;
+  ): Promise<TDto>;
 
-  protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: AnyEditor): Promise<ILinkInfo>;
-
-  protected abstract getStoreKey(
-    params: TParams,
-    dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>,
-  ): string;
-
-  protected abstract createValidationResult(
-    params: TParams,
-    dto: AnyEditor,
-    button: IFormButton,
-  ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  InferEditorStoreValidator<any>;
+  protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: TDto): Promise<ILinkInfo>;
+  protected abstract getStoreKey(params: TParams, dto: TDto): string;
+  protected abstract createValidationResult(params: TParams, dto: TDto, button: IFormButton): ResultBase;
 }
-export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
-  TParams,
-  TStore
-> {
-  protected async createDto(
-    context: IContext,
-    params: TParams,
-    button: IFormButton,
-    body: IFormBody,
-  ): Promise<AnyEditor> {
+export abstract class StandardFormHandlerBase<TParams, TDto extends AnyObject> extends FormHandlerBase<TParams, TDto> {
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<TDto> {
     return this.getDto(context, params, button, body);
   }
-
-  protected abstract getDto(
-    context: IContext,
-    params: TParams,
-    button: IFormButton,
-    body: IFormBody,
-  ): Promise<AnyEditor>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<TDto>;
 }
 
-export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
+export abstract class MultipleFileFormHandlerBase<TParams, TDto extends AnyObject> extends FormHandlerBase<
   TParams,
-  TStore
+  TDto
 > {
   protected async createDto(
     context: IContext,
@@ -212,31 +169,7 @@ export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorSt
     button: IFormButton,
     body: IFormBody,
     req: express.Request,
-  ): Promise<AnyEditor> {
-    const file: IFileWrapper | null = req.file ? (new ServerFileWrapper(req.file) as IFileWrapper) : null;
-    return this.getDto(context, params, button, body, file);
-  }
-
-  protected abstract getDto(
-    context: IContext,
-    params: TParams,
-    button: IFormButton,
-    body: IFormBody,
-    file: IFileWrapper | null,
-  ): Promise<AnyEditor>;
-}
-
-export abstract class MultipleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
-  TParams,
-  TStore
-> {
-  protected async createDto(
-    context: IContext,
-    params: TParams,
-    button: IFormButton,
-    body: IFormBody,
-    req: express.Request,
-  ): Promise<AnyEditor> {
+  ): Promise<TDto> {
     const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
     return this.getDto(context, params, button, body, files);
   }
@@ -247,5 +180,5 @@ export abstract class MultipleFileFormHandlerBase<TParams, TStore extends Editor
     button: IFormButton,
     body: IFormBody,
     files: IFileWrapper[],
-  ): Promise<AnyEditor>;
+  ): Promise<TDto>;
 }

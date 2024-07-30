@@ -18,10 +18,10 @@ import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/fo
 
 export class ProjectSetupBankDetailsVerifyHandler extends StandardFormHandlerBase<
   ProjectSetupBankDetailsVerifyParams,
-  "partner"
+  PartnerDto
 > {
   constructor() {
-    super(ProjectSetupBankDetailsVerifyRoute, ["default"], "partner");
+    super(ProjectSetupBankDetailsVerifyRoute, ["default"]);
   }
 
   protected async getDto(context: IContext, params: PartnerDetailsParams): Promise<PartnerDto> {

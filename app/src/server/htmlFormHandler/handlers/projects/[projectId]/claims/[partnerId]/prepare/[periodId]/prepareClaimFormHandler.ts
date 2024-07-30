@@ -14,9 +14,9 @@ import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard
 import { PrepareClaimParams, PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
 import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 
-export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
+export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, ClaimDto> {
   constructor() {
-    super(PrepareClaimRoute, ["default", "save"], "claim");
+    super(PrepareClaimRoute, ["default", "save"]);
   }
 
   protected getDto(context: IContext, params: PrepareClaimParams): Promise<ClaimDto> {

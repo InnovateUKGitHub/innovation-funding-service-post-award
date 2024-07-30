@@ -16,10 +16,10 @@ import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/fo
 
 export class ProjectSetupBankStatementHandler extends StandardFormHandlerBase<
   ProjectSetupBankStatementParams,
-  "partner"
+  PartnerDto
 > {
   constructor() {
-    super(ProjectSetupBankStatementRoute, ["default"], "partner");
+    super(ProjectSetupBankStatementRoute, ["default"]);
   }
 
   protected async getDto(context: IContext, params: PartnerDetailsParams): Promise<PartnerDto> {

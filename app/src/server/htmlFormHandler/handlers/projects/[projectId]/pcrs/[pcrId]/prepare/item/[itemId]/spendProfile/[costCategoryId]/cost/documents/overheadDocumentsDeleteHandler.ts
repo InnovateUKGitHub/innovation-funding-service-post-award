@@ -13,12 +13,9 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 
 type Dto = MultipleDocumentUploadDto & { id: string };
 
-export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<
-  OverheadDocumentsPageParams,
-  "multipleDocuments"
-> {
+export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<OverheadDocumentsPageParams, Dto> {
   constructor() {
-    super(PCRSpendProfileOverheadDocumentRoute, ["delete"], "multipleDocuments");
+    super(PCRSpendProfileOverheadDocumentRoute, ["delete"]);
   }
 
   protected getDto(context: IContext, params: OverheadDocumentsPageParams, button: IFormButton): Promise<Dto> {

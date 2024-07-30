@@ -13,17 +13,13 @@ import { MonitoringReportWorkflowParams } from "@ui/containers/pages/monitoringR
 
 export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   MonitoringReportWorkflowParams,
-  "monitoringReport"
+  MonitoringReportDto
 > {
   constructor() {
-    super(
-      MonitoringReportWorkflowRoute,
-      [
-        { name: "submit", value: "save-continue" },
-        { name: "submit", value: "save-return" },
-      ],
-      "monitoringReport",
-    );
+    super(MonitoringReportWorkflowRoute, [
+      { name: "submit", value: "save-continue" },
+      { name: "submit", value: "save-return" },
+    ]);
   }
 
   protected async getDto(

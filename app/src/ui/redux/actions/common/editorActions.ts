@@ -1,7 +1,6 @@
 import { Results } from "@ui/validation/results";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { IAppError } from "@framework/types/IAppError";
-import { InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
 import { createAction } from "./createAction";
 import { ErrorCode } from "@framework/constants/enums";
 
@@ -21,12 +20,7 @@ export type EditorAction =
 /**
  * Action creator for update editor
  */
-export function updateEditorAction<T>(
-  id: string,
-  store: string,
-  dto: T,
-  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
-) {
+export function updateEditorAction<T>(id: string, store: string, dto: T, validator: Results<ResultBase> | null) {
   const payload = { id, store, dto, validator };
   return createAction("EDITOR_UPDATE", payload);
 }
@@ -34,12 +28,7 @@ export function updateEditorAction<T>(
 /**
  * action creator for handle editor submit
  */
-export function handleEditorSubmit<T>(
-  id: string,
-  store: string,
-  dto: T,
-  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
-) {
+export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<ResultBase> | null) {
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
@@ -72,11 +61,6 @@ export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true
 /**
  * Action creator for reset the editor
  */
-export function resetEditor<TDto>(
-  id: string,
-  store: string,
-  dto: TDto,
-  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
-) {
+export function resetEditor<TDto>(id: string, store: string, dto: TDto, validator: Results<ResultBase> | null) {
   return createAction("EDITOR_RESET", { id, store, dto, validator });
 }

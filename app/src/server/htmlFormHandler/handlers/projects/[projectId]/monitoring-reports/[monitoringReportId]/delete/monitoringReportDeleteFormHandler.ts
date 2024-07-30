@@ -14,10 +14,10 @@ import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringR
 
 export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<
   MonitoringReportDeleteParams,
-  "monitoringReport"
+  MonitoringReportDto
 > {
   constructor() {
-    super(MonitoringReportDeleteRoute, ["delete"], "monitoringReport");
+    super(MonitoringReportDeleteRoute, ["delete"]);
   }
 
   protected getDto(context: IContext, params: MonitoringReportDeleteParams): Promise<MonitoringReportDto> {

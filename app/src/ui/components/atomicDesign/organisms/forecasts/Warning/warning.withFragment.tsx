@@ -1,25 +1,22 @@
-import { useFragment } from "react-relay";
-import { Warning as WarningComponent } from "./warning";
-import { useFragmentContext } from "@gql/utils/fragmentContextHook";
-import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
-import { ForecastWarningFragment$key } from "./__generated__/ForecastWarningFragment.graphql";
-import { forecastWarningFragment } from "./ForecastWarning.fragment";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
-import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import { getFirstEdge } from "@gql/selectors/edges";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { useFragmentContext } from "@gql/utils/fragmentContextHook";
+import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
+import { useFragment } from "react-relay";
+import { ForecastWarningFragment$key } from "./__generated__/ForecastWarningFragment.graphql";
+import { forecastWarningFragment } from "./ForecastWarning.fragment";
+import { Warning as WarningComponent } from "./warning";
 
 const defaultRole = { isPm: false, isMo: false, isFc: false, isAssociate: false };
 
-export const Warning = ({ editor }: { editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator> }) => {
+export const Warning = () => {
   const fragmentRef = useFragmentContext();
 
   if (!isValidFragmentKey<ForecastWarningFragment$key>(fragmentRef, "ForecastWarningFragment")) {
@@ -76,7 +73,6 @@ export const Warning = ({ editor }: { editor?: IEditorStore<ForecastDetailsDTO[]
       costCategories={costCategories}
       claimDetails={claimDetails}
       golCosts={golCosts}
-      editor={editor}
     />
   );
 };

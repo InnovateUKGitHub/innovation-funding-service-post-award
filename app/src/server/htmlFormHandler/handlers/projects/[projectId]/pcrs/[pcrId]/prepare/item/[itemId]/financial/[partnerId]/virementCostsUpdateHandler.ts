@@ -18,10 +18,10 @@ import { FinancialVirementDtoValidator } from "@ui/validation/validators/financi
 
 export class VirementCostsUpdateHandler extends StandardFormHandlerBase<
   PartnerLevelFinancialVirementParams,
-  "financialVirement"
+  FinancialVirementDto
 > {
   constructor() {
-    super(PartnerLevelFinancialVirementRoute, ["default"], "financialVirement");
+    super(PartnerLevelFinancialVirementRoute, ["default"]);
   }
 
   protected async getDto(

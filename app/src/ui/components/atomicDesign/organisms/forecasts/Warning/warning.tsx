@@ -8,8 +8,6 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { AriaLive } from "../../../atoms/AriaLive/ariaLive";
 
 interface Props {
@@ -20,19 +18,9 @@ interface Props {
   forecastDetails: Pick<ForecastDetailsDTO, "costCategoryId" | "periodId" | "value">[];
   golCosts: Pick<GOLCostDto, "value" | "costCategoryId">[];
   costCategories: Pick<CostCategoryDto, "id" | "name">[];
-  editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 
-export const Warning = ({
-  costCategories,
-  claims,
-  editor,
-  forecastDetails,
-  golCosts,
-  claimDetails,
-  partner,
-}: Props) => {
-  const forecasts = editor?.data || forecastDetails;
+export const Warning = ({ costCategories, claims, forecastDetails, golCosts, claimDetails, partner }: Props) => {
   const currentPeriod = claims.reduce(
     (periodValue, { periodId }) => (periodId > periodValue ? periodId : periodValue),
     0,
@@ -46,7 +34,9 @@ export const Warning = ({
     const gol = golCosts.find(x => x.costCategoryId === category.id);
 
     claimDetails.forEach(x => (total += x.costCategoryId === category.id && x.periodId <= currentPeriod ? x.value : 0));
-    forecasts.forEach(x => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0));
+    forecastDetails.forEach(
+      x => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0),
+    );
 
     total = roundCurrency(total);
 

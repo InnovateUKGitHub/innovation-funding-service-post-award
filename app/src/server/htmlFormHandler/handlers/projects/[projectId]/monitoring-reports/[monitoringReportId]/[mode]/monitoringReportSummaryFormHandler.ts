@@ -12,10 +12,10 @@ import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMon
 
 export class MonitoringReportSummaryFormHandler extends StandardFormHandlerBase<
   MonitoringReportWorkflowParams,
-  "monitoringReport"
+  MonitoringReportDto
 > {
   constructor() {
-    super(MonitoringReportWorkflowRoute, [{ name: "submit", value: "submit" }], "monitoringReport");
+    super(MonitoringReportWorkflowRoute, [{ name: "submit", value: "submit" }]);
   }
 
   protected async getDto(

@@ -47,10 +47,10 @@ interface IBaseCost {
 
 export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<
   PcrAddSpendProfileCostParams,
-  "pcr"
+  PCRDto
 > {
   constructor() {
-    super(PCRSpendProfileAddCostRoute, ["default", "calculateOverheadsDocuments"], "pcr");
+    super(PCRSpendProfileAddCostRoute, ["default", "calculateOverheadsDocuments"]);
   }
 
   protected async getDto(

@@ -11,9 +11,12 @@ import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowCo
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 
-export class VirementLoanEditHandler extends StandardFormHandlerBase<FinancialVirementParams, "financialLoanVirement"> {
+export class VirementLoanEditHandler extends StandardFormHandlerBase<
+  FinancialVirementParams,
+  FinancialLoanVirementDto
+> {
   constructor() {
-    super(PCRPrepareItemRoute, ["loanEdit"], "financialLoanVirement");
+    super(PCRPrepareItemRoute, ["loanEdit"]);
   }
 
   protected async getDto(

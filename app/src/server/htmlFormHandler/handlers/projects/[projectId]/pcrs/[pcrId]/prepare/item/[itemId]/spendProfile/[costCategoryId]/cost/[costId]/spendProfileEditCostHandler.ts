@@ -41,10 +41,10 @@ import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<
   PcrEditSpendProfileCostParams,
-  "pcr"
+  PCRDto
 > {
   constructor() {
-    super(PCRSpendProfileEditCostRoute, ["default", "calculateOverheadsDocuments"], "pcr");
+    super(PCRSpendProfileEditCostRoute, ["default", "calculateOverheadsDocuments"]);
   }
 
   protected async getDto(

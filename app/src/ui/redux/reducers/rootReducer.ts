@@ -4,7 +4,6 @@ import { historyReducer } from "@ui/redux/reducers/historyReducer";
 import { ErrorPayload } from "@shared/create-error-payload";
 import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
-import { editorReducer } from "./editorsReducer";
 import { errorReducer } from "./errorReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
@@ -16,15 +15,12 @@ import { previousReactHookFormInputReducer } from "./previousReactHookFormInputR
 
 export type DataState = ReturnType<typeof dataReducer>;
 
-export type EditorState = ReturnType<typeof editorReducer>;
-
 export type MessagesState = ReturnType<typeof messagesReducer>;
 
 export type ErrorState = ReturnType<typeof errorReducer>;
 
 export interface RootState {
   data: DataState;
-  editors: EditorState;
   history: number;
   loadStatus: number;
   messages: MessagesState;
@@ -37,7 +33,6 @@ export interface RootState {
 
 const combinedReducers = {
   data: dataReducer,
-  editors: editorReducer,
   history: historyReducer,
   loadStatus: loadStatusReducer,
   messages: messagesReducer,

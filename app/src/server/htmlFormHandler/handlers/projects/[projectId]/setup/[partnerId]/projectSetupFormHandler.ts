@@ -11,14 +11,16 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/g
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
-export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetupParams, "partner"> {
+interface Dto {
+  partner: PartnerDto;
+  project: ProjectDto;
+}
+
+export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetupParams, Dto> {
   constructor() {
-    super(ProjectSetupRoute, ["default"], "partner");
+    super(ProjectSetupRoute, ["default"]);
   }
-  protected async getDto(
-    context: IContext,
-    params: ProjectSetupParams,
-  ): Promise<{ partner: PartnerDto; project: ProjectDto }> {
+  protected async getDto(context: IContext, params: ProjectSetupParams): Promise<Dto> {
     const [partner, project] = await Promise.all([
       context.runQuery(new GetPartnerByIdQuery(params.partnerId)),
       context.runQuery(new GetByIdQuery(params.projectId)),
@@ -31,7 +33,7 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
     context: IContext,
     params: ProjectSetupParams,
     button: IFormButton,
-    { partner, project }: { partner: PartnerDto; project: ProjectDto },
+    { partner, project }: Dto,
   ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePartnerCommand(partner, { projectSource: project.projectSource }));
     return ProjectDashboardRoute.getLink({});
@@ -41,10 +43,7 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(
-    params: ProjectSetupParams,
-    { partner, project }: { partner: PartnerDto; project: ProjectDto },
-  ) {
+  protected createValidationResult(params: ProjectSetupParams, { partner, project }: Dto) {
     return new PartnerDtoValidator(partner, partner, [], {
       showValidationErrors: false,
       projectSource: project.projectSource,

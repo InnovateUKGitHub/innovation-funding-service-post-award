@@ -14,10 +14,10 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 
 export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
   OverheadDocumentsPageParams,
-  "multipleDocuments"
+  MultipleDocumentUploadDto
 > {
   constructor() {
-    super(PCRSpendProfileOverheadDocumentRoute, ["uploadFile"], "multipleDocuments");
+    super(PCRSpendProfileOverheadDocumentRoute, ["uploadFile"]);
   }
 
   protected async getDto(

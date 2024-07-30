@@ -17,10 +17,10 @@ import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<
   PcrSpendProfileCostSummaryParams,
-  "pcr"
+  PCRDto
 > {
   constructor() {
-    super(PCRSpendProfileCostsSummaryRoute, ["default"], "pcr");
+    super(PCRSpendProfileCostsSummaryRoute, ["default"]);
   }
 
   protected async getDto(

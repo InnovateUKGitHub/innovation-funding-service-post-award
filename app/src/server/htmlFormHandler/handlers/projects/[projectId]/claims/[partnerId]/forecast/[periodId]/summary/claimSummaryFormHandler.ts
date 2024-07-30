@@ -15,9 +15,9 @@ import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard
 import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { PrepareClaimParams } from "@ui/containers/pages/claims/claimPrepare.page";
 
-export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
+export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, ClaimDto> {
   constructor() {
-    super(ClaimSummaryRoute, ["submit"], "claim");
+    super(ClaimSummaryRoute, ["submit"]);
   }
 
   protected async getDto(

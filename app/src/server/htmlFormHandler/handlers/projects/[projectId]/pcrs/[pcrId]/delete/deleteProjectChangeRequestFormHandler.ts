@@ -9,9 +9,9 @@ import { PCRDeleteParams, PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDe
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
-export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, "pcr"> {
+export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, PCRDto> {
   constructor() {
-    super(PCRDeleteRoute, ["delete"], "pcr");
+    super(PCRDeleteRoute, ["delete"]);
   }
 
   protected async getDto(context: IContext, params: PCRDeleteParams): Promise<PCRDto> {

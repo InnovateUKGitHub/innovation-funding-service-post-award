@@ -15,10 +15,10 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 
 export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectSetupBankStatementParams,
-  "multipleDocuments"
+  MultipleDocumentUploadDto
 > {
   constructor() {
-    super(ProjectSetupBankStatementRoute, ["uploadFile"], "multipleDocuments");
+    super(ProjectSetupBankStatementRoute, ["uploadFile"]);
   }
 
   protected getDto(

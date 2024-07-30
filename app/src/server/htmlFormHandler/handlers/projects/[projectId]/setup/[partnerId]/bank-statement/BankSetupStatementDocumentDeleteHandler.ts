@@ -17,13 +17,17 @@ interface Document extends MultipleDocumentUploadDto {
 
 export class BankSetupStatementDocumentDeleteHandler extends StandardFormHandlerBase<
   ProjectSetupBankStatementParams,
-  "multipleDocuments"
+  MultipleDocumentUploadDto
 > {
   constructor() {
-    super(ProjectSetupBankStatementRoute, ["delete"], "multipleDocuments");
+    super(ProjectSetupBankStatementRoute, ["delete"]);
   }
 
-  protected getDto(_context: IContext, _params: ProjectSetupBankStatementParams, button: IFormButton) {
+  protected getDto(
+    _context: IContext,
+    _params: ProjectSetupBankStatementParams,
+    button: IFormButton,
+  ): Promise<MultipleDocumentUploadDto> {
     return Promise.resolve({ id: button.value, files: [] });
   }
 

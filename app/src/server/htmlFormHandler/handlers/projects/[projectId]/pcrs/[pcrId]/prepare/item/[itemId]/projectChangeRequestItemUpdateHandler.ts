@@ -48,10 +48,10 @@ import { DateTime } from "luxon";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareItemParams,
-  "pcr"
+  PCRDto
 > {
   constructor() {
-    super(PCRPrepareItemRoute, ["default", "saveAndReturnToSummary", "changeLoanEdit"], "pcr");
+    super(PCRPrepareItemRoute, ["default", "saveAndReturnToSummary", "changeLoanEdit"]);
   }
 
   protected async getDto(

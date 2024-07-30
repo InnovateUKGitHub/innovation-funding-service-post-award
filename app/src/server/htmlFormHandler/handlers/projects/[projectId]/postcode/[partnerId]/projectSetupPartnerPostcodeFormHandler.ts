@@ -10,9 +10,9 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 
-export class ProjectSetupPartnerPostcodeFormHandler extends StandardFormHandlerBase<PartnerDetailsParams, "partner"> {
+export class ProjectSetupPartnerPostcodeFormHandler extends StandardFormHandlerBase<PartnerDetailsParams, PartnerDto> {
   constructor() {
-    super(ProjectSetupPartnerPostcodeRoute, ["default"], "partner");
+    super(ProjectSetupPartnerPostcodeRoute, ["default"]);
   }
 
   protected async getDto(
