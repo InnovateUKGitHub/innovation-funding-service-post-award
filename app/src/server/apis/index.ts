@@ -2,7 +2,6 @@ import express from "express";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
-import * as claimOverrides from "./claimOverrides";
 import * as claimDetails from "./claimDetails";
 import * as companiesHouse from "./companies";
 import * as costsSummary from "./costsSummary";
@@ -25,7 +24,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   costsSummary: costsSummary.ICostsSummaryApi<Context>;
   companies: companiesHouse.ICompaniesApi<Context>;
   claims: claims.IClaimsApi<Context>;
-  claimOverrides: claimOverrides.IClaimOverridesApi<Context>;
   costCategories: costCategories.ICostCategoriesApi<Context>;
   documents: documents.IDocumentsApi<Context>;
   financialVirements: financialVirements.IFinancialVirement<Context>;
@@ -43,7 +41,6 @@ export interface IApiClient<Context extends "client" | "server"> {
 
 export const serverApis = {
   claims: claims.controller,
-  claimOverrides: claimOverrides.controller,
   claimDetails: claimDetails.controller,
   companies: companiesHouse.controller,
   costsSummary: costsSummary.controller,

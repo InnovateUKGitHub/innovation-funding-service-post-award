@@ -15,9 +15,6 @@ const clientApi: IApiClient<"client"> = {
         params.claim,
       ),
   },
-  claimOverrides: {
-    getAllByPartner: params => ajaxJson(`/api/claim-overrides/${params.partnerId}`),
-  },
   companies: {
     searchCompany: params =>
       ajaxJson(
