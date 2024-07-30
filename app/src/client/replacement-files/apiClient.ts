@@ -41,16 +41,11 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   claimDetails: {
-    get: params =>
-      ajaxJson(
-        `/api/claim-details/${params.projectId}/${params.partnerId}/${params.periodId}/${params.costCategoryId}`,
-      ),
     saveClaimDetails: params =>
       ajaxPut(
         `/api/claim-details/${params.projectId}/${params.partnerId}/${params.periodId}/${params.costCategoryId}`,
         params.claimDetails,
       ),
-    getAllByPartner: params => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`),
   },
   costCategories: {
     getAll: () => ajaxJson("/api/cost-categories"),

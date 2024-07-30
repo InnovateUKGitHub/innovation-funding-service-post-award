@@ -4,12 +4,9 @@ import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetails
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { ClaimDetailsSummaryDto, ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
-import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails/getAllByPartnerQuery";
 import { GetClaimDetailsQuery } from "@server/features/claimDetails/getClaimDetailsQuery";
 
 export interface IClaimDetailsApi<Context extends "client" | "server"> {
-  getAllByPartner: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ClaimDetailsSummaryDto[]>;
-  get: (params: ApiParams<Context, ClaimDetailKey>) => Promise<ClaimDetailsDto>;
   saveClaimDetails: (
     params: ApiParams<Context, ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
   ) => Promise<ClaimDetailsDto>;
@@ -22,21 +19,6 @@ class Controller
   constructor() {
     super("claim-details");
 
-    this.getItems(
-      "/",
-      (p, q) => ({ partnerId: q.partnerId }),
-      p => this.getAllByPartner(p),
-    );
-    this.getItem(
-      "/:projectId/:partnerId/:periodId/:costCategoryId",
-      p => ({
-        projectId: p.projectId,
-        partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10) as PeriodId,
-        costCategoryId: p.costCategoryId,
-      }),
-      p => this.get(p),
-    );
     this.putItem(
       "/:projectId/:partnerId/:periodId/:costCategoryId",
       (p, q, b: ClaimDetailsDto) => ({
@@ -48,17 +30,6 @@ class Controller
       }),
       p => this.saveClaimDetails(p),
     );
-  }
-
-  public async getAllByPartner(params: ApiParams<"server", { partnerId: PartnerId }>) {
-    const { partnerId } = params;
-    const query = new GetAllClaimDetailsByPartner(partnerId);
-    return contextProvider.start(params).runQuery(query);
-  }
-
-  public async get(params: ApiParams<"server", ClaimDetailKey>) {
-    const query = new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId);
-    return contextProvider.start(params).runQuery(query);
   }
 
   public async saveClaimDetails(
