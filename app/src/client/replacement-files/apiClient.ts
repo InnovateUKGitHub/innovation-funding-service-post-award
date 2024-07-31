@@ -1,5 +1,5 @@
 import { UnauthenticatedError } from "@shared/appError";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IApiClient } from "@server/apis";
 import { processResponse } from "@shared/processResponse";
 import { removeUndefinedString } from "@shared/string-helpers";
@@ -50,8 +50,6 @@ const clientApi: IApiClient<"client"> = {
         `/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`,
         documents,
       ),
-    uploadClaimDocument: ({ claimKey, document }) =>
-      ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
     uploadClaimDocuments: ({ claimKey, documents }) =>
       ajaxPostFiles(
         `/api/documents/claimDocuments/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`,
@@ -175,15 +173,6 @@ const ajaxDelete = <T>(url: string, opts?: RequestInit): Promise<T> => {
   });
 
   return ajaxJson<T>(url, options);
-};
-
-const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
-  const formData = new FormData();
-  formData.append("attachment", (document.file as ClientFileWrapper).file);
-  if (document.description) {
-    formData.append("description", document.description.toString());
-  }
-  return ajaxPostFormData<T>(url, formData);
 };
 
 const ajaxPostFiles = <T>(url: string, documents: MultipleDocumentUploadDto) => {

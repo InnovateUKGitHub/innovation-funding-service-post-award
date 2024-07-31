@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`filenameValidator invalid RTL character in name 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "invalid_extension",
+      "root": "",
+      "dir": "",
+      "base": "‮xtpp.suriv.a.ton.ylemert.exe",
+      "ext": ".exe",
+      "name": "‮xtpp.suriv.a.ton.ylemert"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid character in name 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "bad_characters",
+      "characters": [
+        "?",
+        "?",
+        "?"
+      ],
+      "count": 3,
+      "root": "",
+      "dir": "",
+      "base": "???.txt",
+      "ext": ".txt",
+      "name": "???"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid file with extension only 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "no_filename",
+      "root": "",
+      "dir": "",
+      "base": ".pptx",
+      "ext": "",
+      "name": ".pptx"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid file with path 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "invalid_path",
+      "root": "/",
+      "dir": "/mnt/c",
+      "base": "whatever.pptx",
+      "ext": ".pptx",
+      "name": "whatever"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid file without extension 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "no_extension",
+      "root": "",
+      "dir": "",
+      "base": "pptx",
+      "ext": "",
+      "name": "pptx"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid file without name 1`] = `
+[ZodError: [
+  {
+    "code": "too_small",
+    "minimum": 1,
+    "type": "string",
+    "inclusive": true,
+    "exact": false,
+    "message": "String must contain at least 1 character(s)",
+    "path": []
+  },
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "no_extension",
+      "root": "",
+      "dir": "",
+      "base": "",
+      "ext": "",
+      "name": ""
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid powerpoint presentation extension 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "invalid_extension",
+      "root": "",
+      "dir": "",
+      "base": "hello.ppt",
+      "ext": ".ppt",
+      "name": "hello"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator invalid reserved Microsoft Windows name 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "microsoft_windows_invalid_filename",
+      "root": "",
+      "dir": "",
+      "base": "CON.pptx",
+      "ext": ".pptx",
+      "name": "CON"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator man in business suit levitating 1`] = `
+[ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "bad_characters",
+      "characters": [
+        "🕴"
+      ],
+      "count": 1,
+      "root": "",
+      "dir": "",
+      "base": "🕴️.txt",
+      "ext": ".txt",
+      "name": "🕴️"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]]
+`;
+
+exports[`filenameValidator valid arabic filename 1`] = `undefined`;
+
+exports[`filenameValidator valid burmese filename 1`] = `undefined`;
+
+exports[`filenameValidator valid document 1`] = `undefined`;
+
+exports[`filenameValidator valid filename with acute 1`] = `undefined`;
+
+exports[`filenameValidator valid filename with space 1`] = `undefined`;
+
+exports[`filenameValidator valid filename with ß character 1`] = `undefined`;
+
+exports[`filenameValidator valid filename with œ character 1`] = `undefined`;
+
+exports[`filenameValidator valid katakana filename 1`] = `undefined`;
+
+exports[`filenameValidator valid photograph 1`] = `undefined`;
+
+exports[`filenameValidator valid powerpoint presentation 1`] = `undefined`;
+
+exports[`filenameValidator valid spreadsheet 1`] = `undefined`;
+
+exports[`filenameValidator valid text document 1`] = `undefined`;
+
+exports[`filenameValidator valid traditional chinese filename 1`] = `undefined`;
+
+exports[`filenameValidator valid ukranian filename 1`] = `undefined`;

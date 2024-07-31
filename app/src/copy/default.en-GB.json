@@ -38,6 +38,61 @@
     "contentTitle": "Content solution",
     "content": "Some example content"
   },
+  "characters": {
+    "0": "null",
+    "1": "start of heading",
+    "2": "start of text",
+    "3": "end of text",
+    "4": "end of transmission",
+    "5": "enquiry",
+    "6": "acknowledge",
+    "7": "bell",
+    "8": "backspace",
+    "9": "tab",
+    "00": "line feed",
+    "0A": "vertical tab",
+    "0B": "new page",
+    "0C": "carriage return",
+    "0D": "shift out",
+    "0E": "shift in",
+    "10": "data link escape",
+    "11": "device control 1",
+    "12": "device control 2",
+    "13": "device control 3",
+    "14": "device control 4",
+    "15": "negative acknowledge",
+    "16": "synchronous idle",
+    "17": "end of transmission block",
+    "18": "cancel",
+    "19": "end of medium",
+    "1A": "substitute",
+    "1B": "escape",
+    "1C": "file separator",
+    "1D": "group separator",
+    "1E": "record separator",
+    "1F": "unit separator",
+    "7F": "delete",
+    "61c": "Arabic letter mark",
+    "2028": "line separator",
+    "2029": "paragraph separator",
+    "200e": "left-to-right mark",
+    "200f": "right-to-left mark",
+    "202a": "left-to-right embedding",
+    "202b": "right-to-left embedding",
+    "202c": "pop directional formatting",
+    "202d": "left-to-right override",
+    "202e": "right-to-left override",
+    "2066": "left-to-right isolate",
+    "2067": "right-to-left isolate",
+    "2068": "first string isolate",
+    "2069": "pop directional isolate",
+    "fff9": "interlinear annotation anchor",
+    "fffa": "interlinear annotation separator",
+    "fffb": "interlinear annotation terminator",
+    "ffff": "non-character",
+    "e0001": "language tag",
+    "e007f": "cancel tag"
+  },
   "components": {
     "table": {
       "noDataText": "No data"
@@ -2320,13 +2375,28 @@
           "uploadedDocuments_other": "{{count}} documents have been uploaded.",
           "deletedDocument": "'{{deletedFileName}}' has been removed."
         },
+        "arrayType": {
+          "fileName": {
+            "errors": {
+              "invalid_path": "Filename must not include / and \\.",
+              "no_filename": "The selected file must have a name.",
+              "every_char_space": "The selected file must have a name.",
+              "every_char_full_stop": "The selected file must have a name.",
+              "invalid_extension": "The selected file must be a {{ allowedExtensions, uppercase, list(type: disjunction) }}.",
+              "microsoft_windows_invalid_filename": "The selected file must not be named {{ name }}.",
+              "starts_with_space": "The selected file name must not begin with a space.",
+              "bad_characters_one": "The selected file name cannot use the {{ characters, translateChar, list }} character.",
+              "bad_characters_other": "The selected file name cannot use the {{ characters, translateChar, list }} characters."
+            }
+          },
+          "size": {
+            "errors": {
+              "too_small": "The selected file is empty.",
+              "too_big": "The selected file must be no larger than {{ maximum, bytes }}."
+            }
+          }
+        },
         "errors": {
-          "file_name_invalid_characters": "Your document '{{ input.fileName }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
-          "file_extension_invalid_type": "You cannot upload '{{ input.fileName }}' because it is the wrong file type.",
-          "file_basename_too_small": "You cannot upload this file because the file has no name.",
-          "file_basename_too_big": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
-          "file_size_too_small": "You cannot upload '{{ input.fileName }}' because it is empty.",
-          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be no larger than {{ size, bytes }}.",
           "too_small": "Choose a file to upload.",
           "too_big": "You can only select up to {{ count }} files at the same time.",
           "total_size_too_large": "You can only upload up to {{ size, bytes }} at the same time."

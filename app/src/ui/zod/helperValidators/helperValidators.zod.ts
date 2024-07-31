@@ -1,12 +1,11 @@
-import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 import { ClientFileWrapper } from "@client/clientFileWrapper";
-import { z, ZodIssueCode, ZodRawShape } from "zod";
-import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
-import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
-import { getFileExtension, getFileName } from "@framework/util/files";
+import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { IFileWrapper } from "@framework/types/fileWrapper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
+import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { DateTime } from "luxon";
+import { z, ZodIssueCode, ZodRawShape } from "zod";
+import { filenameValidatior } from "./filenameValidator.zod";
 
 const y2k = new Date("2000-01-01");
 
@@ -86,71 +85,70 @@ const booleanValidation = z
     return value;
   });
 
-const getSingleFileValidation = (options: IAppOptions) => {
-  const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
-  const permittedFileTypes = [...pdfTypes, ...textTypes, ...presentationTypes, ...spreadsheetTypes, ...imageTypes];
+const currencyValidation = z
+  .string()
+  .nonempty()
+  .superRefine((val, ctx) => {
+    const currency = parseCurrency(val);
 
-  return z.custom<IFileWrapper>().superRefine((file, ctx) => {
-    const basename = getFileName(file.fileName);
-    const extension = getFileExtension(file.fileName);
-
-    if (basename.length === 0 || extension.length === 0) {
-      ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.file_basename_too_small",
-        },
+    // Check if the string can even be parsed
+    if (isNaN(currency)) {
+      return ctx.addIssue({
+        code: ZodIssueCode.invalid_type,
+        expected: "number",
+        received: "nan",
       });
     }
 
-    if (!(file.fileName.length <= options.maxFileBasenameLength)) {
-      ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.file_basename_too_big",
-          count: options.maxFileBasenameLength,
-        },
+    // Make sure our currency isn't so big as to break our server
+    if (currency > 999_999_999_999) {
+      return ctx.addIssue({
+        code: ZodIssueCode.too_big,
+        type: "number",
+        maximum: 999_999_999_999,
+        inclusive: false,
       });
     }
 
-    if (!validDocumentFilenameCharacters.test(file.fileName)) {
-      ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.file_name_invalid_characters",
-        },
+    if (currency < -999_999_999_999) {
+      return ctx.addIssue({
+        code: ZodIssueCode.too_small,
+        type: "number",
+        minimum: -999_999_999_999,
+        inclusive: false,
       });
     }
 
-    if (!permittedFileTypes.includes(extension)) {
-      ctx.addIssue({
+    if (/\.\d\d\d/.test(val)) {
+      return ctx.addIssue({
         code: ZodIssueCode.custom,
         params: {
-          i18n: "errors.file_extension_invalid_type",
-        },
-      });
-    }
-
-    if (!(file.size > 0)) {
-      ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.file_size_too_small",
-        },
-      });
-    }
-
-    if (!(file.size <= options.maxFileSize)) {
-      ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.file_size_too_large",
-          size: options.maxFileSize,
+          i18n: "errors.two_decimal_places",
         },
       });
     }
   });
-};
+
+const zeroOrGreaterCurrencyValidation = currencyValidation.superRefine((val, ctx) => {
+  const currency = roundCurrency(parseCurrency(val));
+
+  if (currency < 0) {
+    return ctx.addIssue({
+      code: ZodIssueCode.too_small,
+      type: "number",
+      minimum: 0,
+      inclusive: true,
+    });
+  }
+});
+
+const getSingleFileValidation = (options: IAppOptions) =>
+  z
+    .object({
+      fileName: filenameValidatior(options),
+      size: z.number().min(0).max(options.maxFileSize),
+    })
+    .passthrough();
 
 const getMultiFileValidation = (options: IAppOptions) =>
   z
@@ -258,23 +256,25 @@ const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validato
 };
 
 export {
-  projectIdValidation,
-  pcrIdValidation,
-  pcrItemIdValidation,
-  financialVirementForCostsIdValidation,
-  partnerIdValidation,
-  profileIdValidation,
-  periodIdValidation,
-  pclIdValidation,
   booleanValidation,
-  loanIdValidation,
-  costIdValidation,
   claimIdValidation,
   costCategoryIdValidation,
-  emptyStringToUndefinedValidation,
-  emptyStringToNullValidation,
-  getSingleFileValidation,
-  getMultiFileValidation,
+  costIdValidation,
+  currencyValidation,
   dateValidation,
+  emptyStringToNullValidation,
+  emptyStringToUndefinedValidation,
   evaluateObject,
+  financialVirementForCostsIdValidation,
+  getMultiFileValidation,
+  getSingleFileValidation,
+  loanIdValidation,
+  partnerIdValidation,
+  pclIdValidation,
+  pcrIdValidation,
+  pcrItemIdValidation,
+  periodIdValidation,
+  profileIdValidation,
+  projectIdValidation,
+  zeroOrGreaterCurrencyValidation,
 };

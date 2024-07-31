@@ -40,7 +40,13 @@ const registerIntlFormatter = () => {
           .join(" ")
       );
     }
+    if (Array.isArray(value)) return value.map(x => (typeof x === "string" ? x.toLocaleLowerCase() : x));
+    return value;
+  });
 
+  i18next.services.formatter?.add("uppercase", value => {
+    if (typeof value === "string") return value.toLocaleUpperCase();
+    if (Array.isArray(value)) return value.map(x => (typeof x === "string" ? x.toLocaleUpperCase() : x));
     return value;
   });
 
@@ -84,6 +90,23 @@ const registerIntlFormatter = () => {
       return currencyValue.format(formatValue);
     }
     return value;
+  });
+
+  i18next.services.formatter?.add("translateChar", value => {
+    const translateChar = (char: unknown) => {
+      if (typeof char !== "string") return value;
+
+      const codepoint = char.codePointAt(0)?.toString(16);
+
+      if (i18next.exists(`characters.${codepoint}`)) {
+        return i18next.t(`characters.${codepoint}`);
+      }
+
+      return char;
+    };
+
+    if (Array.isArray(value)) return value.map(translateChar);
+    return translateChar(value);
   });
 };
 
