@@ -12,7 +12,7 @@ import {
   partnerIdValidation,
   periodIdValidation,
   projectIdValidation,
-} from "@ui/zod/helperValidators.zod";
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 

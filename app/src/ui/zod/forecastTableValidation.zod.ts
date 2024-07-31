@@ -14,7 +14,7 @@ import {
   partnerIdValidation,
   profileIdValidation,
   projectIdValidation,
-} from "./helperValidators.zod";
+} from "./helperValidators/helperValidators.zod";
 import { getGenericCurrencyValidation } from "./currencyValidator.zod";
 
 type ForecastTableSchemaType = ReturnType<typeof getForecastTableValidation>["schema"];

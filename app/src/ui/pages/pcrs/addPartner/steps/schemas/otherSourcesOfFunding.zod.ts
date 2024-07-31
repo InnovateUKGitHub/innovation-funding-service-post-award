@@ -2,7 +2,7 @@ import { CostCategoryType } from "@framework/constants/enums";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { costIdValidation } from "@ui/zod/helperValidators.zod";
+import { costIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { z } from "zod";
 
 const valueDescription = z.object({

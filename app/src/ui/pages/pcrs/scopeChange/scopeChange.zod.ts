@@ -6,7 +6,7 @@ import {
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
-} from "@ui/zod/helperValidators.zod";
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const scopeChangeErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "scopeChange"] });

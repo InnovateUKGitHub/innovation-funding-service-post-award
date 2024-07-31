@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dateValidation, pclIdValidation } from "./helperValidators.zod";
+import { dateValidation, pclIdValidation } from "./helperValidators/helperValidators.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 
 const contactSchemaErrorMap = makeZodI18nMap({ keyPrefix: ["contact"] });

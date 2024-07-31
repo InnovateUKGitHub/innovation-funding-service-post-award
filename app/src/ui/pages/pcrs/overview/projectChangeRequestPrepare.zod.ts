@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { pcrItemIdValidation } from "@ui/zod/helperValidators.zod";
+import { pcrItemIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const pcrPrepareErrorMap = makeZodI18nMap({ keyPrefix: ["pcrPrepare"] });

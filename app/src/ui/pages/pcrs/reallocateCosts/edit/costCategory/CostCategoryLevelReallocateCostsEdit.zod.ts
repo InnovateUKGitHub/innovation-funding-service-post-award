@@ -6,7 +6,7 @@ import {
   pcrIdValidation,
   pcrItemIdValidation,
   projectIdValidation,
-} from "@ui/zod/helperValidators.zod";
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { MapVirements } from "../../../utils/useMapFinancialVirements";
 import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelReallocateCostsEdit.logic";

@@ -3,7 +3,7 @@ import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
 import { FormTypes } from "./FormTypes";
-import { pcrIdValidation, projectIdValidation } from "./helperValidators.zod";
+import { pcrIdValidation, projectIdValidation } from "./helperValidators/helperValidators.zod";
 
 interface PCRValidatorExtraProps {
   pcrItemInfo: Pick<PCRItemTypeDto, "type" | "disabled" | "disabledReason" | "displayName">[];

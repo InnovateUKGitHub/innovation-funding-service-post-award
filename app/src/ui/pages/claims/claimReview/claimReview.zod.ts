@@ -7,7 +7,7 @@ import {
   partnerIdValidation,
   periodIdValidation,
   projectIdValidation,
-} from "@ui/zod/helperValidators.zod";
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 

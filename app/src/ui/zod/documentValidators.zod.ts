@@ -19,7 +19,7 @@ import {
   costCategoryIdValidation,
   pcrIdValidation,
   loanIdValidation,
-} from "./helperValidators.zod";
+} from "./helperValidators/helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { makeZodI18nMap } from "@shared/zodi18n";

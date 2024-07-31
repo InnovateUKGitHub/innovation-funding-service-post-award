@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
+import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { isNil } from "lodash";
 import { FormTypes } from "@ui/zod/FormTypes";
 
