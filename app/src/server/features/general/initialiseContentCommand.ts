@@ -62,9 +62,9 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
 
   private setCompetitionContent(context: IContext): void {
     context.internationalisation.addResourceBundle(ktpEnCopy, CopyNamespaces.KTP);
-    context.internationalisation.addResourceBundle(sbriEnCopy, CopyNamespaces.LOANS);
+    context.internationalisation.addResourceBundle(sbriEnCopy, CopyNamespaces.SBRI);
     context.internationalisation.addResourceBundle(sbriIfsEnCopy, CopyNamespaces.SBRI_IFS);
-    context.internationalisation.addResourceBundle(loansEnCopy, CopyNamespaces.SBRI);
+    context.internationalisation.addResourceBundle(loansEnCopy, CopyNamespaces.LOANS);
     context.internationalisation.addResourceBundle(
       horizonEuropeParticipationEnCopy,
       CopyNamespaces.HORIZON_EUROPE_PARTICIPATION,
