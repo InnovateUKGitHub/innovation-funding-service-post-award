@@ -22,7 +22,7 @@ export class Clock implements IClock {
 
   parseOptionalSalesforceDate(value: string | null): Date | null {
     if (!value) return null;
-    const result = DateTime.fromFormat(value, salesforceDateFormat).setZone("Europe/London");
+    const result = DateTime.fromFormat(value, salesforceDateFormat, { zone: "UTC" }).setZone("Europe/London");
     if (!result.isValid) {
       throw new Error("Invalid Date: " + value);
     }
@@ -47,7 +47,7 @@ export class Clock implements IClock {
 
   parseOptionalSalesforceDateTime(value: string | null): Date | null {
     if (!value) return null;
-    const result = DateTime.fromISO(value);
+    const result = DateTime.fromISO(value, { zone: "UTC" }).setZone("Europe/London");
     if (!result.isValid) {
       throw new Error("Invalid DateTime: " + value);
     }
