@@ -1,4 +1,13 @@
-import { CopyLanguages, CopyNamespaces } from "@copy/data";
+import {
+  CopyLanguages,
+  CopyNamespaces,
+  enCopy,
+  horizonEuropeParticipationEnCopy,
+  ktpEnCopy,
+  loansEnCopy,
+  sbriEnCopy,
+  sbriIfsEnCopy,
+} from "@copy/data";
 import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 import express from "express";
 import i18next from "i18next";
@@ -12,6 +21,16 @@ export const initInternationalisation = async () => {
     defaultNS: CopyNamespaces.DEFAULT,
     fallbackNS: CopyNamespaces.DEFAULT,
     interpolation: i18nInterpolationOptions,
+    resources: {
+      [CopyLanguages.en_GB]: {
+        [CopyNamespaces.DEFAULT]: enCopy,
+        [CopyNamespaces.KTP]: ktpEnCopy,
+        [CopyNamespaces.LOANS]: loansEnCopy,
+        [CopyNamespaces.SBRI_IFS]: sbriEnCopy,
+        [CopyNamespaces.SBRI]: sbriIfsEnCopy,
+        [CopyNamespaces.HORIZON_EUROPE_PARTICIPATION]: horizonEuropeParticipationEnCopy,
+      },
+    },
   });
 
   registerIntlFormatter();

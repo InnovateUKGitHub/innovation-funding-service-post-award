@@ -77,10 +77,6 @@ export interface IResources {
   readonly bankCheckService: IBankCheckService;
 }
 
-export interface IInternationalisation {
-  addResourceBundle(content: ContentJson, namespace: string): void;
-}
-
 export interface IContext {
   repositories: IRepositories;
   resources: IResources;
@@ -97,7 +93,6 @@ export interface IContext {
   asSystemUser: () => IContext;
   asBankDetailsValidationUser: () => IContext;
   getSalesforceConnection: () => Promise<Connection>;
-  internationalisation: IInternationalisation;
 }
 
 export interface ITimer {

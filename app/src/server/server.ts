@@ -9,7 +9,6 @@ import { useBasicAuth } from "./basicAuth";
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
 
 import { contextProvider } from "@server/features/common/contextProvider";
-import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";
 import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
 import { developmentRouter } from "@server/developmentReloader";
@@ -38,7 +37,6 @@ export class Server {
 
     try {
       await initInternationalisation();
-      await this.initialiseCustomContent(false);
     } catch (error) {
       console.log("Failed to initialize internationalization", error);
 
@@ -50,14 +48,6 @@ export class Server {
     this.logger.info(`Webserver is now available at ${configuration.webserver.url}`);
 
     setTimeout(() => this.primeCaches());
-
-    if (configuration.features.customContent) {
-      setTimeout(() => this.initialiseCustomContent(true));
-
-      if (configuration.timeouts.contentRefreshSeconds) {
-        setInterval(() => this.initialiseCustomContent(true), configuration.timeouts.contentRefreshSeconds * 1000);
-      }
-    }
   }
 
   private middleware(): void {
@@ -147,21 +137,5 @@ export class Server {
     const cacheContext = contextProvider.start({ user: { email: this.stubEmail } });
 
     await fetchCaches(cacheContext);
-  }
-
-  private async initialiseCustomContent(loadCustom: boolean): Promise<void> {
-    const context = contextProvider.start({ user: { email: this.stubEmail } });
-
-    try {
-      const hasInitialised = await context.runCommand(new InitialiseContentCommand(loadCustom));
-
-      if (!hasInitialised) {
-        throw new Error(`Command ran but returned '${hasInitialised}'`);
-      }
-
-      context.logger.info("Successfully initialised content");
-    } catch (error) {
-      context.logger.error("Unable to initialised content", error);
-    }
   }
 }

@@ -1,5 +1,5 @@
 import { Authorisation } from "@framework/types/authorisation";
-import { IContext, IAsyncRunnable, ISyncRunnable } from "@framework/types/IContext";
+import { IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types/IContext";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { ValidationError } from "@shared/appError";
@@ -9,7 +9,6 @@ import { TestCaches } from "./testCaches";
 import { TestClock } from "./testClock";
 import { TestConfig } from "./testConfig";
 import { TestData } from "./testData";
-import { TestInternationalisation } from "./testInternationalisation";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestResources } from "./testResources";
 import { TestStore } from "./testStore";
@@ -28,8 +27,6 @@ export class TestContext implements IContext {
   public user = new TestUser();
   public testData: TestData;
   public testStore: TestStore;
-
-  public internationalisation = new TestInternationalisation();
 
   public resources = new TestResources();
 

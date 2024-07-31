@@ -1,25 +1,13 @@
-import i18next from "i18next";
-import { CustomContentStore } from "@server/resources/customContentStore";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { BankCheckService } from "@server/resources/bankCheckService";
-import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
-import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
-import { SfdcServerError, AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
-import { Logger } from "@shared/developmentLogger";
-import { ILogger } from "@shared/logger";
 import { ErrorCode } from "@framework/constants/enums";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { Option } from "@framework/dtos/option";
+import { PermissionGroup } from "@framework/entities/permissionGroup";
+import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
-import {
-  ICaches,
-  IContext,
-  IRepositories,
-  IResources,
-  IInternationalisation,
-  IAsyncRunnable,
-  ISyncRunnable,
-} from "@framework/types/IContext";
+import { IConfig } from "@framework/types/IConfig";
+import { IAsyncRunnable, ICaches, IContext, IRepositories, IResources, ISyncRunnable } from "@framework/types/IContext";
 import { ISessionUser } from "@framework/types/IUser";
-import { IClock, Clock } from "@framework/util/clock";
+import { Clock, IClock } from "@framework/util/clock";
 import { AccountsRepository } from "@server/repositories/accountsRepository";
 import { ClaimDetailsRepository } from "@server/repositories/claimDetailsRepository";
 import { ClaimLineItemRepository } from "@server/repositories/claimLineItemRepository";
@@ -30,10 +18,10 @@ import { CompaniesHouse } from "@server/repositories/companiesRepository";
 import { CostCategoryRepository } from "@server/repositories/costCategoriesRepository";
 import { DocumentsRepository } from "@server/repositories/documentsRepository";
 import {
-  SalesforceTokenError,
-  SalesforceInvalidFilterError,
   FileTypeNotAllowedError,
   SalesforceDetailedErrorResponse,
+  SalesforceInvalidFilterError,
+  SalesforceTokenError,
 } from "@server/repositories/errors";
 import { FinancialLoanVirementRepository } from "@server/repositories/financialLoanVirementRepository";
 import { FinancialVirementRepository } from "@server/repositories/financialVirementRepository";
@@ -53,16 +41,19 @@ import { ProjectChangeRequestStatusChangeRepository } from "@server/repositories
 import { ProjectContactsRepository } from "@server/repositories/projectContactsRepository";
 import { ProjectRepository } from "@server/repositories/projectsRepository";
 import { RecordTypeRepository } from "@server/repositories/recordTypeRepository";
+import { ISalesforceConnectionDetails, salesforceConnectionWithToken } from "@server/repositories/salesforceConnection";
+import { BankCheckService } from "@server/resources/bankCheckService";
+import { CustomContentStore } from "@server/resources/customContentStore";
+import { Logger } from "@shared/developmentLogger";
+import { ILogger } from "@shared/logger";
+import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
+import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { AppError, BadRequestError, ForbiddenError, NotFoundError, SfdcServerError, ValidationError } from "./appError";
+import { Cache } from "./cache";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "./commandBase";
 import { configuration } from "./config";
-import { IConfig } from "@framework/types/IConfig";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { Timer } from "./timer";
-import { Option } from "@framework/dtos/option";
-import { Cache } from "./cache";
-import { PermissionGroup } from "@framework/entities/permissionGroup";
-import { RecordType } from "@framework/entities/recordType";
-import { ISalesforceConnectionDetails, salesforceConnectionWithToken } from "@server/repositories/salesforceConnection";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -186,10 +177,6 @@ export class Context implements IContext {
   public readonly clock: IClock = new Clock();
   public readonly caches: ICaches;
   public readonly resources: IResources;
-
-  public readonly internationalisation: IInternationalisation = {
-    addResourceBundle: (content, namespace) => i18next.addResourceBundle("en-GB", namespace, content, true, true),
-  };
 
   private readonly salesforceConnectionDetails: ISalesforceConnectionDetails;
 
