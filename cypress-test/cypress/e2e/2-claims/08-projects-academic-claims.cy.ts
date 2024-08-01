@@ -32,8 +32,8 @@ describe("claims > edit claims as FC", () => {
 
   it("Displays the cost category table", shouldShowAcademicCostCatTable);
 
-  it("Should let you click on the cost category 'Labour'", () => {
-    cy.get("td.govuk-table__cell").clickOn("Directly incurred - Staff");
+  it("Should let you click on the cost category 'Directly incurred - Staff'", () => {
+    cy.get("a").contains("Directly incurred - Staff").click();
   });
 
   it("Should still display the project title and cost category title", shouldShowProjectTitle);

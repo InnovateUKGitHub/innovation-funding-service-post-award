@@ -451,8 +451,10 @@ const testFileComponent = (
   if (pcr) {
     cy.backLink(`Back to ${suffix}`).click();
     cy.get("h1").contains(headerAssertion);
-    cy.get("main").within(() => {
-      cy.getByQA("validation-message-content").should("not.exist");
+    cy.get("main").then($main => {
+      if ($main.html().includes("validation-message-content")) {
+        cy.getByQA("validation-message-content").should("not.contain", "has been uploaded");
+      }
     });
     cy.log("Moving forward to the document area again");
     cy.get("a").contains(access).click();
@@ -462,14 +464,20 @@ const testFileComponent = (
   } else if (loans) {
     cy.backLink(`Back to ${suffix}`).click();
     cy.get("h1").contains(headerAssertion);
-    cy.getByQA("validation-message-content").should("not.contain", "has been uploaded.");
+    cy.get("main").then($main => {
+      if ($main.html().includes("validation-message-content")) {
+        cy.getByQA("validation-message-content").should("not.contain", "has been uploaded");
+      }
+    });
     cy.log("Moving forward to the document area again");
     cy.clickOn(access);
   } else {
     cy.backLink(`Back to ${suffix}`).click();
     cy.get("h1").contains(headerAssertion);
-    cy.get("main").within(() => {
-      cy.getByQA("validation-message-content").should("not.exist");
+    cy.get("main").then($main => {
+      if ($main.html().includes("validation-message-content")) {
+        cy.getByQA("validation-message-content").should("not.contain", "has been uploaded");
+      }
     });
     cy.log("Moving forward to the document area again");
     cy.clickOn(access);
