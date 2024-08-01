@@ -902,7 +902,7 @@ export const ktpTopThreeRows = () => {
   [
     ["Period", "1", "2", "3", "4"],
     ["Schedule 3 Due", "Yes", "No", "No", "No"],
-    ["Month", "Feb to Apr 2023", "May to Jul 2023", "Aug to Oct 2023", "Nov 2023 to Jan 2024"],
+    ["Month", "Feb to Apr 2024", "May to Jul 2024", "Aug to Oct 2024", "Nov 2024 to Jan 2025"],
   ].forEach((cols, rowNumber = 0) => {
     cy.get("tr")
       .eq(rowNumber + 1)
@@ -921,18 +921,18 @@ export const claimReviewTopThreeRows = () => {
       ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
       [
         "Month",
-        "Feb 2023",
-        "Mar 2023",
-        "Apr 2023",
-        "May 2023",
-        "Jun 2023",
-        "Jul 2023",
-        "Aug 2023",
-        "Sep 2023",
-        "Oct 2023",
-        "Nov 2023",
-        "Dec 2023",
-        "Jan 2024",
+        "Feb 2024",
+        "Mar 2024",
+        "Apr 2024",
+        "May 2024",
+        "Jun 2024",
+        "Jul 2024",
+        "Aug 2024",
+        "Sep 2024",
+        "Oct 2024",
+        "Nov 2024",
+        "Dec 2024",
+        "Jan 2025",
       ],
     ].forEach((cols, rowNumber = 0) => {
       cy.get("tr")
