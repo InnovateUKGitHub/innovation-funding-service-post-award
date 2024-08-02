@@ -185,6 +185,10 @@ const getAuthRouter = async () => {
       }
 
       return next();
+    })
+    .use((req, res, next) => {
+      newrelic?.addCustomAttribute("acc.username", req?.session?.user?.email);
+      next();
     });
 
   return router;
