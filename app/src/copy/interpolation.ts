@@ -1,4 +1,5 @@
 import { isNumber } from "@framework/util/numberHelper";
+import { CharacterType } from "@ui/zod/helperValidators/filenameValidator.zod";
 import bytes from "bytes";
 import i18next, { InterpolationOptions } from "i18next";
 
@@ -92,14 +93,21 @@ const registerIntlFormatter = () => {
     return value;
   });
 
+  i18next.services.formatter?.add("unique", value => {
+    if (Array.isArray(value)) return [...new Set(value)];
+    return value;
+  });
+
   i18next.services.formatter?.add("translateChar", value => {
-    const translateChar = (char: unknown) => {
-      if (typeof char !== "string") return value;
+    const translateChar = (data: unknown) => {
+      if (!Array.isArray(data)) return value;
+      if (typeof data[0] !== "string") return value;
+      if (typeof data[1] !== "string") return value;
 
-      const codepoint = char.codePointAt(0)?.toString(16);
+      const [char, charType] = data as [string, CharacterType];
 
-      if (i18next.exists(`characters.${codepoint}`)) {
-        return i18next.t(`characters.${codepoint}`);
+      if (i18next.exists(`characters.${charType}`)) {
+        return i18next.t(`characters.${charType}`);
       }
 
       return char;

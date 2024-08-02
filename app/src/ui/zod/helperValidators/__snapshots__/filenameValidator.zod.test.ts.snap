@@ -5,7 +5,14 @@ exports[`filenameValidator invalid RTL character in name 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "invalid_extension",
+      "i18n": "errors.invalid_extension",
+      "allowedExtensions": [
+        "png",
+        "pdf",
+        "pptx",
+        "xlsx",
+        "txt"
+      ],
       "root": "",
       "dir": "",
       "base": "‮xtpp.suriv.a.ton.ylemert.exe",
@@ -23,13 +30,22 @@ exports[`filenameValidator invalid character in name 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "bad_characters",
+      "i18n": "errors.bad_characters",
       "characters": [
-        "?",
-        "?",
-        "?"
+        [
+          "?",
+          "fs"
+        ],
+        [
+          "?",
+          "fs"
+        ],
+        [
+          "?",
+          "fs"
+        ]
       ],
-      "count": 3,
+      "count": 2,
       "root": "",
       "dir": "",
       "base": "???.txt",
@@ -47,7 +63,7 @@ exports[`filenameValidator invalid file with extension only 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "no_filename",
+      "i18n": "errors.no_filename",
       "root": "",
       "dir": "",
       "base": ".pptx",
@@ -65,7 +81,7 @@ exports[`filenameValidator invalid file with path 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "invalid_path",
+      "i18n": "errors.invalid_path",
       "root": "/",
       "dir": "/mnt/c",
       "base": "whatever.pptx",
@@ -83,7 +99,7 @@ exports[`filenameValidator invalid file without extension 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "no_extension",
+      "i18n": "errors.invalid_extension",
       "root": "",
       "dir": "",
       "base": "pptx",
@@ -110,7 +126,7 @@ exports[`filenameValidator invalid file without name 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "no_extension",
+      "i18n": "errors.invalid_extension",
       "root": "",
       "dir": "",
       "base": "",
@@ -128,7 +144,14 @@ exports[`filenameValidator invalid powerpoint presentation extension 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "invalid_extension",
+      "i18n": "errors.invalid_extension",
+      "allowedExtensions": [
+        "png",
+        "pdf",
+        "pptx",
+        "xlsx",
+        "txt"
+      ],
       "root": "",
       "dir": "",
       "base": "hello.ppt",
@@ -146,7 +169,7 @@ exports[`filenameValidator invalid reserved Microsoft Windows name 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "microsoft_windows_invalid_filename",
+      "i18n": "errors.microsoft_windows_invalid_filename",
       "root": "",
       "dir": "",
       "base": "CON.pptx",
@@ -164,11 +187,14 @@ exports[`filenameValidator man in business suit levitating 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "bad_characters",
+      "i18n": "errors.bad_characters",
       "characters": [
-        "🕴"
+        [
+          "🕴",
+          "emojis"
+        ]
       ],
-      "count": 1,
+      "count": 2,
       "root": "",
       "dir": "",
       "base": "🕴️.txt",

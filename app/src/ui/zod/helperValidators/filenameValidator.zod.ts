@@ -4,10 +4,10 @@ import path from "path-browserify";
 import { z } from "zod";
 
 enum CharacterType {
-  ASCII_CONTROL_CHARACTERS = "ascii control characters",
-  UNICODE_CONTROL_CHARACTERS = "unicode control characters",
-  PRIVATE_USE_AREA = "private use area",
-  DIRECTION_OVERRIDES = "direction overrides",
+  ASCII_CONTROL_CHARACTERS = "ascii_control",
+  UNICODE_CONTROL_CHARACTERS = "unicode_control",
+  PRIVATE_USE_AREA = "private_use",
+  DIRECTION_OVERRIDES = "direction_overrides",
   EMOJIS = "emojis",
   FILESYSTEM = "fs",
 }
@@ -188,13 +188,14 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
         });
       }
 
-      const foundBadCharacters = [];
+      const foundBadCharacters: [string, CharacterType][] = [];
       let everyCharacterIsSpace = true;
       let everyCharacterIsFullStop = true;
+      let forcePlural = false;
       for (const character of parsedFile.name) {
         for (const [badCharacter, type] of badCharactersList) {
           if (character === badCharacter) {
-            foundBadCharacters.push(badCharacter);
+            foundBadCharacters.push([badCharacter, type]);
             everyCharacterIsSpace = false;
             everyCharacterIsFullStop = false;
           }
@@ -203,6 +204,19 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
           }
           if (character !== ".") {
             everyCharacterIsFullStop = false;
+          }
+          if (
+            type === CharacterType.ASCII_CONTROL_CHARACTERS ||
+            type === CharacterType.DIRECTION_OVERRIDES ||
+            type === CharacterType.EMOJIS ||
+            type === CharacterType.PRIVATE_USE_AREA ||
+            type === CharacterType.UNICODE_CONTROL_CHARACTERS
+          ) {
+            // These are "categories" of characters, which should
+            // force the output error to be a plural.
+            // i.e. Cannot use invisible characters
+            // not. Cannot use the invisible character
+            forcePlural = true;
           }
         }
       }
@@ -213,7 +227,7 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
           params: {
             i18n: "errors.bad_characters",
             characters: foundBadCharacters,
-            count: foundBadCharacters.length,
+            count: forcePlural ? 2 : foundBadCharacters.length,
             ...parsedFile,
           },
         });
@@ -241,4 +255,4 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
     });
 };
 
-export { filenameValidatior };
+export { filenameValidatior, CharacterType };
