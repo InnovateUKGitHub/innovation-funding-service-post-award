@@ -40,8 +40,9 @@ export const validCurrencyRegex = /^-?£?(((\d{1,3}(,\d{3})*)|\d+)(\.\d{1,2})?)$
 /**
  * returns difference between two numbers as a percentage to two decimal points
  */
-export function diffAsPercentage(startingValue: number, secondValue: number) {
-  if (startingValue === 0) return 0;
+export function diffAsPercentage(startingValue: number, secondValue: number, defaultValue: number = 0) {
+  if (secondValue === 0 && startingValue === 0) return 0;
+  if (startingValue === 0) return defaultValue;
 
   const roundedStarting = roundCurrency(startingValue);
   const roundedSecond = roundCurrency(secondValue);

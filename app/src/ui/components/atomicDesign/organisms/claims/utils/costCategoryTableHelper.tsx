@@ -186,7 +186,7 @@ function createRow(
     category,
     cost: item || emptyCostsSummaryForPeriodDto,
     differenceInPounds: item ? roundCurrency(item.forecastThisPeriod - item.costsClaimedThisPeriod) : 0,
-    diffPercentage: item ? diffAsPercentage(item.forecastThisPeriod, item.costsClaimedThisPeriod) : 0,
+    diffPercentage: item ? diffAsPercentage(item.forecastThisPeriod, item.costsClaimedThisPeriod, 100) : 0,
   };
 
   return {
