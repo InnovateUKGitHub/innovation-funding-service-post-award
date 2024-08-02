@@ -1,6 +1,6 @@
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
-import { diffAsPercentage, isNumber, roundCurrency } from "@framework/util/numberHelper";
+import { diffAsPercentage, isNumber, parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { useMemo } from "react";
 import { z } from "zod";
 import { EditClaimLineItemLineItemSchemaType } from "./editClaimLineItems.zod";
@@ -70,9 +70,9 @@ const mapToClaimLineItemTableDto = ({
 
     for (const lineItem of controlledFields) {
       const existingLineItem = existingLineItems.find(x => x.id === lineItem.id);
-      const value = parseFloat(lineItem.value ?? "");
+      const value = parseCurrency(lineItem.value ?? "");
 
-      total = roundCurrency(value + total);
+      if (isNumber(value)) total = roundCurrency(value + total);
 
       rows.push({
         id: lineItem.id,
