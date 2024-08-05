@@ -112,7 +112,7 @@ export const getClaimSummarySchema = ({
       status: z.string(),
       comments: getTextareaValidation({
         maxLength: 1000,
-        required: true,
+        required: false,
       }),
     }),
   ]);

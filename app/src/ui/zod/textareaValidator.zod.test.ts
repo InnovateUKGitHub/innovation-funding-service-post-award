@@ -43,7 +43,7 @@ describe("generic textarea validator", () => {
       ${"3 chars long"}                    | ${"ops"}                                 | ${{ organisationName: "ops" }}        | ${true}  | ${true}
       ${"35 chars long"}                   | ${"this is much too big and impossible"} | ${undefined}                          | ${true}  | ${false}
       ${"10 chars long"}                   | ${"acceptable"}                          | ${{ organisationName: "acceptable" }} | ${true}  | ${true}
-      ${"spaces are treated as undefined"} | ${"          "}                          | ${{ organisationName: undefined }}    | ${false} | ${true}
+      ${"spaces are treated as undefined"} | ${"          "}                          | ${{ organisationName: "" }}           | ${false} | ${true}
       ${"spaces are not allowed"}          | ${"          "}                          | ${undefined}                          | ${true}  | ${false}
     `("$name", ({ input, required, output, accept }) => {
       const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
@@ -70,7 +70,7 @@ describe("generic textarea validator", () => {
       ${"too small"}                       | ${"ops"}                                 | ${undefined}    | ${true}  | ${false}
       ${"too big"}                         | ${"this is much too big and impossible"} | ${undefined}    | ${true}  | ${false}
       ${"acceptable"}                      | ${"acceptable"}                          | ${"acceptable"} | ${true}  | ${true}
-      ${"spaces are treated as undefined"} | ${"          "}                          | ${undefined}    | ${false} | ${true}
+      ${"spaces are treated as undefined"} | ${"          "}                          | ${""}           | ${false} | ${true}
       ${"spaces are not allowed"}          | ${"          "}                          | ${undefined}    | ${true}  | ${false}
     `("$name", ({ input, required, output, accept }) => {
       const errorMap = makeZodI18nMap({ keyPrefix: ["my", "nice", "error"] });

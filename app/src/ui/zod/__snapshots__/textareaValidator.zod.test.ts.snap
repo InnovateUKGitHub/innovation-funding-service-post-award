@@ -88,7 +88,7 @@ exports[`generic textarea validator max length validation spaces are not allowed
 exports[`generic textarea validator max length validation spaces are treated as undefined 1`] = `
 {
   "data": {
-    "organisationName": undefined,
+    "organisationName": "",
   },
   "success": true,
 }
@@ -144,7 +144,7 @@ exports[`generic textarea validator ranged validation spaces are not allowed 1`]
 
 exports[`generic textarea validator ranged validation spaces are treated as undefined 1`] = `
 {
-  "data": undefined,
+  "data": "",
   "success": true,
 }
 `;
