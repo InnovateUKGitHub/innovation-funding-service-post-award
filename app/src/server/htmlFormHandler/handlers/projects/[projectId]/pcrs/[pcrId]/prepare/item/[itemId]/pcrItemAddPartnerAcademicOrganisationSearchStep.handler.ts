@@ -12,7 +12,7 @@ import {
   academicOrganisationSearchSchema,
 } from "@ui/containers/pages/pcrs/addPartner/steps/schemas/academicOrganisation.zod";
 import { addPartnerErrorMap } from "@ui/containers/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { GetJesAccountsByNameQuery } from "@server/features/accounts/getJesAccountsByName";
+import { GetJesAccountsByNameQuery } from "@server/features/accounts/GetJesAccountsByNameQuery";
 import { AccountDto } from "@framework/dtos/accountDto";
 
 export class PcrItemAddPartnerAcademicOrganisationSearchStepHandler extends ZodFormHandlerBase<
@@ -55,7 +55,7 @@ export class PcrItemAddPartnerAcademicOrganisationSearchStepHandler extends ZodF
     let jesSearchResults: AccountDto[] = [];
 
     if (!!input.searchJesOrganisations) {
-      jesSearchResults = await new GetJesAccountsByNameQuery(input.searchJesOrganisations).run(context);
+      jesSearchResults = await new GetJesAccountsByNameQuery(input.searchJesOrganisations).execute(context);
     }
 
     res.locals.preloadedData = { jesSearchResults };

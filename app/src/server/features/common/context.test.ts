@@ -5,9 +5,9 @@ import {
 } from "@server/repositories/errors";
 import { Results } from "@ui/validation/results";
 import { NotFoundError, ForbiddenError, ValidationError, BadRequestError, AppError } from "./appError";
-import { CommandBase, SyncCommandBase } from "./commandBase";
+import { AsyncCommandBase, SyncCommandBase } from "./commandBase";
 import { constructErrorResponse, Context } from "./context";
-import { QueryBase, SyncQueryBase } from "./queryBase";
+import { AsyncQueryBase, SyncQueryBase } from "./queryBase";
 
 describe("constructErrorResponse", () => {
   test.each`
@@ -55,13 +55,20 @@ describe("Context", () => {
   describe("public methods", () => {
     describe("runQuery", () => {
       it("should run a valid runnable async query", async () => {
-        const response = { name: "mock result object" };
-        const query = {
-          run: jest.fn().mockImplementation(() => Promise.resolve(response)),
-          logMessage: () => ["Query log message"],
-        };
+        const response = { name: "mock result object" } as const;
+        class TestQuery extends AsyncQueryBase<typeof response> {
+          runnableName = "TestCommand";
 
-        const res = await context.runQuery(query as unknown as QueryBase<{ name: "mock result object" }>);
+          async run() {
+            return response;
+          }
+
+          logMessage() {
+            return { projectId: "zucchini" };
+          }
+        }
+
+        const res = await context.runQuery(new TestQuery());
 
         expect(res).toEqual(response);
       });
@@ -69,13 +76,21 @@ describe("Context", () => {
 
     describe("runSyncQuery", () => {
       it("should run a valid runnable synchronous query", () => {
-        const response = { name: "mock result object" };
-        const query = {
-          run: jest.fn().mockImplementation(() => response),
-          logMessage: () => ["Query log message"],
-        };
+        const response = { name: "mock result object" } as const;
 
-        const res = context.runSyncQuery(query as unknown as SyncQueryBase<{ name: "mock result object" }>);
+        class TestQuery extends SyncQueryBase<typeof response> {
+          runnableName = "TestCommand";
+
+          run() {
+            return response;
+          }
+
+          logMessage() {
+            return { projectId: "zucchini" };
+          }
+        }
+
+        const res = context.runSyncQuery(new TestQuery());
 
         expect(res).toEqual(response);
       });
@@ -84,12 +99,20 @@ describe("Context", () => {
     describe("runCommand", () => {
       it("should run a valid runnable async command", async () => {
         const response = { name: "mock result object" };
-        const command = {
-          run: jest.fn().mockImplementation(() => Promise.resolve(response)),
-          logMessage: () => ["Query log message"],
-        };
 
-        const res = await context.runCommand(command as unknown as CommandBase<{ name: "mock result object" }>);
+        class TestCommand extends AsyncCommandBase<typeof response> {
+          runnableName = "TestCommand";
+
+          async run() {
+            return response;
+          }
+
+          logMessage() {
+            return { projectId: "zucchini" };
+          }
+        }
+
+        const res = await context.runCommand(new TestCommand());
 
         expect(res).toEqual(response);
       });
@@ -97,14 +120,20 @@ describe("Context", () => {
 
     describe("runSyncCommand", () => {
       it("should run a valid runnable synchronous command", () => {
-        const response = { name: "mock result object" };
-        const command = {
-          run: jest.fn().mockImplementation(() => response),
-          logMessage: () => ["Query log message"],
-        };
+        const response = { name: "mock result object" } as const;
+        class TestCommand extends SyncCommandBase<typeof response> {
+          runnableName = "TestCommand";
 
-        const res = context.runSyncCommand(command as unknown as SyncCommandBase<{ name: "mock result object" }>);
+          run() {
+            return response;
+          }
 
+          logMessage() {
+            return { projectId: "zucchini" };
+          }
+        }
+
+        const res = context.runSyncCommand(new TestCommand());
         expect(res).toEqual(response);
       });
     });

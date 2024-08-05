@@ -6,9 +6,9 @@ import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
+export abstract class DocumentsSummaryQueryBase extends AuthorisedAsyncQueryBase<DocumentSummaryDto[]> {
   public logger: ILogger = new Logger("DocumentsSummaryQueryBase");
 
   constructor(protected readonly filter?: DocumentFilter) {

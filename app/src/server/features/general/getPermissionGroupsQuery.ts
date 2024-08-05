@@ -2,9 +2,10 @@ import { PermissionGroupIdentifier } from "@framework/constants/enums";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError } from "../common/appError";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
+export class GetPermissionGroupQuery extends AuthorisedAsyncQueryBase<PermissionGroup> {
+  public readonly runnableName: string = "GetPermissionGroupQuery";
   constructor(private readonly identifier: PermissionGroupIdentifier) {
     super();
   }

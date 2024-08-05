@@ -9,12 +9,13 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 
-export class CreateProjectChangeRequestCommand extends CommandBase<string> {
+export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBase<PcrId> {
+  public readonly runnableName: string = "CreateProjectChangeRequestCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly projectChangeRequestDto: CreatePcrDto,
@@ -22,7 +23,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 

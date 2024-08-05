@@ -1,6 +1,6 @@
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
-import { GetClaim } from "@server/features/claims/getClaim";
+import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { BadRequestError } from "@shared/appError";
@@ -48,7 +48,7 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
     const command = new UpdateClaimCommand(projectId, claim, isClaimSummary);
     await context.runCommand(command);
 
-    const query = new GetClaim(partnerId, periodId);
+    const query = new GetClaimByPartnerIdAndPeriod(partnerId, periodId);
     return context.runQuery(query);
   }
 }

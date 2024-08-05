@@ -1,7 +1,7 @@
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetAllForPartnerQuery } from "./getAllForPartnerQuery";
+import { GetAllClaimsByPartnerIdIncludingNewClaimsQuery } from "./GetAllClaimsByPartnerIdIncludingNewClaimsQuery";
 
-describe("GetAllForPartnerQuery", () => {
+describe("GetAllClaimsByPartnerIdIncludingNewClaimsQuery", () => {
   it("returns objects of correct shape", async () => {
     const context = new TestContext();
     const partner = context.testData.createPartner();
@@ -12,7 +12,7 @@ describe("GetAllForPartnerQuery", () => {
     testData.createClaim(partner, period);
     testData.createProfileTotalPeriod(partner, period);
 
-    const query = new GetAllForPartnerQuery(partner.id);
+    const query = new GetAllClaimsByPartnerIdIncludingNewClaimsQuery(partner.id);
     const result = await context.runQuery(query);
     const item = result[0];
 
@@ -33,7 +33,7 @@ describe("GetAllForPartnerQuery", () => {
     testData.createClaim(partner, period2);
     testData.createProfileTotalPeriod(partner, period2);
 
-    const query = new GetAllForPartnerQuery(partner.id);
+    const query = new GetAllClaimsByPartnerIdIncludingNewClaimsQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(2);

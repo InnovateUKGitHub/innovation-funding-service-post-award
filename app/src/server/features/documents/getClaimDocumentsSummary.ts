@@ -7,6 +7,7 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
+  public readonly runnableName: string = "GetClaimDocumentsQuery";
   constructor(
     private readonly claimKey: ClaimKey,
     filter?: DocumentFilter,
@@ -14,7 +15,7 @@ export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
     super(filter);
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return (
       auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact) ||
       auth.forProject(this.claimKey.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)

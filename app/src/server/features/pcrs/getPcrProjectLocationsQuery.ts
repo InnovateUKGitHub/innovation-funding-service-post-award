@@ -4,6 +4,7 @@ import { PCRProjectLocationMapper } from "@server/repositories/mappers/projectCh
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrProjectLocationsQuery extends OptionsQueryBase<PCRProjectLocation> {
+  public readonly runnableName: string = "GetPcrProjectLocationsQuery";
   constructor() {
     super("PCRProjectLocations");
   }

@@ -4,6 +4,7 @@ import { PcrSpendProfileCapitalUsageTypeMapper } from "@server/repositories/mapp
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrSpendProfileCapitalUsageTypesQuery extends OptionsQueryBase<PCRSpendProfileCapitalUsageType> {
+  public readonly runnableName: string = "GetPcrSpendProfileCapitalUsageTypesQuery";
   constructor() {
     super("PCRSpendProfileCapitalUsageTypes");
   }

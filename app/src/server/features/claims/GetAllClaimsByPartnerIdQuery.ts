@@ -1,17 +1,18 @@
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
-export class GetAllIncludingNewForPartnerQuery extends QueryBase<ClaimDto[]> {
+export class GetAllClaimsByPartnerIdQuery extends AuthorisedAsyncQueryBase<ClaimDto[]> {
+  public readonly runnableName: string = "GetAllClaimsByPartnerIdQuery";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }
 
   protected async run(context: IContext) {
     const partner = await context.repositories.partners.getById(this.partnerId);
-    const claims = await context.repositories.claims.getAllIncludingNewByPartnerId(this.partnerId);
+    const claims = await context.repositories.claims.getAllByPartnerId(this.partnerId);
     const forecasts = await context.repositories.profileTotalPeriod.getAllByPartnerId(this.partnerId);
     const joined = claims.map(claim => ({
       claim,

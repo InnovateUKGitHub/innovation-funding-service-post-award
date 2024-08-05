@@ -5,18 +5,19 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { mapToPartnerDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 
-export class GetAllPartnerDocumentsQuery extends QueryBase<AllPartnerDocumentSummaryDto> {
+export class GetAllPartnerDocumentsQuery extends AuthorisedAsyncQueryBase<AllPartnerDocumentSummaryDto> {
+  public readonly runnableName: string = "GetAllPartnerDocumentsQuery";
   public logger: ILogger = new Logger("GetAllPartnerDocumentsQuery");
 
   constructor(private readonly projectId: ProjectId) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return auth
       .forProject(this.projectId)
       .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager);

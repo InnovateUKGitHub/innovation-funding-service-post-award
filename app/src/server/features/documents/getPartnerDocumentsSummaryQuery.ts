@@ -4,6 +4,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
+  public readonly runnableName: string = "GetPartnerDocumentsQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -11,7 +12,7 @@ export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
     super();
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

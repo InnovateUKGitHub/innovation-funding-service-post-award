@@ -7,11 +7,12 @@ import { ISalesforceLoan } from "@server/repositories/loanRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetLoanDocumentsQuery } from "../documents/getLoanDocuments";
 import { GetLoan } from "./getLoan";
 
-export class UpdateLoanCommand extends CommandBase<boolean> {
+export class UpdateLoanCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateLoanCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly loanId: string,
@@ -20,7 +21,7 @@ export class UpdateLoanCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.FinancialContact);
   }
 

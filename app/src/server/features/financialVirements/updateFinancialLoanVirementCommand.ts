@@ -6,10 +6,11 @@ import { ISalesforceFinancialLoanVirement } from "@server/repositories/financial
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 import { InActiveProjectError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
-export class UpdateFinancialLoanVirementCommand extends CommandBase<boolean> {
+export class UpdateFinancialLoanVirementCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateFinancialLoanVirementCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrItemId: PcrItemId,
@@ -19,7 +20,7 @@ export class UpdateFinancialLoanVirementCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 

@@ -1,10 +1,11 @@
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
 // @TODO - nullable or throw to be decided
-export class GetClaim extends QueryBase<ClaimDto> {
+export class GetClaimByPartnerIdAndPeriod extends AuthorisedAsyncQueryBase<ClaimDto> {
+  public readonly runnableName: string = "GetClaimByPartnerIdAndPeriod";
   constructor(
     private readonly partnerId: PartnerId,
     private readonly periodId: number,

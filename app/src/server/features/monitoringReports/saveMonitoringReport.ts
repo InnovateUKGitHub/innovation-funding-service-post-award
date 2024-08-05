@@ -9,11 +9,13 @@ import { IContext } from "@framework/types/IContext";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
 import { BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { noop } from "lodash";
 
-export class SaveMonitoringReport extends CommandBase<boolean> {
+export class SaveMonitoringReport extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "SaveMonitoringReport";
+
   constructor(
     private readonly monitoringReportDto: PickRequiredFromPartial<
       MonitoringReportDto,
@@ -24,7 +26,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

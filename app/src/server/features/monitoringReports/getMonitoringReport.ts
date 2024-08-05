@@ -8,12 +8,13 @@ import {
 } from "@server/repositories/monitoringReportHeaderRepository";
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
 import { BadRequestError } from "../common/appError";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnsweredQuestions";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
-export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
+export class GetMonitoringReportById extends AuthorisedAsyncQueryBase<MonitoringReportDto> {
+  public readonly runnableName: string = "GetMonitoringReportById";
   private readonly updatableStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
 
   constructor(
@@ -23,7 +24,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

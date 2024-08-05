@@ -5,6 +5,7 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetClaimDetailDocumentQuery extends DocumentQueryBase {
+  public readonly runnableName: string = "GetClaimDetailDocumentQuery";
   constructor(
     private readonly claimKey: ClaimDetailKey,
     documentId: string,
@@ -12,7 +13,7 @@ export class GetClaimDetailDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return (
       auth
         .forPartner(this.claimKey.projectId, this.claimKey.partnerId)

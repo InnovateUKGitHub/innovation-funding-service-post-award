@@ -15,7 +15,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { isNumber, sumBy } from "@framework/util/numberHelper";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
@@ -30,7 +30,8 @@ type PcrData = PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"
 const isPartnerAdditionItem = (item: PCRItemDto): item is PCRItemForPartnerAdditionDto =>
   item.type === PCRItemType.PartnerAddition;
 
-export class UpdatePCRCommand extends CommandBase<boolean> {
+export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdatePCRCommand";
   private readonly projectId: ProjectId;
   private readonly projectChangeRequestId: PcrId | PcrItemId;
   private readonly pcr: PcrData;
@@ -58,7 +59,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     this.pcrStepId = pcrStepId;
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 

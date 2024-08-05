@@ -4,6 +4,7 @@ import { PcrProjectRoleMapper } from "@server/repositories/mappers/projectChange
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrProjectRolesQuery extends OptionsQueryBase<PCRProjectRole> {
+  public readonly runnableName: string = "GetPcrProjectRolesQuery";
   constructor() {
     super("PCRProjectRoles");
   }

@@ -1,10 +1,11 @@
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 import { CostCategoryList } from "@framework/types/CostCategory";
 
-export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
+export class GetAllGOLForecastedCostCategoriesQuery extends AuthorisedAsyncQueryBase<GOLCostDto[]> {
+  public readonly runnableName: string = "GetAllGOLForecastedCostCategoriesQuery";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }

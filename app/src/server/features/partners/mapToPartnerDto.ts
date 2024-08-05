@@ -15,6 +15,7 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { SyncCommandBase } from "../common/commandBase";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
+  public readonly runnableName: string = "MapToPartnerDtoCommand";
   constructor(
     private readonly item: Partner,
     private readonly partnerLevelRoles: ProjectRole,

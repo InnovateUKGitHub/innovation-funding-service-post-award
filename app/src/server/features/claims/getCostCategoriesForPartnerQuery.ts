@@ -1,10 +1,11 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetFilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
-export class GetCostCategoriesForPartnerQuery extends QueryBase<CostCategoryDto[]> {
+export class GetCostCategoriesForPartnerQuery extends AuthorisedAsyncQueryBase<CostCategoryDto[]> {
+  public readonly runnableName: string = "GetCostCategoriesForPartnerQuery";
   constructor(private readonly partner: PartnerDto) {
     super();
   }

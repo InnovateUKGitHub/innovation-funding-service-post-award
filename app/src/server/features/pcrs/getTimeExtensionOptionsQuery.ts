@@ -3,10 +3,11 @@ import { PCRTimeExtensionOption } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { monthDifference, totalCalendarMonths } from "@shared/date-helpers";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
-export class GetTimeExtensionOptionsQuery extends QueryBase<PCRTimeExtensionOption[]> {
+export class GetTimeExtensionOptionsQuery extends AuthorisedAsyncQueryBase<PCRTimeExtensionOption[]> {
+  public readonly runnableName: string = "GetTimeExtensionOptionsQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

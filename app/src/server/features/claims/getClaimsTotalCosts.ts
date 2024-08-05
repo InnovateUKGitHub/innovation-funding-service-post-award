@@ -12,9 +12,10 @@ import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodD
 import { IContext } from "@framework/types/IContext";
 import { sumBy, roundCurrency } from "@framework/util/numberHelper";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
+export class GetClaimsTotalCosts extends AuthorisedAsyncQueryBase<TotalCosts> {
+  public readonly runnableName: string = "GetClaimsTotalCosts";
   constructor(
     private readonly partnerId: PartnerId,
     private readonly projectId: ProjectId,

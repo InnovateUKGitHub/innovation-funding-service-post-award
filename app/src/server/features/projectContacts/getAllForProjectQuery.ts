@@ -1,12 +1,13 @@
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 
-export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
+export class GetAllForProjectQuery extends AuthorisedAsyncQueryBase<ProjectContactDto[]> {
+  public readonly runnableName: string = "GetAllForProjectQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

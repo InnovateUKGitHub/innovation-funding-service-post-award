@@ -1,9 +1,11 @@
 import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 
-export class DeleteLoanDocument extends CommandBase<void> {
+export class DeleteLoanDocument extends AuthorisedAsyncCommandBase<void> {
+  public readonly runnableName = "DeleteLoanDocument";
+
   constructor(
     private readonly documentId: string,
     private readonly projectId: ProjectId,

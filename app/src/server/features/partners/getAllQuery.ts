@@ -1,11 +1,12 @@
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";
 
-export class GetAllQuery extends QueryBase<PartnerDto[]> {
+export class GetAllQuery extends AuthorisedAsyncQueryBase<PartnerDto[]> {
+  public readonly runnableName: string = "GetAllQuery";
   protected async run(context: IContext): Promise<PartnerDto[]> {
     const results = await context.repositories.partners.getAll();
     const roles = await context.runQuery(new GetAllProjectRolesForUser());

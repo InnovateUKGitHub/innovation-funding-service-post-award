@@ -7,7 +7,7 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFor
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { GetClaim } from "@server/features/claims/getClaim";
+import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
@@ -26,7 +26,7 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
     button: IFormButton,
     body: IFormBody,
   ): Promise<ClaimDto> {
-    const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
+    const claim = await context.runQuery(new GetClaimByPartnerIdAndPeriod(params.partnerId, params.periodId));
 
     claim.comments = body.comments;
 

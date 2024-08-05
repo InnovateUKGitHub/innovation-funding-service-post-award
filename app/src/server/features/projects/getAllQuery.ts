@@ -1,10 +1,11 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "./getAllProjectRolesForUser";
 import { mapToProjectDto } from "./mapToProjectDto";
 
-export class GetAllQuery extends QueryBase<ProjectDto[]> {
+export class GetAllQuery extends AuthorisedAsyncQueryBase<ProjectDto[]> {
+  public readonly runnableName: string = "GetAllQuery";
   protected async run(context: IContext) {
     const allRoles = await context.runQuery(new GetAllProjectRolesForUser());
     const items = await context.repositories.projects.getAll();
@@ -14,9 +15,5 @@ export class GetAllQuery extends QueryBase<ProjectDto[]> {
         return mapToProjectDto(context, item, roles);
       }),
     );
-  }
-
-  protected logMessage() {
-    return ["Projects.GetAllQuery"];
   }
 }
