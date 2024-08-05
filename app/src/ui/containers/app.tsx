@@ -18,7 +18,7 @@ import { FullHeight } from "@ui/components/atomicDesign/atoms/FullHeight/FullHei
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
 import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
-import { SuspensePageLoader } from "@ui/components/bjss/loading";
+import { SuspensePageLoader } from "@ui/components/atomicDesign/atoms/loading/loading";
 import { RoutesProvider } from "@ui/context/routesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
