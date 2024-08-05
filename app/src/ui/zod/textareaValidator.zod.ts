@@ -30,8 +30,10 @@ export const getTextareaValidation = <Required extends boolean = false>({
     .optional()
     .nullable()
     .transform((val, ctx) => {
-      const isEmpty = (typeof val === "string" && val.trim() === "") || isNil(val);
-      if (required && isEmpty) {
+      const valIsEmptyString = typeof val === "string" && val.trim() === "";
+      const valIsNil = isNil(val);
+
+      if (required && (valIsEmptyString || valIsNil)) {
         ctx.addIssue({
           code: ZodIssueCode.custom,
           params: {
@@ -42,7 +44,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
         return z.NEVER;
       }
 
-      if (!isEmpty) {
+      if (!(valIsEmptyString || valIsNil)) {
         const len = val.length;
 
         // Something can be too big if there is some kind of limit.
@@ -94,7 +96,11 @@ export const getTextareaValidation = <Required extends boolean = false>({
         }
       }
 
-      if ((typeof val === "string" && val.trim() === "") || isNil(val)) {
+      if (valIsEmptyString) {
+        return "";
+      }
+
+      if (valIsNil) {
         return undefined;
       }
 
