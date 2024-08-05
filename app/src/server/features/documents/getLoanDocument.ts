@@ -4,6 +4,7 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetLoanDocumentQuery extends DocumentQueryBase {
+  public readonly runnableName: string = "GetLoanDocumentQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly loanId: string,
@@ -12,7 +13,7 @@ export class GetLoanDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
+  async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     const loan = await context.repositories.loans.get(this.projectId, { loanId: this.loanId });
 
     if (!loan) return false;
@@ -20,7 +21,7 @@ export class GetLoanDocumentQuery extends DocumentQueryBase {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  protected getRecordId(): Promise<string | null> {
+  getRecordId(): Promise<string | null> {
     return Promise.resolve(this.loanId);
   }
 }

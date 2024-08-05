@@ -8,6 +8,7 @@ import { SyncCommandBase } from "../common/commandBase";
  * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
 export class MapToPartnerBankDetailsDtoCommand extends SyncCommandBase<PartnerBankDetailsDto> {
+  public readonly runnableName: string = "MapToPartnerBankDetailsDtoCommand";
   constructor(private readonly item: PartnerBankDetails) {
     super();
   }

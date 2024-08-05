@@ -2,14 +2,15 @@ import { ProjectRole } from "@framework/constants/project";
 import { LoanDto } from "@framework/dtos/loanDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetAllLoans extends QueryBase<LoanDto[]> {
+export class GetAllLoans extends AuthorisedAsyncQueryBase<LoanDto[]> {
+  public readonly runnableName: string = "GetAllLoans";
   constructor(private readonly projectId: ProjectId) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth
       .forProject(this.projectId)
       .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);

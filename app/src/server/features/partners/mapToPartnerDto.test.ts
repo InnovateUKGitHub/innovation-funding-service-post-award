@@ -1,6 +1,7 @@
 import { ProjectRole } from "@framework/constants/project";
 import { BankDetails, PartnerDto } from "@framework/dtos/partnerDto";
 import { Partner } from "@framework/entities/partner";
+import { IContext } from "@framework/types/IContext";
 import { createPartnerDto } from "@framework/util/stubDtos";
 import { MapToPartnerDtoCommand } from "@server/features/partners/mapToPartnerDto";
 
@@ -120,7 +121,7 @@ describe("mapToPartnerDto", () => {
       stubPartnerToMap,
       7 as ProjectRole,
       ProjectRole.ProjectManager,
-    ).run();
+    ).execute(null as unknown as IContext); // context not used
 
     expect(mappedPartnerDto).toMatchObject(expected);
   });

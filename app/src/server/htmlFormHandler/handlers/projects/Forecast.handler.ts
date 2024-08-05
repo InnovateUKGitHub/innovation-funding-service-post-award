@@ -1,8 +1,8 @@
 import { ProjectRole } from "@framework/constants/project";
 import { IContext } from "@framework/types/IContext";
-import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails/getAllByPartnerQuery";
-import { GetAllForPartnerQuery } from "@server/features/claims/getAllForPartnerQuery";
-import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
+import { GetAllClaimDetailsByPartnerIdQuery } from "@server/features/claimDetails/GetAllClaimDetailsByPartnerIdQuery";
+import { GetAllClaimsByPartnerIdQuery } from "@server/features/claims/GetAllClaimsByPartnerIdQuery";
+import { GetAllGOLForecastedCostCategoriesQuery } from "@server/features/claims/GetAllGOLForecastedCostCategoriesQuery";
 import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
 import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
 import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
@@ -51,10 +51,12 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
   async getZodSchema({ context, input }: { context: IContext; input: z.input<ForecastTableSchemaType> }) {
     const projectPromise = context.runQuery(new GetProjectByIdQuery(input.projectId as ProjectId));
     const partnerPromise = context.runQuery(new GetPartnerByIdQuery(input.partnerId as PartnerId));
-    const claimDetailsPromise = context.runQuery(new GetAllClaimDetailsByPartner(input.partnerId as PartnerId));
-    const claimTotalProjectPeriodsPromise = context.runQuery(new GetAllForPartnerQuery(input.partnerId as PartnerId));
+    const claimDetailsPromise = context.runQuery(new GetAllClaimDetailsByPartnerIdQuery(input.partnerId as PartnerId));
+    const claimTotalProjectPeriodsPromise = context.runQuery(
+      new GetAllClaimsByPartnerIdQuery(input.partnerId as PartnerId),
+    );
     const profileTotalCostCategoriesPromise = context.runQuery(
-      new GetAllForecastsGOLCostsQuery(input.partnerId as PartnerId),
+      new GetAllGOLForecastedCostCategoriesQuery(input.partnerId as PartnerId),
     );
     const profileDetailsPromise = context.runQuery(new GetAllForecastsForPartnerQuery(input.partnerId as PartnerId));
 

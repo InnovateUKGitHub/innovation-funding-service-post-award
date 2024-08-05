@@ -1,6 +1,6 @@
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
-import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
-import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { AuthorisedAsyncQueryBase, SyncQueryBase } from "@server/features/common/queryBase";
+import { AuthorisedAsyncCommandBase, AsyncCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { IClock } from "@framework/util/clock";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
@@ -86,9 +86,9 @@ export interface IContext {
   resources: IResources;
   caches: ICaches;
   config: IConfig;
-  runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
+  runQuery<TResult>(cmd: AuthorisedAsyncQueryBase<TResult>): Promise<TResult>;
   runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
-  runCommand<TResult>(cmd: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult>;
+  runCommand<TResult>(cmd: AuthorisedAsyncCommandBase<TResult> | AsyncCommandBase<TResult>): Promise<TResult>;
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
@@ -114,14 +114,13 @@ export interface ICaches {
   contentStoreLastUpdated: Date | null;
 }
 
-export interface IAsyncRunnable<T> {
-  run: (context: IContext) => Promise<T>;
-  logMessage: () => unknown[];
-  handleRepositoryError?: (context: IContext, error: unknown) => void;
-  accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
+export interface ISyncRunnable<T> {
+  runnableName: string;
+  execute: (context: IContext) => T;
+  logMessage: () => unknown;
 }
 
-export interface ISyncRunnable<T> {
-  run: (context: IContext) => T;
-  logMessage: () => unknown[];
+export interface IAsyncRunnable<T> extends ISyncRunnable<Promise<T>> {
+  handleRepositoryError?: (context: IContext, error: unknown) => void;
+  accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }

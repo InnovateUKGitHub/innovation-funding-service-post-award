@@ -1,8 +1,8 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetAllClaimsForProjectQuery } from "./getAllClaimsForProjectQuery";
+import { GetAllClaimsByProjectIdQuery } from "./GetAllClaimsByProjectIdQuery";
 
-describe("getAllClaimsForProjectQuery", () => {
+describe("GetAllClaimsByProjectIdQuery", () => {
   it("returns the full claim details", async () => {
     const context = new TestContext();
     const expectedClaimCost = 10000;
@@ -21,7 +21,7 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_PeriodLatestForecastCost__c = expectedForcastCost;
     });
 
-    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project.Id);
     const result = await context.runQuery(query);
     const item = result[0];
 
@@ -48,7 +48,7 @@ describe("getAllClaimsForProjectQuery", () => {
       });
     });
 
-    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project.Id);
     const results = await context.runQuery(query);
 
     expect(results.length).toBe(3);
@@ -83,7 +83,7 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_PeriodLatestForecastCost__c = 200;
     });
 
-    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project.Id);
     const results = await context.runQuery(query);
 
     expect(results.length).toBe(2);
@@ -120,7 +120,7 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_PeriodLatestForecastCost__c = 200;
     });
 
-    const query = new GetAllClaimsForProjectQuery(project2.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project2.Id);
     const results = await context.runQuery(query);
 
     expect(results.length).toBe(1);
@@ -152,7 +152,7 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createClaim(partner2, 1);
     context.testData.createClaim(partner3, 1);
 
-    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project.Id);
     const results = await context.runQuery(query);
 
     expect(results.map(x => x.partnerId)).toEqual([partner2.id, partner3.id, partner1.id]);
@@ -178,7 +178,7 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createClaim(partner2, 2);
     context.testData.createClaim(partner2, 1);
 
-    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const query = new GetAllClaimsByProjectIdQuery(project.Id);
     const results = await context.runQuery(query);
 
     expect(results.map(x => x.partnerId)).toEqual([

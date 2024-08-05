@@ -58,57 +58,71 @@ exports[`initialCache should initialise the cache 1`] = `
   [
     GetPermissionGroupQuery {
       "identifier": 1,
+      "runnableName": "GetPermissionGroupQuery",
     },
   ],
   [
-    GetAllRecordTypesQuery {},
+    GetAllRecordTypesQuery {
+      "runnableName": "GetAllRecordTypesQuery",
+    },
   ],
   [
-    GetUnfilteredCostCategoriesQuery {},
+    GetUnfilteredCostCategoriesQuery {
+      "runnableName": "GetUnfilteredCostCategoriesQuery",
+    },
   ],
   [
     GetClaimStatusesQuery {
       "key": "ClaimStatus",
+      "runnableName": "GetClaimStatusesQuery",
     },
   ],
   [
     GetMonitoringReportStatusesQuery {
       "key": "MonitoringReports",
+      "runnableName": "GetMonitoringReportStatusesQuery",
     },
   ],
   [
     GetPcrStatusesQuery {
       "key": "PCRStatuses",
+      "runnableName": "GetPcrStatusesQuery",
     },
   ],
   [
     GetPcrProjectRolesQuery {
       "key": "PCRProjectRoles",
+      "runnableName": "GetPcrProjectRolesQuery",
     },
   ],
   [
     GetPcrPartnerTypesQuery {
       "key": "PCRPartnerTypes",
+      "runnableName": "GetPcrPartnerTypesQuery",
     },
   ],
   [
     GetPcrParticipantSizesQuery {
       "key": "PCRParticipantSize",
+      "runnableName": "GetPcrParticipantSizesQuery",
     },
   ],
   [
     GetPcrProjectLocationsQuery {
       "key": "PCRProjectLocations",
+      "runnableName": "GetPcrProjectLocationsQuery",
     },
   ],
   [
     GetPcrSpendProfileCapitalUsageTypesQuery {
       "key": "PCRSpendProfileCapitalUsageTypes",
+      "runnableName": "GetPcrSpendProfileCapitalUsageTypesQuery",
     },
   ],
   [
     GetPcrSpendProfileOverheadRateOptionsQuery {
       "key": "PCRSpendProfileOverheadRateOptions",
+      "runnableName": "GetPcrSpendProfileOverheadRateOptionsQuery",
     },
   ],
 ]

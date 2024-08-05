@@ -1,10 +1,11 @@
 import { CompanyDto } from "@framework/dtos/companyDto";
 import { IContext } from "@framework/types/IContext";
 import { ICompaniesHouseParams } from "@server/resources/companiesHouse";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapCompaniesHouse } from "../../repositories/mapCompaniesHouse";
 
-export class SearchCompaniesQuery extends QueryBase<CompanyDto[]> {
+export class SearchCompaniesQuery extends AuthorisedAsyncQueryBase<CompanyDto[]> {
+  public readonly runnableName: string = "SearchCompaniesQuery";
   constructor(private readonly queryParams: ICompaniesHouseParams) {
     super();
   }

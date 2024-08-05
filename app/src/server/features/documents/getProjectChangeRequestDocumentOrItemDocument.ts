@@ -5,6 +5,7 @@ import { DocumentQueryBase } from "@server/features/documents/documentQueryBase"
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends DocumentQueryBase {
+  public readonly runnableName: string = "GetProjectChangeRequestDocumentOrItemDocumentQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly projectChangeRequestIdOrItemId: string,
@@ -13,7 +14,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends Document
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
+  async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(
       this.projectId,
       this.projectChangeRequestIdOrItemId,

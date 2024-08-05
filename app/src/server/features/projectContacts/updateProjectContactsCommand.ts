@@ -1,5 +1,5 @@
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { ProjectRole, ProjectStatus } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -8,7 +8,8 @@ import { ActiveProjectError, ZodFormHandlerError } from "../common/appError";
 import { DateTime } from "luxon";
 import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 
-export class UpdateProjectContactsCommand extends CommandBase<boolean> {
+export class UpdateProjectContactsCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateProjectContactsCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly contacts: PickRequiredFromPartial<ProjectContactDto, "id" | "associateStartDate">[],
@@ -16,7 +17,7 @@ export class UpdateProjectContactsCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 

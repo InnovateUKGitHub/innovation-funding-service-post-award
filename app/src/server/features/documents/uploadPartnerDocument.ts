@@ -7,6 +7,8 @@ import { CommandMultipleDocumentBase } from "../common/commandBase";
 import { ValidationError } from "../common/appError";
 
 export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<string[]> {
+  public readonly runnableName: string = "UploadPartnerDocumentCommand";
+
   protected filesRequired = true;
   protected showValidationErrors = true;
 
@@ -18,11 +20,15 @@ export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<st
     super();
   }
 
-  protected logMessage() {
-    return [this.constructor.name, { projectId: this.projectId }, this.documents?.files?.map(x => x.fileName)];
+  logMessage() {
+    return {
+      projectId: this.projectId,
+      partnerId: this.partnerId,
+      documents: this.documents,
+    };
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     // Allow if the user is a MO, FC or PM of the partner.
     const canUploadAsPartner = auth
       .forPartner(this.projectId, this.partnerId)

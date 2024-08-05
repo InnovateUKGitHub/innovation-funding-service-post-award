@@ -7,11 +7,12 @@ import {
   CopyNamespaces,
 } from "@copy/data";
 import { IContext } from "@framework/types/IContext";
-import { NonAuthorisedCommandBase } from "../common/commandBase";
+import { AsyncCommandBase } from "../common/commandBase";
 
 const defaultContentMarker = new Date("1970/01/01");
 
-export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> {
+export class InitialiseContentCommand extends AsyncCommandBase<boolean> {
+  public readonly runnableName: string = "InitialiseContentCommand";
   constructor(private readonly loadCustom: boolean) {
     super();
   }

@@ -3,10 +3,11 @@ import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
 import { IConfig } from "@framework/types/IConfig";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
-export class GetAllPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
+export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTypeDto[]> {
+  public readonly runnableName: string = "GetAllPCRItemTypesQuery";
   constructor(public readonly projectId: ProjectId) {
     super();
   }

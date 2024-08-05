@@ -8,9 +8,10 @@ import {
   PeriodClaimOverrideRate,
 } from "@framework/dtos/claimOverrideRate";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
+export class GetClaimOverrideRates extends AuthorisedAsyncQueryBase<ClaimOverrideRateDto> {
+  public readonly runnableName: string = "GetClaimOverrideRates";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }

@@ -1,9 +1,10 @@
 import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapClaimDetailsSummary } from "./mapClaimDetails";
 
-export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsSummaryDto[]> {
+export class GetAllClaimDetailsByPartnerIdQuery extends AuthorisedAsyncQueryBase<ClaimDetailsSummaryDto[]> {
+  public readonly runnableName: string = "GetAllClaimDetailsByPartnerIdQuery";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }

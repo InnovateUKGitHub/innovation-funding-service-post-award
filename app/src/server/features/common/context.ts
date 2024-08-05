@@ -9,15 +9,7 @@ import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
-import {
-  ICaches,
-  IContext,
-  IRepositories,
-  IResources,
-  IInternationalisation,
-  IAsyncRunnable,
-  ISyncRunnable,
-} from "@framework/types/IContext";
+import { ICaches, IContext, IRepositories, IResources, IInternationalisation } from "@framework/types/IContext";
 import { ISessionUser } from "@framework/types/IUser";
 import { IClock, Clock } from "@framework/util/clock";
 import { AccountsRepository } from "@server/repositories/accountsRepository";
@@ -53,10 +45,10 @@ import { ProjectChangeRequestStatusChangeRepository } from "@server/repositories
 import { ProjectContactsRepository } from "@server/repositories/projectContactsRepository";
 import { ProjectRepository } from "@server/repositories/projectsRepository";
 import { RecordTypeRepository } from "@server/repositories/recordTypeRepository";
-import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "./commandBase";
+import { AuthorisedAsyncCommandBase, AsyncCommandBase, SyncCommandBase } from "./commandBase";
 import { configuration } from "./config";
 import { IConfig } from "@framework/types/IConfig";
-import { QueryBase, SyncQueryBase } from "./queryBase";
+import { AsyncQueryBase, AuthorisedAsyncQueryBase, SyncQueryBase } from "./queryBase";
 import { Timer } from "./timer";
 import { Option } from "@framework/dtos/option";
 import { Cache } from "./cache";
@@ -207,67 +199,71 @@ export class Context implements IContext {
     if (this.authorisation) {
       return Promise.resolve(this.authorisation);
     }
-    return new GetAllProjectRolesForUser().run(this).then(x => {
+    return new GetAllProjectRolesForUser().execute(this).then(x => {
       this.authorisation = x;
       return x;
     });
   }
 
-  private async runAsync<TResult>(runnable: IAsyncRunnable<TResult>): Promise<TResult> {
+  private async runAsync<TResult>(
+    runnable:
+      | AuthorisedAsyncQueryBase<TResult>
+      | AuthorisedAsyncCommandBase<TResult>
+      | AsyncQueryBase<TResult>
+      | AsyncCommandBase<TResult>,
+  ): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      if (runnable.accessControl) {
+      if (runnable instanceof AuthorisedAsyncQueryBase || runnable instanceof AuthorisedAsyncCommandBase) {
         const authorisation = await this.getAuthorisation();
         if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
       }
       // await the run because of the finally
-      return await runnable.run(this);
+      return await runnable.execute(this);
     } catch (e: unknown) {
-      this.logger.warn("Failed query", runnable.logMessage(), e);
+      this.logger.warn(`Failed to run async ${runnable.runnableName}`, runnable.logMessage(), e);
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
       }
-      if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
+      if (runnable instanceof AuthorisedAsyncCommandBase) runnable.handleRepositoryError(this, e);
       throw constructErrorResponse(e);
     } finally {
       timer.finish();
     }
   }
 
-  private runSync<TResult>(runnable: ISyncRunnable<TResult>): TResult {
+  private runSync<TResult>(runnable: SyncQueryBase<TResult> | SyncCommandBase<TResult>): TResult {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      return runnable.run(this);
+      return runnable.execute(this);
     } catch (e: unknown) {
-      this.logger.warn("Failed query", runnable.logMessage(), e);
+      this.logger.warn(`Failed to run sync ${runnable.runnableName}`, runnable.logMessage(), e);
       throw constructErrorResponse(e);
     } finally {
       timer.finish();
     }
   }
 
-  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    const runnable = query as unknown as IAsyncRunnable<TResult>;
-    this.logger.info("Running async query", runnable.logMessage());
-    return this.runAsync(runnable);
+  public runQuery<TResult>(query: AsyncQueryBase<TResult> | AuthorisedAsyncQueryBase<TResult>): Promise<TResult> {
+    this.logger.info(`Running async ${query.runnableName}`, query.logMessage());
+    return this.runAsync(query);
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    const runnable = query as unknown as ISyncRunnable<TResult>;
-    this.logger.info("Running sync query", runnable.logMessage());
-    return this.runSync(runnable);
+    this.logger.info(`Running sync ${query.runnableName}`, query.logMessage());
+    return this.runSync(query);
   }
 
-  public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-    const runnable = command as unknown as IAsyncRunnable<TResult>;
-    this.logger.info("Running async command", ...runnable.logMessage());
-    return this.runAsync(runnable);
+  public runCommand<TResult>(
+    command: AuthorisedAsyncCommandBase<TResult> | AsyncCommandBase<TResult>,
+  ): Promise<TResult> {
+    this.logger.info(`Running async ${command.runnableName}`, command.logMessage());
+    return this.runAsync(command);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    const runnable = command as unknown as ISyncRunnable<TResult>;
-    this.logger.info("Running sync command", runnable.logMessage());
-    return this.runSync(runnable);
+    this.logger.info("Running sync command", command.logMessage());
+    return this.runSync(command);
   }
 
   /**
@@ -275,7 +271,6 @@ export class Context implements IContext {
    *
    * @param user The Salesforce user e-mail address
    * @returns An elevated IContext as the passed in user
-   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    */
   private elevateUserAs(user: string): IContext {
     if (this.user.email !== user) {

@@ -1,4 +1,4 @@
-import { GetJesAccountsByNameQuery } from "@server/features/accounts/getJesAccountsByName";
+import { GetJesAccountsByNameQuery } from "@server/features/accounts/GetJesAccountsByNameQuery";
 import { ISalesforceAccount } from "@server/repositories/accountsRepository";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 

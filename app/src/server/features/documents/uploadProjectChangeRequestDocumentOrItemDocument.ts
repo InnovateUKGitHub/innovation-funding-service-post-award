@@ -8,6 +8,7 @@ import { CommandMultipleDocumentBase } from "../common/commandBase";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends CommandMultipleDocumentBase<string[]> {
+  public readonly runnableName: string = "UploadProjectChangeRequestDocumentOrItemDocumentCommand";
   protected filesRequired = true;
   protected showValidationErrors = true;
 
@@ -19,7 +20,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  async accessControl(auth: Authorisation, context: IContext) {
     const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(
       this.projectId,
       this.projectChangeRequestIdOrItemId,

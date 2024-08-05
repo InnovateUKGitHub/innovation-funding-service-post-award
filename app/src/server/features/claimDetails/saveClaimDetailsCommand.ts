@@ -10,10 +10,12 @@ import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsValidator";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
-export class SaveClaimDetails extends CommandBase<boolean> {
+export class SaveClaimDetails extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName = "SaveClaimDetails";
+
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -24,7 +26,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

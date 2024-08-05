@@ -26,7 +26,7 @@ import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcr
 import { PCRSpendProfileDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 interface BaseEntityFields {
@@ -37,7 +37,8 @@ interface BaseEntityFields {
   description: string | null;
 }
 
-export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
+export class UpdatePCRSpendProfileCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdatePCRSpendProfileCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrItemId: PcrItemId,
@@ -46,7 +47,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 

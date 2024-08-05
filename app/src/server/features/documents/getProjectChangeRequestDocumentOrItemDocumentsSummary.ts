@@ -6,6 +6,7 @@ import { IContext } from "@framework/types/IContext";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends DocumentsSummaryQueryBase {
+  public readonly runnableName: string = "GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly projectChangeRequestIdOrItemId: string,
@@ -13,7 +14,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
+  async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(
       this.projectId,
       this.projectChangeRequestIdOrItemId,

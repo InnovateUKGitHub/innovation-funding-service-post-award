@@ -1,7 +1,7 @@
 import { Authorisation } from "@framework/types/authorisation";
-import { IContext, IAsyncRunnable, ISyncRunnable } from "@framework/types/IContext";
-import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
+import { IContext } from "@framework/types/IContext";
+import { AuthorisedAsyncCommandBase, AsyncCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { AuthorisedAsyncQueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { ValidationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { Connection } from "jsforce";
@@ -42,34 +42,37 @@ export class TestContext implements IContext {
 
   public caches = new TestCaches();
 
-  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    return (query as unknown as IAsyncRunnable<TResult>).run(this);
+  public runQuery<TResult>(query: AuthorisedAsyncQueryBase<TResult>): Promise<TResult> {
+    return query.execute(this);
   }
 
-  public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-    const runnable = command as unknown as IAsyncRunnable<TResult>;
-    return runnable.run(this).catch(e => {
+  public runCommand<TResult>(
+    command: AuthorisedAsyncCommandBase<TResult> | AsyncCommandBase<TResult>,
+  ): Promise<TResult> {
+    return command.execute(this).catch(e => {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation ERROR", [e.results]);
       }
-      if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
+      if ("handleRepositoryError" in command) command.handleRepositoryError(this, e);
       throw e;
     });
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    return (query as unknown as ISyncRunnable<TResult>).run(this);
+    return query.execute(this);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    return (command as unknown as ISyncRunnable<TResult>).run(this);
+    return command.execute(this);
   }
 
   // handle access control separate to running the commands to keep tests focused on single areas
-  public runAccessControl(auth: Authorisation, runnable: QueryBase<unknown> | CommandBase<unknown>): Promise<boolean> {
-    const runnableQuery = runnable as unknown as IAsyncRunnable<unknown>;
-    if (typeof runnableQuery?.accessControl === "function") {
-      return runnableQuery.accessControl(auth, this);
+  public runAccessControl(
+    auth: Authorisation,
+    runnable: AuthorisedAsyncQueryBase<unknown> | AuthorisedAsyncCommandBase<unknown>,
+  ): Promise<boolean> {
+    if ("accessControl" in runnable) {
+      return runnable.accessControl(auth, this);
     }
     return Promise.reject();
   }

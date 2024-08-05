@@ -9,7 +9,7 @@ import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
 import { ValidationError } from "../common/appError";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
 import { InActiveProjectError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { mapToReceivedStatus } from "@gql/dtoMapper/mapClaimDto";
@@ -18,7 +18,9 @@ import {
   mapImpactManagementPhasedStageToEnum,
 } from "@framework/mappers/impactManagementParticipation";
 
-export class UpdateClaimCommand extends CommandBase<boolean> {
+export class UpdateClaimCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName = "UpdateClaimCommand";
+
   constructor(
     private readonly projectId: ProjectId,
     private readonly claimDto: ClaimDto,
@@ -27,7 +29,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     const hasMoRole = auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
     const hasFcRole = auth.forPartner(this.projectId, this.claimDto.partnerId).hasRole(ProjectRole.FinancialContact);
 

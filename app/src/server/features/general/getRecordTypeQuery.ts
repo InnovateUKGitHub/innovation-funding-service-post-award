@@ -1,10 +1,11 @@
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError } from "../common/appError";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllRecordTypesQuery } from "./getAllRecordTypesQuery";
 
-export class GetRecordTypeQuery extends QueryBase<RecordType> {
+export class GetRecordTypeQuery extends AuthorisedAsyncQueryBase<RecordType> {
+  public readonly runnableName: string = "GetRecordTypeQuery";
   constructor(
     private readonly parent: string,
     private readonly type: string,

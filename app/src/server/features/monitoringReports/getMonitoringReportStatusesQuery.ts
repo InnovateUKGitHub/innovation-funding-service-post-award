@@ -4,6 +4,7 @@ import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReportStatusesQuery extends OptionsQueryBase<MonitoringReportStatus> {
+  public readonly runnableName: string = "GetMonitoringReportStatusesQuery";
   constructor() {
     super("MonitoringReports");
   }

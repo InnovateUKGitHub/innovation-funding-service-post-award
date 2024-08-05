@@ -2,9 +2,11 @@ import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 
-export class DeleteMonitoringReportCommand extends CommandBase<void> {
+export class DeleteMonitoringReportCommand extends AuthorisedAsyncCommandBase<void> {
+  public readonly runnableName: string = "DeleteMonitoringReportCommand";
+
   constructor(
     private readonly projectId: ProjectId,
     private readonly reportId: MonitoringReportId,
@@ -12,7 +14,7 @@ export class DeleteMonitoringReportCommand extends CommandBase<void> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

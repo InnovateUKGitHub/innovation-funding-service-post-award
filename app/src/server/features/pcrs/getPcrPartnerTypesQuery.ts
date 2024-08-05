@@ -4,6 +4,7 @@ import { PcrPartnerTypeMapper } from "@server/repositories/mappers/projectChange
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrPartnerTypesQuery extends OptionsQueryBase<PCRPartnerType> {
+  public readonly runnableName: string = "GetPcrPartnerTypesQuery";
   constructor() {
     super("PCRPartnerTypes");
   }

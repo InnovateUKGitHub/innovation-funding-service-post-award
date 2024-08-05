@@ -13,9 +13,10 @@ import { IContext } from "@framework/types/IContext";
 import { roundCurrency, sumBy } from "@framework/util/numberHelper";
 import { GetClaimOverrideRates } from "../claims/getClaimOverrideRates";
 import { GetFilteredCostCategoriesQuery, GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
+export class GetFinancialVirementQuery extends AuthorisedAsyncQueryBase<FinancialVirementDto> {
+  public readonly runnableName: string = "GetFinancialVirementQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrItemId: PcrItemId,
@@ -24,7 +25,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 

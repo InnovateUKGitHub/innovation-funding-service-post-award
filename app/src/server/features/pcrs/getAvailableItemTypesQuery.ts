@@ -10,11 +10,12 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllForProjectQuery } from "../projectContacts/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 
-export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
+export class GetAvailableItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTypeDto[]> {
+  public readonly runnableName: string = "GetAvailableItemTypesQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrId?: PcrId,

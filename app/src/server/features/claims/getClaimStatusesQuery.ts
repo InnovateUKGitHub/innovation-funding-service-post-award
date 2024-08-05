@@ -4,6 +4,7 @@ import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapToClaimStatus } from "./mapClaim";
 
 export class GetClaimStatusesQuery extends OptionsQueryBase<ClaimStatus> {
+  public readonly runnableName: string = "GetClaimStatusesQuery";
   constructor() {
     super("ClaimStatus");
   }

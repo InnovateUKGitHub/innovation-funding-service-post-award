@@ -9,6 +9,8 @@ import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandMultipleDocumentBase } from "../common/commandBase";
 
 export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
+  public readonly runnableName = "UploadClaimDocumentsCommand";
+
   protected filesRequired = true;
   protected showValidationErrors = true;
 
@@ -19,11 +21,14 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
     super();
   }
 
-  protected logMessage() {
-    return [this.constructor.name, this.claimKey, this.documents?.files?.map(x => x.fileName)];
+  logMessage() {
+    return {
+      ...this.claimKey,
+      documents: this.documents,
+    };
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return (
       auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
       auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact)

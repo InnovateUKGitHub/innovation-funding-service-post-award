@@ -10,19 +10,20 @@ import { IContext } from "@framework/types/IContext";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import { GetAllClaimDetailsByPartner } from "../claimDetails/getAllByPartnerQuery";
-import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
-import { GetAllForPartnerQuery } from "../claims/getAllForPartnerQuery";
+import { GetAllClaimDetailsByPartnerIdQuery } from "../claimDetails/GetAllClaimDetailsByPartnerIdQuery";
+import { GetAllGOLForecastedCostCategoriesQuery } from "../claims/GetAllGOLForecastedCostCategoriesQuery";
+import { GetAllClaimsByPartnerIdQuery } from "../claims/GetAllClaimsByPartnerIdQuery";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { UpdateClaimCommand } from "../claims/updateClaim";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 
-export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
+export class UpdateForecastDetailsCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateForecastDetailsCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -32,7 +33,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
@@ -46,9 +47,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
     const preparedForecasts = await this.prepareForecasts(context, existing, this.forecasts);
-    const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
-    const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
-    const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
+    const claims = await context.runQuery(new GetAllClaimsByPartnerIdQuery(this.partnerId));
+    const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartnerIdQuery(this.partnerId));
+    const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(this.partnerId));
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
     await this.testValidation(preparedForecasts, claims, claimDetails, golCosts, partner);
@@ -126,7 +127,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async updateClaim(context: IContext) {
-    const query = new GetAllForPartnerQuery(this.partnerId);
+    const query = new GetAllClaimsByPartnerIdQuery(this.partnerId);
     const claims = await context.runQuery(query);
     const claim = claims.find(x => !x.isApproved);
 
