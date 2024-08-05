@@ -8,7 +8,7 @@ import {
   PCRItemType,
 } from "@framework/constants/pcrConstants";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
 
 const usePcrItemsForThisCompetition = (

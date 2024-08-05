@@ -14,7 +14,7 @@ import { EditClaimLineItemsSchemaType } from "./editClaimLineItems.zod";
 import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 
 const emptyData = { id: "", description: "", value: "" };

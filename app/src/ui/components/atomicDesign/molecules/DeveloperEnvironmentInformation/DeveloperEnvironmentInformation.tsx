@@ -1,5 +1,5 @@
 import { AccEnvironment } from "@framework/constants/enums";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { DeveloperCurrentUsername } from "../../atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
 import { useMounted } from "../../atoms/providers/Mounted/Mounted";
 import { SummaryList, SummaryListItem } from "../SummaryList/summaryList";

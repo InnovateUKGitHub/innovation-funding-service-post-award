@@ -22,7 +22,7 @@ import { SuspensePageLoader } from "@ui/components/bjss/loading";
 import { RoutesProvider } from "@ui/context/routesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { useMessageContext } from "@ui/context/messages";
 import { BasePropsContext } from "@framework/api-helpers/useBaseProps";

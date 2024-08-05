@@ -7,7 +7,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { Content } from "../../../../components/atomicDesign/molecules/Content/content";
 import { ExternalLink } from "../../../../components/atomicDesign/atoms/ExternalLink/externalLink";
 import { H2 } from "../../../../components/atomicDesign/atoms/Heading/Heading.variants";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { ErrorDetails } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorDetails";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 

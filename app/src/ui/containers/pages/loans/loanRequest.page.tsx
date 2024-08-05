@@ -29,7 +29,7 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useMessages } from "@framework/api-helpers/useMessages";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";

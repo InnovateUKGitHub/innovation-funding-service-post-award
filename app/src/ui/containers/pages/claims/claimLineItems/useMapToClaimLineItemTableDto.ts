@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { z } from "zod";
 import { EditClaimLineItemLineItemSchemaType } from "./editClaimLineItems.zod";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 interface LineItem {
   id?: string;

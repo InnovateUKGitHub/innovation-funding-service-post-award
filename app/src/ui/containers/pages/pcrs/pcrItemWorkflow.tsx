@@ -4,7 +4,7 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { IAppError } from "@framework/types/IAppError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { Results } from "@ui/validation/results";

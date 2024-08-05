@@ -14,7 +14,7 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { useClaimDetailDocumentsQuery } from "./claimDetailDocuments.logic";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -8,7 +8,7 @@ import { IAppError } from "@framework/types/IAppError";
 import { FullHeight } from "../../atoms/FullHeight/FullHeight";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
 import { Header } from "../Header/header";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 

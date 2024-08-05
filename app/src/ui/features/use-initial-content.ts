@@ -1,7 +1,7 @@
 import { Copy } from "@copy/Copy";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { Params } from "@ui/helpers/make-url";
 import { useEffect, useRef } from "react";
 import { initialContentQuery } from "./InitialContent.query";

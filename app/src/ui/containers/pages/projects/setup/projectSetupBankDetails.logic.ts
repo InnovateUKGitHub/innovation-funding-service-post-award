@@ -14,7 +14,7 @@ import { ValidationError } from "@shared/appError";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { UseFormSetError } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { ProjectSetupBankDetailsSchemaType } from "./projectSetupBankDetails.zod";
 import { z } from "zod";
 

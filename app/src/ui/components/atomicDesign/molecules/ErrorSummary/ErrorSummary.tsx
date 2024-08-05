@@ -4,7 +4,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { H2 } from "../../atoms/Heading/Heading.variants";
 import { Info } from "../../atoms/Details/Details";
 import { ErrorDetails } from "./ErrorDetails";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 export interface ErrorSummaryProps {
   error?: Partial<IAppError>;

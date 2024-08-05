@@ -3,7 +3,7 @@ import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import {
   IReasoningWorkflowMetadata,
   reasoningWorkflowSteps,

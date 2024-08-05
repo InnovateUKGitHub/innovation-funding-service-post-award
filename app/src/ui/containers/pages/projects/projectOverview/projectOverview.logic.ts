@@ -11,7 +11,7 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 export type Project = Pick<
   ProjectDtoGql,

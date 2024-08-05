@@ -6,7 +6,7 @@ import { H3 } from "../../atoms/Heading/Heading.variants";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
 import { AnyRouteDefinition } from "@ui/containers/containerBase";
 import { DeveloperEnvironmentInformation } from "../../molecules/DeveloperEnvironmentInformation/DeveloperEnvironmentInformation";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 interface DeveloperSectionProps {
   currentRoute: AnyRouteDefinition;

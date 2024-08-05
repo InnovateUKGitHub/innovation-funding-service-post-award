@@ -5,7 +5,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ClaimLineItemMode } from "./ClaimLineItems.logic";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 interface ClaimLineItemNavigationArrowsCommonProps {
   costCategories: Pick<CostCategoryDto, "id" | "competitionType" | "organisationType" | "name">[];

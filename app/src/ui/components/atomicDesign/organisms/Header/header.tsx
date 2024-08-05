@@ -1,4 +1,4 @@
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import { useMemo } from "react";

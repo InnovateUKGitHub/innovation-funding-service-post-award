@@ -1,7 +1,7 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { Content } from "../../../molecules/Content/content";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 /**
  * A "Document Guidance" details pane, which describes what a user can/is allowed to upload.

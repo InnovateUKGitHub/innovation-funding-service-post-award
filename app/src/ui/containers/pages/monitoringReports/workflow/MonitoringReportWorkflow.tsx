@@ -8,7 +8,7 @@ import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowDef } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { useContent } from "@ui/hooks/content.hook";

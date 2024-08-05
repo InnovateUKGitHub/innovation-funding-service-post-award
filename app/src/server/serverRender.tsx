@@ -25,7 +25,7 @@ import { getErrorStatus } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError, ZodFormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
-import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
+import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { MessageContextProvider } from "@ui/context/messages";
 import { UserProvider } from "@ui/context/user";
 import { ZodIssue } from "zod";

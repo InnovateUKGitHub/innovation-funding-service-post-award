@@ -6,7 +6,7 @@ import { mountedContext } from "@ui/components/atomicDesign/atoms/providers/Moun
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/context/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
-import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
+import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
 import { RenderHookOptions } from "@testing-library/react";

@@ -2,7 +2,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { useRoutes } from "@ui/context/routesProvider";
 import { Dispatch, SetStateAction } from "react";
 import { useLazyLoadQuery } from "react-relay";

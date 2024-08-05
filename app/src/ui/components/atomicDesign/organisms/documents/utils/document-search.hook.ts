@@ -5,7 +5,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { getFileSize } from "@framework/util/files";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 const filterItems = <T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
   valueToSearch: string,

@@ -3,7 +3,7 @@ import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryList } from "@framework/types/CostCategory";
-import { useFetchKey } from "@ui/components/providers/FetchKeyProvider";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
