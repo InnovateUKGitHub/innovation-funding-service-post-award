@@ -12,7 +12,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";

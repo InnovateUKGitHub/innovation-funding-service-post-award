@@ -1,4 +1,4 @@
-import { mountedContext } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { mountedContext } from "@ui/context/Mounted";
 import { ReactNode } from "react";
 
 interface IStubMountedProvider {

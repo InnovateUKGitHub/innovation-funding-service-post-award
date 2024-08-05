@@ -4,7 +4,7 @@ import { diffAsPercentage, isNumber, parseCurrency, roundCurrency } from "@frame
 import { useMemo } from "react";
 import { z } from "zod";
 import { EditClaimLineItemLineItemSchemaType } from "./editClaimLineItems.zod";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 interface LineItem {

@@ -20,7 +20,7 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { ProjectManagerSchema, getProjectManagerSchema } from "./schemas/projectManager.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";

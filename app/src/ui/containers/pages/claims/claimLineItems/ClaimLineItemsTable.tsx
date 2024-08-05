@@ -3,7 +3,7 @@ import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";

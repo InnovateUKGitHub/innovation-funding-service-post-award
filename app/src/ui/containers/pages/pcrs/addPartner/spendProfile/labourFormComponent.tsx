@@ -1,5 +1,5 @@
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";

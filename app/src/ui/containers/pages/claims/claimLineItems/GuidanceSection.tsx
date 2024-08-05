@@ -3,7 +3,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks/content.hook";

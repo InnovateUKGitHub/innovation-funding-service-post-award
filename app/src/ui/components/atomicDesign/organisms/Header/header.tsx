@@ -3,7 +3,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import { useMemo } from "react";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
-import { useMounted } from "../../atoms/providers/Mounted/Mounted";
+import { useMounted } from "../../../../context/Mounted";
 import { Logo } from "../../atoms/svg/Logo/Logo";
 
 export interface HeaderProps {

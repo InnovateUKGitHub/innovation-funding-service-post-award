@@ -1,6 +1,6 @@
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { PcrPage } from "../../pcrPage";

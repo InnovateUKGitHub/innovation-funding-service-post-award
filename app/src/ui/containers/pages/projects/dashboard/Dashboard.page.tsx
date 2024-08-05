@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useMountedState } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMountedState } from "@ui/context/Mounted";
 import { PageTitle } from "@ui/features/page-title";
 import { BroadcastsViewer } from "@ui/components/atomicDesign/organisms/BroadcastViewer/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";

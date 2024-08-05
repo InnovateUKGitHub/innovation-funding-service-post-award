@@ -1,5 +1,5 @@
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";

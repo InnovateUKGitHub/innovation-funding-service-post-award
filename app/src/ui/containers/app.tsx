@@ -12,7 +12,7 @@ import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { MountedProvider } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { MountedProvider } from "@ui/context/Mounted";
 import { ErrorBoundaryFallback } from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
 import { FullHeight } from "@ui/components/atomicDesign/atoms/FullHeight/FullHeight";
 import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";

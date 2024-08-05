@@ -4,7 +4,7 @@ import {
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { useContext } from "react";
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";

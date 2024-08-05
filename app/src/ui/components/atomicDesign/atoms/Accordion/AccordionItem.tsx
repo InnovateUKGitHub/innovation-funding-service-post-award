@@ -4,7 +4,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import type { ContentSelector } from "@copy/type";
 import { removeSpaces } from "@shared/string-helpers";
 import { AccordionToggle } from "./AccordionToggle";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { AccessibilityText } from "../AccessibilityText/AccessibilityText";
 import { H2 } from "../Heading/Heading.variants";
 

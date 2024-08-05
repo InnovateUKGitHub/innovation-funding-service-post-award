@@ -1,4 +1,4 @@
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import React, { useState } from "react";
 import { AccordionControls } from "./AccordionControls";
 import { AccordionItem, AccordionItemProps } from "./AccordionItem";

@@ -5,7 +5,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { H4, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";

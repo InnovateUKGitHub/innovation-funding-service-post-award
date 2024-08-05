@@ -4,7 +4,7 @@ import { PCRSpendProfileOtherFundingDto } from "@framework/dtos/pcrSpendProfileD
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";

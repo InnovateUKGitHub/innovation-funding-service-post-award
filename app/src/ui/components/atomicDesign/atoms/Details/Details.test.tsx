@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { MountedProvider } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { MountedProvider } from "@ui/context/Mounted";
 
 import { Info } from "./Details";
 

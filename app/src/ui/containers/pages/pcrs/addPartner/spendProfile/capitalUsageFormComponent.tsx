@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { appendOrMerge, SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { CapitalUsageSchema, capitalUsageSchema, errorMap } from "./spendProfile.zod";

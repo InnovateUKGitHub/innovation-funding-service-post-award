@@ -4,7 +4,7 @@ import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { useMounted } from "@ui/context/Mounted";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { useContext, useMemo } from "react";
