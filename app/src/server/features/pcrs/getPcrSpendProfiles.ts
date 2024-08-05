@@ -20,9 +20,10 @@ import { CostCategoryList } from "@framework/types/CostCategory";
 import { IContext } from "@framework/types/IContext";
 import { isNumber } from "@framework/util/numberHelper";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
+export class GetPcrSpendProfilesQuery extends AuthorisedAsyncQueryBase<PcrSpendProfileDto> {
+  public readonly runnableName: string = "GetPcrSpendProfilesQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrItemId: PcrItemId,

@@ -3,9 +3,10 @@ import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 
-export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
+export class DeleteProjectChangeRequestCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "DeleteProjectChangeRequestCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrId: PcrId,

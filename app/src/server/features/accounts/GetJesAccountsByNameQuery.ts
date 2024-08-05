@@ -1,9 +1,10 @@
 import { AccountDto } from "@framework/dtos/accountDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapToAccountDto } from "./mapToAccountDto";
 
-export class GetJesAccountsByNameQuery extends QueryBase<AccountDto[]> {
+export class GetJesAccountsByNameQuery extends AuthorisedAsyncQueryBase<AccountDto[]> {
+  public readonly runnableName: string = "GetJesAccountsByNameQuery";
   constructor(private searchString?: string) {
     super();
   }

@@ -4,6 +4,7 @@ import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapToPCRStatus } from "@framework/mappers/pcr";
 
 export class GetPcrStatusesQuery extends OptionsQueryBase<PCRStatus> {
+  public readonly runnableName: string = "GetPcrStatusesQuery";
   constructor() {
     super("PCRStatuses");
   }

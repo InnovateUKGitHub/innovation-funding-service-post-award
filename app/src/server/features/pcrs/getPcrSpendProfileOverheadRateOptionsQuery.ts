@@ -4,6 +4,7 @@ import { PcrSpendProfileOverheadRateMapper } from "@server/repositories/mappers/
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrSpendProfileOverheadRateOptionsQuery extends OptionsQueryBase<PCRSpendProfileOverheadRate> {
+  public readonly runnableName: string = "GetPcrSpendProfileOverheadRateOptionsQuery";
   constructor() {
     super("PCRSpendProfileOverheadRateOptions");
   }

@@ -12,9 +12,9 @@ import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { GetPcrStatusesQuery } from "@server/features/pcrs/getPcrStatusesQuery";
 import { GetUnfilteredCostCategoriesQuery } from "./claims/getCostCategoriesQuery";
-import { QueryBase } from "./common/queryBase";
+import { AuthorisedAsyncQueryBase } from "./common/queryBase";
 
-type ICacheQuery = [string, QueryBase<unknown>];
+type ICacheQuery = [string, AuthorisedAsyncQueryBase<unknown>];
 
 /**
  * @description This describes the name of the cache and query it is caching, this will get executed on app starting.

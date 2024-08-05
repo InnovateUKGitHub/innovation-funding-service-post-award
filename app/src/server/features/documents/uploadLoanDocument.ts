@@ -8,6 +8,8 @@ import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandMultipleDocumentBase } from "../common/commandBase";
 
 export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
+  public readonly runnableName: string = "UploadLoanDocumentsCommand";
+
   protected filesRequired = true;
   protected showValidationErrors = true;
 
@@ -19,11 +21,15 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
     super();
   }
 
-  protected logMessage() {
-    return ["UploadLoanDocumentsCommand", this.loanId, this.documents?.files?.map(x => x.fileName)];
+  logMessage() {
+    return {
+      projectId: this.projectId,
+      loanId: this.loanId,
+      documents: this.documents,
+    };
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  async accessControl(auth: Authorisation, context: IContext) {
     const loan = await context.repositories.loans.get(this.projectId, { loanId: this.loanId });
 
     if (!loan) return false;

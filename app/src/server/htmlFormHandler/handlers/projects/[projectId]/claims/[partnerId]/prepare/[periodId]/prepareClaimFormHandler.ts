@@ -7,7 +7,7 @@ import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/fo
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { GetClaim } from "@server/features/claims/getClaim";
+import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
@@ -20,7 +20,7 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected getDto(context: IContext, params: PrepareClaimParams): Promise<ClaimDto> {
-    return context.runQuery(new GetClaim(params.partnerId, params.periodId));
+    return context.runQuery(new GetClaimByPartnerIdAndPeriod(params.partnerId, params.periodId));
   }
 
   protected async run(

@@ -7,11 +7,12 @@ import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitori
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
-export class CreateMonitoringReportCommand extends CommandBase<string> {
+export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<string> {
+  public readonly runnableName: string = "CreateMonitoringReportCommand";
   constructor(
     private readonly monitoringReportDto: PickRequiredFromPartial<
       MonitoringReportDto,
@@ -22,7 +23,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

@@ -1,11 +1,12 @@
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";
 
-export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
+export class GetAllForProjectQuery extends AuthorisedAsyncQueryBase<PartnerDto[]> {
+  public readonly runnableName: string = "GetAllForProjectQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

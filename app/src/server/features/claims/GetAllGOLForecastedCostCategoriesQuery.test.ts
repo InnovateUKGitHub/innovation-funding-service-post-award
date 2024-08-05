@@ -1,5 +1,5 @@
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetAllForecastsGOLCostsQuery } from "./getAllForecastGOLCostsQuery";
+import { GetAllGOLForecastedCostCategoriesQuery } from "./GetAllGOLForecastedCostCategoriesQuery";
 
 describe("GetAllForecastsForPartnerQuery", () => {
   it("returns objects of correct shape", async () => {
@@ -8,7 +8,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileTotalCostCategory(costCat, partner);
 
-    const query = new GetAllForecastsGOLCostsQuery(partner.id);
+    const query = new GetAllGOLForecastedCostCategoriesQuery(partner.id);
     const result = await context.runQuery(query);
     const item = result[0];
 
@@ -22,7 +22,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileTotalCostCategory(costCat, partner);
 
-    const query = new GetAllForecastsGOLCostsQuery(partner.id);
+    const query = new GetAllGOLForecastedCostCategoriesQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
@@ -36,7 +36,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     context.testData.createProfileTotalCostCategory(costCat, partner);
     context.testData.createProfileTotalCostCategory(costCat, partner);
 
-    const query = new GetAllForecastsGOLCostsQuery(partner.id);
+    const query = new GetAllGOLForecastedCostCategoriesQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(3);

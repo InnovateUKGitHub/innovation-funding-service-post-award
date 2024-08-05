@@ -1,9 +1,10 @@
 import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceMonitoringReportQuestions } from "@server/repositories/monitoringReportQuestionsRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
+export class GetMonitoringReportActiveQuestions extends AuthorisedAsyncQueryBase<MonitoringReportQuestionDto[]> {
+  public readonly runnableName: string = "GetMonitoringReportActiveQuestions";
   private async getQuestions(context: IContext) {
     const sfQuestions = await context.repositories.monitoringReportQuestions.getAll();
     return sfQuestions

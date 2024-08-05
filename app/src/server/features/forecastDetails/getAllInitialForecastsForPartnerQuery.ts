@@ -1,9 +1,10 @@
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { IContext } from "@framework/types/IContext";
 import { mapInitialForecastDetail } from "@server/features/forecastDetails/mapForecastDetail";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetAllInitialForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
+export class GetAllInitialForecastsForPartnerQuery extends AuthorisedAsyncQueryBase<ForecastDetailsDTO[]> {
+  public readonly runnableName: string = "GetAllInitialForecastsForPartnerQuery";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }

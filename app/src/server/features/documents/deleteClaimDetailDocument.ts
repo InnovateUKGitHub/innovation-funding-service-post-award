@@ -2,9 +2,11 @@ import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { IContext } from "@framework/types/IContext";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 
-export class DeleteClaimDetailDocumentCommand extends CommandBase<void> {
+export class DeleteClaimDetailDocumentCommand extends AuthorisedAsyncCommandBase<void> {
+  public readonly runnableName = "DeleteClaimDetailDocumentCommand";
+
   constructor(
     private readonly documentId: string,
     private readonly claimDetailKey: ClaimDetailKey,

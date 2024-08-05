@@ -9,10 +9,11 @@ import { dateComparator, stringComparator } from "@framework/util/comparator";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@server/features/claims/mapClaim";
 import { ISalesforceClaimStatusChange } from "@server/repositories/claimStatusChangeRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 
-export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]> {
+export class GetClaimStatusChangesQuery extends AuthorisedAsyncQueryBase<ClaimStatusChangeDto[]> {
+  public readonly runnableName: string = "GetClaimStatusChangesQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,

@@ -7,10 +7,11 @@ import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
 import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
 import { ISalesforceMonitoringReportStatusChange } from "@server/repositories/monitoringReportStatusChangeRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 
-export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
+export class GetMonitoringReportStatusChanges extends AuthorisedAsyncQueryBase<MonitoringReportStatusChangeDto[]> {
+  public readonly runnableName: string = "GetMonitoringReportStatusChanges";
   constructor(
     private readonly projectId: ProjectId,
     private readonly reportId: string,
@@ -18,7 +19,7 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     // @TODO: validate report is actually for project passed in
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }

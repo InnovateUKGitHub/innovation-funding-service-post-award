@@ -1,10 +1,11 @@
 import { ProjectStatus } from "@framework/constants/project";
 import { ProjectStatusDto } from "@framework/dtos/projectStatusDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetByIdQuery } from "./getDetailsByIdQuery";
 
-export class GetProjectStatusQuery extends QueryBase<ProjectStatusDto> {
+export class GetProjectStatusQuery extends AuthorisedAsyncQueryBase<ProjectStatusDto> {
+  public readonly runnableName: string = "GetProjectStatusQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

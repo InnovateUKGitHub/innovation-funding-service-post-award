@@ -5,6 +5,7 @@ import { IContext } from "@framework/types/IContext";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
+  public readonly runnableName: string = "GetClaimDetailDocumentsQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -14,7 +15,7 @@ export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
     super();
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return (
       auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer) ||
       auth

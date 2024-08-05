@@ -5,11 +5,12 @@ import { ProjectChangeRequestEntity } from "@framework/entities/projectChangeReq
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { numberComparator } from "@framework/util/comparator";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
 
-export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
+export class GetAllPCRsQuery extends AuthorisedAsyncQueryBase<PCRSummaryDto[]> {
+  public readonly runnableName: string = "GetAllPCRsQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

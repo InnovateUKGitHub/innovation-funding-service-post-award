@@ -3,10 +3,11 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { IContext } from "@framework/types/IContext";
 import { IComparer } from "@framework/util/comparator";
 import { ISalesforceClaim } from "@server/repositories/claimsRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
-export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
+export class GetAllClaimsByProjectIdQuery extends AuthorisedAsyncQueryBase<ClaimDto[]> {
+  public readonly runnableName: string = "GetAllClaimsByProjectIdQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }

@@ -72,6 +72,10 @@
     "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
     "forceConsistentCasingInFileNames": true
   },
+  "watchOptions": {
+    // Our project is too big for poor little TypeScript to watch over the entire project
+    "watchFile": "fixedpollinginterval"
+  },
   "exclude": ["node_modules", "dist"],
   "include": ["./src/**/*", "./tests/**/*", "./scripts/**/*", "./.storybook/**/*"]
 }

@@ -16,6 +16,7 @@ import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandDocumentBase } from "../common/commandBase";
 
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
+  public readonly runnableName: string = "UploadClaimDocumentCommand";
   protected showValidationErrors = true;
 
   constructor(
@@ -25,11 +26,11 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     super();
   }
 
-  protected logMessage() {
-    return [this.constructor.name, this.claimKey, this.document && this.document.file && this.document.file.fileName];
+  logMessage() {
+    return [this.claimKey, this?.document?.file?.fileName];
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

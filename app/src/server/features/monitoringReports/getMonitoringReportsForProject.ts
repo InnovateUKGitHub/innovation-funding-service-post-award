@@ -3,15 +3,16 @@ import { MonitoringReportSummaryDto } from "@framework/dtos/monitoringReportDto"
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
-export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {
+export class GetMonitoringReportsForProject extends AuthorisedAsyncQueryBase<MonitoringReportSummaryDto[]> {
+  public readonly runnableName: string = "GetMonitoringReportsForProject";
   constructor(private readonly projectId: ProjectId) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

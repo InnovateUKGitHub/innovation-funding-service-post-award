@@ -3,9 +3,10 @@ import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodD
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetFilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeriodDto[]> {
+export class GetCostsSummaryForPeriodQuery extends AuthorisedAsyncQueryBase<CostsSummaryForPeriodDto[]> {
+  public readonly runnableName: string = "GetCostsSummaryForPeriodQuery";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -14,7 +15,7 @@ export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeri
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return (
       auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
       auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact)

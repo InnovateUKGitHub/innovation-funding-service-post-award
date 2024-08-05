@@ -4,7 +4,7 @@ import { IContext } from "@framework/types/IContext";
 import { numberComparator } from "@framework/util/comparator";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { storeKeys } from "@server/features/common/storeKeys";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
 /**
  * Retrieves all cost categories from salesforce
@@ -14,7 +14,8 @@ import { QueryBase } from "../common/queryBase";
  * **Uses a cache to improve performance**
  *
  */
-export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
+export class GetUnfilteredCostCategoriesQuery extends AuthorisedAsyncQueryBase<CostCategoryDto[]> {
+  public readonly runnableName: string = "GetUnfilteredCostCategoriesQuery";
   protected async run(context: IContext) {
     return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context));
   }
@@ -29,7 +30,8 @@ export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[
   }
 }
 
-export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
+export class GetFilteredCostCategoriesQuery extends AuthorisedAsyncQueryBase<CostCategoryDto[]> {
+  public readonly runnableName: string = "GetFilteredCostCategoriesQuery";
   constructor(private readonly partnerId: PartnerId) {
     super();
   }

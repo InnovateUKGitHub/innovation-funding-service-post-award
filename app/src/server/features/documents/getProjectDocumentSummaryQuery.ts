@@ -4,11 +4,12 @@ import { Authorisation } from "@framework/types/authorisation";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetProjectDocumentSummaryQuery extends DocumentsSummaryQueryBase {
+  public readonly runnableName: string = "GetProjectDocumentSummaryQuery";
   constructor(private readonly projectId: ProjectId) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation): Promise<boolean> {
+  async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

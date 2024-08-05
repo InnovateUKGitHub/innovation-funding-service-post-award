@@ -6,11 +6,14 @@ import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities/proj
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetPcrStatusesQuery } from "./getPcrStatusesQuery";
 
-export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChangeRequestStatusChangeDto[]> {
+export class GetProjectChangeRequestStatusChanges extends AuthorisedAsyncQueryBase<
+  ProjectChangeRequestStatusChangeDto[]
+> {
+  public readonly runnableName: string = "GetProjectChangeRequestStatusChanges";
   constructor(
     private readonly projectId: ProjectId,
     private readonly projectChangeRequestId: PcrId,
@@ -18,7 +21,7 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 

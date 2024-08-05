@@ -18,7 +18,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber, parseNumber } from "@framework/util/numberHelper";
@@ -27,7 +27,8 @@ import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
-export class UpdatePartnerCommand extends CommandBase<boolean> {
+export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdatePartnerCommand";
   private mergedPartner: PartnerDto | null = null;
   private readonly logger: ILogger = new Logger("UpdatePartnerCommand");
 
@@ -42,7 +43,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth
       .forPartner(this.partner.projectId, this.partner.id)
       .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);

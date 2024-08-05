@@ -4,6 +4,7 @@ import { PcrParticipantSizeMapper } from "@server/repositories/mappers/projectCh
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrParticipantSizesQuery extends OptionsQueryBase<PCRParticipantSize> {
+  public readonly runnableName: string = "GetPcrParticipantSizesQuery";
   constructor() {
     super("PCRParticipantSize");
   }

@@ -5,7 +5,7 @@ import {
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { CostCategoryType } from "@framework/constants/enums";
-import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
+import { GetAllGOLForecastedCostCategoriesQuery } from "@server/features/claims/GetAllGOLForecastedCostCategoriesQuery";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { CostCategoryForecast } from "./forecastDetailsDtosValidator";
 
@@ -24,7 +24,7 @@ describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {
       context.testData.createProfileDetail(labour, partner, 1, item => (item.Acc_InitialForecastCost__c = 5));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const stubForecast: CostCategoryForecast = {
@@ -72,7 +72,7 @@ describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {
       );
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const stubForecast: CostCategoryForecast = {
@@ -95,7 +95,7 @@ describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {
       context.testData.createProfileDetail(labour, partner, 1, item => (item.Acc_InitialForecastCost__c = 10));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const stubForecast: CostCategoryForecast = {
@@ -122,7 +122,7 @@ describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {
       context.testData.createProfileDetail(labour, partner, 1, item => (item.Acc_InitialForecastCost__c = 10));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const stubForecast: CostCategoryForecast = {
@@ -151,7 +151,7 @@ describe("InitialForecastDetailsValidator()", () => {
       context.testData.createProfileDetail(labour, partner, 2, item => (item.Acc_InitialForecastCost__c = 50));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, false, true);
@@ -180,7 +180,7 @@ describe("InitialForecastDetailsValidator()", () => {
       context.testData.createProfileDetail(labour, partner, 2, item => (item.Acc_InitialForecastCost__c = 50));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, true, true);
@@ -220,7 +220,7 @@ describe("InitialForecastDetailsValidator()", () => {
       context.testData.createProfileDetail(subcontracting, partner, 2, item => (item.Acc_InitialForecastCost__c = 50));
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
-      const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
+      const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(partner.id));
       const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, true, true);

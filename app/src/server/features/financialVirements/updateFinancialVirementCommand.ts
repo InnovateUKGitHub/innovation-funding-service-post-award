@@ -18,10 +18,11 @@ import { IContext } from "@framework/types/IContext";
 import { ISalesforceFinancialVirement } from "@server/repositories/financialVirementRepository";
 import { ValidationError } from "../common/appError";
 import { InActiveProjectError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetPCRByIdQuery } from "../pcrs/getPCRByIdQuery";
-export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
+export class UpdateFinancialVirementCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateFinancialVirementCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly pcrId: PcrId,
@@ -32,7 +33,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 

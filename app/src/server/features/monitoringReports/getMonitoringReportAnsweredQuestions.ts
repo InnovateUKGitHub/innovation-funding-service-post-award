@@ -1,8 +1,9 @@
 import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
 import { IContext } from "@framework/types/IContext";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
-export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
+export class GetMonitoringReportAnsweredQuestions extends AuthorisedAsyncQueryBase<MonitoringReportQuestionDto[]> {
+  public readonly runnableName: string = "GetMonitoringReportAnsweredQuestions";
   constructor(private readonly questionIds: string[]) {
     super();
   }

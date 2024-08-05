@@ -11,14 +11,15 @@ import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { InitialForecastDetailsDtosValidator } from "@ui/validation/validators/initialForecastDetailsDtosValidator";
-import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
+import { GetAllGOLForecastedCostCategoriesQuery } from "../claims/GetAllGOLForecastedCostCategoriesQuery";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
-export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
+export class UpdateInitialForecastDetailsCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public readonly runnableName: string = "UpdateInitialForecastDetailsCommand";
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
@@ -28,7 +29,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
@@ -46,7 +47,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     }
 
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
-    const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
+    const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(this.partnerId));
 
     const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
 

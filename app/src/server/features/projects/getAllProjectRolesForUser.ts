@@ -4,14 +4,15 @@ import { Partner } from "@framework/entities/partner";
 import { Authorisation, getAuthRoles } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceProjectContact, SalesforceRole } from "@server/repositories/projectContactsRepository";
-import { QueryBase } from "../common/queryBase";
+import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
   partnerRoles: { [key: string]: ProjectRole };
 }
 
-export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
+export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authorisation> {
+  public readonly runnableName: string = "GetAllProjectRolesForUser";
   public async run(context: IContext): Promise<Authorisation> {
     const email = context.user && context.user.email;
 
