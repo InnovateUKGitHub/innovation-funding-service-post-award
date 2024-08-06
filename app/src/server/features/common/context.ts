@@ -86,7 +86,7 @@ export const constructErrorResponse = (error: unknown): AppError => {
   }
 
   if (error instanceof SalesforceDetailedErrorResponse) {
-    return new SfdcServerError(error.message, error.details);
+    return new SfdcServerError(error.message, error.details, error);
   }
 
   if (error instanceof FileTypeNotAllowedError) {
@@ -195,14 +195,9 @@ export class Context implements IContext {
 
   private authorisation: Authorisation | null = null;
 
-  private getAuthorisation() {
-    if (this.authorisation) {
-      return Promise.resolve(this.authorisation);
-    }
-    return new GetAllProjectRolesForUser().execute(this).then(x => {
-      this.authorisation = x;
-      return x;
-    });
+  private async getAuthorisation() {
+    if (!this.authorisation) this.authorisation = await new GetAllProjectRolesForUser().execute(this);
+    return this.authorisation;
   }
 
   private async runAsync<TResult>(
@@ -216,8 +211,10 @@ export class Context implements IContext {
     try {
       if (runnable instanceof AuthorisedAsyncQueryBase || runnable instanceof AuthorisedAsyncCommandBase) {
         const authorisation = await this.getAuthorisation();
-        if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+        const accessible = await runnable.accessControl(authorisation, this);
+        if (!accessible) throw new ForbiddenError();
       }
+
       // await the run because of the finally
       return await runnable.execute(this);
     } catch (e: unknown) {

@@ -343,7 +343,7 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     if (extension === "zip") {
-      throw new FileTypeNotAllowedError("File type not allowed");
+      throw new FileTypeNotAllowedError({ message: "File type not allowed" });
     }
     const title = nameParts[0];
 

@@ -27,29 +27,14 @@ export class CompaniesHouseBase extends ICompaniesHouseBase {
   }
 
   protected async queryCompaniesHouse<T>(url: string, searchParams?: Record<string, string>): Promise<T> {
-    try {
-      const parsedUrl = this.getUrl(url, searchParams);
+    const parsedUrl = this.getUrl(url, searchParams);
+    const res = await fetch(parsedUrl, { dispatcher: mtlsFetchAgent });
 
-      const fetchQuery = await fetch(parsedUrl, { dispatcher: mtlsFetchAgent });
-
-      if (!fetchQuery.ok) {
-        throw new Error((await fetchQuery.text()) || "Bad Companies House request. Failed to get a positive response.");
-      }
-
-      return (await fetchQuery.json()) as Promise<T>;
-    } catch (err: unknown) {
-      // Note: Add specific api failures here
-
-      if (isError(err)) {
-        if (err?.message?.includes("socket hang up")) {
-          // Note: Add this point we know to contact develop/escalate
-          throw new Error("COMPANIES_HOUSE_WHITELIST_ISSUE");
-        }
-
-        throw new Error(err.message);
-      }
-
-      throw new Error(String(err));
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text ?? "Bad Companies House request. Failed to get a positive response.");
     }
+
+    return await res.json();
   }
 }

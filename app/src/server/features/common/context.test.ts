@@ -22,9 +22,9 @@ describe("constructErrorResponse", () => {
 
   test.each`
     name                                                       | error
-    ${"AppError if it is a SalesforceTokenError"}              | ${new SalesforceTokenError(new Error("stub-token-error"))}
-    ${"NotFoundError if it is a SalesforceInvalidFilterError"} | ${new SalesforceInvalidFilterError("invalid-filter")}
-    ${"AppError if it is a FileTypeNotAllowedError"}           | ${new FileTypeNotAllowedError("file-not-found")}
+    ${"AppError if it is a SalesforceTokenError"}              | ${new SalesforceTokenError({ message: "stub-token-error" })}
+    ${"NotFoundError if it is a SalesforceInvalidFilterError"} | ${new SalesforceInvalidFilterError({ message: "invalid-filter" })}
+    ${"AppError if it is a FileTypeNotAllowedError"}           | ${new FileTypeNotAllowedError({ message: "file-not-found" })}
     ${"an unknown AppError"}                                   | ${new Error("unknown-error")}
   `("should return the configured $name", ({ error }: { error: Error }) => {
     const res = constructErrorResponse(error);

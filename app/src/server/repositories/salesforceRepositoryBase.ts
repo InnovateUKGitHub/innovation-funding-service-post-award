@@ -59,22 +59,22 @@ export abstract class RepositoryBase {
       }
 
       if (e.errorCode === "INVALID_FIELD") {
-        new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
+        new Errors.BadSalesforceQuery({ errorReason: e.errorCode, errorDetail: e.errorCode, cause: e });
       }
       if (e.errorCode === "ERROR_HTTP_503") {
-        new Errors.SalesforceUnavailableError("Salesforce unavailable");
+        new Errors.SalesforceUnavailableError({ message: "Salesforce unavailable", cause: e });
       }
       if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-        new Errors.SalesforceInvalidFilterError("Salesforce filter error");
+        new Errors.SalesforceInvalidFilterError({ message: "Salesforce filter error", cause: e });
       }
       if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
-        new Errors.FileTypeNotAllowedError(e.message);
+        new Errors.FileTypeNotAllowedError({ message: e.message, cause: e });
       }
       if (e.errorCode === "FIELD_CUSTOM_VALIDATION_EXCEPTION") {
-        new Errors.SalesforceFieldCustomValidationError({ message: e.message });
+        new Errors.SalesforceFieldCustomValidationError({ message: e.message, cause: e });
       }
 
-      new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [] });
+      new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [], cause: e });
     }
     return e instanceof Error ? e : new Error(`${e}`);
   }
@@ -212,7 +212,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     const filteredResult = await this.filterOne(filter);
 
     if (!filteredResult) {
-      throw new Errors.SalesforceInvalidFilterError("Filter did not return a single item");
+      throw new Errors.SalesforceInvalidFilterError({ message: "Filter did not return a single item" });
     }
 
     return filteredResult;

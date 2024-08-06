@@ -908,7 +908,7 @@ exports[`Context should contain the repositories 1`] = `
 
 exports[`constructErrorResponse should return the configured AppError if it is a FileTypeNotAllowedError 1`] = `[Error: file-not-found]`;
 
-exports[`constructErrorResponse should return the configured AppError if it is a SalesforceTokenError 1`] = `[Error: AUTHENTICATION_ERROR]`;
+exports[`constructErrorResponse should return the configured AppError if it is a SalesforceTokenError 1`] = `[Error: stub-token-error]`;
 
 exports[`constructErrorResponse should return the configured NotFoundError if it is a SalesforceInvalidFilterError 1`] = `[Error: Not Found]`;
 

@@ -8,3 +8,7 @@
 .ifspa-developer-section-select {
   width: 100%;
 }
+
+.ifspa-developer-stacktrace .ifspa-developer-stacktrace-stack {
+  font-size: 8pt;
+}
