@@ -14,6 +14,11 @@ import * as Validation from "./common";
 import { ProjectSource } from "@framework/constants/project";
 
 export class PartnerDtoValidator extends Results<PartnerDto> {
+  public sortCode: Result;
+  public accountNumber: Result;
+  public manualProjectSetup: Result;
+  public partnerStatus: Result;
+
   constructor(
     model: PartnerDto,
     private readonly original: PartnerDto,
@@ -26,6 +31,66 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     },
   ) {
     super({ model, showValidationErrors: options.showValidationErrors });
+
+    this.sortCode = this.conditionallyValidateBankDetails(
+      () =>
+        Validation.all(
+          this,
+          () =>
+            Validation.required(
+              this,
+              model.bankDetails.sortCode,
+              this.getContent(x => x.validation.partnerDtoValidator.sortCodeRequired),
+              "sortCode",
+            ),
+          () =>
+            Validation.sortCode(
+              this,
+              model.bankDetails.sortCode,
+              this.getContent(x => x.validation.partnerDtoValidator.sortCodeInvalid),
+              "sortCode",
+            ),
+        ),
+      original.bankCheckStatus === BankCheckStatus.NotValidated,
+    );
+
+    this.accountNumber = this.conditionallyValidateBankDetails(
+      () =>
+        Validation.all(
+          this,
+          () =>
+            Validation.required(
+              this,
+              model.bankDetails.accountNumber,
+              this.getContent(x => x.validation.partnerDtoValidator.accountNumberRequired),
+              "accountNumber",
+            ),
+          () =>
+            Validation.accountNumber(
+              this,
+              model.bankDetails.accountNumber,
+              this.getContent(x => x.validation.partnerDtoValidator.accountNumberInvalid),
+              "accountNumber",
+            ),
+        ),
+      original.bankCheckStatus === BankCheckStatus.NotValidated,
+    );
+
+    this.manualProjectSetup =
+      options.projectSource === "Manual"
+        ? this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+            Validation.inValid(
+              this,
+              this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
+            ),
+          )
+        : Validation.valid(this);
+
+    this.partnerStatus = Validation.isTrue(
+      this,
+      this.isPartnerStatusTransitionAllowed(original, model),
+      this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
+    );
   }
 
   private readonly allowedPartnerStatusTransitions: { [key: number]: PartnerStatus[] } = {
@@ -82,12 +147,6 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     if (this.original.partnerStatus !== status) return Validation.valid(this);
     return validation();
   }
-
-  public partnerStatus = Validation.isTrue(
-    this,
-    this.isPartnerStatusTransitionAllowed(this.original, this.model),
-    this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
-  );
 
   public spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
     Validation.isTrue(
@@ -158,60 +217,6 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       "bankCheckValidation",
     ),
   );
-
-  public sortCode = this.conditionallyValidateBankDetails(
-    () =>
-      Validation.all(
-        this,
-        () =>
-          Validation.required(
-            this,
-            this.model.bankDetails.sortCode,
-            this.getContent(x => x.validation.partnerDtoValidator.sortCodeRequired),
-            "sortCode",
-          ),
-        () =>
-          Validation.sortCode(
-            this,
-            this.model.bankDetails.sortCode,
-            this.getContent(x => x.validation.partnerDtoValidator.sortCodeInvalid),
-            "sortCode",
-          ),
-      ),
-    this.original.bankCheckStatus === BankCheckStatus.NotValidated,
-  );
-
-  public accountNumber = this.conditionallyValidateBankDetails(
-    () =>
-      Validation.all(
-        this,
-        () =>
-          Validation.required(
-            this,
-            this.model.bankDetails.accountNumber,
-            this.getContent(x => x.validation.partnerDtoValidator.accountNumberRequired),
-            "accountNumber",
-          ),
-        () =>
-          Validation.accountNumber(
-            this,
-            this.model.bankDetails.accountNumber,
-            this.getContent(x => x.validation.partnerDtoValidator.accountNumberInvalid),
-            "accountNumber",
-          ),
-      ),
-    this.original.bankCheckStatus === BankCheckStatus.NotValidated,
-  );
-
-  public manualProjectSetup =
-    this.options.projectSource === "Manual"
-      ? this.validateForPartnerStatus(PartnerStatus.Pending, () =>
-          Validation.inValid(
-            this,
-            this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
-          ),
-        )
-      : Validation.valid(this);
 
   private conditionallyValidateBankDetails(test: () => Result, condition = true) {
     if (condition && this.options.validateBankDetails) {

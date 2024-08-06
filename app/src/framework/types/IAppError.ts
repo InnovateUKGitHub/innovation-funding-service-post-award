@@ -9,6 +9,7 @@ export interface IAppError<T extends Results<ResultBase> = Results<ResultBase>> 
   results?: T | null;
   stack?: string;
   details: IAppDetailedError[];
+  cause?: unknown | null;
 }
 
 interface IAppDetailedBaseError {

@@ -146,12 +146,12 @@ const serverRender =
           if (err?.code === ErrorCode.VALIDATION_ERROR) {
             // We've got some kind of validation error, so let the user know that happened.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formError = formError.concat(err?.error?.results?.errors ?? []);
+            formError = formError.concat(err?.cause?.results?.errors ?? []);
           } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
 
-            apiError = err.error;
+            apiError = err.cause;
           }
         } else {
           // We cannot handle these beautifully.

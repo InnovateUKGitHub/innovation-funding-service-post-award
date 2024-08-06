@@ -3,12 +3,15 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 import { CombinedResultsValidator } from "@ui/validation/results";
 
 export class PCRWorkflowValidator extends CombinedResultsValidator {
+  public pcr: PCRDtoValidator;
+  public files: MultipleDocumentUploadDtoValidator;
+
   constructor(
     private readonly pcrValidator: PCRDtoValidator,
     private readonly filesValidator: MultipleDocumentUploadDtoValidator,
   ) {
     super(pcrValidator, filesValidator);
+    this.pcr = pcrValidator;
+    this.files = filesValidator;
   }
-  public pcr = this.pcrValidator;
-  public files = this.filesValidator;
 }

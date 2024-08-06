@@ -58,8 +58,12 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
   const request = await fetch(`${config.connectionUrl}/services/oauth2/token`, { method: "POST", body });
   const tokenQuery: ISalesforceTokenQuery = await request.json();
 
-  if ("error" in tokenQuery) throw new SalesforceTokenError(tokenQuery);
-  if (!request.ok) throw new SalesforceTokenError(request.status);
+  if ("error" in tokenQuery) {
+    throw new SalesforceTokenError({ message: tokenQuery.error });
+  }
+  if (!request.ok) {
+    throw new SalesforceTokenError({ message: `Request failed with status ${request.status} - ${tokenQuery}` });
+  }
 
   return {
     url: tokenQuery.sfdc_community_url,

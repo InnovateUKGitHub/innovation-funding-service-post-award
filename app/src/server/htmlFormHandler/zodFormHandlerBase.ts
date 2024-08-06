@@ -140,10 +140,10 @@ abstract class ZodFormHandlerBase<
     } catch (e) {
       if (e instanceof ZodError) {
         this.logger.warn("Failed to parse Zod input.", userInput, e);
-        next(new ZodFormHandlerError(userInput, e.message, e.issues));
+        next(new ZodFormHandlerError(userInput, e.message, e.issues, e));
       } else if (e instanceof ValidationError) {
         this.logger.warn("Failed to execute Zod form handler due to ValidationError", userInput, e);
-        next(new ZodFormHandlerError(userInput, e.message, convertResultErrorsToZodFormat(e.results.errors)));
+        next(new ZodFormHandlerError(userInput, e.message, convertResultErrorsToZodFormat(e.results.errors), e));
       } else {
         this.logger.error("Failed to execute Zod form handler.", e);
         next(e);

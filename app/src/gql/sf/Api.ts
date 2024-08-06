@@ -119,7 +119,7 @@ export class Api {
       return json;
     } catch (e) {
       this.logger.error("Failed to decode Salesforce JSON response", e, jsonAsText);
-      throw new Error("Failed to decode JSON");
+      throw new Error("Failed to decode JSON", { cause: e });
     }
   }
 

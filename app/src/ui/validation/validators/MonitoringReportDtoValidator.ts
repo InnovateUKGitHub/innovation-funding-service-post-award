@@ -2,8 +2,12 @@ import { MonitoringReportStatus } from "@framework/constants/monitoringReportSta
 import { MonitoringReportQuestionDto, MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Results } from "../results";
 import * as Validation from "./common";
+import { Result } from "../result";
 
 export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
+  public readonly comments: Result;
+  public readonly score: Result;
+
   constructor(
     readonly question: MonitoringReportQuestionDto,
     readonly answer: MonitoringReportQuestionDto,
@@ -11,60 +15,58 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
     readonly submit: boolean,
   ) {
     super({ model: question, showValidationErrors: show });
+
+    this.comments = Validation.all(
+      this,
+      () =>
+        answer.comments
+          ? Validation.required(
+              this,
+              answer.optionId,
+              this.getContent(x => x.validation.monitoringReportDtoValidator.scoreRequired({ name: question.title })),
+              "comments",
+            )
+          : Validation.valid(this),
+      () =>
+        submit
+          ? Validation.required(
+              this,
+              answer.comments,
+              this.getContent(x => x.validation.monitoringReportDtoValidator.commentRequired({ name: question.title })),
+              "comments",
+            )
+          : Validation.valid(this),
+    );
+
+    this.score = question.isScored
+      ? Validation.all(
+          this,
+          () =>
+            submit
+              ? Validation.required(
+                  this,
+                  answer.optionId,
+                  this.getContent(x =>
+                    x.validation.monitoringReportDtoValidator.scoreRequired({ name: question.title }),
+                  ),
+                  "optionId",
+                )
+              : Validation.valid(this),
+          () =>
+            Validation.isTrue(
+              this,
+              !answer.optionId || !!question.options.find(x => x.id === answer.optionId),
+              this.getContent(x => x.validation.monitoringReportDtoValidator.scoreInvalidChoice),
+              "optionId",
+            ),
+        )
+      : Validation.valid(this);
   }
-
-  public readonly comments = Validation.all(
-    this,
-    () =>
-      this.answer.comments
-        ? Validation.required(
-            this,
-            this.answer.optionId,
-            this.getContent(x =>
-              x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
-            ),
-            "comments",
-          )
-        : Validation.valid(this),
-    () =>
-      this.submit
-        ? Validation.required(
-            this,
-            this.answer.comments,
-            this.getContent(x =>
-              x.validation.monitoringReportDtoValidator.commentRequired({ name: this.question.title }),
-            ),
-            "comments",
-          )
-        : Validation.valid(this),
-  );
-
-  public readonly score = this.question.isScored
-    ? Validation.all(
-        this,
-        () =>
-          this.submit
-            ? Validation.required(
-                this,
-                this.answer.optionId,
-                this.getContent(x =>
-                  x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
-                ),
-                "optionId",
-              )
-            : Validation.valid(this),
-        () =>
-          Validation.isTrue(
-            this,
-            !this.answer.optionId || !!this.question.options.find(x => x.id === this.answer.optionId),
-            this.getContent(x => x.validation.monitoringReportDtoValidator.scoreInvalidChoice),
-            "optionId",
-          ),
-      )
-    : Validation.valid(this);
 }
 
 export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
+  public readonly responses: Result;
+
   constructor(
     model: MonitoringReportDto,
     show: boolean,
@@ -73,6 +75,20 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     private readonly totalProjectPeriods: number,
   ) {
     super({ model, showValidationErrors: show });
+    this.responses = Validation.optionalChild(
+      this,
+      this.questions,
+      q =>
+        new QuestionValidator(
+          q,
+          (this.model.questions || []).find(x => x.displayOrder === q.displayOrder) ||
+            ({} as MonitoringReportQuestionDto),
+          this.showValidationErrors,
+          this.submit,
+        ),
+      this.getContent(x => x.validation.monitoringReportDtoValidator.responsesInvalid),
+      "questions",
+    );
   }
 
   public readonly periodId = Validation.all(
@@ -100,21 +116,6 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         ),
         "period",
       ),
-  );
-
-  public readonly responses = Validation.optionalChild(
-    this,
-    this.questions,
-    q =>
-      new QuestionValidator(
-        q,
-        (this.model.questions || []).find(x => x.displayOrder === q.displayOrder) ||
-          ({} as MonitoringReportQuestionDto),
-        this.showValidationErrors,
-        this.submit,
-      ),
-    this.getContent(x => x.validation.monitoringReportDtoValidator.responsesInvalid),
-    "questions",
   );
 
   private readonly editableStates = [
