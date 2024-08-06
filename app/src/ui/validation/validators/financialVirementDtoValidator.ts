@@ -11,22 +11,26 @@ import { Results } from "@ui/validation/results";
 
 import * as Validation from "./common";
 import { PCRItemType, enableFinancialVirementItems } from "@framework/constants/pcrConstants";
+import { NestedResult } from "../nestedResult";
+import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 
 export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVirementDto> {
+  private readonly editablePeriods: PeriodId[];
+  public readonly totalValue: Result;
+  public readonly totals: { currentTotal: number; updatedTotal: number };
+  public readonly items: NestedResult<FinancialLoanVirement<LoanFinancialVirement>>;
+
   constructor(
     public model: FinancialLoanVirementDto,
     public showValidationErrors: boolean,
     private readonly submit: boolean,
   ) {
     super({ model, showValidationErrors });
+    this.editablePeriods = model.loans.filter(x => x.isEditable).map(x => x.period);
+    this.totals = this.validateTotals();
+    this.totalValue = this.validateTotalValue();
+    this.items = this.validateItems();
   }
-
-  private readonly editablePeriods = this.model.loans.filter(x => x.isEditable).map(x => x.period);
-
-  public readonly totals = this.validateTotals();
-  public readonly totalValue = this.validateTotalValue();
-
-  public readonly items = this.validateItems();
 
   private validateTotals() {
     return this.model.loans.reduce(

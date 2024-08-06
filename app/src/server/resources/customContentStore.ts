@@ -51,7 +51,7 @@ export class CustomContentStore {
 
       return { lastModified: response.LastModified as Date };
     } catch (error) {
-      throw new Error(`S3 Query Error - Failed to HeadObject command, ${JSON.stringify(error)}`);
+      throw new Error(`S3 Query Error - Failed to HeadObject command, ${JSON.stringify(error)}`, { cause: error });
     }
   }
 
@@ -68,7 +68,7 @@ export class CustomContentStore {
 
       return response.Body?.toString() ?? "";
     } catch (error) {
-      throw new Error(`S3 Query Error - Failed to GetObject command, ${JSON.stringify(error)}`);
+      throw new Error(`S3 Query Error - Failed to GetObject command, ${JSON.stringify(error)}`, { cause: error });
     }
   }
 }

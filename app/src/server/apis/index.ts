@@ -1,5 +1,5 @@
 import express from "express";
-import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
+import { getErrorStatus } from "@server/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
@@ -52,5 +52,5 @@ export const router = express.Router();
 
 router.all("*", (req, res) => {
   const error = new NotFoundError();
-  res.status(getErrorStatus(error)).json(getErrorResponse(error));
+  res.status(getErrorStatus(error)).json(error);
 });

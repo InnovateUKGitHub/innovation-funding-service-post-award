@@ -4,50 +4,70 @@ import { mapSfdcErrors, mapSfdcFieldCustomValidation } from "@shared/mapAppError
 import { Error as SfdcError } from "jsforce";
 
 export class BadSalesforceQuery extends Error {
-  constructor(
-    public errorReason: string = "FAILED_SOQL_QUERY",
-    public errorDetail?: unknown,
-  ) {
-    super(errorReason);
+  public errorReason: string;
+  public errorDetail?: unknown;
+
+  constructor({
+    errorReason = "FAILED_SOQL_QUERY",
+    errorDetail,
+    cause,
+  }: {
+    errorReason?: string;
+    errorDetail?: unknown;
+    cause?: unknown;
+  } = {}) {
+    super(errorReason, { cause });
+    this.errorReason = errorReason;
+    this.errorDetail = errorDetail;
   }
 }
 
 export class SalesforceUnavailableError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor({ message, cause }: { message: string; cause?: unknown }) {
+    super(message, { cause });
   }
 }
 
 export class FileTypeNotAllowedError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor({ message, cause }: { message: string; cause?: unknown }) {
+    super(message, { cause });
   }
 }
 
 export class SalesforceInvalidFilterError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor({ message, cause }: { message: string; cause?: unknown }) {
+    super(message, { cause });
   }
 }
 
 export class SalesforceTokenError extends Error {
-  constructor(public tokenError: unknown) {
-    super("AUTHENTICATION_ERROR");
+  constructor({ message, cause }: { message: string; cause?: unknown }) {
+    super(message, { cause });
   }
 }
 
 export class SalesforceDetailedErrorResponse extends Error {
   public readonly errorCode?: string;
   public readonly details: IAppDetailedError[];
-  constructor({ errorCode, message, details }: { errorCode?: string; message: string; details: IAppDetailedError[] }) {
-    super(message);
+  constructor({
+    errorCode,
+    message,
+    details,
+    cause,
+  }: {
+    errorCode?: string;
+    message: string;
+    details: IAppDetailedError[];
+    cause?: unknown;
+  }) {
+    super(message, { cause });
     this.errorCode = errorCode;
     this.details = details;
   }
 }
 
 export class SalesforceFieldCustomValidationError extends SalesforceDetailedErrorResponse {
-  constructor({ message }: { message: string }) {
+  constructor({ message, cause }: { message: string; cause?: unknown }) {
     super({
       errorCode: "FIELD_CUSTOM_VALIDATION_EXCEPTION",
       message: `FIELD_CUSTOM_VALIDATION_EXCEPTION: ${message}`,
@@ -57,6 +77,7 @@ export class SalesforceFieldCustomValidationError extends SalesforceDetailedErro
           message: mapSfdcFieldCustomValidation(message),
         },
       ],
+      cause,
     });
   }
 }

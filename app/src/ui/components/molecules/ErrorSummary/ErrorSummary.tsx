@@ -10,8 +10,19 @@ export interface ErrorSummaryProps {
   error?: Partial<IAppError>;
 }
 
+const StackTrace = ({ stack, cause }: Pick<IAppError, "stack" | "cause">) => {
+  const nestedCause = cause as unknown as IAppError | null;
+
+  return (
+    <div className="ifspa-developer-stacktrace">
+      <pre className="ifspa-developer-stacktrace-stack">{stack}</pre>
+      {nestedCause && <StackTrace stack={nestedCause.stack} cause={nestedCause.cause} />}
+    </div>
+  );
+};
+
 export const ErrorSummary = ({ error = {} }: ErrorSummaryProps) => {
-  const { code, details } = error;
+  const { code, details, stack, cause } = error;
 
   const { getContent } = useContent();
   const { features } = useClientConfig();
@@ -50,6 +61,7 @@ export const ErrorSummary = ({ error = {} }: ErrorSummaryProps) => {
 
         {features.detailedErrorSummaryComponent && Array.isArray(details) && (
           <Info summary={getContent(x => x.components.errorSummary.info)} className="govuk-!-margin-bottom-0">
+            <StackTrace cause={cause ?? null} stack={stack} />
             <ErrorDetails details={details} />
           </Info>
         )}

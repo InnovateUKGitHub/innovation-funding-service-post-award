@@ -9,41 +9,34 @@ export class AppError<T extends Results<ResultBase> = Results<ResultBase>> exten
   public details: IAppDetailedError[] = [];
 
   constructor(
-    public code: ErrorCode,
-    public message: string,
-    public original?: Error,
+    public readonly code: ErrorCode,
+    public readonly message: string,
+    public readonly cause?: unknown,
   ) {
-    super();
+    super(message, { cause });
   }
 }
-
 export class NotFoundError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error,
-  ) {
-    super(ErrorCode.REQUEST_ERROR, details || "Not Found", original);
+  constructor(details?: string, cause?: unknown) {
+    super(ErrorCode.REQUEST_ERROR, details || "Not Found", cause);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error,
-  ) {
-    super(ErrorCode.FORBIDDEN_ERROR, details || "Forbidden", original);
+  constructor(details?: string, cause?: Error) {
+    super(ErrorCode.FORBIDDEN_ERROR, details || "Forbidden", cause);
   }
 }
 
 export class InActiveProjectError extends ForbiddenError {
-  constructor(readonly original?: Error) {
-    super("Project must be active to proceed.", original);
+  constructor(readonly cause?: Error) {
+    super("Project must be active to proceed.", cause);
   }
 }
 
 export class ActiveProjectError extends ForbiddenError {
-  constructor(readonly original?: Error) {
-    super("Project must be 'Offer Letter Sent' to proceed.", original);
+  constructor(readonly cause?: Error) {
+    super("Project must be 'Offer Letter Sent' to proceed.", cause);
   }
 }
 
@@ -54,9 +47,9 @@ export class FormHandlerError extends AppError {
     public dto: any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public result: any,
-    public error: IAppError,
+    public cause: IAppError,
   ) {
-    super(error.code, error.message || "Not Found");
+    super(cause.code, cause.message || "Not Found", cause);
   }
 }
 
@@ -65,46 +58,41 @@ export class ZodFormHandlerError extends AppError {
     public dto: AnyObject | null,
     message: string,
     public zodIssues: ZodIssue[],
+    cause?: Error,
   ) {
-    super(ErrorCode.VALIDATION_ERROR, message);
+    super(ErrorCode.VALIDATION_ERROR, message, cause);
   }
 }
 
 export class BadRequestError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error,
-  ) {
-    super(ErrorCode.BAD_REQUEST_ERROR, details || "Invalid Request", original);
+  constructor(details?: string, cause?: Error) {
+    super(ErrorCode.BAD_REQUEST_ERROR, details || "Invalid Request", cause);
   }
 }
 
 export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>> extends AppError<T> {
-  constructor(
-    results: T,
-    readonly original?: Error,
-  ) {
-    super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
+  constructor(results: T, cause?: Error) {
+    super(ErrorCode.VALIDATION_ERROR, "Validation Error", cause);
     this.results = results;
     this.details = mapValidationResultErrors(results);
   }
 }
 
 export class UnauthenticatedError extends AppError {
-  constructor() {
-    super(ErrorCode.UNAUTHENTICATED_ERROR, "User not authenticated");
+  constructor(cause?: unknown) {
+    super(ErrorCode.UNAUTHENTICATED_ERROR, "User not authenticated", cause);
   }
 }
 
 export class ConfigurationError extends AppError {
-  constructor(message: string) {
-    super(ErrorCode.CONFIGURATION_ERROR, message);
+  constructor(message: string, cause?: unknown) {
+    super(ErrorCode.CONFIGURATION_ERROR, message, cause);
   }
 }
 
 export class SfdcServerError extends AppError {
-  constructor(message: string, details: IAppDetailedError[]) {
-    super(ErrorCode.SFDC_ERROR, message);
+  constructor(message: string, details: IAppDetailedError[], cause?: unknown) {
+    super(ErrorCode.SFDC_ERROR, message, cause);
     this.details = details;
   }
 }
