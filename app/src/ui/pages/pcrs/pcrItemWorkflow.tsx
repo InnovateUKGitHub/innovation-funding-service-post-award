@@ -1,6 +1,7 @@
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { GraphqlError } from "@framework/types/IAppError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
@@ -47,7 +48,6 @@ type Data = {
  * @returns {JSX.Element | "This is required to complete this request."} message block
  */
 function getRequiredToCompleteMessage(message?: string) {
-  // const standardMessage = "This is required to complete this request.";
   const standardMessage = <Content value={x => x.pcrLabels.requiredToComplete} />;
 
   if (!message) return standardMessage;
@@ -66,13 +66,8 @@ type PcrWorkflowContextProps = Data &
   ProjectChangeRequestPrepareItemSearchParams &
   Pick<BaseProps, "config" | "messages" | "routes" | "currentRoute"> & {
     isFetching: boolean;
-    onSave: ({
-      data,
-      context,
-    }: {
-      data: Partial<FullPCRItemDto> & { button_submit?: string | null };
-      context?: { link: ILinkInfo };
-    }) => Promise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onSave: ({ data, context, onSuccess }: { data: any; onSuccess?: () => void; context: { link: ILinkInfo } }) => void;
     workflow: PcrWorkflow;
     fetchKey: number;
     displayCompleteForm: boolean;
@@ -80,7 +75,7 @@ type PcrWorkflowContextProps = Data &
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
     markedAsCompleteHasBeenChecked: boolean;
     setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
-    apiError: ClientErrorResponse | null;
+    apiError: ClientErrorResponse | GraphqlError | null;
     refreshItemWorkflowQuery: () => Promise<void>;
   };
 
@@ -96,7 +91,7 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
     throw new Error("missing a workflow in pcrItemWorkflow");
   }
 
-  const [fetchKey, setFetchKey] = useFetchKey();
+  const [fetchKey] = useFetchKey();
   const [markedAsCompleteHasBeenChecked, setMarkedAsCompleteHasBeenChecked] = useState(
     props.pcrItem.status === PCRItemStatus.Complete,
   );
@@ -104,16 +99,14 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
   const {
     onUpdate: onSave,
     apiError,
-    isProcessing,
-  } = useOnSavePcrItem(
-    props.projectId,
-    props.pcrId,
-    props.itemId,
-    setFetchKey,
-    props.refreshItemWorkflowQuery,
-    props.step,
-    props.pcrType,
-  );
+    isFetching,
+  } = useOnSavePcrItem({
+    pcrItemId: props.itemId,
+    pcrType: props.pcrType,
+    projectId: props.projectId,
+    onSuccess: props.refreshItemWorkflowQuery,
+    step: props.step,
+  });
 
   const displayCompleteForm = props.mode === "prepare";
   const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
@@ -125,7 +118,7 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
         ...props,
         workflow,
         onSave,
-        isFetching: isProcessing,
+        isFetching,
         fetchKey,
         getRequiredToCompleteMessage,
         displayCompleteForm,

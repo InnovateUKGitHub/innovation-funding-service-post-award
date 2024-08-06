@@ -39,6 +39,48 @@ export const mapToPCRItemStatus = (status: string | number): PCRItemStatus => {
   }
 };
 
+export const mapFromPCRItemStatus = (status: PCRItemStatus | undefined) => {
+  switch (status) {
+    case PCRItemStatus.ToDo:
+      return "To Do";
+    case PCRItemStatus.Incomplete:
+      return "Incomplete";
+    case PCRItemStatus.Complete:
+      return "Complete";
+    default:
+      return "Unknown";
+  }
+};
+
+export class PcrProjectRoleMapper {
+  private readonly roles = {
+    collaborator: "Collaborator",
+    projectLead: "Lead",
+  };
+
+  public mapFromSalesforcePCRProjectRole = (role: string | null): PCRProjectRole => {
+    switch (role) {
+      case this.roles.collaborator:
+        return PCRProjectRole.Collaborator;
+      case this.roles.projectLead:
+        return PCRProjectRole.ProjectLead;
+      default:
+        return PCRProjectRole.Unknown;
+    }
+  };
+
+  public mapToSalesforcePCRProjectRole = (role: PCRProjectRole | undefined) => {
+    switch (role) {
+      case PCRProjectRole.Collaborator:
+        return this.roles.collaborator;
+      case PCRProjectRole.ProjectLead:
+        return this.roles.projectLead;
+      default:
+        return null;
+    }
+  };
+}
+
 export const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
   switch (typeOfAid) {
     case "State aid":
@@ -130,6 +172,21 @@ export const mapFromSalesforcePCRPartnerType = (partnerType: string | null) => {
       return PCRPartnerType.Other;
     default:
       return PCRPartnerType.Unknown;
+  }
+};
+
+export const mapToSalesforcePCRPartnerType = (partnerType: PCRPartnerType) => {
+  switch (partnerType) {
+    case PCRPartnerType.Business:
+      return partnerTypes.business;
+    case PCRPartnerType.Research:
+      return partnerTypes.research;
+    case PCRPartnerType.ResearchAndTechnology:
+      return partnerTypes.researchAndTechnology;
+    case PCRPartnerType.Other:
+      return partnerTypes.other;
+    default:
+      return "unknown";
   }
 };
 

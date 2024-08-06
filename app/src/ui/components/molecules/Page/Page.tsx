@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { GraphqlError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
 import { AriaLive } from "@ui/components/atoms/AriaLive/ariaLive";
@@ -16,7 +17,7 @@ export interface PageProps {
   pageTitle: React.ReactNode;
   children: React.ReactNode;
   backLink?: React.ReactNode;
-  apiError?: ClientErrorResponse | null;
+  apiError?: ClientErrorResponse | GraphqlError | null;
   validationErrors?: RhfErrors;
   qa?: string;
   className?: string;

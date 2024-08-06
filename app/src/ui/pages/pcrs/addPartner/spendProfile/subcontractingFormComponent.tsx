@@ -8,7 +8,7 @@ import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SubcontractingSchema, subcontractingSchema, errorMap } from "./spendProfile.zod";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
@@ -32,19 +32,8 @@ const isSubcontractingCostDto = function (
 };
 
 export const SubcontractingFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultValues: MaybeNewCostDto<PCRSpendProfileSubcontractingCostDto>;
 
@@ -89,17 +78,10 @@ export const SubcontractingFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  ...data,
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  description: data?.subcontractorName,
-                  value: parseCurrency(data.subcontractorCost),
-                }),
-              },
+              ...data,
+              costCategoryId,
+              description: data?.subcontractorName,
+              value: parseCurrency(data.subcontractorCost),
             },
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),

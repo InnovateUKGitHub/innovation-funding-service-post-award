@@ -1,16 +1,27 @@
-import { ErrorCode } from "@framework/constants/enums";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { DetailedErrorCode, ErrorCode } from "@framework/constants/enums";
+import { GraphqlError, isGraphqlError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks/content.hook";
 import { Info } from "../../atoms/Details/Details";
 import { H2 } from "../../atoms/Heading/Heading.variants";
 import { ErrorInformation } from "./ErrorInformation";
 
 export interface ErrorSummaryProps {
-  error?: ClientErrorResponse;
+  error?: ClientErrorResponse | GraphqlError;
 }
 
-export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
-  const { code, details } = error ?? {};
+export const ErrorSummary = ({ error = { traceId: null } }: ErrorSummaryProps) => {
+  let code, details;
+  if (isGraphqlError(error)) {
+    code = DetailedErrorCode.ACC_GRAPHQL_ERROR;
+    details = [{ code: DetailedErrorCode.ACC_GRAPHQL_ERROR, message: error.message }] as unknown as ClientErrorResponse;
+  } else {
+    code = error.code;
+    details = error.details;
+  }
+
+  console.log("code", code, "details", details);
+
   const { getContent } = useContent();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
@@ -47,7 +58,7 @@ export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
 
         {error && (
           <Info summary={getContent(x => x.components.errorSummary.info)} className="govuk-!-margin-bottom-0">
-            <ErrorInformation error={error} />
+            <ErrorInformation error={error as ClientErrorResponse} />
           </Info>
         )}
       </div>

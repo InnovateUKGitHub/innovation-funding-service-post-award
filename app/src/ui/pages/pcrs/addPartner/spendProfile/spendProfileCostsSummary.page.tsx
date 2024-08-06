@@ -22,7 +22,6 @@ import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
-import { noop } from "lodash";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
@@ -42,7 +41,6 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
     itemId,
     costCategoryId,
     undefined,
-    undefined,
   );
 
   const addPartnerItem = pcrItem;
@@ -61,15 +59,12 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
   const costs = spendProfile.costs.filter(x => x.costCategoryId === costCategoryId);
   const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
 
-  const { onUpdate, isFetching } = useOnSavePcrItem(
+  const { onUpdate, isFetching } = useOnSavePcrItem({
+    pcrItemId: itemId,
     projectId,
-    pcrId,
-    itemId,
-    noop,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
+    pcrType: PCRItemType.PartnerAddition,
+    step: undefined,
+  });
   const { handleSubmit } = useForm({});
 
   return (

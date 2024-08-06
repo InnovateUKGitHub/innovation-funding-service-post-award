@@ -24,6 +24,7 @@ import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 import { ServerErrorContextProvider } from "@ui/context/server-error";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { RecordTypesContextProvider, RecordType, RecordTypeProvider } from "@ui/context/recordTypes";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -35,7 +36,7 @@ const serverZodErrors = processDto(window.__PRELOADED_SERVER_ZOD_ERRORS__ || [])
 const serverInput = processDto(window.__PRELOADED_SERVER_INPUT__ || null) as unknown as AnyObject;
 const preloadedData = (processDto(window.__PRELOADED_DATA__) || null) as AnyObject | null;
 const serverErrors = processDto(window.__PRELOADED_SERVER_ERRORS__ || null) as ClientErrorResponse;
-
+const salesforceRecordTypes = processDto(window.__PRELOADED_RECORD_TYPES__ || null) as unknown as RecordType[];
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
 const Client = () => {
@@ -52,29 +53,31 @@ const Client = () => {
   }, []);
 
   return (
-    <ServerErrorContextProvider value={serverErrors}>
-      <ServerInputContextProvider value={serverInput ?? {}}>
-        <ServerZodErrorProvider value={serverZodErrors}>
-          <UserProvider value={userConfig}>
-            <FetchKeyProvider>
-              <ClientConfigProvider config={clientConfig}>
-                <ApiErrorContextProvider value={apiErrors}>
-                  <FormErrorContextProvider value={formErrors}>
-                    <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
-                      <MessageContextProvider preloadedMessages={preloadedMessages}>
-                        <BrowserRouter>
-                          <App relayEnvironment={ClientGraphQLEnvironment} />
-                        </BrowserRouter>
-                      </MessageContextProvider>
-                    </PreloadedDataContextProvider>
-                  </FormErrorContextProvider>
-                </ApiErrorContextProvider>
-              </ClientConfigProvider>
-            </FetchKeyProvider>
-          </UserProvider>
-        </ServerZodErrorProvider>
-      </ServerInputContextProvider>
-    </ServerErrorContextProvider>
+    <RecordTypesContextProvider value={new RecordTypeProvider(salesforceRecordTypes)}>
+      <ServerErrorContextProvider value={serverErrors}>
+        <ServerInputContextProvider value={serverInput ?? {}}>
+          <ServerZodErrorProvider value={serverZodErrors}>
+            <UserProvider value={userConfig}>
+              <FetchKeyProvider>
+                <ClientConfigProvider config={clientConfig}>
+                  <ApiErrorContextProvider value={apiErrors}>
+                    <FormErrorContextProvider value={formErrors}>
+                      <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
+                        <MessageContextProvider preloadedMessages={preloadedMessages}>
+                          <BrowserRouter>
+                            <App relayEnvironment={ClientGraphQLEnvironment} />
+                          </BrowserRouter>
+                        </MessageContextProvider>
+                      </PreloadedDataContextProvider>
+                    </FormErrorContextProvider>
+                  </ApiErrorContextProvider>
+                </ClientConfigProvider>
+              </FetchKeyProvider>
+            </UserProvider>
+          </ServerZodErrorProvider>
+        </ServerInputContextProvider>
+      </ServerErrorContextProvider>
+    </RecordTypesContextProvider>
   );
 };
 

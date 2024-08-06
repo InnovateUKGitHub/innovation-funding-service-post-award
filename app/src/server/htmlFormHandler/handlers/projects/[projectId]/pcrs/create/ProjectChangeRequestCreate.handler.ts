@@ -48,8 +48,14 @@ class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSche
     context,
   }: {
     input: z.output<PcrCreateSchemaType>;
+    params: PcrModifyParams;
     context: IContext;
   }): Promise<string> {
+    context.runCommand;
+    // const request = await fetch(`${config.connectionUrl}/services/oauth2/token`, { method: "POST", body });
+    // const headerResponse = await postMutation(pcrModifyOptionsCreateHeaderMutation, { projectId: params.projectId });
+
+    // console.log("headerResponse", headerResponse);
     const newPcr = await context.runCommand(
       new CreateProjectChangeRequestCommand(input.projectId, {
         projectId: input.projectId,

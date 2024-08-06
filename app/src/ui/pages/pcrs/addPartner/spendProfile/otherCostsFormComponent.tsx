@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { OtherCostsSchema, otherCostsSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,19 +29,8 @@ const isOtherCostDto = function (
 };
 
 export const OtherCostsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileOtherCostsDto>;
 
@@ -82,16 +71,9 @@ export const OtherCostsFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  id: data.id ?? ("" as CostId),
-                  description: data.descriptionOfCost,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  value: parseCurrency(data.estimatedCost),
-                }),
-              },
+              description: data.descriptionOfCost,
+              costCategoryId,
+              value: parseCurrency(data.estimatedCost),
             },
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),

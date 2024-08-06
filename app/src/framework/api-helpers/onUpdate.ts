@@ -4,6 +4,10 @@ import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
+import { useMutation } from "react-relay";
+import { GraphQLTaggedNode, MutationParameters, PayloadError } from "relay-runtime";
+import { GraphqlError, isGraphqlError } from "@framework/types/IAppError";
 
 export enum Propagation {
   STOP,
@@ -67,4 +71,37 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
   };
 
   return { onUpdate, apiError, isFetching, isProcessing };
+};
+
+export const useOnMutation = <TQuery extends MutationParameters, TFormValues extends AnyObject>(
+  query: GraphQLTaggedNode,
+  createVariables: (data: TFormValues) => MutationParameters["variables"],
+  onSuccess: (response: TQuery["response"], errors: PayloadError[] | null) => void | null,
+  onError: (e: unknown) => Propagation | void,
+) => {
+  // const serverRenderedApiError = useApiErrorContext();
+  const [apiError, setApiError] = useState<GraphqlError | null>(null);
+
+  const [commitMutation, isFetching] = useMutation<TQuery>(query);
+
+  const onUpdate = ({ data }: { data: TFormValues }) => {
+    commitMutation({
+      variables: createVariables(data),
+      onCompleted: onSuccess,
+      onError: er => {
+        if (isGraphqlError(er)) {
+          setApiError(() => ({ message: er.message, name: er.name, stack: er.stack }));
+        }
+        useScrollToTopSmoothly([]);
+
+        onError(er);
+      },
+    });
+  };
+
+  return {
+    onUpdate,
+    isFetching,
+    apiError,
+  };
 };

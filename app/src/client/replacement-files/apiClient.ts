@@ -118,7 +118,7 @@ const clientApi: IApiClient<"client"> = {
   },
 };
 
-const getJsonHeaders = () => {
+export const getJsonHeaders = () => {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
   return headers;

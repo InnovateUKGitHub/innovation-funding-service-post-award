@@ -28,7 +28,6 @@ import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
-import { noop } from "lodash";
 import { ProjectRole } from "@framework/constants/project";
 import { H2, H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { LinksList } from "@ui/components/atoms/LinksList/linksList";
@@ -46,13 +45,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
   const { getContent } = useContent();
   const { pcrId, itemId, projectId, routes, costCategoryId } = props;
 
-  const { spendProfile, fragmentRef } = useSpendProfileCostsQuery(
-    projectId,
-    itemId,
-    costCategoryId,
-    undefined,
-    undefined,
-  );
+  const { spendProfile, fragmentRef } = useSpendProfileCostsQuery(projectId, itemId, costCategoryId, undefined);
 
   const cost = spendProfile.costs.find(x => x.costCategoryId === costCategoryId);
   if (!cost) throw new Error(`Cannot find cost matching ${costCategoryId}`);
@@ -101,15 +94,12 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     defaultValues: {},
   });
 
-  const { onUpdate, isFetching } = useOnSavePcrItem(
+  const { onUpdate, isFetching } = useOnSavePcrItem({
+    pcrItemId: itemId,
     projectId,
-    pcrId,
-    itemId,
-    noop,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
+    pcrType: PCRItemType.PartnerAddition,
+    step: undefined,
+  });
 
   const validationErrors = useRhfErrors(formState?.errors);
 

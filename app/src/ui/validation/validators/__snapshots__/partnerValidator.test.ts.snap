@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Partner Validator With en-GB i18n postcode should throw error with empty postcode 1`] = `"Enter project location postcode."`;
+exports[`Partner Validator With en-GB i18n postcode should throw error with empty postcode 1`] = `"Enter partner location postcode."`;
 
 exports[`Partner Validator With no i18n postcode should throw error with empty postcode 1`] = `"forms.errors.generic.textarea.required"`;

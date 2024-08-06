@@ -1,4 +1,4 @@
-import { useLazyLoadQuery } from "react-relay";
+import { useLazyLoadQuery, useMutation } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
@@ -7,23 +7,37 @@ import { SpendProfile, mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpen
 
 import { spendProfileCostsQuery } from "./SpendProfileCosts.query";
 import { noop } from "lodash";
-import { createContext } from "react";
-import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
+import { createContext, useState } from "react";
 import { CostCategoryItem } from "@framework/types/CostCategory";
 import { BaseProps } from "@ui/app/containerBase";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { GraphqlError, isGraphqlError } from "@framework/types/IAppError";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { SpendProfileCostsQuery } from "./__generated__/SpendProfileCostsQuery.graphql";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { useNavigate } from "react-router-dom";
+import { useMessageContext } from "@ui/context/messages";
+import { SpendProfileCreateItemMutation } from "./__generated__/SpendProfileCreateItemMutation.graphql";
+import { spendProfileCreateItemMutation } from "./SpendProfileCreateItem.mutation";
+import { SpendProfileUpdateItemMutation } from "./__generated__/SpendProfileUpdateItemMutation.graphql";
+import { spendProfileUpdateItemMutation } from "./SpendProfileUpdateItem.mutation";
+import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
+
+import { PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
+import { SpendProfileDeleteItemMutation } from "./__generated__/SpendProfileDeleteItemMutation.graphql";
+import { spendProfileDeleteItemMutation } from "./SpendProfileDeleteItem.mutation";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { useRecordTypesContext } from "@ui/context/recordTypes";
 
 export const useSpendProfileCostsQuery = (
   projectId: ProjectId,
   pcrItemId: PcrItemId,
   costCategoryId: CostCategoryId,
   costId: CostId | undefined | null,
-  fetchKey: number | undefined,
 ) => {
+  const [fetchKey] = useFetchKey();
+
   const data = useLazyLoadQuery<SpendProfileCostsQuery>(
     spendProfileCostsQuery,
     {
@@ -135,13 +149,8 @@ export type SpendProfileQueryReturnType = ReturnType<typeof useSpendProfileCosts
 
 type SpendProfileContextType = {
   isFetching: boolean;
-  onUpdate: ({
-    data,
-    context,
-  }: {
-    data: Partial<FullPCRItemDto> & { spendProfile: Partial<PcrSpendProfileDto> };
-    context: { link: ILinkInfo };
-  }) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onUpdate: ({ data, context }: { data: any; context: { link: ILinkInfo } }) => void;
   cost: SpendProfileQueryReturnType["cost"];
   costCategoryType: CostCategoryItem;
   spendProfile: SpendProfileQueryReturnType["spendProfile"];
@@ -156,7 +165,7 @@ type SpendProfileContextType = {
   documents: SpendProfileQueryReturnType["documents"];
   costCategory: SpendProfileQueryReturnType["costCategory"];
   pcrItem: SpendProfileQueryReturnType["pcrItem"];
-  apiError: ClientErrorResponse | null;
+  apiError: ClientErrorResponse | GraphqlError | null;
   stepRoute: ILinkInfo;
   addNewItem: boolean;
   fragmentRef: unknown;
@@ -176,4 +185,119 @@ export const appendOrMerge = <T extends { id?: string | null }>(costs: T[], cost
   } else {
     return [...costs, cost];
   }
+};
+
+export const useOnDeleteSpendProfileItem = (costId: CostId, projectId: ProjectId) => {
+  const navigate = useNavigate();
+
+  const [apiError, setApiError] = useState<GraphqlError | null>(null);
+
+  const [commitDeleteMutation, isDeleteMutationInProgress] =
+    useMutation<SpendProfileDeleteItemMutation>(spendProfileDeleteItemMutation);
+  const [, setFetchKey] = useFetchKey();
+  return {
+    onUpdate({ context }: { context: { link: { path: string } } }) {
+      commitDeleteMutation({
+        variables: { id: costId, projectId },
+
+        onError: (er: unknown) => {
+          if (isGraphqlError(er)) {
+            scrollToTheTopSmoothly();
+            setApiError(er);
+          }
+        },
+        onCompleted: () => {
+          setFetchKey(x => x + 1);
+          navigate(context?.link?.path ?? "");
+        },
+      });
+    },
+    isFetching: isDeleteMutationInProgress,
+    apiError,
+  };
+};
+
+export const useOnSaveSpendProfileItem = ({
+  pcrItemId,
+  costId,
+  projectId,
+  refreshItemWorkflowQuery,
+}: {
+  pcrItemId: PcrItemId;
+  costId?: CostId;
+  projectId: ProjectId;
+  refreshItemWorkflowQuery: (() => Promise<void>) | null | undefined;
+}) => {
+  const navigate = useNavigate();
+  const [, setFetchKey] = useFetchKey();
+  const { clearMessages } = useMessageContext();
+
+  const { getPcrSpendProfileRecordType } = useRecordTypesContext();
+
+  const [commitCreateMutation, isCreateMutationInProgress] =
+    useMutation<SpendProfileCreateItemMutation>(spendProfileCreateItemMutation);
+
+  const [commitUpdateMutation, isUpdateMutationInProgress] =
+    useMutation<SpendProfileUpdateItemMutation>(spendProfileUpdateItemMutation);
+
+  const [apiError, setApiError] = useState<GraphqlError | null>(null);
+
+  if (costId) {
+    return {
+      onUpdate: ({ data, context }: { data: PcrSpendProfileEntityForCreate; context: { link: { path: string } } }) => {
+        const values = new SalesforcePcrSpendProfileMapper(getPcrSpendProfileRecordType()).mapToSalesforceForCreate({
+          ...data,
+          pcrItemId,
+        });
+
+        commitUpdateMutation({
+          variables: { input: { Acc_IFSSpendProfile__c: values, Id: costId }, projectId },
+          onError: (er: unknown) => {
+            if (isGraphqlError(er)) {
+              scrollToTheTopSmoothly();
+              setApiError(er);
+            }
+          },
+          onCompleted: () => {
+            if (!!refreshItemWorkflowQuery) {
+              refreshItemWorkflowQuery();
+            }
+            clearMessages();
+            setFetchKey(k => k + 1);
+            navigate(context?.link?.path ?? "");
+          },
+        });
+      },
+      isFetching: isUpdateMutationInProgress,
+      apiError,
+    };
+  }
+  return {
+    onUpdate: ({ data, context }: { data: PcrSpendProfileEntityForCreate; context: { link: { path: string } } }) => {
+      const values = new SalesforcePcrSpendProfileMapper(getPcrSpendProfileRecordType()).mapToSalesforceForCreate({
+        ...data,
+        pcrItemId,
+      });
+
+      commitCreateMutation({
+        variables: { input: { Acc_IFSSpendProfile__c: values }, projectId },
+        onError: (er: unknown) => {
+          if (isGraphqlError(er)) {
+            scrollToTheTopSmoothly();
+            setApiError(er);
+          }
+        },
+        onCompleted: () => {
+          if (!!refreshItemWorkflowQuery) {
+            refreshItemWorkflowQuery();
+          }
+          clearMessages();
+          setFetchKey(k => k + 1);
+          navigate(context?.link?.path ?? "");
+        },
+      });
+    },
+    isFetching: isCreateMutationInProgress,
+    apiError,
+  };
 };

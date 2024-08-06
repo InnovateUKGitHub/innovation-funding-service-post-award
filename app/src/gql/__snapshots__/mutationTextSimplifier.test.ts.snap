@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getMutationHash should get the hash of the simplified mutation for client side mutations 1`] = `"dd3e43529f6b9e56daa8a4b1d9dc7229"`;
+
+exports[`getMutationHash should get the hash of the simplified mutation for server side mutations 1`] = `"dd3e43529f6b9e56daa8a4b1d9dc7229"`;
+
+exports[`mutationTextSimplifier should simplify the text for clientside 1`] = `"mutationPcrModifyOptionsCreateMultipleMutation($headerId:IdOrRef!$projectId:IdOrRef!$hasPcr2:Boolean!$hasPcr3:Boolean!$hasPcr4:Boolean!$hasPcr5:Boolean!$recordType1:IdOrRef!$recordType2:IdOrRef$recordType3:IdOrRef$recordType4:IdOrRef$recordType5:IdOrRef$projectIdStr:String!){uiapi(projectId:$projectIdStr){firstPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType1}}){Record{IdName{value}}}secondPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType2}}){Record{IdName{value}}}thirdPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType3}}){Record{IdName{value}}}fourthPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType4}}){Record{IdName{value}}}fifthPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType5}}){Record{IdName{value}}}}}"`;
+
+exports[`mutationTextSimplifier should simplify the text for serverside 1`] = `"mutationPcrModifyOptionsCreateMultipleMutation($headerId:IdOrRef!$projectId:IdOrRef!$hasPcr2:Boolean!$hasPcr3:Boolean!$hasPcr4:Boolean!$hasPcr5:Boolean!$recordType1:IdOrRef!$recordType2:IdOrRef$recordType3:IdOrRef$recordType4:IdOrRef$recordType5:IdOrRef$projectIdStr:String!){uiapi(projectId:$projectIdStr){firstPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType1}}){Record{IdName{value}}}secondPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType2}}){Record{IdName{value}}}thirdPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType3}}){Record{IdName{value}}}fourthPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType4}}){Record{IdName{value}}}fifthPcr:Acc_ProjectChangeRequest__cCreate(input:{Acc_ProjectChangeRequest__c:{Acc_RequestHeader__c:$headerIdAcc_Project__c:$projectIdAcc_MarkedasComplete__c:"ToDo"RecordTypeId:$recordType5}}){Record{IdName{value}}}}}"`;
+
+exports[`removeDirectives should strip directives from the mutation for client side mutations 1`] = `
+"
+mutation PcrModifyOptionsCreateMultipleMutation(
+    $headerId: IdOrRef!
+    $projectId: IdOrRef!
+    $hasPcr2: Boolean!
+    $hasPcr3: Boolean!
+    $hasPcr4: Boolean!
+    $hasPcr5: Boolean!
+    $recordType1: IdOrRef!
+    $recordType2: IdOrRef
+    $recordType3: IdOrRef
+    $recordType4: IdOrRef
+    $recordType5: IdOrRef
+    $projectIdStr: String!
+  ) {
+    uiapi(projectId: $projectIdStr) {
+      firstPcr: Acc_ProjectChangeRequest__cCreate(
+        input: {
+          Acc_ProjectChangeRequest__c: {
+            Acc_RequestHeader__c: $headerId
+            Acc_Project__c: $projectId
+            Acc_MarkedasComplete__c: "To Do"
+            RecordTypeId: $recordType1
+          }
+        }
+      ) {
+        Record {
+          Id
+          Name {
+            value
+          }
+        }
+      }
+
+      
+        secondPcr: Acc_ProjectChangeRequest__cCreate(
+          input: {
+            Acc_ProjectChangeRequest__c: {
+              Acc_RequestHeader__c: $headerId
+              Acc_Project__c: $projectId
+              Acc_MarkedasComplete__c: "To Do"
+              RecordTypeId: $recordType2
+            }
+          }
+        ) {
+          Record {
+            Id
+            Name {
+              value
+            }
+          }
+        }
+      
+      
+        thirdPcr: Acc_ProjectChangeRequest__cCreate(
+          input: {
+            Acc_ProjectChangeRequest__c: {
+              Acc_RequestHeader__c: $headerId
+              Acc_Project__c: $projectId
+              Acc_MarkedasComplete__c: "To Do"
+              RecordTypeId: $recordType3
+            }
+          }
+        ) {
+          Record {
+            Id
+            Name {
+              value
+            }
+          }
+        }
+      
+      
+        fourthPcr: Acc_ProjectChangeRequest__cCreate(
+          input: {
+            Acc_ProjectChangeRequest__c: {
+              Acc_RequestHeader__c: $headerId
+              Acc_Project__c: $projectId
+              Acc_MarkedasComplete__c: "To Do"
+              RecordTypeId: $recordType4
+            }
+          }
+        ) {
+          Record {
+            Id
+            Name {
+              value
+            }
+          }
+        }
+      
+      
+        fifthPcr: Acc_ProjectChangeRequest__cCreate(
+          input: {
+            Acc_ProjectChangeRequest__c: {
+              Acc_RequestHeader__c: $headerId
+              Acc_Project__c: $projectId
+              Acc_MarkedasComplete__c: "To Do"
+              RecordTypeId: $recordType5
+            }
+          }
+        ) {
+          Record {
+            Id
+            Name {
+              value
+            }
+          }
+        }
+      
+    }
+  }"
+`;
+
+exports[`removeDirectives should strip directives from the mutation for server side mutations 1`] = `
+"mutation PcrModifyOptionsCreateMultipleMutation(
+  $headerId: IdOrRef!
+  $projectId: IdOrRef!
+  $hasPcr2: Boolean!
+  $hasPcr3: Boolean!
+  $hasPcr4: Boolean!
+  $hasPcr5: Boolean!
+  $recordType1: IdOrRef!
+  $recordType2: IdOrRef
+  $recordType3: IdOrRef
+  $recordType4: IdOrRef
+  $recordType5: IdOrRef
+  $projectIdStr: String!
+) {
+  uiapi(projectId: $projectIdStr) {
+    firstPcr: Acc_ProjectChangeRequest__cCreate(input: {Acc_ProjectChangeRequest__c: {Acc_RequestHeader__c: $headerId, Acc_Project__c: $projectId, Acc_MarkedasComplete__c: "To Do", RecordTypeId: $recordType1}}) {
+      Record {
+        Id
+        Name {
+          value
+        }
+      }
+    }
+    secondPcr: Acc_ProjectChangeRequest__cCreate(input: {Acc_ProjectChangeRequest__c: {Acc_RequestHeader__c: $headerId, Acc_Project__c: $projectId, Acc_MarkedasComplete__c: "To Do", RecordTypeId: $recordType2}}) {
+      Record {
+        Id
+        Name {
+          value
+        }
+      }
+    }
+    thirdPcr: Acc_ProjectChangeRequest__cCreate(input: {Acc_ProjectChangeRequest__c: {Acc_RequestHeader__c: $headerId, Acc_Project__c: $projectId, Acc_MarkedasComplete__c: "To Do", RecordTypeId: $recordType3}}) {
+      Record {
+        Id
+        Name {
+          value
+        }
+      }
+    }
+    fourthPcr: Acc_ProjectChangeRequest__cCreate(input: {Acc_ProjectChangeRequest__c: {Acc_RequestHeader__c: $headerId, Acc_Project__c: $projectId, Acc_MarkedasComplete__c: "To Do", RecordTypeId: $recordType4}}) {
+      Record {
+        Id
+        Name {
+          value
+        }
+      }
+    }
+    fifthPcr: Acc_ProjectChangeRequest__cCreate(input: {Acc_ProjectChangeRequest__c: {Acc_RequestHeader__c: $headerId, Acc_Project__c: $projectId, Acc_MarkedasComplete__c: "To Do", RecordTypeId: $recordType5}}) {
+      Record {
+        Id
+        Name {
+          value
+        }
+      }
+    }
+  }
+}"
+`;

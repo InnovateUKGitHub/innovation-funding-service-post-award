@@ -12,7 +12,6 @@ import {
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost.page";
 import { CostCategoryGroupType } from "@framework/constants/enums";
-import { PCRItemType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -26,14 +25,12 @@ import { DeleteOtherCostFormComponent } from "./deleteOtherCostFormComponent";
 import { DeleteSubcontractingCostFormComponent } from "./deleteSubcontractingCostFormComponent";
 import { DeleteTravelAndSubsCostFormComponent } from "./deleteTravelAndSubsCostFormComponent";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
-import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
+import { useOnDeleteSpendProfileItem, useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
-import { noop } from "lodash";
 import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
@@ -54,13 +51,7 @@ const SpendProfileDeleteCostPage = ({
   messages,
   ...props
 }: PcrDeleteSpendProfileCostParams & BaseProps) => {
-  const { costCategory, cost, spendProfile, fragmentRef } = useSpendProfileCostsQuery(
-    projectId,
-    itemId,
-    costCategoryId,
-    costId,
-    0,
-  );
+  const { costCategory, cost, fragmentRef } = useSpendProfileCostsQuery(projectId, itemId, costCategoryId, costId);
 
   if (!cost) {
     throw new Error("attempting to delete a missing cost object");
@@ -68,15 +59,7 @@ const SpendProfileDeleteCostPage = ({
 
   const { getContent } = useContent();
 
-  const { onUpdate, isFetching, apiError } = useOnSavePcrItem(
-    projectId,
-    pcrId,
-    itemId,
-    noop,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
+  const { onUpdate, isFetching, apiError } = useOnDeleteSpendProfileItem(costId, projectId);
   const { handleSubmit } = useForm<EmptyObject>({});
 
   return (
@@ -102,12 +85,6 @@ const SpendProfileDeleteCostPage = ({
         <Form
           onSubmit={handleSubmit(() =>
             onUpdate({
-              data: {
-                spendProfile: {
-                  ...spendProfile,
-                  costs: spendProfile.costs.filter(x => x.id !== cost?.id),
-                },
-              },
               context: {
                 link: props.routes.pcrSpendProfileCostsSummary.getLink({
                   projectId,

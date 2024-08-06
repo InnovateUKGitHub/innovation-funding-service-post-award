@@ -8,7 +8,7 @@ import { useMounted } from "@ui/context/Mounted";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { useContext, useMemo } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OverheadSchema, overheadSchema, errorMap } from "./spendProfile.zod";
@@ -164,21 +164,13 @@ export const OverheadsFormComponent = ({}) => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  ...data,
-                  id: data.id ?? ("" as CostId),
-                  description: "",
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  overheadRate: Number(data.overheadRate),
-                  value:
-                    typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0
-                      ? parseCurrency(data.calculatedValue)
-                      : 0,
-                }),
-              },
+              description: "",
+              costCategoryId,
+              overheadRate: Number(data.overheadRate),
+              value:
+                typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0
+                  ? parseCurrency(data.calculatedValue)
+                  : 0,
             },
             context: {
               link: data.button_submit === "uploadDocuments" ? getUploadDocumentsLink() : stepRoute,

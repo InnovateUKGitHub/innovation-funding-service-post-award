@@ -12,6 +12,15 @@ export interface IAppError<T extends Results<ResultBase> = Results<ResultBase>> 
   cause?: unknown | null;
 }
 
+export interface GraphqlError {
+  name: string;
+  message: string;
+  stack?: string;
+}
+
+export const isGraphqlError = (er: unknown): er is GraphqlError =>
+  typeof er === "object" && er !== null && "name" in er && "message" in er;
+
 interface IAppDetailedBaseError {
   code: DetailedErrorCode;
 }

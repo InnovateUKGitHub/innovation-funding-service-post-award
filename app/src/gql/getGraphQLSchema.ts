@@ -16,10 +16,11 @@ import { isFeedAttachmentResolver } from "./resolvers/ContentDocument/isFeedAtta
 import { isOwnerResolver } from "./resolvers/ContentDocument/isOwner";
 import { configuration } from "@server/features/common/config";
 import { claimCountsResolver } from "./resolvers/Acc_Project__c/claimCounts";
+import { PayloadError } from "relay-runtime";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
-  executor: <T>({ document, variables }: ExecutionRequest) => Promise<{ data: T }>;
+  executor: <T>({ document, variables }: ExecutionRequest) => Promise<{ data: T; errors: PayloadError[] }>;
   transforms?: Transform[];
 }
 
@@ -42,7 +43,7 @@ const getGraphQLSchema = async ({ api }: { api?: TsforceConnection }) => {
   };
 
   if (api) {
-    stitchConfig.subschemas?.push(salesforceSubschema);
+    stitchConfig.subschemas?.push(salesforceSubschema as unknown as GraphQLSchema);
     Object.assign(stitchConfig, {
       typeDefs,
       resolvers: {

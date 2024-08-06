@@ -8,6 +8,7 @@ import { IClientConfig } from "../types/IClientConfig";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { RecordType } from "@ui/context/recordTypes";
 
 let versionInformation = "";
 
@@ -58,6 +59,7 @@ export function renderHtml({
   preloadedData,
   preloadedServerErrors,
   isErrorPage,
+  preloadedRecordTypes,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -74,6 +76,7 @@ export function renderHtml({
   preloadedData: AnyObject;
   preloadedServerErrors: ClientErrorResponse | null;
   isErrorPage: boolean;
+  preloadedRecordTypes: RecordType[];
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -128,6 +131,8 @@ export function renderHtml({
               preloadedServerErrors ? injectJson(preloadedServerErrors) : undefined
             }
             window.__IS_ERROR_PAGE__ = ${isErrorPage};
+            window.__PRELOADED_RECORD_TYPES__ = ${preloadedRecordTypes ? injectJson(preloadedRecordTypes) : []}
+
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

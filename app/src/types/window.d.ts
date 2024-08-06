@@ -6,6 +6,7 @@ import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { RecordType } from "@ui/context/recordTypes";
 
 declare global {
   interface Window {
@@ -21,5 +22,6 @@ declare global {
     __PRELOADED_SERVER_INPUT__?: AnyObject;
     __PRELOADED_DATA__: AnyObject | undefined;
     __PRELOADED_SERVER_ERRORS__: ClientErrorResponse | null;
+    __PRELOADED_RECORD_TYPES__: RecordType[];
   }
 }

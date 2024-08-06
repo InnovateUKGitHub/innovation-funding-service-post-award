@@ -15,6 +15,7 @@ export class GetRecordTypeQuery extends AuthorisedAsyncQueryBase<RecordType> {
 
   protected async run(context: IContext): Promise<RecordType> {
     const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
+
     const recordType = recordTypes.find(x => x.parent === this.parent && x.type === this.type);
 
     if (!recordType) {

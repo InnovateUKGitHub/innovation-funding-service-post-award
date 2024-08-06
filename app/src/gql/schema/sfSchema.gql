@@ -2,6 +2,14 @@ type Query {
   uiapi: UIAPI!
 }
 
+"""
+Beta. Entry point for create, update and delete operations to the schema.
+"""
+type Mutation {
+  """Beta. Entry point for create, update and delete operations for UI API."""
+  uiapi(input: UIAPIMutationsInput): UIAPIMutations!
+}
+
 type Acc_BroadcastMessage__c {
   LastModifiedDate: DateTimeValue
   IsDeleted: BooleanValue
@@ -1017,9 +1025,180 @@ type Acc_IFSSpendProfile__cConnection {
   pageResultCount: Int!
 }
 
+input Acc_IFSSpendProfile__cCreateInput {
+  Acc_IFSSpendProfile__c: Acc_IFSSpendProfile__cCreateRepresentation!
+}
+
+type Acc_IFSSpendProfile__cCreatePayload {
+  Record: Acc_IFSSpendProfile__c
+}
+
+input Acc_IFSSpendProfile__cCreateRepresentation {
+  Acc_DATotalEstatesCosts__c: Currency
+  Acc_ForecastInitialValue__c: Currency
+  Acc_TotalOverheadCosts1__c: Currency
+  Acc_Amount__c: Currency
+  Acc_Role__c: String
+  Acc_CostOfSubcontractor__c: Currency
+  Acc_FundingSought__c: Currency
+  Acc_OverheadRate__c: Picklist
+  Acc_CostOfRole__c: Currency
+  Acc_ProjectPeriodStartDate__c: Date
+  Acc_TotalOverheadCosts__c: Currency
+  Acc_TotalValue__c: Currency
+  Acc_AwardRate__c: Percent
+  Acc_CostEach__c: Currency
+  Acc_TotalIndirectCosts__c: Currency
+  Acc_ResidualValue__c: Currency
+  Acc_DITotalOtherCosts__c: Currency
+  Acc_TotalOtherCosts__c: Currency
+  Acc_PartnerContribution__c: Currency
+  Acc_GolValue__c: Currency
+  Acc_DateSecured__c: Date
+  Acc_ProjectParticipantID__c: IdOrRef
+  Acc_PeriodForecastStatus__c: Picklist
+  Acc_DITotalStaffCosts__c: Currency
+  Acc_DATotalInvestigatorsCosts__c: Currency
+  Acc_NewOrExisting__c: Picklist
+  Acc_Utilisation__c: Percent
+  Acc_ETotalOtherCosts__c: Currency
+  Acc_TSBReference__c: String
+  Acc_TotalSubcontractingCosts__c: Currency
+  Acc_TotalCapitalUsageCosts__c: Currency
+  Acc_Name__c: String
+  Acc_CostCategoryID__c: IdOrRef
+  Acc_DATotalOtherCosts__c: Currency
+  Acc_TotalFutureCostCategoryValue__c: Currency
+  Acc_Item__c: String
+  Acc_OCDescription__c: LongTextArea
+  Acc_NetPresentValue__c: Currency
+  Acc_TotalGolvalue__c: Currency
+  Acc_DITotalTravelCosts__c: Currency
+  Acc_OtherFunding__c: Boolean
+  Acc_DaysSpentOnProject__c: Double
+  Acc_TotalDirectlyAllocatedCosts__c: Currency
+  Acc_ItemDescription__c: LongTextArea
+  Acc_Quantity__c: Double
+  Acc_TravelCostOfItem__c: Currency
+  Acc_Country__c: String
+  OwnerId: IdOrRef
+  Acc_TotalCost__c: Currency
+  Acc_RoleAndDescription__c: LongTextArea
+  RecordTypeId: IdOrRef
+  Acc_TotalTravelCosts__c: Currency
+  Acc_ProjectPeriodEndDate__c: Date
+  Acc_TotalMaterialsCosts__c: Currency
+  Acc_ProjectChangeRequest__c: IdOrRef
+  Acc_DepreciationPeriod__c: Double
+  Acc_TotalExceptionsCosts__c: Currency
+  Acc_ETotalStaffCosts__c: Currency
+  Acc_MaterialsCostOfItem__c: Currency
+  Acc_TotalLabourCosts__c: Currency
+  Acc_TSDescription__c: TextArea
+  Acc_TotalCostCategoryValue__c: Currency
+  Acc_TotalProjectCosts__c: Currency
+  Acc_Source__c: String
+  Acc_NumberOfTimes__c: Double
+  Acc_TotalDirectlyIncurredCosts__c: Currency
+  Acc_CapitalUsageCostOfItem__c: Currency
+  Acc_OtherCostsCostOfItem__c: Currency
+  Acc_TotalIndirectCosts1__c: Currency
+  Acc_GrossCostOfRole__c: Currency
+  Acc_CostPerItem__c: Currency
+  Acc_Rate__c: Currency
+  Acc_ForecastLatestValue__c: Currency
+  Acc_ProjectPeriodNumber__c: Double
+}
+
 type Acc_IFSSpendProfile__cEdge {
   node: Acc_IFSSpendProfile__c
   cursor: String!
+}
+
+input Acc_IFSSpendProfile__cUpdateInput {
+  Acc_IFSSpendProfile__c: Acc_IFSSpendProfile__cUpdateRepresentation!
+  Id: IdOrRef!
+}
+
+type Acc_IFSSpendProfile__cUpdatePayload {
+  success: Boolean
+}
+
+input Acc_IFSSpendProfile__cUpdateRepresentation {
+  Acc_DATotalEstatesCosts__c: Currency
+  Acc_ForecastInitialValue__c: Currency
+  Acc_TotalOverheadCosts1__c: Currency
+  Acc_Amount__c: Currency
+  Acc_Role__c: String
+  Acc_CostOfSubcontractor__c: Currency
+  Acc_FundingSought__c: Currency
+  Acc_OverheadRate__c: Picklist
+  Acc_CostOfRole__c: Currency
+  Acc_ProjectPeriodStartDate__c: Date
+  Acc_TotalOverheadCosts__c: Currency
+  Acc_TotalValue__c: Currency
+  Acc_AwardRate__c: Percent
+  Acc_CostEach__c: Currency
+  Acc_TotalIndirectCosts__c: Currency
+  Acc_ResidualValue__c: Currency
+  Acc_DITotalOtherCosts__c: Currency
+  Acc_TotalOtherCosts__c: Currency
+  Acc_PartnerContribution__c: Currency
+  Acc_GolValue__c: Currency
+  Acc_DateSecured__c: Date
+  Acc_ProjectParticipantID__c: IdOrRef
+  Acc_PeriodForecastStatus__c: Picklist
+  Acc_DITotalStaffCosts__c: Currency
+  Acc_DATotalInvestigatorsCosts__c: Currency
+  Acc_NewOrExisting__c: Picklist
+  Acc_Utilisation__c: Percent
+  Acc_ETotalOtherCosts__c: Currency
+  Acc_TSBReference__c: String
+  Acc_TotalSubcontractingCosts__c: Currency
+  Acc_TotalCapitalUsageCosts__c: Currency
+  Acc_Name__c: String
+  Acc_CostCategoryID__c: IdOrRef
+  Acc_DATotalOtherCosts__c: Currency
+  Acc_TotalFutureCostCategoryValue__c: Currency
+  Acc_Item__c: String
+  Acc_OCDescription__c: LongTextArea
+  Acc_NetPresentValue__c: Currency
+  Acc_TotalGolvalue__c: Currency
+  Acc_DITotalTravelCosts__c: Currency
+  Acc_OtherFunding__c: Boolean
+  Acc_DaysSpentOnProject__c: Double
+  Acc_TotalDirectlyAllocatedCosts__c: Currency
+  Acc_ItemDescription__c: LongTextArea
+  Acc_Quantity__c: Double
+  Acc_TravelCostOfItem__c: Currency
+  Acc_Country__c: String
+  OwnerId: IdOrRef
+  Acc_TotalCost__c: Currency
+  Acc_RoleAndDescription__c: LongTextArea
+  RecordTypeId: IdOrRef
+  Acc_TotalTravelCosts__c: Currency
+  Acc_ProjectPeriodEndDate__c: Date
+  Acc_TotalMaterialsCosts__c: Currency
+  Acc_ProjectChangeRequest__c: IdOrRef
+  Acc_DepreciationPeriod__c: Double
+  Acc_TotalExceptionsCosts__c: Currency
+  Acc_ETotalStaffCosts__c: Currency
+  Acc_MaterialsCostOfItem__c: Currency
+  Acc_TotalLabourCosts__c: Currency
+  Acc_TSDescription__c: TextArea
+  Acc_TotalCostCategoryValue__c: Currency
+  Acc_TotalProjectCosts__c: Currency
+  Acc_Source__c: String
+  Acc_NumberOfTimes__c: Double
+  Acc_TotalDirectlyIncurredCosts__c: Currency
+  Acc_CapitalUsageCostOfItem__c: Currency
+  Acc_OtherCostsCostOfItem__c: Currency
+  Acc_TotalIndirectCosts1__c: Currency
+  Acc_GrossCostOfRole__c: Currency
+  Acc_CostPerItem__c: Currency
+  Acc_Rate__c: Currency
+  Acc_ForecastLatestValue__c: Currency
+  Acc_ProjectPeriodNumber__c: Double
 }
 
 input Acc_IFSSpendProfile__c_Filter {
@@ -2264,9 +2443,222 @@ type Acc_ProjectChangeRequest__cConnection {
   pageResultCount: Int!
 }
 
+input Acc_ProjectChangeRequest__cCreateInput {
+  Acc_ProjectChangeRequest__c: Acc_ProjectChangeRequest__cCreateRepresentation!
+}
+
+type Acc_ProjectChangeRequest__cCreatePayload {
+  Record: Acc_ProjectChangeRequest__c
+}
+
+input Acc_ProjectChangeRequest__cCreateRepresentation {
+  Acc_Employees__c: Double
+  Acc_Contact1ProjectRole__c: Picklist
+  Acc_Contact1Forename__c: String
+  Acc_ExternalReviewCompletedDate__c: Date
+  Acc_FastTrack__c: Boolean
+  Acc_ProjectRole__c: Picklist
+  Acc_Approved__c: Boolean
+  Acc_Contact1__c: IdOrRef
+  Acc_AwardRate__c: Percent
+  Acc_NewOrganisationName__c: LongTextArea
+  Acc_RequestHeader__c: IdOrRef
+  Acc_Reasoning__c: LongTextArea
+  Acc_RegisteredAddress__c: LongTextArea
+  Acc_ExistingProjectDuration__c: Double
+  Acc_TerminationDate__c: Date
+  Acc_ExistingEndDate__c: Date
+  Acc_ReasonForWithdrawal__c: Picklist
+  Acc_ParticipantSize__c: Picklist
+  Acc_ProjectSummarySnapshot__c: LongTextArea
+  Acc_TotalOtherFunding__c: Currency
+  Override_Grant_Control__c: Boolean
+  Acc_SuspensionStarts__c: Date
+  New_company_subcontractor_name__c: String
+  Acc_Nickname__c: String
+  OwnerId: IdOrRef
+  Justification__c: LongTextArea
+  Acc_TurnoverYearEnd__c: Date
+  RecordTypeId: IdOrRef
+  Acc_ApprovalStatus__c: Picklist
+  Acc_Profile__c: IdOrRef
+  Acc_Project_Participant__c: IdOrRef
+  Acc_PriorStatusValue__c: TextArea
+  Country_where_work_will_be_carried_out__c: String
+  Acc_TypesofPCRRequests__c: LongTextArea
+  Acc_RemovalPeriod__c: Double
+  Acc_Status__c: Picklist
+  Acc_ParticipantType__c: Picklist
+  Acc_RemovalDate__c: Date
+  Loan_RepaymentPeriodChange__c: Double
+  Acc_Contact1EmailAddress__c: String
+  Acc_LastUpdated__c: Date
+  Acc_RequestNumber__c: Double
+  Acc_GrantMovingOverFinancialYear__c: Currency
+  Acc_Rejected__c: Boolean
+  Acc_Project__c: IdOrRef
+  Acc_RequestedEndDate__c: Date
+  Acc_ExternalReviewRequestedDate__c: Date
+  Acc_Contact2Surname__c: String
+  Acc_Guidance__c: LongTextArea
+  Acc_Account__c: IdOrRef
+  Days_in_previous_statuses__c: Double
+  Acc_RequestedEndPeriod__c: Double
+  Acc_ProjectContactLink__c: IdOrRef
+  Acc_ExternalReviewStatus__c: Picklist
+  Acc_ReasonforTermination__c: Picklist
+  Acc_Contact2Phone__c: String
+  Cost_of_work__c: Currency
+  Acc_Approval_Setting_Name__c: String
+  Acc_Contact2ProjectRole__c: Picklist
+  Acc_Subsidiary__c: Boolean
+  Role_in_the_project__c: String
+  Company_registration_number__c: String
+  Acc_ProjectPostcode__c: String
+  Acc_Contact1Surname__c: String
+  Acc_EligibleForStateAid__c: Boolean
+  Acc_NewPeriodLength__c: Picklist
+  Acc_RegistrationNumber__c: String
+  Acc_Contact2Forename__c: String
+  Status_change_date__c: Date
+  Acc_TSBReference__c: String
+  Acc_OrganisationName__c: String
+  Acc_CommercialWork__c: Boolean
+  Acc_Turnover__c: Currency
+  Loan_ExtensionPeriodChange__c: Double
+  Acc_OtherFunding__c: Boolean
+  Relationship_between_partners__c: Boolean
+  Allow_Flow_To_Override_Status_Changes__c: Boolean
+  Acc_AdditionalNumberofMonths__c: Double
+  Acc_Location__c: Picklist
+  Acc_MarkedasComplete__c: Picklist
+  Acc_Contact1Phone__c: String
+  Acc_NewPublicDescription__c: LongTextArea
+  Acc_SuspensionEnds__c: Date
+  Acc_NewProjectSummary__c: LongTextArea
+  Acc_NewProjectDuration__c: Double
+  Acc_NewProjectEndDate__c: Date
+  Override_Justification__c: String
+  Acc_TypeofWithdrawal__c: Picklist
+  Acc_PublicDescriptionSnapshot__c: LongTextArea
+  Acc_ProjectCity__c: String
+  Acc_Contact2__c: IdOrRef
+  Acc_Contact2EmailAddress__c: String
+  Relationship_justification__c: LongTextArea
+  Acc_Comments__c: LongTextArea
+  Acc_ExistingPartnerName__c: TextArea
+}
+
 type Acc_ProjectChangeRequest__cEdge {
   node: Acc_ProjectChangeRequest__c
   cursor: String!
+}
+
+input Acc_ProjectChangeRequest__cUpdateInput {
+  Acc_ProjectChangeRequest__c: Acc_ProjectChangeRequest__cUpdateRepresentation!
+  Id: IdOrRef!
+}
+
+type Acc_ProjectChangeRequest__cUpdatePayload {
+  success: Boolean
+}
+
+input Acc_ProjectChangeRequest__cUpdateRepresentation {
+  Acc_Employees__c: Double
+  Acc_Contact1ProjectRole__c: Picklist
+  Acc_Contact1Forename__c: String
+  Acc_ExternalReviewCompletedDate__c: Date
+  Acc_FastTrack__c: Boolean
+  Acc_ProjectRole__c: Picklist
+  Acc_Approved__c: Boolean
+  Acc_Contact1__c: IdOrRef
+  Acc_AwardRate__c: Percent
+  Acc_NewOrganisationName__c: LongTextArea
+  Acc_RequestHeader__c: IdOrRef
+  Acc_Reasoning__c: LongTextArea
+  Acc_RegisteredAddress__c: LongTextArea
+  Acc_ExistingProjectDuration__c: Double
+  Acc_TerminationDate__c: Date
+  Acc_ExistingEndDate__c: Date
+  Acc_ReasonForWithdrawal__c: Picklist
+  Acc_ParticipantSize__c: Picklist
+  Acc_ProjectSummarySnapshot__c: LongTextArea
+  Acc_TotalOtherFunding__c: Currency
+  Override_Grant_Control__c: Boolean
+  Acc_SuspensionStarts__c: Date
+  New_company_subcontractor_name__c: String
+  Acc_Nickname__c: String
+  OwnerId: IdOrRef
+  Justification__c: LongTextArea
+  Acc_TurnoverYearEnd__c: Date
+  RecordTypeId: IdOrRef
+  Acc_ApprovalStatus__c: Picklist
+  Acc_Profile__c: IdOrRef
+  Acc_Project_Participant__c: IdOrRef
+  Acc_PriorStatusValue__c: TextArea
+  Country_where_work_will_be_carried_out__c: String
+  Acc_TypesofPCRRequests__c: LongTextArea
+  Acc_RemovalPeriod__c: Double
+  Acc_Status__c: Picklist
+  Acc_ParticipantType__c: Picklist
+  Acc_RemovalDate__c: Date
+  Loan_RepaymentPeriodChange__c: Double
+  Acc_Contact1EmailAddress__c: String
+  Acc_LastUpdated__c: Date
+  Acc_RequestNumber__c: Double
+  Acc_GrantMovingOverFinancialYear__c: Currency
+  Acc_Rejected__c: Boolean
+  Acc_Project__c: IdOrRef
+  Acc_RequestedEndDate__c: Date
+  Acc_ExternalReviewRequestedDate__c: Date
+  Acc_Contact2Surname__c: String
+  Acc_Guidance__c: LongTextArea
+  Acc_Account__c: IdOrRef
+  Days_in_previous_statuses__c: Double
+  Acc_RequestedEndPeriod__c: Double
+  Acc_ProjectContactLink__c: IdOrRef
+  Acc_ExternalReviewStatus__c: Picklist
+  Acc_ReasonforTermination__c: Picklist
+  Acc_Contact2Phone__c: String
+  Cost_of_work__c: Currency
+  Acc_Approval_Setting_Name__c: String
+  Acc_Contact2ProjectRole__c: Picklist
+  Acc_Subsidiary__c: Boolean
+  Role_in_the_project__c: String
+  Company_registration_number__c: String
+  Acc_ProjectPostcode__c: String
+  Acc_Contact1Surname__c: String
+  Acc_EligibleForStateAid__c: Boolean
+  Acc_NewPeriodLength__c: Picklist
+  Acc_RegistrationNumber__c: String
+  Acc_Contact2Forename__c: String
+  Status_change_date__c: Date
+  Acc_TSBReference__c: String
+  Acc_OrganisationName__c: String
+  Acc_CommercialWork__c: Boolean
+  Acc_Turnover__c: Currency
+  Loan_ExtensionPeriodChange__c: Double
+  Acc_OtherFunding__c: Boolean
+  Relationship_between_partners__c: Boolean
+  Allow_Flow_To_Override_Status_Changes__c: Boolean
+  Acc_AdditionalNumberofMonths__c: Double
+  Acc_Location__c: Picklist
+  Acc_MarkedasComplete__c: Picklist
+  Acc_Contact1Phone__c: String
+  Acc_NewPublicDescription__c: LongTextArea
+  Acc_SuspensionEnds__c: Date
+  Acc_NewProjectSummary__c: LongTextArea
+  Acc_NewProjectDuration__c: Double
+  Acc_NewProjectEndDate__c: Date
+  Override_Justification__c: String
+  Acc_TypeofWithdrawal__c: Picklist
+  Acc_PublicDescriptionSnapshot__c: LongTextArea
+  Acc_ProjectCity__c: String
+  Acc_Contact2__c: IdOrRef
+  Acc_Contact2EmailAddress__c: String
+  Relationship_justification__c: LongTextArea
+  Acc_Comments__c: LongTextArea
+  Acc_ExistingPartnerName__c: TextArea
 }
 
 input Acc_ProjectChangeRequest__c_Filter {
@@ -3026,9 +3418,234 @@ type Acc_ProjectParticipant__cConnection {
   pageResultCount: Int!
 }
 
+input Acc_ProjectParticipant__cCreateInput {
+  Acc_ProjectParticipant__c: Acc_ProjectParticipant__cCreateRepresentation!
+}
+
+type Acc_ProjectParticipant__cCreatePayload {
+  Record: Acc_ProjectParticipant__c
+}
+
+input Acc_ProjectParticipant__cCreateRepresentation {
+  Acc_CreateClaims__c: Boolean
+  Acc_VerificationConditionsDesc__c: String
+  Acc_AddressTown__c: String
+  Acc_CompanysHouseNumber__c: String
+  Acc_ProjectRole__c: Picklist
+  Acc_ManuallyVerified__c: Boolean
+  Acc_ClaimsOverdue__c: Double
+  Acc_TotalFutureForecastsForParticipant__c: Currency
+  Acc_AddressBuildingName__c: String
+  IM_Survey_Form__c: IdOrRef
+  Acc_SortCode__c: EncryptedString
+  Acc_TotalGrantApproved__c: Currency
+  IM_Survey__c: String
+  Acc_VerificationConditionsSeverity__c: String
+  Acc_DeferredGrant__c: Currency
+  Acc_PostcodeStatus__c: Picklist
+  Acc_FlaggedParticipant__c: Boolean
+  Acc_ReasonForWithdrawal__c: Picklist
+  Acc_ParticipantSize__c: Picklist
+  Acc_Cap_Limit__c: Percent
+  Acc_Award_Rate__c: Percent
+  Acc_AccountValidation__c: Picklist
+  Acc_AccountVerification__c: Picklist
+  Acc_Overdue_Claim_Helper__c: Boolean
+  Acc_FinanceContact__c: IdOrRef
+  Acc_ForecastLastModifiedDate__c: DateTime
+  Acc_ProjectManager__c: IdOrRef
+  Acc_FinalClaim__c: Boolean
+  Acc_TotalCostsSubmitted__c: Currency
+  Acc_CompanyName__c: String
+  Acc_VerificationConditionsCode__c: String
+  Acc_Prepayment__c: Boolean
+  Acc_AddressOrganisation__c: String
+  Acc_AuditReportFrequency__c: Picklist
+  Acc_NewForecastNeeded__c: Boolean
+  No_Of_Periods__c: Double
+  Acc_ParticipantProjectReportingType__c: Picklist
+  Acc_AccountNumber__c: EncryptedString
+  Acc_CompanyNameAndAddressScore__c: Double
+  Acc_SpendProfileCompleted__c: Picklist
+  Acc_ValidationConditionsDesc__c: String
+  OwnerId: IdOrRef
+  Acc_Iban__c: EncryptedString
+  Acc_WorkdaySupplierSetupComplete__c: Boolean
+  Acc_AddressPostcode__c: String
+  Acc_ParticipantType__c: Picklist
+  Acc_Open_Claim_Period__c: Double
+  Acc_FlaggedParticipantComments__c: LongTextArea
+  Acc_TotalApprovedCosts__c: Currency
+  Acc_FinanceContactPcl__c: IdOrRef
+  Acc_OrganisationType__c: Picklist
+  Acc_Total_Prepayment_Approved__c: Double
+  IM_Survey_Stage__c: String
+  Acc_FirstName__c: String
+  Acc_AccountId__c: IdOrRef
+  Acc_ValidationConditionsCode__c: String
+  Acc_NonfundedParticipant__c: Boolean
+  Acc_TotalPaidCosts__c: Currency
+  Acc_OverheadRate__c: Percent
+  Acc_TotalParticipationGrantHelper__c: Double
+  Acc_Recovery__c: Picklist
+  Acc_ValidationCheckPassed__c: Boolean
+  Acc_OverdueEmailsSent__c: MultiPicklist
+  Acc_Postcode__c: String
+  Acc_CurrentPeriodNumber__c: Double
+  Acc_ParticipantStatus__c: Picklist
+  Acc_AddressStreet__c: String
+  Acc_BacsCheck__c: String
+  Acc_RegistrationNumberMatch__c: String
+  Acc_OrganisationLegalForm__c: Picklist
+  Acc_TotalParticipantCosts__c: Currency
+  Acc_RegistrationNumber__c: String
+  Acc_CapLimitDeferredGrantHelper__c: Currency
+  Acc_CompanyNameScore__c: Double
+  Acc_Total_Prepayment_Not_Approved__c: Double
+  Acc_BankAccountName__c: String
+  Acc_BankCheckState__c: Picklist
+  Acc_CreateProfiles__c: Boolean
+  Acc_AddressScore__c: Double
+  Acc_LastName__c: String
+  Acc_TotalForecastsForParticipant__c: Currency
+  Acc_OpenClaimStatus__c: String
+  Acc_TotalPrepayment__c: Currency
+  Acc_OverrideOverdueProject__c: Picklist
+  Acc_Total_Prepayment_created__c: Double
+  Acc_OutstandingDeferredCosts__c: Currency
+  IM_Survey_Status__c: Picklist
+  Acc_PersonalDetailsScore__c: Double
+  Acc_ValidationConditionsSeverity__c: String
+  Acc_RegNumberScore__c: String
+  Acc_AccountValidationNotes__c: String
+  Acc_MonitoringOfficer__c: IdOrRef
+  Acc_ClaimsUnderQuery__c: Double
+  ParticipantMigrationID__c: String
+  Acc_ClaimsForReview__c: Double
+  Excess_Award_Rate__c: Percent
+  Acc_TrackingClaims__c: Picklist
+  Acc_AddressLocality__c: String
+  Acc_BankCheckCompleted__c: Picklist
+  Acc_ProjectId__c: IdOrRef
+  IM_Survey_Last_Updated__c: Date
+}
+
 type Acc_ProjectParticipant__cEdge {
   node: Acc_ProjectParticipant__c
   cursor: String!
+}
+
+input Acc_ProjectParticipant__cUpdateInput {
+  Acc_ProjectParticipant__c: Acc_ProjectParticipant__cUpdateRepresentation!
+  Id: IdOrRef!
+}
+
+type Acc_ProjectParticipant__cUpdatePayload {
+  success: Boolean
+}
+
+input Acc_ProjectParticipant__cUpdateRepresentation {
+  Acc_CreateClaims__c: Boolean
+  Acc_VerificationConditionsDesc__c: String
+  Acc_AddressTown__c: String
+  Acc_CompanysHouseNumber__c: String
+  Acc_ProjectRole__c: Picklist
+  Acc_ManuallyVerified__c: Boolean
+  Acc_ClaimsOverdue__c: Double
+  Acc_TotalFutureForecastsForParticipant__c: Currency
+  Acc_AddressBuildingName__c: String
+  IM_Survey_Form__c: IdOrRef
+  Acc_SortCode__c: EncryptedString
+  Acc_TotalGrantApproved__c: Currency
+  IM_Survey__c: String
+  Acc_VerificationConditionsSeverity__c: String
+  Acc_DeferredGrant__c: Currency
+  Acc_PostcodeStatus__c: Picklist
+  Acc_FlaggedParticipant__c: Boolean
+  Acc_ReasonForWithdrawal__c: Picklist
+  Acc_ParticipantSize__c: Picklist
+  Acc_Cap_Limit__c: Percent
+  Acc_Award_Rate__c: Percent
+  Acc_AccountValidation__c: Picklist
+  Acc_AccountVerification__c: Picklist
+  Acc_Overdue_Claim_Helper__c: Boolean
+  Acc_FinanceContact__c: IdOrRef
+  Acc_ForecastLastModifiedDate__c: DateTime
+  Acc_ProjectManager__c: IdOrRef
+  Acc_FinalClaim__c: Boolean
+  Acc_TotalCostsSubmitted__c: Currency
+  Acc_CompanyName__c: String
+  Acc_VerificationConditionsCode__c: String
+  Acc_Prepayment__c: Boolean
+  Acc_AddressOrganisation__c: String
+  Acc_AuditReportFrequency__c: Picklist
+  Acc_NewForecastNeeded__c: Boolean
+  No_Of_Periods__c: Double
+  Acc_ParticipantProjectReportingType__c: Picklist
+  Acc_AccountNumber__c: EncryptedString
+  Acc_CompanyNameAndAddressScore__c: Double
+  Acc_SpendProfileCompleted__c: Picklist
+  Acc_ValidationConditionsDesc__c: String
+  OwnerId: IdOrRef
+  Acc_Iban__c: EncryptedString
+  Acc_WorkdaySupplierSetupComplete__c: Boolean
+  Acc_AddressPostcode__c: String
+  Acc_ParticipantType__c: Picklist
+  Acc_Open_Claim_Period__c: Double
+  Acc_FlaggedParticipantComments__c: LongTextArea
+  Acc_TotalApprovedCosts__c: Currency
+  Acc_FinanceContactPcl__c: IdOrRef
+  Acc_OrganisationType__c: Picklist
+  Acc_Total_Prepayment_Approved__c: Double
+  IM_Survey_Stage__c: String
+  Acc_FirstName__c: String
+  Acc_AccountId__c: IdOrRef
+  Acc_ValidationConditionsCode__c: String
+  Acc_NonfundedParticipant__c: Boolean
+  Acc_TotalPaidCosts__c: Currency
+  Acc_OverheadRate__c: Percent
+  Acc_TotalParticipationGrantHelper__c: Double
+  Acc_Recovery__c: Picklist
+  Acc_ValidationCheckPassed__c: Boolean
+  Acc_OverdueEmailsSent__c: MultiPicklist
+  Acc_Postcode__c: String
+  Acc_CurrentPeriodNumber__c: Double
+  Acc_ParticipantStatus__c: Picklist
+  Acc_AddressStreet__c: String
+  Acc_BacsCheck__c: String
+  Acc_RegistrationNumberMatch__c: String
+  Acc_OrganisationLegalForm__c: Picklist
+  Acc_TotalParticipantCosts__c: Currency
+  Acc_RegistrationNumber__c: String
+  Acc_CapLimitDeferredGrantHelper__c: Currency
+  Acc_CompanyNameScore__c: Double
+  Acc_Total_Prepayment_Not_Approved__c: Double
+  Acc_BankAccountName__c: String
+  Acc_BankCheckState__c: Picklist
+  Acc_CreateProfiles__c: Boolean
+  Acc_AddressScore__c: Double
+  Acc_LastName__c: String
+  Acc_TotalForecastsForParticipant__c: Currency
+  Acc_OpenClaimStatus__c: String
+  Acc_TotalPrepayment__c: Currency
+  Acc_OverrideOverdueProject__c: Picklist
+  Acc_Total_Prepayment_created__c: Double
+  Acc_OutstandingDeferredCosts__c: Currency
+  IM_Survey_Status__c: Picklist
+  Acc_PersonalDetailsScore__c: Double
+  Acc_ValidationConditionsSeverity__c: String
+  Acc_RegNumberScore__c: String
+  Acc_AccountValidationNotes__c: String
+  Acc_MonitoringOfficer__c: IdOrRef
+  Acc_ClaimsUnderQuery__c: Double
+  ParticipantMigrationID__c: String
+  Acc_ClaimsForReview__c: Double
+  Excess_Award_Rate__c: Percent
+  Acc_TrackingClaims__c: Picklist
+  Acc_AddressLocality__c: String
+  Acc_BankCheckCompleted__c: Picklist
+  Acc_ProjectId__c: IdOrRef
+  IM_Survey_Last_Updated__c: Date
 }
 
 input Acc_ProjectParticipant__c_Filter {
@@ -3555,9 +4172,152 @@ type Acc_Project__cConnection {
   pageResultCount: Int!
 }
 
+input Acc_Project__cCreateInput {
+  Acc_Project__c: Acc_Project__cCreateRepresentation!
+}
+
+type Acc_Project__cCreatePayload {
+  Record: Acc_Project__c
+}
+
+input Acc_Project__cCreateRepresentation {
+  Acc_ProjectNumber__c: String
+  Acc_ProjectReportingType__c: Picklist
+  Acc_CurrentPeriodStartDateHelper__c: Date
+  Acc_WorkdayParticipantCompleteHelper__c: Boolean
+  Acc_AwardRate__c: Percent
+  Acc_ClaimsOverdue__c: Double
+  Acc_LegacyID__c: String
+  Acc_FlaggedProject__c: Boolean
+  Acc_TotalFutureForecastsforProject__c: Currency
+  Acc_Sector__c: MultiPicklist
+  Acc_Overdue_Claim_Helper__c: Boolean
+  Acc_CompetitionId__c: IdOrRef
+  Acc_HubAndSpokeProject__c: Boolean
+  Acc_SuspensionStartDate__c: Date
+  Loan_LoanRepaymentPeriodLength__c: Double
+  Loan_LoanAvailabilityPeriodLength__c: Double
+  Acc_MonitoringReportSchedule__c: Picklist
+  Acc_NumberofPCRs__c: Double
+  Acc_LeadParticipantName__c: String
+  OwnerId: IdOrRef
+  Loans_RnDStatus__c: Picklist
+  Acc_CurrentPeriodNumberHelper__c: Double
+  Acc_ProjectTitle__c: String
+  Acc_NonFEC__c: Boolean
+  Acc_TotalProjectGrant__c: Currency
+  Acc_WorkdayProjectSetupComplete__c: Boolean
+  Loan_LoanExtensionPeriodLength__c: Double
+  Acc_TestProject__c: Boolean
+  Acc_NumberofPeriodsHelper__c: Double
+  Acc_LeadParticipantID__c: String
+  Acc_ProjectStatus__c: Picklist
+  IM_Phase1ProjectNumber__c: String
+  Acc_NumberOfOpenClaims__c: Double
+  Acc_ProjectSource__c: Picklist
+  Acc_ReasonForTermination__c: Picklist
+  Acc_StartDate__c: Date
+  Acc_ClaimFrequency__c: Picklist
+  Loan_LoanApplicationID__c: String
+  Acc_Duration__c: Double
+  Acc_IFSApplicationId__c: Double
+  Acc_SuspensionEndDate__c: Date
+  Acc_MonitoringLevel__c: Picklist
+  Acc_LinkedProject__c: IdOrRef
+  Acc_TrackingClaimStatus__c: Picklist
+  Acc_OfferLetterDate__c: Date
+  Acc_PCRsForReview__c: Double
+  Acc_PublicDescription__c: LongTextArea
+  Acc_PCRsUnderQuery__c: Double
+  Acc_TSBProjectNumber__c: Double
+  Loans_DocusignRDConfirmation__c: Picklist
+  Acc_GOLTotalCostAwarded__c: Currency
+  Acc_PeriodLengthChanged__c: Boolean
+  Acc_UpdatingDuration__c: Boolean
+  Acc_ProjectSummary__c: LongTextArea
+  Acc_CurrentPeriodEndDateHelper__c: Date
+  Loan_FinanceContact__c: IdOrRef
+  Acc_ClaimsUnderQuery__c: Double
+  Acc_TotalProjectCosts__c: Currency
+  Acc_FlaggedProjectComments__c: LongTextArea
+  Acc_ClaimsForReview__c: Double
+}
+
 type Acc_Project__cEdge {
   node: Acc_Project__c
   cursor: String!
+}
+
+input Acc_Project__cUpdateInput {
+  Acc_Project__c: Acc_Project__cUpdateRepresentation!
+  Id: IdOrRef!
+}
+
+type Acc_Project__cUpdatePayload {
+  success: Boolean
+}
+
+input Acc_Project__cUpdateRepresentation {
+  Acc_ProjectNumber__c: String
+  Acc_ProjectReportingType__c: Picklist
+  Acc_CurrentPeriodStartDateHelper__c: Date
+  Acc_WorkdayParticipantCompleteHelper__c: Boolean
+  Acc_AwardRate__c: Percent
+  Acc_ClaimsOverdue__c: Double
+  Acc_LegacyID__c: String
+  Acc_FlaggedProject__c: Boolean
+  Acc_TotalFutureForecastsforProject__c: Currency
+  Acc_Sector__c: MultiPicklist
+  Acc_Overdue_Claim_Helper__c: Boolean
+  Acc_CompetitionId__c: IdOrRef
+  Acc_HubAndSpokeProject__c: Boolean
+  Acc_SuspensionStartDate__c: Date
+  Loan_LoanRepaymentPeriodLength__c: Double
+  Loan_LoanAvailabilityPeriodLength__c: Double
+  Acc_MonitoringReportSchedule__c: Picklist
+  Acc_NumberofPCRs__c: Double
+  Acc_LeadParticipantName__c: String
+  OwnerId: IdOrRef
+  Loans_RnDStatus__c: Picklist
+  Acc_CurrentPeriodNumberHelper__c: Double
+  Acc_ProjectTitle__c: String
+  Acc_NonFEC__c: Boolean
+  Acc_TotalProjectGrant__c: Currency
+  Acc_WorkdayProjectSetupComplete__c: Boolean
+  Loan_LoanExtensionPeriodLength__c: Double
+  Acc_TestProject__c: Boolean
+  Acc_NumberofPeriodsHelper__c: Double
+  Acc_LeadParticipantID__c: String
+  Acc_ProjectStatus__c: Picklist
+  IM_Phase1ProjectNumber__c: String
+  Acc_NumberOfOpenClaims__c: Double
+  Acc_ProjectSource__c: Picklist
+  Acc_ReasonForTermination__c: Picklist
+  Acc_StartDate__c: Date
+  Acc_ClaimFrequency__c: Picklist
+  Loan_LoanApplicationID__c: String
+  Acc_Duration__c: Double
+  Acc_IFSApplicationId__c: Double
+  Acc_SuspensionEndDate__c: Date
+  Acc_MonitoringLevel__c: Picklist
+  Acc_LinkedProject__c: IdOrRef
+  Acc_TrackingClaimStatus__c: Picklist
+  Acc_OfferLetterDate__c: Date
+  Acc_PCRsForReview__c: Double
+  Acc_PublicDescription__c: LongTextArea
+  Acc_PCRsUnderQuery__c: Double
+  Acc_TSBProjectNumber__c: Double
+  Loans_DocusignRDConfirmation__c: Picklist
+  Acc_GOLTotalCostAwarded__c: Currency
+  Acc_PeriodLengthChanged__c: Boolean
+  Acc_UpdatingDuration__c: Boolean
+  Acc_ProjectSummary__c: LongTextArea
+  Acc_CurrentPeriodEndDateHelper__c: Date
+  Loan_FinanceContact__c: IdOrRef
+  Acc_ClaimsUnderQuery__c: Double
+  Acc_TotalProjectCosts__c: Currency
+  Acc_FlaggedProjectComments__c: LongTextArea
+  Acc_ClaimsForReview__c: Double
 }
 
 input Acc_Project__c_Filter {
@@ -6027,29 +6787,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  YESTERDAY
-  THIS_MONTH
   TODAY
   LAST_WEEK
-  NEXT_QUARTER
-  NEXT_MONTH
-  THIS_FISCAL_QUARTER
-  LAST_FISCAL_YEAR
-  NEXT_FISCAL_YEAR
-  NEXT_90_DAYS
-  LAST_90_DAYS
-  LAST_QUARTER
-  LAST_YEAR
-  THIS_FISCAL_YEAR
-  TOMORROW
-  THIS_WEEK
-  NEXT_YEAR
-  THIS_QUARTER
   LAST_MONTH
-  NEXT_FISCAL_QUARTER
-  LAST_FISCAL_QUARTER
-  NEXT_WEEK
+  LAST_QUARTER
+  LAST_FISCAL_YEAR
+  NEXT_MONTH
+  NEXT_QUARTER
+  THIS_FISCAL_YEAR
+  NEXT_90_DAYS
   THIS_YEAR
+  LAST_FISCAL_QUARTER
+  LAST_YEAR
+  YESTERDAY
+  NEXT_FISCAL_YEAR
+  TOMORROW
+  NEXT_WEEK
+  NEXT_YEAR
+  THIS_WEEK
+  THIS_MONTH
+  THIS_QUARTER
+  NEXT_FISCAL_QUARTER
+  LAST_90_DAYS
+  THIS_FISCAL_QUARTER
 }
 
 input DateOperators {
@@ -6507,6 +7267,11 @@ input IdOperators {
   nin: [ID]
 }
 
+"""
+Can be set to an ID or a Reference to the result of another mutation operation.
+"""
+scalar IdOrRef
+
 type IntAggregate {
   value: Int
   displayValue: String
@@ -6669,11 +7434,11 @@ input NoFunctionAggregateOrderByClause {
 
 """Enum representing possible null ordering options."""
 enum NullOrder {
-  """The enum value represents null first order."""
-  FIRST
-
   """The enum value represents null last order."""
   LAST
+
+  """The enum value represents null first order."""
+  FIRST
 }
 
 enum NullsOrder {
@@ -7140,6 +7905,18 @@ type PicklistValue {
   label: String
 }
 
+"""Input to the mutation to delete a Record"""
+input RecordDeleteInput {
+  """The ID of the Record to delete"""
+  Id: IdOrRef!
+}
+
+"""The return value for the mutation to delete a Record"""
+type RecordDeletePayload {
+  """The ID of the deleted Record"""
+  Id: ID
+}
+
 type RecordQuery {
   """Issues a query for the specified record type."""
   Acc_BroadcastMessage__c(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
@@ -7317,11 +8094,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents descending order."""
-  DESC
-
   """The enum value represents ascending order."""
   ASC
+
+  """The enum value represents descending order."""
+  DESC
 }
 
 enum ResultsOrder {
@@ -7519,6 +8296,93 @@ type UIAPI {
     """
     locale: String
   ): [ObjectInfo]
+}
+
+type UIAPIMutations {
+  """Delete an existing Record"""
+  Acc_BatchSettings__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_BroadcastMessage__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_Claims__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_CostCategory__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_DocumentType__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_EmailSenders__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Create a new Record"""
+  Acc_IFSSpendProfile__cCreate(input: Acc_IFSSpendProfile__cCreateInput!): Acc_IFSSpendProfile__cCreatePayload
+
+  """Update an existing Record"""
+  Acc_IFSSpendProfile__cUpdate(input: Acc_IFSSpendProfile__cUpdateInput!): Acc_IFSSpendProfile__cUpdatePayload
+
+  """Delete an existing Record"""
+  Acc_IFSSpendProfile__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_MonitoringAnswer__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_MonitoringQuestion__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_Prepayment__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_Profile__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_Programme__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Create a new Record"""
+  Acc_ProjectChangeRequest__cCreate(input: Acc_ProjectChangeRequest__cCreateInput!): Acc_ProjectChangeRequest__cCreatePayload
+
+  """Update an existing Record"""
+  Acc_ProjectChangeRequest__cUpdate(input: Acc_ProjectChangeRequest__cUpdateInput!): Acc_ProjectChangeRequest__cUpdatePayload
+
+  """Delete an existing Record"""
+  Acc_ProjectChangeRequest__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_ProjectContactLink__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Create a new Record"""
+  Acc_ProjectParticipant__cCreate(input: Acc_ProjectParticipant__cCreateInput!): Acc_ProjectParticipant__cCreatePayload
+
+  """Update an existing Record"""
+  Acc_ProjectParticipant__cUpdate(input: Acc_ProjectParticipant__cUpdateInput!): Acc_ProjectParticipant__cUpdatePayload
+
+  """Delete an existing Record"""
+  Acc_ProjectParticipant__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Create a new Record"""
+  Acc_Project__cCreate(input: Acc_Project__cCreateInput!): Acc_Project__cCreatePayload
+
+  """Update an existing Record"""
+  Acc_Project__cUpdate(input: Acc_Project__cUpdateInput!): Acc_Project__cUpdatePayload
+
+  """Delete an existing Record"""
+  Acc_Project__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_StatusChange__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+
+  """Delete an existing Record"""
+  Acc_Virements__cDelete(input: RecordDeleteInput!): RecordDeletePayload
+}
+
+input UIAPIMutationsInput {
+  """
+  Determines whether or not all the operations should be rolled back in the event one or more operations fail.
+  """
+  allOrNone: Boolean = true
 }
 
 scalar Url

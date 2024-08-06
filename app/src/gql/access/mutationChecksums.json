@@ -1,0 +1,12 @@
+{
+  "PcrItemUpdateMutation": "f1e617cc4e4e5b0937f8b7be19a41bf9",
+  "PcrDeleteMutation": "a5061fe7fba1f34bbbe23c820712407c",
+  "PcrReasoningMutation": "97820033a8718e0da47a1a752b382af7",
+  "PcrModifyOptionsCreateMultipleMutation": "dd3e43529f6b9e56daa8a4b1d9dc7229",
+  "PcrModifyOptionsCreateHeaderMutation": "7518365e4943b67e18b7ba7a011ed68c",
+  "PcrModifyOptionsCreateMutation": "b59f4a84f9c3016e129ed39d86ca7541",
+  "SpendProfileUpdateItemMutation": "4adb5f50be781a8be5affce115ef1a6e",
+  "SpendProfileDeleteItemMutation": "1c16ae875246ae0387bf437654373d0a",
+  "SpendProfileCreateItemMutation": "1f400f5d475b77ef5c277c75aa14e4f4",
+  "PartnerDetailsEditMutation": "fd9f89ada4a8041b9f4f0d8e17b3412e"
+}

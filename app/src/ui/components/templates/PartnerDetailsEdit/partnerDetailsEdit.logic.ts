@@ -2,12 +2,14 @@ import { useLazyLoadQuery } from "react-relay";
 import { partnerDetailsEditQuery } from "./PartnerDetailsEdit.query";
 import { PartnerDetailsEditQuery } from "./__generated__/PartnerDetailsEditQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { clientsideApiClient } from "@ui/apiClient";
+import { useOnMutation } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
-import { PartnerStatus } from "@framework/constants/partner";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { partnerDetailsEditMutation } from "./PartnerDetailsEdit.mutation";
+import { PartnerDetailsEditMutation } from "./__generated__/PartnerDetailsEditMutation.graphql";
+import { noop } from "lodash";
+import { z } from "zod";
+import { PartnerDetailsEditSchema } from "./partnerDetailsEdit.zod";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -27,29 +29,13 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
   };
 };
 
-export type FormValues = {
-  postcode: string;
-  partnerStatus: PartnerStatus;
-};
-
-export const useOnUpdatePartnerDetails = (
-  partnerId: PartnerId,
-  projectId: ProjectId,
-  navigateTo: string,
-  partner: Partial<PartnerDto>,
-) => {
+export const useOnUpdatePartnerDetails = (partnerId: PartnerId, projectId: ProjectId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<PartnerDto, "postcode">>({
-    req: data =>
-      clientsideApiClient.partners.updatePartner({
-        partnerId,
-        partnerDto: {
-          ...partner,
-          postcode: data.postcode,
-          id: partnerId,
-          projectId,
-        },
-      }),
-    onSuccess: () => navigate(navigateTo),
-  });
+
+  return useOnMutation<PartnerDetailsEditMutation, z.infer<PartnerDetailsEditSchema>>(
+    partnerDetailsEditMutation,
+    data => ({ partnerId, postcode: data.postcode ?? "", projectId, partnerIdStr: partnerId }),
+    () => navigate(navigateTo),
+    noop,
+  );
 };

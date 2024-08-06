@@ -57,7 +57,7 @@ import { RecordType } from "@framework/entities/recordType";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 // obviously needs to be singleton
-const cachesImplementation: ICaches = {
+export const cachesImplementation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(configuration.timeouts.costCategories),
   optionsLookup: new Cache<Option<unknown>[]>(configuration.timeouts.optionsLookup),
   projectRoles: new Cache<{ [key: string]: IRoleInfo }>(configuration.timeouts.projectRoles),

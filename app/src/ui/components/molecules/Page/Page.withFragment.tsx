@@ -8,12 +8,13 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import React from "react";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { GraphqlError } from "@framework/types/IAppError";
 
 type PageWithFragmentProps = {
   backLink?: React.ReactNode;
   fragmentRef: unknown;
   children: React.ReactNode;
-  apiError?: ClientErrorResponse | null;
+  apiError?: ClientErrorResponse | GraphqlError | null;
   validationErrors?: RhfErrors;
   qa?: string;
   className?: string;

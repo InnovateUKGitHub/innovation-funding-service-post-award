@@ -110,7 +110,8 @@ export const RoleAndOrganisationStep = () => {
             onSave({
               data: formHasBeenFilled ? {} : setData(data),
               context: link(data),
-            }).then(() => refreshItemWorkflowQuery()),
+              onSuccess: refreshItemWorkflowQuery,
+            }),
           )}
         >
           <input type="hidden" name="form" value={FormTypes.PcrAddPartnerRoleAndOrganisationStep} />

@@ -65,7 +65,6 @@ const SpendProfileCostsSummaryReviewComponent = (props: PcrSpendProfileCostSumma
     itemId,
     costCategoryId,
     undefined,
-    undefined,
   );
 
   const addPartnerItem = pcrItem;

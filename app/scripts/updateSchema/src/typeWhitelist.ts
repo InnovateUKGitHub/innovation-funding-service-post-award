@@ -10,6 +10,7 @@ const types = [
   "ID",
   "Id",
   "Int",
+  "IdOrRef",
   // "JSON",
   // "Latitude",
   "LongTextArea",
@@ -25,7 +26,7 @@ const types = [
   "Time",
   "Url",
   "Group",
-];
+] as const;
 
 const objectsToKeep = [
   "Group",
@@ -57,7 +58,9 @@ const objectsToKeep = [
   "AggregateOrderByStringClause",
   "NoFunctionAggregateOrderByClause",
   "AggregateOrderByNumberClause",
-];
+  "UIAPIMutations",
+  "UIAPIMutationsInput",
+] as const;
 
 const typeSuffixes = ["", "Input", "Value", "Operators", "Aggregate", "Literal"];
 const objectSuffixes = [
@@ -70,10 +73,22 @@ const objectSuffixes = [
   "_GroupBy",
   "_Owner",
   "OrderByStringClause",
-];
+] as const;
+
+const mutations = [
+  "Record",
+  "Acc_Project__c",
+  "Acc_ProjectParticipant__c",
+  "Acc_ProjectChangeRequest__c",
+  "Acc_IFSSpendProfile__c",
+] as const;
+
+const mutationSuffixes = ["Create", "Delete", "Update"] as const;
+const mutationTypes = ["", "Input", "Payload", "Representation"] as const;
 const additionalObjects = [
   "Query",
   "UIAPI",
+  "Mutation",
   "GroupByDateFunction",
   "GroupByFunction",
   "GroupByClause",
@@ -86,7 +101,7 @@ const additionalObjects = [
   "ObjectInfo",
   "ResultsOrder",
   "NullsOrder",
-];
+] as const;
 
 const getTypeWhitelist = () => {
   const whitelist: string[] = [];
@@ -98,6 +113,14 @@ const getTypeWhitelist = () => {
   for (const type of types) {
     for (const suffix of typeSuffixes) {
       whitelist.push(`${type}${suffix}`);
+    }
+  }
+
+  for (const mutation of mutations) {
+    for (const suffix of mutationSuffixes) {
+      for (const type of mutationTypes) {
+        whitelist.push(`${mutation}${suffix}${type}`);
+      }
     }
   }
 

@@ -33,7 +33,7 @@ export function useRefreshQuery<T extends GraphQLTaggedNode, U extends AnyObject
 ): [RefreshedQueryOptions, () => Promise<void>] {
   const environment = useRelayEnvironment();
 
-  // The current refresh promise - If it's realoding.
+  // The current refresh promise - If it's reloading.
   const [refreshPromise, setRefreshPromise] = useState<Promise<void> | null>(null);
   const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<RefreshedQueryOptions>(undefined);
 

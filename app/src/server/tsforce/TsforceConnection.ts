@@ -92,7 +92,8 @@ class TsforceConnection {
     decodeHTMLEntities,
   }: ExecutionRequest & ExecuteConfiguration): Promise<{ data: T; errors: PayloadError[] }> {
     const query = print(document);
-    const queryName = /query (\w+)[\s(]/.exec(query)?.[1];
+
+    const queryName = /query|mutation (\w+)[\s(]/.exec(query)?.[1];
 
     const timer = this.startTimer(queryName ?? "Anonymous GraphQL Query");
 

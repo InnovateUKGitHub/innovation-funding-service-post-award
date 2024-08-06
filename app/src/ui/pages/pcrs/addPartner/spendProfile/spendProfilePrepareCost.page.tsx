@@ -1,20 +1,18 @@
 import { CostCategoryGroupType } from "@framework/constants/enums";
-import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryList } from "@framework/types/CostCategory";
-import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { useContext } from "react";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
 import { LabourFormComponent } from "./labourFormComponent";
 import { MaterialsFormComponent } from "./materialsFormComponent";
 import { OtherCostsFormComponent } from "./otherCostsFormComponent";
 import { OverheadsFormComponent } from "./overheadsFormComponent";
-import { SpendProfileContext, useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
+import { SpendProfileContext, useOnSaveSpendProfileItem, useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { SubcontractingFormComponent } from "./subcontractingFormComponent";
 import { TravelAndSubsFormComponent } from "./travelAndSubsFormComponent";
 
@@ -33,27 +31,21 @@ export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostPar
 const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BaseProps) => {
   const { itemId, pcrId, projectId, costCategoryId, costId, routes, messages } = props;
 
-  const [fetchKey, setFetchKey] = useFetchKey();
-
   const { project, costCategory, spendProfile, pcrItem, cost, documents, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
     itemId,
     costCategoryId,
     costId,
-    fetchKey,
   );
 
   const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
 
-  const { onUpdate, isFetching, apiError } = useOnSavePcrItem(
+  const { onUpdate, isFetching, apiError } = useOnSaveSpendProfileItem({
+    pcrItemId: itemId,
+    costId,
+    refreshItemWorkflowQuery: null,
     projectId,
-    pcrId,
-    itemId,
-    setFetchKey,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
+  });
 
   const addPartnerWorkflow = getWorkflow(pcrItem);
   const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();

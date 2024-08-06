@@ -31,6 +31,8 @@ import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context
 import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { ServerErrorContextProvider } from "@ui/context/server-error";
 import { configuration } from "./features/common/config";
+import { RecordType, RecordTypeProvider, RecordTypesContextProvider } from "@ui/context/recordTypes";
+import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
 
 interface IServerApp {
   requestUrl: string;
@@ -45,6 +47,7 @@ interface IServerApp {
   preloadedData: AnyObject;
   preloadedServerErrors: ClientErrorResponse | null;
   isErrorPage: boolean;
+  preloadedRecordTypes: RecordType[];
 }
 
 const logger = new Logger("HTML Render");
@@ -61,29 +64,34 @@ const ServerApp = ({
   preloadedServerInput,
   preloadedData,
   preloadedServerErrors,
-}: IServerApp) => (
-  <ServerErrorContextProvider value={preloadedServerErrors}>
-    <ServerInputContextProvider value={preloadedServerInput}>
-      <ServerZodErrorProvider value={serverZodErrors}>
-        <UserProvider value={userConfig}>
-          <ClientConfigProvider config={clientConfig}>
-            <ApiErrorContextProvider value={apiError}>
-              <FormErrorContextProvider value={formError}>
-                <StaticRouter location={requestUrl}>
-                  <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
-                    <MessageContextProvider preloadedMessages={messages}>
-                      <App relayEnvironment={relayEnvironment} />
-                    </MessageContextProvider>
-                  </PreloadedDataContextProvider>
-                </StaticRouter>
-              </FormErrorContextProvider>
-            </ApiErrorContextProvider>
-          </ClientConfigProvider>
-        </UserProvider>
-      </ServerZodErrorProvider>
-    </ServerInputContextProvider>
-  </ServerErrorContextProvider>
-);
+  preloadedRecordTypes,
+}: IServerApp) => {
+  return (
+    <RecordTypesContextProvider value={new RecordTypeProvider(preloadedRecordTypes)}>
+      <ServerErrorContextProvider value={preloadedServerErrors}>
+        <ServerInputContextProvider value={preloadedServerInput}>
+          <ServerZodErrorProvider value={serverZodErrors}>
+            <UserProvider value={userConfig}>
+              <ClientConfigProvider config={clientConfig}>
+                <ApiErrorContextProvider value={apiError}>
+                  <FormErrorContextProvider value={formError}>
+                    <StaticRouter location={requestUrl}>
+                      <PreloadedDataContextProvider preloadedData={preloadedData as IPreloadedDataContext["data"]}>
+                        <MessageContextProvider preloadedMessages={messages}>
+                          <App relayEnvironment={relayEnvironment} />
+                        </MessageContextProvider>
+                      </PreloadedDataContextProvider>
+                    </StaticRouter>
+                  </FormErrorContextProvider>
+                </ApiErrorContextProvider>
+              </ClientConfigProvider>
+            </UserProvider>
+          </ServerZodErrorProvider>
+        </ServerInputContextProvider>
+      </ServerErrorContextProvider>
+    </RecordTypesContextProvider>
+  );
+};
 
 /**
  * The main server side process handled here.
@@ -93,7 +101,12 @@ const serverRender =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
-    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
+    const context = await contextProvider.start({ user: req.session?.user, traceId: res.locals.traceId });
+    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({
+      req,
+      res,
+      schema,
+    });
     let isErrorPage = false;
     const jsDisabled = req.headers["x-acc-js-disabled"] === "true";
     const clientConfig = getClientConfig();
@@ -113,7 +126,6 @@ const serverRender =
           userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
         };
       } else {
-        const context = await contextProvider.start({ user: req.session?.user, traceId: res?.locals.traceId });
         auth = await context.runQuery(new GetAllProjectRolesForUser());
         user = {
           roleInfo: auth.permissions,
@@ -123,6 +135,8 @@ const serverRender =
           csrf: req.csrfToken(),
         };
       }
+
+      const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
 
       let formError: Result[] = [];
       let apiError: ClientErrorResponse | null = null;
@@ -192,6 +206,7 @@ const serverRender =
           preloadedServerErrors: res.locals.preloadedServerErrors,
           apiError,
           isErrorPage,
+          preloadedRecordTypes: recordTypes,
         });
       });
 
@@ -223,6 +238,7 @@ const serverRender =
           preloadedData: res.locals.preloadedData,
           preloadedServerErrors: res.locals.preloadedServerErrors,
           isErrorPage,
+          preloadedRecordTypes: recordTypes,
         }),
       );
     } catch (renderError: unknown) {
@@ -266,6 +282,7 @@ function renderApp(props: {
   preloadedData: AnyObject;
   preloadedServerErrors: ClientErrorResponse | null;
   isErrorPage: boolean;
+  preloadedRecordTypes: RecordType[];
 }): string {
   const html = renderToString(<ServerApp {...props} />);
   // Note: Must be called after "renderToString"
@@ -287,6 +304,7 @@ function renderApp(props: {
     preloadedData: props.preloadedData,
     preloadedServerErrors: props.preloadedServerErrors,
     isErrorPage: props.isErrorPage,
+    preloadedRecordTypes: props.preloadedRecordTypes,
   });
 }
 

@@ -421,7 +421,12 @@ export class ProjectChangeRequestRepository
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
+    // private async getRecordTypeId(objectName: string, recordType: string): Promise<string> {
+    //   const query = new GetRecordTypeQuery(objectName, recordType);
+    //   return this.runQuery(query).then(x => x.id);
+    // }
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,

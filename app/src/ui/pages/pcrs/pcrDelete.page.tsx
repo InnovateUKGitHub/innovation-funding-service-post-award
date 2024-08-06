@@ -29,7 +29,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
     onUpdate: onDelete,
     apiError,
     isFetching,
-  } = useOnDeletePcr(projectId, pcrId, props.routes.pcrsDashboard.getLink({ projectId }).path);
+  } = useOnDeletePcr(pcrId, projectId, props.routes.pcrsDashboard.getLink({ projectId }).path);
 
   const { handleSubmit } = useForm({
     defaultValues: {},

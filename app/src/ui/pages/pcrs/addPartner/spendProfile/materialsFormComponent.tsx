@@ -1,7 +1,7 @@
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,19 +34,8 @@ const isMaterialsCostDto = function (
 };
 
 export const MaterialsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileMaterialsCostDto>;
@@ -93,18 +82,11 @@ export const MaterialsFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data?.materialsDescription,
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  quantity: Number(data.quantityOfMaterialItems),
-                  costPerItem: parseCurrency(data.costPerItem),
-                  value: totalCost,
-                }),
-              },
+              description: data?.materialsDescription,
+              costCategoryId,
+              quantity: Number(data.quantityOfMaterialItems),
+              costPerItem: parseCurrency(data.costPerItem),
+              value: totalCost,
             },
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),

@@ -12,7 +12,7 @@ import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
@@ -35,19 +35,8 @@ const isLabourCostDto = function (
 };
 
 export const LabourFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileLabourCostDto>;
 
@@ -98,20 +87,14 @@ export const LabourFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data.descriptionOfRole,
-                  id: data.id as CostId,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  grossCostOfRole: parseCurrency(data.grossCostOfRole),
-                  ratePerDay: parseCurrency(data.ratePerDay),
-                  daysSpentOnProject: Number(data.daysSpentOnProject),
-                  value: totalCost,
-                }),
-              },
+              daysSpentOnProject: data.daysSpentOnProject,
+              description: data.descriptionOfRole,
+              ratePerDay: parseCurrency(data.ratePerDay),
+              grossCostOfRole: parseCurrency(data.grossCostOfRole),
+              costCategoryId,
+              value: totalCost,
             },
+
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}

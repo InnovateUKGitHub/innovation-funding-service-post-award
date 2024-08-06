@@ -110,6 +110,27 @@ export const convertZodErrorsToResultsFormat = <TFormValues extends AnyObject>(e
   return resultArray;
 };
 
+type SalesforceMutationError = { message: string; path: string[]; extensions: { ErrorType: string } };
+
+export const convertSalesforceMutationErrorsToResultsFormat = (errors: SalesforceMutationError[]) => {
+  const resultArray = errors.map(value => {
+    if (value && typeof value?.message === "string") {
+      return new Result(null, true, false, value?.message ?? null, true, String(value?.path?.[0]));
+    } else {
+      return new Result(null, true, false, "This error type not supported yet", true);
+    }
+  });
+
+  return resultArray;
+};
+
+export const isSalesforceMutationError = (er: unknown): er is { errors: SalesforceMutationError[] } =>
+  typeof er === "object" &&
+  er !== null &&
+  "errors" in er &&
+  Array.isArray(er.errors) &&
+  er.errors.every(x => "message" in x);
+
 /**
  * In some cases we wish to validate errors directly from zod without going through
  * react hook form, e.g. when validating directly on a dto.

@@ -2037,7 +2037,7 @@
     },
     "partnerDetailsEdit": {
       "postcode": {
-        "label": "Project location postcode",
+        "label": "Partner location postcode",
         "errors": {
           "too_small": "Project location postcode must be {{ count }} characters or more.",
           "too_big": "Project location postcode must {{ count }} characters or less."
@@ -2358,6 +2358,7 @@
     },
     "projectSetup": {
       "postcode": {
+        "label": "Postcode",
         "errors": {
           "invalid_type": "You must provide your project location postcode.",
           "too_small": "You must provide your project location postcode."

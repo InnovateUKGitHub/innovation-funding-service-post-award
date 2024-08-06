@@ -6,7 +6,7 @@ import {
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,19 +36,8 @@ const isTravelAndSubsCostDto = function (
 };
 
 export const TravelAndSubsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileTravelAndSubsCostDto>;
@@ -100,18 +89,11 @@ export const TravelAndSubsFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  id: data.id ?? ("" as CostId),
-                  description: data.descriptionOfCost,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  numberOfTimes: Number(data.numberOfTimes),
-                  costOfEach: parseCurrency(data.costOfEach),
-                  value: totalCost,
-                }),
-              },
+              description: data.descriptionOfCost,
+              costCategoryId,
+              numberOfTimes: Number(data.numberOfTimes),
+              costOfEach: parseCurrency(data.costOfEach),
+              value: totalCost,
             },
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),

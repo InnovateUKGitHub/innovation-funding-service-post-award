@@ -106,6 +106,10 @@ enum FormTypes {
   LoanLevelUpload = "loanLevelUpload",
   LoanLevelDelete = "loanLevelDelete",
   LoanRequest = "loanRequest",
+
+  // partner details
+  PartnerDetailsEdit = "partnerDetailsEdit",
+  PartnerDetailsSetup = "partnerDetailsSetup",
 }
 
 export { FormTypes };

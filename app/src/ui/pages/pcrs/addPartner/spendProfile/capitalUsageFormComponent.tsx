@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { useMounted } from "@ui/context/Mounted";
-import { appendOrMerge, SpendProfileContext } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { CapitalUsageSchema, capitalUsageSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,19 +41,8 @@ const isCapitalUsageCostDto = function (
 };
 
 export const CapitalUsageFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, isFetching, costCategory, onUpdate, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileCapitalUsageCostDto>;
@@ -125,22 +114,15 @@ export const CapitalUsageFormComponent = () => {
         onSubmit={handleSubmit(data =>
           onUpdate({
             data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data.capitalUsageDescription,
-                  type: Number(data.itemType),
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  depreciationPeriod: Number(data.depreciationPeriod),
-                  netPresentValue: parseCurrency(data.netPresentValue),
-                  residualValue: parseCurrency(data.residualValue),
-                  utilisation: Number(data.utilisation),
-                  typeLabel: typeOptions.find(x => x.value === Number(data.itemType))?.label ?? "",
-                  value: netCost,
-                }),
-              },
+              description: data.capitalUsageDescription,
+              type: Number(data.itemType),
+              costCategoryId,
+              depreciationPeriod: Number(data.depreciationPeriod),
+              netPresentValue: parseCurrency(data.netPresentValue),
+              residualValue: parseCurrency(data.residualValue),
+              utilisation: Number(data.utilisation),
+              typeLabel: typeOptions.find(x => x.value === Number(data.itemType))?.label ?? "",
+              value: netCost,
             },
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),

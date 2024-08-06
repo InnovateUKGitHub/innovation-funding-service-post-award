@@ -72,7 +72,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
     },
   });
 
-  const { apiError, isFetching, onUpdate } = useOnSubmit();
+  const { apiError, isFetching, onUpdate } = useOnSubmit({ pcrId: pcrId ?? null, projectId });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<PcrModifyTypesSchemaType>>(setError, formState.errors);

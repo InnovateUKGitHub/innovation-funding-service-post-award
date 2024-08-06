@@ -4,10 +4,9 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import {
   partnerDetailsEditSchema,
   postcodeSetupSchema,
-  partnerDetailsOptionalSchema,
   partnerDetailsEditErrorMap,
+  PartnerDetailsEditSchema,
 } from "./partnerDetailsEdit.zod";
-import { PostcodeTaskStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
@@ -19,10 +18,12 @@ import { Label } from "@ui/components/atoms/form/Label/Label";
 import { SubmitButton } from "@ui/components/atoms/form/SubmitButton/SubmitButton";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { usePartnerDetailsEditQuery, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { z } from "zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -37,11 +38,11 @@ interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
   isSetup?: boolean;
 }
 
-const getZodResolver = (isSetupPage: boolean, postcodeStatus: PostcodeTaskStatus) => {
+const getZodResolver = (isSetupPage: boolean) => {
   if (isSetupPage) {
     return postcodeSetupSchema;
   } else {
-    return postcodeStatus !== PostcodeTaskStatus.ToDo ? partnerDetailsEditSchema : partnerDetailsOptionalSchema;
+    return partnerDetailsEditSchema;
   }
 };
 
@@ -61,17 +62,19 @@ export function PartnerDetailsEditComponent({
   const { partner, fragmentRef } = usePartnerDetailsEditQuery(projectId, partnerId);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setError } = useForm<z.infer<PartnerDetailsEditSchema>>({
     defaultValues: {
       postcode: partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
+      postcodeStatus: partner.postcodeStatus,
+      form: FormTypes.PartnerDetailsEdit,
     },
-    resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus), { errorMap: partnerDetailsEditErrorMap }),
+    resolver: zodResolver(getZodResolver(isSetup), { errorMap: partnerDetailsEditErrorMap }),
   });
 
-  const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo);
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useZodErrors(setError, formState.errors);
 
   const postcodeError = validatorErrors?.postcode as RhfErrors;
   return (
@@ -83,6 +86,14 @@ export function PartnerDetailsEditComponent({
       partnerId={partnerId}
     >
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
+        <input type="hidden" name="postcodeStatus" value={partner.postcodeStatus} />
+        <input
+          type="hidden"
+          name="form"
+          value={isSetup ? FormTypes.PartnerDetailsSetup : FormTypes.PartnerDetailsEdit}
+        />
+        <input type="hidden" name="isSetup" value={String(isSetup)} />
+        <input type="hidden" name="partnerStatus" value={String(partner.partnerStatus)} />
         <Fieldset>
           {!isSetup && (
             <FormGroup>

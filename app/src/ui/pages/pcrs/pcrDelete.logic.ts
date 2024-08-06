@@ -4,8 +4,10 @@ import { PcrDeleteQuery } from "./__generated__/PcrDeleteQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { useNavigate } from "react-router-dom";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { clientsideApiClient } from "@ui/apiClient";
+import { useOnMutation } from "@framework/api-helpers/onUpdate";
+import { PcrDeleteMutation } from "./__generated__/PcrDeleteMutation.graphql";
+import { pcrDeleteMutation } from "./PcrDelete.mutation";
+import { noop } from "lodash";
 
 export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<PcrDeleteQuery>(pcrDeleteQuery, { projectId, pcrId }, { fetchPolicy: "network-only" });
@@ -22,10 +24,12 @@ export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
   return { fragmentRef: data.salesforce.uiapi, pcr };
 };
 
-export const useOnDeletePcr = (projectId: ProjectId, pcrId: PcrId, navigateTo: string) => {
+export const useOnDeletePcr = (pcrId: PcrId, projectId: ProjectId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate({
-    req: () => clientsideApiClient.pcrs.delete({ projectId, id: pcrId }),
-    onSuccess: () => navigate(navigateTo),
-  });
+  return useOnMutation<PcrDeleteMutation, EmptyObject>(
+    pcrDeleteMutation,
+    () => ({ pcrId, projectId }),
+    () => navigate(navigateTo),
+    noop,
+  );
 };

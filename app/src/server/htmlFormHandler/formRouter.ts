@@ -38,7 +38,6 @@ import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "./handlers/p
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningDocumentUpload.handler";
 import { ProjectChangeRequestReasoningUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningUpdate.handler";
 import { ProjectChangeRequestReviewFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/review/reviewProjectChangeRequestFormHandler";
-import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerifyHandler";
 import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetails.handler";
 import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDeleteHandler";
@@ -91,6 +90,7 @@ import { PcrItemAddPartnerSpendProfileSubcontractingCostsHandler } from "./handl
 import { PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileTravelAndSubs.handler";
 import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOtherCosts.handler";
 import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
+import { PartnerDetailsEditHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/partnerDetailsEdit.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -147,6 +147,7 @@ export const standardFormHandlers = [
   new ForecastHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
+  new PartnerDetailsEditHandler(),
   new ClaimReviewLevelFormHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
@@ -170,7 +171,6 @@ export const standardFormHandlers = [
   new ChangeRemainingGrantUpdateHandler(),
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
-  new ProjectSetupPartnerPostcodeFormHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
