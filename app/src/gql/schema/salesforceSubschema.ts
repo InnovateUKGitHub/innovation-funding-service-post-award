@@ -61,11 +61,14 @@ const salesforceSubschema: ExecutableSchema = {
                   // Replace the items within the context with our new context.
                   Object.assign(
                     ctx ?? {},
-                    await createContextFromEmail({ email: configuration.salesforceServiceUser.serviceUsername }),
+                    await createContextFromEmail({
+                      email: configuration.salesforceServiceUser.serviceUsername,
+                      tid: ctx.tid,
+                    }),
                   );
                   break;
                 default:
-                  Object.assign(ctx ?? {}, await createContextFromEmail({ email: args.login }));
+                  Object.assign(ctx ?? {}, await createContextFromEmail({ email: args.login, tid: ctx.tid }));
                   break;
               }
             }

@@ -1,7 +1,7 @@
 import { DetailedErrorCode } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
+import { UL } from "@ui/components/atoms/List/list";
 import { useContent } from "@ui/hooks/content.hook";
-import { UL } from "../../atoms/List/list";
 import { Fragment } from "react";
 
 interface ErrorDetailProps {

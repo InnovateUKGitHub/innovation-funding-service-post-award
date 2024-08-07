@@ -2,7 +2,8 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ErrorCode } from "@framework/constants/enums";
-import { ErrorContainerProps, ErrorContainer } from "./ErrorContainer";
+import { ErrorContainer } from "./ErrorContainer";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 describe("<ErrorContainer />", () => {
   describe("@renders", () => {
@@ -39,10 +40,10 @@ describe("<ErrorContainer />", () => {
       },
     };
 
-    const setup = (props: ErrorContainerProps) =>
+    const setup = (error: ClientErrorResponse) =>
       render(
         <TestBed>
-          <ErrorContainer {...props} />
+          <ErrorContainer error={error} />
         </TestBed>,
       );
 
@@ -53,8 +54,8 @@ describe("<ErrorContainer />", () => {
     describe("with fallback error", () => {
       test("when no errorType matches a value in error config", () => {
         const { queryByTestId } = setup({
-          errorType: "THIS_SHOULD_NEVER_MATCH",
-          errorCode: ErrorCode.UNKNOWN_ERROR,
+          code: ErrorCode.UNKNOWN_ERROR,
+          traceId: "UNKNOWN_ERROR",
         });
 
         const targetElement = queryByTestId("fallback-error");
@@ -66,8 +67,8 @@ describe("<ErrorContainer />", () => {
     describe("with internal errors", () => {
       test("when not found", () => {
         const { queryByTestId } = setup({
-          errorType: "NOT_FOUND",
-          errorCode: ErrorCode.UNKNOWN_ERROR,
+          code: ErrorCode.NOT_FOUND,
+          traceId: "NOT_FOUND",
         });
 
         const targetElement = queryByTestId("not-found");
@@ -77,8 +78,8 @@ describe("<ErrorContainer />", () => {
 
       test("when authentication fails", () => {
         const { queryByTestId } = setup({
-          errorType: "AUTHENTICATION_ERROR",
-          errorCode: ErrorCode.UNKNOWN_ERROR,
+          code: ErrorCode.UNAUTHENTICATED_ERROR,
+          traceId: "UNAUTHENTICATED_ERROR",
         });
 
         const targetElement = queryByTestId("unauthenticated-error");

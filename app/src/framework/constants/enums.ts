@@ -14,6 +14,8 @@ export enum ErrorCode {
   UNAUTHENTICATED_ERROR = 7,
   CONFIGURATION_ERROR = 8,
   SFDC_ERROR = 9,
+  NOT_FOUND = 10,
+  UNAUTHORISED_ERROR = 11,
 }
 
 export enum SalesforceStatusCode {

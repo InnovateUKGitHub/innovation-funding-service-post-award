@@ -1,11 +1,9 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
-import { IAppError } from "@framework/types/IAppError";
 import { IContext } from "@framework/types/IContext";
 import { IClientUser } from "@framework/types/IUser";
 import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { createErrorPayload } from "@shared/create-error-payload";
 import { Logger } from "@shared/developmentLogger";
 import { App } from "@ui/containers/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
@@ -13,7 +11,6 @@ import { FormErrorContextProvider } from "@ui/context/form-error";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { IClientConfig } from "../types/IClientConfig";
 import { matchRoute } from "@ui/routing/matchRoute";
-import { routeConfig } from "@ui/routing/routeConfig";
 import { Result } from "@ui/validation/result";
 import { NextFunction, Request, Response } from "express";
 import { GraphQLSchema } from "graphql";
@@ -21,7 +18,7 @@ import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { StaticRouter } from "react-router-dom/server";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { getErrorStatus } from "./errorHandlers";
+import { ClientErrorResponse, getErrorResponse, getErrorStatus } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError, ZodFormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
@@ -33,20 +30,21 @@ import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { ServerError, ServerErrorContextProvider } from "@ui/context/server-error";
+import { ServerErrorContextProvider } from "@ui/context/server-error";
 
 interface IServerApp {
   requestUrl: string;
   relayEnvironment: RelayModernEnvironment;
   formError?: Result[];
-  apiError?: IAppError;
+  apiError: ClientErrorResponse | null;
   clientConfig: IClientConfig;
   messages?: string[] | null;
   userConfig: IClientUser;
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
-  preloadedServerErrors: ServerError | null;
+  preloadedServerErrors: ClientErrorResponse | null;
+  isErrorPage: boolean;
 }
 
 const logger = new Logger("HTML Render");
@@ -95,7 +93,7 @@ const serverRender =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
-    const context = contextProvider.start({ user: req.session?.user });
+    const context = contextProvider.start({ user: req.session?.user, tid: res.locals.tid });
     const clientConfig = getClientConfig(context);
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;
@@ -127,10 +125,8 @@ const serverRender =
         };
       }
 
-      let renderUrl = req.url;
-
       let formError: Result[] = [];
-      let apiError: IAppError | undefined;
+      let apiError: ClientErrorResponse | null = null;
       if (err) {
         // A form handler error is an error that renders the original page.
         if (err instanceof ZodFormHandlerError) {
@@ -151,16 +147,15 @@ const serverRender =
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
 
-            apiError = err.cause;
+            apiError = getErrorResponse(err.cause, res.locals.tid);
           }
         } else {
           // We cannot handle these beautifully.
           statusCode = getErrorStatus(err);
-          const errorPayload = createErrorPayload(err, false).params;
+          const errorPayload = getErrorResponse(err, res.locals.tid);
           res.locals.preloadedServerErrors = errorPayload;
-          renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
-          apiError = errorPayload as unknown as IAppError;
+          apiError = errorPayload;
         }
       }
 
@@ -179,7 +174,7 @@ const serverRender =
       // Note: Keep resolving app queries + actions until completion for final render below
       await loadAllData(relayServerSSR, () => {
         renderApp({
-          requestUrl: renderUrl,
+          requestUrl: req.url,
           nonce,
           relayEnvironment: ServerGraphQLEnvironment,
           clientConfig,
@@ -190,6 +185,8 @@ const serverRender =
           preloadedServerInput: res.locals.preloadedServerInput,
           preloadedData: res.locals.preloadedData,
           preloadedServerErrors: res.locals.preloadedServerErrors,
+          apiError,
+          isErrorPage,
         });
       });
 
@@ -201,13 +198,12 @@ const serverRender =
 
       if (relayErrors.length) {
         statusCode = 500;
-        renderUrl = routeConfig.error.getLink({}).path;
         isErrorPage = true;
       }
 
       res.status(statusCode).send(
         renderApp({
-          requestUrl: renderUrl,
+          requestUrl: req.url,
           nonce,
           relayEnvironment: finalRelayEnvironment,
           relayData,
@@ -221,10 +217,11 @@ const serverRender =
           preloadedServerInput: res.locals.preloadedServerInput,
           preloadedData: res.locals.preloadedData,
           preloadedServerErrors: res.locals.preloadedServerErrors,
+          isErrorPage,
         }),
       );
     } catch (renderError: unknown) {
-      logger.error("Caught a server render error", renderError);
+      logger.error("Caught a server render error", { tid: res.locals.tid }, renderError);
       next(renderError);
     }
   };
@@ -250,7 +247,7 @@ function renderApp(props: {
   relayEnvironment: RelayModernEnvironment;
   relayData?: SSRCache;
   formError?: Result[] | undefined;
-  apiError?: IAppError | undefined;
+  apiError: ClientErrorResponse | null;
   clientConfig: IClientConfig;
   jsDisabled: boolean;
   messages?: string[];
@@ -258,7 +255,8 @@ function renderApp(props: {
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
-  preloadedServerErrors: ServerError | null;
+  preloadedServerErrors: ClientErrorResponse | null;
+  isErrorPage: boolean;
 }): string {
   const html = renderToString(<ServerApp {...props} />);
   // Note: Must be called after "renderToString"
@@ -279,6 +277,7 @@ function renderApp(props: {
     preloadedServerInput: props.preloadedServerInput,
     preloadedData: props.preloadedData,
     preloadedServerErrors: props.preloadedServerErrors,
+    isErrorPage: props.isErrorPage,
   });
 }
 

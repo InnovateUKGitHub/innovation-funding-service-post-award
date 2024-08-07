@@ -10,7 +10,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -30,7 +35,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -59,7 +69,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -84,7 +99,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -108,7 +128,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -128,7 +153,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -173,7 +203,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -200,7 +235,12 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "logLevel": "ERROR",
           "prefixLines": [
-            "user@email.com",
+            {
+              "tid": "ctx",
+              "user": {
+                "email": "user@email.com",
+              },
+            },
           ],
         },
       },
@@ -219,7 +259,12 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "logLevel": "ERROR",
           "prefixLines": [
-            "user@email.com",
+            {
+              "tid": "ctx",
+              "user": {
+                "email": "user@email.com",
+              },
+            },
           ],
         },
       },
@@ -236,7 +281,12 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "logLevel": "ERROR",
           "prefixLines": [
-            "user@email.com",
+            {
+              "tid": "ctx",
+              "user": {
+                "email": "user@email.com",
+              },
+            },
           ],
         },
       },
@@ -270,7 +320,12 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "logLevel": "ERROR",
           "prefixLines": [
-            "user@email.com",
+            {
+              "tid": "ctx",
+              "user": {
+                "email": "user@email.com",
+              },
+            },
           ],
         },
       },
@@ -290,7 +345,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -317,7 +377,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -348,7 +413,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -376,7 +446,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -402,7 +477,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -427,7 +507,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -448,7 +533,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -471,7 +561,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -555,7 +650,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -595,7 +695,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -618,7 +723,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -644,7 +754,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -669,7 +784,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -694,7 +814,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -721,7 +846,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -807,7 +937,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -837,7 +972,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },
@@ -889,7 +1029,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "tid": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },

@@ -2,7 +2,8 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ErrorCode } from "@framework/constants/enums";
-import { GenericFallbackErrorProps, GenericFallbackError } from "./GenericFallbackError";
+import { GenericFallbackError } from "./GenericFallbackError";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 describe("<GenericFallbackError />", () => {
   describe("@renders", () => {
@@ -14,10 +15,10 @@ describe("<GenericFallbackError />", () => {
       },
     };
 
-    const setup = (props: GenericFallbackErrorProps) =>
+    const setup = (error?: ClientErrorResponse | null) =>
       render(
         <TestBed>
-          <GenericFallbackError {...props} />
+          <GenericFallbackError error={error}></GenericFallbackError>
         </TestBed>,
       );
 
@@ -27,8 +28,8 @@ describe("<GenericFallbackError />", () => {
 
     test("with page message containing link text", () => {
       const { queryByTestId } = setup({
-        errorCode: ErrorCode.UNKNOWN_ERROR,
-        errorType: "stub-errorType",
+        code: ErrorCode.UNKNOWN_ERROR,
+        traceId: "with page messaging containing link text",
       });
 
       const message = queryByTestId("message");
@@ -40,8 +41,8 @@ describe("<GenericFallbackError />", () => {
     describe("with developer error", () => {
       test("without errorMessage or errorStack", () => {
         const { container } = setup({
-          errorCode: ErrorCode.UNKNOWN_ERROR,
-          errorType: "stub-errorType",
+          code: ErrorCode.UNKNOWN_ERROR,
+          traceId: "acc-traceid",
         });
 
         expect(container.querySelector("pre")).not.toBeInTheDocument();
@@ -51,9 +52,9 @@ describe("<GenericFallbackError />", () => {
         const stubDeveloperError = "stub-developer-error";
 
         const { queryByText } = setup({
-          errorCode: ErrorCode.UNKNOWN_ERROR,
-          errorType: "stub-errorType",
-          errorMessage: stubDeveloperError,
+          code: ErrorCode.UNKNOWN_ERROR,
+          message: stubDeveloperError,
+          traceId: "acc-traceid",
         });
 
         expect(queryByText(stubDeveloperError, { selector: "p" })).toBeInTheDocument();
@@ -63,9 +64,9 @@ describe("<GenericFallbackError />", () => {
         const stubDeveloperError = "stub-developer-error";
 
         const { queryByText } = setup({
-          errorCode: ErrorCode.UNKNOWN_ERROR,
-          errorType: "stub-errorType",
-          errorStack: stubDeveloperError,
+          code: ErrorCode.UNKNOWN_ERROR,
+          stack: stubDeveloperError,
+          traceId: "acc-traceid",
         });
 
         expect(queryByText(stubDeveloperError, { selector: "pre" })).toBeInTheDocument();

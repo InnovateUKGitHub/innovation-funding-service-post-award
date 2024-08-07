@@ -14,7 +14,6 @@ import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
 import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/pages/developer/PageCrasherForbidden.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/pages/developer/UserSwitcher.page";
-import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers/errors.page";
 import { ForecastDashboardRoute } from "@ui/containers/pages/forecasts/forecastDashboard.page";
 import { LoansSummaryRoute } from "@ui/containers/pages/loans/loanOverview.page";
 import { LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
@@ -86,8 +85,6 @@ export const routeConfig = {
   claimForecast: ClaimForecastRoute,
   claimLineItems: ClaimLineItemsRoute,
   claimSummary: ClaimSummaryRoute,
-  error: ErrorRoute,
-  errorNotFound: ErrorNotFoundRoute,
   financeSummary: FinanceSummaryRoute,
   failedBankCheckConfirmation: FailedBankCheckConfirmationRoute,
   home: DeveloperHomePage,

@@ -88,6 +88,13 @@
         }
       }
     },
+    "errorInformation": {
+      "page": "Page",
+      "tid": "Unique error ID",
+      "message": "Message",
+      "details": "Details",
+      "stacktrace": "Stacktrace"
+    },
     "validationError": {
       "prefix": "Error:"
     },

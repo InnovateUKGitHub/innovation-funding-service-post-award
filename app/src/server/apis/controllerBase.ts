@@ -39,6 +39,7 @@ export class ServerFileWrapper implements IFileWrapper {
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
   user: ISessionUser;
+  tid: string;
 }
 
 export type ApiParams<Context extends "client" | "server", T = undefined> = T extends undefined
@@ -245,7 +246,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   }
 
   private handleError(res: Response, err: IAppError) {
-    return res.status(getErrorStatus(err)).json(getErrorResponse(err));
+    return res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
   }
 }
 

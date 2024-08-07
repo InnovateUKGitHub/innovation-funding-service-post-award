@@ -12,7 +12,6 @@ import { hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { clientInternationalisation } from "./clientInternationalisation";
 import { getPolyfills } from "./polyfill";
-import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
@@ -23,18 +22,19 @@ import { ZodIssue } from "zod";
 import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
-import { ServerError, ServerErrorContextProvider } from "@ui/context/server-error";
+import { ServerErrorContextProvider } from "@ui/context/server-error";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
 const formErrors = processDto(window.__PRELOADED_FORM_ERRORS__) as unknown as Result[] | undefined;
-const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as IAppError | null;
+const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as ClientErrorResponse | null;
 const preloadedMessages = (processDto(window.__PRELOADED_MESSAGES__) || null) as unknown as string[] | null;
 const userConfig = processDto(window.__USER_CONFIG__) as unknown as IClientUser;
 const serverZodErrors = processDto(window.__PRELOADED_SERVER_ZOD_ERRORS__ || []) as unknown as ZodIssue[];
 const serverInput = processDto(window.__PRELOADED_SERVER_INPUT__ || null) as unknown as AnyObject;
 const preloadedData = (processDto(window.__PRELOADED_DATA__) || null) as AnyObject | null;
-const serverErrors = processDto(window.__PRELOADED_SERVER_ERRORS__ || null) as ServerError;
+const serverErrors = processDto(window.__PRELOADED_SERVER_ERRORS__ || null) as ClientErrorResponse;
 
 Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 

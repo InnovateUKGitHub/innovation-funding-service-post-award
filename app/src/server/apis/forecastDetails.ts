@@ -50,7 +50,7 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
     );
     await context.runCommand(forecastCmd);
 
-    return this.getAllByPartnerId({ partnerId: params.partnerId, user: params.user });
+    return this.getAllByPartnerId(params);
   }
 }
 

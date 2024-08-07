@@ -6,10 +6,9 @@ import { Messages } from "@ui/components/molecules/Messages/messages";
 import { Section } from "@ui/components/atoms/Section/Section";
 import { Markdown } from "@ui/components/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
-import { IAppError } from "@framework/types/IAppError";
-import { Results } from "@ui/validation/results";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { getDisplayName } from "./pcrItemWorkflow.logic";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 export const PcrPage = ({
   children,
@@ -18,7 +17,7 @@ export const PcrPage = ({
   backLink,
 }: {
   children: React.ReactNode;
-  apiError?: IAppError<Results<ResultBase>> | null | undefined;
+  apiError?: ClientErrorResponse | null;
   validationErrors?: RhfErrors;
   backLink?: React.ReactNode;
 }) => {

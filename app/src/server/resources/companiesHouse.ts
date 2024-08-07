@@ -1,7 +1,6 @@
 import { configuration } from "@server/features/common/config";
 import { mtlsFetchAgent } from "./mtlsFetchAgent";
 import { fetch } from "undici";
-import { isError } from "util";
 
 export interface ICompaniesHouseParams {
   searchString: string;
@@ -35,6 +34,6 @@ export class CompaniesHouseBase extends ICompaniesHouseBase {
       throw new Error(text ?? "Bad Companies House request. Failed to get a positive response.");
     }
 
-    return await res.json();
+    return (await res.json()) as Promise<T>;
   }
 }

@@ -7,13 +7,13 @@ import { pageFragment } from "./Page.fragment";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import React from "react";
-import { IAppError } from "@framework/types/IAppError";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 type PageWithFragmentProps = {
   backLink?: React.ReactNode;
   fragmentRef: unknown;
   children: React.ReactNode;
-  apiError?: IAppError | null;
+  apiError?: ClientErrorResponse | null;
   validationErrors?: RhfErrors;
   qa?: string;
   className?: string;

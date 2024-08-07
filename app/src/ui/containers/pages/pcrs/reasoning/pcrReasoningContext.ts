@@ -3,10 +3,9 @@ import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 import { BaseProps } from "@ui/containers/containerBase";
-import { IAppError } from "@framework/types/IAppError";
-import { Results } from "@ui/validation/results";
 import { PCRItemType } from "@framework/constants/pcrConstants";
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 type PcrReasoningContextType = {
   projectId: ProjectId;
@@ -25,7 +24,7 @@ type PcrReasoningContextType = {
   messages: BaseProps["messages"];
   routes: BaseProps["routes"];
   config: BaseProps["config"];
-  apiError: IAppError<Results<ResultBase>> | null | undefined;
+  apiError: ClientErrorResponse | null;
   editableItemTypes: PCRItemType[];
   markedAsCompleteHasBeenChecked: boolean;
   setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;

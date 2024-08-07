@@ -40,7 +40,7 @@ describe("<ErrorSummary />", () => {
 
   describe("@content", () => {
     test("with title", () => {
-      const { queryByText } = setup({ error: { code: ErrorCode.UNKNOWN_ERROR } });
+      const { queryByText } = setup({ error: { code: ErrorCode.UNKNOWN_ERROR, traceId: "aaa" } });
 
       const titleElement = queryByText(stubContent.components.errorSummary.title);
 
@@ -49,7 +49,7 @@ describe("<ErrorSummary />", () => {
 
     describe("when unauthenticated", () => {
       test("as default", () => {
-        const { queryByText } = setup({ error: { code: ErrorCode.UNAUTHENTICATED_ERROR } });
+        const { queryByText } = setup({ error: { code: ErrorCode.UNAUTHENTICATED_ERROR, traceId: "aaa" } });
 
         const expiredMessageElement = queryByText(stubContent.components.errorSummary.expiredMessage);
         const unsavedMessageElement = queryByText(stubContent.components.errorSummary.unsavedWarning);
@@ -69,7 +69,7 @@ describe("<ErrorSummary />", () => {
 
       describe("with error codes", () => {
         test.each(allAuthenticatedErrors)("with %s", errorKey => {
-          const { queryByText } = setup({ error: { code: ErrorCode[errorKey] } });
+          const { queryByText } = setup({ error: { code: ErrorCode[errorKey], traceId: "aaa" } });
 
           const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingUnknownGoneWrong);
 
@@ -85,7 +85,7 @@ describe("<ErrorSummary />", () => {
           ${"when the document owner does not match original uploader"} | ${DetailedErrorCode.SFDC_NOT_UPLOADED_FROM_OWNER}         | ${stubContent.components.errorSummary.details.SFDC_NOT_UPLOADED_FROM_OWNER.invalid}
         `("$name", ({ code, expectedContent }) => {
           const { queryByText, debug } = setup({
-            error: { code: ErrorCode.SFDC_ERROR, details: [{ code }] },
+            error: { code: ErrorCode.SFDC_ERROR, details: [{ code }], traceId: "aaa" },
           });
 
           debug();
@@ -97,7 +97,7 @@ describe("<ErrorSummary />", () => {
       });
 
       test("when authenticated with message missing", () => {
-        const { queryByText } = setup({ error: { code: ErrorCode.UNKNOWN_ERROR, message: undefined } });
+        const { queryByText } = setup({ error: { code: ErrorCode.UNKNOWN_ERROR, message: undefined, traceId: "aaa" } });
 
         const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingUnknownGoneWrong);
 

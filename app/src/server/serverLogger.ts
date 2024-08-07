@@ -65,6 +65,25 @@ const colouring = {
   },
 };
 
+const unwrapError = (error: Error, depth: number = 0) => {
+  let res = "";
+
+  if (depth === 0) {
+    res += `${error.name} >> ${error.message}\n`;
+  } else {
+    res += `Caused by ${error.name} >> ${error.message}\n`;
+  }
+
+  res += error.stack;
+  res += "\n\n";
+
+  if (error.cause instanceof Error) {
+    res += unwrapError(error.cause, depth + 1);
+  }
+
+  return res;
+};
+
 export class ServerLogger extends BaseLogger {
   private static readonly colourfulLogging = process.env.NODE_ENV === "development" || process.argv.includes("--dev");
 
@@ -154,6 +173,8 @@ export class ServerLogger extends BaseLogger {
       // Try and convert the unknown type into a string.
       if (typeof param === "undefined") {
         inspectedParam = "undefined";
+      } else if (param instanceof Error) {
+        inspectedParam = unwrapError(param);
       } else if (typeof param === "object") {
         inspectedParam = JSON.stringify(param, null, 2);
       } else {

@@ -1,4 +1,4 @@
-import { ServerError } from "@ui/context/server-error";
+import { ClientErrorResponse } from "@server/errorHandlers";
 import { ZodIssue } from "zod";
 
 declare namespace Express {
@@ -8,7 +8,7 @@ declare namespace Express {
     isFormSuccess?: boolean;
     preloadedReduxActions: { type: string; payload?: unknown }[];
     preloadedData: AnyObject;
-    preloadedServerErrors: ServerError | null | undefined;
+    preloadedServerErrors: ClientErrorResponse | null;
     messages: string[];
     serverZodErrors: ZodIssue[];
   }
