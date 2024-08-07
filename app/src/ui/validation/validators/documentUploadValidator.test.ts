@@ -26,11 +26,11 @@ describe("Document upload validator", () => {
           ${"uppercase characters"} | ${"ABC"}
           ${"digits"}               | ${"0123"}
           ${"whitespace"}           | ${"abc abc"}
-          ${"backslash"}            | ${"abc\\abc"}
           ${"dot"}                  | ${"abc.abc"}
           ${"underscore"}           | ${"_"}
           ${"dash"}                 | ${"-"}
           ${"parenthesis"}          | ${"()"}
+          ${"past invalid chars"}   | ${"!'@£$%^&{}[]`~;#"}
         `("$name", ({ fileName }) => {
           const file = createFile("doc", 10000, fileName);
 
@@ -40,7 +40,7 @@ describe("Document upload validator", () => {
       });
     });
 
-    const invalidNameCharacters = "!'@£$%^&{}[]`~;#";
+    const invalidNameCharacters = "\\";
 
     describe("invalid file names", () => {
       const invalidList = invalidNameCharacters.split("");

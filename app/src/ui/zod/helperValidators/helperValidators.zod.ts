@@ -146,7 +146,7 @@ const getSingleFileValidation = (options: IAppOptions) =>
   z
     .object({
       fileName: filenameValidatior(options),
-      size: z.number().min(0).max(options.maxFileSize),
+      size: z.number().min(1).max(options.maxFileSize),
     })
     .passthrough();
 

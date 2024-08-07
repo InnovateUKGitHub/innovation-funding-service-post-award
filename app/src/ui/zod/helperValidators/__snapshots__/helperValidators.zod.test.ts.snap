@@ -136,9 +136,36 @@ exports[`helperValidators getSingleFileValidation .docm 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_extension_invalid_type"
+      "i18n": "errors.invalid_extension",
+      "allowedExtensions": [
+        "pdf",
+        "xps",
+        "doc",
+        "docx",
+        "rtf",
+        "txt",
+        "csv",
+        "odt",
+        "ppt",
+        "pptx",
+        "odp",
+        "xls",
+        "xlsx",
+        "ods",
+        "jpg",
+        "jpeg",
+        "png",
+        "odg"
+      ],
+      "root": "",
+      "dir": "",
+      "base": "awoo.docm",
+      "ext": ".docm",
+      "name": "awoo"
     },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -152,9 +179,36 @@ exports[`helperValidators getSingleFileValidation .tar.gz 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_extension_invalid_type"
+      "i18n": "errors.invalid_extension",
+      "allowedExtensions": [
+        "pdf",
+        "xps",
+        "doc",
+        "docx",
+        "rtf",
+        "txt",
+        "csv",
+        "odt",
+        "ppt",
+        "pptx",
+        "odp",
+        "xls",
+        "xlsx",
+        "ods",
+        "jpg",
+        "jpeg",
+        "png",
+        "odg"
+      ],
+      "root": "",
+      "dir": "",
+      "base": "awoo.tar.gz",
+      "ext": ".gz",
+      "name": "awoo.tar"
     },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -168,9 +222,36 @@ exports[`helperValidators getSingleFileValidation .webm 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_extension_invalid_type"
+      "i18n": "errors.invalid_extension",
+      "allowedExtensions": [
+        "pdf",
+        "xps",
+        "doc",
+        "docx",
+        "rtf",
+        "txt",
+        "csv",
+        "odt",
+        "ppt",
+        "pptx",
+        "odp",
+        "xls",
+        "xlsx",
+        "ods",
+        "jpg",
+        "jpeg",
+        "png",
+        "odg"
+      ],
+      "root": "",
+      "dir": "",
+      "base": "awoo.webm",
+      "ext": ".webm",
+      "name": "awoo"
     },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -184,17 +265,16 @@ exports[`helperValidators getSingleFileValidation Linux/UNIX hidden file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_basename_too_small"
+      "i18n": "errors.no_filename",
+      "root": "",
+      "dir": "",
+      "base": ".gitignore",
+      "ext": "",
+      "name": ".gitignore"
     },
-    "path": [],
-    "message": "Invalid input"
-  },
-  {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.file_extension_invalid_type"
-    },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -208,9 +288,27 @@ exports[`helperValidators getSingleFileValidation crazy characters file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_characters"
+      "i18n": "errors.bad_characters",
+      "characters": [
+        [
+          "*",
+          "fs"
+        ],
+        [
+          "\\"",
+          "fs"
+        ]
+      ],
+      "count": 2,
+      "root": "",
+      "dir": "",
+      "base": "*&\\"£&.pptx",
+      "ext": ".pptx",
+      "name": "*&\\"£&"
     },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -224,17 +322,16 @@ exports[`helperValidators getSingleFileValidation no basename file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_basename_too_small"
+      "i18n": "errors.no_filename",
+      "root": "",
+      "dir": "",
+      "base": ".pptx",
+      "ext": "",
+      "name": ".pptx"
     },
-    "path": [],
-    "message": "Invalid input"
-  },
-  {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.file_extension_invalid_type"
-    },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -248,17 +345,16 @@ exports[`helperValidators getSingleFileValidation no prefix file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_basename_too_small"
+      "i18n": "errors.invalid_extension",
+      "root": "",
+      "dir": "",
+      "base": "jjajangmyeon",
+      "ext": "",
+      "name": "jjajangmyeon"
     },
-    "path": [],
-    "message": "Invalid input"
-  },
-  {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.file_extension_invalid_type"
-    },
-    "path": [],
+    "path": [
+      "fileName"
+    ],
     "message": "Invalid input"
   }
 ]],
@@ -280,13 +376,15 @@ exports[`helperValidators getSingleFileValidation very big sized file 1`] = `
 {
   "error": [ZodError: [
   {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.file_size_too_large",
-      "size": 100000
-    },
-    "path": [],
-    "message": "Invalid input"
+    "code": "too_big",
+    "maximum": 100000,
+    "type": "number",
+    "inclusive": true,
+    "exact": false,
+    "message": "Number must be less than or equal to 100000",
+    "path": [
+      "size"
+    ]
   }
 ]],
   "success": false,
@@ -297,12 +395,15 @@ exports[`helperValidators getSingleFileValidation zero sized file 1`] = `
 {
   "error": [ZodError: [
   {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.file_size_too_small"
-    },
-    "path": [],
-    "message": "Invalid input"
+    "code": "too_small",
+    "minimum": 1,
+    "type": "number",
+    "inclusive": true,
+    "exact": false,
+    "message": "Number must be greater than or equal to 1",
+    "path": [
+      "size"
+    ]
   }
 ]],
   "success": false,
