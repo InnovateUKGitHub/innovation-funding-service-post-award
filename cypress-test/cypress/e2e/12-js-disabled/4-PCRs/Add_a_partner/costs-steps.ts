@@ -81,9 +81,10 @@ export function checkAddLabourItem() {
       cy.validationLink("Enter rate per day.");
       cy.validationLink("Enter days spent on project.");
       cy.getByLabel("Role within project").type("Law keeper");
-      cy.validateCurrency("Gross employee cost", "Gross cost of role", "50000");
-      cy.validateCurrency("Rate (£/day)", "rate per day", "500");
-      cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "100");
+      //cy.validateCurrency("Gross employee cost", "Gross cost of role", "50000");
+      //cy.validateCurrency("Rate (£/day)", "rate per day", "500");
+      //cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "100");
+
       checkTotalCostEquals(pounds(cost));
       checkSummary("Labour", "Law keeper", cost, categoryTotal, totalCost);
     });

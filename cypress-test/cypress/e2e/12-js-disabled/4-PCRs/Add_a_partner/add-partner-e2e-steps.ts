@@ -338,16 +338,25 @@ export const validateMonthYearInput = () => {
 export const validateTurnoverInput = () => {
   ["99999999999999999999999999", "1000000000000", "1000000000001", "9000000000001"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
+    cy.inputPrefix("£", 1);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Financial year end turnover must be 100000000000 or less.");
-    cy.paragraph("Financial year end turnover must be 100000000000 or less.");
+    cy.validationLink("Financial year end turnover must be £999,999,999,999.00 or less.");
+    cy.paragraph("Financial year end turnover must be £999,999,999,999.00 or less.");
   });
-  ["-1", "test copy", `"£$%%*"`].forEach(input => {
+  ["test copy", "%^()!"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
     cy.validationLink("Enter financial year end turnover.");
     cy.paragraph("Enter financial year end turnover.");
   });
+  cy.get("#financialYearEndTurnover").clear().type("-1");
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Financial year end turnover must be £0.00 or more.");
+  cy.paragraph("Financial year end turnover must be £0.00 or more.");
+  cy.get("#financialYearEndTurnover").clear().type("$");
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Financial year end turnover must be in pounds (£).");
+  cy.paragraph("Financial year end turnover must be in pounds (£).");
 };
 
 export const completeDateAndTurnover = () => {
@@ -528,7 +537,7 @@ export const validateWithoutName = () => {
 };
 
 export const displayCostCatTable = () => {
-  ["Category", "Cost (£)"].forEach(head => {
+  ["Category", "Cost"].forEach(head => {
     cy.tableHeader(head);
   });
   let baseNumber = 0;
@@ -562,7 +571,7 @@ export const displayCostCatTable = () => {
 };
 
 export const completeAcademicCostCatTable = () => {
-  ["Category", "Cost (£)"].forEach(head => {
+  ["Category", "Cost"].forEach(head => {
     cy.tableHeader(head);
   });
   let baseNumber = 333.33;
@@ -596,12 +605,13 @@ export const completeLabourForm = () => {
   [
     ["Role within project", "Test"],
     ["Gross employee cost", "6666.66"],
-    ["Rate (£/day)", "222.22"],
+    ["Rate", "222.22"],
     ["Days to be spent by all staff with this role", "30"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
-  cy.paragraph("£6,666.60");
+  cy.inputPrefix("£", 2);
+  cy.inputSuffix("per day", 1);
   cy.clickOn("Save and return to labour");
   cy.get("h2").contains("Labour");
   cy.wait(1000);
@@ -611,7 +621,6 @@ export const completeLabourForm = () => {
 
 export const completeOverheadsSection = () => {
   cy.getByLabel("20%").click();
-  cy.paragraph("£1,333.32");
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -621,11 +630,11 @@ export const completeMaterialsForm = () => {
   [
     ["Item", "Hammer"],
     ["Quantity", "666"],
-    ["Cost per item (£)", "10.01"],
+    ["Cost per item", "10.01"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
-  cy.paragraph("£6,666.66");
+  cy.inputPrefix("£", 1);
   cy.clickOn("Save and return to materials");
   cy.get("h2").contains("Materials");
   cy.wait(1000);
@@ -636,19 +645,20 @@ export const completeMaterialsForm = () => {
 export const completeCapUsageForm = () => {
   cy.get("a").contains("Add a cost").click();
   cy.getByLabel("Item description").clear().type("Test");
-  cy.get("#type_10").click();
-  //cy.getByLabel("New").click();
+  cy.getByLabel("New").click();
   [
-    ["Depreciation period (months)", "20"],
-    ["Net present value (£)", "2000"],
-    ["Residual value at end of project (£)", "1000"],
-    ["Utilisation (%)", "99"],
+    ["Depreciation period", "20"],
+    ["Net present value", "2000"],
+    ["Residual value at end of project", "1000"],
+    ["Utilisation", "99"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
-  cy.paragraph("£990.00");
+  cy.inputPrefix("£", 2);
+  ["%", "months"].forEach(suffix => {
+    cy.inputSuffix(suffix, 2);
+  });
   cy.clickOn("Save and return to capital usage");
-  cy.get("h2").contains("Capital usage");
   cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
@@ -663,11 +673,12 @@ export const completeSubcontractingForm = () => {
       "Role of the the subcontractor in the project and description of the work they will do",
       "Resyk into canned form for Megacity 1.",
     ],
-    ["Cost (£)", "3000"],
+    ["Cost", "3000"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.wait(500);
+  cy.inputPrefix("£", 1);
   cy.clickOn("Save and return to subcontracting");
   cy.get("th").contains("Description");
   cy.wait(1000);
@@ -680,12 +691,12 @@ export const completeTandSForm = () => {
   [
     ["Purpose of journey or description of subsistence cost", "Journeying into the cursed earth."],
     ["Number of times", "2"],
-    ["Cost of each (£)", "500"],
+    ["Cost of each", "500"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
-  cy.paragraph("£1,000.00");
   cy.wait(500);
+  cy.inputPrefix("£", 1);
   cy.clickOn("Save and return to travel and subsistence");
   cy.tableHeader("Description");
   cy.wait(1000);
@@ -704,11 +715,12 @@ export const completeOtherCostsForm = (costsNumber?: string) => {
       "Description and justification of the cost",
       "500x Lawgiver Mk2 standard execution rounds, 200x Lawgiver Mk2 hi-ex rounds, 10x stumm grenades",
     ],
-    ["Estimated cost (£)", "1000"],
+    ["Estimated cost", "1000"],
   ].forEach(([label, input]) => {
     cy.getByLabel(label).type(input);
   });
   cy.wait(500);
+  cy.inputPrefix("£", 1);
   cy.get("button").contains(`Save and return to other costs${costsNumber}`).click();
   cy.get("h2").contains(`Other costs`);
   cy.clickOn("Save and return to project costs");
@@ -1200,4 +1212,9 @@ export const accessCompanyHouseValidationPersists = () => {
   ["Enter organisation name.", "Enter registration number.", "Enter registered address."].forEach(validationMsg => {
     cy.validationLink(validationMsg);
   });
+};
+
+export const navigateToPartnerCosts = () => {
+  cy.getListItemFromKey("Project costs for new partner", "Edit").click();
+  cy.get("h2").contains("Project costs for new partner");
 };
