@@ -15,13 +15,15 @@ import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
 export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">[]) =>
-  evaluateObject(data => ({
+  evaluateObject((data: { markedAsComplete: boolean }) => ({
     markedAsComplete: z.boolean(),
     accountName: getTextareaValidation({
       maxLength: 256,
       required: data.markedAsComplete,
     }),
-    partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
+    partnerId: data.markedAsComplete
+      ? partnerIdValidation
+      : z.union([emptyStringToNullValidation, partnerIdValidation]),
     form: z.union([z.literal(FormTypes.PcrRenamePartnerSummary), z.literal(FormTypes.PcrRenamePartnerStep)]),
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,

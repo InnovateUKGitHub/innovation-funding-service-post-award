@@ -2210,60 +2210,28 @@
           }
         },
         "contact1Forename": {
-          "errors": {
-            "too_small": "Enter a finance contact name.",
-            "invalid_type": "Enter a finance contact name.",
-            "too_big": "Finance contact name must be {{count}} characters or less."
-          }
+          "label": "Finance contact first name"
         },
         "contact1Surname": {
-          "errors": {
-            "too_small": "Enter a finance contact surname.",
-            "invalid_type": "Enter a finance contact surname.",
-            "too_big": "Finance contact surname must be {{count}} characters or less."
-          }
+          "label": "Finance contact last name"
         },
         "contact1Email": {
-          "errors": {
-            "too_small": "Enter a finance contact email address.",
-            "invalid_type": "Enter a finance contact email address.",
-            "too_big": "Email address must be {{count}} characters or less."
-          }
+          "label": "Finance contact email address"
         },
         "contact1Phone": {
-          "errors": {
-            "too_small": "Enter a finance contact phone number.",
-            "invalid_type": "Enter a finance contact phone number.",
-            "too_big": "Finance contact phone number must be {{count}} characters or less."
-          }
+          "label": "Finance contact phone number"
         },
         "contact2Forename": {
-          "errors": {
-            "too_small": "Enter a project manager name.",
-            "invalid_type": "Enter a project manager name.",
-            "too_big": "Project manager name must be {{count}} characters or less."
-          }
+          "label": "Project manager first name"
         },
         "contact2Surname": {
-          "errors": {
-            "too_small": "Enter a project manager surname.",
-            "invalid_type": "Enter a project manager surname.",
-            "too_big": "Project manager surname must be {{count}} characters or less."
-          }
+          "label": "Project manager last name"
         },
         "contact2Email": {
-          "errors": {
-            "too_small": "Enter a project manager email address.",
-            "invalid_type": "Enter a project manager email address.",
-            "too_big": "Email address must be {{count}} characters or less."
-          }
+          "label": "Project manager email address"
         },
         "contact2Phone": {
-          "errors": {
-            "too_small": "Enter a project manager phone number.",
-            "invalid_type": "Enter a project manager phone number.",
-            "too_big": "Project manager phone number must be {{count}} characters or less."
-          }
+          "label": "Project manager phone number"
         },
         "costs": {
           "arrayType": {
@@ -2274,13 +2242,7 @@
           }
         },
         "financialYearEndTurnover": {
-          "label": "Financial year end turnover",
-          "errors": {
-            "invalid_type_received_null": "Enter a financial year end turnover.",
-            "invalid_type_received_string": "Enter a valid financial year end turnover.",
-            "too_small": "Enter a valid financial year end turnover.",
-            "too_big": "Financial year end turnover must be {{count}} or less."
-          }
+          "label": "Financial year end turnover"
         },
         "financialYearEndDate": {
           "errors": {
@@ -2516,10 +2478,7 @@
           }
         },
         "tsbReference": {
-          "errors": {
-            "too_small": "Enter the TSB reference.",
-            "invalid_type": "Enter the TSB reference."
-          }
+          "label": "TSB reference"
         },
         "search": {
           "label": "Search query"
@@ -2554,7 +2513,8 @@
       "renamePartner": {
         "partnerId": {
           "errors": {
-            "too_small": "Select partner to change."
+            "invalid_type": "Select an existing partner to change",
+            "too_small": "Select an existing partner to change."
           }
         },
         "accountName": {
