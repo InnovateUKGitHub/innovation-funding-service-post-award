@@ -67,7 +67,7 @@ export const getClaimSummarySchema = ({
       }),
       comments: getTextareaValidation({
         maxLength: 1000,
-        required: true,
+        required: false,
       }),
       documents: z
         .object({ description: z.nullable(z.number()).optional() })
