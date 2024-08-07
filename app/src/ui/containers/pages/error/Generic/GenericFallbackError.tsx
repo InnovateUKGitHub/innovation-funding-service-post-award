@@ -1,23 +1,13 @@
-import { ErrorPayload } from "@shared/create-error-payload";
+import { ClientErrorResponse } from "@server/errorHandlers";
+import { ExternalLink } from "@ui/components/atoms/ExternalLink/externalLink";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "@ui/components/molecules/Content/content";
+import { ErrorInformation } from "@ui/components/molecules/ErrorSummary/ErrorInformation";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { Section } from "@ui/components/molecules/Section/section";
 import { PageTitle } from "@ui/features/page-title";
 
-import { Page } from "@ui/components/molecules/Page/Page";
-import { Section } from "../../../../components/molecules/Section/section";
-import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
-import { Content } from "../../../../components/molecules/Content/content";
-import { ExternalLink } from "../../../../components/atoms/ExternalLink/externalLink";
-import { H2 } from "../../../../components/atoms/Heading/Heading.variants";
-import { useClientConfig } from "@ui/context/ClientConfigProvider";
-import { ErrorDetails } from "@ui/components/molecules/ErrorSummary/ErrorDetails";
-import { P } from "@ui/components/atoms/Paragraph/Paragraph";
-
-export type GenericFallbackErrorProps = ErrorPayload["params"];
-
-export const GenericFallbackError = ({ errorStack, errorMessage, errorDetails }: GenericFallbackErrorProps) => {
-  const config = useClientConfig();
-
-  const internalError = !config.ssoEnabled && (errorStack || errorMessage || errorDetails);
-
+export const GenericFallbackError = ({ error = null }: { error?: ClientErrorResponse | null }) => {
   return (
     <Page isActive qa="fallback-error" pageTitle={<PageTitle />}>
       <Section>
@@ -33,23 +23,7 @@ export const GenericFallbackError = ({ errorStack, errorMessage, errorDetails }:
         </SimpleString>
       </Section>
 
-      {internalError && (
-        <Section>
-          <H2>
-            <Content value={x => x.pages.genericFallbackError.developerHeading} />
-          </H2>
-
-          {errorMessage && <P>{errorMessage}</P>}
-
-          {errorStack && <pre style={{ whiteSpace: "pre-wrap" }}>{errorStack}</pre>}
-
-          {errorDetails && (
-            <ol>
-              <ErrorDetails details={errorDetails} />
-            </ol>
-          )}
-        </Section>
-      )}
+      {error && <ErrorInformation error={error} />}
     </Page>
   );
 };

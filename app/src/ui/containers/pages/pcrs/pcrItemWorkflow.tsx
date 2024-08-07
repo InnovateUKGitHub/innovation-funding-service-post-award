@@ -1,13 +1,12 @@
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
-import { IAppError } from "@framework/types/IAppError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
+import { ClientErrorResponse } from "@server/errorHandlers";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { Results } from "@ui/validation/results";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
@@ -81,7 +80,7 @@ type PcrWorkflowContextProps = Data &
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
     markedAsCompleteHasBeenChecked: boolean;
     setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
-    apiError: IAppError<Results<ResultBase>> | null | undefined;
+    apiError: ClientErrorResponse | null;
     refreshItemWorkflowQuery: () => Promise<void>;
   };
 

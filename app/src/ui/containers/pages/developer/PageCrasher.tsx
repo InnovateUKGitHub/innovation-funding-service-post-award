@@ -21,7 +21,7 @@ const PageCrasher = () => {
 
   return (
     <Section title={getContent(x => x.components.pageCrasher.sectionTitle)}>
-      <form action={DeveloperPageCrasherPage.routePath}>
+      <form action={DeveloperPageCrasherPage.routePath} method="POST">
         {crashTypes.map(name => (
           <Button name="crashType" value={name} key={name}>
             {getContent(x => x.components.pageCrasher.throw({ name }))}

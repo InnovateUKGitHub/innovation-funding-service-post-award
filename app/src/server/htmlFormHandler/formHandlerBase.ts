@@ -109,7 +109,7 @@ abstract class FormHandlerBase<TParams, TDto extends AnyObject> implements IForm
       delete body[`button_${button.name}`];
     }
 
-    const session: ISession = { user: req.session?.user };
+    const session: ISession = { user: req.session?.user, tid: res.locals.tid };
     const context = contextProvider.start(session);
 
     let dto: TDto;

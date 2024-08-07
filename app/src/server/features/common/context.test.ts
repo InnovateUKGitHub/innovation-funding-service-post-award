@@ -34,7 +34,7 @@ describe("constructErrorResponse", () => {
 });
 
 describe("Context", () => {
-  const context = new Context({ email: "user@email.com" });
+  const context = new Context({ user: { email: "user@email.com" }, tid: "ctx" });
 
   it("should contain the repositories", () => {
     expect(context.repositories).toMatchSnapshot();

@@ -1,6 +1,6 @@
 import { ForbiddenError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
-import { Request } from "express";
+import { Request, Response } from "express";
 import { getFeedAttachmentDataLoader } from "./dataloader/feedAttachmentDataLoader";
 import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { getUserContactDataLoader } from "./dataloader/userContactDataLoader";
@@ -15,6 +15,7 @@ export type PartialGraphQLContext = Record<string, unknown> & {
   adminApi: Api;
   email: string;
   developerEmail: string | null;
+  tid: string;
 };
 
 export type GraphQLContext = PartialGraphQLContext & {
@@ -28,9 +29,11 @@ export type GraphQLContext = PartialGraphQLContext & {
 export const createContextFromEmail = async ({
   email,
   developerEmail = null,
+  tid,
 }: {
   email: string;
   developerEmail?: string | null;
+  tid: string;
 }): Promise<GraphQLContext | EmptyObject> => {
   try {
     const [api, adminApi] = await Promise.all([Api.asUser(email), Api.asSystemUser()]);
@@ -41,6 +44,7 @@ export const createContextFromEmail = async ({
       email,
       api,
       adminApi,
+      tid,
     };
 
     // Create a full context, including DataLoaders.
@@ -55,16 +59,17 @@ export const createContextFromEmail = async ({
 
     return ctx;
   } catch (e) {
-    logger.warn("Failed to login", email, e);
+    logger.warn("Failed to login", { email, tid });
     return {};
   }
 };
 
-export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | EmptyObject> => {
+export const createContext = ({ req, res }: { req: Request; res: Response }): Promise<GraphQLContext | EmptyObject> => {
   const email = req.session?.user.email ?? null;
   const developerEmail = req.session?.user?.developer_oidc_username ?? null;
+  const tid = res.locals.tid;
 
-  if (email) return createContextFromEmail({ email, developerEmail });
+  if (email) return createContextFromEmail({ email, developerEmail, tid });
 
   throw new ForbiddenError("You are not logged in.");
 };
