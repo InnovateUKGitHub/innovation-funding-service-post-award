@@ -31,7 +31,16 @@ const registerIntlFormatter = () => {
   });
 
   i18next.services.formatter?.add("lowercase", value => {
-    if (typeof value === "string") return value.toLocaleLowerCase();
+    if (typeof value === "string") {
+      return (
+        value
+          .split(" ")
+          // do not lower case if word is more than 1 char and entirely upper case, since this is assumed to be an abbreviation
+          .map(x => (x.length > 1 && /^[A-Z]+$/.test(x) ? x : x.toLocaleLowerCase()))
+          .join(" ")
+      );
+    }
+
     return value;
   });
 

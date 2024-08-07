@@ -153,7 +153,7 @@ export const makeZodI18nMap =
     };
 
     // Setup interpreted values
-    const baseInterpValues = {
+    const baseInterpretedValues = {
       ns,
       input: zodIssueContext.data,
       context,
@@ -168,9 +168,9 @@ export const makeZodI18nMap =
         issueType: "type" in issue ? issue.type : undefined,
       });
 
-    const interpValues = {
-      ...baseInterpValues,
-      label: t(makeKey("label"), { ...baseInterpValues }),
+    const interpretedValues = {
+      ...baseInterpretedValues,
+      label: t(makeKey("label"), { ...baseInterpretedValues }),
     };
 
     let message: string;
@@ -179,61 +179,61 @@ export const makeZodI18nMap =
     switch (issue.code) {
       case ZodIssueCode.invalid_type:
         message = t(makeKey(`errors.invalid_type_received_${issue.received}`, "errors.invalid_type"), {
-          ...interpValues,
+          ...interpretedValues,
           expected: t(`types.${issue.expected}`, {
             defaultValue: issue.expected,
-            ...interpValues,
+            ...interpretedValues,
           }),
           received: t(`types.${issue.received}`, {
             defaultValue: issue.received,
-            ...interpValues,
+            ...interpretedValues,
           }),
         });
         break;
       case ZodIssueCode.invalid_literal:
         message = t(makeKey("errors.invalid_literal"), {
           expected: JSON.stringify(issue.expected),
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.unrecognized_keys:
         message = t(makeKey("errors.unrecognized_keys"), {
           keys: joinValues(issue.keys, ", "),
           count: issue.keys.length,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_union:
         message = t(makeKey("errors.invalid_union"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_union_discriminator:
         message = t(makeKey("errors.invalid_union_discriminator"), {
           options: joinValues(issue.options),
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_enum_value:
         message = t(makeKey("errors.invalid_enum_value"), {
           options: joinValues(issue.options),
           received: issue.received,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_arguments:
         message = t(makeKey("errors.invalid_arguments"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_return_type:
         message = t(makeKey("errors.invalid_return_type"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_date:
         message = t(makeKey("errors.invalid_date"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_string:
@@ -241,21 +241,21 @@ export const makeZodI18nMap =
           if ("startsWith" in issue.validation) {
             message = t(makeKey("errors.invalid_string.startsWith"), {
               startsWith: issue.validation.startsWith,
-              ...interpValues,
+              ...interpretedValues,
             });
           } else if ("endsWith" in issue.validation) {
             message = t(makeKey("errors.invalid_string.endsWith"), {
               endsWith: issue.validation.endsWith,
-              ...interpValues,
+              ...interpretedValues,
             });
           }
         } else {
           message = t(makeKey(`errors.invalid_string.${issue.validation}`), {
             validation: t(`validations.${issue.validation}`, {
               defaultValue: issue.validation,
-              ...interpValues,
+              ...interpretedValues,
             }),
-            ...interpValues,
+            ...interpretedValues,
           });
         }
         break;
@@ -264,7 +264,7 @@ export const makeZodI18nMap =
         message = t(makeKey("errors.too_small"), {
           minimum,
           count: typeof minimum === "number" ? minimum : undefined,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.too_big:
@@ -272,29 +272,29 @@ export const makeZodI18nMap =
         message = t(makeKey("errors.too_big"), {
           maximum,
           count: typeof maximum === "number" ? maximum : undefined,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.custom:
         message = t(makeKey(issue.params?.i18n ?? "errors.custom"), {
           ...issue.params,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.invalid_intersection_types:
         message = t(makeKey("errors.invalid_intersection_types"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.not_multiple_of:
         message = t(makeKey("errors.not_multiple_of"), {
           multipleOf: issue.multipleOf,
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       case ZodIssueCode.not_finite:
         message = t(makeKey("errors.not_finite"), {
-          ...interpValues,
+          ...interpretedValues,
         });
         break;
       default:
