@@ -40,8 +40,10 @@ export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHa
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<OverheadSchemaType>> {
+    const id = typeof input.id === "string" && input.id.trim().length > 0 ? input.id : null;
+
     return {
-      id: input.id,
+      id,
       form: input.form,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
       overheadRate: input.overheadRate,
