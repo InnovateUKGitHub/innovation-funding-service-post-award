@@ -2,13 +2,12 @@ import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
 import pkg from "../../package.json";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
 import { IClientConfig } from "../types/IClientConfig";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
-import { ServerError } from "@ui/context/server-error";
+import { ClientErrorResponse } from "./errorHandlers";
 
 let versionInformation = "";
 
@@ -58,13 +57,14 @@ export function renderHtml({
   preloadedServerInput,
   preloadedData,
   preloadedServerErrors,
+  isErrorPage,
 }: {
   HelmetInstance: HelmetData;
   html: string;
   nonce: string;
   relayData?: SSRCache;
   formError: Result[] | undefined;
-  apiError: IAppError | undefined;
+  apiError: ClientErrorResponse | null;
   clientConfig: IClientConfig;
   jsDisabled: boolean;
   messages?: string[];
@@ -72,7 +72,8 @@ export function renderHtml({
   serverZodErrors: ZodIssue[];
   preloadedServerInput: AnyObject | undefined;
   preloadedData: AnyObject;
-  preloadedServerErrors: ServerError;
+  preloadedServerErrors: ClientErrorResponse | null;
+  isErrorPage: boolean;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -126,6 +127,7 @@ export function renderHtml({
             window.__PRELOADED_SERVER_ERRORS__ = ${
               preloadedServerErrors ? injectJson(preloadedServerErrors) : undefined
             }
+            window.__IS_ERROR_PAGE__ = ${isErrorPage};
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

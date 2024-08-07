@@ -1,9 +1,9 @@
-import { isApiError } from "@framework/util/errorHelpers";
 import { useApiErrorContext } from "@ui/context/api-error";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 export enum Propagation {
   STOP,
@@ -57,8 +57,8 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
       const propagation = onError(e);
 
       // If not cancelled and is an api error...
-      if (propagation !== Propagation.STOP && isApiError(e)) {
-        setApiError(e);
+      if (propagation !== Propagation.STOP) {
+        setApiError(e as unknown as ClientErrorResponse);
         scrollToTheTopSmoothly();
       }
 

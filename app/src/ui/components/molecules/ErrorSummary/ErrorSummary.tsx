@@ -1,31 +1,17 @@
 import { ErrorCode } from "@framework/constants/enums";
-import { IAppError } from "@framework/types/IAppError";
+import { ClientErrorResponse } from "@server/errorHandlers";
 import { useContent } from "@ui/hooks/content.hook";
-import { H2 } from "../../atoms/Heading/Heading.variants";
 import { Info } from "../../atoms/Details/Details";
-import { ErrorDetails } from "./ErrorDetails";
-import { useClientConfig } from "@ui/context/ClientConfigProvider";
+import { H2 } from "../../atoms/Heading/Heading.variants";
+import { ErrorInformation } from "./ErrorInformation";
 
 export interface ErrorSummaryProps {
-  error?: Partial<IAppError>;
+  error?: ClientErrorResponse;
 }
 
-const StackTrace = ({ stack, cause }: Pick<IAppError, "stack" | "cause">) => {
-  const nestedCause = cause as unknown as IAppError | null;
-
-  return (
-    <div className="ifspa-developer-stacktrace">
-      <pre className="ifspa-developer-stacktrace-stack">{stack}</pre>
-      {nestedCause && <StackTrace stack={nestedCause.stack} cause={nestedCause.cause} />}
-    </div>
-  );
-};
-
-export const ErrorSummary = ({ error = {} }: ErrorSummaryProps) => {
-  const { code, details, stack, cause } = error;
-
+export const ErrorSummary = ({ error }: ErrorSummaryProps) => {
+  const { code, details } = error ?? {};
   const { getContent } = useContent();
-  const { features } = useClientConfig();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
   const title = getContent(x => x.components.errorSummary.title);
@@ -59,10 +45,9 @@ export const ErrorSummary = ({ error = {} }: ErrorSummaryProps) => {
           </p>
         )}
 
-        {features.detailedErrorSummaryComponent && Array.isArray(details) && (
+        {error && (
           <Info summary={getContent(x => x.components.errorSummary.info)} className="govuk-!-margin-bottom-0">
-            <StackTrace cause={cause ?? null} stack={stack} />
-            <ErrorDetails details={details} />
+            <ErrorInformation error={error} />
           </Info>
         )}
       </div>

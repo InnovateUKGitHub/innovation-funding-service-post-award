@@ -11,12 +11,11 @@ import { createContext } from "react";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryItem } from "@framework/types/CostCategory";
 import { BaseProps } from "@ui/containers/containerBase";
-import { IAppError } from "@framework/types/IAppError";
-import { Results } from "@ui/validation/results";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { SpendProfileCostsQuery } from "./__generated__/SpendProfileCostsQuery.graphql";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 export const useSpendProfileCostsQuery = (
   projectId: ProjectId,
@@ -157,7 +156,7 @@ type SpendProfileContextType = {
   documents: SpendProfileQueryReturnType["documents"];
   costCategory: SpendProfileQueryReturnType["costCategory"];
   pcrItem: SpendProfileQueryReturnType["pcrItem"];
-  apiError: IAppError<Results<ResultBase>> | null | undefined;
+  apiError: ClientErrorResponse | null;
   stepRoute: ILinkInfo;
   addNewItem: boolean;
   fragmentRef: unknown;

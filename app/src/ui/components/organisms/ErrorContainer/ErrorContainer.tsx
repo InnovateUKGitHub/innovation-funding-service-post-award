@@ -1,26 +1,26 @@
-import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
 import { ContentProvider } from "@ui/context/contentProvider";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
-import { errorPages, internalErrorFallback, InternalErrorTypes } from "./utils/error.config";
 import { FallbackProps } from "react-error-boundary";
-import { IAppError } from "@framework/types/IAppError";
 import { FullHeight } from "../../atoms/FullHeight/FullHeight";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
 import { Header } from "../Header/header";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
+import { ErrorCode } from "@framework/constants/enums";
+import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
+import { UnauthenticatedError } from "@ui/containers/pages/error/Unauthenticated/UnauthenticatedError";
+import { GenericFallbackError } from "@ui/containers/pages/error/Generic/GenericFallbackError";
+import { ClientErrorResponse, getErrorResponse } from "@server/errorHandlers";
 
-export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
-
-/**
- * Error hoc which switches between UI based on errorType
- */
-export const ErrorContainer = (props: ErrorContainerProps) => {
-  const predefinedError = errorPages[props.errorType as InternalErrorTypes];
-
-  const ErrorUI = predefinedError || internalErrorFallback;
-
-  return <ErrorUI {...props} />;
+export const ErrorContainer = ({ error }: { error?: ClientErrorResponse | null }) => {
+  switch (error?.code) {
+    case ErrorCode.NOT_FOUND:
+      return <NotFoundError />;
+    case ErrorCode.UNAUTHENTICATED_ERROR:
+      return <UnauthenticatedError />;
+    default:
+      return <GenericFallbackError error={error} />;
+  }
 };
 
 /**
@@ -28,7 +28,7 @@ export const ErrorContainer = (props: ErrorContainerProps) => {
  * Requires Providers and page layout because fallback lies outside main react component tree
  */
 export function ErrorBoundaryFallback({ error }: FallbackProps) {
-  const errorPayload = createErrorPayload(error as unknown as IAppError, false);
+  const errorPayload = getErrorResponse(error, "// TODO: Add Trace ID");
   const content = useInitContent();
   const config = useClientConfig();
 
@@ -42,7 +42,7 @@ export function ErrorBoundaryFallback({ error }: FallbackProps) {
           <Header headingLink={`${config.ifsRoot}/competition/search`} />
           <FullHeight.Content>
             <GovWidthContainer>
-              <ErrorContainer {...errorPayload.params} />
+              <ErrorContainer error={errorPayload} />
             </GovWidthContainer>
           </FullHeight.Content>
         </FullHeight.Container>

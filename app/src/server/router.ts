@@ -39,7 +39,7 @@ const getServerRoutes = async () => {
   router.use("/graphql", async (req, res, next) => {
     createHandler({
       schema,
-      context: await createContext({ req }),
+      context: await createContext({ req, res }),
     })(req, res, next);
   });
 

@@ -30,7 +30,7 @@ export class DeveloperPageCrasherHandler implements IFormHandler {
     // outside of a development environment.
     if (configuration.sso.enabled) return next();
 
-    switch (req.body.button_crashType) {
+    switch (req.body.crashType) {
       case "Error":
         throw new Error("This page has crashed on purpose.");
       case "NotFoundError":

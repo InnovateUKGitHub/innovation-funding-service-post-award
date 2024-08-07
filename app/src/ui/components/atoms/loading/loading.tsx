@@ -1,12 +1,11 @@
 import { ReactNode, Suspense } from "react";
-import { createErrorPayload } from "@shared/create-error-payload";
 import { useContent } from "@ui/hooks/content.hook";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { OperationType } from "relay-runtime";
-import { ErrorCode } from "@framework/constants/enums";
 import { ErrorContainer } from "../../organisms/ErrorContainer/ErrorContainer";
 import { GovWidthContainer } from "../GovWidthContainer/GovWidthContainer";
+import { getErrorResponse } from "@server/errorHandlers";
 
 export const LoadingMessage = () => {
   const { getContent } = useContent();
@@ -42,23 +41,12 @@ const isGraphQLLoading = <T extends OperationType>(
   return false;
 };
 
-const GraphQLLoader = <T extends OperationType>(props: Pick<graphqlLoadingAndErrorType<T>, "error" | "isLoading">) => {
-  if (props.isLoading) {
-    return <LoadingMessage />;
-  }
-
-  if (props.error) {
-    const error = createErrorPayload(
-      {
-        code: ErrorCode.UNKNOWN_ERROR,
-        message: props.error.message,
-        details: [],
-      },
-      true,
-    ).params;
-
-    return <ErrorContainer from="PageLoader" {...error} />;
-  }
+const GraphQLLoader = <T extends OperationType>({
+  isLoading,
+  error,
+}: Pick<graphqlLoadingAndErrorType<T>, "error" | "isLoading">) => {
+  if (isLoading) return <LoadingMessage />;
+  if (error) return <ErrorContainer error={getErrorResponse(error, "// TODO: Add a trace ID thing here")} />;
 
   return null;
 };

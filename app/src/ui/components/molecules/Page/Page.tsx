@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { IAppError } from "@framework/types/IAppError";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { FragmentContext } from "@gql/utils/fragmentContextHook";
 import { AriaLive } from "@ui/components/atoms/AriaLive/ariaLive";
@@ -11,12 +10,13 @@ import { ValidationSummary } from "../../atoms/validation/ValidationSummary/Vali
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
 import { useClearMessagesOnRouteChange } from "@ui/context/messages";
 import { useBaseProps } from "@framework/api-helpers/useBaseProps";
+import { ClientErrorResponse } from "@server/errorHandlers";
 
 export interface PageProps {
   pageTitle: React.ReactNode;
   children: React.ReactNode;
   backLink?: React.ReactNode;
-  apiError?: IAppError | null;
+  apiError?: ClientErrorResponse | null;
   validationErrors?: RhfErrors;
   qa?: string;
   className?: string;

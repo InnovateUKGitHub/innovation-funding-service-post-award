@@ -16,6 +16,7 @@ import { developmentRouter } from "@server/developmentReloader";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
 import { configuration } from "./features/common/config";
+import { v4 } from "uuid";
 
 export class Server {
   private readonly app: express.Express;
@@ -73,8 +74,12 @@ export class Server {
     this.app.use(developmentRouter);
   }
 
-  private readonly requestLogger = (req: express.Request, _res: express.Response, next: express.NextFunction): void => {
-    this.logger.debug(`${req.method} Request - ${req.url}`);
+  private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+    const tid = v4({});
+    newrelic?.addCustomAttribute("acc.tid", tid);
+    res.locals.tid = tid;
+
+    this.logger.debug(`${req.method} Request - ${req.url}`, { tid });
 
     next();
   };
@@ -144,13 +149,13 @@ export class Server {
   private readonly stubEmail = configuration.salesforceServiceUser.serviceUsername;
 
   private async primeCaches(): Promise<void> {
-    const cacheContext = contextProvider.start({ user: { email: this.stubEmail } });
+    const cacheContext = contextProvider.start({ user: { email: this.stubEmail }, tid: "prime-caches" });
 
     await fetchCaches(cacheContext);
   }
 
   private async initialiseCustomContent(loadCustom: boolean): Promise<void> {
-    const context = contextProvider.start({ user: { email: this.stubEmail } });
+    const context = contextProvider.start({ user: { email: this.stubEmail }, tid: "initalise-custom-content" });
 
     try {
       const hasInitialised = await context.runCommand(new InitialiseContentCommand(loadCustom));
