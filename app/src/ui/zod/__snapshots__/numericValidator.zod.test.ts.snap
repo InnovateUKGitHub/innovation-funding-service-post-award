@@ -1,0 +1,341 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`number currency validator accept 0 when not required 1`] = `
+{
+  "data": {
+    "heinz": 0,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 0 when required 1`] = `
+{
+  "data": {
+    "heinz": 0,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 1 when not required 1`] = `
+{
+  "data": {
+    "heinz": 1,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 1 when required 1`] = `
+{
+  "data": {
+    "heinz": 1,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 1.01 when not required 1`] = `
+{
+  "data": {
+    "heinz": 1.01,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 1.01 when required 1`] = `
+{
+  "data": {
+    "heinz": 1.01,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 2 when not required 1`] = `
+{
+  "data": {
+    "heinz": 2,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 2 when required 1`] = `
+{
+  "data": {
+    "heinz": 2,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 3 when not required 1`] = `
+{
+  "data": {
+    "heinz": 3,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 3 when required 1`] = `
+{
+  "data": {
+    "heinz": 3,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 5 when not required 1`] = `
+{
+  "data": {
+    "heinz": 5,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 5 when required 1`] = `
+{
+  "data": {
+    "heinz": 5,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 500 when not required 1`] = `
+{
+  "data": {
+    "heinz": 500,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept 500 when required 1`] = `
+{
+  "data": {
+    "heinz": 500,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept null when not required 1`] = `
+{
+  "data": {
+    "heinz": null,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator accept undefined when not required 1`] = `
+{
+  "data": {
+    "heinz": undefined,
+  },
+  "success": true,
+}
+`;
+
+exports[`number currency validator decline NaN when not required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.number.invalid_type"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be a number."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline NaN when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.number.invalid_type"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be a number."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline infinity when not required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 1000000,
+      "generic": true,
+      "i18n": "errors.generic.number.too_big"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 1000000 or less."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline infinity when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 1000000,
+      "generic": true,
+      "i18n": "errors.generic.number.too_big"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 1000000 or less."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline null when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.number.required"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "Enter New Jeans."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline too big when not required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 1000000,
+      "generic": true,
+      "i18n": "errors.generic.number.too_big"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 1000000 or less."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline too big when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 1000000,
+      "generic": true,
+      "i18n": "errors.generic.number.too_big"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 1000000 or less."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline too small when not required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 0,
+      "generic": true,
+      "i18n": "errors.generic.number.too_small"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 0 or more."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline too small when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "count": 0,
+      "generic": true,
+      "i18n": "errors.generic.number.too_small"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "New Jeans must be 0 or more."
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`number currency validator decline undefined when required 1`] = `
+{
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "generic": true,
+      "i18n": "errors.generic.number.required"
+    },
+    "path": [
+      "heinz"
+    ],
+    "message": "Enter New Jeans."
+  }
+]],
+  "success": false,
+}
+`;

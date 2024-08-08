@@ -2004,6 +2004,13 @@
           "two_decimal_places": "{{label, key}} must be 2 decimal places or fewer.",
           "invalid_currency": "{{label, key}} must be a valid currency.",
           "not_pounds": "{{label, key}} must be in pounds (£)."
+        },
+        "number": {
+          "required": "Enter {{label, key, lowercase}}.",
+          "invalid_type": "{{label, key}} must be a number.",
+          "not_a_number": "{{label, key}} must be a number.",
+          "too_big": "{{label, key}} must be {{count, currency}} or less.",
+          "too_small": "{{label, key}} must be {{count, currency}} or more."
         }
       }
     },
@@ -2201,10 +2208,10 @@
       "addPartner": {
         "awardRate": {
           "errors": {
-            "required": "Enter a funding level.",
-            "too_small": "Enter a valid funding level.",
-            "invalid_type": "Enter a valid funding level.",
-            "invalid_type_received_null": "Enter a funding level.",
+            "required": "Enter funding level.",
+            "too_small": "Enter funding level.",
+            "invalid_type": "Funding level must be number.",
+            "invalid_type_received_null": "Enter funding level.",
             "too_big": "Enter a funding level up to {{count}}%.",
             "two_decimal_places": "Funding level must be 2 decimal places or fewer."
           }
@@ -2246,9 +2253,9 @@
         },
         "financialYearEndDate": {
           "errors": {
-            "invalid_type_received_null": "Enter a financial year end.",
+            "invalid_type_received_null": "Enter financial year end.",
             "invalid_type_received_string": "Enter a valid financial year end.",
-            "too_small": "Enter a financial year end.",
+            "too_small": "Enter financial year end.",
             "custom": "Enter a valid financial year end."
           }
         },
@@ -2274,15 +2281,16 @@
         },
         "isCommercialWork": {
           "errors": {
-            "invalid_type": "Select a project output.",
-            "too_small": "Select a project output."
+            "invalid_type": "Select project output.",
+            "too_small": "Select project output."
           }
         },
 
         "numberOfEmployees": {
+          "label": "Number of employees",
           "aria_label": "number of full-time employees",
           "errors": {
-            "invalid_type_received_null": "Enter the number of employees.",
+            "invalid_type_received_null": "Enter number of employees.",
             "invalid_type_received_string": "Enter a valid number of employees.",
             "custom": "Enter a valid number of employees.",
             "too_small": "Enter a valid number of employees.",
@@ -2294,13 +2302,13 @@
         },
         "participantSize": {
           "errors": {
-            "too_small": "Select a participant size."
+            "too_small": "Select participant size."
           }
         },
         "partnerType": {
           "errors": {
-            "invalid_type": "Select a partner type.",
-            "too_small": "Select a partner type."
+            "invalid_type": "Select partner type.",
+            "too_small": "Select partner type."
           }
         },
         "projectCity": {
@@ -2308,8 +2316,8 @@
         },
         "projectLocation": {
           "errors": {
-            "invalid_type": "Select a project location.",
-            "too_small": "Select a project location."
+            "invalid_type": "Select project location.",
+            "too_small": "Select project location."
           }
         },
         "projectPostcode": {
@@ -2317,8 +2325,8 @@
         },
         "projectRole": {
           "errors": {
-            "invalid_type": "Select a project role.",
-            "too_small": "Select a project role."
+            "invalid_type": "Select project role.",
+            "too_small": "Select project role."
           }
         },
         "registeredAddress": {
@@ -2513,8 +2521,8 @@
       "renamePartner": {
         "partnerId": {
           "errors": {
-            "invalid_type": "Select an existing partner to change",
-            "too_small": "Select an existing partner to change."
+            "invalid_type": "Select existing partner to change",
+            "too_small": "Select existing partner to change."
           }
         },
         "accountName": {
@@ -2527,16 +2535,16 @@
       "projectSuspension": {
         "suspensionStartDate": {
           "errors": {
-            "invalid_type": "Enter a valid project suspension start date.",
-            "custom": "Enter a valid project suspension start date.",
+            "invalid_type": "Enter valid project suspension start date.",
+            "custom": "Enter valid project suspension start date.",
             "readonly": "Project suspension start date cannot be changed."
           }
         },
         "suspensionEndDate": {
           "errors": {
-            "invalid_type": "Enter a valid project suspension end date.",
+            "invalid_type": "Enter valid project suspension end date.",
             "too_small": "The last day of pause cannot be before the first day of pause.",
-            "custom": "Enter a valid project suspension end date.",
+            "custom": "Enter valid project suspension end date.",
             "readonly": "Project suspension end date cannot be changed."
           }
         }
@@ -2655,51 +2663,28 @@
       },
       "approveNewSubcontractor": {
         "subcontractorName": {
-          "errors": {
-            "too_small": "Enter the subcontractor's name.",
-            "too_big": "Subcontractor's name must be {{ count }} characters or less."
-          }
+          "label": "Subcontractor's name"
         },
         "subcontractorRegistrationNumber": {
-          "errors": {
-            "too_small": "Enter the subcontractor's registration number.",
-            "too_big": "Subcontractor's registration number must be {{ count }} characters or less."
-          }
+          "label": "Subcontractor's registration number"
         },
         "subcontractorRelationship": {
-          "errors": {
-            "too_small": "Select a relationship status with the subcontractor."
-          }
+          "label": "Relationship status"
         },
         "subcontractorRelationshipJustification": {
-          "errors": {
-            "too_small": "Enter the relationship between the partner and the subcontractor.",
-            "too_big": "Relationship between the partner and the subcontractor must be {{ count }} characters or less."
-          }
+          "label": "Relationship between the partner and the subcontractor"
         },
         "subcontractorLocation": {
-          "errors": {
-            "too_small": "Enter the country where the subcontractor's work will be carried out.",
-            "too_big": "Country where the subcontractor's work will be carried out must be {{ count }} characters or less."
-          }
+          "label": "Country where the subcontractor's work will be carried out"
         },
         "subcontractorDescription": {
-          "errors": {
-            "too_small": "Enter the description of work to be carried out by the subcontractor.",
-            "too_big": "Description of work to be carried out by the subcontractor must be {{ count }} characters or less."
-          }
+          "label": "Description of work to be carried out by the subcontractor"
         },
         "subcontractorJustification": {
-          "errors": {
-            "too_small": "Enter the justification for including the subcontractor.",
-            "too_big": "Justification for including the subcontractor must be {{ count }} characters or less."
-          }
+          "label": "Justification for including the subcontractor"
         },
         "subcontractorCost": {
-          "label": "The cost of work to be carried out by the new subcontractor",
-          "errors": {
-            "too_small": "Enter the cost of work to be carried out by the new subcontractor."
-          }
+          "label": "The cost of work to be carried out by the new subcontractor"
         }
       },
       "changeRemainingGrant": {

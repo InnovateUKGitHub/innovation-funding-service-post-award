@@ -4,6 +4,7 @@ import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framew
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
 import { evaluateObject } from "@ui/zod/helperValidators.zod";
+import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
@@ -24,11 +25,13 @@ export const getAddPartnerSummarySchema = ({
       required: required && organisationType === PCROrganisationType.Industrial,
       maxLength: 32768,
     }),
-    participantSize: required ? z.number().gt(0) : z.number().nullable().optional(),
-    numberOfEmployees: required && PCROrganisationType.Industrial ? z.number() : z.number().nullable().optional(),
+    participantSize: getNumberValidation({ min: 0, required }),
+    numberOfEmployees: getNumberValidation({ min: 0, max: 99_999_999, required }),
     financialYearEndDate: required && PCROrganisationType.Industrial ? z.date() : z.date().nullable().optional(),
-    financialYearEndTurnover:
-      required && PCROrganisationType.Industrial ? z.number().min(0) : z.number().nullable().optional(),
+    financialYearEndTurnover: getNumberValidation({
+      min: 0,
+      required: required && PCROrganisationType.Industrial,
+    }),
     projectLocation: required
       ? z
           .number()
