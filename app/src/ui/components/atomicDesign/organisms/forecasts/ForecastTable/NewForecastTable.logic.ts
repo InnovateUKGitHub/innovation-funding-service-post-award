@@ -27,6 +27,7 @@ import {
   NewForecastTableFragment$data,
 } from "./__generated__/NewForecastTableFragment.graphql";
 import { CostCategoryList } from "@framework/types/CostCategory";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -55,6 +56,7 @@ interface MapToForecastTableProps {
   profileTotalCostCategories: GOLCostDto[];
   profileDetails: ProfileInfo[];
   clientProfiles?: Record<string, string | null>;
+  periodId?: PeriodId;
 }
 
 interface BaseCellData {
@@ -111,6 +113,7 @@ export interface ForecastTableDto {
 const mapToForecastTableDto = ({
   project,
   partner,
+  periodId, // Override Period ID - This period is "Costs you are claiming" - All other periods after are "Forecast"
   profileTotalProjectPeriods,
   profileTotalCostCategories,
   profileDetails,
@@ -118,11 +121,19 @@ const mapToForecastTableDto = ({
   claimDetails,
   clientProfiles,
 }: MapToForecastTableProps): ForecastTableDto => {
+  const getClaimStatusGroupWithOverride = (status: ClaimStatus, periodNumber?: PeriodId) => {
+    if (typeof periodId === "number" && typeof periodNumber === "number") {
+      if (periodId === periodNumber) return ClaimStatusGroup.SUBMITTED_CLAIMING;
+      if (periodNumber > periodId) return ClaimStatusGroup.FORECAST;
+    }
+    return getClaimStatusGroup(status);
+  };
+
   const costCatAccum: CostCategoryRow[] = [];
   const periodTotals: TotalCellData[] = [];
   const statusCells: StatusCell[] = [];
   const nonForecastClaims = claimTotalProjectPeriods.filter(
-    x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST,
+    x => getClaimStatusGroupWithOverride(x.status, periodId) !== ClaimStatusGroup.FORECAST,
   );
   const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
 
@@ -147,11 +158,12 @@ const mapToForecastTableDto = ({
    * ```
    */
 
-  for (let i = 1; i <= project.numberOfPeriods; i++) {
-    const forecastTotalProjectPeriod = profileTotalProjectPeriods?.find(x => x.periodId === i);
-    const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
-    const nextClaimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i + 1);
-    const isLastColumn = i === project.numberOfPeriods;
+  for (let currentPeriod = 1 as PeriodId; currentPeriod <= project.numberOfPeriods; currentPeriod++) {
+    const nextPeriod = currentPeriod + 1;
+    const forecastTotalProjectPeriod = profileTotalProjectPeriods?.find(x => x.periodId === currentPeriod);
+    const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === currentPeriod);
+    const nextClaimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === nextPeriod);
+    const isLastColumn = currentPeriod === project.numberOfPeriods;
     let drawRhc = false;
 
     // If we haven't got a "current status cell",
@@ -160,14 +172,14 @@ const mapToForecastTableDto = ({
       currentStatusCell = {
         colSpan: 1,
         rhc: false,
-        group: getClaimStatusGroup(claimTotalProjectPeriod.status),
+        group: getClaimStatusGroupWithOverride(claimTotalProjectPeriod.status, currentPeriod),
       };
     }
 
     // If we have a previous status cell
     if (currentStatusCell) {
       const nextClaimGroup = nextClaimTotalProjectPeriod
-        ? getClaimStatusGroup(nextClaimTotalProjectPeriod.status)
+        ? getClaimStatusGroupWithOverride(nextClaimTotalProjectPeriod.status, (currentPeriod + 1) as PeriodId)
         : ClaimStatusGroup.FORECAST;
 
       // If it's a part of the same claim, we should extend the colspan of the column.
@@ -190,7 +202,7 @@ const mapToForecastTableDto = ({
 
     // Initialise the period total for periodId `i`
     periodTotals.push({
-      periodId: i,
+      periodId: currentPeriod,
       value: 0,
       iarDue: !!claimTotalProjectPeriod?.isIarRequired && claimTotalProjectPeriod.iarStatus !== ReceivedStatus.Received,
       periodStart:
@@ -211,7 +223,7 @@ const mapToForecastTableDto = ({
     let total = 0;
     let isCalculatedCostCategory = false;
 
-    for (let i = 1; i <= project.numberOfPeriods; i++) {
+    for (let i = 1 as PeriodId; i <= project.numberOfPeriods; i++) {
       const forecastProfile = profileDetails.find(
         x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId,
       );
@@ -222,6 +234,7 @@ const mapToForecastTableDto = ({
       const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
 
       const forecast =
+        (typeof periodId === "number" && i > periodId) ||
         !claimTotalProjectPeriod ||
         (!finalClaim &&
           !!claimTotalProjectPeriod &&

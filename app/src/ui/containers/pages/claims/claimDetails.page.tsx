@@ -219,7 +219,7 @@ const AccordionSection = ({
   const showForecast = !(isArchived && isMo);
   return (
     <Accordion>
-      {showForecast && <ClaimReviewForecastTable projectId={projectId} partnerId={partnerId} />}
+      {showForecast && <ClaimReviewForecastTable projectId={projectId} partnerId={partnerId} periodId={periodId} />}
 
       <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
         <Logs projectId={projectId} partnerId={partnerId} periodId={periodId} qa="claim-status-change-table" />
