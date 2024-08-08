@@ -11,6 +11,7 @@ interface ForecastTableStandaloneProps {
   queryOptions?: QueryOptions;
   projectId: ProjectId;
   partnerId: PartnerId;
+  periodId?: PeriodId;
 }
 
 const useNewForecastTableData = ({ projectId, partnerId, queryOptions }: ForecastTableStandaloneProps) => {

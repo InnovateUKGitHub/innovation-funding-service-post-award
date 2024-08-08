@@ -8,6 +8,7 @@ export const NewForecastTableWithFragment = (
   props: Omit<NewForecastTableProps, "tableData"> & {
     clientProfiles?: Record<string, string | null>;
     partnerId: PartnerId;
+    periodId?: PeriodId;
   },
 ) => {
   const fragmentRef = useFragmentContext();
@@ -21,9 +22,11 @@ export const NewForecastTableWithFragment = (
     isProjectSetup: props.isProjectSetup,
     partnerId: props.partnerId,
   });
-  const tableData = mapToForecastTableDto(
-    props.clientProfiles ? { ...data, clientProfiles: props.clientProfiles } : data,
-  );
+  const tableData = mapToForecastTableDto({
+    ...data,
+    ...(props.clientProfiles ? { clientProfiles: props.clientProfiles } : {}),
+    periodId: props.periodId,
+  });
 
   return <NewForecastTableComponent tableData={tableData} {...props} />;
 };

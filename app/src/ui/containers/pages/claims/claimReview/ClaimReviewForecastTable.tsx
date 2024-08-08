@@ -4,7 +4,7 @@ import { NewForecastTableWithStandaloneMemo } from "@ui/components/atomicDesign/
 import { useReviewContent } from "./claimReview.logic";
 import { ReviewClaimParams } from "./claimReview.page";
 
-interface ClaimReviewForecastTableProps extends Omit<ReviewClaimParams, "periodId"> {
+interface ClaimReviewForecastTableProps extends ReviewClaimParams {
   refreshedQueryOptions?: QueryOptions;
   isOpen?: boolean;
   onClick?: () => void;
@@ -13,6 +13,7 @@ interface ClaimReviewForecastTableProps extends Omit<ReviewClaimParams, "periodI
 const ClaimReviewForecastTable = ({
   projectId,
   partnerId,
+  periodId,
   isOpen,
   onClick,
   refreshedQueryOptions,
@@ -24,6 +25,7 @@ const ClaimReviewForecastTable = ({
       <NewForecastTableWithStandaloneMemo
         projectId={projectId}
         partnerId={partnerId}
+        periodId={periodId}
         queryOptions={refreshedQueryOptions}
         isProjectSetup={false}
         isOpen={isOpen}

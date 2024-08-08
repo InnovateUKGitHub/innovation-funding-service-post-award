@@ -170,6 +170,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
           <ClaimReviewForecastTable
             projectId={projectId}
             partnerId={partnerId}
+            periodId={periodId}
             refreshedQueryOptions={refreshedQueryOptions}
           />
 
