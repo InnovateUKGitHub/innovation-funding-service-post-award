@@ -242,9 +242,20 @@ export function convertErrorFormatFromRhfForErrorSummary(
       convertErrorFormatFromRhfForErrorSummary(e, key, validationErrors);
     });
   } else {
-    Object.entries(errors).forEach(([key, value]) =>
-      convertErrorFormatFromRhfForErrorSummary(value as RhfError, path ? `${path}.${key}` : key, validationErrors),
-    );
+    Object.entries(errors).forEach(([k, e]) => {
+      let key: string;
+
+      // Special case: If key is `files`, have no further path, as there is only 1 file <input> element.
+      if (path === "files") {
+        key = "files";
+      } else if (path) {
+        key = `${path}.${k}`;
+      } else {
+        key = `${k}`;
+      }
+
+      convertErrorFormatFromRhfForErrorSummary(e as RhfError, key, validationErrors);
+    });
   }
 
   return validationErrors;

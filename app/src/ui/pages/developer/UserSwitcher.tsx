@@ -24,7 +24,7 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
-import { projectIdValidation } from "@ui/zod/helperValidators.zod";
+import { projectIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Email } from "@ui/components/atoms/Email/Email";
