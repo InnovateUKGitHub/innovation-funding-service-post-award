@@ -19,13 +19,13 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimDetailsPageData } from "./claimDetails.logic";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.standalone";
+import { ClaimReviewForecastTable } from "./claimReview/ClaimReviewForecastTable";
 
 interface Params {
   projectId: ProjectId;
@@ -219,11 +219,7 @@ const AccordionSection = ({
   const showForecast = !(isArchived && isMo);
   return (
     <Accordion>
-      {showForecast && (
-        <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
-          <ForecastTable projectId={projectId} partnerId={partnerId} periodId={periodId} hideValidation />
-        </AccordionItem>
-      )}
+      {showForecast && <ClaimReviewForecastTable projectId={projectId} partnerId={partnerId} />}
 
       <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
         <Logs projectId={projectId} partnerId={partnerId} periodId={periodId} qa="claim-status-change-table" />
