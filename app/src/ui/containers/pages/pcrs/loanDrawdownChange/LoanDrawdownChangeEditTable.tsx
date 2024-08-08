@@ -11,6 +11,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export type LoanDrawdownEditErrors = {
   newValue?: RhfError;
@@ -32,7 +33,7 @@ export const LoanDrawdownChangeEditTable = ({
 }) => {
   const { getContent } = useContent();
 
-  const newTotalValue = sumBy(watch().loans, x => Number(x.newValue));
+  const newTotalValue = sumBy(watch().loans, x => parseCurrency(x.newValue) || 0);
 
   return (
     <Table>

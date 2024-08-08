@@ -311,7 +311,7 @@ export const OtherSourcesOfFundingStep = () => {
     name: "funds",
   });
 
-  const total = watch("funds").reduce((acc, cur) => acc + Number(cur.value), 0);
+  const total = watch("funds").reduce((acc, cur) => acc + (parseCurrency(cur.value) || 0), 0);
 
   return (
     <PcrPage validationErrors={validationErrors}>

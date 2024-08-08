@@ -28,6 +28,7 @@ import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 type AcademicCostsRhfError = {
   tsbReference: RhfError;
@@ -66,7 +67,7 @@ export const AcademicCostsStep = () => {
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const total = watch("costs").reduce((acc, cur) => acc + Number(cur.value), 0);
+  const total = watch("costs").reduce((acc, cur) => acc + (parseCurrency(cur.value) || 0), 0);
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -83,7 +84,7 @@ export const AcademicCostsStep = () => {
                 type: pcrItem.type,
                 spendProfile: {
                   ...spendProfile,
-                  costs: data.costs.map(x => ({ ...x, value: Number(x.value) })) as PcrSpendProfileDto["costs"],
+                  costs: data.costs.map(x => ({ ...x, value: parseCurrency(x.value) })) as PcrSpendProfileDto["costs"],
                 },
               },
               context: link(data),

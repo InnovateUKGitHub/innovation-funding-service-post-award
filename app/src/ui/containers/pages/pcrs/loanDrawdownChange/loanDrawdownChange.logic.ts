@@ -9,6 +9,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 import { combineDayMonthYear } from "@ui/components/atomicDesign/atoms/Date";
 import { LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 export const useLoanDrawdownChangeQuery = (pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<LoanDrawdownChangeQuery>(
@@ -62,7 +63,7 @@ export const useOnUpdateLoanChange = (projectId: ProjectId, pcrItemId: PcrItemId
             return {
               ...x,
               newDate,
-              newValue: Number(matchingUpdatedData?.newValue?.replace("£", "")),
+              newValue: parseCurrency(matchingUpdatedData?.newValue),
             };
           }),
         },
