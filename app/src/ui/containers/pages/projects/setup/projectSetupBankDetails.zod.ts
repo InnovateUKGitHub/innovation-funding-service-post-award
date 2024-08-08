@@ -3,13 +3,13 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { partnerIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 const projectSetupBankDetailsErrorMap = makeZodI18nMap({ keyPrefix: ["projectSetupBankDetails"] });
 
 const projectSetupBankDetailsMaxLength = 255 as const;
 
-const projectSetupBankDetailsValidation = getTextareaValidation({
+const projectSetupBankDetailsValidation = getTextValidation({
   maxLength: projectSetupBankDetailsMaxLength,
   required: false,
 });

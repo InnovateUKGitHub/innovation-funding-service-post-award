@@ -7,7 +7,7 @@ import {
   iarValidation,
   pcfValidation,
 } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const claimSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["claimSummary"] });
@@ -65,7 +65,7 @@ export const getClaimSummarySchema = ({
           });
         }
       }),
-      comments: getTextareaValidation({
+      comments: getTextValidation({
         maxLength: 1000,
         required: false,
       }),
@@ -110,7 +110,7 @@ export const getClaimSummarySchema = ({
     z.object({
       button_submit: z.literal("saveAndReturnToClaims"),
       status: z.string(),
-      comments: getTextareaValidation({
+      comments: getTextValidation({
         maxLength: 1000,
         required: false,
       }),

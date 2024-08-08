@@ -24,6 +24,9 @@
 
 import i18next, { i18n } from "i18next";
 import { ZodErrorMap, ZodIssueCode, defaultErrorMap } from "zod";
+import { Logger } from "./developmentLogger";
+
+const logger = new Logger("zodi18n");
 
 const joinValues = <T extends unknown[]>(array: T, separator = " | "): string =>
   array.map(val => (typeof val === "string" ? `'${val}'` : val)).join(separator);
@@ -136,7 +139,6 @@ const generatePossibleCopyStrings = ({
       }
     }
   }
-
   return paths;
 };
 
@@ -175,6 +177,8 @@ export const makeZodI18nMap =
 
     let message: string;
     message = defaultErrorMap(issue, zodIssueContext).message;
+
+    logger.debug("Translating error with data", zodIssueContext, interpretedValues, issue);
 
     switch (issue.code) {
       case ZodIssueCode.invalid_type:

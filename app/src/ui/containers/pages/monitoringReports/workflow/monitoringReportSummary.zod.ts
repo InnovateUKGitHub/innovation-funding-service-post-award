@@ -1,5 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const monitoringReportSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["monitoringReportSummary"] });
@@ -13,7 +13,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
       z
         .object({
           optionId: z.string(),
-          comments: getTextareaValidation({ required: true, minLength: 1, maxLength: 32000 }),
+          comments: getTextValidation({ required: true, minLength: 1, maxLength: 32000 }),
           title: z.string(),
         })
         .superRefine((data, ctx) => {
@@ -29,7 +29,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
         }),
     ),
     periodId: z.number(),
-    addComments: getTextareaValidation({
+    addComments: getTextValidation({
       maxLength: 5000,
       required: false,
     }),
@@ -39,11 +39,11 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     questions: z.array(
       z.object({
         optionId: z.string().optional(),
-        comments: getTextareaValidation({ required: false, maxLength: 32000 }),
+        comments: getTextValidation({ required: false, maxLength: 32000 }),
       }),
     ),
     periodId: z.number(),
-    addComments: getTextareaValidation({
+    addComments: getTextValidation({
       maxLength: 5000,
       required: true,
     }),

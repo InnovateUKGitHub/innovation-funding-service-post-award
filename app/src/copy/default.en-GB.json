@@ -2110,21 +2110,78 @@
       "errors": {
         "too_big": "Maximum of 5000 characters"
       },
-      "questions": {
-        "arrayType": {
+      "questions": [
+        {
           "optionId": {
             "errors": {
-              "custom": "Enter a score for {{input.title, lowercase}}."
+              "too_small": "Enter a score for scope."
             }
           },
           "comments": {
-            "label": "Comments",
+            "label": "Comments for scope"
+          }
+        },
+        {
+          "optionId": {
             "errors": {
-              "too_big": "Maximum of 32,000 characters"
+              "too_small": "Enter a score for time."
             }
+          },
+          "comments": {
+            "label": "Comments for time"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for cost."
+            }
+          },
+          "comments": {
+            "label": "Comments for cost"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for exploitation."
+            }
+          },
+          "comments": {
+            "label": "Comments for exploitation"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for risk management."
+            }
+          },
+          "comments": {
+            "label": "Comments for risk management"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for project planning."
+            }
+          },
+          "comments": {
+            "label": "Comments for project planning"
+          }
+        },
+        {
+          "comments": {
+            "label": "Comments for summary"
+          }
+        },
+        {
+          "comments": {
+            "label": "Comments for issues and actions"
           }
         }
-      }
+      ]
     },
     "monitoringReportSummary": {
       "periodId": {
@@ -2135,18 +2192,78 @@
       "addComments": {
         "label": "Comments"
       },
-      "questions": {
-        "arrayType": {
+      "questions": [
+        {
           "optionId": {
             "errors": {
-              "too_small": "Enter a score for {{input.title, lowercase}}."
+              "too_small": "Enter a score for scope."
             }
           },
           "comments": {
-            "label": "Comments"
+            "label": "Comments for scope"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for time."
+            }
+          },
+          "comments": {
+            "label": "Comments for time"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for cost."
+            }
+          },
+          "comments": {
+            "label": "Comments for cost"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for exploitation."
+            }
+          },
+          "comments": {
+            "label": "Comments for exploitation"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for risk management."
+            }
+          },
+          "comments": {
+            "label": "Comments for risk management"
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for project planning."
+            }
+          },
+          "comments": {
+            "label": "Comments for project planning"
+          }
+        },
+        {
+          "comments": {
+            "label": "Comments for summary"
+          }
+        },
+        {
+          "comments": {
+            "label": "Comments for issues and actions"
           }
         }
-      }
+      ]
     },
     "pcrModify": {
       "types": {

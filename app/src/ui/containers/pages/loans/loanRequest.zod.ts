@@ -1,12 +1,12 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const loanRequestErrorMap = makeZodI18nMap({ keyPrefix: ["loanRequest"] });
 
 export const loanRequestSchema = z.object({
-  comments: getTextareaValidation({
+  comments: getTextValidation({
     minLength: 5,
     maxLength: 32768,
     required: true,

@@ -1,5 +1,5 @@
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const getAcademicOrganisationSchema = (markedAsComplete: boolean) =>
@@ -7,7 +7,7 @@ export const getAcademicOrganisationSchema = (markedAsComplete: boolean) =>
     form: z.literal(FormTypes.PcrAddPartnerAcademicOrganisationStep),
     markedAsComplete: z.string(),
     button_submit: z.string(),
-    organisationName: getTextareaValidation({ required: markedAsComplete, maxLength: 256 }),
+    organisationName: getTextValidation({ required: markedAsComplete, maxLength: 256 }),
   });
 
 export const academicOrganisationSearchSchema = z.object({

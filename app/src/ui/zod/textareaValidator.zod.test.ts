@@ -1,5 +1,5 @@
 import { initStubTestIntl } from "@shared/initStubTestIntl";
-import { getTextareaValidation } from "./textareaValidator.zod";
+import { getTextValidation } from "./textareaValidator.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
 
@@ -49,7 +49,7 @@ describe("generic textarea validator", () => {
       const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
       const parse = z
         .object({
-          organisationName: getTextareaValidation({
+          organisationName: getTextValidation({
             maxLength: 20,
             required,
           }),
@@ -74,7 +74,7 @@ describe("generic textarea validator", () => {
       ${"spaces are not allowed"}          | ${"          "}                          | ${undefined}    | ${true}  | ${false}
     `("$name", ({ input, required, output, accept }) => {
       const errorMap = makeZodI18nMap({ keyPrefix: ["my", "nice", "error"] });
-      const parse = getTextareaValidation({
+      const parse = getTextValidation({
         maxLength: 20,
         minLength: 5,
         required,

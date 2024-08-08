@@ -9,7 +9,7 @@ import {
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 const claimReviewErrorMap = makeZodI18nMap({ keyPrefix: ["claimReview"] });
 const claimReviewSchemaCommentsMax = 1000;
@@ -21,7 +21,7 @@ const claimReviewSchema = evaluateObject((data: { status: ClaimStatus }) => ({
   periodId: periodIdValidation,
   claimId: claimIdValidation,
   status: z.enum([ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL]),
-  comments: getTextareaValidation({
+  comments: getTextValidation({
     maxLength: claimReviewSchemaCommentsMax,
     required: data.status === ClaimStatus.MO_QUERIED,
   }),

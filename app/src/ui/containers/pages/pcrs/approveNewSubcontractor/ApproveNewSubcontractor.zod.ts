@@ -8,7 +8,7 @@ import {
   pcrItemIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 const approveNewSubcontractorErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "approveNewSubcontractor"] });
@@ -28,25 +28,25 @@ const approveNewSubcontractorSchema = evaluateObject(data => ({
     z.literal(FormTypes.PcrApproveNewSubcontractorStep),
     z.literal(FormTypes.PcrApproveNewSubcontractorSummary),
   ]),
-  subcontractorName: getTextareaValidation({ required: data.markedAsComplete, maxLength: subcontractorNameMaxChars }),
-  subcontractorRegistrationNumber: getTextareaValidation({
+  subcontractorName: getTextValidation({ required: data.markedAsComplete, maxLength: subcontractorNameMaxChars }),
+  subcontractorRegistrationNumber: getTextValidation({
     required: data.markedAsComplete,
     maxLength: subcontractorRegistrationNumberMaxChars,
   }),
   subcontractorRelationship: booleanValidation,
-  subcontractorRelationshipJustification: getTextareaValidation({
+  subcontractorRelationshipJustification: getTextValidation({
     required: data.markedAsComplete && data.subcontractorRelationship,
     maxLength: subcontractorRelationshipJustificationMaxChars,
   }),
-  subcontractorLocation: getTextareaValidation({
+  subcontractorLocation: getTextValidation({
     required: data.markedAsComplete,
     maxLength: subcontractorLocationMaxChars,
   }),
-  subcontractorDescription: getTextareaValidation({
+  subcontractorDescription: getTextValidation({
     required: data.markedAsComplete,
     maxLength: subcontractorDescriptionMaxChars,
   }),
-  subcontractorJustification: getTextareaValidation({
+  subcontractorJustification: getTextValidation({
     required: data.markedAsComplete,
     maxLength: subcontractorJustificationMaxChars,
   }),

@@ -10,14 +10,14 @@ import {
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
 export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">[]) =>
   evaluateObject((data: { markedAsComplete: boolean }) => ({
     markedAsComplete: z.boolean(),
-    accountName: getTextareaValidation({
+    accountName: getTextValidation({
       maxLength: 256,
       required: data.markedAsComplete,
     }),

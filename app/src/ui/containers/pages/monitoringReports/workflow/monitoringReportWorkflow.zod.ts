@@ -1,5 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const monitoringReportWorkflowErrorMap = makeZodI18nMap({ keyPrefix: ["monitoringReportWorkflow"] });
@@ -10,7 +10,7 @@ export const monitoringReportWorkflowSchema = z.object({
     z
       .object({
         optionId: z.string(),
-        comments: getTextareaValidation({
+        comments: getTextValidation({
           maxLength: 32_000,
           required: false,
         }),

@@ -1,7 +1,7 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { pcrIdValidation, pcrItemIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 const pcrAddPartnerCompaniesHouseStepSearchMaxLength = 159;
@@ -13,7 +13,7 @@ const pcrAddPartnerCompaniesHouseStepErrorMap = makeZodI18nMap({ keyPrefix: ["pc
 
 const pcrAddPartnerCompaniesHouseStepSearchSchema = z.object({
   step: z.number(),
-  search: getTextareaValidation({
+  search: getTextValidation({
     maxLength: pcrAddPartnerCompaniesHouseStepSearchMaxLength,
     required: false,
   }),
@@ -34,15 +34,15 @@ const getPcrAddPartnerCompaniesHouseStepSchema = (markedAsComplete: boolean) =>
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
-    organisationName: getTextareaValidation({
+    organisationName: getTextValidation({
       maxLength: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
       required: markedAsComplete,
     }),
-    registrationNumber: getTextareaValidation({
+    registrationNumber: getTextValidation({
       maxLength: pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
       required: markedAsComplete,
     }),
-    registeredAddress: getTextareaValidation({
+    registeredAddress: getTextValidation({
       maxLength: pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
       required: markedAsComplete,
     }),

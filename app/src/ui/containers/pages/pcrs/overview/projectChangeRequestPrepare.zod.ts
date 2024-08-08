@@ -2,7 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { pcrItemIdValidation } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const pcrPrepareErrorMap = makeZodI18nMap({ keyPrefix: ["pcrPrepare"] });
 
@@ -18,7 +18,7 @@ export const pcrPrepareSchema = z
       })
       .array(),
     reasoningStatus: z.enum(["Complete", "Incomplete", "To do"]).optional(),
-    comments: getTextareaValidation({
+    comments: getTextValidation({
       maxLength: 1000,
       required: false,
     }),

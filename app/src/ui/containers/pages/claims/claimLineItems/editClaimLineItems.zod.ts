@@ -13,7 +13,7 @@ import {
   periodIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const editClaimLineItemErrorMap = makeZodI18nMap({ keyPrefix: ["claimLineItems"] });
@@ -25,7 +25,7 @@ const editClaimLineItemLineItemSchema = z
       min: -1_000_000,
       required: true,
     }),
-    description: getTextareaValidation({
+    description: getTextValidation({
       maxLength: claimLineItemDescriptionMaxLength,
       required: false,
     }),
@@ -58,7 +58,7 @@ const editClaimLineItemsSchema = z.object({
   periodId: periodIdValidation,
   costCategoryId: costCategoryIdValidation,
   lineItems: editClaimLineItemLineItemSchema.array(),
-  comments: getTextareaValidation({
+  comments: getTextValidation({
     maxLength: claimDetailsCommentsMaxLength,
     required: false,
   }),

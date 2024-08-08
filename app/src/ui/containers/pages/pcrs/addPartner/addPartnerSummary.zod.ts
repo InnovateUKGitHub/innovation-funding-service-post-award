@@ -2,7 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { evaluateObject } from "@ui/zod/helperValidators.zod";
 import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 
@@ -16,12 +16,12 @@ export const getAddPartnerSummarySchema = ({
   organisationType: PCROrganisationType;
 }) =>
   evaluateObject(({ markedAsComplete: required }) => ({
-    organisationName: getTextareaValidation({ required, maxLength: 256 }),
-    registrationNumber: getTextareaValidation({
+    organisationName: getTextValidation({ required, maxLength: 256 }),
+    registrationNumber: getTextValidation({
       required: required && organisationType === PCROrganisationType.Industrial,
       maxLength: 40,
     }),
-    registeredAddress: getTextareaValidation({
+    registeredAddress: getTextValidation({
       required: required && organisationType === PCROrganisationType.Industrial,
       maxLength: 32768,
     }),
@@ -42,25 +42,25 @@ export const getAddPartnerSummarySchema = ({
           .transform(x => x as PCRProjectLocation)
           .nullable()
           .optional(),
-    projectCity: getTextareaValidation({ required, maxLength: 40 }),
-    projectPostcode: getTextareaValidation({ required: false, maxLength: 10 }),
-    contact1Forename: getTextareaValidation({ required, maxLength: 50 }),
-    contact1Surname: getTextareaValidation({ required, maxLength: 50 }),
-    contact1Phone: getTextareaValidation({ required, maxLength: 20 }),
-    contact1Email: getTextareaValidation({ required, maxLength: 255 }),
-    contact2Forename: getTextareaValidation({
+    projectCity: getTextValidation({ required, maxLength: 40 }),
+    projectPostcode: getTextValidation({ required: false, maxLength: 10 }),
+    contact1Forename: getTextValidation({ required, maxLength: 50 }),
+    contact1Surname: getTextValidation({ required, maxLength: 50 }),
+    contact1Phone: getTextValidation({ required, maxLength: 20 }),
+    contact1Email: getTextValidation({ required, maxLength: 255 }),
+    contact2Forename: getTextValidation({
       required: required && projectRole === PCRProjectRole.ProjectLead,
       maxLength: 50,
     }),
-    contact2Phone: getTextareaValidation({
+    contact2Phone: getTextValidation({
       required: required && projectRole === PCRProjectRole.ProjectLead,
       maxLength: 20,
     }),
-    contact2Surname: getTextareaValidation({
+    contact2Surname: getTextValidation({
       required: required && projectRole === PCRProjectRole.ProjectLead,
       maxLength: 255,
     }),
-    contact2Email: getTextareaValidation({
+    contact2Email: getTextValidation({
       required: required && projectRole === PCRProjectRole.ProjectLead,
       maxLength: 50,
     }),
@@ -69,11 +69,11 @@ export const getAddPartnerSummarySchema = ({
     projectRole: z.number().gt(0),
     isCommercialWork: required ? z.boolean() : z.boolean().nullable().optional(),
     hasOtherFunding: required ? z.boolean() : z.boolean().nullable().optional(),
-    organisationType: getTextareaValidation({
+    organisationType: getTextValidation({
       required: true,
       maxLength: 255,
     }),
-    tsbReference: getTextareaValidation({
+    tsbReference: getTextValidation({
       required: required && organisationType === PCROrganisationType.Academic,
       maxLength: 255,
     }),

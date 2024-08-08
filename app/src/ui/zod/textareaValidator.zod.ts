@@ -5,7 +5,7 @@ const defaultMaxLength = 30_000;
 const defaultMinLength = 0;
 
 /**
- * ### getGenericCurrencyValidation
+ * ### getTextValidation
  *
  *
  * this will match a set of validations and
@@ -15,14 +15,16 @@ const defaultMinLength = 0;
  * the `label` can be either a raw string, or if it is a path that matches
  * an item in the copy document, it will be interpolated
  */
-export const getTextareaValidation = <Required extends boolean = false>({
+export const getTextValidation = <Required extends boolean = false>({
   maxLength = defaultMaxLength,
   minLength = defaultMinLength,
   required,
+  params = {},
 }: {
   maxLength?: number;
   minLength?: number;
   required: Required;
+  params?: AnyObject;
 }) => {
   const validationRule = z
     .string()
@@ -32,13 +34,13 @@ export const getTextareaValidation = <Required extends boolean = false>({
     .transform((val, ctx) => {
       const valIsEmptyString = typeof val === "string" && val.trim() === "";
       const valIsNil = isNil(val);
-
       if (required && (valIsEmptyString || valIsNil)) {
         ctx.addIssue({
           code: ZodIssueCode.custom,
           params: {
             generic: true,
             i18n: "errors.generic.textarea.required",
+            ...params,
           },
         });
         return z.NEVER;
@@ -64,6 +66,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
               count: len,
               generic: true,
               i18n: "errors.generic.textarea.invalid_range",
+              ...params,
             },
           });
 
@@ -78,6 +81,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
               count: maxLength,
               generic: true,
               i18n: "errors.generic.textarea.too_big",
+              ...params,
             },
           });
           return z.NEVER;
@@ -90,6 +94,7 @@ export const getTextareaValidation = <Required extends boolean = false>({
               count: minLength,
               generic: true,
               i18n: "errors.generic.textarea.too_small",
+              ...params,
             },
           });
           return z.NEVER;

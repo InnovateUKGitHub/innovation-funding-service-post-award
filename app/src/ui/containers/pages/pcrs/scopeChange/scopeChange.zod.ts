@@ -7,7 +7,7 @@ import {
   pcrItemIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const scopeChangeErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "scopeChange"] });
 
@@ -17,11 +17,11 @@ export const pcrScopeChangeSchema = evaluateObject(data => ({
   pcrId: pcrIdValidation,
   pcrItemId: pcrItemIdValidation,
   markedAsComplete: z.boolean(),
-  projectSummary: getTextareaValidation({
+  projectSummary: getTextValidation({
     maxLength: 32_000,
     required: data.markedAsComplete,
   }),
-  publicDescription: getTextareaValidation({
+  publicDescription: getTextValidation({
     maxLength: 32_000,
     required: data.markedAsComplete,
   }),
@@ -33,7 +33,7 @@ export const getPcrScopeChangeProjectSummarySchema = (markedAsComplete: boolean)
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
-    projectSummary: getTextareaValidation({
+    projectSummary: getTextValidation({
       maxLength: 32_000,
       required: markedAsComplete,
     }),
@@ -45,7 +45,7 @@ export const getPcrScopeChangePublicDescriptionSchema = (markedAsComplete: boole
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
-    publicDescription: getTextareaValidation({
+    publicDescription: getTextValidation({
       maxLength: 32_000,
       required: markedAsComplete,
     }),

@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PartnerStatus } from "@framework/constants/partner";
-import { getTextareaValidation } from "@ui/zod/textareaValidator.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const partnerDetailsEditErrorMap = makeZodI18nMap({ keyPrefix: ["partnerDetailsEdit"] });
 
 export const partnerDetailsEditSchema = z.object({
-  postcode: getTextareaValidation({
+  postcode: getTextValidation({
     minLength: 1,
     maxLength: 10,
     required: true,
@@ -14,7 +14,7 @@ export const partnerDetailsEditSchema = z.object({
 });
 
 export const partnerDetailsOptionalSchema = z.object({
-  postcode: getTextareaValidation({
+  postcode: getTextValidation({
     maxLength: 10,
     required: false,
   }),
@@ -22,7 +22,7 @@ export const partnerDetailsOptionalSchema = z.object({
 
 export const postcodeSetupSchema = z
   .object({
-    postcode: getTextareaValidation({
+    postcode: getTextValidation({
       minLength: 1,
       maxLength: 10,
       required: true,
