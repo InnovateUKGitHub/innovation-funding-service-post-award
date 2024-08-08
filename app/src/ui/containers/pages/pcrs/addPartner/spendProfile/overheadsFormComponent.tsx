@@ -125,7 +125,7 @@ export const OverheadsFormComponent = ({}) => {
   const getOverheadsCostValue = (overheadRate: PCRSpendProfileOverheadRate) => {
     switch (overheadRate) {
       case PCRSpendProfileOverheadRate.Calculated:
-        return Number(watch("calculatedValue")) ?? 0;
+        return parseCurrency(watch("calculatedValue")) ?? 0;
       case PCRSpendProfileOverheadRate.Twenty:
         return roundCurrency((totalLabourCosts * 20) / 100);
       case PCRSpendProfileOverheadRate.Unknown:
