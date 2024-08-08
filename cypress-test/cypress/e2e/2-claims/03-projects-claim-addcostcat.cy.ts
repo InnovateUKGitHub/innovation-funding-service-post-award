@@ -56,7 +56,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should present a table with line item information", correctTableHeaders);
 
-  it("Should allow you to enter a new cost category line item", newCostCatLineItem);
+  it("Should allow you to enter a new cost category line item", () => newCostCatLineItem(false));
 
   it("Should display the same figure entered against 'Total costs'", () => {
     cy.get("span.currency").contains("£1,000.00");

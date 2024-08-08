@@ -151,7 +151,7 @@ export const costCatTableFooter = () => {
 /**
  * Wait required in newCostCatLineItem below
  */
-export const newCostCatLineItem = () => {
+export const newCostCatLineItem = (academic: boolean) => {
   /**
    * click remove first if there is already a line item
    */
@@ -168,7 +168,11 @@ export const newCostCatLineItem = () => {
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
   cy.textValidation("Description", 250, "Save and return to claims", false, "Description of claim line item 0");
   cy.heading("Costs to be claimed");
-  cy.get("a").contains("Labour").click();
+  if (academic) {
+    cy.get("a").contains("Directly incurred - Staff").click();
+  } else {
+    cy.get("a").contains("Labour").click();
+  }
   cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
   cy.inputPrefix("£", 1);
@@ -1597,5 +1601,38 @@ export const downloadExceptionsStaffDocPage = () => {
         expect(obj.ok).to.eq(true);
         expect(obj.base64).to.eq(base64);
       });
+  });
+};
+
+export const viewOnlyForecastTable = () => {
+  cy.button("Forecast").click();
+  [
+    "Labour",
+    "£42,400.00",
+    "£100.00",
+    "£3,000.00",
+    "£3,000.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£0.00",
+    "£48,500.00",
+    "£50,000.00",
+    "-3.00%",
+  ].forEach((cell, index) => {
+    cy.get("#accordion-default-content-forecast-accordion").within(() => {
+      cy.get("table").within(() => {
+        cy.get("tr")
+          .eq(4)
+          .within(() => {
+            cy.get(`td:nth-child(${index + 1})`).contains(cell);
+          });
+      });
+    });
   });
 };

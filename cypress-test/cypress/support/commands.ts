@@ -587,10 +587,16 @@ const textValidation = (message: string, length: number, buttonName: string, tex
     cy.get("textarea").clear().invoke("val", largeText).trigger("input");
     cy.get("textarea").type("{moveToEnd}t");
     cy.get("p").contains("You have 1 character too many");
-  } else {
-    cy.getByAriaLabel(label).clear().invoke("val", largeText).trigger("input");
-    cy.getByAriaLabel(label).type("{moveToEnd}t");
-  }
+  } else
+    cy.get("main").then($checkMain => {
+      if ($checkMain.text().includes(label)) {
+        cy.getByLabel(label).clear().invoke("val", largeText).trigger("input");
+        cy.getByLabel(label).type("{moveToEnd}t");
+      } else {
+        cy.getByAriaLabel(label).clear().invoke("val", largeText).trigger("input");
+        cy.getByAriaLabel(label).type("{moveToEnd}t");
+      }
+    });
   cy.clickOn(buttonName);
   if (textarea) {
     cy.validationLink(`${message} must be ${length} characters or less.`);
@@ -602,7 +608,13 @@ const textValidation = (message: string, length: number, buttonName: string, tex
     cy.get("textarea").type("{backSpace}");
     cy.get("p").contains("You have 0 characters remaining");
   } else {
-    cy.getByAriaLabel(label).type("{backSpace}");
+    cy.get("main").then($checkMain => {
+      if ($checkMain.text().includes(label)) {
+        cy.getByLabel(label).type("{backSpace}");
+      } else {
+        cy.getByAriaLabel(label).type("{backSpace}");
+      }
+    });
   }
   cy.clickOn(buttonName);
   cy.getByQA("validation-summary").should("not.exist");

@@ -306,6 +306,7 @@ export const ensureTableIsPopulated = () => {
 export const partnerValidation = () => {
   cy.getByQA("partner-information").contains(partners[0]).click();
   cy.get("a").contains("Edit").click();
+  cy.getByLabel("New location");
   cy.textValidation("Project location postcode", 10, "Save and return to partner information", false, "New location");
   cy.get("#postcode").clear().type("SN123456789");
   cy.get("a").contains("Edit").click();

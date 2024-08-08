@@ -48,7 +48,7 @@ describe("claims > edit claims as FC", () => {
 
   it("The table should have correct headers", correctTableHeaders);
 
-  it("Should allow you to enter a new cost category line item", newCostCatLineItem);
+  it("Should allow you to enter a new cost category line item", () => newCostCatLineItem(true));
 
   it("Should display the same figure entered against 'Total costs'", () => {
     cy.get("span.currency").contains("£1,000.00");
