@@ -131,7 +131,6 @@ describe("PCR >  Add a partner > E2E: Je-S", { tags: "js-disabled" }, () => {
       "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
     );
   });
-
   it("Should back out to summary", () => {
     cy.clickOn("Save and return to summary");
     cy.get("h2").contains("Organisation");

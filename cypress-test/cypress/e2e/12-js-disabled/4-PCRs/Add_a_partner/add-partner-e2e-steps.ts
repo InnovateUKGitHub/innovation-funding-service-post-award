@@ -1144,7 +1144,7 @@ export const validateJesCostsFields = () => {
   });
 
   cy.button("Save and continue").click();
-  cy.validationLink("Cost must be less than £999,999,999,999.00.");
+  cy.validationLink("Cost must be £999,999,999,999.00 or less.");
 
   fields.forEach(input => {
     cy.getByAriaLabel(input).clear();
