@@ -33,17 +33,18 @@ const NewForecastTable = (props: NewForecastTableProps) => {
   useEffect(forecastTableResize, [props.tableData, props.isOpen]);
 
   // Create the className required for standard columns
-  const colClassName = (x: boolean | undefined = true, className?: string) =>
-    classNames({ "ifspa-forecast-table-border-right": x }, className);
+  const colClassName = (x: boolean | undefined = true, ...props: classNames.ArgumentArray) =>
+    classNames({ "ifspa-forecast-table-border-right": x }, props);
 
   // Create the className required for sticky columns
-  const stickyColClassName = (pos: "left" | "right", i: number) =>
+  const stickyColClassName = (pos: "left" | "right", i: number, ...props: classNames.ArgumentArray) =>
     classNames(
       "ifspa-forecast-table-sticky-col",
 
       // Invert left/right
       `ifspa-forecast-table-border-${pos === "left" ? "right" : "left"}`,
       `ifspa-forecast-table-${pos}-col-${i}`,
+      ...props,
     );
 
   return (
@@ -74,7 +75,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
               {getContent(x => x.components.forecastTable.periodHeader)}
             </TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc, "govuk-table__cell--numeric")}>
                 <AccessibilityText>{getContent(x => x.components.forecastTable.periodHeader)}</AccessibilityText>{" "}
                 {profile.periodId}
               </TH>
@@ -154,7 +155,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
                   <TD
                     data-qa={`forecast-${costCategory.costCategoryId}-${profile.periodId}-cell`}
                     key={profile.periodId}
-                    className={colClassName(profile.rhc)}
+                    className={colClassName(profile.rhc, "govuk-table__cell--numeric")}
                   >
                     {control && trigger && profile.forecastMode && !profile.calculatedField ? (
                       <ForecastTableCurrencyInput
@@ -173,13 +174,13 @@ const NewForecastTable = (props: NewForecastTableProps) => {
                   </TD>
                 );
               })}
-              <TD className={stickyColClassName("right", 3)}>
+              <TD className={stickyColClassName("right", 3, "govuk-table__cell--numeric")}>
                 <Currency value={costCategory.total} />
               </TD>
-              <TD className={stickyColClassName("right", 2)}>
+              <TD className={stickyColClassName("right", 2, "govuk-table__cell--numeric")}>
                 <Currency value={costCategory.golCost} />
               </TD>
-              <TD className={stickyColClassName("right", 1)}>
+              <TD className={stickyColClassName("right", 1, "govuk-table__cell--numeric")}>
                 <Percentage value={costCategory.difference} />
               </TD>
             </TR>
@@ -192,18 +193,18 @@ const NewForecastTable = (props: NewForecastTableProps) => {
               <TD
                 data-qa={`forecast-total-${profile.periodId}-cell`}
                 key={profile.periodId}
-                className={colClassName(profile.rhc)}
+                className={colClassName(profile.rhc, "govuk-table__cell--numeric")}
               >
                 <Currency value={profile.value} />
               </TD>
             ))}
-            <TD className={stickyColClassName("right", 3)}>
+            <TD className={stickyColClassName("right", 3, "govuk-table__cell--numeric")}>
               <Currency value={tableData.totalRow.total} />
             </TD>
-            <TD className={stickyColClassName("right", 2)}>
+            <TD className={stickyColClassName("right", 2, "govuk-table__cell--numeric")}>
               <Currency value={tableData.totalRow.golCost} />
             </TD>
-            <TD className={stickyColClassName("right", 1)}>
+            <TD className={stickyColClassName("right", 1, "govuk-table__cell--numeric")}>
               <Percentage value={tableData.totalRow.difference} />
             </TD>
           </TR>
