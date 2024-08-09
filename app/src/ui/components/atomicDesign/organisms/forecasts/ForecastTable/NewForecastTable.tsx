@@ -95,7 +95,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
               {getContent(x => x.components.forecastTable.iarDueHeader)}
             </TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc, "govuk-table__cell--numeric")}>
                 {getContent(
                   profile.iarDue ? x => x.components.forecastTable.iarDue : x => x.components.forecastTable.iarNotDue,
                 )}
@@ -114,7 +114,10 @@ const NewForecastTable = (props: NewForecastTableProps) => {
           <TR>
             <TH className={stickyColClassName("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={colClassName(profile.rhc, "ifspa-forecast-table-date")}>
+              <TH
+                key={profile.periodId}
+                className={colClassName(profile.rhc, "ifspa-forecast-table-date", "govuk-table__cell--numeric")}
+              >
                 <CondensedDateRange
                   className="ifspa-forecast-wrap"
                   start={profile.periodStart}
