@@ -31,8 +31,6 @@ import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectI
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDeleteHandler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/spendProfileAddCostHandler";
-import { ProjectChangeRequestSpendProfileDeleteCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteCostHandler";
-import { ProjectChangeRequestSpendProfileEditCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileEditCostHandler";
 import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/spendProfileCostsHandler";
 import { VirementLoanEditHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/virementLoanEditHandler";
 import { ProjectChangeRequestPrepareFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/prepareProjectChangeRequestForm.handler";
@@ -166,8 +164,6 @@ export const standardFormHandlers = [
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
   new ProjectChangeRequestSpendProfileAddCostHandler(),
-  new ProjectChangeRequestSpendProfileDeleteCostHandler(),
-  new ProjectChangeRequestSpendProfileEditCostHandler(),
   new ProjectChangeRequestSpendProfileCostsSummaryHandler(),
   new VirementCostsUpdateHandler(),
   new VirementLoanEditHandler(),
