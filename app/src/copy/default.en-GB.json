@@ -2329,6 +2329,8 @@
         "arrayType": {
           "fileName": {
             "errors": {
+              "too_small": "The selected file must have a name.",
+              "too_big": "The selected file name must be {{ count }} characters or less.",
               "invalid_path": "The selected file must not include / and \\.",
               "no_filename": "The selected file must have a name.",
               "every_char_space": "The selected file must have a name.",
