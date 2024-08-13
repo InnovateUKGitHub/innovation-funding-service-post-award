@@ -2324,10 +2324,11 @@
     "pcr": {
       "addPartner": {
         "awardRate": {
+          "label": "Funding level",
           "errors": {
             "required": "Enter funding level.",
             "too_small": "Funding level must be {{count}}% or more.",
-            "invalid_type": "Funding level must be number.",
+            "invalid_type": "Funding level must be a number.",
             "invalid_type_received_null": "Enter funding level.",
             "too_big": "Enter a funding level up to {{count}}%.",
             "two_decimal_places": "Funding level must be 2 decimal places or fewer."
