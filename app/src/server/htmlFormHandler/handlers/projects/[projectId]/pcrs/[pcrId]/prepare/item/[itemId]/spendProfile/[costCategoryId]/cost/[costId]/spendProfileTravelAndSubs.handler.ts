@@ -41,7 +41,7 @@ export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodF
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<TravelAndSubsistenceSchemaType>> {
     const id = typeof input.id === "string" && input.id.trim().length > 0 ? input.id : null;
-
+    const totalCost = parseInt(input.numberOfTimes) * parseCurrency(input.costOfEach);
     return {
       id,
       form: input.form,
@@ -49,7 +49,7 @@ export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodF
       descriptionOfCost: input.descriptionOfCost,
       numberOfTimes: input.numberOfTimes,
       costOfEach: input.costOfEach,
-      totalCost: input.totalCost,
+      totalCost,
     };
   }
 
