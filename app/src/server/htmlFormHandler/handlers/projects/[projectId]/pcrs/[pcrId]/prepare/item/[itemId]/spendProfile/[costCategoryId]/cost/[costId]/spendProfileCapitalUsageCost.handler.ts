@@ -40,8 +40,10 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<CapitalUsageSchemaType>> {
+    const id = typeof input.id === "string" && input.id.trim().length > 0 ? input.id : null;
+
     return {
-      id: input.id,
+      id,
       form: input.form,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
       capitalUsageDescription: input.capitalUsageDescription,

@@ -40,8 +40,10 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<LabourSchemaType>> {
+    const id = typeof input.id === "string" && input.id.trim().length > 0 ? input.id : null;
+
     return {
-      id: input.id,
+      id,
       form: input.form,
       descriptionOfRole: input.descriptionOfRole,
       grossCostOfRole: input.grossCostOfRole,

@@ -17,7 +17,7 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spend
 const description = z.string().min(1).max(131072);
 
 export const labourSchema = z.object({
-  id: z.union([costIdValidation.nullable(), z.literal("")]),
+  id: costIdValidation.nullable(),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileLabourCost),
   descriptionOfRole: description,
   grossCostOfRole: getGenericCurrencyValidation({
@@ -36,7 +36,7 @@ export type LabourSchema = z.infer<typeof labourSchema>;
 export const overheadSchema = evaluateObject(
   (data: { overheadRate: PCRSpendProfileOverheadRate; button_submit: string }) => {
     return {
-      id: z.union([costIdValidation.nullable(), z.literal("")]),
+      id: costIdValidation.nullable(),
       form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadCost),
       overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
       calculatedValue: getGenericCurrencyValidation({
@@ -66,7 +66,7 @@ export type OverheadSchemaType = typeof overheadSchema;
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
 export const materialsSchema = z.object({
-  id: z.union([costIdValidation.nullable(), z.literal("")]),
+  id: costIdValidation.nullable(),
   materialsDescription: description,
   costPerItem: getGenericCurrencyValidation({
     required: true,
@@ -80,7 +80,7 @@ export type MaterialsSchemaType = typeof materialsSchema;
 export type MaterialsSchema = z.infer<typeof materialsSchema>;
 
 export const subcontractingSchema = z.object({
-  id: z.union([costIdValidation.nullable(), z.literal("")]),
+  id: costIdValidation.nullable(),
   subcontractorName: z.string().min(1).max(255),
   subcontractorCountry: z.string().min(1).max(255),
   subcontractorRoleAndDescription: description,
@@ -95,7 +95,7 @@ export type SubcontractingSchemaType = typeof subcontractingSchema;
 export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
 
 export const capitalUsageSchema = z.object({
-  id: z.union([costIdValidation.nullable(), z.literal("")]),
+  id: costIdValidation.nullable(),
   capitalUsageDescription: description,
   depreciationPeriod: requiredPositiveIntegerInput({}),
   itemType: z.coerce.number().min(1),
@@ -117,7 +117,7 @@ const maxTotalCost = 10_000_000_000_000;
 
 export const travelAndASubsistenceSchema = z
   .object({
-    id: z.union([costIdValidation.nullable(), z.literal("")]),
+    id: costIdValidation.nullable(),
     descriptionOfCost: description,
     numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
     costOfEach: getGenericCurrencyValidation({
@@ -144,7 +144,7 @@ export type TravelAndSubsistenceSchemaType = typeof travelAndASubsistenceSchema;
 export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSchema>;
 
 export const otherCostsSchema = z.object({
-  id: z.union([costIdValidation.nullable(), z.literal("")]),
+  id: costIdValidation.nullable(),
   descriptionOfCost: description,
   estimatedCost: getGenericCurrencyValidation({
     required: true,
