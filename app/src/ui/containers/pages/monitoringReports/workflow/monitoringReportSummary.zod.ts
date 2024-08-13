@@ -31,7 +31,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     periodId: z.number(),
     addComments: getTextValidation({
       maxLength: 5000,
-      required: false,
+      required: true,
     }),
   }),
   z.object({
@@ -45,7 +45,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     periodId: z.number(),
     addComments: getTextValidation({
       maxLength: 5000,
-      required: true,
+      required: false,
     }),
   }),
 ]);
