@@ -1992,7 +1992,7 @@
           "required": "Enter {{label, key, lowercase}}.",
           "too_big": "{{label, key}} must be {{count}} characters or less.",
           "too_small": "{{label, key}} must be {{count}} characters or more.",
-          "invalid_range": "{{ label, key }} must be between {{ min }} and {{ max }} characters"
+          "invalid_range": "{{ label, key }} must be between {{ min }} and {{ max }} characters."
         },
         "currency": {
           "required": "Enter {{label, key, lowercase}}.",
