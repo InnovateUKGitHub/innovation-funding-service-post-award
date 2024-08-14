@@ -237,10 +237,16 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
           }
           const defaultContentType = "application/octet-stream";
           const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
+
+          // Must replace commas with `%2C` due to Apple Safari
+          const encFileName = encodeURI(result.fileName).replaceAll(",", "%2C");
           resp.status(successStatus);
           resp.setHeader("Content-Length", result.contentLength);
           resp.setHeader("Content-Type", `${contentType || defaultContentType}; charset=utf-8`);
-          resp.setHeader("Content-Disposition", `attachment; filename="${result.fileName}"`);
+          resp.setHeader(
+            "Content-Disposition",
+            `attachment; filename="${encFileName}"; filename*=UTF-8''${encFileName};`,
+          );
           resp.flushHeaders();
           result.stream.pipe(resp);
         })

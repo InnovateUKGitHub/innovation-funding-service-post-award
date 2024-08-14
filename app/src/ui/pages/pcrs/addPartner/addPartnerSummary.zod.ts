@@ -3,7 +3,7 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
-import { evaluateObject } from "@ui/zod/helperValidators.zod";
+import { evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
