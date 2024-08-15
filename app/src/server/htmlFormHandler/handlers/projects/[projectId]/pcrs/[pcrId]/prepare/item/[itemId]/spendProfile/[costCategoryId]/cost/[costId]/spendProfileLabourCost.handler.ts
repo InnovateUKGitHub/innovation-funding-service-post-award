@@ -14,7 +14,7 @@ import {
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { updatePcrItem } from "../../../../addPartnerUtils";
@@ -72,7 +72,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       daysSpentOnProject: input.daysSpentOnProject,
       grossCostOfRole: parseCurrency(input.grossCostOfRole),
       ratePerDay: parseCurrency(input.ratePerDay),
-      value: parseCurrency(input.ratePerDay) * input.daysSpentOnProject,
+      value: roundCurrency(parseCurrency(input.ratePerDay) * input.daysSpentOnProject),
     });
 
     await updatePcrItem({
