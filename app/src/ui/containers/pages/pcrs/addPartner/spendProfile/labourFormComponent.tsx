@@ -72,7 +72,7 @@ export const LabourFormComponent = () => {
 
   const { handleSubmit, watch, formState, register, setError } = useForm<LabourSchema>({
     defaultValues: {
-      id: defaultCost.id ?? "",
+      id: defaultCost.id,
       form: FormTypes.PcrAddPartnerSpendProfileLabourCost,
       descriptionOfRole: defaultCost.description ?? "",
       grossCostOfRole: String(defaultCost.grossCostOfRole ?? ""),
