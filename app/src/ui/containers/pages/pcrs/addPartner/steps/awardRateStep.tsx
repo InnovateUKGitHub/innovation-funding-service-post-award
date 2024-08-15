@@ -60,7 +60,7 @@ export const AwardRateStep = () => {
               <NumberInput
                 hasError={!!validationErrors?.awardRate}
                 inputWidth={4}
-                defaultValue={String(pcrItem.awardRate)}
+                defaultValue={String(pcrItem.awardRate ?? 0)}
                 {...register("awardRate")}
                 disabled={isFetching}
                 suffix={getContent(x => x.forms.suffix.percent)}
