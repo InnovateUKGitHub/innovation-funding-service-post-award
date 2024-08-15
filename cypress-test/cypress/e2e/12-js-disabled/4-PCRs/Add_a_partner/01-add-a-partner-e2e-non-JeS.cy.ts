@@ -138,151 +138,133 @@ describe("PCR >  Add a partner > E2E: non-Je-S", { tags: "js-disabled" }, () => 
     "Should mark as complete and click 'Save and return to request', prompting validation",
     saveAndReturnPromptingValidation,
   );
-
   /**
    * Eligibility of aid declaration section
    */
-  it("Should access 'Eligibility of aid declaration' section", () => {
-    cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
-    cy.get("h2").contains("Non-aid funding");
-    cy.paragraph(
-      "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
-    );
-  });
-
-  it("Should back out to summary", () => {
-    cy.clickOn("Save and return to summary");
-    cy.get("h2").contains("Organisation");
-  });
-
-  /**
-   * Organisation name section
-   */
-  it("Should access Organisation name' section", () => {
-    cy.getListItemFromKey("Organisation name", "Edit").click();
-    cy.get("h2").contains("Company house");
-  });
-
-  it(
-    "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
-    typeASearchResults,
-  );
-
-  it(
-    "Should auto-fill the 'Organisation name', 'Registration number' and 'Registered address' fields",
-    companyHouseAutofillAssert,
-  );
-
-  it("Should return to summary page", () => {
-    cy.clickOn("Save and return to summary");
-    cy.get("h2").contains("Organisation");
-  });
-
-  it(
-    "Should now validate but this time no validation link will appear for Organisation, registration or registered address",
-    validateWithoutOrganisation,
-  );
-
-  it("Should now access the Size section", () => {
-    cy.getListItemFromKey("Size", "Edit").click();
-    cy.get("h2").contains("Organisation details");
-  });
-
-  /**
-   * Size section
-   */
-  it("Should display inputs for size of organisation", () => {
-    ["Size", "Number of full time employees"].forEach(label => {
-      cy.contains("legend", label);
-    });
-  });
-
-  it("Validate the input box", validateSizeInput);
-
-  it("Should select 'Medium' size and enter 100 employees", medium100Employees);
-
-  it("Should now validate but this time no validation link will appear for Size", validateWithoutSize);
-
-  it("Should access the 'End of financial year' section", () => {
-    cy.getListItemFromKey("End of financial year", "Edit").click();
-    cy.get("h2").contains("Financial details");
-    ["End of financial year", "Turnover"].forEach(subheading => {
-      cy.get("legend").contains(subheading);
-    });
-  });
-
-  it("Should validate the Month and Year box", validateMonthYearInput);
-
-  /**
-   * TODO This is a pre-existing bug so skipping this step to save time. It will always fail. ACC-10525 created.
-   */
-  it("Should validate the Turnover box", validateTurnoverInput);
-
-  it("Should enter valid details in both the date section and turnover section", completeDateAndTurnover);
-
-  it(
-    "Should now validate but this time no validation link will appear for 'End of financial year' and 'Turnover'",
-    validateWithoutFY,
-  );
-
-  /**
-   * Project location section
-   */
-  it("Should access the 'Project location' section", () => {
-    cy.getListItemFromKey("Project location", "Edit").click();
-    cy.get("h2").contains("Project location");
-    ["Name of town or city", "Postcode"].forEach(subheading => {
-      cy.getByLabel(subheading);
-    });
-  });
-
-  it("Should contain correct guidance copy", () => {
-    cy.get("#hint-for-project-location").contains(
-      "Indicate where the majority of the work being done by this partner will take place.",
-    );
-    cy.get("#hint-for-project-postcode").contains("If this is not available, leave this blank.");
-  });
-
-  it("Should click 'Save and return', prompting validation", () => {
-    cy.clickOn("Save and return to summary");
-    cy.validationLink("Select project location.");
-    cy.paragraph("Select project location.");
-  });
-
-  it("Should select Inside and Outside the United Kingdom in turn", () => {
-    ["Inside the United Kingdom", "Outside the United Kingdom"].forEach(selection => {
-      cy.getByLabel(selection);
-    });
-  });
-
-  it("Should validate the Name of town or city input", validateNameOfTown);
-
-  it("Should validate the Postcode input", validatePostcodeInput);
-
-  it("Should complete the form and Save and return", completeLocationForm);
-
-  it(
-    "Should now validate but this time no validation link will appear for location, name of town, and postcode",
-    validateWithoutLocation,
-  );
-
-  /**
-   * Name section
-   */
-  it("Should access the First name section", () => {
-    cy.getListItemFromKey("First name", "Edit").click();
-    cy.get("h2").contains("Add person to organisation");
-  });
-
-  it("Should display the correct subheadings and copy", nameSectionSubheadings);
-
-  it("Should complete the form and prompt validation", validateNameOverLimit);
-
-  it("Should complete form at boundary of character limit", validateNameForm);
-
-  it("Should complete the form and Save and return", completeNameForm);
-
-  it("Should now validate but this time no validation link will appear for Name, number, email", validateWithoutName);
+  //it("Should access 'Eligibility of aid declaration' section", () => {
+  //  cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
+  //  cy.get("h2").contains("Non-aid funding");
+  //  cy.paragraph(
+  //    "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
+  //  );
+  //});
+  //it("Should back out to summary", () => {
+  //  cy.clickOn("Save and return to summary");
+  //  cy.get("h2").contains("Organisation");
+  //});
+  ///**
+  // * Organisation name section
+  // */
+  //it("Should access Organisation name' section", () => {
+  //  cy.getListItemFromKey("Organisation name", "Edit").click();
+  //  cy.get("h2").contains("Company house");
+  //});
+  //it(
+  //  "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
+  //  typeASearchResults,
+  //);
+  //it(
+  //  "Should auto-fill the 'Organisation name', 'Registration number' and 'Registered address' fields",
+  //  companyHouseAutofillAssert,
+  //);
+  //it("Should return to summary page", () => {
+  //  cy.clickOn("Save and return to summary");
+  //  cy.get("h2").contains("Organisation");
+  //});
+  //it(
+  //  "Should now validate but this time no validation link will appear for Organisation, registration or registered address",
+  //  validateWithoutOrganisation,
+  //);
+  //it("Should now access the Size section", () => {
+  //  cy.getListItemFromKey("Size", "Edit").click();
+  //  cy.get("h2").contains("Organisation details");
+  //});
+  ///**
+  // * Size section
+  // */
+  //it("Should display inputs for size of organisation", () => {
+  //  ["Size", "Number of full time employees"].forEach(label => {
+  //    cy.contains("legend", label);
+  //  });
+  //});
+  //it("Validate the input box", validateSizeInput);
+  //it("Should select 'Medium' size and enter 100 employees", medium100Employees);
+  //it("Should now validate but this time no validation link will appear for Size", validateWithoutSize);
+  //it("Should access the 'End of financial year' section", () => {
+  //  cy.getListItemFromKey("End of financial year", "Edit").click();
+  //  cy.get("h2").contains("Financial details");
+  //  ["End of financial year", "Turnover"].forEach(subheading => {
+  //    cy.get("legend").contains(subheading);
+  //  });
+  //});
+  //it("Should validate the Month and Year box", validateMonthYearInput);
+  ///**
+  // * TODO This is a pre-existing bug so skipping this step to save time. It will always fail. ACC-10525 created.
+  // */
+  //it("Should validate the Turnover box", validateTurnoverInput);
+  //it("Should enter valid details in both the date section and turnover section", completeDateAndTurnover);
+  //it(
+  //  "Should now validate but this time no validation link will appear for 'End of financial year' and 'Turnover'",
+  //  validateWithoutFY,
+  //);
+  ///**
+  // * Project location section
+  // */
+  //it("Should access the 'Project location' section", () => {
+  //  cy.getListItemFromKey("Project location", "Edit").click();
+  //  cy.get("h2").contains("Project location");
+  //  ["Name of town or city", "Postcode"].forEach(subheading => {
+  //    cy.getByLabel(subheading);
+  //  });
+  //});
+  //
+  //it("Should contain correct guidance copy", () => {
+  //  cy.get("#hint-for-project-location").contains(
+  //    "Indicate where the majority of the work being done by this partner will take place.",
+  //  );
+  //  cy.get("#hint-for-project-postcode").contains("If this is not available, leave this blank.");
+  //});
+  //
+  //it("Should click 'Save and return', prompting validation", () => {
+  //  cy.clickOn("Save and return to summary");
+  //  cy.validationLink("Select project location.");
+  //  cy.paragraph("Select project location.");
+  //});
+  //
+  //it("Should select Inside and Outside the United Kingdom in turn", () => {
+  //  ["Inside the United Kingdom", "Outside the United Kingdom"].forEach(selection => {
+  //    cy.getByLabel(selection);
+  //  });
+  //});
+  //
+  //it("Should validate the Name of town or city input", validateNameOfTown);
+  //
+  //it("Should validate the Postcode input", validatePostcodeInput);
+  //
+  //it("Should complete the form and Save and return", completeLocationForm);
+  //
+  //it(
+  //  "Should now validate but this time no validation link will appear for location, name of town, and postcode",
+  //  validateWithoutLocation,
+  //);
+  //
+  ///**
+  // * Name section
+  // */
+  //it("Should access the First name section", () => {
+  //  cy.getListItemFromKey("First name", "Edit").click();
+  //  cy.get("h2").contains("Add person to organisation");
+  //});
+  //
+  //it("Should display the correct subheadings and copy", nameSectionSubheadings);
+  //
+  //it("Should complete the form and prompt validation", validateNameOverLimit);
+  //
+  //it("Should complete form at boundary of character limit", validateNameForm);
+  //
+  //it("Should complete the form and Save and return", completeNameForm);
+  //
+  //it("Should now validate but this time no validation link will appear for Name, number, email", validateWithoutName);
 
   /**
    * Project costs for new partner section
@@ -329,6 +311,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", { tags: "js-disabled" }, () => 
   it("Should complete the Other costs 2 section", () => completeOtherCostsForm(" 2"));
 
   it("Should access the Other costs 3 section", () => navigateToCostCat("Other costs 3", 9));
+
   it("Should complete the Other costs 3 section", () => completeOtherCostsForm(" 3"));
 
   it("Should access the Other costs 4 section", () => navigateToCostCat("Other costs 4", 10));

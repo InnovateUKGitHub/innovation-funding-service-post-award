@@ -116,8 +116,8 @@ export const saveAndReturnPromptingValidation = () => {
     "Enter registration number.",
     "Enter financial year end.",
     "Enter financial year end turnover.",
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
     "Select project location.",
@@ -189,8 +189,8 @@ export const validateWithoutOrganisation = () => {
   [
     "Enter financial year end.",
     "Enter financial year end turnover.",
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
     "Select project location.",
@@ -301,8 +301,8 @@ export const validateWithoutSize = () => {
   [
     "Enter financial year end.",
     "Enter financial year end turnover.",
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
     "Select project location.",
@@ -346,8 +346,8 @@ export const validateTurnoverInput = () => {
   ["test copy", "%^()!"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Enter financial year end turnover.");
-    cy.paragraph("Enter financial year end turnover.");
+    cy.validationLink("Financial year end turnover must be a number.");
+    cy.paragraph("Financial year end turnover must be a number.");
   });
   cy.get("#financialYearEndTurnover").clear().type("-1");
   cy.clickOn("Save and return to summary");
@@ -374,8 +374,8 @@ export const validateWithoutFY = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
   [
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
     "Select project location.",
@@ -427,8 +427,8 @@ export const validateWithoutLocation = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
   [
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
     "Enter funding level.",
@@ -527,8 +527,8 @@ export const validateWithoutName = () => {
     "Select project location.",
     "Enter project city.",
     "Enter project postcode",
-    "Enter finance contact name.",
-    "Enter finance contact surname.",
+    "Enter finance contact first name.",
+    "Enter finance contact last name.",
     "Enter finance contact phone number.",
     "Enter finance contact email address.",
   ].forEach(completed => {
@@ -621,6 +621,8 @@ export const completeLabourForm = () => {
 
 export const completeOverheadsSection = () => {
   cy.getByLabel("20%").click();
+  cy.clickOn("Save and return to project costs");
+  cy.get("tr").contains("20%");
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -770,12 +772,12 @@ export const correctFundingLevelCopy = () => {
 
 export const fundingLevelInputValidation = () => {
   [
-    ["-1", "Enter funding level."],
-    ["99999999", "Enter funding level up to 100%."],
-    ["101", "Enter funding level up to 100%."],
-    ["100.5", "Enter funding level up to 100%."],
-    ["Spagbol", "Enter funding level."],
-    ["!%^&*(", "Enter funding level."],
+    ["-1", "Funding level must be 0% or more."],
+    ["99999999", "Enter a funding level up to 100%."],
+    ["101", "Enter a funding level up to 100%."],
+    ["100.5", "Enter a funding level up to 100%."],
+    ["Spagbol", "Funding level must be a number."],
+    ["!%^&*(", "Funding level must be a number."],
   ].forEach(([input, message]) => {
     cy.get("#awardRate").clear().type(input);
     cy.wait(500);
@@ -862,7 +864,7 @@ export const accessOtherPublicFunding = () => {
   cy.paragraph(
     "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
   );
-  ["Source of funding", "Date secured (MM YYYY)", "Funding amount (£)"].forEach(header => {
+  ["Source of funding", "Date secured (MM YYYY)", "Funding amount"].forEach(header => {
     cy.tableHeader(header);
   });
 };
