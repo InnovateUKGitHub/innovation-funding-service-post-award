@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { noop } from "@ui/helpers/noop";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { SearchInput } from "@ui/components/atomicDesign/atoms/Search/searchInput";
 import { useDidUpdate } from "@ui/hooks/generic.hook";
 
 export interface DocumentFilterProps {

@@ -21,7 +21,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { useForm } from "react-hook-form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { SearchInput } from "@ui/components/atomicDesign/atoms/Search/searchInput";
 import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";

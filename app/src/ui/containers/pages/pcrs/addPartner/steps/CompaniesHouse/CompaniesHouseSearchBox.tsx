@@ -5,7 +5,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/context/Mounted";
-import { useDebounce } from "@ui/components/bjss/inputs/input-utils";
+import { useDebounce } from "@ui/components/atomicDesign/input-utils";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks/content.hook";
 import { useEffect } from "react";

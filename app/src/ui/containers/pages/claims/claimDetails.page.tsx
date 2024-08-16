@@ -21,7 +21,7 @@ import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/C
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
+import { TypedDetails, DualDetails } from "@ui/components/atomicDesign/organisms/Details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimDetailsPageData } from "./claimDetails.logic";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.standalone";

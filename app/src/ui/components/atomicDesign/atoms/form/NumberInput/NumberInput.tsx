@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { forwardRef } from "react";
 import type { DetailedHTMLProps, InputHTMLAttributes, Ref } from "react";
-import type { FormInputWidths } from "@ui/components/bjss/inputs/input-utils";
+import type { FormInputWidths } from "@ui/components/atomicDesign/input-utils";
 
 export type NumberInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   "data-qa"?: string;

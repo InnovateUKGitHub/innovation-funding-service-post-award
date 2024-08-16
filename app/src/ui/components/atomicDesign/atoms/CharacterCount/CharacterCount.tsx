@@ -1,6 +1,6 @@
 import React from "react";
 import cx from "classnames";
-import { SimpleString } from "../../atomicDesign/atoms/SimpleString/simpleString";
+import { SimpleString } from "../SimpleString/simpleString";
 import { useMounted } from "@ui/context/Mounted";
 
 export type CharacterTypes =

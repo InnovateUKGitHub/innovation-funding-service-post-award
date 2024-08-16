@@ -1,10 +1,10 @@
 import React, { cloneElement } from "react";
 import cx from "classnames";
-import { Currency } from "../../atomicDesign/atoms/Currency/currency";
-import { FullDate, FullDateTime } from "../../atomicDesign/atoms/Date";
-import { Percentage } from "../../atomicDesign/atoms/Percentage/percentage";
-import { SimpleString } from "../../atomicDesign/atoms/SimpleString/simpleString";
-import { H3, H4 } from "../../atomicDesign/atoms/Heading/Heading.variants";
+import { Currency } from "../../atoms/Currency/currency";
+import { FullDate, FullDateTime } from "../../atoms/Date";
+import { Percentage } from "../../atoms/Percentage/percentage";
+import { SimpleString } from "../../atoms/SimpleString/simpleString";
+import { H3, H4 } from "../../atoms/Heading/Heading.variants";
 
 interface InternalFieldProps<T> {
   label: React.ReactNode;

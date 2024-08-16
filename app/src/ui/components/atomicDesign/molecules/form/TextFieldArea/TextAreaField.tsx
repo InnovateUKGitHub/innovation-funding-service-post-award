@@ -4,7 +4,7 @@ import { Textarea } from "../../../atoms/form/TextArea/Textarea";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { CharacterCount } from "@ui/components/bjss/inputs/CharacterCount";
+import { CharacterCount } from "@ui/components/atomicDesign/atoms/CharacterCount/CharacterCount";
 import { claimCommentsMaxLength } from "@ui/validation/validators/claimDtoValidator";
 
 type TextAreaRef = Ref<HTMLTextAreaElement>;

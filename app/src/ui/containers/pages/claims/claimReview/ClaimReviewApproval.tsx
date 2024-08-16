@@ -11,7 +11,7 @@ import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/R
 import { Textarea } from "@ui/components/atomicDesign/atoms/form/TextArea/Textarea";
 import { useMounted } from "@ui/context/Mounted";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { CharacterCount } from "@ui/components/bjss/inputs/CharacterCount";
+import { CharacterCount } from "@ui/components/atomicDesign/atoms/CharacterCount/CharacterCount";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";

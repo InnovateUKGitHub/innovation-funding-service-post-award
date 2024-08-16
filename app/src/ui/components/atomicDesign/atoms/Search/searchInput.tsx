@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { FormInputWidths, useDebounce } from "./input-utils";
-import { InputProps } from "./common";
+import { FormInputWidths, useDebounce } from "../../input-utils";
 
-interface SearchInputProps extends InputProps<string> {
+interface SearchInputProps {
+  value?: string | null;
+  name: string;
+  disabled?: boolean;
+  onChange?: (v: string | null) => void;
+  placeholder?: string;
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
+  hasError?: boolean;
+  debounce?: boolean;
   maxLength?: number;
   width?: FormInputWidths;
   autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"];

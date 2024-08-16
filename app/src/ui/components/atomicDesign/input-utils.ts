@@ -1,7 +1,5 @@
 import { useRef } from "react";
-import type { Dispatch, SetStateAction } from "react";
 import { noop } from "@ui/helpers/noop";
-import { useDidUpdate } from "@ui/hooks/generic.hook";
 
 export type FormInputWidths =
   | "full"
@@ -43,35 +41,4 @@ export function useDebounce<T extends BasicFn>(
     window.clearTimeout(timeoutId.current);
     timeoutId.current = window.setTimeout(() => action(...args), timeout);
   };
-}
-
-/**
- * Hook will update the state value property when value property from the props does not match the state value
- * Used for externally updating the input field
- */
-export function useUpdateStateValueOnPropsChange<T, S extends { value: T } = { value: T }>(
-  propValue: T,
-  stateValue: T,
-  setState: Dispatch<SetStateAction<S>>,
-) {
-  useDidUpdate(() => {
-    if (propValue !== stateValue) {
-      setState(s => ({ ...s, value: propValue }));
-    }
-  }, [propValue]);
-}
-
-/**
- * ### useResetValueOnNameChange
- *
- * hook resets the value when the name changes for "virtual" unmounting in e.g. monitoring reports
- */
-export function useResetValueOnNameChange(
-  setState: Dispatch<SetStateAction<{ value: string }>>,
-  name: string,
-  initialValue = "",
-) {
-  useDidUpdate(() => {
-    setState(s => ({ ...s, value: initialValue }));
-  }, [name]);
 }

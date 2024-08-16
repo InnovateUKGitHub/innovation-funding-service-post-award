@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { forwardRef } from "react";
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { FormInputWidths } from "../../../../bjss/inputs/input-utils";
+import { FormInputWidths } from "../../../input-utils";
 
 export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   "data-qa"?: string;

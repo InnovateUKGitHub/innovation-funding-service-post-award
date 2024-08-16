@@ -9,7 +9,7 @@ import { useLinks } from "../../utils/useNextLink";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { SearchInput } from "@ui/components/atomicDesign/atoms/Search/searchInput";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";

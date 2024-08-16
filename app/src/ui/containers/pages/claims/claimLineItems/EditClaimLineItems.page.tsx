@@ -12,7 +12,7 @@ import { Textarea } from "@ui/components/atomicDesign/atoms/form/TextArea/Textar
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
-import { CharacterCount } from "@ui/components/bjss/inputs/CharacterCount";
+import { CharacterCount } from "@ui/components/atomicDesign/atoms/CharacterCount/CharacterCount";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";

@@ -1,7 +1,7 @@
 import TestBed from "@shared/TestBed";
 import { render } from "@testing-library/react";
 
-import { CharacterCount, CharacterCountProps } from "@ui/components/bjss/inputs/CharacterCount";
+import { CharacterCount, CharacterCountProps } from "./CharacterCount";
 
 const renderCount = (props: CharacterCountProps) => {
   return render(

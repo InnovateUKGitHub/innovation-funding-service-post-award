@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { DualDetails, DualDetailsProps, TypedDetails } from "@ui/components/bjss/details/details";
+import { DualDetails, DualDetailsProps, TypedDetails } from "@ui/components/atomicDesign/organisms/Details/details";
 import React from "react";
 
 describe("Detail Components", () => {

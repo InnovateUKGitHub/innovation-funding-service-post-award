@@ -3,7 +3,7 @@ import { JesSearchQuery, JesSearchQuery$data } from "./__generated__/JesSearchQu
 import { jesSearchQuery } from "./JesSearchQuery";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { useEffect } from "react";
-import { useDebounce } from "@ui/components/bjss/inputs/input-utils";
+import { useDebounce } from "@ui/components/atomicDesign/input-utils";
 
 export const getJesSearchResults = (data: JesSearchQuery$data | null | undefined) =>
   data?.salesforce?.uiapi?.query?.Account?.edges?.map(x => ({

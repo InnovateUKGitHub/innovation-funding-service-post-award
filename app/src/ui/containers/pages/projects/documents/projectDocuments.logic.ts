@@ -9,7 +9,6 @@ import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useLazyLoadQuery } from "react-relay";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
@@ -68,7 +67,7 @@ export const useValidPartnerDropdownOptions = (
 ) => {
   const { getContent } = useContent();
 
-  const partnerOptions: DropdownListOption[] = [
+  const partnerOptions = [
     {
       id: "none",
       value: "",
