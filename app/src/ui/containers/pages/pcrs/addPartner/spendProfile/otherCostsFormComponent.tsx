@@ -5,19 +5,19 @@ import { OtherCostsSchema, otherCostsSchema, errorMap } from "./spendProfile.zod
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
+import { Button } from "@ui/components/atoms/form/Button/Button";
+import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import {
   MaybeNewCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileOtherCostsDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
-import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { Field } from "@ui/components/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";

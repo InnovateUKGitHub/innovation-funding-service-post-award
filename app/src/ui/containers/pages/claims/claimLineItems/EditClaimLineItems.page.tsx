@@ -3,16 +3,16 @@ import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodError
 import { ProjectRole } from "@framework/constants/project";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { Textarea } from "@ui/components/atomicDesign/atoms/form/TextArea/Textarea";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
-import { CharacterCount } from "@ui/components/atomicDesign/atoms/CharacterCount/CharacterCount";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { SubmitButton } from "@ui/components/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
+import { Textarea } from "@ui/components/atoms/form/TextArea/Textarea";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { AwardRateOverridesMessage } from "@ui/components/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
+import { CharacterCount } from "@ui/components/atoms/CharacterCount/CharacterCount";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -33,8 +33,8 @@ import {
   editClaimLineItemsSchema,
 } from "./editClaimLineItems.zod";
 import { useMapToInitialLineItems } from "./useMapToClaimLineItemTableDto";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 
 type EditClaimLineItemsProps = ClaimLineItemsParams & {
   mode: "prepare";

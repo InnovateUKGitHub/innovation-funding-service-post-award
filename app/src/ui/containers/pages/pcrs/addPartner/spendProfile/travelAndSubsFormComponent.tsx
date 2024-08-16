@@ -3,7 +3,7 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { useContext } from "react";
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
@@ -12,20 +12,20 @@ import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } fr
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { isObject } from "lodash";
-import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { Field } from "@ui/components/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 

@@ -1,7 +1,7 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { TypedDetails, DualDetails } from "@ui/components/atomicDesign/organisms/Details/details";
-import { SectionPanel } from "@ui/components/atomicDesign/molecules/SectionPanel/sectionPanel";
-import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
+import { Content } from "@ui/components/molecules/Content/content";
+import { TypedDetails, DualDetails } from "@ui/components/organisms/Details/details";
+import { SectionPanel } from "@ui/components/molecules/SectionPanel/sectionPanel";
+import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
 import type { Partner } from "./projectOverview.logic";
 
 export const ProjectOverviewSinglePartnerDetails = ({ partner }: { partner: Partner }) => {

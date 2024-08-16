@@ -1,8 +1,8 @@
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
@@ -17,8 +17,8 @@ import {
   approveNewSubcontractorErrorMap,
   approveNewSubcontractorSchema,
 } from "./ApproveNewSubcontractor.zod";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { Markdown } from "@ui/components/atoms/Markdown/markdown";
 
 const ApproveNewSubcontractorSummary = () => {
   const { projectId, pcrId, itemId, fetchKey, displayCompleteForm, markedAsCompleteHasBeenChecked } =

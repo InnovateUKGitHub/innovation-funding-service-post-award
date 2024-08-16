@@ -1,11 +1,11 @@
 import { ProjectRole } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/emailContent";
-import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Content } from "@ui/components/molecules/Content/content";
+import { EmailContent } from "@ui/components/atoms/EmailContent/emailContent";
+import { Markdown } from "@ui/components/atoms/Markdown/markdown";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks/content.hook";
 

@@ -1,18 +1,18 @@
 import { getAuthRoles } from "@framework/types/authorisation";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
-import { DateInputGroup } from "@ui/components/atomicDesign/atoms/DateInputs/DateInputGroup";
-import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInput";
+import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
+import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
 import {
   pcrProjectSuspensionSchema,
@@ -20,7 +20,7 @@ import {
   ProjectSuspensionSchemaType,
 } from "./suspendProject.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDate, getMonth, getYear } from "@ui/components/atoms/Date";
 import { PcrPage } from "../pcrPage";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";

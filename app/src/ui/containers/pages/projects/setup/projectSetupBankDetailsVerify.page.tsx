@@ -1,18 +1,18 @@
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ProjectRole } from "@framework/constants/project";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink, Link } from "@ui/components/atoms/Links/links";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import {
   useOnUpdateSetupBankDetailsVerify,
   useSetupBankDetailsVerifyData,
 } from "./projectSetupBankDetailsVerify.logic";
 import { useForm } from "react-hook-form";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 
 export interface ProjectSetupBankDetailsVerifyParams {
   projectId: ProjectId;

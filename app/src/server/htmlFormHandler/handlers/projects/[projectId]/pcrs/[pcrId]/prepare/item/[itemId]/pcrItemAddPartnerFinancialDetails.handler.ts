@@ -13,7 +13,7 @@ import {
   FinanceDetailsSchemaType,
   getFinanceDetailsSchema,
 } from "@ui/containers/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
-import { combineDate } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 export class PcrItemAddPartnerFinancialDetailsHandler extends ZodFormHandlerBase<

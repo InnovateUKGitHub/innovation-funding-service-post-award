@@ -1,20 +1,20 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { UL } from "@ui/components/atomicDesign/atoms/List/list";
-import { ExternalLink } from "@ui/components/atomicDesign/atoms/ExternalLink/externalLink";
-import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { UL } from "@ui/components/atoms/List/list";
+import { ExternalLink } from "@ui/components/atoms/ExternalLink/externalLink";
+import { H2 } from "@ui/components/atoms/Heading/Heading.variants";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMemo } from "react";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
 import { PcrPage } from "../../pcrPage";
 import { FilesStep } from "../../filesStep/filesStep";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Link } from "@ui/components/atoms/Links/links";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { FormTypes } from "@ui/zod/FormTypes";
 
 const useJesContent = () => {

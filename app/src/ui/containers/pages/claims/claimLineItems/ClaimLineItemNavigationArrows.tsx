@@ -2,7 +2,7 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { ClaimLineItemsParams, ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "./ViewClaimLineItems.page";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
+import { NavigationArrows } from "@ui/components/molecules/NavigationArrows/navigationArrows";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ClaimLineItemMode } from "./ClaimLineItems.logic";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";

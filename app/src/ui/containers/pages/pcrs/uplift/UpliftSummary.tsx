@@ -1,12 +1,12 @@
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useUpliftSummaryQuery } from "./UpliftSummary.logic";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { PcrBackLink, PcrPage } from "../pcrPage";
 import { FinancialVirementsViewTable } from "../financialVirements/summary/FinancialVirementsViewTable";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink } from "@ui/components/atoms/Links/links";
 import { useRoutes } from "@ui/context/routesProvider";
 
 const UpliftSummary = () => {

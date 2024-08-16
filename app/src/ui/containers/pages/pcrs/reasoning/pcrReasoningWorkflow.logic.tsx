@@ -16,7 +16,7 @@ import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { getNextStepNumber } from "./workflowMetadata";
 import { useContent } from "@ui/hooks/content.hook";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink } from "@ui/components/atoms/Links/links";
 import { PcrReasoningFilesQuery } from "./__generated__/PcrReasoningFilesQuery.graphql";
 import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";

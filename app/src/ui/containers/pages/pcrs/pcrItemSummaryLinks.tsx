@@ -1,6 +1,6 @@
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Link } from "@ui/components/atoms/Links/links";
 import { PcrWorkflow } from "./pcrWorkflow";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";

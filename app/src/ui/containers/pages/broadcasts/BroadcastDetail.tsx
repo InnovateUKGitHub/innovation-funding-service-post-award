@@ -1,7 +1,7 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
-import { TypedDetails } from "@ui/components/atomicDesign/organisms/Details/details";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { TypedDetails } from "@ui/components/organisms/Details/details";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 
 export const BroadcastDetail = (props: BroadcastDto) => {

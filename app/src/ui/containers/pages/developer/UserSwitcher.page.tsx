@@ -1,7 +1,7 @@
 import { Authorisation } from "@framework/types/authorisation";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { H1 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { H1 } from "@ui/components/atoms/Heading/Heading.variants";
 import { defineRoute } from "@ui/containers/containerBase";
 import { UserSwitcher } from "./UserSwitcher";
 

@@ -1,9 +1,9 @@
 import { PageTitle } from "@ui/features/page-title";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Content } from "../../../../components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Section } from "../../../../components/atomicDesign/molecules/Section/section";
-import { ExternalLink } from "../../../../components/atomicDesign/atoms/ExternalLink/externalLink";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "../../../../components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { Section } from "../../../../components/molecules/Section/section";
+import { ExternalLink } from "../../../../components/atoms/ExternalLink/externalLink";
 
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";
 

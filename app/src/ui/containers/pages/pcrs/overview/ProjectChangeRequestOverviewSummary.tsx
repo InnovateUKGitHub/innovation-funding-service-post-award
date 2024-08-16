@@ -1,8 +1,8 @@
 import { PCRDto, PCRItemSummaryDto } from "@framework/dtos/pcrDtos";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Section } from "@ui/components/molecules/Section/section";
+import { Link } from "@ui/components/atoms/Links/links";
+import { LineBreakList } from "@ui/components/atoms/LineBreakList/lineBreakList";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";

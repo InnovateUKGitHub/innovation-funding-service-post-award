@@ -1,5 +1,5 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Content } from "@ui/components/molecules/Content/content";
+import { BackLink } from "@ui/components/atoms/Links/links";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from "./MonitoringReportWorkflowProps";
 

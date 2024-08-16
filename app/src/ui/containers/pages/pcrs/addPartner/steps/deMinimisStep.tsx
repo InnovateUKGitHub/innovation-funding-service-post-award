@@ -1,10 +1,10 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { FilesStep } from "../../filesStep/filesStep";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { LinksList } from "@ui/components/atomicDesign/atoms/LinksList/linksList";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Section } from "@ui/components/molecules/Section/section";
+import { Content } from "@ui/components/molecules/Content/content";
+import { LinksList } from "@ui/components/atoms/LinksList/linksList";
+import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { FormTypes } from "@ui/zod/FormTypes";
 
 const DeMinimisGuidance = () => {

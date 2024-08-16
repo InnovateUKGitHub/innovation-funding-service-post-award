@@ -7,29 +7,29 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { formatDate } from "@framework/util/dateHelpers";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { getLeadPartner } from "@framework/util/partnerHelper";
-import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
-import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Accordion } from "@ui/components/atoms/Accordion/Accordion";
+import { AccordionItem } from "@ui/components/atoms/Accordion/AccordionItem";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Messages } from "@ui/components/molecules/Messages/messages";
+import { Section } from "@ui/components/molecules/Section/section";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import {
   ClaimDetailsLink,
   getClaimDetailsStatusType,
-} from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
-import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
+} from "@ui/components/organisms/claims/ClaimDetailsLink/claimDetailsLink";
+import { ClaimPeriodDate } from "@ui/components/organisms/claims/ClaimPeriodDate/claimPeriodDate";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
+import { ProjectBackLink } from "@ui/components/organisms/projects/ProjectBackLink/projectBackLink";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { DateTime } from "luxon";
 import { ClaimsDashboardGuidance } from "../components/ClaimsDashboardGuidance";
 import { useAllClaimsDashboardData } from "./allClaimsDashboard.logic";
-import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
+import { PeriodTitle } from "@ui/components/molecules/PeriodTitle/periodTitle";
 
 export interface AllClaimsDashboardParams {
   projectId: ProjectId;

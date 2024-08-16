@@ -1,26 +1,26 @@
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNextLink } from "../utils/useNextLink";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { getRenamePartnerSchema, renamePartnerErrorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { Label } from "@ui/components/atoms/form/Label/Label";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();

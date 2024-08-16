@@ -3,15 +3,15 @@ import { useFinanceSummaryContent, useFinanceSummaryData } from "./financeSummar
 import type { Partner } from "./financeSummary.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { ShortDateRange } from "@ui/components/atomicDesign/atoms/Date";
-import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { ShortDateRange } from "@ui/components/atoms/Date";
+import { Percentage } from "@ui/components/atoms/Percentage/percentage";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
 
 type Props = {
   projectId: ProjectId;

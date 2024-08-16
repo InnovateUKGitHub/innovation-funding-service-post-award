@@ -1,20 +1,20 @@
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { List } from "@ui/components/atomicDesign/atoms/List/list";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { TaskListSection, Task, TaskStatus } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
+import { Content } from "@ui/components/molecules/Content/content";
+import { List } from "@ui/components/atoms/List/list";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink, Link } from "@ui/components/atoms/Links/links";
+import { TaskListSection, Task, TaskStatus } from "@ui/components/molecules/TaskList/TaskList";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useOnUpdateProjectSetup, useProjectSetupQuery } from "./projectSetup.logic";
 import { useZodFormatToRhfErrors } from "@framework/util/errorHelpers";
 import { projectSetupErrorMap, projectSetupSchema } from "./projectSetup.zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;

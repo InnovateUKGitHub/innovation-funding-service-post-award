@@ -1,9 +1,9 @@
 import { PageTitle } from "@ui/features/page-title";
-import { Content } from "../../../../components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Section } from "../../../../components/atomicDesign/molecules/Section/section";
-import { ExternalLink } from "../../../../components/atomicDesign/atoms/ExternalLink/externalLink";
-import { SimpleString } from "../../../../components/atomicDesign/atoms/SimpleString/simpleString";
+import { Content } from "../../../../components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { Section } from "../../../../components/molecules/Section/section";
+import { ExternalLink } from "../../../../components/atoms/ExternalLink/externalLink";
+import { SimpleString } from "../../../../components/atoms/SimpleString/simpleString";
 
 export const UnauthenticatedError = () => {
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";

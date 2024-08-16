@@ -1,13 +1,13 @@
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Section } from "@ui/components/molecules/Section/section";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Link } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { getInitialAcademicCosts, useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { sumBy } from "lodash";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 

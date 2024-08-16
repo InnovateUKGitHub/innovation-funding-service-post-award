@@ -1,10 +1,10 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Messages } from "@ui/components/molecules/Messages/messages";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { Markdown } from "@ui/components/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";

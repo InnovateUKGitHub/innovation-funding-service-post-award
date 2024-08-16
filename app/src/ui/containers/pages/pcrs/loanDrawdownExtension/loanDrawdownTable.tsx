@@ -8,14 +8,14 @@ import {
   getQuarterInMonths,
 } from "./loanDrawdownExtension.logic";
 import { useContent } from "@ui/hooks/content.hook";
-import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { FullNumericDate } from "@ui/components/atomicDesign/atoms/Date";
-import { DropdownSelect } from "@ui/components/atomicDesign/atoms/form/Dropdown/Dropdown";
+import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { FullNumericDate } from "@ui/components/atoms/Date";
+import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
 import { LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PCRStepType } from "@framework/constants/pcrConstants";
-import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
+import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
 
 const maximumLoanDurationChangeInMonths = 75;
 

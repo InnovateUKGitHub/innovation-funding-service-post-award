@@ -1,6 +1,6 @@
 import { PCRItemType, disableSummaryItems } from "@framework/constants/pcrConstants";
 import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
-import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
+import { NavigationArrows } from "@ui/components/molecules/NavigationArrows/navigationArrows";
 import { IRoutes } from "@ui/routing/routeConfig";
 
 export type PCRTypeForNavigationArrows = Pick<Omit<PCRDto, "items">, "projectId" | "id"> & {

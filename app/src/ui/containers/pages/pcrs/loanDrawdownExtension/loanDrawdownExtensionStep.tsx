@@ -1,6 +1,6 @@
 import { DateFormat } from "@framework/constants/enums";
 import { formatDate } from "@framework/util/dateHelpers";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useContent } from "@ui/hooks/content.hook";
 import { PcrPage } from "../pcrPage";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
@@ -10,9 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useNextLink } from "../utils/useNextLink";
 import { loanDrawdownExtensionSchema, errorMap, LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { LoanDrawdownTable } from "./loanDrawdownTable";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 

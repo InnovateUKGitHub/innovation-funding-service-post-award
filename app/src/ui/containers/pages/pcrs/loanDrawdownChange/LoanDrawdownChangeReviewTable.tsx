@@ -1,9 +1,9 @@
 import cx from "classnames";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { FullDate, FullNumericDate } from "@ui/components/atomicDesign/atoms/Date";
-import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TH, THead, TR, Table, TD, TFoot } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { FullDate, FullNumericDate } from "@ui/components/atoms/Date";
+import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
+import { TBody, TH, THead, TR, Table, TD, TFoot } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
 import { EditLink } from "../pcrItemSummaryLinks";

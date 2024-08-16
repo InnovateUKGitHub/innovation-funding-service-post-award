@@ -1,10 +1,10 @@
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { Table, THead, TR, TH, TBody, TD, TFoot } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { Percentage } from "@ui/components/atoms/Percentage/percentage";
+import { Table, THead, TR, TH, TBody, TD, TFoot } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { MappedFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { useRoutes } from "@ui/context/routesProvider";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Link } from "@ui/components/atoms/Links/links";
 
 interface FinancialVirementsViewTableProps {
   virementData: MappedFinancialVirements["virementData"];

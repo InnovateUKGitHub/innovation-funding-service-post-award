@@ -1,11 +1,11 @@
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
 import { useMounted } from "@ui/context/Mounted";
-import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorSummary";
+import { ErrorSummary } from "@ui/components/molecules/ErrorSummary/ErrorSummary";
 import { useContent } from "@ui/hooks/content.hook";
 import { Suspense, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";

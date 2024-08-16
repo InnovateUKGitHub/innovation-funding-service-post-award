@@ -1,6 +1,6 @@
 import { ProjectRole } from "@framework/constants/project";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PartnerDetailsEditComponent } from "@ui/components/atomicDesign/templates/PartnerDetailsEdit/PartnerDetailsEdit";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { PartnerDetailsEditComponent } from "@ui/components/templates/PartnerDetailsEdit/PartnerDetailsEdit";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 

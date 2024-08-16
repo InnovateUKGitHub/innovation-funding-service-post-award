@@ -13,7 +13,7 @@ import {
   otherSourcesOfFundingSchema,
 } from "@ui/containers/pages/pcrs/addPartner/steps/schemas/otherSourcesOfFunding.zod";
 import { set } from "lodash";
-import { combineDate } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";

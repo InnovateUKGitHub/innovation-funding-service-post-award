@@ -1,26 +1,26 @@
 import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
-import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { DocumentView } from "@ui/components/organisms/documents/DocumentView/DocumentView";
+import { Section } from "@ui/components/molecules/Section/section";
+import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Form } from "@ui/components/atoms/form/Form/Form";
 import { useContext, useMemo } from "react";
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OverheadSchema, overheadSchema, errorMap } from "./spendProfile.zod";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
 import { useContent } from "@ui/hooks/content.hook";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
+import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { isObject, sumBy } from "lodash";
 import { createRegisterButton } from "@framework/util/registerButton";
 import {
@@ -28,7 +28,7 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileOverheadsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { FormTypes } from "@ui/zod/FormTypes";

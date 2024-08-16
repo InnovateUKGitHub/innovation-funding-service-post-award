@@ -1,12 +1,9 @@
 import { Authorisation } from "@framework/types/authorisation";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import {
-  NavigationCardsGrid,
-  NavigationCard,
-} from "@ui/components/atomicDesign/molecules/NavigationCard/navigationCard";
-import { H1 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { NavigationCardsGrid, NavigationCard } from "@ui/components/molecules/NavigationCard/navigationCard";
+import { H1 } from "@ui/components/atoms/Heading/Heading.variants";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 

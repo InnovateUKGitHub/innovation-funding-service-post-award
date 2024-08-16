@@ -1,11 +1,11 @@
 import { PartnerClaimStatus } from "@framework/constants/partner";
 import { ProjectStatus } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { ListItem } from "@ui/components/atomicDesign/atoms/ListItem/listItem";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { ShortDateRange } from "@ui/components/atomicDesign/atoms/Date";
-import { H4 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Content } from "@ui/components/molecules/Content/content";
+import { ListItem } from "@ui/components/atoms/ListItem/listItem";
+import { Link } from "@ui/components/atoms/Links/links";
+import { ShortDateRange } from "@ui/components/atoms/Date";
+import { H4 } from "@ui/components/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";

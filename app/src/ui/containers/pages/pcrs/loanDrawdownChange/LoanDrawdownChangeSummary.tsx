@@ -1,4 +1,4 @@
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { Section } from "@ui/components/atoms/Section/Section";
 import { PcrPage } from "../pcrPage";
 import { useLoanDrawdownChangeQuery } from "./loanDrawdownChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";

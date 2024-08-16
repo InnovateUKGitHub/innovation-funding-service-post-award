@@ -2,16 +2,16 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ProjectRole } from "@framework/constants/project";
 import { useContent } from "@ui/hooks/content.hook";
 import { useMonitoringReportDeleteQuery, useOnMonitoringReportDelete } from "./monitoringReportDelete.logic";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink } from "@ui/components/atoms/Links/links";
 import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;

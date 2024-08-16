@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/context/Mounted";
-import { useDebounce } from "@ui/components/atomicDesign/input-utils";
+import { useDebounce } from "@ui/components/input-utils";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks/content.hook";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ import {
   pcrAddPartnerCompaniesHouseStepSearchSchema,
 } from "../schemas/companiesHouse.zod";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useValidateInitialSearchQuery } from "./CompaniesHouseStep.logic";
 
 interface CompaniesHouseSearchProps {

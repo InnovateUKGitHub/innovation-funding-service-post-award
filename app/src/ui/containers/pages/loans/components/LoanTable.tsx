@@ -1,7 +1,7 @@
 import { LoanDto } from "@framework/dtos/loanDto";
-import { Bold } from "@ui/components/atomicDesign/atoms/Bold/bold";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
+import { Bold } from "@ui/components/atoms/Bold/bold";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
 
 // Note: The totals property has to be required to render the table
 type LoanTableProps = Required<LoanDto>;

@@ -1,9 +1,9 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
 
 import { useClaimDrawdownTableData } from "./claimDrawdownTable.logic";
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { Currency } from "@ui/components/atoms/Currency/currency";
 
 type ProjectOptions = Pick<ProjectDto, "id" | "competitionType">;
 

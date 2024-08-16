@@ -2,11 +2,11 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import {
   ClaimStatusGroup,
   getClaimStatusGroup,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+} from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 import {
   mapToForecastTableDto,
   MapToForecastTableProps,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+} from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { z, ZodIssueCode } from "zod";
 import { FormTypes } from "./FormTypes";
 import {

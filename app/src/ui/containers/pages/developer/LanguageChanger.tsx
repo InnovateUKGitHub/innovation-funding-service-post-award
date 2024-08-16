@@ -1,7 +1,7 @@
 import { CopyLanguages } from "@copy/data";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { Info } from "@ui/components/atoms/Details/Details";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import i18next from "i18next";
 import { useState } from "react";

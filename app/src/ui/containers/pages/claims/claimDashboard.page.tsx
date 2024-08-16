@@ -8,18 +8,18 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { ClaimPeriodDate } from "@ui/components/organisms/claims/ClaimPeriodDate/claimPeriodDate";
+import { ProjectBackLink } from "@ui/components/organisms/projects/ProjectBackLink/projectBackLink";
+import { Messages } from "@ui/components/molecules/Messages/messages";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import {
   ClaimDetailsLink,
   getClaimDetailsStatusType,
-} from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
+} from "@ui/components/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useClaimDashboardData } from "./claimDashboard.logic";
 
 export interface ClaimDashboardPageParams {

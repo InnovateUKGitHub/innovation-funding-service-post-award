@@ -1,8 +1,8 @@
 import { LoanStatus } from "@framework/entities/loan-status";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { LoansTable } from "./components/LoansTable";

@@ -1,8 +1,8 @@
 import { IMetaValue, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { UL } from "@ui/components/atomicDesign/atoms/List/list";
-import { Bold } from "@ui/components/atomicDesign/atoms/Bold/bold";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Info } from "@ui/components/atoms/Details/Details";
+import { UL } from "@ui/components/atoms/List/list";
+import { Bold } from "@ui/components/atoms/Bold/bold";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode, useMemo } from "react";
 

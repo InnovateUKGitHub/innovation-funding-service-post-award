@@ -1,8 +1,8 @@
 import { ProjectRole } from "@framework/constants/project";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { Section } from "@ui/components/molecules/Section/section";
+import { AwardRateOverridesMessage } from "@ui/components/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { Helmet } from "react-helmet";

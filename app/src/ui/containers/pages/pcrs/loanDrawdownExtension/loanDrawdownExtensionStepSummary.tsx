@@ -1,5 +1,5 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { Section } from "@ui/components/atoms/Section/Section";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";

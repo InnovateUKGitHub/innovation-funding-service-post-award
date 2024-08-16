@@ -5,12 +5,12 @@ import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { PartnerClaimStatus } from "@framework/constants/partner";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IClientUser } from "@framework/types/IUser";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { Content } from "@ui/components/molecules/Content/content";
 import {
   NavigationCardMessage,
   NavigationCardsGrid,
   NavigationCard,
-} from "@ui/components/atomicDesign/molecules/NavigationCard/navigationCard";
+} from "@ui/components/molecules/NavigationCard/navigationCard";
 import { IRoutes } from "@ui/routing/routeConfig";
 
 interface ILinks {

@@ -5,20 +5,20 @@ import {
   FormValues,
 } from "./monitoringReportPeriodStep.logic";
 import { ProjectRole } from "@framework/constants/project";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { BackLink } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Field } from "@ui/components/molecules/form/Field/Field";
+import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { createMonitoringReportErrorMap, createMonitoringReportSchema } from "./create/monitoringReportCreate.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
 

@@ -16,7 +16,7 @@ import {
   pcrProjectSuspensionErrorMap,
   pcrProjectSuspensionSchema,
 } from "@ui/containers/pages/pcrs/suspendProject/suspendProject.zod";
-import { combineDate } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDate } from "@ui/components/atoms/Date";
 
 export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
   ProjectSuspensionSchema,

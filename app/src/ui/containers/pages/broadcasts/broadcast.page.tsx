@@ -1,4 +1,4 @@
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { PageTitle } from "@ui/features/page-title";
 
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -6,8 +6,8 @@ import { useContent } from "@ui/hooks/content.hook";
 
 import { BroadcastDetail } from "./BroadcastDetail";
 import { useBroadcastDetailsQuery } from "./broadcastDetails.logic";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { BackLink } from "@ui/components/atoms/Links/links";
 
 interface BroadcastPageParams {
   broadcastId: BroadcastId;

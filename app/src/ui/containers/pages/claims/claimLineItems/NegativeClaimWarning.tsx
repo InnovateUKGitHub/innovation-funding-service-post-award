@@ -1,8 +1,8 @@
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
-import { UL } from "@ui/components/atomicDesign/atoms/List/list";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { UL } from "@ui/components/atoms/List/list";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "@ui/components/molecules/Content/content";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 
 interface NegativeClaimWarningProps {
   claimDetails: {

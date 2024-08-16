@@ -5,17 +5,17 @@ import { useMonitoringReportDashboardQuery, MonitoringReport } from "./monitorin
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { PeriodTitle } from "@ui/components/molecules/PeriodTitle/periodTitle";
+import { Messages } from "@ui/components/molecules/Messages/messages";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
+import { Link } from "@ui/components/atoms/Links/links";
+import { ProjectBackLink } from "@ui/components/organisms/projects/ProjectBackLink/projectBackLink";
 
 interface MonitoringReportDashboardParams {
   projectId: ProjectId;

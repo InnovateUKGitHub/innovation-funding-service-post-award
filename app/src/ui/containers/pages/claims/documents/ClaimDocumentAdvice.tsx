@@ -2,9 +2,9 @@
 
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { UL, OL } from "@ui/components/atomicDesign/atoms/List/list";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { UL, OL } from "@ui/components/atoms/List/list";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Section } from "@ui/components/molecules/Section/section";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks/content.hook";
 

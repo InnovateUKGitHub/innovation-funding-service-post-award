@@ -1,15 +1,15 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Section } from "@ui/components/molecules/Section/section";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Link } from "@ui/components/atoms/Links/links";
 
 export const NonAidFundingStep = () => {
   const { getContent } = useContent();

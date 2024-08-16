@@ -1,19 +1,19 @@
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { FullDateTime } from "@ui/components/atomicDesign/atoms/Date";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
-import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { FullDateTime } from "@ui/components/atoms/Date";
+import { BackLink, Link } from "@ui/components/atoms/Links/links";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { ForecastAgreedCostWarning } from "@ui/components/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { NewForecastTable } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable";
 import {
   useMapToForecastTableDto,
   useNewForecastTableData,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+} from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
@@ -23,8 +23,8 @@ import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import {
   ClaimStatusGroup,
   getClaimStatusGroup,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+} from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { PartnerStatus } from "@framework/constants/partner";
 
 export interface ViewForecastParams {

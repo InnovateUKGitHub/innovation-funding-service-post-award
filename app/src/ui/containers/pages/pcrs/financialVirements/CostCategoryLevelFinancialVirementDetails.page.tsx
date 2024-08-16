@@ -1,20 +1,20 @@
 import { roundCurrency } from "@framework/util/numberHelper";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { AwardRateOverrideLabel } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { AwardRateOverrideLabel } from "@ui/components/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
+import { AwardRateOverridesMessage } from "@ui/components/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { mapVirements } from "../utils/useMapFinancialVirements";
 import { usePcrPartnerFinancialVirementData } from "./PcrFinancialVirement.logic";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Info } from "@ui/components/atoms/Details/Details";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 
 type Mode = "review" | "details";
 

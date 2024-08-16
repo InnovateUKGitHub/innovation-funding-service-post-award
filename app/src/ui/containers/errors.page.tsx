@@ -1,4 +1,4 @@
-import { ErrorContainer } from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
+import { ErrorContainer } from "@ui/components/organisms/ErrorContainer/ErrorContainer";
 import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
 import { defineRoute } from "./containerBase";
 import { useServerErrorContext } from "@ui/context/server-error";

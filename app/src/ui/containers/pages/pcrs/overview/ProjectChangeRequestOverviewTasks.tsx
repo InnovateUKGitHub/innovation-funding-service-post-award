@@ -1,7 +1,7 @@
 import { PCRItemType, PCRItemStatus, disableSummaryItems } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { List } from "@ui/components/atomicDesign/atoms/List/list";
-import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
+import { List } from "@ui/components/atoms/List/list";
+import { TaskListSection, Task } from "@ui/components/molecules/TaskList/TaskList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";

@@ -3,13 +3,13 @@ import { BaseProps, defineRoute } from "../../containerBase";
 import { useForecastDashboardData, Partner } from "./forecastDashboard.logic";
 import { useContent } from "@ui/hooks/content.hook";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
-import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
+import { AccessibilityText } from "@ui/components/atoms/AccessibilityText/AccessibilityText";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { ProjectBackLink } from "@ui/components/organisms/projects/ProjectBackLink/projectBackLink";
 
 interface Params {
   projectId: ProjectId;

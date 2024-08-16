@@ -1,4 +1,4 @@
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import { CuratedSection } from "./Dashboard.interface";
 

@@ -1,21 +1,21 @@
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { ShortDate } from "@ui/components/atoms/Date";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/context/Mounted";
-import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useContent } from "@ui/hooks/content.hook";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { EditClaimLineItemsSchemaType } from "./editClaimLineItems.zod";
 import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
-import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
-import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
+import { AccessibilityText } from "@ui/components/atoms/AccessibilityText/AccessibilityText";
+import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
+import { Button } from "@ui/components/atoms/Button/Button";
 
 const emptyData = { id: "", description: "", value: "" };
 

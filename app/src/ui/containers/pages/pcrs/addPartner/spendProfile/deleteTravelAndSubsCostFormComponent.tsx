@@ -1,8 +1,8 @@
 import { PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Section } from "@ui/components/molecules/Section/section";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { SpendProfileDeleteFormProps } from "./spendProfileDeleteCost.page";
 
 export const DeleteTravelAndSubsCostFormComponent = (

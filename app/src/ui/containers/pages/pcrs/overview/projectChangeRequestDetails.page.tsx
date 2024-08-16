@@ -4,8 +4,8 @@ import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverv
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { usePCRDetailsQuery } from "./projectChangeRequestDetails.logic";
 import { ProjectRole } from "@framework/constants/project";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { BackLink } from "@ui/components/atoms/Links/links";
 
 import { useContent } from "@ui/hooks/content.hook";
 

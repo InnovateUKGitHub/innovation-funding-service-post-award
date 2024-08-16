@@ -1,15 +1,15 @@
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { Checkbox, CheckboxList } from "@ui/components/atoms/form/Checkbox/Checkbox";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,20 +21,20 @@ import {
   financialVirementsSummaryErrorMap,
   getFinancialVirementsSummaryValidator,
 } from "./FinancialVirementsSummary.zod";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { EmailContent } from "@ui/components/atomicDesign/atoms/EmailContent/emailContent";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Link } from "@ui/components/atoms/Links/links";
+import { EmailContent } from "@ui/components/atoms/EmailContent/emailContent";
+import { Content } from "@ui/components/molecules/Content/content";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
 import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 export const FinancialVirementSummary = () => {

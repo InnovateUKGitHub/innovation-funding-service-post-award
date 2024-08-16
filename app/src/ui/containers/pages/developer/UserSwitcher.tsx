@@ -1,10 +1,10 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { H4, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Info } from "@ui/components/atoms/Details/Details";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { H4, H3 } from "@ui/components/atoms/Heading/Heading.variants";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/context/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -15,19 +15,19 @@ import { userSwitcherProjectQuery, userSwitcherProjectsQuery } from "./UserSwitc
 import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQuery.graphql";
 import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
-import { DeveloperCurrentUsername } from "@ui/components/atomicDesign/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
-import { PlainList } from "@ui/components/atomicDesign/atoms/List/list";
+import { DeveloperCurrentUsername } from "@ui/components/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
+import { PlainList } from "@ui/components/atoms/List/list";
 import { useUserContext } from "@ui/context/user";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { DropdownSelect } from "@ui/components/atomicDesign/atoms/form/Dropdown/Dropdown";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Button } from "@ui/components/atoms/form/Button/Button";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { projectIdValidation } from "@ui/zod/helperValidators.zod";
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atomicDesign/atoms/table/tableComponents";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Email } from "@ui/components/atomicDesign/atoms/Email/Email";
+import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Email } from "@ui/components/atoms/Email/Email";
 import { noop } from "lodash";
 
 /**

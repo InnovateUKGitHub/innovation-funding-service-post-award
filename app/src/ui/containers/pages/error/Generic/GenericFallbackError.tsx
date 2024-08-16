@@ -1,15 +1,15 @@
 import { ErrorPayload } from "@shared/create-error-payload";
 import { PageTitle } from "@ui/features/page-title";
 
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { Section } from "../../../../components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Content } from "../../../../components/atomicDesign/molecules/Content/content";
-import { ExternalLink } from "../../../../components/atomicDesign/atoms/ExternalLink/externalLink";
-import { H2 } from "../../../../components/atomicDesign/atoms/Heading/Heading.variants";
+import { Page } from "@ui/components/molecules/Page/Page";
+import { Section } from "../../../../components/molecules/Section/section";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "../../../../components/molecules/Content/content";
+import { ExternalLink } from "../../../../components/atoms/ExternalLink/externalLink";
+import { H2 } from "../../../../components/atoms/Heading/Heading.variants";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
-import { ErrorDetails } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorDetails";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { ErrorDetails } from "@ui/components/molecules/ErrorSummary/ErrorDetails";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 

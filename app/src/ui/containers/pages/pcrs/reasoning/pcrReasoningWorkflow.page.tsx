@@ -1,8 +1,8 @@
 import { ProjectRole } from "@framework/constants/project";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
-import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { LineBreakList } from "@ui/components/atoms/LineBreakList/lineBreakList";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import {
   IReasoningWorkflowMetadata,

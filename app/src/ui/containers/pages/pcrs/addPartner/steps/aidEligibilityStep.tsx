@@ -1,9 +1,9 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Section } from "@ui/components/molecules/Section/section";
 import { PcrPage } from "../../pcrPage";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Link } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { useNextLink, useSummaryLink } from "../../utils/useNextLink";
 

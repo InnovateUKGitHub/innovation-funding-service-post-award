@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { isNil, sumBy } from "lodash";
-import { combineDayMonthYear, validateDayMonthYear } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDayMonthYear, validateDayMonthYear } from "@ui/components/atoms/Date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 

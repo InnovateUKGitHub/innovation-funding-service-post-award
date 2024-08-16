@@ -1,7 +1,7 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Section } from "@ui/components/molecules/Section/section";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
+import { Info } from "@ui/components/atoms/Details/Details";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
@@ -10,17 +10,17 @@ import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLinks } from "../../utils/useNextLink";
 import { PcrPage } from "../../pcrPage";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
+import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { pcrProjectRoles } from "@framework/picklist/pcrProjectRoles";
 import { pcrPartnerTypes } from "@framework/picklist/pcrPartnerTypes";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
+import { Label } from "@ui/components/atoms/form/Label/Label";
 import { createRegisterButton } from "@framework/util/registerButton";
 import {
   PCROrganisationType,

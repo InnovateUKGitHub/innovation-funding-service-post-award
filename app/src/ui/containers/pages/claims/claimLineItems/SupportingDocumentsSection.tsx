@@ -1,6 +1,6 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { Section } from "@ui/components/molecules/Section/section";
+import { DocumentView } from "@ui/components/organisms/documents/DocumentView/DocumentView";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useContent } from "@ui/hooks/content.hook";

@@ -1,5 +1,5 @@
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Content } from "@ui/components/molecules/Content/content";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 
 const isNotAuthorOfLineItems = (claimDetails: { isAuthor: boolean; lineItems: { isAuthor: boolean }[] }) =>
   !claimDetails.isAuthor || claimDetails.lineItems.some(x => !x.isAuthor);

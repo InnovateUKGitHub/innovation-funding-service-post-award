@@ -5,7 +5,7 @@ import {
   CostCategoryVirementDto,
 } from "@framework/dtos/financialVirementDto";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { getCurrency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { getCurrency } from "@ui/components/atoms/Currency/currency";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 

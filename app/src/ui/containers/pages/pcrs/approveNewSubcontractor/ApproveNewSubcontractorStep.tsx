@@ -1,15 +1,15 @@
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { Radio, RadioConditional, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { Radio, RadioConditional, RadioList } from "@ui/components/atoms/form/Radio/Radio";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
+import { Section } from "@ui/components/molecules/Section/section";
+import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
@@ -26,8 +26,8 @@ import {
   subcontractorJustificationMaxChars,
   subcontractorRelationshipJustificationMaxChars,
 } from "./ApproveNewSubcontractor.zod";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atoms/form/Button/Button";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const ApproveNewSubcontractorStep = () => {

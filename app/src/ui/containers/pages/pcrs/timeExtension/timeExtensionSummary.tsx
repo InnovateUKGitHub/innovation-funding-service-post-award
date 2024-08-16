@@ -1,8 +1,8 @@
 import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ShortDateRangeFromDuration, Months } from "@ui/components/atomicDesign/atoms/Date";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Section } from "@ui/components/molecules/Section/section";
+import { ShortDateRangeFromDuration, Months } from "@ui/components/atoms/Date";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { usePcrTimeExtensionWorkflowQuery } from "./timeExtension.logic";
 import { useForm } from "react-hook-form";

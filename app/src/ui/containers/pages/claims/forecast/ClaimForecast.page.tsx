@@ -3,21 +3,21 @@ import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodError
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FullDateTime } from "@ui/components/atomicDesign/atoms/Date";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { NewForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable";
+import { FullDateTime } from "@ui/components/atoms/Date";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { SubmitButton } from "@ui/components/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { ForecastAgreedCostWarning } from "@ui/components/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
+import { NewForecastTable } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable";
 import {
   useMapToForecastTableDto,
   useNewForecastTableData,
-} from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+} from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";

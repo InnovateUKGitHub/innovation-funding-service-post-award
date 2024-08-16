@@ -7,7 +7,7 @@ import { mapLoanFinancialVirementDtoArray } from "@gql/dtoMapper/mapFinancialLoa
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
-import { combineDayMonthYear } from "@ui/components/atomicDesign/atoms/Date";
+import { combineDayMonthYear } from "@ui/components/atoms/Date";
 import { LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 

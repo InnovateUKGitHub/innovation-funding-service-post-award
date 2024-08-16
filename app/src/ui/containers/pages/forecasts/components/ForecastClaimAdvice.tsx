@@ -1,4 +1,4 @@
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useContent } from "@ui/hooks/content.hook";
 
 export interface ForecastClaimAdviceProps {

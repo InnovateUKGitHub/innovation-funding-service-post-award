@@ -1,16 +1,16 @@
 import { ProjectRole } from "@framework/constants/project";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Button } from "@ui/components/atoms/Button/Button";
+import { BackLink, Link } from "@ui/components/atoms/Links/links";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useProjectChangeRequestSubmittedForReviewQuery } from "./ProjectChangeRequestSubmittedForReview.logic";
-import { FullDate } from "@ui/components/atomicDesign/atoms/Date";
+import { FullDate } from "@ui/components/atoms/Date";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
-import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
+import { LineBreakList } from "@ui/components/atoms/LineBreakList/lineBreakList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 

@@ -4,11 +4,11 @@ import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode } from "react";
 import { LoanStatus } from "@framework/entities/loan-status";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { Bold } from "@ui/components/atomicDesign/atoms/Bold/bold";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
+import { Bold } from "@ui/components/atoms/Bold/bold";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { Link } from "@ui/components/atoms/Links/links";
+import { Button } from "@ui/components/atoms/Button/Button";
 
 export interface LoansTableProps {
   items: Loan[];

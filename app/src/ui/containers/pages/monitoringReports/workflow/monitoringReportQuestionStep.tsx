@@ -1,19 +1,19 @@
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { PeriodTitle } from "@ui/components/molecules/PeriodTitle/periodTitle";
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
-import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { H2, H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { useContext, useEffect } from "react";
 import { get } from "lodash";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
+import { Hint } from "@ui/components/atoms/form/Hint/Hint";
+import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 
 const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: number }) => {
   const { getContent } = useContent();

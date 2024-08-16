@@ -13,13 +13,13 @@ import {
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryList } from "@framework/types/CostCategory";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
+import { Content } from "@ui/components/molecules/Content/content";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { Currency } from "@ui/components/atoms/Currency/currency";
+import { Messages } from "@ui/components/molecules/Messages/messages";
+import { createTypedTable } from "@ui/components/molecules/Table/Table";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";

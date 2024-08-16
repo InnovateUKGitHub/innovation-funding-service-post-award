@@ -3,15 +3,15 @@ import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodError
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { NewForecastTableWithFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.withFragment";
-import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
+import { BackLink } from "@ui/components/atoms/Links/links";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { SubmitButton } from "@ui/components/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/molecules/Section/section";
+import { NewForecastTableWithFragment } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.withFragment";
+import { useForecastTableFragment } from "@ui/components/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
@@ -20,9 +20,9 @@ import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/for
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
-import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { Checkbox, CheckboxList } from "@ui/components/atoms/form/Checkbox/Checkbox";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;

@@ -1,11 +1,11 @@
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { useContent } from "@ui/hooks/content.hook";
-import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import { useForm } from "react-hook-form";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useGetBackLink, useNextReasoningLink } from "./pcrReasoningWorkflow.logic";
 import {
   PcrReasoningSchema,
@@ -13,8 +13,8 @@ import {
   pcrReasoningErrorMap,
   pcrReasoningSchema,
 } from "./pcrReasoning.zod";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { Messages } from "@ui/components/molecules/Messages/messages";
 import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";

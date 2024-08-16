@@ -1,6 +1,6 @@
 import { ClaimLineItemsParams } from "./ViewClaimLineItems.page";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Content } from "@ui/components/molecules/Content/content";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { ProjectDto } from "@framework/dtos/projectDto";
 

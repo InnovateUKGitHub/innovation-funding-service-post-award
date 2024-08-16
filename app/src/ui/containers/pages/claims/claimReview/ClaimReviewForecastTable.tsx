@@ -1,6 +1,6 @@
 import { QueryOptions } from "@gql/hooks/useRefreshQuery";
-import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
-import { NewForecastTableWithStandaloneMemo } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.standalone";
+import { AccordionItem } from "@ui/components/atoms/Accordion/AccordionItem";
+import { NewForecastTableWithStandaloneMemo } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.standalone";
 import { useReviewContent } from "./claimReview.logic";
 import { ReviewClaimParams } from "./claimReview.page";
 

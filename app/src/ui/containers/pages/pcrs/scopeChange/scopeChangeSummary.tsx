@@ -1,9 +1,9 @@
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";

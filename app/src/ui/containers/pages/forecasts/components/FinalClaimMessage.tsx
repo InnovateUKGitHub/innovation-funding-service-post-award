@@ -1,8 +1,8 @@
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimTotalProjectPeriodsInfo } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/NewForecastTable.logic";
-import { ClaimStatusGroup } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { Link } from "@ui/components/atoms/Links/links";
+import { Content } from "@ui/components/molecules/Content/content";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
+import { ClaimTotalProjectPeriodsInfo } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import { ClaimStatusGroup } from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 import { useRoutes } from "@ui/context/routesProvider";
 
 interface FinalClaimMessageProps {

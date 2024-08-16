@@ -1,9 +1,9 @@
-import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Info } from "@ui/components/atoms/Details/Details";
+import { Section } from "@ui/components/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
 import { DeveloperPageCrasherPage } from "./PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "./PageCrasherForbidden.page";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 
 const crashTypes = [
   "Error",

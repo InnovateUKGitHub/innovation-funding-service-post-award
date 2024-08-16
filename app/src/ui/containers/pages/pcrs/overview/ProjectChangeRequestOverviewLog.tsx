@@ -1,7 +1,7 @@
-import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
-import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { LogItem, Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
+import { Accordion } from "@ui/components/atoms/Accordion/Accordion";
+import { AccordionItem } from "@ui/components/atoms/Accordion/AccordionItem";
+import { Section } from "@ui/components/molecules/Section/section";
+import { LogItem, Logs } from "@ui/components/molecules/Logs/logs";
 import { useContent } from "@ui/hooks/content.hook";
 import { useMemo } from "react";
 import { mapToPCRStatus } from "@framework/mappers/pcr";

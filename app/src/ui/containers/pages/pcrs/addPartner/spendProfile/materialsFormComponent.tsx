@@ -1,4 +1,4 @@
-import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 
 import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
@@ -7,14 +7,14 @@ import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useContext } from "react";
 import {
   MaybeNewCostDto,
@@ -22,7 +22,7 @@ import {
   PCRSpendProfileMaterialsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
-import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { Field } from "@ui/components/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";

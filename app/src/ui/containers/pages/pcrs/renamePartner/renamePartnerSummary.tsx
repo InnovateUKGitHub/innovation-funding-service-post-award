@@ -1,8 +1,8 @@
 import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
+import { Content } from "@ui/components/molecules/Content/content";
+import { DocumentList } from "@ui/components/organisms/documents/DocumentList/DocumentList";
+import { Section } from "@ui/components/molecules/Section/section";
+import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { useForm } from "react-hook-form";

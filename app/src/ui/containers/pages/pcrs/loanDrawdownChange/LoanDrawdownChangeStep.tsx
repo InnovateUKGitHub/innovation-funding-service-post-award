@@ -7,12 +7,12 @@ import { loanDrawdownChangeSchema, errorMap, LoanDrawdownChangeSchema } from "./
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useNextLink } from "../utils/useNextLink";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Section } from "@ui/components/atoms/Section/Section";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atoms/form/Button/Button";
 import { LoanDrawdownChangeEditTable, LoanDrawdownEditErrors } from "./LoanDrawdownChangeEditTable";
-import { getDay, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
+import { getDay, getMonth, getYear } from "@ui/components/atoms/Date";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export const LoanDrawdownChangeStep = () => {
