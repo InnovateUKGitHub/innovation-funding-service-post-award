@@ -8,7 +8,7 @@ import path from "path";
 import { projectIsActiveResolver } from "./resolvers/Acc_Project__c/isActive";
 import { rolesResolver } from "./resolvers/Acc_Project__c/roles";
 import { salesforceSubschema } from "./schema/salesforceSubschema";
-import { Api } from "./sf/Api";
+import { TsforceConnection } from "../server/tsforce/TsforceConnection";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
 import { usernameResolver } from "./resolvers/Acc_ProjectContactLink__c/username";
@@ -36,7 +36,7 @@ const fullSchemaFilePath = path.join("src", "gql", "schema", "fullSchema.gql");
  *
  * @returns A server-executable GraphQL schema
  */
-const getGraphQLSchema = async ({ api }: { api?: Api }) => {
+const getGraphQLSchema = async ({ api }: { api?: TsforceConnection }) => {
   const stitchConfig: Parameters<typeof stitchSchemas>[0] = {
     subschemas: [],
   };

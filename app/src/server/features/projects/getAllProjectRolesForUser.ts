@@ -33,8 +33,10 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
   }
 
   private async getProjectRoles(email: string, context: IContext) {
-    const contacts = await context.repositories.projectContacts.getAllForUser(email);
-    const partners = await context.repositories.partners.getAll();
+    const [contacts, partners] = await Promise.all([
+      context.repositories.projectContacts.getAllForUser(email),
+      context.repositories.partners.getAll(),
+    ]);
 
     // get all rows grouped by project into lookup
     return contacts.reduce<{ [key: string]: IRoleInfo }>((allRoles, contact) => {
@@ -75,8 +77,11 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
    * @returns The full permissions for all projects and it's associated partners
    */
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
-    const projects = await context.repositories.projects.getAll();
-    const partners = await context.repositories.partners.getAll();
+    const [projects, partners] = await Promise.all([
+      context.repositories.projects.getAll(),
+      context.repositories.partners.getAll(),
+    ]);
+
     const allRoles =
       ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.Associate;
 

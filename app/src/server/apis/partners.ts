@@ -44,7 +44,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       }
     >,
   ) {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
     await context.runCommand(
       new UpdatePartnerCommand(params.partnerDto as PartnerDto, {
         validateBankDetails: params.validateBankDetails,

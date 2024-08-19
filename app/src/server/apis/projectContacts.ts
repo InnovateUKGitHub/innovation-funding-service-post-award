@@ -30,7 +30,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
 
   private async getAllByProjectId(params: ApiParams<"server", { projectId: ProjectId }>) {
     const query = new GetAllForProjectQuery(params.projectId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async update(
@@ -40,7 +40,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     >,
   ) {
     const command = new UpdateProjectContactsCommand(params.projectId, params.contacts);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
     return this.getAllByProjectId(params);
   }
 }

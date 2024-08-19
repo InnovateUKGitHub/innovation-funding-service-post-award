@@ -52,7 +52,7 @@ class Controller extends ControllerBase<"server", FinancialVirementDto> {
       }
     >,
   ): Promise<FinancialVirementDto> {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     const command = new UpdateFinancialVirementCommand(
       params.projectId,

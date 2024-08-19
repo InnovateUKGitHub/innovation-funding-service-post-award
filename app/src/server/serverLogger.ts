@@ -176,7 +176,8 @@ export class ServerLogger extends BaseLogger {
       } else if (param instanceof Error) {
         inspectedParam = unwrapError(param);
       } else if (typeof param === "object") {
-        inspectedParam = JSON.stringify(param, null, 2);
+        inspectedParam = JSON.stringify(param);
+        if (inspectedParam.length > 150) inspectedParam = JSON.stringify(param, null, 2);
       } else {
         inspectedParam = String(param);
       }

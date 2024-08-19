@@ -55,6 +55,7 @@ import { Cache } from "./cache";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { ISalesforceConnectionDetails, salesforceConnectionWithToken } from "@server/repositories/salesforceConnection";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -189,9 +190,15 @@ export class Context implements IContext {
   };
 
   private readonly salesforceConnectionDetails: ISalesforceConnectionDetails;
+  private tsforceConnection: TsforceConnection | null = null;
 
   public getSalesforceConnection() {
-    return salesforceConnectionWithToken(this.salesforceConnectionDetails);
+    if (this.tsforceConnection) return this.tsforceConnection;
+    throw new Error("Must init u idiot");
+  }
+
+  public async init() {
+    this.tsforceConnection = await salesforceConnectionWithToken(this.salesforceConnectionDetails);
   }
 
   public startTimer(message: string) {

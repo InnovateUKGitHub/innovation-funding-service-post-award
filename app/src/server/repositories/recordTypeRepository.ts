@@ -1,9 +1,8 @@
-import { Connection } from "jsforce";
 import { ILogger } from "@shared/logger";
-
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceRecordTypeMapper } from "./mappers/recordTypeMapper";
 import { RecordType } from "@framework/entities/recordType";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforceRecordType {
   Id: string;
@@ -24,7 +23,7 @@ export class RecordTypeRepository
   extends SalesforceRepositoryBaseWithMapping<ISalesforceRecordType, RecordType>
   implements IRecordTypeRepository
 {
-  constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(getSalesforceConnection: () => TsforceConnection, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 

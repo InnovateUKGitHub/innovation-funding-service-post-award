@@ -110,7 +110,7 @@ abstract class FormHandlerBase<TParams, TDto extends AnyObject> implements IForm
     }
 
     const session: ISession = { user: req.session?.user, tid: res.locals.tid };
-    const context = contextProvider.start(session);
+    const context = await contextProvider.start(session);
 
     let dto: TDto;
 

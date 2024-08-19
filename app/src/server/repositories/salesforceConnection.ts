@@ -1,8 +1,8 @@
-import jsforce from "jsforce";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
 import { configuration } from "@server/features/common/config";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 interface ISalesforceTokenPayload {
   access_token: string;
@@ -82,14 +82,13 @@ export const getCachedSalesforceAccessToken = async (
 
 export const salesforceConnectionWithToken = async (
   salesforceDetails: ISalesforceTokenDetails,
-): Promise<jsforce.Connection> => {
+): Promise<TsforceConnection> => {
   const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
   const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 
-  const jsforceConfig = {
+  return new TsforceConnection({
     accessToken: signedToken.accessToken,
-    serverUrl: signedToken.url,
-  };
-
-  return new jsforce.Connection(jsforceConfig);
+    instanceUrl: signedToken.url,
+    email: salesforceDetails.currentUsername,
+  });
 };

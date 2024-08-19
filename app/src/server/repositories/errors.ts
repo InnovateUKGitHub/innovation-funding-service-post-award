@@ -1,7 +1,7 @@
 import { DetailedErrorCode } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
+import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
 import { mapSfdcErrors, mapSfdcFieldCustomValidation } from "@shared/mapAppErrorDetails";
-import { Error as SfdcError } from "jsforce";
 
 export class BadSalesforceQuery extends Error {
   public errorReason: string;
@@ -83,7 +83,7 @@ export class SalesforceFieldCustomValidationError extends SalesforceDetailedErro
 }
 
 export class SalesforceDataChangeError extends SalesforceDetailedErrorResponse {
-  constructor(message: string, errors: (SfdcError | IAppDetailedError)[]) {
+  constructor(message: string, errors: (TsforceSalesforceError | IAppDetailedError)[]) {
     super({ message, details: mapSfdcErrors(errors) });
   }
 }

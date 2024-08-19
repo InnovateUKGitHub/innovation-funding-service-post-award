@@ -149,13 +149,13 @@ export class Server {
   private readonly stubEmail = configuration.salesforceServiceUser.serviceUsername;
 
   private async primeCaches(): Promise<void> {
-    const cacheContext = contextProvider.start({ user: { email: this.stubEmail }, tid: "prime-caches" });
+    const cacheContext = await contextProvider.start({ user: { email: this.stubEmail }, tid: "prime-caches" });
 
     await fetchCaches(cacheContext);
   }
 
   private async initialiseCustomContent(loadCustom: boolean): Promise<void> {
-    const context = contextProvider.start({ user: { email: this.stubEmail }, tid: "initalise-custom-content" });
+    const context = await contextProvider.start({ user: { email: this.stubEmail }, tid: "initalise-custom-content" });
 
     try {
       const hasInitialised = await context.runCommand(new InitialiseContentCommand(loadCustom));

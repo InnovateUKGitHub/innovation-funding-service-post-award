@@ -98,17 +98,10 @@ import { IRecordTypeRepository } from "@server/repositories/recordTypeRepository
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { BadRequestError } from "@shared/appError";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { PicklistEntry } from "jsforce";
-import { Stream } from "stream";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
-
-/**
- * utility stub function returns null when called
- */
-function nullReturn() {
-  return null;
-}
+import { ReadableStream } from "stream/web";
 
 class ProjectsTestRepository extends TestRepository<ISalesforceProject> implements IProjectRepository {
   getById(id: string) {
@@ -395,14 +388,16 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return !!document;
   }
 
-  getDocumentContent(documentId: string): Promise<Stream> {
+  getDocumentContent(documentId: string): Promise<ReadableStream<Uint8Array>> {
     return super
       .getOne(x => x[1].Id === documentId)
       .then(x => {
-        const s = new Stream.Readable();
-        s._read = nullReturn;
-        s.push(x[1].Id);
-        s.push(null);
+        const s = new ReadableStream<Uint8Array>({
+          start(controller) {
+            controller.enqueue(Buffer.from(x[1].Id));
+            controller.close();
+          },
+        });
         return s;
       });
   }
@@ -517,7 +512,7 @@ class MonitoringReportHeaderTestRepository
     return super.deleteItem(this.Items.find(x => x.Id === reportId));
   }
 
-  getMonitoringReportStatuses(): Promise<PicklistEntry[]> {
+  getMonitoringReportStatuses(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
     return Promise.resolve(
       getAllNumericalEnumValues(MonitoringReportStatus)
         // convert to string representation of enum value
@@ -827,34 +822,24 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return super.deleteItem(item);
   }
 
-  getPcrChangeStatuses(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrStatusesPicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getPcrChangeStatuses(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrStatusesPicklist.values()];
   }
 
-  getProjectRoles(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrProjectRolesPicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getProjectRoles(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrProjectRolesPicklist.values()];
   }
 
-  getPartnerTypes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrPartnerTypesPicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getPartnerTypes(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrPartnerTypesPicklist.values()];
   }
 
-  getParticipantSizes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrParticipantSizePicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getParticipantSizes(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrParticipantSizePicklist.values()];
   }
 
-  getProjectLocations(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrProjectLocationPicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getProjectLocations(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrProjectLocationPicklist.values()];
   }
 }
 
@@ -865,6 +850,7 @@ class PcrSpendProfileTestRepository
   getAllForPcr(_: ProjectId, pcrItemId: PcrItemId): Promise<PcrSpendProfileEntity[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
+
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
     const newIds: string[] = [];
     items.forEach(x => {
@@ -874,6 +860,7 @@ class PcrSpendProfileTestRepository
     });
     return Promise.resolve(newIds);
   }
+
   updateSpendProfiles(updates: PcrSpendProfileEntity[]) {
     updates.forEach(update => {
       const item = this.Items.find(x => x.id === update.id);
@@ -881,21 +868,18 @@ class PcrSpendProfileTestRepository
     });
     return Promise.resolve(true);
   }
+
   deleteSpendProfiles(ids: string[]) {
     ids.forEach(x => (this.Items = this.Items.filter(element => element.id !== x)));
     return Promise.resolve();
   }
 
-  getCapitalUsageTypes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = [];
-    pcrSpendProfileCapitalUsageTypePicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getCapitalUsageTypes(): Promise<TsforceDescribeSobjectFieldPicklistEntry[]> {
+    return [...pcrSpendProfileCapitalUsageTypePicklist.values()];
   }
 
-  getOverheadRateOptions(): Promise<IPicklistEntry[]> {
-    const picklistEntry: IPicklistEntry[] = [];
-    pcrSpendProfileOverheadRatePicklist.forEach(x => picklistEntry.push(x));
-    return Promise.resolve(picklistEntry);
+  async getOverheadRateOptions(): Promise<IPicklistEntry[]> {
+    return [...pcrSpendProfileOverheadRatePicklist.values()];
   }
 }
 

@@ -1,6 +1,6 @@
 import { getGraphQLSchema } from "@gql/getGraphQLSchema";
 import { createContext } from "@gql/GraphQLContext";
-import { Api } from "@gql/sf/Api";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 import { router as apiRoutes } from "@server/apis";
 import { configureFormRouter } from "@server/htmlFormHandler/formRouter";
 import { healthRouter } from "@server/health";
@@ -24,9 +24,9 @@ const getServerRoutes = async () => {
   const router = Router();
   const csrfProtection = csrf();
 
-  let adminApi: Api | undefined;
+  let adminApi: TsforceConnection | undefined;
   try {
-    adminApi = await Api.asSystemUser();
+    adminApi = await TsforceConnection.asSystemUser();
   } catch {
     logger.error("Failed to create GraphQL Admin Salesforce API connector.");
   }

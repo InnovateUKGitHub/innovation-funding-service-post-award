@@ -1,10 +1,10 @@
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { ILogger } from "@shared/logger";
 import { sss } from "@server/util/salesforce-string-helpers";
-import { Connection } from "jsforce";
 import { SalesforcePermissionGroupMapper } from "./mappers/permissionGroupMapper";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { PermissionGroupIdentifier } from "@framework/constants/enums";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforcePermissionGroup {
   Id: string;
@@ -30,7 +30,7 @@ export class PermissionGroupRepository
   extends SalesforceRepositoryBaseWithMapping<ISalesforcePermissionGroup, PermissionGroup>
   implements IPermissionGroupRepository
 {
-  constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(getSalesforceConnection: () => TsforceConnection, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 

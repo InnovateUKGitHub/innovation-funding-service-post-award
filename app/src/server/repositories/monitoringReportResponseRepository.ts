@@ -1,7 +1,7 @@
 import { sss } from "@server/util/salesforce-string-helpers";
-import { Connection } from "jsforce";
 import { ILogger } from "@shared/logger";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforceMonitoringReportResponse {
   Id: string;
@@ -30,7 +30,7 @@ export class MonitoringReportResponseRepository
 {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

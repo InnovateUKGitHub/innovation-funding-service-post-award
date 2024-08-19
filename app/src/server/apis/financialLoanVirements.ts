@@ -49,7 +49,7 @@ class Controller
       }
     >,
   ): Promise<FinancialLoanVirementDto> {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     const command = new UpdateFinancialLoanVirementCommand(
       params.projectId,

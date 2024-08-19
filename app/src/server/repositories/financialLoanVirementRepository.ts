@@ -1,10 +1,10 @@
 import { ILogger } from "@shared/logger";
-import { Connection } from "jsforce";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { SalesforceFinancialLoanVirementMapper } from "./mappers/financialLoanVirementMapper";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 import { BadRequestError } from "@shared/appError";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforceFinancialLoanVirement {
   Id: string;
@@ -24,7 +24,7 @@ export interface ISalesforceFinancialLoanVirement {
 export class FinancialLoanVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialLoanVirement> {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

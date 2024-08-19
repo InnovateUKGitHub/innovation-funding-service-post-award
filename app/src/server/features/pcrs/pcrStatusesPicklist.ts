@@ -1,7 +1,7 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
-import { PicklistEntry } from "jsforce";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 
-export const pcrStatusesPicklist: Map<PCRStatus, PicklistEntry> = new Map();
+export const pcrStatusesPicklist: Map<PCRStatus, TsforceDescribeSobjectFieldPicklistEntry> = new Map();
 
 pcrStatusesPicklist.set(PCRStatus.DraftWithProjectManager, {
   value: "1",

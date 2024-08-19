@@ -1,5 +1,3 @@
-import { Stream } from "stream";
-
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { sss } from "@server/util/salesforce-string-helpers";
@@ -29,7 +27,7 @@ export interface ISalesforceDocument {
 export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<ISalesforceDocument[]>;
   getDocument(id: string): Promise<ISalesforceDocument>;
-  getDocumentData(id: string): Promise<Stream>;
+  getDocumentData(id: string): Promise<ReadableStream<Uint8Array>>;
   insertDocument(file: IFileWrapper, description: string): Promise<string>;
 }
 
@@ -100,7 +98,7 @@ export class ContentVersionRepository
     });
   }
 
-  public getDocumentData(versionId: string): Promise<Stream> {
-    return super.getBlob(versionId, "VersionData");
+  public getDocumentData(versionId: string): Promise<ReadableStream<Uint8Array>> {
+    return super.getBlob(versionId);
   }
 }

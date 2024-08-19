@@ -5,14 +5,14 @@ import { getFeedAttachmentDataLoader } from "./dataloader/feedAttachmentDataLoad
 import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { getUserContactDataLoader } from "./dataloader/userContactDataLoader";
 import { getUsernameDataLoader } from "./dataloader/usernameDataLoader";
-import { Api } from "./sf/Api";
+import { TsforceConnection } from "../server/tsforce/TsforceConnection";
 import { getProjectClaimStatusCountsDataLoader } from "./dataloader/projectClaimStatusCountsDataLoader";
 
 const logger = new Logger("GraphQLContext");
 
 export type PartialGraphQLContext = Record<string, unknown> & {
-  api: Api;
-  adminApi: Api;
+  api: TsforceConnection;
+  adminApi: TsforceConnection;
   email: string;
   developerEmail: string | null;
   tid: string;
@@ -36,7 +36,7 @@ export const createContextFromEmail = async ({
   tid: string;
 }): Promise<GraphQLContext | EmptyObject> => {
   try {
-    const [api, adminApi] = await Promise.all([Api.asUser(email), Api.asSystemUser()]);
+    const [api, adminApi] = await Promise.all([TsforceConnection.asUser(email), TsforceConnection.asSystemUser()]);
 
     // Create an incomplete GraphQL context for use in DataLoaders.
     const partialCtx: PartialGraphQLContext = {

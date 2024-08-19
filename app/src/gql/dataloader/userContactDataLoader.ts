@@ -1,12 +1,5 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { sss } from "@server/util/salesforce-string-helpers";
 import DataLoader from "dataloader";
-
-interface UserData {
-  totalSize: number;
-  done: boolean;
-  records: ContactData[];
-}
 
 interface ContactData {
   attributes: unknown;
@@ -29,11 +22,11 @@ interface ContactData {
  */
 const getUserContactDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, ContactData | null>(async usernames => {
-    const data = await ctx.api.executeSOQL<UserData>({
-      query: `SELECT Username, Id, Account.Id, Contact.Id FROM user WHERE username in ('${usernames
-        .map(sss)
-        .join("','")}')`,
-    });
+    const data = await ctx.api
+      .sobject("user")
+      .select<ContactData>(["Username", "Id", "Account.Id", "Contact.Id"])
+      .where({ username: usernames })
+      .execute();
 
     // For each key that was passed in, find the user id.
     // A map is chosen to ensure the data is in the EXACT order as requested.

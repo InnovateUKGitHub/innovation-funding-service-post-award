@@ -1,7 +1,10 @@
 import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
-import { PicklistEntry } from "jsforce";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 
-export const pcrSpendProfileCapitalUsageTypePicklist: Map<PCRSpendProfileCapitalUsageType, PicklistEntry> = new Map();
+export const pcrSpendProfileCapitalUsageTypePicklist: Map<
+  PCRSpendProfileCapitalUsageType,
+  TsforceDescribeSobjectFieldPicklistEntry
+> = new Map();
 
 pcrSpendProfileCapitalUsageTypePicklist.set(PCRSpendProfileCapitalUsageType.Unknown, {
   value: "1",

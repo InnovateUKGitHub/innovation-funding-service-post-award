@@ -2,12 +2,6 @@ import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { soql } from "@server/util/salesforce-string-helpers";
 import DataLoader from "dataloader";
 
-interface ProjectClaimStatusCountsData {
-  totalSize: number;
-  done: boolean;
-  records: ProjectClaimStatusCountsRecord[];
-}
-
 interface ProjectClaimStatusCountsRecord {
   Acc_ClaimStatus__c: string;
   Acc_ProjectId__c: string;
@@ -24,7 +18,7 @@ interface ProjectClaimStatusCountsRecord {
 const getProjectClaimStatusCountsDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, ProjectClaimStatusCountsRecord[] | null>(
     async keys => {
-      const data = await ctx.api.executeSOQL<ProjectClaimStatusCountsData>({
+      const data = await ctx.api.executeSOQL<ProjectClaimStatusCountsRecord>({
         query: soql`
         SELECT
           Acc_ClaimStatus__c,

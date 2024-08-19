@@ -10,7 +10,6 @@ import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { ILogger } from "@shared/logger";
-import { Connection } from "jsforce";
 import { IConfig } from "@framework/types/IConfig";
 import { IAccountsRepository } from "@server/repositories/accountsRepository";
 import { IClaimDetailsRepository } from "@server/repositories/claimDetailsRepository";
@@ -41,6 +40,7 @@ import { IProjectRepository } from "@server/repositories/projectsRepository";
 import { IRecordTypeRepository } from "@server/repositories/recordTypeRepository";
 import { Cache } from "@server/features/common/cache";
 import { Option } from "@framework/dtos/option";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface IRepositories {
   readonly accounts: IAccountsRepository;
@@ -96,7 +96,7 @@ export interface IContext {
   startTimer: (message: string) => ITimer;
   asSystemUser: () => IContext;
   asBankDetailsValidationUser: () => IContext;
-  getSalesforceConnection: () => Promise<Connection>;
+  getSalesforceConnection: () => TsforceConnection;
   internationalisation: IInternationalisation;
 }
 

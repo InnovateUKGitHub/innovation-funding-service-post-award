@@ -2,12 +2,6 @@ import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { sss } from "@server/util/salesforce-string-helpers";
 import DataLoader from "dataloader";
 
-interface FeedAttachmentData {
-  totalSize: number;
-  done: boolean;
-  records: FeedAttachmentRecord[];
-}
-
 interface FeedAttachmentRecord {
   Id: string;
   RecordId: string;
@@ -22,7 +16,7 @@ interface FeedAttachmentRecord {
 const getFeedAttachmentDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, FeedAttachmentRecord | null>(
     async contentDocumentIds => {
-      const data = await ctx.adminApi.executeSOQL<FeedAttachmentData>({
+      const data = await ctx.adminApi.executeSOQL<FeedAttachmentRecord>({
         query: `SELECT Id, RecordId FROM FeedAttachment WHERE RecordId IN ('${contentDocumentIds
           .map(sss)
           .join("','")}')`,
