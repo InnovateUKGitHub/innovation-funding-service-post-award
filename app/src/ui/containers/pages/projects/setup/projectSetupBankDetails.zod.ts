@@ -39,7 +39,8 @@ const unvalidatedProjectSetupBankDetailsSchema = z
     sortCode: z
       .string()
       .min(1)
-      .regex(/^\d\d-?\d\d-?\d\d$/),
+      .regex(/^\d\d-?\d\d-?\d\d$/)
+      .transform(x => x.replaceAll("-", "")),
     accountNumber: z
       .string()
       .min(1)
