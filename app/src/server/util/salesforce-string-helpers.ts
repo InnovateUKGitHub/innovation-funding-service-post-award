@@ -10,7 +10,7 @@ export function parseSfLongTextArea(unParsedString: string): string[] {
 }
 
 type SalesforceSoqlSanitisable = string | number | Date;
-type SalesforceSoqlSanitiserInput =
+export type SalesforceSoqlSanitiserInput =
   | SalesforceSoqlSanitisable
   | ReadonlyArray<SalesforceSoqlSanitisable>
   | Array<SalesforceSoqlSanitisable>;
@@ -22,7 +22,6 @@ type SalesforceSoqlSanitiserInput =
  * @see https://developer.salesforce.com/docs/atlas.en-us.secure_coding_guide.meta/secure_coding_guide/secure_coding_sql_injection.htm
  * @param x The unsanitised value to inject into the SQL query
  * @example queryString += ` AND Description = '${sss(filter.description)}'`;
- * @deprecated Use the `soql` string template to sanitise strings
  */
 export function sss(x: SalesforceSoqlSanitiserInput): string {
   if (typeof x === "number") {

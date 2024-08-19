@@ -32,7 +32,7 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
 
   private async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const query = new GetAllForecastsForPartnerQuery(params.partnerId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async update(
@@ -41,7 +41,7 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
       { projectId: ProjectId; partnerId: PartnerId; forecasts: ForecastDetailsDTO[]; submit: boolean }
     >,
   ) {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
     const forecastCmd = new UpdateForecastDetailsCommand(
       params.projectId,
       params.partnerId,

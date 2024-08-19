@@ -1,10 +1,9 @@
-import { Connection } from "jsforce";
 import { ILogger } from "@shared/logger";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
-
 import SalesforceRepositoryBase, { Insertable } from "./salesforceRepositoryBase";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforcePcrSpendProfile {
   Id: CostId;
@@ -71,7 +70,7 @@ export class PcrSpendProfileRepository
 {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

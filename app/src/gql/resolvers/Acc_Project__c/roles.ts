@@ -23,9 +23,10 @@ const rolesResolver: IFieldResolverOptions = {
   selectionSet: `{ Id }`,
   async resolve(input, args, ctx: GraphQLContext): Promise<ExternalProjectRoles> {
     const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
-
-    const userData = await ctx.userContactDataLoader.load(ctx.email);
-    const roleData = await ctx.projectRolesDataLoader.load(input.Id);
+    const [userData, roleData] = await Promise.all([
+      ctx.userContactDataLoader.load(ctx.email),
+      ctx.projectRolesDataLoader.load(input.Id),
+    ]);
 
     // Initialise an empty list of permissions.
     const permissions: ExternalProjectRoles = {

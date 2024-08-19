@@ -1,9 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 
-interface IStream {
-  pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean }): T;
-}
-
 export type AllPartnerDocumentSummaryDto = PartnerDocumentSummaryDto[];
 export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
   partnerId: PartnerId;
@@ -34,5 +30,5 @@ export interface DocumentDto {
   contentLength: number;
   fileName: string;
   fileType: string | null;
-  stream: IStream;
+  stream: ReadableStream<Uint8Array> | null;
 }

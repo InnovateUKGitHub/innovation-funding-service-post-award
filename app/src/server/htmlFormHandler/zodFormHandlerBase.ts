@@ -83,7 +83,7 @@ abstract class ZodFormHandlerBase<
 
     try {
       const session: ISession = { user: req.session?.user, traceId: res.locals.traceId };
-      const context = contextProvider.start(session);
+      const context = await contextProvider.start(session);
 
       // If the ID of the form has not been submitted, skip to the next handler
       if (!req.body.form) return next();

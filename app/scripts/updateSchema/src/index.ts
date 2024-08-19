@@ -1,8 +1,7 @@
-import { Api } from "@gql/sf/Api";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 import { stitchSchemas } from "@graphql-tools/stitch";
 import { AsyncExecutor } from "@graphql-tools/utils";
 import { FilterTypes, schemaFromExecutor } from "@graphql-tools/wrap";
-import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import fs from "fs";
 import { printSchema } from "graphql";
@@ -26,7 +25,7 @@ const main = async () => {
     currentUsername: getEnv("SALESFORCE_USERNAME"),
   });
 
-  const api = new Api({
+  const api = new TsforceConnection({
     accessToken,
     instanceUrl: url,
     email: getEnv("SALESFORCE_USERNAME"),

@@ -36,7 +36,7 @@ class Controller
     params: ApiParams<"server", ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
   ): Promise<ClaimDetailsDto> {
     const { projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
     const saveLineItemsCommand = new SaveClaimDetails(projectId, partnerId, periodId, costCategoryId, claimDetails);
     await context.runCommand(saveLineItemsCommand);
 

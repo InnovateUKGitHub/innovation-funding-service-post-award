@@ -44,7 +44,7 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
       throw new BadRequestError();
     }
 
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
     const command = new UpdateClaimCommand(projectId, claim, isClaimSummary);
     await context.runCommand(command);
 

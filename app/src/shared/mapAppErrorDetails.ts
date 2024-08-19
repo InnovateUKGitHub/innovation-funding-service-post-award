@@ -4,15 +4,15 @@ import {
   SfdcFieldCustomValidationException,
 } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
+import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
 import { Results } from "@ui/validation/results";
-import { Error as SfdcError } from "jsforce";
 
 /**
  * Map SFDC errors to ACC error details
  * @param errors List of SFDC errors
  * @returns List of ACC errors
  */
-export const mapSfdcErrors = (errors: (SfdcError | IAppDetailedError)[]): IAppDetailedError[] => {
+export const mapSfdcErrors = (errors: (TsforceSalesforceError | IAppDetailedError)[]): IAppDetailedError[] => {
   const details: IAppDetailedError[] = [];
 
   for (const error of errors) {

@@ -1,7 +1,6 @@
 import { ILogger } from "@shared/logger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
-import { Connection } from "jsforce";
 import { DateTime } from "luxon";
 import {
   PcrContactRoleMapper,
@@ -21,6 +20,7 @@ import {
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -206,7 +206,7 @@ export class ProjectChangeRequestRepository
 {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

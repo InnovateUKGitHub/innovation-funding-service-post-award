@@ -1,7 +1,7 @@
 import { PCRParticipantSize } from "@framework/constants/pcrConstants";
-import { PicklistEntry } from "jsforce";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 
-export const pcrParticipantSizePicklist: Map<PCRParticipantSize, PicklistEntry> = new Map();
+export const pcrParticipantSizePicklist: Map<PCRParticipantSize, TsforceDescribeSobjectFieldPicklistEntry> = new Map();
 
 pcrParticipantSizePicklist.set(PCRParticipantSize.Unknown, {
   value: "1",

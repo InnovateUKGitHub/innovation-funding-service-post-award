@@ -4,7 +4,6 @@ import { AuthorisedAsyncCommandBase, AsyncCommandBase, SyncCommandBase } from "@
 import { AuthorisedAsyncQueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { ValidationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
-import { Connection } from "jsforce";
 import { TestCaches } from "./testCaches";
 import { TestClock } from "./testClock";
 import { TestConfig } from "./testConfig";
@@ -13,6 +12,7 @@ import { TestInternationalisation } from "./testInternationalisation";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestResources } from "./testResources";
 import { TestUser } from "./testUser";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export class TestContext implements IContext {
   constructor() {
@@ -85,7 +85,7 @@ export class TestContext implements IContext {
     return this;
   }
 
-  public getSalesforceConnection(): Promise<Connection> {
+  public getSalesforceConnection(): TsforceConnection {
     throw new Error("noop");
   }
 }

@@ -286,19 +286,19 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documentId: string }>,
   ): Promise<DocumentDto | null> {
     const query = new GetLoanDocumentQuery(params.projectId, params.loanId, params.documentId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getLoanDocuments(params: ApiParams<"server", { projectId: ProjectId; loanId: string }>) {
     const query = new GetLoanDocumentsQuery(params.projectId, params.loanId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async uploadLoanDocuments(
     params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadLoanDocumentsCommand(params.documents, params.projectId, params.loanId);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await (await contextProvider.start(params)).runCommand(command);
 
     return { documentIds: insertedIDs };
   }
@@ -307,7 +307,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documentId: string }>,
   ) {
     const command = new DeleteLoanDocument(params.documentId, params.projectId, params.loanId);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
     return true;
   }
 
@@ -327,7 +327,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       { projectId, partnerId, periodId },
       description ? { description } : undefined,
     );
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getClaimDocument(
@@ -335,50 +335,50 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ) {
     const { projectId, partnerId, periodId, documentId } = params;
     const query = new GetClaimDocumentQuery({ projectId, partnerId, periodId }, documentId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getClaimDetailDocuments(params: ApiParams<"server", { claimDetailKey: ClaimDetailKey }>) {
     const { projectId, partnerId, periodId, costCategoryId } = params.claimDetailKey;
     const query = new GetClaimDetailDocumentsQuery(projectId, partnerId, periodId, costCategoryId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getClaimDetailDocument(
     params: ApiParams<"server", { claimDetailKey: ClaimDetailKey; documentId: string }>,
   ) {
     const query = new GetClaimDetailDocumentQuery(params.claimDetailKey, params.documentId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getProjectDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetProjectDocumentSummaryQuery(projectId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId }>) {
     const { projectId, partnerId } = params;
     const query = new GetPartnerDocumentsQuery(projectId, partnerId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getAllPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetAllPartnerDocumentsQuery(projectId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getProjectDocument(params: ApiParams<"server", { projectId: ProjectId; documentId: string }>) {
     const query = new GetProjectDocumentQuery(params.projectId, params.documentId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getPartnerDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; documentId: string }>,
   ) {
     const query = new GetPartnerDocumentQuery(params.projectId, params.partnerId, params.documentId);
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getProjectChangeRequestDocumentsOrItemDocuments(
@@ -388,7 +388,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectId,
       params.projectChangeRequestIdOrItemId,
     );
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async getProjectChangeRequestDocumentOrItemDocument(
@@ -399,7 +399,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectChangeRequestIdOrItemId,
       params.documentId,
     );
-    return contextProvider.start(params).runQuery(query);
+    return (await contextProvider.start(params)).runQuery(query);
   }
 
   public async deleteProjectChangeRequestDocumentOrItemDocument(
@@ -410,7 +410,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectId,
       params.projectChangeRequestIdOrItemId,
     );
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
     return true;
   }
 
@@ -419,15 +419,15 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ) {
     const { claimDetailKey, documents } = params;
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
-    return { documentIds: insertedIDs };
+    const documentIds = await (await contextProvider.start(params)).runCommand(command);
+    return { documentIds };
   }
 
   public async uploadClaimDocument(params: ApiParams<"server", { claimKey: ClaimKey; document: DocumentUploadDto }>) {
     const { claimKey, document } = params;
     const command = new UploadClaimDocumentCommand(claimKey, document);
-    const insertedID = await contextProvider.start(params).runCommand(command);
-    return { documentId: insertedID };
+    const documentId = await (await contextProvider.start(params)).runCommand(command);
+    return { documentId };
   }
 
   public async uploadClaimDocuments(
@@ -435,8 +435,8 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ) {
     const { claimKey, documents } = params;
     const command = new UploadClaimDocumentsCommand(claimKey, documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
-    return { documentIds: insertedIDs };
+    const documentIds = await (await contextProvider.start(params)).runCommand(command);
+    return { documentIds };
   }
 
   public async uploadProjectChangeRequestDocumentOrItemDocument(
@@ -454,27 +454,24 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectChangeRequestIdOrItemId,
       params.documents,
     );
-    const insertedIds = await contextProvider.start(params).runCommand(command);
-
-    return { documentIds: insertedIds };
+    const documentIds = await (await contextProvider.start(params)).runCommand(command);
+    return { documentIds };
   }
 
   public async uploadProjectDocument(
     params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadProjectDocumentCommand(params.projectId, params.documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
-
-    return { documentIds: insertedIDs };
+    const documentIds = await (await contextProvider.start(params)).runCommand(command);
+    return { documentIds };
   }
 
   public async uploadPartnerDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadPartnerDocumentCommand(params.projectId, params.partnerId, params.documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
-
-    return { documentIds: insertedIDs };
+    const documentIds = await (await contextProvider.start(params)).runCommand(command);
+    return { documentIds };
   }
 
   public async deleteClaimDetailDocument(
@@ -482,7 +479,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ): Promise<boolean> {
     const { documentId, claimDetailKey } = params;
     const command = new DeleteClaimDetailDocumentCommand(documentId, claimDetailKey);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
     return true;
   }
 
@@ -491,7 +488,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ): Promise<boolean> {
     const { documentId, claimKey } = params;
     const command = new DeleteClaimDocumentCommand(documentId, claimKey);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
 
     return true;
   }
@@ -501,7 +498,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
     const command = new DeletePartnerDocumentCommand(projectId, partnerId, documentId);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
 
     return true;
   }
@@ -511,7 +508,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   ): Promise<boolean> {
     const { projectId, documentId } = params;
     const command = new DeleteProjectDocumentCommand(projectId, documentId);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
 
     return true;
   }

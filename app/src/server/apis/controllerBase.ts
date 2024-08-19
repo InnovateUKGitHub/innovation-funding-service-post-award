@@ -232,18 +232,17 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
       ) as ApiParams<Context, TParams>;
       run(p)
         .then(result => {
-          if (result === null || result === undefined) {
+          if (result === null || result === undefined || result.stream === null) {
             throw new NotFoundError();
           }
           const defaultContentType = "application/octet-stream";
           const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
-          const head = {
+          resp.writeHead(successStatus, {
             "Content-Length": result.contentLength,
             "Content-Type": `${contentType || defaultContentType}; charset=utf-8`,
             "Content-Disposition": `attachment; filename="${result.fileName}"`,
-          };
-          resp.writeHead(successStatus, head);
-          return result.stream.pipe(resp);
+          });
+          return resp.send(result.stream);
         })
         .catch((e: IAppError) => this.handleError(req, resp, e));
     };

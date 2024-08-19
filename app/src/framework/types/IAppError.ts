@@ -1,6 +1,6 @@
 import { DetailedErrorCode, ErrorCode, SfdcFieldCustomValidationException } from "@framework/constants/enums";
+import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
 import { Results } from "@ui/validation/results";
-import type { Error as SfdcError } from "jsforce";
 import { QueryPayload } from "react-relay-network-modern";
 
 export interface IAppError<T extends Results<ResultBase> = Results<ResultBase>> {
@@ -58,7 +58,7 @@ interface IAppDetailedSfdcFieldCustomValidationExceptionError extends IAppDetail
 
 interface IAppDetailedSfdcGenericError extends IAppDetailedBaseError {
   code: DetailedErrorCode.SFDC_DEFAULT_STACKTRACE;
-  data: SfdcError;
+  data: TsforceSalesforceError;
 }
 
 export type IAppDetailedError =

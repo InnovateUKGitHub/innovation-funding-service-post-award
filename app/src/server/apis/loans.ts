@@ -26,7 +26,7 @@ class LoansApi extends ControllerBase<"server", LoanDto> {
   public async update(
     params: ApiParams<"server", { projectId: ProjectId; loanId: string; loan: LoanDto }>,
   ): Promise<LoanDto> {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     const loanCommand = new UpdateLoanCommand(params.projectId, params.loanId, params.loan);
     await context.runCommand(loanCommand);

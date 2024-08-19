@@ -1,5 +1,3 @@
-import { Stream } from "stream";
-import { Connection } from "jsforce";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
@@ -13,6 +11,7 @@ import { DocumentDescription } from "@framework/constants/documentDescription";
 import { IFileWrapper } from "@framework/types/fileWrapper";
 import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
 import { ForbiddenError } from "@shared/appError";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export class DocumentsRepository {
   private readonly logger: ILogger = new Logger("DocumentsRepository");
@@ -22,8 +21,8 @@ export class DocumentsRepository {
   private readonly salesforceFeedAttachmentRepository: SalesforceFeedAttachmentRepository;
 
   public constructor(
-    getSalesforceConnection: () => Promise<Connection>,
-    getAdministratorSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
+    getAdministratorSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection, logger);
@@ -123,7 +122,7 @@ export class DocumentsRepository {
     return metadata.filter(x => !chatterFiles.some(y => y.RecordId === x.id || y.RecordId === x.contentDocumentId));
   }
 
-  public async getDocumentContent(versionId: string): Promise<Stream> {
+  public async getDocumentContent(versionId: string): Promise<ReadableStream<Uint8Array>> {
     const contentVersion = await this.contentVersionRepository.getDocument(versionId);
     const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordIds([
       versionId,

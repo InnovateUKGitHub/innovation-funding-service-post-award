@@ -1,8 +1,8 @@
 import { ILogger } from "@shared/logger";
 import { sss } from "@server/util/salesforce-string-helpers";
-import { Connection } from "jsforce";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -43,7 +43,7 @@ export class ClaimDetailsRepository
 {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

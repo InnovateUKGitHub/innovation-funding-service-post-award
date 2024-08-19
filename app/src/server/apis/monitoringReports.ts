@@ -56,7 +56,7 @@ class Controller
     >,
   ) {
     const { monitoringReportDto, submit } = params;
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit));
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
@@ -69,7 +69,7 @@ class Controller
     >,
   ) {
     const { monitoringReportDto, submit } = params;
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     const id = (await context.runCommand(
       new CreateMonitoringReportCommand(monitoringReportDto, submit),
@@ -82,7 +82,7 @@ class Controller
   ) {
     const { projectId, reportId } = params;
     const command = new DeleteMonitoringReportCommand(projectId, reportId);
-    await contextProvider.start(params).runCommand(command);
+    (await contextProvider.start(params)).runCommand(command);
 
     return true;
   }

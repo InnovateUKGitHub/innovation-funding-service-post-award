@@ -3,8 +3,10 @@ import { ISessionUser } from "@framework/types/IUser";
 import { Context } from "./context";
 
 class ContextProvider {
-  start(params: { user: ISessionUser; traceId: string }): IContext {
-    return new Context(params);
+  async start(params: { user: ISessionUser; traceId: string }): Promise<IContext> {
+    const context = new Context(params);
+    await context.init();
+    return context;
   }
 }
 

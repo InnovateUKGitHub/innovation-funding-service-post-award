@@ -93,7 +93,7 @@ const serverRender =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
-    const context = contextProvider.start({ user: req.session?.user, traceId: res.locals.traceId });
+    const context = await contextProvider.start({ user: req.session?.user, traceId: res.locals.traceId });
     const clientConfig = getClientConfig(context);
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;

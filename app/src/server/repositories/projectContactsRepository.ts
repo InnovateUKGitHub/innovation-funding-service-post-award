@@ -1,4 +1,4 @@
-import { sss } from "@server/util/salesforce-string-helpers";
+import { soql } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact" | "Associate";
@@ -23,8 +23,6 @@ export interface ISalesforceProjectContact {
   Acc_EndDate__c: string | null;
   Associate_Start_Date__c: string | null;
 }
-
-type UserResult = { ContactId: string };
 
 export interface IProjectContactsRepository {
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
@@ -61,21 +59,11 @@ export class ProjectContactsRepository
   ];
 
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]> {
-    return this.where(`Acc_ProjectId__c = '${sss(projectId)}'`);
+    return this.where(soql`Acc_ProjectId__c = ${projectId}`);
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
-    const conn = await this.getSalesforceConnection();
-
-    const userResult: Partial<UserResult> | undefined | Error = (await conn
-      .sobject<UserResult>("User")
-      .select(["ContactId"])
-      .where({ Username: email })
-      .execute()
-      .then(x => x.pop())
-      .catch(e => this.constructError(e))) as UserResult; // type hack here
-
-    return this.where(`Acc_ContactId__c = '${sss(userResult?.ContactId ?? "")}'`);
+    return this.where(soql`Acc_ContactId__c = (SELECT ContactId FROM User WHERE Username = ${email})`);
   }
 
   public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {

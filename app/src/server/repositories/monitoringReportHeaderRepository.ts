@@ -1,8 +1,8 @@
 import { sss } from "@server/util/salesforce-string-helpers";
-import { Connection } from "jsforce";
 import { ILogger } from "@shared/logger";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {
@@ -40,7 +40,7 @@ export class MonitoringReportHeaderRepository
 {
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
-    getSalesforceConnection: () => Promise<Connection>,
+    getSalesforceConnection: () => TsforceConnection,
     logger: ILogger,
   ) {
     super(getSalesforceConnection, logger);

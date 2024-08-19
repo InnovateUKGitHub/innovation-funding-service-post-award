@@ -1,7 +1,7 @@
 import { PCRPartnerType } from "@framework/constants/pcrConstants";
-import { PicklistEntry } from "jsforce";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 
-export const pcrPartnerTypesPicklist: Map<PCRPartnerType, PicklistEntry> = new Map();
+export const pcrPartnerTypesPicklist: Map<PCRPartnerType, TsforceDescribeSobjectFieldPicklistEntry> = new Map();
 
 // TODO populate this
 pcrPartnerTypesPicklist.set(PCRPartnerType.Unknown, {

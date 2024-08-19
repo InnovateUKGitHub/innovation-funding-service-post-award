@@ -45,7 +45,7 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
   async create(
     params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
   ): Promise<PCRDto> {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
     const id = (await context.runCommand(
       new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto),
     )) as PcrId;
@@ -64,7 +64,7 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
       }
     >,
   ): Promise<PCRDto> {
-    const context = contextProvider.start(params);
+    const context = await contextProvider.start(params);
 
     await context.runCommand(
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
@@ -72,9 +72,9 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
-  delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {
+  async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
-    return contextProvider.start(params).runCommand(command);
+    return (await contextProvider.start(params)).runCommand(command);
   }
 }
 
