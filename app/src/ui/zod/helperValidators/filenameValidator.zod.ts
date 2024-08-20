@@ -94,7 +94,7 @@ const badCharactersList: [string, CharacterType][] = [
    */
 
   // Man in Business Suit Levitating
-  ["\u{1F574}", CharacterType.EMOJIS],
+  // ["\u{1F574}", CharacterType.EMOJIS],
 ];
 
 const badFileNames = [
