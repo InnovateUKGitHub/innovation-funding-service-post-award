@@ -115,7 +115,8 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
     .min(1)
     .max(options.maxFileBasenameLength)
     .superRefine((filename, ctx) => {
-      const parsedFile = path.parse(filename);
+      const normalisedName = filename.normalize("NFC");
+      const parsedFile = path.parse(normalisedName);
 
       if (parsedFile.root !== "" && parsedFile.dir !== "") {
         return ctx.addIssue({
