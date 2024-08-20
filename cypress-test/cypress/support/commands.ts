@@ -451,7 +451,7 @@ const testFileComponent = (
   );
   if (pcr) {
     cy.backLink(`Back to ${suffix}`).click();
-    cy.get("h1").contains(headerAssertion);
+    cy.get("h1").should("have.text", headerAssertion);
     cy.get("main").then($main => {
       if ($main.html().includes("validation-message-content")) {
         cy.getByQA("validation-message-content").should("not.contain", "has been uploaded");
@@ -474,7 +474,7 @@ const testFileComponent = (
     cy.clickOn(access);
   } else {
     cy.backLink(`Back to ${suffix}`).click();
-    cy.get("h1").contains(headerAssertion);
+    cy.get("h1").should("have.text", headerAssertion);
     cy.get("main").then($main => {
       if ($main.html().includes("validation-message-content")) {
         cy.getByQA("validation-message-content").should("not.contain", "has been uploaded");
