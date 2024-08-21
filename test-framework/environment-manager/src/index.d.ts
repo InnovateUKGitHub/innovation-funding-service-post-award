@@ -1,6 +1,6 @@
 declare module "@innovateuk/environment-manager" {
   export class EnvironmentManager {
-    constructor(environemnt: string);
+    constructor(environment: string);
     getEnv(key: string): string | undefined;
   }
 }

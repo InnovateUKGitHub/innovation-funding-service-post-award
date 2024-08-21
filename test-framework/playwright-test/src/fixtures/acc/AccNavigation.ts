@@ -104,7 +104,7 @@ class AccNavigation {
     await this.projectForecasts.isPage();
   }
 
-  @Given("the user is on the monitoring reports page")
+  @Given("the user has navigated to the monitoring reports page")
   async gotoMonitoringReports() {
     await this.testCache.cache(
       ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
