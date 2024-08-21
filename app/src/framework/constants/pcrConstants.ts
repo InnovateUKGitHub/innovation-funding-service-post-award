@@ -58,6 +58,7 @@ export enum PCRItemHiddenReason {
   AnotherPcrAlreadyHasThisType = 1,
   ThisPcrAlreadyHasThisType = 2,
   NotEnoughPartnersToActionThisType = 3,
+  Exclusive = 4,
 }
 
 export const enum PCRItemType {
@@ -240,12 +241,9 @@ export const getPcrItemsSingleInstanceInThisPcrViolations = (pcr?: {
   if (!pcr?.items) return [];
   const pcrItemType: PCRItemType[] = [];
 
-  // Get a list of all PCR types where only a single instance is allowed
-  const unduplicatablePcrItems = pcrItemTypes.filter(x => x.singleInstanceInThisPcr);
-
   // For each PCR item in our list of items...
   for (const pcrItem of pcr.items) {
-    if (unduplicatablePcrItems.some(x => x.type === pcrItem.type)) {
+    if (unduplicatablePcrItems.includes(pcrItem.type)) {
       pcrItemType.push(pcrItem.type);
     }
   }
@@ -295,6 +293,17 @@ export const getPcrItemsTooManyViolations = (
   }
 
   return [...bannedTypes.values()];
+};
+
+export const getPcrItemsExclusivityViolations = (currentPcr?: { items: unknown[] }): PCRItemType[] => {
+  if (!currentPcr?.items) return [];
+
+  // Theoretically a header record can't be created with no items
+  // However, someone internally is bound to break the system
+  if (currentPcr.items.length === 0) return [];
+
+  // If there are any PCR items, we disallow adding any more exclusive shiny pokemon
+  return exclusiveItems;
 };
 
 const scopeChangeGuidance = `Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
@@ -728,4 +737,5 @@ export const pcrItems = [
 
 export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
 export const enableFinancialVirementItems = pcrItemTypes.filter(x => x.enableFinancialVirement).map(x => x.type);
+export const unduplicatablePcrItems = pcrItemTypes.filter(x => x.singleInstanceInThisPcr).map(x => x.type);
 export const exclusiveItems = pcrItemTypes.filter(x => x.exclusive).map(x => x.type);

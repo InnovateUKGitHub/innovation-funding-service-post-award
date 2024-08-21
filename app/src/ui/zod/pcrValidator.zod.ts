@@ -45,6 +45,9 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
 
           if (currentOption) {
             switch (currentOption.hiddenReason) {
+              case PCRItemHiddenReason.Exclusive:
+                ctx.addIssue(createIssue("errors.exclusive", { type: currentOption.displayName }));
+                break;
               case PCRItemHiddenReason.AnotherPcrAlreadyHasThisType:
                 ctx.addIssue(
                   createIssue("errors.another_pcr_already_has_this_type", { type: currentOption.displayName }),

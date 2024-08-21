@@ -922,7 +922,8 @@
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
       "thisPcrAlreadyHasThisTypeMessage": "These types of request are already a part of this current PCR.",
-      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR."
+      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR.",
+      "exclusiveTitle": "Some types are unavailable because they must be created in their own PCR."
     },
     "pcrTimeExtensionStep": {
       "existingProjectHeading": "Existing project details",

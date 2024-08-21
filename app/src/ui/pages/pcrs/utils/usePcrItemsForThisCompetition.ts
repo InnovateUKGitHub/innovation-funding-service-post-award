@@ -7,6 +7,7 @@ import {
   PCRItemHiddenReason,
   PCRItemType,
   exclusiveItems,
+  getPcrItemsExclusivityViolations,
 } from "@framework/constants/pcrConstants";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
@@ -32,17 +33,19 @@ const usePcrItemsForThisCompetition = (
         (x.type === PCRItemType.ApproveNewSubcontractor && features.approveNewSubcontractor),
     );
 
+  const thisPcr = allPcrs.find(x => x.id === pcrId);
+
   const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
-  const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(allPcrs.find(x => x.id === pcrId));
-  const tooManyViolations = getPcrItemsTooManyViolations(
-    numberOfPartners,
-    allPcrs.find(x => x.id === pcrId),
-  );
+  const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(thisPcr);
+  const tooManyViolations = getPcrItemsTooManyViolations(numberOfPartners, thisPcr);
+  const exclusivityViolations = getPcrItemsExclusivityViolations(thisPcr);
 
   return items.map(pcrItem => {
     let hiddenReason = PCRItemHiddenReason.None;
 
-    if (thisPcrViolations.includes(pcrItem.type)) {
+    if (exclusivityViolations.includes(pcrItem.type)) {
+      hiddenReason = PCRItemHiddenReason.Exclusive;
+    } else if (thisPcrViolations.includes(pcrItem.type)) {
       hiddenReason = PCRItemHiddenReason.ThisPcrAlreadyHasThisType;
     } else if (anyOtherPcrViolations.includes(pcrItem.type)) {
       hiddenReason = PCRItemHiddenReason.AnotherPcrAlreadyHasThisType;

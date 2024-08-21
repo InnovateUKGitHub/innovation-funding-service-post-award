@@ -24,6 +24,7 @@ const PcrDisabledReasoning = ({
 
     const disableReasonMessages = {
       [PCRItemHiddenReason.None]: null,
+      [PCRItemHiddenReason.Exclusive]: null,
       [PCRItemHiddenReason.AnotherPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
       ),
@@ -34,6 +35,7 @@ const PcrDisabledReasoning = ({
     };
     const disableReasonTitles = {
       [PCRItemHiddenReason.None]: null,
+      [PCRItemHiddenReason.Exclusive]: getContent(x => x.pages.pcrModifyOptions.exclusiveTitle),
       [PCRItemHiddenReason.AnotherPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
       ),
