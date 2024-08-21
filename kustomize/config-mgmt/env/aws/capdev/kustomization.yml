@@ -1,0 +1,9 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: dev
+
+resources:
+  - ../../../base
+
+patches:
+  - path: acc-ui-configmap.yml

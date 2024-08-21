@@ -147,6 +147,7 @@ export enum AccEnvironment {
   SYSINT = "sysint",
   UAT = "uat",
   LOCAL = "local",
+  CAPDEV = "capdev",
 
   UNKNOWN = "",
 }
