@@ -63,7 +63,6 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         <ValidationError error={error} data-qa={`error-${dataQa}`} />
         <CharacterCount count={characterCount} {...characterCountProps}>
           <Textarea
-            aria-label={label}
             aria-describedby={!!hint ? `hint-for-${id}` : undefined}
             id={id}
             hasError={!!error}
