@@ -52,7 +52,8 @@ _parser.add_argument(
         "sysint",
         "uat",
         "custom",
-        "at"
+        "at",
+        "capdev"
     ],
     dest="environments",
 )
