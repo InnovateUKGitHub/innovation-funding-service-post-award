@@ -10,4 +10,6 @@ const toArray = <T>(input: T | T[] | null): T[] => {
   return [input];
 };
 
-export { toArray };
+const toIntArray = (input: string[]) => input.map(x => parseInt(x, 10));
+
+export { toArray, toIntArray };
