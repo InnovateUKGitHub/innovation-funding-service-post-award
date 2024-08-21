@@ -728,3 +728,4 @@ export const pcrItems = [
 
 export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
 export const enableFinancialVirementItems = pcrItemTypes.filter(x => x.enableFinancialVirement).map(x => x.type);
+export const exclusiveItems = pcrItemTypes.filter(x => x.exclusive).map(x => x.type);

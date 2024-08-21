@@ -174,6 +174,8 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.ApproveNewSubcontractor;
     case ProjectChangeRequest.uplift:
       return PCRItemType.Uplift;
+    case ProjectChangeRequest.manageTeamMembers:
+      return PCRItemType.ManageTeamMembers;
 
     // Request header
     case ProjectChangeRequest.requestHeader:
@@ -220,6 +222,8 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.ApproveNewSubcontractor;
     case "uplift":
       return PCRItemType.Uplift;
+    case "manage team members":
+      return PCRItemType.ManageTeamMembers;
 
     default:
       return PCRItemType.Unknown;

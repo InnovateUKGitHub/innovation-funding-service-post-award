@@ -24,6 +24,7 @@ import {
   PCRItemForLoanDrawdownExtensionDto,
   PCRItemForApproveNewSubcontractorDto,
   PCRItemForUpliftDto,
+  PCRItemForManageTeamMembersDto,
 } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
 import { isBoolean } from "@framework/util/booleanHelper";
@@ -91,6 +92,8 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRI
       return mapItemForApproveNewSubcontractor(pcr, itemType.displayName, itemType.type);
     case PCRItemType.Uplift:
       return mapItemForUplift(pcr, itemType.displayName, itemType.type);
+    case PCRItemType.ManageTeamMembers:
+      return mapItemForManageTeamMembers(pcr, itemType.displayName, itemType.type);
     default:
       throw new Error("Type not handled");
   }
@@ -260,6 +263,15 @@ const mapItemForUplift = (
   typeName: string,
   type: PCRItemType.Uplift,
 ): PCRItemForUpliftDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
+});
+
+const mapItemForManageTeamMembers = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.ManageTeamMembers,
+): PCRItemForManageTeamMembersDto => ({
   ...mapBaseItem(pcr, typeName, type),
   type,
 });

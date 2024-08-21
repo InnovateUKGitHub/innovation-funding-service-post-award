@@ -6,10 +6,14 @@ import {
   getPcrItemsTooManyViolations,
   PCRItemHiddenReason,
   PCRItemType,
+  exclusiveItems,
 } from "@framework/constants/pcrConstants";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
+import { PcrCreateSchemaType, PcrUpdateTypesSchemaType } from "@ui/zod/pcrValidator.zod";
+import { UseFormSetValue } from "react-hook-form";
+import { z } from "zod";
 
 const usePcrItemsForThisCompetition = (
   competitionType: SalesforceCompetitionTypes,
@@ -56,4 +60,27 @@ const usePcrItemsForThisCompetition = (
   });
 };
 
-export { usePcrItemsForThisCompetition };
+const usePcrItemExclusivity = (
+  pcrs: ReturnType<typeof usePcrItemsForThisCompetition>,
+  selectedTypes: (string | PCRItemType)[],
+  setValue: UseFormSetValue<z.output<PcrCreateSchemaType | PcrUpdateTypesSchemaType>>,
+) => {
+  /**
+   * N.B. Seems like React Hook Form treats all checkbox values as string
+   * Must coerce back and forth :(
+   */
+  const exclusiveType = exclusiveItems.find(x => selectedTypes.map(Number).includes(x));
+  // Deselect everything else if an exclusive type has been selected
+  if (exclusiveType && selectedTypes.length > 1) {
+    setValue("types", [String(exclusiveType) as unknown as PCRItemType]);
+  }
+
+  return pcrs.map(pcrItem => {
+    return {
+      ...pcrItem,
+      disabled: !!exclusiveType && pcrItem.type !== exclusiveType,
+    };
+  });
+};
+
+export { usePcrItemsForThisCompetition, usePcrItemExclusivity };

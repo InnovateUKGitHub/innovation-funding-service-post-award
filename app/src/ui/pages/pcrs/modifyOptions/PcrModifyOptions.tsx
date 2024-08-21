@@ -25,7 +25,7 @@ import { z } from "zod";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { useOnSubmit, usePcrModifyOptionsQuery } from "./PcrModifyOptions.logic";
-import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
+import { usePcrItemExclusivity, usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
 interface PcrModifyParams {
   projectId: ProjectId;
@@ -46,19 +46,19 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   const { project, pcrs, numberOfPartners, fragmentRef } = usePcrModifyOptionsQuery({ projectId });
   const currentPcr = pcrs.find(x => x.id === pcrId);
 
-  const pcrItems = usePcrItemsForThisCompetition(
+  const visiblePcrItems = usePcrItemsForThisCompetition(
     mapToSalesforceCompetitionTypes(project.competitionType),
     pcrs,
     pcrId,
     numberOfPartners,
   );
 
-  const { register, handleSubmit, setError, formState, getFieldState } = useForm<
+  const { register, handleSubmit, setError, formState, getFieldState, watch, setValue } = useForm<
     z.output<PcrCreateSchemaType | PcrUpdateTypesSchemaType>
   >({
     resolver: zodResolver(
       getPcrModifyTypesSchema({
-        pcrItemInfo: pcrItems,
+        pcrItemInfo: visiblePcrItems,
         numberOfPartners,
         currentPcrItems: currentPcr?.items ?? [],
       }),
@@ -77,6 +77,8 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<PcrModifyTypesSchemaType>>(setError, formState.errors);
   const defaults = useServerInput<z.output<PcrModifyTypesSchemaType>>();
+
+  const pcrItems = usePcrItemExclusivity(visiblePcrItems, watch("types"), setValue);
 
   const onChange = (dto: z.output<PcrModifyTypesSchemaType>) => {
     onUpdate({
@@ -122,14 +124,14 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
           <CheckboxList name="types" register={register}>
             {pcrItems
               .filter(x => !x.hidden)
-              .map(({ item }, index) => {
+              .map(({ item, disabled }, index) => {
                 const { name, description } = getPcrItemContent(item.type);
 
                 return (
                   <Checkbox
                     key={item.type}
                     id={`types_${index}`}
-                    disabled={isFetching}
+                    disabled={isFetching || disabled}
                     label={
                       <>
                         <span>{name}</span>
@@ -144,7 +146,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
               })}
           </CheckboxList>
         </Field>
-        <PcrDisabledReasoning items={pcrItems} />
+        <PcrDisabledReasoning items={visiblePcrItems} />
 
         <Fieldset>
           <SubmitButton disabled={isFetching}>

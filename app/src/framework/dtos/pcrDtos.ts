@@ -41,7 +41,7 @@ export interface PCRDto extends PCRBaseDto {
   reasoningStatusName: string;
 }
 
-interface PCRItemBaseDto extends PCRItemSummaryDto {
+export interface PCRItemBaseDto extends PCRItemSummaryDto {
   guidance?: string;
   id: PcrItemId;
   status: PCRItemStatus;
@@ -66,7 +66,8 @@ export type PCRItemDto =
   | PCRItemForScopeChangeDto
   | PCRItemForTimeExtensionDto
   | PCRItemForApproveNewSubcontractorDto
-  | PCRItemForUpliftDto;
+  | PCRItemForUpliftDto
+  | PCRItemForManageTeamMembersDto;
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
   grantMovingOverFinancialYear: number | null;
@@ -184,6 +185,11 @@ export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
   subcontractorDescription: string | null;
   subcontractorJustification: string | null;
   subcontractorCost: number | null;
+}
+
+export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
+  type: PCRItemType.ManageTeamMembers;
+  // TODO: FPD-1090
 }
 
 export interface PCRItemTypeDto {

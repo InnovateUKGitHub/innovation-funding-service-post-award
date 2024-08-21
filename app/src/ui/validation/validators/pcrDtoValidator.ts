@@ -28,6 +28,7 @@ import {
   PCRItemForLoanDrawdownExtensionDto,
   PCRItemForApproveNewSubcontractorDto,
   PCRItemForUpliftDto,
+  PCRItemForManageTeamMembersDto,
 } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -97,6 +98,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     | PCRLoanDrawdownChangeItemDtoValidator
     | PCRLoanExtensionItemDtoValidator
     | PCRApproveNewSubcontractorItemDtoValidator
+    | PCRManageTeamMembersItemDtoValidator
   >;
 
   constructor({
@@ -401,6 +403,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
       case PCRItemType.ApproveNewSubcontractor:
         return new PCRApproveNewSubcontractorItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForApproveNewSubcontractorDto>,
+        );
+      case PCRItemType.ManageTeamMembers:
+        return new PCRManageTeamMembersItemDtoValidator(
+          params as PCRBaseItemDtoValidatorProps<PCRItemForManageTeamMembersDto>,
         );
       default:
         throw new Error("PCR Type not implemented");
@@ -972,6 +978,7 @@ export class PCRUpliftDtoValidator extends PCRBaseItemDtoValidator<PCRItemForUpl
 
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}
 export class PCRApproveNewSubcontractorItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForApproveNewSubcontractorDto> {}
+export class PCRManageTeamMembersItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForManageTeamMembersDto> {}
 
 export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {
   private readonly isComplete = this.model.status === PCRItemStatus.Complete;
