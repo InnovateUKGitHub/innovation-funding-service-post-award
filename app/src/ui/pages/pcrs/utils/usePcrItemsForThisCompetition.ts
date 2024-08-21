@@ -4,7 +4,7 @@ import {
   getPcrItemsSingleInstanceInAnyPcrViolations,
   getPcrItemsSingleInstanceInThisPcrViolations,
   getPcrItemsTooManyViolations,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
   PCRItemType,
 } from "@framework/constants/pcrConstants";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
@@ -36,22 +36,22 @@ const usePcrItemsForThisCompetition = (
   );
 
   return items.map(pcrItem => {
-    let disabledReason = PCRItemDisabledReason.None;
+    let hiddenReason = PCRItemHiddenReason.None;
 
     if (thisPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
+      hiddenReason = PCRItemHiddenReason.ThisPcrAlreadyHasThisType;
     } else if (anyOtherPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
+      hiddenReason = PCRItemHiddenReason.AnotherPcrAlreadyHasThisType;
     } else if (tooManyViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
+      hiddenReason = PCRItemHiddenReason.NotEnoughPartnersToActionThisType;
     }
 
     return {
       item: pcrItem,
       displayName: (pcrItem.i18nName ? getContent(pcrItem.i18nName) : pcrItem.displayName) ?? pcrItem.typeName,
       type: pcrItem.type,
-      disabled: disabledReason !== PCRItemDisabledReason.None,
-      disabledReason,
+      hidden: hiddenReason !== PCRItemHiddenReason.None,
+      hiddenReason,
     };
   });
 };

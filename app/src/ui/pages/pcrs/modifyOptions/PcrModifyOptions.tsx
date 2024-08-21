@@ -121,7 +121,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
         >
           <CheckboxList name="types" register={register}>
             {pcrItems
-              .filter(x => !x.disabled)
+              .filter(x => !x.hidden)
               .map(({ item }, index) => {
                 const { name, description } = getPcrItemContent(item.type);
 

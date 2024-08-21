@@ -1,4 +1,4 @@
-import { PCRItemType, PCRItemDisabledReason, pcrItemTypes, IMetaValue } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRItemHiddenReason, pcrItemTypes, IMetaValue } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
@@ -20,8 +20,8 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
       type: metaInfo.type,
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),
-      disabled: false,
-      disabledReason: PCRItemDisabledReason.None,
+      hidden: false,
+      hiddenReason: PCRItemHiddenReason.None,
       recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
     }));

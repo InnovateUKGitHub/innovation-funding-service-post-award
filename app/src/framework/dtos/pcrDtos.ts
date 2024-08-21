@@ -8,7 +8,7 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -195,8 +195,8 @@ export interface PCRItemTypeDto {
    * @description This refers to whether it should be available to the end user (visually available), consider renaming to isAvailable.
    */
   enabled: boolean;
-  disabled: boolean;
-  disabledReason: PCRItemDisabledReason;
+  hidden: boolean;
+  hiddenReason: PCRItemHiddenReason;
   files: { name: string; relativeUrl: string }[];
 }
 

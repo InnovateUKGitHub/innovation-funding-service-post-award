@@ -1,7 +1,7 @@
 import {
   getPcrItemsSingleInstanceInAnyPcrViolations,
   getPcrItemsSingleInstanceInThisPcrViolations,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
   getPcrItemsTooManyViolations,
 } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
@@ -57,20 +57,20 @@ export class GetAvailableItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItem
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 
-      let disabledReason = PCRItemDisabledReason.None;
+      let hiddenReason = PCRItemHiddenReason.None;
 
       if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
+        hiddenReason = PCRItemHiddenReason.ThisPcrAlreadyHasThisType;
       } else if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
+        hiddenReason = PCRItemHiddenReason.AnotherPcrAlreadyHasThisType;
       } else if (tooManyItemTypes.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
+        hiddenReason = PCRItemHiddenReason.NotEnoughPartnersToActionThisType;
       }
 
       return validPcrItems.concat({
         ...pcrItem,
-        disabled: disabledReason !== PCRItemDisabledReason.None,
-        disabledReason,
+        hidden: hiddenReason !== PCRItemHiddenReason.None,
+        hiddenReason,
       });
     }, []);
   }

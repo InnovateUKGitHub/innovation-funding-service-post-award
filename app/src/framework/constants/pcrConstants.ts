@@ -53,7 +53,7 @@ export enum PCRItemStatus {
   Complete = 3,
 }
 
-export enum PCRItemDisabledReason {
+export enum PCRItemHiddenReason {
   None = 0,
   AnotherPcrAlreadyHasThisType = 1,
   ThisPcrAlreadyHasThisType = 2,

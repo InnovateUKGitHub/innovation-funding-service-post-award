@@ -1,4 +1,4 @@
-import { PCRItemDisabledReason, pcrItems, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
+import { PCRItemHiddenReason, pcrItems, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
@@ -6,7 +6,7 @@ import { FormTypes } from "./FormTypes";
 import { pcrIdValidation, projectIdValidation } from "./helperValidators/helperValidators.zod";
 
 interface PCRValidatorExtraProps {
-  pcrItemInfo: Pick<PCRItemTypeDto, "type" | "disabled" | "disabledReason" | "displayName">[];
+  pcrItemInfo: Pick<PCRItemTypeDto, "type" | "hidden" | "hiddenReason" | "displayName">[];
   numberOfPartners: number;
   currentPcrItems: { type: PCRItemType }[];
 }
@@ -44,16 +44,16 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
           const currentOption = pcrItemInfo.find(x => x.type === val);
 
           if (currentOption) {
-            switch (currentOption.disabledReason) {
-              case PCRItemDisabledReason.AnotherPcrAlreadyHasThisType:
+            switch (currentOption.hiddenReason) {
+              case PCRItemHiddenReason.AnotherPcrAlreadyHasThisType:
                 ctx.addIssue(
                   createIssue("errors.another_pcr_already_has_this_type", { type: currentOption.displayName }),
                 );
                 break;
-              case PCRItemDisabledReason.ThisPcrAlreadyHasThisType:
+              case PCRItemHiddenReason.ThisPcrAlreadyHasThisType:
                 ctx.addIssue(createIssue("errors.this_pcr_already_has_this_type", { type: currentOption.displayName }));
                 break;
-              case PCRItemDisabledReason.NotEnoughPartnersToActionThisType:
+              case PCRItemHiddenReason.NotEnoughPartnersToActionThisType:
                 ctx.addIssue(
                   createIssue("errors.not_enough_partners_to_action_this_type", { type: currentOption.displayName }),
                 );
@@ -63,14 +63,12 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
         })
         .refine(
           x =>
-            !pcrItemInfo.some(
-              y => x === y.type && y.disabledReason === PCRItemDisabledReason.AnotherPcrAlreadyHasThisType,
-            ),
+            !pcrItemInfo.some(y => x === y.type && y.hiddenReason === PCRItemHiddenReason.AnotherPcrAlreadyHasThisType),
         )
         .refine(
           x =>
             !pcrItemInfo.some(
-              y => x === y.type && y.disabledReason === PCRItemDisabledReason.NotEnoughPartnersToActionThisType,
+              y => x === y.type && y.hiddenReason === PCRItemHiddenReason.NotEnoughPartnersToActionThisType,
             ),
         ),
     )

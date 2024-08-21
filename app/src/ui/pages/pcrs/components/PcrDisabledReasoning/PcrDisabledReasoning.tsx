@@ -1,4 +1,4 @@
-import { IMetaValue, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
+import { IMetaValue, PCRItemHiddenReason } from "@framework/constants/pcrConstants";
 import { Info } from "@ui/components/atoms/Details/Details";
 import { UL } from "@ui/components/atoms/List/list";
 import { Bold } from "@ui/components/atoms/Bold/bold";
@@ -15,7 +15,7 @@ import { ReactNode, useMemo } from "react";
 const PcrDisabledReasoning = ({
   items,
 }: {
-  items: { item: IMetaValue; disabled: boolean; disabledReason: PCRItemDisabledReason }[];
+  items: { item: IMetaValue; hidden: boolean; hiddenReason: PCRItemHiddenReason }[];
 }) => {
   const { getContent } = useContent();
 
@@ -23,46 +23,46 @@ const PcrDisabledReasoning = ({
     const returnList: ReactNode[] = [];
 
     const disableReasonMessages = {
-      [PCRItemDisabledReason.None]: null,
-      [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
+      [PCRItemHiddenReason.None]: null,
+      [PCRItemHiddenReason.AnotherPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
       ),
-      [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
+      [PCRItemHiddenReason.ThisPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeMessage,
       ),
-      [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: null,
+      [PCRItemHiddenReason.NotEnoughPartnersToActionThisType]: null,
     };
     const disableReasonTitles = {
-      [PCRItemDisabledReason.None]: null,
-      [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
+      [PCRItemHiddenReason.None]: null,
+      [PCRItemHiddenReason.AnotherPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
       ),
-      [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
+      [PCRItemHiddenReason.ThisPcrAlreadyHasThisType]: getContent(
         x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeTitle,
       ),
-      [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
+      [PCRItemHiddenReason.NotEnoughPartnersToActionThisType]: getContent(
         x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeTitle,
       ),
     };
 
-    const foundDisableReasons = new Set<PCRItemDisabledReason>();
+    const foundHiddenReasons = new Set<PCRItemHiddenReason>();
 
     for (const item of items) {
       // Only collate reasons that are not "NONE"
-      if (item.disabledReason !== PCRItemDisabledReason.None) {
-        foundDisableReasons.add(item.disabledReason);
+      if (item.hiddenReason !== PCRItemHiddenReason.None) {
+        foundHiddenReasons.add(item.hiddenReason);
       }
     }
 
-    for (const disableReason of [...foundDisableReasons].sort((a, b) => a - b)) {
-      const itemsDisabledForThisReason = items.filter(x => x.disabledReason === disableReason);
+    for (const hiddenReason of [...foundHiddenReasons].sort((a, b) => a - b)) {
+      const itemsDisabledForThisReason = items.filter(x => x.hiddenReason === hiddenReason);
 
       returnList.push(
-        <div key={disableReason}>
+        <div key={hiddenReason}>
           <SimpleString className="govuk-!-margin-bottom-1 govuk-!-padding-top-3">
-            <Bold>{disableReasonTitles[disableReason]}</Bold>
+            <Bold>{disableReasonTitles[hiddenReason]}</Bold>
             <br />
-            {disableReasonMessages[disableReason]}
+            {disableReasonMessages[hiddenReason]}
           </SimpleString>
 
           <UL>

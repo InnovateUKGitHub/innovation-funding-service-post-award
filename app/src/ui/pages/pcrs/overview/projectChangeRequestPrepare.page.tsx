@@ -93,7 +93,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       <ProjectChangeRequestOverviewSummary
         pcr={pcr}
         projectId={project.id}
-        hideAddTypesLink={availablePcrItems.every(x => x.disabled)}
+        hideAddTypesLink={availablePcrItems.every(x => x.hidden)}
       />
       <ProjectChangeRequestOverviewTasks
         pcr={pcr as Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] }}

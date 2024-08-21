@@ -24,13 +24,13 @@ describe("GetAvailableItemTypesQuery", () => {
       context.testData.createPCRItem(pcr, reallocateSeveralPartnersProjectCost);
 
       const query = new GetAvailableItemTypesQuery(project.Id);
-      const disabledItems = (await context.runQuery(query)).filter(res => res.disabled === true);
+      const disabledItems = (await context.runQuery(query)).filter(res => res.hidden === true);
       expect(disabledItems).toHaveLength(1);
     });
   });
 
   describe("current pcr id", () => {
-    test("types from other pcrs and current pcr should be disabled", async () => {
+    test("types from other pcrs and current pcr should be hidden", async () => {
       // Note: this is to simulate a user adding a type to an open PCR, i.e. we DO need to disable the current PCR types as well as other open PCR types
       const context = new TestContext();
 
@@ -54,11 +54,11 @@ describe("GetAvailableItemTypesQuery", () => {
       context.testData.createPCRItem(editingPcr, changeProjectDuration);
 
       const query = new GetAvailableItemTypesQuery(project.Id, editingPcr.id);
-      const disabledItems = (await context.runQuery(query)).filter(res => res.disabled === true);
+      const hiddenItems = (await context.runQuery(query)).filter(res => res.hidden === true);
 
       // MultiplePartnerFinancialVirement, TimeExtension, Remove Partner and Rename Partner should be disabled.
       // Remove Partner is disabled because there are no partners in this project to remove.
-      expect(disabledItems).toHaveLength(4);
+      expect(hiddenItems).toHaveLength(4);
     });
   });
 });

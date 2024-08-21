@@ -60,7 +60,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     x => x.isPm && partners.some(y => x.partnerId === y.id && y.partnerStatus !== PartnerStatus.OnHold),
   );
 
-  const allPcrItemTypesUnavailable = availablePcrItems.every(x => x.disabled);
+  const allPcrItemTypesUnavailable = availablePcrItems.every(x => x.hidden);
 
   const renderStartANewRequestLink = () => {
     if (!isPmAllowedToEdit) return null;

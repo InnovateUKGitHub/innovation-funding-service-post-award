@@ -18,6 +18,7 @@ describe("GetPCRItemTypesQuery", () => {
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
       PCRItemType.ApproveNewSubcontractor,
+      PCRItemType.ManageTeamMembers,
     ];
 
     const project = context.testData.createProject();
@@ -106,6 +107,7 @@ describe("GetPCRItemTypesQuery", () => {
           PCRItemType.ProjectSuspension,
           PCRItemType.LoanDrawdownChange,
           PCRItemType.LoanDrawdownExtension,
+          PCRItemType.ManageTeamMembers,
         ]);
       });
     });
