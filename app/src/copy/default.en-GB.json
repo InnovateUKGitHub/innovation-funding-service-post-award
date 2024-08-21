@@ -917,6 +917,7 @@
         "newEndDate": "New end date"
       },
       "approveNewSubcontractorMessage": "If you are requesting a change in subcontractor, please select this option.",
+      "manageTeamMembersMessage": "This allows you to add a new project team member or to change the role of an existing team member.",
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
@@ -1504,7 +1505,8 @@
     "loanDrawdownChange": "Loan Drawdown Change",
     "loanDrawdownExtension": "Change Loans Duration",
     "approveNewSubcontractor": "Approve a new subcontractor",
-    "uplift": "Uplift"
+    "uplift": "Uplift",
+    "manageTeamMembers": "Manage team members"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
@@ -2310,7 +2312,8 @@
           "this_pcr_already_has_this_type": "You can only have one '{{ type }}' change in progress in this PCR at a time.",
           "not_enough_partners_to_rename": "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
           "not_enough_partners_to_remove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these.",
-          "not_enough_partners_to_rename_and_remove": "You cannot select ‘Remove a partner’ and ‘Change a partner’s name’ because you do not have enough partners to action these."
+          "not_enough_partners_to_rename_and_remove": "You cannot select ‘Remove a partner’ and ‘Change a partner’s name’ because you do not have enough partners to action these.",
+          "exclusive": "You cannot select {{ types, arrayQuote, conjunction }} because ‘{{ type }}’ is exclusive."
         }
       }
     },

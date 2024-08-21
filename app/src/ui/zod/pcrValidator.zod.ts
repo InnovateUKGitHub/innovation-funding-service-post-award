@@ -1,4 +1,4 @@
-import { PCRItemDisabledReason, pcrItems, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemDisabledReason, pcrItems, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
@@ -25,13 +25,14 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
 
   const createIssue = (
     i18n: string,
-    { type, path }: { type?: string; path?: (string | number)[] } = {},
+    { type, path, params }: { type?: string; path?: (string | number)[]; params?: AnyObject } = {},
   ): z.IssueData => ({
     code: z.ZodIssueCode.custom,
     fatal: true,
     params: {
       i18n,
       type,
+      ...params,
     },
     path,
   });
@@ -80,6 +81,23 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
       let removeSelected = false;
 
       for (const selectedVal of vals) {
+        for (const type of pcrItemTypes) {
+          if (type.type === selectedVal && type.exclusive) {
+            if (vals.length > 1) {
+              ctx.addIssue(
+                createIssue("errors.exclusive", {
+                  params: {
+                    types: pcrItemInfo
+                      .filter(x => x?.type !== type.type && vals.includes(x.type))
+                      .map(x => x?.displayName),
+                    type: pcrItemInfo.find(x => x?.type === type.type)?.displayName,
+                  },
+                }),
+              );
+            }
+          }
+        }
+
         if (selectedVal === PCRItemType.PartnerAddition) additionSelected = true;
         if (selectedVal === PCRItemType.AccountNameChange) renameSelected = true;
         if (selectedVal === PCRItemType.PartnerWithdrawal) removeSelected = true;

@@ -75,6 +75,7 @@ export const enum PCRItemType {
   LoanDrawdownExtension = 120,
   ApproveNewSubcontractor = 130,
   Uplift = 140,
+  ManageTeamMembers = 150,
 }
 
 export const enum PCRItemTypeName {
@@ -520,6 +521,11 @@ export interface IMetaValue {
    * Check if PCR Type successfully validates against Financial Virement DTO Validator
    */
   enableFinancialVirement?: boolean;
+
+  /**
+   * Exclusivity
+   */
+  exclusive?: boolean;
 }
 
 /**
@@ -694,6 +700,14 @@ export const pcrItemTypes: IMetaValue[] = [
     disableStatus: true,
     enableInternalStatuses: true,
   },
+  {
+    type: PCRItemType.ManageTeamMembers,
+    typeName: "Manage team members",
+    i18nName: x => x.pcrTypes.manageTeamMembers,
+    i18nDescription: x => x.pages.pcrModifyOptions.manageTeamMembersMessage,
+    ignoredCompetitions: [],
+    exclusive: true,
+  },
 ];
 
 export const pcrItems = [
@@ -709,6 +723,7 @@ export const pcrItems = [
   PCRItemType.LoanDrawdownChange,
   PCRItemType.LoanDrawdownExtension,
   PCRItemType.ApproveNewSubcontractor,
+  PCRItemType.ManageTeamMembers,
 ] as const;
 
 export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
