@@ -254,7 +254,7 @@ export class TestData {
     const seed = this.repositories.projectContacts.Items.length + 1;
 
     const newItem: ISalesforceProjectContact = {
-      Id: `ProjectContact${seed}` as ContactId,
+      Id: `ProjectContact${seed}` as ProjectContactLinkId,
       Acc_ProjectId__c: project.Id,
       Acc_AccountId__c: ((partner && partner.accountId) || undefined) as AccountId,
       Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,

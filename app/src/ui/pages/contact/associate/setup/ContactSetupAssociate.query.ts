@@ -18,6 +18,7 @@ const contactSetupAssociateQuery = graphql`
                         value
                       }
                       Acc_ContactId__r {
+                        Id
                         Name {
                           value
                         }

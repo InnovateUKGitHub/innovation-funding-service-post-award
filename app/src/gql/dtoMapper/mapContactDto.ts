@@ -9,6 +9,7 @@ type ContactNode = GQL.PartialNode<{
   Id: string;
   Acc_Role__c: GQL.ValueAndLabel<string>;
   Acc_ContactId__r: GQL.Maybe<{
+    Id: string;
     Name: GQL.Value<string>;
   }>;
   Acc_UserId__r: GQL.Maybe<{
@@ -28,8 +29,11 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
   accountId(node) {
     return (node?.Acc_AccountId__c?.value ?? "unknown") as AccountId;
   },
+  contactId(node) {
+    return (node?.Acc_ContactId__r?.Id ?? "unknown") as ContactId;
+  },
   id(node) {
-    return (node?.Id ?? "") as ContactId;
+    return (node?.Id ?? "") as ProjectContactLinkId;
   },
   email(node) {
     return node?.Acc_EmailOfSFContact__c?.value ?? "";
@@ -43,9 +47,15 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
     return (node?.Acc_ProjectId__c?.value ?? "unknown") as ProjectId;
   },
   role(node) {
-    return ["Monitoring officer", "Project Manager", "Finance contact", "Innovation lead", "IPM", "Associate"].includes(
-      node?.Acc_Role__c?.value ?? "",
-    )
+    return [
+      "Monitoring officer",
+      "Project Manager",
+      "Finance contact",
+      "Innovation lead",
+      "IPM",
+      "Associate",
+      "Main Company Contact",
+    ].includes(node?.Acc_Role__c?.value ?? "")
       ? (node?.Acc_Role__c?.value as ProjectRoleName)
       : ("unknown role" as ProjectRoleName);
   },

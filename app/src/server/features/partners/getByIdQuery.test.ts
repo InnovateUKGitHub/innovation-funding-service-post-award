@@ -83,7 +83,7 @@ describe("getAllForProjectQuery", () => {
     const expected: PartnerDto = {
       id: "Partner1" as PartnerId,
       name: "Expected name",
-      accountId: "AccountId1",
+      accountId: "AccountId1" as AccountId,
       type: "Academic",
       postcode: "BS1 1AA",
       postcodeStatusLabel: "",

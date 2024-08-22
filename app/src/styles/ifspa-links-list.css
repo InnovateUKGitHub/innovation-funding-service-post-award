@@ -10,3 +10,7 @@
 .acc-links-list .acc-links-list-item:last-child {
   margin: 0;
 }
+
+.acc-links-group .govuk-link {
+  margin-right: 15px;
+}

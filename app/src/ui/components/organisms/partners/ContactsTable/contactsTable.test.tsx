@@ -43,11 +43,12 @@ describe("<ContactsTable />", () => {
     it("when contacts are provided", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
@@ -55,11 +56,12 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
         },
         {
-          id: "101" as ContactId,
+          id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
           role: "Project Manager",
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
@@ -80,11 +82,12 @@ describe("<ContactsTable />", () => {
     it("with valid form data", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
@@ -105,11 +108,12 @@ describe("<ContactsTable />", () => {
     it("with correct table layout", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
           role: "Finance contact",
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
@@ -117,11 +121,12 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
         },
         {
-          id: "101" as ContactId,
+          id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
           role: "Project Manager",
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,

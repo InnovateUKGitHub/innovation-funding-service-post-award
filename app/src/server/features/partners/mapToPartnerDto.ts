@@ -36,7 +36,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     return {
       id: this.item.id,
       name: this.item.name,
-      accountId: this.item.accountId,
+      accountId: this.item.accountId as AccountId,
       type: this.item.participantType,
       postcode: this.item.postcode,
       postcodeStatus: new PostcodeStatusMapper().mapFromSalesforce(this.item.postcode),

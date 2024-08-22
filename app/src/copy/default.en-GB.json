@@ -1117,6 +1117,23 @@
       "submittedSubmessage": "Please note there is a 30-day Service Level Target from submission of your request to Innovate UK, through to approval of the change(s).",
       "reviewLink": "Review request",
       "backButton": "Return to project change requests"
+    },
+    "manageTeamMembers": {
+      "dashboard": {
+        "title": "Manage team members",
+        "contactName": "Name",
+        "contactOrg": "Organisation",
+        "contactOptions": "Manage",
+        "replaceProjectManager": "Replace project manager",
+        "replaceFinanceContact": "Replace finance contact",
+        "replaceMainCompanyContact": "Replace main company contact",
+        "inviteMainCompanyContact": "Invite main company contact",
+        "inviteAssociate": "Invite associate",
+        "backLink": "Back to project change requests",
+        "backButton": "Cancel and return to start a new request page",
+        "edit": "Edit",
+        "remove": "Remove"
+      }
     }
   },
   "claimsMessages": {
@@ -1333,6 +1350,10 @@
     "financeContacts_other": "Finance contacts",
     "innovationLeads_one": "Innovation lead",
     "innovationLeads_other": "Innovation leads",
+    "associates_one": "Associate",
+    "associates_other": "Associates",
+    "mainCompanyContacts_one": "Main Company Contact",
+    "mainCompanyContacts_other": "Main Company Contacts",
     "ipms_one": "IPM",
     "ipms_other": "IPMs",
     "otherContacts": "Other contacts",

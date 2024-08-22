@@ -4,7 +4,7 @@ import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact" | "Associate";
 
 export interface ISalesforceProjectContact {
-  Id: ContactId;
+  Id: ProjectContactLinkId;
   Acc_AccountId__c: AccountId | undefined;
   Acc_ProjectId__c: string;
   Acc_EmailOfSFContact__c: string;

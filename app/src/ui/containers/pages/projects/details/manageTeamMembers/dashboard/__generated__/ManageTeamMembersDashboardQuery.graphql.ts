@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c1d70741449f253b584ed539d877009f>>
+ * @generated SignedSource<<f68e979d50bc33fe2359a1b798083891>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,30 +10,43 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type ContactSetupAssociateQuery$variables = {
+export type ManageTeamMembersDashboardQuery$variables = {
   projectId: string;
 };
-export type ContactSetupAssociateQuery$data = {
+export type ManageTeamMembersDashboardQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_ProjectParticipantsProject__r: {
+                readonly edges: ReadonlyArray<{
+                  readonly node: {
+                    readonly Acc_AccountId__r: {
+                      readonly Id: string;
+                      readonly Name: {
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                    readonly Id: string;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Project_Contact_Links__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
+                    readonly Acc_AccountId__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ContactId__r: {
                       readonly Id: string;
                       readonly Name: {
                         readonly value: string | null | undefined;
                       } | null | undefined;
                     } | null | undefined;
-                    readonly Acc_EmailOfSFContact__c: {
-                      readonly value: string | null | undefined;
-                    } | null | undefined;
-                    readonly Associate_Start_Date__c: {
+                    readonly Acc_Role__c: {
                       readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Id: string;
@@ -48,9 +61,9 @@ export type ContactSetupAssociateQuery$data = {
     };
   };
 };
-export type ContactSetupAssociateQuery = {
-  response: ContactSetupAssociateQuery$data;
-  variables: ContactSetupAssociateQuery$variables;
+export type ManageTeamMembersDashboardQuery = {
+  response: ManageTeamMembersDashboardQuery$data;
+  variables: ManageTeamMembersDashboardQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -94,7 +107,20 @@ v3 = [
     "storageKey": null
   }
 ],
-v4 = {
+v4 = [
+  (v2/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "StringValue",
+    "kind": "LinkedField",
+    "name": "Name",
+    "plural": false,
+    "selections": (v3/*: any*/),
+    "storageKey": null
+  }
+],
+v5 = {
   "alias": null,
   "args": [
     (v1/*: any*/)
@@ -127,14 +153,67 @@ v4 = {
                 {
                   "kind": "Literal",
                   "name": "first",
+                  "value": 500
+                }
+              ],
+              "concreteType": "Acc_ProjectParticipant__cConnection",
+              "kind": "LinkedField",
+              "name": "Acc_ProjectParticipantsProject__r",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "Acc_ProjectParticipant__cEdge",
+                  "kind": "LinkedField",
+                  "name": "edges",
+                  "plural": true,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "Acc_ProjectParticipant__c",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v2/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "Account",
+                          "kind": "LinkedField",
+                          "name": "Acc_AccountId__r",
+                          "plural": false,
+                          "selections": (v4/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": "Acc_ProjectParticipantsProject__r(first:500)"
+            },
+            {
+              "alias": null,
+              "args": [
+                {
+                  "kind": "Literal",
+                  "name": "first",
                   "value": 2000
                 },
                 {
                   "kind": "Literal",
-                  "name": "where",
+                  "name": "orderBy",
                   "value": {
-                    "Acc_Role__c": {
-                      "eq": "Associate"
+                    "Acc_AccountId__r": {
+                      "Name": {
+                        "nulls": "LAST",
+                        "order": "ASC"
+                      }
                     }
                   }
                 }
@@ -164,9 +243,19 @@ v4 = {
                         {
                           "alias": null,
                           "args": null,
-                          "concreteType": "EmailValue",
+                          "concreteType": "Contact",
                           "kind": "LinkedField",
-                          "name": "Acc_EmailOfSFContact__c",
+                          "name": "Acc_ContactId__r",
+                          "plural": false,
+                          "selections": (v4/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "IDValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_AccountId__c",
                           "plural": false,
                           "selections": (v3/*: any*/),
                           "storageKey": null
@@ -174,31 +263,9 @@ v4 = {
                         {
                           "alias": null,
                           "args": null,
-                          "concreteType": "Contact",
+                          "concreteType": "PicklistValue",
                           "kind": "LinkedField",
-                          "name": "Acc_ContactId__r",
-                          "plural": false,
-                          "selections": [
-                            (v2/*: any*/),
-                            {
-                              "alias": null,
-                              "args": null,
-                              "concreteType": "StringValue",
-                              "kind": "LinkedField",
-                              "name": "Name",
-                              "plural": false,
-                              "selections": (v3/*: any*/),
-                              "storageKey": null
-                            }
-                          ],
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "DateValue",
-                          "kind": "LinkedField",
-                          "name": "Associate_Start_Date__c",
+                          "name": "Acc_Role__c",
                           "plural": false,
                           "selections": (v3/*: any*/),
                           "storageKey": null
@@ -210,7 +277,7 @@ v4 = {
                   "storageKey": null
                 }
               ],
-              "storageKey": "Project_Contact_Links__r(first:2000,where:{\"Acc_Role__c\":{\"eq\":\"Associate\"}})"
+              "storageKey": "Project_Contact_Links__r(first:2000,orderBy:{\"Acc_AccountId__r\":{\"Name\":{\"nulls\":\"LAST\",\"order\":\"ASC\"}}})"
             }
           ],
           "storageKey": null
@@ -221,35 +288,35 @@ v4 = {
   ],
   "storageKey": null
 },
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v7 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isAssociate",
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -261,7 +328,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ContactSetupAssociateQuery",
+    "name": "ManageTeamMembersDashboardQuery",
     "selections": [
       {
         "alias": null,
@@ -292,7 +359,7 @@ return {
                 "name": "query",
                 "plural": false,
                 "selections": [
-                  (v4/*: any*/)
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -310,7 +377,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ContactSetupAssociateQuery",
+    "name": "ManageTeamMembersDashboardQuery",
     "selections": [
       {
         "alias": null,
@@ -383,11 +450,11 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
-                                  (v5/*: any*/),
                                   (v6/*: any*/),
                                   (v7/*: any*/),
                                   (v8/*: any*/),
                                   (v9/*: any*/),
+                                  (v10/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -396,11 +463,11 @@ return {
                                     "name": "partnerRoles",
                                     "plural": true,
                                     "selections": [
-                                      (v5/*: any*/),
                                       (v6/*: any*/),
                                       (v7/*: any*/),
                                       (v8/*: any*/),
                                       (v9/*: any*/),
+                                      (v10/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -513,7 +580,7 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v4/*: any*/)
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -526,16 +593,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ede0658d2073e80d6890d45cd985d5a6",
+    "cacheID": "051cb892949c0226b8b9f497998a2de0",
     "id": null,
     "metadata": {},
-    "name": "ContactSetupAssociateQuery",
+    "name": "ManageTeamMembersDashboardQuery",
     "operationKind": "query",
-    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ManageTeamMembersDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ea379f0dea2cf5d72a0701830db508f8";
+(node as any).hash = "b68419055ea088339af49a2806a92cc1";
 
 export default node;

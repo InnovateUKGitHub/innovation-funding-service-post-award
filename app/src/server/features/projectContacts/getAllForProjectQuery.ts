@@ -30,6 +30,7 @@ export class GetAllForProjectQuery extends AuthorisedAsyncQueryBase<ProjectConta
       role: x.Acc_Role__c,
       roleName: x.RoleName,
       email: x.Acc_EmailOfSFContact__c,
+      contactId: x.Acc_ContactId__r.Id as ContactId,
       accountId: x.Acc_AccountId__c,
       projectId: x.Acc_ProjectId__c as ProjectId,
       startDate: clock.parseOptionalSalesforceDateTime(x.Acc_StartDate__c),

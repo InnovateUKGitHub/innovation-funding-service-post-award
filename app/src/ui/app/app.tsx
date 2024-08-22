@@ -128,13 +128,11 @@ export function App({ relayEnvironment }: AppRoute) {
               {error ? (
                 <Route path="*" element={<AppView currentRoute={ErrorRoute} />} />
               ) : (
-                <>
-                  {routesList.map(([routeKey, route]) => (
+                routesList
+                  .map(([routeKey, route]) => (
                     <Route key={routeKey} path={route.routePath} element={<AppView currentRoute={route} />} />
-                  ))}
-
-                  <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} />} />
-                </>
+                  ))
+                  .concat([<Route key="*" path="*" element={<AppView currentRoute={ErrorNotFoundRoute} />} />])
               )}
             </Routes>
           </MountedProvider>

@@ -144,6 +144,12 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       qa: "pcrDeleteLink",
     };
 
+    const manageTeamMembersLink = {
+      route: props.routes.projectManageTeamMembersDashboard.getLink(pcrLinkArgs),
+      text: "Manage",
+      qa: "pcrManageTeamMembersLink",
+    };
+
     if (isPmOrMo && hasAnyUplift) {
       // If we only have 1 PCR item, show the view item link.
       if (pcr.items.length === 1) {
@@ -154,7 +160,11 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       }
     } else {
       if (pcrStatusMetadata?.editableByPm && isPmAllowedToEdit && project.isActive) {
-        links.push(editLink);
+        if (pcr.items[0].type === PCRItemType.ManageTeamMembers) {
+          links.push(manageTeamMembersLink);
+        } else {
+          links.push(editLink);
+        }
       } else if (pcrStatusMetadata?.reviewableByMo && isMo && project.isActive) {
         links.push(reviewLink);
       } else if (isPmOrMo) {

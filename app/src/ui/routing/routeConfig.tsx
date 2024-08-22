@@ -67,6 +67,7 @@ import { ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page"
 import { PCRDeleteRoute } from "@ui/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.page";
+import { ManageTeamMembersDashboardRoute } from "@ui/containers/pages/projects/details/manageTeamMembers/dashboard/ManageTeamMembersDashboard";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -132,6 +133,7 @@ export const routeConfig = {
   projectSetupPostcode: ProjectSetupPartnerPostcodeRoute,
   projectSetupBankStatement: ProjectSetupBankStatementRoute,
   projectSetupBankDetailsVerify: ProjectSetupBankDetailsVerifyRoute,
+  projectManageTeamMembersDashboard: ManageTeamMembersDashboardRoute,
   reviewClaim: ReviewClaimRoute,
   reviewClaimLineItems: ReviewClaimLineItemsRoute,
   forecastDashboard: ForecastDashboardRoute,

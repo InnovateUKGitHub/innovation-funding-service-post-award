@@ -140,7 +140,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return (node?.Id ?? "") as PartnerId;
   },
   accountId(node) {
-    return node?.Acc_AccountId__c?.value || node?.Acc_AccountId__r?.Id || "";
+    return (node?.Acc_AccountId__c?.value || node?.Acc_AccountId__r?.Id || "") as AccountId;
   },
   auditReportFrequencyName(node) {
     return node?.Acc_AuditReportFrequency__c?.value ?? "";

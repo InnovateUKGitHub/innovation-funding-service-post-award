@@ -69,7 +69,7 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
 
 export const PartnerDetailsRoute = defineRoute<Params>({
   routeName: "partnerDetails",
-  routePath: "/projects/:projectId/details/:partnerId",
+  routePath: "/projects/:projectId/details/partner/:partnerId",
   container: PartnerDetailsPage,
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetails.title),

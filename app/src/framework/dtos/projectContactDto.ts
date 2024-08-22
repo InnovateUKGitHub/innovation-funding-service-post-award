@@ -4,12 +4,14 @@ export type ProjectRoleName =
   | "Finance contact"
   | "Innovation lead"
   | "IPM"
-  | "Associate";
+  | "Associate"
+  | "Main Company Contact";
 
 export interface ProjectContactDto {
   accountId: AccountId | undefined;
+  contactId: ContactId;
   email: string;
-  id: ContactId;
+  id: ProjectContactLinkId;
   name: string;
   projectId: ProjectId;
   role: ProjectRoleName;
