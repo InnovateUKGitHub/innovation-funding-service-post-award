@@ -58,7 +58,7 @@ describe("GetAvailableItemTypesQuery", () => {
 
       // MultiplePartnerFinancialVirement, TimeExtension, Remove Partner and Rename Partner should be disabled.
       // Remove Partner is disabled because there are no partners in this project to remove.
-      expect(hiddenItems).toHaveLength(4);
+      expect(hiddenItems).toHaveLength(5);
     });
   });
 });
