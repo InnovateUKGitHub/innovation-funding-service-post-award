@@ -5,7 +5,8 @@ export type ProjectRoleName =
   | "Innovation lead"
   | "IPM"
   | "Associate"
-  | "Main Company Contact";
+  | "Main Company Contact"
+  | "KB Admin";
 
 export interface ProjectContactDto {
   accountId: AccountId | undefined;

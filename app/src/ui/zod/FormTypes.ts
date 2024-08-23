@@ -28,6 +28,12 @@ enum FormTypes {
 
   PartnerDetailsEdit = "partnerDetailsEdit",
 
+  // Project Replace a Team Member
+  ProjectManageTeamMembersCreate = "projectManageTeamMembersCreate",
+  ProjectManageTeamMembersUpdate = "projectManageTeamMembersUpdate",
+  ProjectManageTeamMembersReplace = "projectManageTeamMembersReplace",
+  ProjectManageTeamMembersDelete = "projectManageTeamMembersDelete",
+
   // Forecast Tile
   ForecastTileForecast = "forecastTileForecast",
 

@@ -8,11 +8,17 @@ import { ActiveProjectError, ZodFormHandlerError } from "../common/appError";
 import { DateTime } from "luxon";
 import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 
+export type ServerUpdateProjectContactsCommandContact = PickRequiredFromPartial<
+  ProjectContactDto,
+  "id" | "associateStartDate"
+>;
+
 export class UpdateProjectContactsCommand extends AuthorisedAsyncCommandBase<boolean> {
   public readonly runnableName: string = "UpdateProjectContactsCommand";
+
   constructor(
     private readonly projectId: ProjectId,
-    private readonly contacts: PickRequiredFromPartial<ProjectContactDto, "id" | "associateStartDate">[],
+    private readonly contacts: ServerUpdateProjectContactsCommandContact[],
   ) {
     super();
   }

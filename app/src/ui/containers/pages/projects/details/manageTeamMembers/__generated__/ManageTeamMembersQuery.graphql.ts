@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f68e979d50bc33fe2359a1b798083891>>
+ * @generated SignedSource<<6b955124f909c008823d8270f0364eb0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,10 +10,10 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type ManageTeamMembersDashboardQuery$variables = {
+export type ManageTeamMembersQuery$variables = {
   projectId: string;
 };
-export type ManageTeamMembersDashboardQuery$data = {
+export type ManageTeamMembersQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
@@ -41,10 +41,19 @@ export type ManageTeamMembersDashboardQuery$data = {
                       readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Acc_ContactId__r: {
+                      readonly FirstName: {
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Id: string;
+                      readonly LastName: {
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Name: {
                         readonly value: string | null | undefined;
                       } | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_EmailOfSFContact__c: {
+                      readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Acc_Role__c: {
                       readonly value: string | null | undefined;
@@ -61,9 +70,9 @@ export type ManageTeamMembersDashboardQuery$data = {
     };
   };
 };
-export type ManageTeamMembersDashboardQuery = {
-  response: ManageTeamMembersDashboardQuery$data;
-  variables: ManageTeamMembersDashboardQuery$variables;
+export type ManageTeamMembersQuery = {
+  response: ManageTeamMembersQuery$data;
+  variables: ManageTeamMembersQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -107,19 +116,16 @@ v3 = [
     "storageKey": null
   }
 ],
-v4 = [
-  (v2/*: any*/),
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "StringValue",
-    "kind": "LinkedField",
-    "name": "Name",
-    "plural": false,
-    "selections": (v3/*: any*/),
-    "storageKey": null
-  }
-],
+v4 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "Name",
+  "plural": false,
+  "selections": (v3/*: any*/),
+  "storageKey": null
+},
 v5 = {
   "alias": null,
   "args": [
@@ -185,7 +191,10 @@ v5 = {
                           "kind": "LinkedField",
                           "name": "Acc_AccountId__r",
                           "plural": false,
-                          "selections": (v4/*: any*/),
+                          "selections": [
+                            (v2/*: any*/),
+                            (v4/*: any*/)
+                          ],
                           "storageKey": null
                         }
                       ],
@@ -247,7 +256,30 @@ v5 = {
                           "kind": "LinkedField",
                           "name": "Acc_ContactId__r",
                           "plural": false,
-                          "selections": (v4/*: any*/),
+                          "selections": [
+                            (v2/*: any*/),
+                            (v4/*: any*/),
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "StringValue",
+                              "kind": "LinkedField",
+                              "name": "FirstName",
+                              "plural": false,
+                              "selections": (v3/*: any*/),
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "StringValue",
+                              "kind": "LinkedField",
+                              "name": "LastName",
+                              "plural": false,
+                              "selections": (v3/*: any*/),
+                              "storageKey": null
+                            }
+                          ],
                           "storageKey": null
                         },
                         {
@@ -266,6 +298,16 @@ v5 = {
                           "concreteType": "PicklistValue",
                           "kind": "LinkedField",
                           "name": "Acc_Role__c",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "EmailValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_EmailOfSFContact__c",
                           "plural": false,
                           "selections": (v3/*: any*/),
                           "storageKey": null
@@ -328,7 +370,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ManageTeamMembersDashboardQuery",
+    "name": "ManageTeamMembersQuery",
     "selections": [
       {
         "alias": null,
@@ -377,7 +419,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ManageTeamMembersDashboardQuery",
+    "name": "ManageTeamMembersQuery",
     "selections": [
       {
         "alias": null,
@@ -593,16 +635,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "051cb892949c0226b8b9f497998a2de0",
+    "cacheID": "a38dceab27136f01f46c52cbe8d31947",
     "id": null,
     "metadata": {},
-    "name": "ManageTeamMembersDashboardQuery",
+    "name": "ManageTeamMembersQuery",
     "operationKind": "query",
-    "text": "query ManageTeamMembersDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ManageTeamMembersQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      FirstName {\n                        value\n                      }\n                      LastName {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b68419055ea088339af49a2806a92cc1";
+(node as any).hash = "5caf1a5d806e377f9fc5917a550f13d0";
 
 export default node;

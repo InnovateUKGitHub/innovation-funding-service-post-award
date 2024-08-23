@@ -1119,20 +1119,172 @@
       "backButton": "Return to project change requests"
     },
     "manageTeamMembers": {
-      "dashboard": {
-        "title": "Manage team members",
+      "table": {
         "contactName": "Name",
         "contactOrg": "Organisation",
-        "contactOptions": "Manage",
+        "contactOptions": "Manage"
+      },
+      "dashboard": {
+        "title": "Manage team members",
         "replaceProjectManager": "Replace project manager",
         "replaceFinanceContact": "Replace finance contact",
         "replaceMainCompanyContact": "Replace main company contact",
-        "inviteMainCompanyContact": "Invite main company contact",
+        "replaceKnowledgeBaseAdministrator": "Replace knowledge base administrator",
         "inviteAssociate": "Invite associate",
+        "inviteMainCompanyContact": "Invite main company contact",
+        "inviteKnowledgeBaseAdministrator": "Invite knowledge base administrator",
         "backLink": "Back to project change requests",
         "backButton": "Cancel and return to start a new request page",
         "edit": "Edit",
-        "remove": "Remove"
+        "remove": "Remove",
+        "replace": "Replace"
+      },
+      "modify": {
+        "backLink": "Back to manage team members",
+        "labels": {
+          "organisation": "Organisation",
+          "firstName": "First name",
+          "lastName": "Last name",
+          "email": "Email",
+          "changeEmail": "To change the email address, please contact customer support service by calling 0300 321 4357 or email [support@iuk.ukri.org](mailto:support@iuk.ukri.org)",
+          "noneProvided": "None provided",
+          "cancel": "Cancel",
+          "saveAndContinue": "Select team member"
+        },
+        "messages": {
+          "invalid": {
+            "title": "Manage team members",
+            "subtitle": "Please check the web address or search term you entered for any errors. You can return to the <0>manage team members</0> PCR or go back to the <1>Innovate UK homepage</1>."
+          },
+          "projectManageTeamMembersCreate": {
+            "projectManagers": {
+              "title": "Invite a new project manager",
+              "subtitle": "Enter the new project manager's details before sending invitation.",
+              "apply": "Send invitation"
+            },
+            "financeContacts": {
+              "title": "Invite a new finance contact",
+              "subtitle": "Enter the new finance contact's details before sending invitation.",
+              "apply": "Send invitation"
+            },
+            "knowledgeBaseAdministrators": {
+              "title": "Invite a new knowledge base administrator",
+              "subtitle": "Enter the new knowledge base administrator's details before sending invitation.",
+              "apply": "Send invitation"
+            },
+            "mainCompanyContacts": {
+              "title": "Invite a new main company contact",
+              "subtitle": "Enter the new main company contact's details before sending invitation.",
+              "apply": "Send invitation"
+            },
+            "associates": {
+              "title": "Invite a new associate",
+              "subtitle": "Enter the new associate's details before sending invitation.",
+              "apply": "Send invitation"
+            }
+          },
+          "projectManageTeamMembersReplace": {
+            "projectManagers": {
+              "title": "Replace project manager",
+              "subtitle": "This page allows you to remove the current project manager and replace with a new project manager. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "heading": "Invite new project manager",
+              "subheading": "Enter the new project manager details before sending invitation.",
+              "apply": "Confirm replacement and send invitation",
+              "pclSelectPlaceholder": "-- Select a project manager --"
+            },
+            "financeContacts": {
+              "title": "Replace finance contact",
+              "subtitle": "This page allows you to select the finance contact to remove and replace them with a new finance contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "heading": "Invite new finance contact",
+              "subheading": "Enter the new finance contact details before sending invitation.",
+              "apply": "Confirm replacement and send invitation",
+              "pclSelectPlaceholder": "-- Select a finance contact --"
+            },
+            "mainCompanyContacts": {
+              "title": "Replace main company contact",
+              "subtitle": "This page allows you to remove the current main company contact and replace with a new main company contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "heading": "Invite new main company contact",
+              "subheading": "Enter the new main company contact details before sending invitation.",
+              "apply": "Confirm replacement and send invitation",
+              "pclSelectPlaceholder": "-- Select a main company contact --"
+            },
+            "knowledgeBaseAdministrators": {
+              "title": "Replace knowledge base administrator",
+              "subtitle": "This page allows you to remove the current knowledge base administrator and replace with a new knowledge base administrator. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "heading": "Invite new knowledge base administrator",
+              "subheading": "Enter the new knowledge base administrator details before sending invitation.",
+              "apply": "Confirm replacement and send invitation",
+              "pclSelectPlaceholder": "-- Select a knowledge base administrator --"
+            },
+            "associates": {
+              "title": "Replace associate",
+              "subtitle": "This page allows you to remove the current associate and replace with a new associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "heading": "Invite new associate",
+              "subheading": "Enter the new associate details before sending invitation.",
+              "apply": "Confirm replacement and send invitation",
+              "pclSelectPlaceholder": "-- Select an associate --"
+            }
+          },
+          "projectManageTeamMembersUpdate": {
+            "projectManagers": {
+              "title": "Edit project manager",
+              "subtitle": "This page allows you to edit a project manager",
+              "apply": "Save changes"
+            },
+            "financeContacts": {
+              "title": "Edit finance contact",
+              "subtitle": "This page allows you to edit a finance contact",
+              "apply": "Save changes"
+            },
+            "mainCompanyContacts": {
+              "title": "Edit main company contact",
+              "subtitle": "This page allows you to edit a main company contact",
+              "apply": "Save changes"
+            },
+            "knowledgeBaseAdministrators": {
+              "title": "Edit knowledge base administrator",
+              "subtitle": "This page allows you to edit a knowledge base administrator",
+              "apply": "Save changes"
+            },
+            "associates": {
+              "title": "Edit associate",
+              "subtitle": "This page allows you to edit an associate",
+              "apply": "Save changes"
+            }
+          },
+          "projectManageTeamMembersDelete": {
+            "projectManagers": {
+              "title": "Confirm removal of project manager",
+              "subtitle": "This page allows you to remove the below project manager. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "apply": "Remove project manager",
+              "pclSelectPlaceholder": "-- Select a project manager --"
+            },
+            "financeContacts": {
+              "title": "Confirm removal of finance contact",
+              "subtitle": "This page allows you to remove the below finance contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "apply": "Remove finance contact",
+              "pclSelectPlaceholder": "-- Select a finance contact --"
+            },
+            "mainCompanyContacts": {
+              "title": "Confirm removal of main company contact",
+              "subtitle": "This page allows you to remove the below main company contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "apply": "Remove main company contact",
+              "pclSelectPlaceholder": "-- Select a main company contact --"
+            },
+            "knowledgeBaseAdministrators": {
+              "title": "Confirm removal of knowledge base administrator",
+              "subtitle": "This page allows you to remove the below knowledge base administrator. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "apply": "Remove knowledge base administrator",
+              "pclSelectPlaceholder": "-- Select a knowledge base administrator --"
+            },
+            "associates": {
+              "title": "Confirm removal of associate",
+              "subtitle": "This page allows you to remove the belown associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "apply": "Remove associate",
+              "pclSelectPlaceholder": "-- Select an associate --"
+            }
+          }
+        }
       }
     }
   },
@@ -1352,8 +1504,10 @@
     "innovationLeads_other": "Innovation leads",
     "associates_one": "Associate",
     "associates_other": "Associates",
-    "mainCompanyContacts_one": "Main Company Contact",
-    "mainCompanyContacts_other": "Main Company Contacts",
+    "knowledgeBaseAdministrators_one": "Knowledge base administrator",
+    "knowledgeBaseAdministrators_other": "Knowledge base administrators",
+    "mainCompanyContacts_one": "Main company contact",
+    "mainCompanyContacts_other": "Main company contacts",
     "ipms_one": "IPM",
     "ipms_other": "IPMs",
     "otherContacts": "Other contacts",
@@ -2025,6 +2179,9 @@
     },
     "errors": {
       "invalid": "A validation error occurred.",
+      "invalid_string": {
+        "email": "Enter a valid email address."
+      },
       "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form.",
       "generic": {
         "textarea": {
@@ -2977,6 +3134,27 @@
               "too_small": "The start date must be the same as or after 1 January 2000."
             }
           }
+        }
+      }
+    },
+    "project": {
+      "manageTeamMembers": {
+        "pclId": {
+          "label": "team member",
+          "errors": {
+            "invalid_string": {
+              "startsWith": "Select a team member."
+            }
+          }
+        },
+        "firstName": {
+          "label": "First name"
+        },
+        "lastName": {
+          "label": "Last name"
+        },
+        "email": {
+          "label": "Email"
         }
       }
     }

@@ -1,7 +1,15 @@
 import { soql } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact" | "Associate";
+export type SalesforceRole =
+  | "Monitoring officer"
+  | "Project Manager"
+  | "Finance contact"
+  | "Innovation lead"
+  | "IPM"
+  | "Associate"
+  | "Main Company Contact"
+  | "KB Admin";
 
 export interface ISalesforceProjectContact {
   Id: ProjectContactLinkId;
@@ -25,8 +33,15 @@ export interface ISalesforceProjectContact {
 }
 
 export interface IProjectContactsRepository {
+  getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact>;
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
+  insert(
+    contact: PickRequiredFromPartial<
+      ISalesforceProjectContact,
+      "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
+    >,
+  ): Promise<ProjectContactLinkId>;
   update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean>;
 }
 
@@ -58,12 +73,25 @@ export class ProjectContactsRepository
     "Associate_Start_Date__c",
   ];
 
+  getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact> {
+    return super.loadItem({ Id: pclId });
+  }
+
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]> {
     return this.where(soql`Acc_ProjectId__c = ${projectId}`);
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
     return this.where(soql`Acc_ContactId__c IN (SELECT ContactId FROM User WHERE Username = ${email})`);
+  }
+
+  public async insert(
+    contact: Pick<
+      ISalesforceProjectContact,
+      "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c" | "Associate_Start_Date__c"
+    >,
+  ): Promise<ProjectContactLinkId> {
+    return super.insertItem(contact) as Promise<ProjectContactLinkId>;
   }
 
   public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {

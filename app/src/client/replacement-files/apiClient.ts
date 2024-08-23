@@ -107,6 +107,7 @@ const clientApi: IApiClient<"client"> = {
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
   },
   projectContacts: {
+    create: params => ajaxPost(`/api/project-contacts/${params.projectId}`, params.contact),
     update: params => ajaxPut(`/api/project-contacts/${params.projectId}`, params.contacts),
   },
   partners: {

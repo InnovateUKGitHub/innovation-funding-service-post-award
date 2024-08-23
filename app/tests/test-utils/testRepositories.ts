@@ -235,9 +235,29 @@ class ProjectContactTestRepository
     return super.getWhere(x => x.Acc_ContactId__r.Email === email);
   }
 
+  getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact> {
+    return super.getOne(x => x.Id === pclId);
+  }
+
+  insert(
+    contact: PickRequiredFromPartial<
+      ISalesforceProjectContact,
+      "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
+    >,
+  ): Promise<ProjectContactLinkId> {
+    const Id = String(this.Items.length + 1) as ProjectContactLinkId;
+
+    super.insertOne({
+      ...contact,
+      Id,
+    });
+
+    return Id;
+  }
+
   update(items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
     for (const item of items) {
-      const foundItem = this.Items.find(x => x.Id === item.Id);
+      const foundItem = this.getById(item.Id);
       if (!foundItem) return Promise.resolve(false);
       foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c ?? null;
     }

@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
-const manageTeamMembersDashboardQuery = graphql`
-  query ManageTeamMembersDashboardQuery($projectId: ID!) {
+const manageTeamMembersQuery = graphql`
+  query ManageTeamMembersQuery($projectId: ID!) {
     salesforce {
       uiapi {
         ...PageFragment
@@ -35,11 +35,20 @@ const manageTeamMembersDashboardQuery = graphql`
                         Name {
                           value
                         }
+                        FirstName {
+                          value
+                        }
+                        LastName {
+                          value
+                        }
                       }
                       Acc_AccountId__c {
                         value
                       }
                       Acc_Role__c {
+                        value
+                      }
+                      Acc_EmailOfSFContact__c {
                         value
                       }
                     }
@@ -54,4 +63,4 @@ const manageTeamMembersDashboardQuery = graphql`
   }
 `;
 
-export { manageTeamMembersDashboardQuery };
+export { manageTeamMembersQuery };

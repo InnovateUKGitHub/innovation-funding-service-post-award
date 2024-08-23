@@ -68,6 +68,12 @@ import { PCRDeleteRoute } from "@ui/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.page";
 import { ManageTeamMembersDashboardRoute } from "@ui/containers/pages/projects/details/manageTeamMembers/dashboard/ManageTeamMembersDashboard";
+import {
+  ManageTeamMembersCreateRoute,
+  ManageTeamMembersDeleteRoute,
+  ManageTeamMembersReplaceRoute,
+  ManageTeamMembersUpdateRoute,
+} from "@ui/containers/pages/projects/details/manageTeamMembers/BaseManageTeamMember.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -139,6 +145,10 @@ export const routeConfig = {
   forecastDashboard: ForecastDashboardRoute,
   viewForecast: ViewForecastRoute,
   forecastUpdate: UpdateForecastRoute,
+  manageTeamMembersCreateRoute: ManageTeamMembersCreateRoute,
+  manageTeamMembersReplaceRoute: ManageTeamMembersReplaceRoute,
+  manageTeamMembersUpdateRoute: ManageTeamMembersUpdateRoute,
+  manageTeamMembersDeleteRoute: ManageTeamMembersDeleteRoute,
 } as const;
 
 export const getRoutes = () => Object.entries(routeConfig);

@@ -11,6 +11,8 @@ type ContactNode = GQL.PartialNode<{
   Acc_ContactId__r: GQL.Maybe<{
     Id: string;
     Name: GQL.Value<string>;
+    LastName?: GQL.Value<string>;
+    FirstName?: GQL.Value<string>;
   }>;
   Acc_UserId__r: GQL.Maybe<{
     Name: GQL.Value<string>;
@@ -23,9 +25,12 @@ type ContactNode = GQL.PartialNode<{
   Associate_Start_Date__c: GQL.Value<string>;
 }>;
 
-type ContactDtoMapping = ProjectContactDto;
+export interface ProjectContactDtoGql extends ProjectContactDto {
+  firstName: string | undefined;
+  lastName: string | undefined;
+}
 
-const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
+const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
   accountId(node) {
     return (node?.Acc_AccountId__c?.value ?? "unknown") as AccountId;
   },
@@ -37,6 +42,12 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
   },
   email(node) {
     return node?.Acc_EmailOfSFContact__c?.value ?? "";
+  },
+  firstName(node) {
+    return node?.Acc_ContactId__r?.FirstName?.value ?? undefined;
+  },
+  lastName(node) {
+    return node?.Acc_ContactId__r?.LastName?.value ?? undefined;
   },
   name(node) {
     const externalUserName = node?.Acc_ContactId__r?.Name?.value && node.Acc_ContactId__r.Name.value;
@@ -55,6 +66,7 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
       "IPM",
       "Associate",
       "Main Company Contact",
+      "KB Admin",
     ].includes(node?.Acc_Role__c?.value ?? "")
       ? (node?.Acc_Role__c?.value as ProjectRoleName)
       : ("unknown role" as ProjectRoleName);
@@ -77,16 +89,16 @@ const mapper: GQL.DtoMapper<ContactDtoMapping, ContactNode> = {
  * Maps a specified Contact Node from a GQL query to
  * the ContactDto to ensure consistency and compatibility in the application
  */
-export function mapToContactDto<T extends ContactNode, PickList extends keyof ContactDtoMapping>(
+export function mapToContactDto<T extends ContactNode, PickList extends keyof ProjectContactDtoGql>(
   loanNode: T,
   pickList: PickList[],
-): Pick<ContactDtoMapping, PickList> {
+): Pick<ProjectContactDtoGql, PickList> {
   return pickList.reduce(
     (dto, field) => {
       dto[field] = mapper[field](loanNode);
       return dto;
     },
-    {} as Pick<ContactDtoMapping, PickList>,
+    {} as Pick<ProjectContactDtoGql, PickList>,
   );
 }
 
@@ -95,8 +107,8 @@ export function mapToContactDto<T extends ContactNode, PickList extends keyof Co
  */
 export function mapToContactDtoArray<
   T extends ReadonlyArray<GQL.Maybe<{ node: ContactNode }>> | null,
-  PickList extends keyof ContactDtoMapping,
->(edges: T, pickList: PickList[]): Pick<ContactDtoMapping, PickList>[] {
+  PickList extends keyof ProjectContactDtoGql,
+>(edges: T, pickList: PickList[]): Pick<ProjectContactDtoGql, PickList>[] {
   return (
     edges?.map(node => {
       return mapToContactDto(node?.node ?? null, pickList);

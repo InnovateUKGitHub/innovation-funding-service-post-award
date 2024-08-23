@@ -1,5 +1,5 @@
 import { isNil } from "lodash";
-import { z, ZodIssueCode } from "zod";
+import { z, ZodIssueCode, ZodString } from "zod";
 
 const defaultMaxLength = 30_000;
 const defaultMinLength = 0;
@@ -18,16 +18,17 @@ const defaultMinLength = 0;
 export const getTextValidation = <Required extends boolean = false>({
   maxLength = defaultMaxLength,
   minLength = defaultMinLength,
+  base = z.string(),
   required,
   params = {},
 }: {
   maxLength?: number;
   minLength?: number;
+  base?: ZodString;
   required: Required;
   params?: AnyObject;
 }) => {
-  const validationRule = z
-    .string()
+  const validationRule = base
     .trim()
     .optional()
     .nullable()
