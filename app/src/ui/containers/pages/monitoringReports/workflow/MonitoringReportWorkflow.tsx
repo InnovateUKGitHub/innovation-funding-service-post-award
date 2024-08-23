@@ -14,7 +14,15 @@ import { MonitoringReportWorkflowDef } from "@ui/containers/pages/monitoringRepo
 import { useContent } from "@ui/hooks/content.hook";
 import { noop } from "lodash";
 import { createContext } from "react";
-import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormWatch, useForm } from "react-hook-form";
+import {
+  FormState,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  UseFormReset,
+  UseFormTrigger,
+  UseFormWatch,
+  useForm,
+} from "react-hook-form";
 import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBackLink";
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
 import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
@@ -31,7 +39,9 @@ type MonitoringReportContextType = {
   projectId: ProjectId;
   id: MonitoringReportId;
   register: UseFormRegister<FormValues>;
+  trigger: UseFormTrigger<FormValues>;
   watch: UseFormWatch<FormValues>;
+  formState: FormState<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   isFetching: boolean;
   onUpdate: ({ data }: { data: FormValues }) => Promise<void>;
@@ -53,7 +63,9 @@ type MonitoringReportContextType = {
 export const MonitoringReportFormContext = createContext<MonitoringReportContextType>({
   register: noop as UseFormRegister<FormValues>,
   watch: noop as UseFormWatch<FormValues>,
+  trigger: noop as UseFormTrigger<FormValues>,
   handleSubmit: noop as UseFormHandleSubmit<FormValues>,
+  formState: {} as FormState<FormValues>,
   isFetching: false,
   onUpdate: noop as unknown as ({ data }: { data: FormValues }) => Promise<void>,
   validatorErrors: undefined,
@@ -100,7 +112,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState, setValue, reset } = useForm<FormValues>({
+  const { register, watch, handleSubmit, formState, setValue, reset, trigger } = useForm<FormValues>({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
@@ -139,6 +151,8 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
   const MonitoringReportContextValues = {
     register,
     watch,
+    trigger,
+    formState,
     handleSubmit,
     isFetching,
     onUpdate,

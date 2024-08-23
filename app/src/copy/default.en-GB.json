@@ -2114,6 +2114,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for scope.",
               "too_small": "Enter a score for scope."
             }
           },
@@ -2124,6 +2125,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for time.",
               "too_small": "Enter a score for time."
             }
           },
@@ -2134,6 +2136,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for cost.",
               "too_small": "Enter a score for cost."
             }
           },
@@ -2144,6 +2147,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for exploitation.",
               "too_small": "Enter a score for exploitation."
             }
           },
@@ -2154,6 +2158,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for risk management.",
               "too_small": "Enter a score for risk management."
             }
           },
@@ -2164,6 +2169,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for project planning.",
               "too_small": "Enter a score for project planning."
             }
           },
@@ -2196,6 +2202,7 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for scope.",
               "too_small": "Enter a score for scope."
             }
           },
@@ -2206,6 +2213,8 @@
         {
           "optionId": {
             "errors": {
+              "custom": "Enter a score for time.",
+              "invalid_type": "Enter a score for time.",
               "too_small": "Enter a score for time."
             }
           },
@@ -2216,6 +2225,7 @@
         {
           "optionId": {
             "errors": {
+              "invalid_type": "Enter a score for cost.",
               "too_small": "Enter a score for cost."
             }
           },
@@ -2226,6 +2236,7 @@
         {
           "optionId": {
             "errors": {
+              "invalid_type": "Enter a score for exploitation.",
               "too_small": "Enter a score for exploitation."
             }
           },
@@ -2236,6 +2247,7 @@
         {
           "optionId": {
             "errors": {
+              "invalid_type": "Enter a score for risk management.",
               "too_small": "Enter a score for risk management."
             }
           },
@@ -2246,6 +2258,7 @@
         {
           "optionId": {
             "errors": {
+              "invalid_type": "Enter a score for project planning.",
               "too_small": "Enter a score for project planning."
             }
           },

@@ -14,11 +14,23 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: number }) => {
   const { getContent } = useContent();
-  const { report, mode, register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset, registerButton } =
-    useContext(MonitoringReportFormContext);
+  const {
+    report,
+    mode,
+    register,
+    watch,
+    handleSubmit,
+    onUpdate,
+    isFetching,
+    validatorErrors,
+    reset,
+    registerButton,
+    trigger,
+  } = useContext(MonitoringReportFormContext);
 
   const i = report.questions.findIndex(x => x.displayOrder === questionNumber);
   const q = report.questions[i];
@@ -31,7 +43,10 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
       }))
     : [];
 
+  const { resetState } = useFormRevalidate(watch, trigger);
+
   useEffect(() => {
+    resetState();
     reset({
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
