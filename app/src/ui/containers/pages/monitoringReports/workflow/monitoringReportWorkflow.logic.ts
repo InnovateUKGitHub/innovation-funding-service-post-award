@@ -126,6 +126,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
         // fetch new gql data if there is a change made
         setFetchKey(s => s + 1);
       }
+
       if (link) navigate(link.path);
       return;
     },

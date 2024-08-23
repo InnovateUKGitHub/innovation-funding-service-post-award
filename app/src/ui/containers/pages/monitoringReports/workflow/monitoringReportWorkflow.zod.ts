@@ -9,7 +9,7 @@ export const monitoringReportWorkflowSchema = z.object({
   questions: z.array(
     z
       .object({
-        optionId: z.string(),
+        optionId: z.string().nullable(),
         comments: getTextValidation({
           maxLength: 32_000,
           required: false,
@@ -24,3 +24,5 @@ export const monitoringReportWorkflowSchema = z.object({
       ),
   ),
 });
+
+export type MonitoringReportWorkflowSchema = typeof monitoringReportWorkflowSchema;
