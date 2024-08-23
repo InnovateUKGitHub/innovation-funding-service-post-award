@@ -6,11 +6,15 @@ import { FieldValues, UseFormTrigger, UseFormWatch } from "react-hook-form";
  * -----------------
  *
  * handler to force validation on change events. Auto validation does not necessarily occur
- * with derived fields and needs to be triggered. This hook will force revalidation
+ * with derived fields and needs to be triggered. This hook will force revalidation.
+ *
+ * The hook also returns a function that can be called to reset the initial validation state
+ * to false. This can be useful in some workflows where a single form is used in multiple steps
  *
  * @param watch the React Hook Form watch method
  * @param trigger the React Hook Form trigger method
  * @param {boolean} [shouldInitiallyValidate] defaults to false, set to true if form should be force revalidated initially
+ * @returns {{resetState: () => void}} a function to reset the initialState to false
  */
 export function useFormRevalidate<T extends FieldValues>(
   watch: UseFormWatch<T>,
@@ -46,4 +50,9 @@ export function useFormRevalidate<T extends FieldValues>(
       subscription.unsubscribe();
     };
   }, [watch, trigger]);
+  return {
+    resetState: () => {
+      hasSubmitted.current = false;
+    },
+  };
 }
