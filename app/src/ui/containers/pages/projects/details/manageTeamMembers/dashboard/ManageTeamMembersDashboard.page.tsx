@@ -1,11 +1,11 @@
 import { ProjectRole } from "@framework/constants/project";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
+import { BackLink, Link } from "@ui/components/atoms/Links/links";
+import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useContent } from "@ui/hooks/content.hook";
 import { ManageTeamMembersDashboardParams } from "./ManageTeamMembersDashboard.logic";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/molecules/Section/section";
 import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactListTable";
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
 import {

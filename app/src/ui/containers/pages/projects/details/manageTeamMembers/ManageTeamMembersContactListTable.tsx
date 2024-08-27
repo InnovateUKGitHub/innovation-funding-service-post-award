@@ -1,6 +1,6 @@
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
 
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useContent } from "@ui/hooks/content.hook";
 import { ManageTeamMembersTableData } from "./ManageTeamMember.logic";
 
