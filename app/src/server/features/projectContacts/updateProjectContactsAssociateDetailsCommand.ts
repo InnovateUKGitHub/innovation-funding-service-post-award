@@ -8,17 +8,17 @@ import { ActiveProjectError, ZodFormHandlerError } from "../common/appError";
 import { DateTime } from "luxon";
 import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 
-export type ServerUpdateProjectContactsCommandContact = PickRequiredFromPartial<
+export type ServerUpdateProjectContactsAssociateDetailsCommand = PickRequiredFromPartial<
   ProjectContactDto,
   "id" | "associateStartDate"
 >;
 
-export class UpdateProjectContactsCommand extends AuthorisedAsyncCommandBase<boolean> {
+export class UpdateProjectContactsAssociateDetailsCommand extends AuthorisedAsyncCommandBase<boolean> {
   public readonly runnableName: string = "UpdateProjectContactsCommand";
 
   constructor(
     private readonly projectId: ProjectId,
-    private readonly contacts: ServerUpdateProjectContactsCommandContact[],
+    private readonly contacts: ServerUpdateProjectContactsAssociateDetailsCommand[],
   ) {
     super();
   }
@@ -40,7 +40,7 @@ export class UpdateProjectContactsCommand extends AuthorisedAsyncCommandBase<boo
       throw new ZodFormHandlerError(this.contacts, validation.error.message, validation.error.issues);
     }
 
-    return await context.repositories.projectContacts.update(
+    return await context.repositories.projectContacts.updateAssociateDetails(
       this.contacts.map(x => ({
         Id: x.id,
         Associate_Start_Date__c: x.associateStartDate

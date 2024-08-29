@@ -48,7 +48,7 @@ const useOnContactSetupAssociateSubmit = ({
 
   return useOnUpdate<z.output<ContactSetupAssociateSchemaType>, unknown>({
     req(data) {
-      return clientsideApiClient.projectContacts.update({
+      return clientsideApiClient.projectContacts.updateAssociateDetails({
         projectId,
         contacts: data.contacts,
       });

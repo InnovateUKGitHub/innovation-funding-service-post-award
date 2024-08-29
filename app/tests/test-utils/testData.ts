@@ -239,6 +239,8 @@ export class TestData {
         return "Project Manager";
       case "Associate":
         return "Associate";
+      default:
+        throw new Error("Get role name can not handle role: " + role);
     }
   }
 
@@ -259,11 +261,12 @@ export class TestData {
       Acc_AccountId__c: ((partner && partner.accountId) || undefined) as AccountId,
       Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
       Acc_ContactId__r: {
-        Id: "Contact" + seed,
+        Id: ("Contact" + seed) as ContactId,
         Name: `Ms Contact ${seed}`,
         Email: `projectcontact${seed}@login.com`,
       },
       Acc_UserId__r: {
+        Id: "User" + seed,
         Name: "Mr Internal Contact",
         Username: `projectcontact${seed}@login.com.bjssdev`,
       },
@@ -272,6 +275,11 @@ export class TestData {
       Acc_StartDate__c: null,
       Acc_EndDate__c: null,
       Associate_Start_Date__c: null,
+      Acc_Inactive__c: false,
+      Acc_New_Team_Member__c: false,
+      Acc_Send_invitation__c: false,
+      Acc_Edited__c: false,
+      Acc_UserId__c: "User" + seed,
     };
 
     if (update) {

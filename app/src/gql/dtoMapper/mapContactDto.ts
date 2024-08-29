@@ -25,10 +25,7 @@ type ContactNode = GQL.PartialNode<{
   Associate_Start_Date__c: GQL.Value<string>;
 }>;
 
-export interface ProjectContactDtoGql extends ProjectContactDto {
-  firstName: string | undefined;
-  lastName: string | undefined;
-}
+export interface ProjectContactDtoGql extends ProjectContactDto {}
 
 const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
   accountId(node) {
@@ -44,10 +41,10 @@ const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
     return node?.Acc_EmailOfSFContact__c?.value ?? "";
   },
   firstName(node) {
-    return node?.Acc_ContactId__r?.FirstName?.value ?? undefined;
+    return node?.Acc_ContactId__r?.FirstName?.value ?? "";
   },
   lastName(node) {
-    return node?.Acc_ContactId__r?.LastName?.value ?? undefined;
+    return node?.Acc_ContactId__r?.LastName?.value ?? "";
   },
   name(node) {
     const externalUserName = node?.Acc_ContactId__r?.Name?.value && node.Acc_ContactId__r.Name.value;

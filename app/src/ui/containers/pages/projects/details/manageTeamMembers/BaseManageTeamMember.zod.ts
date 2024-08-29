@@ -1,6 +1,11 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { partnerIdValidation, pclIdValidation, projectIdValidation } from "@ui/zod/helperValidators.zod";
+import {
+  contactIdValidation,
+  partnerIdValidation,
+  pclIdValidation,
+  projectIdValidation,
+} from "@ui/zod/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -26,6 +31,7 @@ const updateTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersUpdate),
   projectId: projectIdValidation,
   pclId: pclIdValidation,
+  contactId: contactIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
 });

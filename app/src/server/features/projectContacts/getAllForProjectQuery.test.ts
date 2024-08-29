@@ -9,7 +9,7 @@ describe("getAllForProjectQuery", () => {
     const partner = context.testData.createPartner(project);
     const projectContact = context.testData.createFinanceContact(project, partner, x => {
       x.Acc_ContactId__r = {
-        Id: "ExpectedContactId",
+        Id: "ExpectedContactId" as ContactId,
         Name: "ExpectedContactName",
         Email: "contacts.login@test.com",
       };

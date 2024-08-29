@@ -34,7 +34,7 @@ const testPartnerData: PartnerDto[] = [
   },
 ] as PartnerDto[];
 
-const testContactData: ProjectContactDto[] = [
+const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
   {
     id: "100" as ProjectContactLinkId,
     name: "Ted Tester",

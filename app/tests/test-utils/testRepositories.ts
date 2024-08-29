@@ -102,6 +102,10 @@ import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { Readable } from "node:stream";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
+import {
+  IExternalContactsRepository,
+  ISalesforceExternalContact,
+} from "@server/repositories/externalContactRepository";
 
 class TestWriteStream extends Readable {
   private readonly id: string;
@@ -232,14 +236,14 @@ class ProjectContactTestRepository
   }
 
   getAllForUser(email: string) {
-    return super.getWhere(x => x.Acc_ContactId__r.Email === email);
+    return super.getWhere(x => x.Acc_ContactId__r?.Email === email);
   }
 
   getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact> {
     return super.getOne(x => x.Id === pclId);
   }
 
-  insert(
+  async insert(
     contact: PickRequiredFromPartial<
       ISalesforceProjectContact,
       "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
@@ -247,20 +251,47 @@ class ProjectContactTestRepository
   ): Promise<ProjectContactLinkId> {
     const Id = String(this.Items.length + 1) as ProjectContactLinkId;
 
-    super.insertOne({
+    await super.insertOne({
       ...contact,
       Id,
-    });
+    } as ISalesforceProjectContact);
 
-    return Id;
+    return Promise.resolve(Id);
   }
 
-  update(items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
+  async updateAssociateDetails(
+    items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
+  ): Promise<boolean> {
     for (const item of items) {
-      const foundItem = this.getById(item.Id);
+      const foundItem = await this.getById(item.Id);
       if (!foundItem) return Promise.resolve(false);
       foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c ?? null;
     }
+
+    return Promise.resolve(true);
+  }
+
+  async updateContactDetails(contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">): Promise<boolean> {
+    const foundItem = await this.getById(contact.Id);
+    if (!foundItem) return Promise.resolve(false);
+    foundItem.Acc_Edited__c = !!contact.Acc_Edited__c;
+
+    return Promise.resolve(true);
+  }
+}
+
+class ExternalContactTestRepository
+  extends TestRepository<ISalesforceExternalContact>
+  implements IExternalContactsRepository
+{
+  private getById(pclId: ContactId): Promise<ISalesforceExternalContact> {
+    return super.getOne(x => x.Id === pclId);
+  }
+  async update(contact: ISalesforceExternalContact): Promise<boolean> {
+    const foundItem = await this.getById(contact.Id);
+    if (!foundItem) return Promise.resolve(false);
+    foundItem.FirstName = contact.FirstName;
+    foundItem.LastName = contact.LastName;
 
     return Promise.resolve(true);
   }
@@ -1069,6 +1100,7 @@ export interface ITestRepositories extends IRepositories {
   projects: ProjectsTestRepository;
   partners: PartnerTestRepository;
   projectContacts: ProjectContactTestRepository;
+  externalContacts: ExternalContactTestRepository;
   claimTotalCostCategory: ClaimTotalCostTestRepository;
   permissionGroups: PermissionGroupTestRepository;
   recordTypes: RecordTypeTestRepository;
@@ -1106,6 +1138,7 @@ export const createTestRepositories = (): ITestRepositories => {
     projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(projectChangeRequests),
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),
+    externalContacts: new ExternalContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
     permissionGroups: new PermissionGroupTestRepository(),
     recordTypes: new RecordTypeTestRepository(),

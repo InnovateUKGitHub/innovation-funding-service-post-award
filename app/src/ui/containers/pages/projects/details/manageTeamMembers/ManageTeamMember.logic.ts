@@ -7,6 +7,7 @@ import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
 import { useMemo } from "react";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ManageTeamMemberRole } from "./BaseManageTeamMember.logic";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 
 type PclData = Pick<
   ProjectContactDtoGql,
@@ -22,11 +23,13 @@ interface ManageTeamMembersTableData {
 }
 
 const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
+  const [fetchKey] = useFetchKey();
   const data = useLazyLoadQuery<ManageTeamMembersQuery>(
     manageTeamMembersQuery,
     { projectId },
     {
-      fetchPolicy: "store-and-network",
+      fetchPolicy: "network-only",
+      fetchKey,
     },
   );
 

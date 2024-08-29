@@ -108,7 +108,8 @@ const clientApi: IApiClient<"client"> = {
   },
   projectContacts: {
     create: params => ajaxPost(`/api/project-contacts/${params.projectId}`, params.contact),
-    update: params => ajaxPut(`/api/project-contacts/${params.projectId}`, params.contacts),
+    updateAssociateDetails: params => ajaxPut(`/api/project-contacts/associate/${params.projectId}`, params.contacts),
+    updateContactDetails: params => ajaxPut(`/api/project-contacts/manage/${params.projectId}`, params.contact),
   },
   partners: {
     updatePartner: params =>

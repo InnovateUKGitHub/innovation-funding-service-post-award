@@ -20,4 +20,6 @@ export interface ProjectContactDto {
   startDate: Date | null;
   endDate: Date | null;
   associateStartDate: Date | null;
+  firstName: string;
+  lastName: string;
 }

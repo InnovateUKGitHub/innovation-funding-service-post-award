@@ -55,6 +55,7 @@ import { Cache } from "./cache";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
+import { ExternalContactsRepository } from "@server/repositories/externalContactRepository";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -175,6 +176,7 @@ export class Context implements IContext {
       partners: new PartnerRepository(connectionCallback, this.logger),
       projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeRepository(connectionCallback, this.logger),
       projectContacts: new ProjectContactsRepository(connectionCallback, this.logger),
+      externalContacts: new ExternalContactsRepository(connectionCallback, this.logger),
       permissionGroups: new PermissionGroupRepository(connectionCallback, this.logger),
       recordTypes: new RecordTypeRepository(connectionCallback, this.logger),
     };

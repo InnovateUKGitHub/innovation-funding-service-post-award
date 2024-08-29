@@ -60,7 +60,7 @@ const BaseManageTeamMember = ({
       pclId: defaultPclId,
     },
   });
-  const { onUpdate } = useOnBaseManageTeamMemberSubmit({ projectId });
+  const { onUpdate, isFetching, apiError } = useOnBaseManageTeamMemberSubmit({ projectId });
   const validationErrors = useZodErrors<z.output<BaseManageTeamMemberValidatorSchema>>(setError, formState.errors);
   const pclId = watch("pclId");
   const { memberToManage, defaults, hideBottomSection } = useManageTeamMembersDefault({ pclId, collated, method });
@@ -81,6 +81,7 @@ const BaseManageTeamMember = ({
       backLink={<BackLink route={backRoute}>{getContent(x => x.pages.manageTeamMembers.modify.backLink)}</BackLink>}
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
+      apiError={apiError}
     >
       <P>
         {validPage ? (
@@ -179,6 +180,7 @@ const BaseManageTeamMember = ({
               <input type="hidden" value={method} {...register("form")} />
               <input type="hidden" value={projectId} {...register("projectId")} />
               <input type="hidden" name="pclId" value={pclId} />
+              <input type="hidden" {...register("contactId")} value={memberToManage?.pcl.contactId} />
               {method !== ManageTeamMemberMethod.DELETE && (
                 <Section
                   title={
@@ -198,7 +200,12 @@ const BaseManageTeamMember = ({
                         {getContent(x => x.pages.manageTeamMembers.modify.labels.firstName)}
                       </Label>
                       <ValidationError error={getFieldState("firstName").error} />
-                      <TextInput inputWidth="one-third" defaultValue={defaults?.firstName} {...register("firstName")} />
+                      <TextInput
+                        inputWidth="one-third"
+                        defaultValue={defaults?.firstName}
+                        {...register("firstName")}
+                        disabled={isFetching}
+                      />
                     </FormGroup>
                   </Fieldset>
 
@@ -208,7 +215,12 @@ const BaseManageTeamMember = ({
                         {getContent(x => x.pages.manageTeamMembers.modify.labels.lastName)}
                       </Label>
                       <ValidationError error={getFieldState("lastName").error} />
-                      <TextInput inputWidth="one-third" defaultValue={defaults.lastName} {...register("lastName")} />
+                      <TextInput
+                        inputWidth="one-third"
+                        defaultValue={defaults.lastName}
+                        {...register("lastName")}
+                        disabled={isFetching}
+                      />
                     </FormGroup>
                   </Fieldset>
 
@@ -220,6 +232,7 @@ const BaseManageTeamMember = ({
                       <ValidationError error={getFieldState("partnerId").error} />
                       {method === ManageTeamMemberMethod.CREATE ? (
                         <DropdownSelect
+                          disabled={isFetching}
                           options={partners.map(x => ({ id: x.id, value: x.name }))}
                           {...register("partnerId")}
                         />
@@ -237,7 +250,12 @@ const BaseManageTeamMember = ({
                       <Label htmlFor="email">{getContent(x => x.pages.manageTeamMembers.modify.labels.email)}</Label>
                       <ValidationError error={getFieldState("email").error} />
                       {method === ManageTeamMemberMethod.CREATE || method === ManageTeamMemberMethod.REPLACE ? (
-                        <TextInput inputWidth="one-half" defaultValue={defaults?.email} {...register("email")} />
+                        <TextInput
+                          inputWidth="one-half"
+                          defaultValue={defaults?.email}
+                          {...register("email")}
+                          disabled={isFetching}
+                        />
                       ) : (
                         <Hint id="hint-for-email">
                           {memberToManage?.pcl?.email ||
@@ -257,7 +275,11 @@ const BaseManageTeamMember = ({
 
               <Fieldset>
                 <div className="govuk-button-group">
-                  <Button type="submit" styling={method !== ManageTeamMemberMethod.DELETE ? "Primary" : "Warning"}>
+                  <Button
+                    type="submit"
+                    styling={method !== ManageTeamMemberMethod.DELETE ? "Primary" : "Warning"}
+                    disabled={isFetching}
+                  >
                     {getContent(x => x.pages.manageTeamMembers.modify.messages[method][role].apply)}
                   </Button>
                   <Link styling="Link" route={backRoute}>

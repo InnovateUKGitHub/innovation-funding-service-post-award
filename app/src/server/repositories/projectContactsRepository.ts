@@ -14,22 +14,32 @@ export type SalesforceRole =
 export interface ISalesforceProjectContact {
   Id: ProjectContactLinkId;
   Acc_AccountId__c: AccountId | undefined;
-  Acc_ProjectId__c: string;
+  Acc_ProjectId__c: ProjectId;
   Acc_EmailOfSFContact__c: string;
   Acc_Role__c: SalesforceRole;
   RoleName: string;
   Acc_ContactId__r: {
-    Id: string;
-    Name: string;
-    Email: string;
+    Id: ContactId;
+    Name?: string;
+    Email?: string;
+    FirstName?: string;
+    LastName?: string;
   };
   Acc_UserId__r: {
-    Name: string;
-    Username: string;
+    Id: string;
+    Name?: string;
+    Username?: string;
+    FirstName?: string;
+    LastName?: string;
   } | null;
   Acc_StartDate__c: string | null;
   Acc_EndDate__c: string | null;
   Associate_Start_Date__c: string | null;
+  Acc_Inactive__c: boolean;
+  Acc_New_Team_Member__c: boolean;
+  Acc_Send_invitation__c: boolean;
+  Acc_Edited__c: boolean;
+  Acc_UserId__c: string;
 }
 
 export interface IProjectContactsRepository {
@@ -42,7 +52,10 @@ export interface IProjectContactsRepository {
       "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
     >,
   ): Promise<ProjectContactLinkId>;
-  update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean>;
+  updateAssociateDetails(
+    contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
+  ): Promise<boolean>;
+  updateContactDetails(contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">): Promise<boolean>;
 }
 
 /**
@@ -56,6 +69,7 @@ export class ProjectContactsRepository
 {
   protected readonly salesforceObjectName = "Acc_ProjectContactLink__c";
 
+  // create needs Acc_New_Team_Member__c and Acc_StartDate__c and Acc_Send_invitation__c
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_AccountId__c",
@@ -65,11 +79,21 @@ export class ProjectContactsRepository
     "toLabel(Acc_Role__c) RoleName",
     "Acc_ContactId__r.Id",
     "Acc_ContactId__r.Name",
+    "Acc_ContactId__r.FirstName",
+    "Acc_ContactId__r.LastName",
     "Acc_ContactId__r.Email",
+    "Acc_UserId__r.Id",
     "Acc_UserId__r.Name",
     "Acc_UserId__r.Username",
+    "Acc_UserId__r.FirstName",
+    "Acc_UserId__r.LastName",
+    "Acc_Inactive__c", // pass in with delete
     "Acc_StartDate__c",
-    "Acc_EndDate__c",
+    "Acc_New_Team_Member__c", // pass in with create
+    "Acc_Send_invitation__c", // with add new team member
+    "Acc_Edited__c", // pass in with edit
+    "Acc_EndDate__c", // pass in with delete
+    "Acc_UserId__c",
     "Associate_Start_Date__c",
   ];
 
@@ -94,7 +118,15 @@ export class ProjectContactsRepository
     return super.insertItem(contact) as Promise<ProjectContactLinkId>;
   }
 
-  public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
+  public async updateAssociateDetails(
+    contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
+  ): Promise<boolean> {
     return super.updateAll(contacts);
+  }
+
+  public async updateContactDetails(
+    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">,
+  ): Promise<boolean> {
+    return super.updateItem(contact);
   }
 }

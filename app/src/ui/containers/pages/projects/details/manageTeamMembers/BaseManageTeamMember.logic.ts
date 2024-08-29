@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FieldValues } from "react-hook-form";
 import { clientsideApiClient } from "@ui/apiClient";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 
 /**
  * You know, CRUD...
@@ -144,34 +145,32 @@ const useManageTeamMembersDefault = ({
 const useOnBaseManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) => {
   const navigate = useNavigate();
   const routes = useRoutes();
+  const [, setFetchKey] = useFetchKey();
 
-  return useOnUpdate<z.output<BaseManageTeamMemberValidatorSchema>, { pcrId: PcrId }, EmptyObject>({
+  return useOnUpdate<z.output<BaseManageTeamMemberValidatorSchema>, unknown, EmptyObject>({
     req: async data => {
-      console.log(data);
-
       switch (data.form) {
         case FormTypes.ProjectManageTeamMembersCreate:
           {
-            clientsideApiClient.projectContacts.update({
-              projectId,
-              contacts: [
-                {
-                  id: data.pclId,
-                  firstName: data.firstName,
-                  lastName: data.lastName,
-                },
-              ],
-            });
           }
           break;
         case FormTypes.ProjectManageTeamMembersReplace:
           {
           }
           break;
-        case FormTypes.ProjectManageTeamMembersUpdate:
-          {
-          }
-          break;
+        case FormTypes.ProjectManageTeamMembersUpdate: {
+          return await clientsideApiClient.projectContacts.updateContactDetails({
+            projectId,
+            contact: {
+              contactId: data.contactId,
+              id: data.pclId,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              form: data.form,
+            },
+          });
+        }
+
         case FormTypes.ProjectManageTeamMembersDelete:
           {
           }
@@ -179,15 +178,11 @@ const useOnBaseManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }
         default:
           throw new Error("Invalid manage team member action");
       }
-
-      return {
-        pcrId: "test" as PcrId,
-      };
     },
-    onSuccess(data, res) {
-      navigate(
-        routes.projectChangeRequestSubmittedForReview.getLink({ projectId: data.projectId, pcrId: res.pcrId }).path,
-      );
+    onSuccess() {
+      // navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId:  }).path);
+      setFetchKey(x => x + 1);
+      navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId }).path);
     },
   });
 };
