@@ -92,8 +92,10 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
   ) {
     const command = new UpdateProjectManageContactCommand(params.projectId, params.contact);
     await contextProvider.start(params).runCommand(command);
-    const query = new GetAllForProjectQuery(params.projectId);
-    return await contextProvider.start(params).runQuery(query);
+    const query = new GetProjectContactLinkByIdQuery(params.contact.id);
+    const contactItem = await contextProvider.start(params).runQuery(query);
+
+    return [contactItem];
   }
 }
 

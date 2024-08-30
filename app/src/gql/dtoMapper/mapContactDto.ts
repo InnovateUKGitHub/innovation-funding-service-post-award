@@ -23,6 +23,7 @@ type ContactNode = GQL.PartialNode<{
   Acc_StartDate__c: GQL.Value<string>;
   Acc_EndDate__c: GQL.Value<string>;
   Associate_Start_Date__c: GQL.Value<string>;
+  LastModifiedDate: GQL.Value<string>;
 }>;
 
 export interface ProjectContactDtoGql extends ProjectContactDto {}

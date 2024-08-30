@@ -8,7 +8,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends Document
   public readonly runnableName: string = "GetProjectChangeRequestDocumentOrItemDocumentQuery";
   constructor(
     private readonly projectId: ProjectId,
-    private readonly projectChangeRequestIdOrItemId: string,
+    private readonly projectChangeRequestIdOrItemId: PcrId | PcrItemId,
     documentId: string,
   ) {
     super(documentId);

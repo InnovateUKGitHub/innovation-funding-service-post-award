@@ -41,6 +41,10 @@ export interface PCRDto extends PCRBaseDto {
   reasoningStatusName: string;
 }
 
+export interface StandalonePcrDto extends PCRBaseDto {
+  type: PCRItemType;
+}
+
 export interface PCRItemBaseDto extends PCRItemSummaryDto {
   guidance?: string;
   id: PcrItemId;
@@ -204,6 +208,7 @@ export interface PCRItemTypeDto {
   hidden: boolean;
   hiddenReason: PCRItemHiddenReason;
   files: { name: string; relativeUrl: string }[];
+  standalone: boolean;
 }
 
 export interface ProjectChangeRequestStatusChangeDto {

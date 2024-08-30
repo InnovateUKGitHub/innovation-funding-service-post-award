@@ -14,7 +14,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
 
   constructor(
     private readonly projectId: ProjectId,
-    private readonly projectChangeRequestIdOrItemId: string,
+    private readonly projectChangeRequestIdOrItemId: PcrId | PcrItemId,
     protected readonly documents: MultipleDocumentUploadDto,
   ) {
     super();

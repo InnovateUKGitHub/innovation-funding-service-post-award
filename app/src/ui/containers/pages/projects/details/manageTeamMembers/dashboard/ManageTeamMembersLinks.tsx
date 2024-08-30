@@ -6,6 +6,7 @@ import { ManageTeamMemberRole } from "../BaseManageTeamMember.logic";
 interface ManageTeamMembersModifyProps {
   projectId: ProjectId;
   pclId: ProjectContactLinkId;
+  pcrId: PcrId;
   role: ManageTeamMemberRole;
 }
 

@@ -9,7 +9,7 @@ export class DeleteProjectChangeRequestDocumentOrItemDocument extends Authorised
   constructor(
     private readonly documentId: string,
     private readonly projectId: ProjectId,
-    private readonly projectChangeRequestIdOrItemId: string,
+    private readonly projectChangeRequestIdOrItemId: PcrId | PcrItemId,
   ) {
     super();
   }

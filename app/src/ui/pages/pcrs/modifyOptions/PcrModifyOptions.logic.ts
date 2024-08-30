@@ -32,15 +32,22 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   return { project, pcrs, numberOfPartners, fragmentRef: data.salesforce.uiapi };
 };
 
-const useOnSubmit = () => {
+const useOnSubmit = ({ projectId }: { projectId: ProjectId }) => {
   const navigate = useNavigate();
   const routes = useRoutes();
 
-  return useOnUpdate<z.output<PcrModifyTypesSchemaType>, PCRDto | null, EmptyObject>({
+  return useOnUpdate<z.output<PcrModifyTypesSchemaType>, Partial<PCRDto> | null, EmptyObject>({
     req: async data => {
-      // noop Manage Team members
+      // need to create a standalone PCR with no header
       if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
-        return null;
+        return await clientsideApiClient.pcrs.createStandalone({
+          projectId: data.projectId,
+          projectChangeRequestDto: {
+            status: PCRStatus.DraftWithProjectManager,
+            type: data.types[0],
+            projectId,
+          },
+        });
       }
 
       if ("pcrId" in data) {
@@ -66,10 +73,13 @@ const useOnSubmit = () => {
       }
     },
     onSuccess(data, res) {
+      if (!res?.id) {
+        throw new Error("Failed to return a PcrId");
+      }
       if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
-        navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId: data.projectId }).path);
+        navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId: data.projectId, pcrId: res.id }).path);
       } else {
-        navigate(routes.pcrPrepare.getLink({ pcrId: res!.id, projectId: res!.projectId }).path);
+        navigate(routes.pcrPrepare.getLink({ pcrId: res.id, projectId }).path);
       }
     },
   });

@@ -947,6 +947,9 @@ exports[`Context should contain the repositories 1`] = `
       "Loan_RepaymentPeriodChange__c",
     ],
     "salesforceObjectName": "Acc_ProjectChangeRequest__c",
+    "standalonePcrTypes": [
+      "012Pv000001PtFFIA0",
+    ],
     "toOptionalSFDate": [Function],
   },
   "projectContacts": ProjectContactsRepository {

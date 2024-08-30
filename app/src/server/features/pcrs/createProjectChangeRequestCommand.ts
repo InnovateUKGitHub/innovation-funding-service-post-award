@@ -42,14 +42,14 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
     return context.repositories.projectChangeRequests.createProjectChangeRequest(newPCR);
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<string> {
     const pcrToBeChanged = {
       Acc_ProjectChangeRequest__c: projectChangeRequestId,
       Acc_ExternalComment__c: "",
       Acc_ParticipantVisibility__c: true,
     };
 
-    await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
+    return await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
   }
 
   protected async run(context: IContext) {

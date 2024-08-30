@@ -45,6 +45,7 @@ const ManageTeamMemberRoles = [
 
 interface BaseManageTeamMemberProps {
   projectId: ProjectId;
+  pcrId: PcrId;
   pclId?: ProjectContactLinkId;
   role: ManageTeamMemberRole;
 }
@@ -142,7 +143,7 @@ const useManageTeamMembersDefault = ({
   );
 };
 
-const useOnBaseManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) => {
+const useOnBaseManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectId; pcrId: PcrId }) => {
   const navigate = useNavigate();
   const routes = useRoutes();
   const [, setFetchKey] = useFetchKey();
@@ -180,9 +181,9 @@ const useOnBaseManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }
       }
     },
     onSuccess() {
-      // navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId:  }).path);
       setFetchKey(x => x + 1);
-      navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId }).path);
+
+      navigate(routes.manageTeamMembersConfirmationRoute.getLink({ projectId, pcrId }).path);
     },
   });
 };

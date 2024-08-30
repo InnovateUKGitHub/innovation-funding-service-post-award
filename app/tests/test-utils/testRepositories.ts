@@ -17,6 +17,7 @@ import {
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
+  ProjectChangeRequestStandaloneEntity,
   ProjectChangeRequestStatusChangeEntity,
 } from "@framework/entities/projectChangeRequest";
 import { RecordType } from "@framework/entities/recordType";
@@ -795,6 +796,15 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return super.getWhere(x => x.projectId === projectId);
   }
 
+  getStandaloneEntityById(projectId: ProjectId, id: PcrId): Promise<ProjectChangeRequestStandaloneEntity> {
+    return super
+      .getOne(x => x.projectId === projectId && x.id === id)
+      .then(x => {
+        this.PreviousStatus[x.id] = x.status;
+        return x;
+      });
+  }
+
   getById(projectId: ProjectId, id: PcrId): Promise<ProjectChangeRequestEntity> {
     return super
       .getOne(x => x.projectId === projectId && x.id === id)
@@ -872,6 +882,10 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return id;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createStandaloneProjectChangeRequest(_: { projectId: ProjectId; recordTypeId: string; status: PCRStatus }) {
+    return Promise.resolve("new_PcrId" as PcrId);
+  }
   isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean> {
     const data = super.filterOne(x => x.projectId === projectId && x.id === projectChangeRequestId);
     return Promise.resolve(!!data);

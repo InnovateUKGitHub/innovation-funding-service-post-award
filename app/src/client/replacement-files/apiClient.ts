@@ -103,6 +103,7 @@ const clientApi: IApiClient<"client"> = {
   },
   pcrs: {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
+    createStandalone: params => ajaxPost(`/api/pcrs/standalone/${params.projectId}`, params.projectChangeRequestDto),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
   },

@@ -8,14 +8,10 @@ import { ManageTeamMembersDashboardParams } from "./ManageTeamMembersDashboard.l
 import { Section } from "@ui/components/molecules/Section/section";
 import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactListTable";
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
-import {
-  ManageTeamMemberEditLink,
-  ManageTeamMemberRemoveLink,
-  ManageTeamMemberReplaceLink,
-} from "./ManageTeamMembersLinks";
+import { ManageTeamMemberEditLink, ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
 import { ManageTeamMemberRole } from "../BaseManageTeamMember.logic";
 
-const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMembersDashboardParams) => {
+const ManageTeamMembersDashboardPage = ({ projectId, pcrId }: BaseProps & ManageTeamMembersDashboardParams) => {
   const routes = useRoutes();
   const { getContent } = useContent();
 
@@ -39,6 +35,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId={projectId}
               pclId={data.pclId}
               role={ManageTeamMemberRole.PROJECT_MANAGER}
+              pcrId={pcrId}
             />
           )}
         />
@@ -48,6 +45,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
             projectId,
             role: ManageTeamMemberRole.PROJECT_MANAGER,
             pclId: categories.projectManagers.length === 1 ? categories.projectManagers[0].pclId : undefined,
+            pcrId,
           })}
           styling="SecondaryButton"
         >
@@ -63,6 +61,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId={projectId}
               pclId={data.pclId}
               role={ManageTeamMemberRole.FINANCE_CONTACT}
+              pcrId={pcrId}
             />
           )}
         />
@@ -72,6 +71,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
             projectId,
             role: ManageTeamMemberRole.FINANCE_CONTACT,
             pclId: categories.financeContacts.length === 1 ? categories.financeContacts[0].pclId : undefined,
+            pcrId,
           })}
           styling="SecondaryButton"
         >
@@ -91,6 +91,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId={projectId}
               pclId={data.pclId}
               role={ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR}
+              pcrId={pcrId}
             />
           )}
         />
@@ -100,6 +101,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId,
               role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR,
               pclId: undefined,
+              pcrId,
             })}
             styling="SecondaryButton"
           >
@@ -114,6 +116,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
                 categories.knowledgeBaseAdministrators.length === 1
                   ? categories.knowledgeBaseAdministrators[0].pclId
                   : undefined,
+              pcrId,
             })}
             styling="SecondaryButton"
           >
@@ -133,6 +136,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
                 projectId={projectId}
                 pclId={data.pclId}
                 role={ManageTeamMemberRole.MAIN_COMPANY_CONTACT}
+                pcrId={pcrId}
               />
             </>
           )}
@@ -143,6 +147,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId,
               role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT,
               pclId: undefined,
+              pcrId,
             })}
             styling="SecondaryButton"
           >
@@ -154,6 +159,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
               projectId,
               role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT,
               pclId: categories.mainCompanyContacts.length === 1 ? categories.mainCompanyContacts[0].pclId : undefined,
+              pcrId,
             })}
             styling="SecondaryButton"
           >
@@ -171,11 +177,13 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
                 projectId={projectId}
                 pclId={data.pclId}
                 role={ManageTeamMemberRole.ASSOCIATE}
+                pcrId={pcrId}
               />
               <ManageTeamMemberRemoveLink
                 projectId={projectId}
                 pclId={data.pclId}
                 role={ManageTeamMemberRole.ASSOCIATE}
+                pcrId={pcrId}
               />
             </>
           )}
@@ -185,6 +193,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
             projectId,
             role: ManageTeamMemberRole.ASSOCIATE,
             pclId: undefined,
+            pcrId,
           })}
           styling="SecondaryButton"
         >
@@ -201,7 +210,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
 
 const ManageTeamMembersDashboardRoute = defineRoute<ManageTeamMembersDashboardParams>({
   routeName: "ManageTeamMembersDashboard",
-  routePath: "/projects/:projectId/details/manage-team-members",
+  routePath: "/projects/:projectId/details/:pcrId/manage-team-members",
   container: ManageTeamMembersDashboardPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,

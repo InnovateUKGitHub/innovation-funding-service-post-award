@@ -43,7 +43,7 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
       Context,
       {
         projectId: ProjectId;
-        projectChangeRequestIdOrItemId: string;
+        projectChangeRequestIdOrItemId: PcrId | PcrItemId;
         documents: MultipleDocumentUploadDto;
       }
     >,
@@ -69,7 +69,10 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
   ) => Promise<boolean>;
   deleteProjectDocument: (params: ApiParams<Context, { projectId: ProjectId; documentId: string }>) => Promise<boolean>;
   deleteProjectChangeRequestDocumentOrItemDocument: (
-    params: ApiParams<Context, { documentId: string; projectId: ProjectId; projectChangeRequestIdOrItemId: string }>,
+    params: ApiParams<
+      Context,
+      { documentId: string; projectId: ProjectId; projectChangeRequestIdOrItemId: PcrId | PcrItemId }
+    >,
   ) => Promise<boolean>;
 }
 
@@ -208,7 +211,10 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
 
     this.getItems(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
-      p => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => ({
+        projectId: p.projectId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId as PcrId | PcrItemId,
+      }),
       p => this.getProjectChangeRequestDocumentsOrItemDocuments(p),
     );
 
@@ -216,7 +222,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId/:documentId/content",
       p => ({
         projectId: p.projectId,
-        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId as PcrId | PcrItemId,
         documentId: p.documentId,
       }),
       p => this.getProjectChangeRequestDocumentOrItemDocument(p),
@@ -227,7 +233,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       p => ({
         documentId: p.documentId,
         projectId: p.projectId,
-        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId as PcrId | PcrItemId,
       }),
       p => this.deleteProjectChangeRequestDocumentOrItemDocument(p),
     );
@@ -265,7 +271,10 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
 
     this.postAttachments(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
-      p => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => ({
+        projectId: p.projectId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId as PcrId | PcrItemId,
+      }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p),
     );
   }
@@ -376,7 +385,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   }
 
   public getProjectChangeRequestDocumentsOrItemDocuments(
-    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string }>,
+    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: PcrId | PcrItemId }>,
   ) {
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(
       params.projectId,
@@ -387,7 +396,10 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   }
 
   public getProjectChangeRequestDocumentOrItemDocument(
-    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string; documentId: string }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; projectChangeRequestIdOrItemId: PcrId | PcrItemId; documentId: string }
+    >,
   ) {
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(
       params.projectId,
@@ -399,7 +411,10 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   }
 
   public deleteProjectChangeRequestDocumentOrItemDocument(
-    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string; documentId: string }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; projectChangeRequestIdOrItemId: PcrId | PcrItemId; documentId: string }
+    >,
   ) {
     const command = new DeleteProjectChangeRequestDocumentOrItemDocument(
       params.documentId,
@@ -442,7 +457,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       "server",
       {
         projectId: ProjectId;
-        projectChangeRequestIdOrItemId: string;
+        projectChangeRequestIdOrItemId: PcrId | PcrItemId;
         documents: MultipleDocumentUploadDto;
       }
     >,

@@ -8,6 +8,8 @@ import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
 export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTypeDto[]> {
   public readonly runnableName: string = "GetAllPCRItemTypesQuery";
+  public standalonePcrTypes = [PCRItemType.ManageTeamMembers];
+
   constructor(public readonly projectId: ProjectId) {
     super();
   }
@@ -24,6 +26,7 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
       hiddenReason: PCRItemHiddenReason.None,
       recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
+      standalone: this.standalonePcrTypes.includes(metaInfo.type),
     }));
   }
 

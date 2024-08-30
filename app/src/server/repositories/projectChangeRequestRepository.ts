@@ -17,6 +17,7 @@ import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
+  ProjectChangeRequestStandaloneEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
@@ -24,18 +25,39 @@ import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
+  createStandaloneProjectChangeRequest({
+    projectId,
+    recordTypeId,
+    status,
+  }: {
+    projectId: ProjectId;
+    recordTypeId: string;
+    status: PCRStatus;
+  }): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
-  getById(projectId: ProjectId, id: string): Promise<ProjectChangeRequestEntity>;
+  getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
+  getStandaloneEntityById(projectId: ProjectId, pcrId: PcrId): Promise<ProjectChangeRequestStandaloneEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
-  isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean>;
+  isExisting(projectId: ProjectId, projectChangeRequestId: PcrId | PcrItemId): Promise<boolean>;
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
   getPcrChangeStatuses(): Promise<IPicklistEntry[]>;
   getProjectRoles(): Promise<IPicklistEntry[]>;
   getPartnerTypes(): Promise<IPicklistEntry[]>;
   getParticipantSizes(): Promise<IPicklistEntry[]>;
   getProjectLocations(): Promise<IPicklistEntry[]>;
+}
+
+export interface IStandalonePcr {
+  Acc_Status__c: string;
+  StatusName: string;
+  CreatedDate: string;
+  LastModifiedDate: string;
+  RecordTypeId: string;
+  Acc_Project__c: string;
+  Acc_RequestNumber__c: number;
+  Id: string;
 }
 
 export interface ISalesforcePCR {
@@ -214,6 +236,7 @@ export class ProjectChangeRequestRepository
 
   protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
   private readonly recordType = "Request Header";
+  private readonly standalonePcrTypes = ["012Pv000001PtFFIA0"];
 
   protected salesforceFieldNames: string[] = [
     "Id",
@@ -327,6 +350,18 @@ export class ProjectChangeRequestRepository
     return mapped;
   }
 
+  async getStandaloneEntityById(projectId: ProjectId, pcrId: PcrId): Promise<ProjectChangeRequestStandaloneEntity> {
+    const data = await super.where(`(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(pcrId)}') `);
+
+    const item = data[0];
+
+    const mapper = new SalesforcePCRMapper("unknown");
+
+    const mappedItem = mapper.mapStandalonePcr(item);
+
+    return mappedItem;
+  }
+
   async isExisting(projectId: ProjectId, pcrOrItemId: string): Promise<boolean> {
     const data = await super.filterOne(
       `(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(
@@ -418,6 +453,24 @@ export class ProjectChangeRequestRepository
         };
       }),
     );
+  }
+
+  async createStandaloneProjectChangeRequest({
+    projectId,
+    recordTypeId,
+    status,
+  }: {
+    projectId: ProjectId;
+    recordTypeId: string;
+    status: PCRStatus;
+  }): Promise<PcrId> {
+    const id = await super.insertItem({
+      RecordTypeId: recordTypeId,
+      Acc_Project__c: projectId,
+      Acc_Status__c: this.mapStatus(status),
+    });
+
+    return id as PcrId;
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {

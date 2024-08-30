@@ -29,6 +29,16 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
   updated: Date;
 }
 
+export interface ProjectChangeRequestStandaloneEntity {
+  id: PcrId;
+  projectId: ProjectId;
+  number: number;
+  started: Date;
+  updated: Date;
+  status: PCRStatus;
+  statusName: string;
+}
+
 export interface ProjectChangeRequestItemForCreateEntity {
   accountName?: string | null;
   availabilityPeriod?: number | null;

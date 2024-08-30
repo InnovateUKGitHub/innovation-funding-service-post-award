@@ -9,8 +9,12 @@ import {
   getPCROrganisationType,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
-import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
-import { ISalesforcePCR } from "../projectChangeRequestRepository";
+import {
+  ProjectChangeRequestEntity,
+  ProjectChangeRequestItemEntity,
+  ProjectChangeRequestStandaloneEntity,
+} from "@framework/entities/projectChangeRequest";
+import { ISalesforcePCR, IStandalonePcr } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 import { mapToPCRStatus } from "@framework/mappers/pcr";
 import { configuration } from "@server/features/common/config";
@@ -325,6 +329,18 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
             subcontractorCost: pcrItem.Cost_of_work__c,
           }
         : {}),
+    };
+  }
+
+  public mapStandalonePcr(item: IStandalonePcr): ProjectChangeRequestStandaloneEntity {
+    return {
+      number: item.Acc_RequestNumber__c,
+      id: item.Id as PcrId,
+      projectId: item.Acc_Project__c as ProjectId,
+      started: this.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
+      updated: this.clock.parseRequiredSalesforceDateTime(item.LastModifiedDate),
+      status: this.mapStatus(item.Acc_Status__c),
+      statusName: item.StatusName,
     };
   }
 

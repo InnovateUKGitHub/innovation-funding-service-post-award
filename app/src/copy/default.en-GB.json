@@ -1139,6 +1139,17 @@
         "remove": "Remove",
         "replace": "Replace"
       },
+      "confirmation": {
+        "title": "Project change request completed",
+        "success": "Your project change request has been completed",
+        "submitButton": "Return to project change requests",
+        "backLink": "Back to project change requests",
+        "requestNumber": "Request number",
+        "requestType": "Request type",
+        "requestStarted": "request started",
+        "requestStatus": "Request status",
+        "RequestLastUpdated": "Request last updated"
+      },
       "modify": {
         "backLink": "Back to manage team members",
         "labels": {
@@ -1446,6 +1457,11 @@
     "Rejected": "Rejected",
     "AwaitingAmendmentLetter": "Awaiting Amendment Letter",
     "Approved": "Approved"
+  },
+  "pcrItemStatus": {
+    "Complete": "Complete",
+    "ToDo": "To Do",
+    "Incomplete": "Incomplete"
   },
   "spendProfileMessages": {
     "costGuidanceLabour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
