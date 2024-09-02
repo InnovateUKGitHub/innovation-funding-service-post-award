@@ -8,6 +8,13 @@ const ReactTestingLibrary = require("@testing-library/react");
 
 ReactTestingLibrary.configure({ testIdAttribute: "data-qa" });
 
+jest.mock("undici", () => {
+  return {
+    fetch: jest.fn().mockResolvedValue("a happy response"),
+    Agent: class MockAgent {},
+  };
+});
+
 // TODO: Delete the next few lines...
 // https://github.com/kkomelin/isomorphic-dompurify/issues/91#issuecomment-1012645198
 const util = require("util");
