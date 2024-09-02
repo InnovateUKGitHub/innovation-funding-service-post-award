@@ -16,6 +16,10 @@ import {
   ServerManageContactUpdateCommand,
   UpdateProjectManageContactCommand,
 } from "@server/features/projectContacts/updateProjectManageContactDetails";
+import {
+  DeleteContactCommand,
+  DeleteContactCommandContactParams,
+} from "@server/features/projectContacts/deleteContact";
 
 export interface IProjectContactsApi<Context extends "client" | "server"> {
   create: (
@@ -31,6 +35,10 @@ export interface IProjectContactsApi<Context extends "client" | "server"> {
 
   updateContactDetails: (
     params: ApiParams<Context, { projectId: ProjectId; contact: ServerManageContactUpdateCommand }>,
+  ) => Promise<ProjectContactDto[]>;
+
+  removeContact: (
+    params: ApiParams<Context, { projectId: ProjectId; contact: DeleteContactCommandContactParams }>,
   ) => Promise<ProjectContactDto[]>;
 }
 
@@ -57,12 +65,21 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     );
 
     this.putItems(
-      "/manage/:projectId",
+      "/manage/update/:projectId",
       (p, _, b: ServerManageContactUpdateCommand) => ({
         projectId: p.projectId,
         contact: processDto(b),
       }),
       p => this.updateContactDetails(p),
+    );
+
+    this.putItems(
+      "/manage/remove/:projectId",
+      (p, _, b: DeleteContactCommandContactParams) => ({
+        projectId: p.projectId,
+        contact: processDto(b),
+      }),
+      p => this.removeContact(p),
     );
   }
 
@@ -91,6 +108,17 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     params: ApiParams<"server", { projectId: ProjectId; contact: ServerManageContactUpdateCommand }>,
   ) {
     const command = new UpdateProjectManageContactCommand(params.projectId, params.contact);
+    await contextProvider.start(params).runCommand(command);
+    const query = new GetProjectContactLinkByIdQuery(params.contact.id);
+    const contactItem = await contextProvider.start(params).runQuery(query);
+
+    return [contactItem];
+  }
+
+  public async removeContact(
+    params: ApiParams<"server", { projectId: ProjectId; contact: DeleteContactCommandContactParams }>,
+  ) {
+    const command = new DeleteContactCommand(params.projectId, params.contact);
     await contextProvider.start(params).runCommand(command);
     const query = new GetProjectContactLinkByIdQuery(params.contact.id);
     const contactItem = await contextProvider.start(params).runQuery(query);

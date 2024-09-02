@@ -178,10 +178,15 @@ const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectI
           });
         }
 
-        case FormTypes.ProjectManageTeamMembersDelete:
-          {
-          }
-          break;
+        case FormTypes.ProjectManageTeamMembersDelete: {
+          return await clientsideApiClient.projectContacts.removeContact({
+            projectId,
+            contact: {
+              form: data.form,
+              id: data.pclId,
+            },
+          });
+        }
         default:
           throw new Error("Invalid manage team member action");
       }

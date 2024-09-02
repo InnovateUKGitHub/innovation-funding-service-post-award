@@ -279,6 +279,17 @@ class ProjectContactTestRepository
 
     return Promise.resolve(true);
   }
+
+  async deleteContact(
+    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
+  ): Promise<boolean> {
+    const foundItem = await this.getById(contact.Id);
+    if (!foundItem) return Promise.resolve(false);
+    foundItem.Acc_Inactive__c = !!contact.Acc_Inactive__c;
+    foundItem.Acc_EndDate__c = contact.Acc_EndDate__c;
+
+    return Promise.resolve(true);
+  }
 }
 
 class ExternalContactTestRepository

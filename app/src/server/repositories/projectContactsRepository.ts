@@ -56,6 +56,9 @@ export interface IProjectContactsRepository {
     contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
   ): Promise<boolean>;
   updateContactDetails(contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">): Promise<boolean>;
+  deleteContact(
+    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
+  ): Promise<boolean>;
 }
 
 /**
@@ -126,6 +129,12 @@ export class ProjectContactsRepository
 
   public async updateContactDetails(
     contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">,
+  ): Promise<boolean> {
+    return super.updateItem(contact);
+  }
+
+  public async deleteContact(
+    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
   ): Promise<boolean> {
     return super.updateItem(contact);
   }
