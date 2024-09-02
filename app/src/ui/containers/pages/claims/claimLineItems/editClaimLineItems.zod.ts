@@ -27,7 +27,7 @@ const editClaimLineItemLineItemSchema = z
     }),
     description: getTextValidation({
       maxLength: claimLineItemDescriptionMaxLength,
-      required: false,
+      required: true,
     }),
   })
   .superRefine(({ description, value }, ctx) => {
