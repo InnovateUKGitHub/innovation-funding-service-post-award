@@ -9,7 +9,7 @@ import { Section } from "@ui/components/molecules/Section/section";
 import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactListTable";
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
 import { ManageTeamMemberEditLink, ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
-import { ManageTeamMemberRole } from "../BaseManageTeamMember.logic";
+import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 const ManageTeamMembersDashboardPage = ({ projectId, pcrId }: BaseProps & ManageTeamMembersDashboardParams) => {
   const routes = useRoutes();

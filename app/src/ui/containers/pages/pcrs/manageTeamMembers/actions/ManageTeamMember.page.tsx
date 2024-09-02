@@ -1,25 +1,25 @@
 import { BaseProps } from "@ui/containers/containerBase";
 import {
-  BaseManageTeamMemberData,
-  BaseManageTeamMemberProps,
+  ManageTeamMemberData,
+  ManageTeamMemberProps,
   ManageTeamMemberMethod,
   ManageTeamMemberMethods,
   ManageTeamMemberRoles,
   useManageTeamMembersDefault,
-  useOnBaseManageTeamMemberSubmit,
-} from "./BaseManageTeamMember.logic";
-import { useManageTeamMembersQuery } from "./ManageTeamMember.logic";
-import { ManageTeamMembersSingleContactTable } from "./ManageTeamMembersSingleContactTable";
+  useOnManageTeamMemberSubmit,
+} from "../ManageTeamMember.logic";
+import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
+import { ManageTeamMembersSingleContactTable } from "../ManageTeamMembersSingleContactTable";
 import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useForm } from "react-hook-form";
 import {
-  baseManageTeamMemberErrorMap,
-  baseManageTeamMemberValidator,
-  BaseManageTeamMemberValidatorSchema,
-} from "./BaseManageTeamMember.zod";
+  manageTeamMemberErrorMap,
+  manageTeamMemberValidator,
+  ManageTeamMemberValidatorSchema,
+} from "../ManageTeamMember.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -38,13 +38,13 @@ import { Button } from "@ui/components/atoms/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useMounted } from "@ui/context/Mounted";
 
-const BaseManageTeamMember = ({
+const ManageTeamMember = ({
   projectId,
   pclId: defaultPclId,
   pcrId,
   role,
   method,
-}: BaseProps & BaseManageTeamMemberProps & BaseManageTeamMemberData) => {
+}: BaseProps & ManageTeamMemberProps & ManageTeamMemberData) => {
   const { getContent } = useContent();
   const routes = useRoutes();
   const navigate = useNavigate();
@@ -54,15 +54,15 @@ const BaseManageTeamMember = ({
   const { collated, categories, fragmentRef, partners } = useManageTeamMembersQuery({ projectId });
 
   const { register, setError, formState, getFieldState, watch, handleSubmit } = useForm<
-    z.output<BaseManageTeamMemberValidatorSchema>
+    z.output<ManageTeamMemberValidatorSchema>
   >({
-    resolver: zodResolver(baseManageTeamMemberValidator, { errorMap: baseManageTeamMemberErrorMap }),
+    resolver: zodResolver(manageTeamMemberValidator, { errorMap: manageTeamMemberErrorMap }),
     defaultValues: {
       pclId: defaultPclId,
     },
   });
-  const { onUpdate, isFetching, apiError } = useOnBaseManageTeamMemberSubmit({ projectId, pcrId });
-  const validationErrors = useZodErrors<z.output<BaseManageTeamMemberValidatorSchema>>(setError, formState.errors);
+  const { onUpdate, isFetching, apiError } = useOnManageTeamMemberSubmit({ projectId, pcrId });
+  const validationErrors = useZodErrors<z.output<ManageTeamMemberValidatorSchema>>(setError, formState.errors);
   const pclId = watch("pclId");
   const { memberToManage, defaults, hideBottomSection } = useManageTeamMembersDefault({ pclId, collated, method });
 
@@ -304,4 +304,4 @@ const BaseManageTeamMember = ({
   );
 };
 
-export { BaseManageTeamMember };
+export { ManageTeamMember };

@@ -42,15 +42,15 @@ const deleteTeamMemberValidator = z.object({
   pclId: pclIdValidation,
 });
 
-const baseManageTeamMemberValidator = z.discriminatedUnion("form", [
+const manageTeamMemberValidator = z.discriminatedUnion("form", [
   createTeamMemberValidator,
   replaceTeamMemberValidator,
   updateTeamMemberValidator,
   deleteTeamMemberValidator,
 ]);
 
-type BaseManageTeamMemberValidatorSchema = typeof baseManageTeamMemberValidator;
+type ManageTeamMemberValidatorSchema = typeof manageTeamMemberValidator;
 
-const baseManageTeamMemberErrorMap = makeZodI18nMap({ keyPrefix: ["project", "manageTeamMembers"] });
+const manageTeamMemberErrorMap = makeZodI18nMap({ keyPrefix: ["project", "manageTeamMembers"] });
 
-export { BaseManageTeamMemberValidatorSchema, baseManageTeamMemberErrorMap, baseManageTeamMemberValidator };
+export { ManageTeamMemberValidatorSchema, manageTeamMemberErrorMap, manageTeamMemberValidator };

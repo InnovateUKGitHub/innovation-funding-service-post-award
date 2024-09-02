@@ -1,15 +1,21 @@
+import { mapToContactDtoArray, ProjectContactDtoGql } from "@gql/dtoMapper/mapContactDto";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { useLazyLoadQuery } from "react-relay";
+import { ManageTeamMembersQuery } from "./__generated__/ManageTeamMembersQuery.graphql";
+import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
+import { useMemo } from "react";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { useServerInput } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useMemo } from "react";
-import { ManageTeamMembersTableData } from "./ManageTeamMember.logic";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { BaseManageTeamMemberValidatorSchema } from "./BaseManageTeamMember.zod";
+import { ManageTeamMemberValidatorSchema } from "./ManageTeamMember.zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FieldValues } from "react-hook-form";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useFetchKey } from "@ui/context/FetchKeyProvider";
 
 /**
  * You know, CRUD...
@@ -43,26 +49,26 @@ const ManageTeamMemberRoles = [
   ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR,
 ];
 
-interface BaseManageTeamMemberProps {
+interface ManageTeamMemberProps {
   projectId: ProjectId;
   pcrId: PcrId;
   pclId?: ProjectContactLinkId;
   role: ManageTeamMemberRole;
 }
 
-interface BaseManageTeamMemberData {
+interface ManageTeamMemberData {
   method: ManageTeamMemberMethod;
 }
 
-interface ManageTeamMemberCreateProps extends BaseManageTeamMemberProps {
+interface ManageTeamMemberCreateProps extends ManageTeamMemberProps {
   pclId: undefined;
 }
 
-interface ManageTeamMemberReplaceProps extends BaseManageTeamMemberProps {
+interface ManageTeamMemberReplaceProps extends ManageTeamMemberProps {
   pclId: ProjectContactLinkId | undefined;
 }
 
-interface ManageTeamMemberUpdateDeleteProps extends BaseManageTeamMemberProps {
+interface ManageTeamMemberUpdateDeleteProps extends ManageTeamMemberProps {
   pclId: ProjectContactLinkId;
 }
 
@@ -143,12 +149,12 @@ const useManageTeamMembersDefault = ({
   );
 };
 
-const useOnBaseManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectId; pcrId: PcrId }) => {
+const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectId; pcrId: PcrId }) => {
   const navigate = useNavigate();
   const routes = useRoutes();
   const [, setFetchKey] = useFetchKey();
 
-  return useOnUpdate<z.output<BaseManageTeamMemberValidatorSchema>, unknown, EmptyObject>({
+  return useOnUpdate<z.output<ManageTeamMemberValidatorSchema>, unknown, EmptyObject>({
     req: async data => {
       switch (data.form) {
         case FormTypes.ProjectManageTeamMembersCreate:
@@ -188,9 +194,108 @@ const useOnBaseManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: Proj
   });
 };
 
+type PclData = Pick<
+  ProjectContactDtoGql,
+  "accountId" | "contactId" | "id" | "name" | "role" | "email" | "firstName" | "lastName"
+>;
+type PartnerData = Pick<PartnerDto, "accountId" | "id" | "name">;
+
+interface ManageTeamMembersTableData {
+  pclId: ProjectContactLinkId;
+  pcl: PclData;
+  partner: PartnerData;
+  role: ManageTeamMemberRole;
+}
+
+const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
+  const [fetchKey] = useFetchKey();
+  const data = useLazyLoadQuery<ManageTeamMembersQuery>(
+    manageTeamMembersQuery,
+    { projectId },
+    {
+      fetchPolicy: "network-only",
+      fetchKey,
+    },
+  );
+
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+
+  const partnersGql = projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [];
+  const contactsGql = projectNode?.Project_Contact_Links__r?.edges ?? [];
+
+  const partners = mapToPartnerDtoArray(partnersGql, ["id", "name", "accountId"], {});
+
+  const pcls = mapToContactDtoArray(contactsGql, [
+    "accountId",
+    "contactId",
+    "id",
+    "role",
+    "name",
+    "email",
+    "firstName",
+    "lastName",
+  ]);
+
+  const { collated, categories } = useMemo(() => {
+    const cats = {
+      projectManagers: [] as ManageTeamMembersTableData[],
+      financeContacts: [] as ManageTeamMembersTableData[],
+      associates: [] as ManageTeamMembersTableData[],
+      mainCompanyContacts: [] as ManageTeamMembersTableData[],
+      knowledgeBaseAdministrators: [] as ManageTeamMembersTableData[],
+    } satisfies Record<ManageTeamMemberRole, ManageTeamMembersTableData[]>;
+    const collated = new Map<ProjectContactLinkId, ManageTeamMembersTableData>();
+
+    const accountToProjectParticipantMap = new Map<AccountId, PartnerData>();
+
+    for (const partner of partners) {
+      accountToProjectParticipantMap.set(partner.accountId, partner);
+    }
+
+    for (const pcl of pcls) {
+      const partner = pcl.accountId && accountToProjectParticipantMap.get(pcl.accountId);
+
+      if (partner) {
+        const data = {
+          pclId: pcl.id,
+          pcl,
+          partner,
+        };
+
+        switch (pcl.role) {
+          case "Project Manager":
+            cats.projectManagers.push({ ...data, role: ManageTeamMemberRole.PROJECT_MANAGER });
+            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.PROJECT_MANAGER });
+            break;
+          case "Finance contact":
+            cats.financeContacts.push({ ...data, role: ManageTeamMemberRole.FINANCE_CONTACT });
+            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.FINANCE_CONTACT });
+            break;
+          case "Associate":
+            cats.associates.push({ ...data, role: ManageTeamMemberRole.ASSOCIATE });
+            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.ASSOCIATE });
+            break;
+          case "Main Company Contact":
+            cats.mainCompanyContacts.push({ ...data, role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT });
+            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT });
+            break;
+          case "KB Admin":
+            cats.knowledgeBaseAdministrators.push({ ...data, role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR });
+            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR });
+            break;
+        }
+      }
+    }
+
+    return { collated, categories: cats };
+  }, [pcls, partners]);
+
+  return { partners, pcls, categories, collated, fragmentRef: data?.salesforce?.uiapi };
+};
+
 export {
-  BaseManageTeamMemberData,
-  BaseManageTeamMemberProps,
+  ManageTeamMemberData,
+  ManageTeamMemberProps,
   ManageTeamMemberCreateProps,
   ManageTeamMemberMethod,
   ManageTeamMemberMethods,
@@ -199,5 +304,7 @@ export {
   ManageTeamMemberRoles,
   ManageTeamMemberUpdateDeleteProps,
   useManageTeamMembersDefault,
-  useOnBaseManageTeamMemberSubmit,
+  useOnManageTeamMemberSubmit,
+  useManageTeamMembersQuery,
+  ManageTeamMembersTableData,
 };

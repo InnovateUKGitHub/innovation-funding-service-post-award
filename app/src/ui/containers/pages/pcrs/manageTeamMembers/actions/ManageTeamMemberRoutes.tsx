@@ -1,20 +1,20 @@
 import { ProjectRole } from "@framework/constants/project";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { BaseManageTeamMember } from "./BaseManageTeamMember.page";
+import { ManageTeamMember } from "./ManageTeamMember.page";
 import {
-  BaseManageTeamMemberProps,
+  ManageTeamMemberProps,
   ManageTeamMemberCreateProps,
   ManageTeamMemberMethod,
   ManageTeamMemberUpdateDeleteProps,
   ManageTeamMemberRole,
   ManageTeamMemberReplaceProps,
-} from "./BaseManageTeamMember.logic";
+} from "../ManageTeamMember.logic";
 
 const ManageTeamMembersCreateRoute = defineRoute<ManageTeamMemberCreateProps>({
   routeName: "ManageTeamMembersCreate",
   routePath: "/projects/:projectId/details/:pcrId/manage-team-members/create/:role",
-  container: (props: BaseProps & BaseManageTeamMemberProps) => (
-    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.CREATE} />
+  container: (props: BaseProps & ManageTeamMemberProps) => (
+    <ManageTeamMember {...props} method={ManageTeamMemberMethod.CREATE} />
   ),
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
@@ -31,8 +31,8 @@ const ManageTeamMembersReplaceRoute = defineRoute<ManageTeamMemberReplaceProps>(
   routeName: "ManageTeamMembersReplace",
   routePath: "/projects/:projectId/details/manage-team-members/replace/:role",
   routePathWithQuery: "/projects/:projectId/details/:pcrId/manage-team-members/replace/:role?:pclId",
-  container: (props: BaseProps & BaseManageTeamMemberProps) => (
-    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.REPLACE} />
+  container: (props: BaseProps & ManageTeamMemberProps) => (
+    <ManageTeamMember {...props} method={ManageTeamMemberMethod.REPLACE} />
   ),
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
@@ -48,8 +48,8 @@ const ManageTeamMembersReplaceRoute = defineRoute<ManageTeamMemberReplaceProps>(
 const ManageTeamMembersUpdateRoute = defineRoute<ManageTeamMemberUpdateDeleteProps>({
   routeName: "ManageTeamMembersUpdate",
   routePath: "/projects/:projectId/details/:pcrId/manage-team-members/update/:role/:pclId",
-  container: (props: BaseProps & BaseManageTeamMemberProps) => (
-    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.UPDATE} />
+  container: (props: BaseProps & ManageTeamMemberProps) => (
+    <ManageTeamMember {...props} method={ManageTeamMemberMethod.UPDATE} />
   ),
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
@@ -65,8 +65,8 @@ const ManageTeamMembersUpdateRoute = defineRoute<ManageTeamMemberUpdateDeletePro
 const ManageTeamMembersDeleteRoute = defineRoute<ManageTeamMemberUpdateDeleteProps>({
   routeName: "ManageTeamMembersDelete",
   routePath: "/projects/:projectId/details/:pcrId/manage-team-members/delete/:role/:pclId",
-  container: (props: BaseProps & BaseManageTeamMemberProps) => (
-    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.DELETE} />
+  container: (props: BaseProps & ManageTeamMemberProps) => (
+    <ManageTeamMember {...props} method={ManageTeamMemberMethod.DELETE} />
   ),
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,

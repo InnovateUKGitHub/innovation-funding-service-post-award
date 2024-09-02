@@ -70,11 +70,11 @@ import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/Co
 import { ManageTeamMembersDashboardRoute } from "@ui/containers/pages/projects/details/manageTeamMembers/dashboard/ManageTeamMembersDashboard";
 import {
   ManageTeamMembersCreateRoute,
-  ManageTeamMembersDeleteRoute,
   ManageTeamMembersReplaceRoute,
   ManageTeamMembersUpdateRoute,
-} from "@ui/containers/pages/projects/details/manageTeamMembers/BaseManageTeamMemberRoutes";
-import { ManageTeamMembersConfirmationRoute } from "@ui/containers/pages/projects/details/manageTeamMembers/confirmation/ManageTeamMemberConfirmation.page";
+  ManageTeamMembersDeleteRoute,
+} from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberRoutes";
+import { ManageTeamMembersConfirmationRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/confirmation/ManageTeamMemberConfirmation.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;

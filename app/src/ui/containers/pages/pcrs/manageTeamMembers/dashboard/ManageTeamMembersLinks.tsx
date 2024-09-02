@@ -1,7 +1,7 @@
 import { Link } from "@ui/components/atoms/Links/links";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useContent } from "@ui/hooks/content.hook";
-import { ManageTeamMemberRole } from "../BaseManageTeamMember.logic";
+import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 interface ManageTeamMembersModifyProps {
   projectId: ProjectId;

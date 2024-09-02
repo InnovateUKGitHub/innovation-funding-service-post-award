@@ -4,7 +4,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerError } from "../common/appError";
-import { baseManageTeamMemberValidator } from "@ui/containers/pages/projects/details/manageTeamMembers/BaseManageTeamMember.zod";
+import { manageTeamMemberValidator } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 
 export type ServerManageContactUpdateCommand = PickRequiredFromPartial<
@@ -33,7 +33,7 @@ export class UpdateProjectManageContactCommand extends CommandBase<boolean> {
   }
 
   private getZodValidator() {
-    return baseManageTeamMemberValidator;
+    return manageTeamMemberValidator;
   }
 
   protected async run(context: IContext) {
