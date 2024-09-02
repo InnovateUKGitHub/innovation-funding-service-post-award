@@ -102,6 +102,7 @@
     "relay-runtime": "^17.0.0",
     "sanitize-filename": "^1.6.3",
     "type-graphql": "^2.0.0-rc.1",
+    "undici": "^6.19.8",
     "webpack-node-externals": "^3.0.0",
     "zod": "^3.23.8"
   },
