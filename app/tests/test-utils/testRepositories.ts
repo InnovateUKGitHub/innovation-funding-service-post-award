@@ -107,6 +107,7 @@ import {
   IExternalContactsRepository,
   ISalesforceExternalContact,
 } from "@server/repositories/externalContactRepository";
+import { ManageTeamMemberPcrDto } from "@framework/dtos/pcrDtos";
 
 class TestWriteStream extends Readable {
   private readonly id: string;
@@ -826,6 +827,13 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
   }
 
   updateProjectChangeRequest(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  updateManageTeamMemberPcr(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+  ): Promise<void> {
     return Promise.resolve();
   }
 

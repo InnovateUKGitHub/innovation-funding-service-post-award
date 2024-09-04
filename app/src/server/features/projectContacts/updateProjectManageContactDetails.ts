@@ -15,6 +15,7 @@ export type ServerManageContactUpdateCommand = PickRequiredFromPartial<
 export class UpdateProjectManageContactCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
+    private readonly pcrId: PcrId,
     private readonly contact: ServerManageContactUpdateCommand,
   ) {
     super();
@@ -52,6 +53,12 @@ export class UpdateProjectManageContactCommand extends CommandBase<boolean> {
     if (!updateContactSuccess) {
       return false;
     }
+
+    await context.repositories.projectChangeRequests.updateManageTeamMemberPcr({
+      id: this.pcrId,
+      firstName: this.contact.firstName,
+      lastName: this.contact.lastName,
+    });
 
     return await context.repositories.projectContacts.updateContactDetails({
       Id: this.contact.id,

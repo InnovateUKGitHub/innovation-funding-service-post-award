@@ -22,6 +22,7 @@ import {
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
+import { ManageTeamMemberPcrDto } from "@framework/dtos/pcrDtos";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -35,6 +36,9 @@ export interface IProjectChangeRequestRepository {
     status: PCRStatus;
   }): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
+  updateManageTeamMemberPcr(
+    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+  ): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
   getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
@@ -140,7 +144,6 @@ export interface ISalesforcePCR {
 
   // Change loan request
   Loan_ProjectStartDate__c: string | null;
-
   Loan_Duration__c: string | null;
   // Acc_AdditionalNumberofMonths__c is used for setting value
   Loan_ExtensionPeriod__c: string | null;
@@ -155,9 +158,16 @@ export interface ISalesforcePCR {
   Relationship_justification__c: string | null;
   Country_where_work_will_be_carried_out__c: string | null;
   Cost_of_work__c: number | null;
+
   // Description of work to be carried out by the subcontractor
   Role_in_the_project__c: string | null;
   Justification__c: string | null;
+
+  // manage team members
+  // First_Name__c: string | null;
+  // Last_Name__c: string | null;
+  // Email__c: string | null;
+  // Role__c: string | null;
 }
 
 export const mapToPCRApiName = (status: PCRStatus): string => {
@@ -239,87 +249,87 @@ export class ProjectChangeRequestRepository
   private readonly standalonePcrTypes = ["012Pv000001PtFFIA0"];
 
   protected salesforceFieldNames: string[] = [
-    "Id",
-    "Acc_RequestHeader__c",
-    "Acc_RequestNumber__c",
-    "Acc_Status__c",
-    "toLabel(Acc_Status__c) StatusName",
-    "CreatedDate",
-    "LastModifiedDate",
-    "RecordTypeId",
-    "Acc_Project_Participant__c",
-    "Acc_Project__c",
-    "Acc_RequestHeader__r.Acc_Project__r.Acc_CompetitionId__r.Acc_TypeofAid__c",
+    "Acc_AdditionalNumberofMonths__c",
+    "Acc_AwardRate__c",
+    "Acc_Comments__c",
+    "Acc_CommercialWork__c",
+    "Acc_Contact1EmailAddress__c",
+    "Acc_Contact1Forename__c",
+    "Acc_Contact1Phone__c",
+    "Acc_Contact1ProjectRole__c",
+    "Acc_Contact1Surname__c",
+    "Acc_Contact2EmailAddress__c",
+    "Acc_Contact2Forename__c",
+    "Acc_Contact2Phone__c",
+    "Acc_Contact2ProjectRole__c",
+    "Acc_Contact2Surname__c",
+    "Acc_Employees__c",
+    "Acc_ExistingPartnerName__c",
+    "Acc_ExistingProjectDuration__c",
+    "Acc_GrantMovingOverFinancialYear__c",
+    "Acc_Location__c",
+    "Acc_MarkedAsComplete__c",
     "Acc_NewOrganisationName__c",
+    "Acc_NewProjectDuration__c",
     "Acc_NewProjectSummary__c",
     "Acc_NewPublicDescription__c",
-    "Acc_Reasoning__c",
-    "Acc_MarkedAsComplete__c",
-    "Acc_AdditionalNumberofMonths__c",
-    "Acc_NewProjectDuration__c",
-    "Acc_ExistingProjectDuration__c",
-    "Acc_RemovalPeriod__c",
-    "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
-    "Acc_Comments__c",
-    "Acc_SuspensionStarts__c",
-    "Acc_SuspensionEnds__c",
-    "Acc_PublicDescriptionSnapshot__c",
-    "Acc_ProjectSummarySnapshot__c",
-    "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
-    "Acc_ProjectRole__c",
-    "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
-    "Acc_ParticipantType__c",
-    "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
     "Acc_OrganisationName__c",
-    "Acc_RegisteredAddress__c",
-    "Acc_RegistrationNumber__c",
+    "Acc_OtherFunding__c",
     "Acc_ParticipantSize__c",
-    "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
-    "Acc_Employees__c",
-    "Acc_TurnoverYearEnd__c",
-    "Acc_Turnover__c",
-    "Acc_Location__c",
-    "toLabel(Acc_Location__c) ProjectLocationLabel",
+    "Acc_ParticipantType__c",
+    "Acc_Project__c",
+    "Acc_Project_Participant__c",
     "Acc_ProjectCity__c",
     "Acc_projectPostcode__c",
-    "Acc_Contact1ProjectRole__c",
-    "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
-    "Acc_Contact1Forename__c",
-    "Acc_Contact1Surname__c",
-    "Acc_Contact1Phone__c",
-    "Acc_Contact1EmailAddress__c",
-    "Acc_Contact2ProjectRole__c",
-    "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
-    "Acc_Contact2Forename__c",
-    "Acc_Contact2Surname__c",
-    "Acc_Contact2Phone__c",
-    "Acc_Contact2EmailAddress__c",
-    "Acc_AwardRate__c",
-    "Acc_OtherFunding__c",
+    "Acc_ProjectRole__c",
+    "Acc_ProjectSummarySnapshot__c",
+    "Acc_PublicDescriptionSnapshot__c",
+    "Acc_Reasoning__c",
+    "Acc_RegisteredAddress__c",
+    "Acc_RegistrationNumber__c",
+    "Acc_RemovalPeriod__c",
+    "Acc_RequestHeader__c",
+    "Acc_RequestHeader__r.Acc_Project__r.Acc_CompetitionId__r.Acc_TypeofAid__c",
+    "Acc_RequestNumber__c",
+    // "Acc_Role__c",
+    "Acc_Status__c",
+    "Acc_SuspensionEnds__c",
+    "Acc_SuspensionStarts__c",
     "Acc_TotalOtherFunding__c",
-    "Acc_CommercialWork__c",
     "Acc_TSBReference__c",
-    "Acc_GrantMovingOverFinancialYear__c",
-    "Loan_ProjectStartDate__c",
+    "Acc_Turnover__c",
+    "Acc_TurnoverYearEnd__c",
+    "CreatedDate",
+    "Email__c",
+    "First_Name__c",
+    "Id",
+    "LastModifiedDate",
+    "Last_Name__c",
     "Loan_Duration__c",
     "Loan_ExtensionPeriod__c",
     "Loan_ExtensionPeriodChange__c",
+    "Loan_ProjectStartDate__c",
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
-
-    ...(configuration.features.approveNewSubcontractor
-      ? [
-          "New_company_subcontractor_name__c",
-          "Company_registration_number__c",
-          "Relationship_between_partners__c",
-          "Relationship_justification__c",
-          "Country_where_work_will_be_carried_out__c",
-          "Role_in_the_project__c",
-          "Cost_of_work__c",
-          "Justification__c",
-        ]
-      : []),
+    "RecordTypeId",
+    // "Role__c",
+    "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
+    "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
+    "toLabel(Acc_Location__c) ProjectLocationLabel",
+    "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
+    "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
+    "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
+    "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
+    "toLabel(Acc_Status__c) StatusName",
+    "New_company_subcontractor_name__c",
+    "Company_registration_number__c",
+    "Relationship_between_partners__c",
+    "Relationship_justification__c",
+    "Country_where_work_will_be_carried_out__c",
+    "Role_in_the_project__c",
+    "Cost_of_work__c",
+    "Justification__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
@@ -381,6 +391,19 @@ export class ProjectChangeRequestRepository
       Acc_MarkedasComplete__c: this.mapItemStatus(pcr.reasoningStatus),
       Acc_Reasoning__c: pcr.reasoning,
       Acc_Status__c: this.mapStatus(pcr.status),
+    });
+  }
+
+  async updateManageTeamMemberPcr(
+    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+  ) {
+    await super.updateItem({
+      Id: pcr.id,
+      // Acc_Status__c: this.mapStatus(pcr.status),
+      First_Name__c: pcr.firstName,
+      Last_Name__c: pcr.lastName,
+      Email__c: pcr.email,
+      Acc_OrganisationName__c: pcr.organisation,
     });
   }
 

@@ -229,6 +229,15 @@ export interface PCRTimeExtensionOption {
   offset: number;
 }
 
+export type ManageTeamMemberPcrDto = PCRBaseDto & {
+  firstName?: string;
+  lastName?: string;
+  previousFirstName?: string;
+  previousLastName?: string;
+  email?: string;
+  organisation?: string;
+};
+
 export type FullPCRItemDto = {
   accountName: string | null;
   availabilityPeriod: number | null;

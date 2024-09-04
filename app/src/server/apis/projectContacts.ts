@@ -34,11 +34,11 @@ export interface IProjectContactsApi<Context extends "client" | "server"> {
   ) => Promise<ProjectContactDto[]>;
 
   updateContactDetails: (
-    params: ApiParams<Context, { projectId: ProjectId; contact: ServerManageContactUpdateCommand }>,
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; contact: ServerManageContactUpdateCommand }>,
   ) => Promise<ProjectContactDto[]>;
 
   removeContact: (
-    params: ApiParams<Context, { projectId: ProjectId; contact: DeleteContactCommandContactParams }>,
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; contact: DeleteContactCommandContactParams }>,
   ) => Promise<ProjectContactDto[]>;
 }
 
@@ -50,6 +50,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
       "/:projectId",
       (p, _, b: ServerCreateProjectContactsCommandContact) => ({
         projectId: p.projectId,
+        pcrId: p.pcrId,
         contact: processDto(b),
       }),
       p => this.create(p),
@@ -65,18 +66,20 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     );
 
     this.putItems(
-      "/manage/update/:projectId",
+      "/manage/update/:projectId/:pcrId",
       (p, _, b: ServerManageContactUpdateCommand) => ({
         projectId: p.projectId,
+        pcrId: p.pcrId,
         contact: processDto(b),
       }),
       p => this.updateContactDetails(p),
     );
 
     this.putItems(
-      "/manage/remove/:projectId",
+      "/manage/remove/:projectId/:pcrId",
       (p, _, b: DeleteContactCommandContactParams) => ({
         projectId: p.projectId,
+        pcrId: p.pcrId,
         contact: processDto(b),
       }),
       p => this.removeContact(p),
@@ -105,9 +108,9 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
   }
 
   public async updateContactDetails(
-    params: ApiParams<"server", { projectId: ProjectId; contact: ServerManageContactUpdateCommand }>,
+    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; contact: ServerManageContactUpdateCommand }>,
   ) {
-    const command = new UpdateProjectManageContactCommand(params.projectId, params.contact);
+    const command = new UpdateProjectManageContactCommand(params.projectId, params.pcrId, params.contact);
     await contextProvider.start(params).runCommand(command);
     const query = new GetProjectContactLinkByIdQuery(params.contact.id);
     const contactItem = await contextProvider.start(params).runQuery(query);
@@ -116,7 +119,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
   }
 
   public async removeContact(
-    params: ApiParams<"server", { projectId: ProjectId; contact: DeleteContactCommandContactParams }>,
+    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; contact: DeleteContactCommandContactParams }>,
   ) {
     const command = new DeleteContactCommand(params.projectId, params.contact);
     await contextProvider.start(params).runCommand(command);

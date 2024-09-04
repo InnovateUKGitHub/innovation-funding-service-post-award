@@ -168,6 +168,7 @@ const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectI
         case FormTypes.ProjectManageTeamMembersUpdate: {
           return await clientsideApiClient.projectContacts.updateContactDetails({
             projectId,
+            pcrId: pcrId,
             contact: {
               contactId: data.contactId,
               id: data.pclId,
@@ -181,6 +182,7 @@ const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectI
         case FormTypes.ProjectManageTeamMembersDelete: {
           return await clientsideApiClient.projectContacts.removeContact({
             projectId,
+            pcrId: pcrId,
             contact: {
               form: data.form,
               id: data.pclId,
