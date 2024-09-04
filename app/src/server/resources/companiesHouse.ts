@@ -15,9 +15,9 @@ export abstract class ICompaniesHouseBase {
 
 export class CompaniesHouseBase extends ICompaniesHouseBase {
   private getUrl(endpointSegment: string, inboundParams?: Record<string, string>): string {
-    const { sil } = configuration;
+    const hydraUrl = configuration?.certificates?.hydraMtls?.serverName ?? "unknown";
 
-    const apiEndpoint = `${sil.url}${endpointSegment}`;
+    const apiEndpoint = `${hydraUrl}${endpointSegment}`;
 
     if (!inboundParams) return apiEndpoint;
 
