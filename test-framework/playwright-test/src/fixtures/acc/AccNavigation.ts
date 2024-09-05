@@ -11,6 +11,7 @@ import { ProjectDashboard } from "./pages/ProjectDashboard";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
+import { ProjectChangeRequests } from "./pages/PCRs/ProjectChangeRequest";
 
 export
 @Fixture("accNavigation")
@@ -127,10 +128,10 @@ class AccNavigation {
     await this.monitoringReports.isPage();
   }
 
-  @Given("the user has navigated to the project change request page")
-  async gotoProjectChangeRequests() {
+  @Given("the user is on the project change request page")
+  async gotoPCRPage() {
     await this.testCache.cache(
-      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      ["gotoProjectChangeRequests", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Project change requests").click();
@@ -143,5 +144,6 @@ class AccNavigation {
 
     await this.devtools.isLoaded();
     await this.putProjectOnHold.isPage();
+    await this.projectForecasts.isPage();
   }
 }

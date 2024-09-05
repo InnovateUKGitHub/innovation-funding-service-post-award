@@ -20,6 +20,8 @@ import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
+import { ManageTeamMember } from "./acc/pages/PCRs/ManageTeamMember";
+import { AccProjectKTP } from "./projectFactory/AccProjectKTP";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 
 type AccFixtures = {
@@ -31,6 +33,7 @@ type AccFixtures = {
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
   putProjectOnHold: PutProjectOnHold;
+  manageTeamMember: ManageTeamMember;
   projectChangeRequests: ProjectChangeRequests;
   approveNewSubcontractor: ApproveNewSubcontractor;
 
@@ -53,6 +56,7 @@ type AccFixtures = {
 interface Workers {
   sfdcApi: SfdcApi;
   accProjectBase: AccProjectBase;
+  accProjectKTP: AccProjectKTP;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -66,10 +70,9 @@ export const test = base.extend<AccFixtures, Workers>({
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
-  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
-  approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
-    use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
 
+  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  manageTeamMember: ({ page, commands }, use) => use(new ManageTeamMember({ page, commands })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -79,7 +82,10 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
-
+  accProjectKTP: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectKTP({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
   // Misc
   accNavigation: (
     {
