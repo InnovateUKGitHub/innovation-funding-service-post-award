@@ -19,6 +19,9 @@ import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectP
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { PutProjectOnHold } from "./acc/pages/putProjectOnHold";
+import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequest";
+import { ManageTeamMember } from "./acc/pages/PCRs/ManageTeamMember";
+import { AccProjectKTP } from "./projectFactory/AccProjectKTP";
 
 type AccFixtures = {
   // Pages
@@ -29,6 +32,8 @@ type AccFixtures = {
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
   putProjectOnHold: PutProjectOnHold;
+  projectChangeRequests: ProjectChangeRequests;
+  manageTeamMember: ManageTeamMember;
 
   // Misc
   accNavigation: AccNavigation;
@@ -49,6 +54,7 @@ type AccFixtures = {
 interface Workers {
   sfdcApi: SfdcApi;
   accProjectBase: AccProjectBase;
+  accProjectKTP: AccProjectKTP;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -63,7 +69,8 @@ export const test = base.extend<AccFixtures, Workers>({
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
 
-  
+  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  manageTeamMember: ({ page, commands }, use) => use(new ManageTeamMember({ page, commands })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -73,10 +80,22 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
-
+  accProjectKTP: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectKTP({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
   // Misc
   accNavigation: (
-    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState, monitoringReports, putProjectOnHold },
+    {
+      page,
+      developerHomepage,
+      projectDashboard,
+      projectOverview,
+      projectForecasts,
+      projectState,
+      monitoringReports,
+      putProjectOnHold,
+    },
     use,
   ) =>
     use(
