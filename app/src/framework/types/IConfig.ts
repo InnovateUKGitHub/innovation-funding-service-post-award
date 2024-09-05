@@ -53,6 +53,7 @@ export interface IConfig {
       certificationAuthority: string;
       public: string;
       private: string;
+      passphrase: string;
       serverName: string;
       rejectUnauthorised: boolean;
     };

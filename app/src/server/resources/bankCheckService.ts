@@ -65,13 +65,12 @@ export class BankCheckService {
     path: string,
     payload: T,
   ): Promise<U> {
-    const { sil } = configuration;
-
-    if (!sil.url) {
+    const pathToHydra = configuration?.certificates?.hydraMtls?.serverName;
+    if (!pathToHydra) {
       throw new ConfigurationError("Bank checking service not configured");
     }
 
-    const request = await fetch(`${sil.url}${path}`, {
+    const request = await fetch(`${pathToHydra}${path}`, {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
@@ -89,7 +88,7 @@ export class BankCheckService {
     } else {
       this.logger.error(
         "Failed querying Experian via Integration Platform",
-        `${sil.url}${path}`,
+        `${pathToHydra}${path}`,
         await request.text(),
         request.status,
       );

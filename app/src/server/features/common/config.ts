@@ -48,6 +48,7 @@ const configuration: Readonly<IConfig> = {
     },
     hydraMtls: {
       certificationAuthority: certEnv("SIL_HYDRA_MTLS_CERTIFICATION_AUTHORITY", ""),
+      passphrase: strEnv("SIL_HYDRA_MTLS_PASSPHRASE", ""),
       public: certEnv("SIL_HYDRA_MTLS_PUBLIC_KEY", ""),
       private: certEnv("SIL_HYDRA_MTLS_PRIVATE_KEY", ""),
       serverName: strEnv("SIL_HYDRA_MTLS_SERVER_NAME", ""),
