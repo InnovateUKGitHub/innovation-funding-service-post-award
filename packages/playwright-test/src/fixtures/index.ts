@@ -21,6 +21,8 @@ import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
+import { ManageTeamMember } from "./acc/pages/PCRs/ManageTeamMember";
+import { AccProjectKTP } from "./projectFactory/AccProjectKTP";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 import { RemovePartner } from "./acc/pages/PCRs/removePartner";
 import { ProjectDetails } from "./acc/pages/ProjectDetails";
@@ -37,6 +39,7 @@ type AccFixtures = {
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
   putProjectOnHold: PutProjectOnHold;
+  manageTeamMember: ManageTeamMember;
   projectChangeRequests: ProjectChangeRequests;
   approveNewSubcontractor: ApproveNewSubcontractor;
   changeScope: ChangeProjectScope;
@@ -48,6 +51,7 @@ type AccFixtures = {
   accNavigation: AccNavigation;
   commands: Commands;
   validators: Validators;
+  ktp: AccProjectKTP;
 
   // ACC
   accUserSwitcher: AccUserSwitcher;
@@ -65,6 +69,7 @@ interface Workers {
   sfdcApi: SfdcApi;
   accProjectBase: AccProjectBase;
   accProjectMulti: AccProjectMulti;
+  accProjectKTP: AccProjectKTP;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -104,7 +109,10 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
-
+  accProjectKTP: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectKTP({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
   // Misc
   accNavigation: (
     {

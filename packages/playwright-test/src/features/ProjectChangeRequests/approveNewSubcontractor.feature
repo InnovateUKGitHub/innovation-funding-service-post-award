@@ -20,7 +20,7 @@ Feature: Approve a new subcontractor
         Then the validation messages will persist
 
         When the user enters text into each field
-        Then the validation messages will dynamically disappear
+        Then the approve subcontractor validation messages will dynamically disappear
 
     Scenario: Validating the text boundaries and currency of Approve a new subcontractor PCR
         Given the user has created and is in Approve a new subcontractor
