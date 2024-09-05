@@ -39,6 +39,7 @@ export class TestConfig implements IConfig {
       private: "hydraMtls-private",
       serverName: "acc-ui",
       rejectUnauthorised: false,
+      passphrase: "passphrase",
     },
   };
 
