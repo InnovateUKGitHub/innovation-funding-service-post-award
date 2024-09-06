@@ -565,7 +565,7 @@ export const checkCapUsageSavedData = (
 ) => {
   cy.tableCell(lineItem).siblings().contains("a", "Edit").click();
   cy.get("h2").contains("Capital usage");
-  cy.getByAriaLabel("Item description").should("have.value", lineItem);
+  cy.get("textarea").should("have.value", lineItem);
   cy.getByLabel(newOrExisting).should("have.attr", "checked");
   cy.getByLabel("Depreciation period (months)").should("have.value", period);
   cy.getByLabel("Net present value").should("have.value", netValue);
