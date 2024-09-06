@@ -1,4 +1,4 @@
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { Clock } from "@framework/util/clock";
 import { ISalesforceProjectContact } from "@server/repositories/projectContactsRepository";
 
@@ -20,7 +20,7 @@ const mapToProjectContactDto = (x: ISalesforceProjectContact): ProjectContactDto
   return {
     id: x.Id,
     name,
-    role: x.Acc_Role__c,
+    role: x.Acc_Role__c as ProjectRoleName,
     roleName: x.RoleName,
     email: x.Acc_EmailOfSFContact__c,
     contactId: x.Acc_ContactId__r.Id as ContactId,

@@ -37,7 +37,7 @@ export interface IProjectChangeRequestRepository {
   }): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateManageTeamMemberPcr(
-    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation" | "role">,
   ): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
@@ -313,7 +313,7 @@ export class ProjectChangeRequestRepository
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
     "RecordTypeId",
-    // "Role__c",
+    "Role__c",
     "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
     "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
     "toLabel(Acc_Location__c) ProjectLocationLabel",
@@ -395,7 +395,7 @@ export class ProjectChangeRequestRepository
   }
 
   async updateManageTeamMemberPcr(
-    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation" | "role">,
   ) {
     await super.updateItem({
       Id: pcr.id,
@@ -404,6 +404,7 @@ export class ProjectChangeRequestRepository
       Last_Name__c: pcr.lastName,
       Email__c: pcr.email,
       Acc_OrganisationName__c: pcr.organisation,
+      Role__c: pcr.role,
     });
   }
 

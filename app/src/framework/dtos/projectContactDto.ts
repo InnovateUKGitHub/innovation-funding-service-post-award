@@ -1,12 +1,13 @@
-export type ProjectRoleName =
-  | "Monitoring officer"
-  | "Project Manager"
-  | "Finance contact"
-  | "Innovation lead"
-  | "IPM"
-  | "Associate"
-  | "Main Company Contact"
-  | "KB Admin";
+export enum ProjectRoleName {
+  MonitoringOfficer = "Monitoring officer",
+  ProjectManager = "Project Manager",
+  FinanceContact = "Finance contact",
+  InnovationLead = "Innovation lead",
+  IPM = "IPM",
+  Associate = "Associate",
+  MainCompanyContact = "Main Company Contact",
+  KBAdmin = "KB Admin",
+}
 
 export interface ProjectContactDto {
   accountId: AccountId | undefined;

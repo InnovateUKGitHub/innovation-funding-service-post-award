@@ -9,7 +9,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 
 export type ServerManageContactUpdateCommand = PickRequiredFromPartial<
   ProjectContactDto,
-  "id" | "contactId" | "firstName" | "lastName"
+  "id" | "contactId" | "firstName" | "lastName" | "role"
 > & { form: FormTypes };
 
 export class UpdateProjectManageContactCommand extends CommandBase<boolean> {
@@ -58,6 +58,7 @@ export class UpdateProjectManageContactCommand extends CommandBase<boolean> {
       id: this.pcrId,
       firstName: this.contact.firstName,
       lastName: this.contact.lastName,
+      role: this.contact.role,
     });
 
     return await context.repositories.projectContacts.updateContactDetails({

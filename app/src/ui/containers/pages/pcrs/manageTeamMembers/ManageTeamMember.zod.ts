@@ -1,3 +1,4 @@
+import { ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
@@ -34,6 +35,7 @@ const updateTeamMemberValidator = z.object({
   contactId: contactIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
+  role: z.nativeEnum(ProjectRoleName),
 });
 
 const deleteTeamMemberValidator = z.object({

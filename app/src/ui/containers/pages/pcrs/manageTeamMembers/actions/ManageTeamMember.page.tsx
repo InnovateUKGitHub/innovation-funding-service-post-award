@@ -107,6 +107,7 @@ const ManageTeamMember = ({
                 <>
                   <ManageTeamMembersSingleContactTable tableData={memberToManage} />
                   <input type="hidden" defaultValue={pclId} {...register("pclId")} />
+                  <input type="hidden" defaultValue={memberToManage?.pcl.role} {...register("role")} />
                 </>
               ) : (
                 <>

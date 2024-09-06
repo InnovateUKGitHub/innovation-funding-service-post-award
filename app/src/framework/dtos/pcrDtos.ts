@@ -236,6 +236,7 @@ export type ManageTeamMemberPcrDto = PCRBaseDto & {
   previousLastName?: string;
   email?: string;
   organisation?: string;
+  role: string;
 };
 
 export type FullPCRItemDto = {

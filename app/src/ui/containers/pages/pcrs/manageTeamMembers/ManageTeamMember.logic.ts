@@ -172,6 +172,7 @@ const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectI
             contact: {
               contactId: data.contactId,
               id: data.pclId,
+              role: data.role,
               firstName: data.firstName,
               lastName: data.lastName,
               form: data.form,

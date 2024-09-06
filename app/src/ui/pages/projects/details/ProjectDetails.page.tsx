@@ -1,6 +1,6 @@
 import { ProjectMonitoringLevel, ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -36,10 +36,15 @@ interface Props {
 type ProjectContactRole = ProjectContactDto["role"];
 
 const getRoles = () => {
-  const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager", "Innovation lead", "IPM"];
+  const primaryRoles: ProjectContactRole[] = [
+    ProjectRoleName.MonitoringOfficer,
+    ProjectRoleName.ProjectManager,
+    ProjectRoleName.InnovationLead,
+    ProjectRoleName.IPM,
+  ];
 
   // Note: Excluded roles are already rendered elsewhere on page
-  const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, "Finance contact"];
+  const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, ProjectRoleName.FinanceContact];
 
   return {
     primaryRoles,
@@ -163,15 +168,15 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
   const monitoringOfficers = getDetailsContactRole({
     contacts,
     partners,
-    partnerRole: "Monitoring officer",
+    partnerRole: ProjectRoleName.MonitoringOfficer,
   });
-  const projectManagers = getDetailsContactRole({ contacts, partners, partnerRole: "Project Manager" });
-  const financeContacts = getDetailsContactRole({ contacts, partners, partnerRole: "Finance contact" });
-  const innovationLead = getDetailsContactRole({ contacts, partners, partnerRole: "Innovation lead" });
+  const projectManagers = getDetailsContactRole({ contacts, partners, partnerRole: ProjectRoleName.ProjectManager });
+  const financeContacts = getDetailsContactRole({ contacts, partners, partnerRole: ProjectRoleName.FinanceContact });
+  const innovationLead = getDetailsContactRole({ contacts, partners, partnerRole: ProjectRoleName.InnovationLead });
   const ipm = getDetailsContactRole({
     contacts,
     partners,
-    partnerRole: "IPM",
+    partnerRole: ProjectRoleName.IPM,
   });
 
   return (

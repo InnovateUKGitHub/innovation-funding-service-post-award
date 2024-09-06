@@ -9,7 +9,10 @@ import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 import { mergePcrData } from "@framework/util/pcrHelper";
 
-type PcrData = Pick<ManageTeamMemberPcrDto, "id" | "status" | "firstName" | "lastName" | "email" | "organisation">;
+type PcrData = Pick<
+  ManageTeamMemberPcrDto,
+  "id" | "status" | "firstName" | "lastName" | "email" | "organisation" | "role"
+>;
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectId: ProjectId;

@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { ContactsTable, IContactsTable } from "@ui/components/organisms/partners/ContactsTable/contactsTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { getColumnValues } from "@tests/test-utils/tableHelpers";
 
 describe("<ContactsTable />", () => {
@@ -45,7 +45,7 @@ describe("<ContactsTable />", () => {
         {
           id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           contactId: "892" as ContactId,
@@ -60,7 +60,7 @@ describe("<ContactsTable />", () => {
         {
           id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
-          role: "Project Manager",
+          role: ProjectRoleName.ProjectManager,
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
           contactId: "892" as ContactId,
@@ -88,7 +88,7 @@ describe("<ContactsTable />", () => {
         {
           id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           contactId: "892" as ContactId,
@@ -116,7 +116,7 @@ describe("<ContactsTable />", () => {
         {
           id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           contactId: "892" as ContactId,
@@ -131,7 +131,7 @@ describe("<ContactsTable />", () => {
         {
           id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
-          role: "Project Manager",
+          role: ProjectRoleName.ProjectManager,
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
           contactId: "892" as ContactId,
