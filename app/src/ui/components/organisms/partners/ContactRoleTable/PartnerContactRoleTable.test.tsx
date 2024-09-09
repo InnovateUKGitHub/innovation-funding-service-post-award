@@ -127,7 +127,7 @@ describe("<PartnersAndFinanceContacts />", () => {
     });
 
     test("matching PM snapshot", () => {
-      expect(setup(ProjectRoleName.MonitoringOfficer).container).toMatchSnapshot();
+      expect(setup(ProjectRoleName.ProjectManager).container).toMatchSnapshot();
     });
 
     test("with partners names and Steel Manufacturing as the lead", () => {
