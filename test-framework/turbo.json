@@ -15,6 +15,7 @@
     },
     "open": {
       "persistent": true,
+      "cache": false,
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "DISPLAY",
@@ -29,6 +30,7 @@
     },
     "run": {
       "persistent": true,
+      "cache": false,
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "BASIC_AUTH",

@@ -347,7 +347,7 @@ class MonitoringReports {
     if (hasquestions) {
       await this.commentsBox.fill("Test");
       await this.continueButton.click();
-      await this.validationMessage(`Enter score for ${section}`);
+      await this.validationMessage(`Enter a score for ${section}`);
     }
     let lorem = getLorem(length);
     let validNumber = length - 1;
