@@ -6,20 +6,12 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-import { CreateStandaloneProjectChangeRequestCommand } from "@server/features/pcrs/createStandaloneProjectChangeRequestCommand";
-import { GetStandalonePCRByIdQuery } from "@server/features/pcrs/getStandalonePcrByIdQuery";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
     params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
   ) => Promise<PCRDto>;
 
-  createStandalone: (
-    params: ApiParams<
-      Context,
-      { projectId: ProjectId; projectChangeRequestDto: Pick<StandalonePcrDto, "type" | "status" | "projectId"> }
-    >,
-  ) => Promise<StandalonePcrDto>;
   update: (
     params: ApiParams<
       Context,
@@ -42,14 +34,6 @@ class Controller
   constructor() {
     super("pcrs");
 
-    this.postItem(
-      "/standalone/:projectId",
-      (p, _, b: StandalonePcrDto) => ({
-        projectId: p.projectId,
-        projectChangeRequestDto: processDto(b),
-      }),
-      this.createStandalone,
-    );
     this.postItem(
       "/:projectId",
       (p, _, b: PCRDto) => ({
@@ -77,21 +61,6 @@ class Controller
     )) as PcrId;
 
     return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
-  }
-
-  async createStandalone(
-    params: ApiParams<
-      "server",
-      { projectId: ProjectId; projectChangeRequestDto: Pick<StandalonePcrDto, "status" | "type" | "projectId"> }
-    >,
-  ): Promise<StandalonePcrDto> {
-    const context = contextProvider.start(params);
-
-    const id = (await context.runCommand(
-      new CreateStandaloneProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto),
-    )) as PcrId;
-
-    return context.runQuery(new GetStandalonePCRByIdQuery(params.projectId, id));
   }
 
   async update(
