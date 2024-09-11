@@ -163,11 +163,12 @@ export interface ISalesforcePCR {
   Role_in_the_project__c: string | null;
   Justification__c: string | null;
 
-  // manage team members
+  // Manage Team Members
   // First_Name__c: string | null;
   // Last_Name__c: string | null;
   // Email__c: string | null;
   // Role__c: string | null;
+  Acc_ProjectContactLink__c: string | null;
 }
 
 export const mapToPCRApiName = (status: PCRStatus): string => {
@@ -330,6 +331,7 @@ export class ProjectChangeRequestRepository
     "Role_in_the_project__c",
     "Cost_of_work__c",
     "Justification__c",
+    "Acc_ProjectContactLink__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
@@ -462,6 +464,7 @@ export class ProjectChangeRequestRepository
           Loan_RepaymentPeriodChange__c: String(x.repaymentPeriodChange),
           New_company_subcontractor_name__c: x.subcontractorName,
           Company_registration_number__c: x.subcontractorRegistrationNumber,
+          Acc_ProjectContactLink__c: x.pclId,
 
           ...(configuration.features.approveNewSubcontractor
             ? {

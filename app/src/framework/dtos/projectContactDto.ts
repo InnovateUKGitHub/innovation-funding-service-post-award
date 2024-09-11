@@ -20,7 +20,11 @@ export interface ProjectContactDto {
   roleName: string;
   startDate: Date | null;
   endDate: Date | null;
-  associateStartDate: Date | null;
   firstName: string;
   lastName: string;
+  associateStartDate: Date | null;
+  inactive: boolean;
+  newTeamMember: boolean;
+  sendInvitation: boolean;
+  edited: boolean;
 }

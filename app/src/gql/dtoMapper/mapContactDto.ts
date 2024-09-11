@@ -24,6 +24,10 @@ type ContactNode = GQL.PartialNode<{
   Acc_EndDate__c: GQL.Value<string>;
   Associate_Start_Date__c: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
+  Acc_Inactive__c: GQL.Value<boolean>;
+  Acc_New_Team_Member__c: GQL.Value<boolean>;
+  Acc_Send_invitation__c: GQL.Value<boolean>;
+  Acc_Edited__c: GQL.Value<boolean>;
 }>;
 
 export interface ProjectContactDtoGql extends ProjectContactDto {}
@@ -80,6 +84,18 @@ const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
   },
   associateStartDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Associate_Start_Date__c?.value ?? null);
+  },
+  edited(node) {
+    return node?.Acc_Edited__c?.value ?? false;
+  },
+  inactive(node) {
+    return node?.Acc_Inactive__c?.value ?? false;
+  },
+  newTeamMember(node) {
+    return node?.Acc_New_Team_Member__c?.value ?? false;
+  },
+  sendInvitation(node) {
+    return node?.Acc_Send_invitation__c?.value ?? false;
   },
 };
 

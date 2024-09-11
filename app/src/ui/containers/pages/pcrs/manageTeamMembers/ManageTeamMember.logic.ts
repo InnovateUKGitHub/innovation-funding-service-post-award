@@ -1,21 +1,16 @@
+import { useServerInput } from "@framework/api-helpers/useZodErrors";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToContactDtoArray, ProjectContactDtoGql } from "@gql/dtoMapper/mapContactDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { getFirstEdge } from "@gql/selectors/edges";
+import { getDay, getMonth, getYear } from "@ui/components/atoms/Date";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useMemo } from "react";
+import { FieldValues } from "react-hook-form";
 import { useLazyLoadQuery } from "react-relay";
 import { ManageTeamMembersQuery } from "./__generated__/ManageTeamMembersQuery.graphql";
 import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
-import { useMemo } from "react";
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { useFetchKey } from "@ui/context/FetchKeyProvider";
-import { useServerInput } from "@framework/api-helpers/useZodErrors";
-import { FormTypes } from "@ui/zod/FormTypes";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { ManageTeamMemberValidatorSchema } from "./ManageTeamMember.zod";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom";
-import { useRoutes } from "@ui/context/routesProvider";
-import { FieldValues } from "react-hook-form";
-import { clientsideApiClient } from "@ui/apiClient";
 
 /**
  * You know, CRUD...
@@ -51,8 +46,7 @@ const ManageTeamMemberRoles = [
 
 interface ManageTeamMemberProps {
   projectId: ProjectId;
-  pcrId: PcrId;
-  pclId?: ProjectContactLinkId;
+  pclId?: ProjectContactLinkId | "undefined"; // When JS is disabled, we get "undefined" as a string.
   role: ManageTeamMemberRole;
 }
 
@@ -72,7 +66,7 @@ interface ManageTeamMemberUpdateDeleteProps extends ManageTeamMemberProps {
   pclId: ProjectContactLinkId;
 }
 
-const getManageTeamMemberDefaults = ({
+const getManageTeamMember = ({
   pclId,
   collated,
   method,
@@ -90,6 +84,9 @@ const getManageTeamMemberDefaults = ({
   let defaultLastName: string | undefined = undefined;
   let defaultProjectParticipantId: PartnerId | undefined = undefined;
   let defaultEmail: string | undefined;
+  let defaultStartDay: string | undefined;
+  let defaultStartMonth: string | undefined;
+  let defaultStartYear: string | undefined;
   let hideBottomSection = false;
 
   switch (method) {
@@ -99,6 +96,16 @@ const getManageTeamMemberDefaults = ({
         defaultLastName = defaults?.lastName ?? undefined;
         defaultProjectParticipantId = defaults?.partnerId ?? undefined;
         defaultEmail = defaults?.email ?? undefined;
+        defaultStartDay =
+          defaults?.startDate && "day" in defaults?.startDate ? defaults?.startDate.day : getDay(defaults?.startDate);
+        defaultStartMonth =
+          defaults?.startDate && "month" in defaults?.startDate
+            ? defaults?.startDate.month
+            : getMonth(defaults?.startDate);
+        defaultStartYear =
+          defaults?.startDate && "year" in defaults?.startDate
+            ? defaults?.startDate.year
+            : getYear(defaults?.startDate);
       }
       break;
     case ManageTeamMemberMethod.REPLACE:
@@ -128,12 +135,15 @@ const getManageTeamMemberDefaults = ({
       lastName: defaultLastName,
       projectParticipantId: defaultProjectParticipantId,
       email: defaultEmail,
+      startDay: defaultStartDay,
+      startMonth: defaultStartMonth,
+      startYear: defaultStartYear,
     },
     hideBottomSection,
   };
 };
 
-const useManageTeamMembersDefault = ({
+const useManageTeamMembers = ({
   pclId,
   collated,
   method,
@@ -143,63 +153,7 @@ const useManageTeamMembersDefault = ({
   method: ManageTeamMemberMethod;
 }) => {
   const defaults = useServerInput();
-  return useMemo(
-    () => getManageTeamMemberDefaults({ pclId, collated, method, defaults }),
-    [pclId, collated, method, defaults],
-  );
-};
-
-const useOnManageTeamMemberSubmit = ({ projectId, pcrId }: { projectId: ProjectId; pcrId: PcrId }) => {
-  const navigate = useNavigate();
-  const routes = useRoutes();
-  const [, setFetchKey] = useFetchKey();
-
-  return useOnUpdate<z.output<ManageTeamMemberValidatorSchema>, unknown, EmptyObject>({
-    req: async data => {
-      switch (data.form) {
-        case FormTypes.ProjectManageTeamMembersCreate:
-          {
-          }
-          break;
-        case FormTypes.ProjectManageTeamMembersReplace:
-          {
-          }
-          break;
-        case FormTypes.ProjectManageTeamMembersUpdate: {
-          return await clientsideApiClient.projectContacts.updateContactDetails({
-            projectId,
-            pcrId: pcrId,
-            contact: {
-              contactId: data.contactId,
-              id: data.pclId,
-              role: data.role,
-              firstName: data.firstName,
-              lastName: data.lastName,
-              form: data.form,
-            },
-          });
-        }
-
-        case FormTypes.ProjectManageTeamMembersDelete: {
-          return await clientsideApiClient.projectContacts.removeContact({
-            projectId,
-            pcrId: pcrId,
-            contact: {
-              form: data.form,
-              id: data.pclId,
-            },
-          });
-        }
-        default:
-          throw new Error("Invalid manage team member action");
-      }
-    },
-    onSuccess() {
-      setFetchKey(x => x + 1);
-
-      navigate(routes.manageTeamMembersConfirmationRoute.getLink({ projectId, pcrId }).path);
-    },
-  });
+  return useMemo(() => getManageTeamMember({ pclId, collated, method, defaults }), [pclId, collated, method, defaults]);
 };
 
 type PclData = Pick<
@@ -302,17 +256,17 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
 };
 
 export {
-  ManageTeamMemberData,
-  ManageTeamMemberProps,
+  getManageTeamMember as getManageTeamMember,
   ManageTeamMemberCreateProps,
+  ManageTeamMemberData,
   ManageTeamMemberMethod,
   ManageTeamMemberMethods,
+  ManageTeamMemberProps,
   ManageTeamMemberReplaceProps,
   ManageTeamMemberRole,
   ManageTeamMemberRoles,
-  ManageTeamMemberUpdateDeleteProps,
-  useManageTeamMembersDefault,
-  useOnManageTeamMemberSubmit,
-  useManageTeamMembersQuery,
   ManageTeamMembersTableData,
+  ManageTeamMemberUpdateDeleteProps,
+  useManageTeamMembers,
+  useManageTeamMembersQuery,
 };

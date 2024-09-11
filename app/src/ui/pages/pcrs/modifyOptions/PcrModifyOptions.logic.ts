@@ -40,14 +40,8 @@ const useOnSubmit = ({ projectId }: { projectId: ProjectId }) => {
     req: async data => {
       // need to create a standalone PCR with no header
       if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
-        return await clientsideApiClient.pcrs.createStandalone({
-          projectId: data.projectId,
-          projectChangeRequestDto: {
-            status: PCRStatus.DraftWithProjectManager,
-            type: data.types[0],
-            projectId,
-          },
-        });
+        return null;
+        // noop
       }
 
       if ("pcrId" in data) {
@@ -73,12 +67,12 @@ const useOnSubmit = ({ projectId }: { projectId: ProjectId }) => {
       }
     },
     onSuccess(data, res) {
-      if (!res?.id) {
-        throw new Error("Failed to return a PcrId");
-      }
       if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
-        navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId: data.projectId, pcrId: res.id }).path);
+        navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId: data.projectId }).path);
       } else {
+        if (!res?.id) {
+          throw new Error("Failed to return a PcrId");
+        }
         navigate(routes.pcrPrepare.getLink({ pcrId: res.id, projectId }).path);
       }
     },

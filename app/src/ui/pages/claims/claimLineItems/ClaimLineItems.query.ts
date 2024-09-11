@@ -102,7 +102,7 @@ export const claimLineItemsQuery = graphql`
                   value
                 }
                 Owner {
-                  ... on User {
+                  ... on UserAggregate {
                     Email {
                       value
                     }

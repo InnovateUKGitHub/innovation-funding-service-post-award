@@ -99,6 +99,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   subcontractorDescription?: string | null;
   subcontractorJustification?: string | null;
   subcontractorCost?: number | null;
+  pclId?: ProjectContactLinkId | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

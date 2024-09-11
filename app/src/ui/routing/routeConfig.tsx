@@ -74,7 +74,6 @@ import {
   ManageTeamMembersUpdateRoute,
   ManageTeamMembersDeleteRoute,
 } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberRoutes";
-import { ManageTeamMembersConfirmationRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/confirmation/ManageTeamMemberConfirmation.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -150,7 +149,6 @@ export const routeConfig = {
   manageTeamMembersReplaceRoute: ManageTeamMembersReplaceRoute,
   manageTeamMembersUpdateRoute: ManageTeamMembersUpdateRoute,
   manageTeamMembersDeleteRoute: ManageTeamMembersDeleteRoute,
-  manageTeamMembersConfirmationRoute: ManageTeamMembersConfirmationRoute,
 } as const;
 
 export const getRoutes = () => Object.entries(routeConfig);

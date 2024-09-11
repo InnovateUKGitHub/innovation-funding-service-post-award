@@ -1,14 +1,15 @@
-import { ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   contactIdValidation,
+  dateValidation,
   partnerIdValidation,
   pclIdValidation,
   projectIdValidation,
 } from "@ui/zod/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
+import { ManageTeamMemberRole } from "./ManageTeamMember.logic";
 
 const createTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersCreate),
@@ -17,6 +18,8 @@ const createTeamMemberValidator = z.object({
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
+  startDate: dateValidation,
+  role: z.literal(ManageTeamMemberRole.ASSOCIATE),
 });
 
 const replaceTeamMemberValidator = z.object({
@@ -35,7 +38,6 @@ const updateTeamMemberValidator = z.object({
   contactId: contactIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
-  role: z.nativeEnum(ProjectRoleName),
 });
 
 const deleteTeamMemberValidator = z.object({
@@ -55,4 +57,12 @@ type ManageTeamMemberValidatorSchema = typeof manageTeamMemberValidator;
 
 const manageTeamMemberErrorMap = makeZodI18nMap({ keyPrefix: ["project", "manageTeamMembers"] });
 
-export { ManageTeamMemberValidatorSchema, manageTeamMemberErrorMap, manageTeamMemberValidator };
+export {
+  ManageTeamMemberValidatorSchema,
+  manageTeamMemberErrorMap,
+  manageTeamMemberValidator,
+  createTeamMemberValidator,
+  replaceTeamMemberValidator,
+  updateTeamMemberValidator,
+  deleteTeamMemberValidator,
+};

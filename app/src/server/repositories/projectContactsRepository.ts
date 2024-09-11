@@ -52,13 +52,7 @@ export interface IProjectContactsRepository {
       "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
     >,
   ): Promise<ProjectContactLinkId>;
-  updateAssociateDetails(
-    contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
-  ): Promise<boolean>;
-  updateContactDetails(contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">): Promise<boolean>;
-  deleteContact(
-    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
-  ): Promise<boolean>;
+  update(contacts: PickRequiredFromPartial<ISalesforceProjectContact, "Id">[]): Promise<boolean>;
 }
 
 /**
@@ -90,12 +84,12 @@ export class ProjectContactsRepository
     "Acc_UserId__r.Username",
     "Acc_UserId__r.FirstName",
     "Acc_UserId__r.LastName",
-    "Acc_Inactive__c", // pass in with delete
+    "Acc_Inactive__c",
     "Acc_StartDate__c",
-    "Acc_New_Team_Member__c", // pass in with create
-    "Acc_Send_invitation__c", // with add new team member
-    "Acc_Edited__c", // pass in with edit
-    "Acc_EndDate__c", // pass in with delete
+    // "Acc_New_Team_Member__c",
+    // "Acc_Send_invitation__c",
+    // "Acc_Edited__c",
+    "Acc_EndDate__c",
     "Acc_UserId__c",
     "Associate_Start_Date__c",
   ];
@@ -121,21 +115,7 @@ export class ProjectContactsRepository
     return super.insertItem(contact) as Promise<ProjectContactLinkId>;
   }
 
-  public async updateAssociateDetails(
-    contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
-  ): Promise<boolean> {
+  public async update(contacts: PickRequiredFromPartial<ISalesforceProjectContact, "Id">[]): Promise<boolean> {
     return super.updateAll(contacts);
-  }
-
-  public async updateContactDetails(
-    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">,
-  ): Promise<boolean> {
-    return super.updateItem(contact);
-  }
-
-  public async deleteContact(
-    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
-  ): Promise<boolean> {
-    return super.updateItem(contact);
   }
 }

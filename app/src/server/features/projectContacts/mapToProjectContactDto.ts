@@ -28,9 +28,13 @@ const mapToProjectContactDto = (x: ISalesforceProjectContact): ProjectContactDto
     projectId: x.Acc_ProjectId__c as ProjectId,
     startDate: clock.parseOptionalSalesforceDateTime(x.Acc_StartDate__c),
     endDate: clock.parseOptionalSalesforceDateTime(x.Acc_EndDate__c),
-    associateStartDate: clock.parseOptionalSalesforceDateTime(x.Associate_Start_Date__c),
     firstName,
     lastName,
+    associateStartDate: clock.parseOptionalSalesforceDateTime(x.Associate_Start_Date__c),
+    inactive: x.Acc_Inactive__c,
+    newTeamMember: x.Acc_New_Team_Member__c,
+    sendInvitation: x.Acc_Send_invitation__c,
+    edited: x.Acc_Edited__c,
   };
 };
 

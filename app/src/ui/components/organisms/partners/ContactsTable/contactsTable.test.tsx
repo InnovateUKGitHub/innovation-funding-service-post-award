@@ -56,6 +56,10 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
           firstName: "Ted",
           lastName: "Tester",
+          edited: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
         {
           id: "101" as ProjectContactLinkId,
@@ -71,6 +75,10 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
           firstName: "Dave",
           lastName: "Developer",
+          edited: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 
@@ -99,6 +107,10 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
           firstName: "Ted",
           lastName: "Tester",
+          edited: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 
@@ -127,6 +139,10 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
           firstName: "Ted",
           lastName: "Tester",
+          edited: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
         {
           id: "101" as ProjectContactLinkId,
@@ -142,6 +158,10 @@ describe("<ContactsTable />", () => {
           associateStartDate: null,
           firstName: "Dave",
           lastName: "Developer",
+          edited: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 

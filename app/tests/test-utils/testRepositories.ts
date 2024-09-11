@@ -261,33 +261,30 @@ class ProjectContactTestRepository
     return Promise.resolve(Id);
   }
 
-  async updateAssociateDetails(
-    items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[],
-  ): Promise<boolean> {
+  async update(items: PickRequiredFromPartial<ISalesforceProjectContact, "Id">[]): Promise<boolean> {
     for (const item of items) {
       const foundItem = await this.getById(item.Id);
       if (!foundItem) return Promise.resolve(false);
-      foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c ?? null;
+
+      if (typeof item.Associate_Start_Date__c === "string") {
+        foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c;
+      }
+      if (typeof item.Acc_EndDate__c === "string") {
+        foundItem.Acc_EndDate__c = item.Acc_EndDate__c;
+      }
+      if (typeof item.Acc_Edited__c === "boolean") {
+        foundItem.Acc_Edited__c = item.Acc_Edited__c;
+      }
+      if (typeof item.Acc_Inactive__c === "boolean") {
+        foundItem.Acc_Inactive__c = item.Acc_Inactive__c;
+      }
+      if (typeof item.Acc_New_Team_Member__c === "boolean") {
+        foundItem.Acc_New_Team_Member__c = item.Acc_New_Team_Member__c;
+      }
+      if (typeof item.Acc_Send_invitation__c === "boolean") {
+        foundItem.Acc_Send_invitation__c = item.Acc_Send_invitation__c;
+      }
     }
-
-    return Promise.resolve(true);
-  }
-
-  async updateContactDetails(contact: Pick<ISalesforceProjectContact, "Id" | "Acc_Edited__c">): Promise<boolean> {
-    const foundItem = await this.getById(contact.Id);
-    if (!foundItem) return Promise.resolve(false);
-    foundItem.Acc_Edited__c = !!contact.Acc_Edited__c;
-
-    return Promise.resolve(true);
-  }
-
-  async deleteContact(
-    contact: Pick<ISalesforceProjectContact, "Id" | "Acc_EndDate__c" | "Acc_Inactive__c">,
-  ): Promise<boolean> {
-    const foundItem = await this.getById(contact.Id);
-    if (!foundItem) return Promise.resolve(false);
-    foundItem.Acc_Inactive__c = !!contact.Acc_Inactive__c;
-    foundItem.Acc_EndDate__c = contact.Acc_EndDate__c;
 
     return Promise.resolve(true);
   }

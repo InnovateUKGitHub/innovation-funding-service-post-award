@@ -80,6 +80,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly projectManagerCanEdit: boolean;
   private readonly isPmProjectParticipantNotOnHold: boolean;
   private readonly monitoringOfficerCanEdit: boolean;
+  private readonly isManageTeamMember: boolean;
 
   public comments: Result;
   public status: Result;
@@ -130,6 +131,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       this.partners && this.partners.length > 0 && this.partners.some(x => getAuthRoles(x.roles).isPm)
         ? this.partners.some(x => getAuthRoles(x.roles).isPm && x.partnerStatus !== PartnerStatus.OnHold)
         : true;
+    this.isManageTeamMember = model.items.length === 1 && model.items[0].type === PCRItemType.ManageTeamMembers;
 
     // Validating these fields requires above values to be computed
     this.comments = this.validateComments();
@@ -187,6 +189,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   static readonly maxSalesforceFieldLength = 32000;
 
   private validateComments(): Result {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const { isPm, isMo } = getAuthRoles(this.role);
 
     const canPmEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold;
@@ -235,6 +239,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateReasoningComments() {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const { isPm } = getAuthRoles(this.role);
 
     if (isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold) {
@@ -279,6 +285,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const permittedStatus: PCRStatus[] = [];
     const { isPm, isMo } = getAuthRoles(this.role);
 
+    if (this.isManageTeamMember) {
+      permittedStatus.push(PCRStatus.Approved, PCRStatus.SubmittedToInnovateUK);
+    }
+
     if (isPm) {
       if (!this.original) {
         permittedStatus.push(PCRStatus.DraftWithProjectManager);
@@ -314,6 +324,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateReasonStatus() {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
     const preparePcrStatus = [
@@ -427,6 +439,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateItems() {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const statusWhenNotRequiredToBeComplete = [
       PCRStatus.DraftWithProjectManager,
       PCRStatus.QueriedToProjectManager,

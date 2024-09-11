@@ -1157,6 +1157,7 @@
           "firstName": "First name",
           "lastName": "Last name",
           "email": "Email",
+          "startDate": "Start date",
           "changeEmail": "To change the email address, please contact customer support service by calling 0300 321 4357 or email [support@iuk.ukri.org](mailto:support@iuk.ukri.org)",
           "noneProvided": "None provided",
           "cancel": "Cancel",
@@ -3171,6 +3172,37 @@
         },
         "email": {
           "label": "Email"
+        },
+        "startDate": {
+          "day": {
+            "errors": {
+              "too_big": "Start day must be a valid number.",
+              "invalid_string": {
+                "regex": "Start day must be a number."
+              }
+            }
+          },
+          "month": {
+            "errors": {
+              "too_big": "Start month must be a valid number.",
+              "invalid_string": {
+                "regex": "Start month must be a number."
+              }
+            }
+          },
+          "year": {
+            "errors": {
+              "too_small": "Start year must be a valid 4 digit number.",
+              "too_big": "Start year must be a valid 4 digit number.",
+              "invalid_string": {
+                "regex": "Start year must be a 4 digit number."
+              }
+            }
+          },
+          "errors": {
+            "invalid_date": "Enter a valid start date.",
+            "too_small": "The start date must be the same as or after 1 January 2000."
+          }
         }
       }
     }

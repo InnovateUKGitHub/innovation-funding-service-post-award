@@ -24,11 +24,11 @@ const types = [
   "TextArea",
   "Time",
   "Url",
+  "User",
   "Group",
 ];
 
 const objectsToKeep = [
-  "Group",
   "User",
   "RecordQuery",
   "RecordType",
@@ -70,6 +70,7 @@ const objectSuffixes = [
   "_GroupBy",
   "_Owner",
   "OrderByStringClause",
+  "Aggregate",
 ];
 const additionalObjects = [
   "Query",
@@ -88,6 +89,8 @@ const additionalObjects = [
   "NullsOrder",
 ];
 
+const disallowList = ["Group_Owner", "RecordQueryAggregate"];
+
 const getTypeWhitelist = () => {
   const whitelist: string[] = [];
 
@@ -97,13 +100,15 @@ const getTypeWhitelist = () => {
 
   for (const type of types) {
     for (const suffix of typeSuffixes) {
-      whitelist.push(`${type}${suffix}`);
+      const item = `${type}${suffix}`;
+      if (!disallowList.includes(item)) whitelist.push(item);
     }
   }
 
   for (const objectToKeep of objectsToKeep) {
     for (const suffix of objectSuffixes) {
-      whitelist.push(`${objectToKeep}${suffix}`);
+      const item = `${objectToKeep}${suffix}`;
+      if (!disallowList.includes(item)) whitelist.push(item);
     }
   }
 

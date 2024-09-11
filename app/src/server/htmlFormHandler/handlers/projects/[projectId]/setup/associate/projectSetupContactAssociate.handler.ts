@@ -1,5 +1,5 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdateProjectContactsAssociateDetailsCommand } from "@server/features/projectContacts/updateProjectContactsAssociateDetailsCommand";
+import { UpdateProjectContactLinkCommand } from "@server/features/projectContacts/UpdateProjectContactLinkCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { ContactSetupAssociateParams } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.logic";
 import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.page";
@@ -62,7 +62,7 @@ class ProjectSetupContactAssociateHandler extends ZodFormHandlerBase<
     input: z.output<ContactSetupAssociateSchemaType>;
     context: IContext;
   }): Promise<string> {
-    await context.runCommand(new UpdateProjectContactsAssociateDetailsCommand(input.projectId, input.contacts));
+    await context.runCommand(new UpdateProjectContactLinkCommand(input.projectId, input.contacts));
     return ProjectDashboardRoute.getLink({}).path;
   }
 }

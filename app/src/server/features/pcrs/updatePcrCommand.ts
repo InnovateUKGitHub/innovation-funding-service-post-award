@@ -358,6 +358,15 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
 
         break;
       }
+
+      case PCRItemType.ManageTeamMembers: {
+        if (item.pclId !== dto.pclId) {
+          return {
+            ...init,
+            pclId: dto.pclId,
+          };
+        }
+      }
     }
 
     return init;

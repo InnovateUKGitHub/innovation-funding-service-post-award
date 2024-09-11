@@ -47,6 +47,10 @@ const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
     id: "101" as ProjectContactLinkId,
@@ -60,6 +64,10 @@ const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
     id: "102" as ProjectContactLinkId,
@@ -73,6 +81,10 @@ const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
     id: "103" as ProjectContactLinkId,
@@ -86,6 +98,10 @@ const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
 ];
 

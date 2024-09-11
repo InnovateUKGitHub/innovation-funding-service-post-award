@@ -715,6 +715,7 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nName: x => x.pcrTypes.manageTeamMembers,
     i18nDescription: x => x.pages.pcrModifyOptions.manageTeamMembersMessage,
     ignoredCompetitions: [],
+    disableSummary: true,
     exclusive: true,
   },
 ];

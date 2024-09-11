@@ -3,7 +3,7 @@ import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { Params } from "@ui/helpers/make-url";
-import { useEffect, useRef } from "react";
+import { startTransition, useEffect, useRef } from "react";
 import { initialContentQuery } from "./InitialContent.query";
 import { InitialContentQuery } from "./__generated__/InitialContentQuery.graphql";
 
@@ -39,7 +39,9 @@ export function useInitContent(params?: Params): Copy {
   }
 
   useEffect(() => {
-    setFetchKey(x => x + 1);
+    startTransition(() => {
+      setFetchKey(x => x + 1);
+    });
   }, [projectId]);
 
   return copyRef.current.copy;
