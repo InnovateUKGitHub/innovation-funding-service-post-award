@@ -6,7 +6,7 @@ import { ManageTeamMembersTableData } from "./ManageTeamMember.logic";
 
 interface ManageTeamMembersContactTableProps {
   tableData: ManageTeamMembersTableData[];
-  link: React.FunctionComponent<{ data: ManageTeamMembersTableData }> | null;
+  link?: React.FunctionComponent<{ data: ManageTeamMembersTableData }> | null;
 }
 
 const ManageTeamMembersContactListTable = ({ tableData, link: Link }: ManageTeamMembersContactTableProps) => {

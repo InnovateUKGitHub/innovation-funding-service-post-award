@@ -1,3 +1,4 @@
+import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
@@ -9,8 +10,6 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useFormContext } from "react-hook-form";
 import { ManageTeamMemberMethod, ManageTeamMemberRole } from "../../ManageTeamMember.logic";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
-import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
-import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 
 const ManageTeamMemberInputs = () => {
   const { method, role, defaults, isFetching, memberToManage, partners } = useManageTeamMemberActionContext();

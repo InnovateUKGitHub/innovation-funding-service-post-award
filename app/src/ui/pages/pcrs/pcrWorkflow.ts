@@ -11,6 +11,7 @@ import { accountNameChangeWorkflow } from "./renamePartner/renamePartnerWorkflow
 import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
 import { approveNewSubcontractorWorkflow } from "./approveNewSubcontractor/approveNewSubcontractorWorkflow";
 import { upliftWorkflow } from "./uplift/upliftWorkflow";
+import { manageTeamMemberWorkflow } from "./manageTeamMembers/manageTeamMemberWorkflow";
 
 export type IPCRWorkflow = IWorkflow<PCRStepType>;
 
@@ -45,6 +46,8 @@ export class PcrWorkflow extends WorkflowBase<PCRStepType> {
         return new PcrWorkflow(approveNewSubcontractorWorkflow, step);
       case PCRItemType.Uplift:
         return new PcrWorkflow(upliftWorkflow, step);
+      case PCRItemType.ManageTeamMembers:
+        return new PcrWorkflow(manageTeamMemberWorkflow, step);
       default:
         return null;
     }

@@ -274,6 +274,7 @@ const mapItemForManageTeamMembers = (
 ): PCRItemForManageTeamMembersDto => ({
   ...mapBaseItem(pcr, typeName, type),
   type,
+  pclId: pcr.pclId,
 });
 
 const mapItemForLoansChangeDrawdown = (

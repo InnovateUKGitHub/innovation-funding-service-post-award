@@ -439,8 +439,6 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateItems() {
-    if (this.isManageTeamMember) return Validation.valid(this);
-
     const statusWhenNotRequiredToBeComplete = [
       PCRStatus.DraftWithProjectManager,
       PCRStatus.QueriedToProjectManager,
@@ -487,6 +485,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
               items => {
                 // If we are in a draft, allow the same partner to be selected more than once.
                 if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+                if (this.isManageTeamMember) return true;
 
                 const seenPartnerIds = new Set<string>();
 
@@ -509,6 +508,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
               items => {
                 // If we are in a draft, allow the same partner to be selected more than once.
                 if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+                if (this.isManageTeamMember) return true;
 
                 const seenPartnerIds = new Set<string>();
 

@@ -112,7 +112,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
 
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
-    const hasAnyUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+    const skipToItem = pcr.items.some(x => x.type === PCRItemType.Uplift || x.type === PCRItemType.ManageTeamMembers);
 
     const viewItemLink = {
       route: props.routes.pcrViewItem.getLink(pcrLinkArgs),
@@ -150,7 +150,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       qa: "pcrManageTeamMembersLink",
     };
 
-    if (isPmOrMo && hasAnyUplift) {
+    if (isPmOrMo && skipToItem) {
       // If we only have 1 PCR item, show the view item link.
       if (pcr.items.length === 1) {
         links.push(viewItemLink);
