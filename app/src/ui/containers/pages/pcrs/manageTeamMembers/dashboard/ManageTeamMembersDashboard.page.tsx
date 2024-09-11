@@ -8,7 +8,7 @@ import { ManageTeamMembersDashboardParams } from "./ManageTeamMembersDashboard.l
 import { Section } from "@ui/components/molecules/Section/section";
 import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactListTable";
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
-import { ManageTeamMemberEditLink, ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
+import { ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
 import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMembersDashboardParams) => {
@@ -28,16 +28,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       fragmentRef={fragmentRef}
     >
       <Section title={getContent(x => x.projectLabels.projectManagers({ count: categories.projectManagers.length }))}>
-        <ManageTeamMembersContactListTable
-          tableData={categories.projectManagers}
-          link={({ data }) => (
-            <ManageTeamMemberEditLink
-              projectId={projectId}
-              pclId={data.pclId}
-              role={ManageTeamMemberRole.PROJECT_MANAGER}
-            />
-          )}
-        />
+        <ManageTeamMembersContactListTable tableData={categories.projectManagers} />
 
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
@@ -52,16 +43,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       </Section>
 
       <Section title={getContent(x => x.projectLabels.financeContacts({ count: categories.financeContacts.length }))}>
-        <ManageTeamMembersContactListTable
-          tableData={categories.financeContacts}
-          link={({ data }) => (
-            <ManageTeamMemberEditLink
-              projectId={projectId}
-              pclId={data.pclId}
-              role={ManageTeamMemberRole.FINANCE_CONTACT}
-            />
-          )}
-        />
+        <ManageTeamMembersContactListTable tableData={categories.financeContacts} />
 
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
@@ -80,16 +62,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           x.projectLabels.knowledgeBaseAdministrators({ count: categories.mainCompanyContacts.length }),
         )}
       >
-        <ManageTeamMembersContactListTable
-          tableData={categories.knowledgeBaseAdministrators}
-          link={({ data }) => (
-            <ManageTeamMemberEditLink
-              projectId={projectId}
-              pclId={data.pclId}
-              role={ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR}
-            />
-          )}
-        />
+        <ManageTeamMembersContactListTable tableData={categories.knowledgeBaseAdministrators} />
         {categories.knowledgeBaseAdministrators.length === 0 ? (
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
@@ -121,18 +94,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       <Section
         title={getContent(x => x.projectLabels.mainCompanyContacts({ count: categories.mainCompanyContacts.length }))}
       >
-        <ManageTeamMembersContactListTable
-          tableData={categories.mainCompanyContacts}
-          link={({ data }) => (
-            <>
-              <ManageTeamMemberEditLink
-                projectId={projectId}
-                pclId={data.pclId}
-                role={ManageTeamMemberRole.MAIN_COMPANY_CONTACT}
-              />
-            </>
-          )}
-        />
+        <ManageTeamMembersContactListTable tableData={categories.mainCompanyContacts} />
         {categories.mainCompanyContacts.length === 0 ? (
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
@@ -162,18 +124,11 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
         <ManageTeamMembersContactListTable
           tableData={categories.associates}
           link={({ data }) => (
-            <>
-              <ManageTeamMemberEditLink
-                projectId={projectId}
-                pclId={data.pclId}
-                role={ManageTeamMemberRole.ASSOCIATE}
-              />
-              <ManageTeamMemberRemoveLink
-                projectId={projectId}
-                pclId={data.pclId}
-                role={ManageTeamMemberRole.ASSOCIATE}
-              />
-            </>
+            <ManageTeamMemberRemoveLink
+              projectId={projectId}
+              pclId={data.pclId}
+              role={ManageTeamMemberRole.ASSOCIATE}
+            />
           )}
         />
         <Link
