@@ -115,6 +115,7 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.ToDo,
+      items: [],
     } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -128,6 +129,7 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.DraftWithProjectManager,
       reasoningStatus: PCRItemStatus.Complete,
+      items: [],
     } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -141,9 +143,50 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.Approved,
       reasoningStatus: PCRItemStatus.ToDo,
+      items: [],
     } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  test("should not throw a validation error if a Manage Team Member status is approved", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    context.testData.createCurrentUserAsProjectManager(project);
+    await context.testData.createPartner(project);
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
+      projectId: project.Id,
+      status: PCRStatus.Approved,
+      reasoningStatus: PCRItemStatus.Complete,
+      items: [
+        {
+          type: PCRItemType.ManageTeamMembers,
+          status: PCRItemStatus.Complete,
+        },
+      ],
+    } as unknown as PCRDto);
+
+    await expect(context.runCommand(command)).resolves.not.toThrow();
+  });
+
+  test("should not throw a validation error if a Manage Team Member status is Submitted to Innovate UK", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    context.testData.createCurrentUserAsProjectManager(project);
+    await context.testData.createPartner(project);
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
+      projectId: project.Id,
+      status: PCRStatus.SubmittedToInnovateUK,
+      reasoningStatus: PCRItemStatus.Complete,
+      items: [
+        {
+          type: PCRItemType.ManageTeamMembers,
+          status: PCRItemStatus.Complete,
+        },
+      ],
+    } as unknown as PCRDto);
+
+    await expect(context.runCommand(command)).resolves.not.toThrow();
   });
 
   test("throws an error if a type is not enabled", async () => {

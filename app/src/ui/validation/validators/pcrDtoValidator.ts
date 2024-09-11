@@ -463,6 +463,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
             return children.isTrue(
               items => {
                 const seenProjectPcrs = new Set<PCRItemType>();
+                if (this.isManageTeamMember) return true;
 
                 for (const projectPcr of items) {
                   // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
@@ -569,7 +570,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 }
 
-export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
+export abstract class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   protected readonly canEdit: boolean;
   protected readonly role: ProjectRolePermissionBits = ProjectRolePermissionBits.Unknown;
   protected readonly pcrStatus: PCRStatus;
@@ -617,6 +618,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
   private validateTypes() {
     const { isPm } = getAuthRoles(this.role);
+
     return Validation.all(
       this,
       () =>
@@ -644,7 +646,10 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   private validateStatus() {
     const { isPm } = getAuthRoles(this.role);
 
-    const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
+    const permittedStatus =
+      this.model.type === PCRItemType.ManageTeamMembers
+        ? [PCRItemStatus.Complete]
+        : [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
     const statusWhenNotRequiredToBeComplete = [
       PCRStatus.DraftWithProjectManager,

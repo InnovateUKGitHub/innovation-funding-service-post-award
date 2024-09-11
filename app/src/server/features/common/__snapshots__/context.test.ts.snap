@@ -957,6 +957,7 @@ exports[`Context should contain the repositories 1`] = `
       "Role_in_the_project__c",
       "Cost_of_work__c",
       "Justification__c",
+      "Acc_ProjectContactLink__c",
     ],
     "salesforceObjectName": "Acc_ProjectChangeRequest__c",
     "standalonePcrTypes": [
@@ -1000,9 +1001,6 @@ exports[`Context should contain the repositories 1`] = `
       "Acc_UserId__r.LastName",
       "Acc_Inactive__c",
       "Acc_StartDate__c",
-      "Acc_New_Team_Member__c",
-      "Acc_Send_invitation__c",
-      "Acc_Edited__c",
       "Acc_EndDate__c",
       "Acc_UserId__c",
       "Associate_Start_Date__c",
