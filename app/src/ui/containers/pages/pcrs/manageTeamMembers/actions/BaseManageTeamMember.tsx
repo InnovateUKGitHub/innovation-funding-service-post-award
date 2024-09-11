@@ -2,9 +2,6 @@ import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@ui/components/atoms/Button/Button";
-import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
-import { Form } from "@ui/components/atoms/form/Form/Form";
 import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -27,12 +24,12 @@ import {
   useManageTeamMembers,
   useManageTeamMembersQuery,
 } from "../ManageTeamMember.logic";
+import { useOnManageTeamMemberSubmit } from "./ManageTeamMember.logic";
 import {
   manageTeamMemberErrorMap,
   manageTeamMemberValidator,
   ManageTeamMemberValidatorSchema,
-} from "../ManageTeamMember.zod";
-import { useOnManageTeamMemberSubmit } from "./ManageTeamMember.logic";
+} from "./ManageTeamMember.zod";
 
 interface ManageTeamMembersActionContext {
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
@@ -98,7 +95,7 @@ const BaseManageTeamMember = ({
       pclId: defaultPclId,
     },
   });
-  const { setError, formState, watch, register, handleSubmit } = methods;
+  const { setError, formState, watch } = methods;
   const pclId = watch("pclId");
 
   const { onUpdate, isFetching, apiError } = useOnManageTeamMemberSubmit({ projectId });
@@ -141,57 +138,26 @@ const BaseManageTeamMember = ({
       </P>
 
       {validPage && (
-        <Form onSubmit={handleSubmit(x => onUpdate({ data: x }))}>
-          <input type="hidden" value={method} {...register("form")} />
-          <input type="hidden" value={role} {...register("role")} />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" name="pclId" value={pclId} />
-          <input type="hidden" {...register("contactId")} value={memberToManage?.pcl.contactId} />
-
-          <FormProvider {...methods}>
-            <ManageTeamMemberActionProvider
-              data={{
-                projectId,
-                defaultPclId,
-                pclId,
-                role,
-                method,
-                collated,
-                categories,
-                partners,
-                onUpdate,
-                isFetching,
-                memberToManage,
-                defaults,
-                hideBottomSection,
-                backRoute,
-              }}
-            >
-              {children}
-            </ManageTeamMemberActionProvider>
-          </FormProvider>
-
-          {!hideBottomSection && (
-            <Fieldset>
-              <div className="govuk-button-group">
-                <Button
-                  type="submit"
-                  styling={
-                    method === ManageTeamMemberMethod.DELETE || method === ManageTeamMemberMethod.REPLACE
-                      ? "Warning"
-                      : "Primary"
-                  }
-                  disabled={isFetching}
-                >
-                  {getContent(x => x.pages.manageTeamMembers.modify.messages[method][role].apply)}
-                </Button>
-                <Link styling="Link" route={backRoute}>
-                  {getContent(x => x.pages.manageTeamMembers.modify.labels.cancel)}
-                </Link>
-              </div>
-            </Fieldset>
-          )}
-        </Form>
+        <ManageTeamMemberActionProvider
+          data={{
+            projectId,
+            defaultPclId,
+            pclId,
+            role,
+            method,
+            collated,
+            categories,
+            partners,
+            onUpdate,
+            isFetching,
+            memberToManage,
+            defaults,
+            hideBottomSection,
+            backRoute,
+          }}
+        >
+          <FormProvider {...methods}>{children}</FormProvider>
+        </ManageTeamMemberActionProvider>
       )}
     </Page>
   );

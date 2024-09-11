@@ -5,14 +5,19 @@ import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
+import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
+import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 
 const ManageTeamMemberReplacePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.REPLACE}>
       <SelectTeamMember />
-      <ManageTeamMemberSection>
-        <ManageTeamMemberInputs />
-      </ManageTeamMemberSection>
+      <ManageTeamMemberForm>
+        <ManageTeamMemberSection>
+          <ManageTeamMemberInputs />
+        </ManageTeamMemberSection>
+        <ManageTeamMemberSubmitSection />
+      </ManageTeamMemberForm>
     </BaseManageTeamMember>
   );
 };

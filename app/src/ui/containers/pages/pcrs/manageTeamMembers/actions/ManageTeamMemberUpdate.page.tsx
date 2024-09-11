@@ -9,14 +9,19 @@ import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
+import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
+import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 
 const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.UPDATE}>
-      <ManageTeamMemberSection>
-        <ManageTeamMemberInputs />
-        <ManageEmailMessage />
-      </ManageTeamMemberSection>
+      <ManageTeamMemberForm>
+        <ManageTeamMemberSection>
+          <ManageTeamMemberInputs />
+          <ManageEmailMessage />
+        </ManageTeamMemberSection>
+        <ManageTeamMemberSubmitSection />
+      </ManageTeamMemberForm>
     </BaseManageTeamMember>
   );
 };

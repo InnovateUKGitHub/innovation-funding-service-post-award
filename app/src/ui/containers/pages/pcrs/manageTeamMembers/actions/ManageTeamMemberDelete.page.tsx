@@ -8,12 +8,17 @@ import {
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
+import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
+import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 
 const ManageTeamMemberDeletePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.DELETE}>
       <SelectTeamMember />
-      <ManageTeamMemberSection></ManageTeamMemberSection>
+      <ManageTeamMemberForm>
+        <ManageTeamMemberSection />
+        <ManageTeamMemberSubmitSection />
+      </ManageTeamMemberForm>
     </BaseManageTeamMember>
   );
 };

@@ -4,10 +4,11 @@ import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { ManageTeamMemberValidatorSchema } from "../ManageTeamMember.zod";
+import { ManageTeamMemberValidatorSchema } from "./ManageTeamMember.zod";
 import { useRoutes } from "@ui/context/routesProvider";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
+import { useFormContext } from "react-hook-form";
 
 const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) => {
   const navigate = useNavigate();
@@ -17,106 +18,71 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
   return useOnUpdate<z.output<ManageTeamMemberValidatorSchema>, PCRDto, EmptyObject>({
     req: async data => {
       let pcrStatus = PCRStatus.Approved;
+      let pclId: ProjectContactLinkId | undefined;
 
       switch (data.form) {
-        case FormTypes.ProjectManageTeamMembersCreate: {
-          pcrStatus = PCRStatus.SubmittedToInnovateUK;
-
-          return await clientsideApiClient.pcrs.create({
-            projectId: data.projectId,
-            projectChangeRequestDto: {
-              projectId: data.projectId,
-              status: pcrStatus,
-              reasoningStatus: PCRItemStatus.Incomplete,
-              items: [
+        case FormTypes.ProjectManageTeamMembersCreate:
+          {
+            pcrStatus = PCRStatus.SubmittedToInnovateUK;
+          }
+          break;
+        case FormTypes.ProjectManageTeamMembersReplace:
+          {
+            pcrStatus = PCRStatus.SubmittedToInnovateUK;
+            pclId = data.pclId;
+          }
+          break;
+        case FormTypes.ProjectManageTeamMembersUpdate:
+          {
+            await clientsideApiClient.projectContacts.update({
+              projectId,
+              contacts: [
                 {
-                  type: PCRItemType.ManageTeamMembers,
-                  status: PCRItemStatus.Complete,
+                  id: data.pclId,
+                  firstName: data.firstName,
+                  lastName: data.lastName,
                 },
               ],
-            },
-          });
-        }
-        case FormTypes.ProjectManageTeamMembersReplace: {
-          pcrStatus = PCRStatus.SubmittedToInnovateUK;
+            });
+            pclId = data.pclId;
+          }
+          break;
 
-          return await clientsideApiClient.pcrs.create({
-            projectId: data.projectId,
-            projectChangeRequestDto: {
-              projectId: data.projectId,
-              status: pcrStatus,
-              reasoningStatus: PCRItemStatus.Incomplete,
-              items: [
+        case FormTypes.ProjectManageTeamMembersDelete:
+          {
+            await clientsideApiClient.projectContacts.update({
+              projectId,
+              contacts: [
                 {
-                  type: PCRItemType.ManageTeamMembers,
-                  status: PCRItemStatus.Complete,
-                  pclId: data.pclId,
+                  id: data.pclId,
+                  inactive: true,
+                  endDate: new Date(),
                 },
               ],
-            },
-          });
-        }
-        case FormTypes.ProjectManageTeamMembersUpdate: {
-          await clientsideApiClient.projectContacts.update({
-            projectId,
-            contacts: [
-              {
-                id: data.pclId,
-                firstName: data.firstName,
-                lastName: data.lastName,
-              },
-            ],
-          });
-
-          return await clientsideApiClient.pcrs.create({
-            projectId: data.projectId,
-            projectChangeRequestDto: {
-              projectId: data.projectId,
-              status: pcrStatus,
-              reasoningStatus: PCRItemStatus.Complete,
-              items: [
-                {
-                  type: PCRItemType.ManageTeamMembers,
-                  status: PCRItemStatus.Complete,
-                  pclId: data.pclId,
-                },
-              ],
-            },
-          });
-        }
-
-        case FormTypes.ProjectManageTeamMembersDelete: {
-          await clientsideApiClient.projectContacts.update({
-            projectId,
-            contacts: [
-              {
-                id: data.pclId,
-                inactive: true,
-                endDate: new Date(),
-              },
-            ],
-          });
-
-          return await clientsideApiClient.pcrs.create({
-            projectId: data.projectId,
-            projectChangeRequestDto: {
-              projectId: data.projectId,
-              status: pcrStatus,
-              reasoningStatus: PCRItemStatus.Complete,
-              items: [
-                {
-                  type: PCRItemType.ManageTeamMembers,
-                  status: PCRItemStatus.Complete,
-                  pclId: data.pclId,
-                },
-              ],
-            },
-          });
-        }
+            });
+            pclId = data.pclId;
+          }
+          break;
 
         default:
           throw new Error("Invalid manage team member action");
       }
+
+      return await clientsideApiClient.pcrs.create({
+        projectId: data.projectId,
+        projectChangeRequestDto: {
+          projectId: data.projectId,
+          status: pcrStatus,
+          reasoningStatus: PCRItemStatus.Complete,
+          items: [
+            {
+              type: PCRItemType.ManageTeamMembers,
+              status: PCRItemStatus.Complete,
+              pclId,
+            },
+          ],
+        },
+      });
     },
     onSuccess(data, res) {
       setFetchKey(x => x + 1);
@@ -126,4 +92,6 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
   });
 };
 
-export { useOnManageTeamMemberSubmit };
+const useManageTeamMemberFormContext = useFormContext<z.output<ManageTeamMemberValidatorSchema>>;
+
+export { useOnManageTeamMemberSubmit, useManageTeamMemberFormContext };

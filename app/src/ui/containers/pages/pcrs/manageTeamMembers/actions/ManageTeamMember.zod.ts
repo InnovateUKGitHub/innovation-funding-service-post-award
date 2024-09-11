@@ -9,7 +9,7 @@ import {
 } from "@ui/zod/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
-import { ManageTeamMemberRole } from "./ManageTeamMember.logic";
+import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 const createTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersCreate),

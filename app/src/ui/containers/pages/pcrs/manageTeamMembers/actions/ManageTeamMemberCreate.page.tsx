@@ -5,14 +5,19 @@ import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
+import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
+import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 
 const ManageTeamMemberCreatePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.CREATE}>
-      <ManageTeamMemberSection>
-        <ManageTeamMemberInputs />
-        <ManageEmailMessage />
-      </ManageTeamMemberSection>
+      <ManageTeamMemberForm>
+        <ManageTeamMemberSection>
+          <ManageTeamMemberInputs />
+          <ManageEmailMessage />
+        </ManageTeamMemberSection>
+        <ManageTeamMemberSubmitSection />
+      </ManageTeamMemberForm>
     </BaseManageTeamMember>
   );
 };
