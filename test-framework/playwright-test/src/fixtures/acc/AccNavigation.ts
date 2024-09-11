@@ -10,6 +10,7 @@ import { MonitoringReports } from "./pages/MonitoringReports";
 import { ProjectDashboard } from "./pages/ProjectDashboard";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
+import { ProjectChangeRequests } from "./pages/ProjectChangeRequests";
 
 export
 @Fixture("accNavigation")
@@ -23,6 +24,7 @@ class AccNavigation {
   private readonly projectState: ProjectState;
   private readonly testCache = new TestCache();
   private readonly devtools: DevTools;
+  private readonly projectChangeRequests: ProjectChangeRequests;
 
   constructor({
     page,
@@ -32,6 +34,7 @@ class AccNavigation {
     projectForecasts,
     projectState,
     monitoringReports,
+    projectChangeRequests,
   }: {
     page: Page;
     developerHomepage: DeveloperHomepage;
@@ -40,6 +43,7 @@ class AccNavigation {
     projectForecasts: ProjectForecasts;
     projectState: ProjectState;
     monitoringReports: MonitoringReports;
+    projectChangeRequests: ProjectChangeRequests;
   }) {
     this.page = page;
     this.developerHomepage = developerHomepage;
@@ -48,6 +52,7 @@ class AccNavigation {
     this.projectForecasts = projectForecasts;
     this.projectState = projectState;
     this.monitoringReports = monitoringReports;
+    this.projectChangeRequests = projectChangeRequests;
     this.devtools = new DevTools({ page });
   }
 
@@ -120,5 +125,23 @@ class AccNavigation {
 
     await this.devtools.isLoaded();
     await this.monitoringReports.isPage();
+  }
+
+  @Given("the user has navigated to the project change request page")
+  async gotoProjectChangeRequests() {
+    await this.testCache.cache(
+      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Project change requests").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.devtools.isLoaded();
+    await this.projectChangeRequests.isPage();
   }
 }

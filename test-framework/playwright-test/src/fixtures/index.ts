@@ -18,6 +18,7 @@ import { AccUserSwitcher } from "./acc/AccUserSwitcher";
 import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
+import { ProjectChangeRequests } from "./acc/pages/ProjectChangeRequests";
 
 type AccFixtures = {
   // Pages
@@ -27,6 +28,7 @@ type AccFixtures = {
   projectForecasts: ProjectForecasts;
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
+  projectChangeRequests: ProjectChangeRequests;
 
   // Misc
   accNavigation: AccNavigation;
@@ -59,6 +61,9 @@ export const test = base.extend<AccFixtures, Workers>({
   projectForecasts: ({ page, commands }, use) => use(new ProjectForecasts({ page, commands })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
+  projectChangeRequests: ({ page }, use) => use(new ProjectChangeRequests({ page })),
+
+  
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -71,7 +76,7 @@ export const test = base.extend<AccFixtures, Workers>({
 
   // Misc
   accNavigation: (
-    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState, monitoringReports },
+    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState, monitoringReports, projectChangeRequests },
     use,
   ) =>
     use(
@@ -83,6 +88,7 @@ export const test = base.extend<AccFixtures, Workers>({
         projectForecasts,
         projectState,
         monitoringReports,
+        projectChangeRequests,
       }),
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
