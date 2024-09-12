@@ -28,7 +28,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       fragmentRef={fragmentRef}
     >
       <Section title={getContent(x => x.projectLabels.projectManagers({ count: categories.projectManagers.length }))}>
-        <ManageTeamMembersContactListTable tableData={categories.projectManagers} />
+        <ManageTeamMembersContactListTable tableData={categories.projectManagers} qa="projectManagers-table" />
 
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
@@ -43,7 +43,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       </Section>
 
       <Section title={getContent(x => x.projectLabels.financeContacts({ count: categories.financeContacts.length }))}>
-        <ManageTeamMembersContactListTable tableData={categories.financeContacts} />
+        <ManageTeamMembersContactListTable tableData={categories.financeContacts} qa="financeContacts-table" />
 
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
@@ -62,7 +62,10 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           x.projectLabels.knowledgeBaseAdministrators({ count: categories.mainCompanyContacts.length }),
         )}
       >
-        <ManageTeamMembersContactListTable tableData={categories.knowledgeBaseAdministrators} />
+        <ManageTeamMembersContactListTable
+          tableData={categories.knowledgeBaseAdministrators}
+          qa="knowledgeBaseAdministrators-table"
+        />
         {categories.knowledgeBaseAdministrators.length === 0 ? (
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
@@ -94,7 +97,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       <Section
         title={getContent(x => x.projectLabels.mainCompanyContacts({ count: categories.mainCompanyContacts.length }))}
       >
-        <ManageTeamMembersContactListTable tableData={categories.mainCompanyContacts} />
+        <ManageTeamMembersContactListTable tableData={categories.mainCompanyContacts} qa="mainCompanyContacts-table" />
         {categories.mainCompanyContacts.length === 0 ? (
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
@@ -122,6 +125,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
 
       <Section title={getContent(x => x.projectLabels.associates({ count: categories.associates.length }))}>
         <ManageTeamMembersContactListTable
+          qa="associates-table"
           tableData={categories.associates}
           link={({ data }) => (
             <ManageTeamMemberRemoveLink

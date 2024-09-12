@@ -7,9 +7,10 @@ import { ManageTeamMembersTableData } from "./ManageTeamMember.logic";
 interface ManageTeamMembersContactTableProps {
   tableData: ManageTeamMembersTableData[];
   link?: React.FunctionComponent<{ data: ManageTeamMembersTableData }> | null;
+  qa?: string;
 }
 
-const ManageTeamMembersContactListTable = ({ tableData, link: Link }: ManageTeamMembersContactTableProps) => {
+const ManageTeamMembersContactListTable = ({ tableData, link: Link, qa }: ManageTeamMembersContactTableProps) => {
   const { getContent } = useContent();
 
   if (tableData.length === 0) {
@@ -17,7 +18,7 @@ const ManageTeamMembersContactListTable = ({ tableData, link: Link }: ManageTeam
   }
 
   return (
-    <Table>
+    <Table data-qa={qa}>
       <THead>
         <TR>
           <TH className="govuk-!-width-one-third">{getContent(x => x.pages.manageTeamMembers.table.contactName)}</TH>
