@@ -60,6 +60,7 @@ const useOnSubmit = ({ projectId }: { projectId: ProjectId }) => {
           projectChangeRequestDto: {
             projectId: data.projectId,
             status: PCRStatus.DraftWithProjectManager,
+            manageTeamMemberStatus: PCRStatus.Unknown,
             reasoningStatus: PCRItemStatus.ToDo,
             items: data.types.map(x => ({ type: x, status: PCRItemStatus.ToDo })) as PCRItemDto[],
           },

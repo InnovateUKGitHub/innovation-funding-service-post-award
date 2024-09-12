@@ -73,6 +73,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
         projectChangeRequestDto: {
           projectId: data.projectId,
           status: pcrStatus,
+          manageTeamMemberStatus: pcrStatus,
           reasoningStatus: PCRItemStatus.Complete,
           items: [
             {
@@ -80,7 +81,13 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
               status: PCRItemStatus.Complete,
               pclId,
               // TODO: FPD-1090 The conversion is sane because the strings are identical
-              manageType: data.form as unknown as ManageTeamMemberMethod,
+              manageTeamMemberType: data.form as unknown as ManageTeamMemberMethod,
+              ...("firstName" in data ? { manageTeamMemberFirstName: data.firstName } : {}),
+              ...("lastName" in data ? { manageTeamMemberLastName: data.lastName } : {}),
+              ...("email" in data ? { manageTeamMemberEmail: data.email } : {}),
+              ...("startDate" in data ? { manageTeamMemberAssociateStartDate: data.startDate } : {}),
+              ...("role" in data ? { manageTeamMemberRole: data.role } : {}),
+              ...("partnerId" in data ? { partnerId: data.partnerId } : {}),
             },
           ],
         },

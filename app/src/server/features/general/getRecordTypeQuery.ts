@@ -15,7 +15,9 @@ export class GetRecordTypeQuery extends AuthorisedAsyncQueryBase<RecordType> {
 
   protected async run(context: IContext): Promise<RecordType> {
     const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
-    const recordType = recordTypes.find(x => x.parent === this.parent && x.type === this.type);
+    const recordType = recordTypes.find(
+      x => x.parent === this.parent && (x.type === this.type || x.developerName === this.type),
+    );
 
     if (!recordType) {
       throw new BadRequestError(`Record type not found for ${this.parent} and ${this.type}`);

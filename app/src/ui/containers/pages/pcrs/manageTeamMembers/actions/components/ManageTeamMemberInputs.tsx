@@ -56,9 +56,12 @@ const ManageTeamMemberInputs = () => {
               {...register("partnerId")}
             />
           ) : (
-            <Hint id="hint-for-partnerId">
-              {memberToManage?.partner.name || getContent(x => x.pages.manageTeamMembers.modify.labels.noneProvided)}
-            </Hint>
+            <>
+              <input type="hidden" value={memberToManage?.partner.id} {...register("partnerId")} />
+              <Hint id="hint-for-partnerId">
+                {memberToManage?.partner.name || getContent(x => x.pages.manageTeamMembers.modify.labels.noneProvided)}
+              </Hint>
+            </>
           )}
         </FormGroup>
       </Fieldset>

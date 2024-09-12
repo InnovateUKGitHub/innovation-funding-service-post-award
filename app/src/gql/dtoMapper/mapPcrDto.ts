@@ -1,16 +1,18 @@
 import { pcrItemTypes } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
-import { PCRDto, FullPCRItemDto, ManageTeamMemberPcrDto } from "@framework/dtos/pcrDtos";
+import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
 import {
   getPCROrganisationType,
-  mapToPCRItemStatus,
-  mapFromSalesforcePCRProjectRole,
-  mapTypeOfAidToEnum,
-  mapToPCRStatus,
   mapFromSalesforcePCRPartnerType,
+  mapFromSalesforcePCRProjectRole,
+  mapToPCRItemStatus,
   mapToPcrItemType,
+  mapToPCRManageTeamMemberRole,
+  mapToPCRManageTeamMemberType,
+  mapToPCRStatus,
+  mapTypeOfAidToEnum,
   PcrContactRoleMapper,
 } from "@framework/mappers/pcr";
 import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
@@ -63,6 +65,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_RequestHeader__c: GQL.Value<string>;
   Acc_RequestNumber__c: GQL.Value<number>;
   Acc_Status__c: GQL.Value<string>;
+  Acc_Manage_Team_Member_Status__c: GQL.Value<string>;
   Acc_SuspensionEnds__c: GQL.Value<string>;
   Acc_SuspensionStarts__c: GQL.Value<string>;
   Acc_TSBReference__c: GQL.Value<string>;
@@ -91,10 +94,13 @@ export type PcrNode = GQL.PartialNode<{
   Justification__c: GQL.Value<string>;
   Override_Justification__c: GQL.Value<string>;
   Acc_Project_Change_Requests__r: GQL.ArrayValue<PcrNode>;
-  First_Name__c: GQL.Value<string>;
-  Last_Name__c: GQL.Value<string>;
-  Email__c: GQL.Value<string>;
-  Role__c: GQL.Value<string>;
+
+  Acc_First_Name__c: GQL.Value<string>;
+  Acc_Last_Name__c: GQL.Value<string>;
+  Acc_Email__c: GQL.Value<string>;
+  Acc_Role__c: GQL.Value<string>;
+  Acc_Start_Date__c: GQL.Value<string>;
+  Acc_Type__c: GQL.Value<string>;
 }>;
 
 type PcrDtoMapping = Pick<
@@ -109,6 +115,7 @@ type PcrDtoMapping = Pick<
   | "started"
   | "status"
   | "statusName"
+  | "manageTeamMemberStatus"
 >;
 
 export type PcrItemDtoMapping = Pick<
@@ -185,6 +192,12 @@ export type PcrItemDtoMapping = Pick<
   | "subcontractorJustification"
   | "subcontractorCost"
   | "reasoningComments"
+  | "manageTeamMemberType"
+  | "manageTeamMemberFirstName"
+  | "manageTeamMemberLastName"
+  | "manageTeamMemberEmail"
+  | "manageTeamMemberRole"
+  | "manageTeamMemberAssociateStartDate"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -436,6 +449,24 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   subcontractorJustification(node) {
     return node?.Justification__c?.value ?? null;
   },
+  manageTeamMemberType(node) {
+    return mapToPCRManageTeamMemberType(node?.Acc_Type__c?.value) ?? null;
+  },
+  manageTeamMemberFirstName(node) {
+    return node?.Acc_First_Name__c?.value ?? null;
+  },
+  manageTeamMemberLastName(node) {
+    return node?.Acc_Last_Name__c?.value ?? null;
+  },
+  manageTeamMemberEmail(node) {
+    return node?.Acc_Email__c?.value ?? null;
+  },
+  manageTeamMemberRole(node) {
+    return mapToPCRManageTeamMemberRole(node?.Acc_Role__c?.value) ?? null;
+  },
+  manageTeamMemberAssociateStartDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_Start_Date__c?.value ?? null);
+  },
 };
 
 /**
@@ -469,55 +500,13 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
     return node?.CreatedDate?.value ? clock.parseRequiredSalesforceDateTime(node?.CreatedDate?.value) : new Date();
   },
   status(node) {
-    return mapToPCRStatus(node?.Acc_Status__c?.value || "unknown");
+    return mapToPCRStatus((node?.Acc_Status__c?.value ?? node?.Acc_Manage_Team_Member_Status__c?.value) || "unknown");
+  },
+  manageTeamMemberStatus(node) {
+    return mapToPCRStatus(node?.Acc_Manage_Team_Member_Status__c?.value || "unknown");
   },
   statusName(node) {
     return node?.Acc_Status__c?.value || "Unknown";
-  },
-};
-
-/**
- * Mapper for the PCR standalone node
- */
-
-const standaloneMapper: GQL.DtoMapper<ManageTeamMemberPcrDto, PcrNode> = {
-  id(node) {
-    return (node?.Id ?? "") as PcrId;
-  },
-  lastUpdated(node) {
-    return node?.LastModifiedDate?.value
-      ? clock.parseRequiredSalesforceDateTime(node?.LastModifiedDate?.value)
-      : new Date();
-  },
-  projectId(node) {
-    return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
-  },
-  requestNumber(node) {
-    return node?.Acc_RequestNumber__c?.value ?? 0;
-  },
-  started(node) {
-    return node?.CreatedDate?.value ? clock.parseRequiredSalesforceDateTime(node?.CreatedDate?.value) : new Date();
-  },
-  status(node) {
-    return mapToPCRStatus(node?.Acc_Status__c?.value || "unknown");
-  },
-  statusName(node) {
-    return node?.Acc_Status__c?.value || "Unknown";
-  },
-  firstName(node) {
-    return node?.First_Name__c?.value ?? "";
-  },
-  lastName(node) {
-    return node?.Last_Name__c?.value ?? "";
-  },
-  email(node) {
-    return node?.Email__c?.value ?? "";
-  },
-  organisation(node) {
-    return node?.Acc_OrganisationName__c?.value ?? "";
-  },
-  role(node) {
-    return node?.Role__c?.value ?? "unknown";
   },
 };
 
@@ -537,25 +526,6 @@ type PcrAdditionalData<TPickList extends string> = AdditionalDataType<
     ["typeOfAid", "typeOfAid", string | TypeOfAid], // get from Acc_CompetitionId__r { Acc_TypeofAid__c {value}} or from project.typeOfAid
   ]
 >;
-
-/**
- * maps for a single standalone pcr item
- */
-export function mapStandalonePcrDto<T extends PcrNode, PickList extends keyof ManageTeamMemberPcrDto>(
-  node: T,
-  pickList: PickList[],
-): Pick<ManageTeamMemberPcrDto, PickList> {
-  return pickList.reduce(
-    (dto, field) => {
-      if (!standaloneMapper[field]) {
-        throw new Error("trying to call undefined");
-      }
-      dto[field] = standaloneMapper[field](node);
-      return dto;
-    },
-    {} as Pick<ManageTeamMemberPcrDto, PickList>,
-  );
-}
 
 /**
  * maps for a single pcr item
@@ -655,7 +625,10 @@ export function mapToPcrDtoArray<
             childPcrs.push(childPcr.node);
           }
         }
-      } else if (pcr?.node?.RecordType?.DeveloperName?.value === ProjectChangeRequest.requestHeader) {
+      } else if (
+        pcr?.node?.RecordType?.DeveloperName?.value === ProjectChangeRequest.requestHeader ||
+        pcr?.node.RecordType?.DeveloperName?.value === ProjectChangeRequest.manageTeamMemberRequestHeader
+      ) {
         for (const childPcr of pcrs) {
           if (!!pcr?.node && !!childPcr?.node && pcr?.node?.Id === childPcr?.node?.Acc_RequestHeader__c?.value) {
             childPcrs.push(childPcr.node);

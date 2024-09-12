@@ -25,25 +25,30 @@ const createTeamMemberValidator = z.object({
 const replaceTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersReplace),
   projectId: projectIdValidation,
+  partnerId: partnerIdValidation,
   pclId: pclIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
+  role: z.nativeEnum(ManageTeamMemberRole),
 });
 
 const updateTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersUpdate),
   projectId: projectIdValidation,
+  partnerId: partnerIdValidation,
   pclId: pclIdValidation,
   contactId: contactIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
+  role: z.nativeEnum(ManageTeamMemberRole),
 });
 
 const deleteTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersDelete),
   projectId: projectIdValidation,
   pclId: pclIdValidation,
+  role: z.nativeEnum(ManageTeamMemberRole),
 });
 
 const manageTeamMemberValidator = z.discriminatedUnion("form", [

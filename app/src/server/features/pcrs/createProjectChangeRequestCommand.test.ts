@@ -245,8 +245,8 @@ describe("Create PCR Command", () => {
         {
           status: PCRItemStatus.ToDo,
           projectId: project.Id,
-          partnerId: "",
-          accountName: "",
+          partnerId: null,
+          accountName: null,
           recordTypeId: recordTypes.find(x => x.type === itemType?.typeName)?.id,
         },
       ],

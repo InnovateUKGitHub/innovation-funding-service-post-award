@@ -126,6 +126,7 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
     const pcrCommand = new CreateProjectChangeRequestCommand(input.projectId, {
       projectId: input.projectId,
       status: pcrStatus,
+      manageTeamMemberStatus: PCRStatus.Unknown,
       reasoningStatus: PCRItemStatus.Complete,
       items: [
         {

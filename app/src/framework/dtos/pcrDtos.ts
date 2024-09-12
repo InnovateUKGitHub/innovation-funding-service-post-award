@@ -13,6 +13,7 @@ import {
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { ManageTeamMemberRole } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -21,6 +22,7 @@ interface PCRBaseDto {
   requestNumber: number;
   started: Date;
   status: PCRStatus;
+  manageTeamMemberStatus: PCRStatus;
   statusName: string;
 }
 
@@ -54,7 +56,7 @@ export interface PCRItemBaseDto extends PCRItemSummaryDto {
 }
 
 export type CreatePcrItemDto = PickRequiredFromPartial<PCRItemDto, "type" | "status">;
-export type CreatePcrDto = Pick<PCRDto, "projectId" | "reasoningStatus" | "status"> & {
+export type CreatePcrDto = Pick<PCRDto, "projectId" | "reasoningStatus" | "status" | "manageTeamMemberStatus"> & {
   items: CreatePcrItemDto[];
 };
 
@@ -195,7 +197,12 @@ export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
 export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
   type: PCRItemType.ManageTeamMembers;
   pclId: ProjectContactLinkId | null;
-  manageType: ManageTeamMemberMethod | null;
+  manageTeamMemberType: ManageTeamMemberMethod | null;
+  manageTeamMemberFirstName: string | null;
+  manageTeamMemberLastName: string | null;
+  manageTeamMemberEmail: string | null;
+  manageTeamMemberRole: ManageTeamMemberRole | null;
+  manageTeamMemberAssociateStartDate: Date | null;
 }
 
 export interface PCRItemTypeDto {
@@ -318,4 +325,12 @@ export type FullPCRItemDto = {
   subcontractorDescription: string | null;
   subcontractorJustification: string | null;
   subcontractorCost: number | null;
+  manageTeamMemberType: ManageTeamMemberMethod | null;
+  manageTeamMemberFirstName: string | null;
+  manageTeamMemberLastName: string | null;
+  manageTeamMemberEmail: string | null;
+  manageTeamMemberRole: ManageTeamMemberRole | null;
+  manageTeamMemberAssociateStartDate: Date | null;
 };
+
+export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;

@@ -13,7 +13,7 @@ import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
-import { PCRItemType } from "@framework/constants/pcrConstants";
+import { getMapper } from "./mapToPCRDto";
 
 export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBase<PcrId> {
   public readonly runnableName: string = "CreateProjectChangeRequestCommand";
@@ -37,6 +37,7 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,
       status: projectChangeRequestDto.status,
+      manageTeamMemberStatus: projectChangeRequestDto.manageTeamMemberStatus,
       items: projectChangeRequestDto.items.map(x => this.mapItem(projectChangeRequestDto, x, itemTypes)),
     };
 
@@ -101,12 +102,13 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   ): ProjectChangeRequestItemForCreateEntity {
     const matchedItem = itemTypes.find(t => t.type === itemDto.type);
     if (!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
-
+    const mapper = getMapper(itemDto.type);
     return {
       projectId: dto.projectId,
       recordTypeId: matchedItem.recordTypeId,
+      developerRecordTypeName: matchedItem.developerRecordTypeName,
       status: itemDto.status,
-      ...(itemDto.type === PCRItemType.ManageTeamMembers ? { manageType: itemDto.manageType } : {}),
+      ...mapper?.(itemDto),
     };
   }
 }

@@ -8,6 +8,7 @@ import {
   PCRParticipantSize,
   pcrItemTypes,
 } from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
 import {
   PCRItemTypeDto,
   PCRDto,
@@ -25,6 +26,7 @@ import {
   PCRItemForApproveNewSubcontractorDto,
   PCRItemForUpliftDto,
   PCRItemForManageTeamMembersDto,
+  PCRTypeWithoutBase,
 } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
 import { isBoolean } from "@framework/util/booleanHelper";
@@ -36,6 +38,7 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
   started: pcr.started,
   lastUpdated: pcr.updated,
   status: pcr.status,
+  manageTeamMemberStatus: pcr.manageTeamMemberStatus,
   statusName: pcr.statusName,
   comments: pcr.comments,
   reasoningStatus: pcr.reasoningStatus,
@@ -62,40 +65,54 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
     .map(({ pcr, itemType }) => mapItem(pcr, itemType));
 };
 
-export const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
+const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
   if (!pcr) throw new Error("Cannot map undefined pcr");
+  const hasMapper = dtoHasMapper(itemType);
+  const mapper = getMapper(itemType?.type);
+  if (hasMapper && mapper) {
+    return {
+      ...mapBaseItem(pcr, itemType?.displayName, itemType?.type),
+      ...mapper(pcr),
+    };
+  } else {
+    throw new Error("No PCR mapper handler found");
+  }
+};
 
-  switch (itemType?.type) {
+const dtoHasMapper = (itemDto: PCRItemTypeDto | undefined): itemDto is PCRItemTypeDto => !!getMapper(itemDto?.type);
+
+export const getMapper = (type: PCRItemType | undefined) => {
+  switch (type) {
     case PCRItemType.TimeExtension:
-      return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
+      return mapItemForTimeExtension;
     case PCRItemType.ScopeChange:
-      return mapItemForScopeChange(pcr, itemType.displayName, itemType.type);
+      return mapItemForScopeChange;
     case PCRItemType.ProjectSuspension:
-      return mapItemForProjectSuspension(pcr, itemType.displayName, itemType.type);
+      return mapItemForProjectSuspension;
     case PCRItemType.ProjectTermination:
-      return mapItemForTermination(pcr, itemType.displayName, itemType.type);
+      return mapItemForTermination;
     case PCRItemType.AccountNameChange:
-      return mapItemForAccountNameChange(pcr, itemType.displayName, itemType.type);
+      return mapItemForAccountNameChange;
     case PCRItemType.PartnerWithdrawal:
-      return mapItemForPartnerWithdrawal(pcr, itemType.displayName, itemType.type);
+      return mapItemForPartnerWithdrawal;
     case PCRItemType.PartnerAddition:
-      return mapItemForPartnerAddition(pcr, itemType.displayName, itemType.type);
+      return mapItemForPartnerAddition;
     case PCRItemType.MultiplePartnerFinancialVirement:
-      return mapItemForMultiplePartnerVirements(pcr, itemType.displayName, itemType.type);
+      return mapItemForMultiplePartnerVirements;
     case PCRItemType.PeriodLengthChange:
-      return mapItemForPeriodLengthChange(pcr, itemType.displayName, itemType.type);
+      return mapItemForPeriodLengthChange;
     case PCRItemType.LoanDrawdownChange:
-      return mapItemForLoansChangeDrawdown(pcr, itemType.displayName, itemType.type);
+      return mapItemForLoansChangeDrawdown;
     case PCRItemType.LoanDrawdownExtension:
-      return mapItemForChangeLoansDuration(pcr, itemType.displayName, itemType.type);
+      return mapItemForChangeLoansDuration;
     case PCRItemType.ApproveNewSubcontractor:
-      return mapItemForApproveNewSubcontractor(pcr, itemType.displayName, itemType.type);
+      return mapItemForApproveNewSubcontractor;
     case PCRItemType.Uplift:
-      return mapItemForUplift(pcr, itemType.displayName, itemType.type);
+      return mapItemForUplift;
     case PCRItemType.ManageTeamMembers:
-      return mapItemForManageTeamMembers(pcr, itemType.displayName, itemType.type);
+      return mapItemForManageTeamMembers;
     default:
-      throw new Error("Type not handled");
+      return null;
   }
 };
 
@@ -108,30 +125,27 @@ const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type
   shortName: pcr.shortName || typeName,
 });
 
-const mapItemForTermination = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+const mapItemForTermination = (): PCRTypeWithoutBase<PCRItemForProjectTerminationDto> => ({
   type: PCRItemType.ProjectTermination,
-): PCRItemForProjectTerminationDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
 });
 
-const mapItemForPeriodLengthChange = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+const mapItemForPeriodLengthChange = (): PCRTypeWithoutBase<PCRItemForPeriodLengthChangeDto> => ({
   type: PCRItemType.PeriodLengthChange,
-): PCRItemForPeriodLengthChangeDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
 });
 
 const mapItemForApproveNewSubcontractor = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.ApproveNewSubcontractor,
-): PCRItemForApproveNewSubcontractorDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<
+    ProjectChangeRequestItemEntity,
+    | "subcontractorName"
+    | "subcontractorRegistrationNumber"
+    | "subcontractorRelationship"
+    | "subcontractorRelationshipJustification"
+    | "subcontractorLocation"
+    | "subcontractorDescription"
+    | "subcontractorJustification"
+    | "subcontractorCost"
+  >,
+): PCRTypeWithoutBase<PCRItemForApproveNewSubcontractorDto> => ({
   subcontractorName: pcr.subcontractorName ?? null,
   subcontractorRegistrationNumber: pcr.subcontractorRegistrationNumber ?? null,
   subcontractorRelationship: pcr.subcontractorRelationship ?? null,
@@ -140,160 +154,189 @@ const mapItemForApproveNewSubcontractor = (
   subcontractorDescription: pcr.subcontractorDescription ?? null,
   subcontractorJustification: pcr.subcontractorJustification ?? null,
   subcontractorCost: pcr.subcontractorCost ?? null,
-  type,
+  type: PCRItemType.ApproveNewSubcontractor,
 });
 
 const mapItemForTimeExtension = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.TimeExtension,
-): PCRItemForTimeExtensionDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<ProjectChangeRequestItemEntity, "offsetMonths" | "projectDurationSnapshot">,
+): PCRTypeWithoutBase<PCRItemForTimeExtensionDto> => ({
   offsetMonths: pcr.offsetMonths ?? 0,
   projectDurationSnapshot: pcr.projectDurationSnapshot || 0,
-  type,
+  type: PCRItemType.TimeExtension,
 });
 
 const mapItemForScopeChange = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.ScopeChange,
-): PCRItemForScopeChangeDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<
+    ProjectChangeRequestItemEntity,
+    "projectSummary" | "publicDescription" | "projectSummarySnapshot" | "publicDescriptionSnapshot"
+  >,
+): PCRTypeWithoutBase<PCRItemForScopeChangeDto> => ({
   projectSummary: pcr.projectSummary || null,
   publicDescription: pcr.publicDescription || null,
   projectSummarySnapshot: pcr.projectSummarySnapshot || null,
   publicDescriptionSnapshot: pcr.publicDescriptionSnapshot || null,
-  type,
+  type: PCRItemType.ScopeChange,
 });
 
 const mapItemForProjectSuspension = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.ProjectSuspension,
-): PCRItemForProjectSuspensionDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<ProjectChangeRequestItemEntity, "suspensionStartDate" | "suspensionEndDate">,
+): PCRTypeWithoutBase<PCRItemForProjectSuspensionDto> => ({
   suspensionStartDate: pcr.suspensionStartDate || null,
   suspensionEndDate: pcr.suspensionEndDate || null,
-  type,
+  type: PCRItemType.ProjectSuspension,
 });
 
 const mapItemForAccountNameChange = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.AccountNameChange,
-): PCRItemForAccountNameChangeDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<ProjectChangeRequestItemEntity, "accountName" | "partnerId" | "partnerNameSnapshot">,
+): PCRTypeWithoutBase<PCRItemForAccountNameChangeDto> => ({
   accountName: pcr.accountName || null,
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
-  type,
+  type: PCRItemType.AccountNameChange,
 });
 
 const mapItemForPartnerWithdrawal = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.PartnerWithdrawal,
-): PCRItemForPartnerWithdrawalDto => ({
-  ...mapBaseItem(pcr, typeName, type),
+  pcr: Pick<ProjectChangeRequestItemEntity, "partnerId" | "partnerNameSnapshot" | "removalPeriod">,
+): PCRTypeWithoutBase<PCRItemForPartnerWithdrawalDto> => ({
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
   removalPeriod: pcr.removalPeriod || null,
-  type,
+  type: PCRItemType.PartnerWithdrawal,
 });
 
 const mapItemForPartnerAddition = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
-  type: PCRItemType.PartnerAddition,
-): PCRItemForPartnerAdditionDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
-  contact1Forename: pcr.contact1Forename || null,
-  contact1Surname: pcr.contact1Surname || null,
-  contact1Phone: pcr.contact1Phone || null,
-  contact1Email: pcr.contact1Email || null,
-  financialYearEndDate: pcr.financialYearEndDate || null,
-  financialYearEndTurnover: isNumber(pcr.financialYearEndTurnover) ? pcr.financialYearEndTurnover : null,
-  organisationName: pcr.organisationName || null,
-  registeredAddress: pcr.registeredAddress || null,
-  registrationNumber: pcr.registrationNumber || null,
-  projectRole: pcr.projectRole || PCRProjectRole.Unknown,
-  partnerType: pcr.partnerType || PCRPartnerType.Unknown,
-  organisationType: pcr.organisationType || PCROrganisationType.Unknown,
-  projectRoleLabel: pcr.projectRoleLabel || null,
-  partnerTypeLabel: pcr.partnerTypeLabel || null,
-  isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
-  typeOfAid: pcr.typeOfAid,
-  spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
-  projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
-  projectLocationLabel: pcr.projectLocationLabel || null,
-  projectCity: pcr.projectCity || null,
-  projectPostcode: pcr.projectPostcode || null,
-  participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
-  participantSizeLabel: pcr.participantSizeLabel || null,
-  numberOfEmployees: isNumber(pcr.numberOfEmployees) ? pcr.numberOfEmployees : null,
-  contact2ProjectRole: pcr.contact2ProjectRole || PCRContactRole.Unknown,
-  contact2Forename: pcr.contact2Forename || null,
-  contact2Surname: pcr.contact2Surname || null,
-  contact2Phone: pcr.contact2Phone || null,
-  contact2Email: pcr.contact2Email || null,
-  awardRate: isNumber(pcr.awardRate) ? pcr.awardRate : null,
-  hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
-  totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
-  tsbReference: pcr.tsbReference || null,
-  type,
-});
+  pcr: Pick<
+    ProjectChangeRequestItemEntity,
+    | "contact1ProjectRole"
+    | "contact1Forename"
+    | "contact1Surname"
+    | "contact1Phone"
+    | "contact1Email"
+    | "financialYearEndDate"
+    | "financialYearEndTurnover"
+    | "organisationName"
+    | "registeredAddress"
+    | "registrationNumber"
+    | "projectRole"
+    | "partnerType"
+    | "organisationType"
+    | "projectRoleLabel"
+    | "partnerTypeLabel"
+    | "isCommercialWork"
+    | "typeOfAid"
+    | "projectLocation"
+    | "projectLocationLabel"
+    | "projectCity"
+    | "projectPostcode"
+    | "participantSize"
+    | "participantSizeLabel"
+    | "numberOfEmployees"
+    | "contact2ProjectRole"
+    | "contact2Forename"
+    | "contact2Surname"
+    | "contact2Phone"
+    | "contact2Email"
+    | "awardRate"
+    | "hasOtherFunding"
+    | "totalOtherFunding"
+    | "tsbReference"
+  > &
+    Partial<Pick<ProjectChangeRequestItemEntity, "id">>,
+): PCRTypeWithoutBase<PCRItemForPartnerAdditionDto> => {
+  if (!pcr.id) throw new Error("ID must be specified");
+
+  return {
+    contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
+    contact1Forename: pcr.contact1Forename || null,
+    contact1Surname: pcr.contact1Surname || null,
+    contact1Phone: pcr.contact1Phone || null,
+    contact1Email: pcr.contact1Email || null,
+    financialYearEndDate: pcr.financialYearEndDate || null,
+    financialYearEndTurnover: isNumber(pcr.financialYearEndTurnover) ? pcr.financialYearEndTurnover : null,
+    organisationName: pcr.organisationName || null,
+    registeredAddress: pcr.registeredAddress || null,
+    registrationNumber: pcr.registrationNumber || null,
+    projectRole: pcr.projectRole || PCRProjectRole.Unknown,
+    partnerType: pcr.partnerType || PCRPartnerType.Unknown,
+    organisationType: pcr.organisationType || PCROrganisationType.Unknown,
+    projectRoleLabel: pcr.projectRoleLabel || null,
+    partnerTypeLabel: pcr.partnerTypeLabel || null,
+    isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
+    typeOfAid: pcr.typeOfAid || TypeOfAid.Unknown,
+    spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
+    projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
+    projectLocationLabel: pcr.projectLocationLabel || null,
+    projectCity: pcr.projectCity || null,
+    projectPostcode: pcr.projectPostcode || null,
+    participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
+    participantSizeLabel: pcr.participantSizeLabel || null,
+    numberOfEmployees: isNumber(pcr.numberOfEmployees) ? pcr.numberOfEmployees : null,
+    contact2ProjectRole: pcr.contact2ProjectRole || PCRContactRole.Unknown,
+    contact2Forename: pcr.contact2Forename || null,
+    contact2Surname: pcr.contact2Surname || null,
+    contact2Phone: pcr.contact2Phone || null,
+    contact2Email: pcr.contact2Email || null,
+    awardRate: isNumber(pcr.awardRate) ? pcr.awardRate : null,
+    hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
+    totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
+    tsbReference: pcr.tsbReference || null,
+    type: PCRItemType.PartnerAddition,
+  };
+};
 
 const mapItemForMultiplePartnerVirements = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+  pcr: Pick<ProjectChangeRequestItemEntity, "grantMovingOverFinancialYear">,
+): PCRTypeWithoutBase<PCRItemForMultiplePartnerFinancialVirementDto> => ({
   type: PCRItemType.MultiplePartnerFinancialVirement,
-): PCRItemForMultiplePartnerFinancialVirementDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
   grantMovingOverFinancialYear:
     !!pcr.grantMovingOverFinancialYear || pcr.grantMovingOverFinancialYear === 0
       ? pcr.grantMovingOverFinancialYear
       : null,
 });
 
-const mapItemForUplift = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+const mapItemForUplift = (): PCRTypeWithoutBase<PCRItemForUpliftDto> => ({
   type: PCRItemType.Uplift,
-): PCRItemForUpliftDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
 });
 
 const mapItemForManageTeamMembers = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+  pcr: Pick<
+    ProjectChangeRequestItemEntity,
+    | "pclId"
+    | "manageTeamMemberType"
+    | "manageTeamMemberFirstName"
+    | "manageTeamMemberLastName"
+    | "manageTeamMemberEmail"
+    | "manageTeamMemberRole"
+    | "manageTeamMemberAssociateStartDate"
+  >,
+): PCRTypeWithoutBase<PCRItemForManageTeamMembersDto> => ({
   type: PCRItemType.ManageTeamMembers,
-): PCRItemForManageTeamMembersDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
   pclId: pcr.pclId ?? null,
-  manageType: pcr.manageType ?? null,
+  manageTeamMemberType: pcr.manageTeamMemberType ?? null,
+  manageTeamMemberFirstName: pcr.manageTeamMemberFirstName ?? null,
+  manageTeamMemberLastName: pcr.manageTeamMemberLastName ?? null,
+  manageTeamMemberAssociateStartDate: pcr.manageTeamMemberAssociateStartDate ?? null,
+  manageTeamMemberEmail: pcr.manageTeamMemberEmail ?? null,
+  manageTeamMemberRole: pcr.manageTeamMemberRole ?? null,
 });
 
-const mapItemForLoansChangeDrawdown = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+const mapItemForLoansChangeDrawdown = (): PCRTypeWithoutBase<PCRItemForLoanDrawdownChangeDto> => ({
   type: PCRItemType.LoanDrawdownChange,
-): PCRItemForLoanDrawdownChangeDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
 });
 
 const mapItemForChangeLoansDuration = (
-  pcr: ProjectChangeRequestItemEntity,
-  typeName: string,
+  pcr: Pick<
+    ProjectChangeRequestItemEntity,
+    | "projectStartDate"
+    | "availabilityPeriod"
+    | "availabilityPeriodChange"
+    | "extensionPeriod"
+    | "extensionPeriodChange"
+    | "repaymentPeriod"
+    | "repaymentPeriodChange"
+  >,
+): PCRTypeWithoutBase<PCRItemForLoanDrawdownExtensionDto> => ({
   type: PCRItemType.LoanDrawdownExtension,
-): PCRItemForLoanDrawdownExtensionDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
   projectStartDate: pcr.projectStartDate ?? null,
   availabilityPeriod: pcr.availabilityPeriod ?? null,
   availabilityPeriodChange: pcr.availabilityPeriodChange ?? null,

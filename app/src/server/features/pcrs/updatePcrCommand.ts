@@ -165,6 +165,7 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
         if (!itemType) throw new Error(`Cannot find item matching ${x.item.type}`);
         return {
           recordTypeId: itemType.recordTypeId,
+          developerRecordTypeName: itemType.developerRecordTypeName,
           status: x.item.status,
           projectId: this.projectId,
         };

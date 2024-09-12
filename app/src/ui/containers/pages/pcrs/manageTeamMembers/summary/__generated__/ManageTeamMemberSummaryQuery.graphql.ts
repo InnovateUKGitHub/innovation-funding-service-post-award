@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4f3bd459c54c351bb9763f6dfcc73a2c>>
+ * @generated SignedSource<<53f793ce1ad024dc18d212658031d57b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,9 +21,6 @@ export type ManageTeamMemberSummaryQuery$data = {
             readonly node: {
               readonly Acc_Project_Change_Requests__r: {
                 readonly totalCount: number;
-              } | null | undefined;
-              readonly Acc_Reasoning__c: {
-                readonly value: any | null | undefined;
               } | null | undefined;
               readonly Acc_RequestNumber__c: {
                 readonly value: number | null | undefined;
@@ -49,15 +46,6 @@ var v0 = [
   }
 ],
 v1 = [
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "value",
-    "storageKey": null
-  }
-],
-v2 = [
   {
     "alias": null,
     "args": null,
@@ -136,7 +124,15 @@ v2 = [
                             "kind": "LinkedField",
                             "name": "Acc_RequestNumber__c",
                             "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "value",
+                                "storageKey": null
+                              }
+                            ],
                             "storageKey": null
                           },
                           {
@@ -155,16 +151,6 @@ v2 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "LongTextAreaValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_Reasoning__c",
-                            "plural": false,
-                            "selections": (v1/*: any*/),
                             "storageKey": null
                           }
                         ],
@@ -192,7 +178,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ManageTeamMemberSummaryQuery",
-    "selections": (v2/*: any*/),
+    "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -201,19 +187,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ManageTeamMemberSummaryQuery",
-    "selections": (v2/*: any*/)
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "ee36c2e93f3b2366293e26218dacb3e1",
+    "cacheID": "dad83f2d68afab01133ec81d738523d1",
     "id": null,
     "metadata": {},
     "name": "ManageTeamMemberSummaryQuery",
     "operationKind": "query",
-    "text": "query ManageTeamMemberSummaryQuery(\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                totalCount\n              }\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ManageTeamMemberSummaryQuery(\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                totalCount\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1356af029329b7d74b4145608d53a473";
+(node as any).hash = "d8f29dd8233d3fccee3021564e699399";
 
 export default node;

@@ -6,9 +6,82 @@ import {
   PCRProjectRole,
   PCRItemType,
   PCRContactRole,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
+import { ProjectRoleName } from "@framework/dtos/projectContactDto";
+import { ManageTeamMemberRole } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
+
+export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMethod => {
+  switch (type) {
+    case "New Team Member":
+      return ManageTeamMemberMethod.CREATE;
+    case "Replaced":
+      return ManageTeamMemberMethod.REPLACE;
+    case "Updated":
+      return ManageTeamMemberMethod.UPDATE;
+    case "Deleted":
+      return ManageTeamMemberMethod.DELETE;
+    default:
+      return ManageTeamMemberMethod.UNKNOWN;
+  }
+};
+
+export const mapToSalesforcePCRManageTeamMemberType = (
+  type: ManageTeamMemberMethod | undefined | null,
+): string | null | undefined => {
+  switch (type) {
+    case ManageTeamMemberMethod.CREATE:
+      return "New Team Member";
+    case ManageTeamMemberMethod.REPLACE:
+      return "Replaced";
+    case ManageTeamMemberMethod.UPDATE:
+      return "Updated";
+    case ManageTeamMemberMethod.DELETE:
+      return "Deleted";
+    case ManageTeamMemberMethod.UNKNOWN:
+    case null:
+      return null;
+    case undefined:
+    default:
+      return undefined;
+  }
+};
+
+export const mapToPCRManageTeamMemberRole = (
+  type: string | undefined | null,
+): ManageTeamMemberRole | null | undefined => {
+  switch (type) {
+    case ProjectRoleName.ProjectManager:
+      return ManageTeamMemberRole.PROJECT_MANAGER;
+    case ProjectRoleName.FinanceContact:
+      return ManageTeamMemberRole.FINANCE_CONTACT;
+    case ProjectRoleName.MainCompanyContact:
+      return ManageTeamMemberRole.MAIN_COMPANY_CONTACT;
+    case ProjectRoleName.Associate:
+      return ManageTeamMemberRole.ASSOCIATE;
+    case ProjectRoleName.KBAdmin:
+      return ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR;
+  }
+};
+
+export const mapToSalesforceTeamMemberType = (
+  type: ManageTeamMemberRole | undefined | null,
+): ProjectRoleName | null | undefined => {
+  switch (type) {
+    case ManageTeamMemberRole.PROJECT_MANAGER:
+      return ProjectRoleName.ProjectManager;
+    case ManageTeamMemberRole.FINANCE_CONTACT:
+      return ProjectRoleName.FinanceContact;
+    case ManageTeamMemberRole.MAIN_COMPANY_CONTACT:
+      return ProjectRoleName.MainCompanyContact;
+    case ManageTeamMemberRole.ASSOCIATE:
+      return ProjectRoleName.Associate;
+    case ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR:
+      return ProjectRoleName.KBAdmin;
+  }
+};
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {
@@ -179,6 +252,7 @@ export const mapToPcrItemType = (developerName: string) => {
 
     // Request header
     case ProjectChangeRequest.requestHeader:
+    case ProjectChangeRequest.manageTeamMemberRequestHeader:
     case ProjectChangeRequest.projectChangeRequests:
       return PCRItemType.Unknown;
   }

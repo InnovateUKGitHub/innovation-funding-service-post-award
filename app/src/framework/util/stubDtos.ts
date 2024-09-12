@@ -1248,6 +1248,7 @@ export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) =>
     started: new Date(),
     lastUpdated: new Date(),
     status: 1,
+    manageTeamMemberStatus: 1,
     statusName: "Draft",
     projectId: "a0E0C000001zU2tUAE" as ProjectId,
     items: [

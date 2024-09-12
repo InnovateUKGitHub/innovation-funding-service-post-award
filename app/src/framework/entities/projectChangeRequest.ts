@@ -10,12 +10,14 @@ import {
   ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
+import { ManageTeamMemberRole } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
 
 export interface ProjectChangeRequestForCreateEntity {
   items: ProjectChangeRequestItemForCreateEntity[];
   projectId: ProjectId;
   reasoningStatus: PCRItemStatus;
   status: PCRStatus;
+  manageTeamMemberStatus: PCRStatus;
 }
 
 export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreateEntity {
@@ -73,6 +75,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectSummary?: string | null;
   publicDescription?: string | null;
   recordTypeId: string;
+  developerRecordTypeName: string;
   registeredAddress?: string | null;
   registrationNumber?: string | null;
   removalPeriod?: number | null;
@@ -91,10 +94,12 @@ export interface ProjectChangeRequestItemForCreateEntity {
   subcontractorJustification?: string | null;
   subcontractorCost?: number | null;
   pclId?: ProjectContactLinkId | null;
-  manageType?: ManageTeamMemberMethod | null;
+  manageTeamMemberType?: ManageTeamMemberMethod | null;
   manageTeamMemberFirstName?: string | null;
   manageTeamMemberLastName?: string | null;
   manageTeamMemberEmail?: string | null;
+  manageTeamMemberRole?: ManageTeamMemberRole | null;
+  manageTeamMemberAssociateStartDate?: Date | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
@@ -107,7 +112,7 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   shortName: string;
   statusName: string;
   totalOtherFunding?: number | null;
-  typeOfAid: TypeOfAid;
+  typeOfAid?: TypeOfAid;
 }
 
 export interface ProjectChangeRequestStatusChangeEntity {

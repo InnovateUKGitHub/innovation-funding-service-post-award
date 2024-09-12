@@ -55,6 +55,7 @@ export class GetAllPCRsQuery extends AuthorisedAsyncQueryBase<PCRSummaryDto[]> {
       started: pcr.started,
       lastUpdated: pcr.updated,
       status: pcr.status,
+      manageTeamMemberStatus: pcr.manageTeamMemberStatus,
       statusName: pcr.statusName,
       projectId: pcr.projectId,
       items: filteredItemTypes.map(x => ({

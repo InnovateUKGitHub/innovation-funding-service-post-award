@@ -3,7 +3,6 @@ import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
 import { DateTime } from "luxon";
 import {
-  mapToSalesforcePCRManageTeamMemberType,
   PcrContactRoleMapper,
   PcrParticipantSizeMapper,
   PcrPartnerTypeMapper,
@@ -22,6 +21,8 @@ import {
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
+import { mapToSalesforcePCRManageTeamMemberType, mapToSalesforceTeamMemberType } from "@framework/mappers/pcr";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -44,10 +45,14 @@ export interface ISalesforcePCR {
   Acc_RequestHeader__c: string;
   Acc_RequestNumber__c: number;
   Acc_Status__c: string;
+  Acc_Manage_Team_Member_Status__c: string;
   StatusName: string;
   CreatedDate: string;
   LastModifiedDate: string;
-  RecordTypeId: string;
+  RecordType: {
+    Id: string;
+    DeveloperName: string;
+  };
   Acc_Reasoning__c: string;
   Acc_Project_Participant__c: string | null;
   Acc_Project__c: string;
@@ -121,10 +126,10 @@ export interface ISalesforcePCR {
   Loan_ProjectStartDate__c: string | null;
   Loan_Duration__c: string | null;
   // Acc_AdditionalNumberofMonths__c is used for setting value
-  Loan_ExtensionPeriod__c: string | null;
-  Loan_ExtensionPeriodChange__c: string | null;
-  Loan_RepaymentPeriod__c: string | null;
-  Loan_RepaymentPeriodChange__c: string | null;
+  Loan_ExtensionPeriod__c: number | null;
+  Loan_ExtensionPeriodChange__c: number | null;
+  Loan_RepaymentPeriod__c: number | null;
+  Loan_RepaymentPeriodChange__c: number | null;
 
   // Approve a new subcontractor
   New_company_subcontractor_name__c: string | null;
@@ -139,12 +144,13 @@ export interface ISalesforcePCR {
   Justification__c: string | null;
 
   // Manage Team Members
-  First_Name__c: string | null;
-  Last_Name__c: string | null;
-  Email__c: string | null;
-  // Role__c: string | null;
+  Acc_First_Name__c: string | null;
+  Acc_Last_Name__c: string | null;
+  Acc_Email__c: string | null;
+  Acc_Role__c: string | null;
   Acc_ProjectContactLink__c: string | null;
-  Type__c: string | null;
+  Acc_Type__c: string | null;
+  Acc_Start_Date__c: string | null;
 }
 
 export const mapToPCRApiName = (status: PCRStatus): string => {
@@ -222,7 +228,8 @@ export class ProjectChangeRequestRepository
   }
 
   protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
-  private readonly recordType = "Request Header";
+  private readonly recordType = ProjectChangeRequest.requestHeader;
+  private readonly accRequestHeaderManageTeamMembers = ProjectChangeRequest.manageTeamMemberRequestHeader;
 
   protected salesforceFieldNames: string[] = [
     "Acc_AdditionalNumberofMonths__c",
@@ -277,18 +284,16 @@ export class ProjectChangeRequestRepository
     "Acc_Turnover__c",
     "Acc_TurnoverYearEnd__c",
     "CreatedDate",
-    "Email__c",
-    "First_Name__c",
     "Id",
     "LastModifiedDate",
-    "Last_Name__c",
     "Loan_Duration__c",
     "Loan_ExtensionPeriod__c",
     "Loan_ExtensionPeriodChange__c",
     "Loan_ProjectStartDate__c",
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
-    "RecordTypeId",
+    "RecordType.Id",
+    "RecordType.DeveloperName",
     "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
     "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
     "toLabel(Acc_Location__c) ProjectLocationLabel",
@@ -306,16 +311,26 @@ export class ProjectChangeRequestRepository
     "Cost_of_work__c",
     "Justification__c",
     "Acc_ProjectContactLink__c",
-    "Role__c",
-    "Type__c",
+    "Acc_Role__c",
+    "Acc_Type__c",
+    "Acc_Start_Date__c",
+    "Acc_First_Name__c",
+    "Acc_Last_Name__c",
+    "Acc_Email__c",
+    "Acc_Manage_Team_Member_Status__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+    const manageTeamMemberheader = await this.getRecordTypeId(
+      this.salesforceObjectName,
+      this.accRequestHeaderManageTeamMembers,
+    );
+
     const data = await super.where(
       `Acc_Project__c='${sss(projectId)}' OR Acc_RequestHeader__r.Acc_Project__c='${sss(projectId)}'`,
     );
-    const mapper = new SalesforcePCRMapper(headerRecordTypeId);
+    const mapper = new SalesforcePCRMapper([headerRecordTypeId, manageTeamMemberheader]);
     return mapper.map(data);
   }
 
@@ -329,8 +344,12 @@ export class ProjectChangeRequestRepository
     );
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+    const manageTeamMemberheader = await this.getRecordTypeId(
+      this.salesforceObjectName,
+      this.accRequestHeaderManageTeamMembers,
+    );
 
-    const mapper = new SalesforcePCRMapper(headerRecordTypeId);
+    const mapper = new SalesforcePCRMapper([headerRecordTypeId, manageTeamMemberheader]);
     const mapped = mapper.map(data).pop();
     if (!mapped) {
       throw new NotFoundError();
@@ -369,81 +388,35 @@ export class ProjectChangeRequestRepository
       items.map(x => {
         const isDurationChange = x.shortName === PCRItemTypeName.TimeExtension;
         const additionalNumberOfMonths = isDurationChange ? x.offsetMonths : x.availabilityPeriodChange;
-
         return {
           Id: x.id,
-          Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-          Acc_NewProjectDuration__C: x.projectDuration,
-          Acc_AdditionalNumberofMonths__c: additionalNumberOfMonths ?? 0,
-          Acc_NewProjectSummary__c: x.projectSummary,
-          Acc_NewPublicDescription__c: x.publicDescription,
-          Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
-          Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
-          Acc_NewOrganisationName__c: x.accountName,
-          Acc_RemovalPeriod__c: x.removalPeriod,
-          Acc_Project_Participant__c: x.partnerId,
-          Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
-          Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
-          Acc_CommercialWork__c: x.isCommercialWork,
-          Acc_OrganisationName__c: x.organisationName,
-          Acc_RegisteredAddress__c: x.registeredAddress,
-          Acc_RegistrationNumber__c: x.registrationNumber,
-          Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
-          Acc_Employees__c: x.numberOfEmployees,
-          Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
-          Acc_Turnover__c: x.financialYearEndTurnover,
-          Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
-          Acc_ProjectCity__c: x.projectCity,
-          Acc_ProjectPostcode__c: x.projectPostcode,
-          Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
-          Acc_Contact1Forename__c: x.contact1Forename,
-          Acc_Contact1Surname__c: x.contact1Surname,
-          Acc_Contact1Phone__c: x.contact1Phone,
-          Acc_Contact1EmailAddress__c: x.contact1Email,
-          Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
-          Acc_Contact2Forename__c: x.contact2Forename,
-          Acc_Contact2Surname__c: x.contact2Surname,
-          Acc_Contact2Phone__c: x.contact2Phone,
-          Acc_Contact2EmailAddress__c: x.contact2Email,
-          Acc_AwardRate__c: x.awardRate,
-          Acc_OtherFunding__c: x.hasOtherFunding,
           Acc_TotalOtherFunding__c: x.totalOtherFunding,
-          Acc_TSBReference__c: x.tsbReference,
-          Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
-          Loan_ExtensionPeriodChange__c: String(x.extensionPeriodChange),
-          Loan_RepaymentPeriodChange__c: String(x.repaymentPeriodChange),
-          New_company_subcontractor_name__c: x.subcontractorName,
-          Company_registration_number__c: x.subcontractorRegistrationNumber,
-          Acc_ProjectContactLink__c: x.pclId,
-
-          Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageType),
-          First_Name__c: x.manageTeamMemberFirstName,
-          Last_Name__c: x.manageTeamMemberLastName,
-          Email__c: x.manageTeamMemberEmail,
-
-          ...(configuration.features.approveNewSubcontractor
-            ? {
-                // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
-                Relationship_between_partners__c: x.subcontractorRelationship ?? false,
-                Relationship_justification__c: x.subcontractorRelationshipJustification,
-                Country_where_work_will_be_carried_out__c: x.subcontractorLocation,
-                Role_in_the_project__c: x.subcontractorDescription,
-                Cost_of_work__c: x.subcontractorCost,
-                Justification__c: x.subcontractorJustification,
-              }
-            : {}),
+          Acc_AdditionalNumberofMonths__c: additionalNumberOfMonths ?? 0,
+          ...this.mapCreateDto(x),
         };
       }),
     );
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
-    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+    let headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+
+    if (
+      projectChangeRequest.items.length === 1 &&
+      projectChangeRequest.items[0].developerRecordTypeName === ProjectChangeRequest.manageTeamMembers
+    ) {
+      headerRecordTypeId = await this.getRecordTypeId(
+        this.salesforceObjectName,
+        this.accRequestHeaderManageTeamMembers,
+      );
+    }
+
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,
       Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
       Acc_Status__c: this.mapStatus(projectChangeRequest.status),
+      Acc_Manage_Team_Member_Status__c: this.mapStatus(projectChangeRequest.manageTeamMemberStatus),
       Acc_Project__c: projectChangeRequest.projectId,
     });
     // Insert sub-items
@@ -456,9 +429,8 @@ export class ProjectChangeRequestRepository
       items.map(x => ({
         Acc_RequestHeader__c: headerId,
         RecordTypeId: x.recordTypeId,
-        Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
         Acc_Project__c: x.projectId,
-        Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageType),
+        ...this.mapCreateDto(x),
       })),
     );
   }
@@ -493,5 +465,72 @@ export class ProjectChangeRequestRepository
 
   private mapItemStatus(status?: PCRItemStatus): string {
     return mapToPCRItemStatusLabel(status);
+  }
+
+  private mapCreateDto(x: ProjectChangeRequestItemForCreateEntity) {
+    return {
+      Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+      Acc_NewProjectDuration__C: x.projectDuration,
+
+      Acc_NewProjectSummary__c: x.projectSummary,
+      Acc_NewPublicDescription__c: x.publicDescription,
+      Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
+      Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
+      Acc_NewOrganisationName__c: x.accountName,
+      Acc_RemovalPeriod__c: x.removalPeriod,
+      Acc_Project_Participant__c: x.partnerId,
+      Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
+      Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+      Acc_CommercialWork__c: x.isCommercialWork,
+      Acc_OrganisationName__c: x.organisationName,
+      Acc_RegisteredAddress__c: x.registeredAddress,
+      Acc_RegistrationNumber__c: x.registrationNumber,
+      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
+      Acc_Employees__c: x.numberOfEmployees,
+      Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
+      Acc_Turnover__c: x.financialYearEndTurnover,
+      Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
+      Acc_ProjectCity__c: x.projectCity,
+      Acc_ProjectPostcode__c: x.projectPostcode,
+      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
+      Acc_Contact1Forename__c: x.contact1Forename,
+      Acc_Contact1Surname__c: x.contact1Surname,
+      Acc_Contact1Phone__c: x.contact1Phone,
+      Acc_Contact1EmailAddress__c: x.contact1Email,
+      Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
+      Acc_Contact2Forename__c: x.contact2Forename,
+      Acc_Contact2Surname__c: x.contact2Surname,
+      Acc_Contact2Phone__c: x.contact2Phone,
+      Acc_Contact2EmailAddress__c: x.contact2Email,
+      Acc_AwardRate__c: x.awardRate,
+      Acc_OtherFunding__c: x.hasOtherFunding,
+
+      Acc_TSBReference__c: x.tsbReference,
+      Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
+      Loan_ExtensionPeriodChange__c: x.extensionPeriodChange,
+      Loan_RepaymentPeriodChange__c: x.repaymentPeriodChange,
+      New_company_subcontractor_name__c: x.subcontractorName,
+      Company_registration_number__c: x.subcontractorRegistrationNumber,
+      Acc_ProjectContactLink__c: x.pclId,
+
+      Acc_Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageTeamMemberType),
+      Acc_First_Name__c: x.manageTeamMemberFirstName,
+      Acc_Last_Name__c: x.manageTeamMemberLastName,
+      Acc_Email__c: x.manageTeamMemberEmail,
+      Acc_Role__c: mapToSalesforceTeamMemberType(x.manageTeamMemberRole),
+      Acc_Start_Date__c: this.toOptionalSFDate(x.projectStartDate),
+
+      ...(configuration.features.approveNewSubcontractor
+        ? {
+            // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
+            Relationship_between_partners__c: x.subcontractorRelationship ?? false,
+            Relationship_justification__c: x.subcontractorRelationshipJustification,
+            Country_where_work_will_be_carried_out__c: x.subcontractorLocation,
+            Role_in_the_project__c: x.subcontractorDescription,
+            Cost_of_work__c: x.subcontractorCost,
+            Justification__c: x.subcontractorJustification,
+          }
+        : {}),
+    };
   }
 }

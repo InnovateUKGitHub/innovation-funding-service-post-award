@@ -127,7 +127,7 @@ const SelectTeamMember = () => {
         <>
           <ManageTeamMembersSingleContactTable tableData={memberToManage} />
           <input type="hidden" defaultValue={pclId} {...register("pclId")} />
-          <input type="hidden" defaultValue={memberToManage?.pcl.role} {...register("role")} />
+          <input type="hidden" defaultValue={memberToManage?.role} />
         </>
       )}
     </form>
