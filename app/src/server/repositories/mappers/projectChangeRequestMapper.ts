@@ -7,14 +7,11 @@ import {
   PCRParticipantSize,
   PCRProjectLocation,
   getPCROrganisationType,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
-import {
-  ProjectChangeRequestEntity,
-  ProjectChangeRequestItemEntity,
-  ProjectChangeRequestStandaloneEntity,
-} from "@framework/entities/projectChangeRequest";
-import { ISalesforcePCR, IStandalonePcr } from "../projectChangeRequestRepository";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
+import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 import { mapToPCRStatus } from "@framework/mappers/pcr";
 import { configuration } from "@server/features/common/config";
@@ -29,6 +26,42 @@ export const mapToPCRItemStatus = (status: string): PCRItemStatus => {
       return PCRItemStatus.Complete;
     default:
       return PCRItemStatus.Unknown;
+  }
+};
+
+export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMethod => {
+  switch (type) {
+    case "New Team Member":
+      return ManageTeamMemberMethod.CREATE;
+    case "Replaced":
+      return ManageTeamMemberMethod.REPLACE;
+    case "Updated":
+      return ManageTeamMemberMethod.UPDATE;
+    case "Deleted":
+      return ManageTeamMemberMethod.DELETE;
+    default:
+      return ManageTeamMemberMethod.UNKNOWN;
+  }
+};
+
+export const mapToSalesforcePCRManageTeamMemberType = (
+  type: ManageTeamMemberMethod | undefined | null,
+): string | null | undefined => {
+  switch (type) {
+    case ManageTeamMemberMethod.CREATE:
+      return "New Team Member";
+    case ManageTeamMemberMethod.REPLACE:
+      return "Replaced";
+    case ManageTeamMemberMethod.UPDATE:
+      return "Updated";
+    case ManageTeamMemberMethod.DELETE:
+      return "Deleted";
+    case ManageTeamMemberMethod.UNKNOWN:
+    case null:
+      return null;
+    case undefined:
+    default:
+      return undefined;
   }
 };
 
@@ -248,6 +281,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       pcrId: header.Id as PcrId,
       projectId: header.Acc_Project__c as ProjectId,
       partnerId: pcrItem.Acc_Project_Participant__c as PartnerId,
+      pclId: pcrItem.Acc_ProjectContactLink__c as ProjectContactLinkId,
       recordTypeId: pcrItem.RecordTypeId,
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
       statusName: pcrItem.MarkedAsCompleteName,
@@ -315,6 +349,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       extensionPeriodChange: this.mapChangeOffsetToQuarter(extensionPeriod, extensionPeriodChange),
       repaymentPeriod,
       repaymentPeriodChange: this.mapChangeOffsetToQuarter(repaymentPeriod, repaymentPeriodChange),
+      manageType: mapToPCRManageTeamMemberType(pcrItem.Type__c),
 
       ...(configuration.features.approveNewSubcontractor
         ? {
@@ -329,18 +364,6 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
             subcontractorCost: pcrItem.Cost_of_work__c,
           }
         : {}),
-    };
-  }
-
-  public mapStandalonePcr(item: IStandalonePcr): ProjectChangeRequestStandaloneEntity {
-    return {
-      number: item.Acc_RequestNumber__c,
-      id: item.Id as PcrId,
-      projectId: item.Acc_Project__c as ProjectId,
-      started: this.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
-      updated: this.clock.parseRequiredSalesforceDateTime(item.LastModifiedDate),
-      status: this.mapStatus(item.Acc_Status__c),
-      statusName: item.StatusName,
     };
   }
 

@@ -1,4 +1,5 @@
 import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -36,6 +37,7 @@ describe("GetPCRItemTypesQuery", () => {
     const recordType = context.testData.createRecordType({
       type: "Remove a partner",
       parent: "Acc_ProjectChangeRequest__c",
+      developerName: ProjectChangeRequest.partnerWithdrawal,
     });
 
     const query = new GetPCRItemTypesQuery(project.Id);

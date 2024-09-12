@@ -13,6 +13,7 @@ import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBase<PcrId> {
   public readonly runnableName: string = "CreateProjectChangeRequestCommand";
@@ -100,10 +101,12 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   ): ProjectChangeRequestItemForCreateEntity {
     const matchedItem = itemTypes.find(t => t.type === itemDto.type);
     if (!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
+
     return {
       projectId: dto.projectId,
       recordTypeId: matchedItem.recordTypeId,
       status: itemDto.status,
+      ...(itemDto.type === PCRItemType.ManageTeamMembers ? { manageType: itemDto.manageType } : {}),
     };
   }
 }

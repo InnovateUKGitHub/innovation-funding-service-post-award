@@ -2,8 +2,8 @@ import { Button } from "@ui/components/atoms/Button/Button";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Link } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
-import { ManageTeamMemberMethod } from "../../ManageTeamMember.logic";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberSubmitSection = () => {
   const { method, hideBottomSection, backRoute, isFetching, role } = useManageTeamMemberActionContext();

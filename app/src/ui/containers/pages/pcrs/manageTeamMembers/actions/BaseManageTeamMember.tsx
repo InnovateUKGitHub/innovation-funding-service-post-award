@@ -15,8 +15,6 @@ import { z } from "zod";
 import {
   getManageTeamMember,
   ManageTeamMemberData,
-  ManageTeamMemberMethod,
-  ManageTeamMemberMethods,
   ManageTeamMemberProps,
   ManageTeamMemberRole,
   ManageTeamMemberRoles,
@@ -30,6 +28,7 @@ import {
   manageTeamMemberValidator,
   ManageTeamMemberValidatorSchema,
 } from "./ManageTeamMember.zod";
+import { ManageTeamMemberMethod, ManageTeamMemberMethods } from "@framework/constants/pcrConstants";
 
 interface ManageTeamMembersActionContext {
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
@@ -50,7 +49,11 @@ interface ManageTeamMembersActionContext {
   pclId: ProjectContactLinkId | undefined;
   defaultPclId: ProjectContactLinkId | undefined | "undefined";
   role: ManageTeamMemberRole;
-  method: ManageTeamMemberMethod;
+  method:
+    | ManageTeamMemberMethod.CREATE
+    | ManageTeamMemberMethod.REPLACE
+    | ManageTeamMemberMethod.UPDATE
+    | ManageTeamMemberMethod.DELETE;
   backRoute: ILinkInfo;
 }
 

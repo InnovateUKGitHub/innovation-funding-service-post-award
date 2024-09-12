@@ -3,7 +3,6 @@ import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atoms/form/Label/Label";
-import { ManageTeamMemberMethod } from "../../ManageTeamMember.logic";
 import { ManageTeamMembersSingleContactTable } from "../../ManageTeamMembersSingleContactTable";
 import { useFormContext } from "react-hook-form";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
@@ -13,6 +12,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useRoutes } from "@ui/context/routesProvider";
 import { Link } from "@ui/components/atoms/Links/links";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const SelectTeamMember = () => {
   const { register, getFieldState } = useFormContext();

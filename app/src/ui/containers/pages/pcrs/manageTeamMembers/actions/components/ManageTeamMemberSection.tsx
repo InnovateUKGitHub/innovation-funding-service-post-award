@@ -1,8 +1,8 @@
 import { Section } from "@ui/components/molecules/Section/section";
-import { ManageTeamMemberMethod } from "../../ManageTeamMember.logic";
 import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode } from "react";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberSection = ({ children }: { children?: ReactNode }) => {
   const { role, method, hideBottomSection } = useManageTeamMemberActionContext();

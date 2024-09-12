@@ -1,4 +1,5 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
@@ -22,6 +23,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
       id: "id_1",
       parent: projectChangeRequest.id,
       type: "Scope Change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -66,6 +68,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
         id: "recordType_1",
         parent: projectChangeRequest.id,
         type: "Scope change",
+        developerName: ProjectChangeRequest.changeProjectScope,
       };
       const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -97,6 +100,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
         id: "recordType_1",
         parent: projectChangeRequest.id,
         type: "Scope change",
+        developerName: ProjectChangeRequest.changeProjectScope,
       };
       const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 

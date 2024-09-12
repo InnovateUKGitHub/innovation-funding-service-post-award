@@ -7,6 +7,7 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 
@@ -27,16 +28,6 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
   started: Date;
   statusName: string;
   updated: Date;
-}
-
-export interface ProjectChangeRequestStandaloneEntity {
-  id: PcrId;
-  projectId: ProjectId;
-  number: number;
-  started: Date;
-  updated: Date;
-  status: PCRStatus;
-  statusName: string;
 }
 
 export interface ProjectChangeRequestItemForCreateEntity {
@@ -100,6 +91,10 @@ export interface ProjectChangeRequestItemForCreateEntity {
   subcontractorJustification?: string | null;
   subcontractorCost?: number | null;
   pclId?: ProjectContactLinkId | null;
+  manageType?: ManageTeamMemberMethod | null;
+  manageTeamMemberFirstName?: string | null;
+  manageTeamMemberLastName?: string | null;
+  manageTeamMemberEmail?: string | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

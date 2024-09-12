@@ -1,4 +1,4 @@
-import { ManageTeamMemberMethod, ManageTeamMemberReplaceProps, ManageTeamMemberRole } from "../ManageTeamMember.logic";
+import { ManageTeamMemberReplaceProps, ManageTeamMemberRole } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
@@ -7,6 +7,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberReplacePage = (props: ManageTeamMemberModifyProps) => {
   return (

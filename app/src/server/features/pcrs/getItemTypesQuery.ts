@@ -18,7 +18,7 @@ export class GetPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTypeDt
     const competitionType = mapToSalesforceCompetitionTypes(typeString);
 
     return itemTypes.filter(x => {
-      const pcrItem = pcrItemTypes.find(y => y.type === x.type);
+      const pcrItem = pcrItemTypes.find(y => y.developerRecordTypeName === x.developerRecordTypeName);
 
       if (!pcrItem) return false;
       return !pcrItem.ignoredCompetitions.includes(competitionType);

@@ -1,15 +1,12 @@
 import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
-import {
-  ManageTeamMemberMethod,
-  ManageTeamMemberRole,
-  ManageTeamMemberUpdateDeleteProps,
-} from "../ManageTeamMember.logic";
+import { ManageTeamMemberRole, ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberDeletePage = (props: ManageTeamMemberModifyProps) => {
   return (

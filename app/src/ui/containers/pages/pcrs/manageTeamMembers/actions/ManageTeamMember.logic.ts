@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { ManageTeamMemberValidatorSchema } from "./ManageTeamMember.zod";
 import { useRoutes } from "@ui/context/routesProvider";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberMethod, PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { useFormContext } from "react-hook-form";
 
@@ -79,6 +79,8 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
               type: PCRItemType.ManageTeamMembers,
               status: PCRItemStatus.Complete,
               pclId,
+              // TODO: FPD-1090 The conversion is sane because the strings are identical
+              manageType: data.form as unknown as ManageTeamMemberMethod,
             },
           ],
         },

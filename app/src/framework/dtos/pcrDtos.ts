@@ -9,6 +9,7 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRItemHiddenReason,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -194,11 +195,13 @@ export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
 export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
   type: PCRItemType.ManageTeamMembers;
   pclId: ProjectContactLinkId | null;
+  manageType: ManageTeamMemberMethod | null;
 }
 
 export interface PCRItemTypeDto {
   type: PCRItemType;
   displayName: string;
+  developerRecordTypeName: string;
   recordTypeId: string;
   /**
    * @todo Refactor this to reduce confusion around the inverse of "disabled"

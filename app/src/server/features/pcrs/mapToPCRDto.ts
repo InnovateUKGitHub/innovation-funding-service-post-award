@@ -62,7 +62,7 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
     .map(({ pcr, itemType }) => mapItem(pcr, itemType));
 };
 
-const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
+export const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
   if (!pcr) throw new Error("Cannot map undefined pcr");
 
   switch (itemType?.type) {
@@ -275,6 +275,7 @@ const mapItemForManageTeamMembers = (
   ...mapBaseItem(pcr, typeName, type),
   type,
   pclId: pcr.pclId ?? null,
+  manageType: pcr.manageType ?? null,
 });
 
 const mapItemForLoansChangeDrawdown = (

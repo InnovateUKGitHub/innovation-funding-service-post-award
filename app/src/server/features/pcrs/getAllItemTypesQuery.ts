@@ -24,7 +24,8 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
       enabled: this.getEnabledStatus(metaInfo, context.config),
       hidden: false,
       hiddenReason: PCRItemHiddenReason.None,
-      recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
+      developerRecordTypeName: metaInfo.developerRecordTypeName,
+      recordTypeId: this.findRecordType(metaInfo.developerRecordTypeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
       standalone: this.standalonePcrTypes.includes(metaInfo.type),
     }));
@@ -50,8 +51,8 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
     return true;
   }
 
-  private findRecordType(typeName: string, recordTypes: RecordType[]): string {
-    const recordType = recordTypes.find(y => y.type === typeName);
+  private findRecordType(developerName: string, recordTypes: RecordType[]): string {
+    const recordType = recordTypes.find(y => y.developerName === developerName);
     return recordType?.id || "Unknown";
   }
 }

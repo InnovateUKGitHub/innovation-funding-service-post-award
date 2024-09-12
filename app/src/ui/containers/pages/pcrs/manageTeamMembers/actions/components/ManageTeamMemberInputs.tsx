@@ -8,8 +8,9 @@ import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormContext } from "react-hook-form";
-import { ManageTeamMemberMethod, ManageTeamMemberRole } from "../../ManageTeamMember.logic";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberRole } from "../../ManageTeamMember.logic";
 
 const ManageTeamMemberInputs = () => {
   const { method, role, defaults, isFetching, memberToManage, partners } = useManageTeamMemberActionContext();

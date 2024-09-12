@@ -3,6 +3,7 @@ import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
 import { DateTime } from "luxon";
 import {
+  mapToSalesforcePCRManageTeamMemberType,
   PcrContactRoleMapper,
   PcrParticipantSizeMapper,
   PcrPartnerTypeMapper,
@@ -17,32 +18,17 @@ import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
-  ProjectChangeRequestStandaloneEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
-import { ManageTeamMemberPcrDto } from "@framework/dtos/pcrDtos";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
-  createStandaloneProjectChangeRequest({
-    projectId,
-    recordTypeId,
-    status,
-  }: {
-    projectId: ProjectId;
-    recordTypeId: string;
-    status: PCRStatus;
-  }): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
-  updateManageTeamMemberPcr(
-    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation" | "role">,
-  ): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
   getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
-  getStandaloneEntityById(projectId: ProjectId, pcrId: PcrId): Promise<ProjectChangeRequestStandaloneEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
   isExisting(projectId: ProjectId, projectChangeRequestId: PcrId | PcrItemId): Promise<boolean>;
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
@@ -51,17 +37,6 @@ export interface IProjectChangeRequestRepository {
   getPartnerTypes(): Promise<IPicklistEntry[]>;
   getParticipantSizes(): Promise<IPicklistEntry[]>;
   getProjectLocations(): Promise<IPicklistEntry[]>;
-}
-
-export interface IStandalonePcr {
-  Acc_Status__c: string;
-  StatusName: string;
-  CreatedDate: string;
-  LastModifiedDate: string;
-  RecordTypeId: string;
-  Acc_Project__c: string;
-  Acc_RequestNumber__c: number;
-  Id: string;
 }
 
 export interface ISalesforcePCR {
@@ -164,11 +139,12 @@ export interface ISalesforcePCR {
   Justification__c: string | null;
 
   // Manage Team Members
-  // First_Name__c: string | null;
-  // Last_Name__c: string | null;
-  // Email__c: string | null;
+  First_Name__c: string | null;
+  Last_Name__c: string | null;
+  Email__c: string | null;
   // Role__c: string | null;
   Acc_ProjectContactLink__c: string | null;
+  Type__c: string | null;
 }
 
 export const mapToPCRApiName = (status: PCRStatus): string => {
@@ -247,7 +223,6 @@ export class ProjectChangeRequestRepository
 
   protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
   private readonly recordType = "Request Header";
-  private readonly standalonePcrTypes = ["012Pv000001PtFFIA0"];
 
   protected salesforceFieldNames: string[] = [
     "Acc_AdditionalNumberofMonths__c",
@@ -314,7 +289,6 @@ export class ProjectChangeRequestRepository
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
     "RecordTypeId",
-    "Role__c",
     "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
     "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
     "toLabel(Acc_Location__c) ProjectLocationLabel",
@@ -332,6 +306,8 @@ export class ProjectChangeRequestRepository
     "Cost_of_work__c",
     "Justification__c",
     "Acc_ProjectContactLink__c",
+    "Role__c",
+    "Type__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
@@ -362,18 +338,6 @@ export class ProjectChangeRequestRepository
     return mapped;
   }
 
-  async getStandaloneEntityById(projectId: ProjectId, pcrId: PcrId): Promise<ProjectChangeRequestStandaloneEntity> {
-    const data = await super.where(`(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(pcrId)}') `);
-
-    const item = data[0];
-
-    const mapper = new SalesforcePCRMapper("unknown");
-
-    const mappedItem = mapper.mapStandalonePcr(item);
-
-    return mappedItem;
-  }
-
   async isExisting(projectId: ProjectId, pcrOrItemId: string): Promise<boolean> {
     const data = await super.filterOne(
       `(Acc_Project__c='${sss(projectId)}' AND Id = '${sss(
@@ -393,20 +357,6 @@ export class ProjectChangeRequestRepository
       Acc_MarkedasComplete__c: this.mapItemStatus(pcr.reasoningStatus),
       Acc_Reasoning__c: pcr.reasoning,
       Acc_Status__c: this.mapStatus(pcr.status),
-    });
-  }
-
-  async updateManageTeamMemberPcr(
-    pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation" | "role">,
-  ) {
-    await super.updateItem({
-      Id: pcr.id,
-      // Acc_Status__c: this.mapStatus(pcr.status),
-      First_Name__c: pcr.firstName,
-      Last_Name__c: pcr.lastName,
-      Email__c: pcr.email,
-      Acc_OrganisationName__c: pcr.organisation,
-      Role__c: pcr.role,
     });
   }
 
@@ -466,6 +416,11 @@ export class ProjectChangeRequestRepository
           Company_registration_number__c: x.subcontractorRegistrationNumber,
           Acc_ProjectContactLink__c: x.pclId,
 
+          Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageType),
+          First_Name__c: x.manageTeamMemberFirstName,
+          Last_Name__c: x.manageTeamMemberLastName,
+          Email__c: x.manageTeamMemberEmail,
+
           ...(configuration.features.approveNewSubcontractor
             ? {
                 // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
@@ -480,24 +435,6 @@ export class ProjectChangeRequestRepository
         };
       }),
     );
-  }
-
-  async createStandaloneProjectChangeRequest({
-    projectId,
-    recordTypeId,
-    status,
-  }: {
-    projectId: ProjectId;
-    recordTypeId: string;
-    status: PCRStatus;
-  }): Promise<PcrId> {
-    const id = await super.insertItem({
-      RecordTypeId: recordTypeId,
-      Acc_Project__c: projectId,
-      Acc_Status__c: this.mapStatus(status),
-    });
-
-    return id as PcrId;
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
@@ -521,6 +458,7 @@ export class ProjectChangeRequestRepository
         RecordTypeId: x.recordTypeId,
         Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
         Acc_Project__c: x.projectId,
+        Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageType),
       })),
     );
   }

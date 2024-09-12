@@ -1,6 +1,8 @@
 import { ContentSelector } from "@copy/type";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { SalesforceCompetitionTypes } from "./competitionTypes";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ProjectChangeRequest } from "./recordTypes";
 
 export enum PCRStatus {
   Unknown = 0,
@@ -176,6 +178,24 @@ export enum PCROrganisationType {
   Academic = "Academic",
   Industrial = "Industrial",
 }
+
+/**
+ * You know, CRUD...
+ */
+export enum ManageTeamMemberMethod {
+  CREATE = FormTypes.ProjectManageTeamMembersCreate,
+  REPLACE = FormTypes.ProjectManageTeamMembersReplace,
+  UPDATE = FormTypes.ProjectManageTeamMembersUpdate,
+  DELETE = FormTypes.ProjectManageTeamMembersDelete,
+  UNKNOWN = "unknownManageTeamMemberMethod",
+}
+
+export const ManageTeamMemberMethods = [
+  ManageTeamMemberMethod.CREATE,
+  ManageTeamMemberMethod.REPLACE,
+  ManageTeamMemberMethod.UPDATE,
+  ManageTeamMemberMethod.DELETE,
+];
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {
@@ -502,6 +522,7 @@ export interface IMetaValue {
   ignoredCompetitions: SalesforceCompetitionTypes[];
   type: PCRItemType;
   typeName: string;
+  developerRecordTypeName: ProjectChangeRequest;
   displayName?: string;
   i18nName?: ContentSelector;
   i18nDescription?: ContentSelector;
@@ -546,6 +567,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.MultiplePartnerFinancialVirement,
     typeName: "Reallocate several partners' project cost",
+    developerRecordTypeName: ProjectChangeRequest.reallocateSeveralPartnersProjectCost,
     files: ["reallocate-project-costs.xlsx"],
     displayName: "Reallocate project costs",
     i18nName: x => x.pcrTypes.multiplePartnerFinancialVirement,
@@ -559,6 +581,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.PartnerWithdrawal,
     typeName: "Remove a partner",
+    developerRecordTypeName: ProjectChangeRequest.partnerWithdrawal,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.partnerWithdrawal,
     i18nDescription: x => x.pages.pcrModifyOptions.removePartnerMessage,
@@ -568,6 +591,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.PartnerAddition,
     typeName: "Add a partner",
+    developerRecordTypeName: ProjectChangeRequest.addAPartner,
     files: ["de-minimis-declaration.odt"],
     guidance: partnerAdditionGuidance,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
@@ -579,6 +603,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.ScopeChange,
     typeName: "Change project scope",
+    developerRecordTypeName: ProjectChangeRequest.changeProjectScope,
     guidance: scopeChangeGuidance,
     ignoredCompetitions: [],
     i18nName: x => x.pcrTypes.scopeChange,
@@ -589,6 +614,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.TimeExtension,
     typeName: "Change project duration",
+    developerRecordTypeName: ProjectChangeRequest.changeProjectDuration,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.timeExtension,
     i18nDescription: x => x.pages.pcrModifyOptions.changeDurationMessage,
@@ -598,6 +624,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.PeriodLengthChange,
     typeName: "Change period length",
+    developerRecordTypeName: ProjectChangeRequest.changePeriodLength,
     ignoredCompetitions: [
       SalesforceCompetitionTypes.crnd,
       SalesforceCompetitionTypes.contracts,
@@ -616,6 +643,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.AccountNameChange,
     typeName: "Change a partner's name",
+    developerRecordTypeName: ProjectChangeRequest.changeAPartnersName,
     guidance: nameChangeGuidance,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.accountNameChange,
@@ -626,6 +654,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.ProjectSuspension,
     typeName: "Put project on hold",
+    developerRecordTypeName: ProjectChangeRequest.putProjectOnHold,
     ignoredCompetitions: [],
     i18nName: x => x.pcrTypes.projectSuspension,
     i18nDescription: x => x.pages.pcrModifyOptions.putProjectOnHoldMessage,
@@ -635,6 +664,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.ProjectTermination,
     typeName: "End the project early",
+    developerRecordTypeName: ProjectChangeRequest.endProjectEarly,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.projectTermination,
     i18nDescription: x => x.pages.pcrModifyOptions.endProjectEarlyMessage,
@@ -645,6 +675,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.LoanDrawdownChange,
     typeName: "Loan Drawdown Change",
+    developerRecordTypeName: ProjectChangeRequest.loanDrawdownChange,
     ignoredCompetitions: [
       SalesforceCompetitionTypes.crnd,
       SalesforceCompetitionTypes.contracts,
@@ -664,6 +695,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.LoanDrawdownExtension,
     typeName: "Change Loans Duration",
+    developerRecordTypeName: ProjectChangeRequest.changeLoansDuration,
     ignoredCompetitions: [
       SalesforceCompetitionTypes.crnd,
       SalesforceCompetitionTypes.contracts,
@@ -683,6 +715,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.ApproveNewSubcontractor,
     typeName: "Approve a new subcontractor",
+    developerRecordTypeName: ProjectChangeRequest.approveNewSubcontractor,
     ignoredCompetitions: [SalesforceCompetitionTypes.ktp, SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.approveNewSubcontractor,
     i18nDescription: x => x.pages.pcrModifyOptions.approveNewSubcontractorMessage,
@@ -692,6 +725,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.Uplift,
     typeName: "Uplift",
+    developerRecordTypeName: ProjectChangeRequest.uplift,
     i18nName: x => x.pcrTypes.uplift,
     ignoredCompetitions: [
       SalesforceCompetitionTypes.crnd,
@@ -712,6 +746,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.ManageTeamMembers,
     typeName: "Manage team members",
+    developerRecordTypeName: ProjectChangeRequest.manageTeamMembers,
     i18nName: x => x.pcrTypes.manageTeamMembers,
     i18nDescription: x => x.pages.pcrModifyOptions.manageTeamMembersMessage,
     ignoredCompetitions: [],

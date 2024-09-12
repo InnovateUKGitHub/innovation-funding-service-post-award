@@ -771,13 +771,14 @@ export class TestData {
     return new TestFileWrapper(fileName, content, description);
   }
 
-  public createRecordType(update?: Partial<RecordType>) {
+  public createRecordType(update?: PickRequiredFromPartial<RecordType, "developerName">) {
     const seed = this.repositories.recordTypes.Items.length + 1;
 
     const newItem: RecordType = {
       id: "RecordType " + seed,
       type: "Type " + seed,
       parent: "Parent " + seed,
+      developerName: "DeveloperName " + seed,
     };
 
     if (update) {
@@ -802,12 +803,15 @@ export class TestData {
       .filter(x => typeof competitionType === "undefined" || !x.ignoredCompetitions.includes(competitionType))
       .map(x => {
         const parent = "Acc_ProjectChangeRequest__c";
-        const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
+        const existing = this.repositories.recordTypes.Items.find(
+          r => r.parent === parent && r.developerName === x.developerRecordTypeName,
+        );
         return (
           existing ||
           this.createRecordType({
             parent,
             type: x.typeName,
+            developerName: x.developerRecordTypeName,
           })
         );
       });

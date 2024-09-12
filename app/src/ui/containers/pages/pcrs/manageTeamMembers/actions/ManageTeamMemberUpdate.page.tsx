@@ -1,8 +1,4 @@
-import {
-  ManageTeamMemberMethod,
-  ManageTeamMemberRole,
-  ManageTeamMemberUpdateDeleteProps,
-} from "../ManageTeamMember.logic";
+import { ManageTeamMemberRole, ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
@@ -11,6 +7,7 @@ import { defineRoute } from "@ui/containers/containerBase";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
   return (

@@ -17,7 +17,6 @@ import {
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
-  ProjectChangeRequestStandaloneEntity,
   ProjectChangeRequestStatusChangeEntity,
 } from "@framework/entities/projectChangeRequest";
 import { RecordType } from "@framework/entities/recordType";
@@ -803,15 +802,6 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
 
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
     return super.getWhere(x => x.projectId === projectId);
-  }
-
-  getStandaloneEntityById(projectId: ProjectId, id: PcrId): Promise<ProjectChangeRequestStandaloneEntity> {
-    return super
-      .getOne(x => x.projectId === projectId && x.id === id)
-      .then(x => {
-        this.PreviousStatus[x.id] = x.status;
-        return x;
-      });
   }
 
   getById(projectId: ProjectId, id: PcrId): Promise<ProjectChangeRequestEntity> {

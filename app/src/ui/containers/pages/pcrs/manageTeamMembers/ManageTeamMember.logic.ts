@@ -5,22 +5,12 @@ import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { getDay, getMonth, getYear } from "@ui/components/atoms/Date";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
-import { FormTypes } from "@ui/zod/FormTypes";
 import { useMemo } from "react";
 import { FieldValues } from "react-hook-form";
 import { useLazyLoadQuery } from "react-relay";
 import { ManageTeamMembersQuery } from "./__generated__/ManageTeamMembersQuery.graphql";
 import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
-
-/**
- * You know, CRUD...
- */
-enum ManageTeamMemberMethod {
-  CREATE = FormTypes.ProjectManageTeamMembersCreate,
-  REPLACE = FormTypes.ProjectManageTeamMembersReplace,
-  UPDATE = FormTypes.ProjectManageTeamMembersUpdate,
-  DELETE = FormTypes.ProjectManageTeamMembersDelete,
-}
+import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 enum ManageTeamMemberRole {
   PROJECT_MANAGER = "projectManagers",
@@ -30,12 +20,6 @@ enum ManageTeamMemberRole {
   KNOWLEDGE_BASE_ADMINISTRATOR = "knowledgeBaseAdministrators",
 }
 
-const ManageTeamMemberMethods = [
-  ManageTeamMemberMethod.CREATE,
-  ManageTeamMemberMethod.REPLACE,
-  ManageTeamMemberMethod.UPDATE,
-  ManageTeamMemberMethod.DELETE,
-];
 const ManageTeamMemberRoles = [
   ManageTeamMemberRole.PROJECT_MANAGER,
   ManageTeamMemberRole.FINANCE_CONTACT,
@@ -51,7 +35,11 @@ interface ManageTeamMemberProps {
 }
 
 interface ManageTeamMemberData {
-  method: ManageTeamMemberMethod;
+  method:
+    | ManageTeamMemberMethod.CREATE
+    | ManageTeamMemberMethod.REPLACE
+    | ManageTeamMemberMethod.UPDATE
+    | ManageTeamMemberMethod.DELETE;
 }
 
 interface ManageTeamMemberCreateProps extends ManageTeamMemberProps {
@@ -259,8 +247,6 @@ export {
   getManageTeamMember as getManageTeamMember,
   ManageTeamMemberCreateProps,
   ManageTeamMemberData,
-  ManageTeamMemberMethod,
-  ManageTeamMemberMethods,
   ManageTeamMemberProps,
   ManageTeamMemberReplaceProps,
   ManageTeamMemberRole,
