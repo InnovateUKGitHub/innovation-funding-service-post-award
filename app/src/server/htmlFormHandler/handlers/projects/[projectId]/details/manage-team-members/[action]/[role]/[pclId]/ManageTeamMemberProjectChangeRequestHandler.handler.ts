@@ -56,8 +56,13 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
       firstName: input.firstName,
       lastName: input.lastName,
       email: input.email,
-      startDate: input.startDate,
+      startDate: {
+        day: input["startDate.day"],
+        month: input["startDate.month"],
+        year: input["startDate.year"],
+      },
       role: input.role,
+      pclId: input.pclId,
     };
   }
 

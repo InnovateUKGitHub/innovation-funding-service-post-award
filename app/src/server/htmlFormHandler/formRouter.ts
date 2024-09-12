@@ -90,6 +90,7 @@ import { PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler } from "./handle
 import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOtherCosts.handler";
 import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/editPartnerDetailsPostcode.handler";
+import { ManageTeamMemberProjectChangeRequestHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberProjectChangeRequestHandler.handler";
 
 export const standardFormHandlers = [
   // Zod
@@ -173,6 +174,7 @@ export const standardFormHandlers = [
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
+  new ManageTeamMemberProjectChangeRequestHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [new OverheadDocumentsUploadHandler()] as const;
