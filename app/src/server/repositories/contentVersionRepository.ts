@@ -3,6 +3,7 @@ import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { IFileWrapper } from "@framework/types/fileWrapper";
+import { ReadableStream } from "stream/web";
 
 export interface ISalesforceDocument {
   Id: string;

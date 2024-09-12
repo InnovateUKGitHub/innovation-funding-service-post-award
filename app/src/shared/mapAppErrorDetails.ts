@@ -4,7 +4,7 @@ import {
   SfdcFieldCustomValidationException,
 } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
-import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
+import { TsforceSalesforceError } from "@server/tsforce/types/TsforceSalesforceError";
 import { Results } from "@ui/validation/results";
 
 /**

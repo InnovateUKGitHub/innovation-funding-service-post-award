@@ -3,7 +3,7 @@ import { BaseTsforceSobjectSubrequest } from "./BaseTsforceSubrequest";
 interface TsforceDescribeSobjectFieldPicklistEntry {
   active: boolean;
   defaultValue: boolean;
-  label?: string;
+  label?: string | null;
   value: string;
 }
 

@@ -1,4 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ReadableStream } from "stream/web";
 
 export type AllPartnerDocumentSummaryDto = PartnerDocumentSummaryDto[];
 export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {

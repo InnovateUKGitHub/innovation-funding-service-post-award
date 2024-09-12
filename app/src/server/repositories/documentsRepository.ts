@@ -12,6 +12,7 @@ import { IFileWrapper } from "@framework/types/fileWrapper";
 import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
 import { ForbiddenError } from "@shared/appError";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
+import { ReadableStream } from "stream/web";
 
 export class DocumentsRepository {
   private readonly logger: ILogger = new Logger("DocumentsRepository");

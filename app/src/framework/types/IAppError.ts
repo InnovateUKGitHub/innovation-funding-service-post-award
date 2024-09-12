@@ -1,5 +1,5 @@
 import { DetailedErrorCode, ErrorCode, SfdcFieldCustomValidationException } from "@framework/constants/enums";
-import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
+import { TsforceSalesforceError } from "@server/tsforce/types/TsforceSalesforceError";
 import { Results } from "@ui/validation/results";
 import { QueryPayload } from "react-relay-network-modern";
 
