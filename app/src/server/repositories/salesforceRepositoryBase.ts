@@ -10,10 +10,11 @@ import {
 } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 import { TsforceQuerySubrequest } from "@server/tsforce/requests/TsforceQuerySubrequest";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
-import { TsforceSalesforceResponse } from "@server/tsforce/types/RenameMePlease";
+import { TsforceSalesforceResponse } from "@server/tsforce/types/TsforceSalesforceResponse";
 import { BadRequestError } from "@shared/appError";
 import { createBatch } from "@shared/create-batch";
 import { ILogger } from "@shared/logger";
+import { ReadableStream } from "stream/web";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
@@ -156,7 +157,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     try {
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject(this.salesforceObjectName);
-      const stream = await targetObject.blob(id);
+      const stream = (await targetObject.blob(id)) as ReadableStream<Uint8Array>;
 
       if (stream === null) throw new Errors.BadSalesforceQuery();
 

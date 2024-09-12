@@ -1,6 +1,6 @@
 import { DetailedErrorCode } from "@framework/constants/enums";
 import { IAppDetailedError } from "@framework/types/IAppError";
-import { TsforceSalesforceError } from "@server/tsforce/types/RenameMePlease";
+import { TsforceSalesforceError } from "@server/tsforce/types/TsforceSalesforceError";
 import { mapSfdcErrors, mapSfdcFieldCustomValidation } from "@shared/mapAppErrorDetails";
 
 export class BadSalesforceQuery extends Error {
