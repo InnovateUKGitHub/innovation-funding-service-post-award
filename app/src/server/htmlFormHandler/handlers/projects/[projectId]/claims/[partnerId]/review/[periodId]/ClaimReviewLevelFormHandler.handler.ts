@@ -35,6 +35,7 @@ export class ClaimReviewLevelFormHandler extends ZodFormHandlerBase<ClaimReviewS
       claimId: input.claimId,
       comments: input.comments,
       status: input.status,
+      isIarMissing: input.isIarMissing,
     };
   }
 
