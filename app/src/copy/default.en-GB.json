@@ -1118,6 +1118,10 @@
       "reviewLink": "Review request",
       "backButton": "Return to project change requests"
     },
+    "pcrCompleted": {
+      "title": "Project change request completed",
+      "submittedMessage": "Your project change request has been completed."
+    },
     "manageTeamMembers": {
       "table": {
         "contactName": "Name",

@@ -74,6 +74,7 @@ import {
   ManageTeamMembersUpdateRoute,
   ManageTeamMembersDeleteRoute,
 } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberRoutes";
+import { ProjectChangeRequestCompletedRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -107,6 +108,7 @@ export const routeConfig = {
   loansRequest: LoansRequestRoute,
   projectChangeRequestAddType: ProjectChangeRequestAddTypeRoute,
   projectChangeRequestSubmittedForReview: ProjectChangeRequestSubmittedForReviewRoute,
+  projectChangeRequestCompleted: ProjectChangeRequestCompletedRoute,
   pcrCreate: PCRCreateRoute,
   pcrDetails: PCRDetailsRoute,
   pcrDelete: PCRDeleteRoute,

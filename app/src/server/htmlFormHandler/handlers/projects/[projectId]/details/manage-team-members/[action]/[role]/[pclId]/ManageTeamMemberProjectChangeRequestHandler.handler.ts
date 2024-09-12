@@ -14,6 +14,7 @@ import { ManageTeamMembersDeleteRoute } from "@ui/containers/pages/pcrs/manageTe
 import { ManageTeamMembersReplaceRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";
 import { ManageTeamMembersUpdateRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberUpdate.page";
 import { ManageTeamMemberProps } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
+import { ProjectChangeRequestCompletedRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
@@ -137,6 +138,12 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
 
     const pcrId = await context.runCommand(pcrCommand);
 
-    return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId: input.projectId, pcrId }).path;
+    switch (pcrStatus) {
+      case PCRStatus.Approved:
+        return ProjectChangeRequestCompletedRoute.getLink({ projectId: input.projectId, pcrId }).path;
+      case PCRStatus.SubmittedToInnovateUK:
+      default:
+        return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId: input.projectId, pcrId }).path;
+    }
   }
 }

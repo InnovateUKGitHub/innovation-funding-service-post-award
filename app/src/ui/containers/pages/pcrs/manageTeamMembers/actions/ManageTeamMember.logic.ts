@@ -87,7 +87,15 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
     onSuccess(data, res) {
       setFetchKey(x => x + 1);
 
-      navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId: res.id }).path);
+      switch (data.form) {
+        case FormTypes.ProjectManageTeamMembersCreate:
+        case FormTypes.ProjectManageTeamMembersReplace:
+          navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId: res.id }).path);
+          break;
+        case FormTypes.ProjectManageTeamMembersUpdate:
+        case FormTypes.ProjectManageTeamMembersDelete:
+          navigate(routes.projectChangeRequestCompleted.getLink({ projectId, pcrId: res.id }).path);
+      }
     },
   });
 };
