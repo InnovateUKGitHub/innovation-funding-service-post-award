@@ -13,6 +13,7 @@ import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { LineBreakList } from "@ui/components/atoms/LineBreakList/lineBreakList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 export interface ProjectChangeRequestSubmittedForReviewParams {
   projectId: ProjectId;
@@ -38,11 +39,13 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
       backLink={<BackLink route={pcrsRoute}>{getContent(x => x.pages.pcrSubmittedForReview.backLink)}</BackLink>}
       fragmentRef={fragmentRef}
     >
-      <ValidationMessage
-        message={getContent(x => x.pages.pcrSubmittedForReview.submittedMessage)}
-        subMessage={getContent(x => x.pages.pcrSubmittedForReview.submittedSubmessage)}
-        messageType="success"
-      />
+      {!(pcr.items.length === 1 && pcr.items[0].type === PCRItemType.ManageTeamMembers) && (
+        <ValidationMessage
+          message={getContent(x => x.pages.pcrSubmittedForReview.submittedMessage)}
+          subMessage={getContent(x => x.pages.pcrSubmittedForReview.submittedSubmessage)}
+          messageType="success"
+        />
+      )}
 
       <SummaryList>
         <SummaryListItem label={getContent(x => x.pcrLabels.requestNumber)} content={pcr.requestNumber} />
