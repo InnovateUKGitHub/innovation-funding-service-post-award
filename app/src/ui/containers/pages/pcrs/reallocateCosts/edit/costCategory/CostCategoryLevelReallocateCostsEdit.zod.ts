@@ -9,21 +9,21 @@ import {
 } from "@ui/zod/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { MapVirements } from "../../../utils/useMapFinancialVirements";
-import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelFinancialVirementEdit.logic";
+import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelReallocateCostsEdit.logic";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
-const costCategoryLevelFinancialVirementEditErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "financialVirements", "costCategoryLevel"],
+const costCategoryLevelReallocateCostsEditErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "reallocateCosts", "costCategoryLevel"],
 });
 
-const getCostCategoryLevelFinancialVirementEditSchema = ({
-  mapFinancialVirementProps,
+const getCostCategoryLevelReallocateCostsEditSchema = ({
+  mapReallocateCostsProps,
 }: {
-  mapFinancialVirementProps: MapVirements;
+  mapReallocateCostsProps: MapVirements;
 }) =>
   z
     .object({
-      form: z.literal(FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue),
+      form: z.literal(FormTypes.PcrReallocateCostsCostCategorySaveAndContinue),
       projectId: projectIdValidation,
       partnerId: partnerIdValidation,
       pcrId: pcrIdValidation,
@@ -38,7 +38,7 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
       ),
     })
     .superRefine((data, ctx) => {
-      const { virementData } = mapOverwrittenFinancialVirements(mapFinancialVirementProps)(data.virements);
+      const { virementData } = mapOverwrittenFinancialVirements(mapReallocateCostsProps)(data.virements);
 
       virementData.partners.forEach(partner => {
         partner.virements.forEach((costCategoryVirement, i) => {
@@ -60,12 +60,10 @@ const getCostCategoryLevelFinancialVirementEditSchema = ({
       });
     });
 
-type CostCategoryLevelFinancialVirementEditSchemaType = ReturnType<
-  typeof getCostCategoryLevelFinancialVirementEditSchema
->;
+type CostCategoryLevelReallocateCostsEditSchemaType = ReturnType<typeof getCostCategoryLevelReallocateCostsEditSchema>;
 
 export {
-  CostCategoryLevelFinancialVirementEditSchemaType,
-  costCategoryLevelFinancialVirementEditErrorMap,
-  getCostCategoryLevelFinancialVirementEditSchema,
+  CostCategoryLevelReallocateCostsEditSchemaType,
+  costCategoryLevelReallocateCostsEditErrorMap,
+  getCostCategoryLevelReallocateCostsEditSchema,
 };

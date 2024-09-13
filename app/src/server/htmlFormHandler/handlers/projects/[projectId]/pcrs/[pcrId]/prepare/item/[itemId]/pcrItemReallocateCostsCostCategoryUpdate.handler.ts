@@ -7,28 +7,28 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   mapOverwrittenFinancialVirements,
   patchFinancialVirementsForCosts,
-} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.logic";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.logic";
 import {
-  PartnerLevelFinancialVirementParams,
-  PartnerLevelFinancialVirementRoute,
-} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+  PartnerLevelReallocateCostsParams,
+  PartnerLevelReallocateCostsRoute,
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
 import {
-  CostCategoryLevelFinancialVirementEditSchemaType,
-  costCategoryLevelFinancialVirementEditErrorMap,
-  getCostCategoryLevelFinancialVirementEditSchema,
-} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.zod";
+  CostCategoryLevelReallocateCostsEditSchemaType,
+  costCategoryLevelReallocateCostsEditErrorMap,
+  getCostCategoryLevelReallocateCostsEditSchema,
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.zod";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFormHandlerBase<
-  CostCategoryLevelFinancialVirementEditSchemaType,
-  PartnerLevelFinancialVirementParams
+class ProjectChangeRequestItemReallocateCostsCostCategoryUpdate extends ZodFormHandlerBase<
+  CostCategoryLevelReallocateCostsEditSchemaType,
+  PartnerLevelReallocateCostsParams
 > {
   constructor() {
     super({
-      routes: [PartnerLevelFinancialVirementRoute],
-      forms: [FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue],
+      routes: [PartnerLevelReallocateCostsRoute],
+      forms: [FormTypes.PcrReallocateCostsCostCategorySaveAndContinue],
     });
   }
 
@@ -39,7 +39,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     input,
     context,
   }: {
-    input: z.input<CostCategoryLevelFinancialVirementEditSchemaType>;
+    input: z.input<CostCategoryLevelReallocateCostsEditSchemaType>;
     context: IContext;
   }) {
     const partnersPromise = context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
@@ -63,8 +63,8 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     if (!pcrItem) throw new Error("cannae find pcr item");
 
     return {
-      schema: getCostCategoryLevelFinancialVirementEditSchema({
-        mapFinancialVirementProps: {
+      schema: getCostCategoryLevelReallocateCostsEditSchema({
+        mapReallocateCostsProps: {
           partners,
           financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
             x.virements.map(y => ({ ...y, parentId: x.id })),
@@ -74,7 +74,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
           pcrItemId: input.pcrItemId as PcrItemId,
         },
       }),
-      errorMap: costCategoryLevelFinancialVirementEditErrorMap,
+      errorMap: costCategoryLevelReallocateCostsEditErrorMap,
     };
   }
 
@@ -82,10 +82,10 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     input,
   }: {
     input: AnyObject;
-  }): Promise<z.input<CostCategoryLevelFinancialVirementEditSchemaType>> {
-    const virements: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"] = [];
+  }): Promise<z.input<CostCategoryLevelReallocateCostsEditSchemaType>> {
+    const virements: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"] = [];
 
-    for (let i = 0; i < ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate.MAX_NUMBER_COST_CATS; i++) {
+    for (let i = 0; i < ProjectChangeRequestItemReallocateCostsCostCategoryUpdate.MAX_NUMBER_COST_CATS; i++) {
       const virementCostId = input[`virements.${i}.virementCostId`];
       const newEligibleCosts = input[`virements.${i}.newEligibleCosts`];
 
@@ -97,7 +97,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     }
 
     return {
-      form: FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue,
+      form: FormTypes.PcrReallocateCostsCostCategorySaveAndContinue,
       projectId: input.projectId,
       pcrId: input.pcrId,
       pcrItemId: input.pcrItemId,
@@ -110,7 +110,7 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
     input,
     context,
   }: {
-    input: z.output<CostCategoryLevelFinancialVirementEditSchemaType>;
+    input: z.output<CostCategoryLevelReallocateCostsEditSchemaType>;
     context: IContext;
   }): Promise<string> {
     const partnersPromise = context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
@@ -147,4 +147,4 @@ class ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate extends ZodFo
   }
 }
 
-export { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate };
+export { ProjectChangeRequestItemReallocateCostsCostCategoryUpdate };

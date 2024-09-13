@@ -49,11 +49,11 @@ import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[
 import { FallbackFormHandler } from "./FallbackFormHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
-import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFinancialVirementsSummaryUpdate.handler";
+import { ProjectChangeRequestItemReallocateCostsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemReallocateCostsSummaryUpdate.handler";
 import { ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemApproveNewSubcontractorSummaryUpdate.handler";
 import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemApproveNewSubcontractorStepUpdate.handler";
 import { ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerCompaniesHouseStepUpdate.handler";
-import { ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemFinancialVirementsCostCategoryUpdate.handler";
+import { ProjectChangeRequestItemReallocateCostsCostCategoryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemReallocateCostsCostCategoryUpdate.handler";
 import { ProjectSetupContactAssociateHandler } from "./handlers/projects/[projectId]/setup/associate/projectSetupContactAssociate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectScopeProposedPublicDescriptionStepUpdate.handler";
 import { ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemChangeProjectScopeProposedProjectSummaryStepUpdate.handler";
@@ -105,8 +105,8 @@ export const standardFormHandlers = [
   new PcrItemFilesStepHandler(),
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
-  new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
-  new ProjectChangeRequestItemFinancialVirementsCostCategoryUpdate(),
+  new ProjectChangeRequestItemReallocateCostsSummaryUpdate(),
+  new ProjectChangeRequestItemReallocateCostsCostCategoryUpdate(),
   new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),

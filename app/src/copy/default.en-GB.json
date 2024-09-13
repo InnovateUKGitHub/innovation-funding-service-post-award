@@ -653,7 +653,7 @@
     "financialVirementDetails": {
       "title": "Financial virements"
     },
-    "financialVirementEdit": {
+    "reallocateCostsEdit": {
       "title": "Reallocate costs",
       "summaryTitle": "Summary of project costs",
       "saveButton": "Save and return to reallocate project costs"
@@ -668,7 +668,7 @@
         "fundingLevel": "Each partner's 'Funding level' will be updated to the 'New funding level' for the remaining project costs."
       }
     },
-    "financialVirementSummary": {
+    "reallocateCostsSummary": {
       "availableGrantMessage": "Your 'Remaining grant' has a surplus of {{ difference, abs, currency }}. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
       "unavailableGrantMessage": "You must reduce your 'New remaining grant' project total to {{ total, currency }} or less, because you have exceeded it by {{ difference, abs, currency }}. You can change each partner\u2019s 'Remaining grant' to reduce the project total to the amount agreed.",
       "linkChangeGrant": "Change remaining grant",
@@ -1429,7 +1429,7 @@
     "otherRoleDocumentsIntroMessage": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible to Innovate UK, the Monitoring Officer and participants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCRs.\n",
     "otherRoleDocumentsIntroMessage_InternalAssurance": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible to participants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCRs.\n"
   },
-  "financialVirementLabels": {
+  "reallocateCostsLabels": {
     "partnerName": "Partner",
     "costCategoryName": "Cost category",
     "originalFundingLevel": "Funding level",
@@ -2768,7 +2768,7 @@
           }
         }
       },
-      "financialVirements": {
+      "reallocateCosts": {
         "errors": {
           "virement_too_big": "You must reduce your 'New remaining grant' project total to {{ total, currency }} or less, because you have exceeded it by {{ difference, abs, currency }}."
         },

@@ -6,22 +6,22 @@ import { mapPcrItemDto, mapToPcrDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
-import { pcrFinancialVirementQuery } from "./PcrFinancialVirement.query";
-import { PcrFinancialVirementQuery } from "./__generated__/PcrFinancialVirementQuery.graphql";
+import { pcrReallocateCostsQuery } from "./PcrReallocateCosts.query";
+import { PcrReallocateCostsQuery } from "./__generated__/PcrReallocateCostsQuery.graphql";
 
-interface UsePcrFinancialVirementDataProps {
+interface UsePcrReallocateCostsDataProps {
   projectId: ProjectId;
   pcrId: PcrId;
   itemId: PcrItemId;
   fetchKey?: number;
 }
-interface UsePcrPartnerFinancialVirementDataProps extends UsePcrFinancialVirementDataProps {
+interface UsePcrPartnerReallocateCostsDataProps extends UsePcrReallocateCostsDataProps {
   partnerId: PartnerId;
 }
 
-const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: UsePcrFinancialVirementDataProps) => {
-  const data = useLazyLoadQuery<PcrFinancialVirementQuery>(
-    pcrFinancialVirementQuery,
+const usePcrReallocateCostsData = ({ projectId, pcrId, itemId, fetchKey }: UsePcrReallocateCostsDataProps) => {
+  const data = useLazyLoadQuery<PcrReallocateCostsQuery>(
+    pcrReallocateCostsQuery,
     { projectId, pcrId, itemId },
     { fetchPolicy: "network-only", fetchKey },
   );
@@ -88,10 +88,10 @@ const usePcrFinancialVirementData = ({ projectId, pcrId, itemId, fetchKey }: Use
   };
 };
 
-const usePcrPartnerFinancialVirementData = (props: UsePcrPartnerFinancialVirementDataProps) => {
-  const data = usePcrFinancialVirementData(props);
+const usePcrPartnerReallocateCostsData = (props: UsePcrPartnerReallocateCostsDataProps) => {
+  const data = usePcrReallocateCostsData(props);
 
   return { ...data, partner: data.partners.find(x => x.id === props.partnerId)! };
 };
 
-export { usePcrFinancialVirementData, usePcrPartnerFinancialVirementData };
+export { usePcrReallocateCostsData, usePcrPartnerReallocateCostsData };

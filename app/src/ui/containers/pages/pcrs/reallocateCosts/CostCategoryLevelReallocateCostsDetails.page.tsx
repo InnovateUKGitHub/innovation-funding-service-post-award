@@ -11,14 +11,14 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { mapVirements } from "../utils/useMapFinancialVirements";
-import { usePcrPartnerFinancialVirementData } from "./PcrFinancialVirement.logic";
+import { usePcrPartnerReallocateCostsData } from "./PcrReallocateCosts.logic";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Info } from "@ui/components/atoms/Details/Details";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 
 type Mode = "review" | "details";
 
-interface PartnerLevelFinancialVirementDetailsParams {
+interface PartnerLevelReallocateCostsDetailsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
   pcrId: PcrId;
@@ -35,7 +35,7 @@ const EditPage = ({
   itemId,
   partnerId,
   mode,
-}: PartnerLevelFinancialVirementDetailsParams & BaseProps) => {
+}: PartnerLevelReallocateCostsDetailsParams & BaseProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
 
@@ -48,7 +48,7 @@ const EditPage = ({
     partners,
     pcr,
     fragmentRef,
-  } = usePcrPartnerFinancialVirementData({ projectId, partnerId, pcrId, itemId });
+  } = usePcrPartnerReallocateCostsData({ projectId, partnerId, pcrId, itemId });
 
   const { virementData } = mapVirements({
     financialVirementsForCosts,
@@ -81,7 +81,7 @@ const EditPage = ({
                 })
           }
         >
-          <Content value={x => x.financialVirementLabels.backToSummary} />
+          <Content value={x => x.reallocateCostsLabels.backToSummary} />
         </BackLink>
       }
     >
@@ -93,17 +93,17 @@ const EditPage = ({
 
       <Section title={partner.name}>
         {isMo && pcr.reasoningComments && (
-          <Info summary={getContent(x => x.financialVirementLabels.reasoningComments)}>
+          <Info summary={getContent(x => x.reallocateCostsLabels.reasoningComments)}>
             <SimpleString multiline>{pcr.reasoningComments}</SimpleString>
           </Info>
         )}
         <Table>
           <THead>
             <TR>
-              <TH>{getContent(x => x.financialVirementLabels.costCategoryName)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryOriginalEligibleCosts)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryNewEligibleCosts)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryDifferenceCosts)}</TH>
+              <TH>{getContent(x => x.reallocateCostsLabels.costCategoryName)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryOriginalEligibleCosts)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryNewEligibleCosts)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryDifferenceCosts)}</TH>
             </TR>
           </THead>
           <TBody>
@@ -124,7 +124,7 @@ const EditPage = ({
           </TBody>
           <TFoot>
             <TR>
-              <TD bold>{getContent(x => x.financialVirementLabels.partnerTotals)}</TD>
+              <TD bold>{getContent(x => x.reallocateCostsLabels.partnerTotals)}</TD>
               <TD bold numeric>
                 <Currency value={partnerVirement.originalEligibleCosts} />
               </TD>
@@ -144,9 +144,9 @@ const EditPage = ({
   );
 };
 
-const PartnerLevelFinancialVirementDetailsRoute = defineRoute({
+const PartnerLevelReallocateCostsDetailsRoute = defineRoute({
   // pm reallocates costs for participant at cost category level
-  routeName: "partnerLevelFinancialVirementDetails",
+  routeName: "partnerLevelReallocateCostsDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/:mode/item/:itemId/financial/:partnerId",
   container: EditPage,
   getParams: route => ({
@@ -156,7 +156,7 @@ const PartnerLevelFinancialVirementDetailsRoute = defineRoute({
     partnerId: route.params.partnerId as PartnerId,
     mode: route.params.mode as Mode,
   }),
-  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEdit.title),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.reallocateCostsEdit.title),
 });
 
-export { PartnerLevelFinancialVirementDetailsParams, PartnerLevelFinancialVirementDetailsRoute };
+export { PartnerLevelReallocateCostsDetailsParams, PartnerLevelReallocateCostsDetailsRoute };

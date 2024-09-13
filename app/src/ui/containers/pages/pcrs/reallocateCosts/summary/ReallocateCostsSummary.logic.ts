@@ -17,11 +17,11 @@ const useGrantMessage = ({
   if (hasMatchingGrant) return undefined;
 
   if (hasAvailableGrant) {
-    return getContent(x => x.pages.financialVirementSummary.availableGrantMessage({ difference: newGrantDifference }));
+    return getContent(x => x.pages.reallocateCostsSummary.availableGrantMessage({ difference: newGrantDifference }));
   }
 
   return getContent(x =>
-    x.pages.financialVirementSummary.unavailableGrantMessage({
+    x.pages.reallocateCostsSummary.unavailableGrantMessage({
       difference: newGrantDifference,
       total: originalRemainingGrant,
     }),

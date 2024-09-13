@@ -5,7 +5,7 @@ import { GetFinancialLoanVirementQuery } from "@server/features/financialViremen
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { PartnerLevelFinancialVirementParams } from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+import { PartnerLevelReallocateCostsParams } from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
 import { FinancialVirementParams } from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@server/features/common/storeKeys";
@@ -60,7 +60,7 @@ export class VirementLoanEditHandler extends StandardFormHandlerBase<
 
   protected async run(
     context: IContext,
-    { projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams,
+    { projectId, itemId, pcrId }: PartnerLevelReallocateCostsParams,
     button: IFormButton,
     dto: FinancialLoanVirementDto,
   ): Promise<ILinkInfo> {
@@ -68,11 +68,11 @@ export class VirementLoanEditHandler extends StandardFormHandlerBase<
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams) {
+  protected getStoreKey({ projectId, itemId, pcrId }: PartnerLevelReallocateCostsParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId);
   }
 
-  protected createValidationResult(params: PartnerLevelFinancialVirementParams, dto: FinancialLoanVirementDto) {
+  protected createValidationResult(params: PartnerLevelReallocateCostsParams, dto: FinancialLoanVirementDto) {
     return new FinancialLoanVirementDtoValidator(dto, false, true);
   }
 }

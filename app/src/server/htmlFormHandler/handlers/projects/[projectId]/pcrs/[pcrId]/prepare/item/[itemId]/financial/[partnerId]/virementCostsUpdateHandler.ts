@@ -9,24 +9,24 @@ import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
 import {
-  PartnerLevelFinancialVirementParams,
-  PartnerLevelFinancialVirementRoute,
-} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+  PartnerLevelReallocateCostsParams,
+  PartnerLevelReallocateCostsRoute,
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 
 export class VirementCostsUpdateHandler extends StandardFormHandlerBase<
-  PartnerLevelFinancialVirementParams,
+  PartnerLevelReallocateCostsParams,
   FinancialVirementDto
 > {
   constructor() {
-    super(PartnerLevelFinancialVirementRoute, ["default"]);
+    super(PartnerLevelReallocateCostsRoute, ["default"]);
   }
 
   protected async getDto(
     context: IContext,
-    params: PartnerLevelFinancialVirementParams,
+    params: PartnerLevelReallocateCostsParams,
     button: IFormButton,
     body: IFormBody,
   ): Promise<FinancialVirementDto> {
@@ -65,7 +65,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<
 
   protected async run(
     context: IContext,
-    { projectId, itemId, pcrId }: PartnerLevelFinancialVirementParams,
+    { projectId, itemId, pcrId }: PartnerLevelReallocateCostsParams,
     button: IFormButton,
     dto: FinancialVirementDto,
   ): Promise<ILinkInfo> {
@@ -73,11 +73,11 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId, partnerId }: PartnerLevelFinancialVirementParams) {
+  protected getStoreKey({ projectId, itemId, pcrId, partnerId }: PartnerLevelReallocateCostsParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId, partnerId);
   }
 
-  protected createValidationResult(params: PartnerLevelFinancialVirementParams, dto: FinancialVirementDto) {
+  protected createValidationResult(params: PartnerLevelReallocateCostsParams, dto: FinancialVirementDto) {
     return new FinancialVirementDtoValidator({ model: dto, showValidationErrors: false, submit: false });
   }
 }

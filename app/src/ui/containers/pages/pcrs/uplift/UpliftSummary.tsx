@@ -4,7 +4,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryLi
 import { useContent } from "@ui/hooks/content.hook";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { PcrBackLink, PcrPage } from "../pcrPage";
-import { FinancialVirementsViewTable } from "../reallocateCosts/summary/FinancialVirementsViewTable";
+import { FinancialVirementsViewTable } from "../reallocateCosts/summary/ReallocateCostsViewTable";
 import { useMapFinancialVirements } from "../utils/useMapFinancialVirements";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { useRoutes } from "@ui/context/routesProvider";

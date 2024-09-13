@@ -6,11 +6,11 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { FinancialVirementForCost, MapVirements, mapVirements } from "../../../utils/useMapFinancialVirements";
-import { CostCategoryLevelFinancialVirementEditSchemaType } from "./CostCategoryLevelFinancialVirementEdit.zod";
+import { CostCategoryLevelReallocateCostsEditSchemaType } from "./CostCategoryLevelReallocateCostsEdit.zod";
 
 const patchFinancialVirementsForCosts = (
   financialVirementForCosts: FinancialVirementForCost[],
-  virements?: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"],
+  virements?: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"],
 ): FinancialVirementForCost[] => {
   return financialVirementForCosts.map(x => {
     const editedCosts = virements?.find(y => y.virementCostId === x.id);
@@ -29,7 +29,7 @@ export const useOnUpdateCostCategoryLevel = ({
   const routes = useRoutes();
   const navigate = useNavigate();
 
-  return useOnUpdate<z.output<CostCategoryLevelFinancialVirementEditSchemaType>, unknown>({
+  return useOnUpdate<z.output<CostCategoryLevelReallocateCostsEditSchemaType>, unknown>({
     req: data => {
       return clientsideApiClient.financialVirements.update({
         projectId: data.projectId,
@@ -58,7 +58,7 @@ export const mapOverwrittenFinancialVirements =
     partners,
     pcrItemId,
   }: MapVirements) =>
-  (virements?: z.input<CostCategoryLevelFinancialVirementEditSchemaType>["virements"]) =>
+  (virements?: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"]) =>
     mapVirements({
       financialVirementsForCosts: patchFinancialVirementsForCosts(financialVirementsForCosts, virements),
       financialVirementsForParticipants,

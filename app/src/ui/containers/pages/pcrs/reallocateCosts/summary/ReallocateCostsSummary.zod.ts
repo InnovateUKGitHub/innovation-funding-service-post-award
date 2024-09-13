@@ -10,9 +10,9 @@ import { ZodIssueCode, z } from "zod";
 import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 
-const financialVirementsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "financialVirements"] });
+const reallocateCostsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "reallocateCosts"] });
 
-const getFinancialVirementsSummaryValidator = ({
+const getReallocateCostsSummaryValidator = ({
   mapFinancialVirementProps,
 }: {
   mapFinancialVirementProps: MapVirements;
@@ -21,7 +21,7 @@ const getFinancialVirementsSummaryValidator = ({
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
     pcrItemId: pcrItemIdValidation,
-    form: z.literal(FormTypes.PcrFinancialVirementsSummary),
+    form: z.literal(FormTypes.PcrReallocateCostsSummary),
     grantMovingOverFinancialYear: getGenericCurrencyValidation({
       required: data.markedAsComplete,
     }),
@@ -61,10 +61,6 @@ const getFinancialVirementsSummaryValidator = ({
   });
 };
 
-type FinancialVirementsSummaryValidatorSchema = ReturnType<typeof getFinancialVirementsSummaryValidator>;
+type ReallocateCostsSummaryValidatorSchema = ReturnType<typeof getReallocateCostsSummaryValidator>;
 
-export {
-  financialVirementsSummaryErrorMap,
-  getFinancialVirementsSummaryValidator,
-  FinancialVirementsSummaryValidatorSchema,
-};
+export { reallocateCostsSummaryErrorMap, getReallocateCostsSummaryValidator, ReallocateCostsSummaryValidatorSchema };
