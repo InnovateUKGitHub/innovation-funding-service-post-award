@@ -7,16 +7,16 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   mapOverwrittenFinancialVirements,
   patchFinancialVirementsForCosts,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.logic";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.logic";
 import {
   PartnerLevelFinancialVirementParams,
   PartnerLevelFinancialVirementRoute,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
 import {
   CostCategoryLevelFinancialVirementEditSchemaType,
   costCategoryLevelFinancialVirementEditErrorMap,
   getCostCategoryLevelFinancialVirementEditSchema,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.zod";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.zod";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";

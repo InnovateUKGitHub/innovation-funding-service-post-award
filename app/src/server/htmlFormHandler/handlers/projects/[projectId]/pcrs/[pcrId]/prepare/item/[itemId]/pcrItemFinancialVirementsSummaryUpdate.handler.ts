@@ -9,7 +9,7 @@ import {
   FinancialVirementsSummaryValidatorSchema,
   financialVirementsSummaryErrorMap,
   getFinancialVirementsSummaryValidator,
-} from "@ui/containers/pages/pcrs/financialVirements/summary/FinancialVirementsSummary.zod";
+} from "@ui/containers/pages/pcrs/reallocateCosts/summary/FinancialVirementsSummary.zod";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   PCRPrepareItemRoute,

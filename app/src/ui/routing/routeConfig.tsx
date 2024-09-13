@@ -36,9 +36,9 @@ import {
 import { ProjectChangeRequestAddTypeRoute } from "@ui/containers/pages/pcrs/addType";
 import { PCRCreateRoute } from "@ui/containers/pages/pcrs/create";
 import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
-import { PartnerLevelFinancialVirementDetailsRoute } from "@ui/containers/pages/pcrs/financialVirements/CostCategoryLevelFinancialVirementDetails.page";
-import { PartnerLevelFinancialVirementRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
-import { ChangeRemainingGrantRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/partner/changeRemainingGrant.page";
+import { PartnerLevelFinancialVirementDetailsRoute } from "@ui/containers/pages/pcrs/reallocateCosts/CostCategoryLevelFinancialVirementDetails.page";
+import { PartnerLevelFinancialVirementRoute } from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+import { ChangeRemainingGrantRoute } from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.page";
 import { PCRDetailsRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestDetails.page";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {

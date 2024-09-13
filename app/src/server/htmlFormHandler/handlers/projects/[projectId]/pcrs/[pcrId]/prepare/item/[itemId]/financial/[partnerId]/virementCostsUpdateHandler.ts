@@ -11,7 +11,7 @@ import { BadRequestError } from "@shared/appError";
 import {
   PartnerLevelFinancialVirementParams,
   PartnerLevelFinancialVirementRoute,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
