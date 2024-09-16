@@ -234,7 +234,7 @@ export const FinancialVirementSummary = () => {
             <input type="hidden" value={itemId} {...register("pcrItemId")} />
 
             <Fieldset>
-              <Legend>{getContent(x => x.financialVirementLabels.grantMovingOverYear)}</Legend>
+              <Legend>{getContent(x => x.reallocateCostsLabels.grantMovingOverYear)}</Legend>
               <Hint id="hint-for-grantMovingOverFinancialYear">
                 {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
               </Hint>
