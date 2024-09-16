@@ -1,15 +1,15 @@
 enum SalesforceCompetitionTypes {
   unknown = "unknown",
-  crnd = "CR&D",
-  contracts = "CONTRACTS",
-  sbri = "SBRI",
-  sbriIfs = "SBRI IFS",
-  ktp = "KTP",
-  catapults = "CATAPULTS",
-  loans = "LOANS",
-  edge = "EDGE",
-  horizonEurope = "Horizon Europe Participation",
-  combinedCapital = "Combined Capital",
+  crnd = "crnd",
+  contracts = "contracts",
+  sbri = "sbri",
+  sbriIfs = "sbriIfs",
+  ktp = "ktp",
+  catapults = "catapults",
+  loans = "loans",
+  edge = "edge",
+  horizonEurope = "horizonEurope",
+  combinedCapital = "combinedCapital",
 }
 
 enum ImpactManagementParticipation {

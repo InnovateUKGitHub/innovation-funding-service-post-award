@@ -22,6 +22,9 @@ import { useRoutes } from "@ui/context/routesProvider";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
 import { getContactRole } from "@ui/components/organisms/partners/utils/getContactRole";
+import { useMemo } from "react";
+import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface Props {
   projectId: ProjectId;
@@ -145,11 +148,14 @@ const getDetailsContactRole = getContactRole<
 >;
 
 const ProjectDetailsPage = (props: Props & BaseProps) => {
-  const { project, partners, contacts, fragmentRef } = useProjectDetailsQuery(props.projectId);
+  const { getContent } = useContent();
+  const { project, partners, competitionName, contacts, fragmentRef } = useProjectDetailsQuery(props.projectId);
   const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
 
-  // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
-  const competitionName = partners[0].competitionName;
+  const competitionTypeName = useMemo(() => {
+    const type = mapToSalesforceCompetitionTypes(project.competitionType);
+    return getContent(x => x.enums.competitionTypes[type]);
+  }, [project.competitionType, getContent]);
 
   const monitoringOfficers = getDetailsContactRole({
     contacts,
@@ -257,7 +263,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
           <SummaryListItem
             label={x => x.projectLabels.competitionType}
             qa="competition-type"
-            content={<SimpleString>{project.competitionType}</SimpleString>}
+            content={<SimpleString>{competitionTypeName}</SimpleString>}
           />
 
           <SummaryListItem

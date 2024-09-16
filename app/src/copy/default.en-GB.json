@@ -1618,10 +1618,12 @@
   },
   "enums": {
     "competitionTypes": {
+      "unknown": "Unknown competition type",
       "crnd": "CR&D",
+      "combinedCapital": "Combined Capital",
       "contracts": "Contract",
-      "sbri": "SBRI",
-      "sbriIfs": "SBRI IFS",
+      "sbri": "Contracts for Innovation",
+      "sbriIfs": "Contracts for Innovation",
       "ktp": "KTP",
       "catapults": "Catapult",
       "loans": "Loans",

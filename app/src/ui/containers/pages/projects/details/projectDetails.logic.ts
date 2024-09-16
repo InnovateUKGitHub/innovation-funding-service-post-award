@@ -41,24 +41,16 @@ export const useProjectDetailsQuery = (projectId: ProjectId) => {
     "title",
     "monitoringLevel",
     "isActive",
+    "competitionType",
   ]);
 
   const partners = mapToPartnerDtoArray(
     partnersGql,
-    [
-      "id",
-      "name",
-      "isLead",
-      "isWithdrawn",
-      "competitionName",
-      "accountId",
-      "partnerStatusLabel",
-      "isNonFunded",
-      "postcode",
-      "type",
-    ],
-    { competitionName: projectNode?.Acc_CompetitionId__r?.Name?.value ?? "unknown competition Name" },
+    ["id", "name", "isLead", "isWithdrawn", "accountId", "partnerStatusLabel", "isNonFunded", "postcode", "type"],
+    {},
   );
+
+  const competitionName = projectNode?.Acc_CompetitionId__r?.Name?.value ?? null;
 
   const contacts = mapToContactDtoArray(contactsGql, [
     "accountId",
@@ -69,5 +61,5 @@ export const useProjectDetailsQuery = (projectId: ProjectId) => {
     "projectId",
     "roleName",
   ]);
-  return { project, partners, contacts, fragmentRef: data?.salesforce?.uiapi };
+  return { project, partners, contacts, competitionName, fragmentRef: data?.salesforce?.uiapi };
 };
