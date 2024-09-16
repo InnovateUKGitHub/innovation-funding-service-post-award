@@ -25,6 +25,7 @@ type ContactNode = GQL.PartialNode<{
   Associate_Start_Date__c: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
   Acc_Inactive__c: GQL.Value<boolean>;
+  Acc_Replaced__c: GQL.Value<boolean>;
   Acc_New_Team_Member__c: GQL.Value<boolean>;
   Acc_Send_invitation__c: GQL.Value<boolean>;
   Acc_Edited__c: GQL.Value<boolean>;
@@ -87,6 +88,9 @@ const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
   },
   edited(node) {
     return node?.Acc_Edited__c?.value ?? false;
+  },
+  replaced(node) {
+    return node?.Acc_Replaced__c?.value ?? false;
   },
   inactive(node) {
     return node?.Acc_Inactive__c?.value ?? false;

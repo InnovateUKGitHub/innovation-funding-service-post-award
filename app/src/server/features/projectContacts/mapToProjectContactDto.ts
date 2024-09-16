@@ -35,6 +35,7 @@ const mapToProjectContactDto = (x: ISalesforceProjectContact): ProjectContactDto
     newTeamMember: x.Acc_New_Team_Member__c,
     sendInvitation: x.Acc_Send_invitation__c,
     edited: x.Acc_Edited__c,
+    replaced: x.Acc_Replaced__c,
   };
 };
 

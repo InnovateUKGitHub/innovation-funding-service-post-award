@@ -29,6 +29,15 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
         case FormTypes.ProjectManageTeamMembersReplace:
           {
             pcrStatus = PCRStatus.SubmittedToInnovateUK;
+            await clientsideApiClient.projectContacts.update({
+              projectId,
+              contacts: [
+                {
+                  id: data.pclId,
+                  replaced: true,
+                },
+              ],
+            });
             pclId = data.pclId;
           }
           break;
@@ -41,6 +50,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
                   id: data.pclId,
                   firstName: data.firstName,
                   lastName: data.lastName,
+                  edited: true,
                 },
               ],
             });
@@ -55,7 +65,6 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
               contacts: [
                 {
                   id: data.pclId,
-                  inactive: true,
                   endDate: new Date(),
                 },
               ],

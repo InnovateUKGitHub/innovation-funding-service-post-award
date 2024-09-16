@@ -35,4 +35,5 @@ export interface ProjectContactDto {
   newTeamMember: boolean;
   sendInvitation: boolean;
   edited: boolean;
+  replaced: boolean;
 }

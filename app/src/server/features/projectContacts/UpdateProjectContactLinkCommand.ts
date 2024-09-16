@@ -18,7 +18,7 @@ export type ServerUpdateProjectContactsAssociateDetailsCommand = Pick<ProjectCon
     | "startDate"
     | "endDate"
     | "edited"
-    | "inactive"
+    | "replaced"
     | "newTeamMember"
     | "sendInvitation"
     | "firstName"
@@ -84,10 +84,10 @@ export class UpdateProjectContactLinkCommand extends CommandBase<boolean> {
       }
 
       if (typeof editDetail.email !== "undefined") partial.Acc_EmailOfSFContact__c = editDetail.email;
-      if (typeof editDetail.inactive !== "undefined") partial.Acc_Inactive__c = editDetail.inactive;
       if (typeof editDetail.newTeamMember !== "undefined") partial.Acc_New_Team_Member__c = editDetail.newTeamMember;
       if (typeof editDetail.sendInvitation !== "undefined") partial.Acc_Send_invitation__c = editDetail.sendInvitation;
       if (typeof editDetail.edited !== "undefined") partial.Acc_Edited__c = editDetail.edited;
+      if (typeof editDetail.replaced !== "undefined") partial.Acc_Replaced__c = editDetail.replaced;
 
       if (typeof editDetail.firstName !== "undefined" && typeof editDetail.lastName !== "undefined") {
         promises.push(

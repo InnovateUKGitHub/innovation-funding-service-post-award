@@ -279,6 +279,7 @@ export class TestData {
       Acc_New_Team_Member__c: false,
       Acc_Send_invitation__c: false,
       Acc_Edited__c: false,
+      Acc_Replaced__c: false,
       Acc_UserId__c: "User" + seed,
     };
 

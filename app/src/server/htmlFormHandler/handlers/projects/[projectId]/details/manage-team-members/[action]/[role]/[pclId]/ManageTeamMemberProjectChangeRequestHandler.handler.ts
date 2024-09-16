@@ -86,6 +86,14 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
       case FormTypes.ProjectManageTeamMembersReplace:
         {
           pcrStatus = PCRStatus.SubmittedToInnovateUK;
+          await context.runCommand(
+            new UpdateProjectContactLinkCommand(input.projectId, [
+              {
+                id: input.pclId,
+                replaced: true,
+              },
+            ]),
+          );
           pclId = input.pclId;
         }
         break;
@@ -97,6 +105,7 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
                 id: input.pclId,
                 firstName: input.firstName,
                 lastName: input.lastName,
+                edited: true,
               },
             ]),
           );
@@ -110,7 +119,6 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
             new UpdateProjectContactLinkCommand(input.projectId, [
               {
                 id: input.pclId,
-                inactive: true,
                 endDate: new Date(),
               },
             ]),
