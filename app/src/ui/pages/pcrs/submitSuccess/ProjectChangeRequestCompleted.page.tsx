@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ProjectChangeRequestSubmittedForReviewBase } from "./ProjectChangeRequestSubmittedForReviewBase";
@@ -32,5 +32,5 @@ export const ProjectChangeRequestCompletedRoute = defineRoute<ProjectChangeReque
     pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrCompleted.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

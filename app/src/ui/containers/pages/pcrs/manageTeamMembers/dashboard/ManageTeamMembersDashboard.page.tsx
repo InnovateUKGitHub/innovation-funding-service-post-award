@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -9,7 +9,7 @@ import { Section } from "@ui/components/molecules/Section/section";
 import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactListTable";
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
 import { ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
-import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMembersDashboardParams) => {
   const routes = useRoutes();
@@ -33,7 +33,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
             projectId,
-            role: ManageTeamMemberRole.PROJECT_MANAGER,
+            role: ProjectRole.PROJECT_MANAGER,
             pclId: categories.projectManagers.length === 1 ? categories.projectManagers[0].pclId : undefined,
           })}
           styling="SecondaryButton"
@@ -48,7 +48,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
         <Link
           route={routes.manageTeamMembersReplaceRoute.getLink({
             projectId,
-            role: ManageTeamMemberRole.FINANCE_CONTACT,
+            role: ProjectRole.FINANCE_CONTACT,
             pclId: categories.financeContacts.length === 1 ? categories.financeContacts[0].pclId : undefined,
           })}
           styling="SecondaryButton"
@@ -70,7 +70,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
               projectId,
-              role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR,
+              role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
               pclId: undefined,
             })}
             styling="SecondaryButton"
@@ -81,7 +81,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           <Link
             route={routes.manageTeamMembersReplaceRoute.getLink({
               projectId,
-              role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR,
+              role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
               pclId:
                 categories.knowledgeBaseAdministrators.length === 1
                   ? categories.knowledgeBaseAdministrators[0].pclId
@@ -102,7 +102,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           <Link
             route={routes.manageTeamMembersCreateRoute.getLink({
               projectId,
-              role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT,
+              role: ProjectRole.MAIN_COMPANY_CONTACT,
               pclId: undefined,
             })}
             styling="SecondaryButton"
@@ -113,7 +113,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           <Link
             route={routes.manageTeamMembersReplaceRoute.getLink({
               projectId,
-              role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT,
+              role: ProjectRole.MAIN_COMPANY_CONTACT,
               pclId: categories.mainCompanyContacts.length === 1 ? categories.mainCompanyContacts[0].pclId : undefined,
             })}
             styling="SecondaryButton"
@@ -128,17 +128,13 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
           qa="associates-table"
           tableData={categories.associates}
           link={({ data }) => (
-            <ManageTeamMemberRemoveLink
-              projectId={projectId}
-              pclId={data.pclId}
-              role={ManageTeamMemberRole.ASSOCIATE}
-            />
+            <ManageTeamMemberRemoveLink projectId={projectId} pclId={data.pclId} role={ProjectRole.ASSOCIATE} />
           )}
         />
         <Link
           route={routes.manageTeamMembersCreateRoute.getLink({
             projectId,
-            role: ManageTeamMemberRole.ASSOCIATE,
+            role: ProjectRole.ASSOCIATE,
             pclId: undefined,
           })}
           styling="SecondaryButton"
@@ -162,7 +158,7 @@ const ManageTeamMembersDashboardRoute = defineRoute<ManageTeamMembersDashboardPa
     projectId: route.params.projectId as ProjectId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.manageTeamMembers.dashboard.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });
 
 export { ManageTeamMembersDashboardRoute };

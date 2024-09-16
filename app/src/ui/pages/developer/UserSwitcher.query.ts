@@ -58,6 +58,12 @@ const userSwitcherProjectQuery = graphql`
                 Project_Contact_Links__r(orderBy: { Acc_ContactId__r: { Name: { order: ASC } } }, first: 2000) {
                   edges {
                     node {
+                      Acc_Inactive__c {
+                        value
+                      }
+                      Acc_EndDate__c {
+                        value
+                      }
                       Acc_ContactId__r {
                         Id
                         Name {

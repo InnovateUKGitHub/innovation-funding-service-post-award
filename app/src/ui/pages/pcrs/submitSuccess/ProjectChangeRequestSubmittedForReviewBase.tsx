@@ -11,6 +11,7 @@ import { ReactNode } from "react";
 import { useGetPcrItemMetadata } from "../utils/useGetPcrItemMetadata";
 import { useGetPcrStatusMetadata } from "../utils/useGetPcrStatusMetadata";
 import { useProjectChangeRequestSubmittedForReviewQuery } from "./ProjectChangeRequestSubmittedForReview.logic";
+import { skipToItemItems } from "@framework/constants/pcrConstants";
 
 export interface ProjectChangeRequestSubmittedForReviewBaseParams {
   projectId: ProjectId;
@@ -32,6 +33,8 @@ const ProjectChangeRequestSubmittedForReviewBase = ({
   const { pcr, fragmentRef } = useProjectChangeRequestSubmittedForReviewQuery({ projectId, pcrId });
 
   const reviewPcrRoute = routes.pcrDetails.getLink({ projectId, pcrId });
+  const reviewPcrItemRoute = routes.pcrViewItem.getLink({ projectId, pcrId, itemId: pcr.items[0].id });
+  const skipToItem = pcr.items.some(x => skipToItemItems.includes(x.type));
   const pcrsRoute = routes.pcrsDashboard.getLink({ projectId });
 
   return (
@@ -66,7 +69,9 @@ const ProjectChangeRequestSubmittedForReviewBase = ({
       </SummaryList>
 
       <P>
-        <Link route={reviewPcrRoute}>{getContent(x => x.pages.pcrSubmittedForReview.reviewLink)}</Link>
+        <Link route={skipToItem ? reviewPcrItemRoute : reviewPcrRoute}>
+          {getContent(x => x.pages.pcrSubmittedForReview.reviewLink)}
+        </Link>
       </P>
       <Link route={pcrsRoute}>
         <Button styling="Primary">{getContent(x => x.pages.pcrSubmittedForReview.backButton)}</Button>

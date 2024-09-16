@@ -104,7 +104,7 @@ export const projectDashboardQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
-                Project_Contact_Links__r(first: 2000) {
+                Project_Contact_Links__r(where: { Acc_Inactive__c: { ne: true } }, first: 2000) {
                   edges {
                     node {
                       Acc_Role__c {

@@ -10,7 +10,7 @@ import {
   ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
-import { ManageTeamMemberRole } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 export interface ProjectChangeRequestForCreateEntity {
   items: ProjectChangeRequestItemForCreateEntity[];
@@ -98,7 +98,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   manageTeamMemberFirstName?: string | null;
   manageTeamMemberLastName?: string | null;
   manageTeamMemberEmail?: string | null;
-  manageTeamMemberRole?: ManageTeamMemberRole | null;
+  manageTeamMemberRole?: ProjectRole | null;
   manageTeamMemberAssociateStartDate?: Date | null;
 }
 

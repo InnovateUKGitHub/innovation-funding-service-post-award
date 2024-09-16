@@ -9,7 +9,7 @@ import {
   mapFromSalesforcePCRProjectRole,
   mapToPCRItemStatus,
   mapToPcrItemType,
-  mapToPCRManageTeamMemberRole,
+  mapProjectRoleToInternal,
   mapToPCRManageTeamMemberType,
   mapToPCRStatus,
   mapTypeOfAidToEnum,
@@ -462,7 +462,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return node?.Acc_Email__c?.value ?? null;
   },
   manageTeamMemberRole(node) {
-    return mapToPCRManageTeamMemberRole(node?.Acc_Role__c?.value) ?? null;
+    return mapProjectRoleToInternal(node?.Acc_Role__c?.value) ?? null;
   },
   manageTeamMemberAssociateStartDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_Start_Date__c?.value ?? null);

@@ -12,7 +12,7 @@ import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
 import {
   mapToPCRItemStatus,
-  mapToPCRManageTeamMemberRole,
+  mapProjectRoleToInternal,
   mapToPCRManageTeamMemberType,
   mapToPCRStatus,
 } from "@framework/mappers/pcr";
@@ -320,7 +320,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       repaymentPeriodChange: this.mapChangeOffsetToQuarter(repaymentPeriod, repaymentPeriodChange),
       manageTeamMemberType: mapToPCRManageTeamMemberType(pcrItem.Acc_Type__c),
       manageTeamMemberAssociateStartDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_Start_Date__c),
-      manageTeamMemberRole: mapToPCRManageTeamMemberRole(pcrItem.Acc_Role__c),
+      manageTeamMemberRole: mapProjectRoleToInternal(pcrItem.Acc_Role__c),
       manageTeamMemberEmail: pcrItem.Acc_Email__c,
       manageTeamMemberFirstName: pcrItem.Acc_First_Name__c,
       manageTeamMemberLastName: pcrItem.Acc_Last_Name__c,

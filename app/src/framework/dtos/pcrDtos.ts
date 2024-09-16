@@ -13,7 +13,7 @@ import {
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { ManageTeamMemberRole } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
+import { ProjectRole } from "./projectContactDto";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -201,7 +201,7 @@ export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
   manageTeamMemberFirstName: string | null;
   manageTeamMemberLastName: string | null;
   manageTeamMemberEmail: string | null;
-  manageTeamMemberRole: ManageTeamMemberRole | null;
+  manageTeamMemberRole: ProjectRole | null;
   manageTeamMemberAssociateStartDate: Date | null;
 }
 
@@ -329,7 +329,7 @@ export type FullPCRItemDto = {
   manageTeamMemberFirstName: string | null;
   manageTeamMemberLastName: string | null;
   manageTeamMemberEmail: string | null;
-  manageTeamMemberRole: ManageTeamMemberRole | null;
+  manageTeamMemberRole: ProjectRole | null;
   manageTeamMemberAssociateStartDate: Date | null;
 };
 

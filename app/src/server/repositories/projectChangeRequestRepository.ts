@@ -22,7 +22,7 @@ import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
-import { mapToSalesforcePCRManageTeamMemberType, mapToSalesforceTeamMemberType } from "@framework/mappers/pcr";
+import { mapToSalesforcePCRManageTeamMemberType, mapProjectRoleToName } from "@framework/mappers/pcr";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -517,8 +517,8 @@ export class ProjectChangeRequestRepository
       Acc_First_Name__c: x.manageTeamMemberFirstName,
       Acc_Last_Name__c: x.manageTeamMemberLastName,
       Acc_Email__c: x.manageTeamMemberEmail,
-      Acc_Role__c: mapToSalesforceTeamMemberType(x.manageTeamMemberRole),
-      Acc_Start_Date__c: this.toOptionalSFDate(x.projectStartDate),
+      Acc_Role__c: mapProjectRoleToName(x.manageTeamMemberRole),
+      Acc_Start_Date__c: this.toOptionalSFDate(x.manageTeamMemberAssociateStartDate),
 
       ...(configuration.features.approveNewSubcontractor
         ? {

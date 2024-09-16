@@ -11,27 +11,20 @@ import { useLazyLoadQuery } from "react-relay";
 import { ManageTeamMembersQuery } from "./__generated__/ManageTeamMembersQuery.graphql";
 import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
-
-enum ManageTeamMemberRole {
-  PROJECT_MANAGER = "projectManagers",
-  FINANCE_CONTACT = "financeContacts",
-  MAIN_COMPANY_CONTACT = "mainCompanyContacts",
-  ASSOCIATE = "associates",
-  KNOWLEDGE_BASE_ADMINISTRATOR = "knowledgeBaseAdministrators",
-}
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 const ManageTeamMemberRoles = [
-  ManageTeamMemberRole.PROJECT_MANAGER,
-  ManageTeamMemberRole.FINANCE_CONTACT,
-  ManageTeamMemberRole.MAIN_COMPANY_CONTACT,
-  ManageTeamMemberRole.ASSOCIATE,
-  ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR,
+  ProjectRole.PROJECT_MANAGER,
+  ProjectRole.FINANCE_CONTACT,
+  ProjectRole.MAIN_COMPANY_CONTACT,
+  ProjectRole.ASSOCIATE,
+  ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
 ];
 
 interface ManageTeamMemberProps {
   projectId: ProjectId;
   pclId?: ProjectContactLinkId | "undefined"; // When JS is disabled, we get "undefined" as a string.
-  role: ManageTeamMemberRole;
+  role: ProjectRole;
 }
 
 interface ManageTeamMemberData {
@@ -154,7 +147,7 @@ interface ManageTeamMembersTableData {
   pclId: ProjectContactLinkId;
   pcl: PclData;
   partner: PartnerData;
-  role: ManageTeamMemberRole;
+  role: ProjectRole;
 }
 
 const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
@@ -193,7 +186,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
       associates: [] as ManageTeamMembersTableData[],
       mainCompanyContacts: [] as ManageTeamMembersTableData[],
       knowledgeBaseAdministrators: [] as ManageTeamMembersTableData[],
-    } satisfies Record<ManageTeamMemberRole, ManageTeamMembersTableData[]>;
+    } satisfies Record<ProjectRole, ManageTeamMembersTableData[]>;
     const collated = new Map<ProjectContactLinkId, ManageTeamMembersTableData>();
 
     const accountToProjectParticipantMap = new Map<AccountId, PartnerData>();
@@ -214,24 +207,24 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
 
         switch (pcl.role) {
           case "Project Manager":
-            cats.projectManagers.push({ ...data, role: ManageTeamMemberRole.PROJECT_MANAGER });
-            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.PROJECT_MANAGER });
+            cats.projectManagers.push({ ...data, role: ProjectRole.PROJECT_MANAGER });
+            collated.set(pcl.id, { ...data, role: ProjectRole.PROJECT_MANAGER });
             break;
           case "Finance contact":
-            cats.financeContacts.push({ ...data, role: ManageTeamMemberRole.FINANCE_CONTACT });
-            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.FINANCE_CONTACT });
+            cats.financeContacts.push({ ...data, role: ProjectRole.FINANCE_CONTACT });
+            collated.set(pcl.id, { ...data, role: ProjectRole.FINANCE_CONTACT });
             break;
           case "Associate":
-            cats.associates.push({ ...data, role: ManageTeamMemberRole.ASSOCIATE });
-            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.ASSOCIATE });
+            cats.associates.push({ ...data, role: ProjectRole.ASSOCIATE });
+            collated.set(pcl.id, { ...data, role: ProjectRole.ASSOCIATE });
             break;
           case "Main Company Contact":
-            cats.mainCompanyContacts.push({ ...data, role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT });
-            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.MAIN_COMPANY_CONTACT });
+            cats.mainCompanyContacts.push({ ...data, role: ProjectRole.MAIN_COMPANY_CONTACT });
+            collated.set(pcl.id, { ...data, role: ProjectRole.MAIN_COMPANY_CONTACT });
             break;
           case "KB Admin":
-            cats.knowledgeBaseAdministrators.push({ ...data, role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR });
-            collated.set(pcl.id, { ...data, role: ManageTeamMemberRole.KNOWLEDGE_BASE_ADMINISTRATOR });
+            cats.knowledgeBaseAdministrators.push({ ...data, role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR });
+            collated.set(pcl.id, { ...data, role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR });
             break;
         }
       }
@@ -249,7 +242,6 @@ export {
   ManageTeamMemberData,
   ManageTeamMemberProps,
   ManageTeamMemberReplaceProps,
-  ManageTeamMemberRole,
   ManageTeamMemberRoles,
   ManageTeamMembersTableData,
   ManageTeamMemberUpdateDeleteProps,

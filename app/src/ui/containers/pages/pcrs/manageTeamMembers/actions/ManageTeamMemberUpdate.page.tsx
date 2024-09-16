@@ -1,13 +1,14 @@
-import { ManageTeamMemberRole, ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
+import { ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
   return (
@@ -29,12 +30,12 @@ const ManageTeamMembersUpdateRoute = defineRoute<ManageTeamMemberUpdateDeletePro
   container: ManageTeamMemberUpdatePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    role: route.params.role as ManageTeamMemberRole,
+    role: route.params.role as ProjectRole,
     pclId: route.params.pclId as ProjectContactLinkId,
     method: ManageTeamMemberMethod.UPDATE,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.manageTeamMembers.dashboard.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });
 
 export { ManageTeamMemberUpdatePage, ManageTeamMembersUpdateRoute };

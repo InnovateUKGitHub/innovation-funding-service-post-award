@@ -1,13 +1,14 @@
-import { ManageTeamMemberCreateProps, ManageTeamMemberRole } from "../ManageTeamMember.logic";
+import { ManageTeamMemberCreateProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
-import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 const ManageTeamMemberCreatePage = (props: ManageTeamMemberModifyProps) => {
   return (
@@ -29,12 +30,12 @@ const ManageTeamMembersCreateRoute = defineRoute<ManageTeamMemberCreateProps>({
   container: ManageTeamMemberCreatePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    role: route.params.role as ManageTeamMemberRole,
+    role: route.params.role as ProjectRole,
     pclId: undefined,
     method: ManageTeamMemberMethod.CREATE,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.manageTeamMembers.dashboard.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });
 
 export { ManageTeamMemberCreatePage, ManageTeamMembersCreateRoute };

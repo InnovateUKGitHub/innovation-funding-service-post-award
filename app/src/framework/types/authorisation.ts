@@ -14,9 +14,7 @@ export function getAuthRoles(role: ProjectRolePermissionBits | SfRoles): Record<
 
   let isUnknown = false;
   if (typeof role == "number") {
-    isUnknown =
-      (role & ProjectRolePermissionBits.Unknown) === ProjectRolePermissionBits.Unknown &&
-      role === ProjectRolePermissionBits.Unknown;
+    isUnknown = role === ProjectRolePermissionBits.Unknown;
     isFc = !!(role & ProjectRolePermissionBits.FinancialContact);
     isPm = !!(role & ProjectRolePermissionBits.ProjectManager);
     isMo = !!(role & ProjectRolePermissionBits.MonitoringOfficer);

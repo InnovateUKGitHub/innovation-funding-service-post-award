@@ -1,4 +1,4 @@
-import { PCRItemType, pcrStatusMetaValues } from "@framework/constants/pcrConstants";
+import { PCRItemType, pcrStatusMetaValues, skipToItemItems } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -112,7 +112,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
 
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
-    const skipToItem = pcr.items.some(x => x.type === PCRItemType.Uplift || x.type === PCRItemType.ManageTeamMembers);
+    const skipToItem = pcr.items.some(x => skipToItemItems.includes(x.type));
 
     const viewItemLink = {
       route: props.routes.pcrViewItem.getLink(pcrLinkArgs),

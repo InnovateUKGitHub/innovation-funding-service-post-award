@@ -10,7 +10,10 @@ const contactSetupAssociateQuery = graphql`
             edges {
               node {
                 Id
-                Project_Contact_Links__r(where: { Acc_Role__c: { eq: "Associate" } }, first: 2000) {
+                Project_Contact_Links__r(
+                  where: { Acc_Role__c: { eq: "Associate" }, Acc_Inactive__c: { ne: true } }
+                  first: 2000
+                ) {
                   edges {
                     node {
                       Id

@@ -1,34 +1,35 @@
+import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { DeveloperUser } from "@framework/dtos/developerUser";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
+import { mapProjectRoleToInternal } from "@framework/mappers/pcr";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { Info } from "@ui/components/atoms/Details/Details";
-import { Section } from "@ui/components/molecules/Section/section";
+import { DeveloperCurrentUsername } from "@ui/components/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
+import { H3, H4 } from "@ui/components/atoms/Heading/Heading.variants";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
-import { H4, H3 } from "@ui/components/atoms/Heading/Heading.variants";
+import { Button } from "@ui/components/atoms/form/Button/Button";
+import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
+import { Form } from "@ui/components/atoms/form/Form/Form";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atoms/form/Label/Label";
+import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
+import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
+import { Section } from "@ui/components/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/context/Mounted";
+import { useUserContext } from "@ui/context/user";
 import { useContent } from "@ui/hooks/content.hook";
+import { projectIdValidation } from "@ui/zod/helperValidators.zod";
+import classNames from "classnames";
+import { decode as decodeHTMLEntities } from "html-entities";
+import { noop } from "lodash";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
 import { userSwitcherProjectQuery, userSwitcherProjectsQuery } from "./UserSwitcher.query";
 import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQuery.graphql";
 import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
-import { decode as decodeHTMLEntities } from "html-entities";
-import { DeveloperCurrentUsername } from "@ui/components/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
-import { PlainList } from "@ui/components/atoms/List/list";
-import { useUserContext } from "@ui/context/user";
-import { Form } from "@ui/components/atoms/form/Form/Form";
-import { Button } from "@ui/components/atoms/form/Button/Button";
-import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
-import { Label } from "@ui/components/atoms/form/Label/Label";
-import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
-import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
-import { projectIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
-import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Email } from "@ui/components/atoms/Email/Email";
-import { noop } from "lodash";
 
 /**
  * Get the link to the current page
@@ -44,10 +45,7 @@ const useReturnLocation = () => {
 };
 
 interface UserSwitcherTableRow {
-  isMo: boolean;
-  isFc: boolean;
-  isPm: boolean;
-  isAssociate: boolean;
+  roles: { role: ProjectRole; endDate: string | null; isInactive: boolean }[];
   user: DeveloperUser;
 }
 
@@ -88,16 +86,11 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
     const username = internalUsername ?? externalUsername ?? null;
 
     if (username && user.Acc_Role__c?.value) {
-      const role = user.Acc_Role__c.value;
-
       // If the contact has not yet been seen before...
       if (!contactRoleInfo[username]) {
         // Initialise the record with default options
         contactRoleInfo[username] = {
-          isMo: false,
-          isFc: false,
-          isPm: false,
-          isAssociate: false,
+          roles: [],
           user: {
             externalUsername,
             internalUsername,
@@ -106,15 +99,13 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
         };
       }
 
-      // Add the relevant role to the contact's role info.
-      if (role === "Monitoring officer") {
-        contactRoleInfo[username].isMo = true;
-      } else if (role === "Finance contact") {
-        contactRoleInfo[username].isFc = true;
-      } else if (role === "Project Manager") {
-        contactRoleInfo[username].isPm = true;
-      } else if (role === "Associate") {
-        contactRoleInfo[username].isAssociate = true;
+      const projectRole = mapProjectRoleToInternal(user.Acc_Role__c.value);
+      if (projectRole) {
+        contactRoleInfo[username].roles.push({
+          role: projectRole,
+          endDate: user.Acc_EndDate__c?.value ?? null,
+          isInactive: user.Acc_Inactive__c?.value ?? false,
+        });
       }
     }
   }
@@ -134,32 +125,50 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
           <TR>
             <TH>{getContent(x => x.projectContactLabels.contactName)}</TH>
             <TH>{getContent(x => x.components.userSwitcher.tableHeaderRole)}</TH>
-            <TH>{getContent(x => x.components.userSwitcher.externalUsername)}</TH>
-            <TH>{getContent(x => x.components.userSwitcher.internalUsername)}</TH>
+            <TH>{getContent(x => x.components.userSwitcher.details)}</TH>
             <TH>{getContent(x => x.components.userSwitcher.tableHeaderSwitchOptions)}</TH>
           </TR>
         </THead>
         <TBody>
           {users.map(x => (
             <TR key={x.user.name}>
-              <TD data-qa="partner-name">
-                <P>{x.user.name}</P>
-              </TD>
+              <TD data-qa="partner-name">{x.user.name}</TD>
               <TD data-qa="partner-role">
-                <PlainList noBottomMargin>
-                  {x.isPm && <li>{getContent(x => x.components.userSwitcher.projectManagerContact)}</li>}
-                  {x.isFc && <li>{getContent(x => x.components.userSwitcher.financeContact)}</li>}
-                  {x.isMo && <li>{getContent(x => x.components.userSwitcher.monitoringOfficerContact)}</li>}
-                  {x.isAssociate && <li>{getContent(x => x.components.userSwitcher.associateContact)}</li>}
-                </PlainList>
+                <div className="ifspa-developer-displaylist">
+                  {x.roles.map((y, i) => (
+                    <dl key={i}>
+                      <dt className={classNames({ "ifspa-developer-crossout": y.isInactive })}>
+                        {getContent(z => z.projectLabels[y.role]({ count: 1 }))}
+                      </dt>
+                      {y.endDate && (
+                        <dd>
+                          {getContent(z => z.components.userSwitcher.endDate)} {y.endDate}
+                        </dd>
+                      )}
+                    </dl>
+                  ))}
+                </div>
               </TD>
-              <TD data-qa="partner-external-username">
-                <Email>{String(x.user.externalUsername ?? "")}</Email>
+              <TD data-qa="partner-details">
+                <div className="ifspa-developer-displaylist">
+                  {x.user.externalUsername && (
+                    <dl>
+                      <dt>{getContent(x => x.components.userSwitcher.externalUsername)}</dt>
+                      <dd>
+                        <Email>{x.user.externalUsername}</Email>
+                      </dd>
+                    </dl>
+                  )}
+                  {x.user.internalUsername && (
+                    <dl>
+                      <dt>{getContent(x => x.components.userSwitcher.internalUsername)}</dt>
+                      <dd>
+                        <Email>{x.user.internalUsername}</Email>
+                      </dd>
+                    </dl>
+                  )}
+                </div>
               </TD>
-              <TD data-qa="partner-email">
-                <Email>{String(x.user.internalUsername ?? "")}</Email>
-              </TD>
-
               <TD data-qa="delete">
                 {x.user.externalUsername && (
                   <Form action={DeveloperUserSwitcherPage.routePath}>
@@ -384,4 +393,4 @@ const HiddenUserSwitcher = () => {
   );
 };
 
-export { UserSwitcher, HiddenUserSwitcher };
+export { HiddenUserSwitcher, UserSwitcher };

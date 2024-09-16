@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c1d70741449f253b584ed539d877009f>>
+ * @generated SignedSource<<cba5b9beef1a467b8e80fc4630a635c9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -133,6 +133,9 @@ v4 = {
                   "kind": "Literal",
                   "name": "where",
                   "value": {
+                    "Acc_Inactive__c": {
+                      "ne": true
+                    },
                     "Acc_Role__c": {
                       "eq": "Associate"
                     }
@@ -210,7 +213,7 @@ v4 = {
                   "storageKey": null
                 }
               ],
-              "storageKey": "Project_Contact_Links__r(first:2000,where:{\"Acc_Role__c\":{\"eq\":\"Associate\"}})"
+              "storageKey": "Project_Contact_Links__r(first:2000,where:{\"Acc_Inactive__c\":{\"ne\":true},\"Acc_Role__c\":{\"eq\":\"Associate\"}})"
             }
           ],
           "storageKey": null
@@ -526,16 +529,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ede0658d2073e80d6890d45cd985d5a6",
+    "cacheID": "cd861b905b2af75f5134d3d34d0ff61c",
     "id": null,
     "metadata": {},
     "name": "ContactSetupAssociateQuery",
     "operationKind": "query",
-    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}, Acc_Inactive__c: {ne: true}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ea379f0dea2cf5d72a0701830db508f8";
+(node as any).hash = "f68b6ce8e302d41fb3f64b6dd7a7f349";
 
 export default node;

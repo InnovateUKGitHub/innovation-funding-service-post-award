@@ -10,12 +10,22 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useFormContext } from "react-hook-form";
 import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
-import { ManageTeamMemberRole } from "../../ManageTeamMember.logic";
+import { useMemo } from "react";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 const ManageTeamMemberInputs = () => {
   const { method, role, defaults, isFetching, memberToManage, partners } = useManageTeamMemberActionContext();
   const { getFieldState, register } = useFormContext();
   const { getContent } = useContent();
+  const today = useMemo(() => {
+    const dateTime = new Date();
+
+    return {
+      day: dateTime.getDate(),
+      month: dateTime.getMonth() + 1,
+      year: dateTime.getFullYear(),
+    };
+  }, []);
 
   return (
     <>
@@ -85,19 +95,41 @@ const ManageTeamMemberInputs = () => {
         </FormGroup>
       </Fieldset>
 
-      {method === ManageTeamMemberMethod.CREATE && role === ManageTeamMemberRole.ASSOCIATE && (
-        <Fieldset>
-          <FormGroup hasError={!!getFieldState("startDate").error}>
-            <Label htmlFor="startDate">{getContent(x => x.pages.manageTeamMembers.modify.labels.startDate)}</Label>
-            <ValidationError error={getFieldState("startDate").error} />
-            <div className="govuk-date-input">
-              <DateInput type="day" {...register("startDate.day")} defaultValue={defaults?.startDay ?? ""} />
-              <DateInput type="month" {...register("startDate.month")} defaultValue={defaults?.startMonth ?? ""} />
-              <DateInput type="year" {...register("startDate.year")} defaultValue={defaults?.startYear ?? ""} />
-            </div>
-          </FormGroup>
-        </Fieldset>
-      )}
+      {method === ManageTeamMemberMethod.CREATE &&
+        (role === ProjectRole.ASSOCIATE ? (
+          <Fieldset>
+            <FormGroup hasError={!!getFieldState("startDate").error}>
+              <Label htmlFor="startDate">{getContent(x => x.pages.manageTeamMembers.modify.labels.startDate)}</Label>
+              <ValidationError error={getFieldState("startDate").error} />
+              <div className="govuk-date-input">
+                <DateInput
+                  type="day"
+                  {...register("startDate.day")}
+                  defaultValue={defaults?.startDay ?? ""}
+                  disabled={isFetching}
+                />
+                <DateInput
+                  type="month"
+                  {...register("startDate.month")}
+                  defaultValue={defaults?.startMonth ?? ""}
+                  disabled={isFetching}
+                />
+                <DateInput
+                  type="year"
+                  {...register("startDate.year")}
+                  defaultValue={defaults?.startYear ?? ""}
+                  disabled={isFetching}
+                />
+              </div>
+            </FormGroup>
+          </Fieldset>
+        ) : (
+          <>
+            <input type="hidden" {...register("startDate.day")} value={today.day} />
+            <input type="hidden" {...register("startDate.month")} value={today.month} />
+            <input type="hidden" {...register("startDate.year")} value={today.year} />
+          </>
+        ))}
     </>
   );
 };

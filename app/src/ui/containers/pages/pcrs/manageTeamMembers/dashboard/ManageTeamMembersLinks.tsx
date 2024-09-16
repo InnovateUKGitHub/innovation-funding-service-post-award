@@ -1,12 +1,12 @@
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 import { Link } from "@ui/components/atoms/Links/links";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useContent } from "@ui/hooks/content.hook";
-import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 interface ManageTeamMembersModifyProps {
   projectId: ProjectId;
   pclId: ProjectContactLinkId;
-  role: ManageTeamMemberRole;
+  role: ProjectRole;
 }
 
 const ManageTeamMemberReplaceLink = (props: ManageTeamMembersModifyProps) => {

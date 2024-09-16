@@ -1,3 +1,11 @@
+export enum ProjectRole {
+  PROJECT_MANAGER = "projectManagers",
+  FINANCE_CONTACT = "financeContacts",
+  MAIN_COMPANY_CONTACT = "mainCompanyContacts",
+  ASSOCIATE = "associates",
+  KNOWLEDGE_BASE_ADMINISTRATOR = "knowledgeBaseAdministrators",
+}
+
 export enum ProjectRoleName {
   MonitoringOfficer = "Monitoring officer",
   ProjectManager = "Project Manager",

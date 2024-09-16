@@ -1,3 +1,4 @@
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
@@ -9,7 +10,6 @@ import {
 } from "@ui/zod/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
-import { ManageTeamMemberRole } from "../ManageTeamMember.logic";
 
 const createTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersCreate),
@@ -19,7 +19,11 @@ const createTeamMemberValidator = z.object({
   lastName: getTextValidation({ maxLength: 100, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
   startDate: dateValidation,
-  role: z.literal(ManageTeamMemberRole.ASSOCIATE),
+  role: z.union([
+    z.literal(ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR),
+    z.literal(ProjectRole.MAIN_COMPANY_CONTACT),
+    z.literal(ProjectRole.ASSOCIATE),
+  ]),
 });
 
 const replaceTeamMemberValidator = z.object({
@@ -30,7 +34,7 @@ const replaceTeamMemberValidator = z.object({
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
-  role: z.nativeEnum(ManageTeamMemberRole),
+  role: z.nativeEnum(ProjectRole),
 });
 
 const updateTeamMemberValidator = z.object({
@@ -41,14 +45,14 @@ const updateTeamMemberValidator = z.object({
   contactId: contactIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
-  role: z.nativeEnum(ManageTeamMemberRole),
+  role: z.nativeEnum(ProjectRole),
 });
 
 const deleteTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersDelete),
   projectId: projectIdValidation,
   pclId: pclIdValidation,
-  role: z.nativeEnum(ManageTeamMemberRole),
+  role: z.nativeEnum(ProjectRole),
 });
 
 const manageTeamMemberValidator = z.discriminatedUnion("form", [

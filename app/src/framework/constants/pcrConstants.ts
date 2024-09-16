@@ -538,6 +538,11 @@ export interface IMetaValue {
   disableSummary?: boolean;
 
   /**
+   * If this PCR Item exists, skip the "Give us details" screen
+   */
+  skipToItem?: boolean;
+
+  /**
    * Hide the "To do"/"Incomplete"/"Complete" status associated with a PCR Item
    */
   disableStatus?: boolean;
@@ -740,6 +745,7 @@ export const pcrItemTypes: IMetaValue[] = [
       SalesforceCompetitionTypes.loans,
     ],
     disableSummary: true,
+    skipToItem: true,
     disableStatus: true,
     enableInternalStatuses: true,
   },
@@ -751,6 +757,7 @@ export const pcrItemTypes: IMetaValue[] = [
     i18nDescription: x => x.pages.pcrModifyOptions.manageTeamMembersMessage,
     ignoredCompetitions: [],
     disableSummary: true,
+    skipToItem: true,
     exclusive: true,
   },
 ];
@@ -772,6 +779,7 @@ export const pcrItems = [
 ] as const;
 
 export const disableSummaryItems = pcrItemTypes.filter(x => x.disableSummary).map(x => x.type);
+export const skipToItemItems = pcrItemTypes.filter(x => x.skipToItem).map(x => x.type);
 export const enableFinancialVirementItems = pcrItemTypes.filter(x => x.enableFinancialVirement).map(x => x.type);
 export const unduplicatablePcrItems = pcrItemTypes.filter(x => x.singleInstanceInThisPcr).map(x => x.type);
 export const exclusiveItems = pcrItemTypes.filter(x => x.exclusive).map(x => x.type);

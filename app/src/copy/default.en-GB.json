@@ -231,8 +231,10 @@
       "associateContact": "KTP Associate",
       "tableHeaderSwitchOptions": "After changing...",
       "loadingUsers": "Loading PCL list...",
+      "details": "Details",
       "externalUsername": "External username",
-      "internalUsername": "Internal username"
+      "internalUsername": "Internal username",
+      "endDate": "End date: "
     },
     "pageCrasher": {
       "sectionTitle": "Page Crasher",
@@ -1300,6 +1302,36 @@
               "pclSelectPlaceholder": "-- Select an associate --"
             }
           }
+        }
+      },
+      "types": {
+        "projectManageTeamMembersCreate": "Invite a team member",
+        "projectManageTeamMembersUpdate": "Edit a team member",
+        "projectManageTeamMembersReplace": "Replace a team member",
+        "projectManageTeamMembersDelete": "Remove a team member",
+        "unknownManageTeamMemberMethod": "Unknown action to team member"
+      },
+      "summary": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email address",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "role": "Role",
+        "action": "Action",
+        "projectManageTeamMembersCreate": {
+          "invitedTeamMember": "Team member being invited"
+        },
+        "projectManageTeamMembersReplace": {
+          "removedTeamMember": "Team member being replaced",
+          "invitedTeamMember": "Team member being invited"
+        },
+        "projectManageTeamMembersUpdate": {
+          "removedTeamMember": "Before",
+          "invitedTeamMember": "After"
+        },
+        "projectManageTeamMembersDelete": {
+          "removedTeamMember": "Team member being removed"
         }
       }
     }

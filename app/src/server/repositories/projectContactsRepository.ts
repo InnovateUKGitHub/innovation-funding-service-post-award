@@ -103,7 +103,9 @@ export class ProjectContactsRepository
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
-    return this.where(soql`Acc_ContactId__c IN (SELECT ContactId FROM User WHERE Username = ${email})`);
+    return this.where(
+      soql`Acc_ContactId__c IN (SELECT ContactId FROM User WHERE Username = ${email}) AND Acc_Inactive__c != true`,
+    );
   }
 
   public async insert(

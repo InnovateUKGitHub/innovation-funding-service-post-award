@@ -16,7 +16,6 @@ import {
   getManageTeamMember,
   ManageTeamMemberData,
   ManageTeamMemberProps,
-  ManageTeamMemberRole,
   ManageTeamMemberRoles,
   ManageTeamMembersTableData,
   useManageTeamMembers,
@@ -29,6 +28,7 @@ import {
   ManageTeamMemberValidatorSchema,
 } from "./ManageTeamMember.zod";
 import { ManageTeamMemberMethod, ManageTeamMemberMethods } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 interface ManageTeamMembersActionContext {
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
@@ -48,7 +48,7 @@ interface ManageTeamMembersActionContext {
   projectId: ProjectId;
   pclId: ProjectContactLinkId | undefined;
   defaultPclId: ProjectContactLinkId | undefined | "undefined";
-  role: ManageTeamMemberRole;
+  role: ProjectRole;
   method:
     | ManageTeamMemberMethod.CREATE
     | ManageTeamMemberMethod.REPLACE

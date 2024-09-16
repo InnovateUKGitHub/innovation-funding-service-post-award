@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7ca1386e08dcfae0df3176d215766738>>
+ * @generated SignedSource<<184ee58a49020fb4868410847897c986>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -643,7 +643,16 @@ v11 = [
                           {
                             "alias": null,
                             "args": [
-                              (v4/*: any*/)
+                              (v4/*: any*/),
+                              {
+                                "kind": "Literal",
+                                "name": "where",
+                                "value": {
+                                  "Acc_Inactive__c": {
+                                    "ne": true
+                                  }
+                                }
+                              }
                             ],
                             "concreteType": "Acc_ProjectContactLink__cConnection",
                             "kind": "LinkedField",
@@ -728,7 +737,7 @@ v11 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": "Project_Contact_Links__r(first:2000)"
+                            "storageKey": "Project_Contact_Links__r(first:2000,where:{\"Acc_Inactive__c\":{\"ne\":true}})"
                           },
                           {
                             "alias": null,
@@ -870,16 +879,16 @@ return {
     "selections": (v11/*: any*/)
   },
   "params": {
-    "cacheID": "079fa4831c489abc5344cf7aa6ae0bac",
+    "cacheID": "c0a02642a0a4a8290d5c488131176e63",
     "id": null,
     "metadata": {},
     "name": "DashboardProjectDashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardProjectDashboardQuery {\n  salesforce {\n    uiapi {\n      query {\n        Acc_BroadcastMessage__c(first: 100, where: {and: [{Acc_StartDate__c: {lte: {literal: TODAY}}}, {Acc_EndDate__c: {gte: {literal: TODAY}}}]}) {\n          edges {\n            node {\n              Acc_Message__c {\n                value\n              }\n              Competition_type__c {\n                value\n              }\n              Id\n              DisplayValue\n            }\n          }\n        }\n        Acc_Project__c(first: 2000, orderBy: {Acc_ClaimsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsUnderQuery__c: {nulls: LAST, order: DESC}, Acc_ProjectTitle__c: {nulls: LAST, order: ASC}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isPm\n                  isMo\n                  isAssociate\n                  partnerId\n                }\n              }\n              claimCounts {\n                DRAFT\n                SUBMITTED\n                MO_QUERIED\n                AWAITING_IUK_APPROVAL\n                INNOVATE_QUERIED\n                AWAITING_IAR\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_LeadParticipantName__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_ClaimsOverdue__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n                label\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Project_Contact_Links__r(first: 2000) {\n                edges {\n                  node {\n                    Acc_Role__c {\n                      value\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                      Id\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Id\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                    Acc_OpenClaimStatus__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query DashboardProjectDashboardQuery {\n  salesforce {\n    uiapi {\n      query {\n        Acc_BroadcastMessage__c(first: 100, where: {and: [{Acc_StartDate__c: {lte: {literal: TODAY}}}, {Acc_EndDate__c: {gte: {literal: TODAY}}}]}) {\n          edges {\n            node {\n              Acc_Message__c {\n                value\n              }\n              Competition_type__c {\n                value\n              }\n              Id\n              DisplayValue\n            }\n          }\n        }\n        Acc_Project__c(first: 2000, orderBy: {Acc_ClaimsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsUnderQuery__c: {nulls: LAST, order: DESC}, Acc_ProjectTitle__c: {nulls: LAST, order: ASC}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isPm\n                  isMo\n                  isAssociate\n                  partnerId\n                }\n              }\n              claimCounts {\n                DRAFT\n                SUBMITTED\n                MO_QUERIED\n                AWAITING_IUK_APPROVAL\n                INNOVATE_QUERIED\n                AWAITING_IAR\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_LeadParticipantName__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_ClaimsOverdue__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n                label\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Project_Contact_Links__r(where: {Acc_Inactive__c: {ne: true}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_Role__c {\n                      value\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                      Id\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Id\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                    Acc_OpenClaimStatus__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a997962bb2c1d7e9633c0c4c4e0ff709";
+(node as any).hash = "b8c450fd854a3fd6936adfbb09c46f1d";
 
 export default node;
