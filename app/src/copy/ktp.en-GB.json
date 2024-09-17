@@ -43,6 +43,9 @@
     "financialVirementSummary": {
       "nonFecGrantAdviceChangeEmail": "ktpqueries@iuk.ukri.org"
     },
+    "reallocateCostsSummary": {
+      "nonFecGrantAdviceChangeEmail": "ktpqueries@iuk.ukri.org"
+    },
     "pcrAddPartnerStateAidEligibility": {
       "guidanceNonAidFunding": "This screen is not relevant to KTPs. Click save and continue."
     },

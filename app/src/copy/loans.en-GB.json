@@ -77,7 +77,7 @@
     "extensionPeriod": "Extension period",
     "repaymentPeriod": "Repayment period"
   },
-  "financialVirementLabels": {
+  "reallocateCostsLabels": {
     "costCategoryCostsClaimed": "Costs to date",
     "projectOriginalRemainingGrant": "Total remaining loan",
     "projectNewRemainingGrant": "New total remaining loan",
