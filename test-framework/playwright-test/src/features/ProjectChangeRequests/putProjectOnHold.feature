@@ -7,7 +7,7 @@ Feature: Put a project on hold
     And the user is on the project overview
     When the user selects the "Project change requests" tile
     Then the project change request page is displayed 
-
+       
   Scenario: Verify that the user can put a project on hold
     Given the user sees the project request page
     And the following guidance texts are visible:
@@ -27,10 +27,10 @@ Feature: Put a project on hold
 
  # Scenario: User must select atleast one PCR type
    # Given the user clicks create request without selecting a PCR
-   # Then an error message should be displayed
+   # Then an error message should be displayed      
 
     
-# Scenario: Verify guidance texts and checkboxes
+# Scenario: Verify guidance texts and checkboxes    
 #    Given the user sees the project request page
  #  And the user clicks create request   Then the following guidance texts should be visibl      | Label Text                | Inner HTML                                                                 |
  #     | Reallocate project costs   | This allows you to move costs from one category to another.               |
