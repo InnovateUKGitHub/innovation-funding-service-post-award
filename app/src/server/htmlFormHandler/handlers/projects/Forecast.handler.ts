@@ -90,7 +90,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
           .filter(([key]) => key.startsWith("profile."))
           .map(([key, value]) => [key.replace("profile.", ""), value]),
       ),
-      submit: input.submit,
+      submit: input.submit === "on" || input.submit === "true",
     };
   }
 
