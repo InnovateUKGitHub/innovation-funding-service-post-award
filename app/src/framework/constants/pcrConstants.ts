@@ -489,7 +489,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
 ] as const;
 
 export interface IMetaValue {
-  ignoredCompetitions: string[];
+  ignoredCompetitions: SalesforceCompetitionTypes[];
   type: PCRItemType;
   typeName: string;
   displayName?: string;

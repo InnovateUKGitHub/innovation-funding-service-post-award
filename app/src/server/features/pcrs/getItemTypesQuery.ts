@@ -4,6 +4,7 @@ import { IContext } from "@framework/types/IContext";
 import { QueryBase } from "../common/queryBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
+import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   constructor(public readonly projectId: ProjectId) {
@@ -12,7 +13,8 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
 
   protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
     const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
-    const { competitionType } = await context.runQuery(new GetByIdQuery(this.projectId));
+    const { competitionType: typeString } = await context.runQuery(new GetByIdQuery(this.projectId));
+    const competitionType = mapToSalesforceCompetitionTypes(typeString);
 
     return itemTypes.filter(x => {
       const pcrItem = pcrItemTypes.find(y => y.type === x.type);
