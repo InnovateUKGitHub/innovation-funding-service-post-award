@@ -74,7 +74,7 @@ describe("getAllForProjectQuery", () => {
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
-    context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+    context.user.set({ email: projectManger.Acc_ContactId__r?.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.id));
 
@@ -243,7 +243,7 @@ describe("getAllForProjectQuery", () => {
     });
 
     const projectManger = context.testData.createProjectManager(project);
-    context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+    context.user.set({ email: projectManger.Acc_ContactId__r?.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.id));
 
@@ -263,7 +263,7 @@ describe("getAllForProjectQuery", () => {
     });
 
     const projectManger = context.testData.createProjectManager(project);
-    context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+    context.user.set({ email: projectManger.Acc_ContactId__r?.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.id));
 
@@ -284,7 +284,7 @@ describe("getAllForProjectQuery", () => {
     });
 
     const projectManger = context.testData.createProjectManager(project);
-    context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+    context.user.set({ email: projectManger.Acc_ContactId__r?.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.percentageParticipantCostsClaimed).toBe(0);
@@ -307,22 +307,22 @@ describe("getAllForProjectQuery", () => {
     const projectContact1 = context.testData.createFinanceContact(
       project,
       partner,
-      x => (x.Acc_ContactId__r.Email = "financecontact@test.com"),
+      x => (x.Acc_ContactId__r!.Email = "financecontact@test.com"),
     );
     const projectContact2 = context.testData.createProjectManager(
       project,
       partner,
-      x => (x.Acc_ContactId__r.Email = "projectManager@test.com"),
+      x => (x.Acc_ContactId__r!.Email = "projectManager@test.com"),
     );
 
     // now set user to the finance contact
-    context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
+    context.user.set({ email: projectContact1.Acc_ContactId__r?.Email });
 
     const result1 = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result1.roles).toBe(ProjectRolePermissionBits.FinancialContact);
 
     // now set user to the project manager
-    context.user.set({ email: projectContact2.Acc_ContactId__r.Email });
+    context.user.set({ email: projectContact2.Acc_ContactId__r?.Email });
 
     const result2 = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result2.roles).toBe(ProjectRolePermissionBits.ProjectManager);

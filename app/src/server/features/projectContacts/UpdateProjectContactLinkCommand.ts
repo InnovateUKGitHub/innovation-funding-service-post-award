@@ -60,7 +60,7 @@ export class UpdateProjectContactLinkCommand extends CommandBase<boolean> {
       const existingPcl = existingPcls.find(x => x.id === editDetail.id);
 
       if (!existingPcl) {
-        throw new NotFoundError("Cannot find PCL :(");
+        throw new NotFoundError("Cannot find PCL");
       }
 
       const partial: PickRequiredFromPartial<ISalesforceProjectContact, "Id"> = {
@@ -89,7 +89,11 @@ export class UpdateProjectContactLinkCommand extends CommandBase<boolean> {
       if (typeof editDetail.edited !== "undefined") partial.Acc_Edited__c = editDetail.edited;
       if (typeof editDetail.replaced !== "undefined") partial.Acc_Replaced__c = editDetail.replaced;
 
-      if (typeof editDetail.firstName !== "undefined" && typeof editDetail.lastName !== "undefined") {
+      if (
+        existingPcl.contactId &&
+        typeof editDetail.firstName !== "undefined" &&
+        typeof editDetail.lastName !== "undefined"
+      ) {
         promises.push(
           context.repositories.externalContacts.update({
             Id: existingPcl.contactId,

@@ -40,7 +40,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     const email = "fc@test.com";
 
     const project = context.testData.createProject();
-    context.testData.createFinanceContact(project, undefined, x => (x.Acc_ContactId__r.Email = email));
+    context.testData.createFinanceContact(project, undefined, x => (x.Acc_ContactId__r!.Email = email));
 
     // login as fc
     context.user.set({ email });
@@ -54,7 +54,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     const email = "mo@test.com";
 
     const project = context.testData.createProject();
-    context.testData.createMonitoringOfficer(project, x => (x.Acc_ContactId__r.Email = email));
+    context.testData.createMonitoringOfficer(project, x => (x.Acc_ContactId__r!.Email = email));
 
     // login as fc
     context.user.set({ email });

@@ -293,7 +293,7 @@ export class TestData {
   }
 
   private assignToCurrentUser(item: ISalesforceProjectContact) {
-    item.Acc_ContactId__r.Email = this.getCurrentUser().email;
+    item.Acc_ContactId__r!.Email = this.getCurrentUser().email;
   }
 
   public createFinanceContact(

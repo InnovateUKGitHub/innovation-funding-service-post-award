@@ -19,7 +19,7 @@ export enum ProjectRoleName {
 
 export interface ProjectContactDto {
   accountId: AccountId | undefined;
-  contactId: ContactId;
+  contactId: ContactId | undefined;
   email: string;
   id: ProjectContactLinkId;
   name: string;

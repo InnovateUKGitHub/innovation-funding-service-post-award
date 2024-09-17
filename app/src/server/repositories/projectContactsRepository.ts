@@ -24,7 +24,7 @@ export interface ISalesforceProjectContact {
     Email?: string;
     FirstName?: string;
     LastName?: string;
-  };
+  } | null;
   Acc_UserId__r: {
     Id: string;
     Name?: string;
