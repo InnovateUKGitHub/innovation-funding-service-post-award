@@ -39,7 +39,7 @@ import { ProjectChangeRequestReasoningDocumentUploadHandler } from "./handlers/p
 import { ProjectChangeRequestReasoningUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningUpdate.handler";
 import { ProjectChangeRequestReviewFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/review/reviewProjectChangeRequestFormHandler";
 import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/projectSetupPartnerPostcodeFormHandler";
-import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerifyHandler";
+import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerify.handler";
 import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetails.handler";
 import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDeleteHandler";
 import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentUploadHandler";
