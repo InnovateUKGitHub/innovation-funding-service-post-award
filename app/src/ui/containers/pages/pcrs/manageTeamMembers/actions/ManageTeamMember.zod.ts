@@ -18,7 +18,7 @@ const createTeamMemberValidator = z.object({
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
-  startDate: dateValidation,
+  startDate: dateValidation.optional(),
   role: z.union([
     z.literal(ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR),
     z.literal(ProjectRole.MAIN_COMPANY_CONTACT),
