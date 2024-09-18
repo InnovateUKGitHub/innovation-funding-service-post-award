@@ -308,10 +308,12 @@ const mapItemForManageTeamMembers = (
     | "manageTeamMemberEmail"
     | "manageTeamMemberRole"
     | "manageTeamMemberAssociateStartDate"
+    | "partnerId"
   >,
 ): PCRTypeWithoutBase<PCRItemForManageTeamMembersDto> => ({
   type: PCRItemType.ManageTeamMembers,
   pclId: pcr.pclId ?? null,
+  partnerId: pcr.partnerId ?? null,
   manageTeamMemberType: pcr.manageTeamMemberType ?? null,
   manageTeamMemberFirstName: pcr.manageTeamMemberFirstName ?? null,
   manageTeamMemberLastName: pcr.manageTeamMemberLastName ?? null,

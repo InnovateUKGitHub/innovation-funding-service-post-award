@@ -197,6 +197,7 @@ export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
 export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
   type: PCRItemType.ManageTeamMembers;
   pclId: ProjectContactLinkId | null;
+  partnerId: PartnerId | null; // Project Participant ID
   manageTeamMemberType: ManageTeamMemberMethod | null;
   manageTeamMemberFirstName: string | null;
   manageTeamMemberLastName: string | null;
