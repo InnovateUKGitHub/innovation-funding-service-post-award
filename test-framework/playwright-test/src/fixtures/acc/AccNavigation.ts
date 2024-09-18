@@ -10,7 +10,7 @@ import { MonitoringReports } from "./pages/MonitoringReports";
 import { ProjectDashboard } from "./pages/ProjectDashboard";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
-import { ProjectChangeRequests } from "./pages/ProjectChangeRequests";
+import { PutProjectOnHold } from "./pages/putProjectOnHold";
 
 export
 @Fixture("accNavigation")
@@ -24,7 +24,7 @@ class AccNavigation {
   private readonly projectState: ProjectState;
   private readonly testCache = new TestCache();
   private readonly devtools: DevTools;
-  private readonly projectChangeRequests: ProjectChangeRequests;
+  private readonly putProjectOnHold: PutProjectOnHold;
 
   constructor({
     page,
@@ -34,7 +34,7 @@ class AccNavigation {
     projectForecasts,
     projectState,
     monitoringReports,
-    projectChangeRequests,
+    putProjectOnHold,
   }: {
     page: Page;
     developerHomepage: DeveloperHomepage;
@@ -43,7 +43,7 @@ class AccNavigation {
     projectForecasts: ProjectForecasts;
     projectState: ProjectState;
     monitoringReports: MonitoringReports;
-    projectChangeRequests: ProjectChangeRequests;
+    putProjectOnHold: PutProjectOnHold;
   }) {
     this.page = page;
     this.developerHomepage = developerHomepage;
@@ -52,7 +52,7 @@ class AccNavigation {
     this.projectForecasts = projectForecasts;
     this.projectState = projectState;
     this.monitoringReports = monitoringReports;
-    this.projectChangeRequests = projectChangeRequests;
+    this.putProjectOnHold = putProjectOnHold;
     this.devtools = new DevTools({ page });
   }
 
@@ -142,6 +142,6 @@ class AccNavigation {
     );
 
     await this.devtools.isLoaded();
-    await this.projectChangeRequests.isPage();
+    await this.putProjectOnHold.isPage();
   }
 }

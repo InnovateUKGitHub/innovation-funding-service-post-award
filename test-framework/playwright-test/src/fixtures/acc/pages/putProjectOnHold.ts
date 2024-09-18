@@ -7,8 +7,8 @@ import { getLorem } from "../../../components/lorem";
 import path from "path";
 
 export
-@Fixture("projectChangeRequests")
-class ProjectChangeRequests {
+@Fixture("putProjectOnHold")
+class PutProjectOnHold {
   protected readonly page: Page;
   private readonly pageTitle: PageHeading;
   private readonly saveAndReturnSummary: Locator;

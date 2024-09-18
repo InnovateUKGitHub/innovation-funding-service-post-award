@@ -10,9 +10,9 @@ Feature: Put a project on hold
   
  Scenario: Submitting an incomplete PCR request triggers an error 
    Given the user sees the project request page
-   And the user clicks create request without selecting a PCR
+   And the user clicks create request without selecting a PCR   
    Then an error message should be displayed  
-   #Add one more step
+   #Add one more step 
        
   Scenario: Verify that the user can put a project on hold
     Given the user sees the project request page
