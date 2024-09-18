@@ -16,6 +16,11 @@ enum FormTypes {
   ProjectSetupBankDetails = "projectSetupBankDetails",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",
   ProjectSetupForecast = "projectSetupForecast",
+  ProjectSetupPostcode = "projectSetupPostcode",
+
+  // Partner details
+
+  PartnerDetailsEdit = "partnerDetailsEdit",
 
   // Forecast Tile
   ForecastTileForecast = "forecastTileForecast",
