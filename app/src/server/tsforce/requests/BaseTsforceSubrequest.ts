@@ -43,7 +43,7 @@ abstract class BaseTsforceSubrequest<T> extends BaseTsforceRequest<T> {
     const result = (await this.connection.dataLoader.subrequest.load(this)) as TsforceCompositeSubrequestResult<T>;
 
     if (result.httpStatusCode < 200 || result.httpStatusCode >= 300) {
-      throw new Error("error :c");
+      throw new Error(JSON.stringify(result));
     }
 
     return result.body;
