@@ -169,6 +169,48 @@ profiles:
         paths:
           - kustomize/env/aws/capdev
 
+  - name: capconfig
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: true
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      artifacts: []
+    deploy:
+      kubeContext: dev
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/aws/capconfig
+
+  - name: captest
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: true
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      artifacts: []
+    deploy:
+      kubeContext: dev
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/aws/captest
+
   - name: perf
     build:
       local:

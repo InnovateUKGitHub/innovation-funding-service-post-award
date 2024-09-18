@@ -32,6 +32,10 @@ export function parseAccEnvironment(value?: string | AccEnvironment): AccEnviron
       return AccEnvironment.LOCAL;
     case AccEnvironment.CAPDEV:
       return AccEnvironment.CAPDEV;
+    case AccEnvironment.CAPCONFIG:
+      return AccEnvironment.CAPCONFIG;
+    case AccEnvironment.CAPTEST:
+      return AccEnvironment.CAPTEST;
     default:
       return AccEnvironment.UNKNOWN;
   }
