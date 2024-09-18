@@ -407,11 +407,11 @@ class ProjectChangeRequests {
 
   @Then('the request should be submitted successfully')
   async validatePcrSubmission() {
-    await this.validateSumbmittedPcrDetails('Request number', '1');
-    await this.validateSumbmittedPcrDetails('Request type', 'Put project on hold');
-    await this.validateSumbmittedPcrDetails('Request started', /^\d{1,2} \w+ \d{4}$/);
-    await this.validateSumbmittedPcrDetails('Request status', 'Submitted to Monitoring Officer');
-    await this.validateSumbmittedPcrDetails('Request started', /^\d{1,2} \w+ \d{4}$/);
+    await this.validateSubmittedPcrDetails('Request number', '1');
+    await this.validateSubmittedPcrDetails('Request type', 'Put project on hold');
+    await this.validateSubmittedPcrDetails('Request started', /^\d{1,2} \w+ \d{4}$/);
+    await this.validateSubmittedPcrDetails('Request status', 'Submitted to Monitoring Officer');
+    await this.validateSubmittedPcrDetails('Request started', /^\d{1,2} \w+ \d{4}$/);
   }
 
   // Validate user cannot create a request without selecting atleast one pcr
