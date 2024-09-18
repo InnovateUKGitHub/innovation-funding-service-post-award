@@ -63,7 +63,7 @@ export class ProjectContactsRepository
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
-    return this.where(soql`Acc_ContactId__c = (SELECT ContactId FROM User WHERE Username = ${email})`);
+    return this.where(soql`Acc_ContactId__c IN (SELECT ContactId FROM User WHERE Username = ${email})`);
   }
 
   public async update(contacts: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
