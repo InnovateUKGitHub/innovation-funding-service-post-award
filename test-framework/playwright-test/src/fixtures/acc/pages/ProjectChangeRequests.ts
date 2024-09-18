@@ -103,7 +103,7 @@ class ProjectChangeRequests {
     this.pcrValidationsError = this.page.locator('.govuk-error-summary__body');
   }
 
-  async validateSumbmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
+  async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
     const element = this.submittedDetails.replace('%s', fieldName);
 
     const actualValue = await this.page.textContent(element);
