@@ -21,7 +21,7 @@
     "run:at": "TEST_SALESFORCE_SANDBOX=at turbo run"
   },
   "dependencies": {
-    "turbo": "^2.0.6"
+    "turbo": "^2.1.1"
   },
   "packageManager": "npm@10.5.2"
 }
