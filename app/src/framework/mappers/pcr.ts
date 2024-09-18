@@ -14,7 +14,7 @@ import { ProjectRole, ProjectRoleName } from "@framework/dtos/projectContactDto"
 
 export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMethod => {
   switch (type) {
-    case "New Team Member":
+    case "Invite":
       return ManageTeamMemberMethod.CREATE;
     case "Replaced":
       return ManageTeamMemberMethod.REPLACE;
@@ -32,7 +32,7 @@ export const mapToSalesforcePCRManageTeamMemberType = (
 ): string | null | undefined => {
   switch (type) {
     case ManageTeamMemberMethod.CREATE:
-      return "New Team Member";
+      return "Invite";
     case ManageTeamMemberMethod.REPLACE:
       return "Replaced";
     case ManageTeamMemberMethod.UPDATE:
