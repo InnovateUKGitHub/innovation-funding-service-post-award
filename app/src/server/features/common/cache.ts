@@ -19,7 +19,7 @@ export class Cache<T> implements ICache<T> {
     if (result) {
       return Promise.resolve(result);
     }
-    return this.set(key, await get());
+    return get().then(x => this.set(key, x));
   }
 
   set(key: string, item: T): T {

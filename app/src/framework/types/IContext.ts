@@ -40,7 +40,6 @@ import { IProjectRepository } from "@server/repositories/projectsRepository";
 import { IRecordTypeRepository } from "@server/repositories/recordTypeRepository";
 import { Cache } from "@server/features/common/cache";
 import { Option } from "@framework/dtos/option";
-import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 export interface IRepositories {
   readonly accounts: IAccountsRepository;

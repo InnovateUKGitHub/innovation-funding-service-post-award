@@ -1,6 +1,5 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
-import { IContext } from "@framework/types/IContext";
 import { IClientUser } from "@framework/types/IUser";
 import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { contextProvider } from "@server/features/common/contextProvider";
@@ -31,6 +30,7 @@ import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { ServerErrorContextProvider } from "@ui/context/server-error";
+import { configuration } from "./features/common/config";
 
 interface IServerApp {
   requestUrl: string;
@@ -93,12 +93,10 @@ const serverRender =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
-    const context = await contextProvider.start({ user: req.session?.user, traceId: res.locals.traceId });
-    const clientConfig = getClientConfig(context);
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;
-
     const jsDisabled = req.headers["x-acc-js-disabled"] === "true";
+    const clientConfig = getClientConfig();
 
     try {
       let auth: Authorisation;
@@ -115,6 +113,7 @@ const serverRender =
           userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
         };
       } else {
+        const context = await contextProvider.start({ user: req.session?.user, traceId: res?.locals.traceId });
         auth = await context.runQuery(new GetAllProjectRolesForUser());
         user = {
           roleInfo: auth.permissions,
@@ -290,15 +289,15 @@ function renderApp(props: {
 /**
  * Pick the ClientConfig from Context.
  */
-function getClientConfig(context: IContext): IClientConfig {
+function getClientConfig(): IClientConfig {
   return {
-    ifsRoot: context.config.urls.ifsRoot,
-    features: context.config.features,
-    ssoEnabled: context.config.sso.enabled,
-    options: context.config.options,
-    accEnvironment: context.config.accEnvironment,
-    logLevel: context.config.logLevel,
-    developer: { oidc: { enabled: context.config.developer.oidc.enabled } },
+    ifsRoot: configuration.urls.ifsRoot,
+    features: configuration.features,
+    ssoEnabled: configuration.sso.enabled,
+    options: configuration.options,
+    accEnvironment: configuration.accEnvironment,
+    logLevel: configuration.logLevel,
+    developer: { oidc: { enabled: configuration.developer.oidc.enabled } },
   };
 }
 

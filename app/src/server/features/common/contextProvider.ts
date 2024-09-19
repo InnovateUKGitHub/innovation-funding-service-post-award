@@ -13,15 +13,15 @@ class ContextProvider {
     });
   }
 
-  async start({ user, traceId }: { user: ISessionUser; traceId: string }): Promise<IContext> {
-    const [connection, systemConnection, bankConnection] = await Promise.all([
+  start({ user, traceId }: { user: ISessionUser; traceId: string }): Promise<IContext> {
+    return Promise.all([
       this.getConnection(user.email),
       this.getConnection(configuration.salesforceServiceUser.serviceUsername),
       this.getConnection(configuration.bankDetailsValidationUser.serviceUsername),
-    ]);
-
-    const context = new Context({ user, traceId, connection, systemConnection, bankConnection });
-    return context;
+    ]).then(
+      ([connection, systemConnection, bankConnection]) =>
+        new Context({ user, traceId, connection, systemConnection, bankConnection }),
+    );
   }
 }
 
