@@ -70,6 +70,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
     claimOverrideAwardRates,
     partners,
     pcrItemId: itemId,
+    currentPartnerId: partnerId,
   };
 
   const mapFinancialVirement = useMapOverwrittenFinancialVirements(mapReallocateCostsProps);

@@ -54,6 +54,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
       showValidationErrors: true,
       submit: this.submit,
       pcrItemType: pcrItem.type,
+      validateOnlyCurrentPartner: true,
     });
 
     if (!validator.isValid) {

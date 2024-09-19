@@ -61,6 +61,7 @@ interface MappedFinancialVirementDto extends FinancialVirementDto {
   grantDifference: number;
   costDifference: number;
   partners: MappedFinancialVirementParticipantDto[];
+  currentPartnerId?: PartnerId;
 }
 
 interface MappedFinancialVirementMeta {
@@ -83,6 +84,7 @@ interface MapVirements {
   claimOverrideAwardRates?: ClaimOverrideRateDto;
   partners: Partner[];
   pcrItemId: PcrItemId;
+  currentPartnerId?: PartnerId;
 }
 
 const mapCostCategory = ({
@@ -198,6 +200,7 @@ const mapVirements = ({
   claimOverrideAwardRates,
   partners,
   pcrItemId,
+  currentPartnerId,
 }: MapVirements): MappedFinancialVirement => {
   let costsClaimedToDate = 0;
   let originalEligibleCosts = 0;
@@ -273,6 +276,7 @@ const mapVirements = ({
       originalFundingLevel: roundCurrency(originalFundingLevel),
       newFundingLevel: roundCurrency(newFundingLevel),
       pcrItemId,
+      currentPartnerId,
     },
     virementMeta: {
       hasMatchingGrant,

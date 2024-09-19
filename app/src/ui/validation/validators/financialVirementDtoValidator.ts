@@ -171,6 +171,7 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
     showValidationErrors: boolean;
     readonly submit: boolean;
     readonly pcrItemType?: PCRItemType;
+    validateOnlyCurrentPartner?: boolean;
   }) {
     super({ model, showValidationErrors });
     this.submit = submit;

@@ -57,6 +57,7 @@ export const mapOverwrittenFinancialVirements =
     claimOverrideAwardRates,
     partners,
     pcrItemId,
+    currentPartnerId,
   }: MapVirements) =>
   (virements?: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"]) =>
     mapVirements({
@@ -65,6 +66,7 @@ export const mapOverwrittenFinancialVirements =
       claimOverrideAwardRates,
       partners,
       pcrItemId,
+      currentPartnerId,
     });
 
 export const useMapOverwrittenFinancialVirements = (props: MapVirements) =>

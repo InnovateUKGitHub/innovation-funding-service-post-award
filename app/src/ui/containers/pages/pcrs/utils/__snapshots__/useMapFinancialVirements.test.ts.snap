@@ -6,6 +6,7 @@ exports[`mapFinancialVirements should map the virements into the correct format 
   "virementData": {
     "costDifference": 1,
     "costsClaimedToDate": 7400,
+    "currentPartnerId": undefined,
     "grantDifference": -653956.06,
     "newEligibleCosts": 2750001,
     "newFundingLevel": 59.69,
