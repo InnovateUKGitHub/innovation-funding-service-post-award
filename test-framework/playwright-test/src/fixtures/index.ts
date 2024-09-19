@@ -38,7 +38,6 @@ type AccFixtures = {
   // Misc
   accNavigation: AccNavigation;
   commands: Commands;
-  ktp: AccProjectKTP;
 
   // ACC
   accUserSwitcher: AccUserSwitcher;
@@ -71,7 +70,7 @@ export const test = base.extend<AccFixtures, Workers>({
   putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
 
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
-  manageTeamMember: ({ page, commands, ktp, accUserSwitcher, accNavigation }, use) =>
+  manageTeamMember: ({ page, commands, accProjectKTP, accUserSwitcher, accNavigation }, use) =>
     use(new ManageTeamMember({ page, commands, ktp, accUserSwitcher, accNavigation })),
   // Project Factory
   accProjectBase: [

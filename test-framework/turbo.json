@@ -4,7 +4,8 @@
     "build": {
       "cache": false,
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": ["TEST_SALESFORCE_SANDBOX"]
     },
     "test": {
       "dependsOn": ["build"]
