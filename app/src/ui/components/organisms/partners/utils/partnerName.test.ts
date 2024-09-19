@@ -28,7 +28,7 @@ describe("getPartnerName()", () => {
         test.each`
           name                                                   | partnerObject                                 | expectedName
           ${"when showIsLead is true with isWithdrawn is false"} | ${{ ...stubLeadPartner, isWithdrawn: false }} | ${`${stubLeadPartner.name} (Lead)`}
-          ${"when showIsLead is true with isWithdrawn is true"}  | ${{ ...stubLeadPartner, isWithdrawn: true }}  | ${`${stubLeadPartner.name} (withdrawn) (Lead)`}
+          ${"when showIsLead is true with isWithdrawn is true"}  | ${{ ...stubLeadPartner, isWithdrawn: true }}  | ${`${stubLeadPartner.name} (Withdrawn) (Lead)`}
         `("$name", ({ partnerObject, expectedName }) => {
           const partnerName = getPartnerName(partnerObject, true);
 
@@ -40,7 +40,7 @@ describe("getPartnerName()", () => {
         test.each`
           name                                                    | partnerObject                                 | expectedName
           ${"when showIsLead is false with isWithdrawn is false"} | ${{ ...stubLeadPartner, isWithdrawn: false }} | ${stubLeadPartner.name}
-          ${"when showIsLead is false with isWithdrawn is true"}  | ${{ ...stubLeadPartner, isWithdrawn: true }}  | ${`${stubLeadPartner.name} (withdrawn)`}
+          ${"when showIsLead is false with isWithdrawn is true"}  | ${{ ...stubLeadPartner, isWithdrawn: true }}  | ${`${stubLeadPartner.name} (Withdrawn)`}
         `("$name", ({ partnerObject, expectedName }) => {
           const partnerName = getPartnerName(partnerObject);
 
@@ -55,12 +55,12 @@ describe("getPartnerName()", () => {
         isWithdrawn: true,
       };
 
-      describe("when showWidthdrawn is true", () => {
+      describe("when showWithdrawn is true", () => {
         describe("when showIsLead is true", () => {
           test.each`
             name                                               | partnerObject                                 | expectedName
-            ${"when showIsLead is false with isLead is false"} | ${{ ...stubWithdrawnPartner, isLead: false }} | ${`${stubWithdrawnPartner.name} (withdrawn)`}
-            ${"when showIsLead is false with isLead is true"}  | ${{ ...stubWithdrawnPartner, isLead: true }}  | ${`${stubWithdrawnPartner.name} (withdrawn) (Lead)`}
+            ${"when showIsLead is false with isLead is false"} | ${{ ...stubWithdrawnPartner, isLead: false }} | ${`${stubWithdrawnPartner.name} (Withdrawn)`}
+            ${"when showIsLead is false with isLead is true"}  | ${{ ...stubWithdrawnPartner, isLead: true }}  | ${`${stubWithdrawnPartner.name} (Withdrawn) (Lead)`}
           `("$name", ({ partnerObject, expectedName }) => {
             const partnerName = getPartnerName(partnerObject, true);
 
@@ -71,8 +71,8 @@ describe("getPartnerName()", () => {
         describe("when showIsLead is false", () => {
           test.each`
             name                                               | partnerObject                                 | expectedName
-            ${"when showIsLead is false with isLead is false"} | ${{ ...stubWithdrawnPartner, isLead: false }} | ${`${stubWithdrawnPartner.name} (withdrawn)`}
-            ${"when showIsLead is false with isLead is true"}  | ${{ ...stubWithdrawnPartner, isLead: true }}  | ${`${stubWithdrawnPartner.name} (withdrawn)`}
+            ${"when showIsLead is false with isLead is false"} | ${{ ...stubWithdrawnPartner, isLead: false }} | ${`${stubWithdrawnPartner.name} (Withdrawn)`}
+            ${"when showIsLead is false with isLead is true"}  | ${{ ...stubWithdrawnPartner, isLead: true }}  | ${`${stubWithdrawnPartner.name} (Withdrawn)`}
           `("$name", ({ partnerObject, expectedName }) => {
             const partnerName = getPartnerName(partnerObject);
 

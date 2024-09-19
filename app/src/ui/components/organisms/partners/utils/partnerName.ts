@@ -13,7 +13,7 @@ export function getPartnerName(partner?: PartnerNameValues | null, showIsLead = 
   let finalName = partner.name;
 
   if (showWithdrawn && partner.isWithdrawn) {
-    finalName += " (withdrawn)";
+    finalName += " (Withdrawn)";
   }
   if (showIsLead && partner.isLead) {
     finalName += " (Lead)";

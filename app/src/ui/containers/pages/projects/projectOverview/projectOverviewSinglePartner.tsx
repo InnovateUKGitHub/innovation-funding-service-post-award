@@ -6,7 +6,7 @@ import type { Partner } from "./projectOverview.logic";
 
 export const ProjectOverviewSinglePartnerDetails = ({ partner }: { partner: Partner }) => {
   const PartnerSummaryDetails = TypedDetails<Partner>();
-  const partnerName = getPartnerName(partner);
+  const partnerName = getPartnerName(partner, true, false);
 
   return (
     <SectionPanel
