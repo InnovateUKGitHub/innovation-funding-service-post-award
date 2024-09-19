@@ -30,10 +30,10 @@ export interface ClientErrorResponse {
   details?: IAppDetailedError[];
   cause?: ClientErrorResponse | null;
   stack?: string | null;
-  traceId: string;
+  traceId: string | null;
 }
 
-export const getErrorResponse = (err: unknown, traceId: string): ClientErrorResponse => {
+export const getErrorResponse = (err: unknown, traceId: string | null): ClientErrorResponse => {
   const isError = err instanceof Error;
 
   const code = isError && "code" in err ? (err.code as ErrorCode) : ErrorCode.UNKNOWN_ERROR;

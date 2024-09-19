@@ -28,7 +28,7 @@ export const ErrorContainer = ({ error }: { error?: ClientErrorResponse | null }
  * Requires Providers and page layout because fallback lies outside main react component tree
  */
 export function ErrorBoundaryFallback({ error }: FallbackProps) {
-  const errorPayload = getErrorResponse(error, "// TODO: Add Trace ID");
+  const errorPayload = getErrorResponse(error, null);
   const content = useInitContent();
   const config = useClientConfig();
 
