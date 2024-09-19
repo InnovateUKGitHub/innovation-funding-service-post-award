@@ -8,6 +8,7 @@ import { NotFoundError, ForbiddenError, ValidationError, BadRequestError, AppErr
 import { AsyncCommandBase, SyncCommandBase } from "./commandBase";
 import { constructErrorResponse, Context } from "./context";
 import { AsyncQueryBase, SyncQueryBase } from "./queryBase";
+import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 describe("constructErrorResponse", () => {
   test.each`
@@ -34,7 +35,13 @@ describe("constructErrorResponse", () => {
 });
 
 describe("Context", () => {
-  const context = new Context({ user: { email: "user@email.com" }, traceId: "ctx" });
+  const context = new Context({
+    user: { email: "user@email.com" },
+    traceId: "ctx",
+    connection: { email: "user@email.com" } as unknown as TsforceConnection,
+    bankConnection: { email: "bank@email.com" } as unknown as TsforceConnection,
+    systemConnection: { email: "system@email.com" } as unknown as TsforceConnection,
+  });
 
   it("should contain the repositories", () => {
     expect(context.repositories).toMatchSnapshot();
@@ -142,8 +149,15 @@ describe("Context", () => {
       it("should return the context as a system user", () => {
         const systemUserEmail = context.asSystemUser().user;
 
-        expect(systemUserEmail).not.toEqual({ email: "user@email.com" });
-        expect(systemUserEmail).toEqual({ email: "" });
+        expect(systemUserEmail).toEqual({ email: "system@email.com" });
+      });
+    });
+
+    describe("asBankDetailsValidationUser", () => {
+      it("should return the context as a system user", () => {
+        const systemUserEmail = context.asBankDetailsValidationUser().user;
+
+        expect(systemUserEmail).toEqual({ email: "bank@email.com" });
       });
     });
   });
