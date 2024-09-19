@@ -27,10 +27,6 @@ export interface ISalesforceTokenDetails {
   clientId: string;
 }
 
-export interface ISalesforceConnectionDetails extends ISalesforceTokenDetails {
-  serviceUsername: string;
-}
-
 export interface ITokenInfo {
   accessToken: string;
   url: string;
@@ -56,39 +52,39 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
   body.append("assertion", jwtToken);
 
   const request = await fetch(`${config.connectionUrl}/services/oauth2/token`, { method: "POST", body });
-  const tokenQuery: ISalesforceTokenQuery = await request.json();
+  const tokenBody = await request.text();
 
-  if ("error" in tokenQuery) {
-    throw new SalesforceTokenError({ message: tokenQuery.error });
-  }
-  if (!request.ok) {
-    throw new SalesforceTokenError({ message: `Request failed with status ${request.status} - ${tokenQuery}` });
-  }
+  try {
+    const tokenQuery: ISalesforceTokenQuery = JSON.parse(tokenBody);
 
-  return {
-    url: tokenQuery.sfdc_community_url,
-    accessToken: tokenQuery.access_token,
-  };
+    if ("error" in tokenQuery) return Promise.reject(new SalesforceTokenError(tokenQuery));
+    if (!request.ok) return Promise.reject(new SalesforceTokenError(request.status));
+
+    return {
+      url: tokenQuery.sfdc_community_url,
+      accessToken: tokenQuery.access_token,
+    };
+  } catch {
+    return Promise.reject(new SalesforceTokenError(tokenBody));
+  }
 };
 
 export const getCachedSalesforceAccessToken = async (
-  salesforceDetails: ISalesforceConnectionDetails,
+  salesforceDetails: ISalesforceTokenDetails,
 ): Promise<ITokenInfo> => {
-  const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
-  const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
-
-  return signedToken;
+  const fetchToken = () => getSalesforceAccessToken(salesforceDetails);
+  return tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 };
 
 export const salesforceConnectionWithToken = async (
   salesforceDetails: ISalesforceTokenDetails,
 ): Promise<TsforceConnection> => {
-  const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
-  const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
-
-  return new TsforceConnection({
-    accessToken: signedToken.accessToken,
-    instanceUrl: signedToken.url,
-    email: salesforceDetails.currentUsername,
-  });
+  return getCachedSalesforceAccessToken(salesforceDetails).then(
+    signedToken =>
+      new TsforceConnection({
+        accessToken: signedToken.accessToken,
+        instanceUrl: signedToken.url,
+        email: salesforceDetails.currentUsername,
+      }),
+  );
 };

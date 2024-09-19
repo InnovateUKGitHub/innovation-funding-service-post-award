@@ -60,7 +60,6 @@ class TsforceConnection {
     const { accessToken, url } = await getCachedSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
-      serviceUsername: configuration.salesforceServiceUser.serviceUsername,
       currentUsername: email,
     });
 
