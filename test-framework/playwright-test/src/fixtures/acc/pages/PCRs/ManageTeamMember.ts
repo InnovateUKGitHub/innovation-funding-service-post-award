@@ -69,20 +69,20 @@ class ManageTeamMember {
     page,
     commands,
     ktp,
-    userswitcher,
-    navigation,
+    accUserSwitcher,
+    accNavigation,
   }: {
     page: Page;
     commands: Commands;
     ktp: AccProjectKTP;
-    userswitcher: AccUserSwitcher;
-    navigation: AccNavigation;
+    accUserSwitcher: AccUserSwitcher;
+    accNavigation: AccNavigation;
   }) {
     this.page = page;
     this.commands = commands;
     this.ktp = ktp;
-    this.userswitcher = userswitcher;
-    this.navigation = navigation;
+    this.userswitcher = accUserSwitcher;
+    this.navigation = accNavigation;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
     this.backProject = this.commands.backLink("Back to project");
     this.dashboardGuidance = this.page.getByText("You have no ongoing requests.");
