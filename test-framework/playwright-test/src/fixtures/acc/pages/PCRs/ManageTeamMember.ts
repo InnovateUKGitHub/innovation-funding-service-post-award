@@ -13,7 +13,7 @@ export
 class ManageTeamMember {
   protected readonly page: Page;
   protected readonly commands: Commands;
-  protected readonly ktp: AccProjectKTP;
+  protected readonly accProjectKTP: AccProjectKTP;
   protected readonly userswitcher: AccUserSwitcher;
   protected readonly navigation: AccNavigation;
   private readonly dashboardTitle: PageHeading;
@@ -68,19 +68,19 @@ class ManageTeamMember {
   constructor({
     page,
     commands,
-    ktp,
+    accProjectKTP,
     accUserSwitcher,
     accNavigation,
   }: {
     page: Page;
     commands: Commands;
-    ktp: AccProjectKTP;
+    accProjectKTP: AccProjectKTP;
     accUserSwitcher: AccUserSwitcher;
     accNavigation: AccNavigation;
   }) {
     this.page = page;
     this.commands = commands;
-    this.ktp = ktp;
+    this.accProjectKTP = accProjectKTP;
     this.userswitcher = accUserSwitcher;
     this.navigation = accNavigation;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
@@ -177,7 +177,7 @@ class ManageTeamMember {
 
   @Given("a PM of a KTP project has created a new Project Change Request")
   async ktpPCRCreated() {
-    this.ktp.create();
+    this.accProjectKTP.create();
     this.userswitcher.switchToProjectManager();
     this.navigation.gotoPCRPage();
     this.userClicksCreate();
