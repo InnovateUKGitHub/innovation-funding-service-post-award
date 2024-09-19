@@ -20,10 +20,14 @@ const ErrorInformation = ({ error }: { error: ClientErrorResponse }) => {
           header: getContent(x => x.components.errorInformation.page),
           description: <SimpleString>{location.pathname}</SimpleString>,
         },
-        {
-          header: getContent(x => x.components.errorInformation.tid),
-          description: <SimpleString>{traceId}</SimpleString>,
-        },
+        ...(error.traceId
+          ? [
+              {
+                header: getContent(x => x.components.errorInformation.tid),
+                description: <SimpleString>{traceId}</SimpleString>,
+              },
+            ]
+          : []),
         ...(error.message
           ? [
               {
