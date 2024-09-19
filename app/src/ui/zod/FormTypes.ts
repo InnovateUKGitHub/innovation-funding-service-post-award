@@ -13,6 +13,7 @@ enum FormTypes {
   ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
 
   // Project Setup
+  ProjectSetup = "projectSetup",
   ProjectSetupBankDetails = "projectSetupBankDetails",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",
   ProjectSetupForecast = "projectSetupForecast",

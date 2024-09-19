@@ -53,6 +53,7 @@ export function PartnerDetailsEditComponent({
 
   const { register, handleSubmit, formState } = useForm<SchemaType>({
     defaultValues: {
+      form: isSetup ? FormTypes.ProjectSetupPostcode : FormTypes.PartnerDetailsEdit,
       postcode: partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
       postcodeStatus: partner.postcodeStatus,
@@ -66,6 +67,8 @@ export function PartnerDetailsEditComponent({
   const validatorErrors = useRhfErrors<SchemaType>(formState.errors);
 
   const postcodeError = validatorErrors?.postcode as RhfErrors;
+
+  console.log("partner", partner);
   return (
     <Page
       fragmentRef={fragmentRef}
@@ -77,7 +80,7 @@ export function PartnerDetailsEditComponent({
       <Form onSubmit={handleSubmit(data => onUpdate({ data: { ...data, postcode: data.postcode ?? "" } }))}>
         <input
           type="hidden"
-          {...register("form")}
+          name="form"
           value={isSetup ? FormTypes.ProjectSetupPostcode : FormTypes.PartnerDetailsEdit}
         />
         <input type="hidden" name="postcodeStatus" value={partner.postcodeStatus} />

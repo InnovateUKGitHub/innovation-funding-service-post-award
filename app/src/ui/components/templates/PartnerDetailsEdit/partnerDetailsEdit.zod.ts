@@ -10,14 +10,14 @@ export const postcodeErrorMap = makeZodI18nMap({ keyPrefix: ["partnerDetailsEdit
 export const postcodeSchema = evaluateObject(
   (data: { postcodeStatus: PostcodeTaskStatus; isSetup: boolean; partnerStatus: PartnerStatus }) => {
     return {
-      form: z.literal(FormTypes.PartnerDetailsEdit),
+      form: z.union([z.literal(FormTypes.ProjectSetupPostcode), z.literal(FormTypes.PartnerDetailsEdit)]),
       postcodeStatus: z.nativeEnum(PostcodeTaskStatus),
       partnerStatus: z.nativeEnum(PartnerStatus),
       isSetup: z.boolean(),
       postcode: getTextValidation({
         maxLength: 10,
         required: data.isSetup
-          ? data.partnerStatus === PartnerStatus.Active
+          ? data.partnerStatus !== PartnerStatus.Active
           : data.postcodeStatus !== PostcodeTaskStatus.ToDo,
       }),
     };
