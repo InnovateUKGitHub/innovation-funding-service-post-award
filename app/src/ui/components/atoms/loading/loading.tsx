@@ -46,7 +46,7 @@ const GraphQLLoader = <T extends OperationType>({
   error,
 }: Pick<graphqlLoadingAndErrorType<T>, "error" | "isLoading">) => {
   if (isLoading) return <LoadingMessage />;
-  if (error) return <ErrorContainer error={getErrorResponse(error, "// TODO: Add a trace ID thing here")} />;
+  if (error) return <ErrorContainer error={getErrorResponse(error, null)} />;
 
   return null;
 };
