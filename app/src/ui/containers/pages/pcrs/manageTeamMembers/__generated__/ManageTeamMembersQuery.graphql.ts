@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<92c075d3a6615a05a32d0be1e2ff5452>>
+ * @generated SignedSource<<c45652e5f5637f452f706e2b525e2490>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -28,6 +28,9 @@ export type ManageTeamMembersQuery$data = {
                       readonly Name: {
                         readonly value: string | null | undefined;
                       } | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_ParticipantType__c: {
+                      readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Id: string;
                   } | null | undefined;
@@ -195,6 +198,16 @@ v5 = {
                             (v2/*: any*/),
                             (v4/*: any*/)
                           ],
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "PicklistValue",
+                          "kind": "LinkedField",
+                          "name": "Acc_ParticipantType__c",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
                           "storageKey": null
                         }
                       ],
@@ -644,16 +657,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "86accb63fc7e02a5a46dc3901ec93603",
+    "cacheID": "d508d396cc468efa959520f20461aaa7",
     "id": null,
     "metadata": {},
     "name": "ManageTeamMembersQuery",
     "operationKind": "query",
-    "text": "query ManageTeamMembersQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(where: {Acc_Inactive__c: {ne: true}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      FirstName {\n                        value\n                      }\n                      LastName {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ManageTeamMembersQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(where: {Acc_Inactive__c: {ne: true}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      FirstName {\n                        value\n                      }\n                      LastName {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "72df6214df6cacd4fb53c47f52d99605";
+(node as any).hash = "0f9c2aaf0874e8551e45617b9e2ad11b";
 
 export default node;

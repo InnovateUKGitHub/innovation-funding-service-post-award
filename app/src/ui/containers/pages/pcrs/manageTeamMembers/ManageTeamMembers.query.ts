@@ -20,6 +20,9 @@ const manageTeamMembersQuery = graphql`
                           value
                         }
                       }
+                      Acc_ParticipantType__c {
+                        value
+                      }
                     }
                   }
                 }

@@ -39,7 +39,7 @@ interface ManageTeamMembersActionContext {
     mainCompanyContacts: ManageTeamMembersTableData[];
     knowledgeBaseAdministrators: ManageTeamMembersTableData[];
   };
-  partners: Pick<PartnerDto, "id" | "accountId" | "name">[];
+  filteredPartners: Pick<PartnerDto, "id" | "accountId" | "name" | "type">[];
   isFetching: boolean;
   onUpdate: ReturnType<typeof useOnManageTeamMemberSubmit>["onUpdate"];
   memberToManage: ReturnType<typeof getManageTeamMember>["memberToManage"];
@@ -105,7 +105,13 @@ const BaseManageTeamMember = ({
   const validationErrors = useZodErrors<z.output<ManageTeamMemberValidatorSchema>>(setError, formState.errors);
 
   const { collated, categories, fragmentRef, partners } = useManageTeamMembersQuery({ projectId });
-  const { memberToManage, defaults, hideBottomSection } = useManageTeamMembers({ pclId, collated, method });
+  const { memberToManage, defaults, hideBottomSection, filteredPartners } = useManageTeamMembers({
+    pclId,
+    collated,
+    method,
+    role,
+    partners,
+  });
 
   const validPage =
     ManageTeamMemberMethods.includes(method) &&
@@ -150,7 +156,7 @@ const BaseManageTeamMember = ({
             method,
             collated,
             categories,
-            partners,
+            filteredPartners,
             onUpdate,
             isFetching,
             memberToManage,

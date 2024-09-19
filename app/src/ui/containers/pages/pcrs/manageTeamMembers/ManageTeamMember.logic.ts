@@ -51,11 +51,15 @@ const getManageTeamMember = ({
   pclId,
   collated,
   method,
+  role,
+  partners,
   defaults,
 }: {
   pclId?: ProjectContactLinkId;
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
   method: ManageTeamMemberMethod;
+  role: ProjectRole;
+  partners: Pick<PartnerDto, "id" | "accountId" | "name" | "type">[];
   defaults: FieldValues | null;
 }) => {
   const memberToManage = pclId && collated.get(pclId);
@@ -69,6 +73,7 @@ const getManageTeamMember = ({
   let defaultStartMonth: string | undefined;
   let defaultStartYear: string | undefined;
   let hideBottomSection = false;
+  let filteredPartners = partners;
 
   switch (method) {
     case ManageTeamMemberMethod.CREATE:
@@ -87,6 +92,13 @@ const getManageTeamMember = ({
           defaults?.startDate && "year" in defaults?.startDate
             ? defaults?.startDate.year
             : getYear(defaults?.startDate);
+        if (
+          role === ProjectRole.ASSOCIATE ||
+          role === ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR ||
+          role === ProjectRole.MAIN_COMPANY_CONTACT
+        ) {
+          filteredPartners = filteredPartners.filter(x => x.type === "Knowledge base");
+        }
       }
       break;
     case ManageTeamMemberMethod.REPLACE:
@@ -121,6 +133,7 @@ const getManageTeamMember = ({
       startYear: defaultStartYear,
     },
     hideBottomSection,
+    filteredPartners,
   };
 };
 
@@ -128,13 +141,20 @@ const useManageTeamMembers = ({
   pclId,
   collated,
   method,
+  role,
+  partners,
 }: {
   pclId?: ProjectContactLinkId;
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
   method: ManageTeamMemberMethod;
+  role: ProjectRole;
+  partners: Pick<PartnerDto, "id" | "accountId" | "name" | "type">[];
 }) => {
   const defaults = useServerInput();
-  return useMemo(() => getManageTeamMember({ pclId, collated, method, defaults }), [pclId, collated, method, defaults]);
+  return useMemo(
+    () => getManageTeamMember({ pclId, collated, method, partners, role, defaults }),
+    [pclId, collated, method, defaults],
+  );
 };
 
 type PclData = Pick<
@@ -166,7 +186,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
   const partnersGql = projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [];
   const contactsGql = projectNode?.Project_Contact_Links__r?.edges ?? [];
 
-  const partners = mapToPartnerDtoArray(partnersGql, ["id", "name", "accountId"], {});
+  const partners = mapToPartnerDtoArray(partnersGql, ["id", "name", "accountId", "type"], {});
 
   const pcls = mapToContactDtoArray(contactsGql, [
     "accountId",

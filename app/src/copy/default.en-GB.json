@@ -3209,6 +3209,14 @@
         "email": {
           "label": "Email"
         },
+        "partnerId": {
+          "placeholder": "-- Select an organisation --",
+          "errors": {
+            "invalid_string": {
+              "startsWith": "Select an organisation."
+            }
+          }
+        },
         "startDate": {
           "day": {
             "errors": {
