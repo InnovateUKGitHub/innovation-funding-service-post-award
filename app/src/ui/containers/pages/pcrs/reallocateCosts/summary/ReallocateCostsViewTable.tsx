@@ -31,31 +31,31 @@ const FinancialVirementsViewTable = ({
       <THead>
         <TR>
           <TH small className={colClass}>
-            {getContent(x => x.financialVirementLabels.partnerName)}
+            {getContent(x => x.reallocateCostsLabels.partnerName)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.partnerOriginalEligibleCosts)}
+            {getContent(x => x.reallocateCostsLabels.partnerOriginalEligibleCosts)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.partnerNewEligibleCosts)}
+            {getContent(x => x.reallocateCostsLabels.partnerNewEligibleCosts)}
           </TH>
           <TH small numeric className={colClass}>
-            {getContent(x => x.financialVirementLabels.partnerDifferenceCosts)}
+            {getContent(x => x.reallocateCostsLabels.partnerDifferenceCosts)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.originalFundingLevel)}
+            {getContent(x => x.reallocateCostsLabels.originalFundingLevel)}
           </TH>
           <TH small numeric className={colClass}>
-            {getContent(x => x.financialVirementLabels.newFundingLevel)}
+            {getContent(x => x.reallocateCostsLabels.newFundingLevel)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant)}
+            {getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingGrant)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.partnerNewRemainingGrant)}
+            {getContent(x => x.reallocateCostsLabels.partnerNewRemainingGrant)}
           </TH>
           <TH small numeric>
-            {getContent(x => x.financialVirementLabels.partnerDifferenceGrant)}
+            {getContent(x => x.reallocateCostsLabels.partnerDifferenceGrant)}
           </TH>
         </TR>
       </THead>
@@ -64,7 +64,7 @@ const FinancialVirementsViewTable = ({
           <TR key={x.virementParticipantId}>
             <TD small className={colClass}>
               <Link
-                route={routes.pcrFinancialVirementDetails.getLink({
+                route={routes.pcrReallocateCostsDetails.getLink({
                   projectId,
                   partnerId: x.partnerId,
                   itemId,
@@ -105,7 +105,7 @@ const FinancialVirementsViewTable = ({
       <TFoot>
         <TR>
           <TH small className={colClass}>
-            {getContent(x => x.financialVirementLabels.projectTotals)}
+            {getContent(x => x.reallocateCostsLabels.projectTotals)}
           </TH>
           <TH small numeric>
             <Currency value={virementData.originalEligibleCosts} />

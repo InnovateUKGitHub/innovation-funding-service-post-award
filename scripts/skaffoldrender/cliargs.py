@@ -53,7 +53,9 @@ _parser.add_argument(
         "uat",
         "custom",
         "at",
-        "capdev"
+        "capdev",
+        "capconfig",
+        "captest"
     ],
     dest="environments",
 )

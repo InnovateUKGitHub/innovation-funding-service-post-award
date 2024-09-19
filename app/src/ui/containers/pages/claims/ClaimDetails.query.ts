@@ -228,6 +228,9 @@ export const claimDetailsQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
+                Acc_PeriodCoststobePaid__c {
+                  value
+                }
               }
             }
           }

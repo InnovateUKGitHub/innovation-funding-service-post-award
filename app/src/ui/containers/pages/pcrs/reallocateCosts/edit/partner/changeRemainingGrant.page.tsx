@@ -20,7 +20,7 @@ import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { sumBy } from "lodash";
 import { useOnUpdateChangeRemainingGrant, getPayload } from "./changeRemainingGrant.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
-import { usePcrFinancialVirementData } from "../../PcrFinancialVirement.logic";
+import { usePcrReallocateCostsData } from "../../PcrReallocateCosts.logic";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { parseCurrency } from "@framework/util/numberHelper";
@@ -37,15 +37,15 @@ export function useChangeRemainingGrantContent() {
     remainingGrantInfoCheckRules: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.checkRules),
     remainingGrantInfoRemainingGrant: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.remainingGrant),
     remainingGrantInfoFundingLevel: getContent(x => x.pages.changeRemainingGrant.remainingGrantInfo.fundingLevel),
-    partnerName: getContent(x => x.financialVirementLabels.partnerName),
-    partnerOriginalRemainingCosts: getContent(x => x.financialVirementLabels.partnerOriginalRemainingCosts),
-    partnerOriginalRemainingGrant: getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant),
-    originalFundingLevel: getContent(x => x.financialVirementLabels.originalFundingLevel),
-    partnerNewRemainingCosts: getContent(x => x.financialVirementLabels.partnerNewRemainingCosts),
-    partnerNewRemainingGrant: getContent(x => x.financialVirementLabels.partnerNewRemainingGrant),
-    newFundingLevel: getContent(x => x.financialVirementLabels.newFundingLevel),
-    projectTotals: getContent(x => x.financialVirementLabels.projectTotals),
-    backToSummary: getContent(x => x.financialVirementLabels.backToSummary),
+    partnerName: getContent(x => x.reallocateCostsLabels.partnerName),
+    partnerOriginalRemainingCosts: getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingCosts),
+    partnerOriginalRemainingGrant: getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingGrant),
+    originalFundingLevel: getContent(x => x.reallocateCostsLabels.originalFundingLevel),
+    partnerNewRemainingCosts: getContent(x => x.reallocateCostsLabels.partnerNewRemainingCosts),
+    partnerNewRemainingGrant: getContent(x => x.reallocateCostsLabels.partnerNewRemainingGrant),
+    newFundingLevel: getContent(x => x.reallocateCostsLabels.newFundingLevel),
+    projectTotals: getContent(x => x.reallocateCostsLabels.projectTotals),
+    backToSummary: getContent(x => x.reallocateCostsLabels.backToSummary),
     gbp: getContent(x => x.forms.prefix.gbp),
   };
 }
@@ -69,7 +69,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
     claimOverrideAwardRates,
     partners,
     fragmentRef,
-  } = usePcrFinancialVirementData({
+  } = usePcrReallocateCostsData({
     projectId: props.projectId,
     pcrId: props.pcrId,
     itemId: props.itemId,

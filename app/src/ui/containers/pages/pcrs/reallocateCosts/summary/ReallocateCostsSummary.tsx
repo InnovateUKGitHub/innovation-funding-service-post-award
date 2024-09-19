@@ -15,12 +15,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { PcrPage } from "../../pcrPage";
-import { useGrantMessage } from "./FinancialVirementsSummary.logic";
+import { useGrantMessage } from "./ReallocateCostsSummary.logic";
 import {
-  FinancialVirementsSummaryValidatorSchema,
-  financialVirementsSummaryErrorMap,
-  getFinancialVirementsSummaryValidator,
-} from "./FinancialVirementsSummary.zod";
+  ReallocateCostsSummaryValidatorSchema,
+  reallocateCostsSummaryErrorMap,
+  getReallocateCostsSummaryValidator,
+} from "./ReallocateCostsSummary.zod";
 import { Section } from "@ui/components/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -32,8 +32,8 @@ import { useMapFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { Button } from "@ui/components/atoms/Button/Button";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
-import { FinancialVirementsViewTable } from "./FinancialVirementsViewTable";
-import { usePcrFinancialVirementData } from "../PcrFinancialVirement.logic";
+import { FinancialVirementsViewTable } from "./ReallocateCostsViewTable";
+import { usePcrReallocateCostsData } from "../PcrReallocateCosts.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { parseCurrency } from "@framework/util/numberHelper";
 
@@ -43,7 +43,7 @@ export const FinancialVirementSummary = () => {
 
   const { projectId, pcrId, itemId, onSave, isFetching, mode, fetchKey } = usePcrWorkflowContext();
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
-    usePcrFinancialVirementData({ projectId, pcrId, itemId, fetchKey });
+    usePcrReallocateCostsData({ projectId, pcrId, itemId, fetchKey });
 
   const { virementData, virementMeta, isSummaryValid } = useMapFinancialVirements({
     financialVirementsForCosts,
@@ -51,13 +51,13 @@ export const FinancialVirementSummary = () => {
     partners,
     pcrItemId: itemId,
   });
-  const defaults = useServerInput<z.output<FinancialVirementsSummaryValidatorSchema>>();
+  const defaults = useServerInput<z.output<ReallocateCostsSummaryValidatorSchema>>();
 
   const { register, formState, handleSubmit, setError, getFieldState } = useForm<
-    z.output<FinancialVirementsSummaryValidatorSchema>
+    z.output<ReallocateCostsSummaryValidatorSchema>
   >({
     resolver: zodResolver(
-      getFinancialVirementsSummaryValidator({
+      getReallocateCostsSummaryValidator({
         mapFinancialVirementProps: {
           financialVirementsForCosts,
           financialVirementsForParticipants,
@@ -65,15 +65,15 @@ export const FinancialVirementSummary = () => {
           pcrItemId: itemId,
         },
       }),
-      { errorMap: financialVirementsSummaryErrorMap },
+      { errorMap: reallocateCostsSummaryErrorMap },
     ),
   });
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<FinancialVirementsSummaryValidatorSchema>>(setError, formState.errors);
+  const allErrors = useZodErrors<z.output<ReallocateCostsSummaryValidatorSchema>>(setError, formState.errors);
 
   const colClass = "acc-table__cell-right-border";
 
-  const onSubmitUpdate = (dto: z.output<FinancialVirementsSummaryValidatorSchema>) => {
+  const onSubmitUpdate = (dto: z.output<ReallocateCostsSummaryValidatorSchema>) => {
     onSave({
       data: {
         id: itemId,
@@ -105,15 +105,15 @@ export const FinancialVirementSummary = () => {
         <Table>
           <THead>
             <TR>
-              <TH className={colClass}>{getContent(x => x.financialVirementLabels.partnerName)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.partnerOriginalEligibleCosts)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.partnerOriginalRemainingCosts)}</TH>
+              <TH className={colClass}>{getContent(x => x.reallocateCostsLabels.partnerName)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerOriginalEligibleCosts)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingCosts)}</TH>
               <TH className={colClass} numeric>
-                {getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant)}
+                {getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingGrant)}
               </TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.partnerNewEligibleCosts)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.partnerNewRemainingCosts)}</TH>
-              <TH numeric>{getContent(x => x.financialVirementLabels.partnerNewRemainingGrant)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewEligibleCosts)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewRemainingCosts)}</TH>
+              <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewRemainingGrant)}</TH>
             </TR>
           </THead>
           <TBody>
@@ -125,7 +125,7 @@ export const FinancialVirementSummary = () => {
               >
                 <TD className={colClass}>
                   <Link
-                    route={routes.pcrFinancialVirementEditCostCategoryLevel.getLink({
+                    route={routes.pcrReallocateCostsEditCostCategoryLevel.getLink({
                       projectId,
                       partnerId: x.partnerId,
                       itemId,
@@ -159,7 +159,7 @@ export const FinancialVirementSummary = () => {
           </TBody>
           <TFoot>
             <TR>
-              <TH className={colClass}>{getContent(x => x.financialVirementLabels.projectTotals)}</TH>
+              <TH className={colClass}>{getContent(x => x.reallocateCostsLabels.projectTotals)}</TH>
               <TH numeric>
                 <Currency value={virementData.originalEligibleCosts} />
               </TH>
@@ -203,41 +203,38 @@ export const FinancialVirementSummary = () => {
             <P>
               <Content
                 components={[
-                  <EmailContent
-                    key="email"
-                    value={x => x.pages.financialVirementSummary.nonFecGrantAdviceChangeEmail}
-                  />,
+                  <EmailContent key="email" value={x => x.pages.reallocateCostsSummary.nonFecGrantAdviceChangeEmail} />,
                 ]}
-                value={x => x.pages.financialVirementSummary.nonFecGrantAdvice}
+                value={x => x.pages.reallocateCostsSummary.nonFecGrantAdvice}
               />
             </P>
           ) : (
             <>
-              <P>{getContent(x => x.pages.financialVirementSummary.grantAdvice)}</P>
+              <P>{getContent(x => x.pages.reallocateCostsSummary.grantAdvice)}</P>
 
               <Section qa="edit-partner-level">
                 <Link
                   styling="SecondaryButton"
-                  route={routes.pcrFinancialVirementEditPartnerLevel.getLink({
+                  route={routes.pcrReallocateCostsEditPartnerLevel.getLink({
                     projectId,
                     pcrId,
                     itemId,
                   })}
                   disabled={isFetching}
                 >
-                  <Content value={x => x.pages.financialVirementSummary.linkChangeGrant} />
+                  <Content value={x => x.pages.reallocateCostsSummary.linkChangeGrant} />
                 </Link>
               </Section>
             </>
           )}
           <Form onSubmit={handleSubmit(onSubmitUpdate)} aria-disabled={isFetching}>
-            <input type="hidden" value={FormTypes.PcrFinancialVirementsSummary} {...register("form")} />
+            <input type="hidden" value={FormTypes.PcrReallocateCostsSummary} {...register("form")} />
             <input type="hidden" value={projectId} {...register("projectId")} />
             <input type="hidden" value={pcrId} {...register("pcrId")} />
             <input type="hidden" value={itemId} {...register("pcrItemId")} />
 
             <Fieldset>
-              <Legend>{getContent(x => x.financialVirementLabels.grantMovingOverYear)}</Legend>
+              <Legend>{getContent(x => x.reallocateCostsLabels.grantMovingOverYear)}</Legend>
               <Hint id="hint-for-grantMovingOverFinancialYear">
                 {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
               </Hint>
@@ -285,7 +282,7 @@ export const FinancialVirementSummary = () => {
           <SummaryList qa="pcr_financial-virement">
             <SummaryListItem
               qa="grantValueYearEnd"
-              label={x => x.pages.financialVirementSummary.headingYearEndGrantValue}
+              label={x => x.pages.reallocateCostsSummary.headingYearEndGrantValue}
               content={<Currency value={pcrItem?.grantMovingOverFinancialYear} />}
             />
           </SummaryList>

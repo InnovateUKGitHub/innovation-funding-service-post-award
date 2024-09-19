@@ -148,6 +148,8 @@ export enum AccEnvironment {
   UAT = "uat",
   LOCAL = "local",
   CAPDEV = "capdev",
+  CAPCONFIG = "capconfig",
+  CAPTEST = "captest",
 
   UNKNOWN = "",
 }

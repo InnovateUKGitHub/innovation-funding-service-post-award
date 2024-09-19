@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: acc-ui-configmap
+data:
+  ACC_ENVIRONMENT: captest
+  SERVER_URL: https://www-acc-captest.apps.ocp4.innovateuk.ukri.org/
+  USE_SSO: "false"
+  NEW_RELIC_ENABLED: "false"
+  FEATURE_DETAILED_ERROR_SUMMARY_COMPONENT: "true"

@@ -1,4 +1,6 @@
 import { configuration } from "@server/features/common/config";
+import { mtlsFetchAgent } from "./mtlsFetchAgent";
+import { fetch } from "undici";
 import { isError } from "util";
 
 export interface ICompaniesHouseParams {
@@ -13,9 +15,9 @@ export abstract class ICompaniesHouseBase {
 
 export class CompaniesHouseBase extends ICompaniesHouseBase {
   private getUrl(endpointSegment: string, inboundParams?: Record<string, string>): string {
-    const { sil } = configuration;
+    const hydraUrl = configuration?.certificates?.hydraMtls?.serverName ?? "unknown";
 
-    const apiEndpoint = `${sil.url}${endpointSegment}`;
+    const apiEndpoint = `${hydraUrl}${endpointSegment}`;
 
     if (!inboundParams) return apiEndpoint;
 
@@ -28,13 +30,13 @@ export class CompaniesHouseBase extends ICompaniesHouseBase {
     try {
       const parsedUrl = this.getUrl(url, searchParams);
 
-      const fetchQuery = await fetch(parsedUrl);
+      const fetchQuery = await fetch(parsedUrl, { dispatcher: mtlsFetchAgent });
 
       if (!fetchQuery.ok) {
         throw new Error((await fetchQuery.text()) || "Bad Companies House request. Failed to get a positive response.");
       }
 
-      return await fetchQuery.json();
+      return (await fetchQuery.json()) as Promise<T>;
     } catch (err: unknown) {
       // Note: Add specific api failures here
 

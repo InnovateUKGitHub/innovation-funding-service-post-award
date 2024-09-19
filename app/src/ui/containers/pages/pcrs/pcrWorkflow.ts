@@ -1,7 +1,7 @@
 import { timeExtensionItemWorkflow } from "@ui/containers/pages/pcrs/timeExtension/timeExtensionWorkflow";
 import { IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { getAddPartnerWorkflow, AddPartnerWorkflowItem } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { financialVirementWorkflow } from "./financialVirements/workflow";
+import { financialVirementWorkflow } from "./reallocateCosts/workflow";
 import { suspendProjectWorkflow } from "./suspendProject/suspendProjectWorkflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";

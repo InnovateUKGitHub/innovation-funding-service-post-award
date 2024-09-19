@@ -49,6 +49,14 @@ export interface IConfig {
         private: string;
       };
     };
+    hydraMtls: {
+      certificationAuthority: string;
+      public: string;
+      private: string;
+      passphrase: string;
+      serverName: string;
+      rejectUnauthorised: boolean;
+    };
   };
 
   readonly features: IFeatureFlags;

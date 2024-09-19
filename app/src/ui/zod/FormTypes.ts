@@ -38,8 +38,8 @@ enum FormTypes {
   PcrLevelDelete = "pcrLevelDelete",
   PcrLevelUpload = "pcrLevelUpload",
 
-  PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
-  PcrFinancialVirementsCostCategorySaveAndContinue = "pcrFinancialVirementsCostCategorySaveAndContinue",
+  PcrReallocateCostsSummary = "pcrReallocateCostsSummary",
+  PcrReallocateCostsCostCategorySaveAndContinue = "pcrReallocateCostsCostCategorySaveAndContinue",
   PcrReallocateCostsChangeRemainingGrant = "pcrReallocateCostsChangeRemainingGrant",
 
   PcrApproveNewSubcontractorStep = "pcrApproveNewSubcontractorDetails",

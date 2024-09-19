@@ -15,7 +15,7 @@ const stubContent = {
       },
     },
   },
-  financialVirementLabels: {
+  reallocateCostsLabels: {
     partnerName: "stub-partnerName",
     partnerOriginalRemainingCosts: "stub-partnerOriginalRemainingCosts",
     partnerOriginalRemainingGrant: "stub-partnerOriginalRemainingGrant",
@@ -79,11 +79,11 @@ describe("useEditPartnerLevelContent()", () => {
     ${"backToSummary"}                 | ${"backToSummary"}
   `(
     "with $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.financialVirementLabels }) => {
+    ({ name, property }: { name: string; property: keyof typeof stubContent.reallocateCostsLabels }) => {
       const { result } = renderPageContent();
 
       const content = (result.current as unknown as Record<string, string>)[name] as string;
-      const expectedContent = stubContent.financialVirementLabels[property];
+      const expectedContent = stubContent.reallocateCostsLabels[property];
 
       expect(content).toBe(expectedContent);
     },

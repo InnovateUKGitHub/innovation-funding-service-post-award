@@ -4,16 +4,16 @@ import { GetFinancialVirementQuery } from "@server/features/financialVirements/g
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { getNewFundingLevel } from "@ui/containers/pages/pcrs/financialVirements/edit/partner/changeRemainingGrant.logic";
+import { getNewFundingLevel } from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.logic";
 import {
   ChangeRemainingGrantRoute,
   FinancialVirementParams,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/partner/changeRemainingGrant.page";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.page";
 import {
   ChangeRemainingGrantSchemaType,
   changeRemainingGrantSchema,
   errorMap,
-} from "@ui/containers/pages/pcrs/financialVirements/edit/partner/changeRemainingGrant.zod";
+} from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.zod";
 import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { sumBy } from "lodash";

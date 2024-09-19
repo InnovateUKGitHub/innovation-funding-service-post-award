@@ -9,6 +9,8 @@ import { configuration } from "@server/features/common/config";
 import { BadRequestError, ConfigurationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
+import { fetch } from "undici";
+import { mtlsFetchAgent } from "./mtlsFetchAgent";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -63,13 +65,12 @@ export class BankCheckService {
     path: string,
     payload: T,
   ): Promise<U> {
-    const { sil } = configuration;
-
-    if (!sil.url) {
+    const pathToHydra = configuration?.certificates?.hydraMtls?.serverName;
+    if (!pathToHydra) {
       throw new ConfigurationError("Bank checking service not configured");
     }
 
-    const request = await fetch(`${sil.url}${path}`, {
+    const request = await fetch(`${pathToHydra}${path}`, {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
@@ -79,14 +80,15 @@ export class BankCheckService {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      dispatcher: mtlsFetchAgent,
     });
 
     if (request.ok) {
-      return await request.json();
+      return (await request.json()) as Promise<U>;
     } else {
       this.logger.error(
         "Failed querying Experian via Integration Platform",
-        `${sil.url}${path}`,
+        `${pathToHydra}${path}`,
         await request.text(),
         request.status,
       );

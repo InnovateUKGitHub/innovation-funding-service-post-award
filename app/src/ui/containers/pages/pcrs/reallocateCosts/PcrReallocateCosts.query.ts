@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
-const pcrFinancialVirementQuery = graphql`
-  query PcrFinancialVirementQuery($projectId: ID, $pcrId: ID, $itemId: ID) {
+const pcrReallocateCostsQuery = graphql`
+  query PcrReallocateCostsQuery($projectId: ID, $pcrId: ID, $itemId: ID) {
     salesforce {
       uiapi {
         ...PageFragment
@@ -203,4 +203,4 @@ const pcrFinancialVirementQuery = graphql`
   }
 `;
 
-export { pcrFinancialVirementQuery };
+export { pcrReallocateCostsQuery };

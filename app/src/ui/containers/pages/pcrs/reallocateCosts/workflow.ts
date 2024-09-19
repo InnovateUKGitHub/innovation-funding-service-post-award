@@ -1,5 +1,5 @@
 import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { FinancialVirementSummary } from "./summary/FinancialVirementsSummary";
+import { FinancialVirementSummary } from "./summary/ReallocateCostsSummary";
 
 export const financialVirementWorkflow: IPCRWorkflow = {
   steps: [],

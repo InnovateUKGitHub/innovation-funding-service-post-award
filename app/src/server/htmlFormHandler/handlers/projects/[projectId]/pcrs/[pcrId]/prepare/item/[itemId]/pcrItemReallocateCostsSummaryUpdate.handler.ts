@@ -6,10 +6,10 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
-  FinancialVirementsSummaryValidatorSchema,
-  financialVirementsSummaryErrorMap,
-  getFinancialVirementsSummaryValidator,
-} from "@ui/containers/pages/pcrs/financialVirements/summary/FinancialVirementsSummary.zod";
+  ReallocateCostsSummaryValidatorSchema,
+  reallocateCostsSummaryErrorMap,
+  getReallocateCostsSummaryValidator,
+} from "@ui/containers/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   PCRPrepareItemRoute,
@@ -18,14 +18,14 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHandlerBase<
-  FinancialVirementsSummaryValidatorSchema,
+class ProjectChangeRequestItemReallocateCostsSummaryUpdate extends ZodFormHandlerBase<
+  ReallocateCostsSummaryValidatorSchema,
   ProjectChangeRequestPrepareItemParams
 > {
   constructor() {
     super({
       routes: [PCRPrepareItemRoute],
-      forms: [FormTypes.PcrFinancialVirementsSummary],
+      forms: [FormTypes.PcrReallocateCostsSummary],
     });
   }
 
@@ -35,7 +35,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
     input,
     context,
   }: {
-    input: z.input<FinancialVirementsSummaryValidatorSchema>;
+    input: z.input<ReallocateCostsSummaryValidatorSchema>;
     context: IContext;
   }) {
     const partnersPromise = context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
@@ -57,7 +57,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
     if (!pcrItem) throw new Error("cannae find pcr item");
 
     return {
-      schema: getFinancialVirementsSummaryValidator({
+      schema: getReallocateCostsSummaryValidator({
         mapFinancialVirementProps: {
           partners,
           financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
@@ -65,17 +65,13 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
           pcrItemId: input.pcrItemId as PcrItemId,
         },
       }),
-      errorMap: financialVirementsSummaryErrorMap,
+      errorMap: reallocateCostsSummaryErrorMap,
     };
   }
 
-  protected async mapToZod({
-    input,
-  }: {
-    input: AnyObject;
-  }): Promise<z.input<FinancialVirementsSummaryValidatorSchema>> {
+  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ReallocateCostsSummaryValidatorSchema>> {
     return {
-      form: FormTypes.PcrFinancialVirementsSummary,
+      form: FormTypes.PcrReallocateCostsSummary,
       projectId: input.projectId,
       pcrId: input.pcrId,
       pcrItemId: input.pcrItemId,
@@ -88,7 +84,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
     input,
     context,
   }: {
-    input: z.output<FinancialVirementsSummaryValidatorSchema>;
+    input: z.output<ReallocateCostsSummaryValidatorSchema>;
     context: IContext;
   }): Promise<string> {
     const pcrItem = {
@@ -118,4 +114,4 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
   }
 }
 
-export { ProjectChangeRequestItemFinancialVirementsSummaryUpdate };
+export { ProjectChangeRequestItemReallocateCostsSummaryUpdate };

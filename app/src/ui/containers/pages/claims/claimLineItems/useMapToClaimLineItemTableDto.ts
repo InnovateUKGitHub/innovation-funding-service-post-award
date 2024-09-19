@@ -45,7 +45,11 @@ interface ClaimLineItemTableDto {
 }
 
 const mapToInitialLineItems = (initialLineItems: InitialLineItem[]): z.output<EditClaimLineItemLineItemSchemaType>[] =>
-  initialLineItems.map(({ id, value, description }) => ({ id, value: String(value), description }));
+  initialLineItems.map(({ id, value, description }) => ({
+    id,
+    value: String(value),
+    description: description ?? "",
+  }));
 
 const mapToClaimLineItemTableDto = ({
   existingLineItems,

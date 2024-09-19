@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<56bb99b71edf932f8f2d04bac4b9df5d>>
+ * @generated SignedSource<<12726e282faaf1a67434242b5e251d87>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,10 +9,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type CostCategoryLevelFinancialVirementDetailsQuery$variables = {
+export type CostCategoryLevelReallocateCostsDetailsQuery$variables = {
   pcrId?: string | null | undefined;
 };
-export type CostCategoryLevelFinancialVirementDetailsQuery$data = {
+export type CostCategoryLevelReallocateCostsDetailsQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
@@ -29,9 +29,9 @@ export type CostCategoryLevelFinancialVirementDetailsQuery$data = {
     };
   };
 };
-export type CostCategoryLevelFinancialVirementDetailsQuery = {
-  response: CostCategoryLevelFinancialVirementDetailsQuery$data;
-  variables: CostCategoryLevelFinancialVirementDetailsQuery$variables;
+export type CostCategoryLevelReallocateCostsDetailsQuery = {
+  response: CostCategoryLevelReallocateCostsDetailsQuery$data;
+  variables: CostCategoryLevelReallocateCostsDetailsQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -156,7 +156,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "CostCategoryLevelFinancialVirementDetailsQuery",
+    "name": "CostCategoryLevelReallocateCostsDetailsQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -165,20 +165,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "CostCategoryLevelFinancialVirementDetailsQuery",
+    "name": "CostCategoryLevelReallocateCostsDetailsQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "cbe4b804bbaf2db9e340911b14df7894",
+    "cacheID": "29fa817c00064238e18712b7528a541b",
     "id": null,
     "metadata": {},
-    "name": "CostCategoryLevelFinancialVirementDetailsQuery",
+    "name": "CostCategoryLevelReallocateCostsDetailsQuery",
     "operationKind": "query",
-    "text": "query CostCategoryLevelFinancialVirementDetailsQuery(\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query CostCategoryLevelReallocateCostsDetailsQuery(\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_Reasoning__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "81727cdf756a8e52d8e1e7012802df87";
+(node as any).hash = "e4ba767e52513637564774433ecc5e65";
 
 export default node;

@@ -32,6 +32,7 @@ import { ClaimReviewForecastTable } from "./ClaimReviewForecastTable";
 import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
 import { ClaimReviewSchemaType, claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -61,11 +62,15 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
   const documentForm = useForm<z.output<ClaimLevelUploadSchemaType>>({
     resolver: zodResolver(getClaimLevelUpload({ config: options, project }), { errorMap: documentsErrorMap }),
   });
+
   const claimReviewForm = useForm<z.output<ClaimReviewSchemaType>>({
+    defaultValues: {},
     resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
   });
 
   useFormRevalidate(claimReviewForm.watch, claimReviewForm.trigger);
+
+  const isIarMissing = claim.isIarRequired && !documents.some(x => x.description === DocumentDescription.IAR);
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const claimDocumentErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(
@@ -205,6 +210,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
           disabled={disabled}
           onUpdate={onUpdate}
           claimReviewForm={claimReviewForm}
+          isIarMissing={isIarMissing}
         />
       </Section>
     </Page>

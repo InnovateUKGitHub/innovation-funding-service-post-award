@@ -1636,3 +1636,18 @@ export const viewOnlyForecastTable = () => {
     });
   });
 };
+
+export const displayClosedClaimSummary = () => {
+  [
+    "Costs claimed",
+    "£59,400.00",
+    "Costs approved",
+    "£59,400.00",
+    "Costs deferred",
+    "£0.00",
+    "Total grant paid",
+    "£29,700.00",
+  ].forEach(summaryItem => {
+    cy.paragraph(summaryItem);
+  });
+};

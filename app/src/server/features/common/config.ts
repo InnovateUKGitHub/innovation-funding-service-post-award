@@ -46,6 +46,14 @@ const configuration: Readonly<IConfig> = {
         private: certEnv("SHIBBOLETH_SP_DECRYPTION_PRIVATE_KEY", ""),
       },
     },
+    hydraMtls: {
+      certificationAuthority: certEnv("SIL_HYDRA_MTLS_CERTIFICATION_AUTHORITY", ""),
+      passphrase: strEnv("SIL_HYDRA_MTLS_PASSPHRASE", ""),
+      public: certEnv("SIL_HYDRA_MTLS_PUBLIC_KEY", ""),
+      private: certEnv("SIL_HYDRA_MTLS_PRIVATE_KEY", ""),
+      serverName: strEnv("SIL_HYDRA_MTLS_SERVER_NAME", ""),
+      rejectUnauthorised: boolEnv("SIL_HYDRA_MTLS_REJECT_UNAUTHORISED", false),
+    },
   },
   basicAuth: {
     credentials: psvEnv("BASIC_AUTH", []),

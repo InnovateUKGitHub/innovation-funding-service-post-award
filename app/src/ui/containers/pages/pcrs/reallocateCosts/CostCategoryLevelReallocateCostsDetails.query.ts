@@ -1,7 +1,7 @@
 import { graphql } from "relay-runtime";
 
-const costCategoryLevelFinancialVirementDetails = graphql`
-  query CostCategoryLevelFinancialVirementDetailsQuery($pcrId: ID) {
+const costCategoryLevelReallocateCostsDetails = graphql`
+  query CostCategoryLevelReallocateCostsDetailsQuery($pcrId: ID) {
     salesforce {
       uiapi {
         query {
@@ -20,4 +20,4 @@ const costCategoryLevelFinancialVirementDetails = graphql`
   }
 `;
 
-export { costCategoryLevelFinancialVirementDetails };
+export { costCategoryLevelReallocateCostsDetails };

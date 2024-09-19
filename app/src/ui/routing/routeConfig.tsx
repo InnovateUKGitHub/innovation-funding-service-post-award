@@ -36,9 +36,9 @@ import {
 import { ProjectChangeRequestAddTypeRoute } from "@ui/containers/pages/pcrs/addType";
 import { PCRCreateRoute } from "@ui/containers/pages/pcrs/create";
 import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
-import { PartnerLevelFinancialVirementDetailsRoute } from "@ui/containers/pages/pcrs/financialVirements/CostCategoryLevelFinancialVirementDetails.page";
-import { PartnerLevelFinancialVirementRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/costCategory/CostCategoryLevelFinancialVirementEdit.page";
-import { ChangeRemainingGrantRoute } from "@ui/containers/pages/pcrs/financialVirements/edit/partner/changeRemainingGrant.page";
+import { PartnerLevelReallocateCostsDetailsRoute } from "@ui/containers/pages/pcrs/reallocateCosts/CostCategoryLevelReallocateCostsDetails.page";
+import { PartnerLevelReallocateCostsRoute } from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
+import { ChangeRemainingGrantRoute } from "@ui/containers/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.page";
 import { PCRDetailsRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestDetails.page";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
@@ -110,9 +110,9 @@ export const routeConfig = {
   pcrCreate: PCRCreateRoute,
   pcrDetails: PCRDetailsRoute,
   pcrDelete: PCRDeleteRoute,
-  pcrFinancialVirementEditPartnerLevel: ChangeRemainingGrantRoute,
-  pcrFinancialVirementEditCostCategoryLevel: PartnerLevelFinancialVirementRoute,
-  pcrFinancialVirementDetails: PartnerLevelFinancialVirementDetailsRoute,
+  pcrReallocateCostsEditPartnerLevel: ChangeRemainingGrantRoute,
+  pcrReallocateCostsEditCostCategoryLevel: PartnerLevelReallocateCostsRoute,
+  pcrReallocateCostsDetails: PartnerLevelReallocateCostsDetailsRoute,
   pcrPrepare: ProjectChangeRequestPrepareRoute,
   pcrPrepareItem: PCRPrepareItemRoute,
   pcrSpendProfileCostsSummary: PCRSpendProfileCostsSummaryRoute,

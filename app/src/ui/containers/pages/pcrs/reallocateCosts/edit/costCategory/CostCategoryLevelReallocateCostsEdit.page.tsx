@@ -28,18 +28,18 @@ import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { usePcrPartnerFinancialVirementData } from "../../PcrFinancialVirement.logic";
+import { usePcrPartnerReallocateCostsData } from "../../PcrReallocateCosts.logic";
 import {
   useMapOverwrittenFinancialVirements,
   useOnUpdateCostCategoryLevel,
-} from "./CostCategoryLevelFinancialVirementEdit.logic";
+} from "./CostCategoryLevelReallocateCostsEdit.logic";
 import {
-  CostCategoryLevelFinancialVirementEditSchemaType,
-  costCategoryLevelFinancialVirementEditErrorMap,
-  getCostCategoryLevelFinancialVirementEditSchema,
-} from "./CostCategoryLevelFinancialVirementEdit.zod";
+  CostCategoryLevelReallocateCostsEditSchemaType,
+  costCategoryLevelReallocateCostsEditErrorMap,
+  getCostCategoryLevelReallocateCostsEditSchema,
+} from "./CostCategoryLevelReallocateCostsEdit.zod";
 
-interface PartnerLevelFinancialVirementParams {
+interface PartnerLevelReallocateCostsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
   pcrId: PcrId;
@@ -49,7 +49,7 @@ interface PartnerLevelFinancialVirementParams {
 /**
  * A page for editing Loans virements for a PCR.
  */
-const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancialVirementParams & BaseProps) => {
+const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocateCostsParams & BaseProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
   const { isServer } = useMounted();
@@ -62,9 +62,9 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
     claimOverrideAwardRates,
     partners,
     fragmentRef,
-  } = usePcrPartnerFinancialVirementData({ projectId, partnerId, pcrId, itemId });
+  } = usePcrPartnerReallocateCostsData({ projectId, partnerId, pcrId, itemId });
 
-  const mapFinancialVirementProps = {
+  const mapReallocateCostsProps = {
     financialVirementsForCosts,
     financialVirementsForParticipants,
     claimOverrideAwardRates,
@@ -72,17 +72,17 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
     pcrItemId: itemId,
   };
 
-  const mapFinancialVirement = useMapOverwrittenFinancialVirements(mapFinancialVirementProps);
+  const mapFinancialVirement = useMapOverwrittenFinancialVirements(mapReallocateCostsProps);
 
   const { register, watch, handleSubmit, setError, formState, getFieldState } = useForm<
-    z.input<CostCategoryLevelFinancialVirementEditSchemaType>
+    z.input<CostCategoryLevelReallocateCostsEditSchemaType>
   >({
     resolver: zodResolver(
-      getCostCategoryLevelFinancialVirementEditSchema({
-        mapFinancialVirementProps,
+      getCostCategoryLevelReallocateCostsEditSchema({
+        mapReallocateCostsProps,
       }),
       {
-        errorMap: costCategoryLevelFinancialVirementEditErrorMap,
+        errorMap: costCategoryLevelReallocateCostsEditErrorMap,
       },
     ),
   });
@@ -112,7 +112,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
             itemId: itemId,
           })}
         >
-          <Content value={x => x.financialVirementLabels.backToSummary} />
+          <Content value={x => x.reallocateCostsLabels.backToSummary} />
         </BackLink>
       }
       validationErrors={validationErrors}
@@ -137,11 +137,11 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           onUpdate({
             // RHF reports the type as the input type,
             // but it has already been transformed to the output type.
-            data: data as unknown as z.output<CostCategoryLevelFinancialVirementEditSchemaType>,
+            data: data as unknown as z.output<CostCategoryLevelReallocateCostsEditSchemaType>,
           }),
         )}
       >
-        <input type="hidden" value={FormTypes.PcrFinancialVirementsCostCategorySaveAndContinue} {...register("form")} />
+        <input type="hidden" value={FormTypes.PcrReallocateCostsCostCategorySaveAndContinue} {...register("form")} />
         <input type="hidden" value={projectId} {...register("projectId")} />
         <input type="hidden" value={pcrId} {...register("pcrId")} />
         <input type="hidden" value={itemId} {...register("pcrItemId")} />
@@ -151,16 +151,16 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           <Table data-qa="partnerVirements">
             <THead>
               <TR>
-                <TH>{getContent(x => x.financialVirementLabels.costCategoryName)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryOriginalEligibleCosts)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryCostsClaimed)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryNewEligibleCosts)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryDifferenceCosts)}</TH>
+                <TH>{getContent(x => x.reallocateCostsLabels.costCategoryName)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryOriginalEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryCostsClaimed)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryNewEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryDifferenceCosts)}</TH>
                 {project.isNonFec && (
                   <>
-                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryOriginalRemainingGrant)}</TH>
-                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryAwardRate)}</TH>
-                    <TH numeric>{getContent(x => x.financialVirementLabels.costCategoryNewRemainingGrant)}</TH>
+                    <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryOriginalRemainingGrant)}</TH>
+                    <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryAwardRate)}</TH>
+                    <TH numeric>{getContent(x => x.reallocateCostsLabels.costCategoryNewRemainingGrant)}</TH>
                   </>
                 )}
               </TR>
@@ -215,7 +215,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
             </TBody>
             <TFoot>
               <TR>
-                <TD bold>{getContent(x => x.financialVirementLabels.partnerTotals)}</TD>
+                <TD bold>{getContent(x => x.reallocateCostsLabels.partnerTotals)}</TD>
                 <TD bold numeric>
                   <Currency value={partnerVirement.originalEligibleCosts} />
                 </TD>
@@ -248,16 +248,16 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
           </Table>
         </Section>
         <Section>
-          <H3 as="h2">{getContent(x => x.pages.financialVirementEdit.summaryTitle)}</H3>
+          <H3 as="h2">{getContent(x => x.pages.reallocateCostsEdit.summaryTitle)}</H3>
           <Table data-qa="summary-table">
             <THead>
               <TR>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectNewEligibleCosts)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceCosts)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectNewRemainingGrant)}</TH>
-                <TH numeric>{getContent(x => x.financialVirementLabels.projectDifferenceGrant)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectOriginalEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectNewEligibleCosts)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectDifferenceCosts)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectOriginalRemainingGrant)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectNewRemainingGrant)}</TH>
+                <TH numeric>{getContent(x => x.reallocateCostsLabels.projectDifferenceGrant)}</TH>
               </TR>
             </THead>
             <TBody>
@@ -287,7 +287,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
 
         <Fieldset>
           <Button type="submit" styling="Primary" disabled={isProcessing}>
-            {getContent(x => x.pages.financialVirementEdit.saveButton)}
+            {getContent(x => x.pages.reallocateCostsEdit.saveButton)}
           </Button>
         </Fieldset>
       </Form>
@@ -295,9 +295,9 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelFinancial
   );
 };
 
-const PartnerLevelFinancialVirementRoute = defineRoute({
+const PartnerLevelReallocateCostsRoute = defineRoute({
   // pm reallocates costs for participant at cost category level
-  routeName: "partnerLevelFinancialVirementEdit",
+  routeName: "partnerLevelReallocateCostsEdit",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/financial/:partnerId",
   container: EditPage,
   getParams: route => ({
@@ -306,7 +306,7 @@ const PartnerLevelFinancialVirementRoute = defineRoute({
     itemId: route.params.itemId as PcrItemId,
     partnerId: route.params.partnerId as PartnerId,
   }),
-  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEdit.title),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.reallocateCostsEdit.title),
 });
 
-export { PartnerLevelFinancialVirementParams, PartnerLevelFinancialVirementRoute };
+export { PartnerLevelReallocateCostsParams, PartnerLevelReallocateCostsRoute };
