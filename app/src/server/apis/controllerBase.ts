@@ -200,7 +200,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
       const user: ISessionUser = req.session?.user;
 
       const p = Object.assign(
-        { user },
+        { user, tid: resp.locals.tid },
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}, req),
       ) as ApiParams<Context, TParams>;
 
@@ -223,7 +223,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     return async (req: Request, resp: Response) => {
       const user: ISessionUser = req.session?.user;
       const p = Object.assign(
-        { user },
+        { user, tid: resp.locals.tid },
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}),
       ) as ApiParams<Context, TParams>;
       run(p)
