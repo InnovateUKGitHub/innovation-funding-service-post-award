@@ -73,7 +73,7 @@ export const test = base.extend<AccFixtures, Workers>({
 
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   manageTeamMember: ({ page, commands, accProjectKTP, accUserSwitcher, accNavigation }, use) =>
-    use(new ManageTeamMember({ page, commands, ktp, accUserSwitcher, accNavigation })),
+    use(new ManageTeamMember({ page, commands, accProjectKTP, accUserSwitcher, accNavigation })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
