@@ -96,7 +96,6 @@ export interface IContext {
   startTimer: (message: string) => ITimer;
   asSystemUser: () => IContext;
   asBankDetailsValidationUser: () => IContext;
-  getSalesforceConnection: () => TsforceConnection;
   internationalisation: IInternationalisation;
 }
 

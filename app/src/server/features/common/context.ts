@@ -54,7 +54,6 @@ import { Option } from "@framework/dtos/option";
 import { Cache } from "./cache";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
-import { ISalesforceConnectionDetails, salesforceConnectionWithToken } from "@server/repositories/salesforceConnection";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
 
 // obviously needs to be singleton
@@ -110,22 +109,30 @@ export const constructErrorResponse = (error: unknown): AppError => {
 export class Context implements IContext {
   public readonly user: ISessionUser;
   public readonly tid: string;
+  private readonly connection: TsforceConnection;
+  private readonly systemConnection: TsforceConnection;
+  private readonly bankConnection: TsforceConnection;
 
-  constructor({ user, tid }: { user: ISessionUser; tid: string }) {
+  constructor({
+    user,
+    tid,
+    connection,
+    systemConnection,
+    bankConnection,
+  }: {
+    user: ISessionUser;
+    tid: string;
+    connection: TsforceConnection;
+    systemConnection: TsforceConnection;
+    bankConnection: TsforceConnection;
+  }) {
     this.user = user;
     this.tid = tid;
+    this.connection = connection;
+    this.systemConnection = systemConnection;
+    this.bankConnection = bankConnection;
+
     this.config = configuration;
-
-    const salesforceConfig = {
-      clientId: this.config.salesforceServiceUser.clientId,
-      connectionUrl: this.config.salesforceServiceUser.connectionUrl,
-      serviceUsername: this.config.salesforceServiceUser.serviceUsername,
-    };
-
-    this.salesforceConnectionDetails = {
-      ...salesforceConfig,
-      currentUsername: this.user?.email,
-    };
 
     this.logger = new Logger("Context", {
       prefixLines: [{ user, tid }],
@@ -134,8 +141,8 @@ export class Context implements IContext {
     this.caches = cachesImplementation;
 
     // use fat arrow so this is bound - extracted to shorten line length
-    const connectionCallback = () => this.getSalesforceConnection();
-    const asSystemUserConnectionCallback = () => this.asSystemUser().getSalesforceConnection();
+    const connectionCallback = () => this.connection;
+    const asSystemUserConnectionCallback = () => this.systemConnection;
     const recordTypeCallback = (objectName: string, recordType: string) => this.getRecordTypeId(objectName, recordType);
 
     this.repositories = {
@@ -188,18 +195,6 @@ export class Context implements IContext {
   public readonly internationalisation: IInternationalisation = {
     addResourceBundle: (content, namespace) => i18next.addResourceBundle("en-GB", namespace, content, true, true),
   };
-
-  private readonly salesforceConnectionDetails: ISalesforceConnectionDetails;
-  private tsforceConnection: TsforceConnection | null = null;
-
-  public getSalesforceConnection() {
-    if (this.tsforceConnection) return this.tsforceConnection;
-    throw new Error("Must init u idiot");
-  }
-
-  public async init() {
-    this.tsforceConnection = await salesforceConnectionWithToken(this.salesforceConnectionDetails);
-  }
 
   public startTimer(message: string) {
     return new Timer(this.logger, message);
@@ -278,12 +273,18 @@ export class Context implements IContext {
   /**
    * Elevate a user context to a different user context.
    *
-   * @param user The Salesforce user e-mail address
+   * @param connection The TsforceConnection for the user
    * @returns An elevated IContext as the passed in user
    */
-  private elevateUserAs(user: string): IContext {
-    if (this.user.email !== user) {
-      return new Context({ user: { email: user }, tid: this.tid });
+  private elevateUserAs(connection: TsforceConnection): IContext {
+    if (this.user.email !== connection.email) {
+      return new Context({
+        user: { email: connection.email },
+        tid: this.tid,
+        connection,
+        systemConnection: this.systemConnection,
+        bankConnection: this.bankConnection,
+      });
     }
     return this;
   }
@@ -294,9 +295,8 @@ export class Context implements IContext {
    * @returns An elevated IContext as the system user
    */
   public asSystemUser(): IContext {
-    const serviceUser = this.config.salesforceServiceUser.serviceUsername;
-    this.logger.info(`Escalating from ${this.user.email} to system user ${serviceUser}`);
-    return this.elevateUserAs(serviceUser);
+    this.logger.info(`Escalating from ${this.connection.email} to system user ${this.systemConnection.email}`);
+    return this.elevateUserAs(this.systemConnection);
   }
 
   /**
@@ -305,9 +305,8 @@ export class Context implements IContext {
    * @returns An elevated IContext as the bank details validation user
    */
   public asBankDetailsValidationUser(): IContext {
-    const serviceUser = this.config.bankDetailsValidationUser.serviceUsername;
-    this.logger.info(`Escalating from ${this.user.email} to banking user ${serviceUser}`);
-    return this.elevateUserAs(serviceUser);
+    this.logger.info(`Escalating from ${this.connection.email} to banking user ${this.bankConnection.email}`);
+    return this.elevateUserAs(this.bankConnection);
   }
 
   // helper function for repositories that need record type ids
