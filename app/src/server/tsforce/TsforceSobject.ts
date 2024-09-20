@@ -42,8 +42,8 @@ class TsforceSobject {
     const command = new TsforceBulkInsertSubrequest<T>({ connection: this.connection, sobject: this.name, body });
     return command.execute();
   }
-  update({ id, ...body }: { Id: string } & AnyObject) {
-    const command = new TsforceUpdateSubrequest({ connection: this.connection, sobject: this.name, id, body });
+  update({ Id, ...body }: { Id: string } & AnyObject) {
+    const command = new TsforceUpdateSubrequest({ connection: this.connection, sobject: this.name, id: Id, body });
     return command.execute();
   }
   updateMany(body: ({ Id: string } & AnyObject)[]) {
