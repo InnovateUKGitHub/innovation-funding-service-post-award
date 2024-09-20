@@ -1,9 +1,9 @@
-import { TsforceSalesforceResponse } from "../types/TsforceSalesforceResponse";
+import { TsforceUnsuccessfulSalesforceResponse } from "../types/TsforceSalesforceResponse";
 import { BaseTsforceRequestProps } from "./BaseTsforceRequest";
 import { BaseTsforceSobjectIdSubrequest } from "./BaseTsforceSubrequest";
 
-class TsforceUpdateSubrequest extends BaseTsforceSobjectIdSubrequest<TsforceSalesforceResponse> {
-  method = "PUT" as const;
+class TsforceUpdateSubrequest extends BaseTsforceSobjectIdSubrequest<null | TsforceUnsuccessfulSalesforceResponse> {
+  method = "PATCH" as const;
   private readonly body: AnyObject;
 
   constructor({

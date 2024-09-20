@@ -321,12 +321,14 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const targetObject = connection.sobject(this.salesforceObjectName);
       const batchResult = await targetObject.update(updates);
 
-      if (batchResult.success) return true;
+      if (batchResult && "errors" in batchResult) {
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to update salesforce",
+          this.getDataChangeErrorMessage(batchResult),
+        );
+      }
 
-      throw new Errors.SalesforceDataChangeError(
-        "Failed to update salesforce",
-        this.getDataChangeErrorMessage(batchResult),
-      );
+      return true;
     } catch (error) {
       throw this.constructError(error);
     }

@@ -14,4 +14,4 @@ interface TsforceUnsuccessfulSalesforceResponse {
   errors: TsforceSalesforceError[];
 }
 
-export { TsforceSalesforceResponse };
+export { TsforceSalesforceResponse, TsforceSuccessfulSalesforceResponse, TsforceUnsuccessfulSalesforceResponse };
