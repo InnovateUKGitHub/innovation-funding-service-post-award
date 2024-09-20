@@ -16,11 +16,11 @@ export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMet
   switch (type) {
     case "Invite":
       return ManageTeamMemberMethod.CREATE;
-    case "Replaced":
+    case "Replace":
       return ManageTeamMemberMethod.REPLACE;
-    case "Updated":
+    case "Update":
       return ManageTeamMemberMethod.UPDATE;
-    case "Deleted":
+    case "Delete":
       return ManageTeamMemberMethod.DELETE;
     default:
       return ManageTeamMemberMethod.UNKNOWN;
@@ -34,11 +34,11 @@ export const mapToSalesforcePCRManageTeamMemberType = (
     case ManageTeamMemberMethod.CREATE:
       return "Invite";
     case ManageTeamMemberMethod.REPLACE:
-      return "Replaced";
+      return "Replace";
     case ManageTeamMemberMethod.UPDATE:
-      return "Updated";
+      return "Update";
     case ManageTeamMemberMethod.DELETE:
-      return "Deleted";
+      return "Delete";
     case ManageTeamMemberMethod.UNKNOWN:
     case null:
       return null;
