@@ -23,7 +23,10 @@ import { BaseProps, defineRoute } from "../../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
 import { getContactRole } from "@ui/components/organisms/partners/utils/getContactRole";
 import { useMemo } from "react";
-import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import {
+  mapSalesforceCompetitionTypeToCopy,
+  mapToSalesforceCompetitionTypes,
+} from "@framework/constants/competitionTypes";
 import { useContent } from "@ui/hooks/content.hook";
 
 interface Props {
@@ -154,7 +157,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
   const competitionTypeName = useMemo(() => {
     const type = mapToSalesforceCompetitionTypes(project.competitionType);
-    return getContent(x => x.enums.competitionTypes[type]);
+    return getContent(mapSalesforceCompetitionTypeToCopy(type));
   }, [project.competitionType, getContent]);
 
   const monitoringOfficers = getDetailsContactRole({

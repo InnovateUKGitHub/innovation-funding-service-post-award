@@ -1,3 +1,5 @@
+import type { ContentSelector } from "@copy/type";
+
 enum SalesforceCompetitionTypes {
   unknown = "unknown",
   crnd = "crnd",
@@ -71,10 +73,38 @@ const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTyp
   }
 };
 
+const mapSalesforceCompetitionTypeToCopy = (type: SalesforceCompetitionTypes): ContentSelector => {
+  switch (type) {
+    case SalesforceCompetitionTypes.crnd:
+      return x => x.enums.competitionTypes.crnd;
+    case SalesforceCompetitionTypes.contracts:
+      return x => x.enums.competitionTypes.contracts;
+    case SalesforceCompetitionTypes.sbri:
+      return x => x.enums.competitionTypes.sbri;
+    case SalesforceCompetitionTypes.sbriIfs:
+      return x => x.enums.competitionTypes.sbriIfs;
+    case SalesforceCompetitionTypes.ktp:
+      return x => x.enums.competitionTypes.ktp;
+    case SalesforceCompetitionTypes.catapults:
+      return x => x.enums.competitionTypes.catapults;
+    case SalesforceCompetitionTypes.loans:
+      return x => x.enums.competitionTypes.loans;
+    case SalesforceCompetitionTypes.edge:
+      return x => x.enums.competitionTypes.edge;
+    case SalesforceCompetitionTypes.horizonEurope:
+      return x => x.enums.competitionTypes.horizonEurope;
+    case SalesforceCompetitionTypes.combinedCapital:
+      return x => x.enums.competitionTypes.combinedCapital;
+    case SalesforceCompetitionTypes.unknown:
+      return x => x.enums.competitionTypes.unknown;
+  }
+};
+
 export {
   allSalesforceCompetitionTypes,
   SalesforceCompetitionTypes,
   ImpactManagementParticipation,
   ImpactManagementPhase,
   mapToSalesforceCompetitionTypes,
+  mapSalesforceCompetitionTypeToCopy,
 };
