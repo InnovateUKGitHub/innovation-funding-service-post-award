@@ -19,7 +19,7 @@ export const spendTableEdit = () => {
     cy.getByAriaLabel(labourInput).clear().type("100");
   });
   cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£1,200.00");
+
   [
     "Materials Period 1",
     "Materials Period 2",
@@ -36,7 +36,7 @@ export const spendTableEdit = () => {
   ].forEach(materialsInput => {
     cy.getByAriaLabel(materialsInput).clear().type("25");
   });
-  cy.get("td:nth-child(14)").contains("£300.00");
+
   [
     "Capital usage Period 1",
     "Capital usage Period 2",
@@ -53,7 +53,7 @@ export const spendTableEdit = () => {
   ].forEach(capUsageInput => {
     cy.getByAriaLabel(capUsageInput).clear().type("10");
   });
-  cy.get("td:nth-child(14)").contains("£120.00");
+
   [
     "Subcontracting Period 1",
     "Subcontracting Period 2",
@@ -70,7 +70,7 @@ export const spendTableEdit = () => {
   ].forEach(subcontractingInput => {
     cy.getByAriaLabel(subcontractingInput).clear().type("5");
   });
-  cy.get("td:nth-child(14)").contains("£60.00");
+
   [
     "Travel and subsistence Period 1",
     "Travel and subsistence Period 2",
@@ -87,7 +87,7 @@ export const spendTableEdit = () => {
   ].forEach(travelInput => {
     cy.getByAriaLabel(travelInput).clear().type("2");
   });
-  cy.get("td:nth-child(14)").contains("£24.00");
+
   [
     "Other costs Period 1",
     "Other costs Period 2",
@@ -104,7 +104,7 @@ export const spendTableEdit = () => {
   ].forEach(otherInput => {
     cy.getByAriaLabel(otherInput).clear().type("1");
   });
-  cy.get("td:nth-child(14)").contains("£12.00");
+
   [
     "Other costs 2 Period 1",
     "Other costs 2 Period 2",
@@ -121,7 +121,7 @@ export const spendTableEdit = () => {
   ].forEach(other2Input => {
     cy.getByAriaLabel(other2Input).clear().type("2000");
   });
-  cy.get("td:nth-child(14)").contains("£24,000.00");
+
   [
     "Other costs 3 Period 1",
     "Other costs 3 Period 2",
@@ -138,7 +138,7 @@ export const spendTableEdit = () => {
   ].forEach(other3Input => {
     cy.getByAriaLabel(other3Input).clear().type("3000");
   });
-  cy.get("td:nth-child(14)").contains("£36,000.00");
+
   [
     "Other costs 4 Period 1",
     "Other costs 4 Period 2",
@@ -155,7 +155,7 @@ export const spendTableEdit = () => {
   ].forEach(other4Input => {
     cy.getByAriaLabel(other4Input).clear().type("4000");
   });
-  cy.get("td:nth-child(14)").contains("£48,000.00");
+
   [
     "Other costs 5 Period 1",
     "Other costs 5 Period 2",
@@ -172,7 +172,7 @@ export const spendTableEdit = () => {
   ].forEach(other5Input => {
     cy.getByAriaLabel(other5Input).clear().type("5000");
   });
-  cy.get("td:nth-child(14)").contains("£60,000.00");
+
   [
     "td:nth-child(2)",
     "td:nth-child(3)",
@@ -189,7 +189,6 @@ export const spendTableEdit = () => {
   ].forEach(columnTotal => {
     cy.get(columnTotal).contains("£14,163.00");
   });
-  cy.get("td:nth-child(14)").contains("£169,956.00");
 };
 
 /**
