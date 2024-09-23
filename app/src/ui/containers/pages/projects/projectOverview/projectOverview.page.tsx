@@ -19,25 +19,26 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
     useProjectOverviewData(props.projectId);
 
   const isMultipleParticipants = partners.length > 1;
-  const title = isPartnerWithdrawn(project.roles, partners) ? undefined : isProjectClosed || project.isPastEndDate ? (
-    <Content value={x => x.projectMessages.projectEndedMessage} />
-  ) : (
-    <Content
-      value={x =>
-        x.projectMessages.currentPeriodInfo({
-          currentPeriod: project.periodId,
-          numberOfPeriods: project.numberOfPeriods,
-        })
-      }
-    />
-  );
-
-  const subtitle =
-    isProjectClosed || isPartnerWithdrawn(project.roles, partners) ? undefined : project.isPastEndDate ? (
-      <Content value={x => x.projectMessages.finalClaimPeriodMessage} />
+  const title =
+    isProjectClosed || project.isPastEndDate || isPartnerWithdrawn(project.roles, partners) ? (
+      <Content value={x => x.projectMessages.projectEndedMessage} />
     ) : (
-      <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
+      <Content
+        value={x =>
+          x.projectMessages.currentPeriodInfo({
+            currentPeriod: project.periodId,
+            numberOfPeriods: project.numberOfPeriods,
+          })
+        }
+      />
     );
+
+  const subtitle = isProjectClosed ? undefined : project.isPastEndDate ||
+    isPartnerWithdrawn(project.roles, partners) ? (
+    <Content value={x => x.projectMessages.finalClaimPeriodMessage} />
+  ) : (
+    <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
+  );
 
   return (
     <Page

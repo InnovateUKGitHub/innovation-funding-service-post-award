@@ -48,7 +48,7 @@ export const ProjectOverviewAllPartnersDetails = ({
             title={
               <Content
                 value={x =>
-                  x.pages.projectOverview.costsToDateMessage({ partnerName: getPartnerName(partner, true, false) })
+                  x.pages.projectOverview.costsToDateMessage({ partnerName: getPartnerName(partner, false, false) })
                 }
               />
             }
