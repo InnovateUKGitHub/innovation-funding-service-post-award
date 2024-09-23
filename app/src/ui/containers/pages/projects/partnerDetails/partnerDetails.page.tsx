@@ -16,7 +16,7 @@ interface Params {
 
 const PartnerDetailsPage = (props: BaseProps & Params) => {
   const { partner, fragmentRef } = usePartnerDetailsQuery(props.projectId, props.partnerId);
-  const { isFc, isPm } = getAuthRoles(partner.roles);
+  const { isFc } = getAuthRoles(partner.roles);
 
   const backToProjectDetailsLink = <Content value={x => x.pages.partnerDetails.backToProjectDetails} />;
   const editLink = <Content value={x => x.pages.partnerDetails.editLink} />;
@@ -48,9 +48,9 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
             qa="partner-postcode"
             content={<SimpleString>{partner.postcode}</SimpleString>}
             action={
-              isFc || isPm ? (
+              isFc ? (
                 <Link
-                  styling={"Link"}
+                  styling="Link"
                   route={props.routes.partnerDetailsEdit.getLink({
                     projectId: props.projectId,
                     partnerId: props.partnerId,
