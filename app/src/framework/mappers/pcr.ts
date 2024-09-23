@@ -20,7 +20,7 @@ export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMet
       return ManageTeamMemberMethod.REPLACE;
     case "Update":
       return ManageTeamMemberMethod.UPDATE;
-    case "Delete":
+    case "Remove":
       return ManageTeamMemberMethod.DELETE;
     default:
       return ManageTeamMemberMethod.UNKNOWN;
@@ -38,7 +38,7 @@ export const mapToSalesforcePCRManageTeamMemberType = (
     case ManageTeamMemberMethod.UPDATE:
       return "Update";
     case ManageTeamMemberMethod.DELETE:
-      return "Delete";
+      return "Remove";
     case ManageTeamMemberMethod.UNKNOWN:
     case null:
       return null;
