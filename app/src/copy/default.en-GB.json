@@ -1297,7 +1297,7 @@
             },
             "associates": {
               "title": "Confirm removal of associate",
-              "subtitle": "This page allows you to remove the belown associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
+              "subtitle": "This page allows you to remove the below associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove associate",
               "pclSelectPlaceholder": "-- Select an associate --"
             }
