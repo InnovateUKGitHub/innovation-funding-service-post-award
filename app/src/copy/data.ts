@@ -2,7 +2,6 @@ import enCopy from "./default.en-GB.json";
 
 import ktpEnCopy from "./ktp.en-GB.json";
 import sbriEnCopy from "./sbri.en-GB.json";
-import sbriIfsEnCopy from "./sbri-ifs.en-GB.json";
 import loansEnCopy from "./loans.en-GB.json";
 import horizonEuropeParticipationEnCopy from "./horizonEurope.en-GB.json";
 
@@ -35,7 +34,6 @@ export {
   enCopy,
   ktpEnCopy,
   sbriEnCopy,
-  sbriIfsEnCopy,
   loansEnCopy,
   horizonEuropeParticipationEnCopy,
   CopyNamespaces,

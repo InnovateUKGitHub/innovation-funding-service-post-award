@@ -5,7 +5,6 @@ import {
   ktpEnCopy,
   loansEnCopy,
   sbriEnCopy,
-  sbriIfsEnCopy,
   horizonEuropeParticipationEnCopy,
 } from "@copy/data";
 import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
@@ -42,7 +41,7 @@ const initFullTestIntl = async () => {
         [CopyNamespaces.KTP]: ktpEnCopy,
         [CopyNamespaces.LOANS]: loansEnCopy,
         [CopyNamespaces.SBRI_IFS]: sbriEnCopy,
-        [CopyNamespaces.SBRI]: sbriIfsEnCopy,
+        [CopyNamespaces.SBRI]: sbriEnCopy,
         [CopyNamespaces.HORIZON_EUROPE_PARTICIPATION]: horizonEuropeParticipationEnCopy,
       },
     },

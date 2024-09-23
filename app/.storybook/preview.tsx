@@ -14,7 +14,6 @@ import {
   ktpEnCopy,
   loansEnCopy,
   sbriEnCopy,
-  sbriIfsEnCopy,
 } from "@copy/data";
 import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 
@@ -35,7 +34,7 @@ i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.DEFAULT, enCopy, t
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.KTP, ktpEnCopy, true, true);
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.LOANS, loansEnCopy, true, true);
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.SBRI_IFS, sbriEnCopy, true, true);
-i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.SBRI, sbriIfsEnCopy, true, true);
+i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.SBRI, sbriEnCopy, true, true);
 
 const decorators: Decorator[] = [
   (Story, context) => {
