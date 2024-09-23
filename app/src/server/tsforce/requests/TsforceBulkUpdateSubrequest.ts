@@ -13,7 +13,9 @@ class TsforceBulkUpdateSubrequest<T> extends BaseTsforceSobjectSubrequest<Tsforc
 
   payload() {
     return {
-      body: this.body.map(x => ({ ...x, attributes: { type: this.sobject } })) as AnyObject[],
+      body: {
+        records: this.body.map(x => ({ ...x, attributes: { type: this.sobject } })) as AnyObject[],
+      },
       queryParameters: undefined,
       url: `/composite/sobjects`,
     };
