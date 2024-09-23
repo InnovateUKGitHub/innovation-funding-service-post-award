@@ -200,7 +200,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     run: Run<Context, TParams, TResponse | null>,
     allowNulls: boolean,
   ) {
-    return async (req: Request, resp: Response) => {
+    return (req: Request, resp: Response) => {
       const user: ISessionUser = req.session?.user;
 
       const p = Object.assign(
@@ -208,7 +208,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}, req),
       ) as ApiParams<Context, TParams>;
 
-      run(p)
+      return run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
             throw new NotFoundError();
@@ -224,13 +224,13 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     getParams: GetParams<TParams>,
     run: Run<Context, TParams, DocumentDto | null>,
   ) {
-    return async (req: Request, resp: Response) => {
+    return (req: Request, resp: Response) => {
       const user: ISessionUser = req.session?.user;
       const p = Object.assign(
         { user, traceId: resp.locals.traceId },
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}),
       ) as ApiParams<Context, TParams>;
-      run(p)
+      return run(p)
         .then(result => {
           if (result === null || result === undefined || result.stream === null) {
             throw new NotFoundError();
