@@ -282,36 +282,41 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     );
   }
 
-  public async getLoanDocument(
+  public getLoanDocument(
     params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documentId: string }>,
   ): Promise<DocumentDto | null> {
     const query = new GetLoanDocumentQuery(params.projectId, params.loanId, params.documentId);
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getLoanDocuments(params: ApiParams<"server", { projectId: ProjectId; loanId: string }>) {
+  public getLoanDocuments(params: ApiParams<"server", { projectId: ProjectId; loanId: string }>) {
     const query = new GetLoanDocumentsQuery(params.projectId, params.loanId);
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async uploadLoanDocuments(
+  public uploadLoanDocuments(
     params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadLoanDocumentsCommand(params.documents, params.projectId, params.loanId);
-    const insertedIDs = await (await contextProvider.start(params)).runCommand(command);
 
-    return { documentIds: insertedIDs };
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async deleteLoanDocument(
-    params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documentId: string }>,
-  ) {
+  public deleteLoanDocument(params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documentId: string }>) {
     const command = new DeleteLoanDocument(params.documentId, params.projectId, params.loanId);
-    (await contextProvider.start(params)).runCommand(command);
-    return true;
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 
-  public async getClaimDocuments(
+  public getClaimDocuments(
     params: ApiParams<
       "server",
       {
@@ -327,71 +332,73 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       { projectId, partnerId, periodId },
       description ? { description } : undefined,
     );
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getClaimDocument(
+  public getClaimDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; periodId: number; documentId: string }>,
   ) {
     const { projectId, partnerId, periodId, documentId } = params;
     const query = new GetClaimDocumentQuery({ projectId, partnerId, periodId }, documentId);
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getClaimDetailDocuments(params: ApiParams<"server", { claimDetailKey: ClaimDetailKey }>) {
+  public getClaimDetailDocuments(params: ApiParams<"server", { claimDetailKey: ClaimDetailKey }>) {
     const { projectId, partnerId, periodId, costCategoryId } = params.claimDetailKey;
     const query = new GetClaimDetailDocumentsQuery(projectId, partnerId, periodId, costCategoryId);
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getClaimDetailDocument(
-    params: ApiParams<"server", { claimDetailKey: ClaimDetailKey; documentId: string }>,
-  ) {
+  public getClaimDetailDocument(params: ApiParams<"server", { claimDetailKey: ClaimDetailKey; documentId: string }>) {
     const query = new GetClaimDetailDocumentQuery(params.claimDetailKey, params.documentId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getProjectDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
+  public getProjectDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetProjectDocumentSummaryQuery(projectId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId }>) {
+  public getPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId }>) {
     const { projectId, partnerId } = params;
     const query = new GetPartnerDocumentsQuery(projectId, partnerId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getAllPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
+  public getAllPartnerDocuments(params: ApiParams<"server", { projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetAllPartnerDocumentsQuery(projectId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getProjectDocument(params: ApiParams<"server", { projectId: ProjectId; documentId: string }>) {
+  public getProjectDocument(params: ApiParams<"server", { projectId: ProjectId; documentId: string }>) {
     const query = new GetProjectDocumentQuery(params.projectId, params.documentId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getPartnerDocument(
+  public getPartnerDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; documentId: string }>,
   ) {
     const query = new GetPartnerDocumentQuery(params.projectId, params.partnerId, params.documentId);
-    return (await contextProvider.start(params)).runQuery(query);
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getProjectChangeRequestDocumentsOrItemDocuments(
+  public getProjectChangeRequestDocumentsOrItemDocuments(
     params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string }>,
   ) {
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(
       params.projectId,
       params.projectChangeRequestIdOrItemId,
     );
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async getProjectChangeRequestDocumentOrItemDocument(
+  public getProjectChangeRequestDocumentOrItemDocument(
     params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string; documentId: string }>,
   ) {
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(
@@ -399,10 +406,11 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectChangeRequestIdOrItemId,
       params.documentId,
     );
-    return (await contextProvider.start(params)).runQuery(query);
+
+    return contextProvider.start(params).then(x => x.runQuery(query));
   }
 
-  public async deleteProjectChangeRequestDocumentOrItemDocument(
+  public deleteProjectChangeRequestDocumentOrItemDocument(
     params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestIdOrItemId: string; documentId: string }>,
   ) {
     const command = new DeleteProjectChangeRequestDocumentOrItemDocument(
@@ -410,36 +418,48 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectId,
       params.projectChangeRequestIdOrItemId,
     );
-    (await contextProvider.start(params)).runCommand(command);
-    return true;
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 
-  public async uploadClaimDetailDocuments(
+  public uploadClaimDetailDocuments(
     params: ApiParams<"server", { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
   ) {
     const { claimDetailKey, documents } = params;
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, documents);
-    const documentIds = await (await contextProvider.start(params)).runCommand(command);
-    return { documentIds };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async uploadClaimDocument(params: ApiParams<"server", { claimKey: ClaimKey; document: DocumentUploadDto }>) {
+  public uploadClaimDocument(params: ApiParams<"server", { claimKey: ClaimKey; document: DocumentUploadDto }>) {
     const { claimKey, document } = params;
     const command = new UploadClaimDocumentCommand(claimKey, document);
-    const documentId = await (await contextProvider.start(params)).runCommand(command);
-    return { documentId };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentId: x }));
   }
 
-  public async uploadClaimDocuments(
+  public uploadClaimDocuments(
     params: ApiParams<"server", { claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>,
   ) {
     const { claimKey, documents } = params;
     const command = new UploadClaimDocumentsCommand(claimKey, documents);
-    const documentIds = await (await contextProvider.start(params)).runCommand(command);
-    return { documentIds };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async uploadProjectChangeRequestDocumentOrItemDocument(
+  public uploadProjectChangeRequestDocumentOrItemDocument(
     params: ApiParams<
       "server",
       {
@@ -454,63 +474,81 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectChangeRequestIdOrItemId,
       params.documents,
     );
-    const documentIds = await (await contextProvider.start(params)).runCommand(command);
-    return { documentIds };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async uploadProjectDocument(
+  public uploadProjectDocument(
     params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadProjectDocumentCommand(params.projectId, params.documents);
-    const documentIds = await (await contextProvider.start(params)).runCommand(command);
-    return { documentIds };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async uploadPartnerDocument(
+  public uploadPartnerDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
   ) {
     const command = new UploadPartnerDocumentCommand(params.projectId, params.partnerId, params.documents);
-    const documentIds = await (await contextProvider.start(params)).runCommand(command);
-    return { documentIds };
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(x => ({ documentIds: x }));
   }
 
-  public async deleteClaimDetailDocument(
+  public deleteClaimDetailDocument(
     params: ApiParams<"server", { documentId: string; claimDetailKey: ClaimDetailKey }>,
   ): Promise<boolean> {
     const { documentId, claimDetailKey } = params;
     const command = new DeleteClaimDetailDocumentCommand(documentId, claimDetailKey);
-    (await contextProvider.start(params)).runCommand(command);
-    return true;
+
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 
-  public async deleteClaimDocument(
+  public deleteClaimDocument(
     params: ApiParams<"server", { documentId: string; claimKey: ClaimKey }>,
   ): Promise<boolean> {
     const { documentId, claimKey } = params;
     const command = new DeleteClaimDocumentCommand(documentId, claimKey);
-    (await contextProvider.start(params)).runCommand(command);
 
-    return true;
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 
-  public async deletePartnerDocument(
+  public deletePartnerDocument(
     params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId | LinkedEntityId; documentId: string }>,
   ): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
     const command = new DeletePartnerDocumentCommand(projectId, partnerId, documentId);
-    (await contextProvider.start(params)).runCommand(command);
 
-    return true;
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 
-  public async deleteProjectDocument(
+  public deleteProjectDocument(
     params: ApiParams<"server", { projectId: ProjectId; documentId: string }>,
   ): Promise<boolean> {
     const { projectId, documentId } = params;
     const command = new DeleteProjectDocumentCommand(projectId, documentId);
-    (await contextProvider.start(params)).runCommand(command);
 
-    return true;
+    return contextProvider
+      .start(params)
+      .then(x => x.runCommand(command))
+      .then(() => true);
   }
 }
 
