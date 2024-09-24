@@ -119,6 +119,6 @@ export interface ISyncRunnable<T> {
 }
 
 export interface IAsyncRunnable<T> extends ISyncRunnable<Promise<T>> {
-  handleRepositoryError?: (context: IContext, error: unknown) => void;
+  handleRepositoryError?: (context: IContext, error: unknown) => Error | void;
   accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }

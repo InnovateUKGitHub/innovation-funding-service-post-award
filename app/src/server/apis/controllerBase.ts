@@ -207,7 +207,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
       return run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
-            throw new NotFoundError();
+            return Promise.reject(new NotFoundError());
           }
           resp.status(successStatus).send(result);
         })
@@ -229,23 +229,24 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
       return run(p)
         .then(result => {
           if (result === null || result === undefined || result.stream === null) {
-            throw new NotFoundError();
+            return Promise.reject(new NotFoundError());
           }
           const defaultContentType = "application/octet-stream";
           const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
-          resp.writeHead(successStatus, {
-            "Content-Length": result.contentLength,
-            "Content-Type": `${contentType || defaultContentType}; charset=utf-8`,
-            "Content-Disposition": `filename="${result.fileName}"`,
-          });
-          return resp.send(result.stream);
+          resp.status(successStatus);
+          resp.setHeader("Content-Length", result.contentLength);
+          resp.setHeader("Content-Type", `${contentType || defaultContentType}; charset=utf-8`);
+          resp.setHeader("Content-Disposition", `filename="${result.fileName}"`);
+          resp.send(result.stream);
         })
         .catch((e: IAppError) => this.handleError(resp, e));
     };
   }
 
   private handleError(res: Response, err: IAppError) {
-    return res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
+    if (res.headersSent) {
+      res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
+    }
   }
 }
 

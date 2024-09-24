@@ -229,7 +229,10 @@ export class Context implements IContext {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
       }
-      if (runnable instanceof AuthorisedAsyncCommandBase) runnable.handleRepositoryError(this, e);
+      if (runnable instanceof AuthorisedAsyncCommandBase) {
+        const error = runnable.handleRepositoryError(this, e);
+        if (error) return Promise.reject(error);
+      }
       return Promise.reject(constructErrorResponse(e));
     } finally {
       timer.finish();

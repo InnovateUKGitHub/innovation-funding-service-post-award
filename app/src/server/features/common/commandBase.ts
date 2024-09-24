@@ -18,7 +18,7 @@ export abstract class AuthorisedAsyncCommandBase<T> extends AsyncCommandBase<T> 
     return Promise.resolve(true);
   }
 
-  handleRepositoryError(context: IContext, error: unknown) {
+  handleRepositoryError(context: IContext, error: unknown): Error | void {
     return;
   }
 }
@@ -48,7 +48,7 @@ export abstract class CommandMultipleDocumentBase<T> extends AuthorisedAsyncComm
         error,
       );
       if (!result.isValid) {
-        throw new ValidationError(result);
+        return new ValidationError(result);
       }
     }
   }
@@ -61,7 +61,7 @@ export abstract class CommandDocumentBase<T> extends AuthorisedAsyncCommandBase<
     if (error instanceof FileTypeNotAllowedError) {
       const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors);
       if (!result.isValid) {
-        throw new ValidationError(result);
+        return new ValidationError(result);
       }
     }
   }
