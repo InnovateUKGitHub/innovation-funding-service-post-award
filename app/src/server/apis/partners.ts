@@ -33,7 +33,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       p => this.updatePartner(p),
     );
   }
-  public async updatePartner(
+  public updatePartner(
     params: ApiParams<
       "server",
       {
@@ -44,16 +44,18 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       }
     >,
   ) {
-    const context = await contextProvider.start(params);
-    await context.runCommand(
-      new UpdatePartnerCommand(params.partnerDto as PartnerDto, {
-        validateBankDetails: params.validateBankDetails,
-        verifyBankDetails: params.verifyBankDetails,
-      }),
-    );
-
-    const query = new GetByIdQuery(params.partnerId);
-    return context.runQuery(query);
+    return contextProvider
+      .start(params)
+      .then(context => {
+        context.runCommand(
+          new UpdatePartnerCommand(params.partnerDto as PartnerDto, {
+            validateBankDetails: params.validateBankDetails,
+            verifyBankDetails: params.verifyBankDetails,
+          }),
+        );
+        return context;
+      })
+      .then(context => context.runQuery(new GetByIdQuery(params.partnerId)));
   }
 }
 

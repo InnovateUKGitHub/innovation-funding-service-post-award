@@ -53,7 +53,7 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.partner.projectId));
 
     if (!isProjectActive) {
-      throw new InActiveProjectError();
+      return Promise.reject(new InActiveProjectError());
     }
 
     const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));

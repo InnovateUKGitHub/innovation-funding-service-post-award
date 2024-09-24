@@ -57,15 +57,15 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
   try {
     const tokenQuery: ISalesforceTokenQuery = JSON.parse(tokenBody);
 
-    if ("error" in tokenQuery) return Promise.reject(new SalesforceTokenError(tokenQuery));
-    if (!request.ok) return Promise.reject(new SalesforceTokenError(request.status));
+    if ("error" in tokenQuery) return Promise.reject(new SalesforceTokenError({ message: tokenQuery.error }));
+    if (!request.ok) return Promise.reject(new SalesforceTokenError({ message: tokenBody }));
 
     return {
       url: tokenQuery.sfdc_community_url,
       accessToken: tokenQuery.access_token,
     };
-  } catch {
-    return Promise.reject(new SalesforceTokenError(tokenBody));
+  } catch (e) {
+    return Promise.reject(new SalesforceTokenError({ message: tokenBody, cause: e }));
   }
 };
 

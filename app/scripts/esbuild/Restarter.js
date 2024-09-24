@@ -40,7 +40,7 @@ class Restarter {
    * @returns {Promise<void>} Successful build
    */
   createServer() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.serverProcess = spawn("npm", ["run", "serve", "--", "--dev"], {
         // Copy stdout of server to current stdio
         stdio: "inherit",
@@ -58,8 +58,8 @@ class Restarter {
 
       // If the server closes itself at any time
       this.serverProcess.on("exit", code => {
-        if (code === 0) resolve();
-        reject(code);
+        console.log(`Server exited with exit code ${code}`);
+        resolve();
       });
     });
   }
