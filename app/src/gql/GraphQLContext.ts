@@ -36,7 +36,10 @@ export const createContextFromEmail = async ({
   traceId: string;
 }): Promise<GraphQLContext | EmptyObject> => {
   try {
-    const [api, adminApi] = await Promise.all([TsforceConnection.asUser(email), TsforceConnection.asSystemUser()]);
+    const [api, adminApi] = await Promise.all([
+      TsforceConnection.asUser(email, tid),
+      TsforceConnection.asSystemUser(tid),
+    ]);
 
     // Create an incomplete GraphQL context for use in DataLoaders.
     const partialCtx: PartialGraphQLContext = {
