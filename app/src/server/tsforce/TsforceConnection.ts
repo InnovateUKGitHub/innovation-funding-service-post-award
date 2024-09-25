@@ -79,46 +79,6 @@ class TsforceConnection {
     return TsforceConnection.asUser(configuration.salesforceServiceUser.serviceUsername);
   }
 
-  private async fetch(input: string, init?: FetcherConfiguration) {
-    const url = new URL(input, this.instanceUrl);
-
-    if (init?.searchParams) {
-      for (const [name, value] of Object.entries(init.searchParams)) {
-        url.searchParams.set(name, value);
-      }
-    }
-
-    const response = await fetch(url, {
-      ...init,
-      headers: {
-        ...init?.headers,
-        Authorization: `Bearer ${this.accessToken}`,
-      },
-    });
-
-    const jsonAsText = await response.text();
-
-    if (response.status !== 200) {
-      let message = `Failed to fetch "${url.toString()}" (status code ${response.status})`;
-      message += `Body:\n${jsonAsText}`;
-      throw new Error(message);
-    }
-
-    try {
-      let json = JSON.parse(jsonAsText);
-
-      // TODO: See if Salesforce decides to not encode their JSON output.
-      if (init?.decodeHTMLEntities) {
-        json = mapStringInObject(json, decodeHTMLEntities);
-      }
-
-      return json;
-    } catch (e) {
-      this.logger.error("Failed to decode Salesforce JSON response", e, jsonAsText);
-      throw new Error("Failed to decode JSON", { cause: e });
-    }
-  }
-
   /**
    * Execute a GraphQL Query AST via the Salesforce GraphQL API.
    *

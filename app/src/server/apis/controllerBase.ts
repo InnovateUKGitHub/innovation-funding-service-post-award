@@ -244,7 +244,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   }
 
   private handleError(res: Response, err: IAppError) {
-    if (res.headersSent) {
+    if (!res.headersSent) {
       res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
     }
   }
