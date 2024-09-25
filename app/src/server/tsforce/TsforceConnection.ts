@@ -31,13 +31,13 @@ class TsforceConnection {
     instanceUrl,
     accessToken,
     email,
-    tid = "TID not implemented",
+    tid,
   }: {
     version?: string;
     instanceUrl: string;
     accessToken: string;
     email: string;
-    tid?: string;
+    tid: string;
   }) {
     this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, tid });
     this.httpClient = new TsforceHttpClient({ version, accessToken, instanceUrl, email, tid });
@@ -56,7 +56,7 @@ class TsforceConnection {
    * @param email The username/email address of the user.
    * @returns A user-specific connection to the Salesforce API.
    */
-  public static async asUser(email: string) {
+  public static async asUser(email: string, tid: string) {
     const { accessToken, url } = await getCachedSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
@@ -67,6 +67,7 @@ class TsforceConnection {
       accessToken,
       instanceUrl: url,
       email,
+      tid,
     });
   }
 
@@ -75,8 +76,8 @@ class TsforceConnection {
    *
    * @returns A connection to the Salesforce API as a system user.
    */
-  public static asSystemUser() {
-    return TsforceConnection.asUser(configuration.salesforceServiceUser.serviceUsername);
+  public static asSystemUser(tid: string) {
+    return TsforceConnection.asUser(configuration.salesforceServiceUser.serviceUsername, tid);
   }
 
   /**

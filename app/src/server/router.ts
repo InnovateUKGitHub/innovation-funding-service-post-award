@@ -26,7 +26,7 @@ const getServerRoutes = async () => {
 
   let adminApi: TsforceConnection | undefined;
   try {
-    adminApi = await TsforceConnection.asSystemUser();
+    adminApi = await TsforceConnection.asSystemUser("init");
   } catch {
     logger.error("Failed to create GraphQL Admin Salesforce API connector.");
   }
