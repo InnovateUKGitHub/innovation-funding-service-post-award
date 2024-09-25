@@ -167,6 +167,12 @@ const serverRender =
         // Check if they are allowed to access this page.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
+          logger.warn("Access control failure", {
+            route: req.url,
+            routeName: matched.routeName,
+            username: req.session?.user.email,
+            tid: res.locals.tid,
+          });
           return next(new ForbiddenError());
         }
       }
@@ -221,7 +227,7 @@ const serverRender =
         }),
       );
     } catch (renderError: unknown) {
-      logger.error("Caught a server render error", { tid: res.locals.tid }, renderError);
+      logger.error("Caught a server render error", { user: req.session?.user.email, tid: res.locals.tid }, renderError);
       next(renderError);
     }
   };

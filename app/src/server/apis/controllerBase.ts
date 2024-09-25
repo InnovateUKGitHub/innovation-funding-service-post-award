@@ -10,6 +10,8 @@ import { IAppError } from "@framework/types/IAppError";
 import { ISessionUser } from "@framework/types/IUser";
 import { configuration } from "@server/features/common/config";
 import { rm, readFile } from "fs/promises";
+import { BaseLogger } from "@shared/logger";
+import { ServerLogger } from "@server/serverLogger";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(private readonly file: Express.Multer.File) {}
@@ -65,9 +67,11 @@ type Run<Context extends "client" | "server", T, TR> = (params: ApiParams<Contex
 
 export abstract class ControllerBaseWithSummary<Context extends "client" | "server", TSummaryDto, TDto> {
   public readonly router: express.Router;
+  protected readonly logger: BaseLogger;
 
   protected constructor(public path: string) {
     this.router = express.Router();
+    this.logger = new ServerLogger(`${path} API controller`);
   }
 
   protected getCustom<TParams, TResponse>(
@@ -211,7 +215,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: IAppError) => this.handleError(resp, e));
+        .catch((e: IAppError) => this.handleError(req, resp, e));
     };
   }
 
@@ -241,12 +245,15 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
         })
-        .catch((e: IAppError) => this.handleError(resp, e));
+        .catch((e: IAppError) => this.handleError(req, resp, e));
     };
   }
 
-  private handleError(res: Response, err: IAppError) {
-    return res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
+  private handleError(req: Request, res: Response, err: IAppError) {
+    const tid = res.locals.tid;
+    const username = req.session?.user.email;
+    this.logger.error(err.message, err, { route: req.url, username, tid });
+    return res.status(getErrorStatus(err)).json(getErrorResponse(err, tid));
   }
 }
 
