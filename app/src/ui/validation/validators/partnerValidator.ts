@@ -18,12 +18,24 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
   public accountNumber: Result;
   public manualProjectSetup: Result;
   public partnerStatus: Result;
+  public spendProfileStatus: Result;
+  public bankDetailsTaskStatus: Result;
+  public postcodeSetupStatus: Result;
+  public bankCheckValidation: Result;
+  private readonly original: PartnerDto;
+  private readonly partnerDocuments: DocumentSummaryDto[];
+  private readonly options: {
+    showValidationErrors: boolean;
+    validateBankDetails?: boolean;
+    failBankValidation?: boolean;
+    projectSource?: ProjectSource;
+  };
 
   constructor(
     model: PartnerDto,
-    private readonly original: PartnerDto,
-    private readonly partnerDocuments: DocumentSummaryDto[],
-    private readonly options: {
+    original: PartnerDto,
+    partnerDocuments: DocumentSummaryDto[],
+    options: {
       showValidationErrors: boolean;
       validateBankDetails?: boolean;
       failBankValidation?: boolean;
@@ -31,6 +43,51 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     },
   ) {
     super({ model, showValidationErrors: options.showValidationErrors });
+
+    this.original = original;
+    this.partnerDocuments = partnerDocuments;
+    this.options = options;
+
+    this.spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.isTrue(
+        this,
+        this.model.partnerStatus !== PartnerStatus.Active ||
+          this.model.spendProfileStatus === SpendProfileStatus.Complete,
+        this.getContent(x => x.validation.partnerDtoValidator.spendProfileRequired),
+      ),
+    );
+
+    this.bankDetailsTaskStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.all(
+        this,
+        () =>
+          Validation.isTrue(
+            this,
+            this.model.partnerStatus !== PartnerStatus.Active ||
+              this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete,
+            this.getContent(x => x.validation.partnerDtoValidator.bankDetailsRequired),
+          ),
+        () => this.validateBankDetailsTaskStatus(),
+      ),
+    );
+
+    this.postcodeSetupStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.isTrue(
+        this,
+        this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
+        this.getContent(x => x.forms.partnerDetailsEdit.postcode.errors.too_small),
+        "postcode",
+      ),
+    );
+
+    this.bankCheckValidation = this.conditionallyValidateBankDetails(() =>
+      Validation.isFalse(
+        this,
+        !!this.options.failBankValidation,
+        this.getContent(x => x.validation.partnerDtoValidator.bankChecksFailed),
+        "bankCheckValidation",
+      ),
+    );
 
     this.sortCode = this.conditionallyValidateBankDetails(
       () =>
@@ -148,38 +205,6 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     return validation();
   }
 
-  public spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
-    Validation.isTrue(
-      this,
-      this.model.partnerStatus !== PartnerStatus.Active ||
-        this.model.spendProfileStatus === SpendProfileStatus.Complete,
-      this.getContent(x => x.validation.partnerDtoValidator.spendProfileRequired),
-    ),
-  );
-
-  public bankDetailsTaskStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
-    Validation.all(
-      this,
-      () =>
-        Validation.isTrue(
-          this,
-          this.model.partnerStatus !== PartnerStatus.Active ||
-            this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete,
-          this.getContent(x => x.validation.partnerDtoValidator.bankDetailsRequired),
-        ),
-      () => this.validateBankDetailsTaskStatus(),
-    ),
-  );
-
-  public postcodeSetupStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
-    Validation.isTrue(
-      this,
-      this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
-      this.getContent(x => x.forms.partnerDetailsEdit.postcode.errors.too_small),
-      "postcode",
-    ),
-  );
-
   public postcodeEditStatus = Validation.all(
     this,
     () =>
@@ -207,15 +232,6 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         ),
         "postcode",
       ),
-  );
-
-  public bankCheckValidation = this.conditionallyValidateBankDetails(() =>
-    Validation.isFalse(
-      this,
-      !!this.options.failBankValidation,
-      this.getContent(x => x.validation.partnerDtoValidator.bankChecksFailed),
-      "bankCheckValidation",
-    ),
   );
 
   private conditionallyValidateBankDetails(test: () => Result, condition = true) {

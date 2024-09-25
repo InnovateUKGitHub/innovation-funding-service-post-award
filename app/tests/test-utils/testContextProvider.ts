@@ -53,8 +53,13 @@ export class TestContext implements IContext {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation ERROR", [e.results]);
       }
-      if ("handleRepositoryError" in command) command.handleRepositoryError(this, e);
-      throw e;
+      if ("handleRepositoryError" in command) {
+        const error = command.handleRepositoryError(this, e);
+        if (error) {
+          return Promise.reject(error);
+        }
+      }
+      return Promise.reject(e);
     });
   }
 

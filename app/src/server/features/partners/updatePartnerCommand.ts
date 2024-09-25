@@ -50,55 +50,60 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
-    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.partner.projectId));
+    try {
+      const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.partner.projectId));
 
-    if (!isProjectActive) {
-      return Promise.reject(new InActiveProjectError());
+      if (!isProjectActive) {
+        return Promise.reject(new InActiveProjectError());
+      }
+
+      const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
+      const partnerDocuments = await context.runQuery(
+        new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
+      );
+
+      const mergedPartner: PartnerDto = merge(originalDto, this.partner);
+      this.mergedPartner = mergedPartner;
+      this.validateRequest(originalDto, partnerDocuments);
+
+      const update: PartnerUpdatable = {
+        Id: this.partner.id,
+      };
+
+      if (mergedPartner.partnerStatus === PartnerStatus.Pending) {
+        if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.check?.validateBankDetails) {
+          await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
+        }
+
+        if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.validateBankDetails) {
+          await this.updateBankDetails(update);
+        }
+
+        if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.verifyBankDetails) {
+          await this.bankCheckVerify(update, context);
+        }
+      }
+
+      await context.repositories.partners.update({
+        ...update,
+        Acc_Postcode__c: mergedPartner.postcode ?? undefined,
+        Acc_NewForecastNeeded__c: isBoolean(mergedPartner.newForecastNeeded)
+          ? mergedPartner.newForecastNeeded
+          : undefined,
+        Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(mergedPartner.partnerStatus),
+        Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(
+          mergedPartner.bankDetailsTaskStatus,
+        ),
+      });
+      return true;
+    } catch (e) {
+      return Promise.reject(e);
     }
-
-    const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
-    const partnerDocuments = await context.runQuery(
-      new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
-    );
-
-    const mergedPartner: PartnerDto = merge(originalDto, this.partner);
-    this.mergedPartner = mergedPartner;
-    this.validateRequest(originalDto, partnerDocuments);
-
-    const update: PartnerUpdatable = {
-      Id: this.partner.id,
-    };
-
-    if (mergedPartner.partnerStatus === PartnerStatus.Pending) {
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.check?.validateBankDetails) {
-        await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
-      }
-
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.validateBankDetails) {
-        await this.updateBankDetails(update);
-      }
-
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.verifyBankDetails) {
-        await this.bankCheckVerify(update, context);
-      }
-    }
-
-    await context.repositories.partners.update({
-      ...update,
-      Acc_Postcode__c: mergedPartner.postcode ?? undefined,
-      Acc_NewForecastNeeded__c: isBoolean(mergedPartner.newForecastNeeded)
-        ? mergedPartner.newForecastNeeded
-        : undefined,
-      Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(mergedPartner.partnerStatus),
-      Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(mergedPartner.bankDetailsTaskStatus),
-    });
-
-    return true;
   }
 
   private async updateBankDetails(update: PartnerUpdatable) {
     if (!this.mergedPartner) {
-      throw new Error("attempting to update bank details without bank details present");
+      return Promise.reject(new Error("attempting to update bank details without bank details present"));
     }
     const { bankDetails } = this.mergedPartner;
     update.Acc_RegistrationNumber__c = bankDetails.companyNumber ?? undefined;
@@ -118,11 +123,11 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
     context: IContext,
   ) {
     if (!this.mergedPartner) {
-      throw new Error("attempting to validate bank details without bank details present");
+      return Promise.reject(new Error("attempting to validate bank details without bank details present"));
     }
     const { bankDetails } = this.mergedPartner;
     if (!bankDetails.sortCode || !bankDetails.accountNumber) {
-      throw new BadRequestError("Sort code or account number not provided");
+      return Promise.reject(new BadRequestError("Sort code or account number not provided"));
     }
 
     const ValidationResult = await context.resources.bankCheckService.validate(
@@ -132,12 +137,14 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
 
     if (!ValidationResult.checkPassed) {
       if (this.mergedPartner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
-        throw new ValidationError(
-          new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
-            showValidationErrors: true,
-            validateBankDetails: true,
-            failBankValidation: true,
-          }),
+        return Promise.reject(
+          new ValidationError(
+            new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
+              showValidationErrors: true,
+              validateBankDetails: true,
+              failBankValidation: true,
+            }),
+          ),
         );
       }
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationFailed);
@@ -178,7 +185,7 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
       .runQuery(new GetBankVerificationDetailsByIdQuery(this.partner.id));
 
     if (!this.mergedPartner) {
-      throw new Error("attempting to verify bank details without bank details present");
+      return Promise.reject(new Error("attempting to verify bank details without bank details present"));
     }
 
     // Grab the bank details from the unmasked partner.
