@@ -15,9 +15,13 @@ enum FormTypes {
   // Project Setup
   ProjectSetup = "projectSetup",
   ProjectSetupBankDetails = "projectSetupBankDetails",
+  ProjectSetupBankDetailsVerify = "projectSetupBankDetailsVerify",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",
   ProjectSetupForecast = "projectSetupForecast",
   ProjectSetupPostcode = "projectSetupPostcode",
+  ProjectSetupBankStatementUpload = "projectSetupBankStatementUpload",
+  ProjectSetupBankStatementDelete = "projectSetupBankStatementDelete",
+  ProjectSetupBankStatement = "projectSetupBankStatement",
 
   // Partner details
 

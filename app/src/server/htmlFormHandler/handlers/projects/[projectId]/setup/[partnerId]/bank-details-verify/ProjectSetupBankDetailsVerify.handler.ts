@@ -1,19 +1,18 @@
 import { BankCheckStatus } from "@framework/constants/partner";
+import { Partner } from "@framework/entities/partner";
 import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
 import { IContext } from "@framework/types/IContext";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FailedBankCheckConfirmationRoute } from "@ui/containers/pages/projects/failedBankCheckConfirmation.page";
 import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
-import {
-  ProjectSetupBankDetailsParams,
-  ProjectSetupBankDetailsRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankDetails.page";
+import { ProjectSetupBankDetailsParams } from "@ui/containers/pages/projects/setup/projectSetupBankDetails.page";
 import {
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
   ProjectSetupBankDetailsSchemaType,
 } from "@ui/containers/pages/projects/setup/projectSetupBankDetails.zod";
+import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
@@ -21,23 +20,23 @@ class ProjectSetupBankDetailsVerifyHandler extends ZodFormHandlerBase<
   ProjectSetupBankDetailsSchemaType,
   ProjectSetupBankDetailsParams
 > {
-  private bankStatusBeforeSubmit: BankCheckStatus | undefined;
+  private partner: Partner | undefined;
 
   constructor() {
     super({
-      routes: [ProjectSetupBankDetailsRoute],
-      forms: [FormTypes.ProjectSetupBankDetails],
+      routes: [ProjectSetupBankDetailsVerifyRoute],
+      forms: [FormTypes.ProjectSetupBankDetailsVerify],
     });
   }
 
   public readonly acceptFiles = false;
 
   protected async getZodSchema({ context, params }: { params: ProjectSetupBankDetailsParams; context: IContext }) {
-    const partnerDto = await context.repositories.partners.getById(params.partnerId);
-    this.bankStatusBeforeSubmit = new BankCheckStatusMapper().mapFromSalesforce(partnerDto.bankCheckStatus);
+    this.partner = await context.repositories.partners.getById(params.partnerId);
+    const bankStatusBeforeSubmit = new BankCheckStatusMapper().mapFromSalesforce(this.partner.bankCheckStatus);
 
     return {
-      schema: getProjectSetupBankDetailsSchema(this.bankStatusBeforeSubmit),
+      schema: getProjectSetupBankDetailsSchema(bankStatusBeforeSubmit),
       errorMap: projectSetupBankDetailsErrorMap,
     };
   }
@@ -45,27 +44,27 @@ class ProjectSetupBankDetailsVerifyHandler extends ZodFormHandlerBase<
   protected async mapToZod({
     input,
     params,
+    context,
   }: {
     input: AnyObject;
     params: ProjectSetupBankDetailsParams;
+    context: IContext;
   }): Promise<z.input<ProjectSetupBankDetailsSchemaType>> {
+    if (!this.partner) {
+      this.partner = await context.repositories.partners.getById(params.partnerId);
+    }
+
     return {
       form: input.form,
       projectId: params.projectId,
       partnerId: params.partnerId,
-      companyNumber: input.companyNumber,
-      accountBuilding: input.accountBuilding,
-      accountStreet: input.accountStreet,
-      accountLocality: input.accountLocality,
-      accountTownOrCity: input.accountTownOrCity,
-      accountPostcode: input.accountPostcode,
+      companyNumber: this.partner.companyNumber,
+      accountBuilding: this.partner.accountBuilding,
+      accountStreet: this.partner.accountStreet,
+      accountLocality: this.partner.accountLocality,
+      accountTownOrCity: this.partner.accountTownOrCity,
+      accountPostcode: this.partner.accountPostcode,
       bankCheckValidation: undefined,
-      ...(this.bankStatusBeforeSubmit !== BankCheckStatus.ValidationPassed
-        ? {
-            sortCode: input.sortCode,
-            accountNumber: input.accountNumber,
-          }
-        : {}),
     };
   }
 

@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface ProjectSetupBankDetailsVerifyParams {
   projectId: ProjectId;
@@ -99,6 +100,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
       </Section>
       <Section qa="bank-details-verify-section">
         <Form data-qa="bank-details-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
+          <input type="hidden" name="form" value={FormTypes.ProjectSetupBankDetailsVerify} />
           <Fieldset>
             <Button disabled={isFetching} type="submit">
               <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />

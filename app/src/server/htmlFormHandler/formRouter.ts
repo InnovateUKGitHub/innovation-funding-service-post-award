@@ -41,9 +41,9 @@ import { ProjectChangeRequestReviewFormHandler } from "./handlers/projects/[proj
 import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerify.handler";
 import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetails.handler";
-import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDeleteHandler";
-import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentUploadHandler";
-import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatementHandler";
+import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentUpload.handler";
+import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatement.handler";
+import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDelete.handler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditForm.handler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupForm.handler";
 import { FallbackFormHandler } from "./FallbackFormHandler";
@@ -171,20 +171,18 @@ export const standardFormHandlers = [
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
-  new BankSetupStatementDocumentDeleteHandler(),
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
+  new BankSetupStatementDocumentDeleteHandler(),
 ] as const;
 
-export const multiFileFormHandlers = [
-  new OverheadDocumentsUploadHandler(),
-  new BankSetupStatementDocumentUploadHandler(),
-] as const;
+export const multiFileFormHandlers = [new OverheadDocumentsUploadHandler()] as const;
 
 export const developerFormHandlers = [new DeveloperUserSwitcherHandler(), new DeveloperPageCrasherHandler()] as const;
 
 export const zodFormHandlers = [
+  new BankSetupStatementDocumentUploadHandler(),
   new ProjectLevelDocumentShareUploadHandler(),
   new ClaimLevelDocumentShareUploadHandler(),
   new ClaimDetailLevelDocumentShareUploadHandler(),
