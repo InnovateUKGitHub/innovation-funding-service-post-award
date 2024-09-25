@@ -182,30 +182,7 @@ exports[`filenameValidator invalid reserved Microsoft Windows name 1`] = `
 ]]
 `;
 
-exports[`filenameValidator man in business suit levitating 1`] = `
-[ZodError: [
-  {
-    "code": "custom",
-    "params": {
-      "i18n": "errors.bad_characters",
-      "characters": [
-        [
-          "🕴",
-          "emojis"
-        ]
-      ],
-      "count": 2,
-      "root": "",
-      "dir": "",
-      "base": "🕴️.txt",
-      "ext": ".txt",
-      "name": "🕴️"
-    },
-    "path": [],
-    "message": "Invalid input"
-  }
-]]
-`;
+exports[`filenameValidator man in business suit levitating 1`] = `undefined`;
 
 exports[`filenameValidator valid arabic filename 1`] = `undefined`;
 

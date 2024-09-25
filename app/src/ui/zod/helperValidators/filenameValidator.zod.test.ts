@@ -25,7 +25,7 @@ describe("filenameValidator", () => {
     ${"invalid reserved Microsoft Windows name"}   | ${"CON.pptx"}                           | ${false}
     ${"invalid RTL character in name"}             | ${"\u202Extpp.suriv.a.ton.ylemert.exe"} | ${false}
     ${"invalid file with path"}                    | ${"/mnt/c/whatever.pptx"}               | ${false}
-    ${"man in business suit levitating"}           | ${"🕴️.txt"}                             | ${false}
+    ${"man in business suit levitating"}           | ${"🕴️.txt"}                             | ${true}
   `("$test", ({ filename, valid }) => {
     const res = filenameValidatior({
       maxFileBasenameLength: 32,

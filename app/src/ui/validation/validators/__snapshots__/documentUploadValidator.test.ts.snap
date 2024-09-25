@@ -2,15 +2,15 @@
 
 exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: \\ 1`] = `"The selected file name cannot use \\ characters."`;
 
-exports[`Document upload validator With en-GB i18n test file extension with disallowed file type 1`] = `"The selected file must be a PDF, XPS, DOC, DOCX, RTF, TXT, ODT, PPT, PPTX, ODP, CSV, XLS, XLSX, ODS, JPG, JPEG, PNG or ODG."`;
+exports[`Document upload validator With en-GB i18n test file extension with disallowed file type 1`] = `"You cannot upload 'test' because it is the wrong file type."`;
 
 exports[`Document upload validator With en-GB i18n test file size when below minimum 1`] = `"You cannot upload 'test.pdf' because it is empty."`;
 
 exports[`Document upload validator With en-GB i18n test file size when exceeding maximum 1`] = `"You cannot upload 'test.pdf' because it must be no larger than 32MB."`;
 
-exports[`Document upload validator With no i18n invalid file names containing invalid character: \\ 1`] = `"forms.errors.invalid"`;
+exports[`Document upload validator With no i18n invalid file names containing invalid character: \\ 1`] = `"forms.errors.bad_characters"`;
 
-exports[`Document upload validator With no i18n test file extension with disallowed file type 1`] = `"forms.errors.invalid"`;
+exports[`Document upload validator With no i18n test file extension with disallowed file type 1`] = `"forms.errors.invalid_extension"`;
 
 exports[`Document upload validator With no i18n test file size when below minimum 1`] = `"validation.documentValidator.fileSizeEmpty"`;
 
