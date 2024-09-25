@@ -121,6 +121,7 @@ export interface IConfig {
 
   readonly developer: {
     writeGraphQL: boolean;
+    colourfulLogging: boolean;
     oidc: {
       enabled: boolean;
       issuer: string;

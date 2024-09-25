@@ -85,8 +85,6 @@ const unwrapError = (error: Error, depth: number = 0) => {
 };
 
 export class ServerLogger extends BaseLogger {
-  private static readonly colourfulLogging = process.env.NODE_ENV === "development" || process.argv.includes("--dev");
-
   private static readonly LOG_LEVEL_PADDING = 10;
   private static readonly LOG_IDENTIFIER_PADDING = 12;
 
@@ -95,7 +93,7 @@ export class ServerLogger extends BaseLogger {
       this.logWithNewRelic(level, message, ...params);
     }
 
-    if (ServerLogger.colourfulLogging) {
+    if (configuration.developer.colourfulLogging) {
       this.logWithTeletype(level, message, ...params);
     } else {
       this.logWithConsoleLog(level, message, ...params);
