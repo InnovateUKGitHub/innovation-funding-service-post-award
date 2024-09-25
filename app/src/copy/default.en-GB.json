@@ -2335,7 +2335,7 @@
               "no_filename": "The selected file must have a name.",
               "every_char_space": "The selected file must have a name.",
               "every_char_full_stop": "The selected file must have a name.",
-              "invalid_extension": "The selected file must be a {{ allowedExtensions, uppercase, list(type: disjunction) }}.",
+              "invalid_extension": "You cannot upload '{{ name }}' because it is the wrong file type.",
               "microsoft_windows_invalid_filename": "The selected file must not be named {{ name }}.",
               "starts_with_space": "The selected file name must not begin with a space.",
               "bad_characters_one": "The selected file name cannot use the {{ characters, translateChar, unique, list }} character.",
