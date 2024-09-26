@@ -66,6 +66,9 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
 
 export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
   public readonly responses: Result;
+  public readonly periodId: Result;
+  public readonly editable: Result;
+  public readonly addComments: Result;
 
   constructor(
     model: MonitoringReportDto,
@@ -89,50 +92,50 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
       this.getContent(x => x.validation.monitoringReportDtoValidator.responsesInvalid),
       "questions",
     );
-  }
 
-  public readonly periodId = Validation.all(
-    this,
-    () =>
-      Validation.required(
-        this,
-        this.model.periodId,
-        this.getContent(x => x.validation.monitoringReportDtoValidator.periodRequired),
-        "period",
-      ),
-    () =>
-      Validation.integer(
-        this,
-        this.model.periodId,
-        this.getContent(x => x.validation.monitoringReportDtoValidator.periodNotNumber),
-        "period",
-      ),
-    () =>
+    this.periodId = Validation.all(
+      this,
+      () =>
+        Validation.required(
+          this,
+          this.model.periodId,
+          this.getContent(x => x.validation.monitoringReportDtoValidator.periodRequired),
+          "period",
+        ),
+      () =>
+        Validation.integer(
+          this,
+          this.model.periodId,
+          this.getContent(x => x.validation.monitoringReportDtoValidator.periodNotNumber),
+          "period",
+        ),
+      () =>
+        Validation.isTrue(
+          this,
+          this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods,
+          this.getContent(x =>
+            x.validation.monitoringReportDtoValidator.periodTooLarge({ count: this.totalProjectPeriods }),
+          ),
+          "period",
+        ),
+    );
+
+    this.editable = Validation.all(this, () =>
       Validation.isTrue(
         this,
-        this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods,
-        this.getContent(x =>
-          x.validation.monitoringReportDtoValidator.periodTooLarge({ count: this.totalProjectPeriods }),
-        ),
-        "period",
+        this.editableStates.includes(this.model.status),
+        this.getContent(x => x.validation.monitoringReportDtoValidator.dtoReadOnly),
       ),
-  );
+    );
+
+    // Limit the monitoring report comment to a max-length of 5000 characters.
+    this.addComments = Validation.all(this, () =>
+      Validation.maxLength(this, this.model.addComments, 5000, undefined, "addComments"),
+    );
+  }
 
   private readonly editableStates = [
     MonitoringReportStatus.Draft,
     MonitoringReportStatus.Queried,
   ] as MonitoringReportStatus[];
-
-  public readonly editable = Validation.all(this, () =>
-    Validation.isTrue(
-      this,
-      this.editableStates.includes(this.model.status),
-      this.getContent(x => x.validation.monitoringReportDtoValidator.dtoReadOnly),
-    ),
-  );
-
-  // Limit the monitoring report comment to a max-length of 5000 characters.
-  public readonly addComments = Validation.all(this, () =>
-    Validation.maxLength(this, this.model.addComments, 5000, undefined, "addComments"),
-  );
 }
