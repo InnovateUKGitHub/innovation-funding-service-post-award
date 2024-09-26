@@ -138,7 +138,7 @@ exports[`number currency validator accept null when not required 1`] = `
 exports[`number currency validator accept undefined when not required 1`] = `
 {
   "data": {
-    "heinz": undefined,
+    "heinz": null,
   },
   "success": true,
 }

@@ -4,12 +4,8 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  costIdValidation,
-  evaluateObject,
-  percentageNumberInput,
-  requiredPositiveIntegerInput,
-} from "@ui/zod/helperValidators.zod";
+import { costIdValidation, evaluateObject } from "@ui/zod/helperValidators.zod";
+import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
@@ -26,7 +22,12 @@ export const labourSchema = z.object({
   ratePerDay: getGenericCurrencyValidation({
     required: true,
   }),
-  daysSpentOnProject: requiredPositiveIntegerInput({ max: 1000000 }),
+  daysSpentOnProject: getNumberValidation({
+    max: 1_000_000,
+    min: 0,
+    integer: true,
+    required: true,
+  }),
   costCategoryType: z.nativeEnum(CostCategoryType),
 });
 
@@ -71,7 +72,11 @@ export const materialsSchema = z.object({
   costPerItem: getGenericCurrencyValidation({
     required: true,
   }),
-  quantityOfMaterialItems: requiredPositiveIntegerInput({ min: 0 }),
+  quantityOfMaterialItems: getNumberValidation({
+    min: 0,
+    integer: true,
+    required: true,
+  }),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileMaterialsCost),
   costCategoryType: z.nativeEnum(CostCategoryType),
 });
@@ -97,7 +102,7 @@ export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
 export const capitalUsageSchema = z.object({
   id: costIdValidation.nullable(),
   capitalUsageDescription: description,
-  depreciationPeriod: requiredPositiveIntegerInput({}),
+  depreciationPeriod: getNumberValidation({ integer: true, min: 0, required: true }),
   itemType: z.coerce.number().min(1),
   netPresentValue: getGenericCurrencyValidation({
     required: true,
@@ -105,7 +110,7 @@ export const capitalUsageSchema = z.object({
   residualValue: getGenericCurrencyValidation({
     required: true,
   }),
-  utilisation: percentageNumberInput({ max: 99.99, min: 0, required: true }),
+  utilisation: getNumberValidation({ lt: 100, min: 0, required: true }),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost),
   costCategoryType: z.nativeEnum(CostCategoryType),
 });
@@ -119,7 +124,7 @@ export const travelAndASubsistenceSchema = z
   .object({
     id: costIdValidation.nullable(),
     descriptionOfCost: description,
-    numberOfTimes: requiredPositiveIntegerInput({ max: 9_999_999_999 }),
+    numberOfTimes: getNumberValidation({ max: 9_999_999_999, min: 0, integer: true, required: true }),
     costOfEach: getGenericCurrencyValidation({
       required: true,
     }),

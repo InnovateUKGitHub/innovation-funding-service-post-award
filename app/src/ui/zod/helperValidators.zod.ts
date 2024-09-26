@@ -6,10 +6,8 @@ import { validDocumentFilenameCharacters } from "@ui/validation/validators/docum
 import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types/fileWrapper";
-import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { DateTime } from "luxon";
 
-const maxDefaultValue = 100_000_000_000;
 const y2k = new Date("2000-01-01");
 
 const projectIdValidation = z
@@ -87,63 +85,6 @@ const booleanValidation = z
     if (value === "false") return false;
     return value;
   });
-
-const currencyValidation = z
-  .string()
-  .nonempty()
-  .superRefine((val, ctx) => {
-    const currency = parseCurrency(val);
-
-    // Check if the string can even be parsed
-    if (isNaN(currency)) {
-      return ctx.addIssue({
-        code: ZodIssueCode.invalid_type,
-        expected: "number",
-        received: "nan",
-      });
-    }
-
-    // Make sure our currency isn't so big as to break our server
-    if (currency > 999_999_999_999) {
-      return ctx.addIssue({
-        code: ZodIssueCode.too_big,
-        type: "number",
-        maximum: 999_999_999_999,
-        inclusive: false,
-      });
-    }
-
-    if (currency < -999_999_999_999) {
-      return ctx.addIssue({
-        code: ZodIssueCode.too_small,
-        type: "number",
-        minimum: -999_999_999_999,
-        inclusive: false,
-      });
-    }
-
-    if (/\.\d\d\d/.test(val)) {
-      return ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: {
-          i18n: "errors.two_decimal_places",
-        },
-      });
-    }
-  });
-
-const zeroOrGreaterCurrencyValidation = currencyValidation.superRefine((val, ctx) => {
-  const currency = roundCurrency(parseCurrency(val));
-
-  if (currency < 0) {
-    return ctx.addIssue({
-      code: ZodIssueCode.too_small,
-      type: "number",
-      minimum: 0,
-      inclusive: true,
-    });
-  }
-});
 
 const getSingleFileValidation = (options: IAppOptions) => {
   const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
@@ -245,242 +186,6 @@ const getMultiFileValidation = (options: IAppOptions) =>
       }
     });
 
-const integerInput = z.union([
-  z.number().int(),
-  z.string().transform((x, ctx) => {
-    if (x === "") return null;
-    const x1 = Number(x);
-    if (isNaN(x1)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_type,
-        expected: "number",
-        received: "string",
-      });
-    }
-    if (!Number.isInteger(x1)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        params: {
-          i18n: "errors.not_integer",
-        },
-      });
-    }
-
-    return x1;
-  }),
-]);
-
-const positiveIntegerInput = ({ lt, min = 0 }: { lt?: number; min?: number }) =>
-  z.union([
-    z.number().int().min(min),
-    z.string().transform((x, ctx) => {
-      if (x === "") return null;
-      const x1 = Number(x);
-
-      if (isNaN(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.invalid_type,
-          expected: "number",
-          received: "string",
-        });
-      } else if (x1 < min) {
-        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: min, inclusive: true, type: "number" });
-      } else if (!Number.isInteger(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-        });
-      } else if (typeof lt === "number" && x1 >= lt) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_big,
-          inclusive: false,
-          maximum: lt,
-          type: "number",
-        });
-      }
-
-      return x1;
-    }),
-  ]);
-
-const requiredPositiveIntegerInput = ({ max = 1000000000, min = 0 }: { max?: number; min?: number }) =>
-  z.union([
-    z.number().int().min(min).max(max),
-    z.string().transform((x, ctx) => {
-      if (x === "") {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          params: {
-            i18n: "errors.required",
-          },
-        });
-      }
-      const x1 = Number(x);
-
-      if (isNaN(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.invalid_type,
-          expected: "number",
-          received: "string",
-        });
-      } else if (x1 < min) {
-        ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: min, inclusive: true, type: "number" });
-      } else if (!Number.isInteger(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          params: {
-            i18n: "errors.not_integer",
-          },
-        });
-      } else if (typeof max === "number" && x1 > max) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_big,
-          inclusive: true,
-          maximum: max,
-          type: "number",
-        });
-      }
-
-      return x1;
-    }),
-  ]);
-
-const numberInput = z.union([z.number(), z.string().transform(x => (x === "" ? null : Number(x)))]);
-
-const positiveNumberInput = z.union([
-  z.number().min(0).max(maxDefaultValue),
-  z.string().transform((x, ctx) => {
-    if (x === "") return null;
-    const x1 = Number(x);
-
-    if (isNaN(x1)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_type,
-        expected: "number",
-        received: "string",
-      });
-    }
-    if (x1 < 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
-        minimum: 0,
-        inclusive: true,
-        type: "number",
-      });
-    }
-
-    if (x1 > maxDefaultValue) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        maximum: maxDefaultValue,
-        inclusive: true,
-        type: "number",
-      });
-    }
-
-    return x1;
-  }),
-]);
-
-const requiredPositiveNumberInput = ({ max = 1000000000 }: { max?: number }) =>
-  z.union([
-    z.number().min(0).max(max),
-    z.string().transform((x, ctx) => {
-      if (x === "") {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          params: {
-            i18n: "errors.required",
-          },
-        });
-      }
-      const x1 = Number(x);
-
-      if (isNaN(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.invalid_type,
-          expected: "number",
-          received: "string",
-        });
-      }
-      if (x1 < 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: 0,
-          inclusive: true,
-          type: "number",
-        });
-      } else if (x1 > max) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_big,
-          maximum: max,
-          inclusive: true,
-          type: "number",
-        });
-      }
-
-      return x1;
-    }),
-  ]);
-
-const percentageNumberInput = (
-  { max = 100, min = 0, required }: { max?: number; min?: number; required?: boolean } = {
-    max: 100,
-    min: 0,
-    required: false,
-  },
-) =>
-  z.union([
-    z.number().min(min).max(max),
-    z.string().transform((x, ctx) => {
-      if (x === "") {
-        if (required) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            params: {
-              i18n: "errors.required",
-            },
-          });
-        } else {
-          return null;
-        }
-      }
-
-      if (/\.\d\d\d/.test(x)) {
-        ctx.addIssue({
-          code: ZodIssueCode.custom,
-          params: {
-            i18n: "errors.two_decimal_places",
-          },
-        });
-      }
-
-      const x1 = Number(x.replace(/%$/, ""));
-      if (Number.isNaN(x1)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.invalid_type,
-          expected: "number",
-          received: "string",
-        });
-      } else if (x1 < min) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          minimum: min,
-          inclusive: true,
-          type: "number",
-        });
-      } else if (x1 > max) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_big,
-          maximum: max,
-          inclusive: true,
-          type: "number",
-        });
-      }
-
-      return x1;
-    }),
-  ]);
-
 const dateValidation = z
   .union([
     z.date(),
@@ -524,19 +229,6 @@ const dateValidation = z
     }
   });
 
-const integerRangeInput = (min: number, max: number) =>
-  integerInput.superRefine((n, ctx) => {
-    if (n === null) {
-      return ctx.addIssue({ code: ZodIssueCode.invalid_type, expected: "number", received: "null" });
-    }
-    if (!(n >= min && n <= max)) {
-      return ctx.addIssue({
-        code: ZodIssueCode.custom,
-        params: { i18n: "errors.invalid_range", min, max, count: min === 1 && max === 1 ? 1 : 2 },
-      });
-    }
-  });
-
 /**
  * ## evaluateObject
  *
@@ -575,20 +267,10 @@ export {
   periodIdValidation,
   pclIdValidation,
   booleanValidation,
-  currencyValidation,
   loanIdValidation,
   costIdValidation,
-  zeroOrGreaterCurrencyValidation,
   claimIdValidation,
   costCategoryIdValidation,
-  integerInput,
-  integerRangeInput,
-  numberInput,
-  percentageNumberInput,
-  positiveNumberInput,
-  positiveIntegerInput,
-  requiredPositiveNumberInput,
-  requiredPositiveIntegerInput,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,

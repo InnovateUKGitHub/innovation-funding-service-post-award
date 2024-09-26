@@ -28,7 +28,7 @@ export const getAddPartnerSummarySchema = ({
     participantSize: required ? z.number().gt(0) : z.number().nullable().optional(),
     numberOfEmployees: getNumberValidation({
       min: 0,
-      max: 99_999_999,
+      lt: 100_000_000,
       required: required && organisationType === PCROrganisationType.Industrial,
     }),
     financialYearEndDate:
@@ -69,7 +69,7 @@ export const getAddPartnerSummarySchema = ({
       required: required && projectRole === PCRProjectRole.ProjectLead,
       maxLength: 50,
     }),
-    awardRate: required ? z.number().min(0) : z.number().nullable().optional(),
+    awardRate: getNumberValidation({ min: 0, max: 100, required }),
     partnerType: z.number().gt(0),
     projectRole: z.number().gt(0),
     isCommercialWork: required ? z.boolean() : z.boolean().nullable().optional(),

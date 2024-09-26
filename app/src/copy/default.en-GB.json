@@ -2019,7 +2019,13 @@
           "invalid_type": "{{label, key}} must be a number.",
           "not_a_number": "{{label, key}} must be a number.",
           "too_big": "{{label, key}} must be {{count}} or less.",
-          "too_small": "{{label, key}} must be {{count}} or more."
+          "too_small": "{{label, key}} must be {{count}} or more.",
+          "less_than": "{{label, key}} must be less than {{count}}.",
+          "greater_than": "{{label, key}} must be greater than {{count}}.",
+          "not_integer": "{{label, key}} must be a whole number, like 15.",
+          "invalid_range_one": "{{label, key}} must be 1.",
+          "invalid_range_other": "{{label, key}} must be between {{min}} and {{max}}.",
+          "decimal_places": "{{label, key}} must be {{count}} decimal places or fewer."
         }
       }
     },
@@ -2113,6 +2119,7 @@
     },
     "monitoringReportCreate": {
       "period": {
+        "label": "Period",
         "errors": {
           "invalid_type_received_string": "Period must be a whole number, like 3.",
           "invalid_type_received_null": "Enter period.",
