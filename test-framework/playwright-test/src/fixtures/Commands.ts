@@ -75,10 +75,10 @@ class Commands {
   /**
    * Get a list item from its key
    */
-  getListItemFromKey(label: string, item: string) {
-    const key = this.page.locator("dt", { hasText: label });
-    const parent = this.page.locator("div", { has: key });
-    return parent.locator("dd", { hasText: item });
+  async getListItemFromKey(label: string, item: string) {
+    const key = this.page.locator("css=dt", { hasText: label });
+    const parent = this.page.locator("css=div", { has: key });
+    return parent.locator("css=dd", { hasText: item });
   }
 
   /**
@@ -444,5 +444,14 @@ class Commands {
 
   getLinkInRow(category: string, linkName: string) {
     return this.getTableRow(category).locator("a").filter({ hasText: linkName });
+  }
+
+  async dateToday() {
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let fulldate = `${day} ${month} ${year}`;
+    return fulldate;
   }
 }

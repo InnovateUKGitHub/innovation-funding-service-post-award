@@ -10,7 +10,7 @@ import { MonitoringReports } from "./pages/MonitoringReports";
 import { ProjectDashboard } from "./pages/ProjectDashboard";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
-import { PutProjectOnHold } from "./pages/putProjectOnHold";
+import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
 
 export
 @Fixture("accNavigation")

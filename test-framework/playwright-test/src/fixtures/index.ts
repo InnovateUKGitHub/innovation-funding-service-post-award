@@ -18,7 +18,9 @@ import { AccUserSwitcher } from "./acc/AccUserSwitcher";
 import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
-import { PutProjectOnHold } from "./acc/pages/putProjectOnHold";
+import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
+import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
+import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 
 type AccFixtures = {
   // Pages
@@ -29,6 +31,8 @@ type AccFixtures = {
   viewForecast: ViewForecast;
   monitoringReports: MonitoringReports;
   putProjectOnHold: PutProjectOnHold;
+  projectChangeRequests: ProjectChangeRequests;
+  approveNewSubcontractor: ApproveNewSubcontractor;
 
   // Misc
   accNavigation: AccNavigation;
@@ -62,8 +66,10 @@ export const test = base.extend<AccFixtures, Workers>({
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
+  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
+    use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
 
-  
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -76,7 +82,16 @@ export const test = base.extend<AccFixtures, Workers>({
 
   // Misc
   accNavigation: (
-    { page, developerHomepage, projectDashboard, projectOverview, projectForecasts, projectState, monitoringReports, putProjectOnHold },
+    {
+      page,
+      developerHomepage,
+      projectDashboard,
+      projectOverview,
+      projectForecasts,
+      projectState,
+      monitoringReports,
+      putProjectOnHold,
+    },
     use,
   ) =>
     use(
