@@ -202,5 +202,5 @@ docker_upload_node() {
 
 acc_clone_secrets() {
   # Clone or Git Pull the latest acc-secrets
-  git -C kustomize/acc-secrets/ pull || git clone https://bitbucket.org/ukri-ddat/acc-secrets.git kustomize/acc-secrets
+  git -C kustomize/acc-secrets/ pull || git clone $(git config --get remote.origin.url)/../acc-secrets.git kustomize/acc-secrets
 }
