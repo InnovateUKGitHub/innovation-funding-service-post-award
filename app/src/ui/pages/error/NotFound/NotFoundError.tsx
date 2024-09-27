@@ -1,4 +1,4 @@
-import { PageTitle } from "@ui/features/page-title";
+import { PageTitle } from "@ui/hooks/page-title";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { Content } from "../../../components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page";

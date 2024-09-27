@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 
 export type FormInputWidths =
   | "full"

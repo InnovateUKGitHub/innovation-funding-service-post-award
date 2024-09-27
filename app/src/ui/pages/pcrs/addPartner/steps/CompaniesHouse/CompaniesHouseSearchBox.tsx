@@ -6,7 +6,7 @@ import { Label } from "@ui/components/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/context/Mounted";
 import { useDebounce } from "@ui/components/input-utils";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { useContent } from "@ui/hooks/content.hook";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

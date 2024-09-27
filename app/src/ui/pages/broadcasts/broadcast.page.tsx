@@ -1,5 +1,5 @@
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
-import { PageTitle } from "@ui/features/page-title";
+import { PageTitle } from "@ui/hooks/page-title";
 
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";

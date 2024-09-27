@@ -1,4 +1,4 @@
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { PossibleCopyFunctions, PossibleCopyStrings, DataOption, ContentSelectorCallInformation } from "./type";
 
 /**

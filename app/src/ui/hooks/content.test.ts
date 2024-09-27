@@ -1,7 +1,7 @@
 import { PossibleCopyFunctions } from "@copy/type";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { useContent } from "./content.hook";
 import { hookTestBed } from "@shared/TestBed";
 

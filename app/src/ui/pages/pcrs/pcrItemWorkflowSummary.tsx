@@ -1,4 +1,4 @@
-import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
+import WithScrollToTopOnPropChange from "@ui/hooks/scroll-to-top-on-prop-change";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 
 export const SummarySection = () => {

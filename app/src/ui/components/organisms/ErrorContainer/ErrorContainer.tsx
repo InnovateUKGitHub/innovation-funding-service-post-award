@@ -1,16 +1,16 @@
 import { ContentProvider } from "@ui/context/contentProvider";
-import { PageTitleProvider } from "@ui/features/page-title";
-import { useInitContent } from "@ui/features/use-initial-content";
+import { PageTitleProvider } from "@ui/hooks/page-title";
+import { useInitContent } from "@ui/hooks/use-initial-content";
 import { FallbackProps } from "react-error-boundary";
 import { FullHeight } from "../../atoms/FullHeight/FullHeight";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
 import { Header } from "../Header/header";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { ErrorCode } from "@framework/constants/enums";
-import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
-import { UnauthenticatedError } from "@ui/containers/pages/error/Unauthenticated/UnauthenticatedError";
-import { GenericFallbackError } from "@ui/containers/pages/error/Generic/GenericFallbackError";
 import { ClientErrorResponse, getErrorResponse } from "@framework/util/errorHandlers";
+import { NotFoundError } from "@ui/pages/error/NotFound/NotFoundError";
+import { UnauthenticatedError } from "@ui/pages/error/Unauthenticated/UnauthenticatedError";
+import { GenericFallbackError } from "@ui/pages/error/Generic/GenericFallbackError";
 
 export const ErrorContainer = ({ error }: { error?: ClientErrorResponse | null }) => {
   switch (error?.code) {

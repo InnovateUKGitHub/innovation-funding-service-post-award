@@ -1,5 +1,5 @@
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 
 type TMessageContext = {

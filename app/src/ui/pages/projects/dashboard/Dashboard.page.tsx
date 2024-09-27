@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useMountedState } from "@ui/context/Mounted";
-import { PageTitle } from "@ui/features/page-title";
+import { PageTitle } from "@ui/hooks/page-title";
 import { BroadcastsViewer } from "@ui/components/organisms/BroadcastViewer/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";

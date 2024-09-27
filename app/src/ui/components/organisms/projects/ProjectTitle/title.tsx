@@ -1,5 +1,5 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { PageTitle } from "@ui/features/page-title";
+import { PageTitle } from "@ui/hooks/page-title";
 
 export interface TitleProps extends Pick<ProjectDto, "projectNumber" | "title"> {
   heading?: string;

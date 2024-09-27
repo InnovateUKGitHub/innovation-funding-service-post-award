@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 
 import { useDebounce } from "./input-utils";
 

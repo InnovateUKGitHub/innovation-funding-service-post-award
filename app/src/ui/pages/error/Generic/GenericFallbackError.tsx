@@ -5,7 +5,7 @@ import { Content } from "@ui/components/molecules/Content/content";
 import { ErrorInformation } from "@ui/components/molecules/ErrorSummary/ErrorInformation";
 import { Page } from "@ui/components/molecules/Page/Page";
 import { Section } from "@ui/components/molecules/Section/section";
-import { PageTitle } from "@ui/features/page-title";
+import { PageTitle } from "@ui/hooks/page-title";
 
 export const GenericFallbackError = ({ error = null }: { error?: ClientErrorResponse | null }) => {
   return (

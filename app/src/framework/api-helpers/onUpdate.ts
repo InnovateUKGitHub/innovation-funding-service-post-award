@@ -1,5 +1,5 @@
 import { useApiErrorContext } from "@ui/context/api-error";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";

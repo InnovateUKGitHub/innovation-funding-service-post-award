@@ -2,7 +2,7 @@ import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
 import { mountedContext } from "@ui/context/Mounted";
-import { PageTitleProvider } from "@ui/features/page-title";
+import { PageTitleProvider } from "@ui/hooks/page-title";
 import { ContentProvider } from "@ui/context/contentProvider";
 import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";

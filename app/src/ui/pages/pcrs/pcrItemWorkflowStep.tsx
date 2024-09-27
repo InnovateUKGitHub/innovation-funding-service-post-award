@@ -1,6 +1,6 @@
 import { ForbiddenError } from "@shared/appError";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
-import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
+import WithScrollToTopOnPropChange from "@ui/hooks/scroll-to-top-on-prop-change";
 
 export const WorkflowStep = () => {
   const { mode, workflow } = usePcrWorkflowContext();

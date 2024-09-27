@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { noop } from "@ui/helpers/noop";
+import noop from "lodash/noop";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { SearchInput } from "@ui/components/atoms/Search/searchInput";
