@@ -21,6 +21,7 @@ import {
   getClaimDetailsStatusType,
 } from "@ui/components/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useClaimDashboardData } from "./claimDashboard.logic";
+import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 
 export interface ClaimDashboardPageParams {
   projectId: ProjectId;
@@ -62,6 +63,10 @@ const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) =>
     <Page backLink={<ProjectBackLink projectId={project.id} />} fragmentRef={fragmentRef}>
       {isMultipleParticipants && (
         <ClaimsDashboardGuidance competitionType={project.competitionType} overdueProject={partner.overdueProject} />
+      )}
+
+      {partner.isWithdrawn && (
+        <ValidationMessage messageType="info" message={x => x.claimsMessages.hasWithdrawnPartner} />
       )}
 
       <Messages messages={props.messages} />
