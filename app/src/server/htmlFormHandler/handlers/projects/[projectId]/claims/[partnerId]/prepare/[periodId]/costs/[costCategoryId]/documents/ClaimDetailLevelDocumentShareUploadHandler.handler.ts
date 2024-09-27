@@ -8,10 +8,7 @@ import {
   getClaimDetailLevelUpload,
 } from "@ui/zod/documentValidators.zod";
 import express from "express";
-import {
-  ClaimDetailDocumentsRoute,
-  ClaimDetailDocumentsPageParams,
-} from "@ui/containers/pages/claims/claimDetailDocuments.page";
+import { ClaimDetailDocumentsRoute, ClaimDetailDocumentsPageParams } from "@ui/pages/claims/claimDetailDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";

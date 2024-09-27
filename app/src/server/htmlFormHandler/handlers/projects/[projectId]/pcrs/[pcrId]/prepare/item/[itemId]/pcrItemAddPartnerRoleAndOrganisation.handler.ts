@@ -1,18 +1,15 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-import { setData } from "@ui/containers/pages/pcrs/addPartner/steps/roleAndOrganisationStep";
+import { setData } from "@ui/pages/pcrs/addPartner/steps/roleAndOrganisationStep";
 import {
   RoleAndOrganisationSchemaType,
   roleAndOrganisationSchema,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/roleAndOrganisation.zod";
-import { addPartnerErrorMap } from "@ui/containers/pages/pcrs/addPartner/addPartnerSummary.zod";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/roleAndOrganisation.zod";
+import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
 
 export class PcrItemAddPartnerRoleAndOrganisationHandler extends ZodFormHandlerBase<

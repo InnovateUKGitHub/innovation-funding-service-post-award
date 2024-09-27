@@ -1,14 +1,10 @@
 import { IContext } from "@framework/types/IContext";
 import { GetLoan } from "@server/features/loans/getLoan";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
-import { LoansSummaryRoute } from "@ui/containers/pages/loans/loanOverview.page";
-import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
+import { LoansSummaryRoute } from "@ui/pages/loans/loanOverview.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/pages/loans/loanRequest.page";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  LoanRequestSchemaType,
-  loanRequestErrorMap,
-  loanRequestSchema,
-} from "@ui/containers/pages/loans/loanRequest.zod";
+import { LoanRequestSchemaType, loanRequestErrorMap, loanRequestSchema } from "@ui/pages/loans/loanRequest.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

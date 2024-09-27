@@ -1,18 +1,15 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-import { addPartnerErrorMap } from "@ui/containers/pages/pcrs/addPartner/addPartnerSummary.zod";
+import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
 import {
   FinanceDetailsSchemaType,
   getFinanceDetailsSchema,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
 import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
 

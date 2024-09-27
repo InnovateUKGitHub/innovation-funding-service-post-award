@@ -2,7 +2,7 @@ import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoa
 import { IContext } from "@framework/types/IContext";
 import express from "express";
 import { configuration } from "@server/features/common/config";
-import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/pages/loans/loanRequest.page";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { LoanLevelUploadSchemaType, documentsErrorMap, getLoanLevelUpload } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";

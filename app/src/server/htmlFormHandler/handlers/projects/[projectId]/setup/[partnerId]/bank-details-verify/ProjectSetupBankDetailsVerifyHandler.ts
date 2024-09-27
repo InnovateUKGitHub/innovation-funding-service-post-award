@@ -5,13 +5,13 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { BankCheckStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
-import { FailedBankCheckConfirmationRoute } from "@ui/containers/pages/projects/failedBankCheckConfirmation.page";
-import { PartnerDetailsParams } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
-import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
+import { FailedBankCheckConfirmationRoute } from "@ui/pages/projects/failedBankCheckConfirmation.page";
+import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
 import {
   ProjectSetupBankDetailsVerifyParams,
   ProjectSetupBankDetailsVerifyRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
+} from "@ui/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";

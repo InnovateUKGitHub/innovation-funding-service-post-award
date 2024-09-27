@@ -6,12 +6,12 @@ import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import {
   MonitoringReportPreparePeriodParams,
   MonitoringReportPreparePeriodRoute,
-} from "@ui/containers/pages/monitoringReports/monitoringReportPeriodStep.page";
-import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/monitoringReportPeriodStep.page";
+import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<
   MonitoringReportPreparePeriodParams,

@@ -3,17 +3,17 @@ import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { PartnerDetailsParams } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
 import {
   ProjectSetupBankDetailsParams,
   ProjectSetupBankDetailsRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankDetails.page";
+} from "@ui/pages/projects/setup/projectSetupBankDetails.page";
 import {
   ProjectSetupBankDetailsSchemaType,
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
-} from "@ui/containers/pages/projects/setup/projectSetupBankDetails.zod";
-import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
+} from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
+import { ProjectSetupBankDetailsVerifyRoute } from "@ui/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

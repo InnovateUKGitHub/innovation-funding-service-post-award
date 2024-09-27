@@ -9,7 +9,7 @@ import { configuration } from "@server/features/common/config";
 import {
   PCRPrepareReasoningRoute,
   ProjectChangeRequestPrepareReasoningParams,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
+} from "@ui/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends ZodFormHandlerBase<

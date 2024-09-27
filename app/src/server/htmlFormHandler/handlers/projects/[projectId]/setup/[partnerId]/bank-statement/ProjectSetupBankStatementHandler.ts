@@ -4,12 +4,12 @@ import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
-import { PartnerDetailsParams } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
-import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
+import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
 import {
   ProjectSetupBankStatementParams,
   ProjectSetupBankStatementRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankStatement.page";
+} from "@ui/pages/projects/setup/projectSetupBankStatement.page";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";

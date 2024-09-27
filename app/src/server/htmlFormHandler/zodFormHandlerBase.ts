@@ -5,7 +5,7 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { ValidationError, ZodFormHandlerError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
-import { IRouteDefinition } from "@ui/containers/containerBase";
+import { IRouteDefinition } from "@ui/app/containerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z, ZodError, ZodTypeAny } from "zod";

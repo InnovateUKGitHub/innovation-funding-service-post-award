@@ -2,15 +2,12 @@ import { IContext } from "@framework/types/IContext";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import {
   RenamePartnerSchema,
   getRenamePartnerSchema,
   renamePartnerErrorMap,
-} from "@ui/containers/pages/pcrs/renamePartner/renamePartner.zod";
+} from "@ui/pages/pcrs/renamePartner/renamePartner.zod";
 
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";

@@ -3,11 +3,8 @@ import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { isNil } from "lodash";
 
 export const getNextAddPartnerStep = async ({

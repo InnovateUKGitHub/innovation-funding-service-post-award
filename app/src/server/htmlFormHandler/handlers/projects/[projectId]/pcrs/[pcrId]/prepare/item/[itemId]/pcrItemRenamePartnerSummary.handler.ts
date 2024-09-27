@@ -3,19 +3,16 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import {
   RenamePartnerSchema,
   getRenamePartnerSchema,
   renamePartnerErrorMap,
-} from "@ui/containers/pages/pcrs/renamePartner/renamePartner.zod";
+} from "@ui/pages/pcrs/renamePartner/renamePartner.zod";
 
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
 

@@ -1,6 +1,6 @@
 import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocument";
 import { IContext } from "@framework/types/IContext";
-import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/pages/loans/loanRequest.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/pages/loans/loanRequest.page";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { documentsErrorMap, loanLevelDelete } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";

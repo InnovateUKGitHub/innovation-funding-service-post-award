@@ -8,7 +8,7 @@ import {
   UnauthenticatedError,
   ForbiddenError,
 } from "@shared/appError";
-import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";
+import { DeveloperPageCrasherPage } from "@ui/pages/developer/PageCrasher.page";
 import express from "express";
 import { configuration } from "@server/features/common/config";
 import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";

@@ -3,20 +3,16 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import {
-  labourSchema,
-  LabourSchemaType,
-  errorMap,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
+import { labourSchema, LabourSchemaType, errorMap } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
   PcrEditSpendProfileCostParams,
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHandlerBase<

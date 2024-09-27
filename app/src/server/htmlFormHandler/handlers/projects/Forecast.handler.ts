@@ -9,19 +9,19 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/g
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
-import { ClaimForecastRoute } from "@ui/containers/pages/claims/forecast/ClaimForecast.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
+import { AllClaimsDashboardRoute } from "@ui/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ClaimsDashboardRoute } from "@ui/pages/claims/claimDashboard.page";
+import { ClaimForecastRoute } from "@ui/pages/claims/forecast/ClaimForecast.page";
+import { ClaimSummaryRoute } from "@ui/pages/claims/claimSummary.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { z } from "zod";
 import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails/updateInitialForecastDetailsCommand";
-import { UpdateForecastRoute } from "@ui/containers/pages/forecasts/UpdateForecastTile.page";
-import { ProjectSetupSpendProfileRoute } from "@ui/containers/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
-import { IRouteDefinition } from "@ui/containers/containerBase";
-import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
-import { ViewForecastRoute } from "@ui/containers/pages/forecasts/ViewForecastTile.page";
+import { UpdateForecastRoute } from "@ui/pages/forecasts/UpdateForecastTile.page";
+import { ProjectSetupSpendProfileRoute } from "@ui/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
+import { IRouteDefinition } from "@ui/app/containerBase";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
+import { ViewForecastRoute } from "@ui/pages/forecasts/ViewForecastTile.page";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 interface ForecastHandlerParams {

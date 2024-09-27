@@ -5,7 +5,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
 import { documentsErrorMap, getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 import express from "express";
-import { ProjectDocumentsRoute } from "@ui/containers/pages/projects/documents/projectDocuments.page";
+import { ProjectDocumentsRoute } from "@ui/pages/projects/documents/projectDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 

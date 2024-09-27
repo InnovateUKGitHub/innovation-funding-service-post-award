@@ -2,7 +2,7 @@ import { BroadcastDto } from "@framework/dtos/BroadcastDto";
 import { Link } from "@ui/components/atoms/Links/links";
 import { Bold } from "@ui/components/atoms/Bold/bold";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
-import { BroadcastPageRoute } from "@ui/containers/pages/broadcasts/broadcast.page";
+import { BroadcastPageRoute } from "@ui/pages/broadcasts/broadcast.page";
 import { useContent } from "@ui/hooks/content.hook";
 
 type BroadcastViewProps = Pick<BroadcastDto, "id" | "title" | "content">;

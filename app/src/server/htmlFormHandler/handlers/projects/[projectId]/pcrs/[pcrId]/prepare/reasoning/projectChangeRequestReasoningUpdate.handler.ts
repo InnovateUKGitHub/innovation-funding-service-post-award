@@ -2,7 +2,7 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { IContext } from "@framework/types/IContext";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   PcrReasoningFilesSchema,
   PcrReasoningSchema,
@@ -11,12 +11,12 @@ import {
   pcrReasoningFilesSchema,
   pcrReasoningSchema,
   pcrReasoningSummarySchema,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoning.zod";
+} from "@ui/pages/pcrs/reasoning/pcrReasoning.zod";
 import {
   PCRPrepareReasoningRoute,
   ProjectChangeRequestPrepareReasoningParams,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
-import { reasoningWorkflowSteps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
+} from "@ui/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
+import { reasoningWorkflowSteps } from "@ui/pages/pcrs/reasoning/workflowMetadata";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

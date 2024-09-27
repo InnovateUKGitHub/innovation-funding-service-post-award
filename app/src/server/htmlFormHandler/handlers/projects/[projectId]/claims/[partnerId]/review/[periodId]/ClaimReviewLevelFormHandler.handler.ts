@@ -2,13 +2,13 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { IContext } from "@framework/types/IContext";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
+import { AllClaimsDashboardRoute } from "@ui/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page";
 import {
   ClaimReviewSchemaType,
   claimReviewErrorMap,
   claimReviewSchema,
-} from "@ui/containers/pages/claims/claimReview/claimReview.zod";
+} from "@ui/pages/claims/claimReview/claimReview.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

@@ -1,17 +1,14 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { addPartnerErrorMap } from "@ui/containers/pages/pcrs/addPartner/addPartnerSummary.zod";
+import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
 import {
   ProjectLocationSchemaType,
   getProjectLocationSchema,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/projectLocation.zod";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/projectLocation.zod";
 
 export class PcrItemAddPartnerProjectLocationHandler extends ZodFormHandlerBase<
   ProjectLocationSchemaType,

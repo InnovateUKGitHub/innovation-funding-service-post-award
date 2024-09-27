@@ -2,10 +2,7 @@ import { IContext } from "@framework/types/IContext";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
@@ -14,8 +11,8 @@ import {
   ProjectSuspensionSummarySchema,
   pcrProjectSuspensionErrorMap,
   pcrProjectSuspensionSummarySchema,
-} from "@ui/containers/pages/pcrs/suspendProject/suspendProject.zod";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
+} from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemPutProjectOnHoldSummaryHandler extends ZodFormHandlerBase<

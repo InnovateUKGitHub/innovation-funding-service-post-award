@@ -8,12 +8,9 @@ import {
   ApproveNewSubcontractorSchemaType,
   approveNewSubcontractorErrorMap,
   approveNewSubcontractorSchema,
-} from "@ui/containers/pages/pcrs/approveNewSubcontractor/ApproveNewSubcontractor.zod";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+} from "@ui/pages/pcrs/approveNewSubcontractor/ApproveNewSubcontractor.zod";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

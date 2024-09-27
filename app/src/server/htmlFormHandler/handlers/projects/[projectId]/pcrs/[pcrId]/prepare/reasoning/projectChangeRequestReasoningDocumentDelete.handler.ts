@@ -5,7 +5,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   PCRPrepareReasoningRoute,
   ProjectChangeRequestPrepareReasoningParams,
-} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
+} from "@ui/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { documentsErrorMap, pcrLevelDelete } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";

@@ -10,7 +10,7 @@ import { configuration } from "@server/features/common/config";
 import {
   ProjectSetupBankStatementParams,
   ProjectSetupBankStatementRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankStatement.page";
+} from "@ui/pages/projects/setup/projectSetupBankStatement.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 
 export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHandlerBase<

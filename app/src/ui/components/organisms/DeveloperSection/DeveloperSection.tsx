@@ -1,10 +1,10 @@
-import { LanguageChanger } from "@ui/containers/pages/developer/LanguageChanger";
-import { HiddenPageCrasher } from "@ui/containers/pages/developer/PageCrasher";
-import { HiddenUserSwitcher } from "@ui/containers/pages/developer/UserSwitcher";
+import { LanguageChanger } from "@ui/pages/developer/LanguageChanger";
+import { HiddenPageCrasher } from "@ui/pages/developer/PageCrasher";
+import { HiddenUserSwitcher } from "@ui/pages/developer/UserSwitcher";
 import { useContent } from "@ui/hooks/content.hook";
 import { H3 } from "../../atoms/Heading/Heading.variants";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
-import { AnyRouteDefinition } from "@ui/containers/containerBase";
+import { AnyRouteDefinition } from "@ui/app/containerBase";
 import { DeveloperEnvironmentInformation } from "../../molecules/DeveloperEnvironmentInformation/DeveloperEnvironmentInformation";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 

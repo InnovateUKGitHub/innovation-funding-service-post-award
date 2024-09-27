@@ -10,9 +10,9 @@ import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringR
 import {
   MonitoringReportCreateParams,
   MonitoringReportCreateRoute,
-} from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
-import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
   MonitoringReportCreateParams,

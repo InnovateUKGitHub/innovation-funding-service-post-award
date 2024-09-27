@@ -9,8 +9,8 @@ import { GetMonitoringReportById } from "@server/features/monitoringReports/getM
 import {
   MonitoringReportDeleteParams,
   MonitoringReportDeleteRoute,
-} from "@ui/containers/pages/monitoringReports/monitoringReportDelete.page";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+} from "@ui/pages/monitoringReports/monitoringReportDelete.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 
 export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<
   MonitoringReportDeleteParams,

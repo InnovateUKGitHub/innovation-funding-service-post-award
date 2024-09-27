@@ -5,10 +5,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import express from "express";
 import { z } from "zod";
 import { documentsErrorMap, projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
-import {
-  ProjectDocumentsRoute,
-  ProjectDocumentPageParams,
-} from "@ui/containers/pages/projects/documents/projectDocuments.page";
+import { ProjectDocumentsRoute, ProjectDocumentPageParams } from "@ui/pages/projects/documents/projectDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 

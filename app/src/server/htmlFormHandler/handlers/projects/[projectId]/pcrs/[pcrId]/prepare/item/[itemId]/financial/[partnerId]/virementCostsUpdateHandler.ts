@@ -11,8 +11,8 @@ import { BadRequestError } from "@shared/appError";
 import {
   PartnerLevelReallocateCostsParams,
   PartnerLevelReallocateCostsRoute,
-} from "@ui/containers/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+} from "@ui/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.page";
+import { PCRPrepareItemRoute } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 

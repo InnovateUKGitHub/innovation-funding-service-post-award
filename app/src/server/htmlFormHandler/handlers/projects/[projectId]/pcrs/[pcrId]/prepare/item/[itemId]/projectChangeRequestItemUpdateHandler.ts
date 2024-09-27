@@ -32,16 +32,13 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
-import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerWorkflow";
-import { SuspendProjectSteps } from "@ui/containers/pages/pcrs/suspendProject/suspendProjectWorkflow";
+import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflow";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PcrWorkflow, WorkflowPcrType } from "@ui/pages/pcrs/pcrWorkflow";
+import { removePartnerStepNames } from "@ui/pages/pcrs/removePartner/removePartnerWorkflow";
+import { accountNameChangeStepNames } from "@ui/pages/pcrs/renamePartner/renamePartnerWorkflow";
+import { SuspendProjectSteps } from "@ui/pages/pcrs/suspendProject/suspendProjectWorkflow";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { DateTime } from "luxon";

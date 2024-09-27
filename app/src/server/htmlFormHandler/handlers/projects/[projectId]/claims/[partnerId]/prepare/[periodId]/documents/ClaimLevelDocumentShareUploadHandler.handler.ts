@@ -5,14 +5,11 @@ import { z } from "zod";
 import { ClaimLevelUploadSchemaType, documentsErrorMap, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
-import {
-  ClaimDocumentsPageParams,
-  ClaimDocumentsRoute,
-} from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
+import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "@ui/pages/claims/documents/ClaimDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
-import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
+import { ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page";
 
 class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   ClaimLevelUploadSchemaType,

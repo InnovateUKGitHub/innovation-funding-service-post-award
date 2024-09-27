@@ -6,9 +6,9 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { toArray } from "@shared/toArray";
-import { PCRCreateRoute } from "@ui/containers/pages/pcrs/create";
-import { PcrModifyParams } from "@ui/containers/pages/pcrs/modifyOptions/PcrModifyOptions";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { PCRCreateRoute } from "@ui/pages/pcrs/create";
+import { PcrModifyParams } from "@ui/pages/pcrs/modifyOptions/PcrModifyOptions";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getPcrCreateSchema, PcrCreateSchemaType, pcrModifyErrorMap } from "@ui/zod/pcrValidator.zod";
 import { z } from "zod";

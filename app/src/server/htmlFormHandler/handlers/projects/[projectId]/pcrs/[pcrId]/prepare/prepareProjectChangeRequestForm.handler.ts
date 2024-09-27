@@ -10,13 +10,13 @@ import {
   PcrPrepareSchema,
   pcrPrepareErrorMap,
   pcrPrepareSchema,
-} from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.zod";
+} from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.zod";
 import {
   ProjectChangeRequestPrepareParams,
   ProjectChangeRequestPrepareRoute,
-} from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
-import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
+} from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
+import { PCRsDashboardRoute } from "@ui/pages/pcrs/dashboard/PCRDashboard.page";
 import { PCRStatus } from "@framework/constants/pcrConstants";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 

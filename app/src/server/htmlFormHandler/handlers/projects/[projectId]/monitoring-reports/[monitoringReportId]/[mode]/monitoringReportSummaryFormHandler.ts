@@ -2,11 +2,11 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFor
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { storeKeys } from "@server/features/common/storeKeys";
-import { MonitoringReportWorkflowParams } from "@ui/containers/pages/monitoringReports/workflow/MonitoringReportWorkflowProps";
+import { MonitoringReportWorkflowParams } from "@ui/pages/monitoringReports/workflow/MonitoringReportWorkflowProps";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
-import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 

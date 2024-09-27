@@ -4,8 +4,8 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
-import { PCRDeleteParams, PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDelete.page";
+import { PCRsDashboardRoute } from "@ui/pages/pcrs/dashboard/PCRDashboard.page";
+import { PCRDeleteParams, PCRDeleteRoute } from "@ui/pages/pcrs/pcrDelete.page";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 

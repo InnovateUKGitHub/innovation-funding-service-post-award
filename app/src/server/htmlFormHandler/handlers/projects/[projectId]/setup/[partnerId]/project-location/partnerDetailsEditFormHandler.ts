@@ -3,11 +3,11 @@ import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
-import { PartnerDetailsRoute } from "@ui/containers/pages/projects/partnerDetails/partnerDetails.page";
+import { PartnerDetailsRoute } from "@ui/pages/projects/partnerDetails/partnerDetails.page";
 import {
   PartnerDetailsParams,
   PartnerDetailsEditRoute,
-} from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
+} from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";

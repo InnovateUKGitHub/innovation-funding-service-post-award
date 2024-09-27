@@ -9,7 +9,7 @@ import { configuration } from "@server/features/common/config";
 import {
   OverheadDocumentsPageParams,
   PCRSpendProfileOverheadDocumentRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
+} from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 
 export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<

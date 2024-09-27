@@ -1,18 +1,15 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-import { addPartnerErrorMap } from "@ui/containers/pages/pcrs/addPartner/addPartnerSummary.zod";
+import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
 import {
   FinanceContactSchemaType,
   getFinanceContactSchema,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/financeContact.zod";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/financeContact.zod";
 
 export class PcrItemAddPartnerFinanceContactHandler extends ZodFormHandlerBase<
   FinanceContactSchemaType,

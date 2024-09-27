@@ -10,10 +10,10 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
-import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
-import { PrepareClaimParams } from "@ui/containers/pages/claims/claimPrepare.page";
+import { AllClaimsDashboardRoute } from "@ui/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ClaimsDashboardRoute } from "@ui/pages/claims/claimDashboard.page";
+import { ClaimSummaryRoute } from "@ui/pages/claims/claimSummary.page";
+import { PrepareClaimParams } from "@ui/pages/claims/claimPrepare.page";
 
 export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, ClaimDto> {
   constructor() {

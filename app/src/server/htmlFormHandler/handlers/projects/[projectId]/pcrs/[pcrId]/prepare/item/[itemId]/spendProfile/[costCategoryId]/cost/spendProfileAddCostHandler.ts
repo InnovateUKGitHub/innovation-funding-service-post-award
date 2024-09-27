@@ -26,15 +26,15 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
-import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { PCRSpendProfileOverheadDocumentRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
-import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflow";
+import { PCRSpendProfileOverheadDocumentRoute } from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
+import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import {
   PcrAddSpendProfileCostParams,
   PCRSpendProfileAddCostRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
+import { PCRPrepareItemRoute } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 

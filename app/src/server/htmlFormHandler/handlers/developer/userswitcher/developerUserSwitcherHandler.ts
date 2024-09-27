@@ -1,5 +1,5 @@
-import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
-import { DeveloperUserSwitcherPage } from "@ui/containers/pages/developer/UserSwitcher.page";
+import { DeveloperHomePage } from "@ui/pages/developer/home.page";
+import { DeveloperUserSwitcherPage } from "@ui/pages/developer/UserSwitcher.page";
 import express from "express";
 import { configuration } from "@server/features/common/config";
 import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";

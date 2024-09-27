@@ -1,13 +1,13 @@
 import { IContext } from "@framework/types/IContext";
 import { UpdateProjectContactsCommand } from "@server/features/projectContacts/updateProjectContactsCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ContactSetupAssociateParams } from "@ui/containers/pages/contact/associate/setup/ContactSetupAssociate.logic";
-import { ContactSetupAssociateRoute } from "@ui/containers/pages/contact/associate/setup/ContactSetupAssociate.page";
+import { ContactSetupAssociateParams } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.logic";
+import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.page";
 import {
   ContactSetupAssociateSchemaType,
   contactSetupAssociateSchema,
-} from "@ui/containers/pages/contact/associate/setup/ContactSetupAssociate.zod";
-import { ProjectDashboardRoute } from "@ui/containers/pages/projects/dashboard/Dashboard.page";
+} from "@ui/pages/contact/associate/setup/ContactSetupAssociate.zod";
+import { ProjectDashboardRoute } from "@ui/pages/projects/dashboard/Dashboard.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { contactSchemaErrorMap } from "@ui/zod/contactSchema.zod";
 import { z } from "zod";

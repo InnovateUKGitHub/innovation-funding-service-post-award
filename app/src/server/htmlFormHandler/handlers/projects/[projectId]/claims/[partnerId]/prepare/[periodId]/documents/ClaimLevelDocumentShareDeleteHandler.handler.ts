@@ -2,11 +2,8 @@ import { IContext } from "@framework/types/IContext";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview/claimReview.page";
-import {
-  ClaimDocumentsPageParams,
-  ClaimDocumentsRoute,
-} from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
+import { ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page";
+import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "@ui/pages/claims/documents/ClaimDocuments.page";
 import { claimLevelDelete, documentsErrorMap } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";

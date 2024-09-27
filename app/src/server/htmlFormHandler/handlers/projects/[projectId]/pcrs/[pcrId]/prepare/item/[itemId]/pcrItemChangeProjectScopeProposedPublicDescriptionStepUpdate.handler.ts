@@ -4,16 +4,13 @@ import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import {
   PcrScopeChangePublicDescriptionSchemaType,
   getPcrScopeChangePublicDescriptionSchema,
   scopeChangeErrorMap,
-} from "@ui/containers/pages/pcrs/scopeChange/scopeChange.zod";
+} from "@ui/pages/pcrs/scopeChange/scopeChange.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

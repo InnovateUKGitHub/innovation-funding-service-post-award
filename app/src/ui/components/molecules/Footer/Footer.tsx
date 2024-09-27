@@ -4,7 +4,7 @@ import { GovWidthContainer } from "@ui/components/atoms/GovWidthContainer/GovWid
 import { UL } from "@ui/components/atoms/List/list";
 import { ExternalLinkProps, ExternalLink } from "@ui/components/atoms/ExternalLink/externalLink";
 import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
-import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/containers/app/footer.config";
+import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/app/footer.config";
 import { useContent } from "@ui/hooks/content.hook";
 import cx from "classnames";
 

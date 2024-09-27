@@ -5,8 +5,8 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
-import { PCRReviewParams, PCRReviewRoute } from "@ui/containers/pages/pcrs/pcrReview";
+import { PCRsDashboardRoute } from "@ui/pages/pcrs/dashboard/PCRDashboard.page";
+import { PCRReviewParams, PCRReviewRoute } from "@ui/pages/pcrs/pcrReview";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 

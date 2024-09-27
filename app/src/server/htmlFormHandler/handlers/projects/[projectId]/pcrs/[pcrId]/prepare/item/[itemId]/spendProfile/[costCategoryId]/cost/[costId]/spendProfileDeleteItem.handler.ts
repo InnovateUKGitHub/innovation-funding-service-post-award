@@ -3,14 +3,14 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import { errorMap } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
+import { errorMap } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 
-import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { updatePcrItem } from "../../../../addPartnerUtils";
 import {
   PcrDeleteSpendProfileCostParams,
   PCRSpendProfileDeleteCostRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
 
 const emptySchema = z.object({ form: z.literal(FormTypes.PcrAddPartnerSPendProfileDeleteItem) });
 type EmptySchema = typeof emptySchema;

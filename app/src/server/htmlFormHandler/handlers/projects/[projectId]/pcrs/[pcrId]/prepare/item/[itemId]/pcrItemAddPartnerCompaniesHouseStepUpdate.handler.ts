@@ -7,11 +7,8 @@ import {
   PcrAddPartnerCompaniesHouseStepSchemaType,
   getPcrAddPartnerCompaniesHouseStepSchema,
   pcrAddPartnerCompaniesHouseStepErrorMap,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";

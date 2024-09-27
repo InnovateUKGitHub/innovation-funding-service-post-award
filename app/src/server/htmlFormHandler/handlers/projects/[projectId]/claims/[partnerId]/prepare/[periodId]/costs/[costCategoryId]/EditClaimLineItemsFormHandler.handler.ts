@@ -4,18 +4,15 @@ import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper"
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { configuration } from "@server/features/common/config";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ClaimDetailDocumentsRoute } from "@ui/containers/pages/claims/claimDetailDocuments.page";
-import {
-  ClaimLineItemsParams,
-  EditClaimLineItemsRoute,
-} from "@ui/containers/pages/claims/claimLineItems/EditClaimLineItems.page";
+import { ClaimDetailDocumentsRoute } from "@ui/pages/claims/claimDetailDocuments.page";
+import { ClaimLineItemsParams, EditClaimLineItemsRoute } from "@ui/pages/claims/claimLineItems/EditClaimLineItems.page";
 import {
   EditClaimLineItemLineItemSchemaType,
   EditClaimLineItemsSchemaType,
   editClaimLineItemErrorMap,
   editClaimLineItemsSchema,
-} from "@ui/containers/pages/claims/claimLineItems/editClaimLineItems.zod";
-import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
+} from "@ui/pages/claims/claimLineItems/editClaimLineItems.zod";
+import { PrepareClaimRoute } from "@ui/pages/claims/claimPrepare.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

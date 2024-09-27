@@ -5,7 +5,7 @@ import { IClientUser } from "@framework/types/IUser";
 import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { Logger } from "@shared/developmentLogger";
-import { App } from "@ui/containers/app";
+import { App } from "@ui/app/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
 import { FormErrorContextProvider } from "@ui/context/form-error";
 import { getParamsFromUrl } from "@ui/helpers/make-url";

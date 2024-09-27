@@ -42,7 +42,7 @@ import {
   pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
   pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
   pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
-} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
+} from "@ui/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
 import { PartnerStatus } from "@framework/constants/partner";
 
 interface PCRBaseDtoValidationProps<T> {

@@ -9,12 +9,9 @@ import {
   ReallocateCostsSummaryValidatorSchema,
   reallocateCostsSummaryErrorMap,
   getReallocateCostsSummaryValidator,
-} from "@ui/containers/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+} from "@ui/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
+import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

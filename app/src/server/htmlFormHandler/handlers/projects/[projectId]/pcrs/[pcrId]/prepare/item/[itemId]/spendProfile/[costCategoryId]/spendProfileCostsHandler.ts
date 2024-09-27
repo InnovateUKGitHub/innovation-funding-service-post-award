@@ -9,9 +9,9 @@ import { BadRequestError } from "@shared/appError";
 import {
   PcrSpendProfileCostSummaryParams,
   PCRSpendProfileCostsSummaryRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
-import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { PCRPrepareItemRoute } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { storeKeys } from "@server/features/common/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 

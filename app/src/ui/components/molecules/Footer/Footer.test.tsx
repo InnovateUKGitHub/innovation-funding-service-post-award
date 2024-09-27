@@ -1,7 +1,7 @@
 import TestBed from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { render } from "@testing-library/react";
-import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/containers/app/footer.config";
+import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/app/footer.config";
 import { Footer } from "./Footer";
 
 describe("Footer", () => {

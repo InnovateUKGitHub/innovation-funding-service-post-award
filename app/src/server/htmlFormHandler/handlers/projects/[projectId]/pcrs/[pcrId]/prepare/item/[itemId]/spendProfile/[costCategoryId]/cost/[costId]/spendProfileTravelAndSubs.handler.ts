@@ -7,16 +7,16 @@ import {
   errorMap,
   TravelAndSubsistenceSchemaType,
   travelAndASubsistenceSchema,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
   PcrEditSpendProfileCostParams,
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
-} from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodFormHandlerBase<

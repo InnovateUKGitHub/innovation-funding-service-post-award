@@ -9,10 +9,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
 
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 
 export class PcrItemLevelDocumentUploadHandler extends ZodFormHandlerBase<
   PcrLevelUploadSchemaType,

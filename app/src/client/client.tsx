@@ -3,7 +3,7 @@ import { parseLogLevel } from "@framework/types/logLevel";
 import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
 import { Logger } from "@shared/developmentLogger";
 import { processDto } from "@shared/processResponse";
-import { App } from "@ui/containers/app";
+import { App } from "@ui/app/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
 import { FormErrorContextProvider } from "@ui/context/form-error";
 import { MessageContextProvider } from "@ui/context/messages";

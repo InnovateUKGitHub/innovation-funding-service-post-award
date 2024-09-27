@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import {
   partnerDetailsEditSchema,
   postcodeSetupSchema,

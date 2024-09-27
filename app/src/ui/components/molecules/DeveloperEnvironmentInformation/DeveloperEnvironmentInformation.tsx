@@ -3,7 +3,7 @@ import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { DeveloperCurrentUsername } from "../../atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
 import { useMounted } from "../../../context/Mounted";
 import { SummaryList, SummaryListItem } from "../SummaryList/summaryList";
-import { AnyRouteDefinition } from "@ui/containers/containerBase";
+import { AnyRouteDefinition } from "@ui/app/containerBase";
 import { DeveloperCurrentDevelopmentUsername } from "../../atoms/DeveloperCurrentDevelopmentUsername/DeveloperCurrentDevelopmentUsername";
 
 interface DeveloperEnvironmentInformationProps {
