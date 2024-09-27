@@ -59,7 +59,8 @@ export class ForecastDetailsDtosValidator
     const currentClaim = claims.find(x => x.periodId === periodId) || null;
     const finalClaim = claims.find(x => x.isFinalClaim) || null;
 
-    if (this.items.isValid) {
+    // Check if we are allowed to edit if we have changed the forecast table
+    if (this.items.isValid && this.items.results.length > 0) {
       this.totalCosts = Validation.all(
         this,
         () =>

@@ -31,13 +31,15 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         z.literal(FormTypes.ProjectSetupForecast),
         z.literal(FormTypes.ForecastTileForecast),
       ]),
-      profile: z.record(
-        profileIdValidation,
-        getGenericCurrencyValidation({
-          min: -1_000_000_000,
-          required: true,
-        }),
-      ),
+      profile: z
+        .record(
+          profileIdValidation,
+          getGenericCurrencyValidation({
+            min: -1_000_000_000,
+            required: true,
+          }),
+        )
+        .default({}), // Required for if all forecast cells are disabled
       submit: booleanValidation,
     })
     .superRefine(({ profile: clientProfiles, form, submit }, { addIssue, path }) => {
@@ -76,7 +78,8 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
         }
       }
 
-      if (clientProfiles && finalClaim) {
+      // Error if it is the final claim and there are changes made in the clientProfiles list.
+      if (typeof clientProfiles === "object" && Object.keys(clientProfiles).length !== 0 && finalClaim) {
         addIssue({
           code: ZodIssueCode.custom,
           params: {
