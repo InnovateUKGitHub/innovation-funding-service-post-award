@@ -18,7 +18,7 @@ import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/
 import { ClaimReviewLevelFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/ClaimReviewLevelFormHandler.handler";
 import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDeleteHandler.handler";
 import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUploadHandler.handler";
-import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateFormHandler";
+import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateForm.handler";
 import { MonitoringReportDeleteFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/delete/monitoringReportDeleteFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPeriodFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportPrepareFormHandler";

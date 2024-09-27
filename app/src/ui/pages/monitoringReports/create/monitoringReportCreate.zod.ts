@@ -1,6 +1,6 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { getNumberValidation } from "@ui/zod/numericValidator.zod";
-
+import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 export const createMonitoringReportErrorMap = makeZodI18nMap({ keyPrefix: ["monitoringReportCreate"] });
@@ -13,6 +13,9 @@ export const createMonitoringReportSchema = (maxNumberOfPeriods: number) =>
       integer: true,
       required: true,
       showValidRange: true,
-    }),
-    button_submit: z.string(),
+    }).transform(x => x as PeriodId),
+    button_submit: z.union([z.literal("saveAndContinue"), z.literal("saveAndReturn")]),
+    form: z.literal(FormTypes.MonitoringReportCreate),
   });
+
+export type MonitoringReportCreateSchema = ReturnType<typeof createMonitoringReportSchema>;

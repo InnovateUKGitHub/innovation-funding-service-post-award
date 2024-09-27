@@ -1,14 +1,9 @@
 import { ProjectRole } from "@framework/constants/project";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import {
-  FormValues,
-  useMonitoringReportCreateQuery,
-  useOnMonitoringReportCreate,
-} from "./monitoringReportCreate.logic";
+import { useMonitoringReportCreateQuery, useOnMonitoringReportCreate } from "./monitoringReportCreate.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -19,8 +14,15 @@ import { Field } from "@ui/components/molecules/form/Field/Field";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { createMonitoringReportSchema, createMonitoringReportErrorMap } from "./monitoringReportCreate.zod";
+import {
+  createMonitoringReportSchema,
+  createMonitoringReportErrorMap,
+  MonitoringReportCreateSchema,
+} from "./monitoringReportCreate.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { z } from "zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface MonitoringReportCreateParams {
   projectId: ProjectId;
@@ -30,10 +32,10 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
   const { project, fragmentRef } = useMonitoringReportCreateQuery(props.projectId);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setValue, setError } = useForm<z.infer<MonitoringReportCreateSchema>>({
     defaultValues: {
       period: undefined,
-      button_submit: "save-continue",
+      button_submit: "saveAndContinue",
     },
     resolver: zodResolver(createMonitoringReportSchema(project.periodId), { errorMap: createMonitoringReportErrorMap }),
   });
@@ -42,7 +44,7 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
 
   const { onUpdate, apiError, isFetching } = useOnMonitoringReportCreate(props.projectId, props.routes);
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useZodErrors(setError, formState.errors);
 
   return (
     <Page
@@ -68,14 +70,15 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
             onUpdate({ data });
           })}
         >
+          <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportCreate} />
           <Field labelBold label="Period" id="period" error={validatorErrors?.period as RhfError}>
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>
           <Fieldset data-qa="save-buttons">
-            <Button disabled={isFetching} type="submit" {...registerButton("save-continue")}>
+            <Button disabled={isFetching} type="submit" {...registerButton("saveAndContinue")}>
               {getContent(x => x.components.reportForm.continueText)}
             </Button>
-            <Button disabled={isFetching} secondary type="submit" {...registerButton("save-return")}>
+            <Button disabled={isFetching} secondary type="submit" {...registerButton("saveAndReturn")}>
               {getContent(x => x.components.reportForm.saveAndReturnText)}
             </Button>
           </Fieldset>
