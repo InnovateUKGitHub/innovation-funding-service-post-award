@@ -2,7 +2,6 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import {
   useMonitoringReportPeriodStepQuery,
   useOnMonitoringReportUpdatePeriodStep,
-  FormValues,
 } from "./monitoringReportPeriodStep.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -11,7 +10,6 @@ import { BackLink } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Section } from "@ui/components/atoms/Section/Section";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atoms/form/Form/Form";
@@ -19,8 +17,15 @@ import { Field } from "@ui/components/molecules/form/Field/Field";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { createMonitoringReportErrorMap, createMonitoringReportSchema } from "./create/monitoringReportCreate.zod";
+import {
+  createMonitoringReportErrorMap,
+  createMonitoringReportSchema,
+  MonitoringReportCreateSchema,
+} from "./create/monitoringReportCreate.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
@@ -31,10 +36,11 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
   const { project, monitoringReport, fragmentRef } = useMonitoringReportPeriodStepQuery(props.projectId, props.id);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setValue, setError } = useForm<z.infer<MonitoringReportCreateSchema>>({
     defaultValues: {
       period: monitoringReport.periodId,
-      button_submit: "save-continue",
+      button_submit: "saveAndContinue",
+      form: FormTypes.MonitoringReportPreparePeriod,
     },
     resolver: zodResolver(createMonitoringReportSchema(project.periodId), { errorMap: createMonitoringReportErrorMap }),
   });
@@ -47,7 +53,7 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useZodErrors(setError, formState.errors);
   return (
     <Page
       backLink={
@@ -72,19 +78,20 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
       </Section>
       <Section>
         <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(async data => await onUpdate({ data }))}>
+          <input type="hidden" name="form" value={FormTypes.MonitoringReportPreparePeriod} />
           <Field
             labelBold
             label={getContent(x => x.pages.monitoringReportsPeriodStep.periodLabel)}
             id="period"
             error={validatorErrors?.period as RhfError}
           >
-            <NumberInput id="period" inputWidth={3} {...register("period")} />
+            <NumberInput id="period" inputWidth={3} {...register("period")} defaultValue={monitoringReport.periodId} />
           </Field>
           <Fieldset data-qa="save-buttons">
-            <Button disabled={isFetching} type="submit" {...registerButton("save-continue")}>
+            <Button disabled={isFetching} type="submit" {...registerButton("saveAndContinue")}>
               {getContent(x => x.components.reportForm.continueText)}
             </Button>
-            <Button disabled={isFetching} secondary type="submit" {...registerButton("save-return")}>
+            <Button disabled={isFetching} secondary type="submit" {...registerButton("saveAndReturn")}>
               {getContent(x => x.components.reportForm.saveAndReturnText)}
             </Button>
           </Fieldset>

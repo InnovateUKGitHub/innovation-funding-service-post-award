@@ -10,6 +10,8 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { mapToMonitoringReportDto } from "@gql/dtoMapper/mapMonitoringReportDto";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { MonitoringReportCreateSchema } from "./create/monitoringReportCreate.zod";
+import { z } from "zod";
 
 export const useMonitoringReportPeriodStepQuery = (projectId: ProjectId, monitoringReportId: MonitoringReportId) => {
   const data = useLazyLoadQuery<MonitoringReportPeriodStepQuery>(
@@ -30,8 +32,6 @@ export const useMonitoringReportPeriodStepQuery = (projectId: ProjectId, monitor
 
   return { project, monitoringReport, fragmentRef: data.salesforce.uiapi };
 };
-
-export type FormValues = { period: PeriodId; button_submit: string };
 
 const getLink = (progress: boolean, projectId: ProjectId, id: MonitoringReportId, routes: IRoutes) => {
   if (!progress) {
@@ -54,7 +54,10 @@ export const useOnMonitoringReportUpdatePeriodStep = (
   routes: IRoutes,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
+  return useOnUpdate<
+    z.output<MonitoringReportCreateSchema>,
+    Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">
+  >({
     req: data =>
       clientsideApiClient.monitoringReports.saveMonitoringReport({
         monitoringReportDto: {
@@ -66,7 +69,7 @@ export const useOnMonitoringReportUpdatePeriodStep = (
         submit: false, // just saving an update
       }),
     onSuccess: (data, response) => {
-      const link = getLink(data["button_submit"] === "save-continue", projectId, response.headerId, routes);
+      const link = getLink(data["button_submit"] === "saveAndContinue", projectId, response.headerId, routes);
       return navigate(link.path);
     },
   });

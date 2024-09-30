@@ -15,7 +15,7 @@ export const createMonitoringReportSchema = (maxNumberOfPeriods: number) =>
       showValidRange: true,
     }).transform(x => x as PeriodId),
     button_submit: z.union([z.literal("saveAndContinue"), z.literal("saveAndReturn")]),
-    form: z.literal(FormTypes.MonitoringReportCreate),
+    form: z.union([z.literal(FormTypes.MonitoringReportCreate), z.literal(FormTypes.MonitoringReportPreparePeriod)]),
   });
 
 export type MonitoringReportCreateSchema = ReturnType<typeof createMonitoringReportSchema>;
