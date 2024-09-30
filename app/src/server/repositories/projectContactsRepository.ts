@@ -89,7 +89,7 @@ export class ProjectContactsRepository
     "Acc_StartDate__c",
     // "Acc_New_Team_Member__c",
     // "Acc_Send_invitation__c",
-    "Acc_Edited__c",
+    // "Acc_Edited__c",
     "Acc_Replaced__c",
     "Acc_EndDate__c",
     "Acc_UserId__c",
