@@ -103,6 +103,12 @@ import { Writable } from "node:stream";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
 
+class TestWriteStream extends Writable {
+  _write(_: unknown, __: unknown, next: () => void) {
+    next();
+  }
+}
+
 class ProjectsTestRepository extends TestRepository<ISalesforceProject> implements IProjectRepository {
   getById(id: string) {
     return super.getOne(x => x.Id === id);
@@ -392,9 +398,8 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return super
       .getOne(x => x[1].Id === documentId)
       .then(x => {
-        const w = new Writable();
-        w.write(Buffer.from(x[1].Id));
-        w.end();
+        const w = new TestWriteStream();
+        w.end(Buffer.from(x[1].Id));
         return w;
       });
   }
