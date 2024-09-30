@@ -84,7 +84,7 @@ class TsforceHttpClient {
     return rs;
   }
 
-  public fetchJson(input: string, init?: FetcherConfiguration): Promise<AnyObject> {
+  public fetchJson(input: string, init?: FetcherConfiguration) {
     return this.executeFetchRequest(input, init).then(
       res =>
         new Promise((resolve, reject) => {
