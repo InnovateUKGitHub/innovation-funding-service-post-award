@@ -34,6 +34,7 @@ enum FormTypes {
   MonitoringReportPreparePeriod = "monitoringReportPreparePeriod",
   MonitoringReportQuestion = "monitoringReportQuestion",
   MonitoringReportSummary = "monitoringReportSummary",
+  MonitoringReportDelete = "monitoringReportDelete",
 
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",

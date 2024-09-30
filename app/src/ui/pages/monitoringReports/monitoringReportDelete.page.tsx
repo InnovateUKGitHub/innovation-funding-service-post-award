@@ -7,11 +7,12 @@ import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { useForm } from "react-hook-form";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;
@@ -22,7 +23,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
   const { getContent } = useContent();
   const { fragmentRef } = useMonitoringReportDeleteQuery(props.projectId);
 
-  const { handleSubmit, formState } = useForm<{}>({});
+  const { handleSubmit, formState, setError } = useForm<{}>({});
 
   const {
     onUpdate: onDelete,
@@ -30,7 +31,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
     isFetching,
   } = useOnMonitoringReportDelete(props.projectId, props.id, props.routes);
 
-  const validatorErrors = useRhfErrors<{}>(formState.errors);
+  const validatorErrors = useZodErrors<{}>(setError, formState.errors);
 
   return (
     <Page
@@ -51,6 +52,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
       <Section>
         <P>{getContent(x => x.monitoringReportsMessages.deletingMonitoringReportMessage)}</P>
         <Form onSubmit={handleSubmit(data => onDelete({ data }))} data-qa="monitoringReportDelete">
+          <input type="hidden" name="form" value={FormTypes.MonitoringReportDelete} />
           <Fieldset>
             <Button name="button_delete" type="submit" disabled={isFetching}>
               {getContent(x => x.pages.monitoringReportsDelete.buttonDeleteReport)}
