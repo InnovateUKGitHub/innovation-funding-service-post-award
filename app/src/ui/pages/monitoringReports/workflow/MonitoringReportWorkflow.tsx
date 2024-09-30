@@ -2,7 +2,6 @@ import { MonitoringReportStatus } from "@framework/constants/monitoringReportSta
 import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { RegisterButton, createRegisterButton } from "@framework/util/registerButton";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +33,7 @@ import {
 import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from "./monitoringReportWorkflow.zod";
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 type MonitoringReportContextType = {
   projectId: ProjectId;
@@ -112,7 +112,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState, setValue, reset, trigger } = useForm<FormValues>({
+  const { register, watch, handleSubmit, formState, setValue, reset, trigger, setError } = useForm<FormValues>({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
@@ -138,7 +138,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     setFetchKey,
   );
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useZodErrors<FormValues>(setError, formState.errors);
 
   const getEditLink = (stepName: string) =>
     props.routes.monitoringReportWorkflow.getLink({

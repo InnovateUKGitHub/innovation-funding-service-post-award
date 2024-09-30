@@ -1,4 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -6,6 +7,7 @@ export const monitoringReportWorkflowErrorMap = makeZodI18nMap({ keyPrefix: ["mo
 
 export const monitoringReportWorkflowSchema = z.object({
   button_submit: z.string(),
+  form: z.literal(FormTypes.MonitoringReportQuestion),
   questions: z.array(
     z
       .object({

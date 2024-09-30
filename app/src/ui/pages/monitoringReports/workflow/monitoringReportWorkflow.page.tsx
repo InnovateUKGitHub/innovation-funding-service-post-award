@@ -2,6 +2,13 @@ import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/app/containerBase";
 import { MonitoringReportWorkflow } from "./MonitoringReportWorkflow";
 
+export type MonitoringReportWorkflowParams = {
+  projectId: ProjectId;
+  id: MonitoringReportId;
+  mode: "view" | "prepare";
+  step: number | undefined;
+};
+
 export const MonitoringReportWorkflowRoute = defineRoute<{
   projectId: ProjectId;
   id: MonitoringReportId;

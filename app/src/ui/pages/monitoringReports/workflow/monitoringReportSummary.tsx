@@ -20,6 +20,7 @@ import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IRoutes } from "@ui/routing/routeConfig";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const MonitoringReportSummary = () => {
   const {
@@ -80,6 +81,7 @@ const ReportForm = () => {
   return (
     <Section>
       <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(data => onUpdate({ data }))}>
+        <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportSummary} />
         <Fieldset data-qa="additional-comments-section">
           <Legend>{getContent(x => x.monitoringReportsLabels.additionalComments)}</Legend>
 

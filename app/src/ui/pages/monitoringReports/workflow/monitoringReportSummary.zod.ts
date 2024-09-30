@@ -1,4 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -9,6 +10,7 @@ const sectionsWithoutOptionId = ["Summary", "Issues and actions"];
 export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit", [
   z.object({
     button_submit: z.literal("submit"),
+    form: z.literal(FormTypes.MonitoringReportSummary),
     questions: z.array(
       z
         .object({

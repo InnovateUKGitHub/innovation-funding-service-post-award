@@ -15,6 +15,7 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: number }) => {
   const { getContent } = useContent();
@@ -56,6 +57,7 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
       })),
       periodId: report.periodId,
       button_submit: "submit",
+      form: FormTypes.MonitoringReportQuestion,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionNumber]);
@@ -78,6 +80,7 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
       </H2>
       <Section>
         <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="monitoringReportQuestionForm">
+          <input type="hidden" {...register("form")} value={FormTypes.MonitoringReportQuestion} />
           <H3>
             {getContent(x =>
               x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length }),
@@ -120,10 +123,10 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
 
           {mode === "prepare" && (
             <Fieldset data-qa="save-buttons">
-              <Button type="submit" {...registerButton("save-continue")} disabled={isFetching}>
+              <Button type="submit" {...registerButton("saveAndContinue")} disabled={isFetching}>
                 {getContent(x => x.pages.monitoringReportsQuestionStep.buttonContinue)}
               </Button>
-              <Button secondary type="submit" {...registerButton("save-return")} disabled={isFetching}>
+              <Button secondary type="submit" {...registerButton("saveAndReturn")} disabled={isFetching}>
                 {getContent(x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn)}
               </Button>
             </Fieldset>
