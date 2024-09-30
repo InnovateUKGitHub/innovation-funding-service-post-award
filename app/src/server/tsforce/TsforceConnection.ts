@@ -105,7 +105,13 @@ class TsforceConnection {
       decodeHTMLEntities,
     });
 
-    if (typeof data === "object" && data !== null && "errors" in data && Array.isArray(data?.errors)) {
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "errors" in data &&
+      Array.isArray(data?.errors) &&
+      data.errors.length > 0
+    ) {
       this.logger.error("GraphQL Error", queryName, variables, data);
     } else {
       this.logger.trace("GraphQL Result", queryName, variables, data);
