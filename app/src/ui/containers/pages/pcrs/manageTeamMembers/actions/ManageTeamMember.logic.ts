@@ -18,7 +18,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
   return useOnUpdate<z.output<ManageTeamMemberValidatorSchema>, PCRDto, EmptyObject>({
     req: async data => {
       let pcrStatus = PCRStatus.Approved;
-      let pclId: ProjectContactLinkId | undefined;
+      let pclId: ProjectContactLinkId | null = null;
 
       switch (data.form) {
         case FormTypes.ProjectManageTeamMembersCreate:
@@ -81,7 +81,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
         projectId: data.projectId,
         projectChangeRequestDto: {
           projectId: data.projectId,
-          status: pcrStatus,
+          // status: pcrStatus,
           manageTeamMemberStatus: pcrStatus,
           reasoningStatus: PCRItemStatus.Complete,
           items: [
