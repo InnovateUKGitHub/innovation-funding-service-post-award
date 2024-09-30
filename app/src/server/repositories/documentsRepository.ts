@@ -12,7 +12,7 @@ import { IFileWrapper } from "@framework/types/fileWrapper";
 import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
 import { ForbiddenError } from "@shared/appError";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
-import { ReadableStream } from "stream/web";
+import { Writable } from "node:stream";
 
 export class DocumentsRepository {
   private readonly logger: ILogger = new Logger("DocumentsRepository");
@@ -123,7 +123,7 @@ export class DocumentsRepository {
     return metadata.filter(x => !chatterFiles.some(y => y.RecordId === x.id || y.RecordId === x.contentDocumentId));
   }
 
-  public async getDocumentContent(versionId: string): Promise<ReadableStream<Uint8Array>> {
+  public async getDocumentContent(versionId: string): Promise<Writable> {
     const contentVersion = await this.contentVersionRepository.getDocument(versionId);
     const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordIds([
       versionId,
