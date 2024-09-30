@@ -3,6 +3,7 @@ import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
 import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@server/tsforce/TsforceConnection";
+import { UnauthenticatedError } from "@shared/appError";
 
 interface ISalesforceTokenPayload {
   access_token: string;
@@ -55,6 +56,8 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
   const tokenBody = await request.text();
 
   try {
+    // Detect a "bad username" Salesforce response
+    if (tokenBody.includes("<title>Down For Maintenance</title>")) return Promise.reject(new UnauthenticatedError());
     const tokenQuery: ISalesforceTokenQuery = JSON.parse(tokenBody);
 
     if ("error" in tokenQuery) return Promise.reject(new SalesforceTokenError({ message: tokenQuery.error }));
