@@ -105,7 +105,7 @@ class TsforceConnection {
       decodeHTMLEntities,
     });
 
-    if (data.errors.length) {
+    if (typeof data === "object" && data !== null && "errors" in data && Array.isArray(data?.errors)) {
       this.logger.error("GraphQL Error", queryName, variables, data);
     } else {
       this.logger.trace("GraphQL Result", queryName, variables, data);
@@ -113,7 +113,7 @@ class TsforceConnection {
 
     timer.finish();
 
-    return data;
+    return data as { data: T; errors: PayloadError[] };
   }
 
   /**
@@ -135,7 +135,7 @@ class TsforceConnection {
     });
     this.logger.trace("SOQL Query Return", query, await data);
     timer.finish();
-    return data;
+    return data as Promise<{ totalSize: number; done: boolean; records: T[] }>;
   }
 
   public sobject(name: string): TsforceSobject {
