@@ -2219,6 +2219,7 @@
           "optionId": {
             "errors": {
               "custom": "Enter a score for scope.",
+              "invalid_type": "Enter a score for scope.",
               "too_small": "Enter a score for scope."
             }
           },

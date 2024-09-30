@@ -12,7 +12,7 @@ import { BaseProps } from "@ui/app/containerBase";
 import { MonitoringReportWorkflowDef } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { useContent } from "@ui/hooks/content.hook";
 import { noop } from "lodash";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import {
   FormState,
   UseFormHandleSubmit,
@@ -34,6 +34,7 @@ import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 type MonitoringReportContextType = {
   projectId: ProjectId;
@@ -112,6 +113,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
+  const isOnSummary = workflow.isOnSummary();
   const { register, watch, handleSubmit, formState, setValue, reset, trigger, setError } = useForm<FormValues>({
     defaultValues: {
       addComments: report.addComments ?? "",
@@ -122,9 +124,18 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
       })),
       periodId: report.periodId,
       button_submit: "submit",
+      form: FormTypes.MonitoringReportSummary,
     },
     resolver: zodResolver(zodSchema.schema, { errorMap: zodSchema.errorMap }),
   });
+
+  useEffect(() => {
+    if (isOnSummary) {
+      setValue("form", FormTypes.MonitoringReportSummary);
+    } else {
+      setValue("form", FormTypes.MonitoringReportQuestion);
+    }
+  }, [isOnSummary, setValue]);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 

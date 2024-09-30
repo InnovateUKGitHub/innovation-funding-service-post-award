@@ -38,9 +38,10 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
   }),
   z.object({
     button_submit: z.literal("saveAndReturnToSummary"),
+    form: z.literal(FormTypes.MonitoringReportSummary),
     questions: z.array(
       z.object({
-        optionId: z.string().optional(),
+        optionId: z.string().optional().nullable(),
         comments: getTextValidation({ required: false, maxLength: 32000 }),
       }),
     ),
@@ -51,3 +52,5 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     }),
   }),
 ]);
+
+export type MonitoringReportSummarySchema = typeof monitoringReportSummarySchema;

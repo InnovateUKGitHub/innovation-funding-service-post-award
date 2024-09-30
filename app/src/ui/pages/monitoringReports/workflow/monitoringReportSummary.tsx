@@ -75,7 +75,7 @@ const ReportLog = () => {
 };
 
 const ReportForm = () => {
-  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, registerButton } =
+  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, registerButton, report } =
     useContext(MonitoringReportFormContext);
   const { getContent } = useContent();
   return (
@@ -95,9 +95,9 @@ const ReportForm = () => {
             characterCount={watch("addComments")?.length ?? 0}
             characterCountMax={5000}
             data-qa="additional-comments-text-area"
+            defaultValue={report.addComments ?? ""}
           />
         </Fieldset>
-
         <P>{getContent(x => x.monitoringReportsMessages.submittingMonitoringReportMessage)}</P>
         <Fieldset data-qa="save-buttons">
           <Button type="submit" disabled={isFetching} {...registerButton("submit")}>

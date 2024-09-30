@@ -61,7 +61,7 @@ export type FormValues = {
   periodId: PeriodId;
   questions: { optionId: string; comments: string; title: string }[];
   addComments: string;
-  button_submit: "save-continue" | "save-return" | "submit" | "saveAndReturnToSummary";
+  button_submit: "saveAndContinue" | "saveAndReturn" | "submit" | "saveAndReturnToSummary";
   form: FormTypes.MonitoringReportQuestion | FormTypes.MonitoringReportSummary;
 };
 
@@ -120,7 +120,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
         mode,
         projectId,
         id: headerId,
-        progress: data["button_submit"] === "save-continue",
+        progress: data["button_submit"] === "saveAndContinue",
         routes,
         workflow,
       });
