@@ -153,7 +153,7 @@ export interface ISalesforcePCR {
   Acc_Start_Date__c: string | null;
 }
 
-export const mapToPCRApiName = (status: PCRStatus): string => {
+export const mapToPCRApiName = (status: unknown): string => {
   switch (status) {
     // Current Values
     case PCRStatus.DraftWithProjectManager:
@@ -459,7 +459,7 @@ export class ProjectChangeRequestRepository
     return super.getPicklist("Acc_Location__c");
   }
 
-  private mapStatus(status: PCRStatus): string {
+  private mapStatus(status: unknown): string {
     return mapToPCRApiName(status);
   }
 
