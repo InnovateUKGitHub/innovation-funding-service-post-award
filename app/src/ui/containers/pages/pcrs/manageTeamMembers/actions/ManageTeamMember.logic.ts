@@ -81,7 +81,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
         projectId: data.projectId,
         projectChangeRequestDto: {
           projectId: data.projectId,
-          // status: pcrStatus,
+          status: PCRStatus.Unknown,
           manageTeamMemberStatus: pcrStatus,
           reasoningStatus: PCRItemStatus.Complete,
           items: [

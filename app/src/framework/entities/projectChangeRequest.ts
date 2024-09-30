@@ -16,8 +16,8 @@ export interface ProjectChangeRequestForCreateEntity {
   items: ProjectChangeRequestItemForCreateEntity[];
   projectId: ProjectId;
   reasoningStatus: PCRItemStatus;
-  status?: PCRStatus;
-  manageTeamMemberStatus?: PCRStatus;
+  status: PCRStatus;
+  manageTeamMemberStatus: PCRStatus;
 }
 
 export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreateEntity {

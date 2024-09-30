@@ -286,7 +286,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const { isPm, isMo } = getAuthRoles(this.role);
 
     if (this.isManageTeamMember) {
-      permittedStatus.push(PCRStatus.Approved, PCRStatus.SubmittedToInnovateUK);
+      permittedStatus.push(PCRStatus.Unknown, PCRStatus.Approved, PCRStatus.SubmittedToInnovateUK);
     }
 
     if (isPm) {

@@ -56,7 +56,10 @@ export interface PCRItemBaseDto extends PCRItemSummaryDto {
 }
 
 export type CreatePcrItemDto = PickRequiredFromPartial<PCRItemDto, "type" | "status">;
-export type CreatePcrDto = Omit<PickRequiredFromPartial<PCRDto, "projectId" | "reasoningStatus">, "items"> & {
+export type CreatePcrDto = Omit<
+  Pick<PCRDto, "projectId" | "reasoningStatus" | "status" | "manageTeamMemberStatus">,
+  "items"
+> & {
   items: CreatePcrItemDto[];
 };
 
