@@ -1,17 +1,17 @@
-import mimeTypes from "mime-types";
-import express, { Request, Response } from "express";
-import { NotFoundError } from "@shared/appError";
-import { getErrorResponse, getErrorStatus } from "@framework/util/errorHandlers";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
-import { upload } from "../htmlFormHandler/diskStorage";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IAppError } from "@framework/types/IAppError";
 import { ISessionUser } from "@framework/types/IUser";
 import { configuration } from "@server/features/common/config";
-import { rm, readFile } from "fs/promises";
-import { BaseLogger } from "@shared/logger";
+import { NotFoundError } from "@shared/appError";
+import express, { Request, Response } from "express";
+import { readFile, rm } from "fs/promises";
+import mimeTypes from "mime-types";
+import { upload } from "../htmlFormHandler/diskStorage";
 import { ServerLogger } from "@server/serverLogger";
+import { BaseLogger } from "@shared/logger";
+import { getErrorStatus, getErrorResponse } from "@framework/util/errorHandlers";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(private readonly file: Express.Multer.File) {}

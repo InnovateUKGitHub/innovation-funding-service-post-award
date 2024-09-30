@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ReadableStream } from "stream/web";
+import type { Writable } from "node:stream";
 
 export type AllPartnerDocumentSummaryDto = PartnerDocumentSummaryDto[];
 export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
@@ -31,5 +31,5 @@ export interface DocumentDto {
   contentLength: number;
   fileName: string;
   fileType: string | null;
-  stream: ReadableStream<Uint8Array> | null;
+  stream: Writable | null;
 }

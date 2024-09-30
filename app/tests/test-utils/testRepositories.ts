@@ -96,12 +96,12 @@ import { IProjectContactsRepository, ISalesforceProjectContact } from "@server/r
 import { IProjectRepository, ISalesforceProject } from "@server/repositories/projectsRepository";
 import { IRecordTypeRepository } from "@server/repositories/recordTypeRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
+import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 import { BadRequestError } from "@shared/appError";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
+import { Writable } from "node:stream";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
-import { ReadableStream } from "stream/web";
 
 class ProjectsTestRepository extends TestRepository<ISalesforceProject> implements IProjectRepository {
   getById(id: string) {
@@ -388,17 +388,14 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return !!document;
   }
 
-  getDocumentContent(documentId: string): Promise<ReadableStream<Uint8Array>> {
+  getDocumentContent(documentId: string): Promise<Writable> {
     return super
       .getOne(x => x[1].Id === documentId)
       .then(x => {
-        const s = new ReadableStream<Uint8Array>({
-          start(controller) {
-            controller.enqueue(Buffer.from(x[1].Id));
-            controller.close();
-          },
-        });
-        return s;
+        const w = new Writable();
+        w.write(Buffer.from(x[1].Id));
+        w.end();
+        return w;
       });
   }
 
