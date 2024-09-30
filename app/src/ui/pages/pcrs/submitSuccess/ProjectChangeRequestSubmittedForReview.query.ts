@@ -28,6 +28,9 @@ const projectChangeRequestSubmittedForReviewQuery = graphql`
                 Acc_Status__c {
                   value
                 }
+                Acc_Manage_Team_Member_Status__c {
+                  value
+                }
                 CreatedDate {
                   value
                 }
