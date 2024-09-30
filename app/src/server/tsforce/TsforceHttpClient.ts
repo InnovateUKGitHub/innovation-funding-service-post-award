@@ -1,9 +1,8 @@
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
-import http, { IncomingMessage } from "node:http";
-import https from "node:https";
 import { Writable } from "node:stream";
-import { decode as decodeHTMLEntities } from "html-entities";
+import { request } from "undici";
+import { UnauthenticatedError } from "@shared/appError";
 
 interface FetcherConfiguration {
   searchParams?: Record<string, string>;
@@ -40,74 +39,54 @@ class TsforceHttpClient {
   }
 
   private executeFetchRequest(input: string, init: FetcherConfiguration = {}) {
-    return new Promise<IncomingMessage>((resolve, reject) => {
-      const url = new URL(`/services/data/${this.version}${input}`, this.instanceUrl);
-      const client = url.protocol === "https:" ? https : http;
+    const url = new URL(`/services/data/${this.version}${input}`, this.instanceUrl);
 
-      if (init?.searchParams) {
-        for (const [name, value] of Object.entries(init.searchParams)) {
-          url.searchParams.set(name, value);
-        }
+    if (init?.searchParams) {
+      for (const [name, value] of Object.entries(init.searchParams)) {
+        url.searchParams.set(name, value);
       }
+    }
 
-      const req = client.request(
-        url,
-        {
-          method: init?.method,
-          headers: {
-            ...init?.headers,
-            Authorization: `Bearer ${this.accessToken}`,
-          },
-        },
-        resolve,
-      );
-
-      req.on("error", reject);
-
-      if (init.chunked) {
-        req.setHeader("transfer-encoding", "chunked");
-        req.flushHeaders();
-      }
-
-      if (init.body) {
-        req.write(init.body);
-      }
-
-      req.end();
+    return request(url, {
+      method: init?.method,
+      headers: {
+        ...init?.headers,
+        Authorization: `Bearer ${this.accessToken}`,
+      },
+      body: init?.body,
     });
   }
 
   public async fetchBlob(input: string, init?: FetcherConfiguration): Promise<Writable> {
     const rs = new Writable();
     const res = await this.executeFetchRequest(input, init);
-    res.pipe(rs);
+    res.body.pipe(rs);
     return rs;
   }
 
-  public fetchJson(input: string, init?: FetcherConfiguration) {
-    return this.executeFetchRequest(input, init).then(
-      res =>
-        new Promise((resolve, reject) => {
-          const body: string[] = [];
-          res.setEncoding("utf-8");
-          res.on("data", chunk => {
-            body.push(chunk);
-          });
-          res.on("error", err => {
-            reject(err);
-          });
-          res.on("end", () => {
-            try {
-              let data = body.join("");
-              if (init?.decodeHTMLEntities) data = decodeHTMLEntities(data);
-              const obj = JSON.parse(data);
-              resolve(obj);
-            } catch (e) {
-              reject(e);
-            }
-          });
-        }),
-    );
+  public async fetchJson(input: string, init?: FetcherConfiguration) {
+    const { body } = await this.executeFetchRequest(input, init);
+
+    let data = await body.text();
+
+    try {
+      if (init?.decodeHTMLEntities) {
+        // JSON Safe Salesforce Decoding
+        // https://developer.salesforce.com/docs/atlas.en-us.chatterapi.meta/chatterapi/intro_encoding.htm
+        data = data
+          .replaceAll("&lt;", "<")
+          .replaceAll("&gt;", ">")
+          .replaceAll("&quot;", '\\"')
+          .replaceAll("&#39;", "'")
+          .replaceAll("&#92;", "\\\\")
+          .replaceAll("&amp;", "&");
+      }
+      if (data.includes("<title>Down For Maintenance</title>")) throw new UnauthenticatedError();
+
+      return JSON.parse(data);
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 }
 
