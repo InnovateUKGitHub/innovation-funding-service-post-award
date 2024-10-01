@@ -2,6 +2,7 @@ import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { getNumberValidation } from "./numericValidator.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
+import copy from "@copy/default.en-GB.json";
 
 describe("number currency validator", () => {
   beforeAll(async () => {
@@ -9,13 +10,7 @@ describe("number currency validator", () => {
       forms: {
         errors: {
           generic: {
-            number: {
-              required: "Enter {{label, key, lowercase}}.",
-              invalid_type: "{{label, key}} must be a number.",
-              not_a_number: "{{label, key}} must be a number.",
-              too_big: "{{label, key}} must be {{count, currency}} or less.",
-              too_small: "{{label, key}} must be {{count, currency}} or more.",
-            },
+            number: copy.forms.errors.generic.number,
           },
         },
         beans: {
