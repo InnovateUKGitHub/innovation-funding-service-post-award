@@ -13,6 +13,7 @@ export const getOrganisationDetailsSchema = (markedAsComplete: boolean) =>
     numberOfEmployees: getNumberValidation({
       lt: employeesLessThan,
       required: markedAsComplete,
+      integer: true,
     }),
   });
 

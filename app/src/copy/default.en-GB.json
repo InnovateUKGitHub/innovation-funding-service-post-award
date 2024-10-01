@@ -2517,13 +2517,7 @@
             "label": "Rate per day"
           },
           "daysSpentOnProject": {
-            "errors": {
-              "required": "Enter days spent on project.",
-              "too_small": "Days spent on project must be {{count}} or more.",
-              "too_big": "Days spent on project must be {{count}} or fewer.",
-              "invalid_type": "Days spent on project must be a number.",
-              "not_integer": "Days spent on project must be a whole number, like 15."
-            }
+            "label": "Days spent on project"
           },
           "calculatedValue": {
             "label": "Total cost of overheads"
@@ -2567,13 +2561,7 @@
             }
           },
           "numberOfTimes": {
-            "errors": {
-              "required": "Enter number of times.",
-              "not_integer": "Number of times must be a whole number, like 15.",
-              "invalid_type": "Number of times must be a number.",
-              "too_small": "Number of times must be {{count}} or more.",
-              "too_big": "Number of times must be {{count}} or less."
-            }
+            "label": "Number of times"
           },
           "totalCost": {
             "errors": {
@@ -2596,13 +2584,7 @@
             }
           },
           "quantityOfMaterialItems": {
-            "errors": {
-              "required": "Enter quantity.",
-              "invalid_type": "Quantity must be a number.",
-              "too_small": "Quantity must be {{count}} or more.",
-              "too_big": "Quantity must be {{count}} or less.",
-              "not_integer": "Quantity must be a whole number, like 15."
-            }
+            "label": "Quantity"
           },
           "itemType": {
             "errors": {
@@ -2613,13 +2595,7 @@
             "label": "Cost per item"
           },
           "depreciationPeriod": {
-            "errors": {
-              "required": "Enter depreciation period.",
-              "not_integer": "Depreciation period must be a whole number, like 15.",
-              "invalid_type": "Depreciation period must be a number.",
-              "too_big": "Depreciation period must be {{count}} or less.",
-              "too_small": "Depreciation period must be {{count}} or more."
-            }
+            "label": "Depreciation period"
           },
           "netPresentValue": {
             "label": "Net present value"
@@ -2628,13 +2604,7 @@
             "label": "Residual value"
           },
           "utilisation": {
-            "errors": {
-              "required": "Enter utilisation.",
-              "too_big": "Utilisation must be a value under 100%.",
-              "too_small": "Utilisation must be {{count}} or more.",
-              "invalid_type": "Utilisation must be a number.",
-              "two_decimal_places": "Utilisation must be 2 decimal places or fewer."
-            }
+            "label": "Utilisation"
           },
           "estimatedCost": {
             "label": "Estimated cost"

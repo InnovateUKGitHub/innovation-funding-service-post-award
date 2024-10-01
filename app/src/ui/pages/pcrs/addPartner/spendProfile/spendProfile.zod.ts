@@ -110,7 +110,7 @@ export const capitalUsageSchema = z.object({
   residualValue: getGenericCurrencyValidation({
     required: true,
   }),
-  utilisation: getNumberValidation({ lt: 100, min: 0, required: true }),
+  utilisation: getNumberValidation({ lt: 100, min: 0, required: true, decimalPlaces: 2 }),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost),
   costCategoryType: z.nativeEnum(CostCategoryType),
 });
