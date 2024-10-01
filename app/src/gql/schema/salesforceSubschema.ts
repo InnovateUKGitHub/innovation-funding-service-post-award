@@ -63,12 +63,12 @@ const salesforceSubschema: ExecutableSchema = {
                     ctx ?? {},
                     await createContextFromEmail({
                       email: configuration.salesforceServiceUser.serviceUsername,
-                      tid: ctx.tid,
+                      traceId: ctx.traceId,
                     }),
                   );
                   break;
                 default:
-                  Object.assign(ctx ?? {}, await createContextFromEmail({ email: args.login, tid: ctx.tid }));
+                  Object.assign(ctx ?? {}, await createContextFromEmail({ email: args.login, traceId: ctx.traceId }));
                   break;
               }
             }

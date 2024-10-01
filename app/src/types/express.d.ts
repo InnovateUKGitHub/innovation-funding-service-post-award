@@ -11,5 +11,6 @@ declare namespace Express {
     preloadedServerErrors: ClientErrorResponse | null;
     messages: string[];
     serverZodErrors: ZodIssue[];
+    traceId: string;
   }
 }

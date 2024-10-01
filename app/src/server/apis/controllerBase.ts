@@ -41,7 +41,7 @@ export class ServerFileWrapper implements IFileWrapper {
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
   user: ISessionUser;
-  tid: string;
+  traceId: string;
 }
 
 export type ApiParams<Context extends "client" | "server", T = undefined> = T extends undefined
@@ -204,7 +204,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
       const user: ISessionUser = req.session?.user;
 
       const p = Object.assign(
-        { user, tid: resp.locals.tid },
+        { user, traceId: resp.locals.traceId },
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}, req),
       ) as ApiParams<Context, TParams>;
 
@@ -227,7 +227,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     return async (req: Request, resp: Response) => {
       const user: ISessionUser = req.session?.user;
       const p = Object.assign(
-        { user, tid: resp.locals.tid },
+        { user, traceId: resp.locals.traceId },
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}),
       ) as ApiParams<Context, TParams>;
       run(p)
@@ -250,10 +250,10 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   }
 
   private handleError(req: Request, res: Response, err: IAppError) {
-    const tid = res.locals.tid;
+    const traceId = res.locals.traceId;
     const username = req.session?.user.email;
-    this.logger.error(err.message, err, { route: req.url, username, tid });
-    return res.status(getErrorStatus(err)).json(getErrorResponse(err, tid));
+    this.logger.error(err.message, err, { route: req.url, username, traceId });
+    return res.status(getErrorStatus(err)).json(getErrorResponse(err, traceId));
   }
 }
 

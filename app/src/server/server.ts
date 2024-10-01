@@ -75,11 +75,11 @@ export class Server {
   }
 
   private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    const tid = v4({});
-    newrelic?.addCustomAttribute("acc.tid", tid);
-    res.locals.tid = tid;
+    const traceId = v4({});
+    newrelic?.addCustomAttribute("acc.traceId", traceId);
+    res.locals.traceId = traceId;
 
-    this.logger.debug(`${req.method} Request - ${req.url}`, { tid });
+    this.logger.debug(`${req.method} Request - ${req.url}`, { traceId });
 
     next();
   };
@@ -149,13 +149,13 @@ export class Server {
   private readonly stubEmail = configuration.salesforceServiceUser.serviceUsername;
 
   private async primeCaches(): Promise<void> {
-    const cacheContext = contextProvider.start({ user: { email: this.stubEmail }, tid: "prime-caches" });
+    const cacheContext = contextProvider.start({ user: { email: this.stubEmail }, traceId: "prime-caches" });
 
     await fetchCaches(cacheContext);
   }
 
   private async initialiseCustomContent(loadCustom: boolean): Promise<void> {
-    const context = contextProvider.start({ user: { email: this.stubEmail }, tid: "initalise-custom-content" });
+    const context = contextProvider.start({ user: { email: this.stubEmail }, traceId: "initalise-custom-content" });
 
     try {
       const hasInitialised = await context.runCommand(new InitialiseContentCommand(loadCustom));

@@ -82,7 +82,7 @@ abstract class ZodFormHandlerBase<
     let userInput: z.output<Schema> | null = null;
 
     try {
-      const session: ISession = { user: req.session?.user, tid: res.locals.tid };
+      const session: ISession = { user: req.session?.user, traceId: res.locals.traceId };
       const context = contextProvider.start(session);
 
       // If the ID of the form has not been submitted, skip to the next handler

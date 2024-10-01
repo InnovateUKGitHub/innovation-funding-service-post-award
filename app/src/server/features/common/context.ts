@@ -108,11 +108,11 @@ export const constructErrorResponse = (error: unknown): AppError => {
 
 export class Context implements IContext {
   public readonly user: ISessionUser;
-  public readonly tid: string;
+  public readonly traceId: string;
 
-  constructor({ user, tid }: { user: ISessionUser; tid: string }) {
+  constructor({ user, traceId }: { user: ISessionUser; traceId: string }) {
     this.user = user;
-    this.tid = tid;
+    this.traceId = traceId;
     this.config = configuration;
 
     const salesforceConfig = {
@@ -127,7 +127,7 @@ export class Context implements IContext {
     };
 
     this.logger = new Logger("Context", {
-      prefixLines: [{ user, tid }],
+      prefixLines: [{ user, traceId }],
     });
 
     this.caches = cachesImplementation;
@@ -276,7 +276,7 @@ export class Context implements IContext {
    */
   private elevateUserAs(user: string): IContext {
     if (this.user.email !== user) {
-      return new Context({ user: { email: user }, tid: this.tid });
+      return new Context({ user: { email: user }, traceId: this.traceId });
     }
     return this;
   }

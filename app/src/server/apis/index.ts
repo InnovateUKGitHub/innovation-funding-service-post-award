@@ -52,5 +52,5 @@ export const router = express.Router();
 
 router.all("*", (req, res) => {
   const error = new NotFoundError();
-  res.status(getErrorStatus(error)).json(getErrorResponse(error, res.locals.tid));
+  res.status(getErrorStatus(error)).json(getErrorResponse(error, res.locals.traceId));
 });
