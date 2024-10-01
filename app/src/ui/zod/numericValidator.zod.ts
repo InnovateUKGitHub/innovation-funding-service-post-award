@@ -48,7 +48,7 @@ export const getNumberValidation = <T extends boolean>({
       /*
        * run the required check first
        */
-      const isEmpty = isNil(rawVal);
+      const isEmpty = isNil(rawVal) || (typeof rawVal === "string" && rawVal.trim() === "");
       if (required && isEmpty) {
         return ctx.addIssue({
           code: ZodIssueCode.custom,
