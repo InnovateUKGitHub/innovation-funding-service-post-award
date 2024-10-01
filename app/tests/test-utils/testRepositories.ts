@@ -99,13 +99,20 @@ import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { TsforceDescribeSobjectFieldPicklistEntry } from "@server/tsforce/requests/TsforceDescribeSubrequest";
 import { BadRequestError } from "@shared/appError";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { Writable } from "node:stream";
+import { Readable } from "node:stream";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
 
-class TestWriteStream extends Writable {
-  _write(_: unknown, __: unknown, next: () => void) {
-    next();
+class TestWriteStream extends Readable {
+  private readonly id: string;
+  constructor(id: string) {
+    super();
+    this.id = id;
+  }
+
+  _read(): void {
+    this.push(this.id, "utf-8");
+    this.push(null);
   }
 }
 
@@ -394,12 +401,11 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return !!document;
   }
 
-  getDocumentContent(documentId: string): Promise<Writable> {
+  getDocumentContent(documentId: string): Promise<Readable> {
     return super
       .getOne(x => x[1].Id === documentId)
       .then(x => {
-        const w = new TestWriteStream();
-        w.end(Buffer.from(x[1].Id));
+        const w = new TestWriteStream(x[1].Id);
         return w;
       });
   }

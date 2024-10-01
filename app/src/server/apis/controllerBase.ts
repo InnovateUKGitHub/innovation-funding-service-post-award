@@ -237,7 +237,8 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
           resp.setHeader("Content-Length", result.contentLength);
           resp.setHeader("Content-Type", `${contentType || defaultContentType}; charset=utf-8`);
           resp.setHeader("Content-Disposition", `filename="${result.fileName}"`);
-          resp.send(result.stream);
+          resp.flushHeaders();
+          result.stream.pipe(resp);
         })
         .catch((e: IAppError) => this.handleError(resp, e));
     };

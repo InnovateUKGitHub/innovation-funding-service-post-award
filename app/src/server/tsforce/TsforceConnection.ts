@@ -27,7 +27,7 @@ class TsforceConnection {
   private readonly sobjectMap: Map<string, TsforceSobject> = new Map();
 
   constructor({
-    version = "v59.0",
+    version = "v60.0",
     instanceUrl,
     accessToken,
     email,
