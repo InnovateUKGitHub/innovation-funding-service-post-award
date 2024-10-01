@@ -52,13 +52,15 @@ class MonitoringReportPrepareFormHandler extends ZodFormHandlerBase<
     const query = new GetMonitoringReportById(params.projectId, params.id);
     this.monitoringReport = await context.runQuery(query);
     const questionDisplayOrder = Number(input.questionDisplayOrder);
-    const q = this.monitoringReport.questions.find(x => x.displayOrder === questionDisplayOrder);
-    if (!q) throw new Error(`Cannot find monitoring report question dto matching ${questionDisplayOrder}`);
 
-    if (q.isScored) {
-      q.optionId = input[`questions.${q.displayOrder - 1}.optionId`];
+    const q = this.monitoringReport.questions.find(x => x.displayOrder === questionDisplayOrder);
+
+    if (q) {
+      if (q.isScored) {
+        q.optionId = input[`questions.${q.displayOrder - 1}.optionId`];
+      }
+      q.comments = input[`questions.${q.displayOrder - 1}.comments`];
     }
-    q.comments = input[`questions.${q.displayOrder - 1}.comments`];
 
     const questions = this.monitoringReport.questions.map(x =>
       x.displayOrder === questionDisplayOrder ? { ...x, ...q } : x,
