@@ -194,30 +194,38 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
       let everyCharacterIsFullStop = true;
       let forcePlural = false;
       for (const character of parsedFile.name) {
+        if (character !== " ") {
+          everyCharacterIsSpace = false;
+        }
+        if (character !== ".") {
+          everyCharacterIsFullStop = false;
+        }
+
         for (const [badCharacter, type] of badCharactersList) {
           if (character === badCharacter) {
             foundBadCharacters.push([badCharacter, type]);
             everyCharacterIsSpace = false;
             everyCharacterIsFullStop = false;
-          }
-          if (character !== " ") {
-            everyCharacterIsSpace = false;
-          }
-          if (character !== ".") {
-            everyCharacterIsFullStop = false;
-          }
-          if (
-            type === CharacterType.ASCII_CONTROL_CHARACTERS ||
-            type === CharacterType.DIRECTION_OVERRIDES ||
-            type === CharacterType.EMOJIS ||
-            type === CharacterType.PRIVATE_USE_AREA ||
-            type === CharacterType.UNICODE_CONTROL_CHARACTERS
-          ) {
-            // These are "categories" of characters, which should
-            // force the output error to be a plural.
-            // i.e. Cannot use invisible characters
-            // not. Cannot use the invisible character
-            forcePlural = true;
+
+            // Edge case - looks like web browsers turn `/` into `:`
+            // Show an error message for both if this occurs.
+            if (character === ":") {
+              foundBadCharacters.push(["/", CharacterType.FILESYSTEM]);
+            }
+
+            if (
+              type === CharacterType.ASCII_CONTROL_CHARACTERS ||
+              type === CharacterType.DIRECTION_OVERRIDES ||
+              type === CharacterType.EMOJIS ||
+              type === CharacterType.PRIVATE_USE_AREA ||
+              type === CharacterType.UNICODE_CONTROL_CHARACTERS
+            ) {
+              // These are "categories" of characters, which should
+              // force the output error to be a plural.
+              // i.e. Cannot use invisible characters
+              // not. Cannot use the invisible character
+              forcePlural = true;
+            }
           }
         }
       }
