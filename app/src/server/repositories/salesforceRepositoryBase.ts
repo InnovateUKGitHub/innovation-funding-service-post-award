@@ -14,7 +14,7 @@ import { TsforceSalesforceResponse } from "@server/tsforce/types/TsforceSalesfor
 import { BadRequestError } from "@shared/appError";
 import { createBatch } from "@shared/create-batch";
 import { ILogger } from "@shared/logger";
-import { Writable } from "node:stream";
+import { Readable } from "node:stream";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
@@ -153,11 +153,11 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
   }
 
-  protected async getBlob(id: string): Promise<Writable> {
+  protected async getBlob(id: string): Promise<Readable> {
     try {
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject(this.salesforceObjectName);
-      const stream = (await targetObject.blob(id)) as Writable;
+      const stream = await targetObject.blob(id, "VersionData");
 
       if (stream === null) throw new Errors.BadSalesforceQuery();
 

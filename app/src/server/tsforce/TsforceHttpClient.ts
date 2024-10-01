@@ -1,16 +1,13 @@
 import { Logger } from "@shared/developmentLogger";
 import { ILogger } from "@shared/logger";
-import { Writable } from "node:stream";
-import { request } from "undici";
+import { Dispatcher, request } from "undici";
 import { UnauthenticatedError } from "@shared/appError";
+import BodyReadable from "undici/types/readable";
 
-interface FetcherConfiguration {
+type RequestOptions = Exclude<Parameters<typeof request>[1], undefined>;
+interface FetcherConfiguration extends RequestOptions {
   searchParams?: Record<string, string>;
   decodeHTMLEntities?: boolean;
-  headers?: Record<string, string>;
-  method?: "POST" | "PUT" | "PATCH" | "GET" | "DELETE";
-  body?: string;
-  chunked?: boolean;
 }
 
 class TsforceHttpClient {
@@ -48,20 +45,17 @@ class TsforceHttpClient {
     }
 
     return request(url, {
-      method: init?.method,
+      ...init,
       headers: {
         ...init?.headers,
         Authorization: `Bearer ${this.accessToken}`,
       },
-      body: init?.body,
     });
   }
 
-  public async fetchBlob(input: string, init?: FetcherConfiguration): Promise<Writable> {
-    const rs = new Writable();
+  public async fetchBlob(input: string, init?: FetcherConfiguration): Promise<BodyReadable & Dispatcher.BodyMixin> {
     const res = await this.executeFetchRequest(input, init);
-    res.body.pipe(rs);
-    return rs;
+    return res.body;
   }
 
   public async fetchJson(input: string, init?: FetcherConfiguration) {

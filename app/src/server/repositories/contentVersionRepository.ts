@@ -2,7 +2,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { IFileWrapper } from "@framework/types/fileWrapper";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { sss } from "@server/util/salesforce-string-helpers";
-import { Writable } from "node:stream";
+import { Readable } from "node:stream";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceDocument {
@@ -28,7 +28,7 @@ export interface ISalesforceDocument {
 export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<ISalesforceDocument[]>;
   getDocument(id: string): Promise<ISalesforceDocument>;
-  getDocumentData(id: string): Promise<Writable>;
+  getDocumentData(id: string): Promise<Readable>;
   insertDocument(file: IFileWrapper, description: string): Promise<string>;
 }
 
@@ -99,7 +99,7 @@ export class ContentVersionRepository
     });
   }
 
-  public getDocumentData(versionId: string): Promise<Writable> {
+  public getDocumentData(versionId: string): Promise<Readable> {
     return super.getBlob(versionId);
   }
 }

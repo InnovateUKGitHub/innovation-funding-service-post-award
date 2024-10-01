@@ -18,8 +18,8 @@ class TsforceSobject {
     this.name = name;
   }
 
-  blob(id: string) {
-    const command = new TsforceBlobRequest({ connection: this.connection, sobject: this.name, id });
+  blob(id: string, fieldName: string) {
+    const command = new TsforceBlobRequest({ connection: this.connection, sobject: this.name, id, fieldName });
     return command.execute();
   }
   describe() {

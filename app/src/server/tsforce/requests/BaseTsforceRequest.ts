@@ -5,7 +5,7 @@ interface BaseTsforceRequestProps {
 }
 
 abstract class BaseTsforceRequest<T> {
-  protected version = "v59.0";
+  protected version = "v60.0";
   protected readonly connection: TsforceConnection;
   abstract execute(): Promise<T>;
 
