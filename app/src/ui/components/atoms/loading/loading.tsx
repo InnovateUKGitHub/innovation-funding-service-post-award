@@ -5,7 +5,7 @@ import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { OperationType } from "relay-runtime";
 import { ErrorContainer } from "../../organisms/ErrorContainer/ErrorContainer";
 import { GovWidthContainer } from "../GovWidthContainer/GovWidthContainer";
-import { getErrorResponse } from "@server/errorHandlers";
+import { getErrorResponse } from "@framework/util/errorHandlers";
 
 export const LoadingMessage = () => {
   const { getContent } = useContent();

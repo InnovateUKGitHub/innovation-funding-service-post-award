@@ -3,7 +3,7 @@ import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ErrorCode } from "@framework/constants/enums";
 import { GenericFallbackError } from "./GenericFallbackError";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 describe("<GenericFallbackError />", () => {
   describe("@renders", () => {

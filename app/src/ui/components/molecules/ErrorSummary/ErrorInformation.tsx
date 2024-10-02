@@ -1,4 +1,4 @@
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { ErrorDetails } from "./ErrorDetails";
 import { useLocation } from "react-router-dom";
 import { ErrorStacktrace } from "./ErrorStacktrace";

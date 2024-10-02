@@ -4,7 +4,7 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";

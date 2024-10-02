@@ -7,7 +7,7 @@ import { configuration } from "./features/common/config";
 import { IClientConfig } from "../types/IClientConfig";
 import { IClientUser } from "@framework/types/IUser";
 import { ZodIssue } from "zod";
-import { ClientErrorResponse } from "./errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 let versionInformation = "";
 

@@ -1,4 +1,4 @@
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { createContext, useContext } from "react";
 
 const apiErrorContext = createContext<ClientErrorResponse | null>(null);

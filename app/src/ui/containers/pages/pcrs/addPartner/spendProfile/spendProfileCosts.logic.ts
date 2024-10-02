@@ -15,7 +15,7 @@ import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { SpendProfileCostsQuery } from "./__generated__/SpendProfileCostsQuery.graphql";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export const useSpendProfileCostsQuery = (
   projectId: ProjectId,

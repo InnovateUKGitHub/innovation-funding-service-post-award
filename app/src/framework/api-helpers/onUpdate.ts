@@ -3,7 +3,7 @@ import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export enum Propagation {
   STOP,

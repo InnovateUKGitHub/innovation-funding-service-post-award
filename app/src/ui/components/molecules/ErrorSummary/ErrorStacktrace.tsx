@@ -1,4 +1,4 @@
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 const ErrorStacktrace = ({ stack, cause }: Pick<ClientErrorResponse, "stack" | "cause">) => {
   return (

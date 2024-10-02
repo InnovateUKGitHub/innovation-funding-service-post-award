@@ -10,7 +10,7 @@ import { ErrorCode } from "@framework/constants/enums";
 import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
 import { UnauthenticatedError } from "@ui/containers/pages/error/Unauthenticated/UnauthenticatedError";
 import { GenericFallbackError } from "@ui/containers/pages/error/Generic/GenericFallbackError";
-import { ClientErrorResponse, getErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse, getErrorResponse } from "@framework/util/errorHandlers";
 
 export const ErrorContainer = ({ error }: { error?: ClientErrorResponse | null }) => {
   switch (error?.code) {

@@ -18,7 +18,7 @@ import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { StaticRouter } from "react-router-dom/server";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { ClientErrorResponse, getErrorResponse, getErrorStatus } from "./errorHandlers";
+import { ClientErrorResponse, getErrorResponse, getErrorStatus } from "@framework/util/errorHandlers";
 import { ForbiddenError, FormHandlerError, ZodFormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";

@@ -1,4 +1,4 @@
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { ExternalLink } from "@ui/components/atoms/ExternalLink/externalLink";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
 import { Content } from "@ui/components/molecules/Content/content";

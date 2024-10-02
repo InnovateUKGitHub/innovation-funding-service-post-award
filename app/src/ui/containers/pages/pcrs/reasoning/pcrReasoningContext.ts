@@ -5,7 +5,7 @@ import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PCRItemType } from "@framework/constants/pcrConstants";
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 type PcrReasoningContextType = {
   projectId: ProjectId;

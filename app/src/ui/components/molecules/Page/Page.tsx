@@ -10,7 +10,7 @@ import { ValidationSummary } from "../../atoms/validation/ValidationSummary/Vali
 import { ProjectSuspensionMessageWithOptionalFragment } from "../../organisms/projects/ProjectSuspensionMessage/ProjectSuspensionMessage.withFragment";
 import { useClearMessagesOnRouteChange } from "@ui/context/messages";
 import { useBaseProps } from "@framework/api-helpers/useBaseProps";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export interface PageProps {
   pageTitle: React.ReactNode;

@@ -8,7 +8,7 @@ import { Markdown } from "@ui/components/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { getDisplayName } from "./pcrItemWorkflow.logic";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export const PcrPage = ({
   children,

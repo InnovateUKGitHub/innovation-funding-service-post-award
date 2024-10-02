@@ -7,7 +7,7 @@ import { pageFragment } from "./Page.fragment";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import React from "react";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 type PageWithFragmentProps = {
   backLink?: React.ReactNode;

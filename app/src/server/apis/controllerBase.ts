@@ -1,7 +1,7 @@
 import mimeTypes from "mime-types";
 import express, { Request, Response } from "express";
 import { NotFoundError } from "@shared/appError";
-import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
+import { getErrorResponse, getErrorStatus } from "@framework/util/errorHandlers";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../htmlFormHandler/diskStorage";

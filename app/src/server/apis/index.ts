@@ -1,5 +1,5 @@
 import express from "express";
-import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
+import { getErrorResponse, getErrorStatus } from "@framework/util/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";

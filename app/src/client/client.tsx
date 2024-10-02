@@ -23,7 +23,7 @@ import { ServerZodErrorProvider } from "@ui/context/server-zod-error";
 import { ServerInputContextProvider } from "@ui/context/server-input";
 import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context/preloaded-data";
 import { ServerErrorContextProvider } from "@ui/context/server-error";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;

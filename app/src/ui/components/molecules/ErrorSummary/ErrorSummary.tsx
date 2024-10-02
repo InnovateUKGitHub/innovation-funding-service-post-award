@@ -1,5 +1,5 @@
 import { ErrorCode } from "@framework/constants/enums";
-import { ClientErrorResponse } from "@server/errorHandlers";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { useContent } from "@ui/hooks/content.hook";
 import { Info } from "../../atoms/Details/Details";
 import { H2 } from "../../atoms/Heading/Heading.variants";
