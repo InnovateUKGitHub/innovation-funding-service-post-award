@@ -4,7 +4,7 @@ import { useFetchKey } from "@ui/context/FetchKeyProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { ManageTeamMemberValidatorSchema } from "./ManageTeamMember.zod";
+import { ManageTeamMemberValidatorSchema } from "./ManageTeamMemberCrud.zod";
 import { useRoutes } from "@ui/context/routesProvider";
 import { ManageTeamMemberMethod, PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";

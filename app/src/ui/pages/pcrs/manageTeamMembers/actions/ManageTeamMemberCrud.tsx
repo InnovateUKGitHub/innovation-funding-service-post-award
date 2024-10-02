@@ -21,12 +21,12 @@ import {
   useManageTeamMembers,
   useManageTeamMembersQuery,
 } from "../ManageTeamMember.logic";
-import { useOnManageTeamMemberSubmit } from "./ManageTeamMember.logic";
+import { useOnManageTeamMemberSubmit } from "./ManageTeamMemberCrud.logic";
 import {
   manageTeamMemberErrorMap,
   manageTeamMemberValidator,
   ManageTeamMemberValidatorSchema,
-} from "./ManageTeamMember.zod";
+} from "./ManageTeamMemberCrud.zod";
 import { ManageTeamMemberMethod, ManageTeamMemberMethods } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/dtos/projectContactDto";
 

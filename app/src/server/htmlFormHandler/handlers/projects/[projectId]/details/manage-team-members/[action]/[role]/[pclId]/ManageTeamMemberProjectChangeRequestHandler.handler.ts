@@ -8,7 +8,7 @@ import {
   manageTeamMemberErrorMap,
   manageTeamMemberValidator,
   ManageTeamMemberValidatorSchema,
-} from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMember.zod";
+} from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCrud.zod";
 import { ManageTeamMembersCreateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCreate.page";
 import { ManageTeamMembersDeleteRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberDelete.page";
 import { ManageTeamMembersReplaceRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";

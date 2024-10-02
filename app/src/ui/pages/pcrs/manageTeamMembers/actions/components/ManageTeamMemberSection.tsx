@@ -1,7 +1,7 @@
 import { Section } from "@ui/components/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode } from "react";
-import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { useManageTeamMemberActionContext } from "../ManageTeamMemberCrud";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const ManageTeamMemberSection = ({ children }: { children?: ReactNode }) => {

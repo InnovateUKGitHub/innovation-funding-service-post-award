@@ -8,7 +8,7 @@ import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useContent } from "@ui/hooks/content.hook";
 import { useFormContext } from "react-hook-form";
-import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { useManageTeamMemberActionContext } from "../ManageTeamMemberCrud";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 import { useMemo } from "react";
 import { ProjectRole } from "@framework/dtos/projectContactDto";

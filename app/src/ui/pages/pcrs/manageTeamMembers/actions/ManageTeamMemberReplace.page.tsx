@@ -1,5 +1,5 @@
 import { ManageTeamMemberReplaceProps } from "../ManageTeamMember.logic";
-import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
+import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";

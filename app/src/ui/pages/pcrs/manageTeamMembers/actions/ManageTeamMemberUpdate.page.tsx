@@ -1,5 +1,5 @@
 import { ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
-import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
+import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRolePermissionBits } from "@framework/constants/project";

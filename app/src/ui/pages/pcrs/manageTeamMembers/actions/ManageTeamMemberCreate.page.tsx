@@ -1,5 +1,5 @@
 import { ManageTeamMemberCreateProps } from "../ManageTeamMember.logic";
-import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
+import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";

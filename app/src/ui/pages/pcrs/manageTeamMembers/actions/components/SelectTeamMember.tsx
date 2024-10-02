@@ -5,7 +5,7 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atoms/form/Label/Label";
 import { ManageTeamMembersSingleContactTable } from "../../ManageTeamMembersSingleContactTable";
 import { useFormContext } from "react-hook-form";
-import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { useManageTeamMemberActionContext } from "../ManageTeamMemberCrud";
 import { useMounted } from "@ui/context/Mounted";
 import { useNavigate } from "react-router-dom";
 import { useContent } from "@ui/hooks/content.hook";

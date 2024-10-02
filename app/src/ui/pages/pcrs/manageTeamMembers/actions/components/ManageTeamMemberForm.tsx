@@ -1,7 +1,7 @@
-import { useManageTeamMemberActionContext } from "../BaseManageTeamMember";
+import { useManageTeamMemberActionContext } from "../ManageTeamMemberCrud";
 import { ReactNode } from "react";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { useManageTeamMemberFormContext } from "../ManageTeamMember.logic";
+import { useManageTeamMemberFormContext } from "../ManageTeamMemberCrud.logic";
 
 const ManageTeamMemberForm = ({ children }: { children: ReactNode }) => {
   const { method, role, projectId, pclId, memberToManage, onUpdate } = useManageTeamMemberActionContext();

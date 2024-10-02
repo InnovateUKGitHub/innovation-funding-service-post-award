@@ -1,7 +1,7 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "@ui/app/containerBase";
 import { ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
-import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
+import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
