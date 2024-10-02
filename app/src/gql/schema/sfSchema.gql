@@ -261,6 +261,10 @@ type Acc_Claims__c {
   Acc_PeriodCoststobePaid__c: CurrencyValue
   SystemModstamp: DateTimeValue
   Acc_ProjectEndDateHidden__c: DateValue
+  Acc_FundingAssuranceOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: User
   Acc_SupplierInvoiceAddedToWorkday__c: BooleanValue
   Acc_ClaimOverdue__c: DoubleValue
   LastActivityDate: DateValue
@@ -332,6 +336,10 @@ type Acc_Claims__c {
   Acc_isCalculated__c: BooleanValue
   Acc_TotalCost__c: CurrencyValue
   Acc_PeriodLengthChanged__c: BooleanValue
+  Acc_ProjectSupportOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: User
   Acc_Claim_Age__c: DoubleValue
   Acc_ProjectPeriodEndDate__c: DateValue
   Acc_StaticAwardRate__c: PercentValue
@@ -465,6 +473,10 @@ type Acc_Claims__cAggregate {
   Acc_PeriodCoststobePaid__c: CurrencyAggregate
   SystemModstamp: DateAggregate
   Acc_ProjectEndDateHidden__c: DateAggregate
+  Acc_FundingAssuranceOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: UserAggregate
   Acc_SupplierInvoiceAddedToWorkday__c: BooleanAggregate
   Acc_ClaimOverdue__c: DoubleAggregate
   LastActivityDate: DateAggregate
@@ -536,6 +548,10 @@ type Acc_Claims__cAggregate {
   Acc_isCalculated__c: BooleanAggregate
   Acc_TotalCost__c: CurrencyAggregate
   Acc_PeriodLengthChanged__c: BooleanAggregate
+  Acc_ProjectSupportOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: UserAggregate
   Acc_Claim_Age__c: DoubleAggregate
   Acc_ProjectPeriodEndDate__c: DateAggregate
   Acc_StaticAwardRate__c: PercentAggregate
@@ -652,6 +668,8 @@ input Acc_Claims__c_Filter {
   Acc_PeriodCoststobePaid__c: CurrencyOperators
   SystemModstamp: DateTimeOperators
   Acc_ProjectEndDateHidden__c: DateOperators
+  Acc_FundingAssuranceOfficer__c: IdOperators
+  Acc_FundingAssuranceOfficer__r: User_Filter
   Acc_SupplierInvoiceAddedToWorkday__c: BooleanOperators
   Acc_ClaimOverdue__c: DoubleOperators
   LastActivityDate: DateOperators
@@ -717,6 +735,8 @@ input Acc_Claims__c_Filter {
   Acc_isCalculated__c: BooleanOperators
   Acc_TotalCost__c: CurrencyOperators
   Acc_PeriodLengthChanged__c: BooleanOperators
+  Acc_ProjectSupportOfficer__c: IdOperators
+  Acc_ProjectSupportOfficer__r: User_Filter
   Acc_Claim_Age__c: DoubleOperators
   Acc_ProjectPeriodEndDate__c: DateOperators
   Acc_StaticAwardRate__c: PercentOperators
@@ -781,6 +801,8 @@ input Acc_Claims__c_GroupBy {
   Acc_TwoStageApproval__c: GroupByClause
   SystemModstamp: GroupByDateFunction
   Acc_ProjectEndDateHidden__c: GroupByClause
+  Acc_FundingAssuranceOfficer__c: GroupByClause
+  Acc_FundingAssuranceOfficer__r: User_GroupBy
   Acc_SupplierInvoiceAddedToWorkday__c: GroupByClause
   LastActivityDate: GroupByClause
   Acc_IARRequired__c: GroupByClause
@@ -810,6 +832,8 @@ input Acc_Claims__c_GroupBy {
   Acc_LeadParticipant__c: GroupByClause
   Acc_isCalculated__c: GroupByClause
   Acc_PeriodLengthChanged__c: GroupByClause
+  Acc_ProjectSupportOfficer__c: GroupByClause
+  Acc_ProjectSupportOfficer__r: User_GroupBy
   Acc_ProjectPeriodEndDate__c: GroupByClause
   Acc_IsLockedLI__c: GroupByClause
   Acc_Non_FEC_project__c: GroupByClause
@@ -894,6 +918,8 @@ input Acc_Claims__c_OrderBy {
   Acc_PeriodCoststobePaid__c: OrderByClause
   SystemModstamp: OrderByClause
   Acc_ProjectEndDateHidden__c: OrderByClause
+  Acc_FundingAssuranceOfficer__c: OrderByClause
+  Acc_FundingAssuranceOfficer__r: User_OrderBy
   Acc_SupplierInvoiceAddedToWorkday__c: OrderByClause
   Acc_ClaimOverdue__c: OrderByClause
   LastActivityDate: OrderByClause
@@ -958,6 +984,8 @@ input Acc_Claims__c_OrderBy {
   Acc_isCalculated__c: OrderByClause
   Acc_TotalCost__c: OrderByClause
   Acc_PeriodLengthChanged__c: OrderByClause
+  Acc_ProjectSupportOfficer__c: OrderByClause
+  Acc_ProjectSupportOfficer__r: User_OrderBy
   Acc_Claim_Age__c: OrderByClause
   Acc_ProjectPeriodEndDate__c: OrderByClause
   Acc_StaticAwardRate__c: OrderByClause
@@ -2822,6 +2850,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_Subsidiary__c: BooleanValue
   Role_in_the_project__c: StringValue
   Acc_Last_Name__c: StringValue
+  Competition_Name__c: StringValue
   Company_registration_number__c: StringValue
   Acc_ProjectPostcode__c: StringValue
   Acc_Manage_Team_Member_Status__c: PicklistValue
@@ -3032,6 +3061,7 @@ type Acc_ProjectChangeRequest__cAggregate {
   Acc_Subsidiary__c: BooleanAggregate
   Role_in_the_project__c: StringAggregate
   Acc_Last_Name__c: StringAggregate
+  Competition_Name__c: StringAggregate
   Company_registration_number__c: StringAggregate
   Acc_ProjectPostcode__c: StringAggregate
   Acc_Manage_Team_Member_Status__c: PicklistAggregate
@@ -3213,6 +3243,7 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_Subsidiary__c: BooleanOperators
   Role_in_the_project__c: StringOperators
   Acc_Last_Name__c: StringOperators
+  Competition_Name__c: StringOperators
   Company_registration_number__c: StringOperators
   Acc_ProjectPostcode__c: StringOperators
   Acc_Manage_Team_Member_Status__c: PicklistOperators
@@ -3497,6 +3528,7 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_Subsidiary__c: OrderByClause
   Role_in_the_project__c: OrderByClause
   Acc_Last_Name__c: OrderByClause
+  Competition_Name__c: OrderByClause
   Company_registration_number__c: OrderByClause
   Acc_ProjectPostcode__c: OrderByClause
   Acc_Manage_Team_Member_Status__c: OrderByClause
@@ -3609,8 +3641,9 @@ type Acc_ProjectContactLink__c {
   LastViewedDate: DateTimeValue
   SystemModstamp: DateTimeValue
   Acc_FinalReportEmailSentDate__c: DateTimeValue
-  Acc_Inactive__c: BooleanValue
   Forthcoming_Partnership_Status__c: StringValue
+  Acc_Replaced__c: BooleanValue
+  Acc_Inactive__c: BooleanValue
   Partnership_End_Date__c: DateValue
   Associate_Start_Date__c: DateValue
   CreatedDate: DateTimeValue
@@ -3697,8 +3730,9 @@ type Acc_ProjectContactLink__cAggregate {
   LastViewedDate: DateAggregate
   SystemModstamp: DateAggregate
   Acc_FinalReportEmailSentDate__c: DateAggregate
-  Acc_Inactive__c: BooleanAggregate
   Forthcoming_Partnership_Status__c: StringAggregate
+  Acc_Replaced__c: BooleanAggregate
+  Acc_Inactive__c: BooleanAggregate
   Partnership_End_Date__c: DateAggregate
   Associate_Start_Date__c: DateAggregate
   CreatedDate: DateAggregate
@@ -3769,8 +3803,9 @@ input Acc_ProjectContactLink__c_Filter {
   LastViewedDate: DateTimeOperators
   SystemModstamp: DateTimeOperators
   Acc_FinalReportEmailSentDate__c: DateTimeOperators
-  Acc_Inactive__c: BooleanOperators
   Forthcoming_Partnership_Status__c: StringOperators
+  Acc_Replaced__c: BooleanOperators
+  Acc_Inactive__c: BooleanOperators
   Partnership_End_Date__c: DateOperators
   Associate_Start_Date__c: DateOperators
   CreatedDate: DateTimeOperators
@@ -3822,6 +3857,7 @@ input Acc_ProjectContactLink__c_GroupBy {
   LastViewedDate: GroupByDateFunction
   SystemModstamp: GroupByDateFunction
   Acc_FinalReportEmailSentDate__c: GroupByDateFunction
+  Acc_Replaced__c: GroupByClause
   Acc_Inactive__c: GroupByClause
   Partnership_End_Date__c: GroupByClause
   Associate_Start_Date__c: GroupByClause
@@ -3875,8 +3911,9 @@ input Acc_ProjectContactLink__c_OrderBy {
   LastViewedDate: OrderByClause
   SystemModstamp: OrderByClause
   Acc_FinalReportEmailSentDate__c: OrderByClause
-  Acc_Inactive__c: OrderByClause
   Forthcoming_Partnership_Status__c: OrderByClause
+  Acc_Replaced__c: OrderByClause
+  Acc_Inactive__c: OrderByClause
   Partnership_End_Date__c: OrderByClause
   Associate_Start_Date__c: OrderByClause
   CreatedDate: OrderByClause
@@ -3919,6 +3956,10 @@ type Acc_ProjectParticipant__c {
   Acc_PostcodeStatus__c: PicklistValue
   Acc_TotalParticipantGrant__c: CurrencyValue
   IsDeleted: BooleanValue
+  FAO__c: IDValue
+
+  """parentRelationship"""
+  FAO__r: User
   Acc_FlaggedParticipant__c: BooleanValue
   Acc_ReasonForWithdrawal__c: PicklistValue
   Acc_ParticipantSize__c: PicklistValue
@@ -4113,6 +4154,10 @@ type Acc_ProjectParticipant__cAggregate {
   Acc_PostcodeStatus__c: PicklistAggregate
   Acc_TotalParticipantGrant__c: CurrencyAggregate
   IsDeleted: BooleanAggregate
+  FAO__c: IDAggregate
+
+  """parentRelationship"""
+  FAO__r: UserAggregate
   Acc_FlaggedParticipant__c: BooleanAggregate
   Acc_ReasonForWithdrawal__c: PicklistAggregate
   Acc_ParticipantSize__c: PicklistAggregate
@@ -4285,6 +4330,8 @@ input Acc_ProjectParticipant__c_Filter {
   Acc_PostcodeStatus__c: PicklistOperators
   Acc_TotalParticipantGrant__c: CurrencyOperators
   IsDeleted: BooleanOperators
+  FAO__c: IdOperators
+  FAO__r: User_Filter
   Acc_FlaggedParticipant__c: BooleanOperators
   Acc_ReasonForWithdrawal__c: PicklistOperators
   Acc_ParticipantSize__c: PicklistOperators
@@ -4424,6 +4471,8 @@ input Acc_ProjectParticipant__c_GroupBy {
   Acc_VerificationConditionsSeverity__c: GroupByClause
   Acc_PostcodeStatus__c: GroupByClause
   IsDeleted: GroupByClause
+  FAO__c: GroupByClause
+  FAO__r: User_GroupBy
   Acc_FlaggedParticipant__c: GroupByClause
   Acc_ReasonForWithdrawal__c: GroupByClause
   Acc_ParticipantSize__c: GroupByClause
@@ -4525,6 +4574,8 @@ input Acc_ProjectParticipant__c_OrderBy {
   Acc_PostcodeStatus__c: OrderByClause
   Acc_TotalParticipantGrant__c: OrderByClause
   IsDeleted: OrderByClause
+  FAO__c: OrderByClause
+  FAO__r: User_OrderBy
   Acc_FlaggedParticipant__c: OrderByClause
   Acc_ReasonForWithdrawal__c: OrderByClause
   Acc_ParticipantSize__c: OrderByClause
@@ -4671,6 +4722,7 @@ type Acc_Project__c {
   Acc_Sector__c: MultiPicklistValue
   Acc_Is_Project_end_date_prior_to_6_month__c: BooleanValue
   Acc_CompetitionType__c: StringValue
+  Acc_FundingAssuranceOfficer_O__c: StringValue
   Acc_Overdue_Claim_Helper__c: BooleanValue
   Acc_FinalReportKTPMemberStatus__c: PicklistValue
   KTA__c: IDValue
@@ -4711,6 +4763,11 @@ type Acc_Project__c {
   Acc_EmailProjectStartDate__c: StringValue
   Acc_LeadParticipantID__c: StringValue
   SystemModstamp: DateTimeValue
+  Acc_FundingAssuranceOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: User
+  Acc_ProjectSupportOfficer_o__c: StringValue
   Acc_ProjectEmailDate__c: StringValue
   Acc_ProjectStatus__c: PicklistValue
   Acc_Can_Suspend__c: BooleanValue
@@ -4752,6 +4809,7 @@ type Acc_Project__c {
   Acc_TSBProjectNumber__c: DoubleValue
   IM_Phase1Competition__c: StringValue
   Associate_Start_Date__c: DateValue
+  PSO_Name__c: StringValue
   CreatedDate: DateTimeValue
   Loans_DocusignRDConfirmation__c: PicklistValue
   Acc_SubsidyControlScheme__c: StringValue
@@ -4763,6 +4821,10 @@ type Acc_Project__c {
   Acc_GOLTotalCostAwarded__c: CurrencyValue
   Acc_PeriodLengthChanged__c: BooleanValue
   Acc_UpdatingDuration__c: BooleanValue
+  Acc_ProjectSupportOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: User
   Associate__c: IDValue
 
   """parentRelationship"""
@@ -4841,6 +4903,7 @@ type Acc_Project__cAggregate {
   Acc_Loan_Extension_End_Date__c: DateAggregate
   Acc_Is_Project_end_date_prior_to_6_month__c: BooleanAggregate
   Acc_CompetitionType__c: StringAggregate
+  Acc_FundingAssuranceOfficer_O__c: StringAggregate
   Acc_Overdue_Claim_Helper__c: BooleanAggregate
   Acc_FinalReportKTPMemberStatus__c: PicklistAggregate
   KTA__c: IDAggregate
@@ -4882,6 +4945,11 @@ type Acc_Project__cAggregate {
   Acc_EmailProjectStartDate__c: StringAggregate
   Acc_LeadParticipantID__c: StringAggregate
   SystemModstamp: DateAggregate
+  Acc_FundingAssuranceOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: UserAggregate
+  Acc_ProjectSupportOfficer_o__c: StringAggregate
   Acc_ProjectEmailDate__c: StringAggregate
   Acc_ProjectStatus__c: PicklistAggregate
   Acc_Can_Suspend__c: BooleanAggregate
@@ -4923,6 +4991,7 @@ type Acc_Project__cAggregate {
   Acc_TSBProjectNumber__c: DoubleAggregate
   IM_Phase1Competition__c: StringAggregate
   Associate_Start_Date__c: DateAggregate
+  PSO_Name__c: StringAggregate
   CreatedDate: DateAggregate
   Loans_DocusignRDConfirmation__c: PicklistAggregate
   Acc_SubsidyControlScheme__c: StringAggregate
@@ -4934,6 +5003,10 @@ type Acc_Project__cAggregate {
   Acc_GOLTotalCostAwarded__c: CurrencyAggregate
   Acc_PeriodLengthChanged__c: BooleanAggregate
   Acc_UpdatingDuration__c: BooleanAggregate
+  Acc_ProjectSupportOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: UserAggregate
   Associate__c: IDAggregate
 
   """parentRelationship"""
@@ -4996,6 +5069,7 @@ input Acc_Project__c_Filter {
   Acc_Sector__c: MultiPicklistOperators
   Acc_Is_Project_end_date_prior_to_6_month__c: BooleanOperators
   Acc_CompetitionType__c: StringOperators
+  Acc_FundingAssuranceOfficer_O__c: StringOperators
   Acc_Overdue_Claim_Helper__c: BooleanOperators
   Acc_FinalReportKTPMemberStatus__c: PicklistOperators
   KTA__c: IdOperators
@@ -5030,6 +5104,9 @@ input Acc_Project__c_Filter {
   Acc_EmailProjectStartDate__c: StringOperators
   Acc_LeadParticipantID__c: StringOperators
   SystemModstamp: DateTimeOperators
+  Acc_FundingAssuranceOfficer__c: IdOperators
+  Acc_FundingAssuranceOfficer__r: User_Filter
+  Acc_ProjectSupportOfficer_o__c: StringOperators
   Acc_ProjectEmailDate__c: StringOperators
   Acc_ProjectStatus__c: PicklistOperators
   Acc_Can_Suspend__c: BooleanOperators
@@ -5067,6 +5144,7 @@ input Acc_Project__c_Filter {
   Acc_TSBProjectNumber__c: DoubleOperators
   IM_Phase1Competition__c: StringOperators
   Associate_Start_Date__c: DateOperators
+  PSO_Name__c: StringOperators
   CreatedDate: DateTimeOperators
   Loans_DocusignRDConfirmation__c: PicklistOperators
   Acc_SubsidyControlScheme__c: StringOperators
@@ -5078,6 +5156,8 @@ input Acc_Project__c_Filter {
   Acc_GOLTotalCostAwarded__c: CurrencyOperators
   Acc_PeriodLengthChanged__c: BooleanOperators
   Acc_UpdatingDuration__c: BooleanOperators
+  Acc_ProjectSupportOfficer__c: IdOperators
+  Acc_ProjectSupportOfficer__r: User_Filter
   Associate__c: IdOperators
   Associate__r: Contact_Filter
   Acc_EmailClaimFrequency__c: StringOperators
@@ -5140,6 +5220,8 @@ input Acc_Project__c_GroupBy {
   Acc_TestProject__c: GroupByClause
   Acc_LeadParticipantID__c: GroupByClause
   SystemModstamp: GroupByDateFunction
+  Acc_FundingAssuranceOfficer__c: GroupByClause
+  Acc_FundingAssuranceOfficer__r: User_GroupBy
   Acc_ProjectStatus__c: GroupByClause
   Acc_Can_Suspend__c: GroupByClause
   LastActivityDate: GroupByClause
@@ -5168,6 +5250,8 @@ input Acc_Project__c_GroupBy {
   LastReferencedDate: GroupByDateFunction
   Acc_PeriodLengthChanged__c: GroupByClause
   Acc_UpdatingDuration__c: GroupByClause
+  Acc_ProjectSupportOfficer__c: GroupByClause
+  Acc_ProjectSupportOfficer__r: User_GroupBy
   Associate__c: GroupByClause
   Associate__r: Contact_GroupBy
   Acc_CurrentPeriodEndDateHelper__c: GroupByClause
@@ -5203,6 +5287,7 @@ input Acc_Project__c_OrderBy {
   Acc_Loan_Extension_End_Date__c: OrderByClause
   Acc_Is_Project_end_date_prior_to_6_month__c: OrderByClause
   Acc_CompetitionType__c: OrderByClause
+  Acc_FundingAssuranceOfficer_O__c: OrderByClause
   Acc_Overdue_Claim_Helper__c: OrderByClause
   Acc_FinalReportKTPMemberStatus__c: OrderByClause
   KTA__c: OrderByClause
@@ -5237,6 +5322,9 @@ input Acc_Project__c_OrderBy {
   Acc_EmailProjectStartDate__c: OrderByClause
   Acc_LeadParticipantID__c: OrderByClause
   SystemModstamp: OrderByClause
+  Acc_FundingAssuranceOfficer__c: OrderByClause
+  Acc_FundingAssuranceOfficer__r: User_OrderBy
+  Acc_ProjectSupportOfficer_o__c: OrderByClause
   Acc_ProjectEmailDate__c: OrderByClause
   Acc_ProjectStatus__c: OrderByClause
   Acc_Can_Suspend__c: OrderByClause
@@ -5273,6 +5361,7 @@ input Acc_Project__c_OrderBy {
   Acc_TSBProjectNumber__c: OrderByClause
   IM_Phase1Competition__c: OrderByClause
   Associate_Start_Date__c: OrderByClause
+  PSO_Name__c: OrderByClause
   CreatedDate: OrderByClause
   Loans_DocusignRDConfirmation__c: OrderByClause
   Acc_SubsidyControlScheme__c: OrderByClause
@@ -5284,6 +5373,8 @@ input Acc_Project__c_OrderBy {
   Acc_GOLTotalCostAwarded__c: OrderByClause
   Acc_PeriodLengthChanged__c: OrderByClause
   Acc_UpdatingDuration__c: OrderByClause
+  Acc_ProjectSupportOfficer__c: OrderByClause
+  Acc_ProjectSupportOfficer__r: User_OrderBy
   Associate__c: OrderByClause
   Associate__r: Contact_OrderBy
   Acc_EmailClaimFrequency__c: OrderByClause
@@ -6811,6 +6902,10 @@ type Competition__c {
   """polymorphicParentRelationship"""
   Owner: Competition__c_Owner
   Acc_CompetitionCode__c: StringValue
+  Acc_ProjectSupportOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: User
   Impact_Management_participation__c: PicklistValue
   Technologists__c: IDValue
 
@@ -6831,6 +6926,10 @@ type Competition__c {
   Authorisation_expected_end_date__c: DateValue
   SystemModstamp: DateTimeValue
   ACC_SubsidyControlScheme__c: IDValue
+  Acc_FundingAssuranceOfficer__c: IDValue
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: User
   Acc_InsertCostCentreCode__c: StringValue
   LastActivityDate: DateValue
   LastModifiedById: IDValue
@@ -6921,6 +7020,10 @@ type Competition__cAggregate {
   """polymorphicParentRelationship"""
   Owner: Competition__c_Owner
   Acc_CompetitionCode__c: StringAggregate
+  Acc_ProjectSupportOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_ProjectSupportOfficer__r: UserAggregate
   Impact_Management_participation__c: PicklistAggregate
   Technologists__c: IDAggregate
 
@@ -6941,6 +7044,10 @@ type Competition__cAggregate {
   Authorisation_expected_end_date__c: DateAggregate
   SystemModstamp: DateAggregate
   ACC_SubsidyControlScheme__c: IDAggregate
+  Acc_FundingAssuranceOfficer__c: IDAggregate
+
+  """parentRelationship"""
+  Acc_FundingAssuranceOfficer__r: UserAggregate
   Acc_InsertCostCentreCode__c: StringAggregate
   LastActivityDate: DateAggregate
   LastModifiedById: IDAggregate
@@ -7002,6 +7109,8 @@ input Competition__c_Filter {
   Acc_AGRefNumber__c: IdOperators
   OwnerId: IdOperators
   Acc_CompetitionCode__c: StringOperators
+  Acc_ProjectSupportOfficer__c: IdOperators
+  Acc_ProjectSupportOfficer__r: User_Filter
   Impact_Management_participation__c: PicklistOperators
   Technologists__c: IdOperators
   Technologists__r: Contact_Filter
@@ -7016,6 +7125,8 @@ input Competition__c_Filter {
   Authorisation_expected_end_date__c: DateOperators
   SystemModstamp: DateTimeOperators
   ACC_SubsidyControlScheme__c: IdOperators
+  Acc_FundingAssuranceOfficer__c: IdOperators
+  Acc_FundingAssuranceOfficer__r: User_Filter
   Acc_InsertCostCentreCode__c: StringOperators
   LastActivityDate: DateOperators
   LastModifiedById: IdOperators
@@ -7067,6 +7178,8 @@ input Competition__c_GroupBy {
   Acc_AGRefNumber__c: GroupByClause
   OwnerId: GroupByClause
   Acc_CompetitionCode__c: GroupByClause
+  Acc_ProjectSupportOfficer__c: GroupByClause
+  Acc_ProjectSupportOfficer__r: User_GroupBy
   Impact_Management_participation__c: GroupByClause
   Technologists__c: GroupByClause
   Technologists__r: Contact_GroupBy
@@ -7080,6 +7193,8 @@ input Competition__c_GroupBy {
   Authorisation_expected_end_date__c: GroupByClause
   SystemModstamp: GroupByDateFunction
   ACC_SubsidyControlScheme__c: GroupByClause
+  Acc_FundingAssuranceOfficer__c: GroupByClause
+  Acc_FundingAssuranceOfficer__r: User_GroupBy
   Acc_InsertCostCentreCode__c: GroupByClause
   LastActivityDate: GroupByClause
   LastModifiedById: GroupByClause
@@ -7128,6 +7243,8 @@ input Competition__c_OrderBy {
   Acc_AGRefNumber__c: OrderByClause
   OwnerId: OrderByClause
   Acc_CompetitionCode__c: OrderByClause
+  Acc_ProjectSupportOfficer__c: OrderByClause
+  Acc_ProjectSupportOfficer__r: User_OrderBy
   Impact_Management_participation__c: OrderByClause
   Technologists__c: OrderByClause
   Technologists__r: Contact_OrderBy
@@ -7142,6 +7259,8 @@ input Competition__c_OrderBy {
   Authorisation_expected_end_date__c: OrderByClause
   SystemModstamp: OrderByClause
   ACC_SubsidyControlScheme__c: OrderByClause
+  Acc_FundingAssuranceOfficer__c: OrderByClause
+  Acc_FundingAssuranceOfficer__r: User_OrderBy
   Acc_InsertCostCentreCode__c: OrderByClause
   LastActivityDate: OrderByClause
   LastModifiedById: OrderByClause
@@ -8103,29 +8222,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  NEXT_WEEK
-  LAST_90_DAYS
-  LAST_FISCAL_YEAR
-  NEXT_FISCAL_YEAR
-  LAST_WEEK
-  LAST_MONTH
+  NEXT_FISCAL_QUARTER
   THIS_YEAR
-  NEXT_90_DAYS
-  YESTERDAY
+  LAST_WEEK
   THIS_WEEK
-  THIS_MONTH
-  LAST_QUARTER
   NEXT_QUARTER
-  TOMORROW
   THIS_FISCAL_YEAR
-  TODAY
-  LAST_FISCAL_QUARTER
+  LAST_90_DAYS
+  YESTERDAY
   NEXT_YEAR
+  TODAY
+  LAST_YEAR
+  LAST_QUARTER
+  NEXT_WEEK
+  LAST_FISCAL_QUARTER
+  NEXT_90_DAYS
+  NEXT_FISCAL_YEAR
   THIS_QUARTER
+  LAST_FISCAL_YEAR
+  THIS_MONTH
+  TOMORROW
+  LAST_MONTH
   NEXT_MONTH
   THIS_FISCAL_QUARTER
-  NEXT_FISCAL_QUARTER
-  LAST_YEAR
 }
 
 input DateOperators {
@@ -9931,13 +10050,34 @@ type User {
   Acc_BroadcastMessages__r(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
 
   """childRelationship"""
+  Claims1__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+
+  """childRelationship"""
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+
+  """childRelationship"""
   Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+
+  """childRelationship"""
+  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+
+  """childRelationship"""
+  Projects1__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+
+  """childRelationship"""
+  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """childRelationship"""
   Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
+  Competitions3__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+
+  """childRelationship"""
   Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+
+  """childRelationship"""
+  Competitions4__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
   Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection

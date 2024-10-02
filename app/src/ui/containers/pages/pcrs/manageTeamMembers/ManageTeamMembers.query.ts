@@ -10,6 +10,9 @@ const manageTeamMembersQuery = graphql`
             edges {
               node {
                 Id
+                Acc_CompetitionType__c {
+                  value
+                }
                 Acc_ProjectParticipantsProject__r(first: 500) {
                   edges {
                     node {

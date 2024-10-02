@@ -12,6 +12,7 @@ import { ManageTeamMembersQuery } from "./__generated__/ManageTeamMembersQuery.g
 import { manageTeamMembersQuery } from "./ManageTeamMembers.query";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/dtos/projectContactDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 const ManageTeamMemberRoles = [
   ProjectRole.PROJECT_MANAGER,
@@ -185,6 +186,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
   const partnersGql = projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [];
   const contactsGql = projectNode?.Project_Contact_Links__r?.edges ?? [];
 
+  const project = mapToProjectDto(projectNode, ["competitionType"]);
   const partners = mapToPartnerDtoArray(partnersGql, ["id", "name", "accountId", "type"], {});
 
   const pcls = mapToContactDtoArray(contactsGql, [
@@ -252,7 +254,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
     return { collated, categories: cats };
   }, [pcls, partners]);
 
-  return { partners, pcls, categories, collated, fragmentRef: data?.salesforce?.uiapi };
+  return { project, partners, pcls, categories, collated, fragmentRef: data?.salesforce?.uiapi };
 };
 
 export {

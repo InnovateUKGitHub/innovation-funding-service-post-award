@@ -15,7 +15,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
   const routes = useRoutes();
   const { getContent } = useContent();
 
-  const { categories, fragmentRef } = useManageTeamMembersQuery({ projectId });
+  const { project, categories, fragmentRef } = useManageTeamMembersQuery({ projectId });
 
   return (
     <Page
@@ -57,91 +57,101 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
         </Link>
       </Section>
 
-      <Section
-        title={getContent(x =>
-          x.projectLabels.knowledgeBaseAdministrators({ count: categories.mainCompanyContacts.length }),
-        )}
-      >
-        <ManageTeamMembersContactListTable
-          tableData={categories.knowledgeBaseAdministrators}
-          qa="knowledgeBaseAdministrators-table"
-        />
-        {categories.knowledgeBaseAdministrators.length === 0 ? (
-          <Link
-            route={routes.manageTeamMembersCreateRoute.getLink({
-              projectId,
-              role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
-              pclId: undefined,
-            })}
-            styling="SecondaryButton"
+      {project.competitionType === "KTP" && (
+        <>
+          <Section
+            title={getContent(x =>
+              x.projectLabels.knowledgeBaseAdministrators({ count: categories.mainCompanyContacts.length }),
+            )}
           >
-            {getContent(x => x.pages.manageTeamMembers.dashboard.inviteKnowledgeBaseAdministrator)}
-          </Link>
-        ) : (
-          <Link
-            route={routes.manageTeamMembersReplaceRoute.getLink({
-              projectId,
-              role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
-              pclId:
-                categories.knowledgeBaseAdministrators.length === 1
-                  ? categories.knowledgeBaseAdministrators[0].pclId
-                  : undefined,
-            })}
-            styling="SecondaryButton"
-          >
-            {getContent(x => x.pages.manageTeamMembers.dashboard.replaceKnowledgeBaseAdministrator)}
-          </Link>
-        )}
-      </Section>
+            <ManageTeamMembersContactListTable
+              tableData={categories.knowledgeBaseAdministrators}
+              qa="knowledgeBaseAdministrators-table"
+            />
+            {categories.knowledgeBaseAdministrators.length === 0 ? (
+              <Link
+                route={routes.manageTeamMembersCreateRoute.getLink({
+                  projectId,
+                  role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
+                  pclId: undefined,
+                })}
+                styling="SecondaryButton"
+              >
+                {getContent(x => x.pages.manageTeamMembers.dashboard.inviteKnowledgeBaseAdministrator)}
+              </Link>
+            ) : (
+              <Link
+                route={routes.manageTeamMembersReplaceRoute.getLink({
+                  projectId,
+                  role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
+                  pclId:
+                    categories.knowledgeBaseAdministrators.length === 1
+                      ? categories.knowledgeBaseAdministrators[0].pclId
+                      : undefined,
+                })}
+                styling="SecondaryButton"
+              >
+                {getContent(x => x.pages.manageTeamMembers.dashboard.replaceKnowledgeBaseAdministrator)}
+              </Link>
+            )}
+          </Section>
 
-      <Section
-        title={getContent(x => x.projectLabels.mainCompanyContacts({ count: categories.mainCompanyContacts.length }))}
-      >
-        <ManageTeamMembersContactListTable tableData={categories.mainCompanyContacts} qa="mainCompanyContacts-table" />
-        {categories.mainCompanyContacts.length === 0 ? (
-          <Link
-            route={routes.manageTeamMembersCreateRoute.getLink({
-              projectId,
-              role: ProjectRole.MAIN_COMPANY_CONTACT,
-              pclId: undefined,
-            })}
-            styling="SecondaryButton"
+          <Section
+            title={getContent(x =>
+              x.projectLabels.mainCompanyContacts({ count: categories.mainCompanyContacts.length }),
+            )}
           >
-            {getContent(x => x.pages.manageTeamMembers.dashboard.inviteMainCompanyContact)}
-          </Link>
-        ) : (
-          <Link
-            route={routes.manageTeamMembersReplaceRoute.getLink({
-              projectId,
-              role: ProjectRole.MAIN_COMPANY_CONTACT,
-              pclId: categories.mainCompanyContacts.length === 1 ? categories.mainCompanyContacts[0].pclId : undefined,
-            })}
-            styling="SecondaryButton"
-          >
-            {getContent(x => x.pages.manageTeamMembers.dashboard.replaceMainCompanyContact)}
-          </Link>
-        )}
-      </Section>
+            <ManageTeamMembersContactListTable
+              tableData={categories.mainCompanyContacts}
+              qa="mainCompanyContacts-table"
+            />
+            {categories.mainCompanyContacts.length === 0 ? (
+              <Link
+                route={routes.manageTeamMembersCreateRoute.getLink({
+                  projectId,
+                  role: ProjectRole.MAIN_COMPANY_CONTACT,
+                  pclId: undefined,
+                })}
+                styling="SecondaryButton"
+              >
+                {getContent(x => x.pages.manageTeamMembers.dashboard.inviteMainCompanyContact)}
+              </Link>
+            ) : (
+              <Link
+                route={routes.manageTeamMembersReplaceRoute.getLink({
+                  projectId,
+                  role: ProjectRole.MAIN_COMPANY_CONTACT,
+                  pclId:
+                    categories.mainCompanyContacts.length === 1 ? categories.mainCompanyContacts[0].pclId : undefined,
+                })}
+                styling="SecondaryButton"
+              >
+                {getContent(x => x.pages.manageTeamMembers.dashboard.replaceMainCompanyContact)}
+              </Link>
+            )}
+          </Section>
 
-      <Section title={getContent(x => x.projectLabels.associates({ count: categories.associates.length }))}>
-        <ManageTeamMembersContactListTable
-          qa="associates-table"
-          tableData={categories.associates}
-          link={({ data }) => (
-            <ManageTeamMemberRemoveLink projectId={projectId} pclId={data.pclId} role={ProjectRole.ASSOCIATE} />
-          )}
-        />
-        <Link
-          route={routes.manageTeamMembersCreateRoute.getLink({
-            projectId,
-            role: ProjectRole.ASSOCIATE,
-            pclId: undefined,
-          })}
-          styling="SecondaryButton"
-        >
-          {getContent(x => x.pages.manageTeamMembers.dashboard.inviteAssociate)}
-        </Link>
-      </Section>
+          <Section title={getContent(x => x.projectLabels.associates({ count: categories.associates.length }))}>
+            <ManageTeamMembersContactListTable
+              qa="associates-table"
+              tableData={categories.associates}
+              link={({ data }) => (
+                <ManageTeamMemberRemoveLink projectId={projectId} pclId={data.pclId} role={ProjectRole.ASSOCIATE} />
+              )}
+            />
+            <Link
+              route={routes.manageTeamMembersCreateRoute.getLink({
+                projectId,
+                role: ProjectRole.ASSOCIATE,
+                pclId: undefined,
+              })}
+              styling="SecondaryButton"
+            >
+              {getContent(x => x.pages.manageTeamMembers.dashboard.inviteAssociate)}
+            </Link>
+          </Section>
+        </>
+      )}
 
       <Link route={routes.pcrCreate.getLink({ projectId })} styling="Link">
         {getContent(x => x.pages.manageTeamMembers.dashboard.backButton)}
