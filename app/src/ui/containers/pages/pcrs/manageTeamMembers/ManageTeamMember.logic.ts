@@ -92,12 +92,11 @@ const getManageTeamMember = ({
           defaults?.startDate && "year" in defaults?.startDate
             ? defaults?.startDate.year
             : getYear(defaults?.startDate);
-        if (
-          role === ProjectRole.ASSOCIATE ||
-          role === ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR ||
-          role === ProjectRole.MAIN_COMPANY_CONTACT
-        ) {
+        if (role === ProjectRole.ASSOCIATE || role === ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR) {
           filteredPartners = filteredPartners.filter(x => x.type === "Knowledge base");
+        }
+        if (role === ProjectRole.MAIN_COMPANY_CONTACT) {
+          filteredPartners = filteredPartners.filter(x => x.type !== "Knowledge base");
         }
       }
       break;
