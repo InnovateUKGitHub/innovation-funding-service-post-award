@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<45e53a654f5105867e870cfa0826a1cd>>
+ * @generated SignedSource<<901262fd0cde4de5f217edbde9bfa212>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,9 @@ export type PCRDashboardQuery$data = {
         readonly Acc_ProjectChangeRequest__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_Manage_Team_Member_Status__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
@@ -274,6 +277,16 @@ v9 = {
               "concreteType": "PicklistValue",
               "kind": "LinkedField",
               "name": "Acc_Status__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "PicklistValue",
+              "kind": "LinkedField",
+              "name": "Acc_Manage_Team_Member_Status__c",
               "plural": false,
               "selections": (v5/*: any*/),
               "storageKey": null
@@ -766,16 +779,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "07393f5660de15e7104981c0ff743414",
+    "cacheID": "c482a367285b34073a7bde30407112c4",
     "id": null,
     "metadata": {},
     "name": "PCRDashboardQuery",
     "operationKind": "query",
-    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, RecordType: {or: [{DeveloperName: {eq: \"Acc_RequestHeader\"}}, {DeveloperName: {eq: \"Acc_Request_Header_Manage_Team_Members\"}}]}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      ...ProjectSuspensionMessageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r {\n                totalCount\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(first: 2000, where: {Acc_Project__c: {eq: $projectId}, RecordType: {or: [{DeveloperName: {eq: \"Acc_RequestHeader\"}}, {DeveloperName: {eq: \"Acc_Request_Header_Manage_Team_Members\"}}]}}, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_Manage_Team_Member_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    RecordType {\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectSuspensionMessageFragment on UIAPI {\n  query {\n    ProjectSuspensionProject: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_ProjectStatus__c {\n            value\n          }\n          roles {\n            isPm\n            isFc\n            isMo\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isSalesforceSystemUser\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8dcf4320a243e77eb43d451a62e18f0e";
+(node as any).hash = "580a5b87d4f381406000765520c0abe8";
 
 export default node;
