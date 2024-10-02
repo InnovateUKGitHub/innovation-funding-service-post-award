@@ -3,19 +3,19 @@ import { IContext } from "@framework/types/IContext";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { UpdateProjectContactLinkCommand } from "@server/features/projectContacts/UpdateProjectContactLinkCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { IRouteDefinition } from "@ui/containers/containerBase";
+import { IRouteDefinition } from "@ui/app/containerBase";
 import {
   manageTeamMemberErrorMap,
   manageTeamMemberValidator,
   ManageTeamMemberValidatorSchema,
-} from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMember.zod";
-import { ManageTeamMembersCreateRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCreate.page";
-import { ManageTeamMembersDeleteRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberDelete.page";
-import { ManageTeamMembersReplaceRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";
-import { ManageTeamMembersUpdateRoute } from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberUpdate.page";
-import { ManageTeamMemberProps } from "@ui/containers/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
-import { ProjectChangeRequestCompletedRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
-import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
+} from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMember.zod";
+import { ManageTeamMembersCreateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCreate.page";
+import { ManageTeamMembersDeleteRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberDelete.page";
+import { ManageTeamMembersReplaceRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";
+import { ManageTeamMembersUpdateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberUpdate.page";
+import { ManageTeamMemberProps } from "@ui/pages/pcrs/manageTeamMembers/ManageTeamMember.logic";
+import { ProjectChangeRequestCompletedRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
+import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

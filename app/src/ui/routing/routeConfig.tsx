@@ -67,14 +67,13 @@ import { ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page"
 import { PCRDeleteRoute } from "@ui/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 import { ContactSetupAssociateRoute } from "@ui/pages/contact/associate/setup/ContactSetupAssociate.page";
-import { ManageTeamMembersDashboardRoute } from "@ui/containers/pages/projects/details/manageTeamMembers/dashboard/ManageTeamMembersDashboard";
-import {
-  ManageTeamMembersCreateRoute,
-  ManageTeamMembersReplaceRoute,
-  ManageTeamMembersUpdateRoute,
-  ManageTeamMembersDeleteRoute,
-} from "@ui/containers/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberRoutes";
+import { ManageTeamMembersDashboardRoute } from "@ui/pages/pcrs/manageTeamMembers/dashboard/ManageTeamMembersDashboard.page";
+
 import { ProjectChangeRequestCompletedRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
+import { ManageTeamMembersCreateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCreate.page";
+import { ManageTeamMembersReplaceRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";
+import { ManageTeamMembersUpdateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberUpdate.page";
+import { ManageTeamMembersDeleteRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberDelete.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;

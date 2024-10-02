@@ -3,7 +3,7 @@ import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageT
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
-import { defineRoute } from "@ui/containers/containerBase";
+import { defineRoute } from "@ui/app/containerBase";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";

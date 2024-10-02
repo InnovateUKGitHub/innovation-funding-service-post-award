@@ -6,7 +6,7 @@ import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
-import { BaseProps } from "@ui/containers/containerBase";
+import { BaseProps } from "@ui/app/containerBase";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useContent } from "@ui/hooks/content.hook";
 import { createContext, ReactNode, useContext } from "react";

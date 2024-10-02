@@ -1,4 +1,4 @@
-import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
+import { IPCRWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { ManageTeamMemberSummary } from "./summary/ManageTeamMemberSummary";
 
 const manageTeamMemberWorkflow: IPCRWorkflow = {

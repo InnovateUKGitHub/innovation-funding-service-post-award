@@ -1,41 +1,38 @@
+import { ProjectRolePermissionBits } from "@framework/constants/project";
+import { defineRoute } from "@ui/app/containerBase";
 import { ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./BaseManageTeamMember";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
-import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
-import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { defineRoute } from "@ui/containers/containerBase";
-import { ManageEmailMessage } from "./components/ManageEmailMessage";
+import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/dtos/projectContactDto";
 
-const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
+const ManageTeamMemberDeletePage = (props: ManageTeamMemberModifyProps) => {
   return (
-    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.UPDATE}>
+    <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.DELETE}>
+      <SelectTeamMember />
       <ManageTeamMemberForm>
-        <ManageTeamMemberSection>
-          <ManageTeamMemberInputs />
-          <ManageEmailMessage />
-        </ManageTeamMemberSection>
+        <ManageTeamMemberSection />
         <ManageTeamMemberSubmitSection />
       </ManageTeamMemberForm>
     </BaseManageTeamMember>
   );
 };
 
-const ManageTeamMembersUpdateRoute = defineRoute<ManageTeamMemberUpdateDeleteProps>({
-  routeName: "ManageTeamMembersUpdate",
-  routePath: "/projects/:projectId/details/manage-team-members/update/:role/:pclId",
-  container: ManageTeamMemberUpdatePage,
+const ManageTeamMembersDeleteRoute = defineRoute<ManageTeamMemberUpdateDeleteProps>({
+  routeName: "ManageTeamMembersDelete",
+  routePath: "/projects/:projectId/details/manage-team-members/delete/:role/:pclId",
+  container: ManageTeamMemberDeletePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     role: route.params.role as ProjectRole,
     pclId: route.params.pclId as ProjectContactLinkId,
-    method: ManageTeamMemberMethod.UPDATE,
+    method: ManageTeamMemberMethod.DELETE,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.manageTeamMembers.dashboard.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });
 
-export { ManageTeamMemberUpdatePage, ManageTeamMembersUpdateRoute };
+export { ManageTeamMemberDeletePage, ManageTeamMembersDeleteRoute };

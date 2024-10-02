@@ -1,6 +1,6 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { ProjectChangeRequestSubmittedForReviewBase } from "./ProjectChangeRequestSubmittedForReviewBase";
 import { useContent } from "@ui/hooks/content.hook";
 

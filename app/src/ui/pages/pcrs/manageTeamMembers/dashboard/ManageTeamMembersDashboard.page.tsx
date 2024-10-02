@@ -1,7 +1,7 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useRoutes } from "@ui/context/routesProvider";
 import { useContent } from "@ui/hooks/content.hook";
 import { ManageTeamMembersDashboardParams } from "./ManageTeamMembersDashboard.logic";
