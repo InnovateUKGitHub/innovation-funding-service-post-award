@@ -344,7 +344,12 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "logLevel": "ERROR",
         "prefixLines": [
-          "user@email.com",
+          {
+            "traceId": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
         ],
       },
     },

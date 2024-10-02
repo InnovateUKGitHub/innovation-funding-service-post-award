@@ -6,9 +6,9 @@ import { ISalesforceProjectContact } from "@server/repositories/projectContactsR
 import { multipleContactDtoSchema } from "@ui/zod/contactSchema.zod";
 import { DateTime } from "luxon";
 import { InActiveProjectError, NotFoundError, ZodFormHandlerError } from "../common/appError";
-import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForProjectQuery } from "./getAllForProjectQuery";
+import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 
 export type ServerUpdateProjectContactsAssociateDetailsCommand = Pick<ProjectContactDto, "id"> &
   Pick<
@@ -25,7 +25,9 @@ export type ServerUpdateProjectContactsAssociateDetailsCommand = Pick<ProjectCon
     | "lastName"
   >;
 
-export class UpdateProjectContactLinkCommand extends CommandBase<boolean> {
+export class UpdateProjectContactLinkCommand extends AuthorisedAsyncCommandBase<boolean> {
+  public runnableName = "UpdateProjectContactLinkCommand";
+
   constructor(
     private readonly projectId: ProjectId,
     private readonly contacts: ServerUpdateProjectContactsAssociateDetailsCommand[],
@@ -33,7 +35,7 @@ export class UpdateProjectContactLinkCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager);
   }
 
