@@ -29,7 +29,7 @@ const main = async () => {
     accessToken,
     instanceUrl: url,
     email: getEnv("SALESFORCE_USERNAME"),
-    tid: "init",
+    traceId: "init",
   });
 
   const salesforceSchema = await schemaFromExecutor(api.executeGraphQL.bind(api) as unknown as AsyncExecutor);

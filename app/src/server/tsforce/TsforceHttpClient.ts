@@ -21,18 +21,18 @@ class TsforceHttpClient {
     accessToken,
     instanceUrl,
     email,
-    tid,
+    traceId,
   }: {
     version: string;
     accessToken: string;
     instanceUrl: string;
     email: string;
-    tid: string;
+    traceId: string;
   }) {
     this.version = version;
     this.accessToken = accessToken;
     this.instanceUrl = instanceUrl;
-    this.logger = new Logger("tsforce", { prefixLines: [{ email, tid }] });
+    this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
   }
 
   private executeFetchRequest(input: string, init: FetcherConfiguration = {}) {

@@ -5,22 +5,22 @@ import { salesforceConnectionWithToken } from "@server/repositories/salesforceCo
 import { configuration } from "./config";
 
 class ContextProvider {
-  private getConnection(username: string, tid: string) {
+  private getConnection(username: string, traceId: string) {
     return salesforceConnectionWithToken(
       {
         clientId: configuration.salesforceServiceUser.clientId,
         connectionUrl: configuration.salesforceServiceUser.connectionUrl,
         currentUsername: username,
       },
-      tid,
+      traceId,
     );
   }
 
   start({ user, traceId }: { user: ISessionUser; traceId: string }): Promise<IContext> {
     return Promise.all([
-      this.getConnection(user.email, tid),
-      this.getConnection(configuration.salesforceServiceUser.serviceUsername, tid),
-      this.getConnection(configuration.bankDetailsValidationUser.serviceUsername, tid),
+      this.getConnection(user.email, traceId),
+      this.getConnection(configuration.salesforceServiceUser.serviceUsername, traceId),
+      this.getConnection(configuration.bankDetailsValidationUser.serviceUsername, traceId),
     ]).then(
       ([connection, systemConnection, bankConnection]) =>
         new Context({ user, traceId, connection, systemConnection, bankConnection }),

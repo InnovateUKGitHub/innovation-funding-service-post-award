@@ -81,7 +81,7 @@ export const getCachedSalesforceAccessToken = async (
 
 export const salesforceConnectionWithToken = async (
   salesforceDetails: ISalesforceTokenDetails,
-  tid: string,
+  traceId: string,
 ): Promise<TsforceConnection> => {
   return getCachedSalesforceAccessToken(salesforceDetails).then(
     signedToken =>
@@ -89,7 +89,7 @@ export const salesforceConnectionWithToken = async (
         accessToken: signedToken.accessToken,
         instanceUrl: signedToken.url,
         email: salesforceDetails.currentUsername,
-        tid,
+        traceId,
       }),
   );
 };

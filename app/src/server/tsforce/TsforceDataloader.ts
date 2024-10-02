@@ -48,7 +48,7 @@ class TsforceConnectionDataloader {
     ) as TsforceCompositeSubrequestResult<unknown>[];
   }
 
-  constructor({ connection, email, tid }: { connection: TsforceConnection; email: string; tid: string }) {
+  constructor({ connection, email, traceId }: { connection: TsforceConnection; email: string; traceId: string }) {
     this.connection = connection;
     this.subrequest = new DataLoader<BaseTsforceSubrequest<unknown>, TsforceCompositeSubrequestResult<unknown>>(
       keys => this.executeCompositeQuery(keys),
@@ -56,7 +56,7 @@ class TsforceConnectionDataloader {
         maxBatchSize: 5,
       },
     );
-    this.logger = new Logger("tsforce", { prefixLines: [{ email, tid }] });
+    this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
   }
 }
 

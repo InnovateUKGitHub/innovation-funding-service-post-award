@@ -253,7 +253,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     const username = req.session?.user.email;
     this.logger.error(err.message, err, { route: req.url, username, traceId });
     if (!res.headersSent) {
-      res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.tid));
+      res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.traceId));
     }
   }
 }

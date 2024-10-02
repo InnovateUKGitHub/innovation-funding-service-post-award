@@ -146,12 +146,12 @@ const serverRender =
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
 
-            apiError = getErrorResponse(err.cause, res.locals.tid);
+            apiError = getErrorResponse(err.cause, res.locals.traceId);
           }
         } else {
           // We cannot handle these beautifully.
           statusCode = getErrorStatus(err);
-          const errorPayload = getErrorResponse(err, res.locals.tid);
+          const errorPayload = getErrorResponse(err, res.locals.traceId);
           res.locals.preloadedServerErrors = errorPayload;
           isErrorPage = true;
           apiError = errorPayload;
@@ -170,7 +170,7 @@ const serverRender =
             route: req.url,
             routeName: matched.routeName,
             username: req.session?.user.email,
-            tid: res.locals.tid,
+            traceId: res.locals.traceId,
           });
           return next(new ForbiddenError());
         }
@@ -226,7 +226,11 @@ const serverRender =
         }),
       );
     } catch (renderError: unknown) {
-      logger.error("Caught a server render error", { user: req.session?.user.email, tid: res.locals.tid }, renderError);
+      logger.error(
+        "Caught a server render error",
+        { user: req.session?.user.email, traceId: res.locals.traceId },
+        renderError,
+      );
       next(renderError);
     }
   };

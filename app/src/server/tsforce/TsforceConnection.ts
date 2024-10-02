@@ -31,19 +31,19 @@ class TsforceConnection {
     instanceUrl,
     accessToken,
     email,
-    tid,
+    traceId,
   }: {
     version?: string;
     instanceUrl: string;
     accessToken: string;
     email: string;
-    tid: string;
+    traceId: string;
   }) {
-    this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, tid });
-    this.httpClient = new TsforceHttpClient({ version, accessToken, instanceUrl, email, tid });
+    this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, traceId });
+    this.httpClient = new TsforceHttpClient({ version, accessToken, instanceUrl, email, traceId });
     this.version = version;
     this.email = email;
-    this.logger = new Logger("tsforce", { prefixLines: [{ email, tid }] });
+    this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
   }
 
   private startTimer(message: string) {
@@ -56,7 +56,7 @@ class TsforceConnection {
    * @param email The username/email address of the user.
    * @returns A user-specific connection to the Salesforce API.
    */
-  public static async asUser(email: string, tid: string) {
+  public static async asUser(email: string, traceId: string) {
     const { accessToken, url } = await getCachedSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
@@ -67,7 +67,7 @@ class TsforceConnection {
       accessToken,
       instanceUrl: url,
       email,
-      tid,
+      traceId,
     });
   }
 
@@ -76,8 +76,8 @@ class TsforceConnection {
    *
    * @returns A connection to the Salesforce API as a system user.
    */
-  public static asSystemUser(tid: string) {
-    return TsforceConnection.asUser(configuration.salesforceServiceUser.serviceUsername, tid);
+  public static asSystemUser(traceId: string) {
+    return TsforceConnection.asUser(configuration.salesforceServiceUser.serviceUsername, traceId);
   }
 
   /**
