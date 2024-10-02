@@ -1,13 +1,13 @@
 import { IContext } from "@framework/types/IContext";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ProjectDashboardRoute } from "@ui/containers/pages/projects/dashboard/Dashboard.page";
-import { ProjectSetupParams, ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
+import { ProjectDashboardRoute } from "@ui/pages/projects/dashboard/Dashboard.page";
+import { ProjectSetupParams, ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
 import {
   projectSetupErrorMap,
   projectSetupSchema,
   ProjectSetupSchema,
-} from "@ui/containers/pages/projects/setup/projectSetup.zod";
+} from "@ui/pages/projects/setup/projectSetup.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";

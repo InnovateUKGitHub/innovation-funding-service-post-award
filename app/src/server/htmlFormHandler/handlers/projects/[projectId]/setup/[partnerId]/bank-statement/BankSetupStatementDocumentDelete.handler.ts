@@ -6,7 +6,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   ProjectSetupBankStatementParams,
   ProjectSetupBankStatementRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankStatement.page";
+} from "@ui/pages/projects/setup/projectSetupBankStatement.page";
 import { bankStatementDelete, BankStatementDeleteSchemaType, documentsErrorMap } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";

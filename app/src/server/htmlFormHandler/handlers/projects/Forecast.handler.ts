@@ -113,7 +113,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
               id,
               value: parseCurrency(value),
             })),
-            false,
+            input.submit,
           ),
         );
       } else {

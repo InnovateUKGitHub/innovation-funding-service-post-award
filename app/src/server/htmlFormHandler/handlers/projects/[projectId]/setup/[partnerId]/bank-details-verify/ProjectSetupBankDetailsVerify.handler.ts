@@ -4,15 +4,15 @@ import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
 import { IContext } from "@framework/types/IContext";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { FailedBankCheckConfirmationRoute } from "@ui/containers/pages/projects/failedBankCheckConfirmation.page";
-import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
-import { ProjectSetupBankDetailsParams } from "@ui/containers/pages/projects/setup/projectSetupBankDetails.page";
+import { FailedBankCheckConfirmationRoute } from "@ui/pages/projects/failedBankCheckConfirmation.page";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
+import { ProjectSetupBankDetailsParams } from "@ui/pages/projects/setup/projectSetupBankDetails.page";
 import {
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
   ProjectSetupBankDetailsSchemaType,
-} from "@ui/containers/pages/projects/setup/projectSetupBankDetails.zod";
-import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
+} from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
+import { ProjectSetupBankDetailsVerifyRoute } from "@ui/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

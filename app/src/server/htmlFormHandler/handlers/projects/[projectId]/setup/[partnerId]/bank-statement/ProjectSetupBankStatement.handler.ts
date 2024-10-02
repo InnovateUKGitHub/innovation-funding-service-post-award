@@ -1,12 +1,12 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
-import { projectSetupBankDetailsErrorMap } from "@ui/containers/pages/projects/setup/projectSetupBankDetails.zod";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
+import { projectSetupBankDetailsErrorMap } from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import {
   ProjectSetupBankStatementParams,
   ProjectSetupBankStatementRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupBankStatement.page";
+} from "@ui/pages/projects/setup/projectSetupBankStatement.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { BankDetailsTaskStatus } from "@framework/constants/partner";

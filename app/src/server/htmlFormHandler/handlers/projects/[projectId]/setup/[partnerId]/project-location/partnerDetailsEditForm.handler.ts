@@ -7,8 +7,8 @@ import {
   postcodeErrorMap,
   postcodeSchema,
 } from "@ui/components/templates/PartnerDetailsEdit/partnerDetailsEdit.zod";
-import { PartnerDetailsRoute } from "@ui/containers/pages/projects/partnerDetails/partnerDetails.page";
-import { PartnerDetailsParams } from "@ui/containers/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { PartnerDetailsRoute } from "@ui/pages/projects/partnerDetails/partnerDetails.page";
+import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
