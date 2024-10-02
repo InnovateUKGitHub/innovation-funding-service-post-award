@@ -11,6 +11,7 @@ enum FormTypes {
   ClaimForecastSaveAndQuit = "claimForecastSaveAndQuit",
   ClaimLineItemSaveAndDocuments = "claimLineItemSaveAndDocuments",
   ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
+  ClaimSummary = "claimSummary",
 
   // Project Setup
   ProjectSetup = "projectSetup",

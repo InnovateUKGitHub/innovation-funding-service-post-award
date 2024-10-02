@@ -29,13 +29,14 @@ import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClaimSummarySchema, claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { DocumentView } from "@ui/components/organisms/documents/DocumentView/DocumentView";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { iarValidation } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -77,7 +78,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
     data.project.monitoringLevel,
   );
 
-  const { register, formState, handleSubmit, watch, setValue } = useForm<ClaimSummarySchema>({
+  const { register, formState, handleSubmit, watch, setValue, setError } = useForm<ClaimSummarySchema>({
     defaultValues: {
       status: data.claim.status,
       comments: data.claim.comments ?? "",
@@ -96,7 +97,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
   const commentsCharacterCount = watch("comments")?.length ?? 0;
 
   return (
@@ -190,6 +191,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
         {!data.claim.isFinalClaim && <ForecastSummary linkProps={linkProps} {...props} {...data} />}
 
         <Form data-qa="summary-form" onSubmit={handleSubmit(data => onUpdate({ data, context: { updateLink } }))}>
+          <input type="hidden" {...register("form")} value={FormTypes.ClaimSummary} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.claimPrepareSummary.addCommentsHeading)}</Legend>
 

@@ -7,6 +7,7 @@ import {
   iarValidation,
   pcfValidation,
 } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
@@ -52,6 +53,7 @@ export const getClaimSummarySchema = ({
   z.discriminatedUnion("button_submit", [
     z.object({
       button_submit: z.literal("submit"),
+      form: z.literal(FormTypes.ClaimSummary),
       status: z.string().superRefine((_, ctx) => {
         const remainingOfferCosts = claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
@@ -109,6 +111,7 @@ export const getClaimSummarySchema = ({
     }),
     z.object({
       button_submit: z.literal("saveAndReturnToClaims"),
+      form: z.literal(FormTypes.ClaimSummary),
       status: z.string(),
       comments: getTextValidation({
         maxLength: 1000,
@@ -117,4 +120,6 @@ export const getClaimSummarySchema = ({
     }),
   ]);
 
-export type ClaimSummarySchema = z.output<ReturnType<typeof getClaimSummarySchema>>;
+export type ClaimSummarySchemaType = ReturnType<typeof getClaimSummarySchema>;
+
+export type ClaimSummarySchema = z.output<ClaimSummarySchemaType>;

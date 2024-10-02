@@ -10,11 +10,10 @@ import { DeveloperUserSwitcherHandler } from "./handlers/developer/userswitcher/
 import { LoanRequestDocumentDeleteHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentDelete.handler";
 import { LoanRequestDocumentUploadHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentUpload.handler";
 import { LoanRequestFormHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestForm.handler";
-import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/summary/claimSummaryFormHandler";
+import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/summary/claimSummaryForm.handler";
 import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/EditClaimLineItemsForm.handler";
 import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDelete.handler";
 import { ClaimLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareUpload.handler";
-import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/prepareClaimFormHandler";
 import { ClaimReviewLevelFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/ClaimReviewLevelForm.handler";
 import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDelete.handler";
 import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUpload.handler";
@@ -146,7 +145,6 @@ export const standardFormHandlers = [
   new EditClaimLineItemsFormHandler(),
   new ForecastHandler(),
   new ClaimSummaryFormHandler(),
-  new PrepareClaimFormHandler(),
   new ClaimReviewLevelFormHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
