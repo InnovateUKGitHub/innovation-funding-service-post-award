@@ -5,7 +5,20 @@ import { CostCategory } from "typings/costCategory";
 import { Heading } from "typings/headings";
 import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
-import { emptyFileName, longFile, singleCharFile, specialCharFile, testFile } from "common/testfileNames";
+import {
+  conName,
+  emptyFileName,
+  intlFileName3,
+  intlFileName1,
+  intlFileName2,
+  keyFile,
+  longFile,
+  lpt1,
+  singleCharFile,
+  specialCharFile,
+  testFile,
+  comFile,
+} from "common/testfileNames";
 import { documents } from "common/fileComponentTests";
 import { Intercepts } from "common/intercepts";
 import { getLorem } from "common/lorem";
@@ -262,6 +275,15 @@ const fileInput = (path: string, fileName?: string) => {
   cy.wait(300);
 };
 
+const uploadAnyFileType = (fileName: string) => {
+  cy.get(`input[type="file"]`).selectFile({
+    contents: Cypress.Buffer.from("file contents"),
+    fileName: fileName,
+    mimeType: "text/plain",
+    lastModified: Date.now(),
+  });
+};
+
 const downloadFile = (href: string): ReturnType<Cypress.Chainable["downloadFile"]> => {
   return cy.url().then(async path => {
     const pathToFetch = new URL(path);
@@ -498,51 +520,69 @@ const testFileComponent = (
   cy.log("Attempting to upload a file that is larger than 32MB");
   cy.fileInput("bigger_test.txt");
   cy.button("Upload").click();
-  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
-  cy.paragraph("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
+  cy.validationLink("The selected file must be no larger than 32MB.");
+  cy.paragraph("The selected file must be no larger than 32MB.");
   cy.wait(500);
   cy.log("Attempting to upload a batch of docs cumulatively larger than 32MB");
   cy.get(`input[type="file"]`)
     .wait(seconds(1))
     .selectFile(largeDocumentPaths, { force: true, timeout: seconds(5) });
   cy.wait(seconds(1)).submitButton("Upload").trigger("focus").click();
-  cy.log("Uploading a single character file");
+  cy.log("Uploading allowed special character file");
   cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
-  cy.log(intercept);
-  cy.fileInput(singleCharFile);
+  [intlFileName1, intlFileName2, intlFileName3].forEach(file => {
+    cy.log(intercept);
+    cy.uploadAnyFileType(file);
+    cy.wait(500);
+    cy.button("Upload documents").click();
+    cy.wait("@filesUpload");
+    cy.validationNotification(`Your document has been uploaded.`);
+    cy.wait(500);
+    cy.log("Deleting allowed special character file");
+    cy.contains("tr", file).within(() => {
+      cy.tableCell("Remove").scrollIntoView().click();
+    });
+    cy.validationNotification(`'${file}' has been removed.`);
+  });
+  cy.log("Validating incorrect file type");
+  cy.uploadAnyFileType(keyFile);
   cy.wait(500);
   cy.button("Upload documents").click();
-  cy.wait("@filesUpload");
-  cy.validationNotification(`Your document has been uploaded.`);
+  cy.validationLink("You cannot upload 'key' because it is the wrong file type.");
+  cy.log("Validating 'Con' as an invalid name");
+  cy.uploadAnyFileType(conName);
   cy.wait(500);
-  cy.log("Deleting the single character file");
-  cy.contains("tr", singleCharFile).within(() => {
-    cy.tableCell("Remove").scrollIntoView().click();
-  });
-  cy.validationNotification(`'${singleCharFile}' has been removed.`);
+  cy.button("Upload documents").click();
+  cy.validationLink("The selected file must not be named CON.");
+  cy.uploadAnyFileType(lpt1);
+  cy.wait(500);
+  cy.button("Upload documents").click();
+  cy.validationLink("The selected file must not be named LPT1.");
+  cy.wait(500);
+  cy.uploadAnyFileType(comFile);
+  cy.wait(500);
+  cy.button("Upload documents").click();
+  cy.validationLink(`The selected file must not be named COM1.`);
+  cy.paragraph(`The selected file must not be named COM1.`);
   cy.log("Validating a file with too long a name (over 80 characters)");
   cy.wait(500);
-  cy.fileInput(longFile);
+  cy.uploadAnyFileType(longFile);
   cy.wait(500);
   cy.button("Upload documents").click();
-  cy.validationLink(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
-  cy.paragraph(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
+  cy.validationLink(`The selected file name must be 80 characters or less.`);
+  cy.paragraph(`The selected file name must be 80 characters or less.`);
   cy.wait(500);
   cy.log("Validating a file with special characters");
-  cy.fileInput(testFile, specialCharFile);
+  cy.uploadAnyFileType(specialCharFile);
   cy.button("Upload documents").click();
-  cy.validationLink(
-    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
-  );
-  cy.paragraph(
-    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
-  );
+  cy.validationLink("The selected file name cannot use *, <, >, :, / and ? characters.");
+  cy.paragraph("The selected file name cannot use *, <, >, :, / and ? characters.");
   cy.wait(500);
   cy.log("Validating a file with an empty name");
-  cy.fileInput(emptyFileName);
+  cy.uploadAnyFileType(emptyFileName);
   cy.button("Upload").click();
-  cy.validationLink(`You cannot upload this file because the file has no name.`);
-  cy.paragraph(`You cannot upload this file because the file has no name.`);
+  cy.validationLink(`The selected file name must not begin with a space.`);
+  cy.paragraph(`The selected file name must not begin with a space.`);
   cy.wait(500);
   cy.log("Validating that maximum batch of documents is 10");
   const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
@@ -694,3 +734,4 @@ Cypress.Commands.add("testFileComponent", testFileComponent);
 Cypress.Commands.add("inputPrefix", inputPrefix);
 Cypress.Commands.add("inputSuffix", inputSuffix);
 Cypress.Commands.add("textValidation", textValidation);
+Cypress.Commands.add("uploadAnyFileType", uploadAnyFileType);

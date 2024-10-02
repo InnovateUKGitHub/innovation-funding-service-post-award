@@ -331,6 +331,11 @@ declare global {
       ): void;
 
       /**
+       * Uploads a file of any type of name including forbidden characters
+       */
+      uploadAnyFileType(fileName: string): void;
+
+      /**
        * Gets input prefix class and asserts of existence and counts number on page
        */
       inputPrefix(label: string, n: number): void;

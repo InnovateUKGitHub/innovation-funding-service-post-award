@@ -1,4 +1,4 @@
-export const specialCharFile = "specialchar@)(*&^%$£!#}{.doc";
+export const specialCharFile = "specialchar@)(//&*<>:?^%$£!#}{.doc";
 export const singleCharFile = "T.doc";
 export const longFile = "Specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowth1.docx";
 export const testFile = "testfile.doc";
@@ -7,3 +7,10 @@ export const testFileEUIFinance = "testfileEUIfc.doc";
 export const testfileEUIProjectManager = "testfileEUIpm.doc";
 export const noFileName = ".txt";
 export const emptyFileName = " .txt";
+export const intlFileName1 = "à, è, ì, ò, ù, À, È, Ì, Ò, Ù.rtf";
+export const intlFileName2 = "ã, ñ, õ, Ã, Ñ, Õ.rtf";
+export const intlFileName3 = "æ,ae,Æ,ø,Ø,ç,Ç,ł,Ł,ß,þ,ż,Ż.rtf";
+export const keyFile = "key.key";
+export const conName = "CON.txt";
+export const lpt1 = "LPT1.txt";
+export const comFile = "COM1.txt";
