@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Fixture, When, Then } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
-import { PcrType } from "../../../../Typings/pcr";
+import { PcrType } from "../../../../typings/pcr";
 import { Button } from "../../../../components/Button";
 import { loremIpsum100Char } from "../../../../components/lorem";
 export
