@@ -7,13 +7,13 @@ import {
   createMonitoringReportErrorMap,
   createMonitoringReportSchema,
   MonitoringReportCreateSchema,
-} from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.zod";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import {
   MonitoringReportPreparePeriodParams,
   MonitoringReportPreparePeriodRoute,
-} from "@ui/containers/pages/monitoringReports/monitoringReportPeriodStep.page";
-import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/monitoringReportPeriodStep.page";
+import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

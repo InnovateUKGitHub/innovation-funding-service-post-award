@@ -1,12 +1,12 @@
 import { IContext } from "@framework/types/IContext";
 import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { createMonitoringReportErrorMap } from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.zod";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { createMonitoringReportErrorMap } from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import {
   MonitoringReportDeleteParams,
   MonitoringReportDeleteRoute,
-} from "@ui/containers/pages/monitoringReports/monitoringReportDelete.page";
+} from "@ui/pages/monitoringReports/monitoringReportDelete.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

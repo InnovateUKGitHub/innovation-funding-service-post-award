@@ -6,14 +6,14 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   MonitoringReportCreateParams,
   MonitoringReportCreateRoute,
-} from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.page";
 import {
   createMonitoringReportErrorMap,
   createMonitoringReportSchema,
   MonitoringReportCreateSchema,
-} from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.zod";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
-import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

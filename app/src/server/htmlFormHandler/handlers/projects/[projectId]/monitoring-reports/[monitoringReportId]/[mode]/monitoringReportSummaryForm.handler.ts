@@ -3,16 +3,16 @@ import { IContext } from "@framework/types/IContext";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import {
   monitoringReportSummaryErrorMap,
   monitoringReportSummarySchema,
   MonitoringReportSummarySchema,
-} from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary.zod";
+} from "@ui/pages/monitoringReports/workflow/monitoringReportSummary.zod";
 import {
   MonitoringReportWorkflowParams,
   MonitoringReportWorkflowRoute,
-} from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 

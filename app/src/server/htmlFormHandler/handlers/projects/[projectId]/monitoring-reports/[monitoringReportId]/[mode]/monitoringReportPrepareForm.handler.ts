@@ -4,17 +4,17 @@ import { GetMonitoringReportById } from "@server/features/monitoringReports/getM
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 
-import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportDashboardRoute } from "@ui/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import {
   MonitoringReportWorkflowParams,
   MonitoringReportWorkflowRoute,
-} from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
+} from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import {
   monitoringReportWorkflowErrorMap,
   monitoringReportWorkflowSchema,
   MonitoringReportWorkflowSchema,
-} from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.zod";
-import { MonitoringReportWorkflowDef } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
+} from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.zod";
+import { MonitoringReportWorkflowDef } from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
