@@ -1604,7 +1604,9 @@
     "contactExternalUsername": "External Username",
     "nonFundedLabel": "Non-funded",
     "fundedLabel": "Funded",
-    "noContactsMessage": "No contacts exist."
+    "noContactsMessage": "No contacts exist.",
+    "noKnowledgeBaseAdministratorsMessage": "No knowledge base administrator exists.",
+    "noMainCompanyContactsMessage": "No company contact exists."
   },
   "documentLabels": {
     "documentDisplayTitle": "Files uploaded",

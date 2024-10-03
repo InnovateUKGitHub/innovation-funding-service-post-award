@@ -10,6 +10,7 @@ import { ManageTeamMembersContactListTable } from "../ManageTeamMembersContactLi
 import { useManageTeamMembersQuery } from "../ManageTeamMember.logic";
 import { ManageTeamMemberRemoveLink } from "./ManageTeamMembersLinks";
 import { ProjectRole } from "@framework/dtos/projectContactDto";
+import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 
 const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMembersDashboardParams) => {
   const routes = useRoutes();
@@ -59,14 +60,11 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
 
       {project.competitionType === "KTP" && (
         <>
-          <Section
-            title={getContent(x =>
-              x.projectLabels.knowledgeBaseAdministrators({ count: categories.mainCompanyContacts.length }),
-            )}
-          >
+          <Section title={getContent(x => x.projectLabels.knowledgeBaseAdministrators({ count: 1 }))}>
             <ManageTeamMembersContactListTable
               tableData={categories.knowledgeBaseAdministrators}
               qa="knowledgeBaseAdministrators-table"
+              noContactsMessage={<P>{getContent(x => x.projectContactLabels.noKnowledgeBaseAdministratorsMessage)}</P>}
             />
             {categories.knowledgeBaseAdministrators.length === 0 ? (
               <Link
@@ -96,14 +94,11 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
             )}
           </Section>
 
-          <Section
-            title={getContent(x =>
-              x.projectLabels.mainCompanyContacts({ count: categories.mainCompanyContacts.length }),
-            )}
-          >
+          <Section title={getContent(x => x.projectLabels.mainCompanyContacts({ count: 1 }))}>
             <ManageTeamMembersContactListTable
               tableData={categories.mainCompanyContacts}
               qa="mainCompanyContacts-table"
+              noContactsMessage={<P>{getContent(x => x.projectContactLabels.noMainCompanyContactsMessage)}</P>}
             />
             {categories.mainCompanyContacts.length === 0 ? (
               <Link
