@@ -1,12 +1,14 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Fixture, Then } from "playwright-bdd/decorators";
 import { PageHeading } from "../../../components/PageHeading";
+import { Commands } from "../../Commands";
 
 export
 @Fixture("projectDetails")
 class ProjectDetails {
   protected readonly page: Page;
   protected readonly pageTitle: PageHeading;
+  protected readonly commands: Commands;
   private readonly heading: Locator;
   private readonly dateValueTestId: Locator;
   private readonly dateValueXPath: Locator;
@@ -39,11 +41,12 @@ class ProjectDetails {
   private readonly projectInformationEndDate: Locator;
   private readonly projectInformationDuration: Locator;
   private readonly projectInformationNoOfPeriods: Locator;
-  private readonly projectInformationStartDateVal: String;
-  private readonly projectInformationEndDateVal: String;
+  private readonly projectInformationStartDateVal: string;
+  private readonly projectInformationEndDateVal: string;
 
-  constructor({ page }: { page: Page }) {
+  constructor({ page, commands }: { commands: Commands; page: Page }) {
     this.page = page;
+    this.commands = commands;
     this.pageTitle = PageHeading.fromTitle(page, "Project details");
     this.heading = this.page.getByRole("heading");
 
@@ -209,6 +212,8 @@ class ProjectDetails {
   }
 
   @Then("Steve ver2")
-  async SteveVer2() {}
+  async SteveVer2() {
+    await this.commands.getCellFromHeaderAndRow("Email", "Matt Otrebski");
+  }
   steveVer2;
 }
