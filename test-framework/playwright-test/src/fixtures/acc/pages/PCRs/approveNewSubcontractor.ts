@@ -123,6 +123,7 @@ class ApproveNewSubcontractor {
     for (const msg of this.emptyValidationList) {
       await this.commands.validationLink(msg);
     }
+    await expect(this.page.getByTestId(this.valQa).getByText(this.relationshipValidation)).not.toBeVisible();
   }
 
   @When("the user clicks one of the Edit links")
@@ -156,8 +157,7 @@ class ApproveNewSubcontractor {
     for (const msg of this.emptyValidationList) {
       await expect(this.page.getByTestId(this.valQa).getByText(msg)).not.toBeVisible();
     }
-    //TODO: Uncomment this once bug ticket ACC-11477 is fixed.
-    //await expect(this.page.getByTestId(this.valQa).getByText(this.relationshipValidation)).not.toBeVisible();
+    await expect(this.page.getByTestId(this.valQa).getByText(this.relationshipValidation)).not.toBeVisible();
   }
 
   @Given("the user has created and is in Approve a new subcontractor")
