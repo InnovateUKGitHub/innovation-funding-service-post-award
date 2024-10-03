@@ -45,9 +45,8 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org",
-    //baseURL: "https://www-acc-custom-XXXX.apps.ocp4.innovateuk.ukri.org",
-    //baseURL: "https://www-acc-at.apps.ocp4.innovateuk.ukri.org",
+    //baseURL: "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org",
+    baseURL: "https://www-acc-at.apps.ocp4.innovateuk.ukri.org",
     httpCredentials,
     trace: "on-first-retry",
     testIdAttribute: "data-qa",

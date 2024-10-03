@@ -21,6 +21,7 @@ import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
+import { ProjectDetails } from "./acc/pages/ProjectsDetails";
 
 type AccFixtures = {
   // Pages
@@ -33,6 +34,7 @@ type AccFixtures = {
   putProjectOnHold: PutProjectOnHold;
   projectChangeRequests: ProjectChangeRequests;
   approveNewSubcontractor: ApproveNewSubcontractor;
+  projectDetails: ProjectDetails;
 
   // Misc
   accNavigation: AccNavigation;
@@ -69,6 +71,7 @@ export const test = base.extend<AccFixtures, Workers>({
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
+  projectDetails: ({ page }, use) => use(new ProjectDetails({ page })),
 
   // Project Factory
   accProjectBase: [
