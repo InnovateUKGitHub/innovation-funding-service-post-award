@@ -41,7 +41,6 @@ export const useClaimReviewPageData = ({
     { projectId, projectIdStr: projectId, partnerId, periodId },
     queryOptions,
   );
-
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
 
@@ -82,7 +81,7 @@ export const useClaimReviewPageData = ({
 
     const claims = mapToCurrentClaimsDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
-      ["id", "isFinalClaim", "periodEndDate", "periodId", "periodStartDate", "partnerId", "status", "isIarRequired"],
+      ["id", "isFinalClaim", "periodEndDate", "periodId", "periodStartDate", "partnerId", "status"],
       {},
     );
 

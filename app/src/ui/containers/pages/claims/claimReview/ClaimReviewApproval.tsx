@@ -26,7 +26,6 @@ interface ClaimReviewApprovalProps extends ReviewClaimParams {
   claimReviewForm: UseFormReturn<z.output<ClaimReviewSchemaType>>;
   onUpdate: ReturnType<typeof useOnUpdateClaimReview>["onUpdate"];
   disabled: boolean;
-  isIarMissing: boolean;
 }
 
 const ClaimReviewApproval = ({
@@ -36,7 +35,6 @@ const ClaimReviewApproval = ({
   periodId,
   claimId,
   disabled,
-  isIarMissing,
   onUpdate,
 }: ClaimReviewApprovalProps) => {
   const content = useReviewContent();
@@ -62,7 +60,6 @@ const ClaimReviewApproval = ({
       <input type="hidden" value={partnerId} {...claimReviewForm.register("partnerId")} />
       <input type="hidden" value={periodId} {...claimReviewForm.register("periodId")} />
       <input type="hidden" value={claimId} {...claimReviewForm.register("claimId")} />
-      <input type="hidden" value={String(isIarMissing)} {...claimReviewForm.register("isIarMissing")} />
 
       <Fieldset>
         <Legend>{content.sectionTitleHowToProceed}</Legend>

@@ -86,9 +86,6 @@ export const claimReviewQuery = graphql`
                 Acc_ClaimStatus__c {
                   value
                 }
-                Acc_IARRequired__c {
-                  value
-                }
               }
             }
           }
