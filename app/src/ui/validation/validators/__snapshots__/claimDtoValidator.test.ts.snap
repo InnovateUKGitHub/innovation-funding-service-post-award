@@ -18,9 +18,13 @@ exports[`claimDtoValidator() With en-GB i18n with claimState as default when cla
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is received and PCF status is not received 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is invalid 1`] = `"You must upload a project completion form before you can submit this claim."`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when fc pcf status is invalid 1`] = `"You must upload a project completion form before you can submit this claim."`;
 
-exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `null`;
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when fc pcf status is valid 1`] = `null`;
+
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when mo pcf status is invalid 1`] = `null`;
+
+exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim is a final claim non-ktp competition type when mo pcf status is valid 1`] = `null`;
 
 exports[`claimDtoValidator() With en-GB i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status with documents as non-KTP competition 1`] = `null`;
 
@@ -130,9 +134,13 @@ exports[`claimDtoValidator() With no i18n with claimState as default when claim 
 
 exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when IAR is not required when IAR is received and PCF status is not received 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is invalid 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when fc pcf status is invalid 1`] = `"forms.claimSummary.documents.errors.pcf_required"`;
 
-exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when pcf status is valid 1`] = `null`;
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when fc pcf status is valid 1`] = `null`;
+
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when mo pcf status is invalid 1`] = `null`;
+
+exports[`claimDtoValidator() With no i18n with claimState as default when claim is a final claim non-ktp competition type when mo pcf status is valid 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with claimState as default when claim not a final claim with non required IAR and a valid IAR status with documents as non-KTP competition 1`] = `null`;
 
