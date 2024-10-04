@@ -3,9 +3,9 @@ import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { BaseProps } from "@ui/app/containerBase";
 
-export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
+export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending" | "hidden";
 
-export type CuratedSections = Exclude<Section, "awaiting">;
+export type CuratedSections = Exclude<Section, "awaiting" | "hidden">;
 export type CuratedSection<T> = { [key in CuratedSections]: T };
 export type Project = Pick<
   ProjectDtoGql,

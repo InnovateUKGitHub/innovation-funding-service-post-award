@@ -150,11 +150,13 @@ export function generateFilteredProjects(filters: FilterOptions[], projects: Pro
     if (!canFilterProject) continue;
 
     // Note: Only allow curated keys, not all sections match ui sections
-    const key: CuratedSections = curatedSection === "awaiting" ? "open" : curatedSection;
+    const key = curatedSection === "awaiting" ? "open" : curatedSection;
 
-    curatedProjects[key].push({ curatedSection, project, partner: projectPartner });
-    curatedTotals[key] += 1;
-    totalProjects += 1;
+    if (key !== "hidden") {
+      curatedProjects[key].push({ curatedSection, project, partner: projectPartner });
+      curatedTotals[key] += 1;
+      totalProjects += 1;
+    }
   }
 
   // Note: Sort only open projects
@@ -244,7 +246,13 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
     return "pending";
   }
 
-  const { isFc, isPmOrMo, isAssociate } = getAuthRoles(project.roles);
+  const { isPm, isFc, isMo, isAssociate, isPmOrMo } = getAuthRoles(project.roles);
+
+  const hasAnyRole = isPm || isFc || isMo || isAssociate;
+
+  if (!hasAnyRole) {
+    return "hidden";
+  }
 
   switch (project.status) {
     case ProjectStatus.Live:
