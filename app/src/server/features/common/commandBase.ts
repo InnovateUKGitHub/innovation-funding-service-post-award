@@ -5,10 +5,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IContext } from "@framework/types/IContext";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
-import {
-  MultipleDocumentUploadDtoValidator,
-  DocumentUploadDtoValidator,
-} from "@ui/validation/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { RunnableBase } from "./Runnable";
 
 export abstract class SyncCommandBase<T> extends RunnableBase<T> {}
@@ -47,19 +44,6 @@ export abstract class CommandMultipleDocumentBase<T> extends AuthorisedAsyncComm
         this.showValidationErrors,
         error,
       );
-      if (!result.isValid) {
-        return new ValidationError(result);
-      }
-    }
-  }
-}
-
-export abstract class CommandDocumentBase<T> extends AuthorisedAsyncCommandBase<T> {
-  protected abstract document: DocumentUploadDto;
-  protected abstract showValidationErrors: boolean;
-  handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
-    if (error instanceof FileTypeNotAllowedError) {
-      const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors);
       if (!result.isValid) {
         return new ValidationError(result);
       }
