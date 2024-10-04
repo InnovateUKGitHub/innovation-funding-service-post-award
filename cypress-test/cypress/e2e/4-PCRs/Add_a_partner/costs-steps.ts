@@ -200,11 +200,11 @@ export const checkAddCapitalUsageItem = () => {
       cy.getByLabel("Utilisation").clear().type("-23");
       cy.validationLink("Utilisation must be 0 or more.");
       cy.getByLabel("Utilisation").clear().type("223");
-      cy.validationLink("Utilisation must be a value under 100%.");
+      cy.validationLink("Utilisation must be less than 100.");
       cy.getByLabel("Utilisation").clear().type("22.33333");
       cy.validationLink("Utilisation must be 2 decimal places or fewer.");
       cy.getByLabel("Utilisation").clear().type("100");
-      cy.validationLink("Utilisation must be a value under 100%.");
+      cy.validationLink("Utilisation must be less than 100.");
       cy.getByLabel("Utilisation").clear().type("50");
       checkTotalCostEquals("£8,000.00", "Net cost");
       checkSummary("Capital usage", "Slush fund usage", cost, categoryTotal, totalCost);
@@ -321,8 +321,8 @@ export const checkAddTravelAndSubsistenceItem = () => {
       cy.clickOn("Save and return to travel and subsistence");
       cy.validationLink("Cost of each must be £999,999,999,999.00 or less.");
       cy.paragraph("Cost of each must be £999,999,999,999.00 or less.");
-      cy.validationLink("Number of times must be 9999999999 or less.");
-      cy.paragraph("Number of times must be 9999999999 or less.");
+      cy.validationLink("Number of times must be 1000000 or less.");
+      cy.paragraph("Number of times must be 1000000 or less.");
       cy.validatePositiveWholeNumber("Number of times", "Number of times", "999999999999");
       cy.validateCurrency("Cost of each", "cost of each", "999999999999");
       cy.clickOn("Save and return to travel and subsistence");

@@ -651,14 +651,19 @@ export const validatePeriodBox = () => {
   cy.validationMessage("There is a problem");
   cy.validationLink("Enter period");
   cy.paragraph("Enter period");
-  ["Lorem", "-", "1.1", "0.5", "100.5", "3000.5", "£$%^&*()", "dasq123cc", "1asd", "asff1"].forEach(invalidNum => {
+  ["1.1", "0.5", "100.5", "3000.5"].forEach(invalidNum => {
     cy.getByLabel("Period");
     cy.get("input#period").clear().type(invalidNum);
     cy.wait(500);
     cy.button("Continue").click();
     cy.validationMessage("There is a problem");
-    cy.validationLink("Period must be a whole number, like 3.");
-    cy.paragraph("Period must be a whole number, like 3.");
+    cy.validationLink("Period must be a whole number, like 15.");
+    cy.paragraph("Period must be a whole number, like 15.");
+    ["-", "Lorem", "£$%^&*()", "dasq123cc", "1asd", "asff1"].forEach(lorem => {
+      cy.get("input#period").clear().type(lorem);
+      cy.validationLink("Period must be a number.");
+      cy.paragraph("Period must be a number.");
+    });
   });
   ["-1", "-999999999999", "0", "12", "100", "99999999999999999999999999999999999999999"].forEach(invalidNum => {
     cy.get("input#period").clear().type(invalidNum);

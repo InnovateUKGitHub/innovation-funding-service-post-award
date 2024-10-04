@@ -285,12 +285,27 @@ export const jeSValidationNoPMName = () => {
 };
 
 export const validateSizeInput = () => {
-  ["-1", "a", "&*£"].forEach(input => {
-    cy.get("#numberOfEmployees").clear().type(input);
-    cy.wait(200);
-    cy.clickOn("Save and return to summary");
-    cy.validationLink("Enter a valid number of employees.");
+  cy.paragraph("Enter number of employees");
+  ["1.1", "0.5", "100.5", "3000.5"].forEach(invalidNum => {
+    cy.get("#numberOfEmployees").clear().type(invalidNum);
+    cy.wait(500);
+    cy.button("Save and continue").click();
+    cy.validationLink("Number of employees must be a whole number, like 15.");
+    cy.paragraph("Number of employees must be a whole number, like 15.");
   });
+  ["-", "Lorem", "£$%^&*()", "dasq123cc", "1asd", "asff1"].forEach(lorem => {
+    cy.get("#numberOfEmployees").clear().type(lorem);
+    cy.validationLink("Number of employees must be a number.");
+    cy.paragraph("Number of employees must be a number.");
+  });
+  ["-1", "-99999", "-0001"].forEach(negative => {
+    cy.get("#numberOfEmployees").clear().type(negative);
+    cy.validationLink("Number of employees must be 0 or more.");
+    cy.paragraph("Number of employees must be 0 or more.");
+  });
+  cy.get("#numberOfEmployees").clear().type("99999999999");
+  cy.validationLink("Number of employees must be less than 100000000.");
+  cy.paragraph("Number of employees must be less than 100000000.");
 };
 export const medium100Employees = () => {
   cy.getByLabel("Medium").click();
@@ -797,10 +812,10 @@ export const correctFundingLevelCopy = () => {
 
 export const fundingLevelInputValidation = () => {
   [
-    ["-1", "Funding level must be 0% or more."],
-    ["99999999", "Enter a funding level up to 100%."],
-    ["101", "Enter a funding level up to 100%."],
-    ["100.5", "Enter a funding level up to 100%."],
+    ["-1", "Funding level must be 0 or more."],
+    ["99999999", "Funding level must be 100 or less."],
+    ["101", "Funding level must be 100 or less."],
+    ["100.5", "Funding level must be 100 or less."],
     ["Spagbol", "Funding level must be a number."],
     ["!%^&*(", "Funding level must be a number."],
   ].forEach(([input, message]) => {

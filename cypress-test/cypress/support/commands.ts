@@ -360,6 +360,8 @@ const validatePositiveWholeNumber = (label: string, errorLabel: string, validVal
   cy.validationLink(`${firstPlaceErrorToken} must be a whole number, like 15.`);
   cy.getByLabel(label).clear().type("-56");
   cy.validationLink(`${firstPlaceErrorToken} must be 0 or more.`);
+  cy.getByLabel(label).clear().type("9999999");
+  cy.validationLink(`${firstPlaceErrorToken} must be 1000000 or less.`);
   cy.getByLabel(label).clear().type(validValue);
 };
 
