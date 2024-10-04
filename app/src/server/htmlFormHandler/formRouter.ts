@@ -38,13 +38,12 @@ import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "./handlers/p
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningDocumentUpload.handler";
 import { ProjectChangeRequestReasoningUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningUpdate.handler";
 import { ProjectChangeRequestReviewFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/review/reviewProjectChangeRequestFormHandler";
-import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerify.handler";
 import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetails.handler";
 import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentUpload.handler";
 import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatement.handler";
 import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDelete.handler";
-import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditForm.handler";
+import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/projectSetupPartnerPostcodeForm.handler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupForm.handler";
 import { FallbackFormHandler } from "./FallbackFormHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
@@ -91,6 +90,7 @@ import { PcrItemAddPartnerSpendProfileSubcontractingCostsHandler } from "./handl
 import { PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileTravelAndSubs.handler";
 import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOtherCosts.handler";
 import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
+import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/editPartnerDetailsPostcode.handler";
 
 export const standardFormHandlers = [
   // Zod

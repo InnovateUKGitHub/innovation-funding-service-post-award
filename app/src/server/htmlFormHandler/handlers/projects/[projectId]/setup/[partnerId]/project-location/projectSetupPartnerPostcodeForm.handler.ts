@@ -7,16 +7,16 @@ import {
   postcodeErrorMap,
   postcodeSchema,
 } from "@ui/components/templates/PartnerDetailsEdit/partnerDetailsEdit.zod";
-import { PartnerDetailsRoute } from "@ui/pages/projects/partnerDetails/partnerDetails.page";
 import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-export class PartnerDetailsEditFormHandler extends ZodFormHandlerBase<PostcodeSchema, PartnerDetailsParams> {
+export class ProjectSetupPartnerPostcodeFormHandler extends ZodFormHandlerBase<PostcodeSchema, PartnerDetailsParams> {
   constructor() {
     super({
       routes: [PartnerDetailsEditRoute],
-      forms: [FormTypes.ProjectSetupPostcode, FormTypes.PartnerDetailsEdit],
+      forms: [FormTypes.ProjectSetupPostcode],
     });
   }
 
@@ -49,6 +49,6 @@ export class PartnerDetailsEditFormHandler extends ZodFormHandlerBase<PostcodeSc
     context: IContext;
   }): Promise<string> {
     await context.runCommand(new UpdatePartnerCommand({ id: params.partnerId, projectId: params.projectId, ...input }));
-    return PartnerDetailsRoute.getLink(params).path;
+    return ProjectSetupRoute.getLink(params).path;
   }
 }
