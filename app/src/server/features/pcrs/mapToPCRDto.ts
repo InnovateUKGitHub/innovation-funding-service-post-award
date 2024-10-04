@@ -68,7 +68,7 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
 const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
   if (!pcr) throw new Error("Cannot map undefined pcr");
   const hasMapper = dtoHasMapper(itemType);
-  const mapper = getMapper(itemType?.type);
+  const mapper = getMapper(itemType?.type, "update");
   if (hasMapper && mapper) {
     return {
       ...mapBaseItem(pcr, itemType?.displayName, itemType?.type),
@@ -79,9 +79,10 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRI
   }
 };
 
-const dtoHasMapper = (itemDto: PCRItemTypeDto | undefined): itemDto is PCRItemTypeDto => !!getMapper(itemDto?.type);
+const dtoHasMapper = (itemDto: PCRItemTypeDto | undefined): itemDto is PCRItemTypeDto =>
+  !!getMapper(itemDto?.type, "create");
 
-export const getMapper = (type: PCRItemType | undefined) => {
+export const getMapper = (type: PCRItemType | undefined, loc: "create" | "update") => {
   switch (type) {
     case PCRItemType.TimeExtension:
       return mapItemForTimeExtension;
@@ -96,7 +97,7 @@ export const getMapper = (type: PCRItemType | undefined) => {
     case PCRItemType.PartnerWithdrawal:
       return mapItemForPartnerWithdrawal;
     case PCRItemType.PartnerAddition:
-      return mapItemForPartnerAddition;
+      return mapItemForPartnerAddition(loc);
     case PCRItemType.MultiplePartnerFinancialVirement:
       return mapItemForMultiplePartnerVirements;
     case PCRItemType.PeriodLengthChange:
@@ -204,83 +205,93 @@ const mapItemForPartnerWithdrawal = (
   type: PCRItemType.PartnerWithdrawal,
 });
 
-const mapItemForPartnerAddition = (
-  pcr: Pick<
-    ProjectChangeRequestItemEntity,
-    | "contact1ProjectRole"
-    | "contact1Forename"
-    | "contact1Surname"
-    | "contact1Phone"
-    | "contact1Email"
-    | "financialYearEndDate"
-    | "financialYearEndTurnover"
-    | "organisationName"
-    | "registeredAddress"
-    | "registrationNumber"
-    | "projectRole"
-    | "partnerType"
-    | "organisationType"
-    | "projectRoleLabel"
-    | "partnerTypeLabel"
-    | "isCommercialWork"
-    | "typeOfAid"
-    | "projectLocation"
-    | "projectLocationLabel"
-    | "projectCity"
-    | "projectPostcode"
-    | "participantSize"
-    | "participantSizeLabel"
-    | "numberOfEmployees"
-    | "contact2ProjectRole"
-    | "contact2Forename"
-    | "contact2Surname"
-    | "contact2Phone"
-    | "contact2Email"
-    | "awardRate"
-    | "hasOtherFunding"
-    | "totalOtherFunding"
-    | "tsbReference"
-  > &
-    Partial<Pick<ProjectChangeRequestItemEntity, "id">>,
-): PCRTypeWithoutBase<PCRItemForPartnerAdditionDto> => {
-  return {
-    contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
-    contact1Forename: pcr.contact1Forename || null,
-    contact1Surname: pcr.contact1Surname || null,
-    contact1Phone: pcr.contact1Phone || null,
-    contact1Email: pcr.contact1Email || null,
-    financialYearEndDate: pcr.financialYearEndDate || null,
-    financialYearEndTurnover: isNumber(pcr.financialYearEndTurnover) ? pcr.financialYearEndTurnover : null,
-    organisationName: pcr.organisationName || null,
-    registeredAddress: pcr.registeredAddress || null,
-    registrationNumber: pcr.registrationNumber || null,
-    projectRole: pcr.projectRole || PCRProjectRole.Unknown,
-    partnerType: pcr.partnerType || PCRPartnerType.Unknown,
-    organisationType: pcr.organisationType || PCROrganisationType.Unknown,
-    projectRoleLabel: pcr.projectRoleLabel || null,
-    partnerTypeLabel: pcr.partnerTypeLabel || null,
-    isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
-    typeOfAid: pcr.typeOfAid || TypeOfAid.Unknown,
-    ...(pcr.id ? { spendProfile: { costs: [], funds: [], pcrItemId: pcr.id } } : {}),
-    projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
-    projectLocationLabel: pcr.projectLocationLabel || null,
-    projectCity: pcr.projectCity || null,
-    projectPostcode: pcr.projectPostcode || null,
-    participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
-    participantSizeLabel: pcr.participantSizeLabel || null,
-    numberOfEmployees: isNumber(pcr.numberOfEmployees) ? pcr.numberOfEmployees : null,
-    contact2ProjectRole: pcr.contact2ProjectRole || PCRContactRole.Unknown,
-    contact2Forename: pcr.contact2Forename || null,
-    contact2Surname: pcr.contact2Surname || null,
-    contact2Phone: pcr.contact2Phone || null,
-    contact2Email: pcr.contact2Email || null,
-    awardRate: isNumber(pcr.awardRate) ? pcr.awardRate : null,
-    hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
-    totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
-    tsbReference: pcr.tsbReference || null,
-    type: PCRItemType.PartnerAddition,
+const mapItemForPartnerAddition =
+  (loc: "create" | "update") =>
+  (
+    pcr: Pick<
+      ProjectChangeRequestItemEntity,
+      | "contact1ProjectRole"
+      | "contact1Forename"
+      | "contact1Surname"
+      | "contact1Phone"
+      | "contact1Email"
+      | "financialYearEndDate"
+      | "financialYearEndTurnover"
+      | "organisationName"
+      | "registeredAddress"
+      | "registrationNumber"
+      | "projectRole"
+      | "partnerType"
+      | "organisationType"
+      | "projectRoleLabel"
+      | "partnerTypeLabel"
+      | "isCommercialWork"
+      | "typeOfAid"
+      | "projectLocation"
+      | "projectLocationLabel"
+      | "projectCity"
+      | "projectPostcode"
+      | "participantSize"
+      | "participantSizeLabel"
+      | "numberOfEmployees"
+      | "contact2ProjectRole"
+      | "contact2Forename"
+      | "contact2Surname"
+      | "contact2Phone"
+      | "contact2Email"
+      | "awardRate"
+      | "hasOtherFunding"
+      | "totalOtherFunding"
+      | "tsbReference"
+    > &
+      Partial<Pick<ProjectChangeRequestItemEntity, "id">>,
+  ): PCRTypeWithoutBase<PCRItemForPartnerAdditionDto> => {
+    if (loc === "create") {
+      return {} as PCRTypeWithoutBase<PCRItemForPartnerAdditionDto>;
+    }
+
+    if (typeof pcr.id === "undefined") {
+      throw new Error("PCR Add a partner type must have PCR ID");
+    }
+
+    return {
+      contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
+      contact1Forename: pcr.contact1Forename || null,
+      contact1Surname: pcr.contact1Surname || null,
+      contact1Phone: pcr.contact1Phone || null,
+      contact1Email: pcr.contact1Email || null,
+      financialYearEndDate: pcr.financialYearEndDate || null,
+      financialYearEndTurnover: isNumber(pcr.financialYearEndTurnover) ? pcr.financialYearEndTurnover : null,
+      organisationName: pcr.organisationName || null,
+      registeredAddress: pcr.registeredAddress || null,
+      registrationNumber: pcr.registrationNumber || null,
+      projectRole: pcr.projectRole || PCRProjectRole.Unknown,
+      partnerType: pcr.partnerType || PCRPartnerType.Unknown,
+      organisationType: pcr.organisationType || PCROrganisationType.Unknown,
+      projectRoleLabel: pcr.projectRoleLabel || null,
+      partnerTypeLabel: pcr.partnerTypeLabel || null,
+      isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
+      typeOfAid: pcr.typeOfAid || TypeOfAid.Unknown,
+      spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
+      projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
+      projectLocationLabel: pcr.projectLocationLabel || null,
+      projectCity: pcr.projectCity || null,
+      projectPostcode: pcr.projectPostcode || null,
+      participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
+      participantSizeLabel: pcr.participantSizeLabel || null,
+      numberOfEmployees: isNumber(pcr.numberOfEmployees) ? pcr.numberOfEmployees : null,
+      contact2ProjectRole: pcr.contact2ProjectRole || PCRContactRole.Unknown,
+      contact2Forename: pcr.contact2Forename || null,
+      contact2Surname: pcr.contact2Surname || null,
+      contact2Phone: pcr.contact2Phone || null,
+      contact2Email: pcr.contact2Email || null,
+      awardRate: isNumber(pcr.awardRate) ? pcr.awardRate : null,
+      hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
+      totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
+      tsbReference: pcr.tsbReference || null,
+      type: PCRItemType.PartnerAddition,
+    };
   };
-};
 
 const mapItemForMultiplePartnerVirements = (
   pcr: Pick<ProjectChangeRequestItemEntity, "grantMovingOverFinancialYear">,

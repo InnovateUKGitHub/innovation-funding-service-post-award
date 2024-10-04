@@ -102,7 +102,7 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   ): ProjectChangeRequestItemForCreateEntity {
     const matchedItem = itemTypes.find(t => t.type === itemDto.type);
     if (!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
-    const mapper = getMapper(itemDto.type);
+    const mapper = getMapper(itemDto.type, "create");
     return {
       projectId: dto.projectId,
       recordTypeId: matchedItem.recordTypeId,
