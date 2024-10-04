@@ -243,8 +243,6 @@ const mapItemForPartnerAddition = (
   > &
     Partial<Pick<ProjectChangeRequestItemEntity, "id">>,
 ): PCRTypeWithoutBase<PCRItemForPartnerAdditionDto> => {
-  if (!pcr.id) throw new Error("ID must be specified");
-
   return {
     contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
     contact1Forename: pcr.contact1Forename || null,
@@ -263,7 +261,7 @@ const mapItemForPartnerAddition = (
     partnerTypeLabel: pcr.partnerTypeLabel || null,
     isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
     typeOfAid: pcr.typeOfAid || TypeOfAid.Unknown,
-    spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
+    ...(pcr.id ? { spendProfile: { costs: [], funds: [], pcrItemId: pcr.id } } : {}),
     projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
     projectLocationLabel: pcr.projectLocationLabel || null,
     projectCity: pcr.projectCity || null,
