@@ -57,9 +57,9 @@ class MonitoringReportPrepareFormHandler extends ZodFormHandlerBase<
 
     if (q) {
       if (q.isScored) {
-        q.optionId = input[`questions.${q.displayOrder - 1}.optionId`];
+        q.optionId = input[`questions.${q.displayOrder - 1}.optionId`] ?? null;
       }
-      q.comments = input[`questions.${q.displayOrder - 1}.comments`];
+      q.comments = input[`questions.${q.displayOrder - 1}.comments`] ?? null;
     }
 
     const questions = this.monitoringReport.questions.map(x =>
