@@ -25,18 +25,7 @@ const claimReviewSchema = evaluateObject((data: { status: ClaimStatus }) => ({
     maxLength: claimReviewSchemaCommentsMax,
     required: data.status === ClaimStatus.MO_QUERIED,
   }),
-  isIarMissing: z.string(),
-})).superRefine((data, ctx) => {
-  if (data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-    if (/^true$/.test(data.isIarMissing)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_string,
-        validation: "regex",
-        path: ["isIarMissing"],
-      });
-    }
-  }
-});
+}));
 
 type ClaimReviewSchemaType = typeof claimReviewSchema;
 
