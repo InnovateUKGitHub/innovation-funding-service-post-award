@@ -76,6 +76,6 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {
-    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "", true);
+    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "", ProjectRole.FinancialContact);
   }
 }

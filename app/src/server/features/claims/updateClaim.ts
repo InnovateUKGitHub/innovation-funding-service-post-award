@@ -17,6 +17,7 @@ import {
   mapImpactManagementParticipationToEnum,
   mapImpactManagementPhasedStageToEnum,
 } from "@framework/mappers/impactManagementParticipation";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 
 export class UpdateClaimCommand extends AuthorisedAsyncCommandBase<boolean> {
   public readonly runnableName = "UpdateClaimCommand";
@@ -50,14 +51,20 @@ export class UpdateClaimCommand extends AuthorisedAsyncCommandBase<boolean> {
       this.claimDto.partnerId,
       this.claimDto.periodId,
     );
+    const rolesQuery = new GetAllProjectRolesForUser();
 
     const existingClaim = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId);
     const existingStatus = existingClaim.Acc_ClaimStatus__c;
     const hasChangedClaimStatus = existingStatus !== this.claimDto.status;
 
-    const partner = await context.runQuery(partnerQuery);
-    const details = await context.runQuery(costSummaryQuery);
-    const documents = await context.runQuery(documentQuery);
+    const [partner, details, documents, auth] = await Promise.all([
+      context.runQuery(partnerQuery),
+      context.runQuery(costSummaryQuery),
+      context.runQuery(documentQuery),
+      context.runQuery(rolesQuery),
+    ]);
+
+    const projectRoles = auth.forProject(this.projectId).getRoles();
 
     const originalClaimStatus = mapToClaimStatus(existingStatus);
 
@@ -80,7 +87,7 @@ export class UpdateClaimCommand extends AuthorisedAsyncCommandBase<boolean> {
       documents,
       true,
       partner.competitionType,
-      this.isClaimSummary,
+      projectRoles,
     );
 
     if (!result.isValid) {
