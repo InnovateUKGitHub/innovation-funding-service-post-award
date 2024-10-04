@@ -74,6 +74,7 @@ export const materialsSchema = z.object({
   }),
   quantityOfMaterialItems: getNumberValidation({
     min: 0,
+    max: 1_000_000,
     integer: true,
     required: true,
   }),
@@ -102,7 +103,12 @@ export type SubcontractingSchema = z.infer<typeof subcontractingSchema>;
 export const capitalUsageSchema = z.object({
   id: costIdValidation.nullable(),
   capitalUsageDescription: description,
-  depreciationPeriod: getNumberValidation({ integer: true, min: 0, required: true }),
+  depreciationPeriod: getNumberValidation({
+    integer: true,
+    min: 0,
+    required: true,
+    max: 1_000_000,
+  }),
   itemType: z.coerce.number().min(1),
   netPresentValue: getGenericCurrencyValidation({
     required: true,
@@ -124,7 +130,7 @@ export const travelAndASubsistenceSchema = z
   .object({
     id: costIdValidation.nullable(),
     descriptionOfCost: description,
-    numberOfTimes: getNumberValidation({ max: 9_999_999_999, min: 0, integer: true, required: true }),
+    numberOfTimes: getNumberValidation({ max: 1_000_000, min: 0, integer: true, required: true }),
     costOfEach: getGenericCurrencyValidation({
       required: true,
     }),
