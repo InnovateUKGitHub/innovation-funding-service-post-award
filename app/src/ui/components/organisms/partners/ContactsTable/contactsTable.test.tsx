@@ -18,6 +18,7 @@ describe("<ContactsTable />", () => {
   const setup = (props?: Omit<IContactsTable, "projectContactLabels">) => {
     const defaultProps: IContactsTable = {
       contacts: [],
+      caption: "stub-caption",
     };
 
     return render(
@@ -84,7 +85,7 @@ describe("<ContactsTable />", () => {
         },
       ];
 
-      const { queryByText, queryByTestId } = setup({ contacts: stubContacts });
+      const { queryByText, queryByTestId } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       const noContactsElement = queryByText(stubContent.projectContactLabels.noContactsMessage);
       const contactsTable = queryByTestId("contacts-table-details");
@@ -117,7 +118,7 @@ describe("<ContactsTable />", () => {
         },
       ];
 
-      const { queryByText } = setup({ contacts: stubContacts });
+      const { queryByText } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       for (const contact of stubContacts) {
         expect(queryByText(contact.name)).toBeInTheDocument();
@@ -170,7 +171,7 @@ describe("<ContactsTable />", () => {
         },
       ];
 
-      const { container } = setup({ contacts: stubContacts });
+      const { container } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       const getValueByColumnName = (columnName: string) =>
         getColumnValues(container, "contacts-table-details", columnName).map(x => x.innerHTML);

@@ -76,13 +76,13 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     );
   };
 
-  const renderTable = (pcrs: PCRDashboardType[], qa: string, message: string) => {
+  const renderTable = (pcrs: PCRDashboardType[], qa: string, message: string, caption: string) => {
     if (!pcrs.length) {
       return <SimpleString>{message}</SimpleString>;
     }
 
     return (
-      <PCRTable.Table data={pcrs} qa={qa}>
+      <PCRTable.Table caption={caption} data={pcrs} qa={qa}>
         <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber} />
         <PCRTable.Custom
           qa="types"
@@ -199,17 +199,19 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
           active,
           "pcrs-active",
           getContent(x => x.pages.pcrsDashboard.noOngoingRequests),
+          getContent(x => x.pages.pcrsDashboard.currentRequests),
         )}
 
         {project.isActive && renderStartANewRequestLink()}
       </Section>
 
       <Accordion>
-        <AccordionItem title="Past requests" qa="past-requests">
+        <AccordionItem title={getContent(x => x.pages.pcrsDashboard.pastRequests)} qa="past-requests">
           {renderTable(
             archived,
             "pcrs-archived",
             getContent(x => x.pages.pcrsDashboard.noPastRequests),
+            getContent(x => x.pages.pcrsDashboard.pastRequests),
           )}
         </AccordionItem>
       </Accordion>

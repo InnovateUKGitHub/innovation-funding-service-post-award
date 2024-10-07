@@ -58,7 +58,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
-          <NumericTable.Table data={[1234]} qa="">
+          <NumericTable.Table data={[1234]} qa="" caption="stub-caption">
             <NumericTable.Number header={stubHeader} value={x => x} qa="val" />
           </NumericTable.Table>,
         );
@@ -72,7 +72,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
-          <NumericTable.Table data={[1234]} qa="">
+          <NumericTable.Table data={[1234]} qa="" caption="stub-caption">
             <NumericTable.Number header={x => x.components.loading.message} value={x => x} qa="val" />
           </NumericTable.Table>,
         );
@@ -87,7 +87,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
-          <NumericTable.Table data={[1234]} qa="">
+          <NumericTable.Table data={[1234]} qa="" caption="stub-caption">
             <NumericTable.Number header={<StubHeaderElement />} value={x => x} qa="val" />
           </NumericTable.Table>,
         );
@@ -101,7 +101,7 @@ describe("Table", () => {
 
       const NumericTable = createTypedTable<number>();
       const { queryByText } = setup(
-        <NumericTable.Table data={[stubNumber]} qa="">
+        <NumericTable.Table data={[stubNumber]} qa="" caption="stub-caption">
           <NumericTable.Number header="" value={x => x} qa="val" />
         </NumericTable.Table>,
       );
@@ -112,7 +112,7 @@ describe("Table", () => {
       const stubData = "stub-data";
       const StringTable = createTypedTable<string>();
       const { queryByText } = setup(
-        <StringTable.Table data={[stubData]} qa="">
+        <StringTable.Table data={[stubData]} qa="" caption="stub-caption">
           <StringTable.String header="" value={x => x} qa="val" />
         </StringTable.Table>,
       );
@@ -123,7 +123,7 @@ describe("Table", () => {
       const rows = [1, 2, 3];
       const NumberTable = createTypedTable<number>();
       const { queryByText } = setup(
-        <NumberTable.Table data={rows} qa="">
+        <NumberTable.Table data={rows} qa="" caption="stub-caption">
           <NumberTable.Number header="" value={x => x} qa="val" />
         </NumberTable.Table>,
       );
@@ -139,7 +139,7 @@ describe("Table", () => {
       const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
-        <TableComponent.Table data={data} qa="">
+        <TableComponent.Table data={data} qa="" caption="stub-caption">
           <TableComponent.String header={stubHeader} value={() => "Content"} qa="val" />
         </TableComponent.Table>,
       );
@@ -152,7 +152,7 @@ describe("Table", () => {
       const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
-        <TableComponent.Table data={data} qa="">
+        <TableComponent.Table data={data} qa="" caption="stub-caption">
           <TableComponent.String header={stubHiddenHeader} hideHeader value={() => "Content"} qa="val" />
         </TableComponent.Table>,
       );
@@ -165,7 +165,7 @@ describe("Table", () => {
       const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
-        <TableComponent.Table data={data} qa="">
+        <TableComponent.Table data={data} qa="" caption="stub-caption">
           <TableComponent.String header="The header" value={x => x} qa="val" />
         </TableComponent.Table>,
       );
@@ -179,7 +179,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
-          <NumericTable.Table data={testData} qa="stub-table-qa">
+          <NumericTable.Table data={testData} qa="stub-table-qa" caption="stub-caption">
             <NumericTable.String header="stub-header-name" value={x => x.name} qa="stub-qa-name" />
             <NumericTable.Number header="stub-header-age" value={x => x.age} qa="stub-qa-age" />
           </NumericTable.Table>,
@@ -202,7 +202,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
-          <NumericTable.Table data={testData} qa="stub-table-qa">
+          <NumericTable.Table data={testData} qa="stub-table-qa" caption="stub-caption">
             <NumericTable.String sortByKey="name" header="stub-header-name" value={x => x.name} qa="stub-qa-name" />
             <NumericTable.Number sortByKey="age" header="stub-header-age" value={x => x.age} qa="stub-qa-age" />
           </NumericTable.Table>,
@@ -243,7 +243,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
-          <NumericTable.Table data={testData} qa="stub-table-qa">
+          <NumericTable.Table data={testData} qa="stub-table-qa" caption="stub-caption">
             <NumericTable.String sortByKey="name" header="stub-header-name" value={x => x.name} qa="stub-qa-name" />
             <NumericTable.Number sortByKey="age" header="stub-header-age" value={x => x.age} qa="stub-qa-age" />
           </NumericTable.Table>,
@@ -314,7 +314,7 @@ describe("Table", () => {
         const NumericTable = createTypedTable<(typeof testData)[0]>();
 
         const { container } = setup(
-          <NumericTable.Table data={testData} qa="stub-table-qa">
+          <NumericTable.Table data={testData} qa="stub-table-qa" caption="stub-caption">
             <NumericTable.String sortByKey="name" header="stub-header-name" value={x => x.name} qa="stub-qa-name" />
             <NumericTable.Number sortByKey="age" header="stub-header-age" value={x => x.age} qa="stub-qa-age" />
           </NumericTable.Table>,

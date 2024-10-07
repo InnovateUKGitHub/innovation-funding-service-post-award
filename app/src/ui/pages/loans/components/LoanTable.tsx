@@ -1,15 +1,16 @@
+import type { ContentSelector } from "@copy/type";
 import { LoanDto } from "@framework/dtos/loanDto";
 import { Bold } from "@ui/components/atoms/Bold/bold";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { createTypedTable } from "@ui/components/molecules/Table/Table";
 
 // Note: The totals property has to be required to render the table
-type LoanTableProps = Required<LoanDto>;
+type LoanTableProps = Required<LoanDto> & { caption: string | React.ReactNode | ContentSelector };
 
 const Request = createTypedTable<LoanTableProps>();
 export const LoanRequestTable = (props: LoanTableProps) => {
   return (
-    <Request.Table data={[props]} qa="drawdown-request" className="loan-table">
+    <Request.Table data={[props]} qa="drawdown-request" className="loan-table" caption={props.caption}>
       <Request.String header="Drawdown" qa="drawdown-request-period" value={x => `${x.period}`} />
 
       <Request.FullNumericDate header="Due date" qa="drawdown-request-date" value={x => x.requestDate} />

@@ -23,6 +23,7 @@ describe("<LoansTable />", () => {
       isFc: true,
       isPm: true,
     },
+    caption: "stub-caption",
   };
 
   const setup = (props?: Partial<LoansTableProps>) =>

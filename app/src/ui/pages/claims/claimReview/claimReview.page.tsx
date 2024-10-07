@@ -162,6 +162,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
               costCategoryId,
             })
           }
+          caption={`Claim overview for ${partner.name} and period ${claim.periodId}`}
         />
       </Section>
 

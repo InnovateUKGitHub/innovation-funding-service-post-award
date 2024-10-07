@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 
 import {
-  createClaim,
   createClaimDetails,
   createClaimLink,
   createCostCategories,
@@ -10,7 +9,7 @@ import {
 } from "@framework/util/stubDtos";
 import TestBed from "@shared/TestBed";
 
-import { ClaimProps } from "@ui/components/organisms/claims/utils/costCategoryTableHelper";
+import { ClaimTableProps } from "@ui/components/organisms/claims/utils/costCategoryTableHelper";
 import { getColumnTextValues } from "@tests/test-utils/tableHelpers";
 
 import { ClaimTable } from "@ui/components/organisms/claims/ClaimTable/claimTable";
@@ -18,13 +17,13 @@ import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 describe("<ClaimTable />", () => {
-  const defaultStubData: ClaimProps = {
+  const defaultStubData: ClaimTableProps = {
     project: createProjectDto(),
     partner: createPartnerDto(),
     costCategories: createCostCategories(),
-    claim: createClaim(),
     claimDetails: createClaimDetails(),
     getLink: createClaimLink(),
+    caption: "stub-caption",
   };
 
   const stubContent = {
@@ -43,7 +42,7 @@ describe("<ClaimTable />", () => {
     },
   };
 
-  const setup = (props?: Partial<ClaimProps>) => {
+  const setup = (props?: Partial<ClaimTableProps>) => {
     return render(
       <TestBed>
         <ClaimTable {...defaultStubData} {...props} />
@@ -62,30 +61,20 @@ describe("<ClaimTable />", () => {
         ${"with first line"}  | ${0}     | ${["Labour", "£30,000.00", "£5,000.00", "£3,500.00", "£21,500.00"]}
         ${"with second line"} | ${1}     | ${["Overheads", "£6,000.00", "£1,000.00", "£700.00", "£4,300.00"]}
       `("$name", ({ rowIndex, expectedValues }) => {
-        const multipleLineItems: ClaimProps = {
+        const multipleLineItems: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
-              type: 10,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
             {
               id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
-              type: 20,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Overhead costs - a % of Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [
@@ -117,30 +106,20 @@ describe("<ClaimTable />", () => {
 
     describe("with conditional ui", () => {
       test("with error ui when total remaining costs is less than 0", () => {
-        const errorClaim: ClaimProps = {
+        const errorClaim: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
-              type: 10,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
             {
               id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
-              type: 20,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Overhead costs - a % of Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [
@@ -172,30 +151,20 @@ describe("<ClaimTable />", () => {
       });
 
       test("with warning message when a single line item is less than zero", () => {
-        const warningClaim: ClaimProps = {
+        const warningClaim: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
-              type: 10,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
             {
               id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
-              type: 20,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Overhead costs - a % of Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [

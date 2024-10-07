@@ -65,6 +65,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
       <Section title={<ClaimPeriodDate claim={data.claim} />}>
         <ClaimTable
+          caption={`Claim for period ${props.periodId} from ${data.claim.periodStartDate} to ${data.claim.periodEndDate}`}
           disabled={isNonEditable}
           {...data}
           getLink={costCategoryId =>

@@ -1,7 +1,7 @@
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { ReactNode } from "react";
-import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { Caption, createTypedTable } from "@ui/components/molecules/Table/Table";
 import { getPartnerName } from "../utils/partnerName";
 
 type PartnersTableType = {
@@ -15,6 +15,7 @@ export interface PartnersAndFinanceContactsProps {
   contactRoles: PartnersTableType[];
   qa: string;
   hidePartnerColumn?: boolean;
+  caption: Caption;
 }
 
 const PartnersTable = createTypedTable<PartnersTableType>();
@@ -25,11 +26,12 @@ export const PartnerContactRoleTable = ({
   footnote,
   qa,
   hidePartnerColumn = false,
+  caption,
 }: PartnersAndFinanceContactsProps) => {
   return (
     <>
       {comment}
-      <PartnersTable.Table qa={qa} data={contactRoles}>
+      <PartnersTable.Table qa={qa} data={contactRoles} caption={caption}>
         {[
           <PartnersTable.String
             qa="fc-name"

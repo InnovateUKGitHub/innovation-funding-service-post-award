@@ -6,7 +6,7 @@ import { LoanStatus } from "@framework/entities/loan-status";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Bold } from "@ui/components/atoms/Bold/bold";
 import { Currency } from "@ui/components/atoms/Currency/currency";
-import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { Caption, createTypedTable } from "@ui/components/molecules/Table/Table";
 import { Link } from "@ui/components/atoms/Links/links";
 import { Button } from "@ui/components/atoms/Button/Button";
 
@@ -14,10 +14,11 @@ export interface LoansTableProps {
   items: Loan[];
   createLink: (id: LoanId) => ILinkInfo;
   roles: { readonly isMo: boolean; readonly isFc: boolean; readonly isPm: boolean };
+  caption: Caption;
 }
 
 const Drawdown = createTypedTable<Loan>();
-export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
+export const LoansTable = ({ items, createLink, roles, caption }: LoansTableProps) => {
   const { getContent } = useContent();
 
   const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
@@ -43,7 +44,13 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
   };
 
   return (
-    <Drawdown.Table data={items} qa="drawdown-list" className="loan-table" bodyRowClass={getRowClassName}>
+    <Drawdown.Table
+      data={items}
+      qa="drawdown-list"
+      className="loan-table"
+      bodyRowClass={getRowClassName}
+      caption={caption}
+    >
       <Drawdown.String
         header={getContent(x => x.components.loansTable.drawdown)}
         qa="drawdown-period"

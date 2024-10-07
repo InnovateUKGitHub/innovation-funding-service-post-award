@@ -46,7 +46,7 @@ export const Primary: Story = {
     const Table = createTypedTable<IData>();
 
     return (
-      <Table.Table qa="primary-table" data={data}>
+      <Table.Table qa="primary-table" data={data} caption="stub-caption">
         <Table.String qa="col-number" header="Id" value={x => x.id} />
         <Table.String qa="col-string" header="Name" value={x => x.name} />
         <Table.Currency qa="col-currency" header="Cost" value={x => x.cost} />
@@ -62,7 +62,7 @@ export const CustomColumn: Story = {
     const Table = createTypedTable<IData>();
 
     return (
-      <Table.Table qa="primary-table" data={data}>
+      <Table.Table qa="primary-table" data={data} caption="stub-caption">
         <Table.String qa="col-string" header="Id" value={x => x.id} />
         <Table.Custom
           qa="col-custom"
@@ -83,7 +83,7 @@ export const CustomFooter: Story = {
     const Table = createTypedTable<IData>();
 
     return (
-      <Table.Table qa="primary-table" data={data}>
+      <Table.Table qa="primary-table" data={data} caption="stub-caption">
         <Table.String qa="col-string" footer="Total costs" header="Id" value={x => x.id} />
         <Table.Currency
           qa="col-currency"

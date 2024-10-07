@@ -23,7 +23,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
   return (
     <Page fragmentRef={fragmentRef} backLink={<ProjectBackLink projectId={project.id} />}>
       <Section qa="project-forecasts">
-        <Table.Table data={partners} qa="partner-table">
+        <Table.Table data={partners} qa="partner-table" caption="Forecasts summary for project">
           <Table.Custom
             header={x => x.pages.forecastsDashboard.headerPartner}
             value={x => getPartnerName(x, true)}

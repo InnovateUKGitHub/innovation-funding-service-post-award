@@ -302,6 +302,8 @@
     "pcrsDashboard": {
       "title": "Project change requests",
       "create": "Create request",
+      "pastRequests": "Past requests",
+      "currentRequests": "Open project change requests",
       "noOngoingRequests": "You have no ongoing requests.",
       "noPastRequests": "You have no past requests.",
       "requestNumber": "Request number",

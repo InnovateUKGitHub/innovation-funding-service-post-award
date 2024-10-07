@@ -117,6 +117,7 @@ describe("<PartnersAndFinanceContacts />", () => {
         partners: testPartnerData,
         partnerRole,
       }),
+      caption: "stub-caption",
       qa: "partner-contact-role-table",
     };
 

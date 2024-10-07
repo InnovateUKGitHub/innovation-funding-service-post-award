@@ -63,7 +63,7 @@ const OtherContactProjectDetailsComponent = ({
 
   return (
     <Section title={x => x.projectLabels.otherContacts} qa="other-contacts-table">
-      <ContactsTable contacts={otherContacts} />
+      <ContactsTable contacts={otherContacts} caption={x => x.projectLabels.otherContacts} />
     </Section>
   );
 };
@@ -113,7 +113,7 @@ const PartnerInformationTable = ({
 
   return (
     <Section title={x => x.projectLabels.partners}>
-      <PartnersTable.Table qa="partner-information" data={partners}>
+      <PartnersTable.Table qa="partner-information" data={partners} caption={x => x.projectLabels.partners}>
         <PartnersTable.Custom
           header={x => x.pages.partnerDetails.projectContactLabels.partnerName}
           value={x => <PartnerName project={project} partner={x} readonly={isAssociate && !isFc && !isPmOrMo} />}
@@ -196,6 +196,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
         {project.monitoringLevel !== ProjectMonitoringLevel.InternalAssurance && (
           <Section title={x => x.projectLabels.monitoringOfficers({ count: monitoringOfficers.length })}>
             <PartnerContactRoleTable
+              caption={x => x.projectLabels.monitoringOfficers({ count: monitoringOfficers.length })}
               hidePartnerColumn
               qa="monitoring-officer-details"
               contactRoles={monitoringOfficers}
@@ -205,6 +206,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
         <Section title={x => x.projectLabels.projectManagers({ count: projectManagers.length })}>
           <PartnerContactRoleTable
+            caption={x => x.projectLabels.projectManagers({ count: projectManagers.length })}
             qa="project-manager-details"
             contactRoles={projectManagers}
             comment={
@@ -219,6 +221,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
         <Section title={x => x.projectLabels.financeContacts({ count: financeContacts.length })}>
           <PartnerContactRoleTable
+            caption={x => x.projectLabels.financeContacts({ count: financeContacts.length })}
             qa="finance-contact-details"
             contactRoles={financeContacts}
             comment={
@@ -243,13 +246,23 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
         {innovationLead?.length > 0 && (
           <Section title={x => x.projectLabels.innovationLeads({ count: innovationLead.length })}>
-            <PartnerContactRoleTable hidePartnerColumn qa="innovation-lead-details" contactRoles={innovationLead} />
+            <PartnerContactRoleTable
+              caption={x => x.projectLabels.innovationLeads({ count: innovationLead.length })}
+              hidePartnerColumn
+              qa="innovation-lead-details"
+              contactRoles={innovationLead}
+            />
           </Section>
         )}
 
         {ipm?.length > 0 && (
           <Section title={x => x.projectLabels.ipms({ count: ipm.length })}>
-            <PartnerContactRoleTable hidePartnerColumn qa="ipm-details" contactRoles={ipm} />
+            <PartnerContactRoleTable
+              caption={x => x.projectLabels.ipms({ count: ipm.length })}
+              hidePartnerColumn
+              qa="ipm-details"
+              contactRoles={ipm}
+            />
           </Section>
         )}
 

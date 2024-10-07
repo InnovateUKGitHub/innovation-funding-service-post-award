@@ -44,7 +44,12 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
 
       <Section title={<Content value={x => x.pages.monitoringReportsDashboard.sectionTitleOpen} />}>
         {reportSections.open.length ? (
-          <MonitoringReportTable reports={reportSections.open} section="current" routes={props.routes} />
+          <MonitoringReportTable
+            reports={reportSections.open}
+            section="current"
+            routes={props.routes}
+            caption={x => x.pages.monitoringReportsDashboard.sectionTitleOpen}
+          />
         ) : (
           <SimpleString>
             <Content value={x => x.monitoringReportsMessages.noOpenReportsMessage} />
@@ -54,7 +59,12 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
 
       <Section title={<Content value={x => x.pages.monitoringReportsDashboard.sectionTitleArchived} />}>
         {reportSections.archived.length ? (
-          <MonitoringReportTable reports={reportSections.archived} section="previous" routes={props.routes} />
+          <MonitoringReportTable
+            reports={reportSections.archived}
+            section="previous"
+            routes={props.routes}
+            caption={x => x.pages.monitoringReportsDashboard.sectionTitleArchived}
+          />
         ) : (
           <SimpleString>
             <Content value={x => x.monitoringReportsMessages.noArchivedReportsMessage} />
@@ -69,10 +79,12 @@ const MonitoringReportTable = ({
   reports,
   section,
   routes,
+  caption,
 }: {
   reports: MonitoringReport[];
   section: "current" | "previous";
   routes: IRoutes;
+  caption: ContentSelector;
 }) => {
   const { getContent } = useContent();
 
@@ -81,6 +93,7 @@ const MonitoringReportTable = ({
       data={reports}
       bodyRowFlag={x => (section !== "current" ? null : editStatuses.indexOf(x.status) >= 0 ? "edit" : null)}
       qa={`${section}-reports-table`}
+      caption={caption}
     >
       <ReportsTable.Custom
         header={getContent(x => x.pages.monitoringReportsDashboard.headerTitle)}

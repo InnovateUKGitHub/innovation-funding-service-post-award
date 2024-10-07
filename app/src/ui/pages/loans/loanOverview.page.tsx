@@ -42,6 +42,7 @@ const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
           items={loans}
           roles={project.roles}
           createLink={loanId => props.routes.loansRequest.getLink({ projectId: project.id, loanId })}
+          caption="Loan overview"
         />
       </Section>
     </Page>

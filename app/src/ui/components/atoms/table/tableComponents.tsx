@@ -92,7 +92,14 @@ const TFoot = ({ className, ...props }: HTMLProps<HTMLTableSectionElement> & Com
   <tfoot {...props} className={classNames("govuk-table__foot", className)} />
 );
 const TCaption = ({ className, ...props }: HTMLProps<HTMLTableCaptionElement> & CommonTableProps) => (
-  <caption {...props} className={classNames("govuk-caption govuk-table__caption--m", className)} />
+  <caption
+    {...props}
+    className={classNames(
+      "govuk-caption govuk-table__caption--m",
+      { "govuk-visually-hidden": !!props.hidden },
+      className,
+    )}
+  />
 );
 const Table = ({ className, ...props }: HTMLProps<HTMLTableElement> & CommonTableProps) => (
   <div className="govuk-table-wrapper">
