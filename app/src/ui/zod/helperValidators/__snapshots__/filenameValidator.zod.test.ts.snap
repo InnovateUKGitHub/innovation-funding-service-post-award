@@ -45,7 +45,7 @@ exports[`filenameValidator invalid character in name 1`] = `
           "fs"
         ]
       ],
-      "count": 2,
+      "count": 3,
       "root": "",
       "dir": "",
       "base": "???.txt",
