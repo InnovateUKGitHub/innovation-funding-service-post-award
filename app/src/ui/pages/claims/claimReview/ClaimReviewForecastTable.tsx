@@ -29,6 +29,7 @@ const ClaimReviewForecastTable = ({
         queryOptions={refreshedQueryOptions}
         isProjectSetup={false}
         isOpen={isOpen}
+        caption={content.tableCaption}
       />
     </AccordionItem>
   );

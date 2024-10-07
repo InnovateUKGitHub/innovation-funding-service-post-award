@@ -48,7 +48,7 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
             reports={reportSections.open}
             section="current"
             routes={props.routes}
-            caption={x => x.pages.monitoringReportsDashboard.sectionTitleOpen}
+            caption={x => x.pages.monitoringReportsDashboard.openReportsTableCaption}
           />
         ) : (
           <SimpleString>
@@ -63,7 +63,7 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
             reports={reportSections.archived}
             section="previous"
             routes={props.routes}
-            caption={x => x.pages.monitoringReportsDashboard.sectionTitleArchived}
+            caption={x => x.pages.monitoringReportsDashboard.archivedReportsTableCaption}
           />
         ) : (
           <SimpleString>

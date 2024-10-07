@@ -111,6 +111,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
             disabled={isFetching}
             trigger={trigger}
             isProjectSetup={false}
+            caption={getContent(x => x.components.forecastTable.caption)}
           />
           <P>
             {getContent(x => x.components.claimLastModified.message)}

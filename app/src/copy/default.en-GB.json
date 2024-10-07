@@ -149,7 +149,8 @@
       "iarNotDue": "No",
       "month": "Month",
       "costCategoriesHeader": "Cost categories",
-      "inputLabel": "{{ costCategoryName }} Period {{ period }}"
+      "inputLabel": "{{ costCategoryName }} Period {{ period }}",
+      "caption": "Forecast table"
     },
     "reportForm": {
       "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
@@ -448,7 +449,8 @@
       "backLink": "Back to set up your project",
       "readyToSubmitMessage": "This is ready to submit.",
       "markAsComplete": "Mark as complete",
-      "spendProfileUpdatedMessage": "Your spend profile has been updated."
+      "spendProfileUpdatedMessage": "Your spend profile has been updated.",
+      "caption": "Set spend profile"
     },
     "failedBankCheckConfirmation": {
       "title": "We need more information",
@@ -736,7 +738,9 @@
         "display": "Monitoring reports"
       },
       "buttonNewMonitoringReport": "Start a new report",
+      "openReportsTableCaption": "Open monitoring reports",
       "sectionTitleOpen": "Open",
+      "archivedReportsTableCaption": "Archived monitoring reports",
       "sectionTitleArchived": "Archived",
       "linkViewMonitoringReport": "View report",
       "linkEditMonitoringReport": "Edit report",

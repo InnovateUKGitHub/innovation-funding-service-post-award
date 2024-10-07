@@ -209,6 +209,7 @@ export function useReviewContent() {
     sectionTitleAdditionalInfo: getContent(x => x.pages.claimReview.sectionTitleAdditionalInfo),
     sectionTitleHowToProceed: getContent(x => x.pages.claimReview.sectionTitleHowToProceed),
     uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
+    tableCaption: getContent(x => x.components.forecastTable.caption),
   };
 }
 
