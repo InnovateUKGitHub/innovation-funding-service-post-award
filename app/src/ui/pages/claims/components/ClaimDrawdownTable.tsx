@@ -1,7 +1,7 @@
 import { ProjectDto } from "@framework/dtos/projectDto";
 
 import { useClaimDrawdownTableData } from "./claimDrawdownTable.logic";
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
+import { Table, TBody, TCaption, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 
@@ -21,6 +21,7 @@ export const ClaimDrawdownTable = (props: ClaimDrawdownTableProps) => {
 
   return (
     <Table>
+      <TCaption hidden>{getContent(x => x.pages.claimDrawdownTable.caption)}</TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.claimDrawdownTable.currentDrawdown)}</TH>

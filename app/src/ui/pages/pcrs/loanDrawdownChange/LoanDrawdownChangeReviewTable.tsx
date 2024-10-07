@@ -3,7 +3,7 @@ import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { FullDate, FullNumericDate } from "@ui/components/atoms/Date";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TH, THead, TR, Table, TD, TFoot } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TH, THead, TR, Table, TD, TFoot, TCaption } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
 import { EditLink } from "../pcrItemSummaryLinks";
@@ -27,6 +27,7 @@ export const LoanDrawdownChangeReviewTable = ({
 
   return (
     <Table>
+      <TCaption hidden>{getContent(x => x.pages.loansRequest.tableCaption)}</TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.loansRequest.drawdownPeriodLabel)}</TH>

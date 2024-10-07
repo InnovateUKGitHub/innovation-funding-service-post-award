@@ -9,7 +9,7 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -103,6 +103,7 @@ export const FinancialVirementSummary = () => {
 
       {mode === "prepare" ? (
         <Table>
+          <TCaption hidden>{getContent(x => x.reallocateCostsLabels.tableCaption)}</TCaption>
           <THead>
             <TR>
               <TH className={colClass}>{getContent(x => x.reallocateCostsLabels.partnerName)}</TH>

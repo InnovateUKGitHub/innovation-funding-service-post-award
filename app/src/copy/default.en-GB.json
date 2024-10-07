@@ -235,7 +235,8 @@
       "details": "Details",
       "externalUsername": "External username",
       "internalUsername": "Internal username",
-      "endDate": "End date: "
+      "endDate": "End date: ",
+      "tableCaption": "User switcher contacts"
     },
     "pageCrasher": {
       "sectionTitle": "Page Crasher",
@@ -368,7 +369,8 @@
       "associate": "Associate",
       "email": "Email address",
       "startDate": "Start date",
-      "saveAndReturn": "Save and return to dashboard"
+      "saveAndReturn": "Save and return to dashboard",
+      "tableCaption": "Project associates"
     },
     "projectOverview": {
       "title": "Project overview",
@@ -498,14 +500,16 @@
       "totalLoan": "Total loan",
       "drawdownToDate": "Drawdown to date",
       "drawdownAmount": "Drawdown amount",
-      "remainingLoan": "Remaining loan"
+      "remainingLoan": "Remaining loan",
+      "tableCaption": "Drawdown table"
     },
     "claimDrawdownTable": {
       "currentDrawdown": "Current drawdown",
       "totalLoanAmount": "Total loan amount",
       "drawdownsToDate": "Drawdowns to date",
       "drawdownThisPeriod": "Drawdown this period",
-      "remainingLoanAmount": "Remaining loan amount"
+      "remainingLoanAmount": "Remaining loan amount",
+      "caption": "Claim drawdown table"
     },
     "financeSummary": {
       "title": "Finance summary",
@@ -618,7 +622,8 @@
       "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save.",
       "readonlyMessage": "This claim has already been submitted. No changes can be made at this time.",
       "descriptionAriaLabel": "Description of claim line item {{ count }}",
-      "costAriaLabel": "Cost of claim line item {{ count }}"
+      "costAriaLabel": "Cost of claim line item {{ count }}",
+      "tableCaption": "Claim line items"
     },
     "claimPrepare": {
       "title": "Costs to be claimed",
@@ -922,7 +927,8 @@
         "currentLength": "Current length (quarters)",
         "currentEndDate": "Current end date",
         "newLength": "New length (quarters)",
-        "newEndDate": "New end date"
+        "newEndDate": "New end date",
+        "tableCaption": "Loan drawdown extension table"
       },
       "approveNewSubcontractorMessage": "If you are requesting a change in subcontractor, please select this option.",
       "manageTeamMembersMessage": "This allows you to add a new project team member or to change the role of an existing team member.",
@@ -980,7 +986,8 @@
       "costsGuidance": "Enter the figures from the summary of resources section of the Je-S form.",
       "categoryHeading": "Category",
       "costHeading": "Cost",
-      "totalCosts": "Total costs (£)"
+      "totalCosts": "Total costs (£)",
+      "tableCaption": "Academic costs table"
     },
     "pcrAddPartnerAcademicOrganisation": {
       "hint": "Enter the name of the organisation that you work for.",
@@ -1027,7 +1034,8 @@
       "totalCosts": "Total costs (£)",
       "costHeading": "Cost (£)",
       "labelView": "View",
-      "labelEdit": "Edit"
+      "labelEdit": "Edit",
+      "tableCaption": "Spend profile table"
     },
     "pcrAddPartnerOtherFunding": {
       "formSectionTitle": "Other public sector funding?",
@@ -1045,7 +1053,8 @@
       "buttonRemove": "Remove",
       "buttonAdd": "Add another source of funding",
       "footerLabelTotal": "Total other funding",
-      "actionHeader": "Action"
+      "actionHeader": "Action",
+      "tableCaption": "Other sources of funding table"
     },
     "pcrAddPartnerAgreementToPcr": {
       "guidance": "You must upload copies of signed letters from all other project partners to show they have agreed to this change",
@@ -1712,7 +1721,8 @@
     "partnerTotals": "Partner totals",
     "grantMovingOverYear": "Grant value moving over the financial year end",
     "backToSummary": "Back to summary",
-    "reasoningComments": "Reasoning for the request"
+    "reasoningComments": "Reasoning for the request",
+    "tableCaption": "Reallocate costs table"
   },
   "forecastsLabels": {
     "overheadCosts": "Overhead costs: "

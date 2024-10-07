@@ -14,7 +14,7 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { useMounted } from "@ui/context/Mounted";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -150,6 +150,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
 
         <Section title={partner.name}>
           <Table data-qa="partnerVirements">
+            <TCaption hidden>{getContent(x => x.reallocateCostsLabels.tableCaption)}</TCaption>
             <THead>
               <TR>
                 <TH>{getContent(x => x.reallocateCostsLabels.costCategoryName)}</TH>

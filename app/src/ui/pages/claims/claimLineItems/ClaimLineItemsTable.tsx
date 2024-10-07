@@ -5,7 +5,7 @@ import { ShortDate } from "@ui/components/atoms/Date";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/context/Mounted";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useContent } from "@ui/hooks/content.hook";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
@@ -29,6 +29,7 @@ interface ClaimLineItemsTableProps {
 interface EditClaimLineItemsTableProps extends ClaimLineItemsTableProps {
   formMethods: UseFormReturn<z.output<EditClaimLineItemsSchemaType>>;
   disabled?: boolean;
+  caption: string;
 }
 
 const EditClaimLineItemsTable = ({
@@ -38,6 +39,7 @@ const EditClaimLineItemsTable = ({
   disabled,
   differenceRow = true,
   boldTotalCosts = false,
+  caption,
 }: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
@@ -60,6 +62,7 @@ const EditClaimLineItemsTable = ({
 
   return (
     <Table data-qa="current-claim-summary-table">
+      <TCaption hidden>{caption}</TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>

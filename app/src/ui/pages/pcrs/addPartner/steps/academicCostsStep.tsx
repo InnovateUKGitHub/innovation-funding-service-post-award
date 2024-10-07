@@ -20,7 +20,7 @@ import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
@@ -115,6 +115,7 @@ export const AcademicCostsStep = () => {
           </Fieldset>
 
           <Table>
+            <TCaption hidden>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.tableCaption)}</TCaption>
             <THead>
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading)}</TH>

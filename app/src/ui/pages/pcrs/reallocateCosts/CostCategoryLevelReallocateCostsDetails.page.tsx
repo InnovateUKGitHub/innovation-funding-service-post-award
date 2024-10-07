@@ -1,7 +1,7 @@
 import { roundCurrency } from "@framework/util/numberHelper";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { BackLink } from "@ui/components/atoms/Links/links";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -98,6 +98,7 @@ const EditPage = ({
           </Info>
         )}
         <Table>
+          <TCaption hidden>{getContent(x => x.reallocateCostsLabels.tableCaption)}</TCaption>
           <THead>
             <TR>
               <TH>{getContent(x => x.reallocateCostsLabels.costCategoryName)}</TH>

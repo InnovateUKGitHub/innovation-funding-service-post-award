@@ -6,7 +6,7 @@ import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TH, THead, TR, Table, TD, TFoot } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TH, THead, TR, Table, TD, TFoot, TCaption } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
@@ -37,6 +37,7 @@ export const LoanDrawdownChangeEditTable = ({
 
   return (
     <Table>
+      <TCaption hidden>{getContent(x => x.pages.loansRequest.tableCaption)}</TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.loansRequest.drawdownPeriodLabel)}</TH>

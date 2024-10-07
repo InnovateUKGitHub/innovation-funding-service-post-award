@@ -6,7 +6,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { getInitialAcademicCosts, useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { PcrPage } from "../../pcrPage";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { sumBy } from "lodash";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
@@ -28,6 +28,7 @@ export const AcademicCostsReviewStep = () => {
 
         <Section title={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
           <Table>
+            <TCaption hidden>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.tableCaption)}</TCaption>
             <THead>
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading)}</TH>

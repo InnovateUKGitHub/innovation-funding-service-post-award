@@ -13,7 +13,7 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
-import { Table, TBody, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
+import { Table, TBody, TCaption, TD, TH, THead, TR } from "@ui/components/atoms/table/tableComponents";
 import { Section } from "@ui/components/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/context/Mounted";
@@ -121,6 +121,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
       <H4>{project.Acc_ProjectTitle__c?.value}</H4>
 
       <Table data-qa="user-switcher-contacts">
+        <TCaption hidden>{getContent(x => x.components.userSwitcher.tableCaption)}</TCaption>
         <THead>
           <TR>
             <TH>{getContent(x => x.projectContactLabels.contactName)}</TH>

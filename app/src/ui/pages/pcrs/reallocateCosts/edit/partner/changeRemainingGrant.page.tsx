@@ -9,7 +9,7 @@ import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atoms/Section/Section";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
@@ -47,6 +47,7 @@ export function useChangeRemainingGrantContent() {
     projectTotals: getContent(x => x.reallocateCostsLabels.projectTotals),
     backToSummary: getContent(x => x.reallocateCostsLabels.backToSummary),
     gbp: getContent(x => x.forms.prefix.gbp),
+    tableCaption: getContent(x => x.reallocateCostsLabels.tableCaption),
   };
 }
 
@@ -174,6 +175,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
           <input type="hidden" value={virementData.newRemainingGrant} {...register("newRemainingGrant")} />
           <input type="hidden" value={virementData.newRemainingCosts} {...register("newRemainingCosts")} />
           <Table data-qa="partner-virements">
+            <TCaption hidden>{content.tableCaption}</TCaption>
             <THead>
               <TR>
                 <TH dividerRight>{content.partnerName}</TH>

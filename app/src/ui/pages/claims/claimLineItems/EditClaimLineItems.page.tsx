@@ -113,6 +113,7 @@ const EditClaimLineItemsPage = ({
             disabled={isFetching}
             differenceRow={true}
             boldTotalCosts={false}
+            caption={getContent(x => x.pages.editClaimLineItems.tableCaption)}
           />
         </Section>
 

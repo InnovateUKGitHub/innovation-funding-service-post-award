@@ -1,6 +1,6 @@
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atoms/Percentage/percentage";
-import { Table, THead, TR, TH, TBody, TD, TFoot } from "@ui/components/atoms/table/tableComponents";
+import { Table, THead, TR, TH, TBody, TD, TFoot, TCaption } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { MappedFinancialVirements } from "../../utils/useMapFinancialVirements";
 import { useRoutes } from "@ui/context/routesProvider";
@@ -28,6 +28,7 @@ const FinancialVirementsViewTable = ({
 
   return (
     <Table>
+      <TCaption hidden>{getContent(x => x.reallocateCostsLabels.tableCaption)}</TCaption>
       <THead>
         <TR>
           <TH small className={colClass}>

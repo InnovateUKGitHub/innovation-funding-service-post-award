@@ -17,7 +17,7 @@ import { PcrPage } from "../../pcrPage";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
@@ -343,6 +343,7 @@ export const OtherSourcesOfFundingStep = () => {
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerOtherSourcesOfFundingStep} />
           <Fieldset>
             <Table>
+              <TCaption hidden>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.tableCaption)}</TCaption>
               <THead>
                 <TR>
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDescription)}</TH>

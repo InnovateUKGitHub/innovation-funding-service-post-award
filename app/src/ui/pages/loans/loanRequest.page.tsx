@@ -10,7 +10,7 @@ import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { Messages } from "@ui/components/molecules/Messages/messages";
 import { useLoanRequestData, useOnUpdateLoanRequest } from "./loanRequest.logic";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
-import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { FullNumericDate } from "@ui/components/atoms/Date";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { Button } from "@ui/components/atoms/form/Button/Button";
@@ -179,6 +179,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 
       <Section>
         <Table>
+          <TCaption hidden>{getContent(x => x.pages.loansRequest.tableCaption)}</TCaption>
           <THead>
             <TR>
               <TH>{getContent(x => x.pages.loansRequest.drawdownPeriodLabel)}</TH>
