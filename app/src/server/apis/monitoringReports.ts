@@ -81,8 +81,9 @@ class Controller
     params: ApiParams<"server", { projectId: ProjectId; reportId: MonitoringReportId }>,
   ) {
     const { projectId, reportId } = params;
+    const context = await contextProvider.start(params);
     const command = new DeleteMonitoringReportCommand(projectId, reportId);
-    (await contextProvider.start(params)).runCommand(command);
+    await context.runCommand(command);
 
     return true;
   }
