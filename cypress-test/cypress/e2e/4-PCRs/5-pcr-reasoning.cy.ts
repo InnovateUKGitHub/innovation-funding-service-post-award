@@ -189,7 +189,7 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
   });
 
   it("Should validate the maximum text allowed in the reasoning box", () => {
-    cy.textValidation("Reasoning", 32000, "Save and continue", true, "Reasons");
+    cy.textValidation("Reasoning", 32000, "Save and continue", true, false, false, "Reasons");
   });
 
   it("Should save the comments and proceed", () => {

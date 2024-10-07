@@ -341,7 +341,15 @@ declare global {
       /**
        * Tests a textarea input for maximum length of characters,
        */
-      textValidation(message: string, length: number, buttonName: string, textarea: boolean, label?: string): void;
+      textValidation(
+        message: string,
+        length: number,
+        buttonName: string,
+        textarea: boolean,
+        jsdisabled?: boolean,
+        mor?: boolean,
+        label?: string,
+      ): void;
     }
   }
 }

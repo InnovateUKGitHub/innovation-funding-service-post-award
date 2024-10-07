@@ -583,12 +583,25 @@ const inputSuffix = (label: string, n: number) => {
     });
 };
 
-const textValidation = (message: string, length: number, buttonName: string, textarea: boolean, label?: string) => {
+const textValidation = (
+  message: string,
+  length: number,
+  buttonName: string,
+  textarea: boolean,
+  jsdisabled?: boolean,
+  mor?: boolean,
+  label?: string,
+) => {
   let largeText = getLorem(length);
   if (textarea) {
-    cy.get("textarea").clear().invoke("val", largeText).trigger("input");
-    cy.get("textarea").type("{moveToEnd}t");
-    cy.get("p").contains("You have 1 character too many");
+    if (jsdisabled) {
+      cy.get("textarea").clear().invoke("val", largeText).trigger("input");
+      cy.get("textarea").type("{moveToEnd}t");
+    } else {
+      cy.get("textarea").clear().invoke("val", largeText).trigger("input");
+      cy.get("textarea").type("{moveToEnd}t");
+      cy.get("p").contains("You have 1 character too many");
+    }
   } else
     cy.get("main").then($checkMain => {
       if ($checkMain.text().includes(label)) {
@@ -607,16 +620,27 @@ const textValidation = (message: string, length: number, buttonName: string, tex
     cy.paragraph(`${message} must be ${length} characters or less.`);
   }
   if (textarea) {
-    cy.get("textarea").type("{backSpace}");
-    cy.get("p").contains("You have 0 characters remaining");
+    if (jsdisabled) {
+      cy.get("textarea").clear().invoke("val", largeText).trigger("input");
+    } else {
+      cy.get("textarea").type("{backSpace}");
+      cy.get("p").contains("You have 0 characters remaining");
+    }
   } else {
     cy.get("main").then($checkMain => {
       if ($checkMain.text().includes(label)) {
-        cy.getByLabel(label).type("{backSpace}");
+        if (jsdisabled) {
+          cy.getByLabel(label).clear().invoke("val", largeText).trigger("input");
+        } else {
+          cy.getByLabel(label).type("{backSpace}");
+        }
       } else {
         cy.getByAriaLabel(label).type("{backSpace}");
       }
     });
+  }
+  if (jsdisabled && mor) {
+    cy.getByQA(label).check();
   }
   cy.clickOn(buttonName);
   cy.getByQA("validation-summary").should("not.exist");

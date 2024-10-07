@@ -1,0 +1,99 @@
+import { visitApp } from "common/visit";
+import {
+  clickMoReportTile,
+  clickStartNewReportButton,
+  continueAndReturnButtons,
+  periodSelection,
+  q1ScoreChoice,
+  q1SelectEachRadioButton,
+  shouldShowProjectTitle,
+  standardComments,
+  deleteMoReport,
+  saveSectionOneAndCheckSummary,
+  saveCommentsAndReturn,
+  checkCommentsSaved,
+  validateMORSection,
+} from "./steps";
+
+const moContactEmail = "testman2@testing.com";
+
+describe("MO report > section 1 - can continue a report - js-disabled", { tags: "js-disabled" }, () => {
+  before(() => {
+    visitApp({ asUser: moContactEmail, jsDisabled: true });
+    cy.navigateToProject("328407");
+  });
+
+  beforeEach(() => {
+    cy.disableJs();
+  });
+
+  after(() => {
+    deleteMoReport();
+  });
+
+  it("should click the MO Reports tile", clickMoReportTile);
+
+  it("Should click the 'Start a new report' button", clickStartNewReportButton);
+
+  it("Should display a period selection box and allow a figure to be entered", periodSelection);
+
+  it("Should continue to the next page", () => {
+    cy.button("Continue").click();
+  });
+
+  it("Should show the period number", () => {
+    cy.get("h2").contains("Period 1");
+  });
+
+  it("Should have a back link", () => {
+    cy.backLink("Back to Monitoring Reports");
+  });
+
+  it("Should show the project title", shouldShowProjectTitle);
+
+  it("Should show the heading 'Monitoring report'", () => {
+    cy.heading("Monitoring report");
+  });
+
+  it("Should show Section 1 of 8 heading", () => {
+    cy.get("h3").contains("Section 1 of 8");
+  });
+
+  it("Should show subheading 'Scope'", () => {
+    cy.get("Legend").contains("Scope");
+  });
+
+  it("Should have a paragraph with guidance on how to complete the report", () => {
+    cy.get("#hint-for-questions").contains("For each question score the project");
+  });
+
+  it("Should have a number of score options", q1ScoreChoice);
+
+  it("Should be able to select each radio button in turn", q1SelectEachRadioButton);
+
+  it("Should have a subheading above the comment box", () => {
+    cy.get("label").contains("Comment");
+  });
+
+  it("Should validate maximum number of characters", () => validateMORSection("1", "scope", true));
+
+  it("Should select radio score 1", () => {
+    cy.getByQA("question-1-score-1").check();
+  });
+
+  it("Should clear the text box and enter standard", () => {
+    cy.get("textarea").clear().type(standardComments);
+    cy.wait(500);
+  });
+
+  it("Should have a 'Continue' button and a 'Save and return to summary' button", continueAndReturnButtons);
+
+  it(
+    "Should click 'Save and return to summary' and assert the completed section appears in the summary correctly",
+    saveSectionOneAndCheckSummary,
+  );
+
+  it("Should enter comments into the Comments box and click Save and return", saveCommentsAndReturn);
+
+  it("Should check that the comments correctly saved", checkCommentsSaved);
+});

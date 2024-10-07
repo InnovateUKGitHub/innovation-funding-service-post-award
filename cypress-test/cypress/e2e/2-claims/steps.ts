@@ -166,7 +166,15 @@ export const newCostCatLineItem = (academic: boolean) => {
   cy.clickOn("Add a cost");
   cy.wait(200);
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
-  cy.textValidation("Description", 250, "Save and return to claims", false, "Description of claim line item 0");
+  cy.textValidation(
+    "Description",
+    250,
+    "Save and return to claims",
+    false,
+    false,
+    false,
+    "Description of claim line item 0",
+  );
   cy.heading("Costs to be claimed");
   if (academic) {
     cy.get("a").contains("Directly incurred - Staff").click();
