@@ -230,10 +230,8 @@ class MonitoringReports {
     await this.period.clear();
     await this.continueButton.click();
     await this.validationMessage("Enter period.");
-    await this.inputInvalStep(
-      ["Lorem", "-", "1.1", "0.5", "100.5", "3000.5", "£$%^&*()", "dasq123cc", "1asd", "asff1"],
-      "Period must be a whole number, like 3.",
-    );
+    await this.inputInvalStep(["Lorem", "-", "£$%^&*()", "dasq123cc", "1asd", "asff1"], "Period must be a number.");
+    await this.inputInvalStep(["1.1", "0.5", "100.5", "3000.5"], "Period must be a whole number, like 15.");
     await this.inputInvalStep(
       ["-1", "-999999999999", "0", "12", "100", "99999999999999999999999999999999999999999"],
       "Period must be 1.",
