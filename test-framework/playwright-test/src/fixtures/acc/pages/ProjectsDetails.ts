@@ -43,6 +43,7 @@ class ProjectDetails {
   private readonly projectInformationNoOfPeriods: Locator;
   private readonly projectInformationStartDateVal: string;
   private readonly projectInformationEndDateVal: string;
+  private readonly pageTitleCommand: Locator;
 
   constructor({ page, commands }: { commands: Commands; page: Page }) {
     this.page = page;
@@ -167,6 +168,9 @@ class ProjectDetails {
 
   @Then("the project details page is displayed")
   async projectDetailsPage() {
+    // Check page title
+    await expect(this.pageTitleCommand).toHaveText("Project details");
+
     // Check date value
     await expect(this.pageTitle.get()).toBeVisible();
     await expect(this.dateValueTestId).toHaveText(this.dateVal);
