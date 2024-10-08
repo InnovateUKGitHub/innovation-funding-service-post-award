@@ -1,7 +1,6 @@
 import { IContext } from "@framework/types/IContext";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { PartnerDetailsEditRoute } from "@ui/components/templates/PartnerDetailsEdit/PartnerDetailsEdit";
 import {
   PostcodeSchema,
   postcodeErrorMap,
@@ -9,13 +8,14 @@ import {
 } from "@ui/components/templates/PartnerDetailsEdit/partnerDetailsEdit.zod";
 import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
 import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
+import { ProjectSetupPartnerPostcodeRoute } from "@ui/pages/projects/setup/projectSetupPartnerPostcode.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 export class ProjectSetupPartnerPostcodeFormHandler extends ZodFormHandlerBase<PostcodeSchema, PartnerDetailsParams> {
   constructor() {
     super({
-      routes: [PartnerDetailsEditRoute],
+      routes: [ProjectSetupPartnerPostcodeRoute],
       forms: [FormTypes.ProjectSetupPostcode],
     });
   }

@@ -14,11 +14,11 @@ import { SubmitButton } from "@ui/components/atoms/form/SubmitButton/SubmitButto
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { usePartnerDetailsEditQuery, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -51,7 +51,7 @@ export function PartnerDetailsEditComponent({
 
   type SchemaType = z.infer<PostcodeSchema>;
 
-  const { register, handleSubmit, formState } = useForm<SchemaType>({
+  const { register, handleSubmit, formState, setError } = useForm<SchemaType>({
     defaultValues: {
       form: isSetup ? FormTypes.ProjectSetupPostcode : FormTypes.PartnerDetailsEdit,
       postcode: partner.postcode ?? "",
@@ -64,11 +64,10 @@ export function PartnerDetailsEditComponent({
 
   const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
-  const validatorErrors = useRhfErrors<SchemaType>(formState.errors);
+  const validatorErrors = useZodErrors<SchemaType>(setError, formState.errors);
 
   const postcodeError = validatorErrors?.postcode as RhfErrors;
 
-  console.log("partner", partner);
   return (
     <Page
       fragmentRef={fragmentRef}
