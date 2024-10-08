@@ -1,7 +1,7 @@
 /**
  * Initial update of spend table with figures
  */
-export const spendTableEdit = () => {
+export const spendTableEdit = (jsdisabled?: boolean) => {
   [
     "Labour Period 1",
     "Labour Period 2",
@@ -16,7 +16,7 @@ export const spendTableEdit = () => {
     "Labour Period 11",
     "Labour Period 12",
   ].forEach(labourInput => {
-    cy.getByAriaLabel(labourInput).clear().type("100");
+    cy.getByAriaLabel(labourInput).scrollIntoView().clear().type("100");
   });
   cy.wait(500);
 
@@ -34,7 +34,7 @@ export const spendTableEdit = () => {
     "Materials Period 11",
     "Materials Period 12",
   ].forEach(materialsInput => {
-    cy.getByAriaLabel(materialsInput).clear().type("25");
+    cy.getByAriaLabel(materialsInput).scrollIntoView().clear().type("25");
   });
 
   [
@@ -51,7 +51,7 @@ export const spendTableEdit = () => {
     "Capital usage Period 11",
     "Capital usage Period 12",
   ].forEach(capUsageInput => {
-    cy.getByAriaLabel(capUsageInput).clear().type("10");
+    cy.getByAriaLabel(capUsageInput).scrollIntoView().clear().type("10");
   });
 
   [
@@ -68,7 +68,7 @@ export const spendTableEdit = () => {
     "Subcontracting Period 11",
     "Subcontracting Period 12",
   ].forEach(subcontractingInput => {
-    cy.getByAriaLabel(subcontractingInput).clear().type("5");
+    cy.getByAriaLabel(subcontractingInput).scrollIntoView().clear().type("5");
   });
 
   [
@@ -85,7 +85,7 @@ export const spendTableEdit = () => {
     "Travel and subsistence Period 11",
     "Travel and subsistence Period 12",
   ].forEach(travelInput => {
-    cy.getByAriaLabel(travelInput).clear().type("2");
+    cy.getByAriaLabel(travelInput).scrollIntoView().clear().type("2");
   });
 
   [
@@ -102,7 +102,7 @@ export const spendTableEdit = () => {
     "Other costs Period 11",
     "Other costs Period 12",
   ].forEach(otherInput => {
-    cy.getByAriaLabel(otherInput).clear().type("1");
+    cy.getByAriaLabel(otherInput).scrollIntoView().clear().type("1");
   });
 
   [
@@ -119,7 +119,7 @@ export const spendTableEdit = () => {
     "Other costs 2 Period 11",
     "Other costs 2 Period 12",
   ].forEach(other2Input => {
-    cy.getByAriaLabel(other2Input).clear().type("2000");
+    cy.getByAriaLabel(other2Input).scrollIntoView().clear().type("2000");
   });
 
   [
@@ -136,7 +136,7 @@ export const spendTableEdit = () => {
     "Other costs 3 Period 11",
     "Other costs 3 Period 12",
   ].forEach(other3Input => {
-    cy.getByAriaLabel(other3Input).clear().type("3000");
+    cy.getByAriaLabel(other3Input).scrollIntoView().clear().type("3000");
   });
 
   [
@@ -153,7 +153,7 @@ export const spendTableEdit = () => {
     "Other costs 4 Period 11",
     "Other costs 4 Period 12",
   ].forEach(other4Input => {
-    cy.getByAriaLabel(other4Input).clear().type("4000");
+    cy.getByAriaLabel(other4Input).scrollIntoView().clear().type("4000");
   });
 
   [
@@ -170,9 +170,14 @@ export const spendTableEdit = () => {
     "Other costs 5 Period 11",
     "Other costs 5 Period 12",
   ].forEach(other5Input => {
-    cy.getByAriaLabel(other5Input).clear().type("5000");
+    cy.getByAriaLabel(other5Input).scrollIntoView().clear().type("5000");
   });
-
+  if (jsdisabled) {
+    cy.button("Save and return to project setup").click();
+    cy.heading("Project setup");
+    cy.get("a").contains("Set spend profile").click();
+    cy.heading("Spend Profile");
+  }
   [
     "td:nth-child(2)",
     "td:nth-child(3)",
@@ -195,7 +200,7 @@ export const spendTableEdit = () => {
  * Entering correct and valid values with GOL costs
  */
 
-export const spendTableWithinGOL = () => {
+export const spendTableWithinGOL = (jsdisabled?: boolean) => {
   [
     "Labour Period 1",
     "Labour Period 2",
@@ -209,7 +214,7 @@ export const spendTableWithinGOL = () => {
     "Labour Period 10",
     "Labour Period 11",
   ].forEach(labourInput => {
-    cy.getByAriaLabel(labourInput).clear().type("2916.66");
+    cy.getByAriaLabel(labourInput).scrollIntoView().clear().type("2916.66");
   });
   cy.wait(500);
   [
@@ -225,7 +230,7 @@ export const spendTableWithinGOL = () => {
     "Materials Period 10",
     "Materials Period 11",
   ].forEach(materialsInput => {
-    cy.getByAriaLabel(materialsInput).clear().type("2916.66");
+    cy.getByAriaLabel(materialsInput).scrollIntoView().clear().type("2916.66");
   });
   [
     "Capital usage Period 1",
@@ -240,7 +245,7 @@ export const spendTableWithinGOL = () => {
     "Capital usage Period 10",
     "Capital usage Period 11",
   ].forEach(capUsageInput => {
-    cy.getByAriaLabel(capUsageInput).clear().type("2916.66");
+    cy.getByAriaLabel(capUsageInput).scrollIntoView().clear().type("2916.66");
   });
   [
     "Subcontracting Period 1",
@@ -255,7 +260,7 @@ export const spendTableWithinGOL = () => {
     "Subcontracting Period 10",
     "Subcontracting Period 11",
   ].forEach(subcontractingInput => {
-    cy.getByAriaLabel(subcontractingInput).clear().type("2916.66");
+    cy.getByAriaLabel(subcontractingInput).scrollIntoView().clear().type("2916.66");
   });
   [
     "Travel and subsistence Period 1",
@@ -270,7 +275,7 @@ export const spendTableWithinGOL = () => {
     "Travel and subsistence Period 10",
     "Travel and subsistence Period 11",
   ].forEach(travelInput => {
-    cy.getByAriaLabel(travelInput).clear().type("2916.66");
+    cy.getByAriaLabel(travelInput).scrollIntoView().clear().type("2916.66");
   });
   [
     "Other costs Period 1",
@@ -285,7 +290,7 @@ export const spendTableWithinGOL = () => {
     "Other costs Period 10",
     "Other costs Period 11",
   ].forEach(otherInput => {
-    cy.getByAriaLabel(otherInput).clear().type("2916.66");
+    cy.getByAriaLabel(otherInput).scrollIntoView().clear().type("2916.66");
   });
   [
     "Other costs 2 Period 1",
@@ -300,7 +305,7 @@ export const spendTableWithinGOL = () => {
     "Other costs 2 Period 10",
     "Other costs 2 Period 11",
   ].forEach(other2Input => {
-    cy.getByAriaLabel(other2Input).clear().type("2916.66");
+    cy.getByAriaLabel(other2Input).scrollIntoView().clear().type("2916.66");
   });
   [
     "Other costs 3 Period 1",
@@ -315,7 +320,7 @@ export const spendTableWithinGOL = () => {
     "Other costs 3 Period 10",
     "Other costs 3 Period 11",
   ].forEach(other3Input => {
-    cy.getByAriaLabel(other3Input).clear().type("2916.66");
+    cy.getByAriaLabel(other3Input).scrollIntoView().clear().type("2916.66");
   });
   [
     "Other costs 4 Period 1",
@@ -330,7 +335,7 @@ export const spendTableWithinGOL = () => {
     "Other costs 4 Period 10",
     "Other costs 4 Period 11",
   ].forEach(other4Input => {
-    cy.getByAriaLabel(other4Input).clear().type("2916.66");
+    cy.getByAriaLabel(other4Input).scrollIntoView().clear().type("2916.66");
   });
   [
     "Other costs 5 Period 1",
@@ -345,7 +350,7 @@ export const spendTableWithinGOL = () => {
     "Other costs 5 Period 10",
     "Other costs 5 Period 11",
   ].forEach(other5Input => {
-    cy.getByAriaLabel(other5Input).clear().type("2916.66");
+    cy.getByAriaLabel(other5Input).scrollIntoView().clear().type("2916.66");
   });
   [
     "Labour Period 12",
@@ -359,15 +364,21 @@ export const spendTableWithinGOL = () => {
     "Other costs 4 Period 12",
     "Other costs 5 Period 12",
   ].forEach(finalPeriod => {
-    cy.getByAriaLabel(finalPeriod).clear().type("2916.74");
+    cy.getByAriaLabel(finalPeriod).scrollIntoView().clear().type("2916.74");
   });
+  if (jsdisabled) {
+    cy.button("Save and return to project setup").click();
+    cy.heading("Project setup");
+    cy.get("a").contains("Set spend profile").click();
+    cy.heading("Spend Profile");
+  }
 };
 
 /**
  * Reverting spend profile to zero across the board.
  */
 
-export const revertSpendTableZero = () => {
+export const revertSpendTableZero = (jsdisabled?: boolean) => {
   [
     "Labour Period 1",
     "Labour Period 2",
@@ -382,10 +393,14 @@ export const revertSpendTableZero = () => {
     "Labour Period 11",
     "Labour Period 12",
   ].forEach(labourInput => {
-    cy.getByAriaLabel(labourInput).clear().type("0");
+    cy.getByAriaLabel(labourInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
+
   [
     "Materials Period 1",
     "Materials Period 2",
@@ -400,10 +415,13 @@ export const revertSpendTableZero = () => {
     "Materials Period 11",
     "Materials Period 12",
   ].forEach(materialsInput => {
-    cy.getByAriaLabel(materialsInput).clear().type("0");
+    cy.getByAriaLabel(materialsInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Capital usage Period 1",
     "Capital usage Period 2",
@@ -418,10 +436,13 @@ export const revertSpendTableZero = () => {
     "Capital usage Period 11",
     "Capital usage Period 12",
   ].forEach(capUsageInput => {
-    cy.getByAriaLabel(capUsageInput).clear().type("0");
+    cy.getByAriaLabel(capUsageInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Subcontracting Period 1",
     "Subcontracting Period 2",
@@ -436,10 +457,13 @@ export const revertSpendTableZero = () => {
     "Subcontracting Period 11",
     "Subcontracting Period 12",
   ].forEach(subcontractingInput => {
-    cy.getByAriaLabel(subcontractingInput).clear().type("0");
+    cy.getByAriaLabel(subcontractingInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Travel and subsistence Period 1",
     "Travel and subsistence Period 2",
@@ -454,10 +478,13 @@ export const revertSpendTableZero = () => {
     "Travel and subsistence Period 11",
     "Travel and subsistence Period 12",
   ].forEach(travelInput => {
-    cy.getByAriaLabel(travelInput).clear().type("0");
+    cy.getByAriaLabel(travelInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Other costs Period 1",
     "Other costs Period 2",
@@ -472,10 +499,13 @@ export const revertSpendTableZero = () => {
     "Other costs Period 11",
     "Other costs Period 12",
   ].forEach(otherInput => {
-    cy.getByAriaLabel(otherInput).clear().type("0");
+    cy.getByAriaLabel(otherInput).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Other costs 2 Period 1",
     "Other costs 2 Period 2",
@@ -490,10 +520,13 @@ export const revertSpendTableZero = () => {
     "Other costs 2 Period 11",
     "Other costs 2 Period 12",
   ].forEach(other2Input => {
-    cy.getByAriaLabel(other2Input).clear().type("0");
+    cy.getByAriaLabel(other2Input).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Other costs 3 Period 1",
     "Other costs 3 Period 2",
@@ -508,9 +541,13 @@ export const revertSpendTableZero = () => {
     "Other costs 3 Period 11",
     "Other costs 3 Period 12",
   ].forEach(other3Input => {
-    cy.getByAriaLabel(other3Input).clear().type("0");
+    cy.getByAriaLabel(other3Input).scrollIntoView().clear().type("0");
   });
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Other costs 4 Period 1",
     "Other costs 4 Period 2",
@@ -525,10 +562,13 @@ export const revertSpendTableZero = () => {
     "Other costs 4 Period 11",
     "Other costs 4 Period 12",
   ].forEach(other4Input => {
-    cy.getByAriaLabel(other4Input).clear().type("0");
+    cy.getByAriaLabel(other4Input).scrollIntoView().clear().type("0");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "Other costs 5 Period 1",
     "Other costs 5 Period 2",
@@ -543,10 +583,17 @@ export const revertSpendTableZero = () => {
     "Other costs 5 Period 11",
     "Other costs 5 Period 12",
   ].forEach(other5Input => {
-    cy.getByAriaLabel(other5Input).clear().type("0");
+    cy.getByAriaLabel(other5Input).scrollIntoView().clear().type("0");
   });
   cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
+  if (jsdisabled) {
+    cy.button("Save and return to project setup").click();
+    cy.heading("Project setup");
+    cy.get("a").contains("Set spend profile").click();
+    cy.heading("Spend Profile");
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   [
     "td:nth-child(2)",
     "td:nth-child(3)",
@@ -563,9 +610,11 @@ export const revertSpendTableZero = () => {
   ].forEach(columnTotal => {
     cy.get(columnTotal).contains("£0.00");
   });
-  cy.wait(500);
-  cy.get("td:nth-child(14)").contains("£0.00");
-  cy.wait(500);
+  if (jsdisabled) {
+    cy.wait(500);
+  } else {
+    cy.get("td:nth-child(14)").contains("£0.00");
+  }
   cy.button("Save and return to project setup").click();
   cy.heading("Project setup");
   cy.get("a").contains("Set spend profile").click();

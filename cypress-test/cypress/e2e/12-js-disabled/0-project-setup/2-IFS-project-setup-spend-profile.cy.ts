@@ -56,7 +56,7 @@ describe(" js disabled >Project setup > IFS > Set spend profile", { tags: "js-di
 
   it("Should display the correct top three rows including IAR frequency", ifsTopThreeRows);
 
-  it("Should edit the forecast table", spendTableEdit);
+  it("Should edit the forecast table", () => spendTableEdit(true));
 
   it("Should save and return", () => {
     cy.button("Save and return to project setup").click();
@@ -67,13 +67,13 @@ describe(" js disabled >Project setup > IFS > Set spend profile", { tags: "js-di
     cy.get("a").contains("Set spend profile").click();
     cy.heading("Spend Profile");
   });
-  it("Should check that all costs saved correctly", spendTableValues);
+  it("Should check that all costs saved correctly", () => spendTableValues(true));
 
   it("Should enter a null value and prompt correct validation message", spendProfileNullValidation);
 
   it("Should Mark as complete and attempt to save table, prompting validation.", saveAndValidate);
 
-  it("Should enter correct figures within GOL value", spendTableWithinGOL);
+  it("Should enter correct figures within GOL value", () => spendTableWithinGOL(true));
 
   it("Validation messaging should no longer be present", saveAndRemoveValidationMsg);
 
@@ -86,7 +86,7 @@ describe(" js disabled >Project setup > IFS > Set spend profile", { tags: "js-di
     cy.getByLabel("This is ready to submit").uncheck();
   });
 
-  it("Should clear the cost categories back to zero", revertSpendTableZero);
+  it("Should clear the cost categories back to zero", () => revertSpendTableZero(true));
 
   it("Should check that the spend profile section is incomplete", checkSpendProfileIncomplete);
 });

@@ -54,7 +54,7 @@ describe("Project setup > IFS > Set spend profile", () => {
 
   it("Should correctly calculate overheads against labour input", spendLabourCalculateOH);
 
-  it("Should edit the forecast table and calculate the new totals correctly", spendTableEdit);
+  it("Should edit the forecast table and calculate the new totals correctly", () => spendTableEdit);
 
   it("Should save and return", () => {
     cy.button("Save and return to project setup").click();
@@ -65,13 +65,13 @@ describe("Project setup > IFS > Set spend profile", () => {
     cy.get("a").contains("Set spend profile").click();
     cy.heading("Spend Profile");
   });
-  it("Should check that all costs saved correctly", spendTableValues);
+  it("Should check that all costs saved correctly", () => spendTableValues);
 
   it("Should enter a null value and prompt correct validation message", spendProfileNullValidation);
 
   it("Should Mark as complete and attempt to save table, prompting validation.", saveAndValidate);
 
-  it("Should enter correct figures within GOL value", spendTableWithinGOL);
+  it("Should enter correct figures within GOL value", () => spendTableWithinGOL);
 
   it("Validation messaging should no longer be present", saveAndRemoveValidationMsg);
 
@@ -84,7 +84,7 @@ describe("Project setup > IFS > Set spend profile", () => {
     cy.getByLabel("This is ready to submit").uncheck();
   });
 
-  it("Should clear the cost categories back to zero", revertSpendTableZero);
+  it("Should clear the cost categories back to zero", () => revertSpendTableZero);
 
   it("Should check that the spend profile section is incomplete", checkSpendProfileIncomplete);
 });

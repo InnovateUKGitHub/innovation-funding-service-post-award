@@ -75,6 +75,8 @@ export const fillAccountInformation = () => {
   cy.getByLabel("Account number");
   cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
   cy.getByLabel("Account number").clear().type("12345678");
+  cy.button("Submit bank details").click();
+  cy.validationLink("Check your sort code and account number.");
 };
 
 export const fillAddressInformation = () => {
@@ -136,10 +138,10 @@ export const bankDetailsValidation = () => {
   cy.getByLabel("Sort code").clear();
   cy.getByLabel("Account number").clear();
   cy.submitButton("Submit bank details").click();
-  cy.validationMessage("Sort code cannot be empty.");
-  cy.validationMessage("Account number cannot be empty.");
-  cy.paragraph("Sort code cannot be empty.");
-  cy.paragraph("Account number cannot be empty");
+  cy.validationMessage("Enter a valid sort code.");
+  cy.validationMessage("Enter a valid account number.");
+  cy.paragraph("Enter a valid sort code.");
+  cy.paragraph("Enter a valid account number.");
   cy.reload();
 };
 
@@ -195,13 +197,14 @@ export const spendTableTidyUp = (valueSearch: string) => {
     cy.get("table").then($table => {
       if ($table.text().includes(valueSearch)) {
         cy.wait(500);
-        revertSpendTableZero();
+        revertSpendTableZero(true);
       }
     });
   });
 };
 
 export const submitComplete = () => {
+  cy.clickCheckBox("This is ready to submit");
   cy.button("Save and return to project setup").click();
   cy.heading("Project setup");
   cy.get("li").eq(4).contains("Complete");

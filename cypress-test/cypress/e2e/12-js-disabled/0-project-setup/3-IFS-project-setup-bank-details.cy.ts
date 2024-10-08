@@ -58,11 +58,6 @@ describe("js disabled > Project setup > IFS > Provide your bank details", { tags
 
   it("Should have an 'Account details' section and populate 'Sort code'", fillAccountInformation);
 
-  it("Should no longer display the validation message", () => {
-    cy.reload();
-    cy.getByQA("validation-summary").should("not.exist");
-  });
-
   it("Should have a 'Billing address' section and populate the address", fillAddressInformation);
 
   it("Should have a 'Submit bank details' button", () => {

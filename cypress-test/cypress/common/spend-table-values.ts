@@ -3,7 +3,7 @@ let newCurrency = new Intl.NumberFormat("en-GB", {
   currency: "GBP",
 });
 
-export const spendTableValues = () => {
+export const spendTableValues = (jsDisabled?: boolean) => {
   [
     "Labour Period 1",
     "Labour Period 2",
@@ -191,6 +191,12 @@ export const spendTableValues = () => {
   ].forEach(other5Input => {
     cy.getByAriaLabel(other5Input).should("have.value", 5000);
   });
+  if (jsDisabled) {
+    cy.button("Save and return to project setup").click();
+    cy.heading("Project setup");
+    cy.get("a").contains("Set spend profile").click();
+    cy.heading("Spend Profile");
+  }
   cy.get("td:nth-child(14)").contains("£60,000.00");
   [
     "td:nth-child(2)",
