@@ -18,10 +18,11 @@ import { AccUserSwitcher } from "./acc/AccUserSwitcher";
 import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
-import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
-import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 import { ProjectDetails } from "./acc/pages/ProjectsDetails";
+import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
+import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
+import { AllanProjectDetails } from "./acc/pages/AllanProjectDetails";
 
 type AccFixtures = {
   // Pages
@@ -33,8 +34,9 @@ type AccFixtures = {
   monitoringReports: MonitoringReports;
   putProjectOnHold: PutProjectOnHold;
   projectChangeRequests: ProjectChangeRequests;
-  approveNewSubcontractor: ApproveNewSubcontractor;
   projectDetails: ProjectDetails;
+  approveNewSubcontractor: ApproveNewSubcontractor;
+  allanProjectDetails: AllanProjectDetails;
 
   // Misc
   accNavigation: AccNavigation;
@@ -71,7 +73,8 @@ export const test = base.extend<AccFixtures, Workers>({
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
-  projectDetails: ({ page }, use) => use(new ProjectDetails({ page })),
+  projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
+  allanProjectDetails: ({ page, commands }, use) => use(new AllanProjectDetails({ page, commands })),
 
   // Project Factory
   accProjectBase: [

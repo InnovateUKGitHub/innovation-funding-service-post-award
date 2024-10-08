@@ -76,9 +76,9 @@ class Commands {
    * Get a list item from its key
    */
   async getListItemFromKey(label: string, item: string) {
-    const key = this.page.locator("css=dt", { hasText: label });
-    const parent = this.page.locator("css=div", { has: key });
-    return parent.locator("css=dd", { hasText: item });
+    const key = this.page.locator("css=dt").filter({ hasText: label });
+    const parent = this.page.locator("css=div").filter({ has: key });
+    return parent.locator("css=dd").filter({ hasText: item }).isVisible();
   }
 
   /**
