@@ -5,5 +5,6 @@ Feature: Project Details Page
         And the user is on the project overview
         When the user selects the "Project details" tile
         Then the project details page is displayed
+        Then Steve ver2
 
 
