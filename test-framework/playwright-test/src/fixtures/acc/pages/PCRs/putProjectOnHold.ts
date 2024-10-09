@@ -68,6 +68,7 @@ class PutProjectOnHold {
   private readonly clickLogs: Locator;
   private readonly pcrAudit: Locator;
   private readonly auditComment: Locator;
+  private readonly pcrTask1: Locator;
 
   constructor({ page }: { page: Page }) {
     this.page = page;
@@ -115,6 +116,8 @@ class PutProjectOnHold {
     this.uploadValidation = this.page.locator("//*[@data-qa='validation-message-content']")
     this.onHoldPcrSummary = this.page.locator('.govuk-summary-list__key, .govuk-summary-list__value');
     this.pcrTask = this.page.locator("//*[@data-qa='taskList']");
+    this.pcrTask1 = this.page.locator("//*[@data-qa='taskList']//span");
+    
     this.statusComment = this.page.locator('#accordion-default-content-status-and-comments-log');
     this.submitButton = this.page.locator("//button[normalize-space()='Submit request']");
     this.submittedDetails = (`//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`);
@@ -131,19 +134,25 @@ class PutProjectOnHold {
     this.pcrComment = this.page.locator("//textarea[@id='comments']");
     this.pcrCommentValidation = this.page.locator("//a[normalize-space()='Comments must be 1000 characters or less.']");
     this.clickLogs = this.page.locator('.govuk-accordion__section-heading-text-focus');
-    this.pcrAudit = this.page.locator("projectChangeRequestStatusChangeTable");
+    this.pcrAudit = this.page.locator("//*[@data-qa='projectChangeRequestStatusChangeTable']//td");
     this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
 
   }
   async getPcrAuditTrail(expectedText: string) {
     await this.clickLogs.click();
 
-    const auditPcr = this.pcrAudit.locator('*');
-    const listCount = auditPcr.count();
-    for (let i = 0; i < await listCount; i++) {
-      const textContent = auditPcr.nth(i).innerText();
-      expect(await textContent === expectedText)
-      return;
+    const task = this.pcrAudit.locator('*');
+    const listCount = await task.count(); 
+
+    let eleFound = false;
+  
+    for (let i = 0; i < listCount; i++) {
+      const textContent = await task.nth(i).innerText(); 
+      if (textContent === expectedText) { 
+        eleFound= true;
+       expect(textContent.trim()).toBe(expectedText); 
+        break; 
+      }
     }
   }
   // move to helper class 
@@ -165,24 +174,38 @@ class PutProjectOnHold {
   }
 
   async validateRequestDetails(expectedText: string) {
-    const pcrTaskList = this.pcrTask.locator('*');
-    const listCount = pcrTaskList.count();
-    for (let i = 0; i < await listCount; i++) {
-      const textContent = pcrTaskList.nth(i).innerText();
-      expect(await textContent === expectedText)
-      return;
-    }
-  }
+    const task = this.pcrTask1.locator('*');
 
+    const listCount = await task.count(); 
+
+    console.log('Total element found ${listCount}')
+   
+    let eleFound = false;
+  
+    for (let i = 0; i < listCount; i++) {
+      const textContent = await task.nth(i).innerText(); 
+      if (textContent === expectedText) { 
+        let eleFound = true;
+        expect(textContent).toBe(expectedText); 
+        break; 
+      }
+    }
+}
   async validatePcrSummaryList(expectedText: string) {
     const pcrSummary = this.pcrSummaryList.locator('*');
     const listCount = pcrSummary.count();
+
+    let eleFound = false;
+   
     for (let i = 0; i < await listCount; i++) {
-      const textContent = pcrSummary.nth(i).innerText();
-      expect(await textContent === expectedText)
-      return;
+      const textContent = await pcrSummary.nth(i).innerText();
+      if (textContent === expectedText) { 
+        let eleFound = true;
+        expect(textContent).toBe(expectedText); 
+        break; 
+      }
     }
-  }
+}
   async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
     const element = this.submittedDetails.replace("%s", fieldName);
 
