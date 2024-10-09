@@ -5,6 +5,7 @@ import { PageHeading } from "../../../../components/PageHeading";
 import { Button } from "../../../../components/Button";
 import { getLorem } from "../../../../components/lorem";
 import path from "path";
+import { DataTable } from "playwright-bdd";
 
 export
 @Fixture("putProjectOnHold")
@@ -24,7 +25,6 @@ class PutProjectOnHold {
   private readonly hintSpanLocator: Locator;
   private readonly checkboxXPath: string;
   private readonly checkboxes: Locator;
-  private readonly clickTask: Locator;
   private readonly createReq: Locator;
   private readonly onHoldStartMonth: Locator;
   private readonly onHoldEndMonth: Locator;
@@ -39,7 +39,6 @@ class PutProjectOnHold {
   private readonly markAsComplete: Locator;
   private readonly saveAndReturnToRequest: Locator;
   private readonly reasonText: Locator;
-  private readonly reasonsLink: Locator;
   private readonly requestNumber: Locator;
   private readonly types: Locator;
   private readonly learnMoreSummary: Locator;
@@ -54,6 +53,21 @@ class PutProjectOnHold {
   private readonly submitButton: Locator;
   private readonly submittedDetails: string;
   private readonly pcrValidationsError: Locator;
+  private readonly pcrTable: string;
+  private readonly taskLink: Locator;
+  private readonly pcrDashboardTable: Locator;
+  private readonly pcrTableCell: Locator;
+  private readonly requestDetails: Locator;
+  private readonly pcrSummaryList: Locator;
+  private readonly nextPreviousPage: Locator;
+  private readonly backToRequest: Locator;
+  private readonly submitPcrs: Locator;
+  private readonly iukRadioButton: string;
+  private readonly pcrComment: Locator;
+  private readonly pcrCommentValidation: Locator;
+  private readonly clickLogs: Locator;
+  private readonly pcrAudit: Locator;
+  private readonly auditComment: Locator;
 
   constructor({ page }: { page: Page }) {
     this.page = page;
@@ -70,9 +84,7 @@ class PutProjectOnHold {
     this.labelSpanLocator = this.checkboxItemLocator.locator("label > span:first-of-type");
     this.hintSpanLocator = this.checkboxItemLocator.locator("label > span.govuk-hint");
     this.checkboxes = this.page.locator('input[type="checkbox"]');
-    this.checkboxXPath =
-      '//label[contains(@class, "govuk-checkboxes__label")]//span[text()="{labelText}"]/ancestor::label/preceding-sibling::input';
-    this.clickTask = this.page.locator('//ul[@data-qa="taskList"]//a');
+    this.checkboxXPath = '//label[contains(@class, "govuk-checkboxes__label")]//span[text()="{labelText}"]/ancestor::label/preceding-sibling::input'
     this.createReq = this.page.locator('button:has-text("Create request")');
     this.onHoldStartMonth = this.page.locator("//input[@id='suspensionStartDate_month']");
     this.onHoldEndMonth = this.page.locator("//input[@id='suspensionEndDate_month']");
@@ -94,22 +106,84 @@ class PutProjectOnHold {
     this.markAsComplete = this.page.locator("//*[@class='govuk-checkboxes__input']");
     this.reasonText = this.page.locator("//*[@class='govuk-textarea']");
     this.reasonTextValue = this.page.locator("//div[@id='reasoningComments']//dd[@class='govuk-summary-list__value']");
-    this.reasonsLink = this.page.locator("//a[normalize-space()='Provide reasons to Innovate UK']");
     this.requestNumber = this.page.locator('dt:has-text("Request number") + dd');
     this.types = this.page.locator('dt:has-text("Types") + dd');
     this.learnMoreSummary = this.page.locator('details summary:has-text("Learn more about files you can upload")');
     this.learnMoreText = this.page.locator("//fieldset[@class='govuk-fieldset']//details[@class='govuk-details']");
     this.chooseFile = this.page.locator("//input[@id='files']");
     this.uploadDocument = this.page.locator("//button[normalize-space()='Upload documents']");
-    this.uploadValidation = this.page.locator("//*[@data-qa='validation-message-content']");
-    this.onHoldPcrSummary = this.page.locator(".govuk-summary-list__key, .govuk-summary-list__value");
-    this.pcrTask = this.page.locator(" //*[@data-qa='taskList']");
-    this.statusComment = this.page.locator("#accordion-default-content-status-and-comments-log");
+    this.uploadValidation = this.page.locator("//*[@data-qa='validation-message-content']")
+    this.onHoldPcrSummary = this.page.locator('.govuk-summary-list__key, .govuk-summary-list__value');
+    this.pcrTask = this.page.locator("//*[@data-qa='taskList']");
+    this.statusComment = this.page.locator('#accordion-default-content-status-and-comments-log');
     this.submitButton = this.page.locator("//button[normalize-space()='Submit request']");
-    this.submittedDetails = `//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`;
-    this.pcrValidationsError = this.page.locator(".govuk-error-summary__body");
+    this.submittedDetails = (`//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`);
+    this.pcrValidationsError = this.page.locator('.govuk-error-summary__body');
+    this.pcrTable = ("//table[@class='govuk-table']//th[text()='%s']/following-sibling::td[@class='govuk-table__cell']");
+    this.taskLink = this.page.locator('role=link');
+    this.pcrDashboardTable = this.page.locator('.govuk-table__body .govuk-table__row');
+    this.pcrTableCell = this.page.locator('.govuk-table__cell');
+    this.pcrSummaryList = this.page.locator('.govuk-summary-list');
+    this.nextPreviousPage = this.page.locator("//span[@class='govuk-navigation-arrows__button__label__category']");
+    this.backToRequest = this.page.locator("//a[normalize-space()='Back to request']");
+    this.submitPcrs = this.page.locator("//button[normalize-space()='Submit']");
+    this.iukRadioButton = "//label[contains(text(),'{text}')]";
+    this.pcrComment = this.page.locator("//textarea[@id='comments']");
+    this.pcrCommentValidation = this.page.locator("//a[normalize-space()='Comments must be 1000 characters or less.']");
+    this.clickLogs = this.page.locator('.govuk-accordion__section-heading-text-focus');
+    this.pcrAudit = this.page.locator("projectChangeRequestStatusChangeTable");
+    this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
+
+  }
+  async getPcrAuditTrail(expectedText: string) {
+    await this.clickLogs.click();
+
+    const auditPcr = this.pcrAudit.locator('*');
+    const listCount = auditPcr.count();
+    for (let i = 0; i < await listCount; i++) {
+      const textContent = auditPcr.nth(i).innerText();
+      expect(await textContent === expectedText)
+      return;
+    }
+  }
+  // move to helper class 
+  dateFormatter(): string {
+    return new Date().toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'short', year: 'numeric'
+    }).replace(/(\d{1,2})\/(\w+)/, '$1 $2');
+
+  }
+  async selectRadioButton(radioItem: string) {
+    const radioButton = this.page.locator(this.iukRadioButton.replace('{text}', radioItem)
+    );
+    await radioButton.click();
+  }
+  async clickBacktoRequest() {
+    await this.backToRequest.click();
+  }
+  async clickNextOrPrevious() {
+    await this.nextPreviousPage.click();
   }
 
+  async validateRequestDetails(expectedText: string) {
+    const pcrTaskList = this.pcrTask.locator('*');
+    const listCount = pcrTaskList.count();
+    for (let i = 0; i < await listCount; i++) {
+      const textContent = pcrTaskList.nth(i).innerText();
+      expect(await textContent === expectedText)
+      return;
+    }
+  }
+
+  async validatePcrSummaryList(expectedText: string) {
+    const pcrSummary = this.pcrSummaryList.locator('*');
+    const listCount = pcrSummary.count();
+    for (let i = 0; i < await listCount; i++) {
+      const textContent = pcrSummary.nth(i).innerText();
+      expect(await textContent === expectedText)
+      return;
+    }
+  }
   async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
     const element = this.submittedDetails.replace("%s", fieldName);
 
@@ -124,6 +198,7 @@ class PutProjectOnHold {
   async submitPcr() {
     await this.submitButton.click();
   }
+
   async completedPcrTask() {
     const expectedContent = [
       "Give us information",
@@ -137,6 +212,7 @@ class PutProjectOnHold {
       await expect(this.pcrTask).toContainText(text);
     }
   }
+
   async projectOnHoldSummary(): Promise<boolean> {
     const ele = await this.onHoldPcrSummary.count();
     expect(ele).toEqual(16);
@@ -189,7 +265,7 @@ class PutProjectOnHold {
   }
 
   async reasonsToInnovate() {
-    await this.reasonsLink.click();
+    await this.clickTaskTodo("Provide reasons to Innovate UK")
     const txt = getLorem(32_000);
     await this.reasonText.fill(txt);
   }
@@ -201,11 +277,18 @@ class PutProjectOnHold {
     await this.reasonText.fill(txt);
   }
 
+  async getAuditComment() {
+    await expect(this.auditComment).toBeVisible();
+    const textAreContent = await this.auditComment.evaluate(el => (el as any).value);
+    expect(textAreContent).not.toBe('');
+  }
+
   async textAreaNotEmpty() {
     await expect(this.reasonTextValue).toBeVisible();
     const textAreContent = await this.reasonTextValue.evaluate(el => (el as any).value);
     expect(textAreContent).not.toBe("");
   }
+
   async clickMarkAsComplete() {
     await this.markAsComplete.click();
     await this.saveAndReturnToRequest.click();
@@ -245,26 +328,17 @@ class PutProjectOnHold {
     await this.putOnHold.click();
   }
 
-  async clickPcrTask(dynamicText: string): Promise<void> {
-    try {
-      const elements = await this.clickTask.count();
-
-      for (let i = 0; i < elements; i++) {
-        const text = this.clickTask.nth(i);
-        const ele = await text.innerText();
-        if (ele === dynamicText) {
-          await text.click();
-          console.log(`Clicked on element with text: ${dynamicText}`);
-          return;
-        }
+  async clickTaskTodo(taskText: string) {
+    const todoLink = this.taskLink.count();
+    for (let i = 0; i < await todoLink; i++) {
+      const ele = this.taskLink.nth(i);
+      const txt = ele.innerText();
+      if (await txt === taskText) {
+        await ele.click();
+        return;
       }
-
-      console.log(`No element found with text: ${dynamicText}`);
-    } catch (error) {
-      console.error("An error occurred:", error);
     }
   }
-
   private getPcr(labelText: string): Locator {
     const resolvedXPath = this.checkboxXPath.replace("{labelText}", labelText);
     return this.page.locator(`xpath=${resolvedXPath}`);
@@ -301,8 +375,12 @@ class PutProjectOnHold {
     }
   }
 
-  //Steps
-  @Then("the project change request page is displayed")
+  async moSubmitPcr() {
+    await this.submitPcrs.click();
+  }
+
+  //Steps 
+  @Then('the project change request page is displayed')
   async isPage() {
     await expect(this.dashboardTitle.get()).toBeVisible();
   }
@@ -343,15 +421,13 @@ class PutProjectOnHold {
     await this.assertAllCheckboxesUnchecked();
     await this.selectPcrType("Put project on hold");
     await this.clickCreateReq();
-
     //Request details
-
     await expect(this.requestTitle).toBeVisible();
-    //await this.clickPcrTask('Put project on hold');
     //Cannot submit a blank request
     await this.submitPcr();
     await this.assertPcrError("Reasons entry must be complete.Put project on hold must be complete.");
-    await this.clickPutProjectOnHold();
+    // await this.clickPutProjectOnHold();
+    await this.clickTaskTodo("Put project on hold");
     await expect(this.requestTitle).toBeVisible();
     await this.verifyTextOnPage(
       "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCRs), update forecasts, or create and submit claims.",
@@ -388,7 +464,8 @@ class PutProjectOnHold {
     await this.projectOnHoldSummary();
     await this.clickMarkAsComplete();
   }
-  @When("the user clicks submit")
+
+  @When('the user clicks submit')
   async clickSubmitRequest() {
     await this.completedPcrTask();
     await this.verifyTextOnPage("Put project on hold");
@@ -403,16 +480,91 @@ class PutProjectOnHold {
 
   @Then("the request should be submitted successfully")
   async validatePcrSubmission() {
-    await this.validateSubmittedPcrDetails("Request number", "1");
-    await this.validateSubmittedPcrDetails("Request type", "Put project on hold");
-    await this.validateSubmittedPcrDetails("Request started", /^\d{1,2} \w+ \d{4}$/);
-    await this.validateSubmittedPcrDetails("Request status", "Submitted to Monitoring Officer");
-    await this.validateSubmittedPcrDetails("Request last updated", /^\d{1,2} \w+ \d{4}$/);
+    await this.validateSubmittedPcrDetails('Request number', '1');
+    await this.validateSubmittedPcrDetails('Request type', 'Put project on hold');
+    await this.validateSubmittedPcrDetails('Request started', /^\d{1,2} \w+ \d{4}$/);
+    await this.validateSubmittedPcrDetails('Request status', 'Submitted to Monitoring Officer');
+    await this.validateSubmittedPcrDetails('Request last updated', /^\d{1,2} \w+ \d{4}$/);
+    await this.verifyTextOnPage("Your project change request has been submitted.Please note there is a 30-day Service Level Target from submission of your request to Innovate UK, through to approval of the change(s).");
+    await this.verifyTextOnPage("Project change request submitted");
+  }
+
+  //MO query 
+
+  @Then('the user sees the following table')
+  async reviewPcrDashboard(data: DataTable) {
+    const expectedTableData = data.hashes()[0]
+    const actualTableData = this.pcrDashboardTable.first()
+
+    const currentDate = this.dateFormatter();
+
+    await expect(actualTableData.locator(this.pcrTableCell).nth(0)).toHaveText(expectedTableData.request_number);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(1)).toHaveText(expectedTableData.types);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(2)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
+  };
+
+  @When('the user queries the PCR request')
+  async queryPcr() {
+    await this.clickTaskTodo("Review")
+    await expect(this.requestTitle).toBeVisible();
+    await this.validateRequestDetails('Put project on hold');
+    await this.validateRequestDetails('Reasoning for Innovate UK');
+    await this.validateRequestDetails('Explain why you want to make the changes');
+    await this.validateRequestDetails('Give us information');
+    await this.validatePcrSummaryList('Put project on hold');
+    await this.validatePcrSummaryList('1');
+    await this.clickTaskTodo("Put project on hold");
+    await this.validateDates();
+    await this.verifyTextOnPage("28 Feb 2026");
+    await this.clickNextOrPrevious();
+    //Reason page 
+    await this.textAreaNotEmpty();
+    await this.validatePcrSummaryList('Put project on hold');
+    await this.validatePcrSummaryList('1');
+    await this.validatePcrSummaryList('add.png');
+    await this.clickNextOrPrevious();
+    await this.clickNextOrPrevious();
+    await this.clickBacktoRequest();
+    await expect(this.requestTitle).toBeVisible();
+  }
+  @When('the user submits the project change request')
+  async moClicksSubmit() {
+    await this.selectRadioButton("Query the request");
+    await this.moSubmitPcr();
+    await this.verifyTextOnPage("Enter comments.");
+    await this.pcrComment.fill(getLorem(1_001));
+    await this.moSubmitPcr();
+    expect(this.pcrCommentValidation).toBeVisible();
+    await this.getPcrAuditTrail("Peter May");
+    await this.getPcrAuditTrail("Submitted to Monitoring Officer");
+    await this.getPcrAuditTrail("Status update");
+    await this.getPcrAuditTrail("Draft with Project Manager");
+    await this.pcrComment.fill(getLorem(1_000));
+    await this.moSubmitPcr();
+
+  }
+
+  @Then('the user should see the following table')
+  async queriedPcrDashboard(data: DataTable) {
+    const expectedTableData = data.hashes()[0]
+    const actualTableData = this.pcrDashboardTable.first()
+
+    const currentDate = this.dateFormatter();
+
+    await expect(actualTableData.locator(this.pcrTableCell).nth(0)).toHaveText(expectedTableData.request_number);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(1)).toHaveText(expectedTableData.types);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(2)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
+
   }
 
   // Validate user cannot create a request without selecting atleast one pcr
-
-  @Given("the user clicks create request without selecting a PCR")
+  @Given('the user clicks create request without selecting a PCR')
   async clickOnCreateRequest() {
     await this.createRequest.click();
   }
@@ -423,8 +575,7 @@ class PutProjectOnHold {
 
     await this.verifyTextOnPage("You must select at least one of the types.");
   }
-
-  // Verify guildance texts
+  // Verify guildance texts 
 
   @Given("the user clicks create request")
   async clickCreateRequest() {
@@ -432,3 +583,8 @@ class PutProjectOnHold {
     await this.createRequest.click();
   }
 }
+
+
+
+
+
