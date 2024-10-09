@@ -42,6 +42,11 @@ const costCategoryIdValidation = z
 const pclIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_ProjectContactLink__c)
+  .transform(x => x as ProjectContactLinkId);
+
+const contactIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_ContactId__c)
   .transform(x => x as ContactId);
 
 const costIdValidation = z
@@ -259,6 +264,7 @@ const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validato
 export {
   booleanValidation,
   claimIdValidation,
+  contactIdValidation,
   costCategoryIdValidation,
   costIdValidation,
   currencyValidation,

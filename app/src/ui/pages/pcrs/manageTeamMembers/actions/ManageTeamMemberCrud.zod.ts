@@ -7,7 +7,7 @@ import {
   partnerIdValidation,
   pclIdValidation,
   projectIdValidation,
-} from "@ui/zod/helperValidators.zod";
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -67,11 +67,11 @@ type ManageTeamMemberValidatorSchema = typeof manageTeamMemberValidator;
 const manageTeamMemberErrorMap = makeZodI18nMap({ keyPrefix: ["project", "manageTeamMembers"] });
 
 export {
-  ManageTeamMemberValidatorSchema,
+  createTeamMemberValidator,
+  deleteTeamMemberValidator,
   manageTeamMemberErrorMap,
   manageTeamMemberValidator,
-  createTeamMemberValidator,
+  ManageTeamMemberValidatorSchema,
   replaceTeamMemberValidator,
   updateTeamMemberValidator,
-  deleteTeamMemberValidator,
 };

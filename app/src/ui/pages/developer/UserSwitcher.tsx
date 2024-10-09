@@ -19,7 +19,7 @@ import { ValidationMessage } from "@ui/components/molecules/validation/Validatio
 import { useMounted } from "@ui/context/Mounted";
 import { useUserContext } from "@ui/context/user";
 import { useContent } from "@ui/hooks/content.hook";
-import { projectIdValidation } from "@ui/zod/helperValidators.zod";
+import { projectIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import classNames from "classnames";
 import { decode as decodeHTMLEntities } from "html-entities";
 import { noop } from "lodash";
