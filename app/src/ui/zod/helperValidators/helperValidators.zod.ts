@@ -5,7 +5,7 @@ import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { DateTime } from "luxon";
 import { z, ZodIssueCode, ZodRawShape } from "zod";
-import { filenameValidatior } from "./filenameValidator.zod";
+import { filenameValidator } from "./filenameValidator.zod";
 
 const y2k = new Date("2000-01-01");
 
@@ -145,8 +145,9 @@ const zeroOrGreaterCurrencyValidation = currencyValidation.superRefine((val, ctx
 const getSingleFileValidation = (options: IAppOptions) =>
   z
     .object({
-      fileName: filenameValidatior(options),
+      fileName: filenameValidator(options),
       size: z.number().min(1).max(options.maxFileSize),
+      read: z.function().nullable().optional(),
     })
     .passthrough();
 

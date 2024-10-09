@@ -61,7 +61,6 @@ class BankSetupStatementDocumentUploadHandler extends ZodFormHandlerBase<
     context: IContext;
   }): Promise<void> {
     await context.runCommand(new UploadPartnerDocumentCommand(params.projectId, params.partnerId, input));
-
     const message = this.copy.getCopyString(x =>
       x.forms.documents.files.messages.uploadedDocuments({ count: input.files.length }),
     );

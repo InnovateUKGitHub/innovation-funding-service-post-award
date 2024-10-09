@@ -210,4 +210,4 @@ exports[`filenameValidator valid text document 1`] = `undefined`;
 
 exports[`filenameValidator valid traditional chinese filename 1`] = `undefined`;
 
-exports[`filenameValidator valid ukranian filename 1`] = `undefined`;
+exports[`filenameValidator valid ukrainian filename 1`] = `undefined`;
