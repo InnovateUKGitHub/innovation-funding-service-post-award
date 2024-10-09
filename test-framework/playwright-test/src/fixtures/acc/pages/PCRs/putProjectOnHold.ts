@@ -154,8 +154,7 @@ class PutProjectOnHold {
 
   }
   async selectRadioButton(radioItem: string) {
-    const radioButton = this.page.locator(this.iukRadioButton.replace('{text}', radioItem)
-    );
+    const radioButton = this.page.locator(this.iukRadioButton.replace('{text}', radioItem));
     await radioButton.click();
   }
   async clickBacktoRequest() {
