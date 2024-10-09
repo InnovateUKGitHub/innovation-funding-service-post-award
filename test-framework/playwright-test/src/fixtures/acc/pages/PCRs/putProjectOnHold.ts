@@ -185,11 +185,12 @@ class PutProjectOnHold {
     for (let i = 0; i < listCount; i++) {
       const textContent = await task.nth(i).innerText(); 
       if (textContent === expectedText) { 
-        let eleFound = true;
+        eleFound = true;
         expect(textContent).toBe(expectedText); 
         break; 
       }
     }
+  
 }
   async validatePcrSummaryList(expectedText: string) {
     const pcrSummary = this.pcrSummaryList.locator('*');
@@ -200,11 +201,12 @@ class PutProjectOnHold {
     for (let i = 0; i < await listCount; i++) {
       const textContent = await pcrSummary.nth(i).innerText();
       if (textContent === expectedText) { 
-        let eleFound = true;
+         eleFound = true;
         expect(textContent).toBe(expectedText); 
         break; 
       }
     }
+   
 }
   async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
     const element = this.submittedDetails.replace("%s", fieldName);
