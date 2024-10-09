@@ -582,8 +582,3 @@ class PutProjectOnHold {
     await this.createRequest.click();
   }
 }
-
-
-
-
-
