@@ -11,6 +11,7 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { PartnerStatus } from "@framework/constants/partner";
 
 class ProjectSetupFormHandler extends ZodFormHandlerBase<ProjectSetupSchema, ProjectSetupParams> {
   constructor() {
@@ -50,7 +51,7 @@ class ProjectSetupFormHandler extends ZodFormHandlerBase<ProjectSetupSchema, Pro
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     await context.runCommand(
       new UpdatePartnerCommand(
-        { id: params.partnerId, projectId: params.projectId, ...input },
+        { id: params.partnerId, projectId: params.projectId, partnerStatus: PartnerStatus.Active, ...input },
         { projectSource: project.projectSource },
       ),
     );
