@@ -18,19 +18,39 @@ class Table<ColumnHeader extends string> {
    * @example
    * lookupCell("Forecast for period", "Labour"); // 123.45
    */
-  lookupCell(columnHeader: ColumnHeader, row: string) {
-    return this.get().evaluate(table => {
-      const rows = table.querySelectorAll("tr");
-      let index: number = 0;
-      rows.evaluateAll(rows =>
-        rows.forEach((element, i) => {
-          if (element.textContent === columnHeader) {
-            index = i;
-          }
-        }),
-      );
-      return this.page.locator("table tr", { hasText: row }).locator(`td:nth(${index + 1})`);
-    });
+  async lookupCell(columnHeader: ColumnHeader, row: string | number) {
+    if (typeof row === "string") {
+      return await this.get().evaluate(table => {
+        const trs = table.querySelectorAll("tr");
+        let index: number = 0;
+        trs.evaluateAll(rows =>
+          rows.forEach((row, i) => {
+            if (row.textContent === columnHeader) {
+              index = i;
+            }
+          }),
+        );
+        return this.page.locator("table tr", { hasText: row }).locator(`td:nth(${index + 1})`);
+      });
+    } else if (typeof row === "number") {
+      return await this.get().evaluate(table => {
+        const trs = table.querySelectorAll("tr");
+        let index: number = 0;
+        trs.evaluateAll(rows =>
+          rows.forEach((row, i) => {
+            if (row.textContent === columnHeader) {
+              index = i;
+            }
+          }),
+        );
+
+        const tableRow = this.page.locator(`table tr:nth(${row})`);
+
+        return tableRow.locator(`td:nth(${index})`);
+      });
+    } else {
+      throw new Error("row must be a string or a number");
+    }
   }
 
   static fromCaption(page: Page, caption: string) {
