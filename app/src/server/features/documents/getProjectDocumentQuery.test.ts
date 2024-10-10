@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
@@ -55,7 +55,7 @@ describe("GetProjectDocumentQuery", () => {
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
       const auth = new Authorisation({
-        [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.MonitoringOfficer, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
@@ -68,7 +68,9 @@ describe("GetProjectDocumentQuery", () => {
 
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.ProjectManager, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -81,7 +83,7 @@ describe("GetProjectDocumentQuery", () => {
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
       const auth = new Authorisation({
-        [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} },
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.FinancialContact, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
@@ -96,7 +98,7 @@ describe("GetProjectDocumentQuery", () => {
       const query = new GetProjectDocumentQuery(project1.Id, document.Id);
 
       const auth = new Authorisation({
-        [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+        [project2.Id]: { projectRoles: ProjectRolePermissionBits.MonitoringOfficer, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });

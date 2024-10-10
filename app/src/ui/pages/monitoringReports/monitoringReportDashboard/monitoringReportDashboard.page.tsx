@@ -3,7 +3,7 @@ import { IRoutes } from "@ui/routing/routeConfig";
 import type { ContentSelector } from "@copy/type";
 import { useMonitoringReportDashboardQuery, MonitoringReport } from "./monitoringReportDashboard.logic";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -169,6 +169,7 @@ export const MonitoringReportDashboardRoute = defineRoute<{
     periodId: r.params.periodId ? parseInt(r.params.periodId, 10) : undefined,
   }),
   container: MonitoringReportDashboard,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, params) =>
+    auth.forProject(params.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDashboard.title),
 });

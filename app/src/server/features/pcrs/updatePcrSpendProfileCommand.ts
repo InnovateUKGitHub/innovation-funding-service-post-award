@@ -1,6 +1,6 @@
 import { CostCategoryType, CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { Option } from "@framework/dtos/option";
 import {
@@ -48,7 +48,7 @@ export class UpdatePCRSpendProfileCommand extends AuthorisedAsyncCommandBase<boo
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager);
   }
 
   private getBaseSpendProfileEntity(dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): BaseEntityFields {

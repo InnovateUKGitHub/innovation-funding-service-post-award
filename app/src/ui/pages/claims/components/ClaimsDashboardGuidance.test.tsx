@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimsDashboardGuidance, ClaimsDashboardGuidanceProps } from "./ClaimsDashboardGuidance";
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
@@ -39,9 +39,9 @@ describe("<ClaimsDashboardGuidance />", () => {
 
     describe("when not overdue", () => {
       test.each`
-        name             | inputRoles                       | expectedContent
-        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${stubContent.claimsMessages.guidanceMessage}
-        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${stubContent.claimsMessages.guidanceMessage}
+        name             | inputRoles                                     | expectedContent
+        ${"when FC"}     | ${ProjectRolePermissionBits.FinancialContact}  | ${stubContent.claimsMessages.guidanceMessage}
+        ${"when not FC"} | ${ProjectRolePermissionBits.MonitoringOfficer} | ${stubContent.claimsMessages.guidanceMessage}
       `("when not overdue partner as non SBRI competition $name", ({ inputRoles, expectedContent }) => {
         const { container, queryByText } = setup({
           competitionType: "CR&D",
@@ -54,9 +54,9 @@ describe("<ClaimsDashboardGuidance />", () => {
       });
 
       test.each`
-        name             | inputRoles                       | shouldHaveMarkdownElement | expectedContent
-        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${false}                  | ${stubContent.claimsMessages.guidanceMessage}
-        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${true}                   | ${stubContent.claimsMessages.guidanceMessage}
+        name             | inputRoles                                     | shouldHaveMarkdownElement | expectedContent
+        ${"when FC"}     | ${ProjectRolePermissionBits.FinancialContact}  | ${false}                  | ${stubContent.claimsMessages.guidanceMessage}
+        ${"when not FC"} | ${ProjectRolePermissionBits.MonitoringOfficer} | ${true}                   | ${stubContent.claimsMessages.guidanceMessage}
       `(
         "when not overdue partner as a SBRI project $name",
         ({ inputRoles, shouldHaveMarkdownElement, expectedContent }) => {

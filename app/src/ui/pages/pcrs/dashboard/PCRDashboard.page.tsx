@@ -1,5 +1,5 @@
 import { PCRItemType, pcrStatusMetaValues } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -219,5 +219,9 @@ export const PCRsDashboardRoute = defineRoute({
   accessControl: (auth, { projectId }) =>
     auth
       .forProject(projectId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+      .hasAnyRoles(
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+      ),
 });

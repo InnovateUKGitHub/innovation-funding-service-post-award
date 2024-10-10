@@ -6,7 +6,7 @@ import {
   PostcodeTaskStatus,
   SpendProfileStatus,
 } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 interface ValidationResponse {
   iban: string | null;
@@ -85,7 +85,7 @@ export interface PartnerDto {
   projectId: ProjectId;
   projectRoleName: string;
   remainingParticipantGrant: number | null;
-  roles: ProjectRole | SfRoles;
+  roles: ProjectRolePermissionBits | SfRoles;
   spendProfileStatus: SpendProfileStatus;
   spendProfileStatusLabel: string | null;
   statusName: string;

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "@server/features/documents/documentQueryBase";
@@ -22,7 +22,9 @@ export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends Document
 
     if (!projectChangeRequestExists) return false;
 
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager);
   }
 
   protected getRecordId(): Promise<string> {

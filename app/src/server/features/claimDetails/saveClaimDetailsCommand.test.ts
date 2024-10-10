@@ -3,7 +3,7 @@ import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { CostCategory } from "@framework/entities/costCategory";
@@ -530,8 +530,8 @@ describe("SaveClaimDetails", () => {
       const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -549,8 +549,13 @@ describe("SaveClaimDetails", () => {
       const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
-          partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager },
+          projectRoles:
+            ProjectRolePermissionBits.FinancialContact |
+            ProjectRolePermissionBits.MonitoringOfficer |
+            ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: {
+            [partner.id]: ProjectRolePermissionBits.MonitoringOfficer | ProjectRolePermissionBits.ProjectManager,
+          },
         },
       });
 

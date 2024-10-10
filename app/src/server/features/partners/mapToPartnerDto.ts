@@ -6,7 +6,7 @@ import {
   PartnerClaimStatus,
   PostcodeTaskStatus,
 } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Partner } from "@framework/entities/partner";
@@ -18,8 +18,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
   public readonly runnableName: string = "MapToPartnerDtoCommand";
   constructor(
     private readonly item: Partner,
-    private readonly partnerLevelRoles: ProjectRole,
-    private readonly projectLevelRoles: ProjectRole,
+    private readonly partnerLevelRoles: ProjectRolePermissionBits,
+    private readonly projectLevelRoles: ProjectRolePermissionBits,
   ) {
     super();
   }

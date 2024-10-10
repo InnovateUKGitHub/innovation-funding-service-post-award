@@ -1,6 +1,6 @@
 import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FullDateTime } from "@ui/components/atoms/Date";
@@ -155,6 +155,6 @@ export const ClaimForecastRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimForecast.title),
 });

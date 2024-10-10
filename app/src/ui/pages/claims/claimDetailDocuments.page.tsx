@@ -4,7 +4,7 @@ import { Content } from "@ui/components/molecules/Content/content";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { BaseProps, defineRoute } from "../../app/containerBase";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentGuidance } from "@ui/components/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -232,5 +232,5 @@ export const ClaimDetailDocumentsRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

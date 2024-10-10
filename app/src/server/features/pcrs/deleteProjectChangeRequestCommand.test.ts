@@ -1,5 +1,5 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@shared/appError";
@@ -18,7 +18,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
           partnerRoles: {},
         },
       });
@@ -36,7 +36,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {},
         },
       });

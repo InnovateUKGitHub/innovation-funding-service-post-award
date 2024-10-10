@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -53,6 +53,7 @@ export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfi
     partnerId: r.params.partnerId as PartnerId,
   }),
   container: FailedBankCheckConfirmation,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, params) =>
+    auth.forProject(params.projectId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: x => x.content.getTitleCopy(x => x.pages.failedBankCheckConfirmation.title),
 });

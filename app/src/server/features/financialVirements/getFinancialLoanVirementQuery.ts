@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -14,7 +14,9 @@ export class GetFinancialLoanVirementQuery extends AuthorisedAsyncQueryBase<Fina
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext): Promise<FinancialLoanVirementDto> {

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { AuthorisedAsyncCommandBase } from "../common/commandBase";
@@ -20,10 +20,14 @@ export class DeletePartnerDocumentCommand extends AuthorisedAsyncCommandBase<voi
     if (!documentExists) return false;
 
     return (
-      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer) ||
       auth
         .forPartner(this.projectId, this.partnerId)
-        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
+        .hasAnyRoles(
+          ProjectRolePermissionBits.FinancialContact,
+          ProjectRolePermissionBits.MonitoringOfficer,
+          ProjectRolePermissionBits.ProjectManager,
+        )
     );
   }
 

@@ -1,4 +1,4 @@
-import { filenameValidatior } from "./filenameValidator.zod";
+import { filenameValidator } from "./filenameValidator.zod";
 
 describe("filenameValidator", () => {
   test.each`
@@ -12,7 +12,7 @@ describe("filenameValidator", () => {
     ${"valid filename with acute"}                 | ${"Union européenne.txt"}               | ${true}
     ${"valid filename with œ character"}           | ${"J'aime œufs.pptx"}                   | ${true}
     ${"valid filename with ß character"}           | ${"straße.png"}                         | ${true}
-    ${"valid ukranian filename"}                   | ${"Барак Обама.pdf"}                    | ${true}
+    ${"valid ukrainian filename"}                  | ${"Барак Обама.pdf"}                    | ${true}
     ${"valid traditional chinese filename"}        | ${"巴拉克 歐巴馬.txt"}                  | ${true}
     ${"valid katakana filename"}                   | ${"バラク オバマ.pptx"}                 | ${true}
     ${"valid burmese filename"}                    | ${"ဘာရက် အိုဘားမား.txt"}                | ${true}
@@ -27,7 +27,7 @@ describe("filenameValidator", () => {
     ${"invalid file with path"}                    | ${"/mnt/c/whatever.pptx"}               | ${false}
     ${"man in business suit levitating"}           | ${"🕴️.txt"}                             | ${true}
   `("$test", ({ filename, valid }) => {
-    const res = filenameValidatior({
+    const res = filenameValidator({
       maxFileBasenameLength: 32,
       permittedTypes: {
         imageTypes: ["png"],

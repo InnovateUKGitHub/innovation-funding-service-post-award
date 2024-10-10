@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
 type AvailableAuthRoles = "Associate" | "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";
@@ -6,7 +6,7 @@ type AvailableAuthRoles = "Associate" | "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc
 /**
  * Gets object with auth roles as series of booleans
  */
-export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${AvailableAuthRoles}`, boolean> {
+export function getAuthRoles(role: ProjectRolePermissionBits | SfRoles): Record<`is${AvailableAuthRoles}`, boolean> {
   let isFc: boolean;
   let isPm: boolean;
   let isMo: boolean;
@@ -14,11 +14,13 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
 
   let isUnknown = false;
   if (typeof role == "number") {
-    isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
-    isFc = !!(role & ProjectRole.FinancialContact);
-    isPm = !!(role & ProjectRole.ProjectManager);
-    isMo = !!(role & ProjectRole.MonitoringOfficer);
-    isAssociate = !!(role & ProjectRole.Associate);
+    isUnknown =
+      (role & ProjectRolePermissionBits.Unknown) === ProjectRolePermissionBits.Unknown &&
+      role === ProjectRolePermissionBits.Unknown;
+    isFc = !!(role & ProjectRolePermissionBits.FinancialContact);
+    isPm = !!(role & ProjectRolePermissionBits.ProjectManager);
+    isMo = !!(role & ProjectRolePermissionBits.MonitoringOfficer);
+    isAssociate = !!(role & ProjectRolePermissionBits.Associate);
   } else {
     isFc = role.isFc;
     isPm = role.isPm;
@@ -44,35 +46,35 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
 }
 
 class RoleChecker {
-  private readonly permissions: ProjectRole;
-  constructor(roles: ProjectRole) {
+  private readonly permissions: ProjectRolePermissionBits;
+  constructor(roles: ProjectRolePermissionBits) {
     this.permissions = roles;
   }
 
-  public hasRole(role: ProjectRole): boolean {
+  public hasRole(role: ProjectRolePermissionBits): boolean {
     return this.hasAllRoles(role);
   }
 
-  public hasOnlyRole(role: ProjectRole): boolean {
+  public hasOnlyRole(role: ProjectRolePermissionBits): boolean {
     return this.permissions === role;
   }
 
-  public hasAllRoles(...roles: ProjectRole[]): boolean {
+  public hasAllRoles(...roles: ProjectRolePermissionBits[]): boolean {
     const combinedRoles = this.combineRoles(roles);
     return (this.permissions & combinedRoles) === combinedRoles;
   }
 
-  public hasAnyRoles(...roles: ProjectRole[]): boolean {
+  public hasAnyRoles(...roles: ProjectRolePermissionBits[]): boolean {
     const combinedRoles = this.combineRoles(roles);
-    return (this.permissions & combinedRoles) !== ProjectRole.Unknown;
+    return (this.permissions & combinedRoles) !== ProjectRolePermissionBits.Unknown;
   }
 
   public getRoles() {
     return this.permissions;
   }
 
-  private combineRoles(roles: ProjectRole[]) {
-    return roles.reduce((combined, r) => (combined |= r), ProjectRole.Unknown);
+  private combineRoles(roles: ProjectRolePermissionBits[]) {
+    return roles.reduce((combined, r) => (combined |= r), ProjectRolePermissionBits.Unknown);
   }
 }
 
@@ -102,7 +104,7 @@ export class Authorisation {
         return partner;
       }
     }
-    return ProjectRole.Unknown;
+    return ProjectRolePermissionBits.Unknown;
   }
 
   private getRolesForProject(projectId: ProjectId) {
@@ -110,6 +112,6 @@ export class Authorisation {
     if (project) {
       return project.projectRoles;
     }
-    return ProjectRole.Unknown;
+    return ProjectRolePermissionBits.Unknown;
   }
 }

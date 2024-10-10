@@ -5,7 +5,7 @@ import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflo
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -260,5 +260,6 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
     costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager),
 });

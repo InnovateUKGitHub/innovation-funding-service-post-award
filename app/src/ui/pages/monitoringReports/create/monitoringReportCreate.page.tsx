@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useMonitoringReportCreateQuery, useOnMonitoringReportCreate } from "./monitoringReportCreate.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -96,6 +96,7 @@ export const MonitoringReportCreateRoute = defineRoute<{
   routePath: "/projects/:projectId/monitoring-reports/create",
   container: MonitoringReportCreatePage,
   getParams: r => ({ projectId: r.params.projectId as ProjectId }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsCreate.title),
 });

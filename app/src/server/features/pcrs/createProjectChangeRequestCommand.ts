@@ -2,7 +2,7 @@
 
 import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRDto, PCRItemTypeDto, CreatePcrDto, CreatePcrItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities/projectChangeRequest";
 import { Authorisation } from "@framework/types/authorisation";
@@ -24,7 +24,7 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager);
   }
 
   private async insertProjectChangeRequest(

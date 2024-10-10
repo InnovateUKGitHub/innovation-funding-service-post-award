@@ -1,5 +1,5 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface ProjectSetupBankDetailsVerifyParams {
   projectId: ProjectId;
@@ -99,6 +100,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
       </Section>
       <Section qa="bank-details-verify-section">
         <Form data-qa="bank-details-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
+          <input type="hidden" name="form" value={FormTypes.ProjectSetupBankDetailsVerify} />
           <Fieldset>
             <Button disabled={isFetching} type="submit">
               <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
@@ -129,5 +131,5 @@ export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupBankDetailsVerify.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

@@ -1,6 +1,6 @@
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { BankCheckStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { TValidationError } from "@framework/mappers/mapRhfError";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -300,5 +300,5 @@ export const ProjectSetupBankDetailsRoute = defineRoute({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupBankDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

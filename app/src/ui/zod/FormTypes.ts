@@ -13,9 +13,19 @@ enum FormTypes {
   ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
 
   // Project Setup
+  ProjectSetup = "projectSetup",
   ProjectSetupBankDetails = "projectSetupBankDetails",
+  ProjectSetupBankDetailsVerify = "projectSetupBankDetailsVerify",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",
   ProjectSetupForecast = "projectSetupForecast",
+  ProjectSetupPostcode = "projectSetupPostcode",
+  ProjectSetupBankStatementUpload = "projectSetupBankStatementUpload",
+  ProjectSetupBankStatementDelete = "projectSetupBankStatementDelete",
+  ProjectSetupBankStatement = "projectSetupBankStatement",
+
+  // Partner details
+
+  PartnerDetailsEdit = "partnerDetailsEdit",
 
   // Forecast Tile
   ForecastTileForecast = "forecastTileForecast",

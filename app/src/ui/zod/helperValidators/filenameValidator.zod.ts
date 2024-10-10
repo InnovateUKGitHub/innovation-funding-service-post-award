@@ -107,7 +107,7 @@ const badFileNames = [
     .flat(),
 ];
 
-const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" | "permittedTypes">) => {
+const filenameValidator = (options: Pick<IAppOptions, "maxFileBasenameLength" | "permittedTypes">) => {
   const allowedExtensions = Object.values(options.permittedTypes).flat();
 
   return z
@@ -264,4 +264,4 @@ const filenameValidatior = (options: Pick<IAppOptions, "maxFileBasenameLength" |
     });
 };
 
-export { filenameValidatior, CharacterType };
+export { filenameValidator, CharacterType };

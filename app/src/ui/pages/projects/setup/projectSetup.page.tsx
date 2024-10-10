@@ -1,6 +1,6 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { List } from "@ui/components/atoms/List/list";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -10,11 +10,15 @@ import { TaskListSection, Task, TaskStatus } from "@ui/components/molecules/Task
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useOnUpdateProjectSetup, useProjectSetupQuery } from "./projectSetup.logic";
-import { useZodFormatToRhfErrors } from "@framework/util/errorHelpers";
-import { projectSetupErrorMap, projectSetupSchema } from "./projectSetup.zod";
+import { projectSetupErrorMap, ProjectSetupSchema, projectSetupSchema } from "./projectSetup.zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -38,14 +42,26 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
   const { getContent } = useContent();
   const { project, partner, fragmentRef } = useProjectSetupQuery(props.projectId, props.partnerId);
 
-  const [validatorErrors, setValidatorZodErrors] = useZodFormatToRhfErrors();
-
   const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetup(
     props.projectId,
     props.partnerId,
     partner,
     props.routes.projectDashboard.getLink({}).path,
   );
+
+  const { handleSubmit, setError, formState } = useForm<z.input<ProjectSetupSchema>>({
+    defaultValues: {
+      form: FormTypes.ProjectSetup,
+      postcode: partner.postcode ?? "",
+      bankDetailsTaskStatus: partner.bankDetailsTaskStatus,
+      spendProfileStatus: partner.spendProfileStatus,
+    },
+    resolver: zodResolver(projectSetupSchema, { errorMap: projectSetupErrorMap }),
+  });
+
+  const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<
+    z.output<ProjectSetupSchema>
+  >;
 
   return (
     <Page
@@ -55,7 +71,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
         </BackLink>
       }
       apiError={apiError}
-      validationErrors={validatorErrors}
+      validationErrors={validationErrors}
       fragmentRef={fragmentRef}
     >
       <Section qa="guidance">
@@ -71,7 +87,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
               partnerId: props.partnerId,
               projectId: props.projectId,
             })}
-            rhfError={validatorErrors?.spendProfileStatus as RhfError}
+            rhfError={validationErrors?.spendProfileStatus as RhfError}
             disabled={isFetching}
           />
 
@@ -79,7 +95,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
             name={x => x.pages.projectSetup.provideBankDetails}
             status={partner.bankDetailsTaskStatusLabel as TaskStatus}
             route={getBankDetailsLink(partner, props.routes, props.projectId, props.partnerId)}
-            rhfError={validatorErrors?.bankDetailsTaskStatus as RhfError}
+            rhfError={validationErrors?.bankDetailsTaskStatus as RhfError}
             disabled={isFetching}
           />
 
@@ -90,7 +106,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
               projectId: props.projectId,
               partnerId: props.partnerId,
             })}
-            rhfError={validatorErrors?.postcode as RhfError}
+            rhfError={validationErrors?.postcode as RhfError}
             disabled={isFetching}
           />
         </TaskListSection>
@@ -99,36 +115,19 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
       <form
         data-qa="projectSetupForm"
         method="POST"
-        onSubmit={e => {
-          e.preventDefault();
-
-          /*
-           * First validate the partial partner dto to see if the necessary work has been completed
-           */
-          const result = projectSetupSchema.safeParse(
-            {
-              postcode: partner.postcode,
-              bankDetailsTaskStatus: String(partner.bankDetailsTaskStatus),
-              spendProfileStatus: String(partner.spendProfileStatus),
+        onSubmit={handleSubmit(data =>
+          onUpdate({
+            data: {
+              ...data,
+              partnerStatus: PartnerStatus.Active,
             },
-            {
-              errorMap: projectSetupErrorMap,
-            },
-          );
-
-          /*
-           * if validation is failed then convert from zod format to Rhf format and set in the state
-           */
-          if (!result?.success) {
-            setValidatorZodErrors(result.error);
-          } else {
-            /*
-             * if validation passed, proceed to update and move on
-             */
-            onUpdate({ data: { partnerStatus: PartnerStatus.Active } });
-          }
-        }}
+          }),
+        )}
       >
+        <input type="hidden" name="form" value={FormTypes.ProjectSetup} />
+        <input type="hidden" name="postcode" value={partner.postcode ?? ""} />
+        <input type="hidden" name="bankDetailsTaskStatus" value={partner.bankDetailsTaskStatus ?? undefined} />
+        <input type="hidden" name="spendProfileStatus" value={partner.spendProfileStatus ?? undefined} />
         <Fieldset>
           {project.projectSource === "Manual" ? (
             <Link route={props.routes.projectDashboard.getLink({})} styling="SecondaryButton" disabled={isFetching}>
@@ -187,6 +186,7 @@ export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   container: ProjectSetupPage,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, params) =>
+    auth.forProject(params.projectId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetup.title),
 });

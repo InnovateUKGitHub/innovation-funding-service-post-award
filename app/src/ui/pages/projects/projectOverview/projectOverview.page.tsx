@@ -3,7 +3,7 @@ import { ProjectOverviewSinglePartnerDetails } from "./projectOverviewSinglePart
 import { ProjectOverviewAllPartnersDetails } from "./projectOverviewAllPartners";
 import ProjectOverviewTiles from "./projectOverviewTiles";
 import { useProjectOverviewData, isPartnerWithdrawn } from "./projectOverview.logic";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -82,10 +82,10 @@ export const ProjectOverviewRoute = defineRoute({
     auth
       .forProject(params.projectId)
       .hasAnyRoles(
-        ProjectRole.FinancialContact,
-        ProjectRole.ProjectManager,
-        ProjectRole.MonitoringOfficer,
-        ProjectRole.Associate,
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.Associate,
       ),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectOverview.title),
 });

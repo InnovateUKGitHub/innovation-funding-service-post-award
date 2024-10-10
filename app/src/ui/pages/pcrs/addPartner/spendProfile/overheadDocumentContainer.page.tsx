@@ -29,7 +29,7 @@ import { BackLink } from "@ui/components/atoms/Links/links";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { noop } from "lodash";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { H2, H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { LinksList } from "@ui/components/atoms/LinksList/linksList";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
@@ -227,5 +227,5 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
     costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileOverheadDocuments.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

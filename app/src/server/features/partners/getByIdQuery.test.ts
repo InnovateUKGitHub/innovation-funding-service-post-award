@@ -9,7 +9,7 @@ import {
   BankDetailsTaskStatus,
   BankCheckStatus,
 } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 
 describe("getAllForProjectQuery", () => {
@@ -103,7 +103,7 @@ describe("getAllForProjectQuery", () => {
       capLimitDeferredGrant: 90_000,
       totalFutureForecastsForParticipants: 1002,
       totalCostsSubmitted: 100,
-      roles: ProjectRole.ProjectManager,
+      roles: ProjectRolePermissionBits.ProjectManager,
       forecastLastModifiedDate: null,
       claimsWithParticipant: 20,
       overdueProject: false,
@@ -319,12 +319,12 @@ describe("getAllForProjectQuery", () => {
     context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
 
     const result1 = await context.runQuery(new GetByIdQuery(partner.id));
-    expect(result1.roles).toBe(ProjectRole.FinancialContact);
+    expect(result1.roles).toBe(ProjectRolePermissionBits.FinancialContact);
 
     // now set user to the project manager
     context.user.set({ email: projectContact2.Acc_ContactId__r.Email });
 
     const result2 = await context.runQuery(new GetByIdQuery(partner.id));
-    expect(result2.roles).toBe(ProjectRole.ProjectManager);
+    expect(result2.roles).toBe(ProjectRolePermissionBits.ProjectManager);
   });
 });

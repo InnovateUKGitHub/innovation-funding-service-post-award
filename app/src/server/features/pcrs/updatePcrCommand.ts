@@ -5,7 +5,7 @@ import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRStepType, PCRStatus, PCRItemType, PCRItemTypeName } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
   ProjectChangeRequestItemEntity,
@@ -60,7 +60,9 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   private async insertStatusChange(
@@ -172,7 +174,7 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
     }
 
-    if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
+    if (auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager)) {
       const partnerAdditionItems = mergedPcr?.items?.filter(isPartnerAdditionItem);
       for (const item of partnerAdditionItems) {
         await context.runCommand(

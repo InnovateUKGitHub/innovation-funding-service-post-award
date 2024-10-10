@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -17,8 +17,10 @@ export class GetCostsSummaryForPeriodQuery extends AuthorisedAsyncQueryBase<Cost
 
   async accessControl(auth: Authorisation) {
     return (
-      auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
-      auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact)
+      auth
+        .forProject(this.projectId)
+        .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager) ||
+      auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact)
     );
   }
 

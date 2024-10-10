@@ -1,5 +1,5 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Option } from "@framework/dtos/option";
 import { ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities/projectChangeRequest";
@@ -22,7 +22,9 @@ export class GetProjectChangeRequestStatusChanges extends AuthorisedAsyncQueryBa
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected async run(context: IContext): Promise<ProjectChangeRequestStatusChangeDto[]> {
@@ -32,8 +34,8 @@ export class GetProjectChangeRequestStatusChanges extends AuthorisedAsyncQueryBa
     );
     const statusLookup = await context.runQuery(new GetPcrStatusesQuery());
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
-    const isPm = roles.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
-    const isMo = roles.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    const isPm = roles.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager);
+    const isMo = roles.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
 
     return statusChanges
       .map<ProjectChangeRequestStatusChangeDto>(x => this.mapItem(context, x, isMo, isPm, statusLookup))

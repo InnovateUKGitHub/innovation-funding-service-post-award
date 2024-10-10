@@ -24,7 +24,7 @@ const getProjectSetupBankDetailsSchema = (
 const validatedProjectSetupBankDetailsSchema = z.object({
   projectId: projectIdValidation,
   partnerId: partnerIdValidation,
-  form: z.literal(FormTypes.ProjectSetupBankDetails),
+  form: z.union([z.literal(FormTypes.ProjectSetupBankDetails), z.literal(FormTypes.ProjectSetupBankDetailsVerify)]),
   companyNumber: projectSetupBankDetailsValidation,
   accountBuilding: projectSetupBankDetailsValidation,
   accountStreet: projectSetupBankDetailsValidation,

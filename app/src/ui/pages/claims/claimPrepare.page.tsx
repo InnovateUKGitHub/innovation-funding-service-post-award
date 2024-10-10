@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Accordion } from "@ui/components/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atoms/Accordion/AccordionItem";
@@ -126,6 +126,6 @@ export const PrepareClaimRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimPrepare.title),
 });

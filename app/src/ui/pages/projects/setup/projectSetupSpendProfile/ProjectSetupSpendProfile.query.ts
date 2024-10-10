@@ -5,6 +5,18 @@ export const projectSetupSpendProfileQuery = graphql`
       uiapi {
         ...NewForecastTableFragment
         ...PageFragment
+        query {
+          Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }) {
+            edges {
+              node {
+                Id
+                Acc_SpendProfileCompleted__c {
+                  value
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

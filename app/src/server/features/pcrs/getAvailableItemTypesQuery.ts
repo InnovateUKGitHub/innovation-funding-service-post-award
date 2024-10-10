@@ -4,7 +4,7 @@ import {
   PCRItemDisabledReason,
   getPcrItemsTooManyViolations,
 } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -26,7 +26,11 @@ export class GetAvailableItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItem
   public async accessControl(auth: Authorisation) {
     return auth
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.FinancialContact,
+      );
   }
 
   protected async run(context: IContext): Promise<PCRItemTypeDto[]> {

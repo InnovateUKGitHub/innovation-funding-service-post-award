@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -48,7 +48,7 @@ describe("DeleteProjectDocumentCommand()", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {},
         },
       });
@@ -61,7 +61,7 @@ describe("DeleteProjectDocumentCommand()", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
           partnerRoles: {},
         },
       });
@@ -74,7 +74,7 @@ describe("DeleteProjectDocumentCommand()", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
           partnerRoles: {},
         },
       });
@@ -87,7 +87,7 @@ describe("DeleteProjectDocumentCommand()", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
+          projectRoles: ProjectRolePermissionBits.Unknown,
           partnerRoles: {},
         },
       });

@@ -5,7 +5,7 @@ import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
 import { ClaimDtoValidator } from "./claimDtoValidator";
 import { ReceivedStatus } from "@framework/entities/received-status";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 describe("claimDtoValidator()", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {
@@ -69,7 +69,7 @@ describe("claimDtoValidator()", () => {
               [],
               stubShowErrors,
               stubCompetitionType,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(status.isValid).toBeFalsy();
@@ -90,7 +90,7 @@ describe("claimDtoValidator()", () => {
               [],
               stubShowErrors,
               stubCompetitionType,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(status.isValid).toBeTruthy();
@@ -108,7 +108,7 @@ describe("claimDtoValidator()", () => {
           [],
           stubShowErrors,
           stubCompetitionType,
-          ProjectRole.FinancialContact,
+          ProjectRolePermissionBits.FinancialContact,
         );
 
         expect(id.isValid).toBeTruthy();
@@ -124,7 +124,7 @@ describe("claimDtoValidator()", () => {
           [],
           stubShowErrors,
           stubCompetitionType,
-          ProjectRole.FinancialContact,
+          ProjectRolePermissionBits.FinancialContact,
         );
 
         expect(id.isValid).toBeFalsy();
@@ -164,7 +164,7 @@ describe("claimDtoValidator()", () => {
               [],
               stubShowErrors,
               stubNotKtpCompetition,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(claimState.isValid).toBeTruthy();
@@ -173,11 +173,11 @@ describe("claimDtoValidator()", () => {
 
         describe("when claim is a final claim non-ktp competition type", () => {
           test.each`
-            name                               | role                             | stubClaim                                            | hasError
-            ${"when fc pcf status is valid"}   | ${ProjectRole.FinancialContact}  | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${false}
-            ${"when fc pcf status is invalid"} | ${ProjectRole.FinancialContact}  | ${{ isFinalClaim: true, pcfStatus: "Not Received" }} | ${true}
-            ${"when mo pcf status is valid"}   | ${ProjectRole.MonitoringOfficer} | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${false}
-            ${"when mo pcf status is invalid"} | ${ProjectRole.MonitoringOfficer} | ${{ isFinalClaim: true, pcfStatus: "Not Received" }} | ${false}
+            name                               | role                                           | stubClaim                                            | hasError
+            ${"when fc pcf status is valid"}   | ${ProjectRolePermissionBits.FinancialContact}  | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${false}
+            ${"when fc pcf status is invalid"} | ${ProjectRolePermissionBits.FinancialContact}  | ${{ isFinalClaim: true, pcfStatus: "Not Received" }} | ${true}
+            ${"when mo pcf status is valid"}   | ${ProjectRolePermissionBits.MonitoringOfficer} | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${false}
+            ${"when mo pcf status is invalid"} | ${ProjectRolePermissionBits.MonitoringOfficer} | ${{ isFinalClaim: true, pcfStatus: "Not Received" }} | ${false}
           `("$name", ({ role, stubClaim, hasError }) => {
             const stubFinalClaim = { ...stubClaimDto, ...stubClaim } as ClaimDto;
 
@@ -216,7 +216,7 @@ describe("claimDtoValidator()", () => {
                 [],
                 stubShowErrors,
                 stubCompetitionType,
-                ProjectRole.FinancialContact,
+                ProjectRolePermissionBits.FinancialContact,
               );
 
               expect(claimState.isValid).toBe(!hasError);
@@ -250,7 +250,7 @@ describe("claimDtoValidator()", () => {
               stubDocuments,
               stubShowErrors,
               ktpCompetitionType,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(claimState.isValid).toBe(expectedToBeValid);
@@ -287,7 +287,7 @@ describe("claimDtoValidator()", () => {
               stubDocuments,
               stubShowErrors,
               testCompetitionType,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(claimState.isValid).toBe(expectedToBeValid);
@@ -353,7 +353,7 @@ describe("claimDtoValidator()", () => {
                 [stubDocument],
                 stubShowErrors,
                 nonKtpCompetitionType,
-                ProjectRole.FinancialContact,
+                ProjectRolePermissionBits.FinancialContact,
               );
 
               expect(claimState.isValid).toBe(expectedState);
@@ -388,7 +388,7 @@ describe("claimDtoValidator()", () => {
                 [stubDocument],
                 stubShowErrors,
                 ktpCompetitionType,
-                ProjectRole.FinancialContact,
+                ProjectRolePermissionBits.FinancialContact,
               );
 
               expect(claimState.isValid).toBe(expectedState);
@@ -417,7 +417,7 @@ describe("claimDtoValidator()", () => {
                 [stubDocument],
                 stubShowErrors,
                 stubKtpCompetition,
-                ProjectRole.FinancialContact,
+                ProjectRolePermissionBits.FinancialContact,
               );
 
               expect(claimState.isValid).toBe(expectedState);
@@ -449,7 +449,7 @@ describe("claimDtoValidator()", () => {
               [stubDocument],
               stubShowErrors,
               testCompetitionType,
-              ProjectRole.FinancialContact,
+              ProjectRolePermissionBits.FinancialContact,
             );
 
             expect(claimState.isValid).toBe(expectedState);
@@ -477,7 +477,7 @@ describe("claimDtoValidator()", () => {
             [],
             stubShowErrors,
             stubCompetitionType,
-            ProjectRole.FinancialContact,
+            ProjectRolePermissionBits.FinancialContact,
           );
 
           expect(comments.isValid).toBe(errorMessage === null);
@@ -504,7 +504,7 @@ describe("claimDtoValidator()", () => {
             [],
             stubShowErrors,
             stubCompetitionType,
-            ProjectRole.FinancialContact,
+            ProjectRolePermissionBits.FinancialContact,
           );
 
           expect(comments.isValid).toBe(errorMessage === null);
@@ -529,7 +529,7 @@ describe("claimDtoValidator()", () => {
           [],
           stubShowErrors,
           stubCompetitionType,
-          ProjectRole.FinancialContact,
+          ProjectRolePermissionBits.FinancialContact,
         );
 
         const expectedToBeValid = errorMessage === null;

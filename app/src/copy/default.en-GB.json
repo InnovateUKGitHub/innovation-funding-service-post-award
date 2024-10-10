@@ -2365,12 +2365,12 @@
       },
       "bankDetailsTaskStatus": {
         "errors": {
-          "invalid_enum_value": "You must provide your bank details."
+          "custom": "You must provide your bank details."
         }
       },
       "spendProfileStatus": {
         "errors": {
-          "invalid_enum_value": "You must complete your spend profile."
+          "custom": "You must complete your spend profile."
         }
       }
     },

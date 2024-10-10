@@ -44,7 +44,7 @@ const getProjectLevelUpload = (config: IAppOptions) =>
 type UploadBankStatementSchemaType = ReturnType<typeof getBankStatementUpload>;
 const getBankStatementUpload = (config: IAppOptions) =>
   z.object({
-    form: z.literal(FormTypes.ProjectLevelUpload),
+    form: z.literal(FormTypes.ProjectSetupBankStatementUpload),
     projectId: projectIdValidation,
     partnerId: z.union([emptyStringToUndefinedValidation, partnerIdValidation]),
     description: z.union([
@@ -151,6 +151,14 @@ const claimLevelDelete = z.object({
   documentId: z.string(),
 });
 
+type BankStatementDeleteSchemaType = typeof bankStatementDelete;
+const bankStatementDelete = z.object({
+  form: z.literal(FormTypes.ProjectSetupBankStatementDelete),
+  projectId: projectIdValidation,
+  partnerId: partnerIdValidation,
+  documentId: z.string(),
+});
+
 const claimDetailLevelDelete = z.object({
   form: z.literal(FormTypes.ClaimDetailLevelDelete),
   projectId: projectIdValidation,
@@ -209,6 +217,7 @@ export {
   projectOrPartnerLevelDelete,
   getBankStatementUpload,
   documentsErrorMap,
+  bankStatementDelete,
 };
 export type {
   ProjectLevelUploadSchemaType,
@@ -218,4 +227,5 @@ export type {
   ClaimDetailLevelUploadSchemaType,
   ClaimLevelDeleteSchemaType,
   LoanLevelUploadSchemaType,
+  BankStatementDeleteSchemaType,
 };

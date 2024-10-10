@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 
@@ -57,8 +57,8 @@ describe("DeleteClaimDetailDocumentCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -70,8 +70,13 @@ describe("DeleteClaimDetailDocumentCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
-          partnerRoles: { [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer },
+          projectRoles:
+            ProjectRolePermissionBits.ProjectManager |
+            ProjectRolePermissionBits.FinancialContact |
+            ProjectRolePermissionBits.MonitoringOfficer,
+          partnerRoles: {
+            [partner.id]: ProjectRolePermissionBits.ProjectManager | ProjectRolePermissionBits.MonitoringOfficer,
+          },
         },
       });
 

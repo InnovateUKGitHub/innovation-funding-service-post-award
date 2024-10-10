@@ -2,7 +2,7 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { Authorisation } from "@framework/types/authorisation";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { PCRItemType, PCRStatus, PCRItemStatus, pcrItemTypes } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ValidationError } from "@shared/appError";
 
@@ -228,7 +228,7 @@ describe("Create PCR Command", () => {
     } as unknown as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.ProjectManager,
+        projectRoles: ProjectRolePermissionBits.ProjectManager,
         partnerRoles: {},
       },
     });
@@ -253,9 +253,15 @@ describe("Create PCR Command", () => {
     } as unknown as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,
+        projectRoles:
+          ProjectRolePermissionBits.FinancialContact |
+          ProjectRolePermissionBits.MonitoringOfficer |
+          ProjectRolePermissionBits.Unknown,
         partnerRoles: {
-          [partner.id]: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,
+          [partner.id]:
+            ProjectRolePermissionBits.FinancialContact |
+            ProjectRolePermissionBits.MonitoringOfficer |
+            ProjectRolePermissionBits.Unknown,
         },
       },
     });

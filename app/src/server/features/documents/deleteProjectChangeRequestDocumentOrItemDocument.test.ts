@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
@@ -80,7 +80,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
           partnerRoles: {},
         },
       });
@@ -111,7 +111,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer | ProjectRolePermissionBits.FinancialContact,
           partnerRoles: {},
         },
       });

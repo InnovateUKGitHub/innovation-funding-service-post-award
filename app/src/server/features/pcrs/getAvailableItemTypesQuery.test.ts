@@ -1,5 +1,5 @@
 import { PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -72,7 +72,7 @@ describe("authorisation", () => {
     const query = new GetAvailableItemTypesQuery(project.Id);
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.Unknown,
+        projectRoles: ProjectRolePermissionBits.Unknown,
         partnerRoles: {},
       },
     });
@@ -82,9 +82,9 @@ describe("authorisation", () => {
 
   test.each`
     name                       | projectRole
-    ${"as financial contact"}  | ${ProjectRole.FinancialContact}
-    ${"as monitoring officer"} | ${ProjectRole.MonitoringOfficer}
-    ${"as project manager"}    | ${ProjectRole.ProjectManager}
+    ${"as financial contact"}  | ${ProjectRolePermissionBits.FinancialContact}
+    ${"as monitoring officer"} | ${ProjectRolePermissionBits.MonitoringOfficer}
+    ${"as project manager"}    | ${ProjectRolePermissionBits.ProjectManager}
   `("$name", async ({ projectRole }) => {
     const context = new TestContext();
     const project = context.testData.createProject();

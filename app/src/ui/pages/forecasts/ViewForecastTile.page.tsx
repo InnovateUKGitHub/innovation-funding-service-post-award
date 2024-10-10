@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Button } from "@ui/components/atoms/Button/Button";
 import { FullDateTime } from "@ui/components/atoms/Date";
@@ -133,8 +133,10 @@ export const ViewForecastRoute = defineRoute({
     partnerId: route.params.partnerId as PartnerId,
   }),
   accessControl: (auth, { projectId, partnerId }) => {
-    const isMOOrPM = auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
-    const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact);
+    const isMOOrPM = auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer);
+    const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
     return isMOOrPM || isFC;
   },
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsDetails.title),

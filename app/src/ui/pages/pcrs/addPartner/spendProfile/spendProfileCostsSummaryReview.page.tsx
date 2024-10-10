@@ -1,6 +1,6 @@
 import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRStepType } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
@@ -432,5 +432,6 @@ export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfil
     costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer),
 });

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BankDetails, PartnerDto } from "@framework/dtos/partnerDto";
 import { Partner } from "@framework/entities/partner";
 import { IContext } from "@framework/types/IContext";
@@ -119,8 +119,8 @@ describe("mapToPartnerDto", () => {
     const expected = createPartnerDto(stubExpectedPartnerDto);
     const mappedPartnerDto = new MapToPartnerDtoCommand(
       stubPartnerToMap,
-      7 as ProjectRole,
-      ProjectRole.ProjectManager,
+      7 as ProjectRolePermissionBits,
+      ProjectRolePermissionBits.ProjectManager,
     ).execute(null as unknown as IContext); // context not used
 
     expect(mappedPartnerDto).toMatchObject(expected);

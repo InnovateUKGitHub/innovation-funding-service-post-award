@@ -2,7 +2,7 @@
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -27,7 +27,7 @@ export class SaveMonitoringReport extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   private async updateHeader(context: IContext) {

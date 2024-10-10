@@ -1,19 +1,19 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation, getAuthRoles } from "./authorisation";
 
 describe("authorisation", () => {
   const roles = {
     Project1: {
-      projectRoles: ProjectRole.FinancialContact,
+      projectRoles: ProjectRolePermissionBits.FinancialContact,
       partnerRoles: {
-        Partner1A: ProjectRole.FinancialContact,
+        Partner1A: ProjectRolePermissionBits.FinancialContact,
       },
     },
     Project2: {
-      projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
+      projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.MonitoringOfficer,
       partnerRoles: {
-        Partner2A: ProjectRole.FinancialContact,
-        Partner2B: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
+        Partner2A: ProjectRolePermissionBits.FinancialContact,
+        Partner2B: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.MonitoringOfficer,
       },
     },
   };
@@ -31,7 +31,7 @@ describe("authorisation", () => {
 
   describe("getRoles for project", () => {
     it("when project not found returns Unknown", async () => {
-      expect(auth.forProject(unknownProject).getRoles()).toBe(ProjectRole.Unknown);
+      expect(auth.forProject(unknownProject).getRoles()).toBe(ProjectRolePermissionBits.Unknown);
     });
 
     it("when project found returns correct role", async () => {
@@ -41,11 +41,11 @@ describe("authorisation", () => {
 
   describe("getRoles for partner", () => {
     it("when project not found returns Unknown", async () => {
-      expect(auth.forPartner(unknownProject, partner2A).getRoles()).toBe(ProjectRole.Unknown);
+      expect(auth.forPartner(unknownProject, partner2A).getRoles()).toBe(ProjectRolePermissionBits.Unknown);
     });
 
     it("when partner not found returns Unknown", async () => {
-      expect(auth.forPartner(projectTwo, unknownPartner).getRoles()).toBe(ProjectRole.Unknown);
+      expect(auth.forPartner(projectTwo, unknownPartner).getRoles()).toBe(ProjectRolePermissionBits.Unknown);
     });
 
     it("when partner found returns correct role", async () => {
@@ -55,97 +55,115 @@ describe("authorisation", () => {
 
   describe("hasRole for project", () => {
     it("when project not found returns false", async () => {
-      expect(auth.forProject(unknownProject).hasRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forProject(unknownProject).hasRole(ProjectRolePermissionBits.FinancialContact)).toBe(false);
     });
 
     it("when project found but not role returns false", async () => {
-      expect(auth.forProject(projectOne).hasRole(ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.forProject(projectOne).hasRole(ProjectRolePermissionBits.MonitoringOfficer)).toBe(false);
     });
 
     it("when project found and role found returns true", async () => {
-      expect(auth.forProject(projectOne).hasRole(ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.forProject(projectOne).hasRole(ProjectRolePermissionBits.FinancialContact)).toBe(true);
     });
 
     it("when project found and role one of many returns true", async () => {
-      expect(auth.forProject(projectTwo).hasRole(ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.forProject(projectTwo).hasRole(ProjectRolePermissionBits.MonitoringOfficer)).toBe(true);
     });
   });
 
   describe("hasAllRoles for project", () => {
     it("when project not found returns false", async () => {
       expect(
-        auth.forProject(unknownProject).hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+        auth
+          .forProject(unknownProject)
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
     it("when project found but not all roles found returns false", async () => {
-      expect(auth.forProject(projectOne).hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(
-        false,
-      );
+      expect(
+        auth
+          .forProject(projectOne)
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
+      ).toBe(false);
     });
 
     it("when project found and all roles found returns true", async () => {
-      expect(auth.forProject(projectTwo).hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(
-        true,
-      );
+      expect(
+        auth
+          .forProject(projectTwo)
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
+      ).toBe(true);
     });
   });
 
   describe("hasAnyRoles for project", () => {
     it("when project not found returns false", async () => {
       expect(
-        auth.forProject(unknownProject).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+        auth
+          .forProject(unknownProject)
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
     it("when project found and one roles found returns true", async () => {
-      expect(auth.forProject(projectOne).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)).toBe(
-        true,
-      );
+      expect(
+        auth
+          .forProject(projectOne)
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager),
+      ).toBe(true);
     });
 
     it("when project found and all roles found returns true", async () => {
-      expect(auth.forProject(projectTwo).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(
-        true,
-      );
+      expect(
+        auth
+          .forProject(projectTwo)
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
+      ).toBe(true);
     });
 
     it("when project found and no roles found returns false", async () => {
-      expect(auth.forProject(projectOne).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)).toBe(
-        false,
-      );
+      expect(
+        auth
+          .forProject(projectOne)
+          .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager),
+      ).toBe(false);
     });
   });
 
   describe("hasOnlyRole for project", () => {
     it("when project not found returns false", async () => {
-      expect(auth.forProject(unknownProject).hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forProject(unknownProject).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(false);
     });
 
     it("when project found and has only role returns true", async () => {
-      expect(auth.forProject(projectOne).hasOnlyRole(ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.forProject(projectOne).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(true);
     });
 
     it("when project found and has other roles as well returns false", async () => {
-      expect(auth.forProject(projectTwo).hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forProject(projectTwo).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(false);
     });
   });
 
   describe("hasRole for partner", () => {
     it("when project not found returns false", async () => {
-      expect(auth.forPartner(unknownProject, partner1A).hasRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forPartner(unknownProject, partner1A).hasRole(ProjectRolePermissionBits.FinancialContact)).toBe(
+        false,
+      );
     });
 
     it("when partner not found returns false", async () => {
-      expect(auth.forPartner(projectOne, unknownPartner).hasRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forPartner(projectOne, unknownPartner).hasRole(ProjectRolePermissionBits.FinancialContact)).toBe(
+        false,
+      );
     });
 
     it("when partner found and role not found returns false", async () => {
-      expect(auth.forPartner(projectOne, partner1A).hasRole(ProjectRole.ProjectManager)).toBe(false);
+      expect(auth.forPartner(projectOne, partner1A).hasRole(ProjectRolePermissionBits.ProjectManager)).toBe(false);
     });
 
     it("when partner found and role found returns true", async () => {
-      expect(auth.forPartner(projectOne, partner1A).hasRole(ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.forPartner(projectOne, partner1A).hasRole(ProjectRolePermissionBits.FinancialContact)).toBe(true);
     });
   });
 
@@ -154,7 +172,7 @@ describe("authorisation", () => {
       expect(
         auth
           .forPartner(unknownProject, partner1A)
-          .hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
@@ -162,18 +180,22 @@ describe("authorisation", () => {
       expect(
         auth
           .forPartner(projectOne, unknownPartner)
-          .hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
     it("when partner found and roles not all found returns false", async () => {
       // @ts-expect-error invalid partner role
-      expect(auth.forPartner(projectTwo, partner2A).hasAllRoles(ProjectRole.FinancialContact, 32)).toBe(false);
+      expect(auth.forPartner(projectTwo, partner2A).hasAllRoles(ProjectRolePermissionBits.FinancialContact, 32)).toBe(
+        false,
+      );
     });
 
     it("when partner found and roles all found not returns true", async () => {
       expect(
-        auth.forPartner(projectTwo, partner2B).hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+        auth
+          .forPartner(projectTwo, partner2B)
+          .hasAllRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(true);
     });
   });
@@ -183,7 +205,7 @@ describe("authorisation", () => {
       expect(
         auth
           .forPartner(unknownProject, partner1A)
-          .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
@@ -191,42 +213,52 @@ describe("authorisation", () => {
       expect(
         auth
           .forPartner(projectOne, unknownPartner)
-          .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(false);
     });
 
     it("when partner found and roles not all found returns true", async () => {
       expect(
-        auth.forPartner(projectTwo, partner2A).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+        auth
+          .forPartner(projectTwo, partner2A)
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(true);
     });
 
     it("when partner found and role all found returns true", async () => {
       expect(
-        auth.forPartner(projectTwo, partner2B).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer),
+        auth
+          .forPartner(projectTwo, partner2B)
+          .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.MonitoringOfficer),
       ).toBe(true);
     });
 
     it("when partner found and no roles found returns false", async () => {
-      expect(auth.forPartner(projectTwo, partner2A).hasAnyRoles(ProjectRole.ProjectManager)).toBe(false);
+      expect(auth.forPartner(projectTwo, partner2A).hasAnyRoles(ProjectRolePermissionBits.ProjectManager)).toBe(false);
     });
   });
 
   describe("hasOnlyRole for partner", () => {
     it("when project not found returns false", async () => {
-      expect(auth.forPartner(unknownProject, partner1A).hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forPartner(unknownProject, partner1A).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(
+        false,
+      );
     });
 
     it("when partner not found returns false", async () => {
-      expect(auth.forPartner(projectOne, partner2A).hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forPartner(projectOne, partner2A).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(
+        false,
+      );
     });
 
     it("when partner found and has only role returns true", async () => {
-      expect(auth.forPartner(projectOne, partner1A).hasOnlyRole(ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.forPartner(projectOne, partner1A).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(true);
     });
 
     it("when partner found and has other roles as well returns false", async () => {
-      expect(auth.forPartner(projectTwo, partner2B).hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.forPartner(projectTwo, partner2B).hasOnlyRole(ProjectRolePermissionBits.FinancialContact)).toBe(
+        false,
+      );
     });
   });
 

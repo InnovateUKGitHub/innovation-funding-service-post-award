@@ -1,6 +1,6 @@
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { AuthorisedAsyncCommandBase } from "../common/commandBase";
-import { ProjectRole, ProjectStatus } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectStatus } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
@@ -18,7 +18,7 @@ export class UpdateProjectContactsCommand extends AuthorisedAsyncCommandBase<boo
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext) {

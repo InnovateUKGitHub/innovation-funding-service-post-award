@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useOnDeletePcr, usePcrDeleteQuery } from "./pcrDelete.logic";
@@ -82,5 +82,5 @@ export const PCRDeleteRoute = defineRoute({
     htmlTitle: "Delete draft request",
     displayTitle: "Delete draft request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

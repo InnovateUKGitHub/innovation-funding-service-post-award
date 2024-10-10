@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentEntity } from "@framework/entities/document";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -18,7 +18,9 @@ export class GetLoanDocumentsQuery extends DocumentsSummaryQueryBase {
 
     if (!loan) return false;
 
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.FinancialContact);
   }
 
   protected getRecordId(): Promise<string> {

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetAllQuery } from "./getAllQuery";
 
@@ -36,11 +36,13 @@ describe("ProjectsGetAllQuery", () => {
     const projects = context.testData.range(5, () => context.testData.createProject());
 
     const expectedRoles = [
-      ProjectRole.Unknown,
-      ProjectRole.FinancialContact,
-      ProjectRole.MonitoringOfficer,
-      ProjectRole.ProjectManager,
-      ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
+      ProjectRolePermissionBits.Unknown,
+      ProjectRolePermissionBits.FinancialContact,
+      ProjectRolePermissionBits.MonitoringOfficer,
+      ProjectRolePermissionBits.ProjectManager,
+      ProjectRolePermissionBits.FinancialContact |
+        ProjectRolePermissionBits.MonitoringOfficer |
+        ProjectRolePermissionBits.ProjectManager,
     ];
 
     context.testData.createCurrentUserAsFinanceContact(projects[1]);

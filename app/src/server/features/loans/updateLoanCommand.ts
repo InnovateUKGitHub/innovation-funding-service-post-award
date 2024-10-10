@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { LoanDto } from "@framework/dtos/loanDto";
 import { LoanStatus } from "@framework/entities/loan-status";
 import { Authorisation } from "@framework/types/authorisation";
@@ -22,7 +22,7 @@ export class UpdateLoanCommand extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.FinancialContact);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext): Promise<boolean> {

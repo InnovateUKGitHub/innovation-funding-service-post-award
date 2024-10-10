@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { Authorisation } from "@framework/types/authorisation";
@@ -27,7 +27,7 @@ export class SaveClaimDetails extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext) {

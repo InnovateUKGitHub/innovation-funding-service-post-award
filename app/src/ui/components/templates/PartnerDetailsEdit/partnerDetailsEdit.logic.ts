@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -30,6 +31,7 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
 export type FormValues = {
   postcode: string;
   partnerStatus: PartnerStatus;
+  form: FormTypes;
 };
 
 export const useOnUpdatePartnerDetails = (

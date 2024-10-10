@@ -5,7 +5,7 @@ import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
@@ -36,7 +36,7 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
     }
     // if pm as well as fc then go to all claims route
     const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
-    if (roles.hasRole(ProjectRole.ProjectManager)) {
+    if (roles.hasRole(ProjectRolePermissionBits.ProjectManager)) {
       return AllClaimsDashboardRoute.getLink(params);
     }
 
@@ -48,6 +48,14 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {
-    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "", ProjectRole.FinancialContact);
+    return new ClaimDtoValidator(
+      dto,
+      ClaimStatus.UNKNOWN,
+      [],
+      [],
+      false,
+      "",
+      ProjectRolePermissionBits.FinancialContact,
+    );
   }
 }

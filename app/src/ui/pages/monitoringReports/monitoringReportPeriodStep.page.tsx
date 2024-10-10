@@ -3,7 +3,7 @@ import {
   useMonitoringReportPeriodStepQuery,
   useOnMonitoringReportUpdatePeriodStep,
 } from "./monitoringReportPeriodStep.logic";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atoms/Links/links";
@@ -106,6 +106,7 @@ export const MonitoringReportPreparePeriodRoute = defineRoute({
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare-period",
   container: PeriodStepPage,
   getParams: r => ({ projectId: r.params.projectId as ProjectId, id: r.params.id as MonitoringReportId }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsPeriodStep.title),
 });

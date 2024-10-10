@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { PartnerDetailsEditComponent } from "@ui/components/templates/PartnerDetailsEdit/PartnerDetailsEdit";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
@@ -27,5 +27,7 @@ export const ProjectSetupPartnerPostcodeRoute = defineRoute<PartnerDetailsParams
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.projectSetupPostcodeDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
+    auth
+      .forPartner(projectId, partnerId)
+      .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager),
 });

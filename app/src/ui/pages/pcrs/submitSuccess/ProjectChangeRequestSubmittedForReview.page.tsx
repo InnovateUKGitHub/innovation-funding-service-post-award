@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Button } from "@ui/components/atoms/Button/Button";
 import { BackLink, Link } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -86,5 +86,5 @@ export const ProjectChangeRequestSubmittedForReviewRoute = defineRoute<ProjectCh
     pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSubmittedForReview.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

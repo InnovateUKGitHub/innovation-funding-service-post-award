@@ -1,5 +1,5 @@
 import { DateFormat } from "@framework/constants/enums";
-import { ProjectRole, ProjectStatus } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectStatus } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
@@ -315,5 +315,7 @@ export const AllClaimsDashboardRoute = defineRoute({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.allClaimsDashboard.title),
   accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+    auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager),
 });

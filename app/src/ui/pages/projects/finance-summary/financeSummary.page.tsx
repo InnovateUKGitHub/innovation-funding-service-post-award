@@ -1,7 +1,7 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useFinanceSummaryContent, useFinanceSummaryData } from "./financeSummary.logic";
 import type { Partner } from "./financeSummary.logic";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -201,6 +201,10 @@ export const FinanceSummaryRoute = defineRoute({
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
+      .hasAnyRoles(
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.FinancialContact,
+      ),
   getTitle: x => x.content.getTitleCopy(x => x.pages.financeSummary.title),
 });

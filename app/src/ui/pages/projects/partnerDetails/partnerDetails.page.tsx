@@ -1,7 +1,7 @@
 import { BaseProps, defineRoute } from "../../../app/containerBase";
 import { usePartnerDetailsQuery } from "./partnerDetails.logic";
 import { SimpleString } from "@ui/components/atoms/SimpleString/simpleString";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -76,5 +76,9 @@ export const PartnerDetailsRoute = defineRoute<Params>({
   accessControl: (auth, { projectId }) =>
     auth
       .forProject(projectId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+      .hasAnyRoles(
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+      ),
 });

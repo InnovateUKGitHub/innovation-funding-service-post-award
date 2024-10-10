@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { AllPartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentEntity } from "@framework/entities/document";
 import { Authorisation } from "@framework/types/authorisation";
@@ -20,7 +20,11 @@ export class GetAllPartnerDocumentsQuery extends AuthorisedAsyncQueryBase<AllPar
   async accessControl(auth: Authorisation): Promise<boolean> {
     return auth
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+      );
   }
 
   protected getUrl(partnerId: PartnerId, document: DocumentEntity): string {
@@ -35,10 +39,14 @@ export class GetAllPartnerDocumentsQuery extends AuthorisedAsyncQueryBase<AllPar
 
     const viewablePartners = partners.filter(
       partner =>
-        auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+        auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer) ||
         auth
           .forPartner(this.projectId, partner.id)
-          .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+          .hasAnyRoles(
+            ProjectRolePermissionBits.FinancialContact,
+            ProjectRolePermissionBits.MonitoringOfficer,
+            ProjectRolePermissionBits.ProjectManager,
+          ),
     );
 
     for (const partner of viewablePartners) {

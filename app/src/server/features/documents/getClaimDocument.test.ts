@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetClaimDocumentQuery } from "@server/features/documents/getClaimDocument";
@@ -115,7 +115,7 @@ describe("GetClaimDocumentQuery", () => {
       );
 
       const auth = new Authorisation({
-        [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.MonitoringOfficer, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
@@ -133,7 +133,9 @@ describe("GetClaimDocumentQuery", () => {
         document.Id,
       );
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.ProjectManager, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -152,8 +154,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [partner.id]: ProjectRole.ProjectManager },
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.ProjectManager },
         },
       });
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -174,8 +176,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -197,8 +199,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner2.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [partner2.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
       expect(await context.runAccessControl(auth, query)).toBe(false);

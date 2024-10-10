@@ -1,5 +1,5 @@
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { AuthorisedAsyncCommandBase } from "../common/commandBase";
@@ -29,7 +29,7 @@ export class DeleteProjectChangeRequestDocumentOrItemDocument extends Authorised
 
     if (!documentExists) return false;
 
-    return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext): Promise<void> {

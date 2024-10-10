@@ -2,7 +2,7 @@ import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framew
 import { BaseProps, defineRoute } from "../../app/containerBase";
 import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 import { PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { Accordion } from "@ui/components/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atoms/Accordion/AccordionItem";
@@ -285,5 +285,6 @@ export const PCRReviewRoute = defineRoute({
     htmlTitle: "Request",
     displayTitle: "Request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
 });

@@ -1,5 +1,5 @@
 import { SpendProfileStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
@@ -289,8 +289,8 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       const { project, partner, command, context } = getCommand();
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -300,17 +300,20 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles:
-            ProjectRole.FinancialContact |
-            ProjectRole.MonitoringOfficer |
-            ProjectRole.ProjectManager |
-            ProjectRole.Unknown,
+            ProjectRolePermissionBits.FinancialContact |
+            ProjectRolePermissionBits.MonitoringOfficer |
+            ProjectRolePermissionBits.ProjectManager |
+            ProjectRolePermissionBits.Unknown,
           partnerRoles: {
-            [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,
+            [partner.id]:
+              ProjectRolePermissionBits.ProjectManager |
+              ProjectRolePermissionBits.MonitoringOfficer |
+              ProjectRolePermissionBits.Unknown,
             ["other partner"]:
-              ProjectRole.ProjectManager |
-              ProjectRole.MonitoringOfficer |
-              ProjectRole.FinancialContact |
-              ProjectRole.Unknown,
+              ProjectRolePermissionBits.ProjectManager |
+              ProjectRolePermissionBits.MonitoringOfficer |
+              ProjectRolePermissionBits.FinancialContact |
+              ProjectRolePermissionBits.Unknown,
           },
         },
       });

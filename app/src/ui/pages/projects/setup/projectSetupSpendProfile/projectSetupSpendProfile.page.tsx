@@ -1,6 +1,6 @@
 import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackLink } from "@ui/components/atoms/Links/links";
@@ -23,6 +23,7 @@ import { useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logi
 import { Checkbox, CheckboxList } from "@ui/components/atoms/form/Checkbox/Checkbox";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
+import { SpendProfileStatus } from "@framework/constants/partner";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -30,10 +31,11 @@ export interface ProjectSetupSpendProfileParams {
 }
 
 const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & ProjectSetupSpendProfileParams) => {
-  const { fragmentRef } = useProjectSetupSpendProfileData({
+  const { fragmentRef, partnerPage } = useProjectSetupSpendProfileData({
     projectId,
     partnerId,
   });
+
   const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
   const { project, partner } = data;
 
@@ -52,7 +54,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   const routes = useRoutes();
   const { getContent } = useContent();
 
-  const { onUpdate, isFetching } = useOnForecastSubmit({ isPm });
+  const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ isPm });
 
   const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
     onUpdate({
@@ -77,6 +79,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
         </BackLink>
       }
       fragmentRef={fragmentRef}
+      apiError={apiError}
     >
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("form")} value={FormTypes.ProjectSetupForecast} type="hidden" />
@@ -109,6 +112,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
                 id="submit"
                 disabled={isFetching}
                 label={getContent(x => x.pages.projectSetupSpendProfile.readyToSubmitMessage)}
+                defaultChecked={partnerPage?.spendProfileStatus === SpendProfileStatus.Complete}
               />
             </CheckboxList>
           </Fieldset>
@@ -135,5 +139,5 @@ export const ProjectSetupSpendProfileRoute = defineRoute({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupSpendProfile.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

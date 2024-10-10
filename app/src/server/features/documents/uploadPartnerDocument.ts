@@ -1,6 +1,6 @@
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { CommandMultipleDocumentBase } from "../common/commandBase";
@@ -32,12 +32,16 @@ export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<st
     // Allow if the user is a MO, FC or PM of the partner.
     const canUploadAsPartner = auth
       .forPartner(this.projectId, this.partnerId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+      );
 
     if (canUploadAsPartner) return true;
 
     // If a user is an MO for the project, allow.
-    const canUploadAsProjectMo = auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    const canUploadAsProjectMo = auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
 
     // If any of the above is true, allow
     if (canUploadAsProjectMo) return true;

@@ -2,7 +2,7 @@ import { ImpactManagementParticipation } from "@framework/constants/competitionT
 import { ClaimFrequency } from "@framework/constants/enums";
 import {
   ProjectMonitoringLevel,
-  ProjectRole,
+  ProjectRolePermissionBits,
   ProjectSource,
   ProjectStatus,
   TypeOfAid,
@@ -40,7 +40,7 @@ export interface ProjectDto {
   periodId: PeriodId;
   periodStartDate: Date | null;
   projectNumber: string;
-  roles: ProjectRole | SfRoles;
+  roles: ProjectRolePermissionBits | SfRoles;
   roleTitles: string[];
   startDate: Date | null;
   status: ProjectStatus;

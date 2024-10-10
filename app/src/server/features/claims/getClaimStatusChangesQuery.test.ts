@@ -2,7 +2,7 @@ import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStat
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimStatusChangeDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Authorisation } from "@framework/types/authorisation";
@@ -28,7 +28,7 @@ describe("GetClaimStatusChangesQuery", () => {
 
         const auth = new Authorisation({
           [partner.projectId]: {
-            projectRoles: ProjectRole.MonitoringOfficer,
+            projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
             partnerRoles: {},
           },
         });
@@ -41,7 +41,7 @@ describe("GetClaimStatusChangesQuery", () => {
 
         const auth = new Authorisation({
           [partner.projectId]: {
-            projectRoles: ProjectRole.ProjectManager,
+            projectRoles: ProjectRolePermissionBits.ProjectManager,
             partnerRoles: {},
           },
         });
@@ -56,8 +56,8 @@ describe("GetClaimStatusChangesQuery", () => {
 
         const auth = new Authorisation({
           [partner.projectId]: {
-            projectRoles: ProjectRole.Unknown,
-            partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+            projectRoles: ProjectRolePermissionBits.Unknown,
+            partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
           },
         });
 
@@ -69,8 +69,8 @@ describe("GetClaimStatusChangesQuery", () => {
 
         const auth = new Authorisation({
           [partner.projectId]: {
-            projectRoles: ProjectRole.Unknown,
-            partnerRoles: { [partner.id]: ProjectRole.ProjectManager },
+            projectRoles: ProjectRolePermissionBits.Unknown,
+            partnerRoles: { [partner.id]: ProjectRolePermissionBits.ProjectManager },
           },
         });
 
@@ -82,8 +82,8 @@ describe("GetClaimStatusChangesQuery", () => {
 
         const auth = new Authorisation({
           [partner.projectId]: {
-            projectRoles: ProjectRole.Unknown,
-            partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer },
+            projectRoles: ProjectRolePermissionBits.Unknown,
+            partnerRoles: { [partner.id]: ProjectRolePermissionBits.MonitoringOfficer },
           },
         });
 

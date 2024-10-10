@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { IContext } from "@framework/types/IContext";
 import { GetAllClaimDetailsByPartnerIdQuery } from "@server/features/claimDetails/GetAllClaimDetailsByPartnerIdQuery";
 import { GetAllClaimsByPartnerIdQuery } from "@server/features/claims/GetAllClaimsByPartnerIdQuery";
@@ -90,7 +90,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
           .filter(([key]) => key.startsWith("profile."))
           .map(([key, value]) => [key.replace("profile.", ""), value]),
       ),
-      submit: input.submit,
+      submit: input.submit === "on" || input.submit === "true",
     };
   }
 
@@ -113,7 +113,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
               id,
               value: parseCurrency(value),
             })),
-            false,
+            input.submit,
           ),
         );
       } else {
@@ -141,7 +141,7 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
       case FormTypes.ClaimForecastSaveAndQuit:
         // if pm as well as fc then go to all claims route
         const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
-        if (roles.hasRole(ProjectRole.ProjectManager)) {
+        if (roles.hasRole(ProjectRolePermissionBits.ProjectManager)) {
           return AllClaimsDashboardRoute.getLink({
             projectId: input.projectId,
           }).path;

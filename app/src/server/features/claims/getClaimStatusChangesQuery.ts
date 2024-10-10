@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimStatusChangeDto } from "@framework/dtos/claimDto";
 import { Option } from "@framework/dtos/option";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -25,21 +25,21 @@ export class GetClaimStatusChangesQuery extends AuthorisedAsyncQueryBase<ClaimSt
   public async accessControl(auth: Authorisation) {
     const isProjectMoPm = auth
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager);
 
     const isPartnerPmFc = auth
       .forPartner(this.projectId, this.partnerId)
-      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.FinancialContact);
 
     return isProjectMoPm || isPartnerPmFc;
   }
 
   protected async run(context: IContext): Promise<ClaimStatusChangeDto[]> {
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
-    const isMo = roles.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    const isMo = roles.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
     const isFcPm = roles
       .forPartner(this.projectId, this.partnerId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+      .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager);
 
     const claimStatuses = await context.runQuery(new GetClaimStatusesQuery());
     const partner = await context.repositories.partners.getById(this.partnerId);

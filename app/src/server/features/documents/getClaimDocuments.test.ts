@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 
@@ -99,8 +99,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner2.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [partner2.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -112,8 +112,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -125,8 +125,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.Unknown },
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRolePermissionBits.Unknown },
         },
       });
 
@@ -138,8 +138,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager },
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRolePermissionBits.ProjectManager },
         },
       });
 
@@ -153,8 +153,8 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [partner2.id]: ProjectRole.ProjectManager },
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: { [partner2.id]: ProjectRolePermissionBits.ProjectManager },
         },
       });
 

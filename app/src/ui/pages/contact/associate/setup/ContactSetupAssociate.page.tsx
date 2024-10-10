@@ -1,5 +1,5 @@
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@ui/components/atoms/Button/Button";
@@ -216,7 +216,7 @@ const ContactSetupAssociateRoute = defineRoute({
     projectId: route.params.projectId as ProjectId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupAssociate.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });
 
 export { ContactSetupAssociatePage, ContactSetupAssociateParams, ContactSetupAssociateRoute };

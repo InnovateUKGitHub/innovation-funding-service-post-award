@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { DocumentGuidance } from "@ui/components/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/organisms/documents/DocumentView/ProjectDocumentView.withFragment";
@@ -91,7 +91,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
-            <input type="hidden" value={FormTypes.ProjectLevelUpload} {...register("form")} />
+            <input type="hidden" value={FormTypes.ProjectSetupBankStatementUpload} {...register("form")} />
             <input type="hidden" value={projectId} {...register("projectId")} />
             <input type="hidden" value={partnerId} {...register("partnerId")} />
             <input type="hidden" {...register("description")} value={DocumentDescription.BankStatement} />
@@ -123,13 +123,14 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           hideSubtitle
           qa="setup-bank-statement-documents"
           onRemove={onDelete}
-          formType={FormTypes.ProjectLevelDelete}
+          formType={FormTypes.ProjectSetupBankStatementDelete}
           disabled={isFetching}
         />
       </Section>
 
       <Section qa="submit-bank-statement">
         <Form data-qa="submit-bank-statement-form">
+          <input type="hidden" value={FormTypes.ProjectSetupBankStatement} name="form" />
           <Fieldset>
             <Button type="submit" disabled={isFetching}>
               <Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
@@ -161,5 +162,5 @@ export const ProjectSetupBankStatementRoute = defineRoute<ProjectSetupBankStatem
   }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.projectSetupBankStatement.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

@@ -1,14 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import {
-  partnerDetailsEditSchema,
-  postcodeSetupSchema,
-  partnerDetailsOptionalSchema,
-  partnerDetailsEditErrorMap,
-} from "./partnerDetailsEdit.zod";
-import { PostcodeTaskStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { postcodeErrorMap, PostcodeSchema, postcodeSchema } from "./partnerDetailsEdit.zod";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -19,10 +13,12 @@ import { Label } from "@ui/components/atoms/form/Label/Label";
 import { SubmitButton } from "@ui/components/atoms/form/SubmitButton/SubmitButton";
 import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { usePartnerDetailsEditQuery, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -36,14 +32,6 @@ interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
   navigateTo: string;
   isSetup?: boolean;
 }
-
-const getZodResolver = (isSetupPage: boolean, postcodeStatus: PostcodeTaskStatus) => {
-  if (isSetupPage) {
-    return postcodeSetupSchema;
-  } else {
-    return postcodeStatus !== PostcodeTaskStatus.ToDo ? partnerDetailsEditSchema : partnerDetailsOptionalSchema;
-  }
-};
 
 /**
  * ### PartnerDetailsEditComponent
@@ -61,19 +49,25 @@ export function PartnerDetailsEditComponent({
   const { partner, fragmentRef } = usePartnerDetailsEditQuery(projectId, partnerId);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  type SchemaType = z.infer<PostcodeSchema>;
+
+  const { register, handleSubmit, formState, setError } = useForm<SchemaType>({
     defaultValues: {
+      form: isSetup ? FormTypes.ProjectSetupPostcode : FormTypes.PartnerDetailsEdit,
       postcode: partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
+      postcodeStatus: partner.postcodeStatus,
+      isSetup,
     },
-    resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus), { errorMap: partnerDetailsEditErrorMap }),
+    resolver: zodResolver(postcodeSchema, { errorMap: postcodeErrorMap }),
   });
 
   const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useZodErrors<SchemaType>(setError, formState.errors);
 
   const postcodeError = validatorErrors?.postcode as RhfErrors;
+
   return (
     <Page
       fragmentRef={fragmentRef}
@@ -82,7 +76,15 @@ export function PartnerDetailsEditComponent({
       apiError={apiError}
       partnerId={partnerId}
     >
-      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
+      <Form onSubmit={handleSubmit(data => onUpdate({ data: { ...data, postcode: data.postcode ?? "" } }))}>
+        <input
+          type="hidden"
+          name="form"
+          value={isSetup ? FormTypes.ProjectSetupPostcode : FormTypes.PartnerDetailsEdit}
+        />
+        <input type="hidden" name="postcodeStatus" value={partner.postcodeStatus} />
+        <input type="hidden" name="partnerStatus" value={partner.partnerStatus} />
+        <input type="hidden" name="isSetup" value={String(isSetup)} />
         <Fieldset>
           {!isSetup && (
             <FormGroup>
@@ -142,5 +144,7 @@ export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetailsEdit.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
+    auth
+      .forPartner(projectId, partnerId)
+      .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager),
 });

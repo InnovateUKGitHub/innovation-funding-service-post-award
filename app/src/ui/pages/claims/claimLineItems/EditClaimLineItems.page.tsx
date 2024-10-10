@@ -1,6 +1,6 @@
 import { useOnClaimLineItemsSubmit } from "@ui/pages/claims/claimLineItems/onClaimLineItemsSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackLink } from "@ui/components/atoms/Links/links";
@@ -154,7 +154,7 @@ const EditClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
   container: props => <EditClaimLineItemsPage {...props} mode="prepare" />,
   getParams: route => getParams(route),
   accessControl: (auth, params) =>
-    auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });
 
 export { ClaimLineItemsParams, EditClaimLineItemsRoute };

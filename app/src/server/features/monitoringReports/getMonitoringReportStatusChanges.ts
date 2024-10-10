@@ -1,5 +1,5 @@
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
 import { Option } from "@framework/dtos/option";
 import { Authorisation } from "@framework/types/authorisation";
@@ -21,7 +21,7 @@ export class GetMonitoringReportStatusChanges extends AuthorisedAsyncQueryBase<M
 
   async accessControl(auth: Authorisation) {
     // @TODO: validate report is actually for project passed in
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected async run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {

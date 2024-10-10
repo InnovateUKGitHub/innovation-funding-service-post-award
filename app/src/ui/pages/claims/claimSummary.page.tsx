@@ -3,7 +3,7 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { claimCommentsMaxLength } from "@ui/validation/validators/claimDtoValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -357,6 +357,6 @@ export const ClaimSummaryRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimSummary.title),
 });

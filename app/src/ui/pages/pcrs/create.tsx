@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "../../app/containerBase";
 import { PcrCreateSelectedContainer } from "./modifyOptions/PcrModifyOptions";
 
@@ -8,5 +8,6 @@ export const PCRCreateRoute = defineRoute({
   container: PcrCreateSelectedContainer,
   getParams: route => ({ projectId: route.params.projectId as ProjectId }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrModifyOptions.createTitle),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager),
 });

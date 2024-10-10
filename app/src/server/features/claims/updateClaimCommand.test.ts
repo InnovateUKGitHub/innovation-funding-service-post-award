@@ -3,7 +3,7 @@ import { mapClaim } from "@server/features/claims/mapClaim";
 import { InActiveProjectError, ValidationError } from "@server/features/common/appError";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { ReceivedStatus } from "@framework/entities/received-status";
@@ -16,7 +16,7 @@ describe("UpdateClaimCommand", () => {
       const command = new UpdateClaimCommand(project.Id, {} as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {},
         },
       });
@@ -31,8 +31,8 @@ describe("UpdateClaimCommand", () => {
       const command = new UpdateClaimCommand(project.Id, claimDto as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [claimDto.partnerId]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [claimDto.partnerId]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -46,8 +46,11 @@ describe("UpdateClaimCommand", () => {
       const command = new UpdateClaimCommand(project.Id, claimDto as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-          partnerRoles: { [claimDto.partnerId]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager },
+          projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: {
+            [claimDto.partnerId]:
+              ProjectRolePermissionBits.MonitoringOfficer | ProjectRolePermissionBits.ProjectManager,
+          },
         },
       });
 

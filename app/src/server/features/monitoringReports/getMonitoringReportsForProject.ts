@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportSummaryDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -13,7 +13,7 @@ export class GetMonitoringReportsForProject extends AuthorisedAsyncQueryBase<Mon
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected async run(context: IContext): Promise<MonitoringReportSummaryDto[]> {

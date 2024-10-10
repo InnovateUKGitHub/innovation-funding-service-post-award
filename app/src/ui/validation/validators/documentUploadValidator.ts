@@ -10,7 +10,7 @@ import { getFileSize } from "@framework/util/files";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { NestedResult } from "@ui/validation/nestedResult";
-import { filenameValidatior } from "@ui/zod/helperValidators/filenameValidator.zod";
+import { filenameValidator } from "@ui/zod/helperValidators/filenameValidator.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 
 export const validDocumentFilenameCharacters = /^[\w\d\s\\.\-()]+$/;
@@ -184,7 +184,7 @@ function validateFileName<T extends Results<ResultBase>>(
   file: IFileWrapper | null,
   options: IAppOptions,
 ): Result {
-  const result = filenameValidatior(options).safeParse(file?.fileName, { errorMap });
+  const result = filenameValidator(options).safeParse(file?.fileName, { errorMap });
 
   if (result.error) {
     return Validation.inValid(results, result.error?.issues[0].message);

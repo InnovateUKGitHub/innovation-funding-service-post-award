@@ -10,6 +10,7 @@ import type {
   PcrLevelUploadSchemaType,
   ClaimDetailLevelUploadSchemaType,
   LoanLevelUploadSchemaType,
+  UploadBankStatementSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
@@ -18,7 +19,8 @@ type InputOptions =
   | ({ form: FormTypes.ClaimLevelUpload | FormTypes.ClaimReviewLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
   | ({ form: FormTypes.ClaimDetailLevelUpload } & z.output<ClaimDetailLevelUploadSchemaType>)
   | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>)
-  | ({ form: FormTypes.LoanLevelUpload } & z.output<LoanLevelUploadSchemaType>);
+  | ({ form: FormTypes.LoanLevelUpload } & z.output<LoanLevelUploadSchemaType>)
+  | ({ form: FormTypes.ProjectSetupBankStatementUpload } & z.output<UploadBankStatementSchemaType>);
 
 const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
   data.form === FormTypes.ProjectLevelUpload;
@@ -34,6 +36,9 @@ const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSc
 
 const isLoanLevelUpload = (data: InputOptions): data is z.output<LoanLevelUploadSchemaType> =>
   data.form === FormTypes.LoanLevelUpload;
+
+const isBankStatementUpload = (data: InputOptions): data is z.output<UploadBankStatementSchemaType> =>
+  data.form === FormTypes.ProjectSetupBankStatementUpload;
 
 export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();
@@ -84,7 +89,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
             description,
           },
         });
-      } else if (isProjectLevelUpload(data)) {
+      } else if (isProjectLevelUpload(data) || isBankStatementUpload(data)) {
         if (data.partnerId) {
           return clientsideApiClient.documents.uploadPartnerDocument({
             projectId: data.projectId,

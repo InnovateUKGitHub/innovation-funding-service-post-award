@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { IContext } from "@framework/types/IContext";
@@ -25,7 +25,7 @@ export class DeleteClaimDetailDocumentCommand extends AuthorisedAsyncCommandBase
 
     return auth
       .forPartner(this.claimDetailKey.projectId, this.claimDetailKey.partnerId)
-      .hasRole(ProjectRole.FinancialContact);
+      .hasRole(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext): Promise<void> {

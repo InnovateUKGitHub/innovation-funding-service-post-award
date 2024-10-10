@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { AuthorisedAsyncCommandBase } from "../common/commandBase";
@@ -17,7 +17,7 @@ export class DeleteProjectDocumentCommand extends AuthorisedAsyncCommandBase<voi
 
     if (!documentExists) return false;
 
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected async run(context: IContext): Promise<void> {
