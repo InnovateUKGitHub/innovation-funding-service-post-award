@@ -322,7 +322,7 @@ export const getPcrItemsExclusivityViolations = (currentPcr?: { items: unknown[]
   // However, someone internally is bound to break the system
   if (currentPcr.items.length === 0) return [];
 
-  // If there are any PCR items, we disallow adding any more exclusive shiny pokemon
+  // If there are any PCR items, we disallow adding any other PCR items
   return exclusiveItems;
 };
 
