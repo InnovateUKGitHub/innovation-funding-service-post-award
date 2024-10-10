@@ -246,8 +246,6 @@ export interface PCRTimeExtensionOption {
 export type ManageTeamMemberPcrDto = PCRBaseDto & {
   firstName?: string;
   lastName?: string;
-  // previousFirstName?: string;
-  // previousLastName?: string;
   email?: string;
   organisation?: string;
   role: string;
