@@ -148,23 +148,7 @@ export const costCatTableFooter = () => {
   });
 };
 
-/**
- * Wait required in newCostCatLineItem below
- */
-export const newCostCatLineItem = (academic: boolean) => {
-  /**
-   * click remove first if there is already a line item
-   */
-  cy.wait(1000);
-  cy.getByQA("current-claim-summary-table")
-    .find("tbody.govuk-table__body")
-    .then($table => {
-      if ($table.find("tr").length > 4) {
-        cy.clickOn("Remove", { multiple: true });
-      }
-    });
-  cy.clickOn("Add a cost");
-  cy.wait(200);
+export const newCostCatLineItemJsDisabled = (academic: boolean) => {
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
   cy.textValidation(
     "Description",
@@ -183,7 +167,6 @@ export const newCostCatLineItem = (academic: boolean) => {
   }
   cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
   cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
-  cy.inputPrefix("£", 1);
 };
 
 export const allowFileUpload = () => {
@@ -212,7 +195,7 @@ export const reflectCostAdded = () => {
   cy.get("span.currency").contains("£1,000.00");
 };
 
-export const clearUpLabourCostCat = () => {
+export const clearUpLabourCostCatJsDisabled = () => {
   cy.wait(3000);
   cy.clickOn("Upload and remove documents");
   cy.get("h1").contains("Labour documents");
@@ -220,15 +203,17 @@ export const clearUpLabourCostCat = () => {
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
   cy.heading("Labour");
-  cy.clickOn("Remove");
+  cy.getByAriaLabel("Description of claim line item 0").clear();
+  cy.getByAriaLabel("Cost of claim line item 0").clear();
   cy.get("textarea").should("have.value", standardComments);
   cy.get("textarea").clear();
 };
 
-export const clearUpOverheadsCostCat = () => {
+export const clearUpOverheadsCostCatJsDisabled = () => {
   cy.get("td.govuk-table__cell").contains("Overheads").click();
   cy.heading("Overheads");
-  cy.clickOn("Remove");
+  cy.getByAriaLabel("Description of claim line item 0").clear();
+  cy.getByAriaLabel("Cost of claim line item 0").clear();
 };
 
 export const evidenceRequiredMessage = () => {
@@ -530,12 +515,16 @@ export const updateAcademicCosts = () => {
   ];
 
   costs.forEach(forecastInput => {
-    cy.getByAriaLabel(forecastInput).clear().type("100");
+    cy.getByAriaLabel(forecastInput).scrollIntoView().clear().type("100");
   });
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
   cy.get("td:nth-child(14)").contains("£52,500.00");
   costs.forEach(forecastInput => {
-    cy.getByAriaLabel(forecastInput).clear().type("0");
+    cy.getByAriaLabel(forecastInput).scrollIntoView().clear().type("0");
   });
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
 };
 
 export const showAClaim = () => {
@@ -848,42 +837,6 @@ export const restoreCostCatReturn = () => {
   });
 };
 
-export const acceptLabourCalculateOH = () => {
-  [
-    [-10000, -2000],
-    [-888, -177.6],
-    [-66666, -13333.2],
-    [-3333, -666.6],
-    [0, 0],
-    [22728.44, 4545.688],
-    [50.24, 10.048],
-    [6530.64, 1306.128],
-    [50.64, 10.128],
-    [100, 20],
-    [1000000, 200000],
-    [10000.33, 2000.066],
-    [5.11, 1.022],
-    [33.33, 6.666],
-  ].forEach(([labourCost, overhead]) => {
-    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
-    let newCurrency = new Intl.NumberFormat("en-GB", {
-      style: "currency",
-      currency: "GBP",
-    });
-    cy.get("tr")
-      .eq(4)
-      .within(() => {
-        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
-      });
-    cy.getByAriaLabel("Overheads Period 2").should("have.text", newCurrency.format(overhead));
-    cy.get("tr")
-      .eq(5)
-      .within(() => {
-        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
-      });
-  });
-};
-
 export const topThreeRows = () => {
   [
     ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
@@ -1155,7 +1108,6 @@ export const summaryUpdateCostsClaimed = () => {
   cy.heading("Costs to be claimed");
   cy.clickOn("a", "Labour");
   cy.heading("Labour");
-  cy.clickOn("Add a cost");
   cy.get("#lineItems_0_description").type("Test cost");
   cy.get("#lineItems_0_value").type("1000");
   cy.wait(500);
@@ -1175,11 +1127,13 @@ export const summaryClearCostCats = () => {
   cy.heading("Costs to be claimed");
   cy.clickOn("a", "Labour");
   cy.heading("Labour");
-  cy.clickOn("Remove");
+  cy.get("#lineItems_0_description").clear();
+  cy.get("#lineItems_0_value").clear();
   cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");
   cy.clickOn("Overheads");
-  cy.clickOn("Remove");
+  cy.get("#lineItems_0_description").clear();
+  cy.get("#lineItems_0_value").clear();
   cy.clickOn("Save and return to claims");
 };
 
@@ -1355,7 +1309,7 @@ export const summaryDocTable = () => {
     });
 };
 
-export const updateClaimsForecast = () => {
+export const updateClaimsForecastJsDisabled = () => {
   let totalCell = (rowNum: number, value: string) => {
     cy.get("tr")
       .eq(rowNum)
@@ -1363,7 +1317,6 @@ export const updateClaimsForecast = () => {
         cy.get("td:nth-child(14)").contains(value);
       });
   };
-
   for (let inputNum = 2; inputNum < 13; inputNum++) {
     let baseTotal = 35000 + inputNum * 100 - 100;
     let labourTotal = 0 + inputNum * 100 - 100;
@@ -1372,22 +1325,39 @@ export const updateClaimsForecast = () => {
     let labourtotalString = labourTotal.toLocaleString("en-GB");
     let subcontractingString = subcontractingTotal.toLocaleString("en-GB");
     [
-      [`Labour Period ${inputNum}`, "4", `£${labourtotalString}.00`],
-      [`Materials Period ${inputNum}`, "6", `£${totalString}.00`],
-      [`Capital usage Period ${inputNum}`, "7", `£${totalString}.00`],
-      [`Subcontracting Period ${inputNum}`, "8", `£${subcontractingString}.00`],
-      [`Travel and subsistence Period ${inputNum}`, "9", `£${totalString}.00`],
-      [`Other costs Period ${inputNum}`, "10", `£${totalString}.00`],
-      [`Other costs 2 Period ${inputNum}`, "11", `£${totalString}.00`],
-      [`Other costs 3 Period ${inputNum}`, "12", `£${totalString}.00`],
-      [`Other costs 4 Period ${inputNum}`, "13", `£${totalString}.00`],
-      [`Other costs 5 Period ${inputNum}`, "14", `£${totalString}.00`],
-    ].forEach(([costCat, row, total]) => {
-      cy.getByAriaLabel(costCat).clear().type("100");
+      `Labour Period ${inputNum}`,
+      `Materials Period ${inputNum}`,
+      `Capital usage Period ${inputNum}`,
+      `Subcontracting Period ${inputNum}`,
+      `Travel and subsistence Period ${inputNum}`,
+      `Other costs Period ${inputNum}`,
+      `Other costs 2 Period ${inputNum}`,
+      `Other costs 3 Period ${inputNum}`,
+      `Other costs 4 Period ${inputNum}`,
+      `Other costs 5 Period ${inputNum}`,
+    ].forEach(costCat => {
+      cy.getByAriaLabel(costCat).scrollIntoView().clear().type("100");
       cy.wait(200);
-      totalCell(Number(row), total);
     });
   }
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.clickOn("Back to update forecast");
+  cy.heading("Update forecast");
+  [
+    ["4", `£1,100.00`],
+    ["6", `£36,100.00`],
+    ["7", `£36,100.00`],
+    ["8", `£1,100.00`],
+    ["9", `£36,100.00`],
+    ["10", `£36,100.00`],
+    ["11", `£36,100.00`],
+    ["12", `£36,100.00`],
+    ["13", `£36,100.00`],
+    ["14", `£36,100.00`],
+  ].forEach(([row, total]) => {
+    totalCell(Number(row), total);
+  });
   const percentages = [
     "-96.86%",
     "-99.37%",
@@ -1422,7 +1392,61 @@ export const updateClaimsForecast = () => {
     .within(() => {
       cy.get("td:nth-child(14)").contains("£291,220.00");
     });
-  cy.reload();
+  for (let inputNum = 2; inputNum < 13; inputNum++) {
+    [
+      `Labour Period ${inputNum}`,
+      `Materials Period ${inputNum}`,
+      `Capital usage Period ${inputNum}`,
+      `Subcontracting Period ${inputNum}`,
+      `Travel and subsistence Period ${inputNum}`,
+      `Other costs Period ${inputNum}`,
+      `Other costs 2 Period ${inputNum}`,
+      `Other costs 3 Period ${inputNum}`,
+      `Other costs 4 Period ${inputNum}`,
+      `Other costs 5 Period ${inputNum}`,
+    ].forEach(costCat => {
+      cy.getByAriaLabel(costCat).scrollIntoView().clear().type("0");
+      cy.wait(200);
+    });
+  }
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.clickOn("Back to update forecast");
+  cy.heading("Update forecast");
+};
+
+export const acceptLabourCalculateOHJsDisabled = () => {
+  [
+    [-10000, -2000],
+    [-888, -177.6],
+    [-66666, -13333.2],
+    [-3333, -666.6],
+    [0, 0],
+    [33.33, 6.666],
+  ].forEach(([labourCost, overhead]) => {
+    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
+    let newCurrency = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.wait(500);
+    cy.button("Continue to summary").click();
+    cy.heading("Claim summary");
+    cy.wait(500);
+    cy.clickOn("Back to update forecast");
+    cy.heading("Update forecast");
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
+      });
+    cy.getByAriaLabel("Overheads Period 2").should("have.text", newCurrency.format(overhead));
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
+      });
+  });
 };
 
 export const reviewLabourFCCopy = () => {

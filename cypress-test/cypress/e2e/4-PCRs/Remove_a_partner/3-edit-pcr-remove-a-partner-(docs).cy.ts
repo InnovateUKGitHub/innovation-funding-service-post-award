@@ -63,6 +63,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
       false,
       true,
       false,
+      false,
       "Documents",
     );
   });

@@ -35,6 +35,45 @@ export const euiCostCleanUp = () => {
     });
 };
 
+export const euiCostCleanUpJsDisabled = () => {
+  cy.get("tr")
+    .eq(1)
+    .then($row1 => {
+      if ($row1.text().includes("£1,000.00")) {
+        cy.log("**Clearing cost category**");
+        cy.get("a").contains("Labour").click();
+        cy.heading("Labour");
+        cy.getByAriaLabel("Description of claim line item 0").clear();
+        cy.getByAriaLabel("Cost of claim line item 0").clear();
+        cy.wait(500);
+        cy.get("textarea").clear();
+        cy.get("main").then($main => {
+          if ($main.text().includes("testfile.doc")) {
+            cy.button("Upload and remove documents").click();
+            cy.heading("Labour documents");
+            cy.clickOn("Remove");
+            cy.validationNotification("has been removed");
+            cy.backLink("Back to Labour").click();
+            cy.heading("Labour");
+          } else {
+            cy.heading("Labour");
+          }
+        });
+        cy.button("Save and return to claims").click();
+        cy.heading("Costs to be claimed");
+        cy.get("a").contains("Overheads").click();
+        cy.heading("Overheads");
+        cy.getByAriaLabel("Description of claim line item 0").clear();
+        cy.getByAriaLabel("Cost of claim line item 0").clear();
+        cy.get("textarea").clear();
+        cy.button("Save and return to claims").click();
+        cy.heading("Costs to be claimed");
+      } else {
+        cy.heading("Costs to be claimed");
+      }
+    });
+};
+
 export const overheadsTidyUp = () => {
   cy.get("tr")
     .eq(2)
@@ -43,6 +82,23 @@ export const overheadsTidyUp = () => {
         cy.get("a").contains("Overheads").click();
         cy.heading("Overheads");
         cy.clickOn("Remove");
+        cy.button("Save and return to claims").click();
+        cy.heading("Costs to be claimed");
+      } else {
+        cy.heading("Costs to be claimed");
+      }
+    });
+};
+
+export const overheadsTidyUpJsDisabled = () => {
+  cy.get("tr")
+    .eq(2)
+    .then($tr2 => {
+      if ($tr2.text().includes("£200.00")) {
+        cy.get("a").contains("Overheads").click();
+        cy.heading("Overheads");
+        cy.getByAriaLabel("Description of claim line item 0").clear();
+        cy.getByAriaLabel("Cost of claim line item 0").clear();
         cy.button("Save and return to claims").click();
         cy.heading("Costs to be claimed");
       } else {

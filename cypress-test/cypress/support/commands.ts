@@ -449,6 +449,7 @@ const testFileComponent = (
   cleanup: boolean,
   pcr: boolean,
   loans: boolean,
+  jsdisabled?: boolean,
   pcrArea?: string,
 ) => {
   cy.get("h2").contains("Files uploaded");
@@ -514,8 +515,12 @@ const testFileComponent = (
   });
   cy.get("a.govuk-link").contains(testFile);
   cy.log("Deleting document");
-  cy.clickOn("Remove");
-  cy.button("Remove").should("be.disabled");
+  if (jsdisabled) {
+    cy.clickOn("Remove");
+  } else {
+    cy.clickOn("Remove");
+    cy.button("Remove").should("be.disabled");
+  }
   cy.validationNotification(`'${testFile}' has been removed.`);
   cy.log("Attempting to upload a file that is larger than 32MB");
   cy.fileInput("bigger_test.txt");
@@ -529,13 +534,21 @@ const testFileComponent = (
     .selectFile(largeDocumentPaths, { force: true, timeout: seconds(5) });
   cy.wait(seconds(1)).submitButton("Upload").trigger("focus").click();
   cy.log("Uploading allowed special character file");
-  cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  if (jsdisabled) {
+    cy.wait(1000);
+  } else {
+    cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  }
   [intlFileName1, intlFileName2, intlFileName3].forEach(file => {
     cy.log(intercept);
     cy.uploadAnyFileType(file);
     cy.wait(500);
     cy.button("Upload documents").click();
-    cy.wait("@filesUpload");
+    if (jsdisabled) {
+      cy.wait(5000);
+    } else {
+      cy.wait("@filesUpload");
+    }
     cy.validationNotification(`Your document has been uploaded.`);
     cy.wait(500);
     cy.log("Deleting allowed special character file");
@@ -591,12 +604,21 @@ const testFileComponent = (
   cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
   cy.wait(1000);
   cy.log("Uploading a batch of 10 documents");
-  cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  if (jsdisabled) {
+    cy.wait(1000);
+  } else {
+    cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+  }
+
   cy.get(`input[type="file"]`)
     .wait(seconds(1))
     .selectFile(documentPaths, { force: true, timeout: seconds(5) });
   cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
-  cy.wait("@filesUpload");
+  if (jsdisabled) {
+    cy.wait(5000);
+  } else {
+    cy.wait("@filesUpload");
+  }
   cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
   cy.log("Deleting documents");
   if (cleanup) {

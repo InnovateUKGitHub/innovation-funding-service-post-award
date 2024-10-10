@@ -434,6 +434,7 @@ describe("PCR >  Add a partner > E2E: non-Je-S", () => {
       true,
       true,
       false,
+      false,
       "Partner agreement",
     );
   });
