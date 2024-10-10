@@ -2,7 +2,7 @@ import { UploadProjectDocumentCommand } from "@server/features/documents/uploadP
 import { ValidationError } from "@server/features/common/appError";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 
 describe("UploadProjectDocumentCommand", () => {
@@ -157,7 +157,7 @@ describe("UploadProjectDocumentCommand", () => {
     const command = new UploadProjectDocumentCommand(project.Id, { files: [context.testData.createFile()] });
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.MonitoringOfficer,
+        projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
         partnerRoles: {},
       },
     });
@@ -171,7 +171,7 @@ describe("UploadProjectDocumentCommand", () => {
     const command = new UploadProjectDocumentCommand(project.Id, { files: [context.testData.createFile()] });
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+        projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.ProjectManager,
         partnerRoles: {},
       },
     });

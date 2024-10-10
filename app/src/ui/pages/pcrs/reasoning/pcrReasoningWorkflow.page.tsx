@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { LineBreakList } from "@ui/components/atoms/LineBreakList/lineBreakList";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -124,7 +124,9 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
   },
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
   accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+    auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer),
 });
 
 export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -138,7 +140,8 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
     pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer),
 });
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -154,5 +157,5 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
     step: parseInt(route.params.step, 10),
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningPrepareReasoning.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

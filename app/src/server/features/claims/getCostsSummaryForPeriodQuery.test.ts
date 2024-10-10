@@ -1,5 +1,5 @@
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
@@ -325,8 +325,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
       const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -341,7 +341,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
           partnerRoles: {},
         },
       });
@@ -358,7 +358,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {},
         },
       });
@@ -375,7 +375,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
+          projectRoles: ProjectRolePermissionBits.Unknown,
           partnerRoles: {},
         },
       });
@@ -392,7 +392,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
           partnerRoles: {},
         },
       });

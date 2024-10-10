@@ -4,7 +4,7 @@ import { routeConfig } from "@ui/routing/routeConfig";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { PartnerStatus } from "@framework/constants/partner";
-import { ProjectStatus, ProjectRole } from "@framework/constants/project";
+import { ProjectStatus, ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsLinkRoutes, ClaimDetailsLink } from "./claimDetailsLink";
 
 // TODO: This test data needs updating there are way too many "as any" overrides here...
@@ -58,7 +58,7 @@ describe("<ClaimDetailsLink />", () => {
         },
         partner: {
           id: partnerId,
-          roles: ProjectRole.FinancialContact,
+          roles: ProjectRolePermissionBits.FinancialContact,
           partnerStatus: PartnerStatus.Active,
           isWithdrawn: false,
         },
@@ -89,7 +89,7 @@ describe("<ClaimDetailsLink />", () => {
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: ClaimStatus.PAID },
         project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
-        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus, isWithdrawn: true },
+        partner: { id: partnerId, roles: ProjectRolePermissionBits.FinancialContact, partnerStatus, isWithdrawn: true },
       };
 
       const { queryByText } = setup(draftProps);
@@ -102,7 +102,7 @@ describe("<ClaimDetailsLink />", () => {
     const draftClaimState = ClaimStatus.DRAFT;
 
     test("when partner is FC returns edit link", () => {
-      const partnerRole = ProjectRole.FinancialContact;
+      const partnerRole = ProjectRolePermissionBits.FinancialContact;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: draftClaimState },
@@ -121,7 +121,7 @@ describe("<ClaimDetailsLink />", () => {
         project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
-          roles: ProjectRole.MonitoringOfficer,
+          roles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerStatus: PartnerStatus.Active,
           isWithdrawn: false,
         },
@@ -133,7 +133,7 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when project is not an FC and the partner is not MO returns view link", () => {
-      const partnerRole = ProjectRole.MonitoringOfficer;
+      const partnerRole = ProjectRolePermissionBits.MonitoringOfficer;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: draftClaimState },
@@ -151,7 +151,7 @@ describe("<ClaimDetailsLink />", () => {
     const moQueriedClaimState = ClaimStatus.MO_QUERIED;
 
     test("when partner FC returns edit link", () => {
-      const partnerRole = ProjectRole.FinancialContact;
+      const partnerRole = ProjectRolePermissionBits.FinancialContact;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: moQueriedClaimState },
@@ -165,7 +165,7 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when partner is not FC returns view link", () => {
-      const partnerRole = ProjectRole.MonitoringOfficer;
+      const partnerRole = ProjectRolePermissionBits.MonitoringOfficer;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: moQueriedClaimState },
@@ -183,7 +183,7 @@ describe("<ClaimDetailsLink />", () => {
     const innovateQueriedClaimState = ClaimStatus.INNOVATE_QUERIED;
 
     test("when partner FC returns edit link", () => {
-      const partnerRole = ProjectRole.FinancialContact;
+      const partnerRole = ProjectRolePermissionBits.FinancialContact;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: innovateQueriedClaimState },
@@ -197,7 +197,7 @@ describe("<ClaimDetailsLink />", () => {
     });
 
     test("when partner is not FC returns view link", () => {
-      const partnerRole = ProjectRole.MonitoringOfficer;
+      const partnerRole = ProjectRolePermissionBits.MonitoringOfficer;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3 as PeriodId, status: innovateQueriedClaimState },
@@ -220,7 +220,7 @@ describe("<ClaimDetailsLink />", () => {
         project: { id: projectId, roles: getMo(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
-          roles: ProjectRole.FinancialContact,
+          roles: ProjectRolePermissionBits.FinancialContact,
           partnerStatus: PartnerStatus.Active,
           isWithdrawn: false,
         },
@@ -237,7 +237,7 @@ describe("<ClaimDetailsLink />", () => {
         project: { id: projectId, roles: getFc(), status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
-          roles: ProjectRole.MonitoringOfficer,
+          roles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerStatus: PartnerStatus.Active,
           isWithdrawn: false,
         },
@@ -262,7 +262,7 @@ describe("<ClaimDetailsLink />", () => {
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live, isActive: true },
         partner: {
           id: partnerId,
-          roles: ProjectRole.ProjectManager,
+          roles: ProjectRolePermissionBits.ProjectManager,
           partnerStatus: PartnerStatus.Active,
           isWithdrawn: false,
         },

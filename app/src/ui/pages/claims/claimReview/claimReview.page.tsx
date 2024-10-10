@@ -1,7 +1,7 @@
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -220,6 +220,7 @@ export const ReviewClaimRoute = defineRoute({
     partnerId: route.params.partnerId as PartnerId,
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimReview.title),
 });

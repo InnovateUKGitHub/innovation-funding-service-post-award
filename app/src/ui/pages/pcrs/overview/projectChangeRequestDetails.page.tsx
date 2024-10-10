@@ -3,7 +3,7 @@ import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewL
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { usePCRDetailsQuery } from "./projectChangeRequestDetails.logic";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atoms/Links/links";
 
@@ -52,5 +52,7 @@ export const PCRDetailsRoute = defineRoute<ProjectChangeRequestDetailsParams>({
     displayTitle: "Request",
   }),
   accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+    auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer),
 });

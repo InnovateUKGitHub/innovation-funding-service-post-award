@@ -3,7 +3,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
-import { ProjectRole, ProjectMonitoringLevel, ProjectSource } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectMonitoringLevel, ProjectSource } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -37,7 +37,7 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
     periodEndDate: new Date(),
     pcrsToReview: 0,
     pcrsQueried: 0,
-    roles: 7 as ProjectRole,
+    roles: 7 as ProjectRolePermissionBits,
     roleTitles: ["Monitoring Officer", "Project Manager", "Finance Contact"],
     status: 2,
     statusName: "Live",
@@ -84,7 +84,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     totalPaidCosts: null,
     totalFutureForecastsForParticipants: 48820.8,
     totalCostsSubmitted: 37000,
-    roles: 7 as ProjectRole,
+    roles: 7 as ProjectRolePermissionBits,
     forecastLastModifiedDate: new Date(),
     overdueProject: false,
     claimsOverdue: 0,

@@ -1,7 +1,7 @@
 import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 
 describe("UploadClaimDetailDocumentCommand", () => {
@@ -129,8 +129,8 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
+          partnerRoles: { [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -142,9 +142,13 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+          projectRoles:
+            ProjectRolePermissionBits.ProjectManager |
+            ProjectRolePermissionBits.MonitoringOfficer |
+            ProjectRolePermissionBits.FinancialContact,
           partnerRoles: {
-            [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer,
+            [claimDto.Acc_ProjectParticipant__r.Id]:
+              ProjectRolePermissionBits.ProjectManager | ProjectRolePermissionBits.MonitoringOfficer,
           },
         },
       });

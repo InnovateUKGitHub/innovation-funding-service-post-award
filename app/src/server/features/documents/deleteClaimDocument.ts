@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimKey } from "@framework/types/ClaimKey";
 import { IContext } from "@framework/types/IContext";
@@ -29,8 +29,10 @@ export class DeleteClaimDocumentCommand extends AuthorisedAsyncCommandBase<void>
 
     // If a project prole (e.g. MO or PM) is used for auth then the claim needs to be looked up by projectId as well as partner & period
     return (
-      auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact) ||
-      auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer)
+      auth
+        .forPartner(this.claimKey.projectId, this.claimKey.partnerId)
+        .hasRole(ProjectRolePermissionBits.FinancialContact) ||
+      auth.forProject(this.claimKey.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer)
     );
   }
 

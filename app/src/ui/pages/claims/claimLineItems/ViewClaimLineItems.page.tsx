@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { Section } from "@ui/components/molecules/Section/section";
 import { AwardRateOverridesMessage } from "@ui/components/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
@@ -94,8 +94,10 @@ const ReviewClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
   container: props => <ViewClaimLineItemsPage {...props} mode="review" />,
   getParams: route => getParams(route),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
-    auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+    auth
+      .forPartner(projectId, partnerId)
+      .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager) ||
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
 });
 
 export { ClaimLineItemsParams, ClaimLineItemsRoute, ReviewClaimLineItemsRoute };

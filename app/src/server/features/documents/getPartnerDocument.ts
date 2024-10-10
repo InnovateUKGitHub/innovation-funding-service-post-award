@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { DocumentQueryBase } from "./documentQueryBase";
 
@@ -14,10 +14,14 @@ export class GetPartnerDocumentQuery extends DocumentQueryBase {
 
   async accessControl(auth: Authorisation): Promise<boolean> {
     return (
-      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer) ||
       auth
         .forPartner(this.projectId, this.partnerId)
-        .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager)
+        .hasAnyRoles(
+          ProjectRolePermissionBits.MonitoringOfficer,
+          ProjectRolePermissionBits.FinancialContact,
+          ProjectRolePermissionBits.ProjectManager,
+        )
     );
   }
 

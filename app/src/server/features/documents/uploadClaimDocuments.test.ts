@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { ValidationError } from "@server/features/common/appError";
 
@@ -147,10 +147,12 @@ describe("UploadClaimDocumentsCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact,
+          projectRoles: ProjectRolePermissionBits.FinancialContact,
           partnerRoles: {
             [claim.Acc_ProjectParticipant__r.Id]:
-              ProjectRole.FinancialContact | ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer,
+              ProjectRolePermissionBits.FinancialContact |
+              ProjectRolePermissionBits.ProjectManager |
+              ProjectRolePermissionBits.MonitoringOfficer,
           },
         },
       });
@@ -163,10 +165,12 @@ describe("UploadClaimDocumentsCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {
             [claim.Acc_ProjectParticipant__r.Id]:
-              ProjectRole.FinancialContact | ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer,
+              ProjectRolePermissionBits.FinancialContact |
+              ProjectRolePermissionBits.ProjectManager |
+              ProjectRolePermissionBits.MonitoringOfficer,
           },
         },
       });
@@ -179,8 +183,11 @@ describe("UploadClaimDocumentsCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown },
+          projectRoles: ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: {
+            [claim.Acc_ProjectParticipant__r.Id]:
+              ProjectRolePermissionBits.ProjectManager | ProjectRolePermissionBits.Unknown,
+          },
         },
       });
 

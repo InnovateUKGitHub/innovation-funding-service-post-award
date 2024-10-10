@@ -1,7 +1,7 @@
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError, ValidationError } from "../common/appError";
@@ -34,7 +34,7 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
 
     if (!loan) return false;
 
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.FinancialContact);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext): Promise<string[]> {

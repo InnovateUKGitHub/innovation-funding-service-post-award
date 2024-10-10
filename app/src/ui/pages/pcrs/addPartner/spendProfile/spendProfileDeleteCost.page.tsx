@@ -13,7 +13,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost.page";
 import { CostCategoryGroupType } from "@framework/constants/enums";
 import { PCRItemType } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Section } from "@ui/components/molecules/Section/section";
@@ -187,5 +187,5 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     costId: route.params.costId as CostId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileDeleteCost.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

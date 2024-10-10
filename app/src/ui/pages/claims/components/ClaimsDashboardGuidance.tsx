@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -18,7 +18,7 @@ export interface ClaimsDashboardGuidanceProps {
 export const ClaimsDashboardGuidance = ({
   overdueProject,
   competitionType = "",
-  roles = ProjectRole.Unknown,
+  roles = ProjectRolePermissionBits.Unknown,
 }: ClaimsDashboardGuidanceProps) => {
   const { getContent } = useContent();
 

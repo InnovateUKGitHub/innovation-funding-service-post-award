@@ -1,6 +1,6 @@
 import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackLink } from "@ui/components/atoms/Links/links";
@@ -135,5 +135,5 @@ export const ProjectSetupSpendProfileRoute = defineRoute({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupSpendProfile.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
 });

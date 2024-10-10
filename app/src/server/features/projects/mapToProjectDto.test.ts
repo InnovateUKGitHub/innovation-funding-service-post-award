@@ -2,7 +2,12 @@ import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimFrequency } from "@framework/constants/enums";
-import { ProjectRole, ProjectMonitoringLevel, ProjectStatus, ProjectSource } from "@framework/constants/project";
+import {
+  ProjectRolePermissionBits,
+  ProjectMonitoringLevel,
+  ProjectStatus,
+  ProjectSource,
+} from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { mapToProjectDto } from "./mapToProjectDto";
 
@@ -44,7 +49,7 @@ describe("mapToProjectDto", () => {
       periodEndDate: periodEndDate.set(midnight).toJSDate(),
       pcrsQueried: 2,
       pcrsToReview: 3,
-      roles: ProjectRole.Unknown,
+      roles: ProjectRolePermissionBits.Unknown,
       roleTitles: [],
       claimsOverdue: 5,
       claimsWithParticipant: 1,
@@ -101,7 +106,7 @@ describe("mapToProjectDto", () => {
       x.Impact_Management_Participation__c = expected.impactManagementParticipation;
     });
 
-    const result = mapToProjectDto(context, project, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, project, ProjectRolePermissionBits.Unknown);
 
     expect(result).toMatchObject(expected);
   });
@@ -117,7 +122,7 @@ describe("mapToProjectDto", () => {
       x.Acc_ProjectNumber__c = "30000";
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
     expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1");
   });
@@ -132,7 +137,7 @@ describe("mapToProjectDto", () => {
       x.Acc_IFSApplicationId__c = 1;
       x.Acc_ProjectNumber__c = "30000";
     });
-    const result = mapToProjectDto(context, project, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, project, ProjectRolePermissionBits.Unknown);
 
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
   });
@@ -148,9 +153,9 @@ describe("mapToProjectDto", () => {
     const projectYesterday = context.testData.createProject(x => {
       x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({ days: 1 }).toFormat("yyyy-MM-dd");
     });
-    expect(mapToProjectDto(context, projectNow, ProjectRole.Unknown).isPastEndDate).toBe(false);
-    expect(mapToProjectDto(context, projectTomorrow, ProjectRole.Unknown).isPastEndDate).toBe(false);
-    expect(mapToProjectDto(context, projectYesterday, ProjectRole.Unknown).isPastEndDate).toBe(true);
+    expect(mapToProjectDto(context, projectNow, ProjectRolePermissionBits.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, projectTomorrow, ProjectRolePermissionBits.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, projectYesterday, ProjectRolePermissionBits.Unknown).isPastEndDate).toBe(true);
   });
 
   it("ClaimFrequency should map correct - Quarterly", () => {
@@ -158,7 +163,7 @@ describe("mapToProjectDto", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
     });
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Quarterly);
   });
 
@@ -167,7 +172,7 @@ describe("mapToProjectDto", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
     });
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Monthly);
   });
 
@@ -178,7 +183,7 @@ describe("mapToProjectDto", () => {
       x.Acc_GOLTotalCostAwarded__c = 100000;
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
     expect(result.grantOfferLetterCosts).toBe(100000);
   });
@@ -190,7 +195,7 @@ describe("mapToProjectDto", () => {
       x.Acc_TotalProjectCosts__c = 500000;
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
     expect(result.costsClaimedToDate).toBe(500000);
   });
@@ -203,7 +208,7 @@ describe("mapToProjectDto", () => {
       x.Acc_NonFEC__c = stubIsNonFec;
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+    const result = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
     expect(result.isNonFec).toBeTruthy();
   });
@@ -220,7 +225,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanEndDate__c = stubDate.toFormat("yyyy-MM-dd");
         });
 
-        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanEndDate).toStrictEqual(expectedDate);
       });
@@ -232,7 +237,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanEndDate__c = null;
         });
 
-        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanEndDate).toStrictEqual(null);
       });
@@ -246,7 +251,11 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanAvailabilityPeriodLength__c = 1;
         });
 
-        const { loanAvailabilityPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanAvailabilityPeriodLength } = mapToProjectDto(
+          context,
+          salesforce,
+          ProjectRolePermissionBits.Unknown,
+        );
 
         expect(loanAvailabilityPeriodLength).toBe(1);
       });
@@ -258,7 +267,11 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanAvailabilityPeriodLength__c = null;
         });
 
-        const { loanAvailabilityPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanAvailabilityPeriodLength } = mapToProjectDto(
+          context,
+          salesforce,
+          ProjectRolePermissionBits.Unknown,
+        );
 
         expect(loanAvailabilityPeriodLength).toBeNull();
       });
@@ -272,7 +285,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanExtensionPeriodLength__c = 1;
         });
 
-        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanExtensionPeriodLength).toBe(1);
       });
@@ -284,7 +297,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanExtensionPeriodLength__c = null;
         });
 
-        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanExtensionPeriodLength).toBeNull();
       });
@@ -298,7 +311,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanRepaymentPeriodLength__c = 1;
         });
 
-        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanRepaymentPeriodLength).toBe(1);
       });
@@ -310,7 +323,7 @@ describe("mapToProjectDto", () => {
           x.Loan_LoanRepaymentPeriodLength__c = null;
         });
 
-        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRolePermissionBits.Unknown);
 
         expect(loanRepaymentPeriodLength).toBeNull();
       });
@@ -329,7 +342,11 @@ describe("mapToProjectDto", () => {
           x.Impact_Management_Participation__c = input as string;
         });
 
-        const { impactManagementParticipation } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+        const { impactManagementParticipation } = mapToProjectDto(
+          context,
+          salesforce,
+          ProjectRolePermissionBits.Unknown,
+        );
 
         expect(impactManagementParticipation).toBe(expected);
       });

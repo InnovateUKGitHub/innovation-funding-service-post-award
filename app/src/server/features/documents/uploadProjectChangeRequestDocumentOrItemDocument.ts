@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -27,7 +27,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
     );
     if (!projectChangeRequestExists) return false;
 
-    return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext) {

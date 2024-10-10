@@ -3,7 +3,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import {
   PCRDto,
   PCRItemDto,
@@ -43,7 +43,7 @@ describe("UpdatePCRCommand", () => {
   });
 
   describe("with access control", () => {
-    const setAccessControl = (role: ProjectRole) => {
+    const setAccessControl = (role: ProjectRolePermissionBits) => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -59,7 +59,7 @@ describe("UpdatePCRCommand", () => {
 
     describe("with invalid roles", () => {
       test("when FC", async () => {
-        const runAccessControl = setAccessControl(ProjectRole.FinancialContact);
+        const runAccessControl = setAccessControl(ProjectRolePermissionBits.FinancialContact);
 
         expect(await runAccessControl).toBeFalsy();
       });
@@ -67,13 +67,13 @@ describe("UpdatePCRCommand", () => {
 
     describe("with valid roles", () => {
       test("when PM", async () => {
-        const runAccessControl = setAccessControl(ProjectRole.ProjectManager);
+        const runAccessControl = setAccessControl(ProjectRolePermissionBits.ProjectManager);
 
         expect(await runAccessControl).toBeTruthy();
       });
 
       test("when MO", async () => {
-        const runAccessControl = setAccessControl(ProjectRole.MonitoringOfficer);
+        const runAccessControl = setAccessControl(ProjectRolePermissionBits.MonitoringOfficer);
 
         expect(await runAccessControl).toBeTruthy();
       });

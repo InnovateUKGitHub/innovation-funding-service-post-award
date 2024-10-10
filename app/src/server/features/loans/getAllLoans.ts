@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { LoanDto } from "@framework/dtos/loanDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -13,7 +13,11 @@ export class GetAllLoans extends AuthorisedAsyncQueryBase<LoanDto[]> {
   async accessControl(auth: Authorisation) {
     return auth
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.FinancialContact,
+      );
   }
 
   public async run(context: IContext): Promise<LoanDto[]> {

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
@@ -114,7 +114,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({
-        [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.MonitoringOfficer, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
@@ -135,7 +135,9 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.ProjectManager, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -156,7 +158,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({
-        [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} },
+        [project.Id]: { projectRoles: ProjectRolePermissionBits.FinancialContact, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
@@ -179,7 +181,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({
-        [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+        [project2.Id]: { projectRoles: ProjectRolePermissionBits.MonitoringOfficer, partnerRoles: {} },
       });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
@@ -201,7 +203,9 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({ [project2.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project2.Id]: { projectRoles: ProjectRolePermissionBits.ProjectManager, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
   });

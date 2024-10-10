@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimKey } from "@framework/types/ClaimKey";
 import { IContext } from "@framework/types/IContext";
@@ -17,8 +17,8 @@ export class GetClaimDocumentQuery extends DocumentQueryBase {
     return (
       auth
         .forPartner(this.claimKey.projectId, this.claimKey.partnerId)
-        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
-      auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer)
+        .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager) ||
+      auth.forProject(this.claimKey.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer)
     );
   }
 

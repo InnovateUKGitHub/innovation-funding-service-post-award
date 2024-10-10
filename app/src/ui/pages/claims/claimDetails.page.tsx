@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
@@ -287,7 +287,9 @@ export const ClaimsDetailsRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, params) =>
-    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
-    auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
+    auth
+      .forProject(params.projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager) ||
+    auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimDetails.title),
 });

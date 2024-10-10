@@ -1,6 +1,6 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { List } from "@ui/components/atoms/List/list";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
@@ -187,6 +187,7 @@ export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   container: ProjectSetupPage,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, params) =>
+    auth.forProject(params.projectId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetup.title),
 });

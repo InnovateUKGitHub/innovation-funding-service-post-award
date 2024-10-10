@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -21,7 +21,7 @@ export class UpdateFinancialLoanVirementCommand extends AuthorisedAsyncCommandBa
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext): Promise<boolean> {

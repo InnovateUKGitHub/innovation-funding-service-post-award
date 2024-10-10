@@ -7,7 +7,7 @@ import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import * as Validation from "@ui/validation/validators/common";
 import { ClaimPcfIarSharedValidatorResult, iarValidation, pcfValidation } from "./shared/claimPcfIarSharedValidator";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 export const claimCommentsMaxLength = 1000;
 
@@ -25,7 +25,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     private readonly documents: DocumentSummaryDto[],
     public readonly showErrors: boolean,
     private readonly competitionType: PartnerDto["competitionType"],
-    private readonly roles: ProjectRole,
+    private readonly roles: ProjectRolePermissionBits,
   ) {
     super({ model: dto, showValidationErrors: showErrors, competitionType });
     this.status = this.validateStatus();
@@ -113,7 +113,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
    * YOU MUST update the Confluence document before editing the code.
    * @see {@link https://ukri.atlassian.net/wiki/spaces/ACC/pages/467107882/PCF+IAR+Validation}
    */
-  private getPcfIarValidation(roles: ProjectRole): Result {
+  private getPcfIarValidation(roles: ProjectRolePermissionBits): Result {
     if (
       this.model.status === ClaimStatus.DRAFT ||
       this.model.status === ClaimStatus.MO_QUERIED ||
@@ -122,7 +122,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
       return Validation.valid(this);
     }
 
-    if (roles & ProjectRole.MonitoringOfficer) {
+    if (roles & ProjectRolePermissionBits.MonitoringOfficer) {
       return Validation.valid(this);
     }
 

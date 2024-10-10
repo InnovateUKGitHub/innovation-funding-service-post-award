@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BaseProps, defineRoute } from "../../app/containerBase";
 import { useForecastDashboardData, Partner } from "./forecastDashboard.logic";
 import { useContent } from "@ui/hooks/content.hook";
@@ -70,6 +70,8 @@ export const ForecastDashboardRoute = defineRoute({
   container: ForecastDashboardPage,
   getParams: r => ({ projectId: r.params.projectId as ProjectId }),
   accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+    auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsDashboard.title),
 });

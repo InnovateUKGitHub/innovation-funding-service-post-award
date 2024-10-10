@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { BaseProps, defineRoute } from "../../app/containerBase";
 import { ClaimsDashboardGuidance } from "./components/ClaimsDashboardGuidance";
 import { DateFormat } from "@framework/constants/enums";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
@@ -249,10 +249,12 @@ export const ClaimsDashboardRoute = defineRoute({
     partnerId: route.params.partnerId as PartnerId,
   }),
   accessControl: (auth, params) => {
-    const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);
+    const isFC = auth
+      .forPartner(params.projectId, params.partnerId)
+      .hasRole(ProjectRolePermissionBits.FinancialContact);
     const isMoOrPm = auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager);
 
     return isFC && !isMoOrPm;
   },

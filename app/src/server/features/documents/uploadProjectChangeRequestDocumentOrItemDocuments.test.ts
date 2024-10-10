@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
@@ -253,7 +253,7 @@ describe("Access control", () => {
 
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.ProjectManager,
+        projectRoles: ProjectRolePermissionBits.ProjectManager,
         partnerRoles: {},
       },
     });
@@ -282,7 +282,7 @@ describe("Access control", () => {
 
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+        projectRoles: ProjectRolePermissionBits.MonitoringOfficer | ProjectRolePermissionBits.FinancialContact,
         partnerRoles: {},
       },
     });

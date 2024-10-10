@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { DocumentQueryBase } from "./documentQueryBase";
 
@@ -12,7 +12,7 @@ export class GetProjectDocumentQuery extends DocumentQueryBase {
   }
 
   async accessControl(auth: Authorisation): Promise<boolean> {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected getRecordId(): Promise<string> {

@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
@@ -34,7 +34,7 @@ export class UpdateForecastDetailsCommand extends AuthorisedAsyncCommandBase<boo
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext) {

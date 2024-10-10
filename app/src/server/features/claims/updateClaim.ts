@@ -1,7 +1,7 @@
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -31,8 +31,10 @@ export class UpdateClaimCommand extends AuthorisedAsyncCommandBase<boolean> {
   }
 
   async accessControl(auth: Authorisation) {
-    const hasMoRole = auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
-    const hasFcRole = auth.forPartner(this.projectId, this.claimDto.partnerId).hasRole(ProjectRole.FinancialContact);
+    const hasMoRole = auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
+    const hasFcRole = auth
+      .forPartner(this.projectId, this.claimDto.partnerId)
+      .hasRole(ProjectRolePermissionBits.FinancialContact);
 
     return hasMoRole || hasFcRole;
   }

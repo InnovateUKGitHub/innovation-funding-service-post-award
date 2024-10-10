@@ -1,4 +1,4 @@
-import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
+import { ProjectMonitoringLevel, ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
@@ -337,9 +337,9 @@ export const ProjectDetailsRoute = defineRoute({
     auth
       .forProject(params.projectId)
       .hasAnyRoles(
-        ProjectRole.FinancialContact,
-        ProjectRole.ProjectManager,
-        ProjectRole.MonitoringOfficer,
-        ProjectRole.Associate,
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.Associate,
       ),
 });

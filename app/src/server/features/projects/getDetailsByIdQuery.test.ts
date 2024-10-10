@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -46,7 +46,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     context.user.set({ email });
 
     const result = await context.runQuery(new GetByIdQuery(project.Id));
-    expect(result.roles).toBe(ProjectRole.FinancialContact);
+    expect(result.roles).toBe(ProjectRolePermissionBits.FinancialContact);
   });
 
   it("when user is monitoring officer expect role returns correctly", async () => {
@@ -60,7 +60,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     context.user.set({ email });
 
     const result = await context.runQuery(new GetByIdQuery(project.Id));
-    expect(result.roles).toBe(ProjectRole.MonitoringOfficer);
+    expect(result.roles).toBe(ProjectRolePermissionBits.MonitoringOfficer);
   });
 
   it("when user is project manager expect role returns correctly", async () => {
@@ -73,7 +73,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     context.testData.createCurrentUserAsProjectManager(project);
 
     const result = await context.runQuery(new GetByIdQuery(project.Id));
-    expect(result.roles).toBe(ProjectRole.ProjectManager);
+    expect(result.roles).toBe(ProjectRolePermissionBits.ProjectManager);
   });
 
   it("when user is all roles expect role returns correctly", async () => {
@@ -89,7 +89,9 @@ describe("ProjectsGetDetailsByIdQuery", () => {
 
     const result = await context.runQuery(new GetByIdQuery(project.Id));
     expect(result.roles).toBe(
-      ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
+      ProjectRolePermissionBits.ProjectManager |
+        ProjectRolePermissionBits.FinancialContact |
+        ProjectRolePermissionBits.MonitoringOfficer,
     );
   });
 });

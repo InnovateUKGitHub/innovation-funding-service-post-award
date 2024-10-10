@@ -1,5 +1,5 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { useContent } from "@ui/hooks/content.hook";
 import { useMonitoringReportDeleteQuery, useOnMonitoringReportDelete } from "./monitoringReportDelete.logic";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -73,5 +73,6 @@ export const MonitoringReportDeleteRoute = defineRoute({
     id: route.params.id as MonitoringReportId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDelete.title),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
 });

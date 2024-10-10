@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -24,7 +24,7 @@ export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<st
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   private async insertStatusChange(context: IContext, headerId: string): Promise<void> {

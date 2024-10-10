@@ -8,7 +8,7 @@ import {
   PCRProjectRole,
   pcrItemTypes,
 } from "@framework/constants/pcrConstants";
-import { ProjectRole, ProjectMonitoringLevel } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectMonitoringLevel } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import {
   PCRItemTypeDto,
@@ -48,7 +48,7 @@ import { PartnerStatus } from "@framework/constants/partner";
 interface PCRBaseDtoValidationProps<T> {
   model: T;
   original?: T;
-  role?: ProjectRole;
+  role?: ProjectRolePermissionBits;
   recordTypes?: PCRItemTypeDto[];
   showValidationErrors?: boolean;
   project?: ProjectDto;
@@ -67,7 +67,7 @@ interface PCRBaseItemDtoValidatorProps<T extends PCRItemDto> extends PCRBaseDtoV
 }
 
 export class PCRDtoValidator extends Results<PCRDto> {
-  private readonly role: ProjectRole = ProjectRole.Unknown;
+  private readonly role: ProjectRolePermissionBits = ProjectRolePermissionBits.Unknown;
   private readonly recordTypes: PCRItemTypeDto[] = [];
   private readonly project?: ProjectDto;
   private readonly original?: PCRDto;
@@ -101,7 +101,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   constructor({
     model,
-    role = ProjectRole.Unknown,
+    role = ProjectRolePermissionBits.Unknown,
     recordTypes = [],
     showValidationErrors = false,
     project,
@@ -551,7 +551,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
 export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   protected readonly canEdit: boolean;
-  protected readonly role: ProjectRole = ProjectRole.Unknown;
+  protected readonly role: ProjectRolePermissionBits = ProjectRolePermissionBits.Unknown;
   protected readonly pcrStatus: PCRStatus;
   protected readonly recordTypes: PCRItemTypeDto[] = [];
   protected readonly original?: T;
@@ -565,7 +565,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   constructor({
     model,
     canEdit,
-    role = ProjectRole.Unknown,
+    role = ProjectRolePermissionBits.Unknown,
     pcrStatus,
     recordTypes = [],
     original,

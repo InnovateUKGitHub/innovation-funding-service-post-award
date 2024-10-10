@@ -1,6 +1,6 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { usePcrItemWorkflowQuery } from "./pcrItemWorkflow.logic";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRItemWorkflow } from "./pcrItemWorkflow";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { pcrItemWorkflowQuery } from "./PcrItemWorkflow.query";
@@ -57,7 +57,9 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     return <PCRItemContainer {...props} mode="details" />;
   },
   accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+    auth
+      .forProject(projectId)
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer),
 });
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
@@ -73,7 +75,8 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     pcrId: route.params.pcrId as PcrId,
     step: parseInt(route.params.step, 10),
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer),
 });
 
 export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
@@ -89,5 +92,5 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     itemId: route.params.itemId as PcrItemId,
     step: parseInt(route.params.step, 10),
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

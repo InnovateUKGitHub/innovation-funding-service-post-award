@@ -35,7 +35,7 @@ import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearM
 import { z } from "zod";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useValidDocumentDropdownOptions } from "@ui/hooks/useValidDocumentDropdownOptions.hook";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -279,5 +279,9 @@ export const ProjectDocumentsRoute = defineRoute({
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+      .hasAnyRoles(
+        ProjectRolePermissionBits.FinancialContact,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.MonitoringOfficer,
+      ),
 });

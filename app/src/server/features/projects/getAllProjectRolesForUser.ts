@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { Partner } from "@framework/entities/partner";
 import { Authorisation, getAuthRoles } from "@framework/types/authorisation";
@@ -7,8 +7,8 @@ import { ISalesforceProjectContact, SalesforceRole } from "@server/repositories/
 import { AuthorisedAsyncQueryBase } from "../common/queryBase";
 
 export interface IRoleInfo {
-  projectRoles: ProjectRole;
-  partnerRoles: { [key: string]: ProjectRole };
+  projectRoles: ProjectRolePermissionBits;
+  partnerRoles: { [key: string]: ProjectRolePermissionBits };
 }
 
 export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authorisation> {
@@ -49,7 +49,7 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
       roleInfo.projectRoles = roleInfo.projectRoles | newProjectRole;
 
       partners.forEach(partner => {
-        roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | ProjectRole.Unknown;
+        roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | ProjectRolePermissionBits.Unknown;
         // if this is a partner level contact then add it at the partner level too
         if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newProjectRole, partner)) {
           roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | newProjectRole;
@@ -64,7 +64,7 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
     return !!(contact.Acc_AccountId__c && partner.accountId === contact.Acc_AccountId__c);
   }
 
-  private isPartnerLevelRole(projectRole: ProjectRole, partner: Partner): boolean {
+  private isPartnerLevelRole(projectRole: ProjectRolePermissionBits, partner: Partner): boolean {
     const { isFc, isPm } = getAuthRoles(projectRole);
 
     return isFc || (isPm && partner.projectRole === SalesforceProjectRole.ProjectLead);
@@ -83,7 +83,10 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
     ]);
 
     const allRoles =
-      ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.Associate;
+      ProjectRolePermissionBits.MonitoringOfficer |
+      ProjectRolePermissionBits.ProjectManager |
+      ProjectRolePermissionBits.FinancialContact |
+      ProjectRolePermissionBits.Associate;
 
     // Create an empty roles set.
     const roles: Record<string, IRoleInfo> = {};
@@ -111,24 +114,24 @@ export class GetAllProjectRolesForUser extends AuthorisedAsyncQueryBase<Authoris
     return roles;
   }
 
-  private getProjectRole(salesforceRole: SalesforceRole): ProjectRole {
+  private getProjectRole(salesforceRole: SalesforceRole): ProjectRolePermissionBits {
     switch (salesforceRole) {
       case "Monitoring officer":
-        return ProjectRole.MonitoringOfficer;
+        return ProjectRolePermissionBits.MonitoringOfficer;
       case "Project Manager":
-        return ProjectRole.ProjectManager;
+        return ProjectRolePermissionBits.ProjectManager;
       case "Finance contact":
-        return ProjectRole.FinancialContact;
+        return ProjectRolePermissionBits.FinancialContact;
       case "Associate":
-        return ProjectRole.Associate;
+        return ProjectRolePermissionBits.Associate;
       default:
-        return ProjectRole.Unknown;
+        return ProjectRolePermissionBits.Unknown;
     }
   }
 
   private getEmptyRoleInfo(): IRoleInfo {
     return {
-      projectRoles: ProjectRole.Unknown,
+      projectRoles: ProjectRolePermissionBits.Unknown,
       partnerRoles: {},
     };
   }

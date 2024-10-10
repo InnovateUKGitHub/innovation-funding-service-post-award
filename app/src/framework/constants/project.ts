@@ -24,7 +24,7 @@ export enum ProjectMonitoringLevel {
   InternalAssurance = "InternalAssurance",
 }
 
-export enum ProjectRole {
+export enum ProjectRolePermissionBits {
   Unknown = 0,
   MonitoringOfficer = 1 << 0,
   ProjectManager = 1 << 1,

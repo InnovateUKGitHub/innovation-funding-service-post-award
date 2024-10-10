@@ -1,5 +1,5 @@
 import { ClaimFrequency } from "@framework/constants/enums";
-import { ProjectRole, ProjectSource } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
@@ -10,7 +10,11 @@ import { dayComparator } from "@framework/util/comparator";
 import { isNumber, roundCurrency } from "@framework/util/numberHelper";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
-export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {
+export const mapToProjectDto = (
+  context: IContext,
+  item: ISalesforceProject,
+  roles: ProjectRolePermissionBits,
+): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
   const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c);
@@ -41,8 +45,8 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     periodEndDate: context.clock.parseOptionalSalesforceDate(item.Acc_CurrentPeriodEndDate__c),
     pcrsToReview: item.Acc_PCRsForReview__c || 0,
     pcrsQueried: item.Acc_PCRsUnderQuery__c || 0,
-    roles: roles || ProjectRole.Unknown,
-    roleTitles: getRoleTitles(roles || ProjectRole.Unknown),
+    roles: roles || ProjectRolePermissionBits.Unknown,
+    roleTitles: getRoleTitles(roles || ProjectRolePermissionBits.Unknown),
     status: getProjectStatus(item.Acc_ProjectStatus__c),
     statusName: item.ProjectStatusName,
     claimsOverdue: item.Acc_ClaimsOverdue__c,
@@ -65,7 +69,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
   };
 };
 
-const getRoleTitles = (roles: ProjectRole) => {
+const getRoleTitles = (roles: ProjectRolePermissionBits) => {
   const { isMo, isPm, isFc, isAssociate } = getAuthRoles(roles);
   const results: string[] = [];
 

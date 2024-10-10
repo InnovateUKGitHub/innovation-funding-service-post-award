@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "@ui/components/atoms/form/Button/Button";
@@ -150,5 +150,5 @@ export const ProjectChangeRequestPrepareRoute = defineRoute<ProjectChangeRequest
     htmlTitle: "Request",
     displayTitle: "Request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRolePermissionBits.ProjectManager),
 });

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentEntity } from "@framework/entities/document";
 import { Authorisation } from "@framework/types/authorisation";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
@@ -10,7 +10,7 @@ export class GetProjectDocumentSummaryQuery extends DocumentsSummaryQueryBase {
   }
 
   async accessControl(auth: Authorisation): Promise<boolean> {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   protected getRecordId(): Promise<string> {

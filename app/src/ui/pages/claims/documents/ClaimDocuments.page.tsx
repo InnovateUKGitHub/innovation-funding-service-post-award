@@ -4,7 +4,7 @@ import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearM
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -272,6 +272,6 @@ export const ClaimDocumentsRoute = defineRoute({
     periodId: parseInt(route.params.periodId ?? "", 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRolePermissionBits.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimDocuments.title),
 });

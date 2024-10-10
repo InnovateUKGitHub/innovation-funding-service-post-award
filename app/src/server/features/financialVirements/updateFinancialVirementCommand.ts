@@ -6,7 +6,7 @@ import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import {
   FinancialVirementDto,
   CostCategoryVirementDto,
@@ -34,7 +34,7 @@ export class UpdateFinancialVirementCommand extends AuthorisedAsyncCommandBase<b
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext): Promise<boolean> {

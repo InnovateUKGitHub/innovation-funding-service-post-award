@@ -12,7 +12,7 @@ import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerD
 import { BankCheckCondition, MatchFlag } from "@framework/types/bankCheck";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
-import { ProjectRole, ProjectSource } from "@framework/constants/project";
+import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -46,7 +46,7 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
   async accessControl(auth: Authorisation) {
     return auth
       .forPartner(this.partner.projectId, this.partner.id)
-      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext) {

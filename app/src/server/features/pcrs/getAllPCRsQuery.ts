@@ -1,5 +1,5 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestEntity } from "@framework/entities/projectChangeRequest";
 import { Authorisation } from "@framework/types/authorisation";
@@ -18,7 +18,11 @@ export class GetAllPCRsQuery extends AuthorisedAsyncQueryBase<PCRSummaryDto[]> {
   public async accessControl(auth: Authorisation) {
     return auth
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.FinancialContact,
+      );
   }
 
   protected async run(context: IContext): Promise<PCRSummaryDto[]> {
@@ -27,7 +31,7 @@ export class GetAllPCRsQuery extends AuthorisedAsyncQueryBase<PCRSummaryDto[]> {
 
     const isPmOrFc = roles
       .forProject(this.projectId)
-      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.FinancialContact);
 
     return (await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId))
       .sort((a, b) => numberComparator(b.number, a.number))

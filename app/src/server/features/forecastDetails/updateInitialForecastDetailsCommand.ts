@@ -3,7 +3,7 @@ import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecast
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { PartnerStatus, SpendProfileStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Authorisation } from "@framework/types/authorisation";
@@ -30,7 +30,7 @@ export class UpdateInitialForecastDetailsCommand extends AuthorisedAsyncCommandB
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
   }
 
   protected async run(context: IContext) {

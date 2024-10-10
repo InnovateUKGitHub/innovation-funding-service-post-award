@@ -2,7 +2,7 @@ import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getPr
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 
 describe("GetProjectDocumentSummaryQuery", () => {
@@ -93,7 +93,7 @@ describe("GetProjectDocumentSummaryQuery", () => {
     const command = new GetProjectDocumentSummaryQuery(project.Id);
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.MonitoringOfficer,
+        projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
         partnerRoles: {},
       },
     });
@@ -107,7 +107,7 @@ describe("GetProjectDocumentSummaryQuery", () => {
     const command = new GetProjectDocumentSummaryQuery(project.Id);
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+        projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.ProjectManager,
         partnerRoles: {},
       },
     });

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { DocumentEntity } from "@framework/entities/document";
 import { Authorisation } from "@framework/types/authorisation";
 import { ClaimKey } from "@framework/types/ClaimKey";
@@ -17,8 +17,12 @@ export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
 
   async accessControl(auth: Authorisation) {
     return (
-      auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact) ||
-      auth.forProject(this.claimKey.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
+      auth
+        .forPartner(this.claimKey.projectId, this.claimKey.partnerId)
+        .hasRole(ProjectRolePermissionBits.FinancialContact) ||
+      auth
+        .forProject(this.claimKey.projectId)
+        .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager)
     );
   }
 

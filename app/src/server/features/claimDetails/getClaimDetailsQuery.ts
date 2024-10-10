@@ -1,6 +1,6 @@
 import { mapClaimDetails } from "./mapClaimDetails";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -19,10 +19,10 @@ export class GetClaimDetailsQuery extends AuthorisedAsyncQueryBase<ClaimDetailsD
 
   async accessControl(auth: Authorisation) {
     return (
-      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer) ||
       auth
         .forPartner(this.projectId, this.partnerId)
-        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)
+        .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager)
     );
   }
 

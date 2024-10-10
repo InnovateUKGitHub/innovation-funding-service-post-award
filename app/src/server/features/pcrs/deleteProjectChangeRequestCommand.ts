@@ -1,5 +1,5 @@
 import { PCRStatus } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { BadRequestError } from "../common/appError";
@@ -15,7 +15,7 @@ export class DeleteProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   }
 
   public async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasRole(ProjectRolePermissionBits.ProjectManager);
   }
 
   protected async run(context: IContext): Promise<boolean> {

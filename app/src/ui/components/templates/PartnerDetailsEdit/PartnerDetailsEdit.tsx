@@ -8,7 +8,7 @@ import {
   partnerDetailsEditErrorMap,
 } from "./partnerDetailsEdit.zod";
 import { PostcodeTaskStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -142,5 +142,7 @@ export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetailsEdit.title),
   accessControl: (auth, { projectId, partnerId }) =>
-    auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
+    auth
+      .forPartner(projectId, partnerId)
+      .hasAnyRoles(ProjectRolePermissionBits.FinancialContact, ProjectRolePermissionBits.ProjectManager),
 });

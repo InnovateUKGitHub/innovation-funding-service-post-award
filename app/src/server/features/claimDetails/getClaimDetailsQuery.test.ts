@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetClaimDetailsQuery } from "./getClaimDetailsQuery";
 
@@ -152,7 +152,7 @@ describe("GetClaimDetailsQuery", () => {
       const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.MonitoringOfficer,
+          projectRoles: ProjectRolePermissionBits.MonitoringOfficer,
           partnerRoles: {},
         },
       });
@@ -167,8 +167,8 @@ describe("GetClaimDetailsQuery", () => {
       const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.FinancialContact },
         },
       });
 
@@ -182,8 +182,8 @@ describe("GetClaimDetailsQuery", () => {
       const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.ProjectManager },
+          projectRoles: ProjectRolePermissionBits.Unknown,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.ProjectManager },
         },
       });
 
@@ -197,8 +197,8 @@ describe("GetClaimDetailsQuery", () => {
       const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-          partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer },
+          projectRoles: ProjectRolePermissionBits.FinancialContact | ProjectRolePermissionBits.ProjectManager,
+          partnerRoles: { [partner.id]: ProjectRolePermissionBits.MonitoringOfficer },
         },
       });
 

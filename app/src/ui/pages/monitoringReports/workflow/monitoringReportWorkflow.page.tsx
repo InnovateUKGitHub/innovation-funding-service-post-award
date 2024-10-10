@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "@ui/app/containerBase";
 import { MonitoringReportWorkflow } from "./MonitoringReportWorkflow";
 
@@ -26,7 +26,8 @@ export const MonitoringReportWorkflowRoute = defineRoute<{
     mode: r.params.mode as "view" | "prepare",
     step: parseInt(r.params.step, 10),
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer),
   getTitle: ({ params, content }) =>
     params.mode === "view"
       ? content.getTitleCopy(x => x.pages.monitoringReportsWorkflow.viewMode.title)
