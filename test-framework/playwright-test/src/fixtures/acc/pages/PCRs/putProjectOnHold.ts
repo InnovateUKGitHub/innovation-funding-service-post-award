@@ -58,7 +58,8 @@ class PutProjectOnHold {
   private readonly pcrDashboardTable: Locator;
   private readonly pcrTableCell: Locator;
   private readonly requestDetails: Locator;
-  private readonly pcrSummaryList: Locator;
+  private readonly pcrSummaryRowValue: string;
+  private readonly pcrSummaryRowlist: string;
   private readonly nextPreviousPage: Locator;
   private readonly backToRequest: Locator;
   private readonly submitPcrs: Locator;
@@ -66,9 +67,9 @@ class PutProjectOnHold {
   private readonly pcrComment: Locator;
   private readonly pcrCommentValidation: Locator;
   private readonly clickLogs: Locator;
-  private readonly pcrAudit: Locator;
+  private readonly pcrAudit: string;
   private readonly auditComment: Locator;
-  private readonly pcrTask1: Locator;
+  private readonly pcrTask1: string;
 
   constructor({ page }: { page: Page }) {
     this.page = page;
@@ -95,15 +96,9 @@ class PutProjectOnHold {
     this.saveAndReturnProject = Button.fromTitle(page, "Save and return to project");
     this.saveAndReturnToRequest = Button.fromTitle(page, "Save and return to request");
     this.saveAndContinue = Button.fromTitle(page, "Save and continue");
-    this.startDateEle = this.page.locator(
-      'dl[data-qa="projectSuspension"] div[data-qa="startDate"] dd.govuk-summary-list__value span',
-    );
-    this.endDateEle = this.page.locator(
-      'dl[data-qa="projectSuspension"] div[data-qa="endDate"] dd.govuk-summary-list__value span',
-    );
-    this.editOnHoldDate = this.page.locator(
-      "//div[@id='suspensionStartDate']//a[@role='link'][normalize-space()='Edit']",
-    );
+    this.startDateEle = this.page.locator('dl[data-qa="projectSuspension"] div[data-qa="startDate"] dd.govuk-summary-list__value span');
+    this.endDateEle = this.page.locator('dl[data-qa="projectSuspension"] div[data-qa="endDate"] dd.govuk-summary-list__value span');
+    this.editOnHoldDate = this.page.locator("//div[@id='suspensionStartDate']//a[@role='link'][normalize-space()='Edit']",);
     this.markAsComplete = this.page.locator("//*[@class='govuk-checkboxes__input']");
     this.reasonText = this.page.locator("//*[@class='govuk-textarea']");
     this.reasonTextValue = this.page.locator("//div[@id='reasoningComments']//dd[@class='govuk-summary-list__value']");
@@ -116,8 +111,7 @@ class PutProjectOnHold {
     this.uploadValidation = this.page.locator("//*[@data-qa='validation-message-content']")
     this.onHoldPcrSummary = this.page.locator('.govuk-summary-list__key, .govuk-summary-list__value');
     this.pcrTask = this.page.locator("//*[@data-qa='taskList']");
-    this.pcrTask1 = this.page.locator("//*[@data-qa='taskList']//span");
-    
+    this.pcrTask1 = ('[data-qa="taskList"]');
     this.statusComment = this.page.locator('#accordion-default-content-status-and-comments-log');
     this.submitButton = this.page.locator("//button[normalize-space()='Submit request']");
     this.submittedDetails = (`//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`);
@@ -126,7 +120,8 @@ class PutProjectOnHold {
     this.taskLink = this.page.locator('role=link');
     this.pcrDashboardTable = this.page.locator('.govuk-table__body .govuk-table__row');
     this.pcrTableCell = this.page.locator('.govuk-table__cell');
-    this.pcrSummaryList = this.page.locator('.govuk-summary-list');
+    this.pcrSummaryRowValue = ('[data-qa="numberRow"] dd.govuk-summary-list__value');
+    this.pcrSummaryRowlist = ('[data-qa="typesRow"] dd.govuk-summary-list__value');
     this.nextPreviousPage = this.page.locator("//span[@class='govuk-navigation-arrows__button__label__category']");
     this.backToRequest = this.page.locator("//a[normalize-space()='Back to request']");
     this.submitPcrs = this.page.locator("//button[normalize-space()='Submit']");
@@ -134,25 +129,17 @@ class PutProjectOnHold {
     this.pcrComment = this.page.locator("//textarea[@id='comments']");
     this.pcrCommentValidation = this.page.locator("//a[normalize-space()='Comments must be 1000 characters or less.']");
     this.clickLogs = this.page.locator('.govuk-accordion__section-heading-text-focus');
-    this.pcrAudit = this.page.locator("//*[@data-qa='projectChangeRequestStatusChangeTable']//td");
+    this.pcrAudit = ('.acc-logs-container');
     this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
 
   }
   async getPcrAuditTrail(expectedText: string) {
     await this.clickLogs.click();
 
-    const task = this.pcrAudit.locator('*');
-    const listCount = await task.count(); 
+    const task = await this.page.textContent(this.pcrAudit);
 
-    let eleFound = false;
-  
-    for (let i = 0; i < listCount; i++) {
-      const textContent = await task.nth(i).innerText(); 
-      if (textContent === expectedText) { 
-        eleFound= true;
-       expect(textContent.trim()).toBe(expectedText); 
-        break; 
-      }
+    if (!task?.includes(expectedText)) {
+      throw new Error(`audit trail:'${expectedText}' not found.`);
     }
   }
   // move to helper class 
@@ -160,8 +147,8 @@ class PutProjectOnHold {
     return new Date().toLocaleDateString('en-GB', {
       day: 'numeric', month: 'short', year: 'numeric'
     }).replace(/(\d{1,2})\/(\w+)/, '$1 $2');
-
   }
+
   async selectRadioButton(radioItem: string) {
     const radioButton = this.page.locator(this.iukRadioButton.replace('{text}', radioItem));
     await radioButton.click();
@@ -173,41 +160,27 @@ class PutProjectOnHold {
     await this.nextPreviousPage.click();
   }
 
-  async validateRequestDetails(expectedText: string) {
-    const task = this.pcrTask1.locator('*');
+  async validatePcrTaskList(expectedSection: string, expectedTask: string) {
+    const taskText = await this.page.textContent(this.pcrTask1);
 
-    const listCount = await task.count(); 
-
-    console.log('Total element found ${listCount}')
-   
-    let eleFound = false;
-  
-    for (let i = 0; i < listCount; i++) {
-      const textContent = await task.nth(i).innerText(); 
-      if (textContent === expectedText) { 
-        eleFound = true;
-        expect(textContent).toBe(expectedText); 
-        break; 
-      }
+    if (!taskText?.includes(expectedSection)) {
+      throw new Error(`task section:'${expectedSection}' not found.`);
     }
-  
-}
-  async validatePcrSummaryList(expectedText: string) {
-    const pcrSummary = this.pcrSummaryList.locator('*');
-    const listCount = pcrSummary.count();
 
-    let eleFound = false;
-   
-    for (let i = 0; i < await listCount; i++) {
-      const textContent = await pcrSummary.nth(i).innerText();
-      if (textContent === expectedText) { 
-         eleFound = true;
-        expect(textContent).toBe(expectedText); 
-        break; 
-      }
+    if (!taskText?.includes(expectedTask)) {
+      throw new Error(`task:'${expectedTask}' not found.`);
     }
-   
-}
+  }
+
+  async validatePcrDetails(expectedRequestNumber: string, expectedTypes: string) {
+    const requestNumber = await this.page.textContent(this.pcrSummaryRowValue);
+    const types = await this.page.textContent(this.pcrSummaryRowlist);
+
+    if (requestNumber !== expectedRequestNumber || types !== expectedTypes) {
+      throw new Error('Validation failed.');
+    }
+  }
+
   async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
     const element = this.submittedDetails.replace("%s", fieldName);
 
@@ -534,21 +507,19 @@ class PutProjectOnHold {
   async queryPcr() {
     await this.clickTaskTodo("Review")
     await expect(this.requestTitle).toBeVisible();
-    await this.validateRequestDetails('Put project on hold');
-    await this.validateRequestDetails('Reasoning for Innovate UK');
-    await this.validateRequestDetails('Explain why you want to make the changes');
-    await this.validateRequestDetails('Give us information');
-    await this.validatePcrSummaryList('Put project on hold');
-    await this.validatePcrSummaryList('1');
+    await this.validatePcrTaskList("1. Give us information", "Put project on hold");
+    await this.validatePcrTaskList("1. Give us information", "Complete");
+    await this.validatePcrTaskList("2. Explain why you want to make the changes", "Reasoning for Innovate UK");
+    await this.validatePcrTaskList("2. Explain why you want to make the changes", "Complete");
+    await this.validatePcrDetails("1", "Put project on hold");
     await this.clickTaskTodo("Put project on hold");
     await this.validateDates();
     await this.verifyTextOnPage("28 Feb 2026");
     await this.clickNextOrPrevious();
     //Reason page 
     await this.textAreaNotEmpty();
-    await this.validatePcrSummaryList('Put project on hold');
-    await this.validatePcrSummaryList('1');
-    await this.validatePcrSummaryList('add.png');
+    await this.validatePcrDetails("1", "Put project on hold");
+    await this.verifyTextOnPage("add.png");
     await this.clickNextOrPrevious();
     await this.clickNextOrPrevious();
     await this.clickBacktoRequest();
@@ -568,7 +539,6 @@ class PutProjectOnHold {
     await this.getPcrAuditTrail("Draft with Project Manager");
     await this.pcrComment.fill(getLorem(1_000));
     await this.moSubmitPcr();
-
   }
 
   @Then('the user should see the following table')
@@ -586,7 +556,6 @@ class PutProjectOnHold {
     await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
 
   }
-
   // Validate user cannot create a request without selecting atleast one pcr
   @Given('the user clicks create request without selecting a PCR')
   async clickOnCreateRequest() {
