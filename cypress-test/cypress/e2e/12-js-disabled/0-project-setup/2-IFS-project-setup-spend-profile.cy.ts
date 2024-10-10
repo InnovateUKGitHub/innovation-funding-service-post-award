@@ -79,7 +79,7 @@ describe(" js disabled >Project setup > IFS > Set spend profile", { tags: "js-di
 
   it("Should submit the spend profile and return to see that the section is now marked 'Complete'.", submitComplete);
 
-  it("Should access the spend profile page again.", reaccessSpendProfile);
+  it("Should access the spend profile page again and check that the box is still ticked.", reaccessSpendProfile);
 
   it("Should untick the setup complete box", () => {
     cy.get("legend").contains("Mark as complete");

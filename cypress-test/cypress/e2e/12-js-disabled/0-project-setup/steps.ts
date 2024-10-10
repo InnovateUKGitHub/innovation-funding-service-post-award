@@ -213,6 +213,7 @@ export const submitComplete = () => {
 export const reaccessSpendProfile = () => {
   cy.get("a").contains("Set spend profile").click();
   cy.heading("Spend Profile");
+  cy.get("#submit").should("be.checked");
 };
 
 export const checkSpendProfileIncomplete = () => {
