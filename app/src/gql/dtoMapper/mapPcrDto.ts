@@ -94,7 +94,6 @@ export type PcrNode = GQL.PartialNode<{
   Justification__c: GQL.Value<string>;
   Override_Justification__c: GQL.Value<string>;
   Acc_Project_Change_Requests__r: GQL.ArrayValue<PcrNode>;
-
   Acc_First_Name__c: GQL.Value<string>;
   Acc_Last_Name__c: GQL.Value<string>;
   Acc_Email__c: GQL.Value<string>;
