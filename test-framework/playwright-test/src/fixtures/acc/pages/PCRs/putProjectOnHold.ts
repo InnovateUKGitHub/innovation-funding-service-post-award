@@ -468,9 +468,7 @@ class PutProjectOnHold {
     await this.verifyTextOnPage("Put project on hold");
     await this.verifyTextOnPage("Request number");
     await this.verifyTextOnPage("1");
-    await this.verifyTextOnPage(
-      "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
-    );
+    await this.verifyTextOnPage( "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.");
     await this.enterPcrComment();
     await this.submitPcr();
   }
