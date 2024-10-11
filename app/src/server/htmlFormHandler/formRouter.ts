@@ -22,8 +22,8 @@ import { MonitoringReportDeleteFormHandler } from "./handlers/projects/[projectI
 import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPeriodForm.handler";
 import { MonitoringReportPrepareFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportPrepareForm.handler";
 import { MonitoringReportSummaryFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportSummaryForm.handler";
-import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectId]/pcrs/create/ProjectChangeRequestCreateHandler.handler";
-import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestFormHandler";
+import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectId]/pcrs/create/ProjectChangeRequestCreate.handler";
+import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestForm.handler";
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddType.handler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
