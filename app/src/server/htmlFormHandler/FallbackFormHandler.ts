@@ -1,7 +1,7 @@
 import express from "express";
 import { Logger } from "@shared/developmentLogger";
 import { BadRequestError, NotFoundError } from "../features/common/appError";
-import { IFormHandler } from "./formHandlerBase";
+import { IFormHandler } from "./IFormHandler";
 import { serverRender } from "@server/serverRender";
 import { GraphQLSchema } from "graphql";
 

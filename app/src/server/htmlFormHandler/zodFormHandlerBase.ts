@@ -9,8 +9,8 @@ import { IRouteDefinition } from "@ui/app/containerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z, ZodError, ZodTypeAny } from "zod";
-import { IFormHandler } from "./formHandlerBase";
 import { convertResultErrorsToZodFormat } from "@framework/util/errorHelpers";
+import { IFormHandler } from "./IFormHandler";
 
 /**
  * will generate different route definitions if passed in an array of different definition param types
