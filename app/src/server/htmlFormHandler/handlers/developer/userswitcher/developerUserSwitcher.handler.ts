@@ -2,7 +2,7 @@ import { DeveloperHomePage } from "@ui/pages/developer/home.page";
 import { DeveloperUserSwitcherPage } from "@ui/pages/developer/UserSwitcher.page";
 import express from "express";
 import { configuration } from "@server/features/common/config";
-import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";
+import { IFormHandler } from "@server/htmlFormHandler/IFormHandler";
 
 export class DeveloperUserSwitcherHandler implements IFormHandler {
   public readonly routePath = DeveloperUserSwitcherPage.routePath;

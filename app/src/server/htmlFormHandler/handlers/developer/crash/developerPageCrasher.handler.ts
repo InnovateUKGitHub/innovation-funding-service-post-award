@@ -11,7 +11,7 @@ import {
 import { DeveloperPageCrasherPage } from "@ui/pages/developer/PageCrasher.page";
 import express from "express";
 import { configuration } from "@server/features/common/config";
-import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";
+import { IFormHandler } from "@server/htmlFormHandler/IFormHandler";
 
 export class DeveloperPageCrasherHandler implements IFormHandler {
   public readonly routePath = DeveloperPageCrasherPage.routePath;

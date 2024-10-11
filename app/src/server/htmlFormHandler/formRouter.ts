@@ -1,5 +1,5 @@
 import { configuration } from "@server/features/common/config";
-import { IFormHandler } from "@server/htmlFormHandler/formHandlerBase";
+import { IFormHandler } from "@server/htmlFormHandler/IFormHandler";
 import csurf from "csurf";
 import express, { RequestHandler } from "express";
 import { GraphQLSchema } from "graphql";
