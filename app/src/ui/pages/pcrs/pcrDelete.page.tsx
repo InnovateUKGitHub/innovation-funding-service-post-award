@@ -13,6 +13,7 @@ import { ValidationMessage } from "@ui/components/molecules/validation/Validatio
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { useGetPcrItemMetadata } from "./utils/useGetPcrItemMetadata";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -61,6 +62,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
 
       <Section>
         <Form data-qa="pcrDelete" onSubmit={handleSubmit(data => onDelete({ data }))}>
+          <input type="hidden" name="form" value={FormTypes.ProjectChangeRequestDelete} />
           <Button type="submit" name="button_delete" disabled={isFetching}>
             {getContent(x => x.pages.pcrDelete.button)}
           </Button>

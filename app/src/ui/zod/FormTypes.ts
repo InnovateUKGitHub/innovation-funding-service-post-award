@@ -56,6 +56,7 @@ enum FormTypes {
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",
   ProjectChangeRequestUpdateTypes = "projectChangeRequestUpdateTypes",
+  ProjectChangeRequestDelete = "projectChangeRequestDelete",
 
   PcrPrepare = "pcrPrepare",
 
