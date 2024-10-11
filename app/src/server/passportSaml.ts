@@ -1,4 +1,4 @@
-import { Strategy, VerifiedCallback } from "@node-saml/passport-saml";
+import { Strategy, VerifiedCallback, PassportSamlConfig } from "@node-saml/passport-saml";
 import { configuration } from "@server/features/common/config";
 import { Logger } from "@shared/developmentLogger";
 import { stripPkcsKey } from "./util/stripPkcsKey";
@@ -39,23 +39,22 @@ export type PassportSamlPayload = expectedUrnResponse & {
 };
 
 export const getPassportSamlStrategy = () => {
+  const strategyOptions: PassportSamlConfig = {
+    idpCert: stripPkcsKey(configuration.certificates.saml.idp.public),
+    privateKey: configuration.certificates.saml.spSigning.private,
+    decryptionPvk: configuration.certificates.saml.spDecryption.private,
+    signatureAlgorithm: "sha512",
+    digestAlgorithm: "sha512",
+    entryPoint: configuration.sso.providerUrl,
+    issuer: configuration.webserver.url,
+    callbackUrl: configuration.webserver.url + passportSamlSuccessRoute,
+    identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
+    wantAuthnResponseSigned: false,
+    acceptedClockSkewMs: -1,
+  };
+
   const strategy = new Strategy(
-    {
-      cert: stripPkcsKey(configuration.certificates.saml.idp.public),
-      privateKey: configuration.certificates.saml.spSigning.private,
-      decryptionPvk: configuration.certificates.saml.spDecryption.private,
-      signatureAlgorithm: "sha512",
-      digestAlgorithm: "sha512",
-
-      entryPoint: configuration.sso.providerUrl,
-      issuer: configuration.webserver.url,
-      callbackUrl: configuration.webserver.url + passportSamlSuccessRoute,
-
-      identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
-      wantAuthnResponseSigned: false,
-
-      acceptedClockSkewMs: -1,
-    },
+    strategyOptions,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (payload: any, onSuccess: VerifiedCallback) => onSuccess(null, payload, {}),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

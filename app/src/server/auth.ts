@@ -126,7 +126,8 @@ const getAuthRouter = async () => {
       const { salesforceServiceUser, sso, developer } = configuration;
 
       if (sso.enabled && req.url === "/") {
-        return res.redirect("/projects/dashboard");
+        res.redirect("/projects/dashboard");
+        return next();
       }
 
       if (req?.session?.user?.email || req?.session?.user?.developer_oidc_username) {
@@ -143,10 +144,11 @@ const getAuthRouter = async () => {
           if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
             // Remember the URL we need to go back to
             req.session.redirect = req.url;
-            return res.redirect("/login");
+            res.redirect("/login");
           } else {
-            return res.status(401);
+            res.status(401);
           }
+          return next();
         }
 
         // User is successfully logged in :)
@@ -160,10 +162,11 @@ const getAuthRouter = async () => {
           if (!req.url.startsWith("/api") && !req.url.startsWith("/developer/oidc/login")) {
             // Remember the URL we need to go back to
             req.session.redirect = req.url;
-            return res.redirect("/developer/oidc/login");
+            res.redirect("/developer/oidc/login");
           } else {
-            return res.status(401);
+            res.status(401);
           }
+          return next();
         }
 
         // User is successfully logged in :)

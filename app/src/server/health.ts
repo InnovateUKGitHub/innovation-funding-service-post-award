@@ -65,10 +65,12 @@ const getHealthCheck = async (_req: Request, res: Response) => {
 
   healthCheckLogger.debug("Health check completed.", { status, response });
 
-  return res.status(status).json(response);
+  res.status(status).json(response);
 };
 
-const getBuildVersion = (_req: Request, res: Response) => res.send(configuration.build);
+const getBuildVersion = (_req: Request, res: Response) => {
+  res.send(configuration.build);
+};
 
 healthRouter.get("/", getHealthIndex);
 healthRouter.get("/details", getHealthCheck);
