@@ -66,6 +66,7 @@ interface BaseCellData {
 }
 
 interface StatusCell {
+  periodId: number;
   group: ClaimStatusGroup;
   colSpan: number;
   rhc: boolean;
@@ -173,6 +174,7 @@ const mapToForecastTableDto = ({
     // initialise it with the status of our first claim.
     if (!currentStatusCell) {
       currentStatusCell = {
+        periodId: currentPeriod,
         colSpan: 1,
         rhc: false,
         group: getClaimStatusGroupWithOverride(claimTotalProjectPeriodStatus, currentPeriod),
@@ -197,6 +199,7 @@ const mapToForecastTableDto = ({
 
         // Create a new status cell with the status of the next claim
         currentStatusCell = {
+          periodId: currentPeriod + 1,
           colSpan: 1,
           rhc: false,
           group: nextClaimGroup,
