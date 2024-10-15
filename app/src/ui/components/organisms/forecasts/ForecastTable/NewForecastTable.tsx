@@ -14,6 +14,7 @@ import { ForecastTableCurrencyInput } from "./ForecastTableCurrencyInput";
 import { forecastTableResize } from "./forecastTableResize";
 import { getForecastHeaderContent } from "./getForecastHeaderContent";
 import { ForecastTableDto } from "./NewForecastTable.logic";
+import { ForecastTableDownloadButton } from "./ForecastTableDownloadButton";
 
 export interface NewForecastTableProps {
   control?: Control<z.output<ForecastTableSchemaType>>;
@@ -213,6 +214,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
           </TR>
         </TFoot>
       </Table>
+      <ForecastTableDownloadButton tableData={tableData} />
     </div>
   );
 };
