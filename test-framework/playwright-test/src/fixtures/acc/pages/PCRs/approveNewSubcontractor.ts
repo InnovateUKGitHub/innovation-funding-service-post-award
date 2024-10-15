@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
-import { ProjectChangeRequests } from "./pcrGeneral";
+import { ProjectChangeRequests } from "./ProjectChangeRequests";
 import { getLorem } from "../../../../components/lorem";
 import { DataTable } from "playwright-bdd";
 import { PageHeading } from "../../../../components/PageHeading";
@@ -279,7 +279,7 @@ class ApproveNewSubcontractor {
     const data = table.hashes();
     for (const row of data) {
       let lorem = getLorem(Number(row["Lorem"]));
-      (await this.commands.getListItemFromKey(row["Field name"], lorem)).isVisible();
+      await this.commands.getListItemFromKey(row["Field name"], lorem);
     }
     await expect(this.summaryKey.filter({ hasText: this.isThereRelationship })).toBeVisible();
     await expect(this.page.getByTestId(this.summaryQaList[2]).filter({ hasText: "Yes" })).toBeVisible();

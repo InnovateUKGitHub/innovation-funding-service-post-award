@@ -18,9 +18,10 @@ import { AccUserSwitcher } from "./acc/AccUserSwitcher";
 import { SfdcIfspaAppAccProjectPage } from "./sfdc/pages/SfdcIfspaAppAccProjectPage";
 import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
-import { ProjectChangeRequests } from "./acc/pages/PCRs/pcrGeneral";
+import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
-import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
+import { ApproveNewSubcontractor } from "./acc/pages/PCRs/ApproveNewSubcontractor";
+import { ChangeProjectScope } from "./acc/pages/PCRs/ChangeScope";
 
 type AccFixtures = {
   // Pages
@@ -33,6 +34,7 @@ type AccFixtures = {
   putProjectOnHold: PutProjectOnHold;
   projectChangeRequests: ProjectChangeRequests;
   approveNewSubcontractor: ApproveNewSubcontractor;
+  changeScope: ChangeProjectScope;
 
   // Misc
   accNavigation: AccNavigation;
@@ -69,6 +71,8 @@ export const test = base.extend<AccFixtures, Workers>({
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
+  changeScope: ({ page, commands, projectChangeRequests }, use) =>
+    use(new ChangeProjectScope({ page, commands, projectChangeRequests })),
 
   // Project Factory
   accProjectBase: [
