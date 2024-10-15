@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { Fixture } from "playwright-bdd/decorators";
+import { getLorem } from "../components/lorem";
 
 export
 @Fixture("commands")
@@ -76,9 +77,10 @@ class Commands {
    * Get a list item from its key
    */
   async getListItemFromKey(label: string, item: string) {
-    const key = this.page.locator("css=dt", { hasText: label });
-    const parent = this.page.locator("css=div", { has: key });
-    return parent.locator("css=dd", { hasText: item });
+    const key = this.page.locator("css=dt").filter({ hasText: label });
+    const parent = this.page.locator("css=div").filter({ has: key });
+    const grandParent = this.page.locator("css=dl").filter({ has: parent });
+    return await grandParent.locator("css=dd", { hasText: item }).isVisible();
   }
 
   /**
@@ -453,5 +455,49 @@ class Commands {
     let year = date.getFullYear();
     let fulldate = `${day} ${month} ${year}`;
     return fulldate;
+  }
+
+  /**
+   * Allows input of variable length of characters and checks for validation messages
+   */
+  async textValidation(
+    message: string,
+    length: number,
+    buttonName: string,
+    textarea: boolean,
+    mor?: boolean,
+    label?: string,
+  ) {
+    let largeText = getLorem(length);
+    if (textarea) {
+      await this.page.getByRole("textbox").fill(largeText);
+      await this.page.getByRole("textbox").press("End");
+      await this.page.getByRole("textbox").press("t");
+      await this.page.getByRole("paragraph").filter({ hasText: "You have 1 character too many" }).isVisible();
+    } else if (this.page.locator("css=main").filter({ hasText: label })) {
+      await this.page.getByLabel(label).fill(largeText);
+      await this.page.getByLabel(label).press("End");
+      await this.page.getByLabel(label).press("t");
+    }
+    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
+    if (textarea) {
+      await this.validationLink(`${message} must be ${length} characters or less.`);
+    } else {
+      await this.validationLink(`${message} must be ${length} characters or less.`);
+      await this.paragraph(`${message} must be ${length} characters or less.`);
+    }
+    if (textarea) {
+      await this.page.getByRole("textbox").press("End");
+      await this.page.getByRole("textbox").press("Backspace");
+      await this.paragraph("You have 0 characters remaining");
+    } else {
+      if (this.page.locator("css=main").filter({ hasText: label }))
+        await this.page.getByLabel(label).press("Backspace");
+    }
+    if (mor) {
+      await this.page.getByLabel(label).check();
+    }
+    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
+    await expect(this.page.getByTestId("validation-summary")).not.toBeVisible();
   }
 }

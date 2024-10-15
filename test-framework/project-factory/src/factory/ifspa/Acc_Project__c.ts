@@ -21,6 +21,18 @@ const accProjectBuilder = new ProjectFactory(
         { sfdcName: "Acc_ProjectNumber__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: false, prefixed: true },
         { sfdcName: "Acc_TSBProjectNumber__c", sfdcType: ProjectFactoryFieldType.NUMBER, nullable: true },
         { sfdcName: "Acc_LegacyID__c", sfdcType: ProjectFactoryFieldType.STRING, nullable: true, prefixed: true },
+        {
+          sfdcName: "Acc_PublicDescription__c",
+          sfdcType: ProjectFactoryFieldType.STRING,
+          nullable: true,
+          prefixed: false,
+        },
+        {
+          sfdcName: "Acc_ProjectSummary__c",
+          sfdcType: ProjectFactoryFieldType.STRING,
+          nullable: true,
+          prefixed: false,
+        },
         { sfdcName: "Acc_WorkdayProjectSetupComplete__c", sfdcType: ProjectFactoryFieldType.CHECKBOX, nullable: false },
         { sfdcName: "Acc_NonFEC__c", sfdcType: ProjectFactoryFieldType.CHECKBOX, nullable: false },
         {
@@ -83,6 +95,8 @@ ${injectFieldToApex(options, instanceName, "Acc_ProjectTitle__c", fields.Acc_Pro
 ${injectFieldToApex(options, instanceName, "Acc_TSBProjectNumber__c", fields.Acc_TSBProjectNumber__c)}
 ${injectFieldToApex(options, instanceName, "Acc_LegacyID__c", fields.Acc_LegacyID__c)}
 ${injectFieldToApex(options, instanceName, "Acc_ProjectSource__c", fields.Acc_ProjectSource__c)}
+${injectFieldToApex(options, instanceName, "Acc_PublicDescription__c", fields.Acc_PublicDescription__c)}
+${injectFieldToApex(options, instanceName, "Acc_ProjectSummary__c", fields.Acc_ProjectSummary__c)}
 ${injectFieldToApex(
   options,
   instanceName,
@@ -129,6 +143,8 @@ const defaultAccProject = accProjectBuilder.create().set({
   Acc_ProjectStatus__c: "Live",
   Acc_CurrentPeriodNumberHelper__c: 1,
   Acc_ProjectSource__c: "Manual",
+  Acc_PublicDescription__c: "This is the public description.",
+  Acc_ProjectSummary__c: "This is the project summary.",
 });
 
 export { accProjectBuilder, defaultAccProject };
