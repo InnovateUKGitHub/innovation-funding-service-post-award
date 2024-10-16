@@ -11,9 +11,10 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import {
   ProjectSuspensionSchema,
   pcrProjectSuspensionErrorMap,
-  pcrProjectSuspensionSchema,
+  getProjectSuspensionSchema,
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { combineDate } from "@ui/components/atoms/Date";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
   ProjectSuspensionSchema,
@@ -28,9 +29,17 @@ export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema() {
+  protected async getZodSchema({
+    params,
+    context,
+  }: {
+    context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
+  }) {
+    const project = await context.runQuery(new GetByIdQuery(params.projectId));
+
     return {
-      schema: pcrProjectSuspensionSchema,
+      schema: getProjectSuspensionSchema(project),
       errorMap: pcrProjectSuspensionErrorMap,
     };
   }

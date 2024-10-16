@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<63454e7f258278d6ad1bfd4ba8e55207>>
+ * @generated SignedSource<<cb4d34323498c3f575c9b8716fcb8d00>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,12 @@ export type PcrSuspendProjectWorkflowQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_EndDate__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_StartDate__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
@@ -215,6 +221,26 @@ v5 = [
                                 "storageKey": null
                               }
                             ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_StartDate__c",
+                            "plural": false,
+                            "selections": (v4/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_EndDate__c",
+                            "plural": false,
+                            "selections": (v4/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -447,16 +473,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "85c4f136b947f3936bc6012870cd64a7",
+    "cacheID": "dd160d0b9f0bbf07d623aa27c31566ce",
     "id": null,
     "metadata": {},
     "name": "PcrSuspendProjectWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrSuspendProjectWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_SuspensionStarts__c {\n                      value\n                    }\n                    Acc_SuspensionEnds__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrSuspendProjectWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_SuspensionStarts__c {\n                      value\n                    }\n                    Acc_SuspensionEnds__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4dc3a36df894cf95fcb548bbc1dc1606";
+(node as any).hash = "37f7cdff25b8d22dcc70c5163601ff3f";
 
 export default node;

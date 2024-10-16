@@ -15,7 +15,7 @@ import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
 import {
-  pcrProjectSuspensionSchema,
+  getProjectSuspensionSchema,
   pcrProjectSuspensionErrorMap,
   ProjectSuspensionSchemaType,
 } from "./suspendProject.zod";
@@ -61,7 +61,7 @@ export const SuspendProjectStep = () => {
       suspensionStartDate: "",
       suspensionEndDate: "",
     },
-    resolver: zodResolver(pcrProjectSuspensionSchema, {
+    resolver: zodResolver(getProjectSuspensionSchema(project), {
       errorMap: pcrProjectSuspensionErrorMap,
     }),
   });
