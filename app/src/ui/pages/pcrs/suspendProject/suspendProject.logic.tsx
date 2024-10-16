@@ -20,7 +20,7 @@ export const usePcrSuspendProjectWorkflowQuery = (projectId: ProjectId, pcrItemI
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "roles"]);
+  const project = mapToProjectDto(projectNode, ["roles", "startDate", "endDate"]);
 
   const { node: pcrNode } = getFirstEdge(projectNode?.Project_Change_Requests__r?.edges ?? []);
 

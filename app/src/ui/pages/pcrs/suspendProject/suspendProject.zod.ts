@@ -5,70 +5,100 @@ import { FormTypes } from "@ui/zod/FormTypes";
 
 export const pcrProjectSuspensionErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "projectSuspension"] });
 
-export const pcrProjectSuspensionSchema = z
-  .object({
-    markedAsComplete: z.boolean(),
-    suspensionStartDate_month: z.string().optional(),
-    suspensionStartDate_year: z.string().optional(),
-    suspensionEndDate_month: z.string().optional(),
-    suspensionEndDate_year: z.string().optional(),
-    form: z.literal(FormTypes.PcrProjectSuspensionStep),
+export const getProjectSuspensionSchema = ({ startDate, endDate }: { startDate: Date | null; endDate: Date | null }) =>
+  z
+    .object({
+      markedAsComplete: z.boolean(),
+      suspensionStartDate_month: z.string().optional(),
+      suspensionStartDate_year: z.string().optional(),
+      suspensionEndDate_month: z.string().optional(),
+      suspensionEndDate_year: z.string().optional(),
+      form: z.literal(FormTypes.PcrProjectSuspensionStep),
 
-    // these just used to allow the error to have a position in the form type
-    suspensionStartDate: z.string(),
-    suspensionEndDate: z.string(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.markedAsComplete) {
-      if (isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["suspensionStartDate"],
-        });
-      }
-    }
-    if (!isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
-      if (!isValidMonth(data.suspensionStartDate_month) || !isValidYear(data.suspensionStartDate_year)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["suspensionStartDate"],
-        });
-      }
-    }
+      // these just used to allow the error to have a position in the form type
+      suspensionStartDate: z.string(),
+      suspensionEndDate: z.string(),
+    })
+    .superRefine((data, ctx) => {
+      const suspensionStartDate =
+        typeof data.suspensionStartDate_year === "string" && typeof data.suspensionStartDate_month === "string"
+          ? new Date(+data.suspensionStartDate_year, +data.suspensionStartDate_month + 1)
+          : null;
+      const suspensionEndDate =
+        typeof data.suspensionEndDate_year === "string" && typeof data.suspensionEndDate_month === "string"
+          ? new Date(+data.suspensionEndDate_year, +data.suspensionEndDate_month + 1)
+          : null;
 
-    if (!isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)) {
-      if (!isValidMonth(data.suspensionEndDate_month) || !isValidYear(data.suspensionEndDate_year)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["suspensionEndDate"],
-        });
+      if (data.markedAsComplete) {
+        if (isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["suspensionStartDate"],
+          });
+        }
       }
-    }
+      if (!isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
+        if (!isValidMonth(data.suspensionStartDate_month) || !isValidYear(data.suspensionStartDate_year)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["suspensionStartDate"],
+          });
+        }
 
-    if (
-      !isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year) &&
-      !isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)
-    ) {
+        if (suspensionStartDate && startDate && suspensionStartDate < startDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            type: "date",
+            minimum: startDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionEndDate"],
+          });
+        }
+      }
+
+      if (!isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)) {
+        if (!isValidMonth(data.suspensionEndDate_month) || !isValidYear(data.suspensionEndDate_year)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["suspensionEndDate"],
+          });
+        }
+
+        if (suspensionEndDate && endDate && suspensionEndDate > endDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_big,
+            type: "date",
+            maximum: endDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionEndDate"],
+          });
+        }
+      }
+
       if (
-        endDateIsBeforeStart(
-          data.suspensionStartDate_month,
-          data.suspensionStartDate_year,
-          data.suspensionEndDate_month,
-          data.suspensionEndDate_year,
-        )
+        !isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year) &&
+        !isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)
       ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.too_small,
-          type: "date",
-          minimum: 0,
-          inclusive: true,
-          path: ["suspensionEndDate"],
-        });
+        if (
+          endDateIsBeforeStart(
+            data.suspensionStartDate_month,
+            data.suspensionStartDate_year,
+            data.suspensionEndDate_month,
+            data.suspensionEndDate_year,
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            type: "date",
+            minimum: startDate?.getTime() ?? 0,
+            inclusive: true,
+            path: ["suspensionEndDate"],
+          });
+        }
       }
-    }
-  });
+    });
 
-export type ProjectSuspensionSchema = typeof pcrProjectSuspensionSchema;
+export type ProjectSuspensionSchema = ReturnType<typeof getProjectSuspensionSchema>;
 
 export type ProjectSuspensionSchemaType = z.infer<ProjectSuspensionSchema>;
 
