@@ -21,10 +21,10 @@ const getClaimStatusGroup = (status: ClaimStatus) => {
     case ClaimStatus.SUBMITTED:
     case ClaimStatus.AWAITING_IUK_APPROVAL:
     case ClaimStatus.AWAITING_IAR:
-    case ClaimStatus.PAYMENT_REQUESTED:
       return ClaimStatusGroup.SUBMITTED_CLAIMING;
     case ClaimStatus.APPROVED:
     case ClaimStatus.PAID:
+    case ClaimStatus.PAYMENT_REQUESTED:
       return ClaimStatusGroup.CLAIMED;
     case ClaimStatus.NOT_USED:
       return ClaimStatusGroup.UNUSED;
