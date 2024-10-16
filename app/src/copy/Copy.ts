@@ -1,6 +1,6 @@
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { Logger } from "@shared/developmentLogger";
-import i18next, { TFunctionDetailedResult } from "i18next";
+import i18next, { i18n, TFunctionDetailedResult } from "i18next";
 import { ContentSelectorFunctionParser } from "./ContentSelectorFunctionParser";
 import {
   DataOption,
@@ -24,17 +24,17 @@ const isI18nDetailedResult = (
 
 /**
  * A repository of copy, with automatic competition type switching.
- *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
 class Copy {
   private logger = new Logger("Copy");
   protected competitionType?: string;
   protected monitoringLevel?: ProjectMonitoringLevel;
+  public i18n: i18n;
 
   constructor({ competitionType, monitoringLevel }: ICopy = {}) {
     this.competitionType = competitionType?.replace(/ /g, "-").toLowerCase();
     this.monitoringLevel = monitoringLevel;
+    this.i18n = i18next; // TODO: Create an instance instead of using a global instance
   }
 
   /**

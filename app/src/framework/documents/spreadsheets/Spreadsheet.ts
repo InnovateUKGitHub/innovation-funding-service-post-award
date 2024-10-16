@@ -16,6 +16,11 @@ interface WorkbookOptions {
   title?: string;
 }
 
+enum SpreadsheetFormat {
+  OOXML = "ooxml", // ECMA-376 ISO/IEC 29500 Office Open XML
+  CSV = "csv", // Comma Separated Values
+}
+
 abstract class Spreadsheet {
   workbook: Workbook;
 
@@ -32,14 +37,23 @@ abstract class Spreadsheet {
 
   abstract createWorksheets(): Promise<Spreadsheet>;
 
-  async exportOOXML() {
+  async export(format: SpreadsheetFormat): Promise<{ buffer: ArrayBuffer; extension: string; mimeType: string }> {
     await this.createWorksheets();
-    return this.workbook.xlsx.writeBuffer();
-  }
 
-  async exportCSV() {
-    await this.createWorksheets();
-    return this.workbook.csv.writeBuffer();
+    switch (format) {
+      case SpreadsheetFormat.OOXML: {
+        const buffer = await this.workbook.xlsx.writeBuffer();
+        return {
+          buffer,
+          extension: "xlsx",
+          mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        };
+      }
+      case SpreadsheetFormat.CSV: {
+        const buffer = await this.workbook.csv.writeBuffer();
+        return { buffer, extension: "csv", mimeType: "text/csv" };
+      }
+    }
   }
 
   static colToLet(col: number): string {
@@ -62,4 +76,4 @@ abstract class Spreadsheet {
   }
 }
 
-export { Spreadsheet };
+export { Spreadsheet, SpreadsheetFormat, WorkbookOptions };
