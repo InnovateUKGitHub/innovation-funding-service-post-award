@@ -26,6 +26,8 @@ Feature: Put a project on hold
       | Change a partner's name     | Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.         |
       | Put project on hold         | This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold. |
       | Approve a new subcontractor | If you are requesting a change in subcontractor, please select this option.                                                                                                      |
+    # | Manage team members         | This allows you to add a new project team member or to change the role of an existing team member.                                                                               |
+
     When the user completes the request to put a project on hold
     And the user clicks submit
     Then the request should be submitted successfully
@@ -46,25 +48,32 @@ Feature: Put a project on hold
       | 1              | Put project on hold | submission date | Queried to Project Manager | submission date | View   |
 
 
-#Todo
-# Scenario: PM can resubmit a PCR
-# Given the user is a project manager
-# And the user is on the project overview
-# When the user selects the "Project change requests" tile
-# Then the user should see the following table
-#      | request_number | types               | started         | status                     | last_updated    | action |
-#      | 1              | Put project on hold | submission date | Queried to Project Manager | submission date | View   |
-# When the user responds to the query to put the project on hold
-# And the user clicks submit
-# Then the user sees the following table
-#     | request_number | types               | started         | status                          | last_updated    | action |
-#     | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | Review |
+  Scenario: PM can resubmit a PCR
+    Given the user is a project manager
+    And the user is on the project overview
+    When the user selects the "Project change requests" tile
+    Then the user should see the following queried request table
+      | request_number | types               | started         | status                     | last_updated    | action |
+      | 1              | Put project on hold | submission date | Queried to Project Manager | submission date | Edit   |
+    When the user replies to the query to put the project on hold
+    Then the request should be succesfully submitted
+    When the user navigates back to the pcr dashboard
+    Then the user sees the table below
+      | request_number | types               | started         | status                          | last_updated    | action |
+      | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | View   |
 
 #Todo
 # Scenario: MO can send PCR for approval
+#   Given the user is a monitoring officer
+#   And the user is on the project overview
+#   When the user selects the "Project change requests" tile
+#   Then the user sees the following table
+#     | request_number | types               | started         | status                          | last_updated    | action |
+#     | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | Review |
+#   When the user reviews the PCR request
+#   And the user sends the project change request for approval
+#   Then the user should see the following table
+#     | request_number | types               | started         | status                     | last_updated    | action |
+#     | 1              | Put project on hold | submission date | Submitted to Innovate UK   | submission date | View   |
 
-
-#Todo
 # Scenario: Innovate lead queries the PCR
-
-

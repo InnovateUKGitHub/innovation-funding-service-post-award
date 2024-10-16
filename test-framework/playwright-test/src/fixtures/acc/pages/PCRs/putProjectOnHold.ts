@@ -38,7 +38,7 @@ class PutProjectOnHold {
   private readonly editOnHoldDate: Locator;
   private readonly markAsComplete: Locator;
   private readonly saveAndReturnToRequest: Locator;
-  private readonly reasonText: Locator;
+  private readonly enterText: Locator;
   private readonly requestNumber: Locator;
   private readonly types: Locator;
   private readonly learnMoreSummary: Locator;
@@ -70,6 +70,8 @@ class PutProjectOnHold {
   private readonly pcrAudit: string;
   private readonly auditComment: Locator;
   private readonly pcrTask1: string;
+  private readonly backButton: Locator;
+  private readonly errorBody: Locator;
 
   constructor({ page }: { page: Page }) {
     this.page = page;
@@ -100,7 +102,7 @@ class PutProjectOnHold {
     this.endDateEle = this.page.locator('dl[data-qa="projectSuspension"] div[data-qa="endDate"] dd.govuk-summary-list__value span');
     this.editOnHoldDate = this.page.locator("//div[@id='suspensionStartDate']//a[@role='link'][normalize-space()='Edit']",);
     this.markAsComplete = this.page.locator("//*[@class='govuk-checkboxes__input']");
-    this.reasonText = this.page.locator("//*[@class='govuk-textarea']");
+    this.enterText = this.page.locator("//*[@class='govuk-textarea']");
     this.reasonTextValue = this.page.locator("//div[@id='reasoningComments']//dd[@class='govuk-summary-list__value']");
     this.requestNumber = this.page.locator('dt:has-text("Request number") + dd');
     this.types = this.page.locator('dt:has-text("Types") + dd');
@@ -108,7 +110,7 @@ class PutProjectOnHold {
     this.learnMoreText = this.page.locator("//fieldset[@class='govuk-fieldset']//details[@class='govuk-details']");
     this.chooseFile = this.page.locator("//input[@id='files']");
     this.uploadDocument = this.page.locator("//button[normalize-space()='Upload documents']");
-    this.uploadValidation = this.page.locator("//*[@data-qa='validation-message-content']")
+    this.uploadValidation = this.page.locator("//span[normalize-space()='Your document has been uploaded.']");
     this.onHoldPcrSummary = this.page.locator('.govuk-summary-list__key, .govuk-summary-list__value');
     this.pcrTask = this.page.locator("//*[@data-qa='taskList']");
     this.pcrTask1 = ('[data-qa="taskList"]');
@@ -131,8 +133,11 @@ class PutProjectOnHold {
     this.clickLogs = this.page.locator('.govuk-accordion__section-heading-text-focus');
     this.pcrAudit = ('.acc-logs-container');
     this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
+    this.backButton = this.page.locator("//*[@data-qa='page-title-caption']//preceding::a[1]");
+    this.errorBody = this.page.locator('.govuk-error-summary__body');
 
   }
+
   async getPcrAuditTrail(expectedText: string) {
     await this.clickLogs.click();
 
@@ -264,14 +269,14 @@ class PutProjectOnHold {
   async reasonsToInnovate() {
     await this.clickTaskTodo("Provide reasons to Innovate UK")
     const txt = getLorem(32_000);
-    await this.reasonText.fill(txt);
+    await this.enterText.fill(txt);
   }
 
   async enterPcrComment() {
-    const textAreContent = await this.reasonText.evaluate(el => (el as any).value);
-    expect(textAreContent).toBe("");
+    const textAreaContent = await this.enterText.evaluate(el => (el as any).value);
+    expect(textAreaContent).toBe("");
     const txt = getLorem(1_000);
-    await this.reasonText.fill(txt);
+    await this.enterText.fill(txt);
   }
 
   async getAuditComment() {
@@ -308,15 +313,6 @@ class PutProjectOnHold {
     await this.saveAndContinue.click();
   }
 
-  async editSuspensionDetails(startMonth: string, endMonth: string, startYear: string, endYear: string) {
-    await this.editOnHoldDate.click();
-    await this.onHoldStartMonth.fill(startMonth);
-    await this.onHoldEndMonth.fill(endMonth);
-    await this.onHoldStartYear.fill(startYear);
-    await this.onHoldEndYear.fill(endYear);
-    await this.saveAndContinue.click();
-  }
-
   async clickCreateReq() {
     await this.createReq.click();
   }
@@ -336,10 +332,7 @@ class PutProjectOnHold {
       }
     }
   }
-  private getPcr(labelText: string): Locator {
-    const resolvedXPath = this.checkboxXPath.replace("{labelText}", labelText);
-    return this.page.locator(`xpath=${resolvedXPath}`);
-  }
+
   async assertAllCheckboxesUnchecked() {
     const checkboxCount = await this.checkboxes.count();
 
@@ -359,11 +352,10 @@ class PutProjectOnHold {
     const isChecked = await accCheckboxLocator.isChecked();
     expect(isChecked).toBe(false);
   }
-  public async verifyTextOnPage(message: string, selector?: string): Promise<void> {
-    if (selector) {
-      const element = this.page.locator(selector);
+  public async verifyTextOnPage(message: string, Locator?: Locator): Promise<void> {
+    if (Locator) {
 
-      await expect(element).toContainText(message);
+      await expect(Locator).toContainText(message);
     } else {
       const pageContent = await this.page.textContent("body");
       if (!pageContent || !pageContent.includes(message)) {
@@ -381,6 +373,7 @@ class PutProjectOnHold {
   async isPage() {
     await expect(this.dashboardTitle.get()).toBeVisible();
   }
+
   @Given("the user sees the project request page")
   async verifyProjectChangeRequestPage() {
     await expect(this.noOngoingRequest).toBeVisible();
@@ -411,6 +404,7 @@ class PutProjectOnHold {
       }
     }
   }
+
   @When("the user completes the request to put a project on hold")
   async completePutProjectOnHold() {
     await this.createRequest.click();
@@ -434,7 +428,8 @@ class PutProjectOnHold {
     await this.enterSuspensionDetails("01", "11", "2024", "2025");
     await this.validateDates();
     //User can edit..
-    await this.editSuspensionDetails("02", "02", "2024", "2026");
+    await this.editOnHoldDate.click();
+    await this.enterSuspensionDetails("02", "02", "2024", "2026");
     await this.validateDates();
     await this.clickMarkAsComplete();
     //Cannot submit without providing reasons to Innovate
@@ -468,7 +463,7 @@ class PutProjectOnHold {
     await this.verifyTextOnPage("Put project on hold");
     await this.verifyTextOnPage("Request number");
     await this.verifyTextOnPage("1");
-    await this.verifyTextOnPage( "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.");
+    await this.verifyTextOnPage("If you want to explain anything to your monitoring officer or to Innovate UK, add it here.");
     await this.enterPcrComment();
     await this.submitPcr();
   }
@@ -483,9 +478,7 @@ class PutProjectOnHold {
     await this.verifyTextOnPage("Your project change request has been submitted.Please note there is a 30-day Service Level Target from submission of your request to Innovate UK, through to approval of the change(s).");
     await this.verifyTextOnPage("Project change request submitted");
   }
-
   //MO query 
-
   @Then('the user sees the following table')
   async reviewPcrDashboard(data: DataTable) {
     const expectedTableData = data.hashes()[0]
@@ -499,11 +492,11 @@ class PutProjectOnHold {
     await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
     await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
     await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
-  };
+  }
 
   @When('the user queries the PCR request')
   async queryPcr() {
-    await this.clickTaskTodo("Review")
+    await this.clickTaskTodo("Review");
     await expect(this.requestTitle).toBeVisible();
     await this.validatePcrTaskList("1. Give us information", "Put project on hold");
     await this.validatePcrTaskList("1. Give us information", "Complete");
@@ -552,7 +545,83 @@ class PutProjectOnHold {
     await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
     await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
     await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
+  }
+  //PM can resubmit PCR
+  @Then('the user should see the following queried request table')
+  async queriedPcrDashboardPM(data: DataTable) {
+    const expectedTableData = data.hashes()[0]
+    const actualTableData = this.pcrDashboardTable.first()
 
+    const currentDate = this.dateFormatter();
+
+    await expect(actualTableData.locator(this.pcrTableCell).nth(0)).toHaveText(expectedTableData.request_number);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(1)).toHaveText(expectedTableData.types);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(2)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
+  }
+
+  @When('the user replies to the query to put the project on hold')
+  async pmResubmitPcr() {
+    await this.createRequest.click();
+    // verify put project on hold in use 
+    await expect(this.checkboxItemLocator).toHaveCount(7);
+    await this.backButton.click();
+    await this.page.waitForTimeout(30000);
+    await this.clickTaskTodo("Edit");
+    await expect(this.requestTitle).toBeVisible();
+    await this.validatePcrTaskList("1. Give us information", "Put project on hold");
+    await this.validatePcrTaskList("1. Give us information", "Complete");
+    await this.validatePcrTaskList("2. Explain why you want to make the changes", "Provide reasons to Innovate UK");
+    await this.validatePcrTaskList("2. Explain why you want to make the changes", "Complete");
+    await this.validatePcrDetails("1", "Put project on hold");
+    await this.getPcrAuditTrail("Matt Otrebski");
+    await this.getPcrAuditTrail("Peter May");
+    await this.getPcrAuditTrail("Queried to Project Manager");
+    await this.clickTaskTodo("Put project on hold");
+    await this.validateDates();
+    await this.editOnHoldDate.click();
+    //invalid test
+    await this.enterSuspensionDetails("abc", "ab_", "2o25", "2!26");
+    await this.verifyTextOnPage("Enter valid project suspension start date.", this.errorBody);
+    await this.verifyTextOnPage("Enter valid project suspension end date.", this.errorBody);
+    await this.enterSuspensionDetails("12", "09", "2024", "2025");
+    await this.clickMarkAsComplete();
+    await this.page.waitForTimeout(30000);
+    await this.enterText.fill(getLorem(10));
+    await this.saveAndReturnToRequest.click();
+    await expect(this.requestTitle).toBeVisible();
+    await this.page.waitForTimeout(30000);
+    await this.clickTaskTodo("Edit");
+    const textAreaContent = await this.enterText.evaluate(el => (el as any).value);
+    expect(textAreaContent).not.toBe("");
+    await this.submitPcr();
+  }
+
+  @Then('the request should be succesfully submitted')
+  async validateResubmission() {
+    await this.validatePcrSubmission();
+  }
+
+  @When('the user navigates back to the pcr dashboard')
+  async getSubmittedDetails() {
+    await this.backButton.click();
+  }
+
+  @Then('the user sees the table below')
+  async resubmittedPcrDashboardPM(data: DataTable) {
+    const expectedTableData = data.hashes()[0]
+    const actualTableData = this.pcrDashboardTable.first()
+
+    const currentDate = this.dateFormatter();
+
+    await expect(actualTableData.locator(this.pcrTableCell).nth(0)).toHaveText(expectedTableData.request_number);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(1)).toHaveText(expectedTableData.types);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(2)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(3)).toHaveText(expectedTableData.status);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(4)).toHaveText(currentDate);
+    await expect(actualTableData.locator(this.pcrTableCell).nth(5)).toHaveText(expectedTableData.action);
   }
   // Validate user cannot create a request without selecting atleast one pcr
   @Given('the user clicks create request without selecting a PCR')
