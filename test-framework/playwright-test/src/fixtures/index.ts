@@ -3,6 +3,7 @@ import { test as base } from "playwright-bdd";
 import { DeveloperHomepage } from "./acc/pages/DeveloperHomepage";
 import { ProjectDashboard } from "./acc/pages/ProjectDashboard";
 import { AccProjectBase } from "./projectFactory/AccProjectBase";
+import { AccProjectMulti } from "./projectFactory/AccProjectMulti";
 import { ProjectFactoryHelloWorld } from "./projectFactory/ProjectFactoryHelloWorld";
 import { AccNavigation } from "./acc/AccNavigation";
 import { ProjectState } from "./projectFactory/ProjectState";
@@ -55,6 +56,7 @@ type AccFixtures = {
 interface Workers {
   sfdcApi: SfdcApi;
   accProjectBase: AccProjectBase;
+  accProjectMulti: AccProjectMulti;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -77,6 +79,10 @@ export const test = base.extend<AccFixtures, Workers>({
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectMulti: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectMulti({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
   projectFactoryHelloWorld: [
