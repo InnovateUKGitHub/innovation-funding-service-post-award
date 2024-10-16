@@ -9,11 +9,11 @@ import { contactBuilder } from "./factory/ifspa/Contact";
 import { userBuilder } from "./factory/ifspa/User";
 import { buildApex } from "./helpers/apex";
 import { makeBaseProject } from "./helpers/makeBaseProject";
+import { makeMultiPartnerProject } from "./helpers/makeMultiPartnerProject";
 import { accProfileTotalCostCategoryBuilder } from "./factory/ifspa/Acc_Profile__c.Total_Cost_Category";
 import { accProfileDetailBuilder } from "./factory/ifspa/Acc_Profile__c.Profile_Detail";
 import { projectFactoryClaimsAndProfilesHelperBuilder } from "./factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
 import { accClaimTotalProjectPeriodBuilder } from "./factory/ifspa/Acc_Claims__c.Total_Project_Period";
-
 import type { CreateProjectProps } from "./helpers/makeBaseProject";
 
 export {
@@ -32,5 +32,6 @@ export {
   userBuilder,
   buildApex,
   makeBaseProject,
+  makeMultiPartnerProject,
   CreateProjectProps,
 };

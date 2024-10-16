@@ -2,6 +2,7 @@ import { BrowserContext, Page } from "@playwright/test";
 import { Fixture, Given } from "playwright-bdd/decorators";
 import { ProjectState } from "../projectFactory/ProjectState";
 import { DevTools } from "../../components/DevTools";
+import { error } from "console";
 
 export
 @Fixture("accUserSwitcher")
@@ -44,6 +45,12 @@ class AccUserSwitcher {
   }
 
   private getUsername(substr: string) {
-    return this.projectState.prefix + this.projectState.usernames.find(x => x.includes(substr));
+    const username = this.projectState.usernames.find(x => x.includes(substr));
+    if (!username) {
+      throw new Error(`Cannot find ${substr} in list ${this.projectState.usernames.join(", ")}`);
+    } else {
+      console.log("Username", username);
+    }
+    return this.projectState.prefix + username;
   }
 }
