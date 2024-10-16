@@ -1,15 +1,27 @@
 import { ForecastTableDto } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 import { CellFormulaValue } from "exceljs";
-import { Spreadsheet } from "./Spreadsheet";
+import { Spreadsheet, WorkbookOptions } from "./Spreadsheet";
+import { Copy } from "@copy/Copy";
+import { getForecastHeaderContent } from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 
 const SCALE_FACTOR = 1 / 7;
 
 class ForecastTableSpreadsheet extends Spreadsheet {
-  tableData: ForecastTableDto;
+  private readonly tableData: ForecastTableDto;
+  private readonly copy: Copy;
 
-  constructor({ tableData }: { tableData: ForecastTableDto }) {
-    super();
+  constructor({
+    tableData,
+    copy,
+    workbookOptions,
+  }: {
+    tableData: ForecastTableDto;
+    copy: Copy;
+    workbookOptions?: WorkbookOptions;
+  }) {
+    super({ workbookOptions });
     this.tableData = tableData;
+    this.copy = copy;
   }
 
   createWorksheets(): Promise<ForecastTableSpreadsheet> {
@@ -80,22 +92,25 @@ class ForecastTableSpreadsheet extends Spreadsheet {
      */
     ws.addRows([
       Object.fromEntries([
-        ["costCategories", "Cost Categories"],
-        ...this.tableData.statusRow.map(x => [`period${x.periodId}`, x.group]),
-        ["total", "Total"],
-        ["totalEligibleCosts", "Total Eligible Costs"],
-        ["difference", "Difference"],
+        ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.costCategoriesHeader)],
+        ...this.tableData.statusRow.map(x => [
+          `period${x.periodId}`,
+          this.copy.getCopyString(getForecastHeaderContent(x.group)),
+        ]),
+        ["total", this.copy.getCopyString(x => x.components.forecastTable.totalHeader)],
+        ["totalEligibleCosts", this.copy.getCopyString(x => x.components.forecastTable.totalEligibleCostsHeader)],
+        ["difference", this.copy.getCopyString(x => x.components.forecastTable.differenceHeader)],
       ]),
       Object.fromEntries([
-        ["costCategories", "Period"],
+        ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.periodHeader)],
         ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.periodId]),
       ]),
       Object.fromEntries([
-        ["costCategories", "Schedule 3 / IAR Due"],
+        ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.iarDueHeader)],
         ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.iarDue]),
       ]),
       Object.fromEntries([
-        ["costCategories", "Month"],
+        ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.month)],
         ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.periodStart]),
       ]),
       ...this.tableData.costCategories.map((costCategory, i) => {
@@ -116,7 +131,7 @@ class ForecastTableSpreadsheet extends Spreadsheet {
         ]);
       }),
       Object.fromEntries([
-        ["costCategories", "Total"],
+        ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.totalHeader)],
         ...this.tableData.totalRow.profiles.map(x => {
           const colLetter = Spreadsheet.colToLet(x.periodId + 1);
           const range = `${colLetter}${totalCostCatStartRow}:${colLetter}${totalCostCatEndRow}`;
@@ -150,6 +165,7 @@ class ForecastTableSpreadsheet extends Spreadsheet {
       const colStart = statusGrouping.periodId + 1;
       const colEnd = colStart + statusGrouping.colSpan - 1;
       ws.mergeCells(1, colStart, 1, colEnd);
+      ws.getCell(1, colStart).alignment = { wrapText: true };
     }
 
     for (let j = 5; j <= totalCostCatEndRow + 1; j++) {

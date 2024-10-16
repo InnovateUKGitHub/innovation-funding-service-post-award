@@ -62,5 +62,6 @@ export const useContent = () => {
   return {
     getContent,
     getContentCall,
+    copy: appContent,
   };
 };
