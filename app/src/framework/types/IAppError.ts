@@ -44,6 +44,7 @@ interface IAppDetailedSfdcSfUpdateAllFailureError extends IAppDetailedBaseError 
 
 interface IAppDetailedSfdcInsufficientAccessOrReadonlyError extends IAppDetailedBaseError {
   code: DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY;
+  data: TsforceSalesforceError[];
   id?: string;
 }
 
