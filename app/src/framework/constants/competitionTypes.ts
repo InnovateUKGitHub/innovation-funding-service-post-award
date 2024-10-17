@@ -44,6 +44,7 @@ const allSalesforceCompetitionTypes = [
   SalesforceCompetitionTypes.loans,
   SalesforceCompetitionTypes.edge,
   SalesforceCompetitionTypes.horizonEurope,
+  SalesforceCompetitionTypes.combinedCapital,
 ];
 
 const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTypes => {

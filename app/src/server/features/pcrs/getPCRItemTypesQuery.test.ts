@@ -37,7 +37,7 @@ describe("GetPCRItemTypesQuery", () => {
     const recordType = context.testData.createRecordType({
       type: "Remove a partner",
       parent: "Acc_ProjectChangeRequest__c",
-      developerName: ProjectChangeRequest.partnerWithdrawal,
+      developerName: ProjectChangeRequest.INACTIVE_partnerWithdrawal,
     });
 
     const query = new GetPCRItemTypesQuery(project.Id);

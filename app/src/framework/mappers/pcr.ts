@@ -204,39 +204,39 @@ export const mapFromSalesforcePCRPartnerType = (partnerType: string | null) => {
 export const mapToPcrItemType = (developerName: string) => {
   switch (developerName) {
     case ProjectChangeRequest.loanDrawdownChange:
-    case ProjectChangeRequest.participantVirementForLoanDrawdown:
-    case ProjectChangeRequest.periodVirementForLoanDrawdown:
+    case ProjectChangeRequest.REMOVED_participantVirementForLoanDrawdown:
+    case ProjectChangeRequest.REMOVED_periodVirementForLoanDrawdown:
       return PCRItemType.LoanDrawdownChange;
     case ProjectChangeRequest.changeLoansDuration:
       return PCRItemType.LoanDrawdownExtension;
-    case ProjectChangeRequest.accountNameChange:
+    case ProjectChangeRequest.INACTIVE_accountNameChange:
     case ProjectChangeRequest.changeAPartnersName:
       return PCRItemType.AccountNameChange;
-    case ProjectChangeRequest.partnerAddition:
+    case ProjectChangeRequest.INACTIVE_partnerAddition:
     case ProjectChangeRequest.addAPartner:
       return PCRItemType.PartnerAddition;
-    case ProjectChangeRequest.projectSuspension:
+    case ProjectChangeRequest.INACTIVE_projectSuspension:
     case ProjectChangeRequest.putProjectOnHold:
       return PCRItemType.ProjectSuspension;
-    case ProjectChangeRequest.timeExtension:
+    case ProjectChangeRequest.INACTIVE_timeExtension:
     case ProjectChangeRequest.changeProjectDuration:
       return PCRItemType.TimeExtension;
     case ProjectChangeRequest.changeProjectScope:
       return PCRItemType.ScopeChange;
-    case ProjectChangeRequest.projectTermination:
+    case ProjectChangeRequest.INACTIVE_projectTermination:
     case ProjectChangeRequest.endProjectEarly:
       return PCRItemType.ProjectTermination;
-    case ProjectChangeRequest.financialVirement:
-    case ProjectChangeRequest.multiplePartnerFinancialVirement:
+    case ProjectChangeRequest.INACTIVE_financialVirement:
+    case ProjectChangeRequest.INACTIVE_multiplePartnerFinancialVirement:
     case ProjectChangeRequest.reallocateOnePartnersProjectCosts:
     case ProjectChangeRequest.reallocateSeveralPartnersProjectCost:
-    case ProjectChangeRequest.singlePartnerFinancialVirement:
-    case ProjectChangeRequest.betweenPartnerFinancialVirement:
+    case ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement:
+    case ProjectChangeRequest.INACTIVE_betweenPartnerFinancialVirement:
       return PCRItemType.MultiplePartnerFinancialVirement;
     case ProjectChangeRequest.removeAPartner:
-    case ProjectChangeRequest.partnerWithdrawal:
+    case ProjectChangeRequest.INACTIVE_partnerWithdrawal:
       return PCRItemType.PartnerWithdrawal;
-    case ProjectChangeRequest.changePeriodLength:
+    case ProjectChangeRequest.INACTIVE_changePeriodLength:
       return PCRItemType.PeriodLengthChange;
     case ProjectChangeRequest.approveNewSubcontractor:
       return PCRItemType.ApproveNewSubcontractor;
@@ -248,7 +248,6 @@ export const mapToPcrItemType = (developerName: string) => {
     // Request header
     case ProjectChangeRequest.requestHeader:
     case ProjectChangeRequest.manageTeamMemberRequestHeader:
-    case ProjectChangeRequest.projectChangeRequests:
       return PCRItemType.Unknown;
   }
 
