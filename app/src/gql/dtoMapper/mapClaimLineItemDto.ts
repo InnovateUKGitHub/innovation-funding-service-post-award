@@ -15,9 +15,7 @@ type ClaimLineItemNode = GQL.PartialNode<{
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
   Acc_CostCategory__c: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
-  Owner: GQL.Maybe<{
-    Email?: GQL.Value<string>;
-  }>;
+  OwnerId: GQL.Value<string>;
   RecordType: GQL.Maybe<{
     DeveloperName: GQL.Value<string>;
   }>;
@@ -31,7 +29,7 @@ export type ClaimLineItemDtoMapping = Pick<
 const mapper: GQL.DtoMapper<
   ClaimLineItemDtoMapping,
   ClaimLineItemNode,
-  { currentUser?: { email?: string; isSystemUser?: boolean } }
+  { currentUser?: { userId?: string; isSystemUser?: boolean } }
 > = {
   id(node) {
     return node?.Id ?? "unknown id";
@@ -39,7 +37,7 @@ const mapper: GQL.DtoMapper<
   isAuthor(node, additionalData) {
     return (
       additionalData.currentUser?.isSystemUser ||
-      (typeof node?.Owner?.Email?.value === "string" && node?.Owner?.Email?.value === additionalData.currentUser?.email)
+      (typeof node?.OwnerId?.value === "string" && node?.OwnerId?.value === additionalData.currentUser?.userId)
     );
   },
   costCategoryId(node) {
@@ -66,7 +64,7 @@ const mapper: GQL.DtoMapper<
 
 export type ClaimLineItemAdditionalData<TPickList extends string> = AdditionalDataType<
   TPickList,
-  [["isAuthor", "currentUser", { email: string; isSystemUser: boolean }]]
+  [["isAuthor", "currentUser", { userId: string; isSystemUser: boolean }]]
 >;
 
 /**
