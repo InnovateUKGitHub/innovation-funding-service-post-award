@@ -586,7 +586,7 @@ export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.PartnerWithdrawal,
     typeName: "Remove a partner",
-    developerRecordTypeName: ProjectChangeRequest.partnerWithdrawal,
+    developerRecordTypeName: ProjectChangeRequest.removeAPartner,
     ignoredCompetitions: [SalesforceCompetitionTypes.loans],
     i18nName: x => x.pcrTypes.partnerWithdrawal,
     i18nDescription: x => x.pages.pcrModifyOptions.removePartnerMessage,

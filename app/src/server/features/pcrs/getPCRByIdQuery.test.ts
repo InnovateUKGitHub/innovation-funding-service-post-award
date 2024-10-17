@@ -134,7 +134,7 @@ describe("GetPCRByIdQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
-      developerName: ProjectChangeRequest.INACTIVE_partnerWithdrawal,
+      developerName: ProjectChangeRequest.removeAPartner,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
@@ -150,7 +150,7 @@ describe("GetPCRByIdQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
-      developerName: ProjectChangeRequest.INACTIVE_partnerWithdrawal,
+      developerName: ProjectChangeRequest.removeAPartner,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
