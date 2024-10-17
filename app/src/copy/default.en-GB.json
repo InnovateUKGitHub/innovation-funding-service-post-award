@@ -2914,16 +2914,20 @@
       "projectSuspension": {
         "suspensionStartDate": {
           "errors": {
-            "invalid_type": "Enter valid project suspension start date.",
-            "custom": "Enter valid project suspension start date.",
-            "readonly": "Project suspension start date cannot be changed."
+            "invalid_type": "Enter a valid project suspension start date.",
+            "custom": "Enter a valid project suspension start date.",
+            "readonly": "Project suspension start date cannot be changed.",
+            "too_small": "The first day of pause must be after the project start date of {{ minimum, datetime }}.",
+            "too_big": "The first day of pause must be before the project end date of {{ maximum, datetime }}."
           }
         },
         "suspensionEndDate": {
           "errors": {
-            "invalid_type": "Enter valid project suspension end date.",
-            "too_small": "The last day of pause cannot be before the first day of pause.",
-            "custom": "Enter valid project suspension end date.",
+            "invalid_type": "Enter a valid project suspension end date.",
+            "invalid_date": "The last day of pause cannot be before the first day of pause.",
+            "too_small": "The last day of pause must be after the project start date of {{ minimum, datetime }}.",
+            "too_big": "The last day of pause must be before the project end date of {{ maximum, datetime }}.",
+            "custom": "Enter a valid project suspension end date.",
             "readonly": "Project suspension end date cannot be changed."
           }
         }
