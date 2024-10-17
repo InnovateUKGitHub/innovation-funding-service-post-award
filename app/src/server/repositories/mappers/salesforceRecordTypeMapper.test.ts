@@ -7,7 +7,7 @@ describe("SalesforceRecordTypeMapper", () => {
       Id: "Test Id",
       Name: "Test Name",
       SobjectType: "Test Object Type",
-      DeveloperName: ProjectChangeRequest.singlePartnerFinancialVirement,
+      DeveloperName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
     };
 
     return Object.assign(defaultItem, item);

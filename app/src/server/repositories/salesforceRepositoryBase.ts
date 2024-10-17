@@ -265,7 +265,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const result = results[i];
       const id = ids?.[i];
       if (!result.success) {
-        ret.push({ code: DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY, id });
+        ret.push({ code: DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY, id, data: result.errors });
       }
     }
     return ret;

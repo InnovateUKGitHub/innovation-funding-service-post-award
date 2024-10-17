@@ -627,25 +627,6 @@ export const pcrItemTypes: IMetaValue[] = [
     singleInstanceInThisPcr: true,
   },
   {
-    type: PCRItemType.PeriodLengthChange,
-    typeName: "Change period length",
-    developerRecordTypeName: ProjectChangeRequest.changePeriodLength,
-    ignoredCompetitions: [
-      SalesforceCompetitionTypes.crnd,
-      SalesforceCompetitionTypes.contracts,
-      SalesforceCompetitionTypes.ktp,
-      SalesforceCompetitionTypes.catapults,
-      SalesforceCompetitionTypes.loans,
-      SalesforceCompetitionTypes.edge,
-      SalesforceCompetitionTypes.sbri,
-      SalesforceCompetitionTypes.sbriIfs,
-      SalesforceCompetitionTypes.horizonEurope,
-      SalesforceCompetitionTypes.combinedCapital,
-    ],
-    singleInstanceInAnyPcr: false,
-    singleInstanceInThisPcr: true,
-  },
-  {
     type: PCRItemType.AccountNameChange,
     typeName: "Change a partner's name",
     developerRecordTypeName: ProjectChangeRequest.changeAPartnersName,
@@ -759,6 +740,27 @@ export const pcrItemTypes: IMetaValue[] = [
     disableSummary: true,
     skipToItem: true,
     exclusive: true,
+  },
+
+  // Salesforce "Inactive Values"
+  {
+    type: PCRItemType.PeriodLengthChange,
+    typeName: "Change period length",
+    developerRecordTypeName: ProjectChangeRequest.INACTIVE_changePeriodLength,
+    ignoredCompetitions: [
+      SalesforceCompetitionTypes.crnd,
+      SalesforceCompetitionTypes.contracts,
+      SalesforceCompetitionTypes.ktp,
+      SalesforceCompetitionTypes.catapults,
+      SalesforceCompetitionTypes.loans,
+      SalesforceCompetitionTypes.edge,
+      SalesforceCompetitionTypes.sbri,
+      SalesforceCompetitionTypes.sbriIfs,
+      SalesforceCompetitionTypes.horizonEurope,
+      SalesforceCompetitionTypes.combinedCapital,
+    ],
+    singleInstanceInAnyPcr: false,
+    singleInstanceInThisPcr: true,
   },
 ];
 

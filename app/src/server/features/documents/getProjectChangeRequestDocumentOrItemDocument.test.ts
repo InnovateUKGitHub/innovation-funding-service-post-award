@@ -15,7 +15,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
-      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+      developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -69,7 +69,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
-      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+      developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -87,7 +87,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
-      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+      developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
     const pcrItem2 = context.testData.createPCRItem(pcr, pcrRecordType);
@@ -110,7 +110,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
-        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+        developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -133,7 +133,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
-        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+        developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -156,7 +156,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
-        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+        developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -180,7 +180,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
-        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+        developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -204,7 +204,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
-        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
+        developerName: ProjectChangeRequest.INACTIVE_singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
