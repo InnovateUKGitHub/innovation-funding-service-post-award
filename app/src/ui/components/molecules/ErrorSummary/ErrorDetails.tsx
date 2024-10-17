@@ -33,6 +33,20 @@ const ErrorDetails = ({ details }: ErrorDetailProps) => {
                 </li>
               );
             }
+          case DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY:
+            if ("data" in detail) {
+              return (
+                <Fragment key={i}>
+                  {detail.data.map((error, i) => (
+                    <li key={i}>
+                      <strong>{error.statusCode}</strong> {error.message}
+                      <br />
+                      <pre>{JSON.stringify(error.fields, null, 2)}</pre>
+                    </li>
+                  ))}
+                </Fragment>
+              );
+            }
           case DetailedErrorCode.ACC_GRAPHQL_ERROR:
             if ("data" in detail) {
               return (

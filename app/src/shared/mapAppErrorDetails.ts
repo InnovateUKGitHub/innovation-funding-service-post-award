@@ -48,6 +48,7 @@ export const mapSfdcErrors = (errors: (TsforceSalesforceError | IAppDetailedErro
         case SalesforceStatusCode.INSUFFICIENT_ACCESS_OR_READONLY:
           details.push({
             code: DetailedErrorCode.SFDC_INSUFFICIENT_ACCESS_OR_READONLY,
+            data: [error],
           });
           break;
 
