@@ -1,4 +1,4 @@
-import { ManageTeamMemberCreateProps } from "../ManageTeamMember.logic";
+import { ManageTeamMemberCreateProps, ManageTeamMemberRole } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
@@ -7,7 +7,6 @@ import { defineRoute } from "@ui/app/containerBase";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/dtos/projectContactDto";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 
 const ManageTeamMemberCreatePage = (props: ManageTeamMemberModifyProps) => {
@@ -30,7 +29,7 @@ const ManageTeamMembersCreateRoute = defineRoute<ManageTeamMemberCreateProps>({
   container: ManageTeamMemberCreatePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    role: route.params.role as ProjectRole,
+    role: route.params.role as ManageTeamMemberRole,
     pclId: undefined,
     method: ManageTeamMemberMethod.CREATE,
   }),
