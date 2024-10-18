@@ -22,10 +22,17 @@ const ManageTeamMemberRoles = [
   ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR,
 ];
 
+type ManageTeamMemberRole =
+  | ProjectRole.PROJECT_MANAGER
+  | ProjectRole.FINANCE_CONTACT
+  | ProjectRole.MAIN_COMPANY_CONTACT
+  | ProjectRole.ASSOCIATE
+  | ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR;
+
 interface ManageTeamMemberProps {
   projectId: ProjectId;
   pclId?: ProjectContactLinkId | "undefined"; // When JS is disabled, we get "undefined" as a string.
-  role: ProjectRole;
+  role: ManageTeamMemberRole;
 }
 
 interface ManageTeamMemberData {
@@ -207,7 +214,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
       associates: [] as ManageTeamMembersTableData[],
       mainCompanyContacts: [] as ManageTeamMembersTableData[],
       knowledgeBaseAdministrators: [] as ManageTeamMembersTableData[],
-    } satisfies Record<ProjectRole, ManageTeamMembersTableData[]>;
+    } satisfies Record<ManageTeamMemberRole, ManageTeamMembersTableData[]>;
     const collated = new Map<ProjectContactLinkId, ManageTeamMembersTableData>();
 
     const accountToProjectParticipantMap = new Map<AccountId, PartnerData>();
@@ -264,6 +271,7 @@ export {
   ManageTeamMemberProps,
   ManageTeamMemberReplaceProps,
   ManageTeamMemberRoles,
+  ManageTeamMemberRole,
   ManageTeamMembersTableData,
   ManageTeamMemberUpdateDeleteProps,
   useManageTeamMembers,

@@ -60,6 +60,8 @@ export const mapProjectRoleToInternal = (type: string | undefined | null): Proje
       return ProjectRole.ASSOCIATE;
     case ProjectRoleName.KBAdmin:
       return ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR;
+    case ProjectRoleName.MonitoringOfficer:
+      return ProjectRole.MONITORING_OFFICER;
   }
 };
 
@@ -75,6 +77,8 @@ export const mapProjectRoleToName = (type: ProjectRole | undefined | null): Proj
       return ProjectRoleName.Associate;
     case ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR:
       return ProjectRoleName.KBAdmin;
+    case ProjectRole.MONITORING_OFFICER:
+      return ProjectRoleName.MonitoringOfficer;
   }
 };
 

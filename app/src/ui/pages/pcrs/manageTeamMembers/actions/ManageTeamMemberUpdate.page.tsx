@@ -1,4 +1,4 @@
-import { ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
+import { ManageTeamMemberRole, ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
@@ -8,7 +8,6 @@ import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/dtos/projectContactDto";
 
 const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
   return (
@@ -30,7 +29,7 @@ const ManageTeamMembersUpdateRoute = defineRoute<ManageTeamMemberUpdateDeletePro
   container: ManageTeamMemberUpdatePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    role: route.params.role as ProjectRole,
+    role: route.params.role as ManageTeamMemberRole,
     pclId: route.params.pclId as ProjectContactLinkId,
     method: ManageTeamMemberMethod.UPDATE,
   }),

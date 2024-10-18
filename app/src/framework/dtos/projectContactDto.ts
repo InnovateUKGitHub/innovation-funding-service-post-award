@@ -4,6 +4,7 @@ export enum ProjectRole {
   MAIN_COMPANY_CONTACT = "mainCompanyContacts",
   ASSOCIATE = "associates",
   KNOWLEDGE_BASE_ADMINISTRATOR = "knowledgeBaseAdministrators",
+  MONITORING_OFFICER = "monitoringOfficers",
 }
 
 export enum ProjectRoleName {
