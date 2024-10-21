@@ -19,18 +19,19 @@ enum ProjectFactoryApexInjectionOrder {
   // Depends on Project, Contact, User and Account
   ACC_PROJECT_CONTACT_LINK_LOAD,
 
-  // Needs contacts/pcls loaded in project first
-  ACC_PROJECT_POSTLOAD,
-
   // Profiles
-  ACC_PROFILE_FETCH,
+  ACC_CLAIMS_AND_PROFILE_FETCH,
   ACC_PROFILE_DETAIL,
   ACC_PROFILE_TOTAL_COST_CATEGORY,
-  ACC_PROFILE_LOAD,
+  ACC_CLAIM_TOTAL_PROJECT_PERIOD,
+  ACC_CLAIMS_AND_PROFILE_LOAD,
 
   // PCRs
   ACC_PROJECT_CHANGE_REQUEST_REQUEST_HEADER,
   ACC_PROJECT_CHANGE_REQUEST_REMOVE_PROJECT_PARTICIPANT,
+
+  // Needs contacts/pcls loaded in project first
+  ACC_PROJECT_POSTLOAD,
 }
 
 export { ProjectFactoryApexInjectionOrder };

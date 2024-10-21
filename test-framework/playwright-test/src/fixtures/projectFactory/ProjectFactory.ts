@@ -36,6 +36,7 @@ export abstract class ProjectFactory {
         data.profiles.projectFactoryHelper,
         ...data.profiles.details,
         ...data.profiles.totalCostCategories,
+        ...data.profiles.claimTotalProjectPeriods,
       ].flat(),
       options: {
         prefix: this.prefix,

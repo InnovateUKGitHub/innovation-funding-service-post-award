@@ -7,7 +7,7 @@ import { userBuilder } from "./User";
 import { contactBuilder } from "./Contact";
 import { accProjectContactLinkBuilder } from "./Acc_ProjectContactLink__c";
 import { accProjectParticipantBuilder } from "./Acc_ProjectParticipant__c";
-import { projectFactoryProfilesHelperBuilder } from "./ProjectFactory.ProfilesHelper";
+import { projectFactoryClaimsAndProfilesHelperBuilder } from "./ProjectFactory.ClaimsAndProfilesHelper";
 import { accProfileDetailBuilder } from "./Acc_Profile__c.Profile_Detail";
 
 const competition = competitionBuilder
@@ -89,7 +89,7 @@ const projectParticipant = accProjectParticipantBuilder.create().set({
   Acc_CreateClaims__c: false,
 });
 
-const profileHelper = projectFactoryProfilesHelperBuilder.create().set({
+const profileHelper = projectFactoryClaimsAndProfilesHelperBuilder.create().set({
   ProjectFactory_ProjectParticipant: projectParticipant,
   ProjectFactory_Competition: competition,
 });

@@ -2,7 +2,7 @@ import { ProjectFactoryApexInjectionOrder } from "../../enum/ProjectFactoryApexI
 import { injectApexFunctionCall, injectFieldToApex } from "../../helpers/apex";
 import { ProjectFactoryFieldType, ProjectFactoryRelationshipType } from "../../types/ProjectFactoryDefinition";
 import { ProjectFactory } from "../ProjectFactory";
-import { projectFactoryProfilesHelperBuilder } from "./ProjectFactory.ProfilesHelper";
+import { projectFactoryClaimsAndProfilesHelperBuilder } from "./ProjectFactory.ClaimsAndProfilesHelper";
 
 const accProfileDetailBuilder = new ProjectFactory(
   <const>{
@@ -47,7 +47,7 @@ const accProfileDetailBuilder = new ProjectFactory(
         {
           sfdcName: "ProjectFactory_ProfileHelper",
           sfdcType: ProjectFactoryRelationshipType.SINGLE,
-          sffBuilder: projectFactoryProfilesHelperBuilder,
+          sffBuilder: projectFactoryClaimsAndProfilesHelperBuilder,
           required: true,
         },
       ],

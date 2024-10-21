@@ -2,6 +2,7 @@ import { EnvironmentManager } from "@innovateuk/environment-manager";
 import jwt from "jsonwebtoken";
 import { Fixture } from "playwright-bdd/decorators";
 import { xml } from "../../helpers/xml";
+import * as prettier from "prettier";
 
 interface SfdcApiProps {
   playwright: typeof import("playwright-core");
@@ -116,8 +117,30 @@ class SfdcApi {
     });
 
     const text = await res.text();
-    if (!res.ok) {
-      throw new Error(text);
+
+    if (!res.ok || text.includes(`<success>false</success>`)) {
+      const lineStr = /<line>(\d+)<\/line>/.exec(text)?.[1];
+
+      const exception = await prettier.format(text, {
+        plugins: ["@prettier/plugin-xml"],
+        bracketSameLine: false,
+        xmlWhitespaceSensitivity: "ignore",
+        parser: "xml",
+      });
+
+      let badApex = apex;
+
+      if (lineStr) {
+        const lineNumber = Number(lineStr);
+
+        badApex = apex
+          .split("\n")
+          .map((x, i) => `${i + 1 === lineNumber ? ">>>" : "   "} ${String(i + 1).padStart(4, " ")} | ${x}`)
+          .filter((_, i) => i > lineNumber - 5 && i < lineNumber + 3)
+          .join("\n");
+      }
+
+      throw new Error("Apex execution issue:\n\n" + exception + "\n\n" + badApex);
     }
   }
 }

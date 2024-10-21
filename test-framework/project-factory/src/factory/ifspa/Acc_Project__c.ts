@@ -106,7 +106,6 @@ ${injectFieldToApex(options, instanceName, "Acc_CurrentPeriodNumberHelper__c", f
 upsert ${instanceName};
 ProjectTriggerHelper.isFirstTime = true;
 new Acc_ProjectPeriodProcessor_Batch().start(null);
-Acc_ClaimsCreateBatch.start(null);
         `,
       priority: ProjectFactoryApexInjectionOrder.ACC_PROJECT_POSTLOAD,
     },

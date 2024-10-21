@@ -11,7 +11,8 @@ import { buildApex } from "./helpers/apex";
 import { makeBaseProject } from "./helpers/makeBaseProject";
 import { accProfileTotalCostCategoryBuilder } from "./factory/ifspa/Acc_Profile__c.Total_Cost_Category";
 import { accProfileDetailBuilder } from "./factory/ifspa/Acc_Profile__c.Profile_Detail";
-import { projectFactoryProfilesHelperBuilder } from "./factory/ifspa/ProjectFactory.ProfilesHelper";
+import { projectFactoryClaimsAndProfilesHelperBuilder } from "./factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
+import { accClaimTotalProjectPeriodBuilder } from "./factory/ifspa/Acc_Claims__c.Total_Project_Period";
 
 import type { CreateProjectProps } from "./helpers/makeBaseProject";
 
@@ -23,7 +24,8 @@ export {
   accPcrHeaderBuilder,
   accProfileTotalCostCategoryBuilder,
   accProfileDetailBuilder,
-  projectFactoryProfilesHelperBuilder,
+  accClaimTotalProjectPeriodBuilder,
+  projectFactoryClaimsAndProfilesHelperBuilder,
   accountBuilder,
   competitionBuilder,
   contactBuilder,

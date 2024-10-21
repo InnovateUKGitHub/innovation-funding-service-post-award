@@ -4,33 +4,31 @@ import { ProjectFactoryFieldType, ProjectFactoryRelationshipType } from "../../t
 import { ProjectFactory } from "../ProjectFactory";
 import { projectFactoryClaimsAndProfilesHelperBuilder } from "./ProjectFactory.ClaimsAndProfilesHelper";
 
-const accProfileTotalCostCategoryBuilder = new ProjectFactory(
+const accClaimTotalProjectPeriodBuilder = new ProjectFactory(
   <const>{
     definition: {
-      sfdcName: "Acc_Profile__c",
+      sfdcName: "Acc_Claims__c",
       fields: [
         {
-          sfdcName: "Acc_CostCategoryDescription__c",
+          sfdcName: "Acc_ClaimStatus__c",
           sfdcType: ProjectFactoryFieldType.SINGLE_PICKLIST,
           nullable: false,
           values: [
-            "Subcontracting",
-            "Labour",
-            "Overheads",
-            "Materials",
-            "Capital Usage",
-            "Travel and Subsistence",
-            "Other costs",
-            "Other costs 2",
-            "Other costs 3",
-            "Other costs 4",
-            "Other costs 5",
+            "Draft",
+            "Independent accountant's report required",
+            "New",
+            "Paid",
+            "Payment being processed",
+            "Queried by Innovate UK",
+            "Queried by Monitoring Officer",
+            "Submitted to Innovate UK",
+            "Submitted to Monitoring Officer",
           ],
         },
         {
-          sfdcName: "Acc_CostCategoryGOLCost__c",
+          sfdcName: "Acc_ProjectPeriodNumber__c",
           sfdcType: ProjectFactoryFieldType.NUMBER,
-          nullable: true,
+          nullable: false,
         },
       ],
       relationships: [
@@ -43,22 +41,22 @@ const accProfileTotalCostCategoryBuilder = new ProjectFactory(
       ],
     },
     generator: {
-      varName: x => `profileTotalCostCategory${x}`,
+      varName: x => `claimTotalProjectPeriod${x}`,
     },
   },
   ({ fields, relationships, instanceName, options }) => [
     {
       code: `
-Acc_Profile__c ${instanceName} = ${injectApexFunctionCall(
+Acc_Claims__c ${instanceName} = ${injectApexFunctionCall(
         relationships.ProjectFactory_ProfileHelper,
-        "ProfileCostCategory",
-        [fields.Acc_CostCategoryDescription__c],
+        "ClaimProjectPeriod",
+        [fields.Acc_ProjectPeriodNumber__c],
       )};
-${injectFieldToApex(options, instanceName, "Acc_CostCategoryGOLCost__c", fields.Acc_CostCategoryGOLCost__c)}
+${injectFieldToApex(options, instanceName, "Acc_ClaimStatus__c", fields.Acc_ClaimStatus__c)}
     `,
-      priority: ProjectFactoryApexInjectionOrder.ACC_PROFILE_TOTAL_COST_CATEGORY,
+      priority: ProjectFactoryApexInjectionOrder.ACC_CLAIM_TOTAL_PROJECT_PERIOD,
     },
   ],
 );
 
-export { accProfileTotalCostCategoryBuilder };
+export { accClaimTotalProjectPeriodBuilder };

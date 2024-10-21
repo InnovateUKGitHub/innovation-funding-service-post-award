@@ -1,3 +1,4 @@
+import { accClaimTotalProjectPeriodBuilder } from "../factory/ifspa/Acc_Claims__c.Total_Project_Period";
 import { accProfileDetailBuilder } from "../factory/ifspa/Acc_Profile__c.Profile_Detail";
 import { accProfileTotalCostCategoryBuilder } from "../factory/ifspa/Acc_Profile__c.Total_Cost_Category";
 import { accPcrRemovePartnerBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RemovePartner";
@@ -8,7 +9,7 @@ import { accProjectBuilder, defaultAccProject } from "../factory/ifspa/Acc_Proje
 import { accountBuilder, defaultAccount } from "../factory/ifspa/Account";
 import { competitionBuilder } from "../factory/ifspa/Competition__c";
 import { contactBuilder } from "../factory/ifspa/Contact";
-import { projectFactoryProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ProfilesHelper";
+import { projectFactoryClaimsAndProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
 import { userBuilder, defaultUser } from "../factory/ifspa/User";
 import { ProjectFactoryInstanceType } from "../types/ProjectFactoryDefinition";
 
@@ -27,9 +28,10 @@ interface CreateProjectProps {
   competition: ProjectFactoryInstanceType<typeof competitionBuilder>;
   projectParticipant: ProjectFactoryInstanceType<typeof accProjectParticipantBuilder>;
   profiles: {
-    projectFactoryHelper: ProjectFactoryInstanceType<typeof projectFactoryProfilesHelperBuilder>;
+    projectFactoryHelper: ProjectFactoryInstanceType<typeof projectFactoryClaimsAndProfilesHelperBuilder>;
     details: ProjectFactoryInstanceType<typeof accProfileDetailBuilder>[];
     totalCostCategories: ProjectFactoryInstanceType<typeof accProfileTotalCostCategoryBuilder>[];
+    claimTotalProjectPeriods: ProjectFactoryInstanceType<typeof accClaimTotalProjectPeriodBuilder>[];
   };
 }
 
@@ -79,7 +81,7 @@ const makeBaseProject = (): CreateProjectProps => {
     Acc_CreateClaims__c: true,
   });
 
-  const helper = projectFactoryProfilesHelperBuilder.create().set({
+  const helper = projectFactoryClaimsAndProfilesHelperBuilder.create().set({
     ProjectFactory_ProjectParticipant: projectParticipant,
     ProjectFactory_Competition: competition,
     ProjectFactory_NumberOfPeriods: 12,
@@ -103,6 +105,12 @@ const makeBaseProject = (): CreateProjectProps => {
     }),
   ];
 
+  const firstClaim = accClaimTotalProjectPeriodBuilder.create().set({
+    ProjectFactory_ProfileHelper: helper,
+    Acc_ClaimStatus__c: "Draft",
+    Acc_ProjectPeriodNumber__c: 1,
+  });
+
   return {
     competition,
     project,
@@ -120,6 +128,7 @@ const makeBaseProject = (): CreateProjectProps => {
       projectFactoryHelper: helper,
       details: profileDetails,
       totalCostCategories: totalCostCategories,
+      claimTotalProjectPeriods: [firstClaim],
     },
   };
 };
