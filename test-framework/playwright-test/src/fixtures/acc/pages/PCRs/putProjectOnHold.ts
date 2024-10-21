@@ -566,7 +566,7 @@ class PutProjectOnHold {
   async pmResubmitPcr() {
     await this.createRequest.click();
     // verify put project on hold in use 
-    await expect(this.checkboxItemLocator).toHaveCount(7);
+    await expect(this.checkboxItemLocator).toHaveCount(8);
     await this.backButton.click();
     await this.page.waitForTimeout(30000);
     await this.clickTaskTodo("Edit");
@@ -586,6 +586,8 @@ class PutProjectOnHold {
     await this.enterSuspensionDetails("abc", "ab_", "2o25", "2!26");
     await this.verifyTextOnPage("Enter valid project suspension start date.", this.errorBody);
     await this.verifyTextOnPage("Enter valid project suspension end date.", this.errorBody);
+    await this.enterSuspensionDetails("12", "11", "2025", "2025");
+    await this.verifyTextOnPage( "The last day of pause cannot be before the first day of pause.",this.errorBody);
     await this.enterSuspensionDetails("12", "09", "2024", "2025");
     await this.clickMarkAsComplete();
     await this.page.waitForTimeout(30000);

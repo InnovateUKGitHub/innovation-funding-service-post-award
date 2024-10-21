@@ -26,7 +26,7 @@ Feature: Put a project on hold
       | Change a partner's name     | Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.         |
       | Put project on hold         | This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold. |
       | Approve a new subcontractor | If you are requesting a change in subcontractor, please select this option.                                                                                                      |
-    # | Manage team members         | This allows you to add a new project team member or to change the role of an existing team member.                                                                               |
+      | Manage team members         | This allows you to add a new project team member or to change the role of an existing team member.                                                                               |
 
     When the user completes the request to put a project on hold
     And the user clicks submit
@@ -75,5 +75,14 @@ Feature: Put a project on hold
 #   Then the user should see the following table
 #     | request_number | types               | started         | status                     | last_updated    | action |
 #     | 1              | Put project on hold | submission date | Submitted to Innovate UK   | submission date | View   |
+
+#Todo
+#  Scenario: Verify that the FC cannot view a PCR
+#  Given the user is a finance contact
+#  And the user is on the project overview
+#  When the user selects the "Project change requests" tile
+#  Then the user sees the table as shown below
+#     | request_number | types               | started         | status                     | last_updated    |
+#     | 1              | Put project on hold | submission date | Submitted to Innovate UK   | submission date |
 
 # Scenario: Innovate lead queries the PCR
