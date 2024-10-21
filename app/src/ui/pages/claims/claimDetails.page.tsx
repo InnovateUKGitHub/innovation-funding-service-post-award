@@ -116,9 +116,14 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
 
       <Section>
         {isFc ? (
-          <ClaimTable getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)} {...data} />
+          <ClaimTable
+            caption={`Claim details for ${data.partner.name} period ${props.periodId}`}
+            getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
+            {...data}
+          />
         ) : (
           <ClaimReviewTable
+            caption={`Claim review for ${data.partner.name} period ${props.periodId}`}
             getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
             {...data}
           />

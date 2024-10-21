@@ -104,7 +104,12 @@ export const pcrPrepareQuery = graphql`
             where: {
               Id: { eq: $pcrId }
               Acc_Project__c: { eq: $projectId }
-              RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } }
+              RecordType: {
+                or: [
+                  { DeveloperName: { eq: "Acc_RequestHeader" } }
+                  { DeveloperName: { eq: "Acc_Request_Header_Manage_Team_Members" } }
+                ]
+              }
             }
           ) {
             edges {

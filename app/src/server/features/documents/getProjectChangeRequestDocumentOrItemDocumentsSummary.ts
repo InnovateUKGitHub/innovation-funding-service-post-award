@@ -9,7 +9,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
   public readonly runnableName: string = "GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery";
   constructor(
     private readonly projectId: ProjectId,
-    private readonly projectChangeRequestIdOrItemId: string,
+    private readonly projectChangeRequestIdOrItemId: PcrId | PcrItemId,
   ) {
     super();
   }

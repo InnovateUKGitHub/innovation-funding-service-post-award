@@ -102,6 +102,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
             clientProfiles={watch("profile")}
             isProjectSetup
             partnerId={partnerId}
+            caption={getContent(x => x.pages.projectSetupSpendProfile.caption)}
           />
         </Section>
         <Section>

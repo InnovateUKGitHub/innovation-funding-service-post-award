@@ -102,6 +102,11 @@ import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { Readable } from "node:stream";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
+import {
+  IExternalContactsRepository,
+  ISalesforceExternalContact,
+} from "@server/repositories/externalContactRepository";
+import { ManageTeamMemberPcrDto } from "@framework/dtos/pcrDtos";
 
 class TestWriteStream extends Readable {
   private readonly id: string;
@@ -232,15 +237,70 @@ class ProjectContactTestRepository
   }
 
   getAllForUser(email: string) {
-    return super.getWhere(x => x.Acc_ContactId__r.Email === email);
+    return super.getWhere(x => x.Acc_ContactId__r?.Email === email);
   }
 
-  update(items: Pick<ISalesforceProjectContact, "Id" | "Associate_Start_Date__c">[]): Promise<boolean> {
+  getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact> {
+    return super.getOne(x => x.Id === pclId);
+  }
+
+  async insert(
+    contact: PickRequiredFromPartial<
+      ISalesforceProjectContact,
+      "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c"
+    >,
+  ): Promise<ProjectContactLinkId> {
+    const Id = String(this.Items.length + 1) as ProjectContactLinkId;
+
+    await super.insertOne({
+      ...contact,
+      Id,
+    } as ISalesforceProjectContact);
+
+    return Promise.resolve(Id);
+  }
+
+  async update(items: PickRequiredFromPartial<ISalesforceProjectContact, "Id">[]): Promise<boolean> {
     for (const item of items) {
-      const foundItem = this.Items.find(x => x.Id === item.Id);
+      const foundItem = await this.getById(item.Id);
       if (!foundItem) return Promise.resolve(false);
-      foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c ?? null;
+
+      if (typeof item.Associate_Start_Date__c === "string") {
+        foundItem.Associate_Start_Date__c = item.Associate_Start_Date__c;
+      }
+      if (typeof item.Acc_EndDate__c === "string") {
+        foundItem.Acc_EndDate__c = item.Acc_EndDate__c;
+      }
+      if (typeof item.Acc_Edited__c === "boolean") {
+        foundItem.Acc_Edited__c = item.Acc_Edited__c;
+      }
+      if (typeof item.Acc_Inactive__c === "boolean") {
+        foundItem.Acc_Inactive__c = item.Acc_Inactive__c;
+      }
+      if (typeof item.Acc_New_Team_Member__c === "boolean") {
+        foundItem.Acc_New_Team_Member__c = item.Acc_New_Team_Member__c;
+      }
+      if (typeof item.Acc_Send_invitation__c === "boolean") {
+        foundItem.Acc_Send_invitation__c = item.Acc_Send_invitation__c;
+      }
     }
+
+    return Promise.resolve(true);
+  }
+}
+
+class ExternalContactTestRepository
+  extends TestRepository<ISalesforceExternalContact>
+  implements IExternalContactsRepository
+{
+  private getById(pclId: ContactId): Promise<ISalesforceExternalContact> {
+    return super.getOne(x => x.Id === pclId);
+  }
+  async update(contact: ISalesforceExternalContact): Promise<boolean> {
+    const foundItem = await this.getById(contact.Id);
+    if (!foundItem) return Promise.resolve(false);
+    foundItem.FirstName = contact.FirstName;
+    foundItem.LastName = contact.LastName;
 
     return Promise.resolve(true);
   }
@@ -757,6 +817,13 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return Promise.resolve();
   }
 
+  updateManageTeamMemberPcr(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _pcr: Pick<ManageTeamMemberPcrDto, "id" | "firstName" | "lastName" | "email" | "organisation">,
+  ): Promise<void> {
+    return Promise.resolve();
+  }
+
   updateItems(pcr: ProjectChangeRequestEntity, pcrItems: ProjectChangeRequestItemEntity[]) {
     pcr.items = pcr.items.map(existingItem => {
       const updatedItem = pcrItems.find(x => x.id === existingItem.id);
@@ -821,6 +888,10 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return id;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  createStandaloneProjectChangeRequest(_: { projectId: ProjectId; recordTypeId: string; status: PCRStatus }) {
+    return Promise.resolve("new_PcrId" as PcrId);
+  }
   isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean> {
     const data = super.filterOne(x => x.projectId === projectId && x.id === projectChangeRequestId);
     return Promise.resolve(!!data);
@@ -1049,6 +1120,7 @@ export interface ITestRepositories extends IRepositories {
   projects: ProjectsTestRepository;
   partners: PartnerTestRepository;
   projectContacts: ProjectContactTestRepository;
+  externalContacts: ExternalContactTestRepository;
   claimTotalCostCategory: ClaimTotalCostTestRepository;
   permissionGroups: PermissionGroupTestRepository;
   recordTypes: RecordTypeTestRepository;
@@ -1086,6 +1158,7 @@ export const createTestRepositories = (): ITestRepositories => {
     projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(projectChangeRequests),
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),
+    externalContacts: new ExternalContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
     permissionGroups: new PermissionGroupTestRepository(),
     recordTypes: new RecordTypeTestRepository(),

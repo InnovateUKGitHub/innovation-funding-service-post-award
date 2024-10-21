@@ -23,9 +23,10 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { noop } from "lodash";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
+import { ContentSelector } from "@copy/type";
 
 export interface PcrSpendProfileCostSummaryParams {
   projectId: ProjectId;
@@ -109,6 +110,7 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
           pcrId={pcrId}
           projectId={projectId}
           costCategoryId={costCategoryId}
+          caption={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
         />
         <Form data-qa="submit_costs" onSubmit={handleSubmit(data => onUpdate({ data, context: { link: stepRoute } }))}>
           <Fieldset>
@@ -130,13 +132,24 @@ type SummaryTableProps = {
   pcrId: PcrId;
   projectId: ProjectId;
   costCategoryId: CostCategoryId;
+  caption: ContentSelector;
 };
-const SummaryTable = ({ costs, costCategory, routes, itemId, pcrId, projectId, costCategoryId }: SummaryTableProps) => {
+const SummaryTable = ({
+  costs,
+  costCategory,
+  routes,
+  itemId,
+  pcrId,
+  projectId,
+  costCategoryId,
+  caption,
+}: SummaryTableProps) => {
   const { getContent } = useContent();
   const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
 
   return (
     <Table>
+      <TCaption>{getContent(caption)}</TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.pcrSpendProfileCostsSummary.table.description)}</TH>

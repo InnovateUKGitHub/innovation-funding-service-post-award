@@ -21,6 +21,7 @@ import {
   PCRItemForApproveNewSubcontractorDto,
 } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -133,6 +134,7 @@ describe("GetPCRByIdQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
+      developerName: ProjectChangeRequest.partnerWithdrawal,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
@@ -148,6 +150,7 @@ describe("GetPCRByIdQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
+      developerName: ProjectChangeRequest.partnerWithdrawal,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });

@@ -1068,7 +1068,7 @@ export const claimReviewUploadDocument = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Invoice");
   cy.clickOn("Upload documents");
-  cy.validationNotification("Your document has been uploaded");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const claimReviewCheckForNewDoc = () => {

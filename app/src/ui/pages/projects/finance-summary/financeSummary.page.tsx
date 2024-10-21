@@ -53,7 +53,12 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
         qa="financeSummarySection"
       >
         <Section title={content.projectCostsLabel}>
-          <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={footerTotalValues}>
+          <FinanceSummaryTable.Table
+            caption={content.projectCostsLabel}
+            data={partnersToShow}
+            qa="ProjectCostsToDate"
+            footers={footerTotalValues}
+          >
             <FinanceSummaryTable.Custom
               hideHeader
               qa="Partner"
@@ -82,7 +87,11 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
         </Section>
 
         <Section title={content.partnerFinanceDetailsTitle}>
-          <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
+          <FinanceSummaryTable.Table
+            caption={content.partnerFinanceDetailsTitle}
+            data={partnersToShow}
+            qa="PartnerFinanceDetails"
+          >
             <FinanceSummaryTable.Custom
               hideHeader
               qa="Partner"
@@ -130,7 +139,11 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
           </FinanceSummaryTable.Table>
         </Section>
         <Section title={content.accountantsReportTitle}>
-          <FinanceSummaryTable.Table qa="WhenAnIarIsNeeded" data={partnersToShow}>
+          <FinanceSummaryTable.Table
+            caption={content.accountantsReportTitle}
+            qa="WhenAnIarIsNeeded"
+            data={partnersToShow}
+          >
             <FinanceSummaryTable.Custom
               qa="Partner"
               hideHeader

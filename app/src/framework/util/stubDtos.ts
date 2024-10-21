@@ -64,7 +64,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
   const stubPartner: PartnerDto = {
     id: "a0D0C000001AEZzUAO" as PartnerId,
     name: "Test account 2A",
-    accountId: "0010C00000AtnOAQAZ",
+    accountId: "0010C00000AtnOAQAZ" as AccountId,
     type: "Business",
     postcode: "BS1 6AC",
     postcodeStatusLabel: "To do",
@@ -1248,6 +1248,7 @@ export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) =>
     started: new Date(),
     lastUpdated: new Date(),
     status: 1,
+    manageTeamMemberStatus: 1,
     statusName: "Draft",
     projectId: "a0E0C000001zU2tUAE" as ProjectId,
     items: [

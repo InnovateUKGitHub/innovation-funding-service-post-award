@@ -1,8 +1,9 @@
 import {
   getPcrItemsSingleInstanceInAnyPcrViolations,
   getPcrItemsSingleInstanceInThisPcrViolations,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
   getPcrItemsTooManyViolations,
+  getPcrItemsExclusivityViolations,
 } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
@@ -52,25 +53,28 @@ export class GetAvailableItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItem
     const nonDuplicatableItemTypesInAnyPcr = getPcrItemsSingleInstanceInAnyPcrViolations(projectPcrs);
     const nonDuplicatableItemTypesInThisPcr = getPcrItemsSingleInstanceInThisPcrViolations(currentPcr);
     const tooManyItemTypes = getPcrItemsTooManyViolations(partners.length, currentPcr);
+    const exclusiveItemTypes = getPcrItemsExclusivityViolations(currentPcr);
 
     return itemTypeDtos.reduce<PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 
-      let disabledReason = PCRItemDisabledReason.None;
+      let hiddenReason = PCRItemHiddenReason.None;
 
-      if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
+      if (exclusiveItemTypes.includes(pcrItem.type)) {
+        hiddenReason = PCRItemHiddenReason.Exclusive;
+      } else if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
+        hiddenReason = PCRItemHiddenReason.ThisPcrAlreadyHasThisType;
       } else if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
+        hiddenReason = PCRItemHiddenReason.AnotherPcrAlreadyHasThisType;
       } else if (tooManyItemTypes.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
+        hiddenReason = PCRItemHiddenReason.NotEnoughPartnersToActionThisType;
       }
 
       return validPcrItems.concat({
         ...pcrItem,
-        disabled: disabledReason !== PCRItemDisabledReason.None,
-        disabledReason,
+        hidden: hiddenReason !== PCRItemHiddenReason.None,
+        hiddenReason,
       });
     }, []);
   }

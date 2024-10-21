@@ -6,9 +6,77 @@ import {
   PCRProjectRole,
   PCRItemType,
   PCRContactRole,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
+import { ProjectRole, ProjectRoleName } from "@framework/dtos/projectContactDto";
+
+export const mapToPCRManageTeamMemberType = (type: unknown): ManageTeamMemberMethod => {
+  switch (type) {
+    case "Invite":
+      return ManageTeamMemberMethod.CREATE;
+    case "Replace":
+      return ManageTeamMemberMethod.REPLACE;
+    case "Update":
+      return ManageTeamMemberMethod.UPDATE;
+    case "Remove":
+      return ManageTeamMemberMethod.DELETE;
+    default:
+      return ManageTeamMemberMethod.UNKNOWN;
+  }
+};
+
+export const mapToSalesforcePCRManageTeamMemberType = (
+  type: ManageTeamMemberMethod | undefined | null,
+): string | null | undefined => {
+  switch (type) {
+    case ManageTeamMemberMethod.CREATE:
+      return "Invite";
+    case ManageTeamMemberMethod.REPLACE:
+      return "Replace";
+    case ManageTeamMemberMethod.UPDATE:
+      return "Update";
+    case ManageTeamMemberMethod.DELETE:
+      return "Remove";
+    case ManageTeamMemberMethod.UNKNOWN:
+    case null:
+      return null;
+    case undefined:
+    default:
+      return undefined;
+  }
+};
+
+export const mapProjectRoleToInternal = (type: string | undefined | null): ProjectRole | null | undefined => {
+  switch (type) {
+    case ProjectRoleName.ProjectManager:
+      return ProjectRole.PROJECT_MANAGER;
+    case ProjectRoleName.FinanceContact:
+      return ProjectRole.FINANCE_CONTACT;
+    case ProjectRoleName.MainCompanyContact:
+      return ProjectRole.MAIN_COMPANY_CONTACT;
+    case ProjectRoleName.Associate:
+      return ProjectRole.ASSOCIATE;
+    case ProjectRoleName.KBAdmin:
+      return ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR;
+  }
+};
+
+export const mapProjectRoleToName = (type: ProjectRole | undefined | null): ProjectRoleName | null | undefined => {
+  switch (type) {
+    case ProjectRole.PROJECT_MANAGER:
+      return ProjectRoleName.ProjectManager;
+    case ProjectRole.FINANCE_CONTACT:
+      return ProjectRoleName.FinanceContact;
+    case ProjectRole.MAIN_COMPANY_CONTACT:
+      return ProjectRoleName.MainCompanyContact;
+    case ProjectRole.ASSOCIATE:
+      return ProjectRoleName.Associate;
+    case ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR:
+      return ProjectRoleName.KBAdmin;
+  }
+};
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {
@@ -174,9 +242,12 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.ApproveNewSubcontractor;
     case ProjectChangeRequest.uplift:
       return PCRItemType.Uplift;
+    case ProjectChangeRequest.manageTeamMembers:
+      return PCRItemType.ManageTeamMembers;
 
     // Request header
     case ProjectChangeRequest.requestHeader:
+    case ProjectChangeRequest.manageTeamMemberRequestHeader:
     case ProjectChangeRequest.projectChangeRequests:
       return PCRItemType.Unknown;
   }
@@ -220,6 +291,8 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.ApproveNewSubcontractor;
     case "uplift":
       return PCRItemType.Uplift;
+    case "manage team members":
+      return PCRItemType.ManageTeamMembers;
 
     default:
       return PCRItemType.Unknown;

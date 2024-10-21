@@ -3,7 +3,7 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/d
 import { getAuthRoles } from "@framework/types/authorisation";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/molecules/Content/content";
-import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { Caption, createTypedTable } from "@ui/components/molecules/Table/Table";
 import { DocumentsBase } from "../utils/documents.interface";
 import { DocumentsUnavailable } from "../DocumentsUnavailable/DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "../DocumentView/DocumentView";
@@ -16,17 +16,25 @@ export interface DocumentTableProps<T extends DocumentSummaryDto> extends Docume
   customContent?: (
     table: ReturnType<typeof createTypedTable<T>>,
   ) => UnwrapArray<Parameters<ReturnType<typeof createTypedTable<T>>["Table"]>["0"]["children"]>;
+  caption?: Caption;
 }
 
 export const DocumentTable = <T extends DocumentSummaryDto>({
   documents = [],
   qa,
   customContent,
+  caption = "Uploaded documents table",
 }: DocumentTableProps<T>) => {
   const ProjectDocumentsTable = createTypedTable<T>();
 
   return (
-    <ProjectDocumentsTable.Table data={documents} qa={qa} initialSortKey="dateCreated" initialSortState="descending">
+    <ProjectDocumentsTable.Table
+      data={documents}
+      qa={qa}
+      initialSortKey="dateCreated"
+      initialSortState="descending"
+      caption={caption}
+    >
       <ProjectDocumentsTable.Custom
         sortByKey="fileName"
         header="File name"

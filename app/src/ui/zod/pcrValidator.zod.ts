@@ -1,4 +1,4 @@
-import { PCRItemDisabledReason, pcrItems, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemHiddenReason, pcrItems, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { z } from "zod";
@@ -6,7 +6,7 @@ import { FormTypes } from "./FormTypes";
 import { pcrIdValidation, projectIdValidation } from "./helperValidators/helperValidators.zod";
 
 interface PCRValidatorExtraProps {
-  pcrItemInfo: Pick<PCRItemTypeDto, "type" | "disabled" | "disabledReason" | "displayName">[];
+  pcrItemInfo: Pick<PCRItemTypeDto, "type" | "hidden" | "hiddenReason" | "displayName">[];
   numberOfPartners: number;
   currentPcrItems: { type: PCRItemType }[];
 }
@@ -25,13 +25,14 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
 
   const createIssue = (
     i18n: string,
-    { type, path }: { type?: string; path?: (string | number)[] } = {},
+    { type, path, params }: { type?: string; path?: (string | number)[]; params?: AnyObject } = {},
   ): z.IssueData => ({
     code: z.ZodIssueCode.custom,
     fatal: true,
     params: {
       i18n,
       type,
+      ...params,
     },
     path,
   });
@@ -43,16 +44,19 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
           const currentOption = pcrItemInfo.find(x => x.type === val);
 
           if (currentOption) {
-            switch (currentOption.disabledReason) {
-              case PCRItemDisabledReason.AnotherPcrAlreadyHasThisType:
+            switch (currentOption.hiddenReason) {
+              case PCRItemHiddenReason.Exclusive:
+                ctx.addIssue(createIssue("errors.exclusive", { type: currentOption.displayName }));
+                break;
+              case PCRItemHiddenReason.AnotherPcrAlreadyHasThisType:
                 ctx.addIssue(
                   createIssue("errors.another_pcr_already_has_this_type", { type: currentOption.displayName }),
                 );
                 break;
-              case PCRItemDisabledReason.ThisPcrAlreadyHasThisType:
+              case PCRItemHiddenReason.ThisPcrAlreadyHasThisType:
                 ctx.addIssue(createIssue("errors.this_pcr_already_has_this_type", { type: currentOption.displayName }));
                 break;
-              case PCRItemDisabledReason.NotEnoughPartnersToActionThisType:
+              case PCRItemHiddenReason.NotEnoughPartnersToActionThisType:
                 ctx.addIssue(
                   createIssue("errors.not_enough_partners_to_action_this_type", { type: currentOption.displayName }),
                 );
@@ -62,14 +66,12 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
         })
         .refine(
           x =>
-            !pcrItemInfo.some(
-              y => x === y.type && y.disabledReason === PCRItemDisabledReason.AnotherPcrAlreadyHasThisType,
-            ),
+            !pcrItemInfo.some(y => x === y.type && y.hiddenReason === PCRItemHiddenReason.AnotherPcrAlreadyHasThisType),
         )
         .refine(
           x =>
             !pcrItemInfo.some(
-              y => x === y.type && y.disabledReason === PCRItemDisabledReason.NotEnoughPartnersToActionThisType,
+              y => x === y.type && y.hiddenReason === PCRItemHiddenReason.NotEnoughPartnersToActionThisType,
             ),
         ),
     )
@@ -80,6 +82,23 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
       let removeSelected = false;
 
       for (const selectedVal of vals) {
+        for (const type of pcrItemTypes) {
+          if (type.type === selectedVal && type.exclusive) {
+            if (vals.length > 1) {
+              ctx.addIssue(
+                createIssue("errors.exclusive", {
+                  params: {
+                    types: pcrItemInfo
+                      .filter(x => x?.type !== type.type && vals.includes(x.type))
+                      .map(x => x?.displayName),
+                    type: pcrItemInfo.find(x => x?.type === type.type)?.displayName,
+                  },
+                }),
+              );
+            }
+          }
+        }
+
         if (selectedVal === PCRItemType.PartnerAddition) additionSelected = true;
         if (selectedVal === PCRItemType.AccountNameChange) renameSelected = true;
         if (selectedVal === PCRItemType.PartnerWithdrawal) removeSelected = true;

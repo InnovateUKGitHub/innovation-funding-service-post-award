@@ -327,6 +327,7 @@ declare global {
         cleanup: boolean,
         pcr: boolean,
         loans: boolean,
+        jsdisabled?: boolean,
         pcrArea?: string,
       ): void;
 

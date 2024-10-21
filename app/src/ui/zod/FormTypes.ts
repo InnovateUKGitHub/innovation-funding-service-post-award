@@ -11,6 +11,7 @@ enum FormTypes {
   ClaimForecastSaveAndQuit = "claimForecastSaveAndQuit",
   ClaimLineItemSaveAndDocuments = "claimLineItemSaveAndDocuments",
   ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
+  ClaimSummary = "claimSummary",
 
   // Project Setup
   ProjectSetup = "projectSetup",
@@ -26,6 +27,12 @@ enum FormTypes {
   // Partner details
 
   PartnerDetailsEdit = "partnerDetailsEdit",
+
+  // Project Replace a Team Member
+  ProjectManageTeamMembersCreate = "projectManageTeamMembersCreate",
+  ProjectManageTeamMembersUpdate = "projectManageTeamMembersUpdate",
+  ProjectManageTeamMembersReplace = "projectManageTeamMembersReplace",
+  ProjectManageTeamMembersDelete = "projectManageTeamMembersDelete",
 
   // Forecast Tile
   ForecastTileForecast = "forecastTileForecast",

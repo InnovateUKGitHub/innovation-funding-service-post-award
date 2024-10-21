@@ -26,7 +26,15 @@ export const pcrReviewQuery = graphql`
           }
           Acc_ProjectChangeRequest__c(
             first: 2000
-            where: { Acc_Project__c: { eq: $projectId }, RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } } }
+            where: {
+              Acc_Project__c: { eq: $projectId }
+              RecordType: {
+                or: [
+                  { DeveloperName: { eq: "Acc_RequestHeader" } }
+                  { DeveloperName: { eq: "Acc_Request_Header_Manage_Team_Members" } }
+                ]
+              }
+            }
             orderBy: { Acc_RequestNumber__c: { order: DESC } }
           ) {
             edges {

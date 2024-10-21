@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { ContactsTable, IContactsTable } from "@ui/components/organisms/partners/ContactsTable/contactsTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { getColumnValues } from "@tests/test-utils/tableHelpers";
 
 describe("<ContactsTable />", () => {
@@ -18,6 +18,7 @@ describe("<ContactsTable />", () => {
   const setup = (props?: Omit<IContactsTable, "projectContactLabels">) => {
     const defaultProps: IContactsTable = {
       contacts: [],
+      caption: "stub-caption",
     };
 
     return render(
@@ -43,32 +44,48 @@ describe("<ContactsTable />", () => {
     it("when contacts are provided", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
           associateStartDate: null,
+          firstName: "Ted",
+          lastName: "Tester",
+          edited: false,
+          replaced: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
         {
-          id: "101" as ContactId,
+          id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
-          role: "Project Manager",
+          role: ProjectRoleName.ProjectManager,
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
           associateStartDate: null,
+          firstName: "Dave",
+          lastName: "Developer",
+          edited: false,
+          replaced: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 
-      const { queryByText, queryByTestId } = setup({ contacts: stubContacts });
+      const { queryByText, queryByTestId } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       const noContactsElement = queryByText(stubContent.projectContactLabels.noContactsMessage);
       const contactsTable = queryByTestId("contacts-table-details");
@@ -80,20 +97,28 @@ describe("<ContactsTable />", () => {
     it("with valid form data", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
           associateStartDate: null,
+          firstName: "Ted",
+          lastName: "Tester",
+          edited: false,
+          replaced: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 
-      const { queryByText } = setup({ contacts: stubContacts });
+      const { queryByText } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       for (const contact of stubContacts) {
         expect(queryByText(contact.name)).toBeInTheDocument();
@@ -105,32 +130,48 @@ describe("<ContactsTable />", () => {
     it("with correct table layout", () => {
       const stubContacts: ProjectContactDto[] = [
         {
-          id: "100" as ContactId,
+          id: "100" as ProjectContactLinkId,
           name: "Ted Tester",
-          role: "Finance contact",
+          role: ProjectRoleName.FinanceContact,
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "321" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
           associateStartDate: null,
+          firstName: "Ted",
+          lastName: "Tester",
+          edited: false,
+          replaced: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
         {
-          id: "101" as ContactId,
+          id: "101" as ProjectContactLinkId,
           name: "Dave Developer",
-          role: "Project Manager",
+          role: ProjectRoleName.ProjectManager,
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
+          contactId: "892" as ContactId,
           accountId: "312" as AccountId,
           projectId: "456" as ProjectId,
           startDate: null,
           endDate: null,
           associateStartDate: null,
+          firstName: "Dave",
+          lastName: "Developer",
+          edited: false,
+          replaced: false,
+          inactive: false,
+          newTeamMember: false,
+          sendInvitation: false,
         },
       ];
 
-      const { container } = setup({ contacts: stubContacts });
+      const { container } = setup({ contacts: stubContacts, caption: "stub-caption" });
 
       const getValueByColumnName = (columnName: string) =>
         getColumnValues(container, "contacts-table-details", columnName).map(x => x.innerHTML);

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e7170ff523fdf74b4aa1485fbdf7b12d>>
+ * @generated SignedSource<<ebb654670d32e3c328ee1666152711e4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,12 @@ export type UserSwitcherProjectQuery$data = {
                         readonly value: string | null | undefined;
                       } | null | undefined;
                       readonly username: string | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_EndDate__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly Acc_Inactive__c: {
+                      readonly value: boolean | null | undefined;
                     } | null | undefined;
                     readonly Acc_Role__c: {
                       readonly value: string | null | undefined;
@@ -212,6 +218,26 @@ v3 = [
                                       {
                                         "alias": null,
                                         "args": null,
+                                        "concreteType": "BooleanValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_Inactive__c",
+                                        "plural": false,
+                                        "selections": (v1/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "DateValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_EndDate__c",
+                                        "plural": false,
+                                        "selections": (v1/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
                                         "concreteType": "Contact",
                                         "kind": "LinkedField",
                                         "name": "Acc_ContactId__r",
@@ -313,16 +339,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "d763ec8249a2a2df616519efe50c2ce3",
+    "cacheID": "149c6e71e7a0e61a7784d9d641e502aa",
     "id": null,
     "metadata": {},
     "name": "UserSwitcherProjectQuery",
     "operationKind": "query",
-    "text": "query UserSwitcherProjectQuery(\n  $projectId: ID\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Contact_Links__r(orderBy: {Acc_ContactId__r: {Name: {order: ASC}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      username\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                      Username {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query UserSwitcherProjectQuery(\n  $projectId: ID\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Contact_Links__r(orderBy: {Acc_ContactId__r: {Name: {order: ASC}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_Inactive__c {\n                      value\n                    }\n                    Acc_EndDate__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      username\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                      Username {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e8203377047071afebc623c59389fb0c";
+(node as any).hash = "1b20ad15af3dcba77acadba64dc68152";
 
 export default node;

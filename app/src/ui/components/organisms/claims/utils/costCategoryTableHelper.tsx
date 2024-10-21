@@ -9,6 +9,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { roundCurrency, diffAsPercentage } from "@framework/util/numberHelper";
 import { Link } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
+import { Caption } from "@ui/components/molecules/Table/Table";
 import { Result } from "@ui/validation/result";
 import { useMemo } from "react";
 
@@ -60,6 +61,7 @@ export interface ClaimTableProps {
   getLink: (costCategoryId: CostCategoryId) => ILinkInfo | null;
   validation?: Result;
   disabled?: boolean;
+  caption: Caption;
 }
 /**
  * creates the table data

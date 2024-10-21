@@ -1,5 +1,6 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
@@ -15,6 +16,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -50,6 +52,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
     const pcrItem2 = context.testData.createPCRItem(pcr2, pcrRecordType);
@@ -72,6 +75,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -109,6 +113,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -131,6 +136,7 @@ describe("authorisation", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -151,6 +157,7 @@ describe("authorisation", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -171,6 +178,7 @@ describe("authorisation", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -192,6 +200,7 @@ describe("authorisation", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -213,6 +222,7 @@ describe("authorisation", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 

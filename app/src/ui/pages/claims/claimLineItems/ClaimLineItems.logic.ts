@@ -81,7 +81,13 @@ const useClaimLineItemsData = (
     claimsGql,
     ["isAuthor", "value", "comments"],
     ["id", "isAuthor", "lastModifiedDate", "value", "description"],
-    { currentUser: Object.assign({}, { email: "unknown email", isSystemUser: false }, data?.currentUser) },
+    {
+      currentUser: Object.assign(
+        {},
+        { email: "unknown email", userId: "unknown user id", isSystemUser: false },
+        data?.currentUser,
+      ),
+    },
   );
 
   const claimDetails = head(claimsDetails) || {

@@ -77,7 +77,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
                         }
                       }
                     }
-                    Project_Contact_Links__r(first: 500) {
+                    Project_Contact_Links__r(first: 500, where: { Acc_Inactive__c: { ne: true } }) {
                       edges {
                         node {
                           Acc_Role__c {

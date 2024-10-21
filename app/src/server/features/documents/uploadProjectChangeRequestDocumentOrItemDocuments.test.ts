@@ -5,6 +5,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ValidationError } from "@shared/appError";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 
 describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
   it("should upload a project change request item document", async () => {
@@ -15,6 +16,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -70,6 +72,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -98,6 +101,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -122,6 +126,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -147,6 +152,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -172,6 +178,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -195,6 +202,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -216,6 +224,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
 
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
@@ -240,6 +249,7 @@ describe("Access control", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -269,6 +279,7 @@ describe("Access control", () => {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
+      developerName: ProjectChangeRequest.changeProjectScope,
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 

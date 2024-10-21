@@ -40,6 +40,7 @@ import { IProjectRepository } from "@server/repositories/projectsRepository";
 import { IRecordTypeRepository } from "@server/repositories/recordTypeRepository";
 import { Cache } from "@server/features/common/cache";
 import { Option } from "@framework/dtos/option";
+import { IExternalContactsRepository } from "@server/repositories/externalContactRepository";
 
 export interface IRepositories {
   readonly accounts: IAccountsRepository;
@@ -65,6 +66,7 @@ export interface IRepositories {
   readonly projects: IProjectRepository;
   readonly partners: IPartnerRepository;
   readonly projectContacts: IProjectContactsRepository;
+  readonly externalContacts: IExternalContactsRepository;
   readonly claimLineItems: IClaimLineItemRepository;
   readonly claimTotalCostCategory: IClaimTotalCostCategoryRepository;
   readonly permissionGroups: IPermissionGroupRepository;

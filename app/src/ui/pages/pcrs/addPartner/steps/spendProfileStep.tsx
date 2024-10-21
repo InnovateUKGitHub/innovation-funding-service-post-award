@@ -6,7 +6,7 @@ import { H2 } from "@ui/components/atoms/Heading/Heading.variants";
 import { Link } from "@ui/components/atoms/Links/links";
 import { Section } from "@ui/components/atoms/Section/Section";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { Content } from "@ui/components/molecules/Content/content";
 import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
@@ -53,6 +53,7 @@ export const SpendProfileStep = () => {
         <H2>{getContent(x => x.pcrAddPartnerLabels.projectCostsHeading)}</H2>
         <Section>
           <Table>
+            <TCaption>{getContent(x => x.pages.pcrAddPartnerSpendProfile.tableCaption)}</TCaption>
             <THead>
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.categoryHeading)}</TH>

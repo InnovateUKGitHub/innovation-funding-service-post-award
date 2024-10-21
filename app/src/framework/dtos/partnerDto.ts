@@ -49,7 +49,7 @@ export interface PartnerBankDetailsDto {
 }
 
 export interface PartnerDto {
-  accountId: string;
+  accountId: AccountId;
   auditReportFrequencyName: string;
   awardRate: number | null;
   bankCheckRetryAttempts: number;

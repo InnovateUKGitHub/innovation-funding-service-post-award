@@ -1,4 +1,4 @@
-import { PCRItemType, PCRItemDisabledReason, pcrItemTypes, IMetaValue } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRItemHiddenReason, pcrItemTypes, IMetaValue } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
@@ -8,6 +8,8 @@ import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
 export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTypeDto[]> {
   public readonly runnableName: string = "GetAllPCRItemTypesQuery";
+  public standalonePcrTypes = [PCRItemType.ManageTeamMembers];
+
   constructor(public readonly projectId: ProjectId) {
     super();
   }
@@ -20,10 +22,12 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
       type: metaInfo.type,
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),
-      disabled: false,
-      disabledReason: PCRItemDisabledReason.None,
-      recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
+      hidden: false,
+      hiddenReason: PCRItemHiddenReason.None,
+      developerRecordTypeName: metaInfo.developerRecordTypeName,
+      recordTypeId: this.findRecordType(metaInfo.developerRecordTypeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
+      standalone: this.standalonePcrTypes.includes(metaInfo.type),
     }));
   }
 
@@ -47,8 +51,8 @@ export class GetAllPCRItemTypesQuery extends AuthorisedAsyncQueryBase<PCRItemTyp
     return true;
   }
 
-  private findRecordType(typeName: string, recordTypes: RecordType[]): string {
-    const recordType = recordTypes.find(y => y.type === typeName);
+  private findRecordType(developerName: string, recordTypes: RecordType[]): string {
+    const recordType = recordTypes.find(y => y.developerName === developerName);
     return recordType?.id || "Unknown";
   }
 }

@@ -8,6 +8,7 @@ export interface ISalesforceRecordType {
   Id: string;
   Name: string;
   SobjectType: string;
+  DeveloperName: string;
 }
 
 export interface IRecordTypeRepository {
@@ -31,7 +32,7 @@ export class RecordTypeRepository
 
   protected readonly salesforceObjectName = "RecordType";
 
-  protected readonly salesforceFieldNames = ["Id", "Name", "SobjectType"];
+  protected readonly salesforceFieldNames = ["Id", "Name", "SobjectType", "DeveloperName"];
 
   async getAll() {
     return super.all();

@@ -135,7 +135,12 @@ const ViewTable = ({
       return <OtherCostsSummary costs={costs as PCRSpendProfileOtherCostsDto[]} costCategory={costCategory} />;
     default:
       return (
-        <PCRSpendProfileCostTable.Table qa="default-costs" data={costs} footers={getFooters(costs, costCategory, 2)}>
+        <PCRSpendProfileCostTable.Table
+          qa="default-costs"
+          data={costs}
+          footers={getFooters(costs, costCategory, 2)}
+          caption={costCategory.name}
+        >
           <PCRSpendProfileCostTable.String
             header={x => x.pcrSpendProfileLabels.description}
             value={x => x.description}
@@ -162,7 +167,12 @@ const LabourCostSummary = ({
   costCategory: Pick<CostCategoryDto, "name">;
 }) => {
   return (
-    <PCRSpendProfileLabourCostTable.Table qa="labour-costs" data={costs} footers={getFooters(costs, costCategory, 5)}>
+    <PCRSpendProfileLabourCostTable.Table
+      qa="labour-costs"
+      data={costs}
+      footers={getFooters(costs, costCategory, 5)}
+      caption={costCategory.name}
+    >
       <PCRSpendProfileLabourCostTable.String
         header={x => x.pcrSpendProfileLabels.labour.role}
         value={x => x.description}
@@ -204,6 +214,7 @@ const MaterialsCostSummary = ({
       qa="materials-costs"
       data={costs}
       footers={getFooters(costs, costCategory, 4)}
+      caption={costCategory.name}
     >
       <PCRSpendProfileMaterialsCostTable.String
         header={x => x.pcrSpendProfileLabels.materials.item}
@@ -244,6 +255,7 @@ const CapitalUsageCostSummary = ({
       qa="capital-usage-costs"
       data={costs}
       footers={getFooters(costs, costCategory, 7)}
+      caption={costCategory.name}
     >
       <PCRSpendProfileCapitalUsageCostTable.String
         header={x => x.pcrSpendProfileLabels.capitalUsage.description}
@@ -299,6 +311,7 @@ const SubcontractingCostSummary = ({
       qa="subcontracting-costs"
       data={costs}
       footers={getFooters(costs, costCategory, 4)}
+      caption={costCategory.name}
     >
       <PCRSpendProfileSubcontractingCostTable.String
         header={x => x.pcrSpendProfileLabels.subcontracting.subcontractorName}
@@ -336,6 +349,7 @@ const TravelAndSubsistenceCostSummary = ({
       qa="travel-and-subs-costs"
       data={costs}
       footers={getFooters(costs, costCategory, 4)}
+      caption={costCategory.name}
     >
       <PCRSpendProfileTravelAndSubsCostTable.String
         header={x => x.pcrSpendProfileLabels.travelAndSubs.description}
@@ -369,7 +383,12 @@ const OtherCostsSummary = ({
   costCategory: Pick<CostCategoryDto, "name">;
 }) => {
   return (
-    <PCRSpendProfileOtherCosts.Table qa="other-costs" data={costs} footers={getFooters(costs, costCategory, 2)}>
+    <PCRSpendProfileOtherCosts.Table
+      qa="other-costs"
+      data={costs}
+      footers={getFooters(costs, costCategory, 2)}
+      caption={costCategory.name}
+    >
       <PCRSpendProfileOtherCosts.String
         header={x => x.pcrSpendProfileLabels.otherCosts.description}
         value={x => x.description}

@@ -239,6 +239,8 @@ export class TestData {
         return "Project Manager";
       case "Associate":
         return "Associate";
+      default:
+        throw new Error("Get role name can not handle role: " + role);
     }
   }
 
@@ -254,16 +256,17 @@ export class TestData {
     const seed = this.repositories.projectContacts.Items.length + 1;
 
     const newItem: ISalesforceProjectContact = {
-      Id: `ProjectContact${seed}` as ContactId,
+      Id: `ProjectContact${seed}` as ProjectContactLinkId,
       Acc_ProjectId__c: project.Id,
       Acc_AccountId__c: ((partner && partner.accountId) || undefined) as AccountId,
       Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
       Acc_ContactId__r: {
-        Id: "Contact" + seed,
+        Id: ("Contact" + seed) as ContactId,
         Name: `Ms Contact ${seed}`,
         Email: `projectcontact${seed}@login.com`,
       },
       Acc_UserId__r: {
+        Id: "User" + seed,
         Name: "Mr Internal Contact",
         Username: `projectcontact${seed}@login.com.bjssdev`,
       },
@@ -272,6 +275,12 @@ export class TestData {
       Acc_StartDate__c: null,
       Acc_EndDate__c: null,
       Associate_Start_Date__c: null,
+      Acc_Inactive__c: false,
+      Acc_New_Team_Member__c: false,
+      Acc_Send_invitation__c: false,
+      Acc_Edited__c: false,
+      Acc_Replaced__c: false,
+      Acc_UserId__c: "User" + seed,
     };
 
     if (update) {
@@ -284,7 +293,7 @@ export class TestData {
   }
 
   private assignToCurrentUser(item: ISalesforceProjectContact) {
-    item.Acc_ContactId__r.Email = this.getCurrentUser().email;
+    item.Acc_ContactId__r!.Email = this.getCurrentUser().email;
   }
 
   public createFinanceContact(
@@ -763,13 +772,14 @@ export class TestData {
     return new TestFileWrapper(fileName, content, description);
   }
 
-  public createRecordType(update?: Partial<RecordType>) {
+  public createRecordType(update?: PickRequiredFromPartial<RecordType, "developerName">) {
     const seed = this.repositories.recordTypes.Items.length + 1;
 
     const newItem: RecordType = {
       id: "RecordType " + seed,
       type: "Type " + seed,
       parent: "Parent " + seed,
+      developerName: "DeveloperName " + seed,
     };
 
     if (update) {
@@ -794,12 +804,15 @@ export class TestData {
       .filter(x => typeof competitionType === "undefined" || !x.ignoredCompetitions.includes(competitionType))
       .map(x => {
         const parent = "Acc_ProjectChangeRequest__c";
-        const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
+        const existing = this.repositories.recordTypes.Items.find(
+          r => r.parent === parent && r.developerName === x.developerRecordTypeName,
+        );
         return (
           existing ||
           this.createRecordType({
             parent,
             type: x.typeName,
+            developerName: x.developerRecordTypeName,
           })
         );
       });
@@ -816,6 +829,7 @@ export class TestData {
       comments: "",
       number: seed,
       status: PCRStatus.Unknown,
+      manageTeamMemberStatus: PCRStatus.Unknown,
       statusName: PCRStatus[PCRStatus.Unknown],
       started: new Date(),
       updated: new Date(),
@@ -855,6 +869,7 @@ export class TestData {
       pcrId: pcr.id,
       accountName: "",
       recordTypeId: recordType.id,
+      developerRecordTypeName: recordType.developerName,
       projectId: pcr.projectId,
       typeOfAid: TypeOfAid.Unknown,
       offsetMonths: 0,

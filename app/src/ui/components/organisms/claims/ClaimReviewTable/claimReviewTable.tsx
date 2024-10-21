@@ -9,7 +9,12 @@ export const ClaimReviewTable = (props: ClaimTableProps) => {
   const { costCategories } = useCreateTableData(props);
 
   return (
-    <CostCategoriesTable.Table qa="cost-cat" data={costCategories} validationResult={props.validation}>
+    <CostCategoriesTable.Table
+      qa="cost-cat"
+      data={costCategories}
+      validationResult={props.validation}
+      caption={props.caption}
+    >
       <CostCategoriesTable.Custom
         qa="category"
         header={getContent(x => x.pages.claimsComponents.categoryLabel)}

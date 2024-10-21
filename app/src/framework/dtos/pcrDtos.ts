@@ -8,10 +8,12 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
+  ManageTeamMemberMethod,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { ProjectRole } from "./projectContactDto";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -20,6 +22,7 @@ interface PCRBaseDto {
   requestNumber: number;
   started: Date;
   status: PCRStatus;
+  manageTeamMemberStatus: PCRStatus;
   statusName: string;
 }
 
@@ -41,15 +44,22 @@ export interface PCRDto extends PCRBaseDto {
   reasoningStatusName: string;
 }
 
-interface PCRItemBaseDto extends PCRItemSummaryDto {
+export interface StandalonePcrDto extends PCRBaseDto {
+  type: PCRItemType;
+}
+
+export interface PCRItemBaseDto extends PCRItemSummaryDto {
   guidance?: string;
   id: PcrItemId;
   status: PCRItemStatus;
   statusName: string;
 }
 
-export type CreatePcrItemDto = Pick<PCRItemDto, "type" | "status">;
-export type CreatePcrDto = Pick<PCRDto, "projectId" | "reasoningStatus" | "status"> & {
+export type CreatePcrItemDto = PickRequiredFromPartial<PCRItemDto, "type" | "status">;
+export type CreatePcrDto = Omit<
+  Pick<PCRDto, "projectId" | "reasoningStatus" | "status" | "manageTeamMemberStatus">,
+  "items"
+> & {
   items: CreatePcrItemDto[];
 };
 
@@ -66,7 +76,8 @@ export type PCRItemDto =
   | PCRItemForScopeChangeDto
   | PCRItemForTimeExtensionDto
   | PCRItemForApproveNewSubcontractorDto
-  | PCRItemForUpliftDto;
+  | PCRItemForUpliftDto
+  | PCRItemForManageTeamMembersDto;
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
   grantMovingOverFinancialYear: number | null;
@@ -186,18 +197,32 @@ export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
   subcontractorCost: number | null;
 }
 
+export interface PCRItemForManageTeamMembersDto extends PCRItemBaseDto {
+  type: PCRItemType.ManageTeamMembers;
+  pclId: ProjectContactLinkId | null;
+  partnerId: PartnerId | null; // Project Participant ID
+  manageTeamMemberType: ManageTeamMemberMethod | null;
+  manageTeamMemberFirstName: string | null;
+  manageTeamMemberLastName: string | null;
+  manageTeamMemberEmail: string | null;
+  manageTeamMemberRole: ProjectRole | null;
+  manageTeamMemberAssociateStartDate: Date | null;
+}
+
 export interface PCRItemTypeDto {
   type: PCRItemType;
   displayName: string;
+  developerRecordTypeName: string;
   recordTypeId: string;
   /**
    * @todo Refactor this to reduce confusion around the inverse of "disabled"
    * @description This refers to whether it should be available to the end user (visually available), consider renaming to isAvailable.
    */
   enabled: boolean;
-  disabled: boolean;
-  disabledReason: PCRItemDisabledReason;
+  hidden: boolean;
+  hiddenReason: PCRItemHiddenReason;
   files: { name: string; relativeUrl: string }[];
+  standalone: boolean;
 }
 
 export interface ProjectChangeRequestStatusChangeDto {
@@ -217,6 +242,14 @@ export interface PCRTimeExtensionOption {
   label: string;
   offset: number;
 }
+
+export type ManageTeamMemberPcrDto = PCRBaseDto & {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  organisation?: string;
+  role: string;
+};
 
 export type FullPCRItemDto = {
   accountName: string | null;
@@ -294,4 +327,12 @@ export type FullPCRItemDto = {
   subcontractorDescription: string | null;
   subcontractorJustification: string | null;
   subcontractorCost: number | null;
+  manageTeamMemberType: ManageTeamMemberMethod | null;
+  manageTeamMemberFirstName: string | null;
+  manageTeamMemberLastName: string | null;
+  manageTeamMemberEmail: string | null;
+  manageTeamMemberRole: ProjectRole | null;
+  manageTeamMemberAssociateStartDate: Date | null;
 };
+
+export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;

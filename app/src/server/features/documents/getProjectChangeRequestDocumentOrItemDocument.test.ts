@@ -1,4 +1,5 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { RecordType } from "@framework/entities/recordType";
 import { Authorisation } from "@framework/types/authorisation";
@@ -14,6 +15,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -67,6 +69,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -84,6 +87,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       id: "id_1",
       parent: pcr.id,
       type: "type",
+      developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
     const pcrItem2 = context.testData.createPCRItem(pcr, pcrRecordType);
@@ -106,6 +110,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
+        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -128,6 +133,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
+        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -150,6 +156,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
+        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -173,6 +180,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
+        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -196,6 +204,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
         id: "id_1",
         parent: pcr.id,
         type: "type",
+        developerName: ProjectChangeRequest.singlePartnerFinancialVirement,
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 

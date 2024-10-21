@@ -13,6 +13,7 @@ import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
+import { getMapper } from "./mapToPCRDto";
 
 export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBase<PcrId> {
   public readonly runnableName: string = "CreateProjectChangeRequestCommand";
@@ -36,20 +37,21 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,
       status: projectChangeRequestDto.status,
+      manageTeamMemberStatus: projectChangeRequestDto.manageTeamMemberStatus,
       items: projectChangeRequestDto.items.map(x => this.mapItem(projectChangeRequestDto, x, itemTypes)),
     };
 
     return context.repositories.projectChangeRequests.createProjectChangeRequest(newPCR);
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<string> {
     const pcrToBeChanged = {
       Acc_ProjectChangeRequest__c: projectChangeRequestId,
       Acc_ExternalComment__c: "",
       Acc_ParticipantVisibility__c: true,
     };
 
-    await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
+    return await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
   }
 
   protected async run(context: IContext) {
@@ -100,10 +102,13 @@ export class CreateProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
   ): ProjectChangeRequestItemForCreateEntity {
     const matchedItem = itemTypes.find(t => t.type === itemDto.type);
     if (!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
+    const mapper = getMapper(itemDto.type, "create");
     return {
       projectId: dto.projectId,
       recordTypeId: matchedItem.recordTypeId,
+      developerRecordTypeName: matchedItem.developerRecordTypeName,
       status: itemDto.status,
+      ...mapper?.(itemDto),
     };
   }
 }

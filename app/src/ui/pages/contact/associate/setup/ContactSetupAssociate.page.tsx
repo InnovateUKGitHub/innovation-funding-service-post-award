@@ -12,7 +12,7 @@ import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atoms/form/Label/Label";
-import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
@@ -167,6 +167,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
         )}
         {contacts.length >= 2 && (
           <Table>
+            <TCaption hidden>{getContent(x => x.pages.projectSetupAssociate.tableCaption)}</TCaption>
             <THead>
               <TR>
                 <TH>{getContent(x => x.pages.projectSetupAssociate.name)}</TH>

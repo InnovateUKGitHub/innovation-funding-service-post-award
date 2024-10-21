@@ -11,6 +11,7 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   40,
   50,
   130,
+  150,
 ]
 `;
 
@@ -25,6 +26,7 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   40,
   50,
   130,
+  150,
 ]
 `;
 
@@ -39,6 +41,7 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   40,
   50,
   130,
+  150,
 ]
 `;
 
@@ -52,6 +55,7 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   10,
   40,
   50,
+  150,
 ]
 `;
 
@@ -66,6 +70,7 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   40,
   50,
   130,
+  150,
 ]
 `;
 
@@ -80,5 +85,6 @@ exports[`GetPCRItemTypesQuery with competition types with common competition typ
   40,
   50,
   130,
+  150,
 ]
 `;

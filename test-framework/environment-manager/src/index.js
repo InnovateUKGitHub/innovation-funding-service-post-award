@@ -17,11 +17,13 @@ class EnvironmentManager {
       "..",
       "kustomize",
       "acc-secrets",
-      `acc-ui-secrets.${environment}.yml`,
+      "secrets",
+      "acc-ui-secret",
+      `acc-ui-secret.${environment}.yml`,
     );
 
     if (fs.existsSync(sopsFile)) {
-      console.log("Attempting to read SOPS YAML file at", sopsFile);
+      console.log("Reading SOPS YAML file at", sopsFile);
 
       const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
         stdio: "pipe",

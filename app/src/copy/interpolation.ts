@@ -56,6 +56,11 @@ const registerIntlFormatter = () => {
     return value;
   });
 
+  i18next.services.formatter?.add("arrayQuote", value => {
+    if (Array.isArray(value)) return value.map(x => `‘${x}’`);
+    return value;
+  });
+
   i18next.services.formatter?.add("bytes", value => {
     if (typeof value === "number") return bytes(value);
     if (typeof value === "string") return bytes(value);
@@ -115,6 +120,12 @@ const registerIntlFormatter = () => {
 
     if (Array.isArray(value)) return value.map(translateChar);
     return translateChar(value);
+  });
+
+  const listformat = new Intl.ListFormat("en-GB", { type: "conjunction" });
+  i18next.services.formatter?.add("conjunction", value => {
+    if (Array.isArray(value)) return listformat.format(value);
+    return value;
   });
 };
 

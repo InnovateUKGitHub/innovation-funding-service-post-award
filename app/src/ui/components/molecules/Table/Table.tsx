@@ -25,6 +25,8 @@ const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = 
 
 const standardRowCssClass = "govuk-table__row";
 
+export type Caption = string | React.ReactNode | ContentSelector;
+
 interface SortButtonProps {
   children: React.ReactNode;
   isSortable: boolean;
@@ -117,7 +119,7 @@ export const createTypedTable = <T,>() => {
     headers?: React.ReactElement[];
     data: T[];
     validationResult?: (Results<ResultBase> | null | undefined)[] | Results<ResultBase> | Result | null | undefined;
-    caption?: React.ReactNode;
+    caption: Caption;
     bodyRowClass?: (row: T, index: number) => string;
     bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
     headerRowClass?: string;
@@ -395,7 +397,11 @@ export const createTypedTable = <T,>() => {
     return (
       <div className="govuk-table-wrapper" data-qa={qa}>
         <table className={cx("govuk-table", className)}>
-          {caption && <caption className="govuk-visually-hidden">{caption}</caption>}
+          {caption && (
+            <caption className="govuk-visually-hidden">
+              {isContentSelector(caption) ? getContent(caption) : caption}
+            </caption>
+          )}
 
           <colgroup>{cols}</colgroup>
 

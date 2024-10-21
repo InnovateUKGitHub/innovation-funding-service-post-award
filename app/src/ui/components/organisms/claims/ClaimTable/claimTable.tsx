@@ -35,6 +35,7 @@ export const ClaimTable = (props: ClaimTableProps) => {
             "table__row--error": hasError(x),
           })
         }
+        caption={props.caption}
       >
         <CostCategoriesTable.Custom
           qa="category"

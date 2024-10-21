@@ -1,5 +1,5 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { PCRItemStatus, PCRStatus } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
@@ -32,12 +32,18 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   return { project, pcrs, numberOfPartners, fragmentRef: data.salesforce.uiapi };
 };
 
-const useOnSubmit = () => {
+const useOnSubmit = ({ projectId }: { projectId: ProjectId }) => {
   const navigate = useNavigate();
   const routes = useRoutes();
 
-  return useOnUpdate<z.output<PcrModifyTypesSchemaType>, PCRDto, EmptyObject>({
+  return useOnUpdate<z.output<PcrModifyTypesSchemaType>, Partial<PCRDto> | null, EmptyObject>({
     req: async data => {
+      // need to create a standalone PCR with no header
+      if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
+        return null;
+        // noop
+      }
+
       if ("pcrId" in data) {
         return await clientsideApiClient.pcrs.update({
           id: data.pcrId,
@@ -54,6 +60,7 @@ const useOnSubmit = () => {
           projectChangeRequestDto: {
             projectId: data.projectId,
             status: PCRStatus.DraftWithProjectManager,
+            manageTeamMemberStatus: PCRStatus.Unknown,
             reasoningStatus: PCRItemStatus.ToDo,
             items: data.types.map(x => ({ type: x, status: PCRItemStatus.ToDo })) as PCRItemDto[],
           },
@@ -61,7 +68,14 @@ const useOnSubmit = () => {
       }
     },
     onSuccess(data, res) {
-      navigate(routes.pcrPrepare.getLink({ pcrId: res.id, projectId: res.projectId }).path);
+      if (data.types.length === 1 && data.types[0] === PCRItemType.ManageTeamMembers) {
+        navigate(routes.projectManageTeamMembersDashboard.getLink({ projectId: data.projectId }).path);
+      } else {
+        if (!res?.id) {
+          throw new Error("Failed to return a PcrId");
+        }
+        navigate(routes.pcrPrepare.getLink({ pcrId: res.id, projectId }).path);
+      }
     },
   });
 };

@@ -22,13 +22,21 @@ export const documents = [
 
 const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
 
-export const allowBatchFileUpload = (documentType: string) => () => {
-  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
+export const allowBatchFileUpload = (documentType: string, jsDisabled?: boolean) => () => {
+  if (jsDisabled) {
+    cy.log("No intercept as js-disabled");
+  } else {
+    cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
+  }
   cy.get(`input[type="file"]`)
     .wait(seconds(1))
     .selectFile(documentPaths, { force: true, timeout: seconds(5) });
   cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
-  cy.wait("@filesUpload");
+  if (jsDisabled) {
+    cy.wait(500);
+  } else {
+    cy.wait("@filesUpload");
+  }
 };
 
 export const displayBatchUpload = (documentType: string, user: string, removeButton: boolean) => {
@@ -97,36 +105,32 @@ export const validateExcessiveFileName = () => {
   cy.fileInput(longFile);
   cy.wait(500);
   cy.button("Upload documents").click();
-  cy.validationLink(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
-  cy.paragraph(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
+  cy.validationLink(`The selected file name must be 80 characters or less.`);
+  cy.paragraph(`The selected file name must be 80 characters or less.`);
   cy.wait(500);
 };
 
 export const doNotUploadSpecialChar = () => {
   cy.fileInput(testFile, specialCharFile);
   cy.button("Upload documents").click();
-  cy.validationLink(
-    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
-  );
-  cy.paragraph(
-    /Your document \'.+\' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot./,
-  );
+  cy.validationLink("The selected file name cannot use *, <, >, :, / and ? characters.");
+  cy.paragraph("The selected file name cannot use *, <, >, :, / and ? characters.");
   cy.wait(500);
 };
 
 export const uploadFileTooLarge = () => {
   cy.fileInput("bigger_test.txt");
   cy.button("Upload").click();
-  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
-  cy.paragraph("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
+  cy.validationLink("The selected file must be no larger than 32MB.");
+  cy.paragraph("The selected file must be no larger than 32MB.");
   cy.wait(500);
 };
 
 export const uploadFileNameTooShort = () => {
   cy.fileInput(emptyFileName);
   cy.button("Upload").click();
-  cy.validationLink(`You cannot upload this file because the file has no name.`);
-  cy.paragraph(`You cannot upload this file because the file has no name.`);
+  cy.validationLink(`The selected file name must not begin with a space.`);
+  cy.paragraph(`The selected file name must not begin with a space.`);
   cy.wait(500);
 };
 

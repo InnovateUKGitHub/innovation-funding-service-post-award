@@ -8,7 +8,7 @@ import {
   getQuarterInMonths,
 } from "./loanDrawdownExtension.logic";
 import { useContent } from "@ui/hooks/content.hook";
-import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
+import { TBody, TCaption, TD, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { FullNumericDate } from "@ui/components/atoms/Date";
 import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
@@ -114,6 +114,9 @@ export const LoanDrawdownTable = ({
 
   return (
     <Table aria-label="Change loan duration table">
+      <TCaption hidden>
+        {getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.tableCaption)}
+      </TCaption>
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.phase)}</TH>

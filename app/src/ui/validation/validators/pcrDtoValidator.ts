@@ -28,6 +28,7 @@ import {
   PCRItemForLoanDrawdownExtensionDto,
   PCRItemForApproveNewSubcontractorDto,
   PCRItemForUpliftDto,
+  PCRItemForManageTeamMembersDto,
 } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -79,6 +80,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly projectManagerCanEdit: boolean;
   private readonly isPmProjectParticipantNotOnHold: boolean;
   private readonly monitoringOfficerCanEdit: boolean;
+  private readonly isManageTeamMember: boolean;
 
   public comments: Result;
   public status: Result;
@@ -97,6 +99,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     | PCRLoanDrawdownChangeItemDtoValidator
     | PCRLoanExtensionItemDtoValidator
     | PCRApproveNewSubcontractorItemDtoValidator
+    | PCRManageTeamMembersItemDtoValidator
   >;
 
   constructor({
@@ -128,6 +131,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       this.partners && this.partners.length > 0 && this.partners.some(x => getAuthRoles(x.roles).isPm)
         ? this.partners.some(x => getAuthRoles(x.roles).isPm && x.partnerStatus !== PartnerStatus.OnHold)
         : true;
+    this.isManageTeamMember = model.items.length === 1 && model.items[0].type === PCRItemType.ManageTeamMembers;
 
     // Validating these fields requires above values to be computed
     this.comments = this.validateComments();
@@ -185,6 +189,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   static readonly maxSalesforceFieldLength = 32000;
 
   private validateComments(): Result {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const { isPm, isMo } = getAuthRoles(this.role);
 
     const canPmEdit = isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold;
@@ -233,6 +239,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateReasoningComments() {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const { isPm } = getAuthRoles(this.role);
 
     if (isPm && this.projectManagerCanEdit && this.isPmProjectParticipantNotOnHold) {
@@ -277,6 +285,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const permittedStatus: PCRStatus[] = [];
     const { isPm, isMo } = getAuthRoles(this.role);
 
+    if (this.isManageTeamMember) {
+      permittedStatus.push(PCRStatus.Unknown, PCRStatus.Approved, PCRStatus.SubmittedToInnovateUK);
+    }
+
     if (isPm) {
       if (!this.original) {
         permittedStatus.push(PCRStatus.DraftWithProjectManager);
@@ -312,6 +324,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateReasonStatus() {
+    if (this.isManageTeamMember) return Validation.valid(this);
+
     const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
     const preparePcrStatus = [
@@ -402,6 +416,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRApproveNewSubcontractorItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForApproveNewSubcontractorDto>,
         );
+      case PCRItemType.ManageTeamMembers:
+        return new PCRManageTeamMembersItemDtoValidator(
+          params as PCRBaseItemDtoValidatorProps<PCRItemForManageTeamMembersDto>,
+        );
       default:
         throw new Error("PCR Type not implemented");
     }
@@ -445,6 +463,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
             return children.isTrue(
               items => {
                 const seenProjectPcrs = new Set<PCRItemType>();
+                if (this.isManageTeamMember) return true;
 
                 for (const projectPcr of items) {
                   // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
@@ -467,6 +486,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
               items => {
                 // If we are in a draft, allow the same partner to be selected more than once.
                 if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+                if (this.isManageTeamMember) return true;
 
                 const seenPartnerIds = new Set<string>();
 
@@ -489,6 +509,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
               items => {
                 // If we are in a draft, allow the same partner to be selected more than once.
                 if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+                if (this.isManageTeamMember) return true;
 
                 const seenPartnerIds = new Set<string>();
 
@@ -549,7 +570,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 }
 
-export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
+export abstract class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   protected readonly canEdit: boolean;
   protected readonly role: ProjectRolePermissionBits = ProjectRolePermissionBits.Unknown;
   protected readonly pcrStatus: PCRStatus;
@@ -597,6 +618,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
   private validateTypes() {
     const { isPm } = getAuthRoles(this.role);
+
     return Validation.all(
       this,
       () =>
@@ -624,7 +646,10 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   private validateStatus() {
     const { isPm } = getAuthRoles(this.role);
 
-    const permittedStatus = [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
+    const permittedStatus =
+      this.model.type === PCRItemType.ManageTeamMembers
+        ? [PCRItemStatus.Complete]
+        : [PCRItemStatus.ToDo, PCRItemStatus.Incomplete, PCRItemStatus.Complete];
 
     const statusWhenNotRequiredToBeComplete = [
       PCRStatus.DraftWithProjectManager,
@@ -972,6 +997,7 @@ export class PCRUpliftDtoValidator extends PCRBaseItemDtoValidator<PCRItemForUpl
 
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}
 export class PCRApproveNewSubcontractorItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForApproveNewSubcontractorDto> {}
+export class PCRManageTeamMembersItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForManageTeamMembersDto> {}
 
 export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {
   private readonly isComplete = this.model.status === PCRItemStatus.Complete;

@@ -4,6 +4,7 @@ import { PageHeading } from "../../../components/PageHeading";
 import { Button } from "../../../components/Button";
 import { moAnswers } from "../../../components/Monitoring/MonitoringAnswers";
 import { getLorem } from "../../../components/lorem";
+
 export
 @Fixture("monitoringReports")
 class MonitoringReports {
@@ -32,8 +33,8 @@ class MonitoringReports {
   private readonly characterCounter5k: Locator;
   private readonly submitComments: string;
   private readonly submitButton: Locator;
-  private readonly sectioncopyComments: Array<string>;
-  private readonly sectioncopyScore: Array<string>;
+  private readonly sectionCopyComments: Array<string>;
+  private readonly sectionCopyScore: Array<string>;
   private readonly summarySubheadings: Array<string>;
   private readonly alert: Locator;
   private readonly summarySectionGuidance: string;
@@ -74,7 +75,7 @@ class MonitoringReports {
     this.commentHint = this.page
       .locator("[data-qa=hint-additional-comments-text-area]")
       .filter({ hasText: "If you want to explain anything to Innovate UK, add it here." });
-    this.sectioncopyComments = [
+    this.sectionCopyComments = [
       "scope",
       "time",
       "cost",
@@ -94,7 +95,7 @@ class MonitoringReports {
       "Summary",
       "Issues and actions",
     ];
-    this.sectioncopyScore = ["scope", "time", "cost", "exploitation", "risk management", "project planning"];
+    this.sectionCopyScore = ["scope", "time", "cost", "exploitation", "risk management", "project planning"];
     this.characterCounter5k = this.page.getByText("You have 5000 characters remaining");
     this.submitComments =
       "By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.";
@@ -134,7 +135,6 @@ class MonitoringReports {
     await expect(this.openSubheading).toBeVisible();
     await expect(this.archivedSubheading).toBeVisible();
   }
-  //
 
   @Given("the user is on the monitoring reports dashboard")
   async isOnMonitoringReports() {
@@ -230,9 +230,9 @@ class MonitoringReports {
     await this.period.clear();
     await this.continueButton.click();
     await this.validationMessage("Enter period.");
-    await this.inputInvalStep(["Lorem", "-", "£$%^&*()", "dasq123cc", "1asd", "asff1"], "Period must be a number.");
-    await this.inputInvalStep(["1.1", "0.5", "100.5", "3000.5"], "Period must be a whole number, like 15.");
-    await this.inputInvalStep(
+    await this.inputInvalidStep(["Lorem", "-", "£$%^&*()", "dasq123cc", "1asd", "asff1"], "Period must be a number.");
+    await this.inputInvalidStep(["1.1", "0.5", "100.5", "3000.5"], "Period must be a whole number, like 15.");
+    await this.inputInvalidStep(
       ["-1", "-999999999999", "0", "12", "100", "99999999999999999999999999999999999999999"],
       "Period must be 1.",
     );
@@ -242,13 +242,13 @@ class MonitoringReports {
   /**
    * Method relating to 'the user submits invalid characters' definition.
    */
-  private async inputInvalStep(values: string[], errormsg: string) {
+  private async inputInvalidStep(values: string[], errorMsg: string) {
     for (const invalid of values) {
       await this.period.clear();
       await this.period.fill(invalid);
       await this.continueButton.click();
-      await this.validationMessage(errormsg);
-      await this.paragraph(errormsg);
+      await this.validationMessage(errorMsg);
+      await this.paragraph(errorMsg);
     }
   }
   //
@@ -304,10 +304,10 @@ class MonitoringReports {
    * Validating summary page with incomplete sections.
    */
   async validateSummaryPage() {
-    for (const val of this.sectioncopyComments) {
+    for (const val of this.sectionCopyComments) {
       await this.validationMessage(`Enter comments for ${val}.`);
     }
-    for (const val of this.sectioncopyScore) {
+    for (const val of this.sectionCopyScore) {
       await this.validationMessage(`Enter a score for ${val}.`);
     }
     await this.validationMessage("Enter comments.");
@@ -341,8 +341,8 @@ class MonitoringReports {
     await expect(this.page.getByRole("link").filter({ hasText: `Back to ${section}` })).toBeVisible();
   }
 
-  async validateMonitoringSection(section: string, length: number, hasquestions: boolean) {
-    if (hasquestions) {
+  async validateMonitoringSection(section: string, length: number, hasQuestions: boolean) {
+    if (hasQuestions) {
       await this.commentsBox.fill("Test");
       await this.continueButton.click();
       await this.validationMessage(`Enter a score for ${section}`);

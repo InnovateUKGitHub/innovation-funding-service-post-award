@@ -1,5 +1,5 @@
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { getContactRole } from "./getContactRole";
 
 const steelManufacturingPartner = {
@@ -94,9 +94,9 @@ const contacts: ProjectContactDto[] = [
 ] as ProjectContactDto[];
 
 describe("getContactRole", () => {
-  const moRoles = getContactRole({ contacts, partners, partnerRole: "Monitoring officer" });
-  const pmRoles = getContactRole({ contacts, partners, partnerRole: "Project Manager" });
-  const fcRoles = getContactRole({ contacts, partners, partnerRole: "Finance contact" });
+  const moRoles = getContactRole({ contacts, partners, partnerRole: ProjectRoleName.MonitoringOfficer });
+  const pmRoles = getContactRole({ contacts, partners, partnerRole: ProjectRoleName.ProjectManager });
+  const fcRoles = getContactRole({ contacts, partners, partnerRole: ProjectRoleName.FinanceContact });
 
   it("gets all MOs of a project", () => {
     expect(moRoles).toStrictEqual([

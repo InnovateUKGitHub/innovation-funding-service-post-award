@@ -112,6 +112,7 @@ const projectDetailsQuery = graphql`
                   }
                 }
                 Project_Contact_Links__r(
+                  where: { Acc_Inactive__c: { ne: true } }
                   orderBy: { Acc_AccountId__r: { Name: { order: ASC, nulls: LAST } } }
                   first: 2000
                 ) {
@@ -121,6 +122,7 @@ const projectDetailsQuery = graphql`
                         value
                       }
                       Acc_ContactId__r {
+                        Id
                         Name {
                           value
                         }

@@ -1,12 +1,11 @@
 import {
   CategoryInfoProps,
   ClaimInfoProps,
-  ClaimProps,
+  ClaimTableProps,
   createTableData,
   renderCostCategory,
 } from "@ui/components/organisms/claims/utils/costCategoryTableHelper";
 import {
-  createClaim,
   createClaimDetails,
   createClaimLink,
   createCostCategories,
@@ -17,12 +16,10 @@ import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Result } from "@ui/validation/result";
 import { Link } from "@ui/components/atoms/Links/links";
-import { CostCategoryType } from "@framework/constants/enums";
 
 const stubProject = createProjectDto();
 const stubPartner = createPartnerDto();
 const stubCostCategories = createCostCategories();
-const stubClaim = createClaim();
 const stubClaimDetails = createClaimDetails();
 
 beforeEach(jest.clearAllMocks);
@@ -30,7 +27,7 @@ beforeEach(jest.clearAllMocks);
 const stubLink = createClaimLink();
 
 describe("createTableData()", () => {
-  const defaultStubData: ClaimProps = {
+  const defaultStubData: ClaimTableProps = {
     project: {
       ...stubProject,
       competitionType: "CR&D",
@@ -40,14 +37,14 @@ describe("createTableData()", () => {
       organisationType: PCROrganisationType.Industrial,
     },
     costCategories: stubCostCategories,
-    claim: stubClaim,
     claimDetails: stubClaimDetails,
     getLink: stubLink,
+    caption: "stub-caption",
   };
 
   describe("returns items with empty data", () => {
     test("when costCategory has no matching claimDetail", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         project: {
           ...defaultStubData.project,
@@ -61,13 +58,8 @@ describe("createTableData()", () => {
           {
             id: "should-not-find-a-claim-detail" as CostCategoryId,
             name: "Directly incurred - Other costs",
-            type: 5,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [],
@@ -82,19 +74,14 @@ describe("createTableData()", () => {
     });
 
     test("with no matching costCategory", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "does-not-match-a-claim-detail" as CostCategoryId,
             name: "Directly incurred - Other costs",
-            type: 5,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -118,7 +105,7 @@ describe("createTableData()", () => {
     });
 
     test("with no matching competitionType", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         project: {
           ...defaultStubData.project,
@@ -128,13 +115,8 @@ describe("createTableData()", () => {
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -158,7 +140,7 @@ describe("createTableData()", () => {
     });
 
     test("with no matching organisationType", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         partner: {
           ...defaultStubData.partner,
@@ -168,13 +150,8 @@ describe("createTableData()", () => {
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -198,7 +175,7 @@ describe("createTableData()", () => {
     });
 
     test("with no matching organisationType or competitionType", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         partner: {
           ...defaultStubData.partner,
@@ -212,13 +189,8 @@ describe("createTableData()", () => {
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -244,19 +216,14 @@ describe("createTableData()", () => {
 
   describe("returns correct array length", () => {
     test("returns single line item", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -279,30 +246,20 @@ describe("createTableData()", () => {
     });
 
     test("returns multiple line items", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
           {
             id: "a060C000000dxWuQAI" as CostCategoryId,
             name: "Overheads",
-            type: 20,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Overhead costs - a % of Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -333,7 +290,7 @@ describe("createTableData()", () => {
     });
 
     test("returns total row when matching items are found", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [],
         claimDetails: [],
@@ -347,19 +304,14 @@ describe("createTableData()", () => {
 
     describe("totalNegativeCategories", () => {
       test("returns with single category when remainingOfferCosts is negative", () => {
-        const stubData: ClaimProps = {
+        const stubData: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
-              type: 20,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Overhead costs - a % of Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [
@@ -383,30 +335,20 @@ describe("createTableData()", () => {
       });
 
       test("returns with multiple categories when all have negative remainingOfferCosts", () => {
-        const stubData: ClaimProps = {
+        const stubData: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
-              type: 10,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
             {
               id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
-              type: 20,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Overhead costs - a % of Labour costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [
@@ -439,19 +381,14 @@ describe("createTableData()", () => {
       });
 
       test("returns empty when remainingOfferCosts is positive", () => {
-        const stubData: ClaimProps = {
+        const stubData: ClaimTableProps = {
           ...defaultStubData,
           costCategories: [
             {
               id: "a060C000000dxWwQAI" as CostCategoryId,
               name: "Capital usage",
-              type: CostCategoryType.Capital_Usage,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
-              isCalculated: false,
-              hasRelated: false,
-              description: "Capital usage costs for industrial organisations",
-              hintText: "stub-hintText",
             },
           ],
           claimDetails: [
@@ -474,19 +411,14 @@ describe("createTableData()", () => {
 
   describe("validate values", () => {
     test("with one valid cost category", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -514,30 +446,20 @@ describe("createTableData()", () => {
     });
 
     test("with two cost categories 1 valid 1 with no matching claim details", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
           {
             id: "a060C000000dxWwQAI" as CostCategoryId,
             name: "Capital usage",
-            type: CostCategoryType.Capital_Usage,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Capital usage costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [
@@ -584,30 +506,20 @@ describe("createTableData()", () => {
     });
 
     test("with the total row values", () => {
-      const stubData: ClaimProps = {
+      const stubData: ClaimTableProps = {
         ...defaultStubData,
         costCategories: [
           {
             id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
-            type: 10,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
           {
             id: "a060C000000dxWuQAI" as CostCategoryId,
             name: "Overheads",
-            type: 20,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
-            isCalculated: false,
-            hasRelated: false,
-            description: "Overhead costs - a % of Labour costs for industrial organisations",
-            hintText: "stub-hintText",
           },
         ],
         claimDetails: [

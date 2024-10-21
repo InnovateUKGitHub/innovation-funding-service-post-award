@@ -9,6 +9,11 @@ exports[`<PartnersAndFinanceContacts /> @renders matching FC snapshot 1`] = `
     <table
       class="govuk-table"
     >
+      <caption
+        class="govuk-visually-hidden"
+      >
+        stub-caption
+      </caption>
       <colgroup>
         <col
           data-qa="col-fc-name"
@@ -145,6 +150,11 @@ exports[`<PartnersAndFinanceContacts /> @renders matching MO snapshot 1`] = `
     <table
       class="govuk-table"
     >
+      <caption
+        class="govuk-visually-hidden"
+      >
+        stub-caption
+      </caption>
       <colgroup>
         <col
           data-qa="col-fc-name"
@@ -199,6 +209,11 @@ exports[`<PartnersAndFinanceContacts /> @renders matching PM snapshot 1`] = `
     <table
       class="govuk-table"
     >
+      <caption
+        class="govuk-visually-hidden"
+      >
+        stub-caption
+      </caption>
       <colgroup>
         <col
           data-qa="col-fc-name"

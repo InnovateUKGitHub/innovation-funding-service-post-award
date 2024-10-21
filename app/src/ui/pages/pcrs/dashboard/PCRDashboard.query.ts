@@ -23,13 +23,24 @@ const pcrDashboardQuery = graphql`
           }
           Acc_ProjectChangeRequest__c(
             first: 2000
-            where: { Acc_Project__c: { eq: $projectId }, RecordType: { DeveloperName: { eq: "Acc_RequestHeader" } } }
+            where: {
+              Acc_Project__c: { eq: $projectId }
+              RecordType: {
+                or: [
+                  { DeveloperName: { eq: "Acc_RequestHeader" } }
+                  { DeveloperName: { eq: "Acc_Request_Header_Manage_Team_Members" } }
+                ]
+              }
+            }
             orderBy: { Acc_RequestNumber__c: { order: DESC } }
           ) {
             edges {
               node {
                 Id
                 Acc_Status__c {
+                  value
+                }
+                Acc_Manage_Team_Member_Status__c {
                   value
                 }
                 Acc_RequestHeader__c {

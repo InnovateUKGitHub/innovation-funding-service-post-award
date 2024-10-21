@@ -153,6 +153,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
             disabled={isProcessing}
             trigger={trigger}
             isProjectSetup={false}
+            caption={getContent(x => x.components.forecastTable.caption)}
           />
           <P>
             {getContent(x => x.components.claimLastModified.message)}

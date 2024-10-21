@@ -1,32 +1,24 @@
 import {
-  PCRStatus,
-  PCRItemStatus,
-  PCRProjectRole,
-  PCRContactRole,
-  PCRPartnerType,
-  PCRParticipantSize,
-  PCRProjectLocation,
   getPCROrganisationType,
+  PCRContactRole,
+  PCRItemStatus,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
+  PCRProjectRole,
+  PCRStatus,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
+import {
+  mapToPCRItemStatus,
+  mapProjectRoleToInternal,
+  mapToPCRManageTeamMemberType,
+  mapToPCRStatus,
+} from "@framework/mappers/pcr";
+import { configuration } from "@server/features/common/config";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
-import { mapToPCRStatus } from "@framework/mappers/pcr";
-import { configuration } from "@server/features/common/config";
-
-export const mapToPCRItemStatus = (status: string): PCRItemStatus => {
-  switch (status) {
-    case "To Do":
-      return PCRItemStatus.ToDo;
-    case "Incomplete":
-      return PCRItemStatus.Incomplete;
-    case "Complete":
-      return PCRItemStatus.Complete;
-    default:
-      return PCRItemStatus.Unknown;
-  }
-};
 
 export class PcrProjectRoleMapper {
   private readonly roles = {
@@ -205,26 +197,39 @@ export class PCRProjectLocationMapper {
 }
 
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], ProjectChangeRequestEntity[]> {
-  constructor(private readonly headerRecordTypeId: string) {
+  constructor(private readonly headerRecordTypeIds: string[]) {
     super();
   }
 
   public map(items: ISalesforcePCR[]): ProjectChangeRequestEntity[] {
-    const headers = items.filter(x => x.RecordTypeId === this.headerRecordTypeId);
+    const salesforcePcrHeaders: ISalesforcePCR[] = [];
+    const salesforcePcrItems: ISalesforcePCR[] = [];
 
-    return headers.map(header => ({
+    for (const item of items) {
+      if (
+        this.headerRecordTypeIds.includes(item.RecordType.Id) ||
+        this.headerRecordTypeIds.includes(item.RecordType.DeveloperName)
+      ) {
+        salesforcePcrHeaders.push(item);
+      } else {
+        salesforcePcrItems.push(item);
+      }
+    }
+
+    return salesforcePcrHeaders.map(header => ({
       id: header.Id as PcrId,
       number: header.Acc_RequestNumber__c,
       projectId: header.Acc_Project__c as ProjectId,
       started: this.clock.parseRequiredSalesforceDateTime(header.CreatedDate),
       updated: this.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate),
       status: this.mapStatus(header.Acc_Status__c),
+      manageTeamMemberStatus: this.mapStatus(header.Acc_Manage_Team_Member_Status__c),
       statusName: header.StatusName,
       reasoning: header.Acc_Reasoning__c,
       reasoningStatus: this.mapItemStatus(header.Acc_MarkedasComplete__c),
       reasoningStatusName: header.MarkedAsCompleteName,
       comments: header.Acc_Comments__c,
-      items: items.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => this.mapItem(header, x)),
+      items: salesforcePcrItems.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => this.mapItem(header, x)),
     }));
   }
 
@@ -244,7 +249,9 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       pcrId: header.Id as PcrId,
       projectId: header.Acc_Project__c as ProjectId,
       partnerId: pcrItem.Acc_Project_Participant__c as PartnerId,
-      recordTypeId: pcrItem.RecordTypeId,
+      pclId: pcrItem.Acc_ProjectContactLink__c as ProjectContactLinkId,
+      recordTypeId: pcrItem.RecordType.Id,
+      developerRecordTypeName: pcrItem.RecordType.DeveloperName,
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
       statusName: pcrItem.MarkedAsCompleteName,
       typeOfAid: mapTypeOfAidToEnum(pcrItem.Acc_RequestHeader__r.Acc_Project__r.Acc_CompetitionId__r.Acc_TypeofAid__c),
@@ -311,6 +318,12 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       extensionPeriodChange: this.mapChangeOffsetToQuarter(extensionPeriod, extensionPeriodChange),
       repaymentPeriod,
       repaymentPeriodChange: this.mapChangeOffsetToQuarter(repaymentPeriod, repaymentPeriodChange),
+      manageTeamMemberType: mapToPCRManageTeamMemberType(pcrItem.Acc_Type__c),
+      manageTeamMemberAssociateStartDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_Start_Date__c),
+      manageTeamMemberRole: mapProjectRoleToInternal(pcrItem.Acc_Role__c),
+      manageTeamMemberEmail: pcrItem.Acc_Email__c,
+      manageTeamMemberFirstName: pcrItem.Acc_First_Name__c,
+      manageTeamMemberLastName: pcrItem.Acc_Last_Name__c,
 
       ...(configuration.features.approveNewSubcontractor
         ? {

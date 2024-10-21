@@ -20,6 +20,7 @@ const useZodErrors = <T extends FieldValues>(
 ): RhfErrors => {
   const { isServer } = useMounted();
   const errors = useServerZodError();
+
   if (isServer) {
     const collatedErrors: RhfErrors = {};
     convertZodIssueToRhf(errors, collatedErrors, setError);

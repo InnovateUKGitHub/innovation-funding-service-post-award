@@ -9,6 +9,7 @@ export const claimLineItemsQuery = graphql`
   ) {
     currentUser {
       isSystemUser
+      userId
       email
     }
     salesforce {
@@ -101,12 +102,8 @@ export const claimLineItemsQuery = graphql`
                 Acc_ReasonForDifference__c {
                   value
                 }
-                Owner {
-                  ... on User {
-                    Email {
-                      value
-                    }
-                  }
+                OwnerId {
+                  value
                 }
                 LastModifiedDate {
                   value

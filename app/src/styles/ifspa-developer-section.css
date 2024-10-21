@@ -12,3 +12,19 @@
 .ifspa-developer-stacktrace .ifspa-developer-stacktrace-stack {
   font-size: 8pt;
 }
+
+.ifspa-developer-displaylist dl {
+  margin: 0.25em 0;
+}
+
+.ifspa-developer-displaylist dl:first-of-type {
+  margin-top: 0;
+}
+
+.ifspa-developer-displaylist dl:last-of-type {
+  margin-bottom: 0;
+}
+
+.ifspa-developer-crossout {
+  text-decoration: line-through;
+}

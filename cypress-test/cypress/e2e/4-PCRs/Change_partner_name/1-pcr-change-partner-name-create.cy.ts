@@ -89,6 +89,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
       true,
       true,
       false,
+      false,
       "Change of name certificate",
     );
   });

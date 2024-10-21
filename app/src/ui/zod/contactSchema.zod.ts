@@ -6,7 +6,16 @@ const contactSchemaErrorMap = makeZodI18nMap({ keyPrefix: ["contact"] });
 
 const contactDtoSchema = z.object({
   id: pclIdValidation,
-  associateStartDate: dateValidation,
+  associateStartDate: dateValidation.optional(),
+  startDate: dateValidation.optional(),
+  endDate: dateValidation.optional(),
+  email: z.string().email().optional(),
+  inactive: z.boolean().optional(),
+  newTeamMember: z.boolean().optional(),
+  sendInvitation: z.boolean().optional(),
+  edited: z.boolean().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
 });
 
 const multipleContactDtoSchema = z.object({

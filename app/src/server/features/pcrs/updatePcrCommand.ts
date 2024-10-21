@@ -165,6 +165,7 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
         if (!itemType) throw new Error(`Cannot find item matching ${x.item.type}`);
         return {
           recordTypeId: itemType.recordTypeId,
+          developerRecordTypeName: itemType.developerRecordTypeName,
           status: x.item.status,
           projectId: this.projectId,
         };
@@ -357,6 +358,15 @@ export class UpdatePCRCommand extends AuthorisedAsyncCommandBase<boolean> {
         }
 
         break;
+      }
+
+      case PCRItemType.ManageTeamMembers: {
+        if (item.pclId !== dto.pclId) {
+          return {
+            ...init,
+            pclId: dto.pclId,
+          };
+        }
       }
     }
 

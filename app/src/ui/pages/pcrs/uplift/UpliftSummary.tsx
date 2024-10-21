@@ -53,7 +53,7 @@ const UpliftSummary = () => {
       <SummaryList qa="pcr_reasoning">
         <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
         <SummaryListItem
-          label={x => x.pcrLabels.type({ count: pcr.items.length })}
+          label={x => x.pcrLabels.type({ count: pcrItemCount })}
           content={getContent(x => x.pcrTypes.uplift)}
           qa="typesRow"
         />

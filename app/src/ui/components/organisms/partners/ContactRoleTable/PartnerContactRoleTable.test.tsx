@@ -7,7 +7,7 @@ import {
 } from "@ui/components/organisms/partners/ContactRoleTable/PartnerContactRoleTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 import { getContactRole } from "../utils/getContactRole";
 
 const testPartnerData: PartnerDto[] = [
@@ -34,54 +34,78 @@ const testPartnerData: PartnerDto[] = [
   },
 ] as PartnerDto[];
 
-const testContactData: ProjectContactDto[] = [
+const testContactData: Omit<ProjectContactDto, "firstName" | "lastName">[] = [
   {
-    id: "100" as ContactId,
+    id: "100" as ProjectContactLinkId,
     name: "Ted Tester",
-    role: "Finance contact",
+    role: ProjectRoleName.FinanceContact,
     roleName: "Finance Contact",
     email: "tedtester@nowhere.com",
+    contactId: "908" as ContactId,
     accountId: "321" as AccountId,
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    replaced: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
-    id: "101" as ContactId,
+    id: "101" as ProjectContactLinkId,
     name: "Dave Developer",
-    role: "Project Manager",
+    role: ProjectRoleName.ProjectManager,
     roleName: "Project Manager",
     email: "davedeveloper@nowhere.com",
+    contactId: "908" as ContactId,
     accountId: "312" as AccountId,
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    replaced: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
-    id: "102" as ContactId,
+    id: "102" as ProjectContactLinkId,
     name: "Joe Bloggs",
-    role: "Finance contact",
+    role: ProjectRoleName.FinanceContact,
     roleName: "Finance Contact",
     email: "joebloggs@nowhere.com",
+    contactId: "908" as ContactId,
     accountId: "312" as AccountId,
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    replaced: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
   {
-    id: "103" as ContactId,
+    id: "103" as ProjectContactLinkId,
     name: "Bob Baker",
-    role: "Finance contact",
+    role: ProjectRoleName.FinanceContact,
     roleName: "Finance Contact",
     email: "bobbaker@nowhere.com",
+    contactId: "908" as ContactId,
     accountId: "832" as AccountId,
     projectId: "456" as ProjectId,
     startDate: null,
     endDate: null,
     associateStartDate: null,
+    edited: false,
+    replaced: false,
+    inactive: false,
+    newTeamMember: false,
+    sendInvitation: false,
   },
 ];
 
@@ -93,6 +117,7 @@ describe("<PartnersAndFinanceContacts />", () => {
         partners: testPartnerData,
         partnerRole,
       }),
+      caption: "stub-caption",
       qa: "partner-contact-role-table",
     };
 
@@ -115,19 +140,19 @@ describe("<PartnersAndFinanceContacts />", () => {
 
   describe("@renders", () => {
     test("matching MO snapshot", () => {
-      expect(setup("Monitoring officer").container).toMatchSnapshot();
+      expect(setup(ProjectRoleName.MonitoringOfficer).container).toMatchSnapshot();
     });
 
     test("matching FC snapshot", () => {
-      expect(setup("Finance contact").container).toMatchSnapshot();
+      expect(setup(ProjectRoleName.FinanceContact).container).toMatchSnapshot();
     });
 
     test("matching PM snapshot", () => {
-      expect(setup("Project Manager").container).toMatchSnapshot();
+      expect(setup(ProjectRoleName.ProjectManager).container).toMatchSnapshot();
     });
 
     test("with partners names and Steel Manufacturing as the lead", () => {
-      const { queryByText } = setup("Finance contact");
+      const { queryByText } = setup(ProjectRoleName.FinanceContact);
 
       const partnerNames = [
         queryByText("Steel Manufacturing (Lead)"),
@@ -139,7 +164,7 @@ describe("<PartnersAndFinanceContacts />", () => {
     });
 
     test("with Finance Contacts", () => {
-      const { queryByText } = setup("Finance contact");
+      const { queryByText } = setup(ProjectRoleName.FinanceContact);
 
       expect(queryByText("Ted Tester")).toBeInTheDocument();
       expect(queryByText("Joe Bloggs")).toBeInTheDocument();
@@ -147,7 +172,7 @@ describe("<PartnersAndFinanceContacts />", () => {
     });
 
     test("with emails of all Finance Contact", () => {
-      const { queryByText } = setup("Finance contact");
+      const { queryByText } = setup(ProjectRoleName.FinanceContact);
 
       expect(queryByText("tedtester@nowhere.com")).toBeInTheDocument();
       expect(queryByText("joebloggs@nowhere.com")).toBeInTheDocument();
@@ -155,13 +180,13 @@ describe("<PartnersAndFinanceContacts />", () => {
     });
 
     test("with Project Managers", () => {
-      const { queryByText } = setup("Project Manager");
+      const { queryByText } = setup(ProjectRoleName.ProjectManager);
 
       expect(queryByText("Dave Developer")).toBeInTheDocument();
     });
 
     test("with emails of all Project Managers", () => {
-      const { queryByText } = setup("Project Manager");
+      const { queryByText } = setup(ProjectRoleName.ProjectManager);
 
       expect(queryByText("davedeveloper@nowhere.com")).toBeInTheDocument();
     });

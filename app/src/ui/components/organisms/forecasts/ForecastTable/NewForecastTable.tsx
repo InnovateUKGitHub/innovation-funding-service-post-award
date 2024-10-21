@@ -3,7 +3,7 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { CondensedDateRange } from "@ui/components/atoms/Date";
 import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
-import { Table, TBody, TFoot, THead, TH, TD, TR } from "@ui/components/atoms/table/tableComponents";
+import { Table, TBody, TFoot, THead, TH, TD, TR, TCaption } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import classNames from "classnames";
@@ -23,6 +23,7 @@ export interface NewForecastTableProps {
   disabled?: boolean;
   isProjectSetup: boolean;
   isOpen?: boolean;
+  caption: string;
 }
 
 const NewForecastTable = (props: NewForecastTableProps) => {
@@ -50,6 +51,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
   return (
     <div className="ifspa-forecast-wrapper">
       <Table id="ifspa-forecast-table" className="ifspa-forecast-table">
+        <TCaption hidden>{props.caption}</TCaption>
         <THead>
           <TR>
             <TH className={stickyColClassName("left", 1)}>

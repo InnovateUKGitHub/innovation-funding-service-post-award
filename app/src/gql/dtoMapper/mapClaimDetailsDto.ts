@@ -21,9 +21,7 @@ type ClaimDetailsNode = GQL.PartialNode<{
   Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
   Acc_ReasonForDifference__c: GQL.Value<string>;
   Impact_Management_Participation__c: GQL.Value<string>;
-  Owner: GQL.Maybe<{
-    Email?: GQL.Value<string>;
-  }>;
+  OwnerId: GQL.Value<string>;
   RecordType: GQL.Maybe<{
     DeveloperName: GQL.Value<string>;
   }>;
@@ -45,7 +43,7 @@ type ClaimDetailsDtoMapping = Pick<
 const mapper: GQL.DtoMapper<
   ClaimDetailsDtoMapping,
   ClaimDetailsNode,
-  { currentUser?: { email?: string; isSystemUser?: boolean } }
+  { currentUser?: { userId?: string; isSystemUser?: boolean } }
 > = {
   costCategoryId(node) {
     return (node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId;
@@ -53,7 +51,7 @@ const mapper: GQL.DtoMapper<
   isAuthor(node, additionalData) {
     return (
       additionalData.currentUser?.isSystemUser ||
-      (typeof node?.Owner?.Email?.value === "string" && node?.Owner?.Email?.value === additionalData.currentUser?.email)
+      (typeof node?.OwnerId?.value === "string" && node?.OwnerId?.value === additionalData.currentUser?.userId)
     );
   },
   comments(node) {
@@ -81,7 +79,7 @@ const mapper: GQL.DtoMapper<
 
 type ClaimDetailsAdditionalData<TPickList extends string> = AdditionalDataType<
   TPickList,
-  [["isAuthor", "currentUser", { email: string; isSystemUser: boolean }]]
+  [["isAuthor", "currentUser", { userId: string; isSystemUser: boolean }]]
 >;
 
 /**

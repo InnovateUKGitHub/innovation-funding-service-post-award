@@ -4,12 +4,17 @@ import {
   getPcrItemsSingleInstanceInAnyPcrViolations,
   getPcrItemsSingleInstanceInThisPcrViolations,
   getPcrItemsTooManyViolations,
-  PCRItemDisabledReason,
+  PCRItemHiddenReason,
   PCRItemType,
+  exclusiveItems,
+  getPcrItemsExclusivityViolations,
 } from "@framework/constants/pcrConstants";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
+import { PcrCreateSchemaType, PcrUpdateTypesSchemaType } from "@ui/zod/pcrValidator.zod";
+import { UseFormSetValue } from "react-hook-form";
+import { z } from "zod";
 
 const usePcrItemsForThisCompetition = (
   competitionType: SalesforceCompetitionTypes,
@@ -28,32 +33,57 @@ const usePcrItemsForThisCompetition = (
         (x.type === PCRItemType.ApproveNewSubcontractor && features.approveNewSubcontractor),
     );
 
+  const thisPcr = allPcrs.find(x => x.id === pcrId);
+
   const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
-  const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(allPcrs.find(x => x.id === pcrId));
-  const tooManyViolations = getPcrItemsTooManyViolations(
-    numberOfPartners,
-    allPcrs.find(x => x.id === pcrId),
-  );
+  const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(thisPcr);
+  const tooManyViolations = getPcrItemsTooManyViolations(numberOfPartners, thisPcr);
+  const exclusivityViolations = getPcrItemsExclusivityViolations(thisPcr);
 
   return items.map(pcrItem => {
-    let disabledReason = PCRItemDisabledReason.None;
+    let hiddenReason = PCRItemHiddenReason.None;
 
-    if (thisPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
+    if (exclusivityViolations.includes(pcrItem.type)) {
+      hiddenReason = PCRItemHiddenReason.Exclusive;
+    } else if (thisPcrViolations.includes(pcrItem.type)) {
+      hiddenReason = PCRItemHiddenReason.ThisPcrAlreadyHasThisType;
     } else if (anyOtherPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
+      hiddenReason = PCRItemHiddenReason.AnotherPcrAlreadyHasThisType;
     } else if (tooManyViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
+      hiddenReason = PCRItemHiddenReason.NotEnoughPartnersToActionThisType;
     }
 
     return {
       item: pcrItem,
       displayName: (pcrItem.i18nName ? getContent(pcrItem.i18nName) : pcrItem.displayName) ?? pcrItem.typeName,
       type: pcrItem.type,
-      disabled: disabledReason !== PCRItemDisabledReason.None,
-      disabledReason,
+      hidden: hiddenReason !== PCRItemHiddenReason.None,
+      hiddenReason,
     };
   });
 };
 
-export { usePcrItemsForThisCompetition };
+const usePcrItemExclusivity = (
+  pcrs: ReturnType<typeof usePcrItemsForThisCompetition>,
+  selectedTypes: (string | PCRItemType)[],
+  setValue: UseFormSetValue<z.output<PcrCreateSchemaType | PcrUpdateTypesSchemaType>>,
+) => {
+  /**
+   * N.B. Seems like React Hook Form treats all checkbox values as string
+   * Must coerce back and forth :(
+   */
+  const exclusiveType = exclusiveItems.find(x => selectedTypes.map(Number).includes(x));
+  // Deselect everything else if an exclusive type has been selected
+  if (exclusiveType && selectedTypes.length > 1) {
+    setValue("types", [String(exclusiveType) as unknown as PCRItemType]);
+  }
+
+  return pcrs.map(pcrItem => {
+    return {
+      ...pcrItem,
+      disabled: !!exclusiveType && pcrItem.type !== exclusiveType,
+    };
+  });
+};
+
+export { usePcrItemsForThisCompetition, usePcrItemExclusivity };

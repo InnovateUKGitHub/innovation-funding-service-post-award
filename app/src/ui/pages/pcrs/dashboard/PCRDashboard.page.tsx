@@ -1,4 +1,4 @@
-import { PCRItemType, pcrStatusMetaValues } from "@framework/constants/pcrConstants";
+import { PCRItemType, pcrStatusMetaValues, skipToItemItems } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -60,7 +60,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     x => x.isPm && partners.some(y => x.partnerId === y.id && y.partnerStatus !== PartnerStatus.OnHold),
   );
 
-  const allPcrItemTypesUnavailable = availablePcrItems.every(x => x.disabled);
+  const allPcrItemTypesUnavailable = availablePcrItems.every(x => x.hidden);
 
   const renderStartANewRequestLink = () => {
     if (!isPmAllowedToEdit) return null;
@@ -76,13 +76,13 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     );
   };
 
-  const renderTable = (pcrs: PCRDashboardType[], qa: string, message: string) => {
+  const renderTable = (pcrs: PCRDashboardType[], qa: string, message: string, caption: string) => {
     if (!pcrs.length) {
       return <SimpleString>{message}</SimpleString>;
     }
 
     return (
-      <PCRTable.Table data={pcrs} qa={qa}>
+      <PCRTable.Table caption={caption} data={pcrs} qa={qa}>
         <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber} />
         <PCRTable.Custom
           qa="types"
@@ -112,7 +112,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     const pcrStatusMetadata = getPcrStatusMetadata(pcr.status);
 
     const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id, itemId: pcr.items?.[0]?.id };
-    const hasAnyUplift = pcr.items.some(x => x.type === PCRItemType.Uplift);
+    const skipToItem = pcr.items.some(x => skipToItemItems.includes(x.type));
 
     const viewItemLink = {
       route: props.routes.pcrViewItem.getLink(pcrLinkArgs),
@@ -144,7 +144,13 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       qa: "pcrDeleteLink",
     };
 
-    if (isPmOrMo && hasAnyUplift) {
+    const manageTeamMembersLink = {
+      route: props.routes.projectManageTeamMembersDashboard.getLink(pcrLinkArgs),
+      text: "Manage",
+      qa: "pcrManageTeamMembersLink",
+    };
+
+    if (isPmOrMo && skipToItem) {
       // If we only have 1 PCR item, show the view item link.
       if (pcr.items.length === 1) {
         links.push(viewItemLink);
@@ -154,7 +160,11 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       }
     } else {
       if (pcrStatusMetadata?.editableByPm && isPmAllowedToEdit && project.isActive) {
-        links.push(editLink);
+        if (pcr.items[0].type === PCRItemType.ManageTeamMembers) {
+          links.push(manageTeamMembersLink);
+        } else {
+          links.push(editLink);
+        }
       } else if (pcrStatusMetadata?.reviewableByMo && isMo && project.isActive) {
         links.push(reviewLink);
       } else if (isPmOrMo) {
@@ -189,17 +199,19 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
           active,
           "pcrs-active",
           getContent(x => x.pages.pcrsDashboard.noOngoingRequests),
+          getContent(x => x.pages.pcrsDashboard.currentRequests),
         )}
 
         {project.isActive && renderStartANewRequestLink()}
       </Section>
 
       <Accordion>
-        <AccordionItem title="Past requests" qa="past-requests">
+        <AccordionItem title={getContent(x => x.pages.pcrsDashboard.pastRequests)} qa="past-requests">
           {renderTable(
             archived,
             "pcrs-archived",
             getContent(x => x.pages.pcrsDashboard.noPastRequests),
+            getContent(x => x.pages.pcrsDashboard.pastRequests),
           )}
         </AccordionItem>
       </Accordion>

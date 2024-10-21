@@ -103,6 +103,7 @@ describe("PCR > Reasoning section", { tags: "smoke" }, () => {
       false,
       true,
       false,
+      false,
       "Files",
     );
   });

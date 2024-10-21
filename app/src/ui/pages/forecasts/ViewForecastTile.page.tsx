@@ -100,7 +100,11 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
             {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}
           </P>
         )}
-        <NewForecastTable tableData={tableData} isProjectSetup={false} />
+        <NewForecastTable
+          tableData={tableData}
+          isProjectSetup={false}
+          caption={getContent(x => x.components.forecastTable.caption)}
+        />
         <P>
           {getContent(x => x.components.claimLastModified.message)}
           {": "}

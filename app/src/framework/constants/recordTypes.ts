@@ -12,6 +12,7 @@ export const enum Profile {
 
 export const enum ProjectChangeRequest {
   requestHeader = "Acc_RequestHeader",
+  manageTeamMemberRequestHeader = "Acc_Request_Header_Manage_Team_Members",
   loanDrawdownChange = "Loan_LoanDrawdownChange",
   participantVirementForLoanDrawdown = "Loan_ParticipantVirementForLoanDrawdown",
   periodVirementForLoanDrawdown = "Loan_PeriodVirementForLoanDrawdown",
@@ -38,5 +39,6 @@ export const enum ProjectChangeRequest {
   changePeriodLength = "Acc_ChangePeriodLength",
   projectChangeRequests = "Acc_ProjectChangeRequests",
   approveNewSubcontractor = "Approve_a_new_subcontractor",
+  manageTeamMembers = "Manage_Team_Members",
   uplift = "Acc_Uplift",
 }

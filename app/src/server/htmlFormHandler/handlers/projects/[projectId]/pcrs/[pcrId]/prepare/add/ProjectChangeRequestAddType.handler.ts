@@ -28,7 +28,6 @@ class ProjectChangeRequestAddTypeHandler extends ZodFormHandlerBase<PcrUpdateTyp
     const typesPromise = context.runQuery(new GetAvailableItemTypesQuery(params.projectId, params.pcrId));
     const partnersPromise = context.runQuery(new GetAllForProjectQuery(params.projectId));
     const pcrsPromise = context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
-
     const [types, partners, pcrs] = await Promise.all([typesPromise, partnersPromise, pcrsPromise]);
 
     return {

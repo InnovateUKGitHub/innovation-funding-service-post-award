@@ -8,6 +8,7 @@ export class SalesforceRecordTypeMapper extends SalesforceBaseMapper<ISalesforce
       id: item.Id,
       parent: item.SobjectType,
       type: item.Name,
+      developerName: item.DeveloperName,
     };
   }
 }

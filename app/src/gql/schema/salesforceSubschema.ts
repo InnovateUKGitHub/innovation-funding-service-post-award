@@ -25,7 +25,23 @@ const salesforceSubschema: ExecutableSchema = {
     variables?: AnyObject;
   }) => {
     if (!context) throw new Error("No context was provided to the GraphQL executor");
-    return await context.api.executeGraphQL({ document, variables, decodeHTMLEntities: true });
+
+    // assigning to any as type is narrowed at next stage anyway
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = await context.api.executeGraphQL<any>({ document, variables, decodeHTMLEntities: true });
+
+    // the errors have a `paths` property from sf, but relay is expecting a `path` property to correctly render errors
+    if ("errors" in data && Array.isArray(data.errors)) {
+      data.errors = data.errors.map(x => {
+        if ("paths" in x && Array.isArray(x.paths)) {
+          return { ...x, path: x.paths };
+        } else {
+          return x;
+        }
+      });
+    }
+
+    return data;
   },
   transforms: [
     /**

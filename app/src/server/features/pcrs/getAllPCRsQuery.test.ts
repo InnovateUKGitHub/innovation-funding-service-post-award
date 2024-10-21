@@ -1,4 +1,5 @@
 import { PCRStatus, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { DateTime } from "luxon";
@@ -148,6 +149,7 @@ describe("GetAllPCRsQuery", () => {
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
       PCRItemType.ApproveNewSubcontractor,
+      PCRItemType.ManageTeamMembers,
     ];
 
     const expectedNames = [
@@ -160,6 +162,7 @@ describe("GetAllPCRsQuery", () => {
       "Put project on hold",
       "End the project early",
       "Approve a new subcontractor",
+      "Manage team members",
     ];
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);
@@ -172,6 +175,7 @@ describe("GetAllPCRsQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType?.typeName,
       parent: "Acc_ProjectChangeRequest__c",
+      developerName: ProjectChangeRequest.partnerWithdrawal,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
@@ -186,6 +190,7 @@ describe("GetAllPCRsQuery", () => {
     const recordType = context.testData.createRecordType({
       type: pcrItemType?.typeName,
       parent: "Acc_ProjectChangeRequest__c",
+      developerName: ProjectChangeRequest.partnerWithdrawal,
     });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
