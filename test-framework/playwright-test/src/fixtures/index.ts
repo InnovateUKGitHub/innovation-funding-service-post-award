@@ -70,8 +70,9 @@ export const test = base.extend<AccFixtures, Workers>({
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
   putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
-
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
+    use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
   manageTeamMember: ({ page, commands, accProjectKTP, accUserSwitcher, accNavigation }, use) =>
     use(new ManageTeamMember({ page, commands, accProjectKTP, accUserSwitcher, accNavigation })),
   // Project Factory

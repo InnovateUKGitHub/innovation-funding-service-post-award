@@ -152,7 +152,7 @@ class ApproveNewSubcontractor {
     await this.page.getByLabel("No").click();
   }
 
-  @Then("the validation messages will dynamically disappear")
+  @Then("the approve subcontractor validation messages will dynamically disappear")
   async noValidationMessage() {
     for (const msg of this.emptyValidationList) {
       await expect(this.page.getByTestId(this.valQa).getByText(msg)).not.toBeVisible();
