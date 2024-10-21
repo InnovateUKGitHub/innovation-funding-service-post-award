@@ -25,11 +25,9 @@ import { MonitoringReportSummaryFormHandler } from "./handlers/projects/[project
 import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectId]/pcrs/create/ProjectChangeRequestCreate.handler";
 import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestForm.handler";
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddType.handler";
-import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDelete.handler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUpload.handler";
-import { VirementLoanEditHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/virementLoanEditHandler";
 import { ProjectChangeRequestPrepareFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/prepareProjectChangeRequestForm.handler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningDocumentDelete.handler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningDocumentUpload.handler";
@@ -149,18 +147,15 @@ export const standardFormHandlers = [
   new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
   // MonitoringReportPrepareFormHandler must be after other MonitoringReport handlers
-  // This is because the handler uses `:mode` to capture "view"/"prepare" state, but may miscatch "prepare-period" as well.
+  // This is because the handler uses `:mode` to capture "view"/"prepare" state, but may mis-catch "prepare-period" as well.
   new MonitoringReportPrepareFormHandler(),
   new OverheadDocumentsDeleteHandler(),
   new LoanRequestFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
-  // ProjectChangeRequestReasoningUpdateHandler should be before ProjectChangeRequestItemUpdateHandler
   new ProjectChangeRequestReasoningUpdateHandler(),
   new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
-  new VirementCostsUpdateHandler(),
-  new VirementLoanEditHandler(),
   new ChangeRemainingGrantUpdateHandler(),
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
