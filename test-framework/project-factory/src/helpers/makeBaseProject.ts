@@ -25,9 +25,9 @@ interface CreateProjectProps {
     removePartner: ProjectFactoryInstanceType<typeof accPcrRemovePartnerBuilder>[];
   };
   competition: ProjectFactoryInstanceType<typeof competitionBuilder>;
-  projectParticipant: ProjectFactoryInstanceType<typeof accProjectParticipantBuilder>;
+  projectParticipants: ProjectFactoryInstanceType<typeof accProjectParticipantBuilder>[];
   profiles: {
-    projectFactoryHelper: ProjectFactoryInstanceType<typeof projectFactoryProfilesHelperBuilder>;
+    projectFactoryHelpers: ProjectFactoryInstanceType<typeof projectFactoryProfilesHelperBuilder>[];
     details: ProjectFactoryInstanceType<typeof accProfileDetailBuilder>[];
     totalCostCategories: ProjectFactoryInstanceType<typeof accProfileTotalCostCategoryBuilder>[];
   };
@@ -115,9 +115,9 @@ const makeBaseProject = (): CreateProjectProps => {
       headers: [],
       removePartner: [],
     },
-    projectParticipant,
+    projectParticipants: [projectParticipant],
     profiles: {
-      projectFactoryHelper: helper,
+      projectFactoryHelpers: [helper],
       details: profileDetails,
       totalCostCategories: totalCostCategories,
     },

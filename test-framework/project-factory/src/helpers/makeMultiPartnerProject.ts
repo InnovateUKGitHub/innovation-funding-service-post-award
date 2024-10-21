@@ -1,16 +1,11 @@
-import { accProfileDetailBuilder } from "../factory/ifspa/Acc_Profile__c.Profile_Detail";
-import { accProfileTotalCostCategoryBuilder } from "../factory/ifspa/Acc_Profile__c.Total_Cost_Category";
-import { accPcrRemovePartnerBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RemovePartner";
-import { accPcrHeaderBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RequestHeader";
 import { accProjectContactLinkBuilder } from "../factory/ifspa/Acc_ProjectContactLink__c";
-import { accProjectParticipantBuilder, defaultAccProjectParticipant } from "../factory/ifspa/Acc_ProjectParticipant__c";
-import { accProjectBuilder, defaultAccProject } from "../factory/ifspa/Acc_Project__c";
-import { accountBuilder, defaultAccount } from "../factory/ifspa/Account";
+import { defaultAccProjectParticipant } from "../factory/ifspa/Acc_ProjectParticipant__c";
+import { defaultAccProject } from "../factory/ifspa/Acc_Project__c";
+import { defaultAccount } from "../factory/ifspa/Account";
 import { competitionBuilder } from "../factory/ifspa/Competition__c";
 import { contactBuilder } from "../factory/ifspa/Contact";
 import { projectFactoryProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ProfilesHelper";
-import { userBuilder, defaultUser } from "../factory/ifspa/User";
-import { ProjectFactoryInstanceType } from "../types/ProjectFactoryDefinition";
+import { defaultUser } from "../factory/ifspa/User";
 import { CreateProjectProps } from "./makeBaseProject";
 
 const makeMultiPartnerProject = (): CreateProjectProps => {
@@ -79,6 +74,12 @@ const makeMultiPartnerProject = (): CreateProjectProps => {
     ProjectFactory_NumberOfPeriods: 12,
   });
 
+  const helperMulti = projectFactoryProfilesHelperBuilder.create().set({
+    ProjectFactory_ProjectParticipant: projectParticipantSecondary,
+    ProjectFactory_Competition: competition,
+    ProjectFactory_NumberOfPeriods: 12,
+  });
+
   return {
     competition,
     project,
@@ -92,9 +93,9 @@ const makeMultiPartnerProject = (): CreateProjectProps => {
       headers: [],
       removePartner: [],
     },
-    projectParticipant,
+    projectParticipants: [projectParticipant, projectParticipantSecondary],
     profiles: {
-      projectFactoryHelper: helper,
+      projectFactoryHelpers: [helper, helperMulti],
       details: [],
       totalCostCategories: [],
     },

@@ -28,12 +28,12 @@ export abstract class ProjectFactory {
     const apex = buildApex({
       instances: [
         data.project,
-        data.projectParticipant,
+        ...data.projectParticipants,
         ...data.pcrs.headers,
         ...data.pcrs.removePartner,
         ...data.logins.map(x => [x.account, x.contact, x.pcl, x.user]),
         data.competition,
-        data.profiles.projectFactoryHelper,
+        ...data.profiles.projectFactoryHelpers,
         ...data.profiles.details,
         ...data.profiles.totalCostCategories,
       ].flat(),
