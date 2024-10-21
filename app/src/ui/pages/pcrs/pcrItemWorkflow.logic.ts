@@ -13,6 +13,7 @@ import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
 import { PCRItemStatus, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -88,7 +89,7 @@ export const useOnSavePcrItem = (
   const navigate = useNavigate();
 
   const { clearMessages } = useMessageContext();
-  return useOnUpdate<Partial<FullPCRItemDto>, PCRDto, { link: ILinkInfo }>({
+  return useOnUpdate<Partial<FullPCRItemDto & { form: FormTypes }>, PCRDto, { link: ILinkInfo }>({
     req: data => {
       return clientsideApiClient.pcrs.update({
         projectId,

@@ -27,10 +27,8 @@ import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[proj
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddType.handler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
-import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDeleteHandler";
-import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUploadHandler";
-import { ProjectChangeRequestSpendProfileAddCostHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/spendProfileAddCostHandler";
-import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/spendProfileCostsHandler";
+import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDelete.handler";
+import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUpload.handler";
 import { VirementLoanEditHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/virementLoanEditHandler";
 import { ProjectChangeRequestPrepareFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/prepareProjectChangeRequestForm.handler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/reasoning/projectChangeRequestReasoningDocumentDelete.handler";
@@ -91,17 +89,15 @@ import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/proje
 import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/editPartnerDetailsPostcode.handler";
 import { ManageTeamMemberProjectChangeRequestHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberProjectChangeRequestHandler.handler";
+import { OverheadDocumentsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocuments.handler";
 
 export const standardFormHandlers = [
-  // Zod
   new ProjectLevelDocumentShareDeleteHandler(),
   new ClaimLevelDocumentShareDeleteHandler(),
   new ClaimDetailLevelDocumentShareDeleteHandler(),
   new ProjectSetupContactAssociateHandler(),
   new ProjectSetupBankDetailsHandler(),
   new PcrLevelDocumentDeleteHandler(),
-
-  // Zod PCRs
   new PcrItemFilesStepHandler(),
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
@@ -129,6 +125,7 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler(),
   new PcrItemAddPartnerSpendProfileOtherCostsHandler(),
   new PcrItemAddPartnerSpendProfileDeleteItemHandler(),
+  new OverheadDocumentsHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpdateHandler(),
   new PcrItemChangeRemovePartnerHandler(),
   new PcrItemChangeRemovePartnerSummaryHandler(),
@@ -162,8 +159,6 @@ export const standardFormHandlers = [
   new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
-  new ProjectChangeRequestSpendProfileAddCostHandler(),
-  new ProjectChangeRequestSpendProfileCostsSummaryHandler(),
   new VirementCostsUpdateHandler(),
   new VirementLoanEditHandler(),
   new ChangeRemainingGrantUpdateHandler(),
@@ -177,8 +172,6 @@ export const standardFormHandlers = [
   new ManageTeamMemberProjectChangeRequestHandler(),
 ] as const;
 
-export const multiFileFormHandlers = [new OverheadDocumentsUploadHandler()] as const;
-
 export const developerFormHandlers = [new DeveloperUserSwitcherHandler(), new DeveloperPageCrasherHandler()] as const;
 
 export const zodFormHandlers = [
@@ -189,6 +182,7 @@ export const zodFormHandlers = [
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new LoanRequestDocumentUploadHandler(),
   new PcrItemLevelDocumentUploadHandler(),
+  new OverheadDocumentsUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {
@@ -244,19 +238,6 @@ export const configureFormRouter = ({
       ((req, res, next) => {
         // Capture any multer errors and pass them into our form handler.
         upload.array("files")(req, res, error => {
-          handlePost({ schema, csrfProtection })(x)(error, req, res, next);
-        });
-      }) as RequestHandler,
-      handleError({ schema, csrfProtection }),
-    );
-  }
-
-  for (const x of multiFileFormHandlers) {
-    result.post(
-      getRoute(x),
-      ((req, res, next) => {
-        // Capture any multer errors and pass them into our form handler.
-        upload.array("attachment")(req, res, error => {
           handlePost({ schema, csrfProtection })(x)(error, req, res, next);
         });
       }) as RequestHandler,

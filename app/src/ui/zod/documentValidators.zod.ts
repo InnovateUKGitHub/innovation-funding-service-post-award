@@ -5,6 +5,7 @@ import {
   DocumentDescription,
   allowedPcrLevelDocuments,
   allowedLoanLevelDocuments,
+  allowedOverheadDocuments,
 } from "@framework/constants/documentDescription";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { z } from "zod";
@@ -127,6 +128,24 @@ const getPcrLevelUpload = ({ config }: { config: IAppOptions }) =>
     files: getMultiFileValidation(config),
   });
 
+type OverheadDocumentUploadSchemaType = ReturnType<typeof getOverheadDocumentUpload>;
+
+const getOverheadDocumentUpload = ({ config }: { config: IAppOptions }) =>
+  z.object({
+    form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload),
+    projectId: projectIdValidation,
+    projectChangeRequestIdOrItemId: pcrItemIdValidation,
+    description: z.union([
+      emptyStringToUndefinedValidation,
+      z.coerce
+        .number()
+        .refine(x => allowedOverheadDocuments.includes(x))
+        .optional()
+        .transform(x => x as DocumentDescription),
+    ]),
+    files: getMultiFileValidation(config),
+  });
+
 type PcrLevelUploadSchemaType = ReturnType<typeof getPcrLevelUpload>;
 
 const projectLevelDelete = z.object({
@@ -175,6 +194,13 @@ const pcrLevelDelete = z.object({
   documentId: z.string(),
 });
 
+const overheadDocumentDelete = z.object({
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete),
+  projectId: projectIdValidation,
+  projectChangeRequestIdOrItemId: z.union([pcrItemIdValidation, pcrIdValidation]),
+  documentId: z.string(),
+});
+
 const projectOrPartnerLevelDelete = z.discriminatedUnion("form", [partnerLevelDelete, projectLevelDelete]);
 
 const getLoanLevelUpload = ({ config }: { config: IAppOptions }) =>
@@ -210,16 +236,19 @@ export {
   getClaimLevelUpload,
   getClaimDetailLevelUpload,
   getLoanLevelUpload,
+  getOverheadDocumentUpload,
   claimDetailLevelDelete,
   claimLevelDelete,
   pcrLevelDelete,
   loanLevelDelete,
   projectOrPartnerLevelDelete,
+  overheadDocumentDelete,
   getBankStatementUpload,
   documentsErrorMap,
   bankStatementDelete,
 };
 export type {
+  OverheadDocumentUploadSchemaType,
   ProjectLevelUploadSchemaType,
   ClaimLevelUploadSchemaType,
   UploadBankStatementSchemaType,

@@ -11,6 +11,7 @@ import type {
   ClaimDetailLevelUploadSchemaType,
   LoanLevelUploadSchemaType,
   UploadBankStatementSchemaType,
+  OverheadDocumentUploadSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
@@ -20,7 +21,8 @@ type InputOptions =
   | ({ form: FormTypes.ClaimDetailLevelUpload } & z.output<ClaimDetailLevelUploadSchemaType>)
   | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>)
   | ({ form: FormTypes.LoanLevelUpload } & z.output<LoanLevelUploadSchemaType>)
-  | ({ form: FormTypes.ProjectSetupBankStatementUpload } & z.output<UploadBankStatementSchemaType>);
+  | ({ form: FormTypes.ProjectSetupBankStatementUpload } & z.output<UploadBankStatementSchemaType>)
+  | ({ form: FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload } & z.output<OverheadDocumentUploadSchemaType>);
 
 const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
   data.form === FormTypes.ProjectLevelUpload;
@@ -39,6 +41,9 @@ const isLoanLevelUpload = (data: InputOptions): data is z.output<LoanLevelUpload
 
 const isBankStatementUpload = (data: InputOptions): data is z.output<UploadBankStatementSchemaType> =>
   data.form === FormTypes.ProjectSetupBankStatementUpload;
+
+const isOverheadDocumentUpload = (data: InputOptions): data is z.output<OverheadDocumentUploadSchemaType> =>
+  data.form === FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload;
 
 export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();
@@ -71,7 +76,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
             description,
           },
         });
-      } else if (isPcrLevelUpload(data)) {
+      } else if (isPcrLevelUpload(data) || isOverheadDocumentUpload(data)) {
         return clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
           projectId,
           projectChangeRequestIdOrItemId: data.projectChangeRequestIdOrItemId,

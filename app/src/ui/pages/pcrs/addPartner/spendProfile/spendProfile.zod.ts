@@ -66,6 +66,13 @@ export const overheadSchema = evaluateObject(
 export type OverheadSchemaType = typeof overheadSchema;
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
+export const overheadDocumentsSchema = z.object({
+  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocuments),
+});
+
+export type OverheadDocumentsSchemaType = typeof overheadDocumentsSchema;
+export type OverheadDocumentsSchema = z.infer<typeof overheadDocumentsSchema>;
+
 export const materialsSchema = z.object({
   id: costIdValidation.nullable(),
   materialsDescription: description,

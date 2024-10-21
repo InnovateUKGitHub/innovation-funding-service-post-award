@@ -14,6 +14,7 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { updatePcrItem } from "../../../../addPartnerUtils";
+import { PCRSpendProfileOverheadDocumentRoute } from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
 
 export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHandlerBase<
   OverheadSchemaType,
@@ -57,6 +58,14 @@ export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHa
     context: IContext;
     params: PcrAddSpendProfileCostParams;
   }): Promise<string> {
+    if (input.button_submit === "uploadDocuments") {
+      return PCRSpendProfileOverheadDocumentRoute.getLink({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        itemId: params.itemId,
+        costCategoryId: params.costCategoryId,
+      }).path;
+    }
     const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
 
     spendProfile.costs.push({

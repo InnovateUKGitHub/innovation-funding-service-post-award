@@ -93,7 +93,8 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
     | FormTypes.ClaimDetailLevelDelete
     | FormTypes.ClaimReviewLevelDelete
     | FormTypes.LoanLevelDelete
-    | FormTypes.ProjectSetupBankStatementDelete;
+    | FormTypes.ProjectSetupBankStatementDelete
+    | FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete;
 }
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({

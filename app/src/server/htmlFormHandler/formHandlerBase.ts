@@ -11,6 +11,7 @@ import { ILogger } from "@shared/logger";
 import { IFileWrapper } from "@framework/types/fileWrapper";
 import { IAppError } from "@framework/types/IAppError";
 import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
+import { IFormHandler } from "./IFormHandler";
 
 const logger: ILogger = new Logger("FormHandlerBase");
 
@@ -20,25 +21,6 @@ export interface RouteInfo<TParams> {
   routeName: string;
   routePath: string;
   getParams: (route: { name: string; path: string; params: AnyObject }) => TParams;
-}
-
-export interface IFormHandler {
-  readonly routePath: string | string[];
-
-  // This handler can be used for both error handling and standard routing.
-  // This is therefore a destructured object instead of positional arg based,
-  // to prevent a developer from passing straight into Express.
-  handle: ({
-    err,
-    req,
-    res,
-    next,
-  }: {
-    err?: unknown;
-    req: express.Request;
-    res: express.Response;
-    next: express.NextFunction;
-  }) => Promise<void>;
 }
 
 export interface IFormButton {

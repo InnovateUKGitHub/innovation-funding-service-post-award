@@ -296,4 +296,6 @@ export const allowedPcrLevelDocuments = [
 
 export const allowedLoanLevelDocuments = [DocumentDescription.Loan];
 
+export const allowedOverheadDocuments = [DocumentDescription.OverheadCalculationSpreadsheet];
+
 export { getDocumentDescriptionContentSelector };

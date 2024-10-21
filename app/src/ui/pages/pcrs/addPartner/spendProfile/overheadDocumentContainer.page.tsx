@@ -12,9 +12,12 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useForm } from "react-hook-form";
-import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
+import {
+  OverheadDocumentUploadSchemaType,
+  documentsErrorMap,
+  getOverheadDocumentUpload,
+} from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { usePcrFilesQuery } from "../../filesStep/filesStep.logic";
 import { pcrFilesQuery } from "../../filesStep/PcrFiles.query";
@@ -34,6 +37,8 @@ import { H2, H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { LinksList } from "@ui/components/atoms/LinksList/linksList";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { Messages } from "@ui/components/molecules/Messages/messages";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { OverheadDocumentsSchema } from "./spendProfile.zod";
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
@@ -77,8 +82,8 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     formState,
     getFieldState,
     reset,
-  } = useForm<z.output<PcrLevelUploadSchemaType>>({
-    resolver: zodResolver(getPcrLevelUpload({ config: props.config.options }), {
+  } = useForm<z.output<OverheadDocumentUploadSchemaType>>({
+    resolver: zodResolver(getOverheadDocumentUpload({ config: props.config.options }), {
       errorMap: documentsErrorMap,
     }),
   });
@@ -97,8 +102,10 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     },
   });
 
-  const { handleSubmit: handleFormSubmit } = useForm<{}>({
-    defaultValues: {},
+  const { handleSubmit: handleFormSubmit, setError } = useForm<OverheadDocumentsSchema>({
+    defaultValues: {
+      form: FormTypes.PcrAddPartnerSpendProfileOverheadDocuments,
+    },
   });
 
   const { onUpdate, isFetching } = useOnSavePcrItem(
@@ -111,7 +118,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     PCRItemType.PartnerAddition,
   );
 
-  const validationErrors = useRhfErrors(formState?.errors);
+  const validationErrors = useZodErrors(setError, formState?.errors);
 
   const disabled = isFetching || isDeleting || isUploading;
 
@@ -154,7 +161,11 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
             ></input>
             <input type="hidden" value={projectId} {...register("projectId")} />
             <input type="hidden" value={itemId} {...register("projectChangeRequestIdOrItemId")} />
-            <input type="hidden" value={FormTypes.PcrLevelUpload} {...register("form")} />
+            <input
+              type="hidden"
+              value={FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload}
+              {...register("form")}
+            />
 
             <DocumentGuidance />
             <FormGroup hasError={!!getFieldState("files").error}>
@@ -194,7 +205,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
             })
           }
           documents={documents}
-          formType={FormTypes.PcrLevelDelete}
+          formType={FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete}
           disabled={disabled}
         />
       </Section>
@@ -206,6 +217,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
           }),
         )}
       >
+        <input type="hidden" value={FormTypes.PcrAddPartnerSpendProfileOverheadDocuments} name="form" />
         <Fieldset>
           <Button disabled={disabled} type="submit">
             {getContent(x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit)}
