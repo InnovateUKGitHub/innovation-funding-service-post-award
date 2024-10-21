@@ -59,6 +59,7 @@ enum FormTypes {
   ProjectChangeRequestDelete = "projectChangeRequestDelete",
 
   PcrPrepare = "pcrPrepare",
+  PcrReview = "pcrReview",
 
   PcrLevelDelete = "pcrLevelDelete",
   PcrLevelUpload = "pcrLevelUpload",

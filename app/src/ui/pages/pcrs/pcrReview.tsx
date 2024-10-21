@@ -21,7 +21,6 @@ import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { useForm } from "react-hook-form";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { PcrReviewSchemaType, pcrReviewErrorMap, pcrReviewSchema } from "./pcrReview.zod";
@@ -30,6 +29,8 @@ import { ValidationError } from "@ui/components/atoms/validation/ValidationError
 import { useContent } from "@ui/hooks/content.hook";
 import { getDisplayName } from "./pcrItemWorkflow.logic";
 import { H2 } from "@ui/components/atoms/Heading/Heading.variants";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export interface PCRReviewParams {
   projectId: ProjectId;
@@ -54,8 +55,12 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
 
   const { getContent } = useContent();
 
-  const { register, watch, formState, handleSubmit } = useForm<PcrReviewSchemaType>({
-    defaultValues: { comments: "", status: "" },
+  const { register, watch, formState, handleSubmit, setError } = useForm<PcrReviewSchemaType>({
+    defaultValues: {
+      comments: "",
+      status: "",
+      form: FormTypes.PcrReview,
+    },
     resolver: zodResolver(pcrReviewSchema, {
       errorMap: pcrReviewErrorMap,
     }),
@@ -63,7 +68,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
 
   const { isFetching, apiError, onUpdate } = useOnUpdatePcrReview(props.pcrId, props.projectId, pcr);
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
     <Page
@@ -87,6 +92,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
       <LogSection statusChanges={statusChanges} />
 
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
+        <input type="hidden" {...register("form")} value={FormTypes.PcrReview} />
         <Fieldset>
           <H2>{getContent(x => x.pages.pcrReview.statusTitle)}</H2>
 
