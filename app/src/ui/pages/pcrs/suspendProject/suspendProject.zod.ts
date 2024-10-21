@@ -22,7 +22,7 @@ export const getProjectSuspensionSchema = ({ startDate, endDate }: { startDate: 
     .superRefine((data, ctx) => {
       const suspensionStartDate =
         typeof data.suspensionStartDate_year === "string" && typeof data.suspensionStartDate_month === "string"
-          ? new Date(+data.suspensionStartDate_year, +data.suspensionStartDate_month - 1, undefined, 12) // First day of the month, add 12 hours for time zone anomalies
+          ? new Date(+data.suspensionStartDate_year, +data.suspensionStartDate_month - 1, 1, 12) // First day of the month, add 12 hours for time zone anomalies
           : null;
       const suspensionEndDate =
         typeof data.suspensionEndDate_year === "string" && typeof data.suspensionEndDate_month === "string"
@@ -34,6 +34,56 @@ export const getProjectSuspensionSchema = ({ startDate, endDate }: { startDate: 
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["suspensionStartDate"],
+          });
+        }
+      }
+
+      if (!isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
+        if (!isValidMonth(data.suspensionStartDate_month) || !isValidYear(data.suspensionStartDate_year)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["suspensionStartDate"],
+          });
+        } else if (suspensionStartDate && startDate && suspensionStartDate < startDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            type: "date",
+            minimum: startDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionStartDate"],
+          });
+        } else if (suspensionStartDate && endDate && suspensionStartDate > endDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_big,
+            type: "date",
+            maximum: endDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionStartDate"],
+          });
+        }
+      }
+
+      if (!isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)) {
+        if (!isValidMonth(data.suspensionEndDate_month) || !isValidYear(data.suspensionEndDate_year)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["suspensionEndDate"],
+          });
+        } else if (suspensionEndDate && startDate && suspensionEndDate < startDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            type: "date",
+            minimum: startDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionEndDate"],
+          });
+        } else if (suspensionEndDate && endDate && suspensionEndDate > endDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_big,
+            type: "date",
+            maximum: endDate?.getTime(),
+            inclusive: true,
+            path: ["suspensionEndDate"],
           });
         }
       }
@@ -52,56 +102,6 @@ export const getProjectSuspensionSchema = ({ startDate, endDate }: { startDate: 
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.invalid_date,
-            path: ["suspensionEndDate"],
-          });
-        }
-      }
-
-      if (!isEmptyDate(data.suspensionStartDate_month, data.suspensionStartDate_year)) {
-        if (suspensionStartDate && startDate && suspensionStartDate < startDate) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            type: "date",
-            minimum: startDate?.getTime(),
-            inclusive: true,
-            path: ["suspensionStartDate"],
-          });
-        } else if (suspensionStartDate && endDate && suspensionStartDate > endDate) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_big,
-            type: "date",
-            maximum: endDate?.getTime(),
-            inclusive: true,
-            path: ["suspensionStartDate"],
-          });
-        } else if (!isValidMonth(data.suspensionStartDate_month) || !isValidYear(data.suspensionStartDate_year)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["suspensionStartDate"],
-          });
-        }
-      }
-
-      if (!isEmptyDate(data.suspensionEndDate_month, data.suspensionEndDate_year)) {
-        if (suspensionEndDate && startDate && suspensionEndDate < startDate) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            type: "date",
-            minimum: startDate?.getTime(),
-            inclusive: true,
-            path: ["suspensionEndDate"],
-          });
-        } else if (suspensionEndDate && endDate && suspensionEndDate > endDate) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_big,
-            type: "date",
-            maximum: endDate?.getTime(),
-            inclusive: true,
-            path: ["suspensionEndDate"],
-          });
-        } else if (!isValidMonth(data.suspensionEndDate_month) || !isValidYear(data.suspensionEndDate_year)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
             path: ["suspensionEndDate"],
           });
         }
