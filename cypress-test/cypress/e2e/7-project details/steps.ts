@@ -313,6 +313,7 @@ export const partnerValidation = () => {
     "Save and return to partner information",
     false,
     false,
+    false,
     "New location",
   );
   cy.get("#postcode").clear().type("SN123456789");

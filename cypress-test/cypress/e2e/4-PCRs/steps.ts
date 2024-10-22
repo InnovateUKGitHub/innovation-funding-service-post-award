@@ -1363,16 +1363,16 @@ export const markAsCompleteSave = () => {
 };
 
 export const populateDateFields = () => {
-  cy.get("#suspensionStartDate_month").clear().type("12");
-  cy.get("#suspensionStartDate_year").clear().type("2023");
-  cy.get("#suspensionEndDate_month").clear().type("03");
+  cy.get("#suspensionStartDate_month").clear().type("04");
+  cy.get("#suspensionStartDate_year").clear().type("2024");
+  cy.get("#suspensionEndDate_month").clear().type("09");
   cy.get("#suspensionEndDate_year").clear().type("2024");
 };
 
 export const dateChangeSummary = () => {
   cy.get("a").contains("Edit");
   projectOnHoldHeadings;
-  ["First day of pause", "2023", "Edit", "Last day of pause (if known)", "2024"].forEach(summary => {
+  ["First day of pause", "2024", "Edit", "Last day of pause (if known)", "2024"].forEach(summary => {
     cy.getByQA("projectSuspension").contains(summary);
   });
 };
@@ -1469,6 +1469,8 @@ export const clearAndValidate = () => {
 };
 
 export const validateDateRequired = () => {
+  const validStartMsg = "Enter a valid project suspension start date.";
+  const validEndMsg = "Enter a valid project suspension end date.";
   [
     "#suspensionStartDate_month",
     "#suspensionStartDate_year",
@@ -1478,10 +1480,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("Error");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter valid project suspension start date.");
-  cy.validationLink("Enter valid project suspension end date.");
-  cy.paragraph("Enter valid project suspension start date.");
-  cy.paragraph("Enter valid project suspension end date.");
+  cy.validationLink(validStartMsg);
+  cy.validationLink(validEndMsg);
+  cy.paragraph(validStartMsg);
+  cy.paragraph(validEndMsg);
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1492,10 +1494,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("200");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter valid project suspension start date.");
-  cy.validationLink("Enter valid project suspension end date.");
-  cy.paragraph("Enter valid project suspension start date.");
-  cy.paragraph("Enter valid project suspension end date.");
+  cy.validationLink(validStartMsg);
+  cy.validationLink(validEndMsg);
+  cy.paragraph(validStartMsg);
+  cy.paragraph(validEndMsg);
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1506,10 +1508,10 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("-200");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter valid project suspension start date.");
-  cy.validationLink("Enter valid project suspension end date.");
-  cy.paragraph("Enter valid project suspension start date.");
-  cy.paragraph("Enter valid project suspension end date.");
+  cy.validationLink(validStartMsg);
+  cy.validationLink(validEndMsg);
+  cy.paragraph(validStartMsg);
+  cy.paragraph(validEndMsg);
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1520,10 +1522,36 @@ export const validateDateRequired = () => {
     cy.get(input).clear().type("%^&*");
   });
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter valid project suspension start date.");
-  cy.validationLink("Enter valid project suspension end date.");
-  cy.paragraph("Enter valid project suspension start date.");
-  cy.paragraph("Enter valid project suspension end date.");
+  cy.validationLink(validStartMsg);
+  cy.validationLink(validEndMsg);
+  cy.paragraph(validStartMsg);
+  cy.paragraph(validEndMsg);
+  [
+    ["#suspensionStartDate_month", "02"],
+    ["#suspensionStartDate_year", "2024"],
+    ["#suspensionEndDate_month", "03"],
+    ["#suspensionEndDate_year", "2025"],
+  ].forEach(([field, input]) => {
+    cy.get(field).clear().type(input);
+  });
+  cy.clickOn("Save and continue");
+  cy.validationLink("The first day of pause must be after the project start date of 01/03/2024.");
+  cy.validationLink("The last day of pause must be before the project end date of 28/02/2025.");
+  cy.paragraph("The first day of pause must be after the project start date of 01/03/2024");
+  cy.paragraph("The last day of pause must be before the project end date of 28/02/2025.");
+  [
+    ["#suspensionStartDate_month", "03"],
+    ["#suspensionStartDate_year", "2025"],
+    ["#suspensionEndDate_month", "02"],
+    ["#suspensionEndDate_year", "2024"],
+  ].forEach(([field, input]) => {
+    cy.get(field).clear().type(input);
+  });
+  cy.clickOn("Save and continue");
+  cy.validationLink("The first day of pause must be before the project end date of 28/02/2025.");
+  cy.validationLink("The last day of pause must be after the project start date of 01/03/2024.");
+  cy.paragraph("The first day of pause must be before the project end date of 28/02/2025");
+  cy.paragraph("The last day of pause must be after the project start date of 01/03/2024.");
 };
 
 export const validateGrantMoving = () => {
@@ -1886,11 +1914,11 @@ export const validatePartialDate = () => {
   cy.get("#suspensionEndDate_month").clear().type("03");
   cy.get("#suspensionEndDate_year").clear().type("2024");
   cy.clickOn("Save and continue");
-  cy.validationLink("Enter valid project suspension start date.");
+  cy.validationLink("Enter a valid project suspension start date.");
   cy.get("a").each($a => {
     cy.wrap($a).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
   });
-  cy.paragraph("Enter valid project suspension start date.");
+  cy.paragraph("Enter a valid project suspension start date.");
   cy.get("a").each($p => {
     cy.wrap($p).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
   });
@@ -1902,7 +1930,7 @@ export const validateFutureStartDate = () => {
   cy.get("#suspensionEndDate_month").clear().type("03");
   cy.get("#suspensionEndDate_year").clear().type("2023");
   cy.button("Save and continue").click();
-  cy.validationLink("The last day of pause cannot be before the first day of pause.");
+  cy.validationLink("The last day of pause must be after the project start date of 01/03/2024.");
 };
 
 export const backToPcrs = () => {
