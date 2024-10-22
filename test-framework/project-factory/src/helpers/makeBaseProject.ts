@@ -1,41 +1,17 @@
 import { accClaimTotalProjectPeriodBuilder } from "../factory/ifspa/Acc_Claims__c.Total_Project_Period";
 import { accProfileDetailBuilder } from "../factory/ifspa/Acc_Profile__c.Profile_Detail";
 import { accProfileTotalCostCategoryBuilder } from "../factory/ifspa/Acc_Profile__c.Total_Cost_Category";
-import { accPcrRemovePartnerBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RemovePartner";
-import { accPcrHeaderBuilder } from "../factory/ifspa/Acc_ProjectChangeRequest__c.RequestHeader";
 import { accProjectContactLinkBuilder } from "../factory/ifspa/Acc_ProjectContactLink__c";
-import { accProjectParticipantBuilder, defaultAccProjectParticipant } from "../factory/ifspa/Acc_ProjectParticipant__c";
-import { accProjectBuilder, defaultAccProject } from "../factory/ifspa/Acc_Project__c";
-import { accountBuilder, defaultAccount } from "../factory/ifspa/Account";
+import { defaultAccProjectParticipant } from "../factory/ifspa/Acc_ProjectParticipant__c";
+import { defaultAccProject } from "../factory/ifspa/Acc_Project__c";
+import { defaultAccount } from "../factory/ifspa/Account";
 import { competitionBuilder } from "../factory/ifspa/Competition__c";
 import { contactBuilder } from "../factory/ifspa/Contact";
 import { projectFactoryClaimsAndProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
-import { userBuilder, defaultUser } from "../factory/ifspa/User";
-import { ProjectFactoryInstanceType } from "../types/ProjectFactoryDefinition";
+import { defaultUser } from "../factory/ifspa/User";
+import { ProjectFactoryDto } from "../types/ProjectFactoryDto";
 
-interface CreateProjectProps {
-  project: ProjectFactoryInstanceType<typeof accProjectBuilder>;
-  logins: {
-    pcl: ProjectFactoryInstanceType<typeof accProjectContactLinkBuilder>;
-    user: ProjectFactoryInstanceType<typeof userBuilder>;
-    contact: ProjectFactoryInstanceType<typeof contactBuilder>;
-    account: ProjectFactoryInstanceType<typeof accountBuilder>;
-  }[];
-  pcrs: {
-    headers: ProjectFactoryInstanceType<typeof accPcrHeaderBuilder>[];
-    removePartner: ProjectFactoryInstanceType<typeof accPcrRemovePartnerBuilder>[];
-  };
-  competition: ProjectFactoryInstanceType<typeof competitionBuilder>;
-  projectParticipants: ProjectFactoryInstanceType<typeof accProjectParticipantBuilder>[];
-  profiles: {
-    projectFactoryHelpers: ProjectFactoryInstanceType<typeof projectFactoryClaimsAndProfilesHelperBuilder>[];
-    details: ProjectFactoryInstanceType<typeof accProfileDetailBuilder>[];
-    totalCostCategories: ProjectFactoryInstanceType<typeof accProfileTotalCostCategoryBuilder>[];
-    claimTotalProjectPeriods: ProjectFactoryInstanceType<typeof accClaimTotalProjectPeriodBuilder>[];
-  };
-}
-
-const makeBaseProject = (): CreateProjectProps => {
+const makeBaseProject = (): ProjectFactoryDto => {
   const competition = competitionBuilder
     .create()
     .set({ Acc_CompetitionCode__c: "0", Acc_CompetitionName__c: "Competition", Acc_CompetitionType__c: "CR&D" });
@@ -133,4 +109,4 @@ const makeBaseProject = (): CreateProjectProps => {
   };
 };
 
-export { CreateProjectProps, makeBaseProject };
+export { ProjectFactoryDto as CreateProjectProps, makeBaseProject };

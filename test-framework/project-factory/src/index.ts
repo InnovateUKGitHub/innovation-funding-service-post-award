@@ -14,7 +14,7 @@ import { accProfileTotalCostCategoryBuilder } from "./factory/ifspa/Acc_Profile_
 import { accProfileDetailBuilder } from "./factory/ifspa/Acc_Profile__c.Profile_Detail";
 import { projectFactoryClaimsAndProfilesHelperBuilder } from "./factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
 import { accClaimTotalProjectPeriodBuilder } from "./factory/ifspa/Acc_Claims__c.Total_Project_Period";
-import type { CreateProjectProps } from "./helpers/makeBaseProject";
+import type { ProjectFactoryDto } from "./types/ProjectFactoryDto";
 
 export {
   accProjectBuilder,
@@ -33,5 +33,5 @@ export {
   buildApex,
   makeBaseProject,
   makeMultiPartnerProject,
-  CreateProjectProps,
+  ProjectFactoryDto,
 };

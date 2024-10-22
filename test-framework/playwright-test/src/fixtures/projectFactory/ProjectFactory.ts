@@ -1,4 +1,4 @@
-import { CreateProjectProps, buildApex } from "@innovateuk/project-factory";
+import { ProjectFactoryDto, buildApex } from "@innovateuk/project-factory";
 import { sleep } from "../../helpers/sleep";
 import { SfdcApi } from "../sfdc/SfdcApi";
 import { ProjectState } from "./ProjectState";
@@ -14,7 +14,7 @@ export abstract class ProjectFactory {
     this.projectState = projectState;
   }
 
-  protected abstract getProject(): CreateProjectProps;
+  protected abstract getProject(): ProjectFactoryDto;
 
   protected async createProject() {
     this.prefix = Math.floor(Date.now() / 1000).toString() + ".";
