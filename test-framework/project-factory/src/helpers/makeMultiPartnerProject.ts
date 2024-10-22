@@ -4,7 +4,7 @@ import { defaultAccProject } from "../factory/ifspa/Acc_Project__c";
 import { defaultAccount } from "../factory/ifspa/Account";
 import { competitionBuilder } from "../factory/ifspa/Competition__c";
 import { contactBuilder } from "../factory/ifspa/Contact";
-import { projectFactoryProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ProfilesHelper";
+import { projectFactoryClaimsAndProfilesHelperBuilder } from "../factory/ifspa/ProjectFactory.ClaimsAndProfilesHelper";
 import { defaultUser } from "../factory/ifspa/User";
 import { CreateProjectProps } from "./makeBaseProject";
 
@@ -59,6 +59,7 @@ const makeMultiPartnerProject = (): CreateProjectProps => {
     Acc_ProjectId__c: project,
     Acc_CreateProfiles__c: false,
     Acc_CreateClaims__c: true,
+    Acc_ProjectRole__c: "Lead",
   });
 
   const projectParticipantSecondary = defaultAccProjectParticipant.copy().set({
@@ -66,15 +67,16 @@ const makeMultiPartnerProject = (): CreateProjectProps => {
     Acc_ProjectId__c: project,
     Acc_CreateProfiles__c: false,
     Acc_CreateClaims__c: true,
+    Acc_ProjectRole__c: "Collaborator",
   });
 
-  const helper = projectFactoryProfilesHelperBuilder.create().set({
+  const helper = projectFactoryClaimsAndProfilesHelperBuilder.create().set({
     ProjectFactory_ProjectParticipant: projectParticipant,
     ProjectFactory_Competition: competition,
     ProjectFactory_NumberOfPeriods: 12,
   });
 
-  const helperMulti = projectFactoryProfilesHelperBuilder.create().set({
+  const helperMulti = projectFactoryClaimsAndProfilesHelperBuilder.create().set({
     ProjectFactory_ProjectParticipant: projectParticipantSecondary,
     ProjectFactory_Competition: competition,
     ProjectFactory_NumberOfPeriods: 12,
@@ -98,6 +100,7 @@ const makeMultiPartnerProject = (): CreateProjectProps => {
       projectFactoryHelpers: [helper, helperMulti],
       details: [],
       totalCostCategories: [],
+      claimTotalProjectPeriods: [],
     },
   };
 };

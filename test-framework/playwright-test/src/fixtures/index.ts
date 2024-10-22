@@ -21,8 +21,8 @@ import { SfdcNavigation } from "./sfdc/SfdcNavigation";
 import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
-import { ApproveNewSubcontractor } from "./acc/pages/PCRs/ApproveNewSubcontractor";
-import { ChangeProjectScope } from "./acc/pages/PCRs/ChangeScope";
+import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
+import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 
 type AccFixtures = {
   // Pages

@@ -87,6 +87,9 @@ const accProjectBuilder = new ProjectFactory(
   ({ fields, relationships, instanceName, options }) => [
     {
       code: `
+// Disable any validation related to projects.
+Acc_Global_Validator.bypassProject();
+
 Acc_Project__c ${instanceName} = new Acc_Project__c();
 ${injectRelationshipToApex(instanceName, "Acc_CompetitionId__c", relationships.Acc_CompetitionId__c)}
 ${injectFieldToApex(options, instanceName, "Acc_StartDate__c", fields.Acc_StartDate__c)}
