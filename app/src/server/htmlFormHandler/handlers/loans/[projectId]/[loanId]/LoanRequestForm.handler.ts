@@ -7,6 +7,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { LoanRequestSchemaType, loanRequestErrorMap, loanRequestSchema } from "@ui/pages/loans/loanRequest.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
 
 export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchemaType, LoansRequestParams> {
   constructor() {
@@ -25,11 +26,22 @@ export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchema
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<LoanRequestSchemaType>> {
+  protected async mapToZod({
+    input,
+    context,
+    params,
+  }: {
+    input: AnyObject;
+    context: IContext;
+    params: LoansRequestParams;
+  }): Promise<z.input<LoanRequestSchemaType>> {
+    const attachments = await context.runQuery(new GetLoanDocumentsQuery(params.projectId, params.loanId));
+
+    const attachmentsCount = attachments?.length ?? 0;
     return {
       form: input.form,
       comments: input.comments ?? "",
-      attachmentsCount: input.attachmentsCount ?? 0,
+      attachmentsCount,
     };
   }
 
@@ -45,7 +57,7 @@ export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchema
     const originalLoanQuery = new GetLoan(params.projectId, { loanId: params.loanId });
     const originalLoan = await context.runQuery(originalLoanQuery);
 
-    const dto = { ...originalLoan, comments: input.comments };
+    const dto = { ...originalLoan, comments: input.comments ?? "" };
     const updateLoanQuery = new UpdateLoanCommand(params.projectId, params.loanId, dto);
     await context.runCommand(updateLoanQuery);
 

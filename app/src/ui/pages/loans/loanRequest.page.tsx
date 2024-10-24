@@ -65,7 +65,6 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
     handleSubmit: handleDocumentSubmit,
     formState: documentFormState,
     getFieldState,
-    // watch: watchFiles,
     reset,
   } = useForm<z.output<LoanLevelUploadSchemaType>>({
     resolver: zodResolver(getLoanLevelUpload({ config: config.options }), {
@@ -122,7 +121,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
     resolver: zodResolver(loanRequestSchema, { errorMap: loanRequestErrorMap }),
   });
 
-  const characterCount = watch("comments").length;
+  const characterCount = (watch("comments") ?? "").length;
 
   const loansOverviewLink = props.routes.loansSummary.getLink({ projectId: props.projectId });
 
@@ -288,7 +287,6 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
         <Section>
           <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
             <input type="hidden" value={FormTypes.LoanRequest} {...register("form")} />
-            <input type="hidden" value={documents.length} {...register("attachmentsCount")} />
 
             <Fieldset>
               <Legend>{getContent(x => x.pages.loansRequest.commentTitle)}</Legend>

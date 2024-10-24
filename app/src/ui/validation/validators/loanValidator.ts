@@ -7,19 +7,24 @@ import { Results } from "@ui/validation/results";
 import * as Validation from "@ui/validation/validators/common";
 
 export class LoanDtoValidator extends Results<LoanDto> {
+  public status: Result;
+  public documents: Result;
+  public comments: Result;
+  public matchingAmountToForecast: Result;
+  public documentDescription: Result;
+
   constructor(
     private readonly dto: LoanDto,
     private readonly loanDocuments: DocumentSummaryDto[],
     public readonly showErrors: boolean,
   ) {
     super({ model: dto, showValidationErrors: showErrors });
+    this.status = this.validateStatus();
+    this.documents = this.validateDocuments();
+    this.comments = this.validateComments();
+    this.matchingAmountToForecast = this.validateAmount();
+    this.documentDescription = this.validateDocumentDescription();
   }
-
-  public status = this.validateStatus();
-  public documents = this.validateDocuments();
-  public comments = this.validateComments();
-  public matchingAmountToForecast = this.validateAmount();
-  public documentDescription = this.validateDocumentDescription();
 
   /**
    * @description Checks the type is correctly added for later filtering

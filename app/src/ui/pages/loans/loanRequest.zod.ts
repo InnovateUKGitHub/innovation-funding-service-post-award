@@ -9,7 +9,7 @@ export const loanRequestSchema = z.object({
   comments: getTextValidation({
     minLength: 5,
     maxLength: 32768,
-    required: true,
+    required: false,
   }),
   attachmentsCount: z.number().min(1),
   form: z.literal(FormTypes.LoanRequest),
