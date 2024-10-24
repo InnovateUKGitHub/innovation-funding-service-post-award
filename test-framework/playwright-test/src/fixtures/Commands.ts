@@ -374,7 +374,6 @@ class Commands {
     if (submitLabel) {
       await this.clickOn(submitLabel);
     }
-
     await this.validationLink(`Enter ${errorToken}.`);
     await input.fill("banana");
     await this.validationLink(`${firstPlaceErrorToken} must be a number.`);
@@ -419,6 +418,82 @@ class Commands {
     await this.validationLink(`${firstPlaceErrorToken} must be 0 or more.`);
     await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be 0 or more.` }).isVisible();
     await input.fill(validValue);
+  }
+
+  getLinkInRow(category: string, linkName: string) {
+    return this.getTableRow(category).locator("a").filter({ hasText: linkName });
+  }
+
+  dateToday() {
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let fulldate = `${day} ${month} ${year}`;
+    return fulldate;
+  }
+
+  startDate() {
+    let date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let fulldate = `01 ${month} ${year}`;
+    return fulldate;
+  }
+
+  endDate() {
+    let date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear() + 3;
+    let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 14);
+    let fulldate = `${lastDay} ${month} ${year}`;
+    return fulldate;
+  }
+
+  getLastDayOfMonth(year: number, month: number) {
+    let lastDay = new Date(year, month, 0, 14);
+    let date = lastDay.toLocaleDateString("en-GB", { day: "2-digit" });
+    return date;
+  }
+
+  /**
+   * Generates a month based on today's date to provide context against a project factory project (also based on today's date).
+   * By default it will add an increment to the month. If you pass true for subtract it will subtract.
+   * There is also the option to generate the output as a written Month if 'alpha' is passed as true.
+   */
+  startEndMonth(increment: number, subtract: boolean, alpha?: boolean, numberForOutput?: boolean): string | number {
+    const date = new Date();
+    if (subtract) {
+      date.setMonth(date.getMonth() - increment);
+    } else {
+      date.setMonth(date.getMonth() + increment);
+    }
+    if (alpha) {
+      return date.toLocaleDateString("en-GB", { month: "short" });
+    } else {
+      if (numberForOutput) {
+        return Number(date.getMonth()) + 1;
+      } else {
+        return date.getMonth();
+      }
+    }
+  }
+
+  /**
+   * Generates an end year based on today. This is the same way automated project factory start dates are created.
+   * By default it will add an increment to the year. If you pass true for subtract it will subtract.
+   */
+  startEndYear(increment: number, subtract: boolean) {
+    const currentDate = new Date();
+    if (subtract) {
+      let year = currentDate.getFullYear() - increment;
+      console.log(String(year));
+      return year;
+    } else {
+      let year = currentDate.getFullYear() + increment;
+      console.log(String(year));
+      return year;
+    }
   }
 
   // /**

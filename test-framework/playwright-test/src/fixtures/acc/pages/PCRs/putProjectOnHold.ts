@@ -1,6 +1,5 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
-import { BackButton } from "../../../../components/BackButton";
 import { PageHeading } from "../../../../components/PageHeading";
 import { Button } from "../../../../components/Button";
 import { getLorem } from "../../../../components/lorem";
@@ -75,7 +74,7 @@ class PutProjectOnHold {
   private readonly backButton: Locator;
   private readonly errorBody: Locator;
 
-  constructor({ page, commands }: { page: Page; commands: Commands }) {
+  constructor({ page }: { page: Page }) {
     this.page = page;
     this.commands = commands;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
@@ -144,7 +143,8 @@ class PutProjectOnHold {
     this.pcrAudit = ".acc-logs-container";
     this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
     this.backButton = this.page.locator("//*[@data-qa='page-title-caption']//preceding::a[1]");
-    this.errorBody = this.page.locator(".govuk-error-summary__body");
+    this.errorBody = this.page.locator('.govuk-error-summary__body');
+
   }
 
   async getPcrAuditTrail(expectedText: string) {
@@ -360,8 +360,10 @@ class PutProjectOnHold {
     const isChecked = await accCheckboxLocator.isChecked();
     expect(isChecked).toBe(false);
   }
+
   public async verifyTextOnPage(message: string, Locator?: Locator): Promise<void> {
     if (Locator) {
+
       await expect(Locator).toContainText(message);
     } else {
       const pageContent = await this.page.textContent("body");
@@ -432,11 +434,11 @@ class PutProjectOnHold {
     );
     await this.verifyTextOnPage("First day of pause");
     await this.verifyTextOnPage("Last day of pause (if known)");
-    await this.enterSuspensionDetails("01", "11", "2024", "2025");
+    await this.enterSuspensionDetails(this.finalStartMonth, this.finalEndMonth, this.finalStartYear, this.finalEndYear);
     await this.validateDates();
     //User can edit..
     await this.editOnHoldDate.click();
-    await this.enterSuspensionDetails("02", "02", "2024", "2026");
+    await this.enterSuspensionDetails(this.finalStartMonth, this.finalEndMonth, this.finalStartYear, this.finalEndYear);
     await this.validateDates();
     await this.clickMarkAsComplete();
     //Cannot submit without providing reasons to Innovate
@@ -516,7 +518,9 @@ class PutProjectOnHold {
     await this.validatePcrDetails("1", "Put project on hold");
     await this.clickTaskTodo("Put project on hold");
     await this.validateDates();
-    await this.verifyTextOnPage("28 Feb 2026");
+    await this.verifyTextOnPage(
+      `${String(this.commands.getLastDayOfMonth(Number(this.finalEndMonth), Number(this.finalEndYear)))} ${this.finalEndMonthAlpha} ${this.finalEndYear}`,
+    );
     await this.clickNextOrPrevious();
     //Reason page
     await this.textAreaNotEmpty();
@@ -527,7 +531,7 @@ class PutProjectOnHold {
     await this.clickBacktoRequest();
     await expect(this.requestTitle).toBeVisible();
   }
-  @When("the user submits the project change request")
+  @When('the user submits the project change request')
   async moClicksSubmit() {
     await this.selectRadioButton("Query the request");
     await this.moSubmitPcr();
@@ -598,7 +602,7 @@ class PutProjectOnHold {
     await this.verifyTextOnPage("Enter valid project suspension start date.", this.errorBody);
     await this.verifyTextOnPage("Enter valid project suspension end date.", this.errorBody);
     await this.enterSuspensionDetails("12", "11", "2025", "2025");
-    await this.verifyTextOnPage("The last day of pause cannot be before the first day of pause.", this.errorBody);
+    await this.verifyTextOnPage( "The last day of pause cannot be before the first day of pause.",this.errorBody);
     await this.enterSuspensionDetails("12", "09", "2024", "2025");
     await this.clickMarkAsComplete();
     await this.page.waitForTimeout(30000);

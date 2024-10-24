@@ -132,7 +132,7 @@ new Acc_ProjectPeriodProcessor_Batch().start(null);
 const currentDate = new Date();
 
 const defaultAccProject = accProjectBuilder.create().set({
-  Acc_StartDate__c: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+  Acc_StartDate__c: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 12),
   Acc_Duration__c: 36,
   Acc_ClaimFrequency__c: "Quarterly",
   Acc_ProjectTitle__c: "Title",
