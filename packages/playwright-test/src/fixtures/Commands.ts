@@ -527,19 +527,6 @@ class Commands {
   //   pcrArea?: string,
   // ): void;
 
-  getLinkInRow(category: string, linkName: string) {
-    return this.getTableRow(category).locator("a").filter({ hasText: linkName });
-  }
-
-  async dateToday() {
-    let date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-    let fulldate = `${day} ${month} ${year}`;
-    return fulldate;
-  }
-
   /**
    * Allows input of variable length of characters and checks for validation messages
    */

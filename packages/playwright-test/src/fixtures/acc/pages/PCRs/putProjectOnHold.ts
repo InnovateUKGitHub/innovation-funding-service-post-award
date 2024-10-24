@@ -73,8 +73,23 @@ class PutProjectOnHold {
   private readonly pcrTask1: string;
   private readonly backButton: Locator;
   private readonly errorBody: Locator;
+  private readonly fullStartDate: string;
+  private readonly fullEndDate: string;
+  private readonly startMonthEarly: string;
+  private readonly endMonthLate: string;
+  private readonly startYearActual: string;
+  private readonly endYearActual: string;
+  private readonly startMonthPlus1: string;
+  private readonly endMonthMinus1: string;
+  private readonly finalStartMonth: string;
+  private readonly finalEndMonth: string;
+  private readonly finalStartYear: string;
+  private readonly finalEndYear: string;
+  private readonly firstDateOfPause: string;
+  private readonly lastDateOfPause: string;
+  private readonly finalEndMonthAlpha: string;
 
-  constructor({ page }: { page: Page }) {
+  constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
     this.commands = commands;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
@@ -143,8 +158,20 @@ class PutProjectOnHold {
     this.pcrAudit = ".acc-logs-container";
     this.auditComment = this.page.locator("(//div[@class='govuk-inset-text govuk-!-margin-top-0 acc-logs-text'])[1]");
     this.backButton = this.page.locator("//*[@data-qa='page-title-caption']//preceding::a[1]");
-    this.errorBody = this.page.locator('.govuk-error-summary__body');
-
+    this.errorBody = this.page.locator(".govuk-error-summary__body");
+    this.fullStartDate = String(this.commands.startDate());
+    this.fullEndDate = String(this.commands.endDate());
+    this.startMonthEarly = String(this.commands.startEndMonth(1, true, false, true));
+    this.endMonthLate = String(this.commands.startEndMonth(1, false, false, true));
+    this.startYearActual = String(this.commands.startEndYear(0, false));
+    this.endYearActual = String(this.commands.startEndYear(3, false));
+    this.startMonthPlus1 = String(this.commands.startEndMonth(1, false, false, true));
+    this.endMonthMinus1 = String(this.commands.startEndMonth(1, true, false, true));
+    this.finalStartMonth = String(this.commands.startEndMonth(1, false, false, true));
+    this.finalEndMonth = String(this.commands.startEndMonth(2, false, false, true));
+    this.finalStartYear = String(this.commands.startEndYear(0, false));
+    this.finalEndYear = String(this.commands.startEndYear(2, false));
+    this.finalEndMonthAlpha = String(this.commands.startEndMonth(2, false, true));
   }
 
   async getPcrAuditTrail(expectedText: string) {
@@ -363,8 +390,7 @@ class PutProjectOnHold {
 
   public async verifyTextOnPage(message: string, Locator?: Locator): Promise<void> {
     if (Locator) {
-
-      await expect(Locator).toContainText(message);
+      await Locator.filter({ hasText: message }).isVisible();
     } else {
       const pageContent = await this.page.textContent("body");
       if (!pageContent || !pageContent.includes(message)) {
@@ -531,7 +557,8 @@ class PutProjectOnHold {
     await this.clickBacktoRequest();
     await expect(this.requestTitle).toBeVisible();
   }
-  @When('the user submits the project change request')
+
+  @When("the user submits the project change request")
   async moClicksSubmit() {
     await this.selectRadioButton("Query the request");
     await this.moSubmitPcr();
@@ -601,9 +628,35 @@ class PutProjectOnHold {
     await this.enterSuspensionDetails("abc", "ab_", "2o25", "2!26");
     await this.verifyTextOnPage("Enter valid project suspension start date.", this.errorBody);
     await this.verifyTextOnPage("Enter valid project suspension end date.", this.errorBody);
-    await this.enterSuspensionDetails("12", "11", "2025", "2025");
-    await this.verifyTextOnPage( "The last day of pause cannot be before the first day of pause.",this.errorBody);
-    await this.enterSuspensionDetails("12", "09", "2024", "2025");
+    await this.enterSuspensionDetails(
+      this.startMonthEarly,
+      this.endMonthLate,
+      this.startYearActual,
+      this.endYearActual,
+    );
+    await this.verifyTextOnPage(
+      `The first day of pause must be after the project start date of ${this.fullStartDate}`,
+      this.errorBody,
+    );
+    await this.verifyTextOnPage(
+      `The last day of pause must be before the project end date of ${this.fullEndDate}`,
+      this.errorBody,
+    );
+    await this.enterSuspensionDetails(
+      this.startMonthPlus1,
+      this.endMonthMinus1,
+      this.endYearActual,
+      this.startYearActual,
+    );
+    await this.verifyTextOnPage(
+      `The first day of pause must be before the project end date of ${this.fullEndDate}`,
+      this.errorBody,
+    );
+    await this.verifyTextOnPage(
+      `The last day of pause must be after the project start date of ${this.fullStartDate}`,
+      this.errorBody,
+    );
+    await this.enterSuspensionDetails(this.finalStartMonth, this.finalEndMonth, this.finalStartYear, this.finalEndYear);
     await this.clickMarkAsComplete();
     await this.page.waitForTimeout(30000);
     await this.enterText.fill(getLorem(10));
