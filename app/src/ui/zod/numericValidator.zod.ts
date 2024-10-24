@@ -140,20 +140,6 @@ export const getNumberValidation = <T extends boolean>({
           }
         } else {
           /*
-           * reject if too big
-           */
-          if (val > max) {
-            return ctx.addIssue({
-              code: ZodIssueCode.custom,
-              params: {
-                count: max,
-                generic: true,
-                i18n: "errors.generic.number.too_big",
-              },
-            });
-          }
-
-          /*
            * also check for less than
            */
           if (typeof lt === "number" && val >= lt) {
@@ -165,18 +151,16 @@ export const getNumberValidation = <T extends boolean>({
                 i18n: "errors.generic.number.less_than",
               },
             });
-          }
-
-          /*
-           * check for too small
-           */
-          if (val < min) {
+          } else if (val > max) {
+            /*
+             * reject if too big
+             */
             return ctx.addIssue({
               code: ZodIssueCode.custom,
               params: {
-                count: min,
+                count: max,
                 generic: true,
-                i18n: "errors.generic.number.too_small",
+                i18n: "errors.generic.number.too_big",
               },
             });
           }
@@ -191,6 +175,18 @@ export const getNumberValidation = <T extends boolean>({
                 count: lt,
                 generic: true,
                 i18n: "errors.generic.number.greater_than",
+              },
+            });
+          } else if (val < min) {
+            /*
+             * check for too small
+             */
+            return ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                count: min,
+                generic: true,
+                i18n: "errors.generic.number.too_small",
               },
             });
           }
