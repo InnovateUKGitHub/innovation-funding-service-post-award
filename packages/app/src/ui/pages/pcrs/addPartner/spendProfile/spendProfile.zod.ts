@@ -10,7 +10,7 @@ import { ZodIssueCode, z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
-const description = z.string().min(1).max(131072);
+const description = z.string().min(1).max(1_000);
 
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
