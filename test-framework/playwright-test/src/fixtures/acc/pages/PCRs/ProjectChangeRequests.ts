@@ -86,7 +86,7 @@ class ProjectChangeRequests {
   async createPCR(pcr: PcrType) {
     await this.commands.button("Create request").click();
     await this.commands.heading(this.startRequestHeader);
-    await this.page.getByLabel(pcr).click();
+    await this.commands.selectPcrType(pcr);
     await this.createButton.click();
     await this.commands.heading("Request");
   }

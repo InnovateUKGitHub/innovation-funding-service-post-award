@@ -6,9 +6,12 @@ export
 @Fixture("commands")
 class Commands {
   private readonly page: Page;
+  private readonly checkboxXPath: string;
 
   constructor({ page }: { page: Page }) {
     this.page = page;
+    this.checkboxXPath =
+      '//label[contains(@class, "govuk-checkboxes__label")]//span[text()="{labelText}"]/ancestor::label/preceding-sibling::input';
   }
 
   /**
@@ -19,6 +22,10 @@ class Commands {
    */
   getByLabel(label: string | RegExp, options?: { exact?: boolean }) {
     return this.page.getByLabel(label, options);
+  }
+
+  async selectPcrType(labelText: string) {
+    await this.page.locator(this.checkboxXPath.replace("{labelText}", labelText)).check();
   }
 
   /**
@@ -397,19 +404,20 @@ class Commands {
       .map((x, i) => (i === 0 ? x.toUpperCase() : x))
       .join("");
     const input = this.getByLabel(label);
+    const paragraph = this.page.getByRole("paragraph");
     await input.clear();
     if (submitLabel) await this.clickOn(submitLabel);
-    await this.validationLink(`Enter ${errorToken}.`);
-    await input.clear();
+    await this.validationLink(`Enter valid ${errorToken}.`);
+    await paragraph.filter({ hasText: `Enter valid ${errorToken}.` }).isVisible();
     await input.fill("banana");
-    await this.validationLink(`${firstPlaceErrorToken} must be a number.`);
-    await input.clear();
+    await this.validationLink(`${firstPlaceErrorToken} must be a whole number, like 3.`);
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 3.` }).isVisible();
     await input.fill("35.45678");
     await this.validationLink(`${firstPlaceErrorToken} must be a whole number, like 15.`);
-    await input.clear();
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 3.` }).isVisible();
     await input.fill("-56");
     await this.validationLink(`${firstPlaceErrorToken} must be 0 or more.`);
-    await input.clear();
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be 0 or more.` }).isVisible();
     await input.fill(validValue);
   }
 
@@ -499,5 +507,38 @@ class Commands {
     }
     await this.page.getByRole("button").filter({ hasText: buttonName }).click();
     await expect(this.page.getByTestId("validation-summary")).not.toBeVisible();
+  }
+
+  async learnFiles() {
+    const guidanceText = [
+      "You can upload up to 10 documents at a time. The documents must:",
+      "There is no limit to the number of files you can upload in total.",
+      "You can upload these file types:",
+    ];
+    const fileList = [
+      "total no more than 32MB in file size",
+      "each have a unique file name that describes its contents",
+      "PDF",
+      "(pdf, xps)",
+      "(doc, docx, rtf, txt, odt)",
+      "text",
+      "presentation",
+      "(ppt, pptx, odp)",
+      "spreadsheet",
+      "(csv, xls, xlsx, ods)",
+      "images",
+      "(jpg, jpeg, png, odg)",
+    ];
+    await this.page.locator("css=details").filter({ hasText: "Learn more about files you can upload" }).click();
+    await this.page
+      .locator("css=details")
+      .filter({ hasText: "Learn more about files you can upload" })
+      .getAttribute("open");
+    for (const txt of guidanceText) {
+      await this.page.getByRole("paragraph").filter({ hasText: txt }).isVisible();
+    }
+    for (const li of fileList) {
+      await this.page.getByRole("list").filter({ hasText: li }).isVisible();
+    }
   }
 }

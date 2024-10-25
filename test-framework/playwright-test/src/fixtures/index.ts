@@ -23,6 +23,7 @@ import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
+import { RemovePartner } from "./acc/pages/PCRs/removePartner";
 
 type AccFixtures = {
   // Pages
@@ -36,6 +37,7 @@ type AccFixtures = {
   projectChangeRequests: ProjectChangeRequests;
   approveNewSubcontractor: ApproveNewSubcontractor;
   changeScope: ChangeProjectScope;
+  removePartner: RemovePartner;
 
   // Misc
   accNavigation: AccNavigation;
@@ -69,12 +71,14 @@ export const test = base.extend<AccFixtures, Workers>({
   projectForecasts: ({ page, commands }, use) => use(new ProjectForecasts({ page, commands })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
-  putProjectOnHold: ({ page }, use) => use(new PutProjectOnHold({ page })),
+  putProjectOnHold: ({ page, commands }, use) => use(new PutProjectOnHold({ page, commands })),
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
   changeScope: ({ page, commands, projectChangeRequests }, use) =>
     use(new ChangeProjectScope({ page, commands, projectChangeRequests })),
+  removePartner: ({ page, commands, projectChangeRequests }, use) =>
+    use(new RemovePartner({ page, commands, projectChangeRequests })),
 
   // Project Factory
   accProjectBase: [
