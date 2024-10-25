@@ -1,42 +1,29 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
-import { isNil } from "lodash";
+import {
+  emptyStringToNullValidation,
+  evaluateObject,
+  partnerIdValidation,
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 
 export const removePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
 
 export const getRemovePartnerSchema = (numberOfPeriods: number) =>
-  z
-    .object({
-      markedAsComplete: z.boolean(),
-      removalPeriod: z.coerce.number().int().min(1).max(numberOfPeriods).nullable(),
-      partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
-      form: z.union([z.literal(FormTypes.PcrRemovePartnerSummary), z.literal(FormTypes.PcrRemovePartnerStep)]),
-    })
-    .superRefine((data, ctx) => {
-      if (data.markedAsComplete) {
-        if (!data.partnerId) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            minimum: 1,
-            inclusive: true,
-            type: "string",
-            path: ["partnerId"],
-          });
-        }
-
-        if (isNil(data?.removalPeriod)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.too_small,
-            minimum: 1,
-            inclusive: true,
-            type: "number",
-            path: ["removalPeriod"],
-          });
-        }
-      }
-    });
+  evaluateObject((data: { markedAsComplete: boolean }) => ({
+    markedAsComplete: z.boolean(),
+    removalPeriod: getNumberValidation({
+      integer: true,
+      min: 1,
+      max: numberOfPeriods,
+      required: data.markedAsComplete,
+    }),
+    partnerId: data.markedAsComplete
+      ? partnerIdValidation
+      : z.union([emptyStringToNullValidation, partnerIdValidation]),
+    form: z.union([z.literal(FormTypes.PcrRemovePartnerSummary), z.literal(FormTypes.PcrRemovePartnerStep)]),
+  }));
 
 export type RemovePartnerSchema = ReturnType<typeof getRemovePartnerSchema>;
 export type RemovePartnerSchemaType = z.infer<RemovePartnerSchema>;

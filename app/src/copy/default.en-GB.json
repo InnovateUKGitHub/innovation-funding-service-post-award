@@ -2974,10 +2974,12 @@
       "removePartner": {
         "partnerId": {
           "errors": {
-            "too_small": "Select partner to remove from this project."
+            "too_small": "Select partner to remove from this project.",
+            "invalid_type": "Select partner to remove from this project."
           }
         },
         "removalPeriod": {
+          "label": "Removal period",
           "errors": {
             "too_small": "Enter valid removal period.",
             "too_big": "Period must be {{count}} or fewer.",
