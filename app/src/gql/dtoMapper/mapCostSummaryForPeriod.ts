@@ -9,7 +9,7 @@ type CostsSummaryForPeriodNode = GQL.PartialNode<{
   Acc_OverrideAwardRate__c: GQL.Value<number>;
 }>;
 
-type CostsSummaryForPeriodMapping = CostsSummaryForPeriodDto & { overrideAwardRate: number };
+type CostsSummaryForPeriodMapping = CostsSummaryForPeriodDto & { overrideAwardRate: number | undefined };
 
 const mapper: GQL.DtoMapper<
   CostsSummaryForPeriodMapping,
@@ -49,7 +49,7 @@ const mapper: GQL.DtoMapper<
     return additionalData?.golCosts?.find(x => x.costCategoryId === node?.Id)?.value ?? 0;
   },
   overrideAwardRate(node) {
-    return node?.Acc_OverrideAwardRate__c?.value ?? 0;
+    return node?.Acc_OverrideAwardRate__c?.value ?? undefined;
   },
   remainingOfferCosts(node, additionalData) {
     const offerTotal = this["offerTotal"](node, additionalData);
