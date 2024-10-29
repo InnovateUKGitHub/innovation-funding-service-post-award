@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 import { Currency } from "@ui/components/atoms/Currency/currency";
-import { FullDate, FullNumericDate } from "@ui/components/atoms/Date";
+import { FullDate, FullNumericDate, getDay, getMonth, getYear } from "@ui/components/atoms/Date";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
@@ -10,7 +10,7 @@ import { TBody, TH, THead, TR, Table, TD, TFoot, TCaption } from "@ui/components
 import { useContent } from "@ui/hooks/content.hook";
 import { sumBy } from "lodash";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import { LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { InferredLoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 export type LoanDrawdownEditErrors = {
@@ -26,8 +26,8 @@ export const LoanDrawdownChangeEditTable = ({
   errors,
 }: {
   loans: LoanFinancialVirement[];
-  register: UseFormRegister<LoanDrawdownChangeSchema>;
-  watch: UseFormWatch<LoanDrawdownChangeSchema>;
+  register: UseFormRegister<InferredLoanDrawdownChangeSchema>;
+  watch: UseFormWatch<InferredLoanDrawdownChangeSchema>;
   disabled: boolean;
   errors: LoanDrawdownEditErrors;
 }) => {
@@ -72,6 +72,7 @@ export const LoanDrawdownChangeEditTable = ({
                       {...register(`loans.${i}.newDate_day`)}
                       disabled={disabled}
                       hasError={!!errors?.loans?.[i]?.newDate_day}
+                      defaultValue={getDay(x.newDate)}
                     />
                     <DateInput
                       id={`loans_${i}_newDate_month`}
@@ -79,6 +80,7 @@ export const LoanDrawdownChangeEditTable = ({
                       {...register(`loans.${i}.newDate_month`)}
                       disabled={disabled}
                       hasError={!!errors?.loans?.[i]?.newDate_month}
+                      defaultValue={getMonth(x.newDate)}
                     />
                     <DateInput
                       id={`loans_${i}_newDate_year`}
@@ -86,6 +88,7 @@ export const LoanDrawdownChangeEditTable = ({
                       {...register(`loans.${i}.newDate_year`)}
                       disabled={disabled}
                       hasError={!!errors?.loans?.[i]?.newDate_year}
+                      defaultValue={getYear(x.newDate)}
                     />
                   </DateInputGroup>
                 </TD>
@@ -101,6 +104,7 @@ export const LoanDrawdownChangeEditTable = ({
                     hasError={!!errors?.newValue}
                     {...register(`loans.${i}.newValue`)}
                     disabled={disabled}
+                    defaultValue={x.newValue}
                   />
                 </TD>
               ) : (

@@ -118,5 +118,7 @@ export const loanDrawdownChangeSummarySchema = z
     }
   });
 
-export type LoanDrawdownChangeSchema = z.infer<typeof loanDrawdownChangeSchema>;
-export type LoanDrawdownChangeSummarySchema = z.infer<typeof loanDrawdownChangeSummarySchema>;
+export type LoanDrawdownChangeSchema = typeof loanDrawdownChangeSchema;
+export type InferredLoanDrawdownChangeSchema = z.infer<LoanDrawdownChangeSchema>;
+export type LoanDrawdownChangeSummarySchema = typeof loanDrawdownChangeSummarySchema;
+export type InferredLoanDrawdownChangeSummarySchema = z.infer<LoanDrawdownChangeSummarySchema>;

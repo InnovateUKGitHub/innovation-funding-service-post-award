@@ -8,7 +8,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 import { combineDayMonthYear } from "@ui/components/atoms/Date";
-import { LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { InferredLoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 export const useLoanDrawdownChangeQuery = (pcrItemId: PcrItemId, fetchKey: number) => {
@@ -41,7 +41,7 @@ export const useLoanDrawdownChangeQuery = (pcrItemId: PcrItemId, fetchKey: numbe
 };
 
 export const useOnUpdateLoanChange = (projectId: ProjectId, pcrItemId: PcrItemId, loans: LoanFinancialVirement[]) => {
-  return useOnUpdate<LoanDrawdownChangeSchema, {}>({
+  return useOnUpdate<InferredLoanDrawdownChangeSchema, {}>({
     req: data => {
       return clientsideApiClient.financialLoanVirements.update({
         projectId,

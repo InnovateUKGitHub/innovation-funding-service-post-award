@@ -121,6 +121,9 @@ enum FormTypes {
   PcrProjectSuspensionStep = "pcrProjectSuspensionStep",
   PcrProjectSuspensionSummary = "pcrProjectSuspensionSummary",
 
+  PcrLoanDrawdownChange = "pcrLoanDrawdownChange",
+  PcrLoanDrawdownChangeSummary = "pcrLoanDrawdownChangeSummary",
+
   PcrChangeDurationStep = "pcrChangeDurationStep",
   PcrChangeDurationSummary = "pcrChangeDurationSummary",
 

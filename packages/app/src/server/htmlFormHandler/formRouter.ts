@@ -88,6 +88,8 @@ import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/proje
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/editPartnerDetailsPostcode.handler";
 import { ManageTeamMemberProjectChangeRequestHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberProjectChangeRequestHandler.handler";
 import { OverheadDocumentsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocuments.handler";
+import { PcrItemLoanDrawdownChangeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChange.handler";
+import { PcrItemLoanDrawdownChangeSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChangeSummary.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
@@ -135,6 +137,8 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerAcademicOrganisationStepHandler(),
   new PcrChangeDurationSummaryHandler(),
   new PcrChangeDurationHandler(),
+  new PcrItemLoanDrawdownChangeHandler(),
+  new PcrItemLoanDrawdownChangeSummaryHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),
   new ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),

@@ -3,9 +3,8 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
 import { useLoanDrawdownChangeQuery, useOnUpdateLoanChange } from "./loanDrawdownChange.logic";
 import { useForm } from "react-hook-form";
-import { loanDrawdownChangeSchema, errorMap, LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { loanDrawdownChangeSchema, errorMap, InferredLoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useNextLink } from "../utils/useNextLink";
 import { Section } from "@ui/components/atoms/Section/Section";
 import { Form } from "@ui/components/atoms/form/Form/Form";
@@ -14,6 +13,8 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { LoanDrawdownChangeEditTable, LoanDrawdownEditErrors } from "./LoanDrawdownChangeEditTable";
 import { getDay, getMonth, getYear } from "@ui/components/atoms/Date";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const LoanDrawdownChangeStep = () => {
   const { getContent } = useContent();
@@ -21,7 +22,7 @@ export const LoanDrawdownChangeStep = () => {
 
   const { pcrItem, loans } = useLoanDrawdownChangeQuery(itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger, watch } = useForm<LoanDrawdownChangeSchema>({
+  const { handleSubmit, register, formState, trigger, watch, setError } = useForm<InferredLoanDrawdownChangeSchema>({
     defaultValues: {
       // take the marked as complete state from the current checkbox state on the summary
       markedAsComplete: markedAsCompleteHasBeenChecked,
@@ -43,7 +44,7 @@ export const LoanDrawdownChangeStep = () => {
 
   const { isFetching: isUpdatingLoans, onUpdate: onUpdateLoans } = useOnUpdateLoanChange(projectId, itemId, loans);
 
-  const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownEditErrors;
+  const validationErrors = useZodErrors(setError, formState.errors) as LoanDrawdownEditErrors;
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const nextLink = useNextLink();
@@ -61,6 +62,7 @@ export const LoanDrawdownChangeStep = () => {
             });
           })}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrLoanDrawdownChange} />
           <LoanDrawdownChangeEditTable
             loans={loans}
             register={register}
