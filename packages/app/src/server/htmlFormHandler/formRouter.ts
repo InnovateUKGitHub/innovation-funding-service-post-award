@@ -90,6 +90,8 @@ import { ManageTeamMemberProjectChangeRequestHandler } from "./handlers/projects
 import { OverheadDocumentsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocuments.handler";
 import { PcrItemLoanDrawdownChangeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChange.handler";
 import { PcrItemLoanDrawdownChangeSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChangeSummary.handler";
+import { PcrItemLoanDurationChangeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDurationChange.handler";
+import { PcrItemLoanDurationChangeSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDurationChangeSummary.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
@@ -139,6 +141,8 @@ export const standardFormHandlers = [
   new PcrChangeDurationHandler(),
   new PcrItemLoanDrawdownChangeHandler(),
   new PcrItemLoanDrawdownChangeSummaryHandler(),
+  new PcrItemLoanDurationChangeHandler(),
+  new PcrItemLoanDurationChangeSummaryHandler(),
   new ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdateHandler(),
   new ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler(),
   new ProjectSetupBankDetailsHandler(),

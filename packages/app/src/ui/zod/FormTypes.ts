@@ -123,6 +123,8 @@ enum FormTypes {
 
   PcrLoanDrawdownChange = "pcrLoanDrawdownChange",
   PcrLoanDrawdownChangeSummary = "pcrLoanDrawdownChangeSummary",
+  PcrLoanDurationChange = "pcrLoanDurationChange",
+  PcrLoanDurationChangeSummary = "pcrLoanDurationChangeSummary",
 
   PcrChangeDurationStep = "pcrChangeDurationStep",
   PcrChangeDurationSummary = "pcrChangeDurationSummary",

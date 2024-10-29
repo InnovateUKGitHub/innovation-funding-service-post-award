@@ -6,17 +6,18 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoanDrawdownExtensionSchema, errorMap } from "./loanDrawdownExtension.zod";
 import { PcrPage } from "../pcrPage";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
 import { loanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { LoanDrawdownTable } from "./loanDrawdownTable";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const LoanDrawdownExtensionSummary = () => {
   const { projectId, itemId, fetchKey, displayCompleteForm, isFetching } = usePcrWorkflowContext();
 
   const { pcrItem } = useLoanDrawdownExtensionQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch } = useForm<LoanDrawdownExtensionSchema>({
+  const { register, handleSubmit, formState, watch, setError } = useForm<LoanDrawdownExtensionSchema>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       availabilityPeriodChange: String(pcrItem.availabilityPeriodChange ?? 0),
@@ -35,7 +36,7 @@ export const LoanDrawdownExtensionSummary = () => {
     ),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors) as LoanDrawdownExtensionErrors;
+  const validationErrors = useZodErrors(setError, formState?.errors) as LoanDrawdownExtensionErrors;
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -58,7 +59,15 @@ export const LoanDrawdownExtensionSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
-        />
+        >
+          <input type="hidden" name="availabilityPeriod" value={pcrItem.availabilityPeriod ?? 0} />
+          <input type="hidden" name="extensionPeriod" value={pcrItem.extensionPeriod ?? 0} />
+          <input type="hidden" name="repaymentPeriod" value={pcrItem.repaymentPeriod ?? 0} />
+          <input type="hidden" name="availabilityPeriodChange" value={pcrItem.availabilityPeriodChange ?? 0} />
+          <input type="hidden" name="extensionPeriodChange" value={pcrItem.extensionPeriodChange ?? 0} />
+          <input type="hidden" name="repaymentPeriodChange" value={pcrItem.repaymentPeriodChange ?? 0} />
+          <input type="hidden" name="form" value={FormTypes.PcrLoanDurationChangeSummary} />
+        </PcrItemSummaryForm>
       )}
     </PcrPage>
   );

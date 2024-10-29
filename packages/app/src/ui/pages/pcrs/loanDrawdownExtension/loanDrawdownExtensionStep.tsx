@@ -7,7 +7,6 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useNextLink } from "../utils/useNextLink";
 import { loanDrawdownExtensionSchema, errorMap, LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { Section } from "@ui/components/atoms/Section/Section";
@@ -15,6 +14,8 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { LoanDrawdownTable } from "./loanDrawdownTable";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const LoanDrawdownExtensionStep = () => {
   const { getContent } = useContent();
@@ -25,7 +26,7 @@ export const LoanDrawdownExtensionStep = () => {
 
   const formattedStartDate = formatDate(pcrItem.projectStartDate, DateFormat.SHORT_DATE);
 
-  const { handleSubmit, register, formState, trigger, watch } = useForm<LoanDrawdownExtensionSchema>({
+  const { handleSubmit, register, formState, trigger, watch, setError } = useForm<LoanDrawdownExtensionSchema>({
     defaultValues: {
       availabilityPeriodChange: String(pcrItem.availabilityPeriodChange ?? 0),
       extensionPeriodChange: String(pcrItem.extensionPeriodChange ?? 0),
@@ -44,7 +45,7 @@ export const LoanDrawdownExtensionStep = () => {
     ),
   });
 
-  const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownExtensionErrors;
+  const validationErrors = useZodErrors(setError, formState.errors) as LoanDrawdownExtensionErrors;
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const nextLink = useNextLink();
@@ -70,6 +71,10 @@ export const LoanDrawdownExtensionStep = () => {
             }),
           )}
         >
+          <input type="hidden" name="form" value={FormTypes.PcrLoanDurationChange} />
+          <input type="hidden" name="availabilityPeriod" value={pcrItem.availabilityPeriod ?? 0} />
+          <input type="hidden" name="extensionPeriod" value={pcrItem.extensionPeriod ?? 0} />
+          <input type="hidden" name="repaymentPeriod" value={pcrItem.repaymentPeriod ?? 0} />
           <Section>
             <LoanDrawdownTable
               pcrItem={pcrItem}

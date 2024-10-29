@@ -56,4 +56,6 @@ export const loanDrawdownExtensionSchema = ({
       }
     });
 
-export type LoanDrawdownExtensionSchema = z.infer<ReturnType<typeof loanDrawdownExtensionSchema>>;
+export type LoanDrawdownExtensionSchemaType = ReturnType<typeof loanDrawdownExtensionSchema>;
+
+export type LoanDrawdownExtensionSchema = z.infer<LoanDrawdownExtensionSchemaType>;
