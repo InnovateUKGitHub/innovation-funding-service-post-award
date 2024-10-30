@@ -1,0 +1,17 @@
+{
+  "name": "@innovateuk/common",
+  "private": true,
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/*.ts --bundle --platform=node --outdir=dist --sourcemap",
+    "typegen": "tsc"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

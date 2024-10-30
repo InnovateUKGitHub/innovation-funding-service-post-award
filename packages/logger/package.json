@@ -1,0 +1,13 @@
+{
+  "name": "@innovateuk/logger",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist --sourcemap",
+    "typegen": "tsc"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

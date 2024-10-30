@@ -1,0 +1,21 @@
+{
+  "name": "@innovateuk/playwright-test",
+  "private": true,
+  "scripts": {
+    "build": "bddgen",
+    "pw": "playwright test --ui",
+    "pw-cli": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.45.1",
+    "@prettier/plugin-xml": "^3.4.1",
+    "@types/node": "^20.14.10",
+    "playwright-bdd": "^7.0.0-1",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "@innovateuk/environment-manager": "*",
+    "@innovateuk/project-factory": "*",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

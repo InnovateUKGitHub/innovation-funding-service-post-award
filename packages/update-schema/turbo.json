@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": ["src/**"],
+      "outputs": ["dist/**"],
+      "dependsOn": ["@innovateuk/tsforce#build", "@innovateuk/common#build"]
+    },
+    "updateSchema": {
+      "inputs": ["src/**"],
+      "outputs": ["dist/**"],
+      "dependsOn": ["@innovateuk/update-schema#build"],
+      "env": ["SALESFORCE_CLIENT_ID", "SALESFORCE_CONNECTION_URL", "SALESFORCE_USERNAME", "SALESFORCE_PRIVATE_KEY"]
+    }
+  }
+}

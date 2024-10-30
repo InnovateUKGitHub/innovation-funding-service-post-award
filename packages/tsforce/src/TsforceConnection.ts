@@ -1,0 +1,124 @@
+import type { ExecutionRequest } from "@graphql-tools/utils";
+import { Logger, ILogger, Timer } from "@innovateuk/logger";
+import { print } from "graphql";
+import { PayloadError } from "relay-runtime";
+import { TsforceHttpClient } from "./TsforceHttpClient";
+import { TsforceSobject } from "./TsforceSobject";
+import { TsforceConnectionDataloader } from "./TsforceDataloader";
+
+interface ExecuteConfiguration {
+  decodeHTMLEntities?: boolean;
+}
+
+/**
+ * User-specific connection to the Salesforce API.
+ * Initialise by creating a connection with the `asUser` static method.
+ */
+class TsforceConnection {
+  private readonly version: string;
+  private readonly logger: ILogger;
+  public readonly email: string;
+  public readonly httpClient: TsforceHttpClient;
+  public readonly dataLoader: TsforceConnectionDataloader;
+  private readonly sobjectMap: Map<string, TsforceSobject> = new Map();
+
+  constructor({
+    version = "v60.0",
+    instanceUrl,
+    accessToken,
+    email,
+    traceId,
+  }: {
+    version?: string;
+    instanceUrl: string;
+    accessToken: string;
+    email: string;
+    traceId: string;
+  }) {
+    this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, traceId });
+    this.httpClient = new TsforceHttpClient({ version, accessToken, instanceUrl, email, traceId });
+    this.version = version;
+    this.email = email;
+    this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
+  }
+
+  private startTimer(message: string) {
+    return new Timer(this.logger, message);
+  }
+
+  /**
+   * Execute a GraphQL Query AST via the Salesforce GraphQL API.
+   *
+   * @todo Remove decodeHTMLEntities when Salesforce no longer returns encoded results.
+   * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
+   */
+  public async executeGraphQL<T>({
+    document,
+    variables,
+    decodeHTMLEntities,
+  }: ExecutionRequest & ExecuteConfiguration): Promise<{ data: T; errors: PayloadError[] }> {
+    const query = print(document);
+    const queryName = /query (\w+)[\s(]/.exec(query)?.[1];
+
+    const timer = this.startTimer(queryName ?? "Anonymous GraphQL Query");
+
+    // "graphql" is not part of the template string because our ESbuild/Relay GraphQL hack
+    // does thinks our code is actually a query.
+    const data = await this.httpClient.fetchJson("/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, variables }),
+      decodeHTMLEntities,
+    });
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "errors" in data &&
+      Array.isArray(data?.errors) &&
+      data.errors.length > 0
+    ) {
+      this.logger.error("GraphQL Error", queryName, variables, data);
+    } else {
+      this.logger.trace("GraphQL Result", queryName, variables, data);
+    }
+
+    timer.finish();
+
+    return data as { data: T; errors: PayloadError[] };
+  }
+
+  /**
+   * Execute a SOQL Query via the Salesforce SOQL Query API.
+   *
+   * @returns SOQL Result - Is typed as `any` because the result may vary, including potential errors.
+   */
+  public async executeSOQL<T>({
+    query,
+  }: {
+    query: string;
+  }): Promise<{ totalSize: number; done: boolean; records: T[] }> {
+    const timer = this.startTimer(query);
+    const data = this.httpClient.fetchJson("/query", {
+      method: "GET",
+      searchParams: {
+        q: query,
+      },
+    });
+    this.logger.trace("SOQL Query Return", query, await data);
+    timer.finish();
+    return data as Promise<{ totalSize: number; done: boolean; records: T[] }>;
+  }
+
+  public sobject(name: string): TsforceSobject {
+    if (this.sobjectMap.has(name)) {
+      return this.sobjectMap.get(name) as TsforceSobject;
+    } else {
+      const newSobject = new TsforceSobject({ connection: this, name });
+      this.sobjectMap.set(name, newSobject);
+      return newSobject;
+    }
+  }
+}
+
+export { TsforceConnection };

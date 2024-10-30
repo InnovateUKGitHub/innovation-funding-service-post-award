@@ -38,4 +38,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.icloud
+
+# acc-secrets
 kustomize/acc-secrets
+
+# Turborepos
+.turbo

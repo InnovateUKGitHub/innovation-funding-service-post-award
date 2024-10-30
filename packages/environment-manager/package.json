@@ -1,0 +1,7 @@
+{
+  "name": "@innovateuk/environment-manager",
+  "private": true,
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "license": "MIT"
+}

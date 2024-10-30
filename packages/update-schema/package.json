@@ -1,0 +1,17 @@
+{
+  "name": "@innovateuk/update-schema",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist/ --sourcemap",
+    "updateSchema": "node --inspect ./dist/index.js"
+  },
+  "dependencies": {
+    "@graphql-tools/stitch": "^9.2.16",
+    "@graphql-tools/utils": "^10.5.5",
+    "@graphql-tools/wrap": "^10.0.11",
+    "@innovateuk/common": "*",
+    "@innovateuk/tsforce": "*",
+    "esbuild": "^0.24.0"
+  }
+}

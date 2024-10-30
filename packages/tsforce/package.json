@@ -1,0 +1,28 @@
+{
+  "name": "@innovateuk/tsforce",
+  "private": true,
+  "exports": {
+    "./*": {
+      "default": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/*.ts src/**/*.ts --bundle --platform=node --outdir=dist/ --sourcemap",
+    "typegen": "tsc"
+  },
+  "dependencies": {
+    "@innovateuk/common": "*",
+    "@innovateuk/logger": "*",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.7",
+    "esbuild": "^0.24.0"
+  },
+  "peerDependencies": {
+    "@graphql-tools/utils": "^10.5.5",
+    "dataloader": "^2.2.2",
+    "undici": "^6.19.8"
+  }
+}

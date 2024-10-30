@@ -1,0 +1,36 @@
+{
+  "name": "@innovateuk/acc-ui-monorepo",
+  "private": true,
+  "workspaces": [
+    "./packages/app",
+    "./packages/common",
+    "./packages/environment-manager",
+    "./packages/logger",
+    "./packages/playwright-test",
+    "./packages/project-factory",
+    "./packages/tsforce",
+    "./packages/update-schema"
+  ],
+  "scripts": {
+    "build": "node --require turbo index.js run build --",
+    "test": "node --require turbo index.js run test --",
+    "pw": "node --require turbo index.js run pw --",
+    "pw:dev": "TEST_SALESFORCE_SANDBOX=dev node --require turbo index.js run pw --",
+    "pw:bjssdev": "TEST_SALESFORCE_SANDBOX=dev node --require turbo index.js run pw --",
+    "pw:at": "TEST_SALESFORCE_SANDBOX=at node --require turbo index.js run pw --",
+    "pw-run": "node --require turbo index.js run run --",
+    "pw-run:dev": "TEST_SALESFORCE_SANDBOX=dev node --require turbo index.js run pw-cli --",
+    "pw-run:bjssdev": "TEST_SALESFORCE_SANDBOX=dev node --require turbo index.js run pw-cli --",
+    "pw-run:at": "TEST_SALESFORCE_SANDBOX=at node --require turbo index.js run pw-cli --",
+    "start": "node --env-file .env --require turbo index.js run start --",
+    "typegen": "node --require turbo index.js run typegen --",
+    "updateSchema": "node --env-file .env --require turbo index.js run updateSchema --",
+    "postinstall": "npm run patch-package",
+    "patch-package": "patch-package"
+  },
+  "dependencies": {
+    "turbo": "^2.2.4-canary.5",
+    "patch-package": "^8.0.0"
+  },
+  "packageManager": "npm@10.5.2"
+}

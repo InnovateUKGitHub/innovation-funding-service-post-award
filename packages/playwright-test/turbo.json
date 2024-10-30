@@ -1,0 +1,39 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": ["src/**"],
+      "dependsOn": ["@innovateuk/project-factory#build"]
+    },
+    "pw": {
+      "persistent": true,
+      "cache": false,
+      "env": [
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "DISPLAY",
+        "BASIC_AUTH",
+        "TEST_SALESFORCE_SANDBOX",
+        "SALESFORCE_PRIVATE_KEY",
+        "SALESFORCE_USERNAME",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CONNECTION_URL"
+      ],
+      "dependsOn": ["@innovateuk/playwright-test#build", "@innovateuk/project-factory#build"]
+    },
+    "pw-cli": {
+      "persistent": true,
+      "cache": false,
+      "env": [
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "BASIC_AUTH",
+        "TEST_SALESFORCE_SANDBOX",
+        "SALESFORCE_PRIVATE_KEY",
+        "SALESFORCE_USERNAME",
+        "SALESFORCE_CLIENT_ID",
+        "SALESFORCE_CONNECTION_URL"
+      ],
+      "dependsOn": ["@innovateuk/playwright-test#build", "@innovateuk/project-factory#build"]
+    }
+  }
+}
