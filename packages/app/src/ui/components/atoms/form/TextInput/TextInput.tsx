@@ -13,7 +13,7 @@ export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
 };
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ className, hasError, inputWidth, prefix, suffix, numeric, ...props }, ref) => (
+  ({ className, hasError, inputWidth, prefix, suffix, numeric, maxLength = 1100, ...props }, ref) => (
     <div className="govuk-input__wrapper">
       {prefix && <div className="govuk-input__prefix">{prefix}</div>}
       <input
@@ -30,6 +30,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         )}
         type="text"
         id={!!props.id ? props.id : props.name}
+        maxLength={maxLength}
         {...props}
       />
       {suffix && <div className="govuk-input__suffix">{suffix}</div>}
