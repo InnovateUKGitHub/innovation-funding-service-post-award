@@ -1,40 +1,57 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
-import { BadRequestError, ValidationError } from "../common/appError";
-import { AuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { BadRequestError } from "../common/appError";
+import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { noop } from "lodash";
+import { z } from "zod";
+import {
+  monitoringReportWorkflowErrorMap,
+  MonitoringReportWorkflowSchema,
+  monitoringReportWorkflowSchema,
+} from "@ui/pages/monitoringReports/workflow/monitoringReportWorkflow.zod";
+import {
+  monitoringReportSummaryErrorMap,
+  MonitoringReportSummarySchema,
+  monitoringReportSummarySchema,
+} from "@ui/pages/monitoringReports/workflow/monitoringReportSummary.zod";
 
-export class SaveMonitoringReport extends AuthorisedAsyncCommandBase<boolean> {
+type SaveMonitoringReportDto = PickRequiredFromPartial<
+  MonitoringReportDto,
+  "projectId" | "periodId" | "headerId" | "questions"
+>;
+
+export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
+  boolean,
+  MonitoringReportWorkflowSchema | MonitoringReportSummarySchema,
+  SaveMonitoringReportDto
+> {
   public readonly runnableName: string = "SaveMonitoringReport";
 
-  constructor(
-    private readonly monitoringReportDto: PickRequiredFromPartial<
-      MonitoringReportDto,
-      "projectId" | "periodId" | "headerId"
-    >,
-    private readonly submit: boolean,
-  ) {
+  protected readonly dto: SaveMonitoringReportDto;
+  private readonly submit: boolean;
+
+  constructor(monitoringReportDto: SaveMonitoringReportDto, submit: boolean) {
     super();
+    this.dto = monitoringReportDto;
+    this.submit = submit;
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
+    return auth.forProject(this.dto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   private async updateHeader(context: IContext) {
-    const periodId = this.monitoringReportDto.periodId;
+    // get period id
+    const periodId = this.dto.periodId;
 
     const profile = await context.repositories.profileTotalPeriod
-      .getByProjectIdAndPeriodId(this.monitoringReportDto.projectId, periodId)
+      .getByProjectIdAndPeriodId(this.dto.projectId, periodId)
       // all the profiles for this period will have the same start and end dates so it doesn't matter which one we use
       .then(profiles => profiles[0]);
 
@@ -43,50 +60,61 @@ export class SaveMonitoringReport extends AuthorisedAsyncCommandBase<boolean> {
     }
 
     const update: Updatable<ISalesforceMonitoringReportHeader> = {
-      Id: this.monitoringReportDto.headerId,
+      Id: this.dto.headerId,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
       Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
-      Acc_AddComments__c: this.monitoringReportDto.addComments,
+      Acc_AddComments__c: this.dto.addComments,
     };
 
+    // add status and comments if is submit action
     if (this.submit) {
       update.Acc_MonitoringReportStatus__c = "Awaiting IUK Approval";
       update.Acc_AddComments__c = "";
     }
 
+    // update header
     await context.repositories.monitoringReportHeader.update(update);
   }
 
   private async insertStatusChange(context: IContext): Promise<void> {
+    // if submitting, then create a status change with header and comments
     if (!this.submit) return;
     await context.repositories.monitoringReportStatusChange.createStatusChange({
-      Acc_MonitoringReport__c: this.monitoringReportDto.headerId,
-      Acc_ExternalComment__c: this.monitoringReportDto.addComments,
+      Acc_MonitoringReport__c: this.dto.headerId,
+      Acc_ExternalComment__c: this.dto.addComments,
     });
   }
 
   private async updateMonitoringReport(context: IContext): Promise<void> {
-    const existing =
-      (await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportDto.headerId)) || [];
+    // get existing monitoring report for the header
+    const existing = (await context.repositories.monitoringReportResponse.getAllForHeader(this.dto.headerId)) || [];
 
-    const updateDtos = this.monitoringReportDto?.questions?.filter(x => x.responseId && x.optionId);
-    const insertDtos = this.monitoringReportDto?.questions?.filter(x => !x.responseId && x.optionId);
+    // get updatable items
+    const updateDtos = this.dto?.questions?.filter(x => x.responseId && x.optionId);
+    // get insertable items
+    const insertDtos = this.dto?.questions?.filter(x => !x.responseId && x.optionId);
+
+    // get the ids of the updatable items
     const persistedIds = updateDtos?.map(x => x.responseId);
+    // get the ids of the items to be deleted
     const deleteItems = existing.filter(x => persistedIds?.indexOf(x.Id) === -1).map(x => x.Id);
 
+    // convert updatable items for SOQL
     const updateItems = updateDtos?.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
       Id: updateDto.responseId ?? "",
       Acc_Question__c: updateDto.optionId ?? "",
       Acc_QuestionComments__c: updateDto.comments,
     }));
 
+    // convert insertable items for SOQL
     const insertItems = insertDtos?.map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
-      Acc_MonitoringHeader__c: this.monitoringReportDto.headerId,
+      Acc_MonitoringHeader__c: this.dto.headerId,
       Acc_Question__c: insertDto.optionId ?? "",
       Acc_QuestionComments__c: insertDto.comments,
     }));
 
+    // run the repository updates
     await Promise.all<AnyObject>([
       updateItems ? context.repositories.monitoringReportResponse.update(updateItems) : noop,
       insertItems ? context.repositories.monitoringReportResponse.insert(insertItems) : noop,
@@ -94,36 +122,56 @@ export class SaveMonitoringReport extends AuthorisedAsyncCommandBase<boolean> {
     ]);
   }
 
-  protected async run(context: IContext) {
-    const header = await context.repositories.monitoringReportHeader.getById(this.monitoringReportDto.headerId);
+  protected async getZodSchema() {
+    if (!this.submit) {
+      return { schema: monitoringReportWorkflowSchema, errorMap: monitoringReportWorkflowErrorMap };
+    } else {
+      return { schema: monitoringReportSummarySchema, errorMap: monitoringReportSummaryErrorMap };
+    }
+  }
 
-    if (header.Acc_Project__c !== this.monitoringReportDto.projectId) {
+  protected async mapToZod(
+    dto: SaveMonitoringReportDto,
+  ): Promise<z.input<MonitoringReportWorkflowSchema> | z.input<MonitoringReportSummarySchema>> {
+    if (!this.submit) {
+      return {
+        questions: dto.questions.map(x => ({
+          optionId: x.optionId ?? "",
+          comments: x.comments,
+          title: x.title,
+        })),
+        button_submit: this.submit ? "continue" : "saveAndReturnToSummary",
+      };
+    } else {
+      return {
+        questions: dto.questions.map(x => ({
+          optionId: x.optionId ?? "",
+          comments: x.comments,
+          title: x.title,
+        })),
+        button_submit: this.submit ? "submit" : "saveAndReturnToSummary",
+        addComments: this.dto.addComments ?? "",
+        periodId: dto.periodId,
+      };
+    }
+  }
+
+  protected async runRepositoryCommands(context: IContext) {
+    // fetch existing header
+    const header = await context.repositories.monitoringReportHeader.getById(this.dto.headerId);
+
+    // reject if the header does not match the project id
+    if (header.Acc_Project__c !== this.dto.projectId) {
       throw new BadRequestError("Invalid request");
     }
 
+    // check that the status is appropriate for updating the monitoring report?
     if (
       header.Acc_MonitoringReportStatus__c !== "Draft" &&
       header.Acc_MonitoringReportStatus__c !== "New" &&
       header.Acc_MonitoringReportStatus__c !== "IUK Queried"
     ) {
       throw new BadRequestError("Report has already been submitted");
-    }
-
-    // as we can save a queried by IUK report should this be dependent on the status of the report?
-    // discussed with Jamie and it is unlikely -  not something to consider at the moment
-    // user can always create a new report to sort this!
-    const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
-    const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));
-
-    const validationResult = new MonitoringReportDtoValidator(
-      this.monitoringReportDto as MonitoringReportDto,
-      true,
-      this.submit,
-      questions,
-      project.periodId,
-    );
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
     }
 
     await this.updateMonitoringReport(context);
