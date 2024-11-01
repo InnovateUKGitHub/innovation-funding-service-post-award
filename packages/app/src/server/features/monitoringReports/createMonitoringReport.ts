@@ -1,30 +1,36 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
-import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
-import { BadRequestError, ValidationError } from "../common/appError";
-import { AuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { BadRequestError } from "../common/appError";
+import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
+import {
+  createMonitoringReportErrorMap,
+  createMonitoringReportSchema,
+  MonitoringReportCreateSchema,
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
+import { z } from "zod";
 
-export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<string> {
+type CreateMonitoringReportDto = PickRequiredFromPartial<MonitoringReportDto, "periodId" | "projectId" | "status">;
+
+export class CreateMonitoringReportCommand extends ZodAuthorisedAsyncCommandBase<
+  string,
+  MonitoringReportCreateSchema,
+  CreateMonitoringReportDto
+> {
   public readonly runnableName: string = "CreateMonitoringReportCommand";
   constructor(
-    private readonly monitoringReportDto: PickRequiredFromPartial<
-      MonitoringReportDto,
-      "periodId" | "projectId" | "status"
-    >,
+    protected readonly dto: PickRequiredFromPartial<MonitoringReportDto, "periodId" | "projectId" | "status">,
     private readonly submit: boolean,
   ) {
     super();
   }
 
   async accessControl(auth: Authorisation) {
-    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
+    return auth.forProject(this.dto.projectId).hasRole(ProjectRolePermissionBits.MonitoringOfficer);
   }
 
   private async insertStatusChange(context: IContext, headerId: string): Promise<void> {
@@ -33,11 +39,24 @@ export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<st
     });
   }
 
+  protected async getZodSchema() {
+    const schema = createMonitoringReportSchema(this.dto.periodId);
+
+    return { schema, errorMap: createMonitoringReportErrorMap };
+  }
+
+  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<MonitoringReportCreateSchema>> {
+    return {
+      period: input.period,
+      button_submit: input.button_submit,
+    };
+  }
+
   private async insertMonitoringReportHeader(context: IContext): Promise<string> {
-    const periodId = this.monitoringReportDto.periodId;
+    const periodId = this.dto.periodId;
 
     const profile = await context.repositories.profileTotalPeriod
-      .getByProjectIdAndPeriodId(this.monitoringReportDto.projectId, periodId)
+      .getByProjectIdAndPeriodId(this.dto.projectId, periodId)
       // all the profiles for this period will have the same start and end dates so it doesn't matter which one we use
       .then(profiles => profiles[0]);
 
@@ -46,7 +65,7 @@ export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<st
     }
 
     const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
-      Acc_Project__c: this.monitoringReportDto.projectId,
+      Acc_Project__c: this.dto.projectId,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
       Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
@@ -83,28 +102,13 @@ export class CreateMonitoringReportCommand extends AuthorisedAsyncCommandBase<st
     await context.repositories.monitoringReportResponse.insert(insertItems);
   }
 
-  protected async run(context: IContext) {
-    if (this.monitoringReportDto.headerId) {
+  protected async runRepositoryCommands(context: IContext) {
+    if (this.dto.headerId) {
       throw new BadRequestError("Report has already been created");
     }
 
-    if (this.monitoringReportDto?.questions?.some(x => !!x.responseId)) {
+    if (this.dto?.questions?.some(x => !!x.responseId)) {
       throw new BadRequestError("Report questions have already been created");
-    }
-
-    const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));
-
-    const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
-
-    const validationResult = new MonitoringReportDtoValidator(
-      this.monitoringReportDto as MonitoringReportDto,
-      true,
-      this.submit,
-      questions,
-      project.periodId,
-    );
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
     }
 
     const headerId = await this.insertMonitoringReportHeader(context);

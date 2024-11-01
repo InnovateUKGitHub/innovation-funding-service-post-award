@@ -130,12 +130,12 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
     }
   }
 
-  protected async mapToZod(
-    dto: SaveMonitoringReportDto,
-  ): Promise<z.input<MonitoringReportWorkflowSchema> | z.input<MonitoringReportSummarySchema>> {
+  protected async mapToZod(): Promise<
+    z.input<MonitoringReportWorkflowSchema> | z.input<MonitoringReportSummarySchema>
+  > {
     if (!this.submit) {
       return {
-        questions: dto.questions.map(x => ({
+        questions: this.dto.questions.map(x => ({
           optionId: x.optionId ?? "",
           comments: x.comments,
           title: x.title,
@@ -144,14 +144,14 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
       };
     } else {
       return {
-        questions: dto.questions.map(x => ({
+        questions: this.dto.questions.map(x => ({
           optionId: x.optionId ?? "",
           comments: x.comments,
           title: x.title,
         })),
         button_submit: this.submit ? "submit" : "saveAndReturnToSummary",
         addComments: this.dto.addComments ?? "",
-        periodId: dto.periodId,
+        periodId: this.dto.periodId,
       };
     }
   }
