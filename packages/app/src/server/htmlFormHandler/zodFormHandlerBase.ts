@@ -37,7 +37,7 @@ type QueryParams<T extends AnyObject> = T extends AnyObject[] ? T[number] : T;
 
 // Ensure that the Schema passed into the ZodFormHandlerBase
 // has the "form" form/button discriminator
-type AnyForm = { form: ZodTypeAny };
+type AnyForm = AnyObject;
 
 abstract class ZodFormHandlerBase<
   Schema extends
