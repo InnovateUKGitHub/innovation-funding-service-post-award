@@ -29,6 +29,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         )}
         type="text"
         inputMode="numeric"
+        maxLength={1100} // to prevent inputting insane numbers of chars that could cause the page to seize up
         id={props.id || props.name}
         {...props}
       />
