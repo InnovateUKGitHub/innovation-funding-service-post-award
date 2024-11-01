@@ -47,7 +47,6 @@ class MonitoringReportPreparePeriodFormHandler extends ZodFormHandlerBase<
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<MonitoringReportCreateSchema>> {
     return {
-      form: input.form,
       period: input.period,
       button_submit: input.button_submit,
     };

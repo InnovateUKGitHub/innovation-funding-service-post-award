@@ -11,7 +11,6 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { MonitoringReportWorkflowDef, getForwardLink } from "./monitoringReportWorkflowDef";
 import { Dispatch, SetStateAction } from "react";
 import { mapToMonitoringReportStatusChangeDtoArray } from "@gql/dtoMapper/mapMonitoringReportStatusChange";
-import { FormTypes } from "@ui/zod/FormTypes";
 
 export const useMonitoringReportWorkflowQuery = (
   projectId: ProjectId,
@@ -62,7 +61,6 @@ export type FormValues = {
   questions: { optionId: string; comments: string; title: string }[];
   addComments: string;
   button_submit: "saveAndContinue" | "saveAndReturn" | "submit" | "saveAndReturnToSummary";
-  form: FormTypes.MonitoringReportQuestion | FormTypes.MonitoringReportSummary;
 };
 
 const hasFormChanged = (

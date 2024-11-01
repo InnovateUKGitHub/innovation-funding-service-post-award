@@ -40,7 +40,6 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
     defaultValues: {
       period: monitoringReport.periodId,
       button_submit: "saveAndContinue",
-      form: FormTypes.MonitoringReportPreparePeriod,
     },
     resolver: zodResolver(createMonitoringReportSchema(project.periodId), { errorMap: createMonitoringReportErrorMap }),
   });

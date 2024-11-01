@@ -10,9 +10,7 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-const emptySchema = z.object({
-  form: z.literal(FormTypes.MonitoringReportDelete),
-});
+const emptySchema = z.object({});
 type EmptySchema = typeof emptySchema;
 
 class MonitoringReportDeleteFormHandler extends ZodFormHandlerBase<EmptySchema, MonitoringReportDeleteParams> {
@@ -32,10 +30,8 @@ class MonitoringReportDeleteFormHandler extends ZodFormHandlerBase<EmptySchema, 
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<EmptySchema>> {
-    return {
-      form: input.form,
-    };
+  protected async mapToZod(): Promise<z.input<EmptySchema>> {
+    return {};
   }
 
   protected async run({
