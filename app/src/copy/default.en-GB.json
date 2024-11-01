@@ -2686,10 +2686,7 @@
         "funds": {
           "arrayType": {
             "description": {
-              "errors": {
-                "too_small": "Enter source of funding.",
-                "invalid_type": "Source of funding is required."
-              }
+              "label": "Source of funding"
             },
             "dateSecured": {
               "errors": {

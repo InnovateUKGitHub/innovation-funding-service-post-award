@@ -3,13 +3,17 @@ import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-he
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { costIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 const valueDescription = z.object({
   value: getGenericCurrencyValidation({
     required: true,
   }),
-  description: z.string().min(1),
+  description: getTextValidation({
+    required: true,
+    maxLength: 1000,
+  }),
   id: z.union([z.literal("").transform(x => x as CostId), costIdValidation]),
   costCategory: z.number().transform(x => x as CostCategoryType),
   costCategoryId: z.string().transform(x => x as CostCategoryId),

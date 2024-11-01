@@ -1,6 +1,7 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
 export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
@@ -9,7 +10,10 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
         markedAsComplete: z.string(),
         button_submit: z.string(),
-        tsbReference: z.string().min(1),
+        tsbReference: getTextValidation({
+          required: true,
+          maxLength: 256,
+        }),
         costs: z.array(
           z.object({
             value: getGenericCurrencyValidation({
@@ -26,7 +30,10 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
         button_submit: z.string(),
         markedAsComplete: z.string(),
-        tsbReference: z.string(),
+        tsbReference: getTextValidation({
+          required: false,
+          maxLength: 256,
+        }),
         costs: z.array(
           z.object({
             value: getGenericCurrencyValidation({
