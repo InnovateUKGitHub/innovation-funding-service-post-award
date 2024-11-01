@@ -144,6 +144,7 @@ export const CompaniesHouseStep = () => {
                 id="registeredAddress"
                 {...register("registeredAddress")}
                 disabled={disabled}
+                maxLength={2200}
               />
             </FormGroup>
           </Fieldset>

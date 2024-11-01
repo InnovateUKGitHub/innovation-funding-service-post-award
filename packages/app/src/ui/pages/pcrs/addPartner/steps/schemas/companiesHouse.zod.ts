@@ -11,7 +11,7 @@ import { z } from "zod";
 const pcrAddPartnerCompaniesHouseStepSearchMaxLength = 159;
 const pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength = 100;
 const pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength = 40;
-const pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength = 32768;
+const pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength = 2000;
 
 const pcrAddPartnerCompaniesHouseStepErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
