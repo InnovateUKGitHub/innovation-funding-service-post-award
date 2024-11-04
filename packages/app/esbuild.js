@@ -29,12 +29,11 @@ if (opts.devtools || shouldEnableDevTools) {
     context(esbuildConfig.getServerConfig()),
     context(esbuildConfig.getClientConfig()),
   ]);
-
+  await Promise.all([server.rebuild(), client.rebuild()]);
   if (opts.watch) {
     await Promise.all([server.watch(), client.watch()]);
     await restarter.createServer();
-  } else {
-    await Promise.all([server.rebuild(), client.rebuild()]);
   }
+
   await Promise.all([server.dispose(), client.dispose()]);
 })();
