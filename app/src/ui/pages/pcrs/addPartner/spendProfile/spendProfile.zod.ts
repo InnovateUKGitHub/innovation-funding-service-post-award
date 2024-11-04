@@ -7,15 +7,15 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 import { costIdValidation, evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
+import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
-const description = z.string().min(1).max(1_000);
-
+const description = getTextValidation({ required: true, maxLength: 1_000 });
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileLabourCost),
-  descriptionOfRole: description,
+  labourDescription: description,
   grossCostOfRole: getGenericCurrencyValidation({
     required: true,
   }),
@@ -94,8 +94,8 @@ export type MaterialsSchema = z.infer<typeof materialsSchema>;
 
 export const subcontractingSchema = z.object({
   id: costIdValidation.nullable(),
-  subcontractorName: z.string().min(1).max(255),
-  subcontractorCountry: z.string().min(1).max(255),
+  subcontractorName: getTextValidation({ required: true, maxLength: 255 }),
+  subcontractorCountry: getTextValidation({ required: true, maxLength: 255 }),
   subcontractorRoleAndDescription: description,
   subcontractorCost: getGenericCurrencyValidation({
     required: true,

@@ -2764,18 +2764,13 @@
         },
         "spendProfile": {
           "description": {
-            "errors": {
-              "invalid_type": "Enter description of role.",
-              "too_small": "Enter description of role.",
-              "too_big": "Description must be {{count}} or fewer."
-            }
+            "label": "Description"
+          },
+          "labourDescription": {
+            "label": "Role within project"
           },
           "descriptionOfRole": {
-            "errors": {
-              "invalid_type": "Enter description of role.",
-              "too_small": "Enter description of role.",
-              "too_big": "Description must be {{count}} or fewer."
-            }
+            "label": "Description of role"
           },
           "grossCostOfRole": {
             "label": "Gross cost of role"
@@ -2790,42 +2785,25 @@
             "label": "Total cost of overheads"
           },
           "overheadRate": {
+            "label": "Overhead rate",
             "errors": {
               "invalid_enum_value": "Select an overhead rate."
             }
           },
           "subcontractorCountry": {
-            "errors": {
-              "too_small": "Enter subcontractor country.",
-              "too_big": "Subcontractor country must be {{count}} characters or fewer."
-            }
+            "label": "Subcontractor country"
           },
           "subcontractorName": {
-            "errors": {
-              "too_small": "Enter subcontractor name.",
-              "too_big": "Subcontractor name must be {{count}} or fewer."
-            }
+            "label": "Subcontractor name"
           },
           "subcontractorRoleAndDescription": {
-            "errors": {
-              "too_small": "Enter role and description.",
-              "too_big": "Role and description must be {{count}} or fewer."
-            }
+            "label": "Role and description"
           },
           "subcontractorCost": {
-            "label": "Cost of subcontractor",
-            "errors": {
-              "too_small": "Enter cost of work to be carried out by the new subcontractor."
-            }
+            "label": "Cost of subcontractor"
           },
           "descriptionOfCost": {
-            "errors": {
-              "too_small": "Enter description of cost.",
-              "too_big": "Description of cost must be {{count}} or fewer.",
-              "invalid_type": "Cost must be a number.",
-              "invalid_string": { "regex": "Cost must be a number." },
-              "two_decimal_places": "Cost must be 2 decimal places or fewer."
-            }
+            "label": "Description of cost"
           },
           "numberOfTimes": {
             "label": "Number of times"
@@ -2839,16 +2817,10 @@
             "label": "Cost of each"
           },
           "capitalUsageDescription": {
-            "errors": {
-              "too_small": "Enter item description.",
-              "too_big": "Item description must be {{count}} or fewer."
-            }
+            "label": "Description"
           },
           "materialsDescription": {
-            "errors": {
-              "too_big": "Item description must be {{count}} or fewer.",
-              "too_small": "Enter item description."
-            }
+            "label": "Item description"
           },
           "quantityOfMaterialItems": {
             "label": "Quantity"

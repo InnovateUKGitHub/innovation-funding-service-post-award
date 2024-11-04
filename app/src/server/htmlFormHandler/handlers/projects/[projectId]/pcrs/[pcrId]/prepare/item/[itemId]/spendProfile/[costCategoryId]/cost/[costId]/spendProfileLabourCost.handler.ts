@@ -41,7 +41,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
     return {
       id,
       form: input.form,
-      descriptionOfRole: input.descriptionOfRole,
+      labourDescription: input.labourDescription,
       grossCostOfRole: input.grossCostOfRole,
       ratePerDay: input.ratePerDay,
       daysSpentOnProject: input.daysSpentOnProject,
@@ -64,7 +64,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       costCategory: input.costCategoryType,
       id: input.id as CostId,
       costCategoryId: params.costCategoryId,
-      description: input.descriptionOfRole,
+      description: input.labourDescription,
       daysSpentOnProject: input.daysSpentOnProject,
       grossCostOfRole: parseCurrency(input.grossCostOfRole),
       ratePerDay: parseCurrency(input.ratePerDay),

@@ -74,7 +74,7 @@ export const LabourFormComponent = () => {
     defaultValues: {
       id: defaultCost.id,
       form: FormTypes.PcrAddPartnerSpendProfileLabourCost,
-      descriptionOfRole: defaultCost.description ?? "",
+      labourDescription: defaultCost.description ?? "",
       grossCostOfRole: String(defaultCost.grossCostOfRole ?? ""),
       ratePerDay: String(defaultCost.ratePerDay ?? ""),
       daysSpentOnProject: defaultCost.daysSpentOnProject ?? undefined,
@@ -101,7 +101,7 @@ export const LabourFormComponent = () => {
               spendProfile: {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
-                  description: data.descriptionOfRole,
+                  description: data.labourDescription,
                   id: data.id as CostId,
                   costCategoryId,
                   costCategory: costCategory.type,
@@ -122,14 +122,14 @@ export const LabourFormComponent = () => {
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
 
           <Field
-            error={validationErrors?.descriptionOfRole}
+            error={validationErrors?.labourDescription}
             label={getContent(x => x.pcrSpendProfileLabels.labour.role)}
             id="descriptionOfRole"
           >
             <TextInput
               disabled={isFetching}
               inputWidth="one-third"
-              {...register("descriptionOfRole")}
+              {...register("labourDescription")}
               defaultValue={defaultCost.description ?? ""}
             />
           </Field>
