@@ -5,7 +5,7 @@ WORKDIR /externalui
 RUN chown node /externalui
 USER node
 
-COPY --chown=node:node index.js turbo.json package.json package-lock.json /externalui/
+COPY --chown=node:node turbo.mjs turbo.json package.json package-lock.json /externalui/
 COPY --chown=node:node patches /externalui/patches
 COPY --chown=node:node packages /externalui/packages
 RUN npm ci --no-optional
