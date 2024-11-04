@@ -2,7 +2,7 @@ import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMon
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
-import { ValidationError } from "@shared/appError";
+import { ZodFormHandlerError } from "@shared/appError";
 import { BadRequestError } from "../common/appError";
 
 const createMonitoringReportTestData = (
@@ -29,7 +29,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    const command = new SaveMonitoringReport(dto, false);
+    const command = new SaveMonitoringReport(dto, false, 1);
     await context.runCommand(command);
 
     expect(context.repositories.monitoringReportResponse.Items).toEqual([]);
@@ -55,7 +55,7 @@ describe("saveMonitoringReports", () => {
     dto.questions[1].optionId = question2Answer.Id;
     dto.questions[1].comments = "Question 2 comments";
 
-    const command = new SaveMonitoringReport(dto, false);
+    const command = new SaveMonitoringReport(dto, false, 1);
     await context.runCommand(command);
 
     expect(context.repositories.monitoringReportResponse.Items.length).toEqual(2);
@@ -95,7 +95,7 @@ describe("saveMonitoringReports", () => {
     dto.questions[0].optionId = question1NewAnswer.Id;
     dto.questions[0].comments = "Question 1 new comments";
 
-    const command = new SaveMonitoringReport(dto, false);
+    const command = new SaveMonitoringReport(dto, false, 3);
     await context.runCommand(command);
 
     expect(context.repositories.monitoringReportResponse.Items.map(x => x.Id)).toEqual([
@@ -134,7 +134,7 @@ describe("saveMonitoringReports", () => {
 
     expect(context.repositories.monitoringReportResponse.Items).toEqual([responseQuestion1, responseQuestion2]);
 
-    const command = new SaveMonitoringReport(dto, false);
+    const command = new SaveMonitoringReport(dto, false, 4);
     await context.runCommand(command);
 
     expect(context.repositories.monitoringReportResponse.Items).toEqual([responseQuestion2]);
@@ -149,7 +149,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
     expectedDto.addComments = "Test comment";
-    await context.runCommand(new SaveMonitoringReport(expectedDto, false));
+    await context.runCommand(new SaveMonitoringReport(expectedDto, false, 5));
 
     const updatedDto = await context.runQuery(
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
@@ -167,13 +167,13 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
     dto.addComments = "Test comment";
-    await context.runCommand(new SaveMonitoringReport(dto, false));
+    await context.runCommand(new SaveMonitoringReport(dto, false, 6));
 
     const expectedDto = await context.runQuery(
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
     expectedDto.addComments = "Updated test comment";
-    await context.runCommand(new SaveMonitoringReport(expectedDto, false));
+    await context.runCommand(new SaveMonitoringReport(expectedDto, false, 7));
 
     const updatedDto = await context.runQuery(
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
@@ -191,7 +191,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, false));
+    await context.runCommand(new SaveMonitoringReport(dto, false, 1));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Draft");
   });
@@ -205,7 +205,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, true));
+    await context.runCommand(new SaveMonitoringReport(dto, true, 2));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Awaiting IUK Approval");
   });
@@ -218,7 +218,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, true));
+    await context.runCommand(new SaveMonitoringReport(dto, true, 3));
     expect(
       context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId),
     ).toBeDefined();
@@ -231,7 +231,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, false));
+    await context.runCommand(new SaveMonitoringReport(dto, false, 4));
     expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
   });
 
@@ -244,7 +244,7 @@ describe("saveMonitoringReports", () => {
     );
     dto.addComments = "Test comment";
 
-    await context.runCommand(new SaveMonitoringReport(dto, true));
+    await context.runCommand(new SaveMonitoringReport(dto, true, 5));
     const statusChange = context.repositories.monitoringReportStatusChange.Items.find(
       x => x.Acc_MonitoringReport__c === dto.headerId,
     );
@@ -263,7 +263,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, true));
+    await context.runCommand(new SaveMonitoringReport(dto, true, 6));
     const statusChange = context.repositories.monitoringReportStatusChange.Items.find(
       x => x.Acc_MonitoringReport__c === dto.headerId,
     );
@@ -285,7 +285,7 @@ describe("saveMonitoringReports validation", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(BadRequestError);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true, 7))).rejects.toThrow(BadRequestError);
   });
 
   it("should return a validation error when trying to save responses without a periodId", async () => {
@@ -299,9 +299,9 @@ describe("saveMonitoringReports validation", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    const command = new SaveMonitoringReport(dto, false);
+    const command = new SaveMonitoringReport(dto, false, 8);
 
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
   });
 
   it("should return a validation error if an invalid option is selected", async () => {
@@ -322,12 +322,12 @@ describe("saveMonitoringReports validation", () => {
     dto.questions[1].optionId = question1Options[1].Id;
     dto.questions[1].comments = "Question 2 comments";
 
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 1))).rejects.toThrow(ZodFormHandlerError);
 
     // save 2nd question with option from second question
     dto.questions[1].optionId = question2Options[1].Id;
 
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 2))).resolves.toBe(true);
   });
 
   it("should return a validation error if submitted and there are scores missing", async () => {
@@ -346,16 +346,16 @@ describe("saveMonitoringReports validation", () => {
     dto.questions[0].comments = "Comment 1";
 
     // save draft
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 3))).resolves.toBe(true);
 
     // save submitted expect fail
-    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true, 4))).rejects.toThrow(ZodFormHandlerError);
 
     dto.questions[1].optionId = question2Options[1].Id;
     dto.questions[1].comments = "Comment 2";
 
     // save submitted
-    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).resolves.toBe(true);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true, 5))).resolves.toBe(true);
   });
 
   it("should return a validation error if submitted and with a comment without a score", async () => {
@@ -375,12 +375,12 @@ describe("saveMonitoringReports validation", () => {
     dto.questions[1].comments = "Comment 2";
 
     // save draft
-    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true, 6))).rejects.toThrow(ZodFormHandlerError);
 
     dto.questions[0].optionId = question1Options[1].Id;
 
     // save draft
-    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).resolves.toBe(true);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true, 7))).resolves.toBe(true);
   });
 
   it("should return a bad request if submitted with a different project id", async () => {
@@ -395,10 +395,10 @@ describe("saveMonitoringReports validation", () => {
     );
     dto.projectId = project2.Id;
 
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(BadRequestError);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 8))).rejects.toThrow(BadRequestError);
 
     dto.projectId = report.Acc_Project__c as ProjectId;
 
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 1))).resolves.toBe(true);
   });
 });

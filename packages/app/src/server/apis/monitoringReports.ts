@@ -20,6 +20,7 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
       {
         monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
         submit: boolean;
+        step: number | "prepare-period" | undefined;
       }
     >,
   ) => Promise<MonitoringReportDto>;
@@ -42,7 +43,18 @@ class Controller
     );
     this.putItem(
       "/",
-      (p, q, b: MonitoringReportDto) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }),
+      (p, q, b: MonitoringReportDto) => {
+        return {
+          monitoringReportDto: processDto(b),
+          submit: q.submit === "true",
+          step:
+            q.step === "undefined"
+              ? undefined
+              : q.step === "prepare-period"
+                ? ("prepare-period" as const)
+                : Number(q.step),
+        };
+      },
       p => this.saveMonitoringReport(p),
     );
     this.deleteItem(
@@ -58,13 +70,14 @@ class Controller
       {
         monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
         submit: boolean;
+        step: number | undefined | "prepare-period";
       }
     >,
   ) {
-    const { monitoringReportDto, submit } = params;
+    const { monitoringReportDto, submit, step } = params;
     const context = await contextProvider.start(params);
 
-    await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit));
+    await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit, step));
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
   }
 

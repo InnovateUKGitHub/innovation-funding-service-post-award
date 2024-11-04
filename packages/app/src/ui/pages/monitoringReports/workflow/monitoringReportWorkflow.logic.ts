@@ -107,6 +107,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
             questions: report.questions.map((question, index) => Object.assign({}, question, data?.questions?.[index])),
           },
           submit: isFinalSubmit,
+          step: workflow.getCurrentStepInfo()?.stepNumber,
         });
       } else {
         return Promise.resolve(report);

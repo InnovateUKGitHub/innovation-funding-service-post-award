@@ -13,6 +13,7 @@ import {
   MonitoringReportCreateSchema,
 } from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
 import { z } from "zod";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
 type CreateMonitoringReportDto = PickRequiredFromPartial<MonitoringReportDto, "periodId" | "projectId" | "status">;
 
@@ -39,16 +40,17 @@ export class CreateMonitoringReportCommand extends ZodAuthorisedAsyncCommandBase
     });
   }
 
-  protected async getZodSchema() {
-    const schema = createMonitoringReportSchema(this.dto.periodId);
+  protected async getZodSchema(context: IContext) {
+    const project = await context.runQuery(new GetByIdQuery(this.dto.projectId));
+    const schema = createMonitoringReportSchema(project.periodId);
 
     return { schema, errorMap: createMonitoringReportErrorMap };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<MonitoringReportCreateSchema>> {
+  protected async mapToZod(): Promise<z.input<MonitoringReportCreateSchema>> {
     return {
-      period: input.period,
-      button_submit: input.button_submit,
+      period: this.dto.periodId,
+      button_submit: "saveAndContinue",
     };
   }
 

@@ -97,7 +97,7 @@ const clientApi: IApiClient<"client"> = {
     createMonitoringReport: params =>
       ajaxPost(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
     saveMonitoringReport: params =>
-      ajaxPut(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
+      ajaxPut(`/api/monitoring-reports?submit=${params.submit}&step=${params.step}`, params.monitoringReportDto),
     deleteMonitoringReport: params =>
       ajax(`/api/monitoring-reports/${params.projectId}/${params.reportId}`, { method: "DELETE" }),
   },

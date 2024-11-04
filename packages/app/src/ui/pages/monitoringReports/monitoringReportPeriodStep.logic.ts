@@ -67,6 +67,7 @@ export const useOnMonitoringReportUpdatePeriodStep = (
           status: MonitoringReportStatus.Draft,
         },
         submit: false, // just saving an update
+        step: "prepare-period",
       }),
     onSuccess: (data, response) => {
       const link = getLink(data["button_submit"] === "saveAndContinue", projectId, response.headerId, routes);

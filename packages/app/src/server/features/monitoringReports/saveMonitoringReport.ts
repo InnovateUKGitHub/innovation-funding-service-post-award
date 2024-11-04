@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
@@ -20,6 +19,12 @@ import {
   MonitoringReportSummarySchema,
   monitoringReportSummarySchema,
 } from "@ui/pages/monitoringReports/workflow/monitoringReportSummary.zod";
+import {
+  createMonitoringReportErrorMap,
+  createMonitoringReportSchema,
+  MonitoringReportCreateSchema,
+} from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
 type SaveMonitoringReportDto = PickRequiredFromPartial<
   MonitoringReportDto,
@@ -28,18 +33,24 @@ type SaveMonitoringReportDto = PickRequiredFromPartial<
 
 export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  MonitoringReportWorkflowSchema | MonitoringReportSummarySchema,
+  MonitoringReportWorkflowSchema | MonitoringReportSummarySchema | MonitoringReportCreateSchema,
   SaveMonitoringReportDto
 > {
   public readonly runnableName: string = "SaveMonitoringReport";
 
   protected readonly dto: SaveMonitoringReportDto;
   private readonly submit: boolean;
+  private readonly step: number | "prepare-period" | undefined;
 
-  constructor(monitoringReportDto: SaveMonitoringReportDto, submit: boolean) {
+  constructor(
+    monitoringReportDto: SaveMonitoringReportDto,
+    submit: boolean,
+    step: number | "prepare-period" | undefined,
+  ) {
     super();
     this.dto = monitoringReportDto;
     this.submit = submit;
+    this.step = step;
   }
 
   async accessControl(auth: Authorisation) {
@@ -122,27 +133,24 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
     ]);
   }
 
-  protected async getZodSchema() {
-    if (!this.submit) {
-      return { schema: monitoringReportWorkflowSchema, errorMap: monitoringReportWorkflowErrorMap };
-    } else {
+  protected async getZodSchema(context: IContext) {
+    if (this.submit) {
       return { schema: monitoringReportSummarySchema, errorMap: monitoringReportSummaryErrorMap };
+    } else if (this.step === "prepare-period") {
+      const project = await context.runQuery(new GetByIdQuery(this.dto.projectId));
+
+      return { schema: createMonitoringReportSchema(project.periodId), errorMap: createMonitoringReportErrorMap };
+    } else {
+      return { schema: monitoringReportWorkflowSchema, errorMap: monitoringReportWorkflowErrorMap };
     }
   }
 
   protected async mapToZod(): Promise<
-    z.input<MonitoringReportWorkflowSchema> | z.input<MonitoringReportSummarySchema>
+    | z.input<MonitoringReportWorkflowSchema>
+    | z.input<MonitoringReportSummarySchema>
+    | z.input<MonitoringReportCreateSchema>
   > {
-    if (!this.submit) {
-      return {
-        questions: this.dto.questions.map(x => ({
-          optionId: x.optionId ?? "",
-          comments: x.comments,
-          title: x.title,
-        })),
-        button_submit: this.submit ? "continue" : "saveAndReturnToSummary",
-      };
-    } else {
+    if (this.submit) {
       return {
         questions: this.dto.questions.map(x => ({
           optionId: x.optionId ?? "",
@@ -152,6 +160,20 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
         button_submit: this.submit ? "submit" : "saveAndReturnToSummary",
         addComments: this.dto.addComments ?? "",
         periodId: this.dto.periodId,
+      };
+    } else if (this.step === "prepare-period") {
+      return {
+        period: this.dto.periodId,
+        button_submit: "saveAndContinue",
+      };
+    } else {
+      return {
+        questions: this.dto.questions.map(x => ({
+          optionId: x.optionId ?? "",
+          comments: x.comments,
+          title: x.title,
+        })),
+        button_submit: this.submit ? "continue" : "saveAndReturnToSummary",
       };
     }
   }

@@ -63,7 +63,7 @@ class MonitoringReportPreparePeriodFormHandler extends ZodFormHandlerBase<
   }): Promise<string> {
     const monitoringReport = await context.runQuery(new GetMonitoringReportById(params.projectId, params.id));
 
-    const command = new SaveMonitoringReport({ ...monitoringReport, periodId: input.period }, false);
+    const command = new SaveMonitoringReport({ ...monitoringReport, periodId: input.period }, false, "prepare-period");
 
     await context.runCommand(command);
     if (input.button_submit === "saveAndReturn") {
