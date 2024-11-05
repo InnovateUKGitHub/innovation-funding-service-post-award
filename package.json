@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "node turbo.mjs run build --",
-    "test": "node turbo.mjs run test --",
+    "test": "node turbo.mjs run test -- --passWithNoTests",
     "pw": "node turbo.mjs run pw --",
     "pw:dev": "TEST_SALESFORCE_SANDBOX=dev node turbo.mjs run pw --",
     "pw:bjssdev": "TEST_SALESFORCE_SANDBOX=dev node turbo.mjs run pw --",
