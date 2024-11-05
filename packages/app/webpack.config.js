@@ -166,7 +166,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       minimize: false,
     },
     target: "node",
-    externals: [nodeExternals()],
+    externals: [nodeExternals({ additionalModuleDirs: [path.resolve("..", "..", "node_modules")] })],
   };
 
   return [clientConfig, serverConfig];
