@@ -20,4 +20,6 @@ ENV ACC_BUILD_TAG $ACC_BUILD_TAG
 ARG ACC_BUILD_EPOCH
 ENV ACC_BUILD_EPOCH $ACC_BUILD_EPOCH
 
-CMD ["node", "--enable-source-maps", "./packages/app/dist/src/server/index.js"]
+WORKDIR /externalui/packages/app
+
+CMD ["node", "--enable-source-maps", "./dist/src/server/index.js"]
