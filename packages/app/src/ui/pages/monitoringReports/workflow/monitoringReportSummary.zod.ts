@@ -34,7 +34,7 @@ export const monitoringReportSummarySchema = evaluateObject(
     periodId: z.number(),
     addComments: getTextValidation({
       maxLength: 5000,
-      required: button_submit === "submit",
+      required: false,
     }),
   }),
 );
