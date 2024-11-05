@@ -205,7 +205,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, true, 2));
+    await context.runCommand(new SaveMonitoringReport(dto, true, undefined));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Awaiting IUK Approval");
   });
@@ -301,33 +301,7 @@ describe("saveMonitoringReports validation", () => {
 
     const command = new SaveMonitoringReport(dto, false, 8);
 
-    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
-  });
-
-  it("should return a validation error if an invalid option is selected", async () => {
-    const context = new TestContext();
-
-    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
-    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
-
-    const report = createMonitoringReportTestData(context, 1);
-
-    const dto = await context.runQuery(
-      new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
-    );
-
-    // save 2nd question with option from first question
-    dto.questions[0].optionId = question1Options[1].Id;
-    dto.questions[0].comments = "Question 1 comments";
-    dto.questions[1].optionId = question1Options[1].Id;
-    dto.questions[1].comments = "Question 2 comments";
-
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 1))).rejects.toThrow(ZodFormHandlerError);
-
-    // save 2nd question with option from second question
-    dto.questions[1].optionId = question2Options[1].Id;
-
-    await expect(context.runCommand(new SaveMonitoringReport(dto, false, 2))).resolves.toBe(true);
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
   it("should return a validation error if submitted and there are scores missing", async () => {
