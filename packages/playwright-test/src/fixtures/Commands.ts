@@ -424,6 +424,10 @@ class Commands {
     return this.getTableRow(category).locator("a").filter({ hasText: linkName });
   }
 
+  /**
+   *
+   * Returns a string with full date 00 00 0000
+   */
   dateToday() {
     let date = new Date();
     let day = date.getDate();
