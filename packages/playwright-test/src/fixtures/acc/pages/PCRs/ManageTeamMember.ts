@@ -3,7 +3,7 @@ import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { PageHeading } from "../../../../components/PageHeading";
 import { Button } from "../../../../components/Button";
 import { Commands } from "../../../Commands";
-import { PcrType } from "../../../../Typings/pcr";
+import { PcrType } from "../../../../typings/pcr";
 import { getLorem } from "../../../../components/lorem";
 import { AccProjectKTP } from "../../../projectFactory/AccProjectKTP";
 import { AccUserSwitcher } from "../../AccUserSwitcher";
@@ -13,9 +13,9 @@ export
 class ManageTeamMember {
   protected readonly page: Page;
   protected readonly commands: Commands;
-  protected readonly ktp: AccProjectKTP;
-  protected readonly userswitcher: AccUserSwitcher;
-  protected readonly navigation: AccNavigation;
+  protected readonly accProjectKTP: AccProjectKTP;
+  protected readonly AccUserswitcher: AccUserSwitcher;
+  protected readonly AccNavigation: AccNavigation;
   private readonly dashboardTitle: PageHeading;
   private readonly dashboardGuidance: Locator;
   private readonly backProject: Locator;
@@ -68,21 +68,21 @@ class ManageTeamMember {
   constructor({
     page,
     commands,
-    ktp,
+    accProjectKTP,
     accUserSwitcher,
     accNavigation,
   }: {
     page: Page;
     commands: Commands;
-    ktp: AccProjectKTP;
+    accProjectKTP: AccProjectKTP;
     accUserSwitcher: AccUserSwitcher;
     accNavigation: AccNavigation;
   }) {
     this.page = page;
     this.commands = commands;
-    this.ktp = ktp;
-    this.userswitcher = accUserSwitcher;
-    this.navigation = accNavigation;
+    this.accProjectKTP = accProjectKTP;
+    this.AccUserswitcher = accUserSwitcher;
+    this.AccNavigation = accNavigation;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
     this.backProject = this.commands.backLink("Back to project");
     this.dashboardGuidance = this.page.getByText("You have no ongoing requests.");
@@ -177,11 +177,11 @@ class ManageTeamMember {
 
   @Given("a PM of a KTP project has created a new Project Change Request")
   async ktpPCRCreated() {
-    this.ktp.create();
-    this.userswitcher.switchToProjectManager();
-    this.navigation.gotoPCRPage();
-    this.userClicksCreate();
-    this.startRequestPage();
+    await this.accProjectKTP.create();
+    await this.AccUserswitcher.switchToProjectManager();
+    await this.AccNavigation.gotoPCRPage();
+    await this.userClicksCreate();
+    await this.startRequestPage();
   }
 
   @Then("the user sees the project change requests page")

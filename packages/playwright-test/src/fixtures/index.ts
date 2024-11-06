@@ -94,7 +94,7 @@ export const test = base.extend<AccFixtures, Workers>({
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
   projectDocuments: ({ page, commands, validators }, use) => use(new ProjectDocuments({ page, commands, validators })),
   manageTeamMember: ({ page, commands, accProjectKTP, accUserSwitcher, accNavigation }, use) =>
-    use(new ManageTeamMember({ page, commands, ktp, accUserSwitcher, accNavigation })),
+    use(new ManageTeamMember({ page, commands, accProjectKTP, accUserSwitcher, accNavigation })),
 
   // Project Factory
   accProjectBase: [

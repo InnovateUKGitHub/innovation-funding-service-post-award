@@ -594,7 +594,6 @@ class PutProjectOnHold {
     await this.clickBacktoRequest();
     await expect(this.requestTitle).toBeVisible();
   }
-
   @When("the user submits the project change request")
   async moClicksSubmit() {
     await this.selectRadioButton("Query the request");
