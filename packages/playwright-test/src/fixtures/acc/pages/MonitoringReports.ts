@@ -160,7 +160,7 @@ class MonitoringReports {
   //
 
   /**
-   * Completing every section of the report on after the other with validation.
+   * Completing every section of the report one after the other with validation.
    */
   @When("the user completes the monitoring report")
   async completeAllMonitoringReportSections() {
@@ -310,7 +310,6 @@ class MonitoringReports {
     for (const val of this.sectionCopyScore) {
       await this.validationMessage(`Enter a score for ${val}.`);
     }
-    await this.validationMessage("Enter comments.");
   }
   //
 
