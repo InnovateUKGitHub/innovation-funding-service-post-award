@@ -15,22 +15,16 @@ enum LogLevel {
  */
 function parseLogLevel(value?: string | LogLevel): LogLevel {
   switch ((value || "").toUpperCase()) {
-    case "TRACE":
     case LogLevel.TRACE:
       return LogLevel.TRACE;
-    case "VERBOSE":
     case LogLevel.VERBOSE:
       return LogLevel.VERBOSE;
-    case "DEBUG":
     case LogLevel.DEBUG:
       return LogLevel.DEBUG;
-    case "INFO":
     case LogLevel.INFO:
       return LogLevel.INFO;
-    case "WARN":
     case LogLevel.WARN:
       return LogLevel.WARN;
-    case "ERROR":
     case LogLevel.ERROR:
     default:
       return LogLevel.ERROR;
