@@ -25,6 +25,7 @@ import {
   MonitoringReportCreateSchema,
 } from "@ui/pages/monitoringReports/create/monitoringReportCreate.zod";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { MonitoringReportStep } from "@framework/types/monitoringReportStep";
 
 type SaveMonitoringReportDto = PickRequiredFromPartial<
   MonitoringReportDto,
@@ -40,13 +41,9 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
 
   protected readonly dto: SaveMonitoringReportDto;
   private readonly submit: boolean;
-  private readonly step: number | "prepare-period" | undefined;
+  private readonly step: MonitoringReportStep;
 
-  constructor(
-    monitoringReportDto: SaveMonitoringReportDto,
-    submit: boolean,
-    step: number | "prepare-period" | undefined,
-  ) {
+  constructor(monitoringReportDto: SaveMonitoringReportDto, submit: boolean, step: MonitoringReportStep) {
     super();
     this.dto = monitoringReportDto;
     this.submit = submit;

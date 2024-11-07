@@ -6,6 +6,7 @@ import { processDto } from "../../shared/processResponse";
 import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
+import { MonitoringReportStep } from "@framework/types/monitoringReportStep";
 
 export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   createMonitoringReport: (
@@ -20,7 +21,7 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
       {
         monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
         submit: boolean;
-        step: number | "prepare-period" | undefined;
+        step: MonitoringReportStep;
       }
     >,
   ) => Promise<MonitoringReportDto>;
@@ -48,8 +49,8 @@ class Controller
           monitoringReportDto: processDto(b),
           submit: q.submit === "true",
           step:
-            q.step === "undefined"
-              ? undefined
+            q.step === "summary-page"
+              ? ("summary-page" as const)
               : q.step === "prepare-period"
                 ? ("prepare-period" as const)
                 : Number(q.step),
@@ -70,7 +71,7 @@ class Controller
       {
         monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "periodId" | "headerId">;
         submit: boolean;
-        step: number | undefined | "prepare-period";
+        step: MonitoringReportStep;
       }
     >,
   ) {
