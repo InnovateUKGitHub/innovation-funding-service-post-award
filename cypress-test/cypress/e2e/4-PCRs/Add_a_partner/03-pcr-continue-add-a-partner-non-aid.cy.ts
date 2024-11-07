@@ -57,6 +57,7 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
     cy.paragraph(
       "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
     );
+    cy.get(`input[id="searchJesOrganisations"]`).clear();
   });
 
   it("Should type 'Swindon' and select 'Swindon University", companyHouseSwindonUniversity);

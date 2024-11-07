@@ -368,9 +368,6 @@ export const acceptNegativeInput = () => {
         cy.get("input").clear().wait(100).type("-200").wait(200);
       });
     });
-  cy.get("tfoot").within(() => {
-    cy.get("th:nth-child(5)").contains("-£193.00");
-  });
 };
 
 export const changeFirstValue = () => {
@@ -382,9 +379,6 @@ export const changeFirstValue = () => {
         cy.get("input").clear().wait(100).type("2").wait(200);
       });
     });
-  cy.get("tfoot").within(() => {
-    cy.get("th:nth-child(5)").contains("£9.00");
-  });
   cy.clickOn("Continue to summary");
   cy.get("legend").contains("Mark as complete");
   cy.get("tfoot").within(() => {

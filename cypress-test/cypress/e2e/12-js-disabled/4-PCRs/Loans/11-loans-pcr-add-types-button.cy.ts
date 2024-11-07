@@ -1,13 +1,18 @@
 import { pcrTidyUp } from "common/pcrtidyup";
-import { visitApp } from "../../common/visit";
+import { visitApp } from "common/visit";
 import { addRemainingPcrTypes, backOutCreateProjectOnHold, createReallocatePartnerPcr } from "./steps";
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Loans project > PCR", () => {
+describe("js-disabled > Loans project > PCR", { tags: "js-disabled" }, () => {
   before(() => {
-    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard", jsDisabled: true });
     pcrTidyUp("Draft");
   });
+
+  beforeEach(() => {
+    cy.disableJs();
+  });
+
   after(() => {
     cy.deletePcr("191431");
   });

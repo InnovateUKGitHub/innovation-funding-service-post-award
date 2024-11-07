@@ -490,14 +490,14 @@ export const removePartnerPromptValidation = () => {
   cy.getByLabel("I agree with this change").click();
   cy.wait(500);
   cy.button("Save and return to request").click();
-  cy.validationLink("Enter valid removal period");
+  cy.validationLink("Enter removal period");
   cy.validationLink("Select partner to remove from this project.");
 };
 
 export const clickEditCheckValMessage = () => {
   cy.getListItemFromKey("Partner being removed", "Edit").click();
   cy.get("legend").contains("Select partner to remove");
-  ["Select partner to remove from this project.", "Enter valid removal period."].forEach(message => {
+  ["Select partner to remove from this project.", "Enter removal period."].forEach(message => {
     cy.validationLink(message);
   });
   [`A Zod`, 'z.literal("")', `was not passed into this form.`, "Zod"].forEach(badMessage => {
@@ -509,25 +509,25 @@ export const validatePeriodBox = () => {
   cy.getByAriaLabel("Removal period").clear().type("13");
   cy.wait(1000);
   cy.button("Save and continue").click();
-  cy.validationLink("Period must be 12 or fewer");
-  cy.paragraph("Period must be 12 or fewer");
+  cy.validationLink("Removal period must be 12 or less.");
+  cy.paragraph("Removal period must be 12 or less.");
   cy.getByAriaLabel("Removal period").clear().type("not a number");
   cy.wait(1000);
   cy.button("Save and continue").click();
-  cy.validationLink("Period must be a whole number, like 3.");
-  cy.paragraph("Period must be a whole number, like 3.");
+  cy.validationLink("Removal period must be a number.");
+  cy.paragraph("Removal period must be a number.");
   ["!", "$", "%", "^", "&", "*", "<", ">"].forEach(specialChar => {
     cy.getByAriaLabel("Removal period").clear().type(specialChar);
     cy.wait(1000);
     cy.button("Save and continue").click();
-    cy.validationLink("Period must be a whole number, like 3.");
+    cy.validationLink("Removal period must be a number.");
   });
   ["-1", "-100", "-3333333", "-0"].forEach(negative => {
     cy.getByAriaLabel("Removal period").clear().type(negative);
     cy.wait(1000);
     cy.button("Save and continue").click();
-    cy.validationLink("Enter valid removal period");
-    cy.paragraph("Enter valid removal period");
+    cy.validationLink("Removal period must be 1 or more.");
+    cy.paragraph("Removal period must be 1 or more.");
   });
 };
 
@@ -777,7 +777,7 @@ export const navigateToFundingLevel = () => {
 
 export const pcrNewCostCatLineItem = () => {
   cy.submitButton("Save and return to labour").click();
-  cy.validationLink("Enter description of role.");
+  cy.validationLink("Enter role within project.");
   cy.validationLink("Enter gross cost of role.");
   cy.validationLink("Enter rate per day.");
   cy.validationLink("Enter days spent on project.");
