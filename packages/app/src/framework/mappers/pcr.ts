@@ -49,18 +49,18 @@ export const mapToSalesforcePCRManageTeamMemberType = (
 };
 
 export const mapProjectRoleToInternal = (type: string | undefined | null): ProjectRole | null | undefined => {
-  switch (type) {
-    case ProjectRoleName.ProjectManager:
+  switch (type?.toLowerCase()) {
+    case ProjectRoleName.ProjectManager.toLowerCase():
       return ProjectRole.PROJECT_MANAGER;
-    case ProjectRoleName.FinanceContact:
+    case ProjectRoleName.FinanceContact.toLowerCase():
       return ProjectRole.FINANCE_CONTACT;
-    case ProjectRoleName.MainCompanyContact:
+    case ProjectRoleName.MainCompanyContact.toLowerCase():
       return ProjectRole.MAIN_COMPANY_CONTACT;
-    case ProjectRoleName.Associate:
+    case ProjectRoleName.Associate.toLowerCase():
       return ProjectRole.ASSOCIATE;
-    case ProjectRoleName.KBAdmin:
+    case ProjectRoleName.KBAdmin.toLowerCase():
       return ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR;
-    case ProjectRoleName.MonitoringOfficer:
+    case ProjectRoleName.MonitoringOfficer.toLowerCase():
       return ProjectRole.MONITORING_OFFICER;
   }
 };
