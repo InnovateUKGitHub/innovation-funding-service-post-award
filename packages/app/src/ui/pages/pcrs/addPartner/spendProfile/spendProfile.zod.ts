@@ -96,7 +96,7 @@ export const subcontractingSchema = z.object({
   id: costIdValidation.nullable(),
   subcontractorName: getTextValidation({ required: true, maxLength: 255 }),
   subcontractorCountry: getTextValidation({ required: true, maxLength: 255 }),
-  subcontractorRoleAndDescription: description,
+  subcontractorRoleAndDescription: getTextValidation({ required: true, maxLength: 32_000 }),
   subcontractorCost: getGenericCurrencyValidation({
     required: true,
   }),
@@ -163,7 +163,7 @@ export type TravelAndASubsistenceSchema = z.infer<typeof travelAndASubsistenceSc
 
 export const otherCostsSchema = z.object({
   id: costIdValidation.nullable(),
-  descriptionOfCost: description,
+  otherCostDescription: getTextValidation({ required: true, maxLength: 32_000 }),
   estimatedCost: getGenericCurrencyValidation({
     required: true,
   }),

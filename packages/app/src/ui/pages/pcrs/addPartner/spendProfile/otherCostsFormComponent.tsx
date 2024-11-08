@@ -62,7 +62,7 @@ export const OtherCostsFormComponent = () => {
   const { handleSubmit, watch, formState, register, setError } = useForm<OtherCostsSchema>({
     defaultValues: {
       id: defaultCost.id,
-      descriptionOfCost: defaultCost?.description ?? "",
+      otherCostDescription: defaultCost?.description ?? "",
       estimatedCost: String(defaultCost?.value ?? ""),
       form: FormTypes.PcrAddPartnerSpendProfileOtherCost,
       costCategoryType: costCategory.type,
@@ -86,7 +86,7 @@ export const OtherCostsFormComponent = () => {
                 ...spendProfile,
                 costs: appendOrMerge(spendProfile.costs, {
                   id: data.id ?? ("" as CostId),
-                  description: data.descriptionOfCost,
+                  description: data.otherCostDescription,
                   costCategoryId,
                   costCategory: costCategory.type,
                   value: parseCurrency(data.estimatedCost),
@@ -101,14 +101,14 @@ export const OtherCostsFormComponent = () => {
           <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOtherCost} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
-          <FormGroup hasError={!!validationErrors.descriptionOfCost}>
+          <FormGroup hasError={!!validationErrors.otherCostDescription}>
             <TextAreaField
-              {...register("descriptionOfCost")}
+              {...register("otherCostDescription")}
               id="description"
-              error={validationErrors.descriptionOfCost}
+              error={validationErrors.otherCostDescription}
               label={getContent(x => x.pcrSpendProfileLabels.otherCosts.description)}
               disabled={isFetching}
-              characterCount={watch("descriptionOfCost")?.length ?? 0}
+              characterCount={watch("otherCostDescription")?.length ?? 0}
               characterCountType="ascending"
               defaultValue={String(defaultCost.description ?? "")}
             />

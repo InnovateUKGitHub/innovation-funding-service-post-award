@@ -2817,7 +2817,7 @@
             "label": "Cost of each"
           },
           "capitalUsageDescription": {
-            "label": "Description"
+            "label": "Item description"
           },
           "materialsDescription": {
             "label": "Item description"
@@ -2832,6 +2832,9 @@
           },
           "costPerItem": {
             "label": "Cost per item"
+          },
+          "otherCostDescription": {
+            "label": "Description and justification"
           },
           "depreciationPeriod": {
             "label": "Depreciation period"

@@ -46,7 +46,7 @@ export class PcrItemAddPartnerSpendProfileOtherCostsHandler extends ZodFormHandl
       id,
       form: input.form,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
-      descriptionOfCost: input.descriptionOfCost,
+      otherCostDescription: input.otherCostDescription,
       estimatedCost: input.estimatedCost,
     };
   }
@@ -66,7 +66,7 @@ export class PcrItemAddPartnerSpendProfileOtherCostsHandler extends ZodFormHandl
       costCategory: input.costCategoryType,
       id: input.id as CostId,
       costCategoryId: params.costCategoryId,
-      description: input.descriptionOfCost,
+      description: input.otherCostDescription,
       value: parseCurrency(input.estimatedCost),
     });
 
