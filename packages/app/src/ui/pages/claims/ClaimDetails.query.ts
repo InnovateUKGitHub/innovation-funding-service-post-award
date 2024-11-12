@@ -219,7 +219,7 @@ export const claimDetailsQuery = graphql`
                 Acc_TotalCostsSubmitted__c {
                   value
                 }
-                Acc_TotalDeferredAmount__c {
+                Acc_NewCapLimitDeferredGrant__c {
                   value
                 }
                 Acc_FinalClaim__c {

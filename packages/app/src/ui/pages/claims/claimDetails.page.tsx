@@ -1,6 +1,6 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimDto, ClaimDtoGql } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -56,7 +56,7 @@ interface ClaimData {
   >;
   costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
   claim: Pick<
-    ClaimDto,
+    ClaimDtoGql,
     | "comments"
     | "isApproved"
     | "isFinalClaim"
@@ -67,7 +67,7 @@ interface ClaimData {
     | "status"
     | "totalCostsApproved"
     | "totalCostsSubmitted"
-    | "totalDeferredAmount"
+    | "newCapLimitDeferredGrant"
   >;
   documents: Pick<
     DocumentSummaryDto,
@@ -146,7 +146,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
 
 const ClaimSummaryDetails =
   TypedDetails<
-    Pick<ClaimDto, "totalCostsSubmitted" | "totalCostsApproved" | "totalDeferredAmount" | "periodCostsToBePaid">
+    Pick<ClaimDtoGql, "totalCostsSubmitted" | "totalCostsApproved" | "newCapLimitDeferredGrant" | "periodCostsToBePaid">
   >();
 
 const CostsAndGrantSummary = ({
@@ -154,8 +154,8 @@ const CostsAndGrantSummary = ({
   project,
 }: {
   claim: Pick<
-    ClaimDto,
-    "isApproved" | "totalCostsSubmitted" | "totalCostsApproved" | "totalDeferredAmount" | "periodCostsToBePaid"
+    ClaimDtoGql,
+    "isApproved" | "totalCostsSubmitted" | "totalCostsApproved" | "newCapLimitDeferredGrant" | "periodCostsToBePaid"
   >;
   project: Pick<ProjectDto, "roles">;
 }) => {
@@ -185,7 +185,7 @@ const CostsAndGrantSummary = ({
           <ClaimSummaryDetails.Currency
             label={<Content value={x => x.claimsLabels.costsDeferred} />}
             qa="costs-deferred"
-            value={x => x.totalDeferredAmount}
+            value={x => x.newCapLimitDeferredGrant}
           />
         </ClaimSummaryDetails.Details>
 

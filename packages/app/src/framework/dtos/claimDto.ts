@@ -33,6 +33,10 @@ export interface ClaimDto {
   impactManagementPhasedCompetitionStage: ImpactManagementPhase;
 }
 
+export interface ClaimDtoGql extends ClaimDto {
+  newCapLimitDeferredGrant: number;
+}
+
 export interface ClaimStatusChangeDto {
   claimId: string;
   comments: string | null;

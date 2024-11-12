@@ -5,7 +5,7 @@ import {
   mapImpactManagementPhasedStageToEnum,
 } from "@framework/mappers/impactManagementParticipation";
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimDtoGql } from "@framework/dtos/claimDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
 import { Claims } from "@framework/constants/recordTypes";
@@ -53,6 +53,7 @@ type ClaimNode = GQL.Maybe<
       Acc_TotalDeferredAmount__c: GQL.Value<number>;
       Acc_TotalCostsApproved__c: GQL.Value<number>;
       Acc_TotalCostsSubmitted__c: GQL.Value<number>;
+      Acc_NewCapLimitDeferredGrant__c: GQL.Value<number>;
       LastModifiedDate: GQL.Value<string>;
       Impact_Management_Participation__c: GQL.Value<string>;
       Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
@@ -67,17 +68,21 @@ type ClaimNode = GQL.Maybe<
 >;
 
 type ClaimDtoMapping = Pick<
-  ClaimDto,
+  ClaimDtoGql,
   | "approvedDate"
   | "comments"
   | "forecastCost"
   | "grantPaidToDate"
   | "iarStatus"
-  | "isIarRequired"
   | "id"
+  | "impactManagementParticipation"
+  | "impactManagementPhasedCompetition"
+  | "impactManagementPhasedCompetitionStage"
+  | "isIarRequired"
   | "isApproved"
   | "isFinalClaim"
   | "lastModifiedDate"
+  | "newCapLimitDeferredGrant"
   | "overheadRate"
   | "paidDate"
   | "partnerId"
@@ -89,9 +94,6 @@ type ClaimDtoMapping = Pick<
   | "status"
   | "statusLabel"
   | "totalCost"
-  | "impactManagementParticipation"
-  | "impactManagementPhasedCompetition"
-  | "impactManagementPhasedCompetitionStage"
   | "totalCostsSubmitted"
   | "totalCostsApproved"
   | "totalDeferredAmount"
@@ -208,6 +210,9 @@ const mapper: GQL.DtoMapper<
   },
   totalDeferredAmount(node) {
     return node?.Acc_TotalDeferredAmount__c?.value ?? 0;
+  },
+  newCapLimitDeferredGrant(node) {
+    return node?.Acc_NewCapLimitDeferredGrant__c?.value ?? 0;
   },
 };
 

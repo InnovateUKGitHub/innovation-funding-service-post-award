@@ -64,7 +64,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
         "status",
         "totalCostsSubmitted",
         "totalCostsApproved",
-        "totalDeferredAmount",
+        "newCapLimitDeferredGrant",
         "periodCostsToBePaid",
       ],
       {},
