@@ -103,7 +103,7 @@ class MonitoringReportPrepareFormHandler extends ZodFormHandlerBase<
       questions: this.monitoringReport.questions.map((x, i) => ({ ...x, ...input.questions[i] })),
     };
 
-    const command = new SaveMonitoringReport(monitoringReportDto, false, params.step);
+    const command = new SaveMonitoringReport(monitoringReportDto, false, params.step ?? "summary-page");
 
     await context.runCommand(command);
 

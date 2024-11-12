@@ -205,7 +205,7 @@ describe("saveMonitoringReports", () => {
       new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId),
     );
 
-    await context.runCommand(new SaveMonitoringReport(dto, true, undefined));
+    await context.runCommand(new SaveMonitoringReport(dto, true, "summary-page"));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Awaiting IUK Approval");
   });

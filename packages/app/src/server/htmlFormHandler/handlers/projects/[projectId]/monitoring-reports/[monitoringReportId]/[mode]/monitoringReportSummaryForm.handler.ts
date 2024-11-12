@@ -76,7 +76,7 @@ class MonitoringReportSummaryFormHandler extends ZodFormHandlerBase<
     const command = new SaveMonitoringReport(
       { ...this.monitoringReport, addComments: input.addComments },
       input.button_submit === "submit",
-      params.step,
+      "summary-page",
     );
     await context.runCommand(command);
     return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined }).path;
