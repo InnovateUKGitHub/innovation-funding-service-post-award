@@ -37,5 +37,6 @@ module.exports = {
       "<rootDir>/tests/__mocks__/fileMock.js",
     "\\.(css|less|apex)$": "<rootDir>/tests/__mocks__/styleMock.js",
     "\\.mdx$": "<rootDir>/tests/__mocks__/mdxMock.js",
+    uuid: require.resolve("uuid"),
   },
 };
