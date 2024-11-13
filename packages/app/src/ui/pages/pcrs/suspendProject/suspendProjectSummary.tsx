@@ -16,10 +16,11 @@ import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrPage } from "../pcrPage";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useContent } from "@ui/hooks/content.hook";
 
 export const SuspendProjectSummary = () => {
+  const { getContent } = useContent();
   const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
-
   const { pcrItem } = usePcrSuspendProjectWorkflowQuery(projectId, itemId, fetchKey);
 
   const { register, handleSubmit, formState, watch, setError } = useForm<ProjectSuspensionSummarySchemaType>({
@@ -35,8 +36,6 @@ export const SuspendProjectSummary = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const lastDayContent = pcrItem.suspensionEndDate ? <ShortDate value={pcrItem.suspensionEndDate} /> : "Not set";
-
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section>
@@ -45,8 +44,16 @@ export const SuspendProjectSummary = () => {
             qa="startDate"
             id="suspensionStartDate"
             label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
-            content={<ShortDate value={pcrItem.suspensionStartDate} />}
-            action={<EditLink stepName={PCRStepType.details} />}
+            content={
+              pcrItem.suspensionStartDate ? (
+                <ShortDate value={pcrItem.suspensionStartDate} />
+              ) : (
+                <EditLink stepName={PCRStepType.details}>
+                  {getContent(x => x.pages.pcrSuspendProjectDetails.firstDayUnset)}
+                </EditLink>
+              )
+            }
+            action={pcrItem.suspensionStartDate && <EditLink stepName={PCRStepType.details} />}
             hasError={!!formState?.errors?.suspensionStartDate}
           />
 
@@ -54,7 +61,13 @@ export const SuspendProjectSummary = () => {
             qa="endDate"
             id="suspensionEndDate"
             label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
-            content={lastDayContent}
+            content={
+              pcrItem.suspensionEndDate ? (
+                <ShortDate value={pcrItem.suspensionEndDate} />
+              ) : (
+                getContent(x => x.pages.pcrSuspendProjectDetails.lastDayUnset)
+              )
+            }
             action={<EditLink stepName={PCRStepType.details} />}
           />
         </SummaryList>

@@ -4,6 +4,7 @@ import { Link } from "@ui/components/atoms/Links/links";
 import { PcrWorkflow } from "./pcrWorkflow";
 import { BaseProps } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
+import { ReactNode } from "react";
 
 export const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
@@ -17,7 +18,15 @@ export const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   );
 };
 
-export const EditLink = ({ stepName, disabled }: { stepName: PCRStepType; disabled?: boolean }) => {
+export const EditLink = ({
+  stepName,
+  disabled,
+  children,
+}: {
+  stepName: PCRStepType;
+  disabled?: boolean;
+  children?: ReactNode;
+}) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
   const { getContent } = useContent();
 
@@ -25,7 +34,7 @@ export const EditLink = ({ stepName, disabled }: { stepName: PCRStepType; disabl
 
   return (
     <Link disabled={disabled} replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
-      {getContent(x => x.pcrLabels.edit)}
+      {children || getContent(x => x.pcrLabels.edit)}
     </Link>
   );
 };
