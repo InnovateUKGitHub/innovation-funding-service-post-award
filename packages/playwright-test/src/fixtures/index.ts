@@ -24,8 +24,7 @@ import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 import { RemovePartner } from "./acc/pages/PCRs/removePartner";
-import { ProjectDetails } from "./acc/pages/ProjectsDetails";
-import { AllanProjectDetails } from "./acc/pages/AllanProjectDetails";
+import { ProjectDetails } from "./acc/pages/ProjectDetails";
 
 type AccFixtures = {
   // Pages
@@ -41,7 +40,6 @@ type AccFixtures = {
   changeScope: ChangeProjectScope;
   removePartner: RemovePartner;
   projectDetails: ProjectDetails;
-  allanProjectDetails: AllanProjectDetails;
 
   // Misc
   accNavigation: AccNavigation;
@@ -84,7 +82,6 @@ export const test = base.extend<AccFixtures, Workers>({
   removePartner: ({ page, commands, projectChangeRequests }, use) =>
     use(new RemovePartner({ page, commands, projectChangeRequests })),
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
-  allanProjectDetails: ({ page, commands }, use) => use(new AllanProjectDetails({ page, commands })),
 
   // Project Factory
   accProjectBase: [
@@ -111,6 +108,7 @@ export const test = base.extend<AccFixtures, Workers>({
       projectState,
       monitoringReports,
       putProjectOnHold,
+      projectDetails,
     },
     use,
   ) =>
@@ -124,6 +122,7 @@ export const test = base.extend<AccFixtures, Workers>({
         projectState,
         monitoringReports,
         putProjectOnHold,
+        projectDetails,
       }),
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],

@@ -11,6 +11,7 @@ import { ProjectDashboard } from "./pages/ProjectDashboard";
 import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
+import { ProjectDetails } from "./pages/ProjectDetails";
 
 export
 @Fixture("accNavigation")
@@ -25,6 +26,7 @@ class AccNavigation {
   private readonly testCache = new TestCache();
   private readonly devtools: DevTools;
   private readonly putProjectOnHold: PutProjectOnHold;
+  private readonly projectDetails: ProjectDetails;
 
   constructor({
     page,
@@ -35,6 +37,7 @@ class AccNavigation {
     projectState,
     monitoringReports,
     putProjectOnHold,
+    projectDetails,
   }: {
     page: Page;
     developerHomepage: DeveloperHomepage;
@@ -44,6 +47,7 @@ class AccNavigation {
     projectState: ProjectState;
     monitoringReports: MonitoringReports;
     putProjectOnHold: PutProjectOnHold;
+    projectDetails: ProjectDetails;
   }) {
     this.page = page;
     this.developerHomepage = developerHomepage;
@@ -54,6 +58,7 @@ class AccNavigation {
     this.monitoringReports = monitoringReports;
     this.putProjectOnHold = putProjectOnHold;
     this.devtools = new DevTools({ page });
+    this.projectDetails = projectDetails;
   }
 
   @Given("the user is on the developer homepage")
@@ -143,5 +148,23 @@ class AccNavigation {
 
     await this.devtools.isLoaded();
     await this.putProjectOnHold.isPage();
+  }
+
+  @Given("the user has navigated to the project details page")
+  async gotoProjectDetails() {
+    await this.testCache.cache(
+      ["gotoProjectDetails", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Project details").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.devtools.isLoaded();
+    await this.projectDetails.isPage();
   }
 }
