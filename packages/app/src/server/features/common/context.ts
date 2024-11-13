@@ -1,4 +1,4 @@
-import i18next from "i18next";
+import i18next, { i18n } from "i18next";
 import { CustomContentStore } from "@server/resources/customContentStore";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
@@ -54,6 +54,7 @@ import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { ExternalContactsRepository } from "@server/repositories/externalContactRepository";
+import { Copy } from "@copy/Copy";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -111,6 +112,7 @@ export class Context implements IContext {
   private readonly connection: TsforceConnection;
   private readonly systemConnection: TsforceConnection;
   private readonly bankConnection: TsforceConnection;
+  private readonly i18n: i18n = i18next;
 
   constructor({
     user,
@@ -130,14 +132,17 @@ export class Context implements IContext {
     this.connection = connection;
     this.systemConnection = systemConnection;
     this.bankConnection = bankConnection;
-
     this.config = configuration;
+    this.caches = cachesImplementation;
 
     this.logger = new Logger("Context", {
       prefixLines: [{ user, traceId }],
     });
 
-    this.caches = cachesImplementation;
+    this.internationalisation = {
+      copy: new Copy({ i18n: this.i18n }),
+      addResourceBundle: (content, namespace) => this.i18n.addResourceBundle("en-GB", namespace, content, true, true),
+    };
 
     // use fat arrow so this is bound - extracted to shorten line length
     const connectionCallback = () => this.connection;
@@ -191,10 +196,7 @@ export class Context implements IContext {
   public readonly clock: IClock = new Clock();
   public readonly caches: ICaches;
   public readonly resources: IResources;
-
-  public readonly internationalisation: IInternationalisation = {
-    addResourceBundle: (content, namespace) => i18next.addResourceBundle("en-GB", namespace, content, true, true),
-  };
+  public readonly internationalisation: IInternationalisation;
 
   public startTimer(message: string) {
     return new Timer(this.logger, message);

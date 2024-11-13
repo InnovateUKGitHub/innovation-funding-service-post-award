@@ -10,7 +10,14 @@ export const newForecastTableFragment = graphql`
       ForecastTable_Project: Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
         edges {
           node {
+            Id
             Acc_NumberofPeriods__c {
+              value
+            }
+            Acc_ProjectTitle__c {
+              value
+            }
+            Acc_ProjectNumber__c {
               value
             }
             roles {
@@ -33,11 +40,17 @@ export const newForecastTableFragment = graphql`
       ForecastTable_ProjectParticipant: Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
         edges {
           node {
+            Id
             Acc_ForecastLastModifiedDate__c {
               value
             }
             Acc_OverheadRate__c {
               value
+            }
+            Acc_AccountId__r {
+              Name {
+                value
+              }
             }
           }
         }

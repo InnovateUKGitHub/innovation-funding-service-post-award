@@ -153,6 +153,13 @@
       "inputLabel": "{{ costCategoryName }} Period {{ period }}",
       "caption": "Forecast table"
     },
+    "forecastTableDownloadButton": {
+      "download": {
+        "ooxml": "Download Spreadsheet - Open Office (.xlsx)",
+        "csv": "Download Spreadsheet - Comma Separated Values (.csv)"
+      },
+      "filename": "{{ date, datetime, replace(searchValue: '/'; replaceValue: '-') }} - {{ projectNumber }} - Forecast for ‘{{ partnerName }}’"
+    },
     "reportForm": {
       "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
       "questionScoreMessage": "For each section score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.",

@@ -30,6 +30,8 @@ import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadP
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ApiParams, ControllerBase } from "./controllerBase";
+import { SpreadsheetFormat } from "@framework/documents/spreadsheets/Spreadsheet";
+import { GetProjectParticipantForecastTableSpreadsheet } from "@server/features/documents/spreadsheets/GetProjectParticipantForecastTableSpreadsheet";
 
 export interface IDocumentsApi<Context extends "client" | "server"> {
   uploadClaimDetailDocuments: (
@@ -277,6 +279,12 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p),
     );
+
+    this.getAttachment(
+      "/forecasts/:projectId/:partnerId/:format(ooxml|csv)",
+      p => ({ projectId: p.projectId, partnerId: p.partnerId, format: p.format as SpreadsheetFormat }),
+      p => this.getForecastTableSpreadsheet(p),
+    );
   }
 
   public getLoanDocument(
@@ -408,6 +416,14 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     );
 
     return contextProvider.start(params).then(x => x.runQuery(query));
+  }
+
+  public getForecastTableSpreadsheet(
+    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; format: SpreadsheetFormat }>,
+  ) {
+    return contextProvider
+      .start(params)
+      .then(x => x.runQuery(new GetProjectParticipantForecastTableSpreadsheet(params)));
   }
 
   public deleteProjectChangeRequestDocumentOrItemDocument(

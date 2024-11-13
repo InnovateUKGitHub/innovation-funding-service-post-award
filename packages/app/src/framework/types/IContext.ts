@@ -42,6 +42,7 @@ import { Cache } from "@innovateuk/common/Cache";
 import { Option } from "@framework/dtos/option";
 import { IExternalContactsRepository } from "@server/repositories/externalContactRepository";
 import { ITimer } from "@innovateuk/logger";
+import { Copy } from "@copy/Copy";
 
 export interface IRepositories {
   readonly accounts: IAccountsRepository;
@@ -80,6 +81,7 @@ export interface IResources {
 }
 
 export interface IInternationalisation {
+  copy: Copy;
   addResourceBundle(content: ContentJson, namespace: string): void;
 }
 

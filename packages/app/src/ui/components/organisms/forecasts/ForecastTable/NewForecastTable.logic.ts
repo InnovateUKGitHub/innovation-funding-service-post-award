@@ -6,7 +6,7 @@ import { multiplyCurrency, parseCurrency, roundCurrency, validCurrencyRegex } fr
 import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
-import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { PartnerDto, PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
 import {
   ProfilePeriodDetailsDtoMapping,
@@ -48,8 +48,8 @@ type ProfileTotalProjectPeriodsInfo = Pick<
 >;
 
 interface MapToForecastTableProps {
-  project: Pick<ProjectDto, "numberOfPeriods">;
-  partner: Pick<PartnerDtoGql, "overheadRate">;
+  project: Pick<ProjectDto, "id" | "numberOfPeriods" | "projectNumber" | "title">;
+  partner: Pick<PartnerDtoGql, "id" | "overheadRate" | "name">;
   claimTotalProjectPeriods: ClaimTotalProjectPeriodsInfo[];
   claimDetails: ClaimDetailInfo[];
   profileTotalProjectPeriods?: ProfileTotalProjectPeriodsInfo[];
@@ -109,6 +109,10 @@ export interface ForecastTableDto {
   totalRow: TotalRow;
   statusRow: StatusCell[];
   finalClaim: ClaimTotalProjectPeriodsInfo | null;
+  metadata: {
+    project: Pick<ProjectDto, "id" | "title" | "projectNumber">;
+    partner: Pick<PartnerDto, "id" | "name">;
+  };
 }
 
 const mapToForecastTableDto = ({
@@ -354,6 +358,10 @@ const mapToForecastTableDto = ({
     },
     statusRow: statusCells,
     finalClaim: finalClaim ?? null,
+    metadata: {
+      project,
+      partner,
+    },
   };
 };
 
@@ -377,8 +385,15 @@ const useNewForecastTableData = ({
   const { node: projectNode } = getFirstEdge(fragment?.query?.ForecastTable_Project?.edges);
   const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_ProjectParticipant?.edges);
 
-  const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles", "partnerRoles"]);
-  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate", "roles"], {
+  const project = mapToProjectDto(projectNode, [
+    "id",
+    "title",
+    "projectNumber",
+    "numberOfPeriods",
+    "roles",
+    "partnerRoles",
+  ]);
+  const partner = mapToPartnerDto(partnerNode, ["id", "forecastLastModifiedDate", "overheadRate", "roles", "name"], {
     roles: getPartnerRoles(project.partnerRoles, partnerId),
   });
   const claimTotalProjectPeriods = mapToClaimDtoArray(

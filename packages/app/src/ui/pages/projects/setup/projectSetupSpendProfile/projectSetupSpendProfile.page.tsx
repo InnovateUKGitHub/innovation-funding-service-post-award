@@ -11,7 +11,6 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
 import { NewForecastTableWithFragment } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.withFragment";
-import { useForecastTableFragment } from "@ui/components/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
@@ -24,6 +23,7 @@ import { Checkbox, CheckboxList } from "@ui/components/atoms/form/Checkbox/Check
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { SpendProfileStatus } from "@framework/constants/partner";
+import { useNewForecastTableData } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -36,7 +36,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
     partnerId,
   });
 
-  const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
+  const data = useNewForecastTableData({ fragmentRef, isProjectSetup: true, partnerId });
   const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();

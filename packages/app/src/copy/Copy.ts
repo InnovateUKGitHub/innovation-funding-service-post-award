@@ -16,6 +16,7 @@ export class CopyContentInvalidInputKeyError extends Error {}
 interface ICopy {
   competitionType?: string;
   monitoringLevel?: ProjectMonitoringLevel;
+  i18n?: i18n;
 }
 
 const isI18nDetailedResult = (i18nResult: string | object): i18nResult is TFunctionDetailedResult<string> =>
@@ -30,10 +31,10 @@ class Copy {
   protected monitoringLevel?: ProjectMonitoringLevel;
   public i18n: i18n;
 
-  constructor({ competitionType, monitoringLevel }: ICopy = {}) {
+  constructor({ competitionType, monitoringLevel, i18n }: ICopy = {}) {
     this.competitionType = competitionType?.replace(/ /g, "-").toLowerCase();
     this.monitoringLevel = monitoringLevel;
-    this.i18n = i18next; // TODO: Create an instance instead of using a global instance
+    this.i18n = i18n ?? i18next;
   }
 
   /**

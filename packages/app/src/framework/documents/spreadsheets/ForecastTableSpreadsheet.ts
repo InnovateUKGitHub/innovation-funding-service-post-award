@@ -1,5 +1,5 @@
 import { ForecastTableDto } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
-import { CellFormulaValue } from "exceljs";
+import { Cell, CellFormulaValue } from "exceljs";
 import { Spreadsheet, WorkbookOptions } from "./Spreadsheet";
 import { Copy } from "@copy/Copy";
 import { getForecastHeaderContent } from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
@@ -24,40 +24,62 @@ class ForecastTableSpreadsheet extends Spreadsheet {
     this.copy = copy;
   }
 
+  getFilename(): string {
+    const date = new Date();
+    return this.copy.getCopyString(x =>
+      x.components.forecastTableDownloadButton.filename({
+        projectNumber: this.tableData.metadata.project.projectNumber,
+        projectTitle: this.tableData.metadata.project.title,
+        partnerName: this.tableData.metadata.partner.name,
+        date,
+      }),
+    );
+  }
+
   createWorksheets(): Promise<ForecastTableSpreadsheet> {
-    const ws = this.workbook.addWorksheet("Period X", {
+    const ws = this.workbook.addWorksheet(this.tableData.metadata.partner.name, {
       pageSetup: {
         paperSize: 9, // PaperSize.A4 (doesn't seem to be exported by ExcelJS for some reason)
         orientation: "landscape",
         showGridLines: false,
       },
+      views: [{ showGridLines: false, state: "frozen", xSplit: 1, ySplit: 4 }],
     });
 
     const numberOfPeriods = this.tableData.totalRow.profiles.length;
     const numberOfCostCategories = this.tableData.costCategories.length;
-    const forecastTableFirstColumn = 2;
-    const forecastTableLastColumn = forecastTableFirstColumn + numberOfPeriods - 1;
-    const forecastTableTotalColumn = forecastTableLastColumn + 1;
+    const forecastTableFirstColumn = 1;
+    const forecastTableFirstRow = 1;
+    const forecastTableFirstPeriodColumn = 2;
+    const forecastTableLastPeriodColumn = forecastTableFirstPeriodColumn + numberOfPeriods - 1;
+    const forecastTableTotalColumn = forecastTableLastPeriodColumn + 1;
     const forecastTableGolCostColumn = forecastTableTotalColumn + 1;
     const forecastTableDifferenceColumn = forecastTableGolCostColumn + 1;
-    const forecastTableStartLetter = Spreadsheet.colToLet(forecastTableFirstColumn);
-    const forecastTableEndLetter = Spreadsheet.colToLet(forecastTableLastColumn);
+    const forecastTableFirstLetter = Spreadsheet.colToLet(forecastTableFirstColumn);
+    const forecastTableFirstPeriodLetter = Spreadsheet.colToLet(forecastTableFirstPeriodColumn);
+    const forecastTableLastPeriodLetter = Spreadsheet.colToLet(forecastTableLastPeriodColumn);
     const forecastTableTotalLetter = Spreadsheet.colToLet(forecastTableTotalColumn);
     const forecastTableGolCostLetter = Spreadsheet.colToLet(forecastTableGolCostColumn);
-    const totalCostCatStartRow = 5;
+    const forecastTableDifferenceLetter = Spreadsheet.colToLet(forecastTableDifferenceColumn);
+    const totalCostCatStartRow = forecastTableFirstRow + 4;
     const totalCostCatEndRow = totalCostCatStartRow + numberOfCostCategories - 1;
+    const forecastTableLastRow = totalCostCatEndRow + 1;
     const getRange = (rowNumber: number) => {
-      const rowRange = `${forecastTableStartLetter}${rowNumber}:${forecastTableEndLetter}${rowNumber}`;
-      const totalCell = `${forecastTableTotalLetter}${rowNumber}`;
-      const golCostCell = `${forecastTableGolCostLetter}${rowNumber}`;
+      const totalCell = `$${forecastTableTotalLetter}$${rowNumber}`;
+      const golCostCell = `$${forecastTableGolCostLetter}$${rowNumber}`;
+      const differenceCell = `$${forecastTableDifferenceLetter}$${rowNumber}`;
+      const allPeriodRows = `$${forecastTableFirstPeriodLetter}$${rowNumber}:$${forecastTableLastPeriodLetter}$${rowNumber}`;
+      const rowRange = `$${forecastTableFirstLetter}$${rowNumber}:${differenceCell}`;
 
       return {
         rowRange,
+        allPeriodRows,
         totalCell,
         golCostCell,
+        differenceCell,
       };
     };
-    const { rowRange, totalCell, golCostCell } = getRange(5 + numberOfCostCategories);
+    const { allPeriodRows, totalCell, golCostCell } = getRange(5 + numberOfCostCategories);
 
     /**
      * A typical forecast table looks like the following...
@@ -80,12 +102,10 @@ class ForecastTableSpreadsheet extends Spreadsheet {
     ws.columns = [
       { key: "costCategories", width: 140 * SCALE_FACTOR },
       ...this.tableData.totalRow.profiles.map(x => ({ key: `period${x.periodId}`, width: 80 * SCALE_FACTOR })),
-      { key: "total", width: 90 * SCALE_FACTOR },
-      { key: "totalEligibleCosts", width: 90 * SCALE_FACTOR },
-      { key: "difference", width: 90 * SCALE_FACTOR },
+      { key: "total", width: 100 * SCALE_FACTOR },
+      { key: "totalEligibleCosts", width: 100 * SCALE_FACTOR },
+      { key: "difference", width: 100 * SCALE_FACTOR },
     ];
-
-    ws.views = [{ state: "frozen", xSplit: 1, ySplit: 4 }];
 
     /**
      * Rows 1, 2, 3 and 4
@@ -107,19 +127,19 @@ class ForecastTableSpreadsheet extends Spreadsheet {
       ]),
       Object.fromEntries([
         ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.iarDueHeader)],
-        ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.iarDue]),
+        ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.iarDue ? 1 : 0]),
       ]),
       Object.fromEntries([
         ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.month)],
         ...this.tableData.totalRow.profiles.map(x => [`period${x.periodId}`, x.periodStart]),
       ]),
       ...this.tableData.costCategories.map((costCategory, i) => {
-        const { rowRange, totalCell, golCostCell } = getRange(5 + i);
+        const { allPeriodRows, totalCell, golCostCell } = getRange(totalCostCatStartRow + i);
 
         return Object.fromEntries([
           ["costCategories", costCategory.costCategoryName],
           ...costCategory.profiles.map(x => [`period${x.periodId}`, x.value]),
-          ["total", { formula: `SUM(${rowRange})`, result: costCategory.total } as CellFormulaValue],
+          ["total", { formula: `SUM(${allPeriodRows})`, result: costCategory.total } as CellFormulaValue],
           ["totalEligibleCosts", costCategory.golCost],
           [
             "difference",
@@ -134,10 +154,10 @@ class ForecastTableSpreadsheet extends Spreadsheet {
         ["costCategories", this.copy.getCopyString(x => x.components.forecastTable.totalHeader)],
         ...this.tableData.totalRow.profiles.map(x => {
           const colLetter = Spreadsheet.colToLet(x.periodId + 1);
-          const range = `${colLetter}${totalCostCatStartRow}:${colLetter}${totalCostCatEndRow}`;
+          const range = `$${colLetter}$${totalCostCatStartRow}:$${colLetter}$${totalCostCatEndRow}`;
           return [`period${x.periodId}`, { formula: `SUM(${range})`, result: x.value } as CellFormulaValue];
         }),
-        ["total", { formula: `SUM(${rowRange})`, result: this.tableData.totalRow.total } as CellFormulaValue],
+        ["total", { formula: `SUM(${allPeriodRows})`, result: this.tableData.totalRow.total } as CellFormulaValue],
         ["totalEligibleCosts", this.tableData.totalRow.golCost],
         [
           "difference",
@@ -166,13 +186,81 @@ class ForecastTableSpreadsheet extends Spreadsheet {
       const colEnd = colStart + statusGrouping.colSpan - 1;
       ws.mergeCells(1, colStart, 1, colEnd);
       ws.getCell(1, colStart).alignment = { wrapText: true };
+
+      for (let j = forecastTableFirstRow; j <= forecastTableLastRow; j++) {
+        ws.getCell(j, colEnd).border = {
+          right: { style: "thin" },
+        };
+      }
     }
 
-    for (let j = 5; j <= totalCostCatEndRow + 1; j++) {
-      for (let i = 2; i <= forecastTableGolCostColumn; i++) {
-        ws.getCell(j, i).numFmt = "£0.00";
+    // Set the format of all cells in the table
+    for (let j = forecastTableFirstRow; j <= forecastTableLastRow; j++) {
+      const cell: Partial<Cell> = {};
+
+      // Apply the formatting in the following switch statement
+      // to the cells between firstColumn and lastColumn.
+      const firstColumn = forecastTableFirstPeriodColumn;
+      let lastColumn = forecastTableLastPeriodColumn;
+
+      // Determine the correct formatting for this row.
+      switch (j) {
+        case 1:
+          cell.font = { bold: true };
+          lastColumn = forecastTableDifferenceColumn;
+        case 2:
+          ws.getCell(j, forecastTableFirstColumn).font = { bold: true };
+          break;
+        case 3:
+          ws.getCell(j, forecastTableFirstColumn).font = { bold: true };
+          cell.numFmt = '"Yes";;"No";';
+          lastColumn = forecastTableLastPeriodColumn;
+          break;
+        case 4:
+          cell.numFmt = "[$-en-GB]mmm yyyy;@";
+          lastColumn = forecastTableLastPeriodColumn;
+          ws.getCell(j, forecastTableFirstColumn).font = { bold: true };
+          break;
+        case forecastTableLastRow:
+          ws.getCell(j, forecastTableFirstColumn).font = { bold: true };
+        default:
+          cell.numFmt = "£#,##0.00";
+          lastColumn = forecastTableGolCostColumn;
+          ws.getCell(j, forecastTableDifferenceColumn).numFmt = "0.00%";
+          break;
       }
-      ws.getCell(j, forecastTableDifferenceColumn).numFmt = "0.00%";
+
+      if (cell) {
+        for (let i = firstColumn; i <= lastColumn; i++) {
+          Object.assign(ws.getCell(j, i), cell);
+        }
+      }
+    }
+
+    for (let i = forecastTableFirstColumn; i <= forecastTableDifferenceColumn; i++) {
+      const firstRowCell = ws.getCell(totalCostCatStartRow, i);
+      firstRowCell.border ??= {};
+      firstRowCell.border.top = { style: "thin" };
+
+      const lastRowCell = ws.getCell(forecastTableLastRow, i);
+      lastRowCell.border ??= {};
+      lastRowCell.border.top = { style: "thick" };
+    }
+
+    // Add "The amount you are requesting is more than the agreed costs" conditional formatting
+    for (let j = totalCostCatStartRow; j <= totalCostCatEndRow; j++) {
+      const { rowRange, golCostCell, totalCell } = getRange(j);
+      ws.addConditionalFormatting({
+        ref: rowRange,
+        rules: [
+          {
+            priority: 1, // Not required, but TypeScript complains.
+            type: "expression",
+            formulae: [`${totalCell}>${golCostCell}`],
+            style: { fill: { type: "pattern", pattern: "solid", bgColor: { argb: "00f8f8f8" } } },
+          },
+        ],
+      });
     }
 
     return Promise.resolve(this);

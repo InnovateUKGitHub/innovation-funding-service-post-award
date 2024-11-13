@@ -1,7 +1,9 @@
+import { Copy } from "@copy/Copy";
 import { IInternationalisation } from "@framework/types/IContext";
 
 export class TestInternationalisation implements IInternationalisation {
   public resourceBundles: Record<string, string>[] = [];
+  public copy: Copy = new Copy();
 
   public addResourceBundle(content: Record<string, string>) {
     this.resourceBundles.push(content);

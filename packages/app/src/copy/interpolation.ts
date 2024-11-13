@@ -127,6 +127,12 @@ const registerIntlFormatter = () => {
     if (Array.isArray(value)) return listformat.format(value);
     return value;
   });
+
+  i18next.services.formatter?.add("replace", (value, _, options) => {
+    const { searchValue, replaceValue } = options ?? {};
+    if (typeof value === "string") return value.replaceAll(searchValue, replaceValue);
+    return value;
+  });
 };
 
 /**

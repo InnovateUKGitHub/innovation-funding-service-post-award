@@ -26,6 +26,8 @@ import {
 } from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { PartnerStatus } from "@framework/constants/partner";
+import { SpreadsheetFormat } from "@framework/documents/spreadsheets/Spreadsheet";
+import { ForecastTableDownloadButton } from "@ui/components/organisms/forecasts/ForecastTable/ForecastTableDownloadButton";
 
 export interface ViewForecastParams {
   projectId: ProjectId;
@@ -105,6 +107,11 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
           isProjectSetup={false}
           caption={getContent(x => x.components.forecastTable.caption)}
         />
+        <P>
+          <ForecastTableDownloadButton format={SpreadsheetFormat.OOXML} tableData={tableData} />
+          <br />
+          <ForecastTableDownloadButton format={SpreadsheetFormat.CSV} tableData={tableData} />
+        </P>
         <P>
           {getContent(x => x.components.claimLastModified.message)}
           {": "}

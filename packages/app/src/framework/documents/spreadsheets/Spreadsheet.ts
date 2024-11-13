@@ -21,8 +21,20 @@ enum SpreadsheetFormat {
   CSV = "csv", // Comma Separated Values
 }
 
+const metadata = {
+  [SpreadsheetFormat.OOXML]: {
+    extension: "xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  },
+  [SpreadsheetFormat.CSV]: {
+    extension: "csv",
+    mimeType: "text/csv",
+  },
+} as const;
+
 abstract class Spreadsheet {
   workbook: Workbook;
+  static metadata = metadata;
 
   constructor({ workbookOptions }: { workbookOptions?: WorkbookOptions } = {}) {
     const opts = {
@@ -36,22 +48,17 @@ abstract class Spreadsheet {
   }
 
   abstract createWorksheets(): Promise<Spreadsheet>;
+  abstract getFilename(): string;
 
-  async export(format: SpreadsheetFormat): Promise<{ buffer: ArrayBuffer; extension: string; mimeType: string }> {
+  async export(format: SpreadsheetFormat): Promise<ArrayBuffer> {
     await this.createWorksheets();
 
     switch (format) {
       case SpreadsheetFormat.OOXML: {
-        const buffer = await this.workbook.xlsx.writeBuffer();
-        return {
-          buffer,
-          extension: "xlsx",
-          mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        };
+        return this.workbook.xlsx.writeBuffer();
       }
       case SpreadsheetFormat.CSV: {
-        const buffer = await this.workbook.csv.writeBuffer();
-        return { buffer, extension: "csv", mimeType: "text/csv" };
+        return this.workbook.csv.writeBuffer();
       }
     }
   }
