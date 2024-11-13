@@ -7,11 +7,13 @@ export enum ClaimStatusGroup {
   SUBMITTED_CLAIMING,
   FORECAST,
   UNUSED,
+  UNKNOWN,
 }
 
 const getClaimStatusGroup = (status: ClaimStatus) => {
   switch (status) {
     case ClaimStatus.UNKNOWN:
+      return ClaimStatusGroup.UNKNOWN;
     case ClaimStatus.NEW:
       return ClaimStatusGroup.FORECAST;
     case ClaimStatus.DRAFT:
@@ -33,6 +35,8 @@ const getClaimStatusGroup = (status: ClaimStatus) => {
 
 const getForecastHeaderContent = (status: ClaimStatusGroup): ContentSelector => {
   switch (status) {
+    case ClaimStatusGroup.UNKNOWN:
+      return x => x.components.forecastTable.unknownHeader;
     case ClaimStatusGroup.FORECAST:
       return x => x.components.forecastTable.forecastHeader;
     case ClaimStatusGroup.EDITABLE_CLAIMING:

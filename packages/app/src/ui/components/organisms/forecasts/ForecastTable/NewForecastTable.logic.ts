@@ -163,24 +163,28 @@ const mapToForecastTableDto = ({
     const forecastTotalProjectPeriod = profileTotalProjectPeriods?.find(x => x.periodId === currentPeriod);
     const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === currentPeriod);
     const nextClaimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === nextPeriod);
+    const claimTotalProjectPeriodStatus = claimTotalProjectPeriod?.status ?? ClaimStatus.UNKNOWN;
+    const nextClaimTotalProjectPeriodStatus = nextClaimTotalProjectPeriod?.status ?? ClaimStatus.UNKNOWN;
+
     const isLastColumn = currentPeriod === project.numberOfPeriods;
     let drawRhc = false;
 
     // If we haven't got a "current status cell",
     // initialise it with the status of our first claim.
-    if (!currentStatusCell && claimTotalProjectPeriod) {
+    if (!currentStatusCell) {
       currentStatusCell = {
         colSpan: 1,
         rhc: false,
-        group: getClaimStatusGroupWithOverride(claimTotalProjectPeriod.status, currentPeriod),
+        group: getClaimStatusGroupWithOverride(claimTotalProjectPeriodStatus, currentPeriod),
       };
     }
 
     // If we have a previous status cell
     if (currentStatusCell) {
-      const nextClaimGroup = nextClaimTotalProjectPeriod
-        ? getClaimStatusGroupWithOverride(nextClaimTotalProjectPeriod.status, (currentPeriod + 1) as PeriodId)
-        : ClaimStatusGroup.FORECAST;
+      const nextClaimGroup =
+        nextClaimTotalProjectPeriodStatus !== ClaimStatus.UNKNOWN
+          ? getClaimStatusGroupWithOverride(nextClaimTotalProjectPeriodStatus, (currentPeriod + 1) as PeriodId)
+          : ClaimStatusGroup.UNKNOWN;
 
       // If it's a part of the same claim, we should extend the colspan of the column.
       if (currentStatusCell.group === nextClaimGroup && !isLastColumn) {

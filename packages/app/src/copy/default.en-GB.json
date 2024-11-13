@@ -141,6 +141,7 @@
       "forecastHeader": "Forecast",
       "unusedHeader": "Not Used",
       "totalHeader": "Total",
+      "unknownHeader": "Unknown status",
       "totalEligibleCostsHeader": "Total eligible costs",
       "differenceHeader": "Difference",
       "periodHeader": "Period",
