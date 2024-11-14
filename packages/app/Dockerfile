@@ -12,7 +12,7 @@ RUN npm ci --no-optional
 
 EXPOSE 8080
 
-RUN npm run build && npm run test && npm run build
+RUN npm run build && npm run test
 
 ARG ACC_BUILD_TAG
 ENV ACC_BUILD_TAG $ACC_BUILD_TAG
