@@ -26,7 +26,7 @@ moduleAlias.addAliases({
 });
 
 Logger.setDefaultOptions({
-  newRelic: configuration.newRelic.enabled,
+  newRelic: configuration.newRelic.enabled && newrelic,
   colourfulLogging: configuration.developer.colourfulLogging,
 });
 

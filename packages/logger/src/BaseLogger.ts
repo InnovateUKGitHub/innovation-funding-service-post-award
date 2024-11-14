@@ -1,11 +1,12 @@
 import { ILogger } from "./ILogger";
 import { LogLevel, getLogLevelNumber, parseLogLevel } from "./LogLevel";
+import type NewRelic from "newrelic";
 
 interface LoggerOptions {
   prefixLines: (string | Record<string, any>)[];
   logLevel: LogLevel;
   colourfulLogging: boolean;
-  newRelic: boolean;
+  newRelic: typeof NewRelic | null | false;
 }
 
 abstract class BaseLogger implements ILogger {

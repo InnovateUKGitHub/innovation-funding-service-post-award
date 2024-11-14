@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
+  },
+  "peerDependencies": {
+    "newrelic": "^11.22.0"
   }
 }
