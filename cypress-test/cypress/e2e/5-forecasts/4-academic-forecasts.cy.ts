@@ -1,5 +1,5 @@
 import { visitApp } from "common/visit";
-import { academicCosts, updateAcademicCosts } from "./steps";
+import { academicCosts, forecastDownloadLinks, noDownloadLinks, updateAcademicCosts } from "./steps";
 
 const fcContact = "s.shuang@irc.trde.org.uk.test";
 
@@ -21,11 +21,15 @@ describe("Forecast > Academic", { tags: "smoke" }, () => {
 
   it("Should display the forecast table with correct academic cost categories", academicCosts);
 
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
+
   it("Should click 'Edit forecast button'", () => {
     cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should update the forecast table and calculate the entries correctly", updateAcademicCosts);
+
+  it("Should not have any download links available", noDownloadLinks);
 
   it("Should remove a number from the box, attempt to submit and generate an error", () => {
     cy.getByAriaLabel("Directly incurred - Staff Period 3").clear();

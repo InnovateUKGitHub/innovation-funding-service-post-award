@@ -7,14 +7,13 @@ import {
   forecastValues,
   correctTableHeaders,
   correctForecastTotals,
+  forecastDownloadLinks,
 } from "./steps";
-
 const financeContactEmail = "wed.addams@test.test.co.uk";
 
 describe("Forecast > front page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
-
     cy.navigateToProject("879546");
   });
 
@@ -46,6 +45,8 @@ describe("Forecast > front page as FC", () => {
   it("Should display correct Forecast values", forecastValues);
 
   it("Should display the correct totals", correctForecastTotals);
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should have an 'Edit forecast' button", () => {
     cy.get("a").contains("Edit forecast");

@@ -1,4 +1,5 @@
 import { visitApp } from "common/visit";
+import { forecastDownloadLinks } from "./steps";
 const fcContact = "pauline.o'jones@uobcw.org.uk.test.prod";
 describe("Forecast > Final claim", () => {
   before(() => {
@@ -19,6 +20,8 @@ describe("Forecast > Final claim", () => {
     cy.getByQA("final-claim-message-FC-content").contains("You cannot change your forecast. You must ");
     cy.get("a").contains("submit your final claim");
   });
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should click 'Submit your final claim' and land on the correct claim page", () => {
     cy.clickOn("submit your final claim");

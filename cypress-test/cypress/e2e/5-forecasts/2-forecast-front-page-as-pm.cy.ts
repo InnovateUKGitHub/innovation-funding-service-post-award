@@ -12,6 +12,7 @@ import {
   accessAbCadForecast,
   displayAbCadForecast,
   noEditForecastLink,
+  forecastDownloadLinks,
 } from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
@@ -42,6 +43,8 @@ describe("Forecast front page as PM", () => {
   it("Should access the forecast for A B Cad Services", accessAbCadForecast);
 
   it("Should display the correct Forecast table for A B Cad Services", displayAbCadForecast);
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should not have an edit button", () => {
     cy.get("a").should("not.contain", "Edit forecast");
@@ -81,6 +84,8 @@ describe("Forecast front page as PM", () => {
   it("Should display correct Forecast values", forecastValues);
 
   it("Should display the correct totals", correctForecastTotals);
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should have an 'Update forecast' button", noEditForecastLink);
 

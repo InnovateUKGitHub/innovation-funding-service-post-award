@@ -4,6 +4,7 @@ import {
   correctForecastTotals,
   correctTableHeaders,
   displayForecastTableCostCategories,
+  forecastDownloadLinks,
   forecastPartnerTable,
   forecastValues,
   shouldShowProjectTitle,
@@ -64,6 +65,8 @@ describe("Forecast front page as PM", () => {
   it("Should display correct Forecast values", forecastValues);
 
   it("Should display the correct totals", correctForecastTotals);
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should not have an edit forecast button", () => {
     cy.get("a").should("not.contain", "Edit forecast");

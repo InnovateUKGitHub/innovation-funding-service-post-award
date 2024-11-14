@@ -8,6 +8,8 @@ import {
   submitCalculations,
   enterExtremePositiveValue,
   enterExtremeNegativeValue,
+  forecastDownloadLinks,
+  noDownloadLinks,
 } from "./steps";
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
@@ -26,11 +28,15 @@ describe("Forecast > edit", () => {
     cy.get("h2").contains("EUI Small Ent Health");
   });
 
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
+
   it("Should have an 'Update forecast' button", () => {
     cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should allow Labour cost fields to be updated", updateLabourFields);
+
+  it("Should not have any download links available", noDownloadLinks);
 
   it(
     "Should calculate the totals entered in each Labour item as £33,999.00 and submit the forecast",

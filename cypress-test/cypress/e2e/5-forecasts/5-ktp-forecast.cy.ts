@@ -1,5 +1,5 @@
 import { visitApp } from "common/visit";
-import { ktpCostCats, ktpUpdateForecast } from "./steps";
+import { forecastDownloadLinks, ktpCostCats, ktpUpdateForecast, noDownloadLinks } from "./steps";
 
 const fcContact = "contact77@test.co.uk";
 
@@ -21,11 +21,15 @@ describe("Forecast > KTP", () => {
 
   it("Should display the forecast table with correct KTP cost categories", ktpCostCats);
 
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
+
   it("Should click 'Update forecast button'", () => {
     cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should update the forecast table and calculate the entries correctly", ktpUpdateForecast);
+
+  it("Should not have any download links available", noDownloadLinks);
 
   it("Should click 'Back to forecast'", () => {
     cy.backLink("Back to forecast").click();

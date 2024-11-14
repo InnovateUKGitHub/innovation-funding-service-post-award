@@ -4,6 +4,7 @@ import {
   accessEUIRemoveUnderspend,
   accessEuiSmallEntHealthForecast,
   displayEUIForecast,
+  forecastDownloadLinks,
   hybridForecastPartnerTable,
   hybridUpdateCostsReflect,
   noEditForecastLink,
@@ -26,6 +27,8 @@ describe("View forecast as hybrid PM/FC user", () => {
   it("Should access EUI Small Ent Health Forecast", accessEuiSmallEntHealthForecast);
 
   it("Should display the correct EUI Small Ent Health forecast data", displayEUIForecast);
+
+  it("Should have working download links for the forecast table", forecastDownloadLinks);
 
   it("Should click 'Edit forecast' button and edit the table", () => {
     cy.clickOn("Edit forecast");

@@ -1,5 +1,4 @@
 import { euiCostCleanUp } from "common/costCleanUp";
-import { visitApp } from "common/visit";
 
 export const ohForecastCleanup = () => {
   cy.get("tr")
@@ -340,6 +339,7 @@ export const clickForecastAccessEUI = () => {
   cy.selectTile("Forecasts");
   cy.heading("Forecasts");
   cy.get("td").contains("EUI Small Ent Health").siblings().contains("View forecast").click();
+  forecastDownloadLinks();
 };
 
 export const clickEditForecastButton = () => {
@@ -580,7 +580,8 @@ export const displayAbCadForecast = () => {
 };
 
 export const saveNegativeValues = () => {
-  cy.getByAriaLabel("Labour Period 2").clear().type("-3333.33");
+  cy.getByAriaLabel("Labour Period 2").clear().wait(500).type("-3333.33");
+  cy.wait(500);
   cy.getByAriaLabel("Overheads Period 2").should("have.text", "-£666.67");
   cy.clickOn("Submit changes");
   cy.get("tr")
@@ -684,6 +685,8 @@ export const viewAbCadForecast = () => {
         cy.get("td:nth-child(16)").contains(difference);
       });
   });
+
+  forecastDownloadLinks();
 };
 
 export const noEditForecastLink = () => {
@@ -742,4 +745,24 @@ export const accessEUIRemoveUnderspend = () => {
   cy.backLink("Back to forecasts").click();
   cy.heading("Forecasts");
   hybridForecastPartnerTable();
+};
+
+export const forecastDownloadLinks = () => {
+  ["Download forecast (.xlsx)", "Download forecast (.csv)"].forEach(link => {
+    cy.get("a")
+      .contains(link)
+      .invoke("attr", "download")
+      .then(download => {
+        cy.log(download);
+        cy.get("a").contains(link).click();
+        cy.readFile(`/Users/allan.haines/UKRI/acc-ui/cypress-test/cypress/downloads/${download}`).should("exist");
+        cy.task("deleteFile", `/Users/allan.haines/UKRI/acc-ui/cypress-test/cypress/downloads/${download}`);
+      });
+  });
+};
+
+export const noDownloadLinks = () => {
+  ["Download forecast (.xlsx)", "Download forecast (.csv)"].forEach(link => {
+    cy.get("a").contains(link).should("not.exist");
+  });
 };
