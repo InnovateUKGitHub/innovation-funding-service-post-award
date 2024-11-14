@@ -1,6 +1,4 @@
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
-import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { PartnerStatus, SpendProfileStatus } from "@framework/constants/partner";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
@@ -10,61 +8,137 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
-import { InitialForecastDetailsDtosValidator } from "@ui/validation/validators/initialForecastDetailsDtosValidator";
 import { GetAllGOLForecastedCostCategoriesQuery } from "../claims/GetAllGOLForecastedCostCategoriesQuery";
-import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
-import { AuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetByIdQuery } from "../partners/getByIdQuery";
+import { InActiveProjectError, BadRequestError } from "../common/appError";
+import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
+import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
+import { GetAllClaimDetailsByPartnerIdQuery } from "@server/features/claimDetails/GetAllClaimDetailsByPartnerIdQuery";
+import { GetAllClaimsByPartnerIdQuery } from "@server/features/claims/GetAllClaimsByPartnerIdQuery";
+import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { z } from "zod";
+import { parseCurrency } from "@framework/util/numberHelper";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
 
-export class UpdateInitialForecastDetailsCommand extends AuthorisedAsyncCommandBase<boolean> {
+type ForecastDto = Pick<ForecastDetailsDTO, "id" | "value">[];
+
+export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncCommandBase<
+  boolean,
+  ForecastTableSchemaType,
+  ForecastDto
+> {
   public readonly runnableName: string = "UpdateInitialForecastDetailsCommand";
+  private readonly projectId: ProjectId;
+  private readonly partnerId: PartnerId;
+  private readonly isSubmitting: boolean;
+  protected readonly dto: ForecastDto;
+
+  private existingDtos:
+    | [ProjectDto, ClaimDetailsSummaryDto[], ClaimDto[], GOLCostDto[], ForecastDetailsDTO[], PartnerDto]
+    | null = null;
+
   constructor(
-    private readonly projectId: ProjectId,
-    private readonly partnerId: PartnerId,
-    private readonly forecasts: Pick<ForecastDetailsDTO, "id" | "value">[],
-    private readonly isSubmitting: boolean,
+    projectId: ProjectId,
+    partnerId: PartnerId,
+    forecasts: Pick<ForecastDetailsDTO, "id" | "value">[],
+    isSubmitting: boolean,
   ) {
     super();
+    this.dto = forecasts;
+    this.projectId = projectId;
+    this.partnerId = partnerId;
+    this.isSubmitting = isSubmitting;
   }
 
   async accessControl(auth: Authorisation) {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
   }
 
-  protected async run(context: IContext) {
+  private async getExistingDtos(context: IContext) {
+    if (this.existingDtos) {
+      return this.existingDtos;
+    }
+    const projectPromise = context.runQuery(new GetProjectByIdQuery(this.projectId as ProjectId));
+    const partnerPromise = context.runQuery(new GetPartnerByIdQuery(this.partnerId as PartnerId));
+    const claimDetailsPromise = context.runQuery(new GetAllClaimDetailsByPartnerIdQuery(this.partnerId as PartnerId));
+    const claimTotalProjectPeriodsPromise = context.runQuery(
+      new GetAllClaimsByPartnerIdQuery(this.partnerId as PartnerId),
+    );
+    const profileTotalCostCategoriesPromise = context.runQuery(
+      new GetAllGOLForecastedCostCategoriesQuery(this.partnerId as PartnerId),
+    );
+    const profileDetailsPromise = context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId as PartnerId));
+
+    this.existingDtos = await Promise.all([
+      projectPromise,
+      claimDetailsPromise,
+      claimTotalProjectPeriodsPromise,
+      profileTotalCostCategoriesPromise,
+      profileDetailsPromise,
+      partnerPromise,
+    ]);
+
+    return this.existingDtos;
+  }
+
+  protected async getZodSchema(context: IContext) {
+    const [project, claimDetails, claimTotalProjectPeriods, profileTotalCostCategories, profileDetails, partner] =
+      await this.getExistingDtos(context);
+
+    return getForecastTableValidation({
+      project,
+      partner,
+      claimDetails,
+      claimTotalProjectPeriods,
+      profileTotalCostCategories,
+      profileDetails,
+    });
+  }
+
+  protected async mapToZod(): Promise<z.input<ForecastTableSchemaType>> {
+    const profile = this.dto.reduce((acc: Record<string, string>, curr) => {
+      acc[curr.id] = String(curr.value);
+      return acc;
+    }, {});
+
+    return {
+      form: FormTypes.ProjectSetupForecast,
+      projectId: this.projectId,
+      partnerId: this.partnerId,
+      profile,
+      submit: this.isSubmitting,
+    };
+  }
+
+  protected async runRepositoryCommands(context: IContext, validatedData: z.output<ForecastTableSchemaType>) {
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
 
     if (!isProjectActive) {
       throw new InActiveProjectError();
     }
-
-    const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
+    const [, , , , profileDetails, partner] = await this.getExistingDtos(context);
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {
       throw new BadRequestError("Cannot update partner initial forecast");
     }
 
-    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
-    const golCosts = await context.runQuery(new GetAllGOLForecastedCostCategoriesQuery(this.partnerId));
+    const forecasts = Object.entries(validatedData.profile).map(([id, value]) => {
+      return {
+        id,
+        value: parseCurrency(typeof value === "boolean" ? "0" : value),
+      };
+    });
 
-    const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
+    const preparedForecasts = await this.prepareForecasts(context, profileDetails, forecasts);
 
-    const preparedForecasts = await this.prepareForecasts(context, existing, this.forecasts);
-
-    const validation = new InitialForecastDetailsDtosValidator(
-      preparedForecasts,
-      golCosts,
-      costCategories,
-      this.isSubmitting,
-      true,
-    );
-
-    if (!validation.isValid) {
-      throw new ValidationError(validation);
-    }
-    await this.updateProfileDetails(context, preparedForecasts, existing, this.isSubmitting);
+    await this.updateProfileDetails(context, preparedForecasts, profileDetails, this.isSubmitting);
     await this.updatePartner(context, partner, this.isSubmitting);
 
     return true;
