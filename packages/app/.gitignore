@@ -1,17 +1,19 @@
+# Build outputs
 node_modules/
 dist/
 public/build
 coverage/
 reports/
 build/
+
+# Environment Variables
 /.env
 /.env1
 /.env2
 old-version-of*
-
-
 old-version-of-*
-test-report.html
+
+# Configuration files
 .idea
 
 # System Defaults
@@ -21,3 +23,7 @@ test-report.html
 /dashboard/
 fullSchema.gql
 storybook-static/
+
+# Logging
+newrelic_agent.log
+test-report.html
