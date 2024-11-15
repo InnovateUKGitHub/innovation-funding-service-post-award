@@ -66,6 +66,7 @@ export const useOnUpdateProjectSetupBankDetails = (
         partnerId,
         partnerDto: {
           ...partner,
+          form: data.form,
           projectId,
           bankDetails: {
             accountNumber: "accountNumber" in data ? data.accountNumber : null,

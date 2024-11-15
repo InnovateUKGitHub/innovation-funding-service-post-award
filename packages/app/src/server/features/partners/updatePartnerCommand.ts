@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
   BankCheckStatusMapper,
@@ -13,66 +12,167 @@ import { BankCheckCondition, MatchFlag } from "@framework/types/bankCheck";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
 import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/project";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
-import { AuthorisedAsyncCommandBase } from "../common/commandBase";
+import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber, parseNumber } from "@framework/util/numberHelper";
 import { merge } from "lodash";
 import { Logger } from "@innovateuk/logger";
 import { ILogger } from "@innovateuk/logger";
+import {
+  getProjectSetupBankDetailsSchema,
+  projectSetupBankDetailsErrorMap,
+  ProjectSetupBankDetailsSchemaType,
+} from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import {
+  postcodeErrorMap,
+  postcodeSchema,
+  PostcodeSchema,
+} from "@ui/components/templates/PartnerDetailsEdit/partnerDetailsEdit.zod";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import {
+  projectSetupErrorMap,
+  ProjectSetupSchema,
+  projectSetupSchema,
+} from "@ui/pages/projects/setup/projectSetup.zod";
+import { z } from "zod";
+
+export type UpdatePartnerFormType =
+  | FormTypes.PartnerDetailsEdit
+  | FormTypes.ProjectSetupBankDetails
+  | FormTypes.ProjectSetupBankDetailsVerify
+  | FormTypes.ProjectSetupPostcode
+  | FormTypes.ProjectSetup;
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
-export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
+type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
+
+export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
+  boolean,
+  ProjectSetupBankDetailsSchemaType | PostcodeSchema | ProjectSetupSchema,
+  UpdatePartnerDto
+> {
   public readonly runnableName: string = "UpdatePartnerCommand";
   private mergedPartner: PartnerDto | null = null;
   private readonly logger: ILogger = new Logger("UpdatePartnerCommand");
+  private readonly form: UpdatePartnerFormType;
+
+  private readonly check: {
+    validateBankDetails?: boolean;
+    verifyBankDetails?: boolean;
+    projectSource?: ProjectSource;
+  } = {};
+
+  protected dto: PartnerDto;
+
+  private savedPartner: PartnerDto | null = null;
 
   constructor(
-    private readonly partner: PickRequiredFromPartial<PartnerDto, "id" | "projectId">,
-    private readonly check: {
+    partner: PartnerDto,
+    form: UpdatePartnerFormType,
+    check: {
       validateBankDetails?: boolean;
       verifyBankDetails?: boolean;
       projectSource?: ProjectSource;
     } = {},
   ) {
     super();
+    this.dto = partner;
+    this.check = check;
+    this.form = form;
   }
 
   async accessControl(auth: Authorisation) {
     return auth
-      .forPartner(this.partner.projectId, this.partner.id)
+      .forPartner(this.dto.projectId, this.dto.id)
       .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.FinancialContact);
   }
 
-  protected async run(context: IContext) {
+  protected async getZodSchema(context: IContext) {
+    this.savedPartner = await context.runQuery(new GetByIdQuery(this.dto.id));
+    switch (this.form) {
+      case FormTypes.ProjectSetupPostcode:
+      case FormTypes.PartnerDetailsEdit:
+        return { schema: postcodeSchema, errorMap: postcodeErrorMap };
+      case FormTypes.ProjectSetup:
+        return { schema: projectSetupSchema, errorMap: projectSetupErrorMap };
+      case FormTypes.ProjectSetupBankDetails:
+      case FormTypes.ProjectSetupBankDetailsVerify:
+        return {
+          schema: getProjectSetupBankDetailsSchema(this.savedPartner.bankCheckStatus),
+          errorMap: projectSetupBankDetailsErrorMap,
+        };
+    }
+  }
+
+  protected async mapToZod(): Promise<
+    z.input<ProjectSetupBankDetailsSchemaType> | z.input<PostcodeSchema> | z.input<ProjectSetupSchema>
+  > {
+    if (this.form === FormTypes.PartnerDetailsEdit || this.form === FormTypes.ProjectSetupPostcode) {
+      return {
+        form: this.form,
+        postcodeStatus: this.dto.postcodeStatus,
+        partnerStatus: this.dto.partnerStatus,
+        isSetup: this.form === FormTypes.ProjectSetupPostcode,
+        postcode: this.dto.postcode,
+      };
+    } else if (
+      this.form === FormTypes.ProjectSetupBankDetails ||
+      this.form === FormTypes.ProjectSetupBankDetailsVerify
+    ) {
+      return {
+        projectId: this.dto.projectId,
+        partnerId: this.dto.id,
+        form: this.form,
+        accountNumber: this.dto.bankDetails?.accountNumber ?? undefined,
+        sortCode: this.dto.bankDetails?.sortCode ?? undefined,
+        companyNumber: this.dto.bankDetails?.companyNumber,
+        accountBuilding: this.dto.bankDetails?.address?.accountBuilding,
+        accountStreet: this.dto.bankDetails?.address?.accountStreet,
+        accountLocality: this.dto.bankDetails?.address?.accountLocality,
+        accountTownOrCity: this.dto.bankDetails?.address?.accountTownOrCity,
+        accountPostcode: this.dto.bankDetails?.address?.accountPostcode,
+        bankCheckValidation: undefined,
+      };
+    } else {
+      return {
+        form: this.form,
+        postcode: this.dto.postcode ?? "",
+        bankDetailsTaskStatus: this.dto.bankDetailsTaskStatus,
+        spendProfileStatus: this.dto.spendProfileStatus,
+      };
+    }
+  }
+
+  protected async runRepositoryCommands(context: IContext) {
     try {
-      const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.partner.projectId));
+      const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.dto.projectId));
 
       if (!isProjectActive) {
         return Promise.reject(new InActiveProjectError());
       }
 
-      const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
-      const partnerDocuments = await context.runQuery(
-        new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
-      );
+      if (!this.savedPartner) {
+        this.savedPartner = await context.runQuery(new GetByIdQuery(this.dto.id));
+      }
 
-      const mergedPartner: PartnerDto = merge(originalDto, this.partner);
+      const partnerDocuments = await context.runQuery(new GetPartnerDocumentsQuery(this.dto.projectId, this.dto.id));
+
+      const mergedPartner: PartnerDto = merge(this.savedPartner, this.dto);
       this.mergedPartner = mergedPartner;
-      this.validateRequest(originalDto, partnerDocuments);
 
       const update: PartnerUpdatable = {
-        Id: this.partner.id,
+        Id: this.dto.id,
       };
 
       if (mergedPartner.partnerStatus === PartnerStatus.Pending) {
         if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.check?.validateBankDetails) {
-          await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
+          await this.bankCheckValidate(this.savedPartner, partnerDocuments, update, context);
         }
 
         if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.validateBankDetails) {
@@ -182,7 +282,7 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
     // using the Bank Details service user.
     const unmaskedPartnerDto = await context
       .asBankDetailsValidationUser()
-      .runQuery(new GetBankVerificationDetailsByIdQuery(this.partner.id));
+      .runQuery(new GetBankVerificationDetailsByIdQuery(this.dto.id));
 
     if (!this.mergedPartner) {
       return Promise.reject(new Error("attempting to verify bank details without bank details present"));
@@ -257,30 +357,10 @@ export class UpdatePartnerCommand extends AuthorisedAsyncCommandBase<boolean> {
     ) {
       return false;
     }
-    if (this.partner.organisationType === "Industrial") {
+    if (this.dto.organisationType === "Industrial") {
       return regNumberScore === "Match";
     }
     return true;
-  }
-
-  private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
-    if (!this.mergedPartner) {
-      throw new BadRequestError("Request is missing required fields");
-    }
-
-    if (originalDto.partnerStatus !== PartnerStatus.Pending && this.check?.validateBankDetails) {
-      throw new BadRequestError("Cannot validate bank details for an active partner");
-    }
-
-    const validationResult = new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
-      showValidationErrors: true,
-      validateBankDetails: this.check?.validateBankDetails || this.check?.verifyBankDetails,
-      projectSource: this.check.projectSource,
-    });
-
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
-    }
   }
 
   private collapseConditions(conditions: BankCheckCondition[]): Record<keyof BankCheckCondition, string> {

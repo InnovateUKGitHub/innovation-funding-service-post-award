@@ -262,7 +262,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return node?.Acc_Postcode__c?.value ?? null;
   },
   postcodeStatus(node) {
-    return node?.Acc_Postcode__c?.value ?? null ? PostcodeTaskStatus.Complete : PostcodeTaskStatus.ToDo; // matches existing logic and not depending on unused Acc_PostcodeStatus__c to limit breaking changes
+    return node?.Acc_Postcode__c?.value ? PostcodeTaskStatus.Complete : PostcodeTaskStatus.ToDo; // matches existing logic and not depending on unused Acc_PostcodeStatus__c to limit breaking changes
   },
   projectId(node) {
     return (node?.Acc_ProjectId__c?.value ?? "") as ProjectId;

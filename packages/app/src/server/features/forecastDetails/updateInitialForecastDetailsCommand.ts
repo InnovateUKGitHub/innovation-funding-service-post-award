@@ -40,9 +40,14 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
   private readonly isSubmitting: boolean;
   protected readonly dto: ForecastDto;
 
-  private existingDtos:
-    | [ProjectDto, ClaimDetailsSummaryDto[], ClaimDto[], GOLCostDto[], ForecastDetailsDTO[], PartnerDto]
-    | null = null;
+  private existingDtos: {
+    project: ProjectDto;
+    claimDetails: ClaimDetailsSummaryDto[];
+    claims: ClaimDto[];
+    golCosts: GOLCostDto[];
+    forecasts: ForecastDetailsDTO[];
+    partner: PartnerDto;
+  } | null = null;
 
   constructor(
     projectId: ProjectId,
@@ -76,7 +81,7 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
     );
     const profileDetailsPromise = context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId as PartnerId));
 
-    this.existingDtos = await Promise.all([
+    const dtos = await Promise.all([
       projectPromise,
       claimDetailsPromise,
       claimTotalProjectPeriodsPromise,
@@ -85,12 +90,26 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
       partnerPromise,
     ]);
 
+    this.existingDtos = {
+      project: dtos[0],
+      claimDetails: dtos[1],
+      claims: dtos[2],
+      golCosts: dtos[3],
+      forecasts: dtos[4],
+      partner: dtos[5],
+    };
     return this.existingDtos;
   }
 
   protected async getZodSchema(context: IContext) {
-    const [project, claimDetails, claimTotalProjectPeriods, profileTotalCostCategories, profileDetails, partner] =
-      await this.getExistingDtos(context);
+    const {
+      project,
+      partner,
+      claimDetails,
+      claims: claimTotalProjectPeriods,
+      golCosts: profileTotalCostCategories,
+      forecasts: profileDetails,
+    } = await this.getExistingDtos(context);
 
     return getForecastTableValidation({
       project,
@@ -123,7 +142,7 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
     if (!isProjectActive) {
       throw new InActiveProjectError();
     }
-    const [, , , , profileDetails, partner] = await this.getExistingDtos(context);
+    const { forecasts: profileDetails, partner } = await this.getExistingDtos(context);
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {
       throw new BadRequestError("Cannot update partner initial forecast");

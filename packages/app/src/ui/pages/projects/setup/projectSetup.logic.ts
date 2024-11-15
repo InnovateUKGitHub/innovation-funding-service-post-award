@@ -8,6 +8,9 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
+import { z } from "zod";
+import { ProjectSetupSchema } from "./projectSetup.zod";
+import { PartnerStatus } from "@framework/constants/partner";
 
 export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupQuery>(
@@ -39,18 +42,13 @@ export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId)
   return { project, partner, fragmentRef: data.salesforce.uiapi };
 };
 
-export const useOnUpdateProjectSetup = (
-  projectId: ProjectId,
-  partnerId: PartnerId,
-  partner: Pick<PartnerDto, "partnerStatus">,
-  navigateTo: string,
-) => {
+export const useOnUpdateProjectSetup = (projectId: ProjectId, partnerId: PartnerId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate<Pick<PartnerDto, "partnerStatus">, Pick<PartnerDto, "postcode">>({
+  return useOnUpdate<z.output<ProjectSetupSchema>, Pick<PartnerDto, "postcode">>({
     req: data =>
       clientsideApiClient.partners.updatePartner({
         partnerId,
-        partnerDto: { ...partner, projectId, id: partnerId, ...data },
+        partnerDto: { projectId, id: partnerId, ...data, partnerStatus: PartnerStatus.Active },
       }),
     onSuccess: () => navigate(navigateTo),
   });

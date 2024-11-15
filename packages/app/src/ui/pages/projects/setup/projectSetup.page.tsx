@@ -1,5 +1,5 @@
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
+import { BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { Content } from "@ui/components/molecules/Content/content";
 import { List } from "@ui/components/atoms/List/list";
@@ -45,7 +45,6 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
   const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetup(
     props.projectId,
     props.partnerId,
-    partner,
     props.routes.projectDashboard.getLink({}).path,
   );
 
@@ -117,10 +116,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
         method="POST"
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              ...data,
-              partnerStatus: PartnerStatus.Active,
-            },
+            data: data as z.output<ProjectSetupSchema>,
           }),
         )}
       >

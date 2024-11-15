@@ -50,6 +50,7 @@ export const useOnUpdatePartnerDetails = (
           postcode: data.postcode,
           id: partnerId,
           projectId,
+          form: data.form,
         },
       }),
     onSuccess: () => navigate(navigateTo),

@@ -15,9 +15,9 @@ const projectSetupBankDetailsValidation = getTextValidation({
 });
 
 const getProjectSetupBankDetailsSchema = (
-  bankVerifiedStatus: BankCheckStatus,
+  bankCheckStatus: BankCheckStatus,
 ): typeof validatedProjectSetupBankDetailsSchema | typeof unvalidatedProjectSetupBankDetailsSchema =>
-  bankVerifiedStatus === BankCheckStatus.ValidationPassed
+  bankCheckStatus === BankCheckStatus.ValidationPassed
     ? validatedProjectSetupBankDetailsSchema
     : unvalidatedProjectSetupBankDetailsSchema;
 

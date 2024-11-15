@@ -9,6 +9,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { useRoutes } from "@ui/context/routesProvider";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupBankDetailsVerifyQuery>(
@@ -36,7 +37,10 @@ export const useOnUpdateSetupBankDetailsVerify = (
     req: () =>
       clientsideApiClient.partners.updatePartner({
         partnerId,
-        partnerDto,
+        partnerDto: {
+          ...partnerDto,
+          form: FormTypes.ProjectSetupBankDetailsVerify,
+        },
         verifyBankDetails: true,
       }),
     onSuccess: (_, response) => {

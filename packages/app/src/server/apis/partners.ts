@@ -4,6 +4,7 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { processDto } from "@shared/processResponse";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface IPartnersApi<Context extends "client" | "server"> {
   updatePartner: (
@@ -11,7 +12,7 @@ export interface IPartnersApi<Context extends "client" | "server"> {
       Context,
       {
         partnerId: PartnerId;
-        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
+        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: FormTypes };
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }
@@ -38,7 +39,8 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       "server",
       {
         partnerId: PartnerId;
-        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
+
+        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: FormTypes };
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }
@@ -46,7 +48,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
   ) {
     const ctx = await contextProvider.start(params);
     await ctx.runCommand(
-      new UpdatePartnerCommand(params.partnerDto as PartnerDto, {
+      new UpdatePartnerCommand(params.partnerDto as PartnerDto, params.partnerDto.form, {
         validateBankDetails: params.validateBankDetails,
         verifyBankDetails: params.verifyBankDetails,
       }),
