@@ -5,6 +5,7 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { processDto } from "@shared/processResponse";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: UpdatePartnerFormType };
 
