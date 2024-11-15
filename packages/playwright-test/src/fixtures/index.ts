@@ -22,7 +22,7 @@ import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
 import { ManageTeamMember } from "./acc/pages/PCRs/ManageTeamMember";
-import { AccProjectKTP } from "./projectFactory/AccProjectKTP";
+import { AccProjectKtp } from "./projectFactory/AccProjectKTP";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
 import { RemovePartner } from "./acc/pages/PCRs/removePartner";
 import { ProjectDetails } from "./acc/pages/ProjectDetails";
@@ -69,7 +69,7 @@ interface Workers {
   sfdcApi: SfdcApi;
   accProjectBase: AccProjectBase;
   accProjectMulti: AccProjectMulti;
-  accProjectKTP: AccProjectKTP;
+  accProjectKtp: AccProjectKtp;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -93,8 +93,8 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new RemovePartner({ page, commands, projectChangeRequests, validators })),
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
   projectDocuments: ({ page, commands, validators }, use) => use(new ProjectDocuments({ page, commands, validators })),
-  manageTeamMember: ({ page, commands, accProjectKTP, accUserSwitcher, accNavigation }, use) =>
-    use(new ManageTeamMember({ page, commands, accProjectKTP, accUserSwitcher, accNavigation })),
+  manageTeamMember: ({ page, commands, accProjectKtp, accUserSwitcher, accNavigation }, use) =>
+    use(new ManageTeamMember({ page, commands, accProjectKtp, accUserSwitcher, accNavigation })),
 
   // Project Factory
   accProjectBase: [
@@ -109,8 +109,8 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
-  accProjectKTP: [
-    ({ sfdcApi, projectState }, use) => use(new AccProjectKTP({ sfdcApi, projectState })),
+  accProjectKtp: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectKtp({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
   // Misc

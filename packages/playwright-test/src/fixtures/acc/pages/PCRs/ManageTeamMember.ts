@@ -5,7 +5,7 @@ import { Button } from "../../../../components/Button";
 import { Commands } from "../../../Commands";
 import { PcrType } from "../../../../typings/pcr";
 import { getLorem } from "../../../../components/lorem";
-import { AccProjectKTP } from "../../../projectFactory/AccProjectKTP";
+import { AccProjectKtp } from "../../../projectFactory/AccProjectKTP";
 import { AccUserSwitcher } from "../../AccUserSwitcher";
 import { AccNavigation } from "../../AccNavigation";
 export
@@ -13,7 +13,7 @@ export
 class ManageTeamMember {
   protected readonly page: Page;
   protected readonly commands: Commands;
-  protected readonly accProjectKTP: AccProjectKTP;
+  protected readonly accProjectKtp: AccProjectKtp;
   protected readonly AccUserswitcher: AccUserSwitcher;
   protected readonly AccNavigation: AccNavigation;
   private readonly dashboardTitle: PageHeading;
@@ -68,19 +68,19 @@ class ManageTeamMember {
   constructor({
     page,
     commands,
-    accProjectKTP,
+    accProjectKtp,
     accUserSwitcher,
     accNavigation,
   }: {
     page: Page;
     commands: Commands;
-    accProjectKTP: AccProjectKTP;
+    accProjectKtp: AccProjectKtp;
     accUserSwitcher: AccUserSwitcher;
     accNavigation: AccNavigation;
   }) {
     this.page = page;
     this.commands = commands;
-    this.accProjectKTP = accProjectKTP;
+    this.accProjectKtp = accProjectKtp;
     this.AccUserswitcher = accUserSwitcher;
     this.AccNavigation = accNavigation;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
@@ -177,7 +177,7 @@ class ManageTeamMember {
 
   @Given("a PM of a KTP project has created a new Project Change Request")
   async ktpPCRCreated() {
-    await this.accProjectKTP.create();
+    await this.accProjectKtp.ktpProject();
     await this.AccUserswitcher.switchToProjectManager();
     await this.AccNavigation.gotoPCRPage();
     await this.userClicksCreate();
