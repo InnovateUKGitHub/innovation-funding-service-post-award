@@ -16,7 +16,7 @@ describe("getAllForProjectQuery", () => {
     expect(result[0].type).toBe(partner.participantType);
   });
 
-  it("when pathers only on other project expect empty", async () => {
+  it("when partners only on other project expect empty", async () => {
     const context = new TestContext();
     const project1 = context.testData.createProject();
     const project2 = context.testData.createProject();
@@ -41,7 +41,7 @@ describe("getAllForProjectQuery", () => {
     expect(result.find(x => x.id === notLeadPartner.id)?.isLead).toBe(false);
   });
 
-  it("sorts by 'Project Lead' and then alpabetical", async () => {
+  it("sorts by 'Project Lead' and then alphabetical", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partners = context.testData.range(10, () => context.testData.createPartner(project));

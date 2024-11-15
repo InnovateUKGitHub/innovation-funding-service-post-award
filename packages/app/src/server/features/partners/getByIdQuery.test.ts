@@ -11,6 +11,7 @@ import {
 } from "@framework/constants/partner";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
@@ -81,7 +82,7 @@ describe("getAllForProjectQuery", () => {
     expect(result).not.toBe(null);
 
     const expected: PartnerDto = {
-      id: "Partner1" as PartnerId,
+      id: (SalesforcePrefixes.Acc_ProjectParticipant__c + "Partner1") as PartnerId,
       name: "Expected name",
       accountId: "AccountId1" as AccountId,
       type: "Academic",
@@ -90,8 +91,9 @@ describe("getAllForProjectQuery", () => {
       postcodeStatus: PostcodeTaskStatus.Complete,
       isLead: true,
       projectRoleName: "Lead",
-      projectId: "Project1" as ProjectId,
+      projectId: (SalesforcePrefixes.Acc_Project__c + "Project1") as ProjectId,
       organisationType: "Industrial",
+      competitionName: undefined,
       competitionType: "SBRI",
       totalPaidCosts: 25555,
       totalParticipantGrant: 125000,

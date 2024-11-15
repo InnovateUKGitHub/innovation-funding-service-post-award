@@ -42,6 +42,7 @@ import { SalesforceRole, ISalesforceProjectContact } from "@server/repositories/
 import { ISalesforceProject } from "@server/repositories/projectsRepository";
 import { RecordType } from "@framework/entities/recordType";
 import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 
 export class TestData {
   constructor(
@@ -97,7 +98,7 @@ export class TestData {
     const seed = this.repositories.projects.Items.length + 1;
 
     const newItem: ISalesforceProject = {
-      Id: ("Project" + seed) as ProjectId,
+      Id: (SalesforcePrefixes.Acc_Project__c + "Project" + seed) as ProjectId,
       Acc_ProjectTitle__c: "Project " + seed,
       Acc_CompetitionType__c: "CR&D",
       Acc_StartDate__c: "",
@@ -154,7 +155,7 @@ export class TestData {
     project = project || this.createProject();
 
     const newItem: Partner = {
-      id: `Partner${seed}` as PartnerId,
+      id: `${SalesforcePrefixes.Acc_ProjectParticipant__c}Partner${seed}` as PartnerId,
       accountId: `AccountId${seed}`,
       name: `Participant Name ${seed}`,
       participantType: "Academic",
@@ -646,7 +647,7 @@ export class TestData {
 
     const seed = this.repositories.profileDetails.Items.length + 1;
     const newItem: ISalesforceProfileDetails = {
-      Id: `ProfileDetailsItem-${seed}`,
+      Id: `${SalesforcePrefixes.Acc_Profile__c}ProfileDetailsItem-${seed}`,
       Acc_CostCategory__c: costCategory.id,
       Acc_ProjectParticipant__c: partner.id,
       Acc_ProjectPeriodNumber__c: periodId,

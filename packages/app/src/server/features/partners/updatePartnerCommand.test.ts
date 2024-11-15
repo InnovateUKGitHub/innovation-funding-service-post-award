@@ -15,9 +15,10 @@ import {
   PostcodeStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { InActiveProjectError, ValidationError } from "@shared/appError";
+import { InActiveProjectError, ValidationError, ZodFormHandlerError } from "@shared/appError";
 import { GetByIdQuery } from "./getByIdQuery";
 import { UpdatePartnerCommand } from "./updatePartnerCommand";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 describe("updatePartnerCommand", () => {
   const setup = (updates?: Partial<Partner>) => {
@@ -61,7 +62,7 @@ describe("updatePartnerCommand", () => {
 
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-      const command = new UpdatePartnerCommand(expected);
+      const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupPostcode);
 
       await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
     });
@@ -71,7 +72,7 @@ describe("updatePartnerCommand", () => {
 
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-      const command = new UpdatePartnerCommand(expected);
+      const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails);
       await expect(context.runCommand(command)).resolves.toBe(true);
 
       const result = await context.runQuery(new GetByIdQuery(partner.id));
@@ -86,7 +87,7 @@ describe("updatePartnerCommand", () => {
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
       expected.postcode = "BS1 1UU";
 
-      const command = new UpdatePartnerCommand(expected);
+      const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails);
 
       await expect(context.runCommand(command)).resolves.toBe(true);
 
@@ -104,12 +105,12 @@ describe("updatePartnerCommand", () => {
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
       expected.postcode = initialStubPostcode;
 
-      const command = new UpdatePartnerCommand(expected);
+      const command = new UpdatePartnerCommand(expected, FormTypes.PartnerDetailsEdit);
       await expect(context.runCommand(command)).resolves.toBe(true);
 
       expected.partnerStatus = PartnerStatus.Active;
       expected.postcode = "";
-      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
 
       const result = await context.runQuery(new GetByIdQuery(partner.id));
 
@@ -121,12 +122,12 @@ describe("updatePartnerCommand", () => {
       const { context, partner } = postcodeSetup();
 
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-      const command = new UpdatePartnerCommand(expected);
+      const command = new UpdatePartnerCommand(expected, FormTypes.PartnerDetailsEdit);
 
       expected.partnerStatus = PartnerStatus.Active;
       expected.postcode = "";
 
-      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
       expected.postcode = "BS1 1UU";
 
       await context.runCommand(command);
@@ -144,7 +145,7 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, {
+    const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails, {
       validateBankDetails: true,
     });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -178,7 +179,7 @@ describe("updatePartnerCommand", () => {
     expected.bankDetails.sortCode = "654321";
     expected.bankDetails.accountNumber = "87654321";
 
-    const command = new UpdatePartnerCommand(expected, {
+    const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails, {
       validateBankDetails: true,
     });
     await expect(context.runCommand(command)).resolves.toBe(true);
@@ -218,7 +219,7 @@ describe("updatePartnerCommand", () => {
     expected.bankDetails.sortCode = "654321";
     expected.bankDetails.accountNumber = "87654321";
 
-    const command = new UpdatePartnerCommand(expected, {
+    const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails, {
       validateBankDetails: true,
     });
     await expect(context.runCommand(command)).resolves.toBe(true);
@@ -243,7 +244,7 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, {
+    const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails, {
       verifyBankDetails: true,
     });
     await expect(context.runCommand(command)).resolves.toBe(true);
@@ -265,7 +266,7 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, {
+    const command = new UpdatePartnerCommand(expected, FormTypes.ProjectSetupBankDetails, {
       verifyBankDetails: true,
     });
     await expect(context.runCommand(command)).resolves.toBe(true);

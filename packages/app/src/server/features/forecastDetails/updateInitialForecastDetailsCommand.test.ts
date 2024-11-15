@@ -4,9 +4,10 @@ import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { InActiveProjectError, ValidationError, ZodFormHandlerError } from "../common/appError";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { UpdateInitialForecastDetailsCommand } from "./updateInitialForecastDetailsCommand";
+import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => ({
   costCategoryId: item.Acc_CostCategory__c as CostCategoryId,
@@ -26,7 +27,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const profileDetail = context.testData.createProfileDetail(undefined, partner);
     const dto: ForecastDetailsDTO[] = [
       {
-        id: "123",
+        id: SalesforcePrefixes.Acc_Profile__c + "123",
         costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
@@ -58,7 +59,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(project.Id, partner.id, dto, false);
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
   });
 
   it("throws a validation error if total costs exceed gol costs when submitting", async () => {
@@ -91,7 +92,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, true);
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
   });
 
   it("throws a bad request error if the partner status is not pending", async () => {
@@ -116,7 +117,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, true);
-    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
   });
 
   it("throws a validation error if total costs are less than gol costs when submitting", async () => {
@@ -146,7 +147,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, true);
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow(ZodFormHandlerError);
   });
 
   it("should update forecasts and initial when forecast is valid and submit === true", async () => {
