@@ -12,7 +12,8 @@
     "relay": "relay-compiler",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "typecheck": "tsc --noEmit --watch"
   },
   "author": "BJSS Ltd",
   "license": "ISC",

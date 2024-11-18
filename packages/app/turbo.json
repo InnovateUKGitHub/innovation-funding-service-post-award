@@ -13,6 +13,7 @@
       "dependsOn": ["@innovateuk/common#build", "@innovateuk/logger#build", "@innovateuk/tsforce#build"]
     },
     "test": {},
+    "typecheck": {},
     "start": {
       "inputs": ["src/**", "webpack.config.js", "tsconfig.json"],
       "outputs": ["dist/**"],

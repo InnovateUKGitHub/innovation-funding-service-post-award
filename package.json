@@ -24,6 +24,7 @@
     "pw-run:at": "TEST_SALESFORCE_SANDBOX=at node turbo.mjs run pw-cli --",
     "start": "node --env-file .env turbo.mjs run start --",
     "typegen": "node turbo.mjs run typegen --",
+    "typecheck": "node turbo.mjs run typecheck --",
     "updateSchema": "node --env-file .env turbo.mjs run updateSchema --",
     "postinstall": "npm run patch-package",
     "patch-package": "patch-package"
