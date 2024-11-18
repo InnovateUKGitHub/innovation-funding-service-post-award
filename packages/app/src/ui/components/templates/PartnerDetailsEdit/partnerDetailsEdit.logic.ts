@@ -9,6 +9,7 @@ import { PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -50,7 +51,7 @@ export const useOnUpdatePartnerDetails = (
           postcode: data.postcode,
           id: partnerId,
           projectId,
-          form: data.form,
+          form: data.form as UpdatePartnerFormType,
         },
       }),
     onSuccess: () => navigate(navigateTo),

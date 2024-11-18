@@ -78,12 +78,9 @@ class ProjectSetupBankDetailsVerifyHandler extends ZodFormHandlerBase<
     context: IContext;
   }): Promise<string> {
     await context.runCommand(
-      new UpdatePartnerCommand(
-        { id: params.partnerId, ...input },
-        {
-          verifyBankDetails: true,
-        },
-      ),
+      new UpdatePartnerCommand({ id: params.partnerId, ...input }, input.form, {
+        verifyBankDetails: true,
+      }),
     );
 
     // Re-obtain the new results

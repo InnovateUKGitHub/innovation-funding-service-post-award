@@ -1,10 +1,12 @@
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { processDto } from "@shared/processResponse";
-import { FormTypes } from "@ui/zod/FormTypes";
+
+type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: UpdatePartnerFormType };
 
 export interface IPartnersApi<Context extends "client" | "server"> {
   updatePartner: (
@@ -12,7 +14,7 @@ export interface IPartnersApi<Context extends "client" | "server"> {
       Context,
       {
         partnerId: PartnerId;
-        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: FormTypes };
+        partnerDto: UpdatePartnerDto;
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }
@@ -25,7 +27,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
     super("partners");
     this.putItem(
       "/:partnerId",
-      (p, q, b: PartnerDto) => ({
+      (p, q, b: UpdatePartnerDto) => ({
         partnerId: p.partnerId,
         partnerDto: processDto(b),
         validateBankDetails: q.validateBankDetails === "true",
@@ -39,8 +41,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       "server",
       {
         partnerId: PartnerId;
-
-        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: FormTypes };
+        partnerDto: UpdatePartnerDto;
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }

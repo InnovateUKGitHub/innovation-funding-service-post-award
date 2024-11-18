@@ -10,7 +10,13 @@ import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
 import { BankCheckCondition, MatchFlag } from "@framework/types/bankCheck";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
-import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
+import {
+  PartnerStatus,
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  PostcodeTaskStatus,
+  SpendProfileStatus,
+} from "@framework/constants/partner";
 import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -41,20 +47,15 @@ import {
   projectSetupSchema,
 } from "@ui/pages/projects/setup/projectSetup.zod";
 import { z } from "zod";
-
-export type UpdatePartnerFormType =
-  | FormTypes.PartnerDetailsEdit
-  | FormTypes.ProjectSetupBankDetails
-  | FormTypes.ProjectSetupBankDetailsVerify
-  | FormTypes.ProjectSetupPostcode
-  | FormTypes.ProjectSetup;
+import { BankStatementSchema, setupBankStatementSchema } from "@ui/pages/projects/setup/projectSetupBankStatement.zod";
+import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
 
 export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  ProjectSetupBankDetailsSchemaType | PostcodeSchema | ProjectSetupSchema,
+  ProjectSetupBankDetailsSchemaType | PostcodeSchema | ProjectSetupSchema | BankStatementSchema,
   UpdatePartnerDto
 > {
   public readonly runnableName: string = "UpdatePartnerCommand";
@@ -68,12 +69,12 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
     projectSource?: ProjectSource;
   } = {};
 
-  protected dto: PartnerDto;
+  protected dto: UpdatePartnerDto;
 
   private savedPartner: PartnerDto | null = null;
 
   constructor(
-    partner: PartnerDto,
+    partner: UpdatePartnerDto,
     form: UpdatePartnerFormType,
     check: {
       validateBankDetails?: boolean;
@@ -107,17 +108,25 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
           schema: getProjectSetupBankDetailsSchema(this.savedPartner.bankCheckStatus),
           errorMap: projectSetupBankDetailsErrorMap,
         };
+      case FormTypes.ProjectSetupBankStatement:
+        return {
+          schema: setupBankStatementSchema,
+          errorMap: projectSetupErrorMap,
+        };
     }
   }
 
   protected async mapToZod(): Promise<
-    z.input<ProjectSetupBankDetailsSchemaType> | z.input<PostcodeSchema> | z.input<ProjectSetupSchema>
+    | z.input<ProjectSetupBankDetailsSchemaType>
+    | z.input<PostcodeSchema>
+    | z.input<ProjectSetupSchema>
+    | z.input<BankStatementSchema>
   > {
     if (this.form === FormTypes.PartnerDetailsEdit || this.form === FormTypes.ProjectSetupPostcode) {
       return {
         form: this.form,
-        postcodeStatus: this.dto.postcodeStatus,
-        partnerStatus: this.dto.partnerStatus,
+        postcodeStatus: this.dto.postcodeStatus ?? PostcodeTaskStatus.Unknown,
+        partnerStatus: this.dto.partnerStatus ?? PartnerStatus.Unknown,
         isSetup: this.form === FormTypes.ProjectSetupPostcode,
         postcode: this.dto.postcode,
       };
@@ -139,12 +148,14 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
         accountPostcode: this.dto.bankDetails?.address?.accountPostcode,
         bankCheckValidation: undefined,
       };
+    } else if (this.form === FormTypes.ProjectSetupBankStatement) {
+      return { form: this.form };
     } else {
       return {
         form: this.form,
         postcode: this.dto.postcode ?? "",
-        bankDetailsTaskStatus: this.dto.bankDetailsTaskStatus,
-        spendProfileStatus: this.dto.spendProfileStatus,
+        bankDetailsTaskStatus: this.dto.bankDetailsTaskStatus ?? BankDetailsTaskStatus.Unknown,
+        spendProfileStatus: this.dto.spendProfileStatus ?? SpendProfileStatus.Unknown,
       };
     }
   }

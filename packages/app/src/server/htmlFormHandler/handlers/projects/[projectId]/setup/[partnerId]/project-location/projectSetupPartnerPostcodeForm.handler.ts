@@ -48,7 +48,9 @@ export class ProjectSetupPartnerPostcodeFormHandler extends ZodFormHandlerBase<P
     params: PartnerDetailsParams;
     context: IContext;
   }): Promise<string> {
-    await context.runCommand(new UpdatePartnerCommand({ id: params.partnerId, projectId: params.projectId, ...input }));
+    await context.runCommand(
+      new UpdatePartnerCommand({ id: params.partnerId, projectId: params.projectId, ...input }, input.form),
+    );
     return ProjectSetupRoute.getLink(params).path;
   }
 }

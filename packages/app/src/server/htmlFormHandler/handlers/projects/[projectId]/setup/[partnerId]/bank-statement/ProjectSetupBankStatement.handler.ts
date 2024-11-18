@@ -10,12 +10,7 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { BankDetailsTaskStatus } from "@framework/constants/partner";
-
-const schema = z.object({
-  form: z.literal(FormTypes.ProjectSetupBankStatement),
-});
-
-type BankStatementSchema = typeof schema;
+import { BankStatementSchema, setupBankStatementSchema } from "@ui/pages/projects/setup/projectSetupBankStatement.zod";
 
 export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
   BankStatementSchema,
@@ -31,7 +26,7 @@ export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
 
   protected async getZodSchema() {
     return {
-      schema: schema,
+      schema: setupBankStatementSchema,
       errorMap: projectSetupBankDetailsErrorMap,
     };
   }
@@ -42,9 +37,11 @@ export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
     };
   }
   protected async run({
+    input,
     params,
     context,
   }: {
+    input: z.output<BankStatementSchema>;
     params: ProjectSetupBankStatementParams;
     context: IContext;
   }): Promise<string> {
@@ -52,11 +49,15 @@ export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
       // Attempt to update the partner information.
       // Will crash and burn if there are validation errors,
       // which will return to the current page as expected.
-      new UpdatePartnerCommand({
-        projectId: params.projectId,
-        id: params.partnerId,
-        bankDetailsTaskStatus: BankDetailsTaskStatus.Complete,
-      }),
+
+      new UpdatePartnerCommand(
+        {
+          projectId: params.projectId,
+          id: params.partnerId,
+          bankDetailsTaskStatus: BankDetailsTaskStatus.Complete,
+        },
+        input.form,
+      ),
     );
 
     return ProjectSetupRoute.getLink(params).path;

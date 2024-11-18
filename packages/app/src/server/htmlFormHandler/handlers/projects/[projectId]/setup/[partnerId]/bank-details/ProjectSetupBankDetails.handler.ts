@@ -92,7 +92,7 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
   }): Promise<string> {
     const params = { projectId: input.projectId, partnerId: input.partnerId };
     await context.runCommand(
-      new UpdatePartnerCommand(await this.getDto(context, params, input), { validateBankDetails: true }),
+      new UpdatePartnerCommand(await this.getDto(context, params, input), input.form, { validateBankDetails: true }),
     );
     return ProjectSetupBankDetailsVerifyRoute.getLink(params).path;
   }

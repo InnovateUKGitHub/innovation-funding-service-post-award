@@ -52,6 +52,7 @@ class ProjectSetupFormHandler extends ZodFormHandlerBase<ProjectSetupSchema, Pro
     await context.runCommand(
       new UpdatePartnerCommand(
         { id: params.partnerId, projectId: params.projectId, partnerStatus: PartnerStatus.Active, ...input },
+        input.form,
         { projectSource: project.projectSource },
       ),
     );
