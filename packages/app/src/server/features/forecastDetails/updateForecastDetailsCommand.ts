@@ -18,9 +18,9 @@ import { UpdateClaimCommand } from "../claims/updateClaim";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
 import { AuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
-import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
+import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 
 export class UpdateForecastDetailsCommand extends AuthorisedAsyncCommandBase<boolean> {
   public readonly runnableName: string = "UpdateForecastDetailsCommand";
@@ -144,9 +144,12 @@ export class UpdateForecastDetailsCommand extends AuthorisedAsyncCommandBase<boo
     if (!partner.newForecastNeeded) {
       return;
     }
-    partner.newForecastNeeded = false;
-    const updatePartnerCommand = new UpdatePartnerCommand(partner);
-    await context.runCommand(updatePartnerCommand);
+    const updatedPartner: Updatable<ISalesforcePartner> = {
+      Id: partner.id,
+      Acc_NewForecastNeeded__c: false,
+    };
+
+    await context.repositories.partners.update(updatedPartner);
   }
 
   private nextClaimStatus(claim: ClaimDto) {
