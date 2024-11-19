@@ -108,7 +108,9 @@ const badFileNames = [
 ];
 
 const filenameValidator = (options: Pick<IAppOptions, "maxFileBasenameLength" | "permittedTypes">) => {
-  const allowedExtensions = Object.values(options.permittedTypes).flat();
+  const allowedExtensions = Object.values(options.permittedTypes)
+    .flat()
+    .map(x => x.toLowerCase());
 
   return z
     .string()
@@ -129,6 +131,7 @@ const filenameValidator = (options: Pick<IAppOptions, "maxFileBasenameLength" | 
       }
 
       const lowercaseFilename = parsedFile.name.toLowerCase();
+      const lowercaseExtension = parsedFile.ext.toLowerCase();
 
       if (parsedFile.ext === "") {
         if (parsedFile.name.startsWith(".")) {
@@ -152,7 +155,7 @@ const filenameValidator = (options: Pick<IAppOptions, "maxFileBasenameLength" | 
 
       let foundGoodExtension = false;
       for (const allowedExtension of allowedExtensions) {
-        if ("." + allowedExtension === parsedFile.ext) {
+        if ("." + allowedExtension === lowercaseExtension) {
           foundGoodExtension = true;
         }
       }
