@@ -231,11 +231,11 @@ export class ServerLogger extends BaseLogger {
   }
 
   private logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
-    const nr = this.options.newRelic;
+    const newRelicInstance = this.options.newRelic;
     // newrelic is a global variable instantiated as a banner of the webpack/esbuild build
-    if (nr) {
+    if (newRelicInstance) {
       // @ts-expect-error TODO: Additional values are allowed to be passed to newrelic#recordLogEvent
-      nr.recordLogEvent({ level, timestamp: Date.now(), message, params });
+      newRelicInstance.recordLogEvent({ level, timestamp: Date.now(), message, params });
     }
   }
 }
