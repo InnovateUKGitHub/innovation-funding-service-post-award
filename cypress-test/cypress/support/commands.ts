@@ -14,10 +14,12 @@ import {
   keyFile,
   longFile,
   lpt1,
-  singleCharFile,
   specialCharFile,
   testFile,
   comFile,
+  upperCaseExtensionPdf,
+  upperCaseExtensionDoc,
+  upperCaseExtensionXls,
 } from "common/testfileNames";
 import { documents } from "common/fileComponentTests";
 import { Intercepts } from "common/intercepts";
@@ -557,6 +559,18 @@ const testFileComponent = (
     });
     cy.validationNotification(`'${file}' has been removed.`);
   });
+  cy.log("Checking uppercase file extensions are allowed");
+  [upperCaseExtensionPdf, upperCaseExtensionDoc, upperCaseExtensionXls].forEach(file => {
+    cy.uploadAnyFileType(file);
+    cy.button("Upload documents").click();
+    cy.validationNotification("has been uploaded.");
+    cy.wait(500);
+    cy.log("Deleting allowed special character file");
+    cy.contains("tr", "TEST.").within(() => {
+      cy.tableCell("Remove").scrollIntoView().click();
+    });
+    cy.validationNotification(`has been removed.`);
+  });
   cy.log("Validating incorrect file type");
   cy.uploadAnyFileType(keyFile);
   cy.wait(500);
@@ -606,17 +620,17 @@ const testFileComponent = (
   cy.log("Uploading a batch of 10 documents");
   if (jsdisabled) {
     cy.wait(1000);
-  } else {
-    cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
-  }
-
-  cy.get(`input[type="file"]`)
-    .wait(seconds(1))
-    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
-  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
-  if (jsdisabled) {
+    cy.get(`input[type="file"]`)
+      .wait(seconds(1))
+      .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+    cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
     cy.wait(5000);
   } else {
+    cy.get(`input[type="file"]`)
+      .wait(seconds(1))
+      .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+    cy.intercept("POST", `/api/documents/${intercept}/**`).as("filesUpload");
+    cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
     cy.wait("@filesUpload");
   }
   cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
