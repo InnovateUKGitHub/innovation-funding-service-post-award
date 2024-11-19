@@ -14,3 +14,6 @@ export const keyFile = "key.key";
 export const conName = "CON.txt";
 export const lpt1 = "LPT1.txt";
 export const comFile = "COM1.txt";
+export const upperCaseExtensionPdf = "TEST.PDF";
+export const upperCaseExtensionDoc = "TEST.DOCX";
+export const upperCaseExtensionXls = "TEST.XLSX";
