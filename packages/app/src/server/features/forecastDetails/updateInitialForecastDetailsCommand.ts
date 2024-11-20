@@ -122,11 +122,7 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
   }
 
   protected async mapToZod(): Promise<z.input<ForecastTableSchemaType>> {
-    const profile = this.dto.reduce((acc: Record<string, string>, curr) => {
-      acc[curr.id] = String(curr.value);
-      return acc;
-    }, {});
-
+    const profile = Object.fromEntries(this.dto.map(x => [x.id, String(x.value)]));
     return {
       form: FormTypes.ProjectSetupForecast,
       projectId: this.projectId,
@@ -151,7 +147,7 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
     const forecasts = Object.entries(validatedData.profile).map(([id, value]) => {
       return {
         id,
-        value: parseCurrency(typeof value === "boolean" ? "0" : value),
+        value: parseCurrency(value),
       };
     });
 
