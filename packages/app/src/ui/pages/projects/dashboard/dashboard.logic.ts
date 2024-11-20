@@ -8,7 +8,7 @@ import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useContent } from "@ui/hooks/content.hook";
 import { useLazyLoadQuery } from "react-relay";
-import { CuratedSection, CuratedSections, FilterOptions, Partner, Project, Section } from "./Dashboard.interface";
+import { CuratedSection, FilterOptions, Partner, Project, Section } from "./Dashboard.interface";
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
 import { IClientConfig } from "../../../../types/IClientConfig";

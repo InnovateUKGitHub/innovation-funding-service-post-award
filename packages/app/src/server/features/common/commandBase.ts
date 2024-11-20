@@ -29,6 +29,7 @@ export abstract class ZodAuthorisedAsyncCommandBase<
 > extends AuthorisedAsyncCommandBase<T> {
   protected shouldSkipIsActiveCheck = false;
   protected abstract readonly dto: Dto;
+
   protected abstract getZodSchema(context: IContext): Promise<{ schema: Schema; errorMap: z.ZodErrorMap }>;
   protected abstract readonly projectId: ProjectId;
   /**

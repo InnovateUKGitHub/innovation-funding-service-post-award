@@ -13,7 +13,18 @@ import { Results } from "../results";
 import * as Validation from "./common";
 import { ProjectSource } from "@framework/constants/project";
 
-export class PartnerDtoValidator extends Results<PartnerDto> {
+type ValidatePartnerDto = Pick<
+  PartnerDto,
+  | "partnerStatus"
+  | "bankDetailsTaskStatus"
+  | "postcode"
+  | "spendProfileStatus"
+  | "bankDetails"
+  | "bankCheckStatus"
+  | "postcodeStatus"
+>;
+
+export class PartnerDtoValidator extends Results<ValidatePartnerDto> {
   public sortCode: Result;
   public accountNumber: Result;
   public manualProjectSetup: Result;
@@ -22,7 +33,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
   public bankDetailsTaskStatus: Result;
   public postcodeSetupStatus: Result;
   public bankCheckValidation: Result;
-  private readonly original: PartnerDto;
+  private readonly original: ValidatePartnerDto;
   private readonly partnerDocuments: DocumentSummaryDto[];
   private readonly options: {
     showValidationErrors: boolean;
@@ -32,8 +43,8 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
   };
 
   constructor(
-    model: PartnerDto,
-    original: PartnerDto,
+    model: ValidatePartnerDto,
+    original: ValidatePartnerDto,
     partnerDocuments: DocumentSummaryDto[],
     options: {
       showValidationErrors: boolean;
@@ -159,7 +170,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     [PartnerStatus.MigratedWithdrawn]: [PartnerStatus.MigratedWithdrawn],
   };
 
-  private isPartnerStatusTransitionAllowed(original: PartnerDto, model: PartnerDto) {
+  private isPartnerStatusTransitionAllowed(original: ValidatePartnerDto, model: ValidatePartnerDto) {
     const allowedTransitions = this.allowedPartnerStatusTransitions[original.partnerStatus] || [];
     return allowedTransitions.indexOf(model.partnerStatus) >= 0;
   }

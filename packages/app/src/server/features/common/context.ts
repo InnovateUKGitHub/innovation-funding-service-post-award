@@ -55,6 +55,8 @@ import { RecordType } from "@framework/entities/recordType";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { ExternalContactsRepository } from "@server/repositories/externalContactRepository";
 import { Copy } from "@copy/Copy";
+import { DocumentNode } from "graphql";
+import { createContextFromEmail } from "@gql/GraphQLContext";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -251,6 +253,21 @@ export class Context implements IContext {
     } finally {
       timer.finish();
     }
+  }
+
+  public async runGraphqlQuery<ResponseData>({
+    document,
+    variables,
+  }: {
+    document: DocumentNode;
+    variables?: Record<string, string | number>;
+  }): Promise<{ data: ResponseData; errors: unknown }> {
+    const graphqlContext = await createContextFromEmail({
+      email: this.user.email,
+      traceId: this.traceId,
+    });
+
+    return graphqlContext.api.executeGraphQL({ document, variables });
   }
 
   public runQuery<TResult>(query: AsyncQueryBase<TResult> | AuthorisedAsyncQueryBase<TResult>): Promise<TResult> {

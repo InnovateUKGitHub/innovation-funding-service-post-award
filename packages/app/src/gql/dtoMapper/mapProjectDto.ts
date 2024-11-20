@@ -8,6 +8,7 @@ import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { Clock } from "@framework/util/clock";
 import { dayComparator } from "@framework/util/comparator";
 import { roundCurrency } from "@framework/util/numberHelper";
+import { getIsActive } from "@gql/resolvers/Acc_Project__c/isActive";
 
 const clock = new Clock();
 
@@ -191,7 +192,8 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
     return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
   isActive(node) {
-    return !!node?.isActive;
+    if (typeof node?.isActive === "boolean") return node?.isActive;
+    return getIsActive(node?.Acc_ProjectStatus__c?.value ?? "unknown");
   },
   isNonFec(node) {
     return !!node?.Acc_NonFEC__c?.value;

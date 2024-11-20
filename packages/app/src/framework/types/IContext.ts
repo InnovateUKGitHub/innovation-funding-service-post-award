@@ -43,6 +43,7 @@ import { Option } from "@framework/dtos/option";
 import { IExternalContactsRepository } from "@server/repositories/externalContactRepository";
 import { ITimer } from "@innovateuk/logger";
 import { Copy } from "@copy/Copy";
+import { DocumentNode } from "graphql";
 
 export interface IRepositories {
   readonly accounts: IAccountsRepository;
@@ -101,6 +102,13 @@ export interface IContext {
   asSystemUser: () => IContext;
   asBankDetailsValidationUser: () => IContext;
   internationalisation: IInternationalisation;
+  runGraphqlQuery<ResponseData>({
+    document,
+    variables,
+  }: {
+    document: DocumentNode;
+    variables?: AnyObject;
+  }): Promise<{ data: ResponseData; errors: unknown }>;
 }
 
 export interface ICaches {
