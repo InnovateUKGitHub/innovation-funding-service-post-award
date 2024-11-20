@@ -7,14 +7,15 @@ import { TsforceDescribeSubrequest } from "./requests/TsforceDescribeSubrequest"
 import { TsforceInsertSubrequest } from "./requests/TsforceInsertSubrequest";
 import { TsforceQuerySubrequest } from "./requests/TsforceQuerySubrequest";
 import { TsforceUpdateSubrequest } from "./requests/TsforceUpdateSubrequest";
-import { TsforceConnection } from "./TsforceConnection";
 import { AnyObject } from "./types/AnyObject";
+import { ITsforceConnection } from "./types/ITsforceConnection";
+import { ITsforceSobject } from "./types/ITsforceObject";
 
-class TsforceSobject {
-  private readonly connection: TsforceConnection;
+class TsforceSobject implements ITsforceSobject {
+  private readonly connection: ITsforceConnection;
   public readonly name: string;
 
-  constructor({ connection, name }: { connection: TsforceConnection; name: string }) {
+  constructor({ connection, name }: { connection: ITsforceConnection; name: string }) {
     this.connection = connection;
     this.name = name;
   }

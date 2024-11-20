@@ -3,6 +3,7 @@ import { ILogger } from "@innovateuk/logger";
 import { Dispatcher, request } from "undici";
 import BodyReadable from "undici/types/readable";
 import { TsforceInvalidUsernameException } from "./exceptions/TsforceInvalidUsernameException";
+import { ITsforceHttpClient } from "./types/ITsforceHttpClient";
 
 type RequestOptions = Exclude<Parameters<typeof request>[1], undefined>;
 interface FetcherConfiguration extends RequestOptions {
@@ -10,8 +11,7 @@ interface FetcherConfiguration extends RequestOptions {
   decodeHTMLEntities?: boolean;
 }
 
-class TsforceHttpClient {
-  private readonly logger: ILogger;
+class TsforceHttpClient implements ITsforceHttpClient {
   private readonly version: string;
   private readonly accessToken: string;
   private readonly instanceUrl: string;
@@ -32,7 +32,6 @@ class TsforceHttpClient {
     this.version = version;
     this.accessToken = accessToken;
     this.instanceUrl = instanceUrl;
-    this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
   }
 
   private executeFetchRequest(input: string, init: FetcherConfiguration = {}) {

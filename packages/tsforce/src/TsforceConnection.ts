@@ -5,6 +5,8 @@ import { PayloadError } from "relay-runtime";
 import { TsforceHttpClient } from "./TsforceHttpClient";
 import { TsforceSobject } from "./TsforceSobject";
 import { TsforceConnectionDataloader } from "./TsforceDataloader";
+import { ITsforceConnection } from "./types/ITsforceConnection";
+import { ITsforceSobject } from "./types/ITsforceObject";
 
 interface ExecuteConfiguration {
   decodeHTMLEntities?: boolean;
@@ -14,13 +16,13 @@ interface ExecuteConfiguration {
  * User-specific connection to the Salesforce API.
  * Initialise by creating a connection with the `asUser` static method.
  */
-class TsforceConnection {
+class TsforceConnection implements ITsforceConnection {
   private readonly version: string;
   private readonly logger: ILogger;
+  private readonly sobjectMap: Map<string, ITsforceSobject> = new Map();
   public readonly email: string;
   public readonly httpClient: TsforceHttpClient;
   public readonly dataLoader: TsforceConnectionDataloader;
-  private readonly sobjectMap: Map<string, TsforceSobject> = new Map();
 
   constructor({
     version = "v60.0",
@@ -110,9 +112,9 @@ class TsforceConnection {
     return data as Promise<{ totalSize: number; done: boolean; records: T[] }>;
   }
 
-  public sobject(name: string): TsforceSobject {
+  public sobject(name: string): ITsforceSobject {
     if (this.sobjectMap.has(name)) {
-      return this.sobjectMap.get(name) as TsforceSobject;
+      return this.sobjectMap.get(name) as ITsforceSobject;
     } else {
       const newSobject = new TsforceSobject({ connection: this, name });
       this.sobjectMap.set(name, newSobject);

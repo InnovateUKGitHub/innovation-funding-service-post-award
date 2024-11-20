@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@innovateuk/environment-manager": "*",
-    "@innovateuk/project-factory": "*",
+    "@innovateuk/project-factory-two": "*",
     "jsonwebtoken": "^9.0.2"
   }
 }

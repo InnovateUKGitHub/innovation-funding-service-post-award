@@ -13,6 +13,7 @@ export * from "./requests/TsforceInsertSubrequest";
 export * from "./requests/TsforceQuerySubrequest";
 export * from "./requests/TsforceUpdateSubrequest";
 
+export type * from "./types/ITsforceConnection";
 export type * from "./types/TsforceSalesforceError";
 export type * from "./types/TsforceSalesforceResponse";
 

@@ -1,12 +1,12 @@
-import { TsforceConnection } from "../TsforceConnection";
+import { ITsforceConnection } from "../types/ITsforceConnection";
 
 interface BaseTsforceRequestProps {
-  connection: TsforceConnection;
+  connection: ITsforceConnection;
 }
 
 abstract class BaseTsforceRequest<T> {
   protected version = "v60.0";
-  protected readonly connection: TsforceConnection;
+  protected readonly connection: ITsforceConnection;
   abstract execute(): Promise<T>;
 
   constructor({ connection }: BaseTsforceRequestProps) {

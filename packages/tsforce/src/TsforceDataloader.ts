@@ -1,8 +1,7 @@
+import { ILogger, Logger } from "@innovateuk/logger";
 import DataLoader from "dataloader";
-import { TsforceConnection } from "./TsforceConnection";
 import { BaseTsforceSubrequest } from "./requests/BaseTsforceSubrequest";
-import { Logger } from "@innovateuk/logger";
-import { ILogger } from "@innovateuk/logger";
+import { ITsforceConnection } from "./types/ITsforceConnection";
 
 interface TsforceCompositeSubrequestResult<T> {
   body: T;
@@ -16,7 +15,7 @@ interface TsforceCompositeResponseBody {
 }
 
 class TsforceConnectionDataloader {
-  private readonly connection: TsforceConnection;
+  private readonly connection: ITsforceConnection;
   private readonly logger: ILogger;
   subrequest: DataLoader<BaseTsforceSubrequest<unknown>, TsforceCompositeSubrequestResult<unknown>>;
 
@@ -48,7 +47,7 @@ class TsforceConnectionDataloader {
     ) as TsforceCompositeSubrequestResult<unknown>[];
   }
 
-  constructor({ connection, email, traceId }: { connection: TsforceConnection; email: string; traceId: string }) {
+  constructor({ connection, email, traceId }: { connection: ITsforceConnection; email: string; traceId: string }) {
     this.connection = connection;
     this.subrequest = new DataLoader<BaseTsforceSubrequest<unknown>, TsforceCompositeSubrequestResult<unknown>>(
       keys => this.executeCompositeQuery(keys),
@@ -60,4 +59,4 @@ class TsforceConnectionDataloader {
   }
 }
 
-export { TsforceConnectionDataloader, TsforceCompositeSubrequestResult };
+export { TsforceCompositeSubrequestResult, TsforceConnectionDataloader };
