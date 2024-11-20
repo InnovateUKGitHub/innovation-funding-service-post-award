@@ -1,7 +1,7 @@
 import { pounds } from "common/pounds";
 import { addPartnerLabourGuidance } from "../steps";
 import { visitApp } from "common/visit";
-import { loremIpsum131k, loremIpsum255Char } from "common/lorem";
+import { loremIpsum131k, loremIpsum255Char, loremIpsum32k } from "common/lorem";
 import { navigateToCostCat } from "./add-partner-e2e-steps";
 
 const refreshTest = () => {
@@ -76,7 +76,7 @@ export function checkAddLabourItem() {
       cy.clickOn("Add a cost");
       cy.get("h2").contains("Labour");
       cy.clickOn("Save and return to labour");
-      cy.validationLink("Enter description of role.");
+      cy.validationLink("Enter role within project.");
       cy.validationLink("Enter gross cost of role.");
       cy.validationLink("Enter rate per day.");
       cy.validationLink("Enter days spent on project.");
@@ -248,29 +248,29 @@ export const checkAddSubcontractingItem = () => {
       cy.getByLabel("Country where the subcontractor will work").invoke("val", loremIpsum255Char).trigger("input");
       cy.getByLabel("Country where the subcontractor will work").type("{moveToEnd}t");
       cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do")
-        .invoke("val", loremIpsum131k)
+        .invoke("val", loremIpsum32k)
         .trigger("input");
       cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do").type(
         "{moveToEnd}t",
       );
-      cy.paragraph("You have 131073 characters");
+      cy.paragraph("You have 32001 characters");
       cy.clickOn("Save and return to subcontracting");
-      cy.validationLink("Subcontractor name must be 255 or fewer.");
-      cy.paragraph("Subcontractor name must be 255 or fewer.");
-      cy.validationLink("Subcontractor country must be 255 characters or fewer.");
-      cy.paragraph("Subcontractor country must be 255 characters or fewer.");
-      cy.validationLink("Role and description must be 131072 or fewer.");
-      cy.paragraph("Role and description must be 131072 or fewer.");
+      cy.validationLink("Subcontractor name must be 255 characters or less.");
+      cy.paragraph("Subcontractor name must be 255 characters or less.");
+      cy.validationLink("Subcontractor country must be 255 characters or less.");
+      cy.paragraph("Subcontractor country must be 255 characters or less.");
+      cy.validationLink("Role and description must be 32000 characters or less.");
+      cy.paragraph("Role and description must be 32000 characters or less.");
       cy.getByLabel("Subcontractor name").type("{backspace}");
       cy.getByLabel("Country where the subcontractor will work").type("{backspace}");
       cy.getByLabel("Role of the the subcontractor in the project and description of the work they will do").type(
         "{backspace}",
       );
-      cy.paragraph("You have 131072 characters");
+      cy.paragraph("You have 32000 characters");
       [
-        "Subcontractor name must be 255 or fewer.",
-        "Subcontractor country must be 255 characters or fewer.",
-        "Role and description must be 131072 or fewer.",
+        "Subcontractor name must be 255 characters or less.",
+        "Subcontractor country must be 255 characters or less.",
+        "Role and description must be 32000 characters or less.",
       ].forEach(validation => {
         cy.getByQA("validation-summary").should("not.contain", validation);
       });
@@ -385,16 +385,19 @@ export const checkAddOtherCostsItem = (pageNumber: OtherCostPages) => {
       );
       cy.clickOn("Add a cost");
       cy.clickOn(`Save and return to ${page.toLowerCase()}`);
-      cy.validationLink("Enter description of cost.");
+      cy.validationLink("Enter description and justification.");
       cy.validationLink("Enter estimated cost.");
-      cy.getByLabel("Description and justification of the cost").invoke("val", loremIpsum131k).trigger("input");
+      cy.getByLabel("Description and justification of the cost").invoke("val", loremIpsum32k).trigger("input");
       cy.getByLabel("Description and justification of the cost").type("{moveToEnd}t");
-      cy.paragraph("You have 131073 characters");
+      cy.paragraph("You have 32001 characters");
       cy.button("Save and return to other costs").click();
-      cy.validationLink("Description of cost must be 131072 or fewer.");
-      cy.paragraph("Description of cost must be 131072 or fewer.");
+      cy.validationLink("Description and justification must be 32000 characters or less.");
+      cy.paragraph("Description and justification must be 32000 characters or less.");
       cy.getByLabel("Description and justification of the cost").type("{backspace}");
-      cy.getByQA("validation-summary").should("not.contain", "Description of cost must be 131072 or fewer.");
+      cy.getByQA("validation-summary").should(
+        "not.contain",
+        "Description and justification must be 32000 characters or less.",
+      );
       cy.getByLabel("Description and justification of the cost").clear().type("Other expenses");
       cy.validateCurrency("Estimated cost", "estimated cost", String(`£${cost}`));
       checkSummary(page, "Other expenses", cost, categoryTotal, totalCost);

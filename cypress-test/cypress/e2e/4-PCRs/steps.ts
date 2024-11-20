@@ -326,7 +326,7 @@ export const searchCompanyHouseGuidance = () => {
 export const specialCharInput = (options?: { markComplete?: boolean }) => {
   ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|", "777", "707", "12345", "98124"].forEach(
     specChar => {
-      cy.get("#search").clear().type(specChar).wait(1000);
+      cy.get("#search").clear().type(specChar).wait(2000);
       cy.getByQA("error-summary").should("not.exist");
       if (options?.markComplete) {
         ["z.literal", "A validation error occurred.", "Zod"].forEach(error => {
