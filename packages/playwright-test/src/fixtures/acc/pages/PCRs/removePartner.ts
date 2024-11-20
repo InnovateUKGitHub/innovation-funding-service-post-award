@@ -61,7 +61,7 @@ class RemovePartner {
     });
     this.lastPeriodBox = this.page.getByLabel("Removal period");
     this.saveAndContinueButton = this.page.getByRole("button").filter({ hasText: "Save and continue" });
-    this.validationMessage = "Period must be a whole number, like 3.";
+    this.validationMessage = "Removal period must be a number.";
     this.certificateSubheading = this.page
       .locator("css=legend")
       .filter({ hasText: "Upload withdrawal of partner certificate" });
@@ -112,8 +112,13 @@ class RemovePartner {
 
   @When("the user enters an invalid last period number")
   async invalidPeriod() {
-    //TODO: ONCE THIS PAGE IS FIXED ON ACC-11575 this can be uncommented. The command itself may need updating.
-    //await this.commands.validatePositiveWholeNumber("Removal period", "Removal period", "5", "Save and continue");
+    await this.commands.validatePositiveWholeNumber(
+      "Removal period",
+      "Removal period",
+      "5",
+      false,
+      "Save and continue",
+    );
     await this.lastPeriodBox.fill("wibble");
     await this.saveAndContinueButton.click();
   }

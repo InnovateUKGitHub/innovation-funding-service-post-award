@@ -167,4 +167,12 @@ class AccNavigation {
     await this.devtools.isLoaded();
     await this.projectDetails.isPage();
   }
+
+  @Given("the user has navigated to {string} Partner information")
+  async navigateToPartnerInformation(name: string) {
+    await this.gotoProjectDetails();
+    await this.projectDetails.clickPartnerName(name);
+    await this.projectDetails.partnerInfo();
+    await this.projectDetails.clickEdit();
+  }
 }

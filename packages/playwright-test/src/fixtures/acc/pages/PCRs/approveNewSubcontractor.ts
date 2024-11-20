@@ -324,7 +324,6 @@ class ApproveNewSubcontractor {
     await this.relationshipBoxLabel.fill("Lorem 7");
     await this.page.getByLabel(this.costField).fill("1000.33");
     this.charactersRemaining(7);
-    this.clicksContinue();
   }
 
   /**

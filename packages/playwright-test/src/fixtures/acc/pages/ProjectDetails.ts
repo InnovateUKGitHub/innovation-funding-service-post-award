@@ -1,7 +1,8 @@
-import { Locator, Page, Project } from "@playwright/test";
+import { expect, Locator, Page, Project } from "@playwright/test";
 import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../Commands";
 import { PageHeading } from "../../../components/PageHeading";
+import { getLorem } from "../../../components/lorem";
 
 export
 @Fixture("projectDetails")
@@ -37,6 +38,7 @@ class ProjectDetails {
   private readonly newPostcode: string;
   private readonly updateLocationButton: Locator;
   private readonly projectDetailsBacklink: Locator;
+  private readonly postCodeValMsg: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -110,6 +112,9 @@ class ProjectDetails {
       .filter({ hasText: "Save and return to partner information" });
     this.newPostcode = "SN2 1LT";
     this.projectDetailsBacklink = this.commands.backLink("Back to project details");
+    this.postCodeValMsg = this.page
+      .getByTestId("validation-summary")
+      .filter({ hasText: "Project location postcode must be 10 characters or less." });
   }
 
   @Then("Project details will be displayed with correct information")
@@ -168,6 +173,7 @@ class ProjectDetails {
     await this.partnerInfoHeading.isVisible();
     await this.page.getByRole("textbox").fill(this.newPostcode);
   }
+
   @When("the user returns to project details")
   async saveUpdatedInfo() {
     await this.updateLocationButton.click();
@@ -186,6 +192,29 @@ class ProjectDetails {
   @Then("the new location is displayed on Project details page")
   async projectDetailsLocation() {
     await this.checkTableDetails("partner-information", this.partnerInfoDetailsUpdated);
+  }
+
+  //TODO: There is a separate ticket to unify this kind of method into a single command.
+  // This can be updated once that ticket is created.
+  @When("the user exceeds {int} characters in postcode field")
+  async exceedCharacters(charLimit: number) {
+    const box = this.page.getByRole("textbox");
+    await box.fill(getLorem(charLimit));
+    await box.focus();
+    await box.press("End");
+    await box.press("t");
+    await this.saveUpdatedInfo();
+    await this.postCodeValMsg.isVisible();
+    await box.focus();
+    await box.press("End");
+    await box.press("Backspace");
+    await expect(this.postCodeValMsg).not.toBeVisible();
+    await box.fill(getLorem(32000));
+  }
+
+  @Then("the postcode character limit is validated")
+  async postCodeValidation() {
+    await this.postCodeValMsg.isVisible();
   }
 
   /**
