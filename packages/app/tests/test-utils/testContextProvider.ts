@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { AuthorisedAsyncCommandBase, AsyncCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
@@ -13,6 +14,7 @@ import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestResources } from "./testResources";
 import { TestUser } from "./testUser";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
+import { DocumentNode } from "graphql";
 
 export class TestContext implements IContext {
   constructor() {
@@ -88,6 +90,16 @@ export class TestContext implements IContext {
 
   public asBankDetailsValidationUser() {
     return this;
+  }
+
+  public runGraphqlQuery<ResponseData>({
+    document,
+    variables,
+  }: {
+    document: DocumentNode;
+    variables?: AnyObject;
+  }): Promise<{ data: ResponseData; errors: unknown }> {
+    throw new Error("noop");
   }
 
   public getSalesforceConnection(): TsforceConnection {

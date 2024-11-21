@@ -78,6 +78,41 @@ export const createContextFromEmail = async ({
   }
 };
 
+export const createContextWithExistingConnection = ({
+  email,
+  developerEmail = null,
+  traceId,
+  salesforceConnection,
+  systemConnection,
+}: {
+  email: string;
+  developerEmail?: string | null;
+  traceId: string;
+  salesforceConnection: TsforceConnection;
+  systemConnection: TsforceConnection;
+}): GraphQLContext => {
+  // Create an incomplete GraphQL context for use in DataLoaders.
+  const partialCtx: PartialGraphQLContext = {
+    developerEmail,
+    email,
+    api: salesforceConnection,
+    adminApi: systemConnection,
+    traceId,
+  };
+
+  // Create a full context, including DataLoaders.
+  const ctx: GraphQLContext = {
+    ...partialCtx,
+    projectRolesDataLoader: getProjectRolesDataLoader(partialCtx),
+    userContactDataLoader: getUserContactDataLoader(partialCtx),
+    usernameDataLoader: getUsernameDataLoader(partialCtx),
+    feedAttachmentDataLoader: getFeedAttachmentDataLoader(partialCtx),
+    projectClaimStatusCountsDataLoader: getProjectClaimStatusCountsDataLoader(partialCtx),
+  };
+
+  return ctx;
+};
+
 export const createContext = ({ req, res }: { req: Request; res: Response }): Promise<GraphQLContext | EmptyObject> => {
   const email = req.session?.user.email ?? null;
   const developerEmail = req.session?.user?.developer_oidc_username ?? null;

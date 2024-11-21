@@ -56,7 +56,7 @@ import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { ExternalContactsRepository } from "@server/repositories/externalContactRepository";
 import { Copy } from "@copy/Copy";
 import { DocumentNode } from "graphql";
-import { createContextFromEmail } from "@gql/GraphQLContext";
+import { createContextWithExistingConnection } from "@gql/GraphQLContext";
 
 // obviously needs to be singleton
 const cachesImplementation: ICaches = {
@@ -262,9 +262,12 @@ export class Context implements IContext {
     document: DocumentNode;
     variables?: Record<string, string | number>;
   }): Promise<{ data: ResponseData; errors: unknown }> {
-    const graphqlContext = await createContextFromEmail({
+    const graphqlContext = createContextWithExistingConnection({
       email: this.user.email,
+      developerEmail: null,
       traceId: this.traceId,
+      salesforceConnection: this.connection,
+      systemConnection: this.systemConnection,
     });
 
     return graphqlContext.api.executeGraphQL({ document, variables });
