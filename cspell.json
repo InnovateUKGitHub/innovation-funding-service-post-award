@@ -5,7 +5,7 @@
     "dictionaries": [],
     "flagWords": [],
     "ignoreRegExpList": [
-        "\\/[a-zA-z\\d]{18}"
+        "\"[a-zA-Z\\d]{18}\""
     ],
     "words": [
         "authorisation",
@@ -53,13 +53,14 @@
         "nogrep",
         "noopener",
         "noreferrer",
+        "normalised",
         "Openshift",
         "organisation",
         "organisations",
         "outdir",
         "Owasp",
-        "PCRs",
         "pcrs",
+        "PCRs",
         "pendings",
         "Picklist",
         "prioritised",
