@@ -92,7 +92,7 @@ const booleanValidation = z
 
 const currencyValidation = z
   .string()
-  .nonempty()
+  .min(1)
   .superRefine((val, ctx) => {
     const currency = parseCurrency(val);
 
