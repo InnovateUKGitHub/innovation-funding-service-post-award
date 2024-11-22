@@ -18,7 +18,7 @@ class TsforceBulkInsertSubrequest<T> extends BaseTsforceSobjectSubrequest<Tsforc
         records: this.body.map(x => ({ ...x, attributes: { type: this.sobject } })) as AnyObject[],
       },
       queryParameters: undefined,
-      url: `/composite/sobjects`,
+      url: `/services/data/v${this.version}/composite/sobjects`,
     };
   }
 }

@@ -69,7 +69,7 @@ class TsforceQuerySubrequest<T> extends BaseTsforceSobjectSubrequest<{
       queryParameters: {
         q: this.toSOQL(),
       },
-      url: "/query",
+      url: `/services/data/v${this.version}/query`,
     };
   }
 }

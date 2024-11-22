@@ -13,7 +13,11 @@ class TsforceInsertSubrequest<T> extends BaseTsforceSobjectSubrequest<TsforceSal
   }
 
   payload() {
-    return { body: this.body as AnyObject, queryParameters: undefined, url: `/sobjects/${this.sobject}/` };
+    return {
+      body: this.body as AnyObject,
+      queryParameters: undefined,
+      url: `/services/data/v${this.version}/sobjects/${this.sobject}/`,
+    };
   }
 }
 

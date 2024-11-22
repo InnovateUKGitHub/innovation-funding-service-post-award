@@ -1,11 +1,13 @@
 import type { ExecutionRequest } from "@graphql-tools/utils";
-import { Logger, ILogger, Timer } from "@innovateuk/logger";
+import { xml } from "@innovateuk/common/xml";
+import { ILogger, Logger, Timer } from "@innovateuk/logger";
 import { print } from "graphql";
 import { PayloadError } from "relay-runtime";
+import { TsforceConnectionDataloader } from "./TsforceDataloader";
 import { TsforceHttpClient } from "./TsforceHttpClient";
 import { TsforceSobject } from "./TsforceSobject";
-import { TsforceConnectionDataloader } from "./TsforceDataloader";
 import { ITsforceConnection } from "./types/ITsforceConnection";
+import { ITsforceHttpClient } from "./types/ITsforceHttpClient";
 import { ITsforceSobject } from "./types/ITsforceObject";
 
 interface ExecuteConfiguration {
@@ -19,29 +21,33 @@ interface ExecuteConfiguration {
 class TsforceConnection implements ITsforceConnection {
   private readonly version: string;
   private readonly logger: ILogger;
+  private readonly accessToken: string;
   private readonly sobjectMap: Map<string, ITsforceSobject> = new Map();
   public readonly email: string;
-  public readonly httpClient: TsforceHttpClient;
+  public readonly httpClient: ITsforceHttpClient;
   public readonly dataLoader: TsforceConnectionDataloader;
 
   constructor({
-    version = "v60.0",
+    version = "60.0",
     instanceUrl,
     accessToken,
     email,
     traceId,
+    httpClient,
   }: {
     version?: string;
     instanceUrl: string;
     accessToken: string;
     email: string;
     traceId: string;
+    httpClient?: ITsforceHttpClient;
   }) {
-    this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, traceId });
-    this.httpClient = new TsforceHttpClient({ version, accessToken, instanceUrl, email, traceId });
+    this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, traceId, version });
+    this.httpClient = httpClient || new TsforceHttpClient({ accessToken, instanceUrl });
     this.version = version;
     this.email = email;
     this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
+    this.accessToken = accessToken;
   }
 
   private startTimer(message: string) {
@@ -66,7 +72,7 @@ class TsforceConnection implements ITsforceConnection {
 
     // "graphql" is not part of the template string because our ESbuild/Relay GraphQL hack
     // does thinks our code is actually a query.
-    const data = await this.httpClient.fetchJson("/graphql", {
+    const data = await this.httpClient.fetchJson(`/services/data/v${this.version}/graphql`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
@@ -101,7 +107,7 @@ class TsforceConnection implements ITsforceConnection {
     query: string;
   }): Promise<{ totalSize: number; done: boolean; records: T[] }> {
     const timer = this.startTimer(query);
-    const data = this.httpClient.fetchJson("/query", {
+    const data = this.httpClient.fetchJson(`/services/data/v${this.version}/query`, {
       method: "GET",
       searchParams: {
         q: query,
@@ -110,6 +116,42 @@ class TsforceConnection implements ITsforceConnection {
     this.logger.trace("SOQL Query Return", query, await data);
     timer.finish();
     return data as Promise<{ totalSize: number; done: boolean; records: T[] }>;
+  }
+
+  public async executeApex({ query }: { query: string }): Promise<string> {
+    return this.httpClient.fetchText(`/services/Soap/T/${this.version}`, {
+      method: "POST",
+      headers: {
+        Accept: "text/xml",
+        "Content-Type": "text/xml",
+        SOAPAction: "blargh", // any string is ok here
+      },
+      body: xml`
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope
+  xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:tns="urn:tooling.soap.sforce.com"
+>
+  <soap:Header>
+    <tns:DebuggingHeader>
+      <tns:categories>
+        <tns:category>apex_code</tns:category>
+        <tns:level>FINEST</tns:level>
+      </tns:categories>
+      <tns:debugLevel>DETAIL</tns:debugLevel>
+    </tns:DebuggingHeader>
+    <tns:SessionHeader>
+      <tns:sessionId>${this.accessToken}</tns:sessionId>
+    </tns:SessionHeader>
+  </soap:Header>
+  <soap:Body>
+    <tns:executeAnonymous>
+      <tns:String>${query}</tns:String>
+    </tns:executeAnonymous>
+  </soap:Body>
+</soap:Envelope>
+      `,
+    });
   }
 
   public sobject(name: string): ITsforceSobject {

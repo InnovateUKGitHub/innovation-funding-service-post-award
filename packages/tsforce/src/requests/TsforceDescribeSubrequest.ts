@@ -20,7 +20,11 @@ class TsforceDescribeSubrequest extends BaseTsforceSobjectSubrequest<TsforceDesc
   method = "GET" as const;
 
   payload() {
-    return { body: undefined, queryParameters: undefined, url: `/sobjects/${this.sobject}/describe` };
+    return {
+      body: undefined,
+      queryParameters: undefined,
+      url: `/services/data/v${this.version}/sobjects/${this.sobject}/describe`,
+    };
   }
 }
 

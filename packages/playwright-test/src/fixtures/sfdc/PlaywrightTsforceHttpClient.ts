@@ -1,28 +1,34 @@
-import type { Readable } from "node:stream";
-import { request } from "undici";
-import { TsforceInvalidUsernameException } from "./exceptions/TsforceInvalidUsernameException";
-import { FetcherConfiguration, ITsforceHttpClient } from "./types/ITsforceHttpClient";
+import { TsforceInvalidUsernameException } from "@innovateuk/tsforce/index";
+import { FetcherConfiguration, ITsforceHttpClient } from "@innovateuk/tsforce/types/ITsforceHttpClient";
+import { APIRequestContext } from "@playwright/test";
+import { Readable } from "node:stream";
+import { ReadableStream } from "stream/web";
 
-class TsforceHttpClient implements ITsforceHttpClient {
+class PlaywrightTsforceHttpClient implements ITsforceHttpClient {
   private readonly accessToken?: string;
   private readonly instanceUrl: string;
+  private readonly apiRequestContext: APIRequestContext;
 
-  constructor({ accessToken, instanceUrl }: { accessToken?: string; instanceUrl: string }) {
+  constructor({
+    accessToken,
+    instanceUrl,
+    apiRequestContext,
+  }: {
+    accessToken?: string;
+    instanceUrl: string;
+    apiRequestContext: APIRequestContext;
+  }) {
     this.accessToken = accessToken;
     this.instanceUrl = instanceUrl;
+    this.apiRequestContext = apiRequestContext;
   }
 
-  private request(input: string, init: FetcherConfiguration = {}) {
-    const url = new URL(input, this.instanceUrl);
-
-    if (init?.searchParams) {
-      for (const [name, value] of Object.entries(init.searchParams)) {
-        url.searchParams.set(name, value);
-      }
-    }
-
-    return request(url, {
+  private executeFetchRequest(input: string, init: FetcherConfiguration = {}) {
+    const url = `${this.instanceUrl}${input}`;
+    return this.apiRequestContext.fetch(url, {
       ...init,
+      params: init.searchParams,
+      data: init.body,
       headers: {
         ...init?.headers,
         ...(this.accessToken ? { Authorization: `Bearer ${this.accessToken}` } : {}),
@@ -31,13 +37,15 @@ class TsforceHttpClient implements ITsforceHttpClient {
   }
 
   public async fetchBlob(input: string, init?: FetcherConfiguration): Promise<Readable> {
-    const res = await this.request(input, init);
-    return res.body;
+    const res = await this.executeFetchRequest(input, init);
+    const buffer = await res.body();
+    const blob = new Blob([buffer]);
+    return Readable.fromWeb(blob.stream() as ReadableStream);
   }
 
   public async fetchText(input: string, init?: FetcherConfiguration): Promise<string> {
-    const { body } = await this.request(input, init);
-    return body.text();
+    const res = await this.executeFetchRequest(input, init);
+    return res.text();
   }
 
   public async fetchJson(input: string, init?: FetcherConfiguration) {
@@ -64,4 +72,4 @@ class TsforceHttpClient implements ITsforceHttpClient {
   }
 }
 
-export { TsforceHttpClient };
+export { PlaywrightTsforceHttpClient };

@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "module": "Node16",
+    "module": "Preserve",
     "esModuleInterop": true,
-    "lib": ["es2021"]
+    "target": "ES2021",
+    "lib": ["es2021"],
+    "moduleResolution": "bundler"
   }
 }

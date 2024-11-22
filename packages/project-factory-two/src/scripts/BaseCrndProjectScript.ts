@@ -1,25 +1,39 @@
-import { getCertificateEnv as certEnv, getStringEnv as strEnv } from "@innovateuk/common/envHelpers";
-import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
-import { getSalesforceAccessToken } from "@innovateuk/tsforce/TsforceToken";
+import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { DatabaseConnector } from "../database/DatabaseConnector";
-import { Competition__c } from "../sobjects/Competition__c";
-import { Account } from "../sobjects/Account";
-import { Contact } from "../sobjects/Contact";
-import { User } from "../sobjects/User";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
+import { Account } from "../sobjects/Account";
+import { Competition__c } from "../sobjects/Competition__c";
+import { Contact } from "../sobjects/Contact";
+import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
-import { ITsforceConnection } from "@innovateuk/tsforce/index";
 
-class BaseCrndProjectScript extends AbstractProjectFactoryScript {
+interface BaseCrndProjectScriptContext {
+  competition: Competition__c;
+  project: Acc_Project__c;
+  mspAccount: Account;
+  ppAccount: Account;
+  projectParticipant: Acc_ProjectParticipant__c;
+  mspContact: Contact;
+  pmContact: Contact;
+  fcContact: Contact;
+  mspUser: User;
+  pmUser: User;
+  fcUser: User;
+  mspPcl: Acc_ProjectContactLink__c;
+  pmPcl: Acc_ProjectContactLink__c;
+  fcPcl: Acc_ProjectContactLink__c;
+}
+
+class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProjectScriptContext> {
   async script({
     connection,
     Database,
   }: {
     connection: ITsforceConnection;
     Database: DatabaseConnector;
-  }): Promise<void> {
+  }): Promise<BaseCrndProjectScriptContext> {
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
     const prefix = (val: string) => `${now}.${val}`;
@@ -59,7 +73,7 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript {
     ppAccount.BillingPostalCode = "SN2 1SZ";
     ppAccount.BillingCountry = "United Kingdom";
     ppAccount.OrgMigrationId__c = prefix("301");
-    ppAccount.Name = "Hedge's Monitoring Ltd.";
+    ppAccount.Name = "Hedge's Finance Ltd.";
 
     await Database.insert([mspAccount, ppAccount]);
 
@@ -129,7 +143,7 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript {
     mspPcl.Acc_ProjectId__c = project.Id;
     mspPcl.Acc_UserId__c = mspUser.Id;
     mspPcl.Acc_EmailOfSFContact__c = mspContact.Email;
-    mspPcl.Acc_Role__c = "Project Manager";
+    mspPcl.Acc_Role__c = "Monitoring officer";
 
     const pmPcl = new Acc_ProjectContactLink__c();
     pmPcl.Acc_AccountId__c = ppAccount.Id;
@@ -158,13 +172,30 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript {
 
     await Database.update(project);
 
-    await connection.executeSOQL({
+    await connection.executeApex({
       query: `
         ProjectTriggerHelper.isFirstTime = true;
         new Acc_ProjectPeriodProcessor_Batch().start(null);
       `,
     });
+
+    return {
+      competition,
+      project,
+      mspAccount,
+      ppAccount,
+      projectParticipant,
+      mspContact,
+      pmContact,
+      fcContact,
+      mspUser,
+      pmUser,
+      fcUser,
+      mspPcl,
+      pmPcl,
+      fcPcl,
+    };
   }
 }
 
-export { BaseCrndProjectScript };
+export { BaseCrndProjectScript, BaseCrndProjectScriptContext };

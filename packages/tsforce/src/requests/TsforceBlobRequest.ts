@@ -15,15 +15,18 @@ class TsforceBlobRequest extends BaseTsforceSobjectIdRequest<Readable> {
   }
 
   execute() {
-    return this.connection.httpClient.fetchBlob(`/sobjects/${this.sobject}/${this.id}/${this.fieldName}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json; charset=UTF-8",
-        "Accept-Encoding": "gzip, deflate, br, zstd",
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
+    return this.connection.httpClient.fetchBlob(
+      `/services/data/v${this.version}/sobjects/${this.sobject}/${this.id}/${this.fieldName}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json; charset=UTF-8",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+        },
       },
-    });
+    );
   }
 }
 

@@ -1,6 +1,8 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import { TsforceInvalidUsernameException } from "./exceptions/TsforceInvalidUsernameException";
 import { TsforceTokenException } from "./exceptions/TsforceTokenException";
+import { ITsforceHttpClient } from "./types/ITsforceHttpClient";
+import { TsforceHttpClient } from "./TsforceHttpClient";
 
 interface TsforceSalesforceTokenSuccessResponse {
   access_token: string;
@@ -26,6 +28,7 @@ export interface TsforceSalesforceAccessTokenProps {
   connectionUrl: string;
   clientId: string;
   privateKey: string;
+  httpClient?: ITsforceHttpClient;
 }
 
 export interface TsforceTokenInfo {
@@ -38,7 +41,9 @@ export const getSalesforceAccessToken = async ({
   currentUsername,
   clientId,
   connectionUrl,
+  httpClient: defaultHttpClient,
 }: TsforceSalesforceAccessTokenProps): Promise<TsforceTokenInfo> => {
+  const httpClient = defaultHttpClient ?? new TsforceHttpClient({ instanceUrl: connectionUrl });
   const jwtPayload = { prn: currentUsername };
   const jwtOptions: SignOptions = {
     issuer: clientId,
@@ -54,8 +59,13 @@ export const getSalesforceAccessToken = async ({
   body.append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
   body.append("assertion", jwtToken);
 
-  const request = await fetch(`${connectionUrl}/services/oauth2/token`, { method: "POST", body });
-  const tokenBody = await request.text();
+  const tokenBody = await httpClient.fetchText("/services/oauth2/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body.toString(),
+  });
 
   try {
     // Detect a "bad username" Salesforce response
@@ -65,7 +75,6 @@ export const getSalesforceAccessToken = async ({
     const tokenQuery: TsforceSalesforceTokenResponse = JSON.parse(tokenBody);
 
     if ("error" in tokenQuery) return Promise.reject(new TsforceTokenException({ message: tokenQuery.error }));
-    if (!request.ok) return Promise.reject(new TsforceTokenException({ message: tokenBody }));
 
     return {
       url: tokenQuery.sfdc_community_url,

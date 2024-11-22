@@ -46,11 +46,11 @@ class SfdcLightningPage {
 
   public async goto(path: string) {
     const tokenInfo = await this.sfdcApi.getSalesforceToken();
-    return this.page.goto(`${tokenInfo.instance_url}${path}`);
+    return this.page.goto(`${tokenInfo.url}${path}`);
   }
 
   public async loginAndGoto(path: string) {
     const tokenInfo = await this.sfdcApi.getSalesforceToken();
-    return this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.access_token}&retUrl=${encodeURIComponent(path)}`);
+    return this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retUrl=${encodeURIComponent(path)}`);
   }
 }

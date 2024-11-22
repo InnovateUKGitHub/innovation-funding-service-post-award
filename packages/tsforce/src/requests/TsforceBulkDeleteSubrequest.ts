@@ -12,7 +12,11 @@ class TsforceBulkDeleteSubrequest extends BaseTsforceSubrequest<TsforceSalesforc
   }
 
   payload() {
-    return { body: undefined, queryParameters: { ids: this.ids.join(",") }, url: "/composite/sobjects" };
+    return {
+      body: undefined,
+      queryParameters: { ids: this.ids.join(",") },
+      url: `/services/data/v${this.version}/composite/sobjects`,
+    };
   }
 }
 

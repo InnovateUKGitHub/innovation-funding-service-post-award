@@ -1,11 +1,12 @@
-import { ProjectFactoryDto, buildApex } from "@innovateuk/project-factory";
 import { sleep } from "../../helpers/sleep";
 import { SfdcApi } from "../sfdc/SfdcApi";
 import { ProjectState } from "./ProjectState";
+import { ITsforceConnection } from "@innovateuk/tsforce/types/ITsforceConnection";
+import { AbstractProjectFactoryScript } from "@innovateuk/project-factory-two/scripts/AbstractProjectFactoryScript";
 
-export abstract class ProjectFactory {
-  protected readonly sfdcApi: SfdcApi;
+export abstract class ProjectFactory<Context> {
   public static projectState: ProjectState | null;
+  protected readonly sfdcApi: SfdcApi;
   protected projectState: ProjectState | null;
   protected prefix: string | null = null;
 
@@ -14,51 +15,15 @@ export abstract class ProjectFactory {
     this.projectState = projectState;
   }
 
-  protected abstract getProject(): ProjectFactoryDto;
+  protected abstract getScript({
+    connection,
+  }: {
+    connection: ITsforceConnection;
+  }): AbstractProjectFactoryScript<Context>;
 
   protected async createProject() {
-    this.prefix = Math.floor(Date.now() / 1000).toString() + ".";
-
-    if (ProjectFactory.projectState) {
-      this.projectState = ProjectFactory.projectState;
-      return;
-    }
-
-    const data = this.getProject();
-    const apex = buildApex({
-      instances: [
-        data.project,
-        ...data.projectParticipants,
-        ...data.pcrs.headers,
-        ...data.pcrs.removePartner,
-        ...data.logins.map(x => [x.account, x.contact, x.pcl, x.user]),
-        data.competition,
-        ...data.profiles.projectFactoryHelpers,
-        ...data.profiles.details,
-        ...data.profiles.totalCostCategories,
-        ...data.profiles.claimTotalProjectPeriods,
-      ].flat(),
-      options: {
-        prefix: this.prefix,
-      },
-    });
-
-    this.projectState.prefix = this.prefix;
-    this.projectState.project = {
-      number: data.project.getField("Acc_ProjectNumber__c"),
-      title: data.project.getField("Acc_ProjectTitle__c"),
-    };
-    this.projectState.usernames = data.logins.map(x => x.user.getField("Username"));
-    ProjectFactory.projectState = this.projectState;
-    await this.sfdcApi.runApex(apex);
-
-    while (true) {
-      try {
-        // Wait until a login is successful
-        await this.sfdcApi.getSalesforceToken(this.prefix + data.logins[0].user.getField("Username"));
-        break;
-      } catch {}
-      await sleep(2000);
-    }
+    const connection = await this.sfdcApi.getTsforceConnection();
+    const script = this.getScript({ connection });
+    await script.run();
   }
 }

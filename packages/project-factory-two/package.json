@@ -1,12 +1,17 @@
 {
   "name": "@innovateuk/project-factory-two",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "./*": {
+      "default": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
+  },
   "scripts": {
     "test": "jest",
     "schema": "node schema/",
-    "build": "esbuild src/*.ts src/**/*.ts --format=cjs --platform=node --outdir=dist/ --sourcemap"
+    "build": "esbuild src/*.ts src/**/*.ts --format=cjs --platform=node --outdir=dist/ --sourcemap",
+    "typegen": "tsc"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

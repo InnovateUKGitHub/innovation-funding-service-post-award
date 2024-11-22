@@ -22,7 +22,7 @@ abstract class BaseTsforceSubrequest<T> extends BaseTsforceRequest<T> {
   compose(n: number): BaseTsforceCompositeSubrequest {
     const { body, queryParameters, url } = this.payload();
 
-    let fullUrl = `/services/data/${this.version}${url}`;
+    let fullUrl = url;
 
     if (queryParameters) {
       const searchParams = new URLSearchParams();

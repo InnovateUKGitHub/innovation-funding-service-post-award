@@ -18,7 +18,11 @@ class TsforceUpdateSubrequest extends BaseTsforceSobjectIdSubrequest<null | Tsfo
   }
 
   payload() {
-    return { body: this.body, queryParameters: undefined, url: `/sobjects/${this.sobject}/${this.id}` };
+    return {
+      body: this.body,
+      queryParameters: undefined,
+      url: `/services/data/v${this.version}/sobjects/${this.sobject}/${this.id}`,
+    };
   }
 }
 

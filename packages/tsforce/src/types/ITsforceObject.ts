@@ -1,13 +1,12 @@
-import { Dispatcher } from "undici";
-import BodyReadable from "undici/types/readable";
-import { TsforceDescribeSObjectResult } from "../requests/TsforceDescribeSubrequest";
-import { TsforceQuerySubrequest } from "../requests/TsforceQuerySubrequest";
-import { AnyObject } from "./AnyObject";
-import { TsforceSalesforceResponse, TsforceUnsuccessfulSalesforceResponse } from "./TsforceSalesforceResponse";
+import type { TsforceDescribeSObjectResult } from "../requests/TsforceDescribeSubrequest";
+import type { TsforceQuerySubrequest } from "../requests/TsforceQuerySubrequest";
+import type { AnyObject } from "./AnyObject";
+import type { TsforceSalesforceResponse, TsforceUnsuccessfulSalesforceResponse } from "./TsforceSalesforceResponse";
+import type { Readable } from "node:stream";
 
 interface ITsforceSobject {
   name: string;
-  blob(id: string, fieldName: string): Promise<BodyReadable & Dispatcher.BodyMixin>;
+  blob(id: string, fieldName: string): Promise<Readable>;
   describe(): Promise<TsforceDescribeSObjectResult>;
   retrieve<T>(
     id: string,

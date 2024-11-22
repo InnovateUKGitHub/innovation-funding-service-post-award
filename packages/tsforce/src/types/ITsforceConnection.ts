@@ -36,6 +36,11 @@ interface ITsforceConnection {
    */
   executeSOQL<T>({ query }: { query: string }): Promise<{ totalSize: number; done: boolean; records: T[] }>;
 
+  /**
+   * Execute an Apex script via the Salesforce SOAP API.
+   */
+  executeApex<T>({ query }: { query: string }): Promise<string>;
+
   sobject(name: string): ITsforceSobject;
 }
 

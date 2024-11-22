@@ -17,6 +17,7 @@ interface TsforceCompositeResponseBody {
 class TsforceConnectionDataloader {
   private readonly connection: ITsforceConnection;
   private readonly logger: ILogger;
+  private readonly version: string;
   subrequest: DataLoader<BaseTsforceSubrequest<unknown>, TsforceCompositeSubrequestResult<unknown>>;
 
   private async executeCompositeQuery(
@@ -29,7 +30,7 @@ class TsforceConnectionDataloader {
       compositeRequest.map(({ method, url }) => ({ method, url })),
     );
 
-    const data = (await this.connection.httpClient.fetchJson("/composite", {
+    const data = (await this.connection.httpClient.fetchJson(`/services/data/v${this.version}/composite`, {
       method: "POST",
       body: JSON.stringify({
         allOrNone: false,
@@ -47,7 +48,17 @@ class TsforceConnectionDataloader {
     ) as TsforceCompositeSubrequestResult<unknown>[];
   }
 
-  constructor({ connection, email, traceId }: { connection: ITsforceConnection; email: string; traceId: string }) {
+  constructor({
+    connection,
+    email,
+    traceId,
+    version,
+  }: {
+    connection: ITsforceConnection;
+    email: string;
+    traceId: string;
+    version: string;
+  }) {
     this.connection = connection;
     this.subrequest = new DataLoader<BaseTsforceSubrequest<unknown>, TsforceCompositeSubrequestResult<unknown>>(
       keys => this.executeCompositeQuery(keys),
@@ -56,6 +67,7 @@ class TsforceConnectionDataloader {
       },
     );
     this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
+    this.version = version;
   }
 }
 
