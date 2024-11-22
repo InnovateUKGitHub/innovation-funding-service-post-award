@@ -84,7 +84,7 @@ export class ForecastDetailsDtosValidator
         () =>
           Validation.isTrue(
             this,
-            totalForecastCosts + totalClaimCosts <= totalGolCosts,
+            roundCurrency(totalForecastCosts + totalClaimCosts) <= roundCurrency(totalGolCosts),
             this.getContent(x => x.validation.forecastDetailsDtoValidator.totalTooLarge),
           ),
       );
