@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Competition Factory competition can be made 1`] = `
+[
+  {
+    "name": "Acc_CompetitionCode__c",
+    "nullable": false,
+    "set": true,
+    "value": "0",
+  },
+  {
+    "name": "Acc_CompetitionType__c",
+    "nullable": false,
+    "set": true,
+    "value": "CR&D",
+  },
+  {
+    "name": "Acc_CompetitionName__c",
+    "nullable": false,
+    "set": true,
+    "value": "Competition",
+  },
+]
+`;

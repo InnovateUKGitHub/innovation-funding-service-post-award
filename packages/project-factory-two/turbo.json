@@ -3,12 +3,12 @@
   "extends": ["//"],
   "tasks": {
     "test": {
-      "dependsOn": ["^@innovateuk/project-factory#build"]
+      "dependsOn": ["^@innovateuk/project-factory-two#build"]
     },
     "build": {
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "dependsOn": ["@innovateuk/common#build", "@innovateuk/logger#build"]
+      "dependsOn": ["@innovateuk/project-factory-two#typegen", "@innovateuk/common#build", "@innovateuk/logger#build"]
     },
     "typegen": {
       "inputs": ["src/**"],

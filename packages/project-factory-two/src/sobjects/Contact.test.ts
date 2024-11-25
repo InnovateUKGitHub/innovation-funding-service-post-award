@@ -5,11 +5,11 @@ import { Contact } from "./Contact";
 describe("Contact Factory", () => {
   test("non-nullable fields are mandatory", async () => {
     const Database = new StubDatabaseConnector();
-    const competition = new Contact();
-    competition.ContactMigrationId__c = "1234";
-    competition.FirstName = "Mark";
+    const contact = new Contact();
+    contact.ContactMigrationId__c = "1234";
+    contact.FirstName = "Mark";
 
-    expect(Database.insert(competition)).rejects.toThrow(ProjectFactoryMissingNonNullableFieldException);
+    expect(Database.insert(contact)).rejects.toThrow(ProjectFactoryMissingNonNullableFieldException);
   });
 
   test("contact can be made", async () => {
@@ -19,6 +19,10 @@ describe("Contact Factory", () => {
     contact.FirstName = "Mark";
     contact.LastName = "Scott";
     contact.Email = "marks@spencer.x.gov.uk";
+    contact.AccountId = "account-id-here-please";
+
+    // Set fields are marked as such
+    expect(contact._fields).toMatchSnapshot();
 
     // Field values are still there
     expect(contact.toObject()).toMatchObject({

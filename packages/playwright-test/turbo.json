@@ -21,7 +21,7 @@
       ],
       "dependsOn": [
         "@innovateuk/playwright-test#build",
-        "@innovateuk/project-factory#build",
+        "@innovateuk/project-factory-two#build",
         "@innovateuk/tsforce#build"
       ]
     },
@@ -39,7 +39,7 @@
       ],
       "dependsOn": [
         "@innovateuk/playwright-test#build",
-        "@innovateuk/project-factory#build",
+        "@innovateuk/project-factory-two#build",
         "@innovateuk/tsforce#build"
       ]
     }
