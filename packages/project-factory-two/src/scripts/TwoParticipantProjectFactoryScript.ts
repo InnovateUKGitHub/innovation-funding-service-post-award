@@ -110,7 +110,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     mainProjectParticipant.Acc_CreateClaims__c = true;
 
     const secondaryProjectParticipant = new Acc_ProjectParticipant__c();
-    secondaryProjectParticipant.Acc_AccountId__c = mainAccount.Id;
+    secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
     secondaryProjectParticipant.Acc_ProjectId__c = project.Id;
     secondaryProjectParticipant.ParticipantMigrationID__c = prefix("200");
     secondaryProjectParticipant.Acc_ParticipantType__c = "Business";
