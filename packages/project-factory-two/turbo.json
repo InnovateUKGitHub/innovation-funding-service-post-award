@@ -8,7 +8,7 @@
     "build": {
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "dependsOn": ["@innovateuk/logger#typegen"]
+      "dependsOn": ["@innovateuk/common#build", "@innovateuk/logger#build"]
     },
     "typegen": {
       "inputs": ["src/**"],

@@ -28,7 +28,8 @@
     "typecheck": "node turbo.mjs run typecheck --",
     "updateSchema": "node --env-file .env turbo.mjs run updateSchema --",
     "postinstall": "npm run patch-package",
-    "patch-package": "patch-package"
+    "patch-package": "patch-package",
+    "clean": "npm exec --workspaces -c 'rm -rf dist'"
   },
   "dependencies": {
     "turbo": "^2.2.4-canary.5",

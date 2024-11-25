@@ -19,7 +19,11 @@
         "SALESFORCE_CLIENT_ID",
         "SALESFORCE_CONNECTION_URL"
       ],
-      "dependsOn": ["@innovateuk/playwright-test#build", "@innovateuk/project-factory#build"]
+      "dependsOn": [
+        "@innovateuk/playwright-test#build",
+        "@innovateuk/project-factory#build",
+        "@innovateuk/tsforce#build"
+      ]
     },
     "pw-cli": {
       "persistent": true,
@@ -33,7 +37,11 @@
         "SALESFORCE_CLIENT_ID",
         "SALESFORCE_CONNECTION_URL"
       ],
-      "dependsOn": ["@innovateuk/playwright-test#build", "@innovateuk/project-factory#build"]
+      "dependsOn": [
+        "@innovateuk/playwright-test#build",
+        "@innovateuk/project-factory#build",
+        "@innovateuk/tsforce#build"
+      ]
     }
   }
 }
