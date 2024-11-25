@@ -12,6 +12,7 @@ import { ProjectForecasts } from "./pages/ProjectForecasts";
 import { ProjectOverview } from "./pages/ProjectOverview";
 import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
 import { ProjectDetails } from "./pages/ProjectDetails";
+import { ProjectDocuments } from "./pages/ProjectDocuments";
 
 export
 @Fixture("accNavigation")
@@ -27,6 +28,7 @@ class AccNavigation {
   private readonly devtools: DevTools;
   private readonly putProjectOnHold: PutProjectOnHold;
   private readonly projectDetails: ProjectDetails;
+  private readonly projectDocuments: ProjectDocuments;
 
   constructor({
     page,
@@ -38,6 +40,7 @@ class AccNavigation {
     monitoringReports,
     putProjectOnHold,
     projectDetails,
+    projectDocuments,
   }: {
     page: Page;
     developerHomepage: DeveloperHomepage;
@@ -48,6 +51,7 @@ class AccNavigation {
     monitoringReports: MonitoringReports;
     putProjectOnHold: PutProjectOnHold;
     projectDetails: ProjectDetails;
+    projectDocuments: ProjectDocuments;
   }) {
     this.page = page;
     this.developerHomepage = developerHomepage;
@@ -59,6 +63,7 @@ class AccNavigation {
     this.putProjectOnHold = putProjectOnHold;
     this.devtools = new DevTools({ page });
     this.projectDetails = projectDetails;
+    this.projectDocuments = projectDocuments;
   }
 
   @Given("the user is on the developer homepage")
@@ -174,5 +179,23 @@ class AccNavigation {
     await this.projectDetails.clickPartnerName(name);
     await this.projectDetails.partnerInfo();
     await this.projectDetails.clickEdit();
+  }
+
+  @Given("the user has navigated to the project documents page")
+  async gotoProjectDocuments() {
+    await this.testCache.cache(
+      ["goToProjectDocuments", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Documents").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.devtools.isLoaded();
+    await this.projectDocuments.isPage();
   }
 }

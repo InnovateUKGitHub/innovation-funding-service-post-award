@@ -3,14 +3,14 @@ import { Fixture, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
 import { ProjectChangeRequests } from "./ProjectChangeRequests";
 import { PageHeading } from "../../../../components/PageHeading";
-import { getLorem, loremIpsum32k } from "../../../../components/lorem";
-
+import { Validators } from "../../../validators";
 export
 @Fixture("changeScope")
 class ChangeProjectScope {
   protected readonly page: Page;
   protected readonly commands: Commands;
   protected readonly pcr: ProjectChangeRequests;
+  protected readonly validators: Validators;
   private readonly pageTitle: PageHeading;
   private readonly backToRequest: Locator;
   private readonly guidance: Locator;
@@ -44,14 +44,17 @@ class ChangeProjectScope {
     page,
     commands,
     projectChangeRequests,
+    validators,
   }: {
     page: Page;
     commands: Commands;
     projectChangeRequests: ProjectChangeRequests;
+    validators: Validators;
   }) {
     this.page = page;
     this.commands = commands;
     this.pcr = projectChangeRequests;
+    this.validators = validators;
     this.pageTitle = this.pageTitle = PageHeading.fromTitle(page, "Change project scope");
     this.backToRequest = this.commands.backLink("Back to request");
     this.guidance = this.page.getByTestId("guidance");
@@ -172,10 +175,10 @@ class ChangeProjectScope {
 
   @When("the user validates 32000 characters in each section correctly")
   async valTexBox() {
-    await this.commands.textValidation("Public description", 32000, "Save and continue", true);
+    await this.validators.textValidation("Public description", 32000, "Save and continue", true);
     await this.publishedSummaryTitle.isVisible();
     await this.backToRequest.isVisible();
-    await this.commands.textValidation("Project summary", 32000, "Save and continue", true);
+    await this.validators.textValidation("Project summary", 32000, "Save and continue", true);
     await this.descriptionEditLink.click();
     await this.publishedDescriptionTitle.isVisible();
     await this.textBox.fill(this.newPublicDescription);

@@ -1,6 +1,7 @@
 import { expect, Page } from "@playwright/test";
 import { Fixture } from "playwright-bdd/decorators";
-import { getLorem } from "../components/lorem";
+import path from "path";
+import * as fs from "fs";
 
 export
 @Fixture("commands")
@@ -83,11 +84,15 @@ class Commands {
   /**
    * Get a list item from its key
    */
-  async getListItemFromKey(label: string, item: string) {
+  async getListItemFromKey(label: string, item: string, clickable?: boolean) {
     const key = this.page.locator("css=dt").filter({ hasText: label });
     const parent = this.page.locator("css=div").filter({ has: key });
     const grandParent = this.page.locator("css=dl").filter({ has: parent });
-    return await grandParent.locator("css=dd", { hasText: item }).isVisible();
+    if (clickable) {
+      return await grandParent.locator("css=dd", { hasText: item }).click();
+    } else {
+      return await grandParent.locator("css=dd", { hasText: item }).isVisible();
+    }
   }
 
   /**
@@ -242,7 +247,7 @@ class Commands {
    * Finds text within a paragraph element
    */
   async paragraph(content: string | RegExp) {
-    expect(await this.page.locator("p", { hasText: content }).innerText()).toBe(content);
+    await expect(this.page.getByRole("paragraph").filter({ hasText: content })).toBeVisible();
   }
 
   /**
@@ -306,7 +311,7 @@ class Commands {
    * cy.clickOn("button", "Save and continue", { force: true });
    */
   async clickOn(name: string) {
-    await this.page.locator("button, a").filter({ hasText: name }).click();
+    await this.page.locator("button, a", { hasText: name }).click();
   }
 
   /**
@@ -348,85 +353,6 @@ class Commands {
    */
   async clickLink(label: string, link: "Edit" | "Review" | "Delete" | "Remove") {
     await this.page.locator("tr", { hasText: label }).locator("a", { hasText: link }).click();
-  }
-
-  /**
-   * runs validations for regular currency input
-   *
-   * label is the actual label of the input field.
-   * errorLabel is the identifier used for the actual error message
-   * validValue is the value that should show no error and allow to pass
-   * submitLabel if passed in will cause this button to be pressed after the first validation to
-   * trigger validation messages
-   *
-   * @example
-   * cy.validateCurrency("Rate (£/day)", "Rate per day", "50000");
-   */
-  async validateCurrency(label: string, errorLabel: string, validValue: string, submitLabel?: string) {
-    const errorToken = errorLabel.toLowerCase();
-    const firstPlaceErrorToken = errorToken
-      .split("")
-      .map((x, i) => (i === 0 ? x.toUpperCase() : x))
-      .join("");
-
-    const input = this.getByLabel(label);
-    await input.clear();
-    if (submitLabel) {
-      await this.clickOn(submitLabel);
-    }
-    await this.validationLink(`Enter ${errorToken}.`);
-    await input.fill("banana");
-    await this.validationLink(`${firstPlaceErrorToken} must be a number.`);
-    await input.clear();
-    await input.fill("35.45678");
-    await this.validationLink(`${firstPlaceErrorToken} must be 2 decimal places or fewer.`);
-    await input.clear();
-    await input.fill(validValue);
-  }
-
-  /**
-   * runs validations for positive whole number inputs
-   *
-   * label is the actual label of the input field.
-   * errorLabel is the identifier used for the actual error message
-   * validValue is the value that should show no error and allow to pass
-   * submitLabel if passed in will cause this button to be pressed after the first validation to
-   * trigger validation messages
-   *
-   * @example
-   * cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "50");
-   */
-  async validatePositiveWholeNumber(
-    label: string,
-    errorLabel: string,
-    validValue: string,
-    valEmpty?: boolean,
-    submitLabel?: string,
-  ) {
-    const errorToken = errorLabel.toLowerCase();
-    const firstPlaceErrorToken = errorToken
-      .split("")
-      .map((x, i) => (i === 0 ? x.toUpperCase() : x))
-      .join("");
-    const input = this.getByLabel(label);
-    const paragraph = this.page.getByRole("paragraph");
-    await input.clear();
-    if (valEmpty) {
-      await this.clickOn(submitLabel);
-      await this.validationLink(`Enter valid ${errorToken}.`);
-      await paragraph.filter({ hasText: `Enter valid ${errorToken}.` }).isVisible();
-    }
-    await input.fill("banana");
-    await this.clickOn(submitLabel);
-    await this.validationLink(`${firstPlaceErrorToken} must be a number.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a number.` }).isVisible();
-    await input.fill("35.45678");
-    await this.validationLink(`${firstPlaceErrorToken} must be a whole number, like 15.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 3.` }).isVisible();
-    await input.fill("-56");
-    await this.validationLink(`${firstPlaceErrorToken} must be 1 or more.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be 1 or more.` }).isVisible();
-    await input.fill(validValue);
   }
 
   getLinkInRow(category: string, linkName: string) {
@@ -500,91 +426,15 @@ class Commands {
     const currentDate = new Date();
     if (subtract) {
       let year = currentDate.getFullYear() - increment;
-      console.log(String(year));
       return year;
     } else {
       let year = currentDate.getFullYear() + increment;
-      console.log(String(year));
       return year;
     }
   }
 
-  // /**
-  //  * disableJs must be added in the `beforeEach` hook for every test suite in which javascript should be disabled
-  //  */
-  // disableJs(): void;
-  // /**
-  //  * Checks for presence and contents of the dropdown 'Learn about files you can upload' section
-  //  */
-  // learnFiles(): void;
-  // /**
-  //  * Checks for presence of a user name and deletes all files uploaded by them
-  //  */
-  // fileTidyUp(name: string): void;
-  // /**
-  //  * Tests the file component on the page with validation, upload and deletion checks.
-  //  * User name, backlink suffix, header, re-navigation, API intercept, cleanup and if PCR must be passed in.
-  //  * 'waitIntercepts' is a list of api Intercepts used to pass in different api calls
-  //  * @example
-  //  * cy.testFileComponent("James Black", "costs to be claimed", "Costs to be claimed", "Continue to documents", Intercepts.claims, true, true, false)
-  //  */
-  // testFileComponent(
-  //   loggedInAs: string,
-  //   suffix: string,
-  //   headerAssertion: string,
-  //   access: string,
-  //   intercept: Intercepts,
-  //   cleanup: boolean,
-  //   pcr: boolean,
-  //   loans: boolean,
-  //   pcrArea?: string,
-  // ): void;
-
-  /**
-   * Allows input of variable length of characters and checks for validation messages
-   */
-  async textValidation(
-    message: string,
-    length: number,
-    buttonName: string,
-    textarea: boolean,
-    mor?: boolean,
-    label?: string,
-  ) {
-    let largeText = getLorem(length);
-    if (textarea) {
-      await this.page.getByRole("textbox").fill(largeText);
-      await this.page.getByRole("textbox").press("End");
-      await this.page.getByRole("textbox").press("t");
-      await this.page.getByRole("paragraph").filter({ hasText: "You have 1 character too many" }).isVisible();
-    } else if (this.page.locator("css=main").filter({ hasText: label })) {
-      await this.page.getByLabel(label).fill(largeText);
-      await this.page.getByLabel(label).press("End");
-      await this.page.getByLabel(label).press("t");
-    }
-    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
-    if (textarea) {
-      await this.validationLink(`${message} must be ${length} characters or less.`);
-    } else {
-      await this.validationLink(`${message} must be ${length} characters or less.`);
-      await this.paragraph(`${message} must be ${length} characters or less.`);
-    }
-    if (textarea) {
-      await this.page.getByRole("textbox").press("End");
-      await this.page.getByRole("textbox").press("Backspace");
-      await this.paragraph("You have 0 characters remaining");
-    } else {
-      if (this.page.locator("css=main").filter({ hasText: label }))
-        await this.page.getByLabel(label).press("Backspace");
-    }
-    if (mor) {
-      await this.page.getByLabel(label).check();
-    }
-    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
-    await expect(this.page.getByTestId("validation-summary")).not.toBeVisible();
-  }
-
   async learnFiles() {
+    this.page.locator("css=span").filter({ hasText: "Learn more about files you can upload" }).click();
     const guidanceText = [
       "You can upload up to 10 documents at a time. The documents must:",
       "There is no limit to the number of files you can upload in total.",
@@ -616,4 +466,79 @@ class Commands {
       await this.page.getByRole("list").filter({ hasText: li }).isVisible();
     }
   }
+
+  async fileInput(names: Array<string>) {
+    let fileList = [];
+    for (const file of names) {
+      let name = path.join(`src/components/testFiles/`, file);
+      fileList.push(name);
+    }
+    await this.page.locator("css=#files").setInputFiles(fileList);
+    await this.clickOn("Upload documents");
+  }
+
+  async uploadAnyFile(name: string) {
+    await this.page
+      .locator("css=#files")
+      .setInputFiles({ name, mimeType: "text/plain", buffer: Buffer.from("file contents") });
+    await this.button("Upload documents").click();
+  }
+
+  async deleteFileFromRow(file: string) {
+    const row = this.page.locator("css=tr").filter({ hasText: file });
+    await row.locator("td").getByRole("button").filter({ hasText: "Remove" }).click();
+    await expect(row.locator("td").getByRole("button").filter({ hasText: "Remove" })).toBeDisabled();
+    await this.validationNotification(`'${file}' has been removed.`).isVisible();
+  }
+
+  async createTestFile(name: string, size: number) {
+    console.log(`Creating ${size}MB file: '${name}.txt'. This may take some time...`);
+    fs.writeFileSync(`src/components/testFiles/${name}.txt`, Buffer.alloc(size * 1024 * 1024, "0"));
+  }
+
+  deleteTestFile(name: string) {
+    console.log(`Deleting test file ${name}`);
+    fs.unlinkSync(`src/components/testFiles/${name}`);
+  }
+
+  docDocuments = [
+    "testfile.doc",
+    "testfile2.doc",
+    "testfile3.doc",
+    "testfile4.doc",
+    "testfile5.doc",
+    "testfile6.doc",
+    "testfile7.doc",
+    "testfile8.doc",
+    "testfile9.doc",
+    "testfile10.doc",
+  ];
+
+  allFileTypes = [
+    "add.png",
+    "testFile.xlsx",
+    "testFile.csv",
+    "testFile.xps",
+    "testFile.odp",
+    "testFile.odt",
+    "testFile.pdf",
+    "testFile.ppt",
+    "testFile.rtf",
+    "testFile.txt",
+  ];
+
+  tooManyDocuments() {
+    let newList = ["T.doc"];
+    for (const file of this.allFileTypes) {
+      newList.push(file);
+    }
+    return newList;
+  }
+
+  async uploadBatchOfDocs(files = []) {
+    await this.fileInput(files);
+    await this.getByAriaLabel("success message").filter({ hasText: "10 documents have been uploaded." }).isVisible();
+  }
+
+  largerDocs = ["11MB_1", "11MB_2", "11MB_3"];
 }

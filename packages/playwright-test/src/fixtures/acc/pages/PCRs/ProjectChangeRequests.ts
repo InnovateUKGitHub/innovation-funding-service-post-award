@@ -141,7 +141,7 @@ class ProjectChangeRequests {
       ["Request last updated", String(this.commands.dateToday())],
     ];
     for (const [key, list] of submissionList) {
-      await await this.commands.getListItemFromKey(key, list);
+      await this.commands.getListItemFromKey(key, list);
     }
     await expect(this.page.getByRole("link").filter({ hasText: "Review request" })).toBeVisible();
     await expect(this.commands.button("Return to project change requests")).toBeVisible();

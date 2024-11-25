@@ -22,9 +22,11 @@ import { SfdcSearchResultsPage } from "./sfdc/pages/SfdcSearchResultsPage";
 import { ProjectChangeRequests } from "./acc/pages/PCRs/ProjectChangeRequests";
 import { PutProjectOnHold } from "./acc/pages/PCRs/putProjectOnHold";
 import { ApproveNewSubcontractor } from "./acc/pages/PCRs/approveNewSubcontractor";
-import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 import { RemovePartner } from "./acc/pages/PCRs/removePartner";
 import { ProjectDetails } from "./acc/pages/ProjectDetails";
+import { ProjectDocuments } from "./acc/pages/ProjectDocuments";
+import { Validators } from "./validators";
+import { ChangeProjectScope } from "./acc/pages/PCRs/ChangeScope";
 
 type AccFixtures = {
   // Pages
@@ -40,10 +42,12 @@ type AccFixtures = {
   changeScope: ChangeProjectScope;
   removePartner: RemovePartner;
   projectDetails: ProjectDetails;
+  projectDocuments: ProjectDocuments;
 
   // Misc
   accNavigation: AccNavigation;
   commands: Commands;
+  validators: Validators;
 
   // ACC
   accUserSwitcher: AccUserSwitcher;
@@ -77,11 +81,12 @@ export const test = base.extend<AccFixtures, Workers>({
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
-  changeScope: ({ page, commands, projectChangeRequests }, use) =>
-    use(new ChangeProjectScope({ page, commands, projectChangeRequests })),
+  changeScope: ({ page, commands, projectChangeRequests, validators }, use) =>
+    use(new ChangeProjectScope({ page, commands, projectChangeRequests, validators })),
   removePartner: ({ page, commands, projectChangeRequests }, use) =>
     use(new RemovePartner({ page, commands, projectChangeRequests })),
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
+  projectDocuments: ({ page, commands, validators }, use) => use(new ProjectDocuments({ page, commands, validators })),
 
   // Project Factory
   accProjectBase: [
@@ -109,6 +114,7 @@ export const test = base.extend<AccFixtures, Workers>({
       monitoringReports,
       putProjectOnHold,
       projectDetails,
+      projectDocuments,
     },
     use,
   ) =>
@@ -123,11 +129,13 @@ export const test = base.extend<AccFixtures, Workers>({
         monitoringReports,
         putProjectOnHold,
         projectDetails,
+        projectDocuments,
       }),
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
   accUserSwitcher: ({ page, context, projectState }, use) => use(new AccUserSwitcher({ page, context, projectState })),
+  validators: ({ page, commands }, use) => use(new Validators({ page, commands })),
   // Salesforce (dot com)
   sfdcApi: [SfdcApi.create, { scope: "worker" }],
   sfdcPage: SfdcLightningPage.create,
