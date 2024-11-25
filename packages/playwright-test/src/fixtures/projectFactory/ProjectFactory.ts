@@ -9,6 +9,7 @@ export abstract class ProjectFactory<Context> {
   protected readonly sfdcApi: SfdcApi;
   protected projectState: ProjectState | null;
   protected prefix: string | null = null;
+  protected context: Context | null = null;
 
   constructor({ projectState, sfdcApi }: { projectState: ProjectState; sfdcApi: SfdcApi }) {
     this.sfdcApi = sfdcApi;
@@ -24,6 +25,6 @@ export abstract class ProjectFactory<Context> {
   protected async createProject() {
     const connection = await this.sfdcApi.getTsforceConnection();
     const script = this.getScript({ connection });
-    await script.run();
+    this.context = await script.run();
   }
 }
