@@ -6,12 +6,15 @@ import { getLorem } from "../../../../components/lorem";
 import path from "path";
 import { DataTable } from "playwright-bdd";
 import { Commands } from "../../../Commands";
+import { ProjectCard } from "../../../../components/ProjectCard";
+import { ProjectChangeRequests } from "./ProjectChangeRequests";
 
 export
 @Fixture("putProjectOnHold")
 class PutProjectOnHold {
   protected readonly page: Page;
   protected readonly commands: Commands;
+  protected readonly pcr: ProjectChangeRequests;
   private readonly pageTitle: PageHeading;
   private readonly saveAndReturnSummary: Locator;
   private readonly createRequest: Locator;
@@ -88,10 +91,20 @@ class PutProjectOnHold {
   private readonly firstDateOfPause: string;
   private readonly lastDateOfPause: string;
   private readonly finalEndMonthAlpha: string;
+  private readonly firstDateofPauseLink: Locator;
 
-  constructor({ page, commands }: { page: Page; commands: Commands }) {
+  constructor({
+    page,
+    commands,
+    projectChangeRequests,
+  }: {
+    page: Page;
+    commands: Commands;
+    projectChangeRequests: ProjectChangeRequests;
+  }) {
     this.page = page;
     this.commands = commands;
+    this.pcr = projectChangeRequests;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
     this.pageTitle = PageHeading.fromTitle(page, "Project change requests");
     this.requestTitle = this.page.locator("//span[@class='govuk-caption-xl']");
@@ -172,6 +185,7 @@ class PutProjectOnHold {
     this.finalStartYear = String(this.commands.startEndYear(0, false));
     this.finalEndYear = String(this.commands.startEndYear(2, false));
     this.finalEndMonthAlpha = String(this.commands.startEndMonth(2, false, true));
+    this.firstDateofPauseLink = this.page.getByRole("link").filter({ hasText: "Enter first day of pause" });
   }
 
   async getPcrAuditTrail(expectedText: string) {
@@ -440,6 +454,21 @@ class PutProjectOnHold {
     }
   }
 
+  @When("the user navigates Put project on hold without entering information")
+  async navigateProjectOnHold() {
+    this.pcr.selectPcrType("Put project on hold");
+    await this.onHoldStartMonth.isVisible();
+  }
+
+  @Then("a blank Put project on hold summary page is displayed")
+  async blankOnHoldSummary() {
+    await this.saveAndContinue.click();
+    await this.commands.getListItemFromKey("First day of pause", "Enter first day of pause");
+    await this.commands.getListItemFromKey("Last day of pause (if known)", "Not known");
+    await this.firstDateofPauseLink.click();
+    await this.onHoldStartMonth.isVisible();
+  }
+
   @When("the user completes the request to put a project on hold")
   async completePutProjectOnHold() {
     await this.createRequest.click();
@@ -455,6 +484,9 @@ class PutProjectOnHold {
     // await this.clickPutProjectOnHold();
     await this.clickTaskTodo("Put project on hold");
     await expect(this.requestTitle).toBeVisible();
+    // Below asserts the addition made in ACC-11442 before continuing test with verifyTextOnPage.
+    await this.navigateProjectOnHold();
+    await this.blankOnHoldSummary();
     await this.verifyTextOnPage(
       "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCRs), update forecasts, or create and submit claims.",
     );
