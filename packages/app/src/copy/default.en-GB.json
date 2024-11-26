@@ -3088,6 +3088,13 @@
         }
       }
     },
+    "projectSetupBankStatement": {
+      "hasUploadedBankStatement": {
+        "errors": {
+          "custom": "You must upload a bank statement before you can proceed."
+        }
+      }
+    },
     "projectSetupBankDetails": {
       "accountNumber": {
         "errors": {

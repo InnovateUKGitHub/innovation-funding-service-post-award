@@ -36,14 +36,14 @@ export abstract class ZodAuthorisedAsyncCommandBase<
    * Convert the `req.body` and `req.files` of Express into the input
    * expected by the Zod validator
    */
-  protected abstract mapToZod(dto: AnyObject): Promise<z.input<Schema>>;
+  protected abstract mapToZod(context: IContext): Promise<z.input<Schema>>;
 
   protected abstract runRepositoryCommands(context: IContext, validatedData: z.output<Schema>): Promise<T>;
 
   protected async run(context: IContext): Promise<T> {
     try {
       const { schema, errorMap } = await this.getZodSchema(context);
-      const data = await this.mapToZod(this.dto);
+      const data = await this.mapToZod(context);
       const validatedData = schema.parse(data, { errorMap });
       const res = await this.runRepositoryCommands(context, validatedData);
       return res;

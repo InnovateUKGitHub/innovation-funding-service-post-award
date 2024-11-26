@@ -49,6 +49,7 @@ import {
 import { z } from "zod";
 import { BankStatementSchema, setupBankStatementSchema } from "@ui/pages/projects/setup/projectSetupBankStatement.zod";
 import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
@@ -116,7 +117,9 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
     }
   }
 
-  protected async mapToZod(): Promise<
+  protected async mapToZod(
+    context: IContext,
+  ): Promise<
     | z.input<ProjectSetupBankDetailsSchemaType>
     | z.input<PostcodeSchema>
     | z.input<ProjectSetupSchema>
@@ -149,7 +152,9 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
         bankCheckValidation: undefined,
       };
     } else if (this.form === FormTypes.ProjectSetupBankStatement) {
-      return { form: this.form };
+      const documents = await context.runQuery(new GetPartnerDocumentsQuery(this.dto.projectId, this.dto.id));
+      const hasUploadedBankStatement = documents.some(doc => doc.description === DocumentDescription.BankStatement);
+      return { form: this.form, hasUploadedBankStatement };
     } else {
       return {
         form: this.form,
@@ -203,7 +208,9 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
           : undefined,
         Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(mergedPartner.partnerStatus),
         Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(
-          mergedPartner.bankDetailsTaskStatus,
+          this.form === FormTypes.ProjectSetupBankStatement
+            ? BankDetailsTaskStatus.Complete
+            : mergedPartner.bankDetailsTaskStatus,
         ),
       });
       return true;

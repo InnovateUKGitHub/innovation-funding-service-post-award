@@ -1,7 +1,6 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
-import { projectSetupBankDetailsErrorMap } from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import {
   ProjectSetupBankStatementParams,
@@ -10,7 +9,13 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { BankDetailsTaskStatus } from "@framework/constants/partner";
-import { BankStatementSchema, setupBankStatementSchema } from "@ui/pages/projects/setup/projectSetupBankStatement.zod";
+import {
+  BankStatementSchema,
+  projectSetupBankStatementErrorMap,
+  setupBankStatementSchema,
+} from "@ui/pages/projects/setup/projectSetupBankStatement.zod";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
   BankStatementSchema,
@@ -27,13 +32,25 @@ export class ProjectSetupBankStatementHandler extends ZodFormHandlerBase<
   protected async getZodSchema() {
     return {
       schema: setupBankStatementSchema,
-      errorMap: projectSetupBankDetailsErrorMap,
+      errorMap: projectSetupBankStatementErrorMap,
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<BankStatementSchema>> {
+  protected async mapToZod({
+    input,
+    context,
+    params,
+  }: {
+    input: AnyObject;
+    context: IContext;
+    params: ProjectSetupBankStatementParams;
+  }): Promise<z.input<BankStatementSchema>> {
+    const documents = await context.runQuery(new GetPartnerDocumentsQuery(params.projectId, params.partnerId));
+    const hasUploadedBankStatement = documents.some(doc => doc.description === DocumentDescription.BankStatement);
+
     return {
       form: input.form,
+      hasUploadedBankStatement,
     };
   }
   protected async run({

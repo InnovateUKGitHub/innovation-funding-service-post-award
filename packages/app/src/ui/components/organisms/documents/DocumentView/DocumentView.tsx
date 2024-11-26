@@ -1,7 +1,7 @@
 import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { useContent } from "@ui/hooks/content.hook";
-import React, { memo } from "react";
+import React, { memo, useRef } from "react";
 import { SimpleString } from "../../../atoms/SimpleString/simpleString";
 import { H2 } from "../../../atoms/Heading/Heading.variants";
 import { useDocumentSearch } from "../utils/document-search.hook";
@@ -20,13 +20,25 @@ export interface DocumentShow {
   disableSearch?: boolean;
   hideHeader?: boolean;
   hideSubtitle?: boolean;
+  documentChangeCallback?: (documents: DocumentSummaryDto[]) => void;
 }
 
 interface DocumentDisplayProps<T extends DocumentSummaryDto>
-  extends Partial<Pick<DocumentShow, "disableSearch" | "hideHeader" | "hideSubtitle">> {
+  extends Partial<Pick<DocumentShow, "disableSearch" | "hideHeader" | "hideSubtitle" | "documentChangeCallback">> {
   children: (documents: T[]) => React.ReactElement<DocumentViewProps<T>> | React.ReactElement<DocumentEditProps<T>>;
   documents: T[];
 }
+
+const useDocumentsCallback = (
+  documents: DocumentSummaryDto[],
+  documentChangeCallback?: (documents: DocumentSummaryDto[]) => void,
+) => {
+  const documentLength = useRef<number>(0);
+  if (documentChangeCallback && documentLength.current !== documents.length) {
+    documentLength.current = documents.length;
+    documentChangeCallback(documents);
+  }
+};
 
 /**
  * Component displays uploaded documents
@@ -41,10 +53,13 @@ function DocumentDisplay<
   hideSubtitle,
   disableSearch = false,
   documents: unCheckedDocuments,
+  documentChangeCallback,
   children,
 }: DocumentDisplayProps<T>) {
   const { getContent } = useContent();
   const { displaySearch, hasDocuments, documents, filterConfig } = useDocumentSearch(disableSearch, unCheckedDocuments);
+
+  useDocumentsCallback(documents, documentChangeCallback);
 
   return (
     <>
@@ -83,9 +98,9 @@ export type ProjectPartnerDocumentEditProps<T extends DocumentSummaryDto> = Docu
   project: Pick<ProjectDto, "roles">;
 };
 
-export const DocumentEdit = (props: DocumentEditProps<DocumentSummaryDto>) => {
+export const DocumentEdit = ({ documentChangeCallback, ...props }: DocumentEditProps<DocumentSummaryDto>) => {
   return (
-    <DocumentDisplay {...props}>
+    <DocumentDisplay documentChangeCallback={documentChangeCallback} {...props}>
       {documents => <DocumentTableWithDelete {...props} qa={`${props.qa}-container`} documents={documents} />}
     </DocumentDisplay>
   );

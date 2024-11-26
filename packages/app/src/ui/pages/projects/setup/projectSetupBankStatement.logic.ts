@@ -9,6 +9,12 @@ import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { UseFormReset } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { BankStatementSchema } from "./projectSetupBankStatement.zod";
+import { clientsideApiClient } from "@ui/apiClient";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { useRoutes } from "@ui/context/routesProvider";
 
 export const useSetupBankStatementData = (
   projectId: ProjectId,
@@ -21,7 +27,10 @@ export const useSetupBankStatementData = (
     refreshedQueryOptions,
   );
 
-  return { fragmentRef: data?.salesforce?.uiapi, userId: data?.currentUser?.userId ?? "unknown" };
+  return {
+    fragmentRef: data?.salesforce?.uiapi,
+    userId: data?.currentUser?.userId ?? "unknown",
+  };
 };
 
 export const useSetupBankStatementActions = (
@@ -35,7 +44,7 @@ export const useSetupBankStatementActions = (
     isProcessing: onUploadFetching,
   } = useOnUpload({
     async onSuccess() {
-      await refresh();
+      refresh();
       reset();
     },
   });
@@ -80,4 +89,24 @@ export const useSetupBankStatementActions = (
     onChange,
     apiError,
   };
+};
+
+export const useOnUpdateProjectSetupBankStatement = (projectId: ProjectId, partnerId: PartnerId) => {
+  const navigate = useNavigate();
+  const routes = useRoutes();
+
+  return useOnUpdate<z.output<BankStatementSchema>, Pick<PartnerDto, "id" | "projectId">>({
+    req: () =>
+      clientsideApiClient.partners.updatePartner({
+        partnerId,
+        partnerDto: { projectId, id: partnerId, form: FormTypes.ProjectSetupBankStatement },
+      }),
+    onSuccess: () =>
+      navigate(
+        routes.projectSetup.getLink({
+          projectId,
+          partnerId,
+        }).path,
+      ),
+  });
 };

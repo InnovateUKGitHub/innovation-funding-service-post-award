@@ -18,7 +18,11 @@ import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { projectSetupBankStatementQuery } from "./ProjectSetupBankStatement.query";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { useSetupBankStatementActions, useSetupBankStatementData } from "./projectSetupBankStatement.logic";
+import {
+  useOnUpdateProjectSetupBankStatement,
+  useSetupBankStatementActions,
+  useSetupBankStatementData,
+} from "./projectSetupBankStatement.logic";
 import { z } from "zod";
 import {
   UploadBankStatementSchemaType,
@@ -29,6 +33,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { useCallback } from "react";
+import {
+  BankStatementSchema,
+  projectSetupBankStatementErrorMap,
+  setupBankStatementSchema,
+} from "./projectSetupBankStatement.zod";
+import { useMessages } from "@framework/api-helpers/useMessages";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ProjectSetupBankStatementParams {
   projectId: ProjectId;
@@ -51,6 +64,12 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const { fragmentRef } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
 
+  const {
+    onUpdate: onUpdateForm,
+    apiError: apiErrorForm,
+    isFetching: isFetchingForm,
+  } = useOnUpdateProjectSetupBankStatement(props.projectId, props.partnerId);
+
   const { register, reset, getFieldState, handleSubmit, setError, formState } = useForm<
     z.output<UploadBankStatementSchemaType>
   >({
@@ -59,10 +78,36 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
     }),
   });
 
+  const {
+    register: registerForm,
+    handleSubmit: handleSubmitForm,
+    setError: setErrorForm,
+    formState: formStateForm,
+    setValue: setFieldValueForm,
+    watch: watchForm,
+    trigger: triggerForm,
+  } = useForm<z.output<BankStatementSchema>>({
+    defaultValues: { hasUploadedBankStatement: false },
+    resolver: zodResolver(setupBankStatementSchema, {
+      errorMap: projectSetupBankStatementErrorMap,
+    }),
+  });
+
+  const documentsCallback = useCallback((childDocuments: DocumentSummaryDto[]) => {
+    const hasUploadedBankStatement = childDocuments?.some(x => x.description === DocumentDescription.BankStatement);
+    console.log("called documents callback and hasUploadedBankStatement", hasUploadedBankStatement);
+    setFieldValueForm("hasUploadedBankStatement", hasUploadedBankStatement);
+  }, []);
+
   const { isFetching, apiError, onChange, onDelete } = useSetupBankStatementActions(refresh, reset, projectId);
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<UploadBankStatementSchemaType>>(setError, formState.errors);
+  const validationErrors = useZodErrors<z.output<UploadBankStatementSchemaType>>(setError, formState.errors);
+  const validationFormErrors = useZodErrors<z.output<BankStatementSchema>>(setErrorForm, formStateForm.errors);
+
+  const { clearMessages } = useMessages();
+
+  useFormRevalidate(watchForm, triggerForm);
 
   return (
     <Page
@@ -71,8 +116,8 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           <Content value={x => x.pages.projectSetupBankStatement.backLink} />
         </BackLink>
       }
-      apiError={apiError}
-      validationErrors={allErrors}
+      apiError={apiError || apiErrorForm}
+      validationErrors={Object.assign({}, validationErrors, validationFormErrors)}
       fragmentRef={fragmentRef}
     >
       <Messages messages={props.messages} />
@@ -125,18 +170,23 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           onRemove={onDelete}
           formType={FormTypes.ProjectSetupBankStatementDelete}
           disabled={isFetching}
+          documentChangeCallback={documentsCallback}
         />
       </Section>
 
       <Section qa="submit-bank-statement">
-        <Form data-qa="submit-bank-statement-form">
-          <input type="hidden" value={FormTypes.ProjectSetupBankStatement} name="form" />
+        <Form
+          data-qa="submit-bank-statement-form"
+          onSubmit={handleSubmitForm(data => onUpdateForm({ data }), clearMessages)}
+        >
+          <input type="hidden" value={FormTypes.ProjectSetupBankStatement} {...registerForm("form")} />
+          <input type="hidden" {...registerForm("hasUploadedBankStatement")} />
           <Fieldset>
             <Button type="submit" disabled={isFetching}>
               <Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
             </Button>
             <Link
-              disabled={isFetching}
+              disabled={isFetching || isFetchingForm}
               styling="SecondaryButton"
               route={props.routes.projectSetup.getLink({
                 projectId: props.projectId,

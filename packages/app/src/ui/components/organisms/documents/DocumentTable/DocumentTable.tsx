@@ -106,6 +106,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
   formType,
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
   const { getContent } = useContent();
+
   if (!documents.length) return <DocumentsUnavailable />;
 
   return (
