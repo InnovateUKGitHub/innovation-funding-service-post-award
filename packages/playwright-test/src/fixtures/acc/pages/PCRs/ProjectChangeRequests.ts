@@ -37,6 +37,7 @@ class ProjectChangeRequests {
   private readonly commentsForMo: string;
   private readonly pmStatusComment: Locator;
   private readonly finalComments: string;
+  private readonly uploadDocumentsHeading: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -77,6 +78,7 @@ class ProjectChangeRequests {
       .getByTestId("projectChangeRequestStatusChangeTable")
       .filter({ hasText: this.commentsForMo });
     this.finalComments = "These are the final comments for Innovate UK.";
+    this.uploadDocumentsHeading = this.page.locator("css=legend").filter({ hasText: "Upload documents" });
   }
 
   /**
@@ -112,8 +114,8 @@ class ProjectChangeRequests {
   async completePcrReasons() {
     await this.provideReasonsLink.click();
     await expect(this.reasoningHeader).toBeVisible();
-    await this.page.getByRole("textbox").fill(loremIpsum100Char);
-    await this.commands.button("Save and continue").click();
+    await this.commands.textValidation("Reasoning", 32000, "Save and continue", true);
+    await this.uploadDocumentsHeading.isVisible();
     await expect(this.page.getByTestId("numberRow").filter({ hasText: "Request number" })).toBeVisible();
     await this.commands.button("Save and continue").click();
     await this.agreeWithChange.click();

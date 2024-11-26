@@ -3,6 +3,7 @@ import { Fixture, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
 import { ProjectChangeRequests } from "./ProjectChangeRequests";
 import { PageHeading } from "../../../../components/PageHeading";
+import { Validators } from "../../../validators";
 
 export
 @Fixture("removePartner")
@@ -10,6 +11,7 @@ class RemovePartner {
   protected readonly page: Page;
   protected readonly commands: Commands;
   protected readonly pcr: ProjectChangeRequests;
+  protected readonly validators: Validators;
   private readonly pageTitle: PageHeading;
   private readonly projectTitle: Locator;
   private readonly backToRequest: Locator;
@@ -41,14 +43,17 @@ class RemovePartner {
     page,
     commands,
     projectChangeRequests,
+    validators,
   }: {
     page: Page;
     commands: Commands;
     projectChangeRequests: ProjectChangeRequests;
+    validators: Validators;
   }) {
     this.page = page;
     this.commands = commands;
     this.pcr = projectChangeRequests;
+    this.validators = validators;
     this.pageTitle = PageHeading.fromTitle(page, "Remove a partner");
     this.projectTitle = this.page.getByTestId("page-title").filter({ hasText: ".100" });
     this.backToRequest = this.commands.backLink("Back to request");
@@ -112,7 +117,7 @@ class RemovePartner {
 
   @When("the user enters an invalid last period number")
   async invalidPeriod() {
-    await this.commands.validatePositiveWholeNumber(
+    await this.validators.validatePositiveWholeNumber(
       "Removal period",
       "Removal period",
       "5",

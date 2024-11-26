@@ -194,22 +194,17 @@ class ProjectDetails {
     await this.checkTableDetails("partner-information", this.partnerInfoDetailsUpdated);
   }
 
-  //TODO: There is a separate ticket to unify this kind of method into a single command.
-  // This can be updated once that ticket is created.
-  @When("the user exceeds {int} characters in postcode field")
-  async exceedCharacters(charLimit: number) {
-    const box = this.page.getByRole("textbox");
-    await box.fill(getLorem(charLimit));
-    await box.focus();
-    await box.press("End");
-    await box.press("t");
-    await this.saveUpdatedInfo();
-    await this.postCodeValMsg.isVisible();
-    await box.focus();
-    await box.press("End");
-    await box.press("Backspace");
-    await expect(this.postCodeValMsg).not.toBeVisible();
-    await box.fill(getLorem(32000));
+  @When("the user exceeds 10 characters in the postcode field")
+  async exceedCharacters() {
+    await this.commands.textValidation(
+      "Project location postcode",
+      10,
+      "Save and return to partner information",
+      false,
+      false,
+      "New location",
+    );
+    await this.page.getByRole("textbox").fill(getLorem(11));
   }
 
   @Then("the postcode character limit is validated")

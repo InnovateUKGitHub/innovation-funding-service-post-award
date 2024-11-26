@@ -2,6 +2,7 @@ import { expect, Page } from "@playwright/test";
 import { Fixture } from "playwright-bdd/decorators";
 import path from "path";
 import * as fs from "fs";
+import { getLorem } from "../components/lorem";
 
 export
 @Fixture("commands")
@@ -431,6 +432,53 @@ class Commands {
       let year = currentDate.getFullYear() + increment;
       return year;
     }
+  }
+
+  /**
+   * Allows input of variable length of characters and checks for validation messages
+   */
+  async textValidation(
+    message: string,
+    length: number,
+    buttonName: string,
+    textarea: boolean,
+    mor?: boolean,
+    label?: string,
+  ) {
+    let largeText = getLorem(length);
+    if (textarea) {
+      await this.page.getByRole("textbox").fill(largeText);
+      await this.page.getByRole("textbox").press("End");
+      await this.page.getByRole("textbox").press("t");
+      await this.page.getByRole("paragraph").filter({ hasText: "You have 1 character too many" }).isVisible();
+    } else if (this.page.locator("css=main").filter({ hasText: label })) {
+      await this.page.getByLabel(label).fill(largeText);
+      await this.page.getByLabel(label).press("End");
+      await this.page.getByLabel(label).press("t");
+    }
+    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
+    if (textarea) {
+      if (mor) {
+        await this.validationLink(`Comments for ${message} must be ${length} characters or less.`);
+      } else {
+        await this.validationLink(`${message} must be ${length} characters or less.`);
+      }
+    } else {
+      await this.validationLink(`${message} must be ${length} characters or less.`);
+      await this.paragraph(`${message} must be ${length} characters or less.`);
+    }
+    if (textarea) {
+      await this.page.getByRole("textbox").press("End");
+      await this.page.getByRole("textbox").press("Backspace");
+      await this.paragraph("You have 0 characters remaining");
+    } else {
+      if (this.page.locator("css=main").filter({ hasText: label })) {
+        await this.page.getByRole("textbox").press("End");
+        await this.page.getByLabel(label).press("Backspace");
+      }
+    }
+    await this.page.getByRole("button").filter({ hasText: buttonName }).click();
+    await expect(this.page.getByTestId("validation-summary")).not.toBeVisible();
   }
 
   async learnFiles() {

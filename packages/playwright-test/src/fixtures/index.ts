@@ -76,16 +76,16 @@ export const test = base.extend<AccFixtures, Workers>({
   projectOverview: ({ page }, use) => use(new ProjectOverview({ page })),
   projectForecasts: ({ page, commands }, use) => use(new ProjectForecasts({ page, commands })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
-  monitoringReports: ({ page }, use) => use(new MonitoringReports({ page })),
+  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   putProjectOnHold: ({ page, commands, projectChangeRequests }, use) =>
     use(new PutProjectOnHold({ page, commands, projectChangeRequests })),
-  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  monitoringReports: ({ page, commands }, use) => use(new MonitoringReports({ page, commands })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
   changeScope: ({ page, commands, projectChangeRequests, validators }, use) =>
     use(new ChangeProjectScope({ page, commands, projectChangeRequests, validators })),
-  removePartner: ({ page, commands, projectChangeRequests }, use) =>
-    use(new RemovePartner({ page, commands, projectChangeRequests })),
+  removePartner: ({ page, commands, projectChangeRequests, validators }, use) =>
+    use(new RemovePartner({ page, commands, projectChangeRequests, validators })),
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
   projectDocuments: ({ page, commands, validators }, use) => use(new ProjectDocuments({ page, commands, validators })),
 

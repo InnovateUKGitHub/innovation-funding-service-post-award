@@ -4,11 +4,13 @@ import { PageHeading } from "../../../components/PageHeading";
 import { Button } from "../../../components/Button";
 import { moAnswers } from "../../../components/Monitoring/MonitoringAnswers";
 import { getLorem } from "../../../components/lorem";
+import { Commands } from "../../Commands";
 
 export
 @Fixture("monitoringReports")
 class MonitoringReports {
   protected readonly page: Page;
+  protected readonly commands: Commands;
   private readonly dashboardTitle: PageHeading;
   private readonly reportTitle: PageHeading;
   private readonly startButton: Locator;
@@ -40,9 +42,11 @@ class MonitoringReports {
   private readonly summarySectionGuidance: string;
   private readonly issuesSectionGuidance: string;
   private readonly submissionGuidance: string;
+  private readonly issuesAndActionsEditLink: Locator;
 
-  constructor({ page }: { page: Page }) {
+  constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
+    this.commands = commands;
     this.dashboardTitle = PageHeading.fromTitle(page, "Monitoring reports");
     this.reportTitle = PageHeading.fromTitle(page, "Monitoring Report");
     this.startButton = this.page.getByRole("link", { name: "Start a new report" });
@@ -104,6 +108,10 @@ class MonitoringReports {
       "Please summarise the project's key achievements and the key issues and risks that it faces.";
     this.issuesSectionGuidance =
       "Please confirm any specific issues that require Technology Strategy Board intervention - e.g. apparent scope change, partner changes, budget virements or time extensions.";
+    this.issuesAndActionsEditLink = this.page
+      .getByTestId("questions-8-comments")
+      .getByRole("link")
+      .filter({ hasText: "Edit" });
   }
 
   async validationMessage(message: string) {
@@ -169,34 +177,34 @@ class MonitoringReports {
     await this.backLinkVisible("Monitoring reports");
     await this.clickSaveReturnValidateSummary();
     await this.seeMOSectionHeading("Scope");
-    await this.validateMonitoringSection("scope", 32001, true);
+    await this.validateMonitoringSection("scope", true, 1);
     await this.completeNumberedMonitoringReportSection("Scope");
     await this.seeMOSectionHeading("Time");
-    await this.validateMonitoringSection("time", 32001, true);
+    await this.validateMonitoringSection("time", true, 2);
     await this.backLinkVisible("scope");
     await this.completeNumberedMonitoringReportSection("Time");
     await this.seeMOSectionHeading("Cost");
-    await this.validateMonitoringSection("cost", 32001, true);
+    await this.validateMonitoringSection("cost", true, 3);
     await this.backLinkVisible("time");
     await this.completeNumberedMonitoringReportSection("Cost");
     await this.seeMOSectionHeading("Exploitation");
-    await this.validateMonitoringSection("exploitation", 32001, true);
+    await this.validateMonitoringSection("exploitation", true, 4);
     await this.backLinkVisible("cost");
     await this.completeNumberedMonitoringReportSection("Exploitation");
     await this.seeMOSectionHeading("Risk");
-    await this.validateMonitoringSection("risk management", 32001, true);
+    await this.validateMonitoringSection("risk management", true, 5);
     await this.backLinkVisible("exploitation");
     await this.completeNumberedMonitoringReportSection("Risk");
     await this.seeMOSectionHeading("Project planning");
-    await this.validateMonitoringSection("project planning", 32001, true);
+    await this.validateMonitoringSection("project planning", true, 6);
     await this.backLinkVisible("risk");
     await this.completeNumberedMonitoringReportSection("planning");
     await this.seeMOSectionHeading("Summary");
-    await this.validateMonitoringSection("summary", 32001, false);
+    await this.validateMonitoringSection("summary", false);
     await this.backLinkVisible("project planning");
     await this.completeTextOnlySection("Summary");
     await this.seeMOSectionHeading("Issues and actions");
-    await this.validateMonitoringSection("issues and actions", 32001, false);
+    await this.validateMonitoringSection("issues and actions", false);
     await this.backLinkVisible("summary");
     await this.completeTextOnlySection("Issues and actions");
   }
@@ -340,19 +348,20 @@ class MonitoringReports {
     await expect(this.page.getByRole("link").filter({ hasText: `Back to ${section}` })).toBeVisible();
   }
 
-  async validateMonitoringSection(section: string, length: number, hasQuestions: boolean) {
+  async validateMonitoringSection(section: string, hasQuestions: boolean, sectionNumber?: number) {
     if (hasQuestions) {
       await this.commentsBox.fill("Test");
       await this.continueButton.click();
       await this.validationMessage(`Enter a score for ${section}`);
+      await this.page.getByTestId(`question-${sectionNumber}-score-1`).click();
     }
-    let lorem = getLorem(length);
-    let validNumber = length - 1;
-    let characters = validNumber.toString();
-    await this.commentsBox.clear();
-    await this.commentsBox.fill(lorem);
-    await this.continueButton.click();
-    await this.validationMessage(`Comments for ${section} must be ${characters} characters or less.`);
+    await this.commands.textValidation(section, 32000, "Continue", true, true);
+    if (section == "issues and actions") {
+      await expect(this.legend.filter({ hasText: this.addComments })).toBeVisible();
+      await this.issuesAndActionsEditLink.click();
+    } else {
+      await this.commands.backLink(`Back to ${section}`).click();
+    }
   }
 
   @Given("the user can see the {string} heading")

@@ -27,5 +27,5 @@ Feature: Project details
         Given a standard CR&D project exists
         And the user is a finance contact
         And the user has navigated to "Hedge's Consulting Ltd. (Lead)" Partner information
-        When the user exceeds 10 characters in postcode field
+        When the user exceeds 10 characters in the postcode field
         Then the postcode character limit is validated

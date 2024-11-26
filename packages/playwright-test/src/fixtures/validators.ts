@@ -275,7 +275,13 @@ class Validators {
    * @example
    * cy.validatePositiveWholeNumber("Days to be spent by all staff with this role", "Days spent on project", "50");
    */
-  async validatePositiveWholeNumber(label: string, errorLabel: string, validValue: string, submitLabel?: string) {
+  async validatePositiveWholeNumber(
+    label: string,
+    errorLabel: string,
+    validValue: string,
+    valEmpty: boolean,
+    submitLabel: "Save and continue",
+  ) {
     const errorToken = errorLabel.toLowerCase();
     const firstPlaceErrorToken = errorToken
       .split("")
@@ -284,18 +290,21 @@ class Validators {
     const input = this.commands.getByLabel(label);
     const paragraph = this.page.getByRole("paragraph");
     await input.clear();
-    if (submitLabel) await this.commands.clickOn(submitLabel);
-    await this.commands.validationLink(`Enter valid ${errorToken}.`);
-    await paragraph.filter({ hasText: `Enter valid ${errorToken}.` }).isVisible();
+    if (valEmpty) {
+      await this.commands.clickOn(submitLabel);
+      await this.commands.validationLink(`Enter valid ${errorToken}.`);
+      await paragraph.filter({ hasText: `Enter valid ${errorToken}.` }).isVisible();
+    }
     await input.fill("banana");
-    await this.commands.validationLink(`${firstPlaceErrorToken} must be a whole number, like 3.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 3.` }).isVisible();
+    await this.commands.button(submitLabel).click();
+    await this.commands.validationLink(`${firstPlaceErrorToken} must be a number.`);
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a number.` }).isVisible();
     await input.fill("35.45678");
     await this.commands.validationLink(`${firstPlaceErrorToken} must be a whole number, like 15.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 3.` }).isVisible();
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be a whole number, like 15.` }).isVisible();
     await input.fill("-56");
-    await this.commands.validationLink(`${firstPlaceErrorToken} must be 0 or more.`);
-    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be 0 or more.` }).isVisible();
+    await this.commands.validationLink(`${firstPlaceErrorToken} must be 1 or more.`);
+    await paragraph.filter({ hasText: `${firstPlaceErrorToken} must be 1 or more.` }).isVisible();
     await input.fill(validValue);
   }
 
