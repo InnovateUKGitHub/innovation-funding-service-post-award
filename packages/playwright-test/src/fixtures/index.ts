@@ -26,7 +26,7 @@ import { RemovePartner } from "./acc/pages/PCRs/removePartner";
 import { ProjectDetails } from "./acc/pages/ProjectDetails";
 import { ProjectDocuments } from "./acc/pages/ProjectDocuments";
 import { Validators } from "./validators";
-import { ChangeProjectScope } from "./acc/pages/PCRs/ChangeScope";
+import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 
 type AccFixtures = {
   // Pages
