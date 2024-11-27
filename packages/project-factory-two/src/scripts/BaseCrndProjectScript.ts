@@ -1,5 +1,11 @@
 import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { DatabaseConnector } from "../database/DatabaseConnector";
+import { awaitResults } from "../helpers/awaitResults";
+import { batch } from "../helpers/batch";
+import { getRecordType } from "../helpers/getRecordType";
+import { makeClaims } from "../helpers/makeClaims";
+import { useTriggerMdt } from "../helpers/triggerMdtToggles";
+import { Acc_Profile__c } from "../sobjects/Acc_Profile__c";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -13,20 +19,20 @@ interface BaseCrndProjectScriptContext {
   competition: Competition__c;
   project: Acc_Project__c;
   mspAccount: Account;
-  ppAccount: Account;
-  projectParticipant: Acc_ProjectParticipant__c;
+  mainAccount: Account;
+  mainProjectParticipant: Acc_ProjectParticipant__c;
   mspContact: Contact;
   pmContact: Contact;
-  fcContact: Contact;
+  mainFcContact: Contact;
   mspUser: User;
   pmUser: User;
-  fcUser: User;
+  mainFcUser: User;
   mspPcl: Acc_ProjectContactLink__c;
   pmPcl: Acc_ProjectContactLink__c;
-  fcPcl: Acc_ProjectContactLink__c;
+  mainFcPcl: Acc_ProjectContactLink__c;
 }
 
-class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProjectScriptContext> {
+class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<BaseCrndProjectScriptContext> {
   async script({
     connection,
     Database,
@@ -37,6 +43,24 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
     const prefix = (val: string) => `${now}.${val}`;
+
+    const [recordTypes, triggers] = await Promise.all([
+      Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
+      Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
+    ]);
+    const { disableClaimTrigger, enableClaimTrigger } = useTriggerMdt({
+      triggers,
+    });
+    const profileTotalCostCategoryRecordType = getRecordType({
+      recordTypes,
+      developerName: "Total_Cost_Category",
+      sobject: "Acc_Profile__c",
+    });
+    const profileProfileDetailRecordType = getRecordType({
+      recordTypes,
+      developerName: "Profile_Detail",
+      sobject: "Acc_Profile__c",
+    });
 
     const competition = new Competition__c();
     competition.Acc_CompetitionCode__c = prefix("000");
@@ -66,36 +90,40 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     mspAccount.OrgMigrationId__c = prefix("300");
     mspAccount.Name = "Hedge's Monitoring Ltd.";
 
-    const ppAccount = new Account();
-    ppAccount.BillingStreet = "North Star Avenue";
-    ppAccount.BillingCity = "Swindon";
-    ppAccount.BillingState = "Wiltshire";
-    ppAccount.BillingPostalCode = "SN2 1SZ";
-    ppAccount.BillingCountry = "United Kingdom";
-    ppAccount.OrgMigrationId__c = prefix("301");
-    ppAccount.Name = "Hedge's Finance Ltd.";
+    const mainAccount = new Account();
+    mainAccount.BillingStreet = "North Star Avenue";
+    mainAccount.BillingCity = "Swindon";
+    mainAccount.BillingState = "Wiltshire";
+    mainAccount.BillingPostalCode = "SN2 1SZ";
+    mainAccount.BillingCountry = "United Kingdom";
+    mainAccount.OrgMigrationId__c = prefix("301");
+    mainAccount.Name = "Hedge's Primary Ltd.";
 
-    await Database.insert([mspAccount, ppAccount]);
+    await Database.insert([mspAccount, mainAccount]);
 
-    const projectParticipant = new Acc_ProjectParticipant__c();
-    projectParticipant.Acc_AccountId__c = ppAccount.Id;
-    projectParticipant.Acc_ProjectId__c = project.Id;
-    projectParticipant.ParticipantMigrationID__c = prefix("200");
-    projectParticipant.Acc_ParticipantType__c = "Business";
-    projectParticipant.Acc_ParticipantSize__c = "Medium";
-    projectParticipant.Acc_ProjectRole__c = "Lead";
-    projectParticipant.Acc_AuditReportFrequency__c = "With all claims";
-    projectParticipant.Acc_ParticipantStatus__c = "Active";
-    projectParticipant.Acc_Award_Rate__c = 50;
-    projectParticipant.Acc_Cap_Limit__c = 50;
-    projectParticipant.Acc_FlaggedParticipant__c = false;
-    projectParticipant.Acc_OverheadRate__c = 20;
-    projectParticipant.Acc_ParticipantProjectReportingType__c = "Public";
-    projectParticipant.Acc_OrganisationType__c = "Industrial";
-    projectParticipant.Acc_CreateProfiles__c = false;
-    projectParticipant.Acc_CreateClaims__c = true;
+    const mainProjectParticipant = new Acc_ProjectParticipant__c();
+    mainProjectParticipant.Acc_AccountId__c = mainAccount.Id;
+    mainProjectParticipant.Acc_ProjectId__c = project.Id;
+    mainProjectParticipant.ParticipantMigrationID__c = prefix("200");
+    mainProjectParticipant.Acc_ParticipantType__c = "Business";
+    mainProjectParticipant.Acc_ParticipantSize__c = "Medium";
+    mainProjectParticipant.Acc_ProjectRole__c = "Lead";
+    mainProjectParticipant.Acc_AuditReportFrequency__c = "With all claims";
+    mainProjectParticipant.Acc_ParticipantStatus__c = "Active";
+    mainProjectParticipant.Acc_Award_Rate__c = 50;
+    mainProjectParticipant.Acc_Cap_Limit__c = 50;
+    mainProjectParticipant.Acc_FlaggedParticipant__c = false;
+    mainProjectParticipant.Acc_OverheadRate__c = 20;
+    mainProjectParticipant.Acc_ParticipantProjectReportingType__c = "Public";
+    mainProjectParticipant.Acc_OrganisationType__c = "Industrial";
+    mainProjectParticipant.Acc_CreateProfiles__c = false;
+    mainProjectParticipant.Acc_CreateClaims__c = false;
 
-    await Database.insert(projectParticipant);
+    // Disable Trigger__mdt so we can insert profiles/claims with impunity
+    disableClaimTrigger();
+    await Database.update(triggers);
+
+    await Database.insert([mainProjectParticipant]);
 
     const mspContact = new Contact();
     mspContact.ContactMigrationId__c = prefix("400");
@@ -109,16 +137,16 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     pmContact.Email = prefix("pm@x.gov.uk");
     pmContact.FirstName = "Project";
     pmContact.LastName = "Manager";
-    pmContact.AccountId = ppAccount.Id;
+    pmContact.AccountId = mainAccount.Id;
 
-    const fcContact = new Contact();
-    fcContact.ContactMigrationId__c = prefix("402");
-    fcContact.Email = prefix("fc@x.gov.uk");
-    fcContact.FirstName = "Finance";
-    fcContact.LastName = "Contact";
-    fcContact.AccountId = ppAccount.Id;
+    const mainFcContact = new Contact();
+    mainFcContact.ContactMigrationId__c = prefix("402");
+    mainFcContact.Email = prefix("fc1@x.gov.uk");
+    mainFcContact.FirstName = "Main Finance";
+    mainFcContact.LastName = "Contact";
+    mainFcContact.AccountId = mainAccount.Id;
 
-    await Database.insert([mspContact, pmContact, fcContact]);
+    await Database.insert([mspContact, pmContact, mainFcContact]);
 
     const mspUser = User.fromContact(mspContact);
     mspUser.boilerplate();
@@ -130,12 +158,12 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     pmUser.Alias = "pm";
     pmUser.CommunityNickname = prefix("pm");
 
-    const fcUser = User.fromContact(fcContact);
-    fcUser.boilerplate();
-    fcUser.Alias = "fc";
-    fcUser.CommunityNickname = prefix("fc");
+    const mainFcUser = User.fromContact(mainFcContact);
+    mainFcUser.boilerplate();
+    mainFcUser.Alias = "fc1";
+    mainFcUser.CommunityNickname = prefix("fc1");
 
-    await Database.insert([mspUser, pmUser, fcUser]);
+    await Database.insert([mspUser, pmUser, mainFcUser]);
 
     const mspPcl = new Acc_ProjectContactLink__c();
     mspPcl.Acc_AccountId__c = mspAccount.Id;
@@ -146,22 +174,30 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     mspPcl.Acc_Role__c = "Monitoring officer";
 
     const pmPcl = new Acc_ProjectContactLink__c();
-    pmPcl.Acc_AccountId__c = ppAccount.Id;
+    pmPcl.Acc_AccountId__c = mainAccount.Id;
     pmPcl.Acc_ContactId__c = pmContact.Id;
     pmPcl.Acc_ProjectId__c = project.Id;
     pmPcl.Acc_UserId__c = pmUser.Id;
     pmPcl.Acc_EmailOfSFContact__c = pmContact.Email;
     pmPcl.Acc_Role__c = "Project Manager";
 
-    const fcPcl = new Acc_ProjectContactLink__c();
-    fcPcl.Acc_AccountId__c = ppAccount.Id;
-    fcPcl.Acc_ContactId__c = fcContact.Id;
-    fcPcl.Acc_ProjectId__c = project.Id;
-    fcPcl.Acc_UserId__c = fcUser.Id;
-    fcPcl.Acc_EmailOfSFContact__c = fcContact.Email;
-    fcPcl.Acc_Role__c = "Finance contact";
+    const mainFcPcl = new Acc_ProjectContactLink__c();
+    mainFcPcl.Acc_AccountId__c = mainAccount.Id;
+    mainFcPcl.Acc_ContactId__c = mainFcContact.Id;
+    mainFcPcl.Acc_ProjectId__c = project.Id;
+    mainFcPcl.Acc_UserId__c = mainFcUser.Id;
+    mainFcPcl.Acc_EmailOfSFContact__c = mainFcContact.Email;
+    mainFcPcl.Acc_Role__c = "Finance contact";
 
-    await Database.insert([mspPcl, pmPcl, fcPcl]);
+    await Database.insert([mspPcl, pmPcl, mainFcPcl]);
+
+    const mainClaimsAndProfiles = makeClaims({
+      recordTypes,
+      projectParticipant: mainProjectParticipant,
+      project,
+    });
+
+    await Database.insert(mainClaimsAndProfiles.claimTotalProjectPeriods);
 
     project.Acc_ClaimFrequency__c = "Quarterly";
     project.Acc_NonFEC__c = false;
@@ -169,7 +205,6 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
     project.Acc_MonitoringReportSchedule__c = "Monthly";
     project.Acc_ProjectStatus__c = "Live";
     project.Acc_CurrentPeriodNumberHelper__c = 1;
-
     await Database.update(project);
 
     await connection.executeApex({
@@ -179,23 +214,66 @@ class BaseCrndProjectScript extends AbstractProjectFactoryScript<BaseCrndProject
       `,
     });
 
+    // Re-enable Trigger__mdt for normal projects
+    enableClaimTrigger();
+    await Database.update(triggers);
+
+    const profiles = await awaitResults(() =>
+      Database.query(
+        `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
+      ),
+    );
+
+    const updates: Acc_Profile__c[] = [];
+    for (const profile of profiles) {
+      switch (profile.RecordTypeId) {
+        case profileTotalCostCategoryRecordType.Id:
+          switch (profile.Acc_CostCategoryDescription__c) {
+            case "Overheads":
+              profile.Acc_CostCategoryGOLCost__c = 240;
+              break;
+            default:
+              profile.Acc_CostCategoryGOLCost__c = 1200;
+              break;
+          }
+          updates.push(profile);
+          await Database.update(profile);
+          break;
+        case profileProfileDetailRecordType.Id:
+          switch (profile.Acc_CostCategoryDescription__c) {
+            case "Overheads":
+              profile.Acc_LatestForecastCost__c = 20;
+              break;
+            default:
+              profile.Acc_LatestForecastCost__c = 100;
+              break;
+          }
+          updates.push(profile);
+          break;
+      }
+    }
+
+    for (const updateBatch of batch(updates)) {
+      await Database.update(updateBatch);
+    }
+
     return {
       competition,
       project,
       mspAccount,
-      ppAccount,
-      projectParticipant,
+      mainAccount,
+      mainProjectParticipant,
       mspContact,
       pmContact,
-      fcContact,
+      mainFcContact,
       mspUser,
       pmUser,
-      fcUser,
+      mainFcUser,
       mspPcl,
       pmPcl,
-      fcPcl,
+      mainFcPcl,
     };
   }
 }
 
-export { BaseCrndProjectScript, BaseCrndProjectScriptContext };
+export { BaseCrndProjectFactoryScript, BaseCrndProjectScriptContext };

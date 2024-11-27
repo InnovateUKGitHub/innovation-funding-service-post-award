@@ -1,5 +1,11 @@
 import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { DatabaseConnector } from "../database/DatabaseConnector";
+import { awaitResults } from "../helpers/awaitResults";
+import { batch } from "../helpers/batch";
+import { getRecordType } from "../helpers/getRecordType";
+import { makeClaims } from "../helpers/makeClaims";
+import { useTriggerMdt } from "../helpers/triggerMdtToggles";
+import { Acc_Profile__c } from "../sobjects/Acc_Profile__c";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -42,6 +48,24 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
     const prefix = (val: string) => `${now}.${val}`;
+
+    const [recordTypes, triggers] = await Promise.all([
+      Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
+      Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
+    ]);
+    const { disableClaimTrigger, enableClaimTrigger } = useTriggerMdt({
+      triggers,
+    });
+    const profileTotalCostCategoryRecordType = getRecordType({
+      recordTypes,
+      developerName: "Total_Cost_Category",
+      sobject: "Acc_Profile__c",
+    });
+    const profileProfileDetailRecordType = getRecordType({
+      recordTypes,
+      developerName: "Profile_Detail",
+      sobject: "Acc_Profile__c",
+    });
 
     const competition = new Competition__c();
     competition.Acc_CompetitionCode__c = prefix("000");
@@ -89,7 +113,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     secondaryAccount.OrgMigrationId__c = prefix("301");
     secondaryAccount.Name = "Hedge's Secondary Ltd.";
 
-    await Database.insert([mspAccount, mainAccount]);
+    await Database.insert([mspAccount, mainAccount, secondaryAccount]);
 
     const mainProjectParticipant = new Acc_ProjectParticipant__c();
     mainProjectParticipant.Acc_AccountId__c = mainAccount.Id;
@@ -107,7 +131,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     mainProjectParticipant.Acc_ParticipantProjectReportingType__c = "Public";
     mainProjectParticipant.Acc_OrganisationType__c = "Industrial";
     mainProjectParticipant.Acc_CreateProfiles__c = false;
-    mainProjectParticipant.Acc_CreateClaims__c = true;
+    mainProjectParticipant.Acc_CreateClaims__c = false;
 
     const secondaryProjectParticipant = new Acc_ProjectParticipant__c();
     secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
@@ -125,9 +149,13 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     secondaryProjectParticipant.Acc_ParticipantProjectReportingType__c = "Public";
     secondaryProjectParticipant.Acc_OrganisationType__c = "Industrial";
     secondaryProjectParticipant.Acc_CreateProfiles__c = false;
-    secondaryProjectParticipant.Acc_CreateClaims__c = true;
+    secondaryProjectParticipant.Acc_CreateClaims__c = false;
 
-    await Database.insert(mainProjectParticipant);
+    // Disable Trigger__mdt so we can insert profiles/claims with impunity
+    disableClaimTrigger();
+    await Database.update(triggers);
+
+    await Database.insert([mainProjectParticipant, secondaryProjectParticipant]);
 
     const mspContact = new Contact();
     mspContact.ContactMigrationId__c = prefix("400");
@@ -215,13 +243,29 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
 
     await Database.insert([mspPcl, pmPcl, mainFcPcl, secondaryFcPcl]);
 
+    const mainClaimsAndProfiles = makeClaims({
+      recordTypes,
+      projectParticipant: mainProjectParticipant,
+      project,
+    });
+
+    const secondaryClaimsAndProfiles = makeClaims({
+      recordTypes,
+      projectParticipant: secondaryProjectParticipant,
+      project,
+    });
+
+    await Promise.all([
+      Database.insert(mainClaimsAndProfiles.claimTotalProjectPeriods),
+      Database.insert(secondaryClaimsAndProfiles.claimTotalProjectPeriods),
+    ]);
+
     project.Acc_ClaimFrequency__c = "Quarterly";
     project.Acc_NonFEC__c = false;
     project.Acc_MonitoringLevel__c = "Platinum";
     project.Acc_MonitoringReportSchedule__c = "Monthly";
     project.Acc_ProjectStatus__c = "Live";
     project.Acc_CurrentPeriodNumberHelper__c = 1;
-
     await Database.update(project);
 
     await connection.executeApex({
@@ -230,6 +274,49 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
         new Acc_ProjectPeriodProcessor_Batch().start(null);
       `,
     });
+
+    // Re-enable Trigger__mdt for normal projects
+    enableClaimTrigger();
+    await Database.update(triggers);
+
+    const profiles = await awaitResults(() =>
+      Database.query(
+        `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
+      ),
+    );
+
+    const updates: Acc_Profile__c[] = [];
+    for (const profile of profiles) {
+      switch (profile.RecordTypeId) {
+        case profileTotalCostCategoryRecordType.Id:
+          switch (profile.Acc_CostCategoryDescription__c) {
+            case "Overheads":
+              profile.Acc_CostCategoryGOLCost__c = 240;
+              break;
+            default:
+              profile.Acc_CostCategoryGOLCost__c = 1200;
+              break;
+          }
+          updates.push(profile);
+          await Database.update(profile);
+          break;
+        case profileProfileDetailRecordType.Id:
+          switch (profile.Acc_CostCategoryDescription__c) {
+            case "Overheads":
+              profile.Acc_LatestForecastCost__c = 20;
+              break;
+            default:
+              profile.Acc_LatestForecastCost__c = 100;
+              break;
+          }
+          updates.push(profile);
+          break;
+      }
+    }
+
+    for (const updateBatch of batch(updates)) {
+      await Database.update(updateBatch);
+    }
 
     return {
       competition,

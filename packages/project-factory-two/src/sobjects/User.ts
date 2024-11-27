@@ -4,40 +4,40 @@ import { Contact } from "./Contact";
 class User extends AbstractSObject {
   public readonly sobject = "User";
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Username: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Email: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor FirstName: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor LastName: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Alias: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor CommunityNickname: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor EmailEncodingKey: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor LocaleSidKey: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor LanguageLocaleKey: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor TimeZoneSidKey: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor ProfileId: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor ContactId: string | undefined;
 
   /**

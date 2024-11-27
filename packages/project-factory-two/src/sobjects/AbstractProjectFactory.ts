@@ -5,6 +5,7 @@ import { ProjectFactoryMissingNonNullableFieldException } from "../exceptions/Pr
 interface SObjectFieldMetadata<T> {
   name: string;
   nullable: boolean;
+  readonly: boolean;
   set: boolean;
   value: T;
 }
@@ -37,13 +38,13 @@ abstract class AbstractSObject {
   toObject() {
     return Object.fromEntries([
       ...(this.Id ? [["Id", this.Id]] : []),
-      ...this._fields.filter(x => x.set).map(x => [x.name, x.value]),
+      ...this._fields.filter(x => x.set && !x.readonly).map(x => [x.name, x.value]),
     ]);
   }
 }
 
 // Listen to any assignments to our field values.
-function SObjectField({ nullable }: { nullable: boolean }) {
+function SObjectField({ nullable, readonly }: { nullable: boolean; readonly: boolean }) {
   return function <Input extends AbstractSObject, Output>(
     value: ClassAccessorDecoratorTarget<Input, Output>,
     context: ClassAccessorDecoratorContext<Input, Output>,
@@ -52,7 +53,13 @@ function SObjectField({ nullable }: { nullable: boolean }) {
     const fieldName = context.name as string;
 
     context.addInitializer(function (this: Input) {
-      const metadata: SObjectFieldMetadata<Output> = { name: fieldName, nullable, set: false, value: get.call(this) };
+      const metadata: SObjectFieldMetadata<Output> = {
+        name: fieldName,
+        nullable,
+        readonly,
+        set: false,
+        value: get.call(this),
+      };
       this._fields.push(metadata);
     });
 

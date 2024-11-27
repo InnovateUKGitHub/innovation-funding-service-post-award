@@ -3,7 +3,7 @@ import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 class Acc_ProjectContactLink__c extends AbstractSObject {
   public readonly sobject = "Acc_ProjectContactLink__c";
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_Role__c:
     | "Finance contact"
     | "Monitoring officer"
@@ -25,19 +25,19 @@ class Acc_ProjectContactLink__c extends AbstractSObject {
     | "Relationship Manager"
     | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_EmailOfSFContact__c: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_ProjectId__c: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_AccountId__c: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_ContactId__c: string | undefined;
 
-  @SObjectField({ nullable: false })
+  @SObjectField({ nullable: false, readonly: false })
   accessor Acc_UserId__c: string | undefined;
 }
 
