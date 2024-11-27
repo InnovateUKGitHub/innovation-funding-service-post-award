@@ -135,7 +135,8 @@ export const test = base.extend<AccFixtures, Workers>({
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
-  accUserSwitcher: ({ page, context, projectState }, use) => use(new AccUserSwitcher({ page, context, projectState })),
+  accUserSwitcher: ({ context, projectState, sfdcApi }, use) =>
+    use(new AccUserSwitcher({ context, projectState, sfdcApi })),
   validators: ({ page, commands }, use) => use(new Validators({ page, commands })),
   // Salesforce (dot com)
   sfdcApi: [SfdcApi.create, { scope: "worker" }],

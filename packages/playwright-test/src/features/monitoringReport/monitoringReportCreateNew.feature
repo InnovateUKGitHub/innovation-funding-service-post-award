@@ -1,8 +1,8 @@
 @mode:serial
 Feature: New Monitoring Report
   Scenario: Completing Monitoring Report
-    Given a standard CR&D project exists
-    And the user is a monitoring officer
+    Given a multi-partner CR&D project exists
+    And the user is the "mspUser" user
     Then the user is on the project overview
 
     When the user selects the "Monitoring reports" tile

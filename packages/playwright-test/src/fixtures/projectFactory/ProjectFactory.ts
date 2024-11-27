@@ -1,10 +1,10 @@
-import { sleep } from "../../helpers/sleep";
+import { AbstractProjectFactoryScript } from "@innovateuk/project-factory-two/scripts/AbstractProjectFactoryScript";
+import { AbstractSObject } from "@innovateuk/project-factory-two/sobjects/AbstractProjectFactory";
+import { ITsforceConnection } from "@innovateuk/tsforce/types/ITsforceConnection";
 import { SfdcApi } from "../sfdc/SfdcApi";
 import { ProjectState } from "./ProjectState";
-import { ITsforceConnection } from "@innovateuk/tsforce/types/ITsforceConnection";
-import { AbstractProjectFactoryScript } from "@innovateuk/project-factory-two/scripts/AbstractProjectFactoryScript";
 
-export abstract class ProjectFactory<Context> {
+export abstract class ProjectFactory<Context extends Record<string, AbstractSObject>, Arguments> {
   public static projectState: ProjectState | null;
   protected readonly sfdcApi: SfdcApi;
   protected projectState: ProjectState | null;
@@ -20,11 +20,13 @@ export abstract class ProjectFactory<Context> {
     connection,
   }: {
     connection: ITsforceConnection;
-  }): AbstractProjectFactoryScript<Context>;
+  }): AbstractProjectFactoryScript<Context, Arguments>;
 
-  protected async createProject() {
+  protected async createProject(args: Arguments) {
     const connection = await this.sfdcApi.getTsforceConnection();
     const script = this.getScript({ connection });
-    this.context = await script.run();
+    const context = await script.run(args);
+    this.context = context;
+    this.projectState.context = context;
   }
 }

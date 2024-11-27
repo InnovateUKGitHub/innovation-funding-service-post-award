@@ -1,15 +1,15 @@
 @mode:serial
 Feature: Project details
     Scenario: Reviewing the project details page
-        Given a standard CR&D project exists
-        And the user is a project manager
+        Given a multi-partner CR&D project exists
+        And the user is the "mainFcUser" user
         And the user is on the project overview
         When the user selects the "Project details" tile
         Then Project details will be displayed with correct information
 
     Scenario: Updating the project location postcode
-        Given a standard CR&D project exists
-        And the user is a finance contact
+        Given a multi-partner CR&D project exists
+        And the user is the "mainFcUser" user
         And the user has navigated to the project details page
         When the user clicks on the "Hedge's Consulting Ltd. (Lead)" partner name
         Then the partner information page is displayed
@@ -24,8 +24,8 @@ Feature: Project details
         Then the new location is displayed on Project details page
 
     Scenario: Validating the postcode box in Partner information
-        Given a standard CR&D project exists
-        And the user is a finance contact
+        Given a multi-partner CR&D project exists
+        And the user is the "mainFcUser" user
         And the user has navigated to "Hedge's Consulting Ltd. (Lead)" Partner information
         When the user exceeds 10 characters in the postcode field
         Then the postcode character limit is validated

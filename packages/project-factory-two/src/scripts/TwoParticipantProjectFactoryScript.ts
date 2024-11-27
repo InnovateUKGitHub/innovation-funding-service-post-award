@@ -15,7 +15,12 @@ import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 
-interface TwoParticipantProjectFactoryScriptContext {
+interface TwoParticipantProjectFactoryScriptArguments {
+  competitionType: "CR&D" | "SBRI";
+  profiles: boolean;
+}
+
+type TwoParticipantProjectFactoryScriptContext = {
   competition: Competition__c;
   project: Acc_Project__c;
   mspAccount: Account;
@@ -35,15 +40,20 @@ interface TwoParticipantProjectFactoryScriptContext {
   pmPcl: Acc_ProjectContactLink__c;
   mainFcPcl: Acc_ProjectContactLink__c;
   secondaryFcPcl: Acc_ProjectContactLink__c;
-}
+};
 
-class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<TwoParticipantProjectFactoryScriptContext> {
+class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
+  TwoParticipantProjectFactoryScriptContext,
+  TwoParticipantProjectFactoryScriptArguments
+> {
   async script({
     connection,
     Database,
+    args,
   }: {
     connection: ITsforceConnection;
     Database: DatabaseConnector;
+    args: TwoParticipantProjectFactoryScriptArguments;
   }): Promise<TwoParticipantProjectFactoryScriptContext> {
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
@@ -70,7 +80,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     const competition = new Competition__c();
     competition.Acc_CompetitionCode__c = prefix("000");
     competition.Acc_CompetitionName__c = "High-carbon inefficient motorways";
-    competition.Acc_CompetitionType__c = "CR&D";
+    competition.Acc_CompetitionType__c = args.competitionType;
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
@@ -154,7 +164,6 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     // Disable Trigger__mdt so we can insert profiles/claims with impunity
     disableClaimTrigger();
     await Database.update(triggers);
-
     await Database.insert([mainProjectParticipant, secondaryProjectParticipant]);
 
     const mspContact = new Contact();
@@ -243,21 +252,21 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
 
     await Database.insert([mspPcl, pmPcl, mainFcPcl, secondaryFcPcl]);
 
-    const mainClaimsAndProfiles = makeClaims({
+    const mainClaims = makeClaims({
       recordTypes,
       projectParticipant: mainProjectParticipant,
       project,
     });
 
-    const secondaryClaimsAndProfiles = makeClaims({
+    const secondaryClaims = makeClaims({
       recordTypes,
       projectParticipant: secondaryProjectParticipant,
       project,
     });
 
     await Promise.all([
-      Database.insert(mainClaimsAndProfiles.claimTotalProjectPeriods),
-      Database.insert(secondaryClaimsAndProfiles.claimTotalProjectPeriods),
+      Database.insert(mainClaims.claimTotalProjectPeriods),
+      Database.insert(secondaryClaims.claimTotalProjectPeriods),
     ]);
 
     project.Acc_ClaimFrequency__c = "Quarterly";
@@ -279,43 +288,44 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
     enableClaimTrigger();
     await Database.update(triggers);
 
-    const profiles = await awaitResults(() =>
-      Database.query(
-        `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
-      ),
-    );
+    if (args.profiles) {
+      const profiles = await awaitResults(() =>
+        Database.query(
+          `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
+        ),
+      );
 
-    const updates: Acc_Profile__c[] = [];
-    for (const profile of profiles) {
-      switch (profile.RecordTypeId) {
-        case profileTotalCostCategoryRecordType.Id:
-          switch (profile.Acc_CostCategoryDescription__c) {
-            case "Overheads":
-              profile.Acc_CostCategoryGOLCost__c = 240;
-              break;
-            default:
-              profile.Acc_CostCategoryGOLCost__c = 1200;
-              break;
-          }
-          updates.push(profile);
-          await Database.update(profile);
-          break;
-        case profileProfileDetailRecordType.Id:
-          switch (profile.Acc_CostCategoryDescription__c) {
-            case "Overheads":
-              profile.Acc_LatestForecastCost__c = 20;
-              break;
-            default:
-              profile.Acc_LatestForecastCost__c = 100;
-              break;
-          }
-          updates.push(profile);
-          break;
+      const updates: Acc_Profile__c[] = [];
+      for (const profile of profiles) {
+        switch (profile.RecordTypeId) {
+          case profileTotalCostCategoryRecordType.Id:
+            switch (profile.Acc_CostCategoryDescription__c) {
+              case "Overheads":
+                profile.Acc_CostCategoryGOLCost__c = 240;
+                break;
+              default:
+                profile.Acc_CostCategoryGOLCost__c = 1200;
+                break;
+            }
+            updates.push(profile);
+            break;
+          case profileProfileDetailRecordType.Id:
+            switch (profile.Acc_CostCategoryDescription__c) {
+              case "Overheads":
+                profile.Acc_LatestForecastCost__c = 20;
+                break;
+              default:
+                profile.Acc_LatestForecastCost__c = 100;
+                break;
+            }
+            updates.push(profile);
+            break;
+        }
       }
-    }
 
-    for (const updateBatch of batch(updates)) {
-      await Database.update(updateBatch);
+      for (const updateBatch of batch(updates)) {
+        await Database.update(updateBatch);
+      }
     }
 
     return {
@@ -342,4 +352,8 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<Tw
   }
 }
 
-export { TwoParticipantProjectFactoryScript, TwoParticipantProjectFactoryScriptContext };
+export {
+  TwoParticipantProjectFactoryScript,
+  TwoParticipantProjectFactoryScriptArguments,
+  TwoParticipantProjectFactoryScriptContext,
+};

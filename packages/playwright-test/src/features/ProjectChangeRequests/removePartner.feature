@@ -5,7 +5,7 @@ Feature: Remove a partner
 
     Scenario: Completing a Remove partner PCR
         Given a multi-partner CR&D project exists
-        And the user is a project manager
+        And the user is the "pmUser" user
         And the user has navigated to the project change request page
         And the user creates a "Remove a partner" PCR
         When the user clicks the "Remove a partner" PCR type

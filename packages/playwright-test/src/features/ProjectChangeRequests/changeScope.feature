@@ -2,8 +2,8 @@
 Feature: Change project scope
 
     Scenario: Creating and submitting Change project scope PCR
-        Given a standard CR&D project exists
-        And the user is a project manager
+        Given a multi-partner CR&D project exists
+        And the user is the "pmUser" user
         And the user has navigated to the project change request page
         And the user creates a "Change project scope" PCR
         When the user clicks the "Change project scope" PCR type
@@ -26,8 +26,8 @@ Feature: Change project scope
         Then the user will see the submitted page for "Change project scope"
 
     Scenario: Reviewing a Change project scope PCR as Monitoring Officer
-        Given a standard CR&D project exists
-        And the user is a monitoring officer
+        Given a multi-partner CR&D project exists
+        And the user is the "mspUser" user
         And the user has navigated to the project change request page
         When the user clicks review against "Change project scope"
         Then the user can see the request page for "Change project scope"
@@ -53,8 +53,8 @@ Feature: Change project scope
         Then the "Change project scope" PCR has the status "Queried to Project Manager"
 
     Scenario: Resubmitting Change project scope PCR as Project Manager
-        Given a standard CR&D project exists
-        And the user is a project manager
+        Given a multi-partner CR&D project exists
+        And the user is the "pmUser" user
         And the user has navigated to the project change request page
         When the user accesses the queried "Change project scope" PCR
         Then the user can see the comments from the "Monitoring Officer"
@@ -64,8 +64,8 @@ Feature: Change project scope
         Then the user can see the request page for "Change project scope"
 
     Scenario: Reviewing and submitting Change project scope PCR as Monitoring Officer
-        Given a standard CR&D project exists
-        And the user is a monitoring officer
+        Given a multi-partner CR&D project exists
+        And the user is the "mspUser" user
         And the user has navigated to the project change request page
         When the user clicks review against "Change project scope"
         Then the user can see the request page for "Change project scope"

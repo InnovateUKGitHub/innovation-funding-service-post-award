@@ -2,7 +2,7 @@ import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 import * as prettier from "prettier";
 
-abstract class AbstractApexScript extends AbstractProjectFactoryScript<Record<string, never>> {
+abstract class AbstractApexScript extends AbstractProjectFactoryScript<Record<string, never>, Record<string, never>> {
   abstract apex: string;
 
   async script({ connection }: { connection: ITsforceConnection }): Promise<Record<string, never>> {

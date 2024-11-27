@@ -7,7 +7,19 @@ class Competition__c extends AbstractSObject {
   accessor Acc_CompetitionCode__c: string | undefined;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_CompetitionType__c: "CR&D" | "KTP" | undefined;
+  accessor Acc_CompetitionType__c:
+    | "CR&D"
+    | "CONTRACTS"
+    | "SBRI"
+    | "SBRI IFS"
+    | "KTP"
+    | "CATAPULTS"
+    | "LOANS"
+    | "EDGE"
+    | "Horizon Europe Participation"
+    | "Combined Capital"
+    | "Ofgem"
+    | undefined;
 
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_CompetitionName__c: string | undefined;

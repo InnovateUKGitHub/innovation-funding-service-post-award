@@ -24,7 +24,7 @@ const makeClaims = ({
 
   for (let i = 1; i <= numberOfPeriods; i++) {
     const claim = new Acc_Claims__c();
-    claim.Acc_ClaimStatus__c = "New";
+    claim.Acc_ClaimStatus__c = i === 1 ? "Draft" : "New";
     claim.Acc_ProjectPeriodNumber__c = i;
     claim.Acc_ProjectParticipant__c = projectParticipant.Id;
     claim.RecordTypeId = claimTotalProjectPeriodRecordType.Id;

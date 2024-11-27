@@ -3,6 +3,7 @@ import { SfdcLightningSearchButton } from "../../../components/sfdc/SfdcLightnin
 import { SfdcLightningPage } from "../SfdcLightningPage";
 import { ProjectState } from "../../projectFactory/ProjectState";
 import { SfdcLightningSearchDialogInstantResultItemComponent } from "../../../components/sfdc/SfdcLightningSearchDialogInstantResultItemComponent";
+import { Acc_Project__c } from "@innovateuk/project-factory-two/sobjects/Acc_Project__c";
 
 export abstract class SfdcBasePage {
   protected readonly sfdcLightningPage: SfdcLightningPage;
@@ -32,7 +33,9 @@ export abstract class SfdcBasePage {
 
   @When("the internal user searches for the project")
   public async enterProjectNumber() {
-    await this.sfdcLightningPage.page.keyboard.type(this.projectState.prefixedProjectNumber());
+    await this.sfdcLightningPage.page.keyboard.type(
+      (this.projectState.context.project as Acc_Project__c | undefined)?.Acc_ProjectNumber__c,
+    );
   }
 
   public async clickShowMoreResults() {

@@ -1,37 +1,38 @@
 import { BrowserContext, Page } from "@playwright/test";
 import { Fixture, Given } from "playwright-bdd/decorators";
 import { ProjectState } from "../projectFactory/ProjectState";
-import { DevTools } from "../../components/DevTools";
-import { error } from "console";
+import { User } from "@innovateuk/project-factory-two/sobjects/User";
+import { SfdcApi } from "../sfdc/SfdcApi";
+import { sleep } from "../../helpers/sleep";
 
 export
 @Fixture("accUserSwitcher")
 class AccUserSwitcher {
-  private readonly page: Page;
   private readonly context: BrowserContext;
   private readonly projectState: ProjectState;
-  private readonly devtools: DevTools;
+  private readonly sfdcApi: SfdcApi;
 
-  constructor({ page, context, projectState }: { page: Page; context: BrowserContext; projectState: ProjectState }) {
-    this.page = page;
+  constructor({
+    context,
+    projectState,
+    sfdcApi,
+  }: {
+    context: BrowserContext;
+    projectState: ProjectState;
+    sfdcApi: SfdcApi;
+  }) {
     this.context = context;
     this.projectState = projectState;
-    this.devtools = new DevTools({ page });
+    this.sfdcApi = sfdcApi;
   }
 
-  @Given("the user is a finance contact")
-  public switchToFinanceContact() {
-    return this.switch(this.getUsername("fc"));
-  }
+  @Given("the user is the {string} user")
+  public switchToFinanceContact(userKey: "string") {
+    const user = this.projectState.context[userKey];
+    if (!(user instanceof User)) throw new Error(`${userKey} is not of type User.`);
+    if (!(typeof user.Username === "string")) throw new Error("User does not have a username defined");
 
-  @Given("the user is a project manager")
-  public switchToProjectManager() {
-    return this.switch(this.getUsername("pm"));
-  }
-
-  @Given("the user is a monitoring officer")
-  public switchToMonitoringOfficer() {
-    return this.switch(this.getUsername("mo"));
+    return this.switch(user.Username);
   }
 
   @Given("the user is the system user")
@@ -39,18 +40,20 @@ class AccUserSwitcher {
     return this.switch("");
   }
 
-  private switch(username: string = "") {
+  private async switch(username: string = "") {
     console.log("acc user switcher", username);
-    return this.context.setExtraHTTPHeaders({ "x-acc-userswitcher": username });
-  }
 
-  private getUsername(substr: string) {
-    const username = this.projectState.usernames.find(x => x.includes(substr));
-    if (!username) {
-      throw new Error(`Cannot find ${substr} in list ${this.projectState.usernames.join(", ")}`);
-    } else {
-      console.log("Username", username);
+    while (true) {
+      try {
+        // Wait until a login is successful
+        await this.sfdcApi.getSalesforceToken(username);
+        break;
+      } catch (e) {
+        console.log(e);
+      }
+      await sleep(2000);
     }
-    return this.projectState.prefix + username;
+
+    return this.context.setExtraHTTPHeaders({ "x-acc-userswitcher": username });
   }
 }

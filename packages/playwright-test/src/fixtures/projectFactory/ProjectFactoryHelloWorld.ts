@@ -5,13 +5,13 @@ import { ITsforceConnection } from "@innovateuk/tsforce/index";
 
 export
 @Fixture("projectFactoryHelloWorld")
-class ProjectFactoryHelloWorld extends ProjectFactory<unknown> {
+class ProjectFactoryHelloWorld extends ProjectFactory<{}, {}> {
   getScript({ connection }: { connection: ITsforceConnection }) {
     return new HelloWorldApexScript({ connection });
   }
 
   @Given("a connection to Salesforce exists")
   async create() {
-    await this.createProject();
+    await this.createProject({});
   }
 }

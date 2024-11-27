@@ -2,8 +2,8 @@
 Feature: Put a project on hold
 
   Background:
-    Given a standard CR&D project exists
-    And the user is a project manager
+    Given a multi-partner CR&D project exists
+    And the user is the "pmUser" user
     And the user is on the project overview
     When the user selects the "Project change requests" tile
     Then the project change request page is displayed
@@ -35,7 +35,7 @@ Feature: Put a project on hold
   #Todo: Update the step above to save and return to request and then create another scenario to edit and submit the PCR
 
   Scenario: Verify that MO can query a PCR
-    Given the user is a monitoring officer
+    Given the user is the "mspUser" user
     And the user is on the project overview
     When the user selects the "Project change requests" tile
     Then the user sees the following table
@@ -49,7 +49,7 @@ Feature: Put a project on hold
 
 
   Scenario: PM can resubmit a PCR
-    Given the user is a project manager
+    Given the user is the "pmUser" user
     And the user is on the project overview
     When the user selects the "Project change requests" tile
     Then the user should see the following queried request table

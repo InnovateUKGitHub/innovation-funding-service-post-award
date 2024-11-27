@@ -6,7 +6,6 @@ import { getLorem } from "../../../../components/lorem";
 import path from "path";
 import { DataTable } from "playwright-bdd";
 import { Commands } from "../../../Commands";
-import { ProjectCard } from "../../../../components/ProjectCard";
 import { ProjectChangeRequests } from "./ProjectChangeRequests";
 
 export

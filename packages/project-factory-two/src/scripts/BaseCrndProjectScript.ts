@@ -15,7 +15,9 @@ import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 
-interface BaseCrndProjectScriptContext {
+interface BaseCrndProjectScriptArguments {}
+
+type BaseCrndProjectScriptContext = {
   competition: Competition__c;
   project: Acc_Project__c;
   mspAccount: Account;
@@ -30,9 +32,12 @@ interface BaseCrndProjectScriptContext {
   mspPcl: Acc_ProjectContactLink__c;
   pmPcl: Acc_ProjectContactLink__c;
   mainFcPcl: Acc_ProjectContactLink__c;
-}
+};
 
-class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<BaseCrndProjectScriptContext> {
+class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
+  BaseCrndProjectScriptContext,
+  BaseCrndProjectScriptArguments
+> {
   async script({
     connection,
     Database,
@@ -276,4 +281,4 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<BaseCrnd
   }
 }
 
-export { BaseCrndProjectFactoryScript, BaseCrndProjectScriptContext };
+export { BaseCrndProjectFactoryScript, BaseCrndProjectScriptArguments, BaseCrndProjectScriptContext };
