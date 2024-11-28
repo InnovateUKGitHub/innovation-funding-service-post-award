@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "inputs": ["src/**"],
-      "dependsOn": ["@innovateuk/project-factory#build"]
+      "dependsOn": ["@innovateuk/project-factory-two#build"]
     },
     "pw": {
       "persistent": true,

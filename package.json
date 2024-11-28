@@ -7,7 +7,6 @@
     "./packages/environment-manager",
     "./packages/logger",
     "./packages/playwright-test",
-    "./packages/project-factory",
     "./packages/project-factory-two",
     "./packages/tsforce",
     "./packages/update-schema"
