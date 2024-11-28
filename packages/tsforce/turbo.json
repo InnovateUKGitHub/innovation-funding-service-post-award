@@ -10,7 +10,7 @@
     "typegen": {
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "dependsOn": ["@innovateuk/logger#build"]
+      "dependsOn": ["@innovateuk/logger#typegen"]
     }
   }
 }

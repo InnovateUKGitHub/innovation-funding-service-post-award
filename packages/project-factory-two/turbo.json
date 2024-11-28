@@ -8,11 +8,17 @@
     "build": {
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
-      "dependsOn": ["@innovateuk/project-factory-two#typegen", "@innovateuk/common#build", "@innovateuk/logger#build"]
+      "dependsOn": [
+        "@innovateuk/project-factory-two#typegen",
+        "@innovateuk/tsforce#build",
+        "@innovateuk/common#build",
+        "@innovateuk/logger#build"
+      ]
     },
     "typegen": {
       "inputs": ["src/**"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "dependsOn": ["@innovateuk/tsforce#typegen", "@innovateuk/common#typegen", "@innovateuk/logger#typegen"]
     }
   }
 }
