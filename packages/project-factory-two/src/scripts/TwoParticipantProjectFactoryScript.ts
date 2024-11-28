@@ -18,6 +18,12 @@ import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 interface TwoParticipantProjectFactoryScriptArguments {
   competitionType: "CR&D" | "SBRI";
   profiles: boolean;
+  usernames?: {
+    msp: string;
+    pm: string;
+    mainFc: string;
+    secondaryFc: string;
+  };
 }
 
 type TwoParticipantProjectFactoryScriptContext = {
@@ -28,10 +34,6 @@ type TwoParticipantProjectFactoryScriptContext = {
   secondaryAccount: Account;
   mainProjectParticipant: Acc_ProjectParticipant__c;
   secondaryProjectParticipant: Acc_ProjectParticipant__c;
-  mspContact: Contact;
-  pmContact: Contact;
-  mainFcContact: Contact;
-  secondaryFcContact: Contact;
   mspUser: User;
   pmUser: User;
   mainFcUser: User;
@@ -166,88 +168,110 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     await Database.update(triggers);
     await Database.insert([mainProjectParticipant, secondaryProjectParticipant]);
 
-    const mspContact = new Contact();
-    mspContact.ContactMigrationId__c = prefix("400");
-    mspContact.Email = prefix("mo@x.gov.uk");
-    mspContact.FirstName = "Monitoring";
-    mspContact.LastName = "Officer";
-    mspContact.AccountId = mspAccount.Id;
+    let mspUser: User;
+    let pmUser: User;
+    let mainFcUser: User;
+    let secondaryFcUser: User;
 
-    const pmContact = new Contact();
-    pmContact.ContactMigrationId__c = prefix("401");
-    pmContact.Email = prefix("pm@x.gov.uk");
-    pmContact.FirstName = "Project";
-    pmContact.LastName = "Manager";
-    pmContact.AccountId = mainAccount.Id;
+    if (args.usernames) {
+      const usernames = args.usernames;
+      const users = await Database.query(
+        `SELECT Id, ContactId, Username FROM User WHERE Username IN ('${usernames.msp}', '${usernames.pm}', '${usernames.mainFc}', '${usernames.secondaryFc}')`,
+      );
+      let mspUserSearchResult = users.find(x => usernames.msp === x.Username);
+      let pmUserSearchResult = users.find(x => usernames.pm === x.Username);
+      let mainFcUserSearchResult = users.find(x => usernames.mainFc === x.Username);
+      let secondaryFcUserSearchResult = users.find(x => usernames.secondaryFc === x.Username);
 
-    const mainFcContact = new Contact();
-    mainFcContact.ContactMigrationId__c = prefix("402");
-    mainFcContact.Email = prefix("fc1@x.gov.uk");
-    mainFcContact.FirstName = "Main Finance";
-    mainFcContact.LastName = "Contact";
-    mainFcContact.AccountId = mainAccount.Id;
+      if (!mspUserSearchResult) throw new Error("Could not find mspUserSearchResult");
+      if (!pmUserSearchResult) throw new Error("Could not find pmUserSearchResult");
+      if (!mainFcUserSearchResult) throw new Error("Could not find mainFcUserSearchResult");
+      if (!secondaryFcUserSearchResult) throw new Error("Could not find secondaryFcUserSearchResult");
 
-    const secondaryFcContact = new Contact();
-    secondaryFcContact.ContactMigrationId__c = prefix("402");
-    secondaryFcContact.Email = prefix("fc2@x.gov.uk");
-    secondaryFcContact.FirstName = "Secondary Finance";
-    secondaryFcContact.LastName = "Contact";
-    secondaryFcContact.AccountId = mainAccount.Id;
+      mspUser = mspUserSearchResult;
+      pmUser = pmUserSearchResult;
+      mainFcUser = mainFcUserSearchResult;
+      secondaryFcUser = secondaryFcUserSearchResult;
+    } else {
+      const mspContact = new Contact();
+      mspContact.ContactMigrationId__c = prefix("400");
+      mspContact.Email = prefix("mo@x.gov.uk");
+      mspContact.FirstName = "Monitoring";
+      mspContact.LastName = "Officer";
+      mspContact.AccountId = mspAccount.Id;
 
-    await Database.insert([mspContact, pmContact, mainFcContact, secondaryFcContact]);
+      const pmContact = new Contact();
+      pmContact.ContactMigrationId__c = prefix("401");
+      pmContact.Email = prefix("pm@x.gov.uk");
+      pmContact.FirstName = "Project";
+      pmContact.LastName = "Manager";
+      pmContact.AccountId = mainAccount.Id;
 
-    const mspUser = User.fromContact(mspContact);
-    mspUser.boilerplate();
-    mspUser.Alias = "msp";
-    mspUser.CommunityNickname = prefix("msp");
+      const mainFcContact = new Contact();
+      mainFcContact.ContactMigrationId__c = prefix("402");
+      mainFcContact.Email = prefix("fc1@x.gov.uk");
+      mainFcContact.FirstName = "Main Finance";
+      mainFcContact.LastName = "Contact";
+      mainFcContact.AccountId = mainAccount.Id;
 
-    const pmUser = User.fromContact(pmContact);
-    pmUser.boilerplate();
-    pmUser.Alias = "pm";
-    pmUser.CommunityNickname = prefix("pm");
+      const secondaryFcContact = new Contact();
+      secondaryFcContact.ContactMigrationId__c = prefix("402");
+      secondaryFcContact.Email = prefix("fc2@x.gov.uk");
+      secondaryFcContact.FirstName = "Secondary Finance";
+      secondaryFcContact.LastName = "Contact";
+      secondaryFcContact.AccountId = mainAccount.Id;
 
-    const mainFcUser = User.fromContact(mainFcContact);
-    mainFcUser.boilerplate();
-    mainFcUser.Alias = "fc1";
-    mainFcUser.CommunityNickname = prefix("fc1");
+      await Database.insert([mspContact, pmContact, mainFcContact, secondaryFcContact]);
 
-    const secondaryFcUser = User.fromContact(secondaryFcContact);
-    secondaryFcUser.boilerplate();
-    secondaryFcUser.Alias = "fc2";
-    secondaryFcUser.CommunityNickname = prefix("fc2");
+      mspUser = User.fromContact(mspContact);
+      mspUser.Alias = "msp";
+      mspUser.CommunityNickname = prefix("msp");
 
-    await Database.insert([mspUser, pmUser, mainFcUser, secondaryFcUser]);
+      pmUser = User.fromContact(pmContact);
+      pmUser.Alias = "pm";
+      pmUser.CommunityNickname = prefix("pm");
+
+      mainFcUser = User.fromContact(mainFcContact);
+      mainFcUser.Alias = "fc1";
+      mainFcUser.CommunityNickname = prefix("fc1");
+
+      secondaryFcUser = User.fromContact(secondaryFcContact);
+      secondaryFcUser.Alias = "fc2";
+      secondaryFcUser.CommunityNickname = prefix("fc2");
+
+      await Database.insert([mspUser, pmUser, mainFcUser, secondaryFcUser]);
+    }
 
     const mspPcl = new Acc_ProjectContactLink__c();
     mspPcl.Acc_AccountId__c = mspAccount.Id;
-    mspPcl.Acc_ContactId__c = mspContact.Id;
+    mspPcl.Acc_ContactId__c = mspUser.ContactId;
     mspPcl.Acc_ProjectId__c = project.Id;
     mspPcl.Acc_UserId__c = mspUser.Id;
-    mspPcl.Acc_EmailOfSFContact__c = mspContact.Email;
+    mspPcl.Acc_EmailOfSFContact__c = mspUser.Username;
     mspPcl.Acc_Role__c = "Monitoring officer";
 
     const pmPcl = new Acc_ProjectContactLink__c();
     pmPcl.Acc_AccountId__c = mainAccount.Id;
-    pmPcl.Acc_ContactId__c = pmContact.Id;
+    pmPcl.Acc_ContactId__c = pmUser.ContactId;
     pmPcl.Acc_ProjectId__c = project.Id;
     pmPcl.Acc_UserId__c = pmUser.Id;
-    pmPcl.Acc_EmailOfSFContact__c = pmContact.Email;
+    pmPcl.Acc_EmailOfSFContact__c = pmUser.Username;
     pmPcl.Acc_Role__c = "Project Manager";
 
     const mainFcPcl = new Acc_ProjectContactLink__c();
     mainFcPcl.Acc_AccountId__c = mainAccount.Id;
-    mainFcPcl.Acc_ContactId__c = mainFcContact.Id;
+    mainFcPcl.Acc_ContactId__c = mainFcUser.ContactId;
     mainFcPcl.Acc_ProjectId__c = project.Id;
     mainFcPcl.Acc_UserId__c = mainFcUser.Id;
-    mainFcPcl.Acc_EmailOfSFContact__c = mainFcContact.Email;
+    mainFcPcl.Acc_EmailOfSFContact__c = mainFcUser.Username;
     mainFcPcl.Acc_Role__c = "Finance contact";
 
     const secondaryFcPcl = new Acc_ProjectContactLink__c();
     secondaryFcPcl.Acc_AccountId__c = mainAccount.Id;
-    secondaryFcPcl.Acc_ContactId__c = secondaryFcContact.Id;
+    secondaryFcPcl.Acc_ContactId__c = secondaryFcUser.ContactId;
     secondaryFcPcl.Acc_ProjectId__c = project.Id;
     secondaryFcPcl.Acc_UserId__c = secondaryFcUser.Id;
-    secondaryFcPcl.Acc_EmailOfSFContact__c = secondaryFcContact.Email;
+    secondaryFcPcl.Acc_EmailOfSFContact__c = secondaryFcUser.Username;
     secondaryFcPcl.Acc_Role__c = "Finance contact";
 
     await Database.insert([mspPcl, pmPcl, mainFcPcl, secondaryFcPcl]);
