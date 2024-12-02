@@ -48,7 +48,7 @@ export const useOnUpdatePartnerDetails = (
         partnerId,
         partnerDto: {
           ...partner,
-          postcode: data.postcode,
+          postcode: data.postcode?.toUpperCase(),
           id: partnerId,
           projectId,
           form: data.form as UpdatePartnerFormType,
