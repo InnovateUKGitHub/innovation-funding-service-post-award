@@ -3,6 +3,7 @@ import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { ProjectSetupCommand } from "@server/features/partners/projectSetupCommand";
 import { ProjectSetupPostcodeCommand } from "@server/features/partners/projectSetupPostcodeCommand";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { processDto } from "@shared/processResponse";
@@ -53,6 +54,9 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
     switch (params.partnerDto.form) {
       case FormTypes.ProjectSetupPostcode:
         await ctx.runCommand(new ProjectSetupPostcodeCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
+        break;
+      case FormTypes.ProjectSetup:
+        await ctx.runCommand(new ProjectSetupCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
         break;
       default:
         await ctx.runCommand(
