@@ -66,6 +66,10 @@ class AccNavigation {
     this.projectDocuments = projectDocuments;
   }
 
+  public clearCache() {
+    this.testCache.invalidate(["accNavigation"]);
+  }
+
   @Given("the user is on the developer homepage")
   async gotoDeveloperHomepage() {
     await this.page.goto("/");
@@ -74,15 +78,14 @@ class AccNavigation {
 
   @Given("the user is on the project dashboard")
   async gotoProjectDashboard() {
-    await this.gotoDeveloperHomepage();
-    await this.developerHomepage.selectProjectTile();
+    await this.page.goto("/projects/dashboard");
     await this.projectDashboard.isPage();
   }
 
   @Given("the user is on the project overview")
   async gotoProjectOverview() {
     await this.testCache.cache(
-      ["gotoProjectOverview", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "gotoProjectOverview", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectDashboard();
         await ProjectCard.fromTitle(this.page, this.projectState.prefixedProjectNumber()).click();
@@ -104,7 +107,7 @@ class AccNavigation {
   @Given("the user is on the project forecasts")
   async gotoProjectForecasts() {
     await this.testCache.cache(
-      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Forecast").click();
@@ -122,7 +125,7 @@ class AccNavigation {
   @Given("the user has navigated to the monitoring reports page")
   async gotoMonitoringReports() {
     await this.testCache.cache(
-      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Monitoring reports").click();
@@ -140,7 +143,7 @@ class AccNavigation {
   @Given("the user has navigated to the project change request page")
   async gotoProjectChangeRequests() {
     await this.testCache.cache(
-      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Project change requests").click();
@@ -158,7 +161,7 @@ class AccNavigation {
   @Given("the user has navigated to the project details page")
   async gotoProjectDetails() {
     await this.testCache.cache(
-      ["gotoProjectDetails", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "gotoProjectDetails", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Project details").click();
@@ -184,7 +187,7 @@ class AccNavigation {
   @Given("the user has navigated to the project documents page")
   async gotoProjectDocuments() {
     await this.testCache.cache(
-      ["goToProjectDocuments", this.projectState.prefixedProjectNumber()],
+      ["accNavigation", "goToProjectDocuments", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Documents").click();

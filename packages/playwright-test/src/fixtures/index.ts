@@ -27,6 +27,9 @@ import { ProjectDetails } from "./acc/pages/ProjectDetails";
 import { ProjectDocuments } from "./acc/pages/ProjectDocuments";
 import { Validators } from "./validators";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
+import { IfsLoginPage } from "./ifs-auth/IfsLoginPage";
+import { IfsAuthNavigation } from "./ifs-auth/IfsAuthNavigation";
+import { Environment } from "./Environment";
 
 type AccFixtures = {
   // Pages
@@ -59,6 +62,10 @@ type AccFixtures = {
   sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage;
   sfdcNavigation: SfdcNavigation;
   sfdcSearchResultsPage: SfdcSearchResultsPage;
+
+  // IFS Auth
+  ifsAuthNavigation: IfsAuthNavigation;
+  ifsLoginPage: IfsLoginPage;
 };
 
 interface Workers {
@@ -67,6 +74,7 @@ interface Workers {
   accProjectMulti: AccProjectMulti;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
+  environment: Environment;
 }
 
 export const test = base.extend<AccFixtures, Workers>({
@@ -135,9 +143,23 @@ export const test = base.extend<AccFixtures, Workers>({
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
-  accUserSwitcher: ({ context, projectState, sfdcApi }, use) =>
-    use(new AccUserSwitcher({ context, projectState, sfdcApi })),
+  accUserSwitcher: (
+    { context, projectState, sfdcApi, accNavigation, ifsAuthNavigation, ifsLoginPage, environment },
+    use,
+  ) =>
+    use(
+      new AccUserSwitcher({
+        context,
+        projectState,
+        sfdcApi,
+        accNavigation,
+        ifsAuthNavigation,
+        ifsLoginPage,
+        environment,
+      }),
+    ),
   validators: ({ page, commands }, use) => use(new Validators({ page, commands })),
+
   // Salesforce (dot com)
   sfdcApi: [SfdcApi.create, { scope: "worker" }],
   sfdcPage: SfdcLightningPage.create,
@@ -146,6 +168,13 @@ export const test = base.extend<AccFixtures, Workers>({
   sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage.create,
   sfdcNavigation: SfdcNavigation.create,
   sfdcSearchResultsPage: SfdcSearchResultsPage.create,
+
+  // IFS Auth
+  ifsAuthNavigation: IfsAuthNavigation.create,
+  ifsLoginPage: IfsLoginPage.create,
+
+  // Environment
+  environment: [({}, use) => use(new Environment()), { scope: "worker" }],
 });
 
 export { AccFixtures };

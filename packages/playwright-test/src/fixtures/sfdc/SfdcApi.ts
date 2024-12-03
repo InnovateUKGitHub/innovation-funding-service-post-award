@@ -3,9 +3,11 @@ import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { getSalesforceAccessToken } from "@innovateuk/tsforce/TsforceToken";
 import { Fixture } from "playwright-bdd/decorators";
 import { PlaywrightTsforceHttpClient } from "./PlaywrightTsforceHttpClient";
+import { Environment } from "../Environment";
 
 interface SfdcApiProps {
   playwright: typeof import("playwright-core");
+  environment: Environment;
 }
 
 interface SalesforceTokenInfo {
@@ -20,12 +22,12 @@ class SfdcApi {
   private readonly playwright: typeof import("playwright-core");
   private connectionMap: Map<string, SalesforceTokenInfo> = new Map();
 
-  public static async create({ playwright }: SfdcApiProps, use: (x: SfdcApi) => Promise<void>) {
-    use(new SfdcApi({ playwright }));
+  public static async create({ playwright, environment }: SfdcApiProps, use: (x: SfdcApi) => Promise<void>) {
+    use(new SfdcApi({ playwright, environment }));
   }
 
-  constructor({ playwright }: SfdcApiProps) {
-    this.envman = new EnvironmentManager(process.env.TEST_SALESFORCE_SANDBOX);
+  constructor({ playwright, environment }: SfdcApiProps) {
+    this.envman = environment.envman;
     this.playwright = playwright;
   }
 

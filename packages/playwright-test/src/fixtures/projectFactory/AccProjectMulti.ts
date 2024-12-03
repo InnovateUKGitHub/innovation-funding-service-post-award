@@ -13,13 +13,20 @@ class AccProjectMulti extends ProjectFactory<
   TwoParticipantProjectFactoryScriptContext,
   TwoParticipantProjectFactoryScriptArguments
 > {
+  uatUsers = {
+    msp: "van.vicks2023+13@gmail.com",
+    pm: "van.vicks2023+14@gmail.com",
+    mainFc: "van.vicks2023+15@gmail.com",
+    secondaryFc: "van.vicks2023+2@gmail.com",
+  };
+
   getScript({ connection }: { connection: ITsforceConnection }) {
     return new TwoParticipantProjectFactoryScript({ connection });
   }
 
   @Given("a multi-partner CR&D project exists")
   async crndMultiProject() {
-    await this.createProject({ profiles: false, competitionType: "CR&D" });
+    await this.createProject({ profiles: false, competitionType: "CR&D", usernames: this.uatUsers });
   }
 
   @Given("a multi-partner SBRI project exists")
