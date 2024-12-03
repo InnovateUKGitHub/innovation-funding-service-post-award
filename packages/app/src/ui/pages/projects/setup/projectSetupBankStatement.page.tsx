@@ -95,7 +95,6 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const documentsCallback = useCallback((childDocuments: DocumentSummaryDto[]) => {
     const hasUploadedBankStatement = childDocuments?.some(x => x.description === DocumentDescription.BankStatement);
-    console.log("called documents callback and hasUploadedBankStatement", hasUploadedBankStatement);
     setFieldValueForm("hasUploadedBankStatement", hasUploadedBankStatement);
   }, []);
 

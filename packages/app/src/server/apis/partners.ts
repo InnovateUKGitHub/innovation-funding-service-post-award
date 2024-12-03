@@ -3,6 +3,7 @@ import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { ProjectSetupBankStatementCommand } from "@server/features/partners/projectSetupBankStatementCommand";
 import { ProjectSetupCommand } from "@server/features/partners/projectSetupCommand";
 import { ProjectSetupPostcodeCommand } from "@server/features/partners/projectSetupPostcodeCommand";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
@@ -57,6 +58,11 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
         break;
       case FormTypes.ProjectSetup:
         await ctx.runCommand(new ProjectSetupCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
+        break;
+      case FormTypes.ProjectSetupBankStatement:
+        await ctx.runCommand(
+          new ProjectSetupBankStatementCommand(params.partnerDto as PartnerDto, params.partnerDto.form),
+        );
         break;
       default:
         await ctx.runCommand(

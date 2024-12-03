@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
-export const projectSetupPostcodeCommandQuery = gql`
-  query ProjectSetupPostcodeCommandQuery($projectId: ID!, $partnerId: ID!) {
+export const projectSetupBankStatementCommandQuery = gql`
+  query ProjectSetupBankStatementCommandQuery($projectId: ID!, $partnerId: ID!) {
     uiapi {
       query {
         Acc_Project__c(where: { Id: { eq: $projectId } }) {
@@ -18,19 +18,8 @@ export const projectSetupPostcodeCommandQuery = gql`
         ) {
           edges {
             node {
-              Acc_AccountId__c {
-                value
-              }
-              Acc_AccountId__r {
-                Name {
-                  value
-                }
-              }
-              Acc_ParticipantStatus__c {
-                value
-              }
-              Acc_Postcode__c {
-                value
+              ContentDocumentLinks(first: 2, where: { ContentDocument: { Description: { eq: "BankStatement" } } }) {
+                totalCount
               }
             }
           }
@@ -40,7 +29,7 @@ export const projectSetupPostcodeCommandQuery = gql`
   }
 `;
 
-export interface ProjectSetupPostcodeCommandData {
+export interface ProjectSetupBankStatementCommandData {
   uiapi: {
     query: {
       Acc_Project__c: {
@@ -58,19 +47,8 @@ export interface ProjectSetupPostcodeCommandData {
         edges: [
           {
             node: {
-              Acc_ParticipantStatus__c: {
-                value: string;
-              };
-              Acc_AccountId__c: {
-                value: string;
-              };
-              Acc_AccountId__r: {
-                Name: {
-                  value: string;
-                };
-              };
-              Acc_Postcode__c: {
-                value: string;
+              ContentDocumentLinks: {
+                totalCount: number;
               };
             };
           },
