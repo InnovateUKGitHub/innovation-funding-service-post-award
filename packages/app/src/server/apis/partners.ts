@@ -12,6 +12,11 @@ import { FormTypes } from "@ui/zod/FormTypes";
 
 type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId"> & { form: UpdatePartnerFormType };
 
+type UpdatePartnerPostcodeDto = UpdatePartnerDto & {
+  postcode: string;
+  form: FormTypes.ProjectSetupPostcode | FormTypes.PartnerDetailsEdit;
+};
+
 export interface IPartnersApi<Context extends "client" | "server"> {
   updatePartner: (
     params: ApiParams<
@@ -24,6 +29,16 @@ export interface IPartnersApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PartnerDto>;
+
+  updatePartnerPostcode: (
+    params: ApiParams<
+      Context,
+      {
+        partnerId: PartnerId;
+        partnerDto: UpdatePartnerPostcodeDto;
+      }
+    >,
+  ) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<"server", PartnerDto> implements IPartnersApi<"server"> {
@@ -39,7 +54,13 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       }),
       p => this.updatePartner(p),
     );
+    this.putItem(
+      "/:partnerId/update-postcode",
+      (p, q, b: UpdatePartnerPostcodeDto) => ({ partnerId: p.partnerId, partnerDto: processDto(b) }),
+      p => this.updatePartnerPostcode(p),
+    );
   }
+
   public async updatePartner(
     params: ApiParams<
       "server",
@@ -75,6 +96,14 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
     }
 
     return ctx.runQuery(new GetByIdQuery(params.partnerId));
+  }
+
+  public async updatePartnerPostcode(
+    params: ApiParams<"server", { partnerId: PartnerId; partnerDto: UpdatePartnerPostcodeDto }>,
+  ) {
+    const ctx = await contextProvider.start(params);
+    await ctx.runCommand(new ProjectSetupPostcodeCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
+    return true; // if it gets this far, it succeeded
   }
 }
 

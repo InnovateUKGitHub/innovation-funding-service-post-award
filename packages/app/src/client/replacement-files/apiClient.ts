@@ -251,6 +251,7 @@ const clientApi: IApiClient<"client"> = {
         `/api/partners/${params.partnerId}?validateBankDetails=${params.validateBankDetails}&verifyBankDetails=${params.verifyBankDetails}`,
         params.partnerDto,
       ),
+    updatePartnerPostcode: params => ajaxPut(`/api/partners/${params.partnerId}/update-postcode`, params.partnerDto),
   },
 };
 

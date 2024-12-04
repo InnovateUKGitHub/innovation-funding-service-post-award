@@ -9,7 +9,6 @@ import { PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -42,16 +41,16 @@ export const useOnUpdatePartnerDetails = (
   partner: Partial<PartnerDto>,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<PartnerDto, "postcode">>({
+  return useOnUpdate<FormValues, boolean>({
     req: data =>
-      clientsideApiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartnerPostcode({
         partnerId,
         partnerDto: {
           ...partner,
           postcode: data.postcode?.toUpperCase(),
           id: partnerId,
           projectId,
-          form: data.form as UpdatePartnerFormType,
+          form: data.form as FormTypes.ProjectSetupPostcode | FormTypes.PartnerDetailsEdit,
         },
       }),
     onSuccess: () => navigate(navigateTo),

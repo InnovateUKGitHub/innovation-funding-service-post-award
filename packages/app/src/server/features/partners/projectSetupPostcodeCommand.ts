@@ -28,9 +28,9 @@ export class ProjectSetupPostcodeCommand extends ZodAuthorisedAsyncCommandBase<
 
   protected dto: ProjectSetupPostcodeDto;
 
-  private form: FormTypes.ProjectSetupPostcode;
+  private form: FormTypes.ProjectSetupPostcode | FormTypes.PartnerDetailsEdit;
 
-  constructor(partner: ProjectSetupPostcodeDto, form: FormTypes.ProjectSetupPostcode) {
+  constructor(partner: ProjectSetupPostcodeDto, form: FormTypes.ProjectSetupPostcode | FormTypes.PartnerDetailsEdit) {
     super();
     this.dto = partner;
     this.form = form;
