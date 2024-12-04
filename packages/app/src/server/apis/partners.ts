@@ -17,6 +17,14 @@ type UpdatePartnerPostcodeDto = UpdatePartnerDto & {
   form: FormTypes.ProjectSetupPostcode | FormTypes.PartnerDetailsEdit;
 };
 
+type UpdatePartnerProjectSetupDto = UpdatePartnerDto & {
+  form: FormTypes.ProjectSetup;
+};
+
+type UpdatePartnerProjectSetupBankStatementDto = UpdatePartnerDto & {
+  form: FormTypes.ProjectSetupBankStatement;
+};
+
 export interface IPartnersApi<Context extends "client" | "server"> {
   updatePartner: (
     params: ApiParams<
@@ -39,6 +47,26 @@ export interface IPartnersApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<boolean>;
+
+  updatePartnerProjectSetup: (
+    params: ApiParams<
+      Context,
+      {
+        partnerId: PartnerId;
+        partnerDto: UpdatePartnerProjectSetupDto;
+      }
+    >,
+  ) => Promise<boolean>;
+
+  updatePartnerProjectSetupBankStatement: (
+    params: ApiParams<
+      Context,
+      {
+        partnerId: PartnerId;
+        partnerDto: UpdatePartnerProjectSetupBankStatementDto;
+      }
+    >,
+  ) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<"server", PartnerDto> implements IPartnersApi<"server"> {
@@ -54,10 +82,23 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       }),
       p => this.updatePartner(p),
     );
+
     this.putItem(
       "/:partnerId/update-postcode",
       (p, q, b: UpdatePartnerPostcodeDto) => ({ partnerId: p.partnerId, partnerDto: processDto(b) }),
       p => this.updatePartnerPostcode(p),
+    );
+
+    this.putItem(
+      "/:partnerId/project-setup",
+      (p, q, b: UpdatePartnerProjectSetupDto) => ({ partnerId: p.partnerId, partnerDto: processDto(b) }),
+      p => this.updatePartnerProjectSetup(p),
+    );
+
+    this.putItem(
+      "/:partnerId/project-setup-bank-statement",
+      (p, q, b: UpdatePartnerProjectSetupBankStatementDto) => ({ partnerId: p.partnerId, partnerDto: processDto(b) }),
+      p => this.updatePartnerProjectSetupBankStatement(p),
     );
   }
 
@@ -103,6 +144,22 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
   ) {
     const ctx = await contextProvider.start(params);
     await ctx.runCommand(new ProjectSetupPostcodeCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
+    return true; // if it gets this far, it succeeded
+  }
+
+  public async updatePartnerProjectSetup(
+    params: ApiParams<"server", { partnerId: PartnerId; partnerDto: UpdatePartnerProjectSetupDto }>,
+  ) {
+    const ctx = await contextProvider.start(params);
+    await ctx.runCommand(new ProjectSetupCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
+    return true; // if it gets this far, it succeeded
+  }
+
+  public async updatePartnerProjectSetupBankStatement(
+    params: ApiParams<"server", { partnerId: PartnerId; partnerDto: UpdatePartnerProjectSetupBankStatementDto }>,
+  ) {
+    const ctx = await contextProvider.start(params);
+    await ctx.runCommand(new ProjectSetupBankStatementCommand(params.partnerDto as PartnerDto, params.partnerDto.form));
     return true; // if it gets this far, it succeeded
   }
 }

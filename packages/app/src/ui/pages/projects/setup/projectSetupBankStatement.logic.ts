@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { BankStatementSchema } from "./projectSetupBankStatement.zod";
 import { clientsideApiClient } from "@ui/apiClient";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useRoutes } from "@ui/context/routesProvider";
 
 export const useSetupBankStatementData = (
@@ -95,9 +94,9 @@ export const useOnUpdateProjectSetupBankStatement = (projectId: ProjectId, partn
   const navigate = useNavigate();
   const routes = useRoutes();
 
-  return useOnUpdate<z.output<BankStatementSchema>, Pick<PartnerDto, "id" | "projectId">>({
+  return useOnUpdate<z.output<BankStatementSchema>, boolean>({
     req: () =>
-      clientsideApiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartnerProjectSetupBankStatement({
         partnerId,
         partnerDto: { projectId, id: partnerId, form: FormTypes.ProjectSetupBankStatement },
       }),
