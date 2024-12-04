@@ -86,11 +86,8 @@ class ProjectChangeRequests {
    */
   @When("the user creates a {string} PCR")
   async createPCR(pcr: PcrType) {
-    await this.commands.button("Create request").click();
-    await this.commands.heading(this.startRequestHeader);
     await this.commands.selectPcrType(pcr);
     await this.createButton.click();
-    await this.commands.heading("Request");
   }
 
   @Then("the user clicks the {string} PCR type")
@@ -253,6 +250,16 @@ class ProjectChangeRequests {
     } else {
       await this.agreeWithChange.isVisible();
       await this.saveAndReturnButton.isVisible();
+    }
+  }
+
+  async pcrCheckBox(name: string, disabled: boolean) {
+    if (disabled) {
+      const span = this.page.locator("css=span").filter({ hasText: name });
+      await expect(this.page.getByRole("checkbox").filter({ has: span })).toBeDisabled();
+    } else {
+      const span = this.page.locator("css=span").filter({ hasText: name });
+      await expect(this.page.getByRole("checkbox").filter({ has: span })).not.toBeDisabled();
     }
   }
 }

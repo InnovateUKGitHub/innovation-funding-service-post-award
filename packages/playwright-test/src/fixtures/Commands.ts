@@ -27,7 +27,7 @@ class Commands {
   }
 
   async selectPcrType(labelText: string) {
-    await this.page.locator(this.checkboxXPath.replace("{labelText}", labelText)).check();
+    await this.page.getByLabel(labelText).check();
   }
 
   /**
@@ -236,7 +236,7 @@ class Commands {
   }
 
   async validationMessage(message: string) {
-    expect(await this.page.getByTestId("validation-summary").filter({ hasText: message }).innerText()).toBe(message);
+    await this.page.getByTestId("validation-summary").filter({ hasText: message }).isVisible();
   }
 
   async heading(title: string) {

@@ -1,52 +1,47 @@
 @mode:serial
+
 Feature: Manage team member
-    Scenario: Selecting 'Manage team member' disables other PCR options
+    Background:
         Given a PM of a KTP project has created a new Project Change Request
+
+    Scenario: Selecting 'Manage team member' disables other PCR options
         When the user selects the PCR type "Manage team members"
         Then other PCR Types are disabled and cannot be selected
 
     Scenario: Selecting PCR types disables 'Manage team member' as an option
-        Given a PM of a KTP project has created a new Project Change Request
         When the user selects each PCR type
         Then the Manage team members PCR type is disabled
+        #Note the below has commented out lines due to ACC-11671
         Then the user cannot select Manage team members
 
     Scenario: Viewing the Manage team member PCR page
-        Given a PM of a KTP project has created a new Project Change Request
         When the user creates a "Manage team members" PCR
         Then the user will see the Manage team member page
 
-    Scenario: Viewing the Replace project manager page
-        Given a PM of a KTP project has created a new Project Change Request
+    Scenario: Validating the replace project manager page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace project manager" button
         Then the user will see the Replace project manager page
 
-    Scenario: Validating the replace project manager page
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Replace project manager" button
-        And the user clicks the "Confirm replacement and send invitation" button
+        When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
         When the user exceeds 100 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
+        When the email entered is not in an email format
+        Then the validation message will confirm an invalid email
+
         When the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
-    Scenario: Viewing the Replace finance contact page
-        Given a PM of a KTP project has created a new Project Change Request
+    Scenario: Validating the Replace finance contact page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace finance contact" button
         Then the user will see the Replace finance contact page
 
-    Scenario: Validating the Replace finance contact page
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Replace finance contact" button
-        And the user selects a Finance contact
+        When the user selects a Finance contact
         And the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
@@ -57,17 +52,12 @@ Feature: Manage team member
         When the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
-    Scenario: Viewing the Replace knowledge base administrator page
-        Given a PM of a KTP project has created a new Project Change Request
+    Scenario: Validating the Replace knowledge base administrator page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace knowledge base administrator" button
         Then the user will see the Replace knowledge base administator page
 
-    Scenario: Validating the Replace knowledge base administrator page
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Replace knowledge base administrator" button
-        And the user clicks the "Confirm replacement and send invitation" button
+        When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
         When the user exceeds 100 characters in the form fields
@@ -77,17 +67,12 @@ Feature: Manage team member
         When the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
-    Scenario: Viewing the Replace main company contact page
-        Given a PM of a KTP project has created a new Project Change Request
+    Scenario: Validating the Replace main company contact page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace main company contact" button
         Then the user will see the Replace main company contact page
 
-    Scenario: Validating the Replace main company contact page
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Replace main company contact" button
-        And the user clicks the "Confirm replacement and send invitation" button
+        When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
         When the user exceeds 100 characters in the form fields
@@ -97,17 +82,13 @@ Feature: Manage team member
         When the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
-    Scenario: Viewing the Invite a new associate page
-        Given a PM of a KTP project has created a new Project Change Request
+    #This will fail until ticket ACC-11681 is resolved
+    Scenario: Validating the Invite associate page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Invite associate" button
         Then the user will see the Invite a new associate page
 
-    Scenario: Validating the Invite associate page
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Invite associate" button
-        And the user clicks the "Send invitation" button
+        When the user clicks the "Send invitation" button
         Then an associate page validation message will advise of empty fields
 
         When the user exceeds 100 characters in the form fields
@@ -125,8 +106,32 @@ Feature: Manage team member
         And the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
+    Scenario: Completing and submitting Replace finance contact
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace finance contact" button
+        And the user submits a valid "Replace finance contact" PCR
+        Then a "Replace finance contact" confirmation screen is displayed
+
+    Scenario: Completing and submitting Replace knowledge base administrator
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace knowledge base administrator" button
+        And the user submits a valid "Replace knowledge base administrator" PCR
+        Then a "Replace knowledge base administrator" confirmation screen is displayed
+
+    Scenario: Completing and submitting Replace main company contact
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace main company contact" button
+        And the user submits a valid "Replace main company contact" PCR
+        Then a "Replace main company contact" confirmation screen is displayed
+
     Scenario: Completing and submitting Replace project manager
-        Given a PM of a KTP project has created a new Project Change Request
-        When the user creates a "Replace project manager" PCR
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace project manager" button
         And the user submits a valid "Replace project manager" PCR
         Then a "Replace project manager" confirmation screen is displayed
+
+    Scenario: Completing and submitting Invite a new associate
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Invite associate" button
+        And the user submits a valid "Invite a new associate" PCR
+        Then a "Invite a new associate" confirmation screen is displayed

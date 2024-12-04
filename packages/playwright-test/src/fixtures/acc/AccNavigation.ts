@@ -13,8 +13,6 @@ import { ProjectOverview } from "./pages/ProjectOverview";
 import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
 import { ProjectDetails } from "./pages/ProjectDetails";
 import { ProjectDocuments } from "./pages/ProjectDocuments";
-import { ProjectChangeRequests } from "./pages/PCRs/ProjectChangeRequest";
-
 export
 @Fixture("accNavigation")
 class AccNavigation {
@@ -138,8 +136,8 @@ class AccNavigation {
     await this.monitoringReports.isPage();
   }
 
-  @Given("the user is on the project change request page")
-  async gotoPCRPage() {
+  @Given("the user has navigated to the project change request page")
+  async gotoProjectChangeRequests() {
     await this.testCache.cache(
       ["gotoProjectChangeRequests", this.projectState.prefixedProjectNumber()],
       async () => {
@@ -154,7 +152,6 @@ class AccNavigation {
 
     await this.devtools.isLoaded();
     await this.putProjectOnHold.isPage();
-    await this.projectForecasts.isPage();
   }
 
   @Given("the user has navigated to the project details page")

@@ -27,7 +27,7 @@ class AccUserSwitcher {
   }
 
   @Given("the user is the {string} user")
-  public switchToFinanceContact(userKey: "string") {
+  public switchToUser(userKey: string) {
     const user = this.projectState.context[userKey];
     if (!(user instanceof User)) throw new Error(`${userKey} is not of type User.`);
     if (!(typeof user.Username === "string")) throw new Error("User does not have a username defined");
