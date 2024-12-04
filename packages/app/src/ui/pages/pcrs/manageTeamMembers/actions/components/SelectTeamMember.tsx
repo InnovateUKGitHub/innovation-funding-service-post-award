@@ -16,8 +16,18 @@ import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
 
 const SelectTeamMember = () => {
   const { register, getFieldState } = useFormContext();
-  const { projectId, pclId, memberToManage, categories, role, method, defaults, hideBottomSection, backRoute } =
-    useManageTeamMemberActionContext();
+  const {
+    projectId,
+    pclId,
+    memberToManage,
+    categories,
+    role,
+    method,
+    defaults,
+    hideBottomSection,
+    backRoute,
+    isFetching,
+  } = useManageTeamMemberActionContext();
   const { getContent } = useContent();
   const navigate = useNavigate();
   const routes = useRoutes();
@@ -93,6 +103,7 @@ const SelectTeamMember = () => {
                     return newPclId;
                   },
                 })}
+                disabled={isFetching}
               />
             </FormGroup>
           </Fieldset>
