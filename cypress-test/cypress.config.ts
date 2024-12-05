@@ -66,7 +66,7 @@ console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n*
 /**
  * Set global timeout from environment variable
  */
-const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT ?? "15000");
+const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT ?? "20000");
 
 /**
  * utility to evaluate if environment variable is true

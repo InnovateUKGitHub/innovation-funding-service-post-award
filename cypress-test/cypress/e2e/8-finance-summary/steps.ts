@@ -152,13 +152,13 @@ export const manyPartnerFinanceDetails = () => {
 
 export const whenIarNeeded = () => {
   [
-    "EUI Small Ent Health (Lead)",
-    "A B Cad Services",
-    "ABS EUI Medium Enterprise",
-    "Never, for this project",
-    "Quarterly",
-  ].forEach(iarRequirement => {
-    cy.getByQA("WhenAnIarIsNeeded").contains(iarRequirement);
+    ["EUI Small Ent Health (Lead)", "Quarterly"],
+    ["A B Cad Services", "Quarterly"],
+    ["ABS EUI Medium Enterprise", "With the first claim, the last claim and on every anniversary of the first IAR"],
+  ].forEach(([partner, frequency]) => {
+    cy.getByQA("WhenAnIarIsNeeded").within(() => {
+      cy.get("td").contains(partner).siblings().contains(frequency);
+    });
   });
   cy.get("h3").contains("When an independent accountant's report is needed");
 };
