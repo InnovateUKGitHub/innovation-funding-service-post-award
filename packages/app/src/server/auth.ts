@@ -59,6 +59,15 @@ const getAuthRouter = async () => {
 
       return res.redirect((configuration.sso.enabled && configuration.sso.signoutUrl) || "/");
     })
+
+    .get("/heartbeat", (req, res, next) => {
+      req.session ??= {};
+      req.session.user ??= {};
+      // req.session.user.developer_oidc_username = payload.preferred_username;
+      req.session.last_reset = getCookieTimestamp();
+      res.status(200);
+      next();
+    })
     .get(passportOidcSuccessRoute, (req, res) =>
       passport.authenticate("passportOidc", (authError: AnyObject, payload: AnyObject) => {
         if (authError) {

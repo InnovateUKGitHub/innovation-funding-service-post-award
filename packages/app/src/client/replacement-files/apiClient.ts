@@ -6,9 +6,6 @@ import { removeUndefinedString } from "@shared/string-helpers";
 import { ClientFileWrapper } from "../clientFileWrapper";
 
 const clientApi: IApiClient<"client"> = {
-  app: {
-    heartbeat: () => ajaxGet("/api/app/heartbeat"),
-  },
   claims: {
     update: params =>
       ajaxPut(
@@ -159,14 +156,6 @@ const ajaxJson = <T>(url: string, opts?: RequestInit): Promise<T> => {
   const headers = getJsonHeaders();
   const options = Object.assign({ headers }, opts);
   return ajax(url, options);
-};
-
-const ajaxGet = <T>(url: string, opts?: RequestInit) => {
-  const options: RequestInit = Object.assign({}, opts, {
-    method: "GET",
-  });
-
-  return ajaxJson<T>(url, options);
 };
 
 const ajaxPost = <T>(url: string, body: AnyObject = {}, opts?: RequestInit) => {

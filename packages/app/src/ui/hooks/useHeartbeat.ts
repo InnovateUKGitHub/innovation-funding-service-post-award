@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { clientsideApiClient } from "@ui/apiClient";
 
-const heartbeatDebounce = 3000;
+const heartbeatDebounceTime = 3000;
 let heartbeatTimeoutId: NodeJS.Timeout;
 
-const sendHeartbeat = () => {
+/**
+ * sends a heartbeat to the server three seconds after the last keypress
+ */
+function sendHeartbeat() {
   clearTimeout(heartbeatTimeoutId);
 
   heartbeatTimeoutId = setTimeout(() => {
-    clientsideApiClient.app.heartbeat(null);
-  }, heartbeatDebounce);
-};
+    fetch("/heartbeat");
+  }, heartbeatDebounceTime);
+}
 
 const useHeartbeat = () => {
   useEffect(() => {
