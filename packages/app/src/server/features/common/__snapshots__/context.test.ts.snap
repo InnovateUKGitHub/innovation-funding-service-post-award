@@ -332,7 +332,14 @@ exports[`Context should contain the repositories 1`] = `
         "colourfulLogging": false,
         "logLevel": "ERROR",
         "newRelic": false,
-        "prefixLines": [],
+        "prefixLines": [
+          {
+            "traceId": "ctx",
+            "user": {
+              "email": "user@email.com",
+            },
+          },
+        ],
       },
     },
     "salesforceFeedAttachmentRepository": SalesforceFeedAttachmentRepository {

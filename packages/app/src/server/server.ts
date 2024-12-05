@@ -78,8 +78,6 @@ export class Server {
         "acc.traceId": traceId,
         "acc.username": req?.session?.user?.email ?? "User is not logged in",
       });
-      const transaction = newrelic.getTransaction();
-      console.log(transaction);
     }
 
     res.locals.traceId = traceId;
