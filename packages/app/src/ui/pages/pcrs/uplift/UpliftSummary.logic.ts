@@ -38,7 +38,7 @@ const useUpliftSummaryQuery = ({
 
   const partners = mapToPartnerDtoArray(
     data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
-    ["id", "name", "isLead"],
+    ["id", "name", "isLead", "remainingParticipantGrant"],
     {},
   );
 
