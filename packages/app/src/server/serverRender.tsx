@@ -117,7 +117,7 @@ const serverRender =
         auth = await context.runQuery(new GetAllProjectRolesForUser());
         user = {
           roleInfo: auth.permissions,
-          email: req.session?.user.email,
+          email: req.session?.user?.email ?? "",
           projectId: req.session?.user.projectId,
           userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
           csrf: req.csrfToken(),
@@ -169,7 +169,7 @@ const serverRender =
           logger.warn("Access control failure", {
             route: req.url,
             routeName: matched.routeName,
-            username: req.session?.user.email,
+            username: req.session?.user?.email ?? "",
             traceId: res.locals.traceId,
           });
           return next(new ForbiddenError());
@@ -228,7 +228,7 @@ const serverRender =
     } catch (renderError: unknown) {
       logger.error(
         "Caught a server render error",
-        { user: req.session?.user.email, traceId: res.locals.traceId },
+        { user: req.session?.user?.email, traceId: res.locals?.traceId },
         renderError,
       );
       next(renderError);
