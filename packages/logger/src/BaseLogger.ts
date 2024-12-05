@@ -31,18 +31,18 @@ abstract class BaseLogger implements ILogger {
 
   constructor(identifier: string, options?: Partial<LoggerOptions>) {
     this.identifier = identifier;
+    this.options = BaseLogger.defaultOptions;
 
-    if (options?.logLevel) {
-      // Obtain the overridden log level
-      this.options.logLevel = options?.logLevel;
-    } else if (typeof process !== "undefined") {
+    if (typeof process !== "undefined") {
       // Obtain the log level if we are running on the server side.
       this.options.logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
+      this.options.colourfulLogging = process.env.DEVELOPER_COLOURFUL_LOGGING === "true";
     }
 
-    this.options.prefixLines = options?.prefixLines ?? BaseLogger.defaultOptions.prefixLines;
-    this.options.newRelic = options?.newRelic ?? BaseLogger.defaultOptions.newRelic;
-    this.options.colourfulLogging = options?.colourfulLogging ?? BaseLogger.defaultOptions.colourfulLogging;
+    if (options?.logLevel) this.options.logLevel = options?.logLevel;
+    if (options?.prefixLines) this.options.prefixLines = options?.prefixLines;
+    if (options?.newRelic) this.options.newRelic = options?.newRelic;
+    if (options?.colourfulLogging) this.options.colourfulLogging = options?.colourfulLogging;
   }
 
   /**
