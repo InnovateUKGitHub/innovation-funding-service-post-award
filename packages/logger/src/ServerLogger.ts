@@ -234,8 +234,21 @@ export class ServerLogger extends BaseLogger {
     const newRelicInstance = this.options.newRelic;
     // newrelic is a global variable instantiated as a banner of the webpack/esbuild build
     if (newRelicInstance) {
-      // @ts-expect-error TODO: Additional values are allowed to be passed to newrelic#recordLogEvent
-      newRelicInstance.recordLogEvent({ level, timestamp: Date.now(), message, params });
+      const transaction = newRelicInstance.getTransaction() as any;
+
+      // Extract NewRelic custom attributes and re-add them to the log event
+      if (transaction?._transaction?.trace?.custom?.attributes) {
+        const customAttributes = Object.fromEntries(
+          Object.entries(transaction._transaction.trace.custom.attributes).map(([key, { value }]: any) => [key, value]),
+        );
+        newRelicInstance.recordLogEvent({
+          level,
+          timestamp: Date.now(),
+          message,
+          params,
+          ...customAttributes,
+        });
+      }
     }
   }
 }
