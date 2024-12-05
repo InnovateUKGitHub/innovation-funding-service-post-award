@@ -1614,7 +1614,16 @@
     "accountLocality": "Locality",
     "accountTownOrCity": "Town or city",
     "accountPostcode": "Postcode",
-    "leadPartner": "{{ name }} (Lead)"
+    "leadPartner": "{{ name }} (Lead)",
+    "auditReportFrequencyName": {
+      "never": "Never, for this project",
+      "all": "With all claims",
+      "firstAndLast": "With the first and last claim only",
+      "last": "With the last claim only",
+      "firstLastAnniversary": "With the first claim, the last claim and on every anniversary of the first IAR",
+      "quarterly": "Quarterly",
+      "unknown": "Unknown"
+    }
   },
   "projectContactLabels": {
     "contactName": "Name",

@@ -56,7 +56,9 @@ describe("mapPartnerDtoArray", () => {
         Acc_TotalPrepayment__c: { value: 4000 },
         Acc_Cap_Limit__c: { value: 100 },
         Acc_Postcode__c: { value: null },
-        Acc_AuditReportFrequency__c: { value: "monthly" },
+        Acc_AuditReportFrequency__c: {
+          value: "With the first claim, last claim and on every anniversary of the project start date",
+        },
         Acc_OpenClaimStatus__c: { value: "New" },
       },
     },

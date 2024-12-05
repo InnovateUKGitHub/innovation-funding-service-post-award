@@ -31,7 +31,7 @@ exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filterin
 [
   {
     "accountId": "001-partner1",
-    "auditReportFrequencyName": "monthly",
+    "auditReportFrequencyName": "unknown",
     "awardRate": 10,
     "capLimit": 100,
     "claimStatus": 3,
@@ -66,7 +66,7 @@ exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filterin
   },
   {
     "accountId": "001-partner2",
-    "auditReportFrequencyName": "monthly",
+    "auditReportFrequencyName": "firstLastAnniversary",
     "awardRate": 10,
     "capLimit": 100,
     "claimStatus": 3,

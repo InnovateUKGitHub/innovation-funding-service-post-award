@@ -7,6 +7,7 @@ import {
 } from "@framework/constants/partner";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { AuditReportFrequencyMapper } from "@framework/mappers/auditReportFrequency";
 import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
 import { BankDetailsTaskStatusMapper } from "@framework/mappers/bankTaskStatus";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
@@ -143,7 +144,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return (node?.Acc_AccountId__c?.value || node?.Acc_AccountId__r?.Id || "") as AccountId;
   },
   auditReportFrequencyName(node) {
-    return node?.Acc_AuditReportFrequency__c?.value ?? "";
+    return AuditReportFrequencyMapper.mapFromSalesforce(node?.Acc_AuditReportFrequency__c?.value ?? "unknown");
   },
   awardRate(node) {
     return node?.Acc_Award_Rate__c?.value ?? null;

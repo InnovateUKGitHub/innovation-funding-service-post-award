@@ -12,6 +12,7 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { ShortDateRange } from "@ui/components/atoms/Date";
 import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { createTypedTable } from "@ui/components/molecules/Table/Table";
+import { useContent } from "@ui/hooks/content.hook";
 
 type Props = {
   projectId: ProjectId;
@@ -20,6 +21,7 @@ type Props = {
 
 const FinanceSummaryPage = (props: Props & BaseProps) => {
   const content = useFinanceSummaryContent();
+  const { getContent } = useContent();
   const FinanceSummaryTable = createTypedTable<Partner>();
   const { project, partners, fragmentRef } = useFinanceSummaryData(props.projectId);
 
@@ -155,7 +157,14 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
               qa="Frequency"
               header={content.auditReportFrequencyLabel}
               hideHeader
-              value={x => x.auditReportFrequencyName}
+              value={x =>
+                getContent(
+                  x1 =>
+                    x1.partnerLabels.auditReportFrequencyName[
+                      x.auditReportFrequencyName as keyof typeof x1.partnerLabels.auditReportFrequencyName
+                    ],
+                )
+              }
             />
           </FinanceSummaryTable.Table>
         </Section>
