@@ -72,7 +72,16 @@ export class Server {
 
   private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
     const traceId = v4({});
-    newrelic?.addCustomAttribute("acc.traceId", traceId);
+
+    if (newrelic) {
+      newrelic.addCustomAttributes({
+        "acc.traceId": traceId,
+        "acc.username": req?.session?.user?.email ?? "User is not logged in",
+      });
+      const transaction = newrelic.getTransaction();
+      console.log(transaction);
+    }
+
     res.locals.traceId = traceId;
 
     this.logger.debug(`${req.method} Request - ${req.url}`, { traceId });
