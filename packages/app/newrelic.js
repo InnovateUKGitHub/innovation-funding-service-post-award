@@ -29,6 +29,8 @@ exports.config = {
    */
   allow_all_headers: true,
   attributes: {
+    include: ["acc.*"],
+
     /**
      * Prefix of attributes to exclude from all destinations. Allows * as wildcard
      * at end.
