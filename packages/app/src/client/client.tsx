@@ -23,6 +23,7 @@ import { IPreloadedDataContext, PreloadedDataContextProvider } from "@ui/context
 import { ServerErrorContextProvider } from "@ui/context/server-error";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { Logger, parseLogLevel } from "@innovateuk/logger";
+import { useHeartbeat } from "@ui/hooks/useHeartbeat";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -49,6 +50,8 @@ const Client = () => {
       clearTimeout(jsEnabledAnimationFrame);
     };
   }, []);
+
+  useHeartbeat();
 
   return (
     <ServerErrorContextProvider value={serverErrors}>

@@ -1,13 +1,10 @@
 import express from "express";
 import crypto from "crypto";
-
 import { getAuthRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
 import { getServerRoutes, noAuthRouter } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
-
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
-
 import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";
@@ -65,7 +62,6 @@ export class Server {
     this.app.use([
       express.urlencoded({ extended: false, limit: "50mb", parameterLimit: 100000 }),
       express.json({ type: ["application/json", "application/csp-report"], limit: "50mb" }),
-      this.handleRouter5GetWithPlus,
       this.requestLogger,
     ]);
   }
@@ -82,31 +78,6 @@ export class Server {
     this.logger.debug(`${req.method} Request - ${req.url}`, { traceId });
 
     next();
-  };
-
-  // TODO: Check this requirement when router is updated/replaced
-  private readonly handleRouter5GetWithPlus = (
-    { method, url }: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ): void => {
-    const isGetRequest = method === "GET";
-
-    if (!isGetRequest) {
-      next();
-      return;
-    }
-
-    /// pluses don't get handled by router 5 when round tripped
-    /// with js disabled form submits values with + rather then %20
-    /// when js is enabled router 5 handles it
-    const urlContainsPlus = url.match(/\+/);
-
-    if (urlContainsPlus) {
-      res.redirect(url.replace(/\+/g, "%20"));
-    } else {
-      next();
-    }
   };
 
   private readonly setNonceValue = (_req: express.Request, res: express.Response, next: express.NextFunction): void => {

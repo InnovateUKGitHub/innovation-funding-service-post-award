@@ -13,6 +13,7 @@ import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
 import * as partners from "./partners";
 import * as projectContacts from "./projectContacts";
+import * as app from "./app";
 
 export interface IApiClient<Context extends "client" | "server"> {
   claimDetails: claimDetails.IClaimDetailsApi<Context>;
@@ -27,6 +28,7 @@ export interface IApiClient<Context extends "client" | "server"> {
   pcrs: pcrs.IPCRsApi<Context>;
   projectContacts: projectContacts.IProjectContactsApi<Context>;
   partners: partners.IPartnersApi<Context>;
+  app: app.IAppApi<Context>;
 }
 
 export const serverApis = {
@@ -42,6 +44,7 @@ export const serverApis = {
   pcrs: pcrs.controller,
   partners: partners.controller,
   projectContacts: projectContacts.controller,
+  app: app.controller,
 } as const;
 
 export const router = express.Router();
