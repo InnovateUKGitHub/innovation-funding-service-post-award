@@ -26,7 +26,7 @@ type FinancialVirementForParticipant = Pick<
   PartnerFinancialVirement,
   "id" | "newEligibleCosts" | "partnerId" | "newFundingLevel" | "originalFundingLevel" | "newRemainingGrant"
 >;
-type Partner = Pick<PartnerDto, "id" | "name" | "isLead">;
+type Partner = Pick<PartnerDto, "id" | "name" | "isLead" | "remainingParticipantGrant">;
 
 interface MapToFinancialVirementProps {
   financialVirementsForCosts: FinancialVirementForCost[];
@@ -166,8 +166,10 @@ const mapProjectParticipant = ({
   costsClaimedToDate = roundCurrency(costsClaimedToDate);
   originalEligibleCosts = roundCurrency(originalEligibleCosts);
   newRemainingGrant = roundCurrency(newRemainingGrant);
-  originalRemainingGrant = roundCurrency(originalRemainingGrant);
   newEligibleCosts = roundCurrency(newEligibleCosts);
+  // Trust in Salesforce to have the correct number, as a claim period could have a different paid out grant level
+  // Don't know why - See ACC-11652 for more information.
+  originalRemainingGrant = roundCurrency(partner.remainingParticipantGrant || originalRemainingGrant);
 
   const originalRemainingCosts = roundCurrency(originalEligibleCosts - costsClaimedToDate);
   const newRemainingCosts = roundCurrency(newEligibleCosts - costsClaimedToDate);

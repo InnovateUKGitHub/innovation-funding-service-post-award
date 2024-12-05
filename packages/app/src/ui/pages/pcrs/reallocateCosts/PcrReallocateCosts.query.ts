@@ -110,6 +110,9 @@ const pcrReallocateCostsQuery = graphql`
                 Acc_ProjectRole__c {
                   value
                 }
+                Acc_RemainingParticipantGrant__c {
+                  value
+                }
               }
             }
           }
