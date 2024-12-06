@@ -1,20 +1,25 @@
 import { useEffect } from "react";
 
 const heartbeatDebounceTime = 3000;
-let heartbeatTimeoutId: NodeJS.Timeout;
+let heartbeatTimeoutId: number;
 
 /**
  * sends a heartbeat to the server three seconds after the last keypress
  */
 function sendHeartbeat() {
-  clearTimeout(heartbeatTimeoutId);
+  window.clearTimeout(heartbeatTimeoutId);
 
-  heartbeatTimeoutId = setTimeout(() => {
+  heartbeatTimeoutId = window.setTimeout(() => {
     fetch("/heartbeat");
   }, heartbeatDebounceTime);
 }
 
-const useHeartbeat = () => {
+/**
+ * useHeartbeat adds event listeners to the window to send heartbeat calls.
+ * Heartbeat calls serve to prevent the session from timing out while the user is
+ * actively typing or clicking
+ */
+function useHeartbeat() {
   useEffect(() => {
     addEventListener("keydown", sendHeartbeat);
     addEventListener("click", sendHeartbeat);
@@ -24,6 +29,6 @@ const useHeartbeat = () => {
       removeEventListener("click", sendHeartbeat);
     };
   }, []);
-};
+}
 
 export { useHeartbeat };
