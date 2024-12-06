@@ -5,11 +5,9 @@ import { SfdcApi } from "../sfdc/SfdcApi";
 import { ProjectState } from "./ProjectState";
 
 export abstract class ProjectFactory<Context extends Record<string, AbstractSObject>, Arguments> {
-  public static projectState: ProjectState | null;
   protected readonly sfdcApi: SfdcApi;
   protected projectState: ProjectState | null;
   protected prefix: string | null = null;
-  protected context: Context | null = null;
 
   constructor({ projectState, sfdcApi }: { projectState: ProjectState; sfdcApi: SfdcApi }) {
     this.sfdcApi = sfdcApi;
@@ -23,10 +21,10 @@ export abstract class ProjectFactory<Context extends Record<string, AbstractSObj
   }): AbstractProjectFactoryScript<Context, Arguments>;
 
   protected async createProject(args: Arguments) {
+    // Project has already been created once.
+    if (this.projectState.context.project) return
     const connection = await this.sfdcApi.getTsforceConnection();
     const script = this.getScript({ connection });
-    const context = await script.run(args);
-    this.context = context;
-    this.projectState.context = context;
+    this.projectState.context = await script.run(args);
   }
 }

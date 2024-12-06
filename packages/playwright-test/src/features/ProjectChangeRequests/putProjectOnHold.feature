@@ -2,7 +2,7 @@
 Feature: Put a project on hold
 
   Background:
-    Given a multi-partner CR&D project exists
+    Given a standard CR&D project exists
     And the user is the "pmUser" user
     And the user is on the project overview
     When the user selects the "Project change requests" tile
@@ -32,8 +32,6 @@ Feature: Put a project on hold
     And the user clicks submit
     Then the request should be submitted successfully
 
-  #Todo: Update the step above to save and return to request and then create another scenario to edit and submit the PCR
-
   Scenario: Verify that MO can query a PCR
     Given the user is the "mspUser" user
     And the user is on the project overview
@@ -46,7 +44,6 @@ Feature: Put a project on hold
     Then the user should see the following table
       | request_number | types               | started         | status                     | last_updated    | action |
       | 1              | Put project on hold | submission date | Queried to Project Manager | submission date | View   |
-
 
   Scenario: PM can resubmit a PCR
     Given the user is the "pmUser" user
@@ -62,27 +59,25 @@ Feature: Put a project on hold
       | request_number | types               | started         | status                          | last_updated    | action |
       | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | View   |
 
-#Todo
-# Scenario: MO can send PCR for approval
-#   Given the user is a monitoring officer
-#   And the user is on the project overview
-#   When the user selects the "Project change requests" tile
-#   Then the user sees the following table
-#     | request_number | types               | started         | status                          | last_updated    | action |
-#     | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | Review |
-#   When the user reviews the PCR request
-#   And the user sends the project change request for approval
-#   Then the user should see the following table
-#     | request_number | types               | started         | status                     | last_updated    | action |
-#     | 1              | Put project on hold | submission date | Submitted to Innovate UK   | submission date | View   |
+  Scenario: MO can send PCR for approval
+    Given the user is the "mspUser" user
+    And the user is on the project overview
+    When the user selects the "Project change requests" tile
+    Then the user sees the following table
+      | request_number | types               | started         | status                          | last_updated    | action |
+      | 1              | Put project on hold | submission date | Submitted to Monitoring Officer | submission date | Review |
+    When the user reviews the PCR request
+    And the user sends the project change request for approval
+    Then the user should see the following table
+      | request_number | types               | started         | status                   | last_updated    | action |
+      | 1              | Put project on hold | submission date | Submitted to Innovate UK | submission date | View   |
 
-#Todo
-#  Scenario: Verify that the FC cannot view a PCR
-#  Given the user is a finance contact
-#  And the user is on the project overview
-#  When the user selects the "Project change requests" tile
-#  Then the user sees the table as shown below
-#     | request_number | types               | started         | status                     | last_updated    |
-#     | 1              | Put project on hold | submission date | Submitted to Innovate UK   | submission date |
+  Scenario: Verify that the FC cannot view a PCR
+    Given the user is the "mainFcUser" user
+    And the user is on the project overview
+    When the user selects the "Project change requests" tile
+    Then the user sees the table as shown below
+      | request_number | types               | started         | status                   | last_updated    |
+      | 1              | Put project on hold | submission date | Submitted to Innovate UK | submission date |
 
 # Scenario: Innovate lead queries the PCR
