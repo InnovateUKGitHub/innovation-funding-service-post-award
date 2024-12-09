@@ -16,8 +16,8 @@ import { getPassportOidcStrategy, passportOidcSuccessRoute } from "./development
 const logger = new Logger("Auth");
 
 const getCookieTimestamp = () => {
-  // reset cookie once every minute to make rolling session
-  return Date.now() - (Date.now() % 60000);
+  // reset cookie to current time
+  return Date.now();
 };
 
 const getAuthRouter = async () => {
@@ -48,6 +48,12 @@ const getAuthRouter = async () => {
       }),
     )
     .use(passport.initialize())
+    .get("/heartbeat", (req, res) => {
+      req.session ??= {};
+      req.session.last_reset = getCookieTimestamp();
+      res.status(200);
+      res.send(null);
+    })
     .get("/developer/oidc/login", noCache, passport.authenticate("passportOidc"))
     .get("/login", noCache, passport.authenticate("passportSaml"))
     .get("/logout", noCache, (_req, res) => {
@@ -58,15 +64,6 @@ const getAuthRouter = async () => {
       });
 
       return res.redirect((configuration.sso.enabled && configuration.sso.signoutUrl) || "/");
-    })
-
-    .get("/heartbeat", (req, res, next) => {
-      req.session ??= {};
-      req.session.user ??= {};
-      // req.session.user.developer_oidc_username = payload.preferred_username;
-      req.session.last_reset = getCookieTimestamp();
-      res.status(200);
-      next();
     })
     .get(passportOidcSuccessRoute, (req, res) =>
       passport.authenticate("passportOidc", (authError: AnyObject, payload: AnyObject) => {
