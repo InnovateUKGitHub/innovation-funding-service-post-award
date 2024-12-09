@@ -32,6 +32,7 @@ export const getSalesforceConnection = async ({
     instanceUrl: url,
     email,
     traceId,
+    useSubrequests: configuration.features.useTsforceSubrequests,
   });
 };
 
@@ -53,6 +54,7 @@ export const salesforceConnectionWithToken = async (
         instanceUrl: signedToken.url,
         email: salesforceDetails.currentUsername,
         traceId,
+        useSubrequests: configuration.features.useTsforceSubrequests,
       }),
   );
 };

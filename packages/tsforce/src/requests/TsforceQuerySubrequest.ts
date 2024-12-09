@@ -18,8 +18,9 @@ class TsforceQuerySubrequest<T> extends BaseTsforceSobjectSubrequest<{
     fieldNames,
     sobject,
     connection,
-  }: { fieldNames: string[]; sobject: string } & BaseTsforceRequestProps) {
-    super({ sobject, connection });
+    useSubrequests,
+  }: { fieldNames: string[]; sobject: string; useSubrequests?: boolean } & BaseTsforceRequestProps) {
+    super({ sobject, connection, useSubrequests });
     this.fieldNames = fieldNames;
   }
 

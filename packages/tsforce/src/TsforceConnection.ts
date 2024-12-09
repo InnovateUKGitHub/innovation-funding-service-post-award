@@ -23,6 +23,7 @@ class TsforceConnection implements ITsforceConnection {
   private readonly logger: ILogger;
   private readonly accessToken: string;
   private readonly sobjectMap: Map<string, ITsforceSobject> = new Map();
+  private readonly useSubrequests?: boolean;
   public readonly email: string;
   public readonly httpClient: ITsforceHttpClient;
   public readonly dataLoader: TsforceConnectionDataloader;
@@ -34,6 +35,7 @@ class TsforceConnection implements ITsforceConnection {
     email,
     traceId,
     httpClient,
+    useSubrequests,
   }: {
     version?: string;
     instanceUrl: string;
@@ -41,6 +43,7 @@ class TsforceConnection implements ITsforceConnection {
     email: string;
     traceId: string;
     httpClient?: ITsforceHttpClient;
+    useSubrequests?: boolean;
   }) {
     this.dataLoader = new TsforceConnectionDataloader({ connection: this, email, traceId, version });
     this.httpClient = httpClient || new TsforceHttpClient({ accessToken, instanceUrl });
@@ -48,6 +51,7 @@ class TsforceConnection implements ITsforceConnection {
     this.email = email;
     this.logger = new Logger("tsforce", { prefixLines: [{ email, traceId }] });
     this.accessToken = accessToken;
+    this.useSubrequests = useSubrequests;
   }
 
   private startTimer(message: string) {
@@ -158,7 +162,7 @@ class TsforceConnection implements ITsforceConnection {
     if (this.sobjectMap.has(name)) {
       return this.sobjectMap.get(name) as ITsforceSobject;
     } else {
-      const newSobject = new TsforceSobject({ connection: this, name });
+      const newSobject = new TsforceSobject({ connection: this, name, useSubrequests: this.useSubrequests });
       this.sobjectMap.set(name, newSobject);
       return newSobject;
     }

@@ -13,19 +13,33 @@ import { ITsforceSobject } from "./types/ITsforceObject";
 
 class TsforceSobject implements ITsforceSobject {
   private readonly connection: ITsforceConnection;
+  private readonly useSubrequests?: boolean;
   public readonly name: string;
 
-  constructor({ connection, name }: { connection: ITsforceConnection; name: string }) {
+  constructor({
+    connection,
+    name,
+    useSubrequests,
+  }: {
+    connection: ITsforceConnection;
+    name: string;
+    useSubrequests?: boolean;
+  }) {
     this.connection = connection;
     this.name = name;
+    this.useSubrequests = useSubrequests;
+  }
+
+  private args() {
+    return { connection: this.connection, sobject: this.name, useSubrequests: this.useSubrequests };
   }
 
   blob(id: string, fieldName: string) {
-    const command = new TsforceBlobRequest({ connection: this.connection, sobject: this.name, id, fieldName });
+    const command = new TsforceBlobRequest({ ...this.args(), id, fieldName });
     return command.execute();
   }
   describe() {
-    const command = new TsforceDescribeSubrequest({ connection: this.connection, sobject: this.name });
+    const command = new TsforceDescribeSubrequest({ ...this.args() });
     return command.execute();
   }
   retrieve<T>(id: string, fieldNames: string[]) {
@@ -33,31 +47,31 @@ class TsforceSobject implements ITsforceSobject {
     return command.execute();
   }
   select<T>(fieldNames: string[]) {
-    const command = new TsforceQuerySubrequest<T>({ connection: this.connection, sobject: this.name, fieldNames });
+    const command = new TsforceQuerySubrequest<T>({ ...this.args(), fieldNames });
     return command;
   }
   insert<T>(body: T) {
-    const command = new TsforceInsertSubrequest<T>({ connection: this.connection, sobject: this.name, body });
+    const command = new TsforceInsertSubrequest<T>({ ...this.args(), body });
     return command.execute();
   }
   insertMany<T>(body: T[]) {
-    const command = new TsforceBulkInsertSubrequest<T>({ connection: this.connection, sobject: this.name, body });
+    const command = new TsforceBulkInsertSubrequest<T>({ ...this.args(), body });
     return command.execute();
   }
   update({ Id, ...body }: { Id: string } & AnyObject) {
-    const command = new TsforceUpdateSubrequest({ connection: this.connection, sobject: this.name, id: Id, body });
+    const command = new TsforceUpdateSubrequest({ ...this.args(), id: Id, body });
     return command.execute();
   }
   updateMany(body: ({ Id: string } & AnyObject)[]) {
-    const command = new TsforceBulkUpdateSubrequest({ connection: this.connection, sobject: this.name, body });
+    const command = new TsforceBulkUpdateSubrequest({ ...this.args(), body });
     return command.execute();
   }
   delete(id: string) {
-    const command = new TsforceDeleteSubrequest({ connection: this.connection, sobject: this.name, id });
+    const command = new TsforceDeleteSubrequest({ ...this.args(), id });
     return command.execute();
   }
   deleteMany(ids: string[]) {
-    const command = new TsforceBulkDeleteSubrequest({ connection: this.connection, ids });
+    const command = new TsforceBulkDeleteSubrequest({ ...this.args(), ids });
     return command.execute();
   }
 }

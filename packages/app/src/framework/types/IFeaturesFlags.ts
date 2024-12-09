@@ -5,4 +5,5 @@ export interface IFeatureFlags {
   readonly futureTimeExtensionInYears: number;
   readonly approveNewSubcontractor: boolean;
   readonly detailedErrorSummaryComponent: boolean;
+  readonly useTsforceSubrequests: boolean;
 }

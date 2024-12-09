@@ -16,8 +16,14 @@ interface TsforceSubrequestPayload {
 }
 
 abstract class BaseTsforceSubrequest<T> extends BaseTsforceRequest<T> {
+  private readonly useSubrequests?: boolean;
   abstract method: "POST" | "PUT" | "PATCH" | "GET" | "DELETE";
   abstract payload(): TsforceSubrequestPayload;
+
+  constructor({ connection, useSubrequests }: BaseTsforceRequestProps & { useSubrequests?: boolean }) {
+    super({ connection });
+    this.useSubrequests = useSubrequests;
+  }
 
   compose(n: number): BaseTsforceCompositeSubrequest {
     const { body, queryParameters, url } = this.payload();
@@ -41,21 +47,34 @@ abstract class BaseTsforceSubrequest<T> extends BaseTsforceRequest<T> {
   }
 
   async execute(): Promise<T> {
-    const result = (await this.connection.dataLoader.subrequest.load(this)) as TsforceCompositeSubrequestResult<T>;
+    if (this.useSubrequests) {
+      const result = (await this.connection.dataLoader.subrequest.load(this)) as TsforceCompositeSubrequestResult<T>;
 
-    if (result.httpStatusCode < 200 || result.httpStatusCode >= 300) {
-      throw new Error(JSON.stringify(result));
+      if (result.httpStatusCode < 200 || result.httpStatusCode >= 300) {
+        throw new Error(JSON.stringify(result));
+      }
+
+      return result.body;
+    } else {
+      const req = this.compose(1);
+
+      return this.connection.httpClient.fetchJson(req.url, {
+        method: req.method,
+        body: req.body ? JSON.stringify(req.body) : undefined,
+      });
     }
-
-    return result.body;
   }
 }
 
 abstract class BaseTsforceSobjectSubrequest<T> extends BaseTsforceSubrequest<T> {
   protected readonly sobject: string;
 
-  constructor({ sobject, connection }: { sobject: string } & BaseTsforceRequestProps) {
-    super({ connection });
+  constructor({
+    sobject,
+    connection,
+    useSubrequests,
+  }: { sobject: string; useSubrequests?: boolean } & BaseTsforceRequestProps) {
+    super({ connection, useSubrequests });
     this.sobject = sobject;
   }
 }

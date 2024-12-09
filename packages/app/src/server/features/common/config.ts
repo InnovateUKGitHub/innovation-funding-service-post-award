@@ -65,6 +65,7 @@ const configuration: Readonly<IConfig> = {
     futureTimeExtensionInYears: intEnv("FUTURE_TIME_EXTENSION_IN_YEARS", 5),
     approveNewSubcontractor: boolEnv("FEATURE_APPROVE_NEW_SUBCONTRACTOR", false),
     detailedErrorSummaryComponent: boolEnv("FEATURE_DETAILED_ERROR_SUMMARY_COMPONENT", false),
+    useTsforceSubrequests: boolEnv("FEATURE_USE_TSFORCE_SUBREQUESTS", true),
   },
   logLevel: env("LOG_LEVEL", LogLevel.ERROR, parseLogLevel),
   options: {

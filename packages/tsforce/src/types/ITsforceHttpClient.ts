@@ -1,7 +1,7 @@
 import type { Readable } from "node:stream";
 
 interface FetcherConfiguration {
-  method?: "GET" | "HEAD" | "PATCH" | "POST" | "PUT";
+  method?: "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE";
   searchParams?: Record<string, string>;
   decodeHTMLEntities?: boolean;
   headers?: Record<string, string>;
