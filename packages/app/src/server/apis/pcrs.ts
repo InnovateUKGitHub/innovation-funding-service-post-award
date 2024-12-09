@@ -1,4 +1,11 @@
-import { CreatePcrDto, FullPCRItemDto, PCRDto, PCRSummaryDto, StandalonePcrDto } from "@framework/dtos/pcrDtos";
+import {
+  CreatePcrDto,
+  FullPCRItemDto,
+  PCRDto,
+  PcrScopeChangeDto,
+  PCRSummaryDto,
+  StandalonePcrDto,
+} from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
@@ -6,6 +13,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
+import { UpdatePCRScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -24,6 +32,17 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PCRDto>;
+
+  updateScopeChange: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        id: PcrId;
+        pcr: PcrScopeChangeDto;
+      }
+    >,
+  ) => Promise<boolean>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
 
@@ -47,6 +66,13 @@ class Controller
       "/:projectId/:pcrId",
       (p, _, b: PCRDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
       this.update,
+    );
+    this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
+
+    this.putItem(
+      "/:projectId/:pcrId/scope-change",
+      (p, _, b: PcrScopeChangeDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
+      this.updateScopeChange,
     );
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
   }
@@ -81,6 +107,29 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async updateScopeChange(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        id: PcrId | PcrItemId;
+        pcr: PcrScopeChangeDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePCRScopeChangeCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.id,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {

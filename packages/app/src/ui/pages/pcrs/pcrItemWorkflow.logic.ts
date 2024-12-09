@@ -8,7 +8,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { FullPCRItemDto, PCRDto, PcrScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
@@ -77,31 +77,64 @@ const createMinimalPcrUpdateDto = ({
   };
 };
 
-export const useOnSavePcrItem = (
+const pcrIsScopeChangePcr = (pcr: PCRItemType): pcr is PCRItemType.ScopeChange => pcr === PCRItemType.ScopeChange;
+
+export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
   projectId: ProjectId,
   pcrId: PcrId,
   pcrItemId: PcrItemId,
   setFetchKey: Dispatch<SetStateAction<number>>,
   refreshItemWorkflowQuery: (() => Promise<void>) | undefined | null,
   step: number | undefined,
-  pcrType: PCRItemType,
+  pcrType: T,
 ) => {
   const navigate = useNavigate();
 
   const { clearMessages } = useMessageContext();
-  return useOnUpdate<Partial<FullPCRItemDto & { form: FormTypes }>, PCRDto, { link: ILinkInfo }>({
-    req: data => {
-      return clientsideApiClient.pcrs.update({
+
+  type SubmitData = T extends PCRItemType.ScopeChange
+    ? PcrScopeChangeDto
+    : Partial<FullPCRItemDto & { form: FormTypes }>;
+
+  if (pcrIsScopeChangePcr(pcrType)) {
+    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
+      req: data =>
+        clientsideApiClient.pcrs.updateScopeChange({
+          projectId,
+          id: pcrId,
+          pcr: {
+            ...(data as PcrScopeChangeDto),
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
+        }),
+      onSuccess: async (_, __, context) => {
+        if (!!refreshItemWorkflowQuery) {
+          await refreshItemWorkflowQuery();
+        }
+
+        clearMessages();
+        setFetchKey(k => k + 1);
+        navigate(context?.link?.path ?? "");
+      },
+    });
+  }
+
+  return useOnUpdate<SubmitData, PCRDto, { link: ILinkInfo }>({
+    req: data =>
+      clientsideApiClient.pcrs.update({
         projectId,
         id: pcrId,
         pcr: createMinimalPcrUpdateDto({
           projectId,
           pcrId,
           pcrItemId,
-          data: { ...data, type: pcrType, ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}) },
+          data: {
+            ...data,
+            type: pcrType,
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
         }),
-      });
-    },
+      }),
     onSuccess: async (_, __, context) => {
       if (!!refreshItemWorkflowQuery) {
         await refreshItemWorkflowQuery();

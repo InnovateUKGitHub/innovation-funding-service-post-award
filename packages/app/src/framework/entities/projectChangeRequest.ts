@@ -115,6 +115,8 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   typeOfAid?: TypeOfAid;
 }
 
+export type UpdatePcrItemEntity = PickRequiredFromPartial<ProjectChangeRequestItemEntity, "id" | "pcrId" | "projectId">;
+
 export interface ProjectChangeRequestStatusChangeEntity {
   createdBy: string;
   createdDate: Date;

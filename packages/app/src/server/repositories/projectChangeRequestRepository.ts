@@ -17,6 +17,7 @@ import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
+  UpdatePcrItemEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { configuration } from "@server/features/common/config";
@@ -28,6 +29,7 @@ export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
+  updateSingleItem(item: UpdatePcrItemEntity): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
   getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
@@ -322,7 +324,7 @@ export class ProjectChangeRequestRepository
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
-    const manageTeamMemberheader = await this.getRecordTypeId(
+    const manageTeamMemberHeader = await this.getRecordTypeId(
       this.salesforceObjectName,
       this.accRequestHeaderManageTeamMembers,
     );
@@ -330,7 +332,7 @@ export class ProjectChangeRequestRepository
     const data = await super.where(
       `Acc_Project__c='${sss(projectId)}' OR Acc_RequestHeader__r.Acc_Project__c='${sss(projectId)}'`,
     );
-    const mapper = new SalesforcePCRMapper([headerRecordTypeId, manageTeamMemberheader]);
+    const mapper = new SalesforcePCRMapper([headerRecordTypeId, manageTeamMemberHeader]);
     return mapper.map(data);
   }
 
@@ -396,6 +398,13 @@ export class ProjectChangeRequestRepository
         };
       }),
     );
+  }
+
+  async updateSingleItem(item: UpdatePcrItemEntity) {
+    await super.updateItem({
+      Id: item.id,
+      ...this.mapCreateDto(item),
+    });
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
@@ -467,11 +476,10 @@ export class ProjectChangeRequestRepository
     return mapToPCRItemStatusLabel(status);
   }
 
-  private mapCreateDto(x: ProjectChangeRequestItemForCreateEntity) {
+  private mapCreateDto(x: ProjectChangeRequestItemForCreateEntity | UpdatePcrItemEntity) {
     return {
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_NewProjectDuration__C: x.projectDuration,
-
       Acc_NewProjectSummary__c: x.projectSummary,
       Acc_NewPublicDescription__c: x.publicDescription,
       Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
@@ -504,7 +512,6 @@ export class ProjectChangeRequestRepository
       Acc_Contact2EmailAddress__c: x.contact2Email,
       Acc_AwardRate__c: x.awardRate,
       Acc_OtherFunding__c: x.hasOtherFunding,
-
       Acc_TSBReference__c: x.tsbReference,
       Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
       Loan_ExtensionPeriodChange__c: x.extensionPeriodChange,
@@ -512,7 +519,6 @@ export class ProjectChangeRequestRepository
       New_company_subcontractor_name__c: x.subcontractorName,
       Company_registration_number__c: x.subcontractorRegistrationNumber,
       Acc_ProjectContactLink__c: x.pclId,
-
       Acc_Type__c: mapToSalesforcePCRManageTeamMemberType(x.manageTeamMemberType),
       Acc_First_Name__c: x.manageTeamMemberFirstName,
       Acc_Last_Name__c: x.manageTeamMemberLastName,

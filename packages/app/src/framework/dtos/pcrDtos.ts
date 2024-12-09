@@ -14,6 +14,7 @@ import {
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectRole } from "./projectContactDto";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -336,3 +337,20 @@ export type FullPCRItemDto = {
 };
 
 export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;
+
+export type ScopeChangeFormType =
+  | FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue
+  | FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue
+  | FormTypes.PcrChangeProjectScopeSummary;
+
+export type PcrScopeChangeDto = {
+  pcrItemId: PcrItemId;
+  pcrId: PcrId;
+  projectId: ProjectId;
+  publicDescription?: string;
+  projectSummary?: string;
+  type: PCRItemType;
+  status?: PCRItemStatus;
+  markedAsComplete?: boolean;
+  form: ScopeChangeFormType;
+};

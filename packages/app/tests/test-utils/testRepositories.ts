@@ -18,6 +18,7 @@ import {
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
   ProjectChangeRequestStatusChangeEntity,
+  UpdatePcrItemEntity,
 } from "@framework/entities/projectChangeRequest";
 import { RecordType } from "@framework/entities/recordType";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
@@ -339,7 +340,7 @@ class ClaimsTestRepository extends TestRepository<ISalesforceClaim> implements I
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
-  getByProjectId(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
+  getByProjectId(_projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
@@ -832,6 +833,11 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return Promise.resolve();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateSingleItem(_item: UpdatePcrItemEntity): Promise<void> {
+    return Promise.resolve();
+  }
+
   private mapItemsForCreate(
     headerId: string,
     pcr: ProjectChangeRequestForCreateEntity,
@@ -987,7 +993,7 @@ class ProjectChangeRequestStatusChangeTestRepository
   }
 
   getStatusChanges(
-    projectId: ProjectId,
+    _projectId: ProjectId,
     projectChangeRequestId: string,
   ): Promise<ProjectChangeRequestStatusChangeEntity[]> {
     return super.getWhere(x => x.pcrId === projectChangeRequestId);
@@ -1054,7 +1060,7 @@ class LoansTestRepository {
     return Promise.resolve(loans);
   }
 
-  get(projectId: ProjectId, options: { loanId?: string; periodId?: number }) {
+  get(_projectId: ProjectId, options: { loanId?: string; periodId?: number }) {
     return new Promise<LoanDto>(resolve => {
       if (options.loanId) {
         const loanItem = this.Items.find(x => x.Id === options.loanId);
