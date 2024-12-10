@@ -77,6 +77,22 @@ export class SalesforceFieldCustomValidationError extends SalesforceDetailedErro
   }
 }
 
+export class DataloaderNotFoundError extends SalesforceDetailedErrorResponse {
+  constructor({ name, key }: { name: string; key: string }) {
+    super({
+      errorCode: "DATALOADER_NOT_FOUND",
+      message: `Dataloader '${name}' could not find a value for key '${key}'`,
+      details: [
+        {
+          code: DetailedErrorCode.ACC_DATALOADER_NOT_FOUND,
+          name,
+          key,
+        },
+      ],
+    });
+  }
+}
+
 export class SalesforceDataChangeError extends SalesforceDetailedErrorResponse {
   constructor(message: string, errors: (TsforceSalesforceError | IAppDetailedError)[]) {
     super({ message, details: mapSfdcErrors(errors) });

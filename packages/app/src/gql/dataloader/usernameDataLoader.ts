@@ -1,5 +1,6 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import DataLoader from "dataloader";
+import { CachedDataloader } from "@server/dataloaderCache";
+import { DataloaderNotFoundError } from "@server/repositories/errors";
 import gql from "graphql-tag";
 
 interface UserData {
@@ -23,6 +24,8 @@ interface RolesData {
   };
 }
 
+const usernameCache = new CachedDataloader();
+
 /**
  * Get an instance of the Username dataloader, which batches requests to fetch usernames from contact ids,
  * then fetches all data required in one go instead of many separate requests.
@@ -30,8 +33,8 @@ interface RolesData {
  * @param ctx The GraphQL Context
  * @returns A dataloader that fetches the user for each username
  */
-const getUsernameDataLoader = (ctx: PartialGraphQLContext) => {
-  return new DataLoader<string, UserData | null>(async contacts => {
+const getUsernameDataLoader = (ctx: PartialGraphQLContext) =>
+  usernameCache.getDataloader(ctx.email, async contacts => {
     const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`
         query UsernameQuery($contacts: [ID!]!) {
@@ -61,8 +64,14 @@ const getUsernameDataLoader = (ctx: PartialGraphQLContext) => {
 
     // For each key that was passed in, find the user data.
     // A map is chosen to ensure the data is in the EXACT order as requested.
-    return contacts.map(contact => data.uiapi.query.User.edges.find(x => x.node?.ContactId?.value === contact) ?? null);
+    return contacts.map(
+      contact =>
+        data.uiapi.query.User.edges.find(x => x.node?.ContactId?.value === contact) ??
+        new DataloaderNotFoundError({
+          name: "Contact",
+          key: contact,
+        }),
+    );
   });
-};
 
 export { getUsernameDataLoader };

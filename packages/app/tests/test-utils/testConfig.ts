@@ -17,6 +17,7 @@ export class TestConfig implements IConfig {
     cookie: 1,
     token: 1,
     contentRefreshSeconds: 0,
+    dataloaderCache: 15,
   };
 
   public certificates = {

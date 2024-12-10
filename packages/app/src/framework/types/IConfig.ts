@@ -33,6 +33,7 @@ export interface IConfig {
     readonly token: number;
     readonly cookie: number;
     readonly contentRefreshSeconds: number;
+    readonly dataloaderCache: number;
   };
 
   readonly certificates: {

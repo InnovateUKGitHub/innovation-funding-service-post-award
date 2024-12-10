@@ -1,5 +1,6 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import DataLoader from "dataloader";
+import { CachedDataloader } from "@server/dataloaderCache";
+import { DataloaderNotFoundError } from "@server/repositories/errors";
 import gql from "graphql-tag";
 
 interface ProjectData {
@@ -46,6 +47,8 @@ interface RolesData {
   };
 }
 
+const rolesCache = new CachedDataloader();
+
 /**
  * Get an instance of the Roles dataloader, which batches requests to fetch roles,
  * then fetches all data required in one go instead of many separate requests.
@@ -54,7 +57,7 @@ interface RolesData {
  * @returns A dataloader that fetches the roles for each project
  */
 const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
-  return new DataLoader<string, ProjectData | null>(async keys => {
+  rolesCache.getDataloader(ctx.email, async keys => {
     const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`
         query UserRolesQuery($keys: [ID]) {
@@ -108,7 +111,14 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
 
     // For each key that was passed in, find the roles data.
     // A map is chosen to ensure the data is in the EXACT order as requested.
-    return keys.map(key => data.uiapi.query.Acc_Project__c.edges.find(x => x.node.Id === key) ?? null);
+    return keys.map(
+      key =>
+        data.uiapi.query.Acc_Project__c.edges.find(x => x.node.Id === key) ??
+        new DataloaderNotFoundError({
+          name: "Project Roles",
+          key,
+        }),
+    );
   });
 };
 

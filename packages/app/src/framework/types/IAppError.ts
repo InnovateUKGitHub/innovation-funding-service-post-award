@@ -62,6 +62,12 @@ interface IAppDetailedSfdcGenericError extends IAppDetailedBaseError {
   data: TsforceSalesforceError;
 }
 
+interface IAppDetailedAccDataloaderNotFoundError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.ACC_DATALOADER_NOT_FOUND;
+  name: string;
+  key: string;
+}
+
 export type IAppDetailedError =
   | IAppDetailedAccValidationError
   | IAppDetailedAccGraphQLError
@@ -71,4 +77,5 @@ export type IAppDetailedError =
   | IAppDetailedSfdcInsufficientAccessOrReadonlyError
   | IAppDetailedSfdcNotUploadedFromOwnerError
   | IAppDetailedSfdcGenericError
-  | IAppDetailedSfdcFieldCustomValidationExceptionError;
+  | IAppDetailedSfdcFieldCustomValidationExceptionError
+  | IAppDetailedAccDataloaderNotFoundError;

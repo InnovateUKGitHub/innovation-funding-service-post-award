@@ -1,12 +1,20 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { soql } from "@innovateuk/common/salesforceStringHelpers";
-import DataLoader from "dataloader";
+import { CachedDataloader } from "@server/dataloaderCache";
 
 interface ProjectClaimStatusCountsRecord {
   Acc_ClaimStatus__c: string;
   Acc_ProjectId__c: string;
   expr0: number;
 }
+
+const claimStatusCeche = new CachedDataloader({
+  dataloaderOptions: {
+    // Assuming each project ID returns a max of 15 counts (there are only 12 statuses),
+    // limit our batch size so each project can return all 12 counts each
+    maxBatchSize: Math.floor(2000 / 15),
+  },
+});
 
 /**
  * Get an instance of the claim counts dataloader, which batches requests to fetch claim counts,
@@ -15,11 +23,10 @@ interface ProjectClaimStatusCountsRecord {
  * @param ctx The GraphQL Context
  * @returns A dataloader that fetches the claim status counts for each project
  */
-const getProjectClaimStatusCountsDataLoader = (ctx: PartialGraphQLContext) => {
-  return new DataLoader<string, ProjectClaimStatusCountsRecord[] | null>(
-    async keys => {
-      const data = await ctx.api.executeSOQL<ProjectClaimStatusCountsRecord>({
-        query: soql`
+const getProjectClaimStatusCountsDataLoader = (ctx: PartialGraphQLContext) =>
+  claimStatusCeche.getDataloader(ctx.email, async keys => {
+    const data = await ctx.api.executeSOQL<ProjectClaimStatusCountsRecord>({
+      query: soql`
         SELECT
           Acc_ClaimStatus__c,
           Acc_ProjectParticipant__r.Acc_ProjectId__c,
@@ -32,16 +39,11 @@ const getProjectClaimStatusCountsDataLoader = (ctx: PartialGraphQLContext) => {
           Acc_ClaimStatus__c,
           Acc_ProjectParticipant__r.Acc_ProjectId__c
       `,
-      });
+    });
 
-      // For each key that was passed in, find the count data.
-      // A map is chosen to ensure the data is in the EXACT order as requested.
-      return keys.map(key => data.records.filter(x => x.Acc_ProjectId__c === key));
-    },
-    // Assuming each project ID returns a max of 15 counts (there are only 12 statuses),
-    // limit our batch size so each project can return all 12 counts each
-    { maxBatchSize: Math.floor(2000 / 15) },
-  );
-};
+    // For each key that was passed in, find the count data.
+    // A map is chosen to ensure the data is in the EXACT order as requested.
+    return keys.map(key => data.records.filter(x => x.Acc_ProjectId__c === key));
+  });
 
 export { getProjectClaimStatusCountsDataLoader };

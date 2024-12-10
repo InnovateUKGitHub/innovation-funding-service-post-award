@@ -30,6 +30,7 @@ const configuration: Readonly<IConfig> = {
     token: floatEnv("TOKEN_TIMEOUT_MINUTES", 10),
     cookie: floatEnv("COOKIE_TIMEOUT_MINUTES", 30),
     contentRefreshSeconds: floatEnv("CONTENT_REFRESH_TIMEOUT_SECONDS", 0),
+    dataloaderCache: intEnv("DATALOADER_TIMEOUT_MINUTES", 15),
   },
   certificates: {
     salesforce: certEnv("SALESFORCE_PRIVATE_KEY"),
