@@ -1,6 +1,6 @@
-import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { soql } from "@innovateuk/common/salesforceStringHelpers";
-import { CachedDataloaderFactory } from "@server/dataloaderCache";
+import { CachedDataloader } from "@server/dataloader/dataloaderCache";
+import { DataloaderParams } from "../dataloader.logic";
 
 interface ProjectClaimStatusCountsRecord {
   Acc_ClaimStatus__c: string;
@@ -8,7 +8,7 @@ interface ProjectClaimStatusCountsRecord {
   expr0: number;
 }
 
-const claimStatusCeche = new CachedDataloaderFactory<ProjectClaimStatusCountsRecord[]>({
+const claimStatusCeche = new CachedDataloader<ProjectClaimStatusCountsRecord[]>({
   dataloaderOptions: {
     // Assuming each project ID returns a max of 15 counts (there are only 12 statuses),
     // limit our batch size so each project can return all 12 counts each
@@ -23,7 +23,7 @@ const claimStatusCeche = new CachedDataloaderFactory<ProjectClaimStatusCountsRec
  * @param ctx The GraphQL Context
  * @returns A dataloader that fetches the claim status counts for each project
  */
-const getProjectClaimStatusCountsDataLoader = (ctx: PartialGraphQLContext) =>
+const getProjectClaimStatusCountsDataLoader = (ctx: DataloaderParams) =>
   claimStatusCeche.getDataloader(ctx.email, async keys => {
     const data = await ctx.api.executeSOQL<ProjectClaimStatusCountsRecord>({
       query: soql`

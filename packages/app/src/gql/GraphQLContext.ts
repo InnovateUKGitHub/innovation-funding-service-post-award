@@ -1,12 +1,12 @@
 import { ForbiddenError } from "@shared/appError";
 import { Logger } from "@innovateuk/logger";
 import { Request, Response } from "express";
-import { getFeedAttachmentDataLoader } from "./dataloader/feedAttachmentDataLoader";
-import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
-import { getUserContactDataLoader } from "./dataloader/userContactDataLoader";
-import { getUsernameDataLoader } from "./dataloader/usernameDataLoader";
+import { getFeedAttachmentDataLoader } from "../server/dataloader/loader/feedAttachmentDataLoader";
+import { getProjectRolesDataLoader } from "../server/dataloader/loader/projectRolesDataLoader";
+import { getUserContactDataLoader } from "../server/dataloader/loader/userContactDataLoader";
+import { getUsernameDataLoader } from "../server/dataloader/loader/usernameDataLoader";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
-import { getProjectClaimStatusCountsDataLoader } from "./dataloader/projectClaimStatusCountsDataLoader";
+import { getProjectClaimStatusCountsDataLoader } from "../server/dataloader/loader/projectClaimStatusCountsDataLoader";
 import { configuration } from "@server/features/common/config";
 import { getSalesforceConnection } from "@server/repositories/salesforceConnection";
 
@@ -53,23 +53,18 @@ export const createContextFromEmail = async ({
       }),
     ]);
 
-    // Create an incomplete GraphQL context for use in DataLoaders.
-    const partialCtx: PartialGraphQLContext = {
+    // Create a full context, including DataLoaders.
+    const ctx: GraphQLContext = {
       developerEmail,
       email,
       api,
       adminApi,
       traceId,
-    };
-
-    // Create a full context, including DataLoaders.
-    const ctx: GraphQLContext = {
-      ...partialCtx,
-      projectRolesDataLoader: getProjectRolesDataLoader(partialCtx),
-      userContactDataLoader: getUserContactDataLoader(partialCtx),
-      usernameDataLoader: getUsernameDataLoader(partialCtx),
-      feedAttachmentDataLoader: getFeedAttachmentDataLoader(partialCtx),
-      projectClaimStatusCountsDataLoader: getProjectClaimStatusCountsDataLoader(partialCtx),
+      projectRolesDataLoader: getProjectRolesDataLoader({ email, api }),
+      userContactDataLoader: getUserContactDataLoader({ email, api }),
+      usernameDataLoader: getUsernameDataLoader({ email, api }),
+      feedAttachmentDataLoader: getFeedAttachmentDataLoader({ email, api: adminApi }),
+      projectClaimStatusCountsDataLoader: getProjectClaimStatusCountsDataLoader({ email, api }),
     };
 
     return ctx;

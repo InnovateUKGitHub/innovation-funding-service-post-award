@@ -1,7 +1,7 @@
-import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { CachedDataloaderFactory } from "@server/dataloaderCache";
+import { CachedDataloader } from "@server/dataloader/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
 import gql from "graphql-tag";
+import { DataloaderParams } from "../dataloader.logic";
 
 interface UserData {
   node: {
@@ -24,7 +24,7 @@ interface RolesData {
   };
 }
 
-const usernameCache = new CachedDataloaderFactory<UserData>();
+const usernameCache = new CachedDataloader<UserData | DataloaderNotFoundError>();
 
 /**
  * Get an instance of the Username dataloader, which batches requests to fetch usernames from contact ids,
@@ -33,7 +33,7 @@ const usernameCache = new CachedDataloaderFactory<UserData>();
  * @param ctx The GraphQL Context
  * @returns A dataloader that fetches the user for each username
  */
-const getUsernameDataLoader = (ctx: PartialGraphQLContext) =>
+const getUsernameDataLoader = (ctx: DataloaderParams) =>
   usernameCache.getDataloader(ctx.email, async contacts => {
     const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`

@@ -1,11 +1,10 @@
 import TTLCache from "@isaacs/ttlcache";
 import DataLoader from "dataloader";
 import { LRUCache } from "lru-cache";
-import { configuration } from "./features/common/config";
-import { DataloaderNotFoundError } from "./repositories/errors";
+import { configuration } from "../features/common/config";
 
-class CachedDataloaderFactory<T> {
-  dataloaderCache: TTLCache<string, DataLoader<string, T | DataloaderNotFoundError>>;
+class CachedDataloader<T> {
+  dataloaderCache: TTLCache<string, DataLoader<string, T>>;
   dataloaderOptions: DataLoader.Options<string, T> | undefined;
 
   constructor({ dataloaderOptions }: { dataloaderOptions?: DataLoader.Options<string, T> } = {}) {
@@ -20,12 +19,12 @@ class CachedDataloaderFactory<T> {
     const existingLoader = this.dataloaderCache.get(key);
     if (existingLoader) return existingLoader;
 
-    const cache = new LRUCache<string, Promise<T | DataloaderNotFoundError>>({
+    const cache = new LRUCache<string, Promise<T>>({
       max: 1000,
       ttl: configuration.timeouts.dataloaderCache * 60 * 1000,
     });
 
-    const newLoader = new DataLoader<string, T | DataloaderNotFoundError>(batchFn, {
+    const newLoader = new DataLoader<string, T>(batchFn, {
       cacheMap: cache,
       ...this.dataloaderOptions,
     });
@@ -36,4 +35,4 @@ class CachedDataloaderFactory<T> {
   }
 }
 
-export { CachedDataloaderFactory };
+export { CachedDataloader };

@@ -1,6 +1,6 @@
-import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { CachedDataloaderFactory } from "@server/dataloaderCache";
+import { CachedDataloader } from "@server/dataloader/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
+import { DataloaderParams } from "../dataloader.logic";
 
 interface ContactData {
   attributes: unknown;
@@ -14,7 +14,7 @@ interface ContactData {
   };
 }
 
-const userCache = new CachedDataloaderFactory<ContactData>();
+const userCache = new CachedDataloader<ContactData | DataloaderNotFoundError>();
 
 /**
  * Get an instance of the Users dataloader, which batches requests to fetch contact ids from usernames,
@@ -23,7 +23,7 @@ const userCache = new CachedDataloaderFactory<ContactData>();
  * @param ctx The Salesforce Context
  * @returns A dataloader that fetches the user for each username
  */
-const getUserContactDataLoader = (ctx: PartialGraphQLContext) =>
+const getUserContactDataLoader = (ctx: DataloaderParams) =>
   userCache.getDataloader(ctx.email, async usernames => {
     const data = await ctx.api
       .sobject("user")

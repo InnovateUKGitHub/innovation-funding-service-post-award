@@ -1,6 +1,6 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
-import { DataloaderNotFoundError } from "@server/repositories/errors";
+import { getRecord } from "@server/dataloader/dataloader.logic";
 
 const isFeedAttachmentResolver: IFieldResolverOptions = {
   selectionSet: `{ Id ContentDocument { Id LatestPublishedVersionId { value }} }`,
@@ -10,9 +10,11 @@ const isFeedAttachmentResolver: IFieldResolverOptions = {
       input.ContentDocument.Id,
     ]);
 
-    return !(
-      contentDocumentLinkData instanceof DataloaderNotFoundError &&
-      contentDocumentData instanceof DataloaderNotFoundError
+    // If any of the loaders returns some data,
+    // we have Salesforce Chatter documents!
+    return (
+      (getRecord(contentDocumentLinkData) && contentDocumentLinkData.length) ||
+      (getRecord(contentDocumentData) && contentDocumentData.length)
     );
   },
 };

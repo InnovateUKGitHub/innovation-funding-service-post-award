@@ -1,14 +1,13 @@
-import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { sss } from "@innovateuk/common/salesforceStringHelpers";
-import { CachedDataloaderFactory } from "@server/dataloaderCache";
-import { DataloaderNotFoundError } from "@server/repositories/errors";
+import { CachedDataloader } from "@server/dataloader/dataloaderCache";
+import { DataloaderParams } from "../dataloader.logic";
 
 interface FeedAttachmentRecord {
   Id: string;
   RecordId: string;
 }
 
-const chatterDocumentCache = new CachedDataloaderFactory<FeedAttachmentRecord>({
+const chatterDocumentCache = new CachedDataloader<FeedAttachmentRecord[]>({
   dataloaderOptions: { maxBatchSize: 20 },
 });
 
@@ -18,20 +17,13 @@ const chatterDocumentCache = new CachedDataloaderFactory<FeedAttachmentRecord>({
  * @param ctx The Salesforce Context
  * @returns A dataloader that fetches the user for each username
  */
-const getFeedAttachmentDataLoader = (ctx: PartialGraphQLContext) =>
+const getFeedAttachmentDataLoader = (ctx: DataloaderParams) =>
   chatterDocumentCache.getDataloader(ctx.email, async contentDocumentIds => {
-    const data = await ctx.adminApi.executeSOQL<FeedAttachmentRecord>({
+    const data = await ctx.api.executeSOQL<FeedAttachmentRecord>({
       query: `SELECT Id, RecordId FROM FeedAttachment WHERE RecordId IN ('${contentDocumentIds.map(sss).join("','")}')`,
     });
 
-    return contentDocumentIds.map(
-      key =>
-        data.records.find(x => x.RecordId === key) ??
-        new DataloaderNotFoundError({
-          name: "Chatter Document",
-          key,
-        }),
-    );
+    return contentDocumentIds.map(key => data.records.filter(x => x.RecordId === key));
   });
 
 export { getFeedAttachmentDataLoader };
