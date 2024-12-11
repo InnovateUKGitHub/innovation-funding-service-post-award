@@ -165,6 +165,8 @@ export const claimDetailsQuery = graphql`
                 { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
               ]
             }
             first: 2000
