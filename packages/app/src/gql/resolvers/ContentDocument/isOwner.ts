@@ -1,5 +1,6 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
+import { DataloaderNotFoundError } from "@server/repositories/errors";
 
 const isOwnerResolver: IFieldResolverOptions = {
   selectionSet: `{ Id ContentDocument { CreatedBy { Id }} }`,
@@ -9,7 +10,7 @@ const isOwnerResolver: IFieldResolverOptions = {
     /**
      * `isOwner` flag is true if the document was created by the current user
      */
-    return userData?.Id && userData.Id === input?.ContentDocument?.CreatedBy?.Id;
+    return !(userData instanceof DataloaderNotFoundError) && userData.Id === input?.ContentDocument?.CreatedBy?.Id;
   },
 };
 

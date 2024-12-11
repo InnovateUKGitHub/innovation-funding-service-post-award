@@ -1,5 +1,5 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { CachedDataloader } from "@server/dataloaderCache";
+import { CachedDataloaderFactory } from "@server/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
 import gql from "graphql-tag";
 
@@ -24,7 +24,7 @@ interface RolesData {
   };
 }
 
-const usernameCache = new CachedDataloader();
+const usernameCache = new CachedDataloaderFactory<UserData>();
 
 /**
  * Get an instance of the Username dataloader, which batches requests to fetch usernames from contact ids,

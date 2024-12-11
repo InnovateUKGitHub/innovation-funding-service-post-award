@@ -1,5 +1,5 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { CachedDataloader } from "@server/dataloaderCache";
+import { CachedDataloaderFactory } from "@server/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
 
 interface ContactData {
@@ -14,7 +14,7 @@ interface ContactData {
   };
 }
 
-const userCache = new CachedDataloader();
+const userCache = new CachedDataloaderFactory<ContactData>();
 
 /**
  * Get an instance of the Users dataloader, which batches requests to fetch contact ids from usernames,

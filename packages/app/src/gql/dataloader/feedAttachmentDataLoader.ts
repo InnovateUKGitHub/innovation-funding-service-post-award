@@ -1,6 +1,6 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { sss } from "@innovateuk/common/salesforceStringHelpers";
-import { CachedDataloader } from "@server/dataloaderCache";
+import { CachedDataloaderFactory } from "@server/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
 
 interface FeedAttachmentRecord {
@@ -8,7 +8,9 @@ interface FeedAttachmentRecord {
   RecordId: string;
 }
 
-const chatterDocumentCache = new CachedDataloader({ dataloaderOptions: { maxBatchSize: 20 } });
+const chatterDocumentCache = new CachedDataloaderFactory<FeedAttachmentRecord>({
+  dataloaderOptions: { maxBatchSize: 20 },
+});
 
 /**
  * Get an instance of the Feed Attachment dataloader, which batches requests to fetch feed attachments

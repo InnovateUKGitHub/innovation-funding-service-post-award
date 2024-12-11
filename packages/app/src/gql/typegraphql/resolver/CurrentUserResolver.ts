@@ -2,6 +2,7 @@ import type { GraphQLContext } from "@gql/GraphQLContext";
 import { configuration } from "@server/features/common/config";
 import { Ctx, Query, Resolver } from "type-graphql";
 import { CurrentUserObject } from "../object/CurrentUserObject";
+import { DataloaderNotFoundError } from "@server/repositories/errors";
 
 @Resolver()
 class CurrentUserResolver {
@@ -9,7 +10,7 @@ class CurrentUserResolver {
   async currentUser(@Ctx() ctx: GraphQLContext): Promise<CurrentUserObject> {
     const userInfo = await ctx.userContactDataLoader.load(ctx.email);
 
-    if (!userInfo) {
+    if (userInfo instanceof DataloaderNotFoundError) {
       return {
         email: null,
         userId: null,

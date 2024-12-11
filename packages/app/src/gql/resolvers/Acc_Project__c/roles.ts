@@ -1,6 +1,7 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
 import { configuration } from "@server/features/common/config";
+import { DataloaderNotFoundError } from "@server/repositories/errors";
 
 interface ExternalRoles {
   isMo: boolean;
@@ -40,7 +41,7 @@ const rolesResolver: IFieldResolverOptions = {
 
     // Make sure our role data and contact data exists first.
     // If it doesn't, return the empty list of permissions.
-    if (!(roleData && userData)) return permissions;
+    if (roleData instanceof DataloaderNotFoundError || userData instanceof DataloaderNotFoundError) return permissions;
 
     // Grab the Contact ID that is related to the current logged in user.
     // In the event the contactId is undefined, for example, incorrectly setup Salesforce,

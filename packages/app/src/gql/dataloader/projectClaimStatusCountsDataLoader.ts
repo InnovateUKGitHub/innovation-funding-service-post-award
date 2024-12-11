@@ -1,6 +1,6 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
 import { soql } from "@innovateuk/common/salesforceStringHelpers";
-import { CachedDataloader } from "@server/dataloaderCache";
+import { CachedDataloaderFactory } from "@server/dataloaderCache";
 
 interface ProjectClaimStatusCountsRecord {
   Acc_ClaimStatus__c: string;
@@ -8,7 +8,7 @@ interface ProjectClaimStatusCountsRecord {
   expr0: number;
 }
 
-const claimStatusCeche = new CachedDataloader({
+const claimStatusCeche = new CachedDataloaderFactory<ProjectClaimStatusCountsRecord[]>({
   dataloaderOptions: {
     // Assuming each project ID returns a max of 15 counts (there are only 12 statuses),
     // limit our batch size so each project can return all 12 counts each

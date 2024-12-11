@@ -1,5 +1,5 @@
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { CachedDataloader } from "@server/dataloaderCache";
+import { CachedDataloaderFactory } from "@server/dataloaderCache";
 import { DataloaderNotFoundError } from "@server/repositories/errors";
 import gql from "graphql-tag";
 
@@ -47,7 +47,7 @@ interface RolesData {
   };
 }
 
-const rolesCache = new CachedDataloader();
+const rolesCache = new CachedDataloaderFactory<ProjectData>();
 
 /**
  * Get an instance of the Roles dataloader, which batches requests to fetch roles,
@@ -56,7 +56,7 @@ const rolesCache = new CachedDataloader();
  * @param ctx The GraphQL Context
  * @returns A dataloader that fetches the roles for each project
  */
-const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
+const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) =>
   rolesCache.getDataloader(ctx.email, async keys => {
     const { data } = await ctx.api.executeGraphQL<RolesData>({
       document: gql`
@@ -120,6 +120,5 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
         }),
     );
   });
-};
 
 export { getProjectRolesDataLoader };
