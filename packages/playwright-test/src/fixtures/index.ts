@@ -29,6 +29,7 @@ import { ProjectDetails } from "./acc/pages/ProjectDetails";
 import { ProjectDocuments } from "./acc/pages/ProjectDocuments";
 import { Validators } from "./validators";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
+import { ChangePartnerName } from "./acc/pages/PCRs/changePartnerName";
 
 type AccFixtures = {
   // Pages
@@ -46,6 +47,7 @@ type AccFixtures = {
   removePartner: RemovePartner;
   projectDetails: ProjectDetails;
   projectDocuments: ProjectDocuments;
+  changePartnerName: ChangePartnerName;
 
   // Misc
   accNavigation: AccNavigation;
@@ -108,6 +110,8 @@ export const test = base.extend<AccFixtures, Workers>({
         projectState,
       }),
     ),
+  changePartnerName: ({ page, commands, projectChangeRequests, accNavigation, validators }, use) =>
+    use(new ChangePartnerName({ page, commands, projectChangeRequests, accNavigation, validators })),
 
   // Project Factory
   accProjectBase: [

@@ -58,7 +58,7 @@ class RemovePartner {
     this.projectTitle = this.page.getByTestId("page-title").filter({ hasText: ".100" });
     this.backToRequest = this.commands.backLink("Back to request");
     this.selectSubheading = this.page.locator("css=legend").filter({ hasText: "Select partner to remove" });
-    this.partners = ["Hedge's Consulting Ltd.", "Hedge's Finance Ltd."];
+    this.partners = ["Hedge's Primary Ltd.", "Hedge's Secondary Ltd."];
     this.lastPeriodSubheading = this.page.locator("css=legend").filter({ hasText: "When is their last period?" });
     this.lastPeriodGuidance = this.page.getByRole("paragraph").filter({
       hasText:

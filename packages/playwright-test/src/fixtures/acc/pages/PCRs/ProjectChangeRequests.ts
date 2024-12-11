@@ -86,6 +86,7 @@ class ProjectChangeRequests {
    */
   @When("the user creates a {string} PCR")
   async createPCR(pcr: PcrType) {
+    await this.clickCreateRequest();
     await this.commands.selectPcrType(pcr);
     await this.createButton.click();
   }
@@ -261,5 +262,9 @@ class ProjectChangeRequests {
       const span = this.page.locator("css=span").filter({ hasText: name });
       await expect(this.page.getByRole("checkbox").filter({ has: span })).not.toBeDisabled();
     }
+  }
+
+  async clickCreateRequest() {
+    await this.commands.button("Create request").click();
   }
 }

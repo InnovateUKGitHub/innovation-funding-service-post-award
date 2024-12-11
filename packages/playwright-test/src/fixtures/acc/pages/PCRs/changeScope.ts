@@ -86,18 +86,18 @@ class ChangeProjectScope {
     this.publishedPubSummary = this.page.locator("css=summary").getByRole("paragraph");
     this.publishedSummaryDetails = this.page.locator("css=details").filter({ hasText: "Published project summary" });
     this.emptySummary = [
-      ["Existing public description", "This is the public description."],
+      ["Existing public description", "This is a public description"],
       ["New public description", "Description test"],
-      ["Existing project summary", "This is the public summary."],
+      ["Existing project summary", "This is a public summary"],
       ["New project summary", "Summary test"],
     ];
     this.fullCharRemaining = this.page
       .getByRole("paragraph")
       .filter({ hasText: "You have 32000 characters remaining" });
     this.completedSummary = [
-      ["Existing public description", "This is the public description."],
+      ["Existing public description", "This is a public description"],
       ["New public description", this.newPublicDescription],
-      ["Existing project summary", "This is the project summary."],
+      ["Existing project summary", "This is a project summary"],
       ["New project summary", this.newProjectSummary],
     ];
     this.bothEmptyValidation = ["Enter project summary.", "Enter public description."];
@@ -116,9 +116,9 @@ class ChangeProjectScope {
     await this.checkGuidance();
     await this.proposedDescription.isVisible();
     await this.publishedDescriptionTitle.isVisible();
-    await this.publishedPubDescription.filter({ hasText: "This is the public description." }).isVisible();
+    await this.publishedPubDescription.filter({ hasText: "This is a public description" }).isVisible();
     await this.descriptionHint.isVisible();
-    await expect(this.textBox).toHaveValue("This is the public description.");
+    await expect(this.textBox).toHaveValue("This is a public description");
     await this.textBox.clear();
     await this.fullCharRemaining.isVisible();
     await this.saveContinueButton.isVisible();
@@ -130,10 +130,10 @@ class ChangeProjectScope {
     await this.saveContinueButton.click();
     await this.publishedSummaryTitle.isVisible();
     await this.proposedPubSummary.isVisible();
-    await this.publishedPubSummary.filter({ hasText: "This is the project summary." }).isVisible();
+    await this.publishedPubSummary.filter({ hasText: "This is a project summary" }).isVisible();
     await this.clickDetailsExpand(true);
     await this.descriptionHint.isVisible();
-    await expect(this.textBox).toHaveValue("This is the project summary.");
+    await expect(this.textBox).toHaveValue("This is a project summary");
     await this.textBox.clear();
     await this.saveContinueButton.click();
     await this.completedSummaryPageList();

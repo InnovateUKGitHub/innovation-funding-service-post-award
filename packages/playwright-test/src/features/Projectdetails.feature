@@ -11,7 +11,7 @@ Feature: Project details
         Given a multi-partner CR&D project exists
         And the user is the "mainFcUser" user
         And the user has navigated to the project details page
-        When the user clicks on the "Hedge's Consulting Ltd. (Lead)" partner name
+        When the user clicks on the "Hedge's Primary Ltd. (Lead)" partner name
         Then the partner information page is displayed
 
         When the user clicks the Edit button next to location
@@ -26,6 +26,6 @@ Feature: Project details
     Scenario: Validating the postcode box in Partner information
         Given a multi-partner CR&D project exists
         And the user is the "mainFcUser" user
-        And the user has navigated to "Hedge's Consulting Ltd. (Lead)" Partner information
+        And the user has navigated to "Hedge's Primary Ltd. (Lead)" Partner information
         When the user exceeds 10 characters in the postcode field
         Then the postcode character limit is validated

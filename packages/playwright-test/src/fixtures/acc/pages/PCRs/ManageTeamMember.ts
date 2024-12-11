@@ -482,7 +482,7 @@ class ManageTeamMember {
   async confirmationScreen(pcr: string) {
     await this.confirmationPageGuidance.isVisible();
     const data = [
-      ["Request number", "1"],
+      ["Request number", /^1$/],
       ["Request type", pcr],
       ["Request started", this.commands.dateToday()],
       ["Request status", "Submitted to Innovate UK"],
@@ -646,7 +646,7 @@ class ManageTeamMember {
 
   async reviewScreenReasoning() {
     const listData = [
-      ["Request number", "1"],
+      ["Request number", /^1$/],
       ["Type", "Manage Team Member"],
       ["Action", "Replace a team member"],
     ];

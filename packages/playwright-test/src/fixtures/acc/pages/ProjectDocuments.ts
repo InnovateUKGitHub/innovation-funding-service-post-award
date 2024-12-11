@@ -23,7 +23,7 @@ class ProjectDocuments {
 
   @When("the user uploads a file in the documents area")
   async uploadFile() {
-    await this.validators.testFileComponent("project", "Project overview", "Documents", false, false, "Plans");
+    await this.validators.testFileComponent("project", "Project overview", "Documents", false, false, "", "Plans");
     await this.validators.docTypeDropdown("Plans");
     await this.page.locator("css=#description").selectOption("Plans");
     await this.commands.fileInput(["testfile.doc"]);

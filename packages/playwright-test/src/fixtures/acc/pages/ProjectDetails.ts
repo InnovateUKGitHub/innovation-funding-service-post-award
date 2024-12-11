@@ -66,7 +66,7 @@ class ProjectDetails {
     this.fcGuidance = this.page.getByRole("paragraph").filter({ hasText: "Only finance contacts can submit claims." });
     this.fcDetails = [
       ["Name", "Ferris Colton"],
-      ["Partner", "Hedge's Consulting Ltd. (Lead)"],
+      ["Partner", "Hedge's Primary Ltd. (Lead)"],
       ["Email", `${this.prefix}.fc@x.gov.uk`],
     ];
     this.changeGuidance = this.page
@@ -77,14 +77,14 @@ class ProjectDetails {
     this.otherContactsGuidance = this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." });
     this.partnerInfoHeading = this.page.getByRole("heading").filter({ hasText: "Partner information" });
     this.partnerInfoDetails = [
-      ["Name", "Hedge's Consulting Ltd. (Lead)"],
+      ["Name", "Hedge's Primary Ltd. (Lead)"],
       ["Partner type", "Business"],
       ["Status", "Active"],
       ["Funding status", "Funded"],
       ["Location", ""],
     ];
     this.partnerInfoDetailsUpdated = [
-      ["Name", "Hedge's Consulting Ltd. (Lead)"],
+      ["Name", "Hedge's Primary Ltd. (Lead)"],
       ["Partner type", "Business"],
       ["Status", "Active"],
       ["Funding status", "Funded"],
@@ -101,7 +101,7 @@ class ProjectDetails {
       ["scope", "Project scope statement", "This is the project summary."],
     ];
     this.projectInfoList = [
-      ["Name", "Hedge's Consulting Ltd."],
+      ["Name", "Hedge's Secondary Ltd."],
       ["Type", "Business"],
       ["Location", "Edit"],
     ];

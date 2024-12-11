@@ -48,19 +48,19 @@ class Validators {
 
   /**
    * Tests the file component on the page with validation, upload and deletion checks.
-   * User name, backlink suffix, header, re-navigation, API intercept, cleanup and if PCR must be passed in.
-   * 'waitIntercepts' is a list of api Intercepts used to pass in different api calls
+   * User name, backlink suffix, header, re-navigation, cleanup and if PCR must be passed in.
+   *
    * @example
-   * this.commands.testFileComponent("James Black", "costs to be claimed", "Costs to be claimed", "Continue to documents", Intercepts.claims, true, true, false)
+   * this.commands.testFileComponent("request", "Costs to be claimed", "Labour", "Labour documents", false, false)
    */
   async testFileComponent(
-    suffix: string,
+    backLinkSuffix: string,
     headerAssertion: string,
     access: string,
     pcr: boolean,
     loans: boolean,
-    docType?: string,
     pcrArea?: string,
+    docType?: string,
   ) {
     const main = this.page.locator("css=main");
     const validation = this.page.getByTestId("validation-message-content");
@@ -83,7 +83,7 @@ class Validators {
       "Checking that the validation message does not persist when navigating back using 'suffix' and 'headerAssertion",
     );
     if (pcr) {
-      await this.commands.backLink(`Back to ${suffix}`).click();
+      await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
       await this.page.getByRole("heading").filter({ hasText: headerAssertion }).isVisible();
       const validation = this.page.getByTestId("validation-message-content");
       if (main.filter({ has: validation }).isVisible()) {
@@ -92,9 +92,9 @@ class Validators {
       console.log("Moving forward to the document area again");
       await this.page.getByRole("link").filter({ hasText: access }).click();
       console.log(pcrArea);
-      await this.commands.getListItemFromKey(pcrArea, "Edit", true);
+      await this.commands.getListItemFromKey(pcrArea, "Edit", true, "supportingDocuments");
     } else if (loans) {
-      await this.commands.backLink(`Back to ${suffix}`).click();
+      await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
       await this.page.getByRole("heading").filter({ hasText: headerAssertion }).isVisible();
       if (main.filter({ has: validation }).isVisible()) {
         expect(this.page.getByText("has been uploaded")).not.toBeVisible();
@@ -102,7 +102,7 @@ class Validators {
       console.log("Moving forward to the document area again");
       await this.commands.clickOn(access);
     } else {
-      await this.commands.backLink(`Back to ${suffix}`).click();
+      await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
       await this.commands.heading(headerAssertion);
       if (main.filter({ has: validation }).isVisible()) {
         await expect(this.page.getByText("has been uploaded")).not.toBeVisible();
@@ -119,7 +119,8 @@ class Validators {
     await this.page.getByRole("link").filter({ hasText: testFile }).isVisible();
     console.log("Deleting document");
     await this.commands.deleteFileFromRow(testFile);
-    this.commands.createTestFile("Biggun", 33);
+    await this.commands.createTestFile("Biggun", 33);
+    await this.page.waitForTimeout(5000);
     if (docType) {
       await this.docTypeDropdown(docType);
     }
@@ -146,6 +147,8 @@ class Validators {
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
       await this.commands.validationNotification(`'${file}' has been removed.`).isVisible();
+      //This timeout is regrettable but required. Otherwise it fails to actually select a fail for upload.
+      await this.page.waitForTimeout(4000);
     }
     console.log("Checking uppercase file extensions are allowed");
     const upperCaseFiles = [upperCaseExtensionPdf, upperCaseExtensionDoc, upperCaseExtensionXls];
@@ -158,6 +161,7 @@ class Validators {
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
       await this.commands.validationNotification(`has been removed.`).isVisible();
+      await this.page.waitForTimeout(4000);
     }
     console.log("Validating incorrect file type");
     if (docType) {

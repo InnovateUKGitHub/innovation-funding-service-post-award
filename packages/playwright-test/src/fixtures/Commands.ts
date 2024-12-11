@@ -27,7 +27,7 @@ class Commands {
   }
 
   async selectPcrType(labelText: string) {
-    await this.page.getByLabel(labelText).check();
+    await this.page.getByLabel(labelText).nth(0).check();
   }
 
   /**
@@ -85,14 +85,23 @@ class Commands {
   /**
    * Get a list item from its key
    */
-  async getListItemFromKey(label: string, item: string, clickable?: boolean) {
-    const key = this.page.locator("css=dt").filter({ hasText: label });
-    const parent = this.page.locator("css=div").filter({ has: key });
-    const grandParent = this.page.locator("css=dl").filter({ has: parent });
-    if (clickable) {
-      return await grandParent.locator("css=dd", { hasText: item }).click();
+  async getListItemFromKey(label: string | RegExp, item: string | RegExp, clickable?: boolean, qaTag?: string) {
+    if (qaTag) {
+      const qakey = this.page.locator("css=dt").filter({ hasText: label });
+      const qaparent = this.page.getByTestId(`${qaTag}`).filter({ has: qakey });
+      if (clickable) {
+        return await qaparent.locator("css=dd").getByRole("link").filter({ hasText: item }).click();
+      } else {
+        return await qaparent.locator("css=dd").filter({ hasText: item }).isVisible();
+      }
     } else {
-      return await grandParent.locator("css=dd", { hasText: item }).isVisible();
+      const key = this.page.locator("css=dt").filter({ hasText: label });
+      const parent = this.page.locator("css=div").filter({ has: key });
+      if (clickable) {
+        return await parent.locator("css=dd").getByRole("link").filter({ hasText: item }).click();
+      } else {
+        return await parent.locator("css=dd").filter({ hasText: item }).isVisible();
+      }
     }
   }
 
@@ -180,6 +189,12 @@ class Commands {
     );
 
     return this.page.locator("table tr", { hasText: row }).locator(`td:nth(${index + 1})`);
+  }
+  /**
+   * Gets a legend tag based on string or RegExp
+   */
+  async getByLegend(name: string | RegExp) {
+    await this.page.locator("css=legend").filter({ hasText: name }).isVisible();
   }
 
   /**
@@ -451,7 +466,7 @@ class Commands {
       await this.page.getByRole("textbox").press("End");
       await this.page.getByRole("textbox").press("t");
       await this.page.getByRole("paragraph").filter({ hasText: "You have 1 character too many" }).isVisible();
-    } else if (this.page.locator("css=main").filter({ hasText: label })) {
+    } else if (this.page.locator("css=main").filter({ hasText: label }).isVisible()) {
       await this.page.getByLabel(label).fill(largeText);
       await this.page.getByLabel(label).press("End");
       await this.page.getByLabel(label).press("t");
@@ -522,6 +537,7 @@ class Commands {
       fileList.push(name);
     }
     await this.page.locator("css=#files").setInputFiles(fileList);
+    await this.page.waitForTimeout(2500);
     await this.clickOn("Upload documents");
   }
 
@@ -529,6 +545,7 @@ class Commands {
     await this.page
       .locator("css=#files")
       .setInputFiles({ name, mimeType: "text/plain", buffer: Buffer.from("file contents") });
+    await this.page.waitForTimeout(2000);
     await this.button("Upload documents").click();
   }
 
