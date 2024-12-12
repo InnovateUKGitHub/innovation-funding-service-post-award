@@ -1645,7 +1645,7 @@ export const viewOnlyForecastTable = () => {
   });
 };
 
-export const displayClosedClaimSummary = () => {
+export const displayABCadClosedClaimSummary = () => {
   [
     "Costs claimed",
     "£59,400.00",
@@ -1657,5 +1657,148 @@ export const displayClosedClaimSummary = () => {
     "£29,700.00",
   ].forEach(summaryItem => {
     cy.paragraph(summaryItem);
+  });
+};
+
+export const displayDRGClosedClaimSummary = () => {
+  [
+    "Costs claimed",
+    "£54,667.46",
+    "Costs approved",
+    "£54,667.46",
+    "Costs deferred",
+    "£0.00",
+    "Total grant paid",
+    "£35,533.85",
+  ].forEach(summaryItem => {
+    cy.paragraph(summaryItem);
+  });
+};
+
+export const navigateToABCadClosed = () => {
+  cy.get("h2").contains("Closed");
+  cy.get("td").contains("View").click();
+  cy.get("h2").contains("A B Cad Services claim for period 1");
+};
+
+export const correctABCadClosedCosts = () => {
+  const tests = [
+    ["Costs claimed this period", "Labour", "£42,400.00"],
+    ["Remaining eligible costs", "Labour", "£7,600.00"],
+    ["Costs claimed this period", "Materials", "£5,000.00"],
+    ["Remaining eligible costs", "Materials", "£15,000.00"],
+    ["Costs claimed this period", "Subcontracting", "£12,000.00"],
+    ["Remaining eligible costs", "Subcontracting", "£0.00"],
+    ["Costs claimed this period", "Total", "£59,400.00"],
+    ["Remaining eligible costs", "Total", "£22,600.00"],
+  ] as const;
+
+  tests.forEach(([column, row, value]) => {
+    cy.getCellFromHeaderAndRow(column, row).should("have.text", value);
+  });
+};
+
+export const expectedABCadClosedStatuses = () => {
+  cy.clickOn("Status and comments log");
+  cy.getCellFromHeaderAndRow("Status update", "Payment being processed");
+  cy.getCellFromHeaderAndRow("Status update", "Submitted to Innovate UK");
+  cy.getCellFromHeaderAndRow("Status update", "Submitted to Monitoring Officer");
+};
+
+export const expectedABCadClosedDetails = () => {
+  cy.getCellFromHeaderAndRow("Cost", "Labour").should("have.text", "£42,400.00");
+  cy.getTableRow("Total costs").contains("£42,400.00");
+  cy.getTableRow("Forecast costs").contains("£0.00");
+  cy.getTableRow("Difference").contains("0.00%");
+};
+
+export const navigateAbCadClosedMaterials = () => {
+  cy.contains("Next").contains("Materials").click();
+  cy.heading("Materials");
+  cy.getCellFromHeaderAndRow("Cost", "Gubbins").should("have.text", "£5,000.00");
+  cy.getTableRow("Total costs").contains("£5,000.00");
+  cy.getTableRow("Forecast costs").contains("£0.00");
+  cy.getTableRow("Difference").contains("0.00%");
+};
+
+export const navigateToProjectOverviewChangeToDRG = () => {
+  cy.backLink("Back to claim").click();
+  cy.heading("Claim");
+  cy.backLink("Back to claims").click();
+  cy.backLink("Back to project").click();
+  cy.heading("Project overview");
+  cy.switchUserTo("pauline.o'jones@uobcw.org.uk.test.prod");
+  cy.selectTile("Claims");
+  cy.get("td").contains("View").click();
+  cy.get("h2").contains("Deep Rock Galactic claim for period 1");
+  displayDRGClosedClaimSummary();
+};
+
+export const navigateToABCadSubtracting = () => {
+  cy.contains("Previous").contains("Subcontracting").click();
+  cy.heading("Subcontracting");
+  cy.getCellFromHeaderAndRow("Cost", "Palming off work to 3rd party").should("have.text", "£12,000.00");
+  cy.getTableRow("Total costs").contains("£12,000.00");
+  cy.getTableRow("Forecast costs").contains("£0.00");
+  cy.getTableRow("Difference").contains("0.00%");
+};
+
+export const closedDrgClaimDetails = () => {
+  const tests = [
+    ["Costs claimed this period", "Labour", "£10,000.00"],
+    ["Remaining eligible costs", "Labour", "£25,000.00"],
+    ["Costs claimed this period", "Materials", "£8,000.00"],
+    ["Remaining eligible costs", "Materials", "£27,000.00"],
+    ["Costs claimed this period", "Capital usage", "£7,000.00"],
+    ["Remaining eligible costs", "Capital usage", "£28,000.00"],
+    ["Costs claimed this period", "Travel and subsistence", "£6,000.00"],
+    ["Remaining eligible costs", "Travel and subsistence", "£29,000.00"],
+    ["Costs claimed this period", "Other costs", "£5,000.00"],
+    ["Remaining eligible costs", "Other costs", "£30,000.00"],
+    ["Costs claimed this period", "Other costs 2", "£4,000.00"],
+    ["Remaining eligible costs", "Other costs 2", "£31,000.00"],
+    ["Costs claimed this period", "Other costs 3", "£3,000.50"],
+    ["Remaining eligible costs", "Other costs 3", "£31,999.50"],
+    ["Costs claimed this period", "Other costs 4", "£2,000.30"],
+    ["Remaining eligible costs", "Other costs 4", "£32,999.70"],
+    ["Costs claimed this period", "Other costs 5", "£666.66"],
+    ["Remaining eligible costs", "Other costs 5", "£34,333.34"],
+    ["Costs claimed this period", "Total", "£54,667.46"],
+    ["Remaining eligible costs", "Total", "£295,332.54"],
+  ] as const;
+
+  tests.forEach(([column, row, value]) => {
+    cy.getCellFromHeaderAndRow(column, row).should("have.text", value);
+  });
+};
+
+export const switchToSystemUserCheckDRGClosed = () => {
+  cy.switchUserTo("iuk.accproject@bjss.com.bjssdev");
+  displayDRGClosedClaimSummary();
+  const tests = [
+    ["Costs claimed this period", "Labour", "£10,000.00"],
+    ["Remaining eligible costs", "Labour", "£25,000.00"],
+    ["Costs claimed this period", "Materials", "£8,000.00"],
+    ["Remaining eligible costs", "Materials", "£27,000.00"],
+    ["Costs claimed this period", "Capital usage", "£7,000.00"],
+    ["Remaining eligible costs", "Capital usage", "£28,000.00"],
+    ["Costs claimed this period", "Travel and subsistence", "£6,000.00"],
+    ["Remaining eligible costs", "Travel and subsistence", "£29,000.00"],
+    ["Costs claimed this period", "Other costs", "£5,000.00"],
+    ["Remaining eligible costs", "Other costs", "£30,000.00"],
+    ["Costs claimed this period", "Other costs 2", "£4,000.00"],
+    ["Remaining eligible costs", "Other costs 2", "£31,000.00"],
+    ["Costs claimed this period", "Other costs 3", "£3,000.50"],
+    ["Remaining eligible costs", "Other costs 3", "£31,999.50"],
+    ["Costs claimed this period", "Other costs 4", "£2,000.30"],
+    ["Remaining eligible costs", "Other costs 4", "£32,999.70"],
+    ["Costs claimed this period", "Other costs 5", "£666.66"],
+    ["Remaining eligible costs", "Other costs 5", "£34,333.34"],
+    ["Costs claimed this period", "Total", "£54,667.46"],
+    ["Remaining eligible costs", "Total", "£295,332.54"],
+  ] as const;
+
+  tests.forEach(([column, row, value]) => {
+    cy.getCellFromHeaderAndRow(column, row).should("have.text", value);
   });
 };
