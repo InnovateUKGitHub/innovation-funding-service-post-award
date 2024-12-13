@@ -8,7 +8,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { FullPCRItemDto, PCRDto, PcrScopeChangeDto } from "@framework/dtos/pcrDtos";
+import { FullPCRItemDto, PCRDto, PcrRenamePartnerDto, PcrScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
@@ -77,8 +77,6 @@ const createMinimalPcrUpdateDto = ({
   };
 };
 
-const pcrIsScopeChangePcr = (pcr: PCRItemType): pcr is PCRItemType.ScopeChange => pcr === PCRItemType.ScopeChange;
-
 export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
   projectId: ProjectId,
   pcrId: PcrId,
@@ -94,9 +92,11 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
 
   type SubmitData = T extends PCRItemType.ScopeChange
     ? PcrScopeChangeDto
-    : Partial<FullPCRItemDto & { form: FormTypes }>;
+    : T extends PCRItemType.AccountNameChange
+      ? PcrRenamePartnerDto
+      : Partial<FullPCRItemDto & { form: FormTypes }>;
 
-  if (pcrIsScopeChangePcr(pcrType)) {
+  if (pcrType === PCRItemType.ScopeChange) {
     return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
       req: data =>
         clientsideApiClient.pcrs.updateScopeChange({
@@ -104,6 +104,29 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           id: pcrId,
           pcr: {
             ...(data as PcrScopeChangeDto),
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
+        }),
+      onSuccess: async (_, __, context) => {
+        if (!!refreshItemWorkflowQuery) {
+          await refreshItemWorkflowQuery();
+        }
+
+        clearMessages();
+        setFetchKey(k => k + 1);
+        navigate(context?.link?.path ?? "");
+      },
+    });
+  }
+
+  if (pcrType === PCRItemType.AccountNameChange) {
+    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
+      req: data =>
+        clientsideApiClient.pcrs.renamePartner({
+          projectId,
+          id: pcrId,
+          pcr: {
+            ...(data as PcrRenamePartnerDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),

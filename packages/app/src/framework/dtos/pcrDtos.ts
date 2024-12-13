@@ -338,19 +338,30 @@ export type FullPCRItemDto = {
 
 export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;
 
+type PcrDtoCommon = {
+  pcrItemId: PcrItemId;
+  pcrId: PcrId;
+  projectId: ProjectId;
+  type: PCRItemType;
+  status?: PCRItemStatus;
+  markedAsComplete?: boolean;
+};
+
 export type ScopeChangeFormType =
   | FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue
   | FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue
   | FormTypes.PcrChangeProjectScopeSummary;
 
-export type PcrScopeChangeDto = {
-  pcrItemId: PcrItemId;
-  pcrId: PcrId;
-  projectId: ProjectId;
+export type PcrScopeChangeDto = PcrDtoCommon & {
   publicDescription?: string;
   projectSummary?: string;
-  type: PCRItemType;
-  status?: PCRItemStatus;
-  markedAsComplete?: boolean;
   form: ScopeChangeFormType;
+};
+
+export type RenamePartnerFormType = FormTypes.PcrRenamePartnerStep | FormTypes.PcrRenamePartnerSummary;
+
+export type PcrRenamePartnerDto = PcrDtoCommon & {
+  accountName: string;
+  partnerId: PartnerId;
+  form: RenamePartnerFormType;
 };

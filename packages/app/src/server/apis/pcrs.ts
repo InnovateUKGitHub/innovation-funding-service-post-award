@@ -2,6 +2,7 @@ import {
   CreatePcrDto,
   FullPCRItemDto,
   PCRDto,
+  PcrRenamePartnerDto,
   PcrScopeChangeDto,
   PCRSummaryDto,
   StandalonePcrDto,
@@ -14,6 +15,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { UpdatePCRScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
+import { UpdatePCRRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -40,6 +42,17 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         projectId: ProjectId;
         id: PcrId;
         pcr: PcrScopeChangeDto;
+      }
+    >,
+  ) => Promise<boolean>;
+
+  renamePartner: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        id: PcrId;
+        pcr: PcrRenamePartnerDto;
       }
     >,
   ) => Promise<boolean>;
@@ -73,6 +86,12 @@ class Controller
       "/:projectId/:pcrId/scope-change",
       (p, _, b: PcrScopeChangeDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
       this.updateScopeChange,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/rename-partner",
+      (p, _, b: PcrRenamePartnerDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
+      this.renamePartner,
     );
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
   }
@@ -123,6 +142,29 @@ class Controller
 
     await context.runCommand(
       new UpdatePCRScopeChangeCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.id,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async renamePartner(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        id: PcrId | PcrItemId;
+        pcr: PcrRenamePartnerDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePCRRenamePartnerCommand({
         projectId: params.projectId,
         projectChangeRequestId: params.id,
         pcr: params.pcr,
