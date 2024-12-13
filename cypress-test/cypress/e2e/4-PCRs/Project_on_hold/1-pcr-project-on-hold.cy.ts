@@ -70,7 +70,7 @@ describe("PCR >  Put project on hold > Create PCR", () => {
   });
 
   it("Should return to editing the request", () => {
-    cy.getListItemFromKey("First day of pause", "Edit").click();
+    cy.getListItemFromKey("Last day of pause (if known)", "Edit").click();
     cy.get("legend").contains("First day of pause");
   });
 

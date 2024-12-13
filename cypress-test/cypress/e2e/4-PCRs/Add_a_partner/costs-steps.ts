@@ -184,7 +184,7 @@ export const checkAddCapitalUsageItem = () => {
       cy.clickOn("Add a cost");
       cy.clickOn("Save and return to capital usage");
       cy.log("checking invalid states");
-      cy.validationLink("Enter description.");
+      cy.validationLink("Enter item description.");
       cy.validationLink("Select item type.");
       cy.validationLink("Enter net present value.");
       cy.validationLink("Enter residual value.");
