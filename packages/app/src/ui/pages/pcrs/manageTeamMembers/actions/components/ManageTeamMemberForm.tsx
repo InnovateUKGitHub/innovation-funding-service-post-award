@@ -13,7 +13,7 @@ const ManageTeamMemberForm = ({ children }: { children: ReactNode }) => {
       <input type="hidden" value={role} {...register("role")} />
       <input type="hidden" value={projectId} {...register("projectId")} />
       <input type="hidden" name="pclId" value={pclId} />
-      <input type="hidden" {...register("contactId")} value={memberToManage?.pcl.contactId} />
+      <input type="hidden" {...register("contactId")} value={memberToManage?.pcl?.contactId} />
 
       {children}
     </Form>
