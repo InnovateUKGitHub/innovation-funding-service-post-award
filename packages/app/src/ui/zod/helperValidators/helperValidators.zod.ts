@@ -285,3 +285,6 @@ export {
   projectIdValidation,
   zeroOrGreaterCurrencyValidation,
 };
+
+export const zodEmptySchema = z.object({});
+export type ZodEmptySchema = typeof zodEmptySchema;

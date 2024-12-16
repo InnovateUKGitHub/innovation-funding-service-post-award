@@ -5,8 +5,8 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import {
   RenamePartnerSchema,
-  getRenamePartnerSchema,
   renamePartnerErrorMap,
+  renamePartnerSchema,
 } from "@ui/pages/pcrs/renamePartner/renamePartner.zod";
 
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -27,16 +27,22 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({ context, input }: { context: IContext; input: z.input<RenamePartnerSchema> }) {
-    const partners = await context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
-
+  protected async getZodSchema() {
     return {
-      schema: getRenamePartnerSchema(partners),
+      schema: renamePartnerSchema,
       errorMap: renamePartnerErrorMap,
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<RenamePartnerSchema>> {
+  protected async mapToZod({
+    input,
+    context,
+  }: {
+    input: AnyObject;
+    context: IContext;
+  }): Promise<z.input<RenamePartnerSchema>> {
+    const partners = await context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
+
     return {
       form: input.form,
       projectId: input.projectId,
@@ -45,6 +51,7 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
       partnerId: input.partnerId ?? null,
       accountName: input.accountName,
       markedAsComplete: input.markedAsComplete === "on",
+      existingAccountName: partners.find(x => x.id === input.partnerId)?.name ?? "",
     };
   }
 

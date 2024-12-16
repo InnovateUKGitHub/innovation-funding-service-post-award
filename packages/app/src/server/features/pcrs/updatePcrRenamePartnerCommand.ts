@@ -8,16 +8,17 @@ import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 import {
-  getRenamePartnerSchema,
   renamePartnerErrorMap,
+  renamePartnerSchema,
   RenamePartnerSchema,
 } from "@ui/pages/pcrs/renamePartner/renamePartner.zod";
-import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { z } from "zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { zodEmptySchema, ZodEmptySchema } from "@ui/zod/helperValidators/helperValidators.zod";
 
 export class UpdatePCRRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  RenamePartnerSchema,
+  RenamePartnerSchema | ZodEmptySchema,
   PcrRenamePartnerDto
 > {
   public readonly runnableName: string = "UpdatePCRRenamePartnerCommand";
@@ -50,15 +51,21 @@ export class UpdatePCRRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
       .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer);
   }
 
-  protected async getZodSchema(context: IContext) {
-    const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
-    return { schema: getRenamePartnerSchema(partners), errorMap: renamePartnerErrorMap };
+  protected async getZodSchema() {
+    if (this.form === FormTypes.PcrRenamePartnerFilesStep) {
+      return { schema: zodEmptySchema, errorMap: renamePartnerErrorMap };
+    }
+    return { schema: renamePartnerSchema, errorMap: renamePartnerErrorMap };
   }
 
   protected async mapToZod() {
+    if (this.form === FormTypes.PcrRenamePartnerFilesStep) {
+      return {};
+    }
     return {
       markedAsComplete: this.dto.markedAsComplete ?? false,
       accountName: this.dto.accountName,
+      existingAccountName: this.dto.existingAccountName,
       partnerId: this.dto.partnerId,
       form: this.form,
       projectId: this.projectId,
@@ -71,6 +78,9 @@ export class UpdatePCRRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
     context: IContext,
     validatedData: z.output<RenamePartnerSchema>,
   ): Promise<boolean> {
+    if (this.form === FormTypes.PcrRenamePartnerFilesStep) {
+      return true;
+    }
     const hasMismatchProjectId = this.projectId !== this.dto.projectId;
     const hasMismatchPcrId = this.projectChangeRequestId !== this.dto.pcrId;
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
@@ -80,6 +90,7 @@ export class UpdatePCRRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
 
     await context.repositories.projectChangeRequests.updateSingleItem({
       id: this.dto.pcrItemId,
+      status: this.dto.status,
       ...validatedData,
     });
 

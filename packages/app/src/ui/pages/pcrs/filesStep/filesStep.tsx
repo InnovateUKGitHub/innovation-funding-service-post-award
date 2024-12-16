@@ -89,10 +89,12 @@ export const FilesStep = ({
 
   const { handleSubmit: handleFormSubmit, setValue } = useForm<{
     markedAsComplete: boolean;
+    form: FormTypes;
     button_submit: "submit" | "returnToSummary";
   }>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
+      form: formType,
       button_submit: "submit",
     },
   });
@@ -168,7 +170,7 @@ export const FilesStep = ({
       <Form
         onSubmit={handleFormSubmit(data =>
           onSave({
-            data: { status: PCRItemStatus.Incomplete },
+            data: { status: PCRItemStatus.Incomplete, form: data.form },
             context: { link: data.button_submit === "submit" ? nextLink : summaryLink },
           }),
         )}

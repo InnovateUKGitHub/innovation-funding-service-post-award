@@ -334,34 +334,39 @@ export type FullPCRItemDto = {
   manageTeamMemberEmail: string | null;
   manageTeamMemberRole: ProjectRole | null;
   manageTeamMemberAssociateStartDate: Date | null;
+  form?: FormTypes;
 };
 
 export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;
 
-type PcrDtoCommon = {
+interface PcrDtoCommon {
   pcrItemId: PcrItemId;
   pcrId: PcrId;
   projectId: ProjectId;
   type: PCRItemType;
   status?: PCRItemStatus;
   markedAsComplete?: boolean;
-};
+}
 
 export type ScopeChangeFormType =
   | FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue
   | FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue
   | FormTypes.PcrChangeProjectScopeSummary;
 
-export type PcrScopeChangeDto = PcrDtoCommon & {
+export interface PcrScopeChangeDto extends PcrDtoCommon {
   publicDescription?: string;
   projectSummary?: string;
   form: ScopeChangeFormType;
-};
+}
 
-export type RenamePartnerFormType = FormTypes.PcrRenamePartnerStep | FormTypes.PcrRenamePartnerSummary;
+export type RenamePartnerFormType =
+  | FormTypes.PcrRenamePartnerStep
+  | FormTypes.PcrRenamePartnerSummary
+  | FormTypes.PcrRenamePartnerFilesStep;
 
-export type PcrRenamePartnerDto = PcrDtoCommon & {
+export interface PcrRenamePartnerDto extends PcrDtoCommon {
   accountName: string;
+  existingAccountName: string;
   partnerId: PartnerId;
   form: RenamePartnerFormType;
-};
+}
