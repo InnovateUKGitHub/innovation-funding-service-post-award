@@ -6,7 +6,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryLi
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { useForm } from "react-hook-form";
-import { RenamePartnerSchemaType, getRenamePartnerSchema, renamePartnerErrorMap } from "./renamePartner.zod";
+import { RenamePartnerSchemaType, renamePartnerErrorMap, renamePartnerSchema } from "./renamePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink } from "../pcrItemSummaryLinks";
@@ -24,10 +24,11 @@ export const RenamePartnerSummary = () => {
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       accountName: pcrItem.accountName ?? "",
+      existingAccountName: pcrItem.partnerNameSnapshot ?? "",
       partnerId: pcrItem.partnerId as string,
       form: FormTypes.PcrRenamePartnerSummary,
     },
-    resolver: zodResolver(getRenamePartnerSchema(partners), {
+    resolver: zodResolver(renamePartnerSchema, {
       errorMap: renamePartnerErrorMap,
     }),
   });

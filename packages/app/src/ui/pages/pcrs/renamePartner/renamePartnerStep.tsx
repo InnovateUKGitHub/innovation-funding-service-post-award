@@ -15,12 +15,13 @@ import { useNextLink } from "../utils/useNextLink";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
-import { getRenamePartnerSchema, renamePartnerErrorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
+import { renamePartnerErrorMap, renamePartnerSchema, RenamePartnerSchemaType } from "./renamePartner.zod";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { Label } from "@ui/components/atoms/form/Label/Label";
+import { useEffect } from "react";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
@@ -37,7 +38,7 @@ export const RenamePartnerStep = () => {
 
   const { partners, pcrItem } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, setError, trigger, getFieldState, watch } =
+  const { handleSubmit, register, formState, setError, trigger, getFieldState, watch, setValue } =
     useForm<RenamePartnerSchemaType>({
       defaultValues: {
         // take the marked as complete state from the current checkbox state on the summary
@@ -45,17 +46,27 @@ export const RenamePartnerStep = () => {
         accountName: pcrItem.accountName ?? "",
         partnerId: pcrItem.partnerId as string,
         form: FormTypes.PcrRenamePartnerStep,
+        existingAccountName: partners.find(x => x.id === pcrItem.partnerId)?.name ?? "",
         pcrItemId: itemId,
         projectId,
         pcrId,
       },
-      resolver: zodResolver(getRenamePartnerSchema(partners), {
+      resolver: zodResolver(renamePartnerSchema, {
         errorMap: renamePartnerErrorMap,
       }),
     });
 
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
+  useEffect(() => {
+    const { unsubscribe } = watch((values, { name }) => {
+      if (name === "partnerId") {
+        setValue("existingAccountName", partners.find(x => x.id === values.partnerId)?.name ?? "");
+      }
+    });
+    return () => unsubscribe();
+  }, [watch, setValue, partners]);
+  watch(values => values);
 
   const partnerOptions = partners
     .filter(x => !x.isWithdrawn)
