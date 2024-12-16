@@ -35,8 +35,8 @@ const SelectTeamMember = () => {
 
   // A user may select a different team member if...
   // - When JS is disabled, a member is not selected
-  // - When JS is enabled, there are more than 1 member to select in the category
-  const canSelect = isServer ? !memberToManage : categories[role].length > 1;
+  // - When JS is enabled, there is only 1 member to select from
+  const canSelect = isServer ? !memberToManage : categories[role].length !== 1;
 
   // Show stub buttons when bottom section is NOT shown
   const showStubButtons = hideBottomSection;
