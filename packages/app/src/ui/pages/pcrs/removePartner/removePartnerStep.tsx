@@ -14,7 +14,7 @@ import { useNextLink } from "../utils/useNextLink";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
-import { getRemovePartnerSchema, removePartnerErrorMap, RemovePartnerSchemaType } from "./removePartner.zod";
+import { removePartnerSchema, removePartnerErrorMap, RemovePartnerSchemaType } from "./removePartner.zod";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
@@ -34,8 +34,9 @@ export const RemovePartnerStep = () => {
       removalPeriod: pcrItem.removalPeriod,
       partnerId: pcrItem.partnerId,
       form: FormTypes.PcrRemovePartnerStep,
+      numberOfPeriods: project.numberOfPeriods,
     },
-    resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
+    resolver: zodResolver(removePartnerSchema, {
       errorMap: removePartnerErrorMap,
     }),
   });
@@ -62,6 +63,7 @@ export const RemovePartnerStep = () => {
           })}
         >
           <input type="hidden" name="form" value={FormTypes.PcrRemovePartnerStep} />
+          <input type="hidden" name="numberOfPeriods" value={project.numberOfPeriods} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrRemovePartner.headingSelectPartner)}</Legend>
             <FormGroup hasError={!!validationErrors?.partnerId}>

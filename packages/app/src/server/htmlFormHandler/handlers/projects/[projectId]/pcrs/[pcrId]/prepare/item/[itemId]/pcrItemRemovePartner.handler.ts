@@ -8,10 +8,9 @@ import { isNil } from "lodash";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import {
   RemovePartnerSchema,
-  getRemovePartnerSchema,
+  removePartnerSchema,
   removePartnerErrorMap,
 } from "@ui/pages/pcrs/removePartner/removePartner.zod";
-import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class PcrItemChangeRemovePartnerHandler extends ZodFormHandlerBase<
   RemovePartnerSchema,
@@ -26,23 +25,16 @@ export class PcrItemChangeRemovePartnerHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({
-    context,
-    params,
-  }: {
-    context: IContext;
-    input: z.input<RemovePartnerSchema>;
-    params: ProjectChangeRequestPrepareItemParams;
-  }) {
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
+  protected async getZodSchema({}: { params: ProjectChangeRequestPrepareItemParams }) {
     return {
-      schema: getRemovePartnerSchema(project.numberOfPeriods),
+      schema: removePartnerSchema,
       errorMap: removePartnerErrorMap,
     };
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<RemovePartnerSchema>> {
     return {
+      numberOfPeriods: Number(input.numberOfPeriods),
       form: input.form,
       partnerId: input.partnerId ?? null,
       removalPeriod: input.removalPeriod || null,

@@ -6,7 +6,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryLi
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { useForm } from "react-hook-form";
-import { RemovePartnerSchemaType, getRemovePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";
+import { RemovePartnerSchemaType, removePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink } from "../pcrItemSummaryLinks";
@@ -25,8 +25,9 @@ export const RemovePartnerSummary = () => {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       removalPeriod: pcrItem.removalPeriod,
       partnerId: pcrItem.partnerId,
+      numberOfPeriods: project.numberOfPeriods,
     },
-    resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
+    resolver: zodResolver(removePartnerSchema, {
       errorMap: removePartnerErrorMap,
     }),
   });
@@ -74,6 +75,7 @@ export const RemovePartnerSummary = () => {
           pcrItem={pcrItem}
         >
           <input type="hidden" {...register("form")} value={FormTypes.PcrRemovePartnerSummary} />
+          <input type="hidden" name="numberOfPeriods" value={project.numberOfPeriods} />
         </PcrItemSummaryForm>
       )}
     </PcrPage>

@@ -10,10 +10,9 @@ import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
 import {
   RemovePartnerSchema,
-  getRemovePartnerSchema,
+  removePartnerSchema,
   removePartnerErrorMap,
 } from "@ui/pages/pcrs/removePartner/removePartner.zod";
-import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class PcrItemChangeRemovePartnerSummaryHandler extends ZodFormHandlerBase<
   RemovePartnerSchema,
@@ -28,17 +27,9 @@ export class PcrItemChangeRemovePartnerSummaryHandler extends ZodFormHandlerBase
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({
-    context,
-    params,
-  }: {
-    context: IContext;
-    params: ProjectChangeRequestPrepareItemParams;
-  }) {
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
-
+  protected async getZodSchema() {
     return {
-      schema: getRemovePartnerSchema(project.numberOfPeriods),
+      schema: removePartnerSchema,
       errorMap: removePartnerErrorMap,
     };
   }
@@ -81,6 +72,7 @@ export class PcrItemChangeRemovePartnerSummaryHandler extends ZodFormHandlerBase
       removalPeriod: item.removalPeriod,
       partnerId: item?.partnerId,
       markedAsComplete: input.markedAsComplete === "on",
+      numberOfPeriods: Number(input.numberOfPeriods),
     };
   }
 
