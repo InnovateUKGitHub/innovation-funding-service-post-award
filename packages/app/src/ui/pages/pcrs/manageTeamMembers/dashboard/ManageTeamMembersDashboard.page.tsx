@@ -31,31 +31,35 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
       <Section title={getContent(x => x.projectLabels.projectManagers({ count: categories.projectManagers.length }))}>
         <ManageTeamMembersContactListTable tableData={categories.projectManagers} qa="projectManagers-table" />
 
-        <Link
-          route={routes.manageTeamMembersReplaceRoute.getLink({
-            projectId,
-            role: ProjectRole.PROJECT_MANAGER,
-            pclId: categories.projectManagers.length === 1 ? categories.projectManagers[0].pclId : undefined,
-          })}
-          styling="SecondaryButton"
-        >
-          {getContent(x => x.pages.manageTeamMembers.dashboard.replaceProjectManager)}
-        </Link>
+        {categories.projectManagers.length > 0 && (
+          <Link
+            route={routes.manageTeamMembersReplaceRoute.getLink({
+              projectId,
+              role: ProjectRole.PROJECT_MANAGER,
+              pclId: categories.projectManagers.length === 1 ? categories.projectManagers[0].pclId : undefined,
+            })}
+            styling="SecondaryButton"
+          >
+            {getContent(x => x.pages.manageTeamMembers.dashboard.replaceProjectManager)}
+          </Link>
+        )}
       </Section>
 
       <Section title={getContent(x => x.projectLabels.financeContacts({ count: categories.financeContacts.length }))}>
         <ManageTeamMembersContactListTable tableData={categories.financeContacts} qa="financeContacts-table" />
 
-        <Link
-          route={routes.manageTeamMembersReplaceRoute.getLink({
-            projectId,
-            role: ProjectRole.FINANCE_CONTACT,
-            pclId: categories.financeContacts.length === 1 ? categories.financeContacts[0].pclId : undefined,
-          })}
-          styling="SecondaryButton"
-        >
-          {getContent(x => x.pages.manageTeamMembers.dashboard.replaceFinanceContact)}
-        </Link>
+        {categories.financeContacts.length > 0 && (
+          <Link
+            route={routes.manageTeamMembersReplaceRoute.getLink({
+              projectId,
+              role: ProjectRole.FINANCE_CONTACT,
+              pclId: categories.financeContacts.length === 1 ? categories.financeContacts[0].pclId : undefined,
+            })}
+            styling="SecondaryButton"
+          >
+            {getContent(x => x.pages.manageTeamMembers.dashboard.replaceFinanceContact)}
+          </Link>
+        )}
       </Section>
 
       {project.competitionType === "KTP" && (
