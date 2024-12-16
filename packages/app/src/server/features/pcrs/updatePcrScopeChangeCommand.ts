@@ -16,10 +16,16 @@ import {
   PcrScopeChangeSchemaType,
   scopeChangeErrorMap,
 } from "@ui/pages/pcrs/scopeChange/scopeChange.zod";
+import { z } from "zod";
+
+type ScopeChangeSchema =
+  | PcrScopeChangeSchemaType
+  | PcrScopeChangePublicDescriptionSchemaType
+  | PcrScopeChangeProjectSummarySchemaType;
 
 export class UpdatePCRScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  PcrScopeChangeSchemaType | PcrScopeChangePublicDescriptionSchemaType | PcrScopeChangeProjectSummarySchemaType,
+  ScopeChangeSchema,
   PcrScopeChangeDto
 > {
   public readonly runnableName: string = "UpdatePCRScopeChangeCommand";
@@ -94,7 +100,10 @@ export class UpdatePCRScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
     }
   }
 
-  protected async runRepositoryCommands(context: IContext): Promise<boolean> {
+  protected async runRepositoryCommands(
+    context: IContext,
+    validatedData: z.output<ScopeChangeSchema>,
+  ): Promise<boolean> {
     const hasMismatchProjectId = this.projectId !== this.dto.projectId;
     const hasMismatchPcrId = this.projectChangeRequestId !== this.dto.pcrId;
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
@@ -104,7 +113,8 @@ export class UpdatePCRScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
 
     await context.repositories.projectChangeRequests.updateSingleItem({
       id: this.dto.pcrItemId,
-      ...this.dto,
+      status: this.dto.status,
+      ...validatedData,
     });
 
     return true;
