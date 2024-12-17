@@ -38,7 +38,7 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
   SaveMonitoringReportDto
 > {
   public readonly runnableName: string = "SaveMonitoringReport";
-
+  protected readonly projectId: ProjectId;
   protected readonly dto: SaveMonitoringReportDto;
   private readonly submit: boolean;
   private readonly step: MonitoringReportStep;
@@ -48,6 +48,7 @@ export class SaveMonitoringReport extends ZodAuthorisedAsyncCommandBase<
     this.dto = monitoringReportDto;
     this.submit = submit;
     this.step = step;
+    this.projectId = monitoringReportDto.projectId;
   }
 
   async accessControl(auth: Authorisation) {

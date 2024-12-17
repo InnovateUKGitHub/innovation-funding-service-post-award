@@ -2,9 +2,7 @@ import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PcrRemovePartnerDto, RemovePartnerFormType } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { InActiveProjectError } from "../common/appError";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { zodEmptySchema, ZodEmptySchema } from "@ui/zod/helperValidators/helperValidators.zod";
@@ -20,7 +18,7 @@ export class UpdatePcrRemovePartnerCommand extends ZodAuthorisedAsyncCommandBase
   PcrRemovePartnerDto
 > {
   public readonly runnableName: string = "UpdatePcrRemovePartnerCommand";
-  private readonly projectId: ProjectId;
+  protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: RemovePartnerFormType;
@@ -83,9 +81,6 @@ export class UpdatePcrRemovePartnerCommand extends ZodAuthorisedAsyncCommandBase
     if (this.form === FormTypes.PcrRemovePartnerFilesStep) {
       return true;
     }
-
-    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-    if (!isProjectActive) throw new InActiveProjectError();
 
     await context.repositories.projectChangeRequests.updateSingleItem({
       id: this.pcrItemId,

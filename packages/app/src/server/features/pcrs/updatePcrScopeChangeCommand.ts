@@ -3,9 +3,7 @@ import { PcrScopeChangeDto, ScopeChangeFormType } from "@framework/dtos/pcrDtos"
 
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { BadRequestError, InActiveProjectError } from "../common/appError";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   getPcrScopeChangeProjectSummarySchema,
@@ -29,7 +27,7 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
   PcrScopeChangeDto
 > {
   public readonly runnableName: string = "UpdatePcrScopeChangeCommand";
-  private readonly projectId: ProjectId;
+  protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: ScopeChangeFormType;
@@ -108,13 +106,6 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
     context: IContext,
     validatedData: z.output<ScopeChangeSchema>,
   ): Promise<boolean> {
-    const hasMismatchProjectId = this.projectId !== this.dto.projectId;
-    const hasMismatchPcrId = this.pcrId !== this.dto.pcrId;
-    if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
-
-    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-    if (!isProjectActive) throw new InActiveProjectError();
-
     await context.repositories.projectChangeRequests.updateSingleItem({
       id: this.pcrItemId,
       status: this.dto.status,

@@ -1,11 +1,8 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { PcrRenamePartnerDto, RenamePartnerFormType } from "@framework/dtos/pcrDtos";
-
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { BadRequestError, InActiveProjectError } from "../common/appError";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 import {
   renamePartnerErrorMap,
@@ -22,7 +19,7 @@ export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
   PcrRenamePartnerDto
 > {
   public readonly runnableName: string = "UpdatePcrRenamePartnerCommand";
-  private readonly projectId: ProjectId;
+  protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: RenamePartnerFormType;
@@ -85,12 +82,6 @@ export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
     if (this.form === FormTypes.PcrRenamePartnerFilesStep) {
       return true;
     }
-    const hasMismatchProjectId = this.projectId !== this.dto.projectId;
-    const hasMismatchPcrId = this.pcrId !== this.dto.pcrId;
-    if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
-
-    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-    if (!isProjectActive) throw new InActiveProjectError();
 
     await context.repositories.projectChangeRequests.updateSingleItem({
       id: this.pcrItemId,

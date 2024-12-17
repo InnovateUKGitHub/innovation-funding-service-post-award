@@ -9,9 +9,8 @@ import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { GetAllGOLForecastedCostCategoriesQuery } from "../claims/GetAllGOLForecastedCostCategoriesQuery";
-import { InActiveProjectError, BadRequestError } from "../common/appError";
+import { BadRequestError } from "../common/appError";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
@@ -35,7 +34,7 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
   ForecastDto
 > {
   public readonly runnableName: string = "UpdateInitialForecastDetailsCommand";
-  private readonly projectId: ProjectId;
+  protected readonly projectId: ProjectId;
   private readonly partnerId: PartnerId;
   private readonly isSubmitting: boolean;
   protected readonly dto: ForecastDto;
@@ -133,11 +132,6 @@ export class UpdateInitialForecastDetailsCommand extends ZodAuthorisedAsyncComma
   }
 
   protected async runRepositoryCommands(context: IContext, validatedData: z.output<ForecastTableSchemaType>) {
-    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-
-    if (!isProjectActive) {
-      throw new InActiveProjectError();
-    }
     const { forecasts: profileDetails, partner } = await this.getExistingDtos(context);
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {

@@ -23,11 +23,13 @@ export class CreateMonitoringReportCommand extends ZodAuthorisedAsyncCommandBase
   CreateMonitoringReportDto
 > {
   public readonly runnableName: string = "CreateMonitoringReportCommand";
+  protected readonly projectId: ProjectId;
   constructor(
     protected readonly dto: PickRequiredFromPartial<MonitoringReportDto, "periodId" | "projectId" | "status">,
     private readonly submit: boolean,
   ) {
     super();
+    this.projectId = dto.projectId;
   }
 
   async accessControl(auth: Authorisation) {

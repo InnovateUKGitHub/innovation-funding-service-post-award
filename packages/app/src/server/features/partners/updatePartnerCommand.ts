@@ -21,9 +21,8 @@ import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/p
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
-import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { BadRequestError, ValidationError } from "../common/appError";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber, parseNumber } from "@framework/util/numberHelper";
 import { merge } from "lodash";
@@ -59,6 +58,7 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   ProjectSetupBankDetailsSchemaType | PostcodeSchema | ProjectSetupSchema | BankStatementSchema,
   UpdatePartnerDto
 > {
+  protected readonly projectId: ProjectId;
   public readonly runnableName: string = "UpdatePartnerCommand";
   private mergedPartner: PartnerDto | null = null;
   private readonly logger: ILogger = new Logger("UpdatePartnerCommand");
@@ -87,6 +87,7 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
     this.dto = partner;
     this.check = check;
     this.form = form;
+    this.projectId = partner.projectId;
   }
 
   async accessControl(auth: Authorisation) {
@@ -167,12 +168,6 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
 
   protected async runRepositoryCommands(context: IContext) {
     try {
-      const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.dto.projectId));
-
-      if (!isProjectActive) {
-        return Promise.reject(new InActiveProjectError());
-      }
-
       if (!this.savedPartner) {
         this.savedPartner = await context.runQuery(new GetByIdQuery(this.dto.id));
       }
