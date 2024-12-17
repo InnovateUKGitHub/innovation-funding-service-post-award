@@ -2,6 +2,7 @@ import {
   CreatePcrDto,
   FullPCRItemDto,
   PCRDto,
+  PcrRemovePartnerDto,
   PcrRenamePartnerDto,
   PcrScopeChangeDto,
   PCRSummaryDto,
@@ -16,6 +17,7 @@ import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
 import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
+import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRemovePartnerCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -59,6 +61,17 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<boolean>;
 
+  removePartner: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrRemovePartnerDto;
+      }
+    >,
+  ) => Promise<boolean>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
 
@@ -105,6 +118,17 @@ class Controller
         pcr: processDto(b),
       }),
       this.renamePartner,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/remove-partner",
+      (p, _, b: PcrRemovePartnerDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.removePartner,
     );
 
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
@@ -182,6 +206,31 @@ class Controller
 
     await context.runCommand(
       new UpdatePcrRenamePartnerCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async removePartner(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrRemovePartnerDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrRemovePartnerCommand({
         projectId: params.projectId,
         pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,

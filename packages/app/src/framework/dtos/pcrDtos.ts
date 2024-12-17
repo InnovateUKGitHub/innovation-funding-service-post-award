@@ -370,3 +370,15 @@ export interface PcrRenamePartnerDto extends PcrDtoCommon {
   partnerId: PartnerId;
   form: RenamePartnerFormType;
 }
+
+export type RemovePartnerFormType =
+  | FormTypes.PcrRemovePartnerStep
+  | FormTypes.PcrRemovePartnerSummary
+  | FormTypes.PcrRemovePartnerFilesStep;
+
+export interface PcrRemovePartnerDto extends PcrDtoCommon {
+  numberOfPeriods: number;
+  removalPeriod: number;
+  partnerId: PartnerId;
+  form: RemovePartnerFormType;
+}

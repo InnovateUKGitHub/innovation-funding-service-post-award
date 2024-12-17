@@ -8,7 +8,13 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { FullPCRItemDto, PCRDto, PcrRenamePartnerDto, PcrScopeChangeDto } from "@framework/dtos/pcrDtos";
+import {
+  FullPCRItemDto,
+  PCRDto,
+  PcrRemovePartnerDto,
+  PcrRenamePartnerDto,
+  PcrScopeChangeDto,
+} from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
@@ -90,6 +96,14 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
 
   const { clearMessages } = useMessageContext();
 
+  type SubmitData = T extends PCRItemType.ScopeChange
+    ? PcrScopeChangeDto
+    : T extends PCRItemType.AccountNameChange
+      ? PcrRenamePartnerDto
+      : T extends PCRItemType.PartnerWithdrawal
+        ? PcrRemovePartnerDto
+        : Partial<FullPCRItemDto & { form: FormTypes }>;
+
   /**
    * on success callback for every pcr update
    */
@@ -102,12 +116,6 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
     setFetchKey(k => k + 1);
     navigate(context?.link?.path ?? "");
   }
-
-  type SubmitData = T extends PCRItemType.ScopeChange
-    ? PcrScopeChangeDto
-    : T extends PCRItemType.AccountNameChange
-      ? PcrRenamePartnerDto
-      : Partial<FullPCRItemDto & { form: FormTypes }>;
 
   if (pcrType === PCRItemType.ScopeChange) {
     return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
@@ -134,6 +142,22 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           pcrItemId,
           pcr: {
             ...(data as PcrRenamePartnerDto),
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
+        }),
+      onSuccess,
+    });
+  }
+
+  if (pcrType === PCRItemType.PartnerWithdrawal) {
+    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
+      req: data =>
+        clientsideApiClient.pcrs.removePartner({
+          projectId,
+          pcrId,
+          pcrItemId,
+          pcr: {
+            ...(data as PcrRemovePartnerDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),
