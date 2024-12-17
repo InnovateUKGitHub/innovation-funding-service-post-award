@@ -1,6 +1,7 @@
 import {
   CreatePcrDto,
   FullPCRItemDto,
+  PcrChangeDurationDto,
   PCRDto,
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
@@ -18,6 +19,7 @@ import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
 import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRemovePartnerCommand";
+import { UpdatePcrChangeDurationCommand } from "@server/features/pcrs/updatePcrChangeDurationCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -36,6 +38,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PCRDto>;
+
+  changeDuration: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrChangeDurationDto;
+      }
+    >,
+  ) => Promise<boolean>;
 
   scopeChange: (
     params: ApiParams<
@@ -97,6 +111,17 @@ class Controller
       this.update,
     );
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/change-duration",
+      (p, _, b: PcrChangeDurationDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.changeDuration,
+    );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/scope-change",
@@ -164,6 +189,31 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async changeDuration(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrChangeDurationDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrChangeDurationCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async scopeChange(

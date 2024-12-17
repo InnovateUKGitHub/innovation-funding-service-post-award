@@ -35,7 +35,6 @@ export const TimeExtensionStep = () => {
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
   const nextLink = useNextLink();
-
   const timeExtensionOptions = generateOptions(project.endDate, config.features.futureTimeExtensionInYears);
   const existingProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.existingProjectHeading);
   const dateLabel = getContent(x => x.pages.pcrTimeExtensionStep.dateLabel);
@@ -99,8 +98,8 @@ export const TimeExtensionStep = () => {
       </Section>
 
       <Form
-        onSubmit={handleSubmit(() => {
-          onSave({ data: { offsetMonths: newOffset }, context: { link: nextLink } });
+        onSubmit={handleSubmit(data => {
+          onSave({ data: { ...data, offsetMonths: newOffset }, context: { link: nextLink } });
         })}
       >
         <input type="hidden" name="form" value={FormTypes.PcrChangeDurationStep} />

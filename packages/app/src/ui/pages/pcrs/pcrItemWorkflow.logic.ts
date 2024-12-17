@@ -10,6 +10,7 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import {
   FullPCRItemDto,
+  PcrChangeDurationDto,
   PCRDto,
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
@@ -102,7 +103,9 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
       ? PcrRenamePartnerDto
       : T extends PCRItemType.PartnerWithdrawal
         ? PcrRemovePartnerDto
-        : Partial<FullPCRItemDto & { form: FormTypes }>;
+        : T extends PCRItemType.TimeExtension
+          ? PcrChangeDurationDto
+          : Partial<FullPCRItemDto & { form: FormTypes }>;
 
   /**
    * on success callback for every pcr update
@@ -158,6 +161,22 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           pcrItemId,
           pcr: {
             ...(data as PcrRemovePartnerDto),
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
+        }),
+      onSuccess,
+    });
+  }
+
+  if (pcrType === PCRItemType.TimeExtension) {
+    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
+      req: data =>
+        clientsideApiClient.pcrs.changeDuration({
+          projectId,
+          pcrId,
+          pcrItemId,
+          pcr: {
+            ...(data as PcrChangeDurationDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),
