@@ -30,6 +30,7 @@ import { ProjectDocuments } from "./acc/pages/ProjectDocuments";
 import { Validators } from "./validators";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 import { ChangePartnerName } from "./acc/pages/PCRs/changePartnerName";
+import { AccProjectWithoutFC } from "./projectFactory/AccProjectWithoutFC";
 
 type AccFixtures = {
   // Pages
@@ -72,6 +73,7 @@ interface Workers {
   accProjectBase: AccProjectBase;
   accProjectMulti: AccProjectMulti;
   accProjectKtp: AccProjectKtp;
+  accProjectWithoutFc: AccProjectWithoutFC;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -128,6 +130,10 @@ export const test = base.extend<AccFixtures, Workers>({
   ],
   accProjectKtp: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectKtp({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectWithoutFc: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectWithoutFC({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
   // Misc

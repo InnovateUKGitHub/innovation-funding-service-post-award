@@ -727,4 +727,17 @@ class ManageTeamMember {
       await grandParent.filter({ has: this.page.locator("css=dd").filter({ hasText: list }) }).isVisible();
     }
   }
+  @Then("the PM has logged in and created a PCR")
+  async noFcCreatePcr() {
+    await this.AccUserswitcher.switchToUser("pmUser");
+    await this.AccNavigation.gotoProjectChangeRequests();
+    await this.userClicksCreate();
+    await this.startRequestPage();
+  }
+
+  @Then("the {string} button should not exist")
+  async pageWithoutFc(buttonName: string) {
+    await this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." }).isVisible();
+    await expect(this.page.getByRole("button")).not.toContainText(buttonName);
+  }
 }
