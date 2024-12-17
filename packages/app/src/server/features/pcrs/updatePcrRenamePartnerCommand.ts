@@ -16,7 +16,7 @@ import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { zodEmptySchema, ZodEmptySchema } from "@ui/zod/helperValidators/helperValidators.zod";
 
-export class UpdatePCRRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase<
+export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
   RenamePartnerSchema | ZodEmptySchema,
   PcrRenamePartnerDto

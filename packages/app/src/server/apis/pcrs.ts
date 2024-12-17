@@ -15,7 +15,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
-import { UpdatePCRRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
+import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -164,7 +164,7 @@ class Controller
     const context = await contextProvider.start(params);
 
     await context.runCommand(
-      new UpdatePCRRenamePartnerCommand({
+      new UpdatePcrRenamePartnerCommand({
         projectId: params.projectId,
         projectChangeRequestId: params.id,
         pcr: params.pcr,
