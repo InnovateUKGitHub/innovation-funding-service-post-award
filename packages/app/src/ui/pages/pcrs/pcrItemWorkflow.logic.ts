@@ -90,6 +90,19 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
 
   const { clearMessages } = useMessageContext();
 
+  /**
+   * on success callback for every pcr update
+   */
+  async function onSuccess<TRes>(_: SubmitData, __: TRes, context: { link: ILinkInfo } | undefined) {
+    if (!!refreshItemWorkflowQuery) {
+      await refreshItemWorkflowQuery();
+    }
+
+    clearMessages();
+    setFetchKey(k => k + 1);
+    navigate(context?.link?.path ?? "");
+  }
+
   type SubmitData = T extends PCRItemType.ScopeChange
     ? PcrScopeChangeDto
     : T extends PCRItemType.AccountNameChange
@@ -107,15 +120,7 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),
-      onSuccess: async (_, __, context) => {
-        if (!!refreshItemWorkflowQuery) {
-          await refreshItemWorkflowQuery();
-        }
-
-        clearMessages();
-        setFetchKey(k => k + 1);
-        navigate(context?.link?.path ?? "");
-      },
+      onSuccess,
     });
   }
 
@@ -130,15 +135,7 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),
-      onSuccess: async (_, __, context) => {
-        if (!!refreshItemWorkflowQuery) {
-          await refreshItemWorkflowQuery();
-        }
-
-        clearMessages();
-        setFetchKey(k => k + 1);
-        navigate(context?.link?.path ?? "");
-      },
+      onSuccess,
     });
   }
 
@@ -158,15 +155,7 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           },
         }),
       }),
-    onSuccess: async (_, __, context) => {
-      if (!!refreshItemWorkflowQuery) {
-        await refreshItemWorkflowQuery();
-      }
-
-      clearMessages();
-      setFetchKey(k => k + 1);
-      navigate(context?.link?.path ?? "");
-    },
+    onSuccess,
   });
 };
 
