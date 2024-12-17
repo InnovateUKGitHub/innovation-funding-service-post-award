@@ -14,7 +14,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-import { UpdatePCRScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
+import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
 import { UpdatePCRRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
@@ -35,7 +35,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<PCRDto>;
 
-  updateScopeChange: (
+  scopeChange: (
     params: ApiParams<
       Context,
       {
@@ -85,7 +85,7 @@ class Controller
     this.putItem(
       "/:projectId/:pcrId/scope-change",
       (p, _, b: PcrScopeChangeDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
-      this.updateScopeChange,
+      this.scopeChange,
     );
 
     this.putItem(
@@ -128,7 +128,7 @@ class Controller
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
-  async updateScopeChange(
+  async scopeChange(
     params: ApiParams<
       "server",
       {
@@ -141,7 +141,7 @@ class Controller
     const context = await contextProvider.start(params);
 
     await context.runCommand(
-      new UpdatePCRScopeChangeCommand({
+      new UpdatePcrScopeChangeCommand({
         projectId: params.projectId,
         projectChangeRequestId: params.id,
         pcr: params.pcr,

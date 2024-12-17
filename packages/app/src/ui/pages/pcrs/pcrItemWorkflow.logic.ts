@@ -99,7 +99,7 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
   if (pcrType === PCRItemType.ScopeChange) {
     return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
       req: data =>
-        clientsideApiClient.pcrs.updateScopeChange({
+        clientsideApiClient.pcrs.scopeChange({
           projectId,
           id: pcrId,
           pcr: {

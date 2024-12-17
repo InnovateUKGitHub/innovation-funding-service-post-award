@@ -23,12 +23,12 @@ type ScopeChangeSchema =
   | PcrScopeChangePublicDescriptionSchemaType
   | PcrScopeChangeProjectSummarySchemaType;
 
-export class UpdatePCRScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
+export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
   ScopeChangeSchema,
   PcrScopeChangeDto
 > {
-  public readonly runnableName: string = "UpdatePCRScopeChangeCommand";
+  public readonly runnableName: string = "UpdatePcrScopeChangeCommand";
   private readonly projectId: ProjectId;
   private readonly projectChangeRequestId: PcrId | PcrItemId;
   private readonly form: ScopeChangeFormType;
