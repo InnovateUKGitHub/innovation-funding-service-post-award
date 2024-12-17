@@ -40,7 +40,8 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       Context,
       {
         projectId: ProjectId;
-        id: PcrId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
         pcr: PcrScopeChangeDto;
       }
     >,
@@ -51,11 +52,13 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       Context,
       {
         projectId: ProjectId;
-        id: PcrId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
         pcr: PcrRenamePartnerDto;
       }
     >,
   ) => Promise<boolean>;
+
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
 
@@ -83,16 +86,27 @@ class Controller
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem(
-      "/:projectId/:pcrId/scope-change",
-      (p, _, b: PcrScopeChangeDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
+      "/:projectId/:pcrId/:pcrItemId/scope-change",
+      (p, _, b: PcrScopeChangeDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
       this.scopeChange,
     );
 
     this.putItem(
-      "/:projectId/:pcrId/rename-partner",
-      (p, _, b: PcrRenamePartnerDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
+      "/:projectId/:pcrId/:pcrItemId/rename-partner",
+      (p, _, b: PcrRenamePartnerDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
       this.renamePartner,
     );
+
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
   }
 
@@ -133,7 +147,8 @@ class Controller
       "server",
       {
         projectId: ProjectId;
-        id: PcrId | PcrItemId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
         pcr: PcrScopeChangeDto;
       }
     >,
@@ -143,7 +158,8 @@ class Controller
     await context.runCommand(
       new UpdatePcrScopeChangeCommand({
         projectId: params.projectId,
-        projectChangeRequestId: params.id,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
         pcr: params.pcr,
         form: params.pcr.form,
       }),
@@ -156,7 +172,8 @@ class Controller
       "server",
       {
         projectId: ProjectId;
-        id: PcrId | PcrItemId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
         pcr: PcrRenamePartnerDto;
       }
     >,
@@ -166,7 +183,8 @@ class Controller
     await context.runCommand(
       new UpdatePcrRenamePartnerCommand({
         projectId: params.projectId,
-        projectChangeRequestId: params.id,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
         pcr: params.pcr,
         form: params.pcr.form,
       }),

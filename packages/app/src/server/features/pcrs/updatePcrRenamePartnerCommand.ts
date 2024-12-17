@@ -21,26 +21,30 @@ export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
   RenamePartnerSchema | ZodEmptySchema,
   PcrRenamePartnerDto
 > {
-  public readonly runnableName: string = "UpdatePCRRenamePartnerCommand";
+  public readonly runnableName: string = "UpdatePcrRenamePartnerCommand";
   private readonly projectId: ProjectId;
-  private readonly projectChangeRequestId: PcrId | PcrItemId;
+  private readonly pcrId: PcrId;
+  private readonly pcrItemId: PcrItemId;
   private readonly form: RenamePartnerFormType;
   protected readonly dto: PcrRenamePartnerDto;
 
   constructor({
     projectId,
-    projectChangeRequestId,
+    pcrId,
+    pcrItemId,
     pcr,
     form,
   }: {
     projectId: ProjectId;
-    projectChangeRequestId: PcrId | PcrItemId;
+    pcrId: PcrId;
+    pcrItemId: PcrItemId;
     pcr: PcrRenamePartnerDto;
     form: RenamePartnerFormType;
   }) {
     super();
     this.projectId = projectId;
-    this.projectChangeRequestId = projectChangeRequestId;
+    this.pcrId = pcrId;
+    this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;
   }
@@ -82,16 +86,17 @@ export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
       return true;
     }
     const hasMismatchProjectId = this.projectId !== this.dto.projectId;
-    const hasMismatchPcrId = this.projectChangeRequestId !== this.dto.pcrId;
+    const hasMismatchPcrId = this.pcrId !== this.dto.pcrId;
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
 
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
     if (!isProjectActive) throw new InActiveProjectError();
 
     await context.repositories.projectChangeRequests.updateSingleItem({
-      id: this.dto.pcrItemId,
+      id: this.pcrItemId,
       status: this.dto.status,
       ...validatedData,
+      pcrId: this.pcrId,
     });
 
     return true;

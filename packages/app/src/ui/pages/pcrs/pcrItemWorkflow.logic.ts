@@ -114,7 +114,8 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
       req: data =>
         clientsideApiClient.pcrs.scopeChange({
           projectId,
-          id: pcrId,
+          pcrId,
+          pcrItemId,
           pcr: {
             ...(data as PcrScopeChangeDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
@@ -129,7 +130,8 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
       req: data =>
         clientsideApiClient.pcrs.renamePartner({
           projectId,
-          id: pcrId,
+          pcrId,
+          pcrItemId,
           pcr: {
             ...(data as PcrRenamePartnerDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),

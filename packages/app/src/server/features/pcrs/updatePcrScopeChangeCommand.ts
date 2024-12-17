@@ -30,24 +30,28 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
 > {
   public readonly runnableName: string = "UpdatePcrScopeChangeCommand";
   private readonly projectId: ProjectId;
-  private readonly projectChangeRequestId: PcrId | PcrItemId;
+  private readonly pcrId: PcrId;
+  private readonly pcrItemId: PcrItemId;
   private readonly form: ScopeChangeFormType;
   protected readonly dto: PcrScopeChangeDto;
 
   constructor({
     projectId,
-    projectChangeRequestId,
+    pcrId,
+    pcrItemId,
     pcr,
     form,
   }: {
     projectId: ProjectId;
-    projectChangeRequestId: PcrId | PcrItemId;
+    pcrId: PcrId;
+    pcrItemId: PcrItemId;
     pcr: PcrScopeChangeDto;
     form: ScopeChangeFormType;
   }) {
     super();
     this.projectId = projectId;
-    this.projectChangeRequestId = projectChangeRequestId;
+    this.pcrId = pcrId;
+    this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;
   }
@@ -105,16 +109,17 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
     validatedData: z.output<ScopeChangeSchema>,
   ): Promise<boolean> {
     const hasMismatchProjectId = this.projectId !== this.dto.projectId;
-    const hasMismatchPcrId = this.projectChangeRequestId !== this.dto.pcrId;
+    const hasMismatchPcrId = this.pcrId !== this.dto.pcrId;
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
 
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
     if (!isProjectActive) throw new InActiveProjectError();
 
     await context.repositories.projectChangeRequests.updateSingleItem({
-      id: this.dto.pcrItemId,
+      id: this.pcrItemId,
       status: this.dto.status,
       ...validatedData,
+      pcrId: this.pcrId,
     });
 
     return true;
