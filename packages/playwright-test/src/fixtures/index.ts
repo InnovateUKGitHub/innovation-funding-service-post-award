@@ -33,6 +33,7 @@ import { ChangePartnerName } from "./acc/pages/PCRs/changePartnerName";
 import { AccProjectWithoutFC } from "./projectFactory/AccProjectWithoutFC";
 import { AccIsLoaded } from "./acc/AccIsLoaded";
 import { ChangeProjectDuration } from "./acc/pages/PCRs/changeProjectDuration";
+import { Acc1CypressDoNotTouch } from "./projectFactory/Acc1CypressDoNotTouch";
 
 type AccFixtures = {
   // Pages
@@ -78,6 +79,7 @@ interface Workers {
   accProjectMulti: AccProjectMulti;
   accProjectKtp: AccProjectKtp;
   accProjectWithoutFc: AccProjectWithoutFC;
+  acc1CypressDoNotTouch: Acc1CypressDoNotTouch;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
 }
@@ -142,6 +144,11 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new AccProjectWithoutFC({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
+  acc1CypressDoNotTouch: [
+    ({ sfdcApi, projectState }, use) => use(new Acc1CypressDoNotTouch({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+
   // Misc
   accNavigation: ({ page, projectState, accIsLoaded }, use) =>
     use(

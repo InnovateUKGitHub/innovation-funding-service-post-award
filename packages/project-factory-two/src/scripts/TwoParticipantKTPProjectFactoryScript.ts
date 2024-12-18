@@ -14,6 +14,7 @@ import { Competition__c } from "../sobjects/Competition__c";
 import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
+import { overwriteProfiles } from "../helpers/overwriteProfiles";
 
 interface TwoParticipantKTPProjectFactoryScriptArguments {
   generateProfiles: boolean;
@@ -368,33 +369,22 @@ class TwoParticipantKTPProjectFactoryScript extends AbstractProjectFactoryScript
         ),
       );
 
-      const updates: Acc_Profile__c[] = [];
-      for (const profile of profiles) {
-        switch (profile.RecordTypeId) {
-          case profileTotalCostCategoryRecordType.Id:
-            switch (profile.Acc_CostCategoryDescription__c) {
-              case "Overheads":
-                profile.Acc_CostCategoryGOLCost__c = 240;
-                break;
-              default:
-                profile.Acc_CostCategoryGOLCost__c = 1200;
-                break;
-            }
-            updates.push(profile);
-            break;
-          case profileProfileDetailRecordType.Id:
-            switch (profile.Acc_CostCategoryDescription__c) {
-              case "Overheads":
-                profile.Acc_LatestForecastCost__c = 20;
-                break;
-              default:
-                profile.Acc_LatestForecastCost__c = 100;
-                break;
-            }
-            updates.push(profile);
-            break;
-        }
-      }
+      const updates = overwriteProfiles({
+        profiles,
+        profileTotalCostCategoryRecordType,
+        profileProfileDetailRecordType,
+        profileOverrides: [
+          {
+            costCategoryDescription: "Overheads",
+            costCategoryGolCost: 240,
+            detail: { latestForecastCost: 20 },
+          },
+        ],
+        defaultValues: {
+          costCategoryGolCost: 1200,
+          detail: { latestForecastCost: 100 },
+        },
+      });
 
       for (const updateBatch of batch(updates)) {
         await Database.update(updateBatch);

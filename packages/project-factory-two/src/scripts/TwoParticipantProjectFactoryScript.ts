@@ -5,7 +5,6 @@ import { batch } from "../helpers/batch";
 import { getRecordType } from "../helpers/getRecordType";
 import { makeClaims } from "../helpers/makeClaims";
 import { useTriggerMdt } from "../helpers/triggerMdtToggles";
-import { Acc_Profile__c } from "../sobjects/Acc_Profile__c";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -14,6 +13,7 @@ import { Competition__c } from "../sobjects/Competition__c";
 import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
+import { overwriteProfiles } from "../helpers/overwriteProfiles";
 
 interface TwoParticipantProjectFactoryScriptArguments {
   competitionType: "CR&D" | "SBRI";
@@ -147,7 +147,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
     secondaryProjectParticipant.Acc_ProjectId__c = project.Id;
     secondaryProjectParticipant.ParticipantMigrationID__c = prefix("200");
-    secondaryProjectParticipant.Acc_ParticipantType__c = "Business";
+    secondaryProjectParticipant.Acc_ParticipantType__c = "Research";
     secondaryProjectParticipant.Acc_ParticipantSize__c = "Medium";
     secondaryProjectParticipant.Acc_ProjectRole__c = "Collaborator";
     secondaryProjectParticipant.Acc_AuditReportFrequency__c = "With all claims";
@@ -157,7 +157,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     secondaryProjectParticipant.Acc_FlaggedParticipant__c = false;
     secondaryProjectParticipant.Acc_OverheadRate__c = 20;
     secondaryProjectParticipant.Acc_ParticipantProjectReportingType__c = "Public";
-    secondaryProjectParticipant.Acc_OrganisationType__c = "Industrial";
+    secondaryProjectParticipant.Acc_OrganisationType__c = "Academic";
     secondaryProjectParticipant.Acc_CreateProfiles__c = false;
     secondaryProjectParticipant.Acc_CreateClaims__c = false;
 
@@ -252,23 +252,6 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
 
     await Database.insert([mspPcl, pmPcl, mainFcPcl, secondaryFcPcl]);
 
-    const mainClaims = makeClaims({
-      recordTypes,
-      projectParticipant: mainProjectParticipant,
-      project,
-    });
-
-    const secondaryClaims = makeClaims({
-      recordTypes,
-      projectParticipant: secondaryProjectParticipant,
-      project,
-    });
-
-    await Promise.all([
-      Database.insert(mainClaims.claimTotalProjectPeriods),
-      Database.insert(secondaryClaims.claimTotalProjectPeriods),
-    ]);
-
     project.Acc_ClaimFrequency__c = "Quarterly";
     project.Acc_NonFEC__c = false;
     project.Acc_MonitoringLevel__c = "Platinum";
@@ -284,49 +267,121 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
       `,
     });
 
-    // Re-enable Trigger__mdt for normal projects
-    enableClaimTrigger();
-    await Database.update(triggers);
-
     if (args.profiles) {
-      const profiles = await awaitResults(() =>
+      const [mainProfiles, secondaryProfiles] = await Promise.all([
+        awaitResults(() =>
+          Database.query(
+            `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c, Acc_CostCategory__c, Acc_ProjectPeriodNumber__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}' AND Acc_ProjectParticipant__c = '${mainProjectParticipant.Id}'`,
+          ),
+        ),
+        awaitResults(() =>
+          Database.query(
+            `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c, Acc_CostCategory__c, Acc_ProjectPeriodNumber__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}' AND Acc_ProjectParticipant__c = '${secondaryProjectParticipant.Id}'`,
+          ),
+        ),
+      ]);
+
+      const mainProfileUpdates = overwriteProfiles({
+        profiles: mainProfiles,
+        profileTotalCostCategoryRecordType,
+        profileProfileDetailRecordType,
+        profileOverrides: [
+          {
+            costCategoryDescription: "Overheads",
+            costCategoryGolCost: 1_560_000,
+            detail: [
+              { latestForecastCost: 20_000 },
+              { latestForecastCost: 40_000 },
+              { latestForecastCost: 60_000 },
+              { latestForecastCost: 80_000 },
+              { latestForecastCost: 100_000 },
+              { latestForecastCost: 120_000 },
+              { latestForecastCost: 140_000 },
+              { latestForecastCost: 160_000 },
+              { latestForecastCost: 180_000 },
+              { latestForecastCost: 200_000 },
+              { latestForecastCost: 220_000 },
+              { latestForecastCost: 240_000 },
+            ],
+          },
+        ],
+        defaultValues: {
+          costCategoryGolCost: 7_800_000,
+          detail: [
+            { latestForecastCost: 100_000 },
+            { latestForecastCost: 200_000 },
+            { latestForecastCost: 300_000 },
+            { latestForecastCost: 400_000 },
+            { latestForecastCost: 500_000 },
+            { latestForecastCost: 600_000 },
+            { latestForecastCost: 700_000 },
+            { latestForecastCost: 800_000 },
+            { latestForecastCost: 900_000 },
+            { latestForecastCost: 1_000_000 },
+            { latestForecastCost: 1_100_000 },
+            { latestForecastCost: 1_200_000 },
+          ],
+        },
+      });
+      const secondaryProfileUpdates = overwriteProfiles({
+        profiles: secondaryProfiles,
+        profileTotalCostCategoryRecordType,
+        profileProfileDetailRecordType,
+        profileOverrides: [],
+        defaultValues: {
+          costCategoryGolCost: 1200,
+          detail: { latestForecastCost: 100 },
+        },
+      });
+
+      for (const updateBatch of batch([...mainProfileUpdates, ...secondaryProfileUpdates])) {
+        await Database.update(updateBatch);
+      }
+
+      const claimTotalProjectPeriods = await awaitResults(() =>
         Database.query(
-          `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
+          `SELECT Id, RecordTypeId, Acc_ProjectPeriodNumber__c, Acc_ProjectParticipant__c FROM Acc_Claims__c WHERE Acc_ProjectID__c = '${project.Id}' AND RecordType.DeveloperName = 'Total_Project_Period'`,
         ),
       );
 
-      const updates: Acc_Profile__c[] = [];
-      for (const profile of profiles) {
-        switch (profile.RecordTypeId) {
-          case profileTotalCostCategoryRecordType.Id:
-            switch (profile.Acc_CostCategoryDescription__c) {
-              case "Overheads":
-                profile.Acc_CostCategoryGOLCost__c = 240;
-                break;
-              default:
-                profile.Acc_CostCategoryGOLCost__c = 1200;
-                break;
-            }
-            updates.push(profile);
-            break;
-          case profileProfileDetailRecordType.Id:
-            switch (profile.Acc_CostCategoryDescription__c) {
-              case "Overheads":
-                profile.Acc_LatestForecastCost__c = 20;
-                break;
-              default:
-                profile.Acc_LatestForecastCost__c = 100;
-                break;
-            }
-            updates.push(profile);
-            break;
-        }
-      }
+      const mainClaims = makeClaims({
+        recordTypes,
+        projectParticipant: mainProjectParticipant,
+        project,
+        profiles: mainProfiles,
+        claimTotalProjectPeriods,
+        claimOverrides: [
+          {
+            period: 1,
+            claimStatus: "Draft",
+            claimDetails: [],
+          },
+        ],
+      });
 
-      for (const updateBatch of batch(updates)) {
-        await Database.update(updateBatch);
-      }
+      const secondaryClaims = makeClaims({
+        recordTypes,
+        projectParticipant: secondaryProjectParticipant,
+        project,
+        profiles: secondaryProfiles,
+        claimTotalProjectPeriods,
+        claimOverrides: [
+          {
+            period: 1,
+            claimStatus: "Draft",
+            claimDetails: [],
+          },
+        ],
+      });
+
+      await Database.upsert([...mainClaims.claimTotalProjectPeriods, ...secondaryClaims.claimTotalProjectPeriods]);
+      await Database.upsert([...mainClaims.claimDetails, ...secondaryClaims.claimDetails]);
+      await Database.upsert([...mainClaims.claimLineItems, ...secondaryClaims.claimLineItems]);
     }
+
+    // Re-enable Trigger__mdt for normal projects
+    enableClaimTrigger();
+    await Database.update(triggers);
 
     return {
       competition,

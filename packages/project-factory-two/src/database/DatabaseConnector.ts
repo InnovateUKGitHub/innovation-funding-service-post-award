@@ -7,6 +7,7 @@ import { ProjectFactoryDatabaseQueryInvalidSoqlException } from "../exceptions/P
 import { sobjects, SObjectInstanceFromQuery, GetSobjectName } from "../sobjects/factories";
 import { ProjectFactoryUnknownSobjectException } from "../exceptions/ProjectFactoryUnknownSobjectException";
 import { ProjectFactoryDatabaseIdMissingException } from "../exceptions/ProjectFactoryDatabaseIdMissingException";
+import { batch } from "../helpers/batch";
 
 class DatabaseConnector implements IDatabaseConnector {
   private readonly connection: ITsforceConnection;
@@ -99,6 +100,24 @@ class DatabaseConnector implements IDatabaseConnector {
       if (!data.Id) throw new ProjectFactoryDatabaseIdMissingException();
       const { sobject } = data;
       await this.connection.sobject(sobject).update(data.toObject());
+    }
+  }
+
+  upsert(recordToUpdate: AbstractSObject, allOrNone?: boolean): Promise<void>;
+  upsert(recordsToUpdate: AbstractSObject[], allOrNone?: boolean): Promise<void>;
+  async upsert(data: AbstractSObject | AbstractSObject[], allOrNone: boolean = true): Promise<void> {
+    if (Array.isArray(data)) {
+      const itemsToInsert = data.filter(x => typeof x.Id === "undefined");
+      const itemsToUpdate = data.filter(x => typeof x.Id !== "undefined");
+
+      await this.insert(itemsToInsert, allOrNone);
+      await this.update(itemsToUpdate, allOrNone);
+    } else {
+      if (typeof data.Id === "undefined") {
+        await this.insert(data, allOrNone);
+      } else {
+        await this.update(data, allOrNone);
+      }
     }
   }
 

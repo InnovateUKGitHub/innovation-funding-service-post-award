@@ -1,29 +1,33 @@
+import { ClaimStatus } from "../types/ClaimStatus";
+import { SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 
 class Acc_Claims__c extends AbstractSObject {
   public readonly sobject = "Acc_Claims__c";
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor RecordTypeId: string | undefined;
+  accessor RecordTypeId: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_ClaimStatus__c: SObjectFieldType<ClaimStatus>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ClaimStatus__c:
-    | "Draft"
-    | "Independent accountant's report required"
-    | "New"
-    | "Paid"
-    | "Payment being processed"
-    | "Queried by Innovate UK"
-    | "Queried by Monitoring Officer"
-    | "Submitted to Innovate UK"
-    | "Submitted to Monitoring Officer"
-    | undefined;
+  accessor Acc_ProjectPeriodNumber__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectPeriodNumber__c: number | undefined;
+  accessor Acc_ProjectParticipant__c: SObjectFieldType<string>;
 
-  @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectParticipant__c: string | undefined;
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_CostCategory__c: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_ParentId__c: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_LineItemCost__c: SObjectFieldType<number>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_LineItemDescription__c: SObjectFieldType<string>;
 }
 
 export { Acc_Claims__c };

@@ -1,43 +1,44 @@
+import { SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 
 class Acc_Project__c extends AbstractSObject {
   public readonly sobject = "Acc_Project__c";
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_StartDate__c: Date | undefined;
+  accessor Acc_StartDate__c: SObjectFieldType<Date>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_Duration__c: number | undefined;
+  accessor Acc_Duration__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_ClaimFrequency__c: "Monthly" | "Quarterly" | undefined;
+  accessor Acc_ClaimFrequency__c: SObjectFieldType<"Monthly" | "Quarterly">;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectTitle__c: string | undefined;
+  accessor Acc_ProjectTitle__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectNumber__c: string | undefined;
+  accessor Acc_ProjectNumber__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_TSBProjectNumber__c: number | undefined;
+  accessor Acc_TSBProjectNumber__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_LegacyID__c: string | undefined;
+  accessor Acc_LegacyID__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_PublicDescription__c: string | undefined;
+  accessor Acc_PublicDescription__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_ProjectSummary__c: string | undefined;
+  accessor Acc_ProjectSummary__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_WorkdayProjectSetupComplete__c: boolean | undefined;
+  accessor Acc_WorkdayProjectSetupComplete__c: SObjectFieldType<boolean>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_NonFEC__c: boolean | undefined;
+  accessor Acc_NonFEC__c: SObjectFieldType<boolean>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_MonitoringLevel__c: "Platinum" | "Gold" | "Silver" | "Bronze" | "Internal Assurance" | undefined;
+  accessor Acc_MonitoringLevel__c: SObjectFieldType<"Platinum" | "Gold" | "Silver" | "Bronze" | "Internal Assurance">;
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Acc_MonitoringReportSchedule__c:
@@ -49,7 +50,7 @@ class Acc_Project__c extends AbstractSObject {
     | undefined;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_ProjectStatus__c:
+  accessor Acc_ProjectStatus__c: SObjectFieldType<
     | "Not set"
     | "PCL Creation Complete"
     | "Offer Letter Sent"
@@ -58,16 +59,16 @@ class Acc_Project__c extends AbstractSObject {
     | "Final Claim"
     | "Closed"
     | "Terminated"
-    | undefined;
+  >;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_CurrentPeriodNumberHelper__c: number | undefined;
+  accessor Acc_CurrentPeriodNumberHelper__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_ProjectSource__c: "Manual" | "IFS" | "Grants" | undefined;
+  accessor Acc_ProjectSource__c: SObjectFieldType<"Manual" | "IFS" | "Grants">;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_CompetitionId__c: string | undefined;
+  accessor Acc_CompetitionId__c: SObjectFieldType<string>;
 }
 
 export { Acc_Project__c };

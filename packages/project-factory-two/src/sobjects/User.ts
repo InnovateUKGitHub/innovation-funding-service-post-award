@@ -1,3 +1,4 @@
+import { SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 import { Contact } from "./Contact";
 
@@ -5,40 +6,40 @@ class User extends AbstractSObject {
   public readonly sobject = "User";
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Username: string | undefined;
+  accessor Username: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Email: string | undefined;
+  accessor Email: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor FirstName: string | undefined;
+  accessor FirstName: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor LastName: string | undefined;
+  accessor LastName: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Alias: string | undefined;
+  accessor Alias: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor CommunityNickname: string | undefined;
+  accessor CommunityNickname: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor EmailEncodingKey: string | undefined;
+  accessor EmailEncodingKey: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor LocaleSidKey: string | undefined;
+  accessor LocaleSidKey: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor LanguageLocaleKey: string | undefined;
+  accessor LanguageLocaleKey: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor TimeZoneSidKey: string | undefined;
+  accessor TimeZoneSidKey: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor ProfileId: string | undefined;
+  accessor ProfileId: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor ContactId: string | undefined;
+  accessor ContactId: SObjectFieldType<string>;
 
   /**
    * Automatically populate required fields that will never change
@@ -51,13 +52,18 @@ class User extends AbstractSObject {
     this.ProfileId = "00e58000001ITpLAAW";
   }
 
-  static fromContact(contact: Contact): User {
+  static fromContact(contact: Contact, sandbox?: string): User {
     const user = new User();
     user.ContactId = contact.Id;
     user.Username = contact.Email;
     user.Email = contact.Email;
     user.FirstName = contact.FirstName;
     user.LastName = contact.LastName;
+
+    if (typeof sandbox === "string") {
+      user.Username += "." + sandbox;
+    }
+
     return user;
   }
 }

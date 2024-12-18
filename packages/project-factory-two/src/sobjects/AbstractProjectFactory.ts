@@ -1,17 +1,18 @@
 import type { InspectOptionsStylized } from "node:util";
 import { inspect } from "util";
 import { ProjectFactoryMissingNonNullableFieldException } from "../exceptions/ProjectFactoryMissingNonNullableFieldException";
+import { SObjectFieldType } from "../types/SObjectFieldType";
 
 interface SObjectFieldMetadata<T> {
   name: string;
   nullable: boolean;
   readonly: boolean;
   set: boolean;
-  value: T;
+  value: SObjectFieldType<T>;
 }
 
 abstract class AbstractSObject {
-  _fields: SObjectFieldMetadata<any>[];
+  _fields: SObjectFieldMetadata<unknown>[];
   abstract sobject: string;
 
   constructor() {
@@ -38,7 +39,10 @@ abstract class AbstractSObject {
   toObject() {
     return Object.fromEntries([
       ...(this.Id ? [["Id", this.Id]] : []),
-      ...this._fields.filter(x => x.set && !x.readonly).map(x => [x.name, x.value]),
+      ...this._fields
+        .filter(x => x.set && !x.readonly)
+        // Call set thunks
+        .map(x => [x.name, x.value]),
     ]);
   }
 }
@@ -49,7 +53,7 @@ function SObjectField({ nullable, readonly }: { nullable: boolean; readonly: boo
     value: ClassAccessorDecoratorTarget<Input, Output>,
     context: ClassAccessorDecoratorContext<Input, Output>,
   ): ClassAccessorDecoratorResult<Input, Output> {
-    const { get, set } = value;
+    const { get } = value;
     const fieldName = context.name as string;
 
     context.addInitializer(function (this: Input) {
@@ -67,7 +71,8 @@ function SObjectField({ nullable, readonly }: { nullable: boolean; readonly: boo
       get() {
         const metadata = this._fields.find(x => x.name === fieldName);
         if (!metadata) throw new Error("Field not properly initialised.");
-        return metadata?.value;
+        if (typeof metadata?.value === "function") return metadata.value() as Output; // Execute thunk
+        return metadata?.value as Output;
       },
       set(val: Output) {
         const metadata = this._fields.find(x => x.name === fieldName);

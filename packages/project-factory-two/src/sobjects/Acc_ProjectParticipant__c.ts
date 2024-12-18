@@ -1,16 +1,17 @@
+import { SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 
 class Acc_ProjectParticipant__c extends AbstractSObject {
   public readonly sobject = "Acc_ProjectParticipant__c";
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_AccountId__c: string | undefined;
+  accessor Acc_AccountId__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectId__c: string | undefined;
+  accessor Acc_ProjectId__c: SObjectFieldType<string>;
 
-  @SObjectField({ nullable: false, readonly: false })
-  accessor ParticipantMigrationID__c: string | undefined;
+  @SObjectField({ nullable: true, readonly: false })
+  accessor ParticipantMigrationID__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_ParticipantType__c:
@@ -21,7 +22,7 @@ class Acc_ProjectParticipant__c extends AbstractSObject {
     | "Public sector, charity or non Je-S registered research organisation"
     | undefined;
 
-  @SObjectField({ nullable: false, readonly: false })
+  @SObjectField({ nullable: true, readonly: false })
   accessor Acc_ParticipantSize__c:
     | "Small"
     | "Medium"
@@ -33,7 +34,7 @@ class Acc_ProjectParticipant__c extends AbstractSObject {
     | undefined;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ProjectRole__c: "Collaborator" | "Lead" | undefined;
+  accessor Acc_ProjectRole__c: SObjectFieldType<"Collaborator" | "Lead">;
 
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_AuditReportFrequency__c:
@@ -57,28 +58,28 @@ class Acc_ProjectParticipant__c extends AbstractSObject {
     | undefined;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_Award_Rate__c: number | undefined;
+  accessor Acc_Award_Rate__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_Cap_Limit__c: number | undefined;
+  accessor Acc_Cap_Limit__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_FlaggedParticipant__c: boolean | undefined;
+  accessor Acc_FlaggedParticipant__c: SObjectFieldType<boolean>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_OverheadRate__c: SObjectFieldType<number>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_OverheadRate__c: number | undefined;
+  accessor Acc_ParticipantProjectReportingType__c: SObjectFieldType<"Public" | "Private">;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_ParticipantProjectReportingType__c: "Public" | "Private" | undefined;
+  accessor Acc_OrganisationType__c: SObjectFieldType<"Industrial" | "Academic">;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_OrganisationType__c: "Industrial" | "Academic" | undefined;
+  accessor Acc_CreateProfiles__c: SObjectFieldType<boolean>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_CreateProfiles__c: boolean | undefined;
-
-  @SObjectField({ nullable: false, readonly: false })
-  accessor Acc_CreateClaims__c: boolean | undefined;
+  accessor Acc_CreateClaims__c: SObjectFieldType<boolean>;
 }
 
 export { Acc_ProjectParticipant__c };

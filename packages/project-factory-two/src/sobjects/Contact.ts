@@ -1,22 +1,29 @@
+import { SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 
 class Contact extends AbstractSObject {
   public readonly sobject = "Contact";
 
-  @SObjectField({ nullable: false, readonly: false })
-  accessor ContactMigrationId__c: string | undefined;
+  @SObjectField({ nullable: true, readonly: false })
+  accessor ContactMigrationId__c: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Salutation: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor FirstName: string | undefined;
+  accessor FirstName: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor LastName: string | undefined;
+  accessor LastName: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor Email: string | undefined;
+  accessor Email: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Email__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: false, readonly: false })
-  accessor AccountId: string | undefined;
+  accessor AccountId: SObjectFieldType<string>;
 }
 
 export { Contact };

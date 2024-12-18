@@ -9,7 +9,7 @@ import { sleep } from "./sleep";
  */
 const awaitResults = async <T>(
   fn: () => Promise<T[]>,
-  { time = 500, attempts = 50, log }: { time?: number; attempts?: number; log?: string } = {},
+  { time = 1000, attempts = 50, log }: { time?: number; attempts?: number; log?: string } = {},
 ): Promise<T[]> => {
   let results: T[] = [];
 
