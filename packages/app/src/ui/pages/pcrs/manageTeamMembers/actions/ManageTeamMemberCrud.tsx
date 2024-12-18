@@ -29,6 +29,7 @@ import {
   ManageTeamMemberValidatorSchema,
 } from "./ManageTeamMemberCrud.zod";
 import { ManageTeamMemberMethod, ManageTeamMemberMethods } from "@framework/constants/pcrConstants";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 interface ManageTeamMembersActionContext {
   collated: Map<ProjectContactLinkId, ManageTeamMembersTableData>;
@@ -118,6 +119,8 @@ const BaseManageTeamMember = ({
     ManageTeamMemberRoles.includes(role) &&
     // If we are NOT in create, check the PCL matches the role we are changing
     (method === ManageTeamMemberMethod.CREATE || (memberToManage ? memberToManage.role === role : true));
+
+  useFormRevalidate(methods.watch, methods.trigger);
 
   return (
     <Page
