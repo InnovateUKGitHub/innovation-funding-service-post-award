@@ -17,13 +17,13 @@ import { useForm } from "react-hook-form";
 import { ChangeRemainingGrantSchema, changeRemainingGrantSchema, errorMap } from "./changeRemainingGrant.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
-import { sumBy } from "lodash";
 import { useOnUpdateChangeRemainingGrant, getPayload } from "./changeRemainingGrant.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { usePcrReallocateCostsData } from "../../PcrReallocateCosts.logic";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
+import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
 
 /**
  * Hook returns content for edit partner view
@@ -91,7 +91,8 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
         form: FormTypes.PcrReallocateCostsChangeRemainingGrant,
         partners: virementData.partners.map(x => ({
           partnerId: x.partnerId,
-          newRemainingGrant: String(x.newRemainingGrant ?? 0),
+          newAvailableGrant: String(x.newAvailableGrant ?? 0),
+          newRemainingGrant: x.newRemainingGrant,
           newRemainingCosts: x.newRemainingCosts,
           newFundingLevel: x.newFundingLevel,
           originalFundingLevel: x.originalFundingLevel,
@@ -122,20 +123,41 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ChangeRemainingGrantErrors;
 
+  const getNewAvailableGrant = (index: number) => {
+    return parseCurrency(watch(`partners.${index}.newAvailableGrant`));
+  };
+  const getNewRemainingGrant = (index: number) => {
+    return roundCurrency(
+      (getNewAvailableGrant(index) || 0) + virementData.partners[index].originalCapLimitDeferredGrant,
+    );
+  };
   const getNewFundingLevel = (index: number) => {
-    if (virementData.partners[index].newRemainingCosts === 0) {
+    if (virementData.partners[index].newRemainingCosts < 0.01) {
       return virementData.partners[index].newFundingLevel;
     }
-    const value = parseCurrency(watch(`partners.${index}.newRemainingGrant`));
+    const value = getNewAvailableGrant(index);
     return (value / virementData.partners[index].newRemainingCosts) * 100;
   };
 
-  const newRemainingGrantTotal = sumBy(watch("partners"), x => parseCurrency(x.newRemainingGrant) || 0);
+  const { newAvailableGrantTotal, newRemainingGrantTotal, newAvailableGrantDifference } = virementData.partners.reduce(
+    (p, _, i) => {
+      return {
+        newAvailableGrantTotal: roundCurrency(p.newAvailableGrantTotal + getNewAvailableGrant(i)),
+        newRemainingGrantTotal: roundCurrency(p.newRemainingGrantTotal + getNewRemainingGrant(i)),
+        newAvailableGrantDifference: roundCurrency(p.newAvailableGrantDifference - getNewAvailableGrant(i)),
+      };
+    },
+    {
+      newAvailableGrantTotal: 0,
+      newRemainingGrantTotal: 0,
+      newAvailableGrantDifference: virementData.originalAvailableGrant,
+    },
+  );
 
   useEffect(() => {
     setValue("newRemainingGrant", newRemainingGrantTotal, { shouldValidate: formState.isSubmitted });
   }, [newRemainingGrantTotal, setValue, formState.isSubmitted]);
-  const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
+  const newFundingLevelTotal = (newAvailableGrantTotal / virementData.newRemainingCosts) * 100;
 
   return (
     <Page
@@ -180,11 +202,13 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
               <TR>
                 <TH dividerRight>{content.partnerName}</TH>
                 <TH numeric>{content.partnerOriginalRemainingCosts}</TH>
+                <TH numeric>Available grant</TH>
                 <TH numeric>{content.partnerOriginalRemainingGrant}</TH>
                 <TH numeric dividerRight>
                   {content.originalFundingLevel}
                 </TH>
                 <TH numeric>{content.partnerNewRemainingCosts}</TH>
+                <TH numeric>New available grant</TH>
                 <TH numeric>{content.partnerNewRemainingGrant}</TH>
                 <TH numeric>{content.newFundingLevel}</TH>
               </TR>
@@ -194,7 +218,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                 <TR key={x.partnerId}>
                   <TD dividerRight>
                     <input type="hidden" value={x.partnerId} {...register(`partners.${i}.partnerId`)} />
-                    {partners.find(p => p.id === x.partnerId)?.name}
+                    {x.name}
                   </TD>
                   <TD numeric>
                     <input
@@ -203,6 +227,9 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                       {...register(`partners.${i}.originalRemainingCosts`)}
                     />
                     <Currency value={x.originalRemainingCosts} />
+                  </TD>
+                  <TD numeric>
+                    <Currency value={x.originalAvailableGrant} />
                   </TD>
                   <TD numeric>
                     <input
@@ -225,17 +252,20 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                     <Currency value={x.newRemainingCosts} />
                   </TD>
                   <TD numeric>
-                    <ValidationError error={getFieldState(`partners.${i}.newRemainingGrant`).error} />
+                    <ValidationError error={getFieldState(`partners.${i}.newAvailableGrant`).error} />
                     <NumberInput
                       inputWidth={10}
-                      aria-label={`${x.name} new remaining grant`}
+                      aria-label={`${x.name} new available grant`}
                       id={`partners_${i}_newRemainingGrant`}
                       hasError={!!validationErrors?.virements?.[i]?.newRemainingGrant}
-                      {...register(`partners.${i}.newRemainingGrant`)}
+                      {...register(`partners.${i}.newAvailableGrant`)}
                       disabled={isFetching}
-                      defaultValue={String(x.newRemainingGrant ?? 0)}
+                      defaultValue={String(x.newAvailableGrant ?? 0)}
                       prefix={content.gbp}
                     />
+                  </TD>
+                  <TD numeric>
+                    <Currency value={getNewRemainingGrant(i)} />
                   </TD>
                   <TD numeric>
                     <input type="hidden" value={x.newFundingLevel} {...register(`partners.${i}.newFundingLevel`)} />
@@ -253,11 +283,17 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                 <TH numeric>
                   <Currency value={virementData.originalRemainingGrant} />
                 </TH>
+                <TH numeric>
+                  <Currency value={virementData.originalAvailableGrant} />
+                </TH>
                 <TH numeric dividerRight>
                   <Percentage value={virementData.originalFundingLevel} />
                 </TH>
                 <TH numeric>
                   <Currency value={virementData.newRemainingCosts} />
+                </TH>
+                <TH numeric>
+                  <Currency value={newAvailableGrantTotal} />
                 </TH>
                 <TH id="newRemainingGrant" numeric>
                   <ValidationError error={getFieldState("newRemainingGrant").error} />
@@ -265,6 +301,33 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                 </TH>
                 <TH numeric>
                   <Percentage value={newFundingLevelTotal} />
+                </TH>
+              </TR>
+              <TR>
+                <TH dividerRight>Unassigned</TH>
+                <TH numeric>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric dividerRight>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric>
+                  <Currency value={newAvailableGrantDifference} />
+                </TH>
+                <TH id="newRemainingGrant" numeric>
+                  <TableEmptyCell />
+                </TH>
+                <TH numeric>
+                  <TableEmptyCell />
                 </TH>
               </TR>
             </TFoot>

@@ -26,7 +26,10 @@ type FinancialVirementForParticipant = Pick<
   PartnerFinancialVirement,
   "id" | "newEligibleCosts" | "partnerId" | "newFundingLevel" | "originalFundingLevel" | "newRemainingGrant"
 >;
-type Partner = Pick<PartnerDto, "id" | "name" | "isLead" | "remainingParticipantGrant">;
+type Partner = Pick<
+  PartnerDto,
+  "id" | "name" | "isLead" | "remainingParticipantGrant" | "capLimitDeferredGrant" | "capLimit"
+>;
 
 interface MapToFinancialVirementProps {
   financialVirementsForCosts: FinancialVirementForCost[];
@@ -54,12 +57,19 @@ interface MappedFinancialVirementParticipantDto extends PartnerVirementsDto {
   name: string;
   costDifference: number;
   grantDifference: number;
+  originalAvailableGrant: number;
+  originalCapLimitDeferredGrant: number;
+  newAvailableGrant: number;
   virements: MappedFinancialVirementCostCategoryDto[];
 }
 
 interface MappedFinancialVirementDto extends FinancialVirementDto {
   grantDifference: number;
+  availableGrantDifference: number;
+  newAvailableGrant: number;
   costDifference: number;
+  originalAvailableGrant: number;
+  originalCapLimitDeferredGrant: number;
   partners: MappedFinancialVirementParticipantDto[];
   currentPartnerId?: PartnerId;
 }
@@ -143,7 +153,9 @@ const mapProjectParticipant = ({
   let originalEligibleCosts = 0;
   let newRemainingGrant = 0;
   let originalRemainingGrant = 0;
+  let originalAvailableGrant;
   let newEligibleCosts = 0;
+  let newAvailableGrant = 0;
 
   const costCategoryVirements = financialVirementsForCosts
     .filter(financialVirementsForCost => financialVirementsForCost.parentId === financialVirementsForParticipant.id)
@@ -165,16 +177,23 @@ const mapProjectParticipant = ({
 
   costsClaimedToDate = roundCurrency(costsClaimedToDate);
   originalEligibleCosts = roundCurrency(originalEligibleCosts);
-  newRemainingGrant = roundCurrency(newRemainingGrant);
   newEligibleCosts = roundCurrency(newEligibleCosts);
   // Trust in Salesforce to have the correct number, as a claim period could have a different paid out grant level
   // Don't know why - See ACC-11652 for more information.
   originalRemainingGrant = roundCurrency(partner.remainingParticipantGrant || originalRemainingGrant);
-
+  newRemainingGrant = roundCurrency(financialVirementsForParticipant?.newRemainingGrant || newRemainingGrant);
   const originalRemainingCosts = roundCurrency(originalEligibleCosts - costsClaimedToDate);
   const newRemainingCosts = roundCurrency(newEligibleCosts - costsClaimedToDate);
   const grantDifference = roundCurrency(newRemainingGrant - originalRemainingGrant);
   const costDifference = roundCurrency(newEligibleCosts - originalEligibleCosts);
+
+  if (typeof partner.capLimit === "number") {
+    originalAvailableGrant = roundCurrency(originalRemainingGrant - (partner.capLimitDeferredGrant ?? 0));
+    newAvailableGrant = roundCurrency(newRemainingGrant - (partner.capLimitDeferredGrant ?? 0));
+  } else {
+    originalAvailableGrant = originalRemainingGrant;
+    newAvailableGrant = newRemainingGrant;
+  }
 
   return {
     virementParticipantId: financialVirementsForParticipant.id,
@@ -186,7 +205,10 @@ const mapProjectParticipant = ({
     originalRemainingCosts,
     newEligibleCosts,
     newRemainingCosts,
+    newAvailableGrant,
     originalRemainingGrant,
+    originalAvailableGrant,
+    originalCapLimitDeferredGrant: partner.capLimitDeferredGrant ?? 0,
     newRemainingGrant,
     costDifference,
     grantDifference,
@@ -208,9 +230,12 @@ const mapVirements = ({
   let originalEligibleCosts = 0;
   let originalRemainingCosts = 0;
   let originalRemainingGrant = 0;
+  let originalAvailableGrant = 0;
+  let originalCapLimitDeferredGrant = 0;
   let newEligibleCosts = 0;
   let newRemainingCosts = 0;
   let newRemainingGrant = 0;
+  let newAvailableGrant = 0;
   let hasAvailablePartners = false;
 
   const partnerVirements = sortPartnersLeadFirst(partners)
@@ -238,9 +263,12 @@ const mapVirements = ({
       originalEligibleCosts += partnerVirement.originalEligibleCosts;
       originalRemainingCosts += partnerVirement.originalRemainingCosts;
       originalRemainingGrant += partnerVirement.originalRemainingGrant;
+      originalAvailableGrant += partnerVirement.originalAvailableGrant;
+      originalCapLimitDeferredGrant += partnerVirement.originalCapLimitDeferredGrant;
       newEligibleCosts += partnerVirement.newEligibleCosts;
       newRemainingCosts += partnerVirement.newRemainingCosts;
       newRemainingGrant += partnerVirement.newRemainingGrant;
+      newAvailableGrant += partnerVirement.newAvailableGrant;
       if (partnerVirement.virements.length > 0) hasAvailablePartners = true;
 
       return partnerVirement;
@@ -251,10 +279,14 @@ const mapVirements = ({
   originalEligibleCosts = roundCurrency(originalEligibleCosts);
   originalRemainingCosts = roundCurrency(originalRemainingCosts);
   originalRemainingGrant = roundCurrency(originalRemainingGrant);
+  originalAvailableGrant = roundCurrency(originalAvailableGrant);
+  originalCapLimitDeferredGrant = roundCurrency(originalCapLimitDeferredGrant);
   newEligibleCosts = roundCurrency(newEligibleCosts);
   newRemainingCosts = roundCurrency(newRemainingCosts);
   newRemainingGrant = roundCurrency(newRemainingGrant);
+  newAvailableGrant = roundCurrency(newAvailableGrant);
 
+  const availableGrantDifference = roundCurrency(newAvailableGrant - originalAvailableGrant);
   const grantDifference = roundCurrency(newRemainingGrant - originalRemainingGrant);
   const costDifference = roundCurrency(newEligibleCosts - originalEligibleCosts);
   const hasAvailableGrant: boolean = grantDifference < 0;
@@ -269,9 +301,13 @@ const mapVirements = ({
       originalEligibleCosts,
       originalRemainingCosts,
       originalRemainingGrant,
+      originalAvailableGrant,
+      originalCapLimitDeferredGrant,
+      availableGrantDifference,
       newEligibleCosts,
       newRemainingCosts,
       newRemainingGrant,
+      newAvailableGrant,
       grantDifference,
       costDifference,
       partners: partnerVirements,

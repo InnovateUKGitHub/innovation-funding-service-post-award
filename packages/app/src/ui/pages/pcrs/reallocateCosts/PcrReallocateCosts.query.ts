@@ -113,6 +113,12 @@ const pcrReallocateCostsQuery = graphql`
                 Acc_RemainingParticipantGrant__c {
                   value
                 }
+                Acc_CapLimitDeferredGrant__c {
+                  value
+                }
+                Acc_Cap_Limit__c {
+                  value
+                }
               }
             }
           }

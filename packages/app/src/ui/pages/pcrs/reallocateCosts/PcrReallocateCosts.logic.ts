@@ -34,7 +34,7 @@ const usePcrReallocateCostsData = ({ projectId, pcrId, itemId, fetchKey }: UsePc
 
   const partners = mapToPartnerDtoArray(
     data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
-    ["id", "name", "isLead", "remainingParticipantGrant"],
+    ["id", "name", "isLead", "remainingParticipantGrant", "capLimitDeferredGrant", "capLimit"],
     {},
   );
 

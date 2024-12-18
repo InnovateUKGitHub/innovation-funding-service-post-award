@@ -143,9 +143,8 @@ export class UpdateFinancialVirementCommand extends AuthorisedAsyncCommandBase<b
       isUpdated = true;
     }
 
-    const newRemainingGrant = calculateNewRemainingGrant(dto.virements, dto.newFundingLevel);
-    if (original.newRemainingGrant !== newRemainingGrant) {
-      update.Acc_NewRemainingGrant__c = newRemainingGrant;
+    if (original.newRemainingGrant !== dto.newRemainingGrant) {
+      update.Acc_NewRemainingGrant__c = dto.newRemainingGrant;
       isUpdated = true;
     }
 

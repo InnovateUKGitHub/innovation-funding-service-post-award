@@ -13,18 +13,19 @@ export const changeRemainingGrantSchema = z
     partners: z.array(
       z
         .object({
-          newRemainingGrant: getGenericCurrencyValidation({
-            required: true,
-          }),
           newRemainingCosts: z.number(),
           newFundingLevel: z.number(),
+          newAvailableGrant: getGenericCurrencyValidation({
+            required: true,
+          }),
+          newRemainingGrant: z.number(),
           originalFundingLevel: z.number(),
           originalRemainingCosts: z.number(),
           originalRemainingGrant: z.number(),
           partnerId: partnerIdValidation,
         })
         .superRefine((data, ctx) => {
-          if (roundCurrency(parseCurrency(data.newRemainingGrant)) > roundCurrency(data.newRemainingCosts)) {
+          if (roundCurrency(parseCurrency(data.newAvailableGrant)) > roundCurrency(data.newRemainingCosts)) {
             ctx.addIssue({
               code: z.ZodIssueCode.too_big,
               type: "number",

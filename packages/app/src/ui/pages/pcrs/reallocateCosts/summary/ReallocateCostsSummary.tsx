@@ -36,6 +36,7 @@ import { FinancialVirementsViewTable } from "./ReallocateCostsViewTable";
 import { usePcrReallocateCostsData } from "../PcrReallocateCosts.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
@@ -109,11 +110,13 @@ export const FinancialVirementSummary = () => {
               <TH className={colClass}>{getContent(x => x.reallocateCostsLabels.partnerName)}</TH>
               <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerOriginalEligibleCosts)}</TH>
               <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingCosts)}</TH>
+              <TH numeric>Available Grant</TH>
               <TH className={colClass} numeric>
                 {getContent(x => x.reallocateCostsLabels.partnerOriginalRemainingGrant)}
               </TH>
               <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewEligibleCosts)}</TH>
               <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewRemainingCosts)}</TH>
+              <TH numeric>New available grant</TH>
               <TH numeric>{getContent(x => x.reallocateCostsLabels.partnerNewRemainingGrant)}</TH>
             </TR>
           </THead>
@@ -143,6 +146,9 @@ export const FinancialVirementSummary = () => {
                 <TD numeric>
                   <Currency value={x.originalRemainingCosts} />
                 </TD>
+                <TD numeric>
+                  <Currency value={x.originalAvailableGrant} />
+                </TD>
                 <TD className={colClass} numeric>
                   <Currency value={x.originalRemainingGrant} />
                 </TD>
@@ -151,6 +157,9 @@ export const FinancialVirementSummary = () => {
                 </TD>
                 <TD numeric>
                   <Currency value={x.newRemainingCosts} />
+                </TD>
+                <TD numeric>
+                  <Currency value={x.newAvailableGrant} />
                 </TD>
                 <TD numeric>
                   <Currency value={x.newRemainingGrant} />
@@ -167,6 +176,9 @@ export const FinancialVirementSummary = () => {
               <TH numeric>
                 <Currency value={virementData.originalRemainingCosts} />
               </TH>
+              <TH numeric>
+                <Currency value={virementData.originalAvailableGrant} />
+              </TH>
               <TH className={colClass} numeric>
                 <Currency
                   className={displayHighlight === "positive-hightlight" && "highlight--info"}
@@ -182,7 +194,46 @@ export const FinancialVirementSummary = () => {
               <TH numeric>
                 <Currency
                   className={displayHighlight === "negative-hightlight" && "highlight--error"}
+                  value={virementData.newAvailableGrant}
+                />
+              </TH>
+              <TH numeric>
+                <Currency
+                  className={displayHighlight === "negative-hightlight" && "highlight--error"}
                   value={virementData.newRemainingGrant}
+                />
+              </TH>
+            </TR>
+            <TR>
+              <TH className={colClass}>Unallocated</TH>
+              <TH>
+                <TableEmptyCell />
+              </TH>
+              <TH>
+                <TableEmptyCell />
+              </TH>
+              <TH>
+                <TableEmptyCell />
+              </TH>
+              <TH className={colClass}>
+                <TableEmptyCell />
+              </TH>
+              <TH>
+                <TableEmptyCell />
+              </TH>
+              <TH>
+                <TableEmptyCell />
+              </TH>
+              <TH>
+                <Currency
+                  className={displayHighlight === "negative-hightlight" && "highlight--info"}
+                  value={-virementData.availableGrantDifference}
+                />
+              </TH>
+              <TH>
+                <Currency
+                  className={displayHighlight === "negative-hightlight" && "highlight--info"}
+                  value={-virementData.grantDifference}
                 />
               </TH>
             </TR>

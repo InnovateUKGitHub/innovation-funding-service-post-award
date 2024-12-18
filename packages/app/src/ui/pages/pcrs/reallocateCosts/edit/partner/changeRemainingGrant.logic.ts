@@ -1,7 +1,7 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { clientsideApiClient } from "@ui/apiClient";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
-import { pick, sumBy } from "lodash";
+import { clientsideApiClient } from "@ui/apiClient";
+import { pick } from "lodash";
 import { useNavigate } from "react-router-dom";
 import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { ChangeRemainingGrantSchema } from "./changeRemainingGrant.zod";
@@ -39,8 +39,47 @@ export const getPayload = (
   virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
   itemId: PcrItemId,
 ) => {
-  const newRemainingGrantTotal = roundCurrency(sumBy(data.partners, x => parseCurrency(x.newRemainingGrant)));
+  let newRemainingGrantTotal = 0;
 
+  const partners = virementData.partners.map(x => {
+    const matchingPartner = data.partners.find(v => v.partnerId === x.partnerId);
+    if (!matchingPartner) throw new Error("cannot find matching partner id");
+
+    const newAvailableGrant = parseCurrency(matchingPartner.newAvailableGrant);
+    const newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant + x.originalCapLimitDeferredGrant);
+    const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newAvailableGrant, x.newFundingLevel);
+
+    newRemainingGrantTotal += newRemainingGrant;
+
+    return {
+      ...pick(x, [
+        "partnerId",
+        "costsClaimedToDate",
+        "originalEligibleCosts",
+        "originalRemainingCosts",
+        "originalRemainingGrant",
+        "originalFundingLevel",
+        "newEligibleCosts",
+        "newRemainingCosts",
+      ]),
+      newRemainingGrant,
+      newFundingLevel,
+      virements: x.virements.map(virement => ({
+        ...pick(virement, [
+          "originalEligibleCosts",
+          "newEligibleCosts",
+          "originalRemainingGrant",
+          "newRemainingGrant",
+          "originalRemainingCosts",
+          "newRemainingCosts",
+          "costCategoryId",
+        ]),
+        costsClaimedToDate: virement.costsClaimedToDate,
+      })),
+    };
+  });
+
+  newRemainingGrantTotal = roundCurrency(newRemainingGrantTotal);
   const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
 
   return {
@@ -56,39 +95,6 @@ export const getPayload = (
     ]),
     newFundingLevel: newFundingLevelTotal,
     newRemainingGrant: newRemainingGrantTotal,
-    partners: virementData.partners.map(x => {
-      const matchingPartner = data.partners.find(v => v.partnerId === x.partnerId);
-      if (!matchingPartner) throw new Error("cannot find matching partner id");
-
-      const newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant);
-      const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newRemainingGrant, x.newFundingLevel);
-
-      return {
-        ...pick(x, [
-          "partnerId",
-          "costsClaimedToDate",
-          "originalEligibleCosts",
-          "originalRemainingCosts",
-          "originalRemainingGrant",
-          "originalFundingLevel",
-          "newEligibleCosts",
-          "newRemainingCosts",
-        ]),
-        newRemainingGrant,
-        newFundingLevel,
-        virements: x.virements.map(virement => ({
-          ...pick(virement, [
-            "originalEligibleCosts",
-            "newEligibleCosts",
-            "originalRemainingGrant",
-            "newRemainingGrant",
-            "originalRemainingCosts",
-            "newRemainingCosts",
-            "costCategoryId",
-          ]),
-          costsClaimedToDate: virement.costsClaimedToDate,
-        })),
-      };
-    }),
+    partners,
   };
 };
