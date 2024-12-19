@@ -82,7 +82,7 @@ Feature: Manage team member
         When the form is completed with 100 characters
         Then the validation messages will dynamically disappear
 
-    #This will fail until ticket ACC-11681 is resolved
+    #This step previously failed until ticket ACC-11681 was resolved
     Scenario: Validating the Invite associate page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Invite associate" button
