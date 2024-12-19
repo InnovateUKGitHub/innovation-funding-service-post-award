@@ -133,7 +133,7 @@ const getAuthRouter = async () => {
 
       if (sso.enabled && req.url === "/") {
         res.redirect("/projects/dashboard");
-        return next();
+        return;
       }
 
       if (req?.session?.user?.email || req?.session?.user?.developer_oidc_username) {
@@ -154,7 +154,7 @@ const getAuthRouter = async () => {
           } else {
             res.status(401);
           }
-          return next();
+          return;
         }
 
         // User is successfully logged in :)
@@ -172,7 +172,7 @@ const getAuthRouter = async () => {
           } else {
             res.status(401);
           }
-          return next();
+          return;
         }
 
         // User is successfully logged in :)

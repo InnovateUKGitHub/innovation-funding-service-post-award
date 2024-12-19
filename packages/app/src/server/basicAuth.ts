@@ -22,8 +22,8 @@ export const useBasicAuth = (req: Express.Request, res: Express.Response, next: 
 
     // reject if missing authorisation header
     if (!req.headers.authorization || req.headers.authorization.indexOf("Basic ") === -1) {
-      res.status(401).json({ message: "Missing Authorization Header " });
-      return next();
+      res.status(401).json({ message: "Missing Authorization Header" });
+      return;
     }
 
     const allowedCredentials = configuration.basicAuth.credentials;
@@ -35,7 +35,7 @@ export const useBasicAuth = (req: Express.Request, res: Express.Response, next: 
     // reject if user credentials do not match any in the allow list
     if (!allowedCredentials.includes(userCredential.trim())) {
       res.status(401).json({ message: "Unauthorized user" });
-      return next();
+      return;
     }
   }
 
