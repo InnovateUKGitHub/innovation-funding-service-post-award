@@ -1,81 +1,43 @@
 import { Page } from "@playwright/test";
 import { Fixture, Given } from "playwright-bdd/decorators";
 import { DashboardTile } from "../../components/DashboardTile";
-import { DevTools } from "../../components/DevTools";
 import { ProjectCard } from "../../components/ProjectCard";
 import { TestCache } from "../../helpers/TestCache";
 import { ProjectState } from "../projectFactory/ProjectState";
-import { DeveloperHomepage } from "./pages/DeveloperHomepage";
-import { MonitoringReports } from "./pages/MonitoringReports";
-import { ProjectDashboard } from "./pages/ProjectDashboard";
-import { ProjectForecasts } from "./pages/ProjectForecasts";
-import { ProjectOverview } from "./pages/ProjectOverview";
-import { PutProjectOnHold } from "./pages/PCRs/putProjectOnHold";
-import { ProjectDetails } from "./pages/ProjectDetails";
-import { ProjectDocuments } from "./pages/ProjectDocuments";
+import { AccIsLoaded } from "./AccIsLoaded";
 export
 @Fixture("accNavigation")
 class AccNavigation {
   private readonly page: Page;
-  private readonly developerHomepage: DeveloperHomepage;
-  private readonly projectDashboard: ProjectDashboard;
-  private readonly projectOverview: ProjectOverview;
-  private readonly projectForecasts: ProjectForecasts;
-  private readonly monitoringReports: MonitoringReports;
   private readonly projectState: ProjectState;
   private readonly testCache = new TestCache();
-  private readonly devtools: DevTools;
-  private readonly putProjectOnHold: PutProjectOnHold;
-  private readonly projectDetails: ProjectDetails;
-  private readonly projectDocuments: ProjectDocuments;
+  private readonly accIsLoaded: AccIsLoaded;
 
   constructor({
     page,
-    developerHomepage,
-    projectDashboard,
-    projectOverview,
-    projectForecasts,
     projectState,
-    monitoringReports,
-    putProjectOnHold,
-    projectDetails,
-    projectDocuments,
+    accIsLoaded,
   }: {
     page: Page;
-    developerHomepage: DeveloperHomepage;
-    projectDashboard: ProjectDashboard;
-    projectOverview: ProjectOverview;
-    projectForecasts: ProjectForecasts;
     projectState: ProjectState;
-    monitoringReports: MonitoringReports;
-    putProjectOnHold: PutProjectOnHold;
-    projectDetails: ProjectDetails;
-    projectDocuments: ProjectDocuments;
+    accIsLoaded: AccIsLoaded;
   }) {
     this.page = page;
-    this.developerHomepage = developerHomepage;
-    this.projectDashboard = projectDashboard;
-    this.projectOverview = projectOverview;
-    this.projectForecasts = projectForecasts;
     this.projectState = projectState;
-    this.monitoringReports = monitoringReports;
-    this.putProjectOnHold = putProjectOnHold;
-    this.devtools = new DevTools({ page });
-    this.projectDetails = projectDetails;
-    this.projectDocuments = projectDocuments;
+    this.accIsLoaded = accIsLoaded;
   }
 
   @Given("the user is on the developer homepage")
   async gotoDeveloperHomepage() {
     await this.page.goto("/");
-    await this.devtools.isLoaded();
+    await this.accIsLoaded.devToolsLoaded();
   }
 
   @Given("the user is on the project dashboard")
   async gotoProjectDashboard() {
     await this.gotoDeveloperHomepage();
-    await this.developerHomepage.selectProjectTile();
-    await this.projectDashboard.isPage();
+    await this.accIsLoaded.selectProjectTile();
+    await this.accIsLoaded.projectDashboardLoaded();
   }
 
   @Given("the user is on the project overview")
@@ -92,8 +54,8 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.projectOverview.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.projectOverviewLoaded();
   }
 
   /**
@@ -114,8 +76,8 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.projectForecasts.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.forecastsLoaded();
   }
 
   @Given("the user has navigated to the monitoring reports page")
@@ -132,8 +94,8 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.monitoringReports.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.moReportLoaded();
   }
 
   @Given("the user has navigated to the project change request page")
@@ -150,8 +112,8 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.putProjectOnHold.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.projectOnHoldLoaded();
   }
 
   @Given("the user has navigated to the project details page")
@@ -168,16 +130,14 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.projectDetails.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.projectDetailsLoaded();
   }
 
   @Given("the user has navigated to {string} Partner information")
   async navigateToPartnerInformation(name: string) {
     await this.gotoProjectDetails();
-    await this.projectDetails.clickPartnerName(name);
-    await this.projectDetails.partnerInfo();
-    await this.projectDetails.clickEdit();
+    await this.accIsLoaded.navToPartnerDetails(name);
   }
 
   @Given("the user has navigated to the project documents page")
@@ -194,7 +154,7 @@ class AccNavigation {
       },
     );
 
-    await this.devtools.isLoaded();
-    await this.projectDocuments.isPage();
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.projectDocumentsLoaded();
   }
 }

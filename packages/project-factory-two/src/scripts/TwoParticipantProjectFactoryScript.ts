@@ -243,7 +243,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     mainFcPcl.Acc_Role__c = "Finance contact";
 
     const secondaryFcPcl = new Acc_ProjectContactLink__c();
-    secondaryFcPcl.Acc_AccountId__c = mainAccount.Id;
+    secondaryFcPcl.Acc_AccountId__c = secondaryAccount.Id;
     secondaryFcPcl.Acc_ContactId__c = secondaryFcContact.Id;
     secondaryFcPcl.Acc_ProjectId__c = project.Id;
     secondaryFcPcl.Acc_UserId__c = secondaryFcUser.Id;

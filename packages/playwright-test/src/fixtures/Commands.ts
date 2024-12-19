@@ -379,13 +379,21 @@ class Commands {
    *
    * Returns a string with full date 00 00 0000
    */
-  dateToday() {
+  dateToday(full: boolean) {
     let date = new Date();
     let day = date.getDate();
-    let month = date.getMonth();
+    let month = date.setDate(date.getMonth());
+    let accurateMonth = Number(month) + 1;
+    const formatter = new Intl.DateTimeFormat("en-UK", { month: "short" });
+    const fullMonth = formatter.format(accurateMonth);
     let year = date.getFullYear();
-    let fulldate = `${day} ${month} ${year}`;
-    return fulldate;
+    let fulldatetoday = `${day} ${fullMonth} ${year}`;
+    let datetoday = `${day} ${accurateMonth} ${year}`;
+    if (full) {
+      return fulldatetoday;
+    } else {
+      return datetoday;
+    }
   }
 
   startDate() {

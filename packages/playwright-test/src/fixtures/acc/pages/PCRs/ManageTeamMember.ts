@@ -18,8 +18,8 @@ class ManageTeamMember {
   protected readonly page: Page;
   protected readonly commands: Commands;
   protected readonly accProjectKtp: AccProjectKtp;
-  protected readonly AccUserswitcher: AccUserSwitcher;
-  protected readonly AccNavigation: AccNavigation;
+  protected readonly accUserswitcher: AccUserSwitcher;
+  protected readonly accNavigation: AccNavigation;
   protected readonly pcr: ProjectChangeRequests;
   protected readonly projectState: ProjectState;
   private readonly dashboardTitle: PageHeading;
@@ -91,8 +91,8 @@ class ManageTeamMember {
     this.page = page;
     this.commands = commands;
     this.accProjectKtp = accProjectKtp;
-    this.AccUserswitcher = accUserSwitcher;
-    this.AccNavigation = accNavigation;
+    this.accUserswitcher = accUserSwitcher;
+    this.accNavigation = accNavigation;
     this.pcr = projectChangeRequests;
     this.projectState = projectState;
     this.dashboardTitle = PageHeading.fromTitle(page, "Project change request");
@@ -194,8 +194,8 @@ class ManageTeamMember {
   @Given("a PM of a KTP project has created a new Project Change Request")
   async ktpPCRCreated() {
     await this.accProjectKtp.ktpMultiProject();
-    await this.AccUserswitcher.switchToUser("pmUser");
-    await this.AccNavigation.gotoProjectChangeRequests();
+    await this.accUserswitcher.switchToUser("pmUser");
+    await this.accNavigation.gotoProjectChangeRequests();
     await this.userClicksCreate();
     await this.startRequestPage();
   }
@@ -484,9 +484,9 @@ class ManageTeamMember {
     const data = [
       ["Request number", /^1$/],
       ["Request type", pcr],
-      ["Request started", this.commands.dateToday()],
+      ["Request started", this.commands.dateToday(false)],
       ["Request status", "Submitted to Innovate UK"],
-      ["Request last updated", this.commands.dateToday()],
+      ["Request last updated", this.commands.dateToday(false)],
     ];
     for (const [key, item] of data) {
       await this.commands.getListItemFromKey(key, item);
@@ -729,8 +729,8 @@ class ManageTeamMember {
   }
   @Then("the PM has logged in and created a PCR")
   async noFcCreatePcr() {
-    await this.AccUserswitcher.switchToUser("pmUser");
-    await this.AccNavigation.gotoProjectChangeRequests();
+    await this.accUserswitcher.switchToUser("pmUser");
+    await this.accNavigation.gotoProjectChangeRequests();
     await this.userClicksCreate();
     await this.startRequestPage();
   }

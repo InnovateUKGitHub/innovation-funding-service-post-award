@@ -31,6 +31,7 @@ import { Validators } from "./validators";
 import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 import { ChangePartnerName } from "./acc/pages/PCRs/changePartnerName";
 import { AccProjectWithoutFC } from "./projectFactory/AccProjectWithoutFC";
+import { AccIsLoaded } from "./acc/AccIsLoaded";
 
 type AccFixtures = {
   // Pages
@@ -55,6 +56,7 @@ type AccFixtures = {
   commands: Commands;
   validators: Validators;
   ktp: AccProjectKtp;
+  accIsLoaded: AccIsLoaded;
 
   // ACC
   accUserSwitcher: AccUserSwitcher;
@@ -96,7 +98,8 @@ export const test = base.extend<AccFixtures, Workers>({
   removePartner: ({ page, commands, projectChangeRequests, validators }, use) =>
     use(new RemovePartner({ page, commands, projectChangeRequests, validators })),
   projectDetails: ({ page, commands }, use) => use(new ProjectDetails({ page, commands })),
-  projectDocuments: ({ page, commands, validators }, use) => use(new ProjectDocuments({ page, commands, validators })),
+  projectDocuments: ({ page, commands, validators, accNavigation }, use) =>
+    use(new ProjectDocuments({ page, commands, validators, accNavigation })),
   manageTeamMember: (
     { page, commands, accProjectKtp, projectChangeRequests, accUserSwitcher, accNavigation, projectState },
     use,
@@ -137,33 +140,19 @@ export const test = base.extend<AccFixtures, Workers>({
     { scope: "worker" },
   ],
   // Misc
-  accNavigation: (
-    {
-      page,
-      developerHomepage,
-      projectDashboard,
-      projectOverview,
-      projectForecasts,
-      projectState,
-      monitoringReports,
-      putProjectOnHold,
-      projectDetails,
-      projectDocuments,
-    },
-    use,
-  ) =>
+  accNavigation: ({ page, projectState, accIsLoaded }, use) =>
     use(
       new AccNavigation({
         page,
-        developerHomepage,
-        projectDashboard,
-        projectOverview,
-        projectForecasts,
         projectState,
-        monitoringReports,
-        putProjectOnHold,
-        projectDetails,
-        projectDocuments,
+        accIsLoaded,
+      }),
+    ),
+  accIsLoaded: ({ page, commands }, use) =>
+    use(
+      new AccIsLoaded({
+        page,
+        commands,
       }),
     ),
   projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],

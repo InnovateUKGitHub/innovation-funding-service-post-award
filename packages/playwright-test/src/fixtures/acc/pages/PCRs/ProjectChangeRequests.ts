@@ -136,9 +136,9 @@ class ProjectChangeRequests {
     let submissionList = [
       ["Request number", String(/[0-9]/)],
       ["Request type", pcr],
-      ["Request started", String(this.commands.dateToday())],
+      ["Request started", String(this.commands.dateToday(true))],
       ["Request status", "Submitted to monitoring officer"],
-      ["Request last updated", String(this.commands.dateToday())],
+      ["Request last updated", String(this.commands.dateToday(true))],
     ];
     for (const [key, list] of submissionList) {
       await this.commands.getListItemFromKey(key, list);
