@@ -14,6 +14,7 @@ import { Logger } from "@innovateuk/logger";
 import { ILogger } from "@innovateuk/logger";
 import { configuration } from "./features/common/config";
 import { v4 } from "uuid";
+import { ifsRedirectRouter } from "./ifsRedirectRouter";
 
 export class Server {
   private readonly app: express.Express;
@@ -110,6 +111,7 @@ export class Server {
   };
 
   private async routing(): Promise<void> {
+    this.app.use(ifsRedirectRouter);
     this.app.use(this.setNonceValue);
     this.app.use(this.preloadReduxActions);
     this.app.use(this.messages);
