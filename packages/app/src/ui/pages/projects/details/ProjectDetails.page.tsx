@@ -4,7 +4,6 @@ import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectConta
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Content } from "@ui/components/molecules/Content/content";
-import { EmailContent } from "@ui/components/atoms/EmailContent/emailContent";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
 import { Link } from "@ui/components/atoms/Links/links";
@@ -157,6 +156,7 @@ const getDetailsContactRole = getContactRole<
 
 const ProjectDetailsPage = (props: Props & BaseProps) => {
   const { getContent } = useContent();
+  const routes = useRoutes();
   const { project, partners, competitionName, contacts, fragmentRef } = useProjectDetailsQuery(props.projectId);
   const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
 
@@ -178,6 +178,11 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
     partners,
     partnerRole: ProjectRoleName.IPM,
   });
+
+  const manageTeamMemberRoute = useMemo(
+    () => routes.projectManageTeamMembersDashboard.getLink({ projectId: project.id }),
+    [project.id, routes],
+  );
 
   return (
     <Page fragmentRef={fragmentRef} backLink={<ProjectBackLink projectId={project.id} />}>
@@ -232,11 +237,16 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
               )
             }
             footnote={
-              !project.roles.isAssociate && (
+              project.roles.isPm && (
                 <SimpleString>
                   <Content
                     value={x => x.pages.projectDetails.changeInfo}
-                    components={[<EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
+                    components={[
+                      <Link key="manageTeamMemberLink" route={manageTeamMemberRoute}>
+                        {" "}
+                        {/* react-i18next will auto-magically fill in the gap. */}
+                      </Link>,
+                    ]}
                   />
                 </SimpleString>
               )
