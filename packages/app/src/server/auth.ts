@@ -189,7 +189,7 @@ const getAuthRouter = async () => {
       }
 
       // If not logged in, reset to the Salesforce System User
-      if (req?.session?.user?.email === undefined) {
+      if (configuration.developer.defaultToSystemUser && req?.session?.user?.email === undefined) {
         req.session.user.email ??= salesforceServiceUser.serviceUsername;
       }
 

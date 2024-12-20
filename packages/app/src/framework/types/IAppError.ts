@@ -62,6 +62,14 @@ interface IAppDetailedSfdcGenericError extends IAppDetailedBaseError {
   data: TsforceSalesforceError;
 }
 
+interface IAppDetailedSfdcInvalidGrantError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.SFDC_INVALID_GRANT;
+}
+
+interface IAppDetailedSfdcInvalidUsernameError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.SFDC_INVALID_USERNAME;
+}
+
 export type IAppDetailedError =
   | IAppDetailedAccValidationError
   | IAppDetailedAccGraphQLError
@@ -71,4 +79,6 @@ export type IAppDetailedError =
   | IAppDetailedSfdcInsufficientAccessOrReadonlyError
   | IAppDetailedSfdcNotUploadedFromOwnerError
   | IAppDetailedSfdcGenericError
-  | IAppDetailedSfdcFieldCustomValidationExceptionError;
+  | IAppDetailedSfdcFieldCustomValidationExceptionError
+  | IAppDetailedSfdcInvalidGrantError
+  | IAppDetailedSfdcInvalidUsernameError;

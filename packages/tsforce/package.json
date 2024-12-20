@@ -8,7 +8,7 @@
     }
   },
   "scripts": {
-    "build": "esbuild src/*.ts src/**/*.ts --bundle --platform=node --outdir=dist/ --sourcemap",
+    "build": "esbuild src/*.ts src/**/*.ts --platform=node --outdir=dist/ --format=cjs --sourcemap",
     "typegen": "tsc"
   },
   "dependencies": {

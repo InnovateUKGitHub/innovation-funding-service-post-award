@@ -141,6 +141,7 @@ const configuration: Readonly<IConfig> = {
   developer: {
     writeGraphQL: boolEnv("DEVELOPER_WRITE_GRAPHQL", false),
     colourfulLogging: boolEnv("DEVELOPER_COLOURFUL_LOGGING", false),
+    defaultToSystemUser: boolEnv("DEVELOPER_DEFAULT_TO_SYSTEM_USER", true),
     oidc: {
       enabled: boolEnv("DEVELOPER_OIDC", false),
       issuer: strEnv("DEVELOPER_OIDC_ISSUER", ""),

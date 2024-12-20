@@ -17,7 +17,7 @@ export const ErrorContainer = ({ error }: { error?: ClientErrorResponse | null }
     case ErrorCode.NOT_FOUND:
       return <NotFoundError />;
     case ErrorCode.UNAUTHENTICATED_ERROR:
-      return <UnauthenticatedError />;
+      return <UnauthenticatedError error={error} />;
     default:
       return <GenericFallbackError error={error} />;
   }

@@ -79,8 +79,9 @@ export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>
 }
 
 export class UnauthenticatedError extends AppError {
-  constructor(cause?: unknown) {
+  constructor(details: IAppDetailedError[] = [], cause?: unknown) {
     super(ErrorCode.UNAUTHENTICATED_ERROR, "User not authenticated", cause);
+    this.details = details;
   }
 }
 

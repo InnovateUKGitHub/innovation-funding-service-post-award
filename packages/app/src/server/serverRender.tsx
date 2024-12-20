@@ -93,12 +93,12 @@ const serverRender =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
-    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;
     const jsDisabled = req.headers["x-acc-js-disabled"] === "true";
     const clientConfig = getClientConfig();
 
     try {
+      const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
       let auth: Authorisation;
       let user: IClientUser;
       let statusCode = 200;

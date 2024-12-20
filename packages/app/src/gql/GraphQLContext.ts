@@ -1,4 +1,3 @@
-import { ForbiddenError } from "@shared/appError";
 import { Logger } from "@innovateuk/logger";
 import { Request, Response } from "express";
 import { getFeedAttachmentDataLoader } from "./dataloader/feedAttachmentDataLoader";
@@ -85,6 +84,5 @@ export const createContext = ({ req, res }: { req: Request; res: Response }): Pr
   const traceId = res.locals.traceId;
 
   if (email) return createContextFromEmail({ email, developerEmail, traceId });
-
-  throw new ForbiddenError("You are not logged in.");
+  return Promise.resolve({});
 };
