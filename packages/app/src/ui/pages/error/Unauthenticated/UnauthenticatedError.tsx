@@ -4,8 +4,10 @@ import { Page } from "@ui/components/molecules/Page/Page";
 import { Section } from "../../../components/molecules/Section/section";
 import { ExternalLink } from "../../../components/atoms/ExternalLink/externalLink";
 import { SimpleString } from "../../../components/atoms/SimpleString/simpleString";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { ErrorInformation } from "@ui/components/molecules/ErrorSummary/ErrorInformation";
 
-export const UnauthenticatedError = () => {
+export const UnauthenticatedError = ({ error = null }: { error?: ClientErrorResponse | null }) => {
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";
 
   return (
@@ -22,6 +24,8 @@ export const UnauthenticatedError = () => {
           />
         </SimpleString>
       </Section>
+
+      {error && <ErrorInformation error={error} />}
     </Page>
   );
 };

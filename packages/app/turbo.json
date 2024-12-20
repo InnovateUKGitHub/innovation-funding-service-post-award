@@ -108,7 +108,8 @@
         "DEVELOPER_OIDC",
         "DEVELOPER_OIDC_ISSUER",
         "DEVELOPER_OIDC_CLIENT_ID",
-        "DEVELOPER_OIDC_CLIENT_SECRET"
+        "DEVELOPER_OIDC_CLIENT_SECRET",
+        "DEVELOPER_DEFAULT_TO_SYSTEM_USER"
       ],
       "persistent": true,
       "cache": false

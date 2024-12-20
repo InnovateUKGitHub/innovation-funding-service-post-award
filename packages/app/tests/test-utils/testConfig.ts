@@ -142,6 +142,7 @@ export class TestConfig implements IConfig {
   public developer = {
     writeGraphQL: false,
     colourfulLogging: false,
+    defaultToSystemUser: true,
     oidc: {
       enabled: false,
       issuer: "",
