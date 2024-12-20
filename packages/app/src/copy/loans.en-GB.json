@@ -49,9 +49,7 @@
       "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCRs), update forecasts, or submit costs."
     },
     "projectDetails": {
-      "financeContactInfo": "Only finance contacts can submit drawdown requests and costs.",
-      "changeInfo": "If you need to change the lead project manager or finance contact, please email <0>{{ emailAddress }}</0>.",
-      "changeEmail": "lending.operations@iuk.ukri.org"
+      "financeContactInfo": "Only finance contacts can submit drawdown requests and costs."
     }
   },
   "claimsMessages": {
