@@ -7,6 +7,7 @@ import {
   PcrRenamePartnerDto,
   PcrScopeChangeDto,
   PCRSummaryDto,
+  PcrSuspendProjectDto,
   StandalonePcrDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
@@ -20,6 +21,7 @@ import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScop
 import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRemovePartnerCommand";
 import { UpdatePcrChangeDurationCommand } from "@server/features/pcrs/updatePcrChangeDurationCommand";
+import { UpdatePcrSuspendProjectCommand } from "@server/features/pcrs/updatePcrSuspendProjectCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -85,6 +87,19 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<boolean>;
+
+  suspendProject: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrSuspendProjectDto;
+      }
+    >,
+  ) => Promise<boolean>;
+
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
 
@@ -155,6 +170,17 @@ class Controller
       this.removePartner,
     );
 
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/suspend-project",
+      (p, _, b: PcrSuspendProjectDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.suspendProject,
+    );
+
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
   }
 
@@ -213,21 +239,21 @@ class Controller
     return true;
   }
 
-  async scopeChange(
+  async removePartner(
     params: ApiParams<
       "server",
       {
         projectId: ProjectId;
         pcrId: PcrId;
         pcrItemId: PcrItemId;
-        pcr: PcrScopeChangeDto;
+        pcr: PcrRemovePartnerDto;
       }
     >,
   ): Promise<boolean> {
     const context = await contextProvider.start(params);
 
     await context.runCommand(
-      new UpdatePcrScopeChangeCommand({
+      new UpdatePcrRemovePartnerCommand({
         projectId: params.projectId,
         pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,
@@ -263,21 +289,46 @@ class Controller
     return true;
   }
 
-  async removePartner(
+  async scopeChange(
     params: ApiParams<
       "server",
       {
         projectId: ProjectId;
         pcrId: PcrId;
         pcrItemId: PcrItemId;
-        pcr: PcrRemovePartnerDto;
+        pcr: PcrScopeChangeDto;
       }
     >,
   ): Promise<boolean> {
     const context = await contextProvider.start(params);
 
     await context.runCommand(
-      new UpdatePcrRemovePartnerCommand({
+      new UpdatePcrScopeChangeCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async suspendProject(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrSuspendProjectDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrSuspendProjectCommand({
         projectId: params.projectId,
         pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,

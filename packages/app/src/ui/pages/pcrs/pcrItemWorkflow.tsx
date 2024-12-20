@@ -47,7 +47,6 @@ type Data = {
  * @returns {JSX.Element | "This is required to complete this request."} message block
  */
 function getRequiredToCompleteMessage(message?: string) {
-  // const standardMessage = "This is required to complete this request.";
   const standardMessage = <Content value={x => x.pcrLabels.requiredToComplete} />;
 
   if (!message) return standardMessage;

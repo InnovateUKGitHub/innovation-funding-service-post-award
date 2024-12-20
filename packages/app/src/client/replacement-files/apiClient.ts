@@ -106,12 +106,14 @@ const clientApi: IApiClient<"client"> = {
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     changeDuration: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/change-duration`, params.pcr),
-    scopeChange: params =>
-      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/scope-change`, params.pcr),
-    renamePartner: params =>
-      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/rename-partner`, params.pcr),
     removePartner: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/remove-partner`, params.pcr),
+    renamePartner: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/rename-partner`, params.pcr),
+    scopeChange: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/scope-change`, params.pcr),
+    suspendProject: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/suspend-project`, params.pcr),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
   },
   projectContacts: {

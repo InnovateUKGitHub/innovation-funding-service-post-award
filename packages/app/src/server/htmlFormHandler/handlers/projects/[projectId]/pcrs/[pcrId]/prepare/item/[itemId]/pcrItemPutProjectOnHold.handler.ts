@@ -11,7 +11,7 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import {
   ProjectSuspensionSchema,
   pcrProjectSuspensionErrorMap,
-  getProjectSuspensionSchema,
+  projectSuspensionSchema,
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { combineDate } from "@ui/components/atoms/Date";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
@@ -29,22 +29,24 @@ export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({
-    params,
-    context,
-  }: {
-    context: IContext;
-    params: ProjectChangeRequestPrepareItemParams;
-  }) {
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
-
+  protected async getZodSchema() {
     return {
-      schema: getProjectSuspensionSchema(project),
+      schema: projectSuspensionSchema,
       errorMap: pcrProjectSuspensionErrorMap,
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ProjectSuspensionSchema>> {
+  protected async mapToZod({
+    input,
+    context,
+    params,
+  }: {
+    input: AnyObject;
+    context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
+  }): Promise<z.input<ProjectSuspensionSchema>> {
+    const project = await context.runQuery(new GetByIdQuery(params.projectId));
+
     return {
       form: input.form,
       suspensionStartDate_month: input.suspensionStartDate_month,
@@ -54,6 +56,8 @@ export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
       suspensionEndDate: "",
       suspensionStartDate: "",
       markedAsComplete: input.markedAsComplete === "on",
+      projectEndDate: project.endDate,
+      projectStartDate: project.startDate,
     };
   }
 

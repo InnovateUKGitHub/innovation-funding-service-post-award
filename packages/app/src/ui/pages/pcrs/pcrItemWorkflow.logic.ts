@@ -15,6 +15,7 @@ import {
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
   PcrScopeChangeDto,
+  PcrSuspendProjectDto,
 } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
@@ -105,7 +106,9 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
         ? PcrRemovePartnerDto
         : T extends PCRItemType.TimeExtension
           ? PcrChangeDurationDto
-          : Partial<FullPCRItemDto & { form: FormTypes }>;
+          : T extends PCRItemType.ProjectSuspension | PCRItemType.ProjectTermination
+            ? PcrSuspendProjectDto
+            : Partial<FullPCRItemDto & { form: FormTypes }>;
 
   /**
    * on success callback for every pcr update
@@ -129,6 +132,22 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           pcrItemId,
           pcr: {
             ...(data as PcrScopeChangeDto),
+            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          },
+        }),
+      onSuccess,
+    });
+  }
+
+  if (pcrType === PCRItemType.ProjectSuspension || pcrType === PCRItemType.ProjectTermination) {
+    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
+      req: data =>
+        clientsideApiClient.pcrs.suspendProject({
+          projectId,
+          pcrId,
+          pcrItemId,
+          pcr: {
+            ...(data as PcrSuspendProjectDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),

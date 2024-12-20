@@ -157,12 +157,6 @@ const makeDate = (inputDate: DateTime) => {
   });
 
   return date.toJSDate();
-
-  // if (date.isValid) {
-  //   return date.toJSDate();
-  // } else {
-  //   throw new Error("the date is invalid");
-  // }
 };
 
 /**

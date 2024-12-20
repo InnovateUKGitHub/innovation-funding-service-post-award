@@ -389,3 +389,17 @@ export interface PcrChangeDurationDto extends PcrDtoCommon {
   timeExtension: string;
   form: ChangeDurationFormType;
 }
+
+export type SuspendProjectFormType = FormTypes.PcrProjectSuspensionStep | FormTypes.PcrProjectSuspensionSummary;
+
+export interface PcrSuspendProjectDto extends PcrDtoCommon {
+  suspensionStartDate: Date;
+  suspensionEndDate: Date;
+  suspensionStartDate_month: string;
+  suspensionStartDate_year: string;
+  suspensionEndDate_month: string;
+  suspensionEndDate_year: string;
+  projectStartDate: Date;
+  projectEndDate: Date;
+  form: SuspendProjectFormType;
+}

@@ -15,7 +15,7 @@ import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
 import {
-  getProjectSuspensionSchema,
+  projectSuspensionSchema,
   pcrProjectSuspensionErrorMap,
   ProjectSuspensionSchemaType,
 } from "./suspendProject.zod";
@@ -60,8 +60,10 @@ export const SuspendProjectStep = () => {
       // for the error field of this name
       suspensionStartDate: "",
       suspensionEndDate: "",
+      projectStartDate: project.startDate,
+      projectEndDate: project.endDate,
     },
-    resolver: zodResolver(getProjectSuspensionSchema(project), {
+    resolver: zodResolver(projectSuspensionSchema, {
       errorMap: pcrProjectSuspensionErrorMap,
     }),
   });
@@ -83,6 +85,7 @@ export const SuspendProjectStep = () => {
           onSubmit={handleSubmit(data => {
             onSave({
               data: {
+                ...data,
                 suspensionStartDate: combineDate(data.suspensionStartDate_month, data.suspensionStartDate_year, true),
                 suspensionEndDate: combineDate(data.suspensionEndDate_month, data.suspensionEndDate_year, false),
               },
@@ -120,12 +123,14 @@ export const SuspendProjectStep = () => {
               <DateInput
                 type="month"
                 defaultValue={getMonth(pcrItem.suspensionEndDate)}
+                disabled={isFetching}
                 {...register("suspensionEndDate_month")}
               />
 
               <DateInput
                 type="year"
                 defaultValue={getYear(pcrItem.suspensionEndDate)}
+                disabled={isFetching}
                 {...register("suspensionEndDate_year")}
               />
             </DateInputGroup>
