@@ -1,9 +1,10 @@
-import { Locator, Page, Project } from "@playwright/test";
+import { expect, Locator, Page, Project } from "@playwright/test";
 import { Fixture, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
 import { ProjectChangeRequests } from "./ProjectChangeRequests";
 import { PageHeading } from "../../../../components/PageHeading";
 import { Validators } from "../../../validators";
+import { DataTable } from "playwright-bdd";
 
 export
 @Fixture("removePartner")
@@ -37,7 +38,7 @@ class RemovePartner {
   private readonly summaryData: Array<[string, string]>;
   private readonly markCompleteHeading: Locator;
   private readonly iAgreeCheckBox: Locator;
-  private readonly saveAndReturnToRequest;
+  private readonly saveAndReturnToRequest: Locator;
 
   constructor({
     page,
@@ -59,8 +60,8 @@ class RemovePartner {
     this.backToRequest = this.commands.backLink("Back to request");
     this.selectSubheading = this.page.locator("css=legend").filter({ hasText: "Select partner to remove" });
     this.partners = ["Hedge's Primary Ltd.", "Hedge's Secondary Ltd."];
-    this.lastPeriodSubheading = this.page.locator("css=legend").filter({ hasText: "When is their last period?" });
-    this.lastPeriodGuidance = this.page.getByRole("paragraph").filter({
+    this.lastPeriodSubheading = this.page.getByText("When is their last period?");
+    this.lastPeriodGuidance = this.page.locator("#hint-for-removalPeriod").filter({
       hasText:
         "The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid.",
     });
@@ -82,7 +83,7 @@ class RemovePartner {
       hasText: "copies of signed letters from all other project partners to show they have agreed to this change",
     });
     this.uploadButton = this.page.getByRole("button").filter({ hasText: "Upload documents" });
-    this.fileInput = this.page.locator("css=input").filter({ hasText: "Choose files" });
+    this.fileInput = this.page.locator("#files");
     this.fileHeading = this.page.getByRole("heading").filter({ hasText: "Files uploaded" });
     this.noDocMsg = this.page.getByRole("paragraph").filter({ hasText: "No documents uploaded." });
     this.noDocValidation = "Choose a file to upload.";
@@ -101,18 +102,19 @@ class RemovePartner {
 
   @Then("the user sees the Remove a partner selection page")
   async selectionPage() {
-    await this.backToRequest.isVisible();
+    await expect(this.backToRequest).toBeVisible();
     await this.pageTitle.isVisible();
-    await this.projectTitle.isVisible();
-    await this.selectSubheading.isVisible();
+    await expect(this.projectTitle).toBeVisible();
+    await expect(this.selectSubheading).toBeVisible();
     for (const partner of this.partners) {
-      await this.page.getByRole("radio").filter({ hasText: partner }).isVisible();
+      await expect(this.page.getByLabel(partner)).toBeVisible();
     }
-    await this.lastPeriodSubheading.isVisible();
-    await this.lastPeriodGuidance.isVisible();
-    await this.lastPeriodBox.isVisible();
-    await this.saveAndContinueButton.isVisible();
-    await this.page.getByLabel(this.removalPartner).click();
+    await this.page.getByLabel(this.partners[1]).click();
+    await expect(this.lastPeriodSubheading).toBeVisible();
+    await expect(this.lastPeriodGuidance).toBeVisible();
+    await expect(this.lastPeriodBox).toBeVisible();
+    await expect(this.saveAndContinueButton).toBeVisible();
+    await expect(this.page.getByLabel(this.removalPartner)).toBeVisible();
   }
 
   @When("the user enters an invalid last period number")
@@ -140,17 +142,17 @@ class RemovePartner {
 
   @Then("the partner certificate page is displayed")
   async certificatePage() {
-    await this.certificateSubheading.isVisible();
-    await this.certificateGuidance.isVisible();
-    await this.certificateBullet1.isVisible();
-    await this.certificateBullet2.isVisible();
-    await this.certificateBullet3.isVisible();
+    await expect(this.certificateSubheading).toBeVisible();
+    await expect(this.certificateGuidance).toBeVisible();
+    await expect(this.certificateBullet1).toBeVisible();
+    await expect(this.certificateBullet2).toBeVisible();
+    await expect(this.certificateBullet3).toBeVisible();
     await this.commands.learnFiles();
-    await this.uploadButton.isVisible();
-    await this.fileInput.isVisible();
-    await this.fileHeading.isVisible();
-    await this.noDocMsg.isVisible();
-    await this.saveAndContinueButton.isVisible();
+    await expect(this.uploadButton).toBeVisible();
+    await expect(this.fileInput).toBeVisible();
+    await expect(this.fileHeading).toBeVisible();
+    await expect(this.noDocMsg).toBeVisible();
+    await expect(this.saveAndContinueButton).toBeVisible();
   }
 
   @When("the user clicks upload without selecting a document")
@@ -161,25 +163,38 @@ class RemovePartner {
   @Then("a choose file validation message is displayed")
   async chooseFileMessage() {
     await this.commands.validationLink(this.noDocValidation);
-    await this.page.getByRole("paragraph").filter({ hasText: this.noDocValidation }).isVisible();
+    await expect(this.page.getByRole("paragraph").filter({ hasText: this.noDocValidation })).toBeVisible();
   }
 
   @When("the user uploads a file")
   async uploadRemoveCertificate() {
     await this.page.locator("css=#files").setInputFiles("src/components/testFiles/add.png");
     await this.uploadButton.click();
-    await this.docSuccessMsg.isVisible();
+    await expect(this.docSuccessMsg).toBeVisible();
   }
 
   @Then("the Remove a partner summary page is displayed")
   async removePartnerSummary() {
-    for (const [key, list] of this.summaryData) await this.commands.getListItemFromKey(key, list);
+    let i = 0;
+    for (const [key, list] of this.summaryData)
+      await this.commands.getListItemFromKey(key, list, false, "name-change-summary-list");
+    i++;
   }
 
   @When("the user marks as complete and saves")
   async markCompleteSave() {
-    await this.markCompleteHeading.isVisible();
+    await expect(this.markCompleteHeading).toBeVisible();
     await this.iAgreeCheckBox.click();
     await this.saveAndReturnToRequest.click();
+  }
+
+  @Then("the user can see the Remove a partner PCR summary")
+  async removePartnerMOSummary(table: DataTable) {
+    let data = table.hashes();
+    for (const row of data) {
+      let i = 0;
+      await this.commands.getListItemFromKey(row["Section"], row["Content"], false, "name-change-summary-list");
+      i++;
+    }
   }
 }

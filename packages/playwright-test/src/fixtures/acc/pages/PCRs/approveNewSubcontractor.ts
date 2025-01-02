@@ -278,8 +278,10 @@ class ApproveNewSubcontractor {
   async correctSummaryPage(table: DataTable) {
     const data = table.hashes();
     for (const row of data) {
+      let i = 0;
       let lorem = getLorem(Number(row["Lorem"]));
-      await this.commands.getListItemFromKey(row["Field name"], lorem);
+      await this.commands.getListItemFromKey(row["Field name"], lorem, i);
+      i++;
     }
     await expect(this.summaryKey.filter({ hasText: this.isThereRelationship })).toBeVisible();
     await expect(this.page.getByTestId(this.summaryQaList[2]).filter({ hasText: "Yes" })).toBeVisible();

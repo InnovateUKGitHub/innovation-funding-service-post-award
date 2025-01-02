@@ -92,15 +92,16 @@ class Commands {
       if (clickable) {
         return await qaparent.locator("css=dd").getByRole("link").filter({ hasText: item }).click();
       } else {
-        return await qaparent.locator("css=dd").filter({ hasText: item }).isVisible();
+        return await expect(qaparent.locator("css=dd").filter({ hasText: item })).toHaveText(item);
       }
     } else {
-      const key = this.page.locator("css=dt").filter({ hasText: label });
+      const key = this.page.locator("css=dt").nth(0).filter({ hasText: label });
       const parent = this.page.locator("css=div").filter({ has: key });
+
       if (clickable) {
-        return await parent.locator("css=dd").getByRole("link").filter({ hasText: item }).click();
+        return await parent.locator("css=dd").nth(0).getByRole("link").filter({ hasText: item }).click();
       } else {
-        return await parent.locator("css=dd").filter({ hasText: item }).isVisible();
+        return await expect(parent.locator("css=dd").nth(0).filter({ hasText: item })).toHaveText(item);
       }
     }
   }
@@ -377,21 +378,24 @@ class Commands {
 
   /**
    *
-   * Returns a string with full date 00 00 0000
+   * Returns a string with full date with option for long or short month. E.g. Jan or January
    */
-  dateToday(full: boolean) {
+  dateToday(long: boolean) {
     let date = new Date();
     let day = date.getDate();
     let month = date.setDate(date.getMonth());
     let accurateMonth = Number(month) + 1;
-    const formatter = new Intl.DateTimeFormat("en-UK", { month: "short" });
-    const fullMonth = formatter.format(accurateMonth);
-    let year = date.getFullYear();
-    let fulldatetoday = `${day} ${fullMonth} ${year}`;
-    let datetoday = `${day} ${accurateMonth} ${year}`;
-    if (full) {
-      return fulldatetoday;
+    if (long) {
+      const formatter = new Intl.DateTimeFormat("en-UK", { month: "long" });
+      const fullMonth = formatter.format(accurateMonth);
+      let year = date.getFullYear();
+      let datetoday = `${day} ${fullMonth} ${year}`;
+      return datetoday;
     } else {
+      const formatter = new Intl.DateTimeFormat("en-UK", { month: "short" });
+      let year = date.getFullYear();
+      let shortMonth = formatter.format(accurateMonth);
+      let datetoday = `${day} ${shortMonth} ${year}`;
       return datetoday;
     }
   }

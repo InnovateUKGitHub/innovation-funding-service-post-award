@@ -87,7 +87,7 @@ class ProjectDocuments {
     this.partnerDocTableHeaders = [
       ["File name", "testfile.xlsx"],
       ["Type", "Plans"],
-      ["Date uploaded", this.commands.dateToday(true)],
+      ["Date uploaded", this.commands.dateToday(false)],
       ["Size", "0KB"],
       ["Uploaded by", "Project Manager"],
       ["Shared with", "Hedge's Primary Ltd."],

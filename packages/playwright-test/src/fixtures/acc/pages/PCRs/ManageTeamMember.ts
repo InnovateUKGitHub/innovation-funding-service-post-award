@@ -483,13 +483,15 @@ class ManageTeamMember {
     await this.confirmationPageGuidance.isVisible();
     const data = [
       ["Request number", /^1$/],
-      ["Request type", pcr],
-      ["Request started", this.commands.dateToday(false)],
+      ["Request type", "Manage team members"],
+      ["Request started", this.commands.dateToday(true)],
       ["Request status", "Submitted to Innovate UK"],
-      ["Request last updated", this.commands.dateToday(false)],
+      ["Request last updated", this.commands.dateToday(true)],
     ];
     for (const [key, item] of data) {
+      let i = 0;
       await this.commands.getListItemFromKey(key, item);
+      i++;
     }
     await this.returnToPcrsButton.isVisible();
     await this.page.getByRole("link").filter({ hasText: "Review request" }).click();
@@ -647,11 +649,13 @@ class ManageTeamMember {
   async reviewScreenReasoning() {
     const listData = [
       ["Request number", /^1$/],
-      ["Type", "Manage Team Member"],
+      ["Type", "Manage team members"],
       ["Action", "Replace a team member"],
     ];
     for (const [key, list] of listData) {
+      let i = 0;
       await this.commands.getListItemFromKey(key, list);
+      i++;
     }
   }
 

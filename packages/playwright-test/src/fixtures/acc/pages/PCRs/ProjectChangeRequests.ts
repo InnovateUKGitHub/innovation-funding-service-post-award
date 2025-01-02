@@ -35,9 +35,11 @@ class ProjectChangeRequests {
   private readonly statusHide: Locator;
   private readonly moStatusComment: Locator;
   private readonly commentsForMo: string;
+  private readonly commentsForIUK: string;
   private readonly pmStatusComment: Locator;
   private readonly finalComments: string;
   private readonly uploadDocumentsHeading: Locator;
+  private readonly giveUsInfoSubheading: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -74,11 +76,13 @@ class ProjectChangeRequests {
       .getByTestId("projectChangeRequestStatusChangeTable")
       .filter({ hasText: this.commentsForPm });
     this.commentsForMo = "These are comments for the MO to pick up.";
+    this.commentsForIUK = "These are comments for Innovate UK to pick up.";
     this.pmStatusComment = this.page
       .getByTestId("projectChangeRequestStatusChangeTable")
       .filter({ hasText: this.commentsForMo });
     this.finalComments = "These are the final comments for Innovate UK.";
     this.uploadDocumentsHeading = this.page.locator("css=legend").filter({ hasText: "Upload documents" });
+    this.giveUsInfoSubheading = this.page.locator("li").getByRole("heading").filter({ hasText: "Give us information" });
   }
 
   /**
@@ -134,15 +138,18 @@ class ProjectChangeRequests {
     await expect(this.submitSuccessMsgHeading).toBeVisible();
     await expect(this.submitSuccessMsgContent).toBeVisible();
     let submissionList = [
-      ["Request number", String(/[0-9]/)],
+      ["Request number", "1"],
       ["Request type", pcr],
       ["Request started", String(this.commands.dateToday(true))],
-      ["Request status", "Submitted to monitoring officer"],
+      ["Request status", "Submitted to Monitoring Officer"],
       ["Request last updated", String(this.commands.dateToday(true))],
     ];
+    let i = 0;
     for (const [key, list] of submissionList) {
       await this.commands.getListItemFromKey(key, list);
+      i++;
     }
+
     await expect(this.page.getByRole("link").filter({ hasText: "Review request" })).toBeVisible();
     await expect(this.commands.button("Return to project change requests")).toBeVisible();
   }
@@ -155,11 +162,10 @@ class ProjectChangeRequests {
 
   @Then("the user can see the request page for {string}")
   async viewRequestPage(pcrType: PcrType) {
-    await this.requestHeading.isVisible();
-    await this.detailsHeading.isVisible();
-    const parent = this.page.locator("li").getByRole("heading").filter({ hasText: "Give us information" });
-    await parent.getByRole("link").filter({ hasText: pcrType }).isVisible();
-    await this.page.waitForTimeout(5000);
+    await expect(this.requestHeading).toBeVisible();
+    await expect(this.detailsHeading).toBeVisible();
+    await expect(this.giveUsInfoSubheading).toBeVisible();
+    await expect(this.page.getByRole("link").filter({ hasText: pcrType })).toBeVisible();
   }
 
   @When("the user clicks Next - Reasoning")
@@ -171,7 +177,11 @@ class ProjectChangeRequests {
   @Then("the reasoning page displays the following")
   async reasoningPageDisplayed(table: DataTable) {
     const data = table.hashes();
-    for (const row of data) await this.commands.getListItemFromKey(row["Key"], row["List item"]);
+    for (const row of data) {
+      let i = 0;
+      await this.commands.getListItemFromKey(row["Key"], row["List item"]);
+      i++;
+    }
   }
 
   @When("the user clicks back to request")
@@ -187,7 +197,8 @@ class ProjectChangeRequests {
 
   @When("the user selects Send for approval")
   async selectSend() {
-    this.sendRadioButton.click();
+    await this.sendRadioButton.click();
+    await this.page.waitForTimeout(2000);
   }
 
   @Then("the user enters comments for the {string}")
@@ -196,6 +207,8 @@ class ProjectChangeRequests {
       await this.page.getByRole("textbox").fill(this.commentsForPm);
     } else if (recipient === "Monitoring Officer") {
       await this.page.getByRole("textbox").fill(this.commentsForMo);
+    } else if (recipient === "Innovate UK") {
+      await this.page.getByRole("textbox").fill(this.commentsForIUK);
     }
   }
 
@@ -208,11 +221,7 @@ class ProjectChangeRequests {
   async pcrStatus(pcrtype: PcrType, status: string) {
     await this.pcrPageHeading.isVisible();
     const row = this.page.locator("css=tr").filter({ hasText: pcrtype });
-    await row.locator("td").nth(4).filter({ hasText: status }).isVisible();
-    /**
-     * Setting a manual wait to ensure the snapshot is recorded.
-     */
-    await this.page.waitForTimeout(5000);
+    await expect(row.locator("td").nth(3).filter({ hasText: status })).toBeVisible();
   }
 
   @When("the user accesses the queried {string} PCR")
