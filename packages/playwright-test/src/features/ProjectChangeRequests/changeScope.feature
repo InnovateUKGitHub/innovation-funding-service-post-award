@@ -13,7 +13,7 @@ Feature: Change project scope
         Then validation messages will advise of empty sections
 
         When the user clicks an Edit button
-        Then the user is brought to the correct page
+        Then the user is brought to the project description page
 
         When the user validates 32000 characters in each section correctly
         Then a completed summary page is displayed
@@ -37,12 +37,11 @@ Feature: Change project scope
 
         When the user clicks Next - Reasoning
         Then the reasoning page displays the following
-            | Key            | List item                                                                                            |
-            | Request number | 1                                                                                                    |
-            | Types          | Change project scope                                                                                 |
-            | Comments       | If you ever need a reason to go to the office in Swindon, consider the fact that every third wednesd |
-            | Key            | List item                                                                                            |
-            | Files          | No documents attached                                                                                |
+            | Key            | List item                           |
+            | Request number | 1                                   |
+            | Types          | Change project scope                |
+            | Comments       | This is the reasoning for this PCR. |
+            | Files          | testfile.doc                        |
 
         When the user clicks back to request
         Then the user can see the request page for "Change project scope"
@@ -61,7 +60,7 @@ Feature: Change project scope
 
         When the user enters comments for the "Monitoring Officer"
         And the user clicks the submit request button
-        Then the user can see the request page for "Change project scope"
+        Then the user will see the submitted page for "Change project scope"
 
     Scenario: Reviewing and submitting Change project scope PCR as Monitoring Officer
         Given a multi-partner CR&D project exists

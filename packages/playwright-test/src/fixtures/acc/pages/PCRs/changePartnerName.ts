@@ -95,8 +95,8 @@ class ChangePartnerName {
   @When("the user attempts to submit an empty Change a partner's name PCR")
   async submitEmpty() {
     await this.saveAndContinueButton.click();
-    await this.page.getByLabel(this.existingPartnerName).isDisabled();
-    await this.certificateSubheading.isVisible();
+    await expect(this.page.getByLabel(this.existingPartnerName)).toBeDisabled();
+    await expect(this.certificateSubheading).toHaveText("Upload change of name certificate");
     await this.saveAndContinueButton.click();
     await this.commands.getByLegend(this.markAsCompleteSubheading);
     await this.page.getByLabel(this.agreeWithChangeBox).check();
@@ -109,7 +109,7 @@ class ChangePartnerName {
     await this.commands.validationMessage(this.selectPartnerValidationMessage);
     const editLinkRow = this.page.getByTestId("currentPartnerName");
     await editLinkRow.getByRole("link").filter({ hasText: "Edit" }).click();
-    await this.selectPartnerSubheading.isVisible();
+    await expect(this.selectPartnerSubheading).toBeVisible();
     await this.commands.validationMessage(this.enterNameValidationMessage);
     await this.commands.validationMessage(this.selectPartnerValidationMessage);
     await this.commands.paragraph(this.enterNameValidationMessage);
@@ -131,9 +131,10 @@ class ChangePartnerName {
     await this.commands.getByLegend(this.markAsCompleteSubheading);
     const editLinkRow = this.page.getByTestId("currentPartnerName");
     await editLinkRow.getByRole("link").filter({ hasText: "Edit" }).click();
-    await this.page.getByLabel(this.existingPartnerName).isVisible();
+    await expect(this.page.getByLabel(this.existingPartnerName)).toBeVisible();
     let largeText = getLorem(257);
     await this.page.getByLabel("Enter new name").fill(largeText);
+    await this.saveAndContinueButton.click();
   }
 
   @Then("validation message will advice of character limit")
@@ -153,14 +154,15 @@ class ChangePartnerName {
       false,
       "Change of name certificate",
     );
+    await this.page.waitForTimeout(2500);
     await this.commands.fileInput(["testfile.doc"]);
-    await this.commands.validationNotification("has been uploaded.").isVisible();
-    await this.page.locator("css=td").filter({ hasText: "Certificate of name change" }).isVisible();
+    await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
+    await expect(this.page.locator("css=td").filter({ hasText: "Certificate of name change" })).toBeVisible();
     await this.saveAndContinueButton.click();
     await this.completedSummary();
     await this.commands.getByLabel(this.agreeWithChangeBox).check();
     await this.saveAndReturn.click();
-    await this.page.getByRole("heading").filter({ hasText: "Request" }).isVisible();
+    await expect(this.page.getByRole("heading").filter({ hasText: "Request" })).toBeVisible();
     await this.pcr.viewRequestPage("Change a partner's name");
     await this.pcr.completePcrReasons();
     await this.pcr.submitRequest();
@@ -178,18 +180,18 @@ class ChangePartnerName {
    */
 
   async viewChangePartnerPage() {
-    await this.changeNamePageHeading.isVisible();
-    await this.backToRequest.isVisible();
-    await this.changeNameGuidanceParagraph.isVisible();
-    await this.selectPartnerSubheading.isVisible();
-    await this.enterNewNameSubheading.isVisible();
-    await this.newNameHint.isVisible();
-    await this.saveAndContinueButton.isVisible();
+    await expect(this.changeNamePageHeading).toBeVisible();
+    await expect(this.backToRequest).toBeVisible();
+    await expect(this.changeNameGuidanceParagraph).toBeVisible();
+    await expect(this.selectPartnerSubheading).toBeVisible();
+    await expect(this.enterNewNameSubheading).toBeVisible();
+    await expect(this.newNameHint).toBeVisible();
+    await expect(this.saveAndContinueButton).toBeVisible();
   }
 
   async assertExistingPartnerNames() {
     for (const label of this.existingPartnerNames) {
-      await this.page.getByLabel(label).isVisible();
+      await expect(this.page.getByLabel(label)).toBeVisible();
     }
   }
 
@@ -200,7 +202,7 @@ class ChangePartnerName {
       ["Change of name certificate", "testfile.doc"],
     ];
     for (const [key, item] of data) {
-      await this.commands.getListItemFromKey(key, item);
+      await this.commands.getListItemFromKey(key, item, 1);
     }
   }
 }

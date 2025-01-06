@@ -64,9 +64,9 @@ class Validators {
   ) {
     const main = this.page.locator("css=main");
     const validation = this.page.getByTestId("validation-message-content");
-    await this.page.getByRole("heading").filter({ hasText: "Files uploaded" }).isVisible();
+    await expect(this.page.getByRole("heading").filter({ hasText: "Files uploaded" })).toBeVisible();
     if (pcr) {
-      await this.page.getByRole("heading").filter({ hasText: access }).isVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: access })).toBeVisible();
     } else if (loans) {
       this.page.locator("css=h1");
     } else {
@@ -84,7 +84,7 @@ class Validators {
     );
     if (pcr) {
       await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
-      await this.page.getByRole("heading").filter({ hasText: headerAssertion }).isVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: headerAssertion })).toBeVisible();
       const validation = this.page.getByTestId("validation-message-content");
       if (main.filter({ has: validation }).isVisible()) {
         expect(this.page.getByText("has been uploaded")).not.toBeVisible();
@@ -92,10 +92,10 @@ class Validators {
       console.log("Moving forward to the document area again");
       await this.page.getByRole("link").filter({ hasText: access }).click();
       console.log(pcrArea);
-      await this.commands.getListItemFromKey(pcrArea, "Edit", true, "supportingDocuments");
+      await this.commands.getListItemFromKey(pcrArea, "Edit", 1, true, "supportingDocuments");
     } else if (loans) {
       await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
-      await this.page.getByRole("heading").filter({ hasText: headerAssertion }).isVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: headerAssertion })).toBeVisible();
       if (main.filter({ has: validation }).isVisible()) {
         expect(this.page.getByText("has been uploaded")).not.toBeVisible();
       }
@@ -110,13 +110,13 @@ class Validators {
       console.log("Moving forward to the document area again");
       await this.commands.clickOn(access);
     }
-    await this.page.getByRole("heading").filter({ hasText: "Files uploaded" }).isVisible();
+    await expect(this.page.getByRole("heading").filter({ hasText: "Files uploaded" })).toBeVisible();
     console.log("Checking for the presence of a document upload table");
     const subheadings = ["File name", "Type", "Date uploaded", "Uploaded by"];
     for (const heading of subheadings) {
-      await this.commands.tableHeader(heading).isVisible();
+      await expect(this.commands.tableHeader(heading)).toBeVisible();
     }
-    await this.page.getByRole("link").filter({ hasText: testFile }).isVisible();
+    await expect(this.page.getByRole("link").filter({ hasText: testFile })).toBeVisible();
     console.log("Deleting document");
     await this.commands.deleteFileFromRow(testFile);
     await this.commands.createTestFile("Biggun", 33);
@@ -143,10 +143,10 @@ class Validators {
         await this.docTypeDropdown(docType);
       }
       await this.commands.uploadAnyFile(file);
-      await this.commands.validationNotification(`Your document has been uploaded.`).isVisible();
+      await expect(this.commands.validationNotification(`Your document has been uploaded.`)).toBeVisible();
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
-      await this.commands.validationNotification(`'${file}' has been removed.`).isVisible();
+      await expect(this.commands.validationNotification(`'${file}' has been removed.`)).toBeVisible();
       //This timeout is regrettable but required. Otherwise it fails to actually select a fail for upload.
       await this.page.waitForTimeout(4000);
     }
@@ -157,10 +157,10 @@ class Validators {
         await this.docTypeDropdown(docType);
       }
       await this.commands.uploadAnyFile(file);
-      this.commands.validationNotification("has been uploaded.");
+      await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
-      await this.commands.validationNotification(`has been removed.`).isVisible();
+      await expect(this.commands.validationNotification(`has been removed.`)).toBeVisible();
       await this.page.waitForTimeout(4000);
     }
     console.log("Validating incorrect file type");
@@ -205,10 +205,9 @@ class Validators {
       await this.docTypeDropdown(docType);
     }
     await this.commands.fileInput(this.commands.tooManyDocuments());
-    await this.page
-      .getByRole("alert")
-      .filter({ hasText: "You can only select up to 10 files at the same time." })
-      .isVisible();
+    await expect(
+      this.page.getByRole("alert").filter({ hasText: "You can only select up to 10 files at the same time." }),
+    ).toBeVisible();
     console.log("Uploading a batch of 10 docs of different types");
     if (docType) {
       await this.docTypeDropdown(docType);

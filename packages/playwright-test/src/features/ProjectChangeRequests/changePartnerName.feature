@@ -28,9 +28,8 @@ Feature: Change a partner's name PCR
 
         When the user clicks the "Change a partner's name" PCR type
         Then the user can see a read-only Change a partner's name PCR with reasoning
-            | Key            | List item                                                                                            |
-            | Request number | 1                                                                                                    |
-            | Types          | Change a partner's name                                                                              |
-            | Comments       | If you ever need a reason to go to the office in Swindon, consider the fact that every third wednesd |
-            | Key            | List item                                                                                            |
-            | Files          | No documents attached                                                                                |
+            | Key            | List item                           |
+            | Request number | 1                                   |
+            | Types          | Change a partner's name             |
+            | Comments       | This is the reasoning for this PCR. |
+            | Files          | testfile.doc                        |

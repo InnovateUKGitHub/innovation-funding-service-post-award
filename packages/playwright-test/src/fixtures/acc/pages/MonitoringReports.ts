@@ -146,7 +146,7 @@ class MonitoringReports {
 
   @Given("the user is on the monitoring reports dashboard")
   async isOnMonitoringReports() {
-    await this.dashboardTitle.isVisible();
+    await expect(this.dashboardTitle.get()).toBeVisible();
   }
 
   @When("the user clicks start a new report")

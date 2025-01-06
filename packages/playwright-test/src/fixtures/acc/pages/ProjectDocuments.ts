@@ -129,7 +129,9 @@ class ProjectDocuments {
     const access = this.page.getByLabel("Access Control");
     await access.selectOption(this.accessControlOptions[0]);
     await this.commands.fileInput(["testfile.doc"]);
-    await this.commands.validationMessage("has been uploaded.");
+    await expect(
+      this.page.getByTestId("validation-message-content").filter({ hasText: "Your document has been uploaded." }),
+    ).toBeVisible();
     await this.commands.backLink("Back to project").click();
     await this.commands.heading("Project overview");
   }
@@ -156,7 +158,9 @@ class ProjectDocuments {
     const access = this.page.getByLabel("Access Control");
     await access.selectOption(this.accessControlOptions[1]);
     await this.commands.fileInput(["testfile.pdf"]);
-    await this.commands.validationMessage("has been uploaded.");
+    await expect(
+      this.page.getByTestId("validation-message-content").filter({ hasText: "has been uploaded." }),
+    ).toBeVisible();
     await this.commands.backLink("Back to project").click();
     await this.commands.heading("Project overview");
   }
@@ -233,7 +237,9 @@ class ProjectDocuments {
   async uploadNavigateBack(filename: string) {
     await this.validators.docTypeDropdown("Plans");
     await this.commands.fileInput([filename]);
-    await this.commands.validationMessage("has been uploaded.");
+    await expect(
+      this.page.getByTestId("validation-message-content").filter({ hasText: "has been uploaded." }),
+    ).toBeVisible();
     await this.commands.backLink("Back to project").click();
     await this.commands.heading("Project overview");
   }

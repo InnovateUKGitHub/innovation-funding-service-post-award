@@ -40,6 +40,7 @@ class ProjectChangeRequests {
   private readonly finalComments: string;
   private readonly uploadDocumentsHeading: Locator;
   private readonly giveUsInfoSubheading: Locator;
+  private readonly pcrReasoning: string;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -83,6 +84,7 @@ class ProjectChangeRequests {
     this.finalComments = "These are the final comments for Innovate UK.";
     this.uploadDocumentsHeading = this.page.locator("css=legend").filter({ hasText: "Upload documents" });
     this.giveUsInfoSubheading = this.page.locator("li").getByRole("heading").filter({ hasText: "Give us information" });
+    this.pcrReasoning = "This is the reasoning for this PCR.";
   }
 
   /**
@@ -117,8 +119,19 @@ class ProjectChangeRequests {
     await this.provideReasonsLink.click();
     await expect(this.reasoningHeader).toBeVisible();
     await this.commands.textValidation("Reasoning", 32000, "Save and continue", true);
-    await this.uploadDocumentsHeading.isVisible();
+    await expect(this.uploadDocumentsHeading).toBeVisible();
+    await this.commands.backLink("Back to request").click();
+    await expect(this.requestHeading).toBeVisible();
+    await this.page.getByRole("link").filter({ hasText: "Provide reasons to Innovate UK" }).click();
+    await this.commands.getByLegend("Mark as complete");
+    await this.commands.getListItemFromKey("Comments", "Edit", 1, true, "comments");
+    await this.commands.getByLegend("Reasons");
+    await this.page.getByRole("textbox").fill(this.pcrReasoning);
+    await this.commands.button("Save and continue").click();
+    await expect(this.uploadDocumentsHeading).toBeVisible();
     await expect(this.page.getByTestId("numberRow").filter({ hasText: "Request number" })).toBeVisible();
+    await this.commands.fileInput(["testfile.doc"]);
+    await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
     await this.commands.button("Save and continue").click();
     await this.agreeWithChange.click();
     await this.commands.button("Save and return to request").click();
@@ -137,16 +150,17 @@ class ProjectChangeRequests {
     await expect(this.backtoPcr).toBeVisible();
     await expect(this.submitSuccessMsgHeading).toBeVisible();
     await expect(this.submitSuccessMsgContent).toBeVisible();
+    //let dates = this.commands.dateToday(true);
     let submissionList = [
-      ["Request number", "1"],
+      ["Request number", /[1-9]/],
       ["Request type", pcr],
       ["Request started", String(this.commands.dateToday(true))],
       ["Request status", "Submitted to Monitoring Officer"],
       ["Request last updated", String(this.commands.dateToday(true))],
     ];
-    let i = 0;
+    let i = 1;
     for (const [key, list] of submissionList) {
-      await this.commands.getListItemFromKey(key, list);
+      await this.commands.getListItemFromKey(key, list, i);
       i++;
     }
 
@@ -170,16 +184,16 @@ class ProjectChangeRequests {
 
   @When("the user clicks Next - Reasoning")
   async nextReasoning() {
-    await this.page.getByTestId("arrow-left").filter({ hasText: "Next" }).isVisible();
+    await expect(this.page.getByTestId("arrow-left").filter({ hasText: "Next" })).toBeVisible();
     await this.page.getByTestId("arrow-left").filter({ hasText: "Reasoning" }).click();
   }
 
   @Then("the reasoning page displays the following")
   async reasoningPageDisplayed(table: DataTable) {
     const data = table.hashes();
+    let i = 1;
     for (const row of data) {
-      let i = 0;
-      await this.commands.getListItemFromKey(row["Key"], row["List item"]);
+      await this.commands.getListItemFromKey(row["Key"], row["List item"], i);
       i++;
     }
   }

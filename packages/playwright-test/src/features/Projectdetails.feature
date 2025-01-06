@@ -1,11 +1,18 @@
 @mode:serial
 Feature: Project details
-    Scenario: Reviewing the project details page
+    Scenario: Reviewing the project details page as FC
         Given a multi-partner CR&D project exists
         And the user is the "mainFcUser" user
         And the user is on the project overview
         When the user selects the "Project details" tile
-        Then Project details will be displayed with correct information
+        Then Project details will be displayed with correct information for "Finance Contact"
+
+    Scenario: Reviewing the project details page as PM
+        Given a multi-partner CR&D project exists
+        And the user is the "pmUser" user
+        And the user is on the project overview
+        When the user selects the "Project details" tile
+        Then Project details will be displayed with correct information for "Project Manager"
 
     Scenario: Updating the project location postcode
         Given a multi-partner CR&D project exists

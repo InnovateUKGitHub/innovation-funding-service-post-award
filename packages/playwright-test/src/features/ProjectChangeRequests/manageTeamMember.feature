@@ -10,9 +10,10 @@ Feature: Manage team member
 
     Scenario: Selecting PCR types disables 'Manage team member' as an option
         When the user selects each PCR type
-        Then the Manage team members PCR type is disabled
-        #Note the below has commented out lines due to ACC-11671
-        Then the user cannot select Manage team members
+        Then the Manage team members PCR type is still enabled
+
+        When the user selects Manage team member
+        Then the other PCR types are then disabled
 
     Scenario: Viewing the Manage team member PCR page
         When the user creates a "Manage team members" PCR
@@ -97,10 +98,10 @@ Feature: Manage team member
 
         When the user enters alpha characters in the start date form
         And the user clicks the "Send invitation" button
-        Then the validation messages for each field will confirm invalid characters
+        Then the validation messages for each field will confirm invalid alpha characters
 
         When the user enters special characters in the start date form
-        Then the validation messages for each field will confirm invalid characters
+        Then the validation messages for each field will confirm invalid special characters
 
         When a valid date is entered in the start date form
         And the form is completed with 100 characters

@@ -51,6 +51,7 @@ class ManageTeamMember {
   private readonly replacePmHint: string;
   private readonly inviteFormNames: Array<string>;
   private readonly inviteOrgLabel: Locator;
+  private readonly orgHint: Locator;
   private readonly confirmReplacementButton: Locator;
   private readonly submitEmptyValidation: Array<string>;
   private readonly replaceFcGuidance: string;
@@ -158,9 +159,10 @@ class ManageTeamMember {
     this.replacePmSubheading = "Invite new project manager";
     this.replacePmHint = "Enter the new project manager details before sending invitation.";
     this.inviteFormNames = ["First name", "Last name"];
-    this.inviteOrgLabel = this.page.getByLabel("Organisation");
+    this.inviteOrgLabel = this.page.locator("//fieldset[3]/div[1]/label").filter({ hasText: "Organisation" });
+    this.orgHint = this.page.locator("#hint-for-partnerId").filter({ hasText: "Hedge's Primary Ltd." });
     this.confirmReplacementButton = Button.fromTitle(page, "Confirm replacement and send invitation");
-    this.submitEmptyValidation = ["Enter email address.", "Enter first name.", "Enter last name."];
+    this.submitEmptyValidation = ["Enter a valid email address.", "Enter first name.", "Enter last name."];
     this.replaceFcGuidance =
       "This page allows you to select the finance contact to remove and replace them with a new finance contact. Once removed, they will no longer have access to the project unless they are added to the team again.";
     this.fcDropdownList = ["Main Finance Contact", "Secondary Finance Contact"];
@@ -242,7 +244,7 @@ class ManageTeamMember {
   async allPcrsDisabled() {
     for (const pcr of this.disabledBoxes) {
       const input = this.page.getByLabel(pcr);
-      await input.isDisabled();
+      await expect(input).toBeDisabled();
     }
   }
 
@@ -253,26 +255,25 @@ class ManageTeamMember {
      */
     for (const pcr of this.disabledBoxes) {
       await this.page.getByLabel(pcr).check();
-      //TODO:This will need uncommenting once this bug ACC-11671 is fixed in development.
-      //const label = this.page.getByLabel("Manage team members");
-      //await label.isDisabled();
-      await this.page.getByLabel(pcr).uncheck();
     }
   }
 
-  @Then("the Manage team members PCR type is disabled")
-  async manageTeamMemberDisabled() {
+  @Then("the Manage team members PCR type is still enabled")
+  async manageTeamMemberEnabled() {
     const label = this.page.getByLabel("Manage Team Member");
-    //await label.isDisabled();
+    await expect(label).toBeEnabled();
   }
 
-  @Then("the user cannot select Manage team members")
+  @When("the user selects Manage team member")
+  async selectManageTeamMember() {
+    await this.page.getByLabel("Manage Team Member").click();
+  }
+
+  @Then("the other PCR types are then disabled")
   async cannotCheckManageTeamMember() {
-    await this.page.getByLabel(this.disabledBoxes[0]).check();
-    //await this.page.getByRole("checkbox").filter({ hasText: "Manage team members" }).check();
-    //TODO: This will need uncommenting once this bug ACC-11671 is fixed in development.
-    //const label = this.page.getByLabel("Manage team member");
-    //await expect(label).not.toBeChecked();
+    for (const pcr of this.disabledBoxes) {
+      await expect(this.page.getByLabel(pcr)).toBeDisabled();
+    }
   }
 
   // **MANAGE TEAM MEMBERS PAGE**
@@ -281,7 +282,7 @@ class ManageTeamMember {
     await expect(this.manageTeamTitle.get()).toBeVisible();
     await expect(this.backPcrs).toBeVisible();
     for (const heading of this.manageTeamSubheadings) {
-      await this.page.getByRole("heading").filter({ hasText: heading }).isVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: heading })).toBeVisible();
     }
     await this.checkManageTeamMemberTable(this.pmTable, "Project Manager", "Hedge's Primary Ltd.", false);
     await this.checkManageTeamMemberTable(this.fcTable, "Main Finance Contact", "Hedge's Primary Ltd.", false);
@@ -289,22 +290,22 @@ class ManageTeamMember {
     await this.checkManageTeamMemberTable(this.mainContactTable, "Main Contact", "Hedge's Primary Ltd.", false);
     await this.checkManageTeamMemberTable(this.associatesTable, "Anna Sociate", "Hedge's Primary Ltd.", true);
     for (const button of this.manageTeamButtons) {
-      await this.page.getByRole("link").filter({ hasText: button }).isVisible();
+      await expect(this.page.getByRole("button").filter({ hasText: button })).toBeVisible();
     }
-    await this.manageTeamCancelLink.isVisible();
+    await expect(this.manageTeamCancelLink).toBeVisible();
   }
 
   // **REPLACE PROJECT MANAGER PAGE**
   @Then("the user will see the Replace project manager page")
   async replacePmPage() {
-    this.viewPage(
+    await this.viewPage(
       true,
       false,
       false,
       "Replace project manager",
       this.replacePmGuidance,
-      "Peter May",
-      "Hedge's Consulting Ltd.",
+      "Project Manager",
+      "Hedge's Primary Ltd.",
       this.replacePmSubheading,
       this.replacePmHint,
     );
@@ -325,7 +326,7 @@ class ManageTeamMember {
   // **REPLACE KNOWLEDGE BASE ADMINISTRATOR PAGE**
   @Then("the user will see the Replace knowledge base administator page")
   async replaceKbAdminPage() {
-    this.viewPage(
+    await this.viewPage(
       true,
       false,
       false,
@@ -342,13 +343,13 @@ class ManageTeamMember {
 
   @Then("the user will see the Replace main company contact page")
   async replaceMainCcPage() {
-    this.viewPage(
+    await this.viewPage(
       true,
       false,
       false,
       "Replace main company contact",
       this.replaceMccGuidance,
-      "Main Company Contact",
+      "Main Contact",
       "Hedge's Primary Ltd.",
       this.replaceMccSubheading,
       this.replaceMccHint,
@@ -357,7 +358,7 @@ class ManageTeamMember {
 
   @Then("the user will see the Invite a new associate page")
   async inviteAssociatePage() {
-    this.viewPage(false, false, true);
+    await this.viewPage(false, false, true);
   }
 
   // **FORM STEPS**
@@ -369,12 +370,12 @@ class ManageTeamMember {
 
   @Then("a standard validation message will advise of empty fields")
   async standardEmptyValidation() {
-    this.emptyFormValidation(false);
+    await this.emptyFormValidation(false);
   }
 
   @Then("an associate page validation message will advise of empty fields")
   async associateEmptyValidation() {
-    this.emptyFormValidation(true);
+    await this.emptyFormValidation(true);
   }
 
   @When("the user exceeds 100 characters in the form fields")
@@ -382,7 +383,7 @@ class ManageTeamMember {
     for (const input of this.inviteFormNames) {
       await this.completeToCharacterLimit(101, input, false);
     }
-    await this.completeToCharacterLimit(95, "Email", true);
+    await this.completeToCharacterLimit(101, "Email", true);
   }
 
   @Then("validation messages for each field will confirm length of 100 characters")
@@ -390,7 +391,6 @@ class ManageTeamMember {
     await this.validateLength("First name", "100");
     await this.validateLength("Last name", "100");
     await this.validateLength("Email", "100");
-    this.commands.validationMessage("Enter a valid email address ");
   }
 
   @When("the email entered is not in an email format")
@@ -400,7 +400,7 @@ class ManageTeamMember {
 
   @Then("the validation message will confirm an invalid email")
   async invalidEmailValidation() {
-    this.commands.validationMessage("Enter a valid email address ");
+    await this.commands.validationMessage("Enter a valid email address ");
   }
 
   @When("the user enters alpha characters in the start date form")
@@ -418,13 +418,18 @@ class ManageTeamMember {
         await this.page.getByLabel(label).clear();
         await this.page.getByLabel(label).fill(input);
       }
-      await this.invalidCharacterMsg();
+      await this.invalidSpecialCharacterMsg();
     }
   }
 
-  @Then("the validation messages for each field will confirm invalid characters")
-  async confirmInvalidChar() {
-    await this.invalidCharacterMsg();
+  @Then("the validation messages for each field will confirm invalid alpha characters")
+  async confirmInvalidAlphaChar() {
+    await this.invalidAlphaCharacterMsg();
+  }
+
+  @Then("the validation messages for each field will confirm invalid special characters")
+  async confirmInvalidSpecialChar() {
+    await this.invalidSpecialCharacterMsg();
   }
 
   @When("the form is completed with 100 characters")
@@ -433,7 +438,7 @@ class ManageTeamMember {
     for (const input of this.inviteFormNames) {
       await this.page.getByLabel(input).fill(lorem);
     }
-    await this.completeToCharacterLimit(95, "Email", true);
+    await this.completeToCharacterLimit(95, "Email", true, true);
     await this.page.getByLabel("Email").press("Delete");
   }
 
@@ -464,7 +469,7 @@ class ManageTeamMember {
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
       await this.confirmReplacementButton.click();
     } else if (pcr === "Replace finance contact") {
-      this.selectFc();
+      await this.selectFc();
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
       await this.confirmReplacementButton.click();
       await expect(this.page.getByRole("combobox")).toBeDisabled();
@@ -482,23 +487,24 @@ class ManageTeamMember {
   async confirmationScreen(pcr: string) {
     await this.confirmationPageGuidance.isVisible();
     const data = [
-      ["Request number", /^1$/],
+      ["Request number", /[1-9]/],
       ["Request type", "Manage team members"],
       ["Request started", this.commands.dateToday(true)],
       ["Request status", "Submitted to Innovate UK"],
       ["Request last updated", this.commands.dateToday(true)],
     ];
+
     for (const [key, item] of data) {
-      let i = 0;
-      await this.commands.getListItemFromKey(key, item);
-      i++;
+      await this.commands.getListItemFromKey(key, item, 1);
     }
+
     await this.returnToPcrsButton.isVisible();
     await this.page.getByRole("link").filter({ hasText: "Review request" }).click();
-    await this.reviewScreenReasoning();
     if (pcr === "Invite a new associate") {
+      await this.reviewScreenReasoning(true);
       await this.reviewScreenNew(pcr);
     } else {
+      await this.reviewScreenReasoning(false);
       await this.reviewScreenExisting(pcr);
       await this.reviewScreenNew(pcr);
     }
@@ -517,20 +523,24 @@ class ManageTeamMember {
    * Function to assert for different tables based on QA tags listed within POM above.
    */
   async checkManageTeamMemberTable(locator: Locator, name: string, organisation: string, associate: boolean) {
-    await locator.locator("th").nth(0).filter({ hasText: "Name" }).isVisible();
-    await locator.locator("td").nth(0).filter({ hasText: name }).isVisible();
-    await locator.locator("th").nth(1).filter({ hasText: "Organisation" }).isVisible();
-    await locator.locator("td").nth(1).filter({ hasText: organisation }).isVisible();
+    await expect(locator.locator("th").nth(0).filter({ hasText: "Name" })).toBeVisible();
+    await expect(locator.locator("td").nth(0).filter({ hasText: name })).toBeVisible();
+    await expect(locator.locator("th").nth(1).filter({ hasText: "Organisation" })).toBeVisible();
+    await expect(locator.locator("td").nth(1).filter({ hasText: organisation })).toBeVisible();
     if (associate) {
-      await locator.locator("th").nth(2).filter({ hasText: "Manage" }).isVisible();
-      await locator.locator("td").nth(2).getByRole("link").filter({ hasText: "Remove" }).isVisible();
+      await expect(locator.locator("th").nth(2).filter({ hasText: "Manage" })).toBeVisible();
+      await expect(locator.locator("td").nth(2).getByRole("link").filter({ hasText: "Remove" })).toBeVisible();
     }
   }
 
-  async completeToCharacterLimit(charlength: number, inputField: string, email: boolean) {
+  async completeToCharacterLimit(charlength: number, inputField: string, email: boolean, accurateEmail?: boolean) {
     if (email) {
-      let emailLorem = `IfyoueverneedareasontogototheofficeinSwindonconsiderthefactthateverythirdwednesdaypippindonuts@x.com`;
+      let emailLorem = `IfyoueverneedareasontogototheofficeinSwindonconsiderthefactthateverythirdwednesdaypippindonuts@x.comm`;
       await this.page.getByLabel(inputField).fill(emailLorem);
+      if (accurateEmail) {
+        await this.page.getByLabel(inputField).press("End");
+        await this.page.getByLabel(inputField).press("Backspace");
+      }
     } else {
       let lorem = getLorem(charlength);
       await this.page.getByLabel(inputField).fill(lorem);
@@ -567,16 +577,16 @@ class ManageTeamMember {
       await this.commands.heading(heading);
       await expect(this.backManageTeam).toBeVisible();
       await expect(this.page.getByText(guidance)).toBeVisible();
-      await this.page.locator("th").nth(0).filter({ hasText: "Name" }).isVisible();
-      await this.page.locator("td").nth(0).filter({ hasText: name }).isVisible();
-      await this.page.locator("th").nth(1).filter({ hasText: "Organisation" }).isVisible();
-      await this.page.locator("td").nth(1).filter({ hasText: partner }).isVisible();
-      await this.page.getByRole("heading").filter({ hasText: subheading }).isVisible();
+      await expect(this.page.locator("th").nth(0).filter({ hasText: "Name" })).toBeVisible();
+      await expect(this.page.locator("td").nth(0).filter({ hasText: name })).toBeVisible();
+      await expect(this.page.locator("th").nth(1).filter({ hasText: "Organisation" })).toBeVisible();
+      await expect(this.page.locator("td").nth(1).filter({ hasText: partner })).toBeVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: subheading })).toBeVisible();
       await expect(this.page.getByText(hint)).toBeVisible();
       await this.checkInviteLabelsExist();
-      await this.inviteOrgLabel.isVisible();
+      await expect(this.inviteOrgLabel).toHaveText("Organisation");
       await expect(this.confirmReplacementButton).toBeVisible();
-      await this.page.getByRole("link").filter({ hasText: "Cancel" }).isVisible();
+      await expect(this.page.getByRole("link").filter({ hasText: "Cancel" })).toBeVisible();
     } else if (fc) {
       await this.commands.heading("Replace finance contact");
       await expect(this.backManageTeam).toBeVisible();
@@ -592,38 +602,58 @@ class ManageTeamMember {
         this.page.getByRole("button").filter({ hasText: "Confirm replacement and send invitation" }),
       ).not.toBeDisabled();
       await this.checkInviteLabelsExist();
-      await this.replaceFcSubheading.isVisible();
+      await expect(this.replaceFcSubheading).toBeVisible();
       await expect(this.page.getByText(this.replaceFcHint)).toBeVisible();
       await expect(this.confirmReplacementButton).toBeVisible();
-      await this.page.getByRole("link").filter({ hasText: "Cancel" }).isVisible();
+      await expect(this.page.getByRole("link").filter({ hasText: "Cancel" })).toBeVisible();
     } else if (associate) {
-      await this.page.getByRole("heading").filter({ hasText: "Invite a new associate" }).isVisible();
+      await expect(this.page.getByRole("heading").filter({ hasText: "Invite a new associate" })).toBeVisible();
       await expect(this.backManageTeam).toBeVisible();
       await expect(this.page.getByText(this.associateGuidance)).toBeVisible();
       await this.checkInviteLabelsExist();
-      await this.page.getByLabel("Organisation").isVisible();
-      await this.page.locator("css=#hint-for-partnerId").filter({ hasText: "Hedge's Secondary Ltd." }).isVisible();
+      await expect(this.inviteOrgLabel).toBeVisible();
+      await expect(
+        this.page.locator("css=#hint-for-partnerId").filter({ hasText: "Hedge's Secondary Ltd." }),
+      ).toBeVisible();
       for (const date of this.associateStartDateList) {
-        await this.page.getByLabel(date).isVisible();
+        await expect(this.page.getByLabel(date)).toBeVisible();
       }
       await expect(this.page.getByText(this.associateFooter)).toBeVisible();
-      await this.page.getByRole("link").filter({ hasText: this.supportEmail }).isVisible();
+      await expect(this.page.getByRole("link").filter({ hasText: this.supportEmail })).toBeVisible();
     }
   }
 
   async emptyFormValidation(associate: boolean) {
     for (const valMsg of this.submitEmptyValidation) {
-      await this.page.getByTestId("validation-summary").filter({ hasText: valMsg }).isVisible();
+      await expect(this.page.getByTestId("validation-summary").filter({ hasText: valMsg })).toBeVisible();
     }
     if (associate) {
-      await this.page.getByTestId("validation-summary").filter({ hasText: "Enter start date." }).isVisible();
+      await expect(
+        this.page.getByTestId("validation-summary").filter({ hasText: "Enter a valid start date." }),
+      ).toBeVisible();
     }
   }
 
-  async invalidCharacterMsg() {
+  async invalidAlphaCharacterMsg() {
     for (const input of this.associateStartDateList) {
       let valLabel = input.toLowerCase();
-      await this.commands.validationMessage(`Start ${valLabel} must be a valid number.`);
+      if (valLabel === "year") {
+        await this.commands.validationMessage(`Start ${valLabel} must be a valid 4 digit number.`);
+      } else {
+        await this.commands.validationMessage(`Start ${valLabel} must be a valid number.`);
+      }
+      await this.commands.validationMessage(`Enter a valid start date`);
+    }
+  }
+
+  async invalidSpecialCharacterMsg() {
+    for (const input of this.associateStartDateList) {
+      let valLabel = input.toLowerCase();
+      if (valLabel === "year") {
+        await this.commands.validationMessage(`Start ${valLabel} must be a valid 4 digit number.`);
+      } else {
+        await this.commands.validationMessage(`Start ${valLabel} must be a number.`);
+      }
       await this.commands.validationMessage(`Enter a valid start date`);
     }
   }
@@ -631,7 +661,8 @@ class ManageTeamMember {
   monthNow() {
     let date = new Date();
     let month = date.getMonth();
-    return month.toString();
+    let accurateMonth = month + 1;
+    return accurateMonth.toString();
   }
 
   yearFromNow() {
@@ -646,15 +677,21 @@ class ManageTeamMember {
     await this.page.getByLabel("Email").fill(email);
   }
 
-  async reviewScreenReasoning() {
+  async reviewScreenReasoning(associate: boolean) {
+    let actiontype: string;
+    if (associate) {
+      actiontype = "Invite a team member";
+    } else {
+      actiontype = "Replace a team member";
+    }
     const listData = [
-      ["Request number", /^1$/],
+      ["Request number", /[1-9]/],
       ["Type", "Manage team members"],
-      ["Action", "Replace a team member"],
+      ["Action", actiontype],
     ];
+    let i = 1;
     for (const [key, list] of listData) {
-      let i = 0;
-      await this.commands.getListItemFromKey(key, list);
+      await this.commands.getListItemFromKey(key, list, i);
       i++;
     }
   }
@@ -674,7 +711,7 @@ class ManageTeamMember {
       firstName = "Main Finance";
       lastName = "Contact";
       emailAddress = context.mainFcPcl.Acc_EmailOfSFContact__c;
-      role = "Finance Contact";
+      role = "Finance contact";
     } else if (pcr === "Replace knowledge base administrator") {
       firstName = "Knowledge";
       lastName = "Base";
@@ -695,40 +732,40 @@ class ManageTeamMember {
     let emailAddress = (await this.getUserDetails(pcr)).emailAddress;
     let role = (await this.getUserDetails(pcr)).role;
     const existingData = [
-      ["First name", firstName],
-      ["Last name", lastName],
-      ["Email address", emailAddress],
-      ["Role", role],
+      ["First name", firstName, "before-firstName"],
+      ["Last name", lastName, "before-lastName"],
+      ["Email address", emailAddress, "before-email"],
+      ["Role", role, "before-role"],
     ];
-    for (const [key, list] of existingData) {
-      const grandParent = this.page.locator("css=div").filter({ hasText: "Team member being replaced" });
-      await grandParent.filter({ has: this.page.locator("css=dt").filter({ hasText: key }) }).isVisible();
-      await grandParent.filter({ has: this.page.locator("css=dd").filter({ hasText: list }) }).isVisible();
+    await expect(this.page.getByRole("heading").filter({ hasText: "Team member being replaced" })).toBeVisible();
+    for (const [key, list, qa] of existingData) {
+      await this.commands.getListItemFromKey(key, list, 1, false, qa);
     }
   }
+
   async reviewScreenNew(pcr: string) {
     let role: string;
     if (pcr === "Replace project manager") {
       role = "Project Manager";
     } else if (pcr === "Replace finance contact") {
-      role = "Finance Contact";
+      role = "Finance contact";
     } else if (pcr === "Replace main company contact") {
-      role = "Main Company Contact";
-    } else if (pcr === "Replace a knowledge base administrator") {
-      role = "KB Admin";
+      role = "Main company contact";
+    } else if (pcr === "Replace knowledge base administrator") {
+      role = "Knowledge base administrator";
     } else if (pcr === "Invite a new associate") {
       role = "Associate";
     }
+
     const newData = [
-      ["First name", "Joe"],
-      ["Last name", "Bloggs"],
-      ["Email address", "joe.bloggs@bloggs.test.test"],
-      ["Role", role],
+      ["First name", "Joe", "after-firstName"],
+      ["Last name", "Bloggs", "after-lastName"],
+      ["Email address", "joe.bloggs@bloggs.test.test", "after-email"],
+      ["Role", role, "after-role"],
     ];
-    for (const [key, list] of newData) {
-      const grandParent = this.page.locator("css=div").filter({ hasText: "Team member being invited" });
-      await grandParent.filter({ has: this.page.locator("css=dt").filter({ hasText: key }) }).isVisible();
-      await grandParent.filter({ has: this.page.locator("css=dd").filter({ hasText: list }) }).isVisible();
+    await expect(this.page.getByRole("heading").filter({ hasText: "Team member being invited" })).toBeVisible();
+    for (const [key, list, qa] of newData) {
+      await this.commands.getListItemFromKey(key, list, 1, false, qa);
     }
   }
   @Then("the PM has logged in and created a PCR")
@@ -741,7 +778,7 @@ class ManageTeamMember {
 
   @Then("the {string} button should not exist")
   async pageWithoutFc(buttonName: string) {
-    await this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." }).isVisible();
+    await expect(this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." })).toBeVisible();
     await expect(this.page.getByRole("button")).not.toContainText(buttonName);
   }
 }

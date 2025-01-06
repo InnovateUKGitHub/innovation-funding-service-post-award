@@ -23,6 +23,7 @@ class ChangeProjectScope {
   private readonly publishedPubDescription: Locator;
   private readonly publishedDescriptionDetails: Locator;
   private readonly descriptionHint: Locator;
+  private readonly summaryHint: Locator;
   private readonly textBox: Locator;
   private readonly fullCharRemaining: Locator;
   private readonly saveContinueButton: Locator;
@@ -31,7 +32,7 @@ class ChangeProjectScope {
   private readonly publishedPubSummary: Locator;
   private readonly publishedSummaryDetails: Locator;
   private readonly emptySummary: Array<[string, string]>;
-  private readonly completedSummary: Array<[string, string]>;
+  private readonly completedSummary: Array<[string, string, string]>;
   private readonly bothEmptyValidation: Array<string>;
   private readonly descriptionEditLink: Locator;
   private readonly summaryEditLink: Locator;
@@ -72,33 +73,38 @@ class ChangeProjectScope {
     this.publishedDescriptionTitle = this.page
       .locator("css=summary")
       .filter({ hasText: "Published public description" });
-    this.publishedPubDescription = this.page.locator("css=summary").getByRole("paragraph");
+    this.publishedPubDescription = this.page
+      .locator("//details//div//p")
+      .filter({ hasText: "This is a public description" });
     this.publishedDescriptionDetails = this.page
       .locator("css=details")
       .filter({ hasText: "Published public description" });
     this.descriptionHint = this.page
-      .locator("#hint-for-description")
+      .locator("css=#hint-for-description")
+      .filter({ hasText: "This is required to complete this request." });
+    this.summaryHint = this.page
+      .locator("css=#hint-for-summary")
       .filter({ hasText: "This is required to complete this request." });
     this.textBox = this.page.getByRole("textbox");
     this.saveContinueButton = this.page.getByRole("button").filter({ hasText: "Save and continue" });
-    this.proposedPubSummary = this.page.locator("css=legend").filter({ hasText: "Proposed public summary" });
+    this.proposedPubSummary = this.page.locator("css=legend").filter({ hasText: "Proposed project summary" });
     this.publishedSummaryTitle = this.page.locator("css=summary").filter({ hasText: "Published project summary" });
-    this.publishedPubSummary = this.page.locator("css=summary").getByRole("paragraph");
+    this.publishedPubSummary = this.page.locator("//details//div//p").filter({ hasText: "This is a project summary" });
     this.publishedSummaryDetails = this.page.locator("css=details").filter({ hasText: "Published project summary" });
     this.emptySummary = [
       ["Existing public description", "This is a public description"],
       ["New public description", "Description test"],
-      ["Existing project summary", "This is a public summary"],
+      ["Existing project summary", "This is a project summary"],
       ["New project summary", "Summary test"],
     ];
     this.fullCharRemaining = this.page
       .getByRole("paragraph")
       .filter({ hasText: "You have 32000 characters remaining" });
     this.completedSummary = [
-      ["Existing public description", "This is a public description"],
-      ["New public description", this.newPublicDescription],
-      ["Existing project summary", "This is a project summary"],
-      ["New project summary", this.newProjectSummary],
+      ["Existing public description", "This is a public description", "currentPublicDescription"],
+      ["New public description", this.newPublicDescription, "newPublicDescription"],
+      ["Existing project summary", "This is a project summary", "currentProjectSummary"],
+      ["New project summary", this.newProjectSummary, "newProjectSummary"],
     ];
     this.bothEmptyValidation = ["Enter project summary.", "Enter public description."];
     this.descriptionEditLink = this.page.locator("//dl//div[2]//dd[2]").getByRole("link").filter({ hasText: "Edit" });
@@ -111,32 +117,33 @@ class ChangeProjectScope {
 
   @Then("the Change project scope page is displayed")
   async changeScopeMainPage() {
-    await this.pageTitle.isVisible();
-    await this.backToRequest.isVisible();
+    await expect(this.pageTitle.get()).toBeVisible();
+    await expect(this.backToRequest).toBeVisible();
     await this.checkGuidance();
-    await this.proposedDescription.isVisible();
-    await this.publishedDescriptionTitle.isVisible();
-    await this.publishedPubDescription.filter({ hasText: "This is a public description" }).isVisible();
-    await this.descriptionHint.isVisible();
+    await expect(this.proposedDescription).toBeVisible();
+    await this.publishedDescriptionTitle.click();
+    await expect(this.publishedPubDescription).toHaveText("This is a public description");
+    await this.publishedDescriptionTitle.click();
+    await expect(this.descriptionHint).toBeVisible();
     await expect(this.textBox).toHaveValue("This is a public description");
     await this.textBox.clear();
-    await this.fullCharRemaining.isVisible();
-    await this.saveContinueButton.isVisible();
+    await expect(this.fullCharRemaining).toBeVisible();
+    await expect(this.saveContinueButton).toBeVisible();
     await this.clickDetailsExpand(false);
   }
 
   @When("the user navigates through to summary and marks as complete")
   async navigateToSummary() {
     await this.saveContinueButton.click();
-    await this.publishedSummaryTitle.isVisible();
-    await this.proposedPubSummary.isVisible();
-    await this.publishedPubSummary.filter({ hasText: "This is a project summary" }).isVisible();
+    await expect(this.publishedSummaryTitle).toBeVisible();
+    await expect(this.proposedPubSummary).toBeVisible();
+    await expect(this.publishedPubSummary).toHaveText("This is a project summary");
     await this.clickDetailsExpand(true);
-    await this.descriptionHint.isVisible();
+    await expect(this.summaryHint).toBeVisible();
     await expect(this.textBox).toHaveValue("This is a project summary");
     await this.textBox.clear();
     await this.saveContinueButton.click();
-    await this.completedSummaryPageList();
+    await this.commands.getListItemFromKey("Existing public description", "This is a public description", 1);
     await this.pcr.markAsCompleteSection(true);
   }
 
@@ -150,55 +157,82 @@ class ChangeProjectScope {
   @When("the user clicks an Edit button")
   async followEditToCorrectPage() {
     await this.descriptionEditLink.click();
-    await this.publishedDescriptionTitle.isVisible();
+    await expect(this.publishedDescriptionTitle).toBeVisible();
     await this.commands.validationLink(this.enterPubDescription);
-    await this.page.getByRole("paragraph").filter({ hasText: this.enterPubDescription }).isVisible();
+    await expect(this.page.getByRole("paragraph").filter({ hasText: this.enterPubDescription })).toBeVisible();
     await this.textBox.fill("Description test");
     await this.saveContinueButton.click();
-    await this.publishedSummaryTitle.isVisible();
+    await expect(this.publishedSummaryTitle).toBeVisible();
     await this.commands.validationLink(this.enterProjSummary);
-    await this.page.getByRole("paragraph").filter({ hasText: this.enterProjSummary }).isVisible();
+    await expect(this.page.getByRole("paragraph").filter({ hasText: this.enterProjSummary })).toBeVisible();
     await this.textBox.fill("Summary test");
     await this.saveContinueButton.click();
     await this.emptySummaryPage();
     await this.summaryEditLink.click();
-    await this.publishedSummaryTitle.isVisible();
+    await expect(this.publishedSummaryTitle).toBeVisible();
     await this.saveContinueButton.click();
   }
 
-  @Then("the user is brought to the correct page")
+  @Then("the user is brought to the project description page")
   async correctPage() {
     await this.emptySummaryPage();
     await this.descriptionEditLink.click();
-    await this.publishedDescriptionTitle.isVisible();
+    await expect(this.publishedDescriptionTitle).toBeVisible();
   }
 
   @When("the user validates 32000 characters in each section correctly")
   async valTexBox() {
     await this.validators.textValidation("Public description", 32000, "Save and continue", true);
-    await this.publishedSummaryTitle.isVisible();
-    await this.backToRequest.isVisible();
+    await expect(this.publishedSummaryTitle).toBeVisible();
+    await expect(this.backToRequest).toBeVisible();
     await this.validators.textValidation("Project summary", 32000, "Save and continue", true);
     await this.descriptionEditLink.click();
-    await this.publishedDescriptionTitle.isVisible();
+    await expect(this.publishedDescriptionTitle).toBeVisible();
     await this.textBox.fill(this.newPublicDescription);
     await this.saveContinueButton.click();
-    await this.publishedSummaryTitle.isVisible();
+    await expect(this.publishedSummaryTitle).toBeVisible();
     await this.textBox.fill(this.newProjectSummary);
     await this.saveContinueButton.click();
   }
 
   @Then("a completed summary page is displayed")
   async completedSummaryPageList() {
-    for (const [dt, dd] of this.completedSummary) {
-      await this.commands.getListItemFromKey(dt, dd);
-    }
+    await expect(this.page.locator("css=legend").filter({ hasText: "Mark as complete" })).toBeVisible();
+    await this.commands.getListItemFromKey(
+      "Existing public description",
+      "This is a public description",
+      1,
+      false,
+      "currentPublicDescription",
+    );
+    await this.commands.getListItemFromKey(
+      "New public description",
+      this.newPublicDescription,
+      1,
+      false,
+      "newPublicDescription",
+    );
+    await this.commands.getListItemFromKey(
+      "Existing project summary",
+      "This is a project summary",
+      1,
+      false,
+      "currentProjectSummary",
+    );
+    await this.commands.getListItemFromKey(
+      "New project summary",
+      this.newProjectSummary,
+      1,
+      false,
+      "newProjectSummary",
+    );
   }
 
   @When("the user clicks Save and return to request")
   async clickSaveAndReturn() {
     await this.pcr.markAsCompleteSection(true);
   }
+
   /**
    * Note that I was unable to utilise getListItemFromKey on this specific page, despite experimentation.
    * As a result I adopted xpath on this occasion to get the test to run and pass.
@@ -218,10 +252,10 @@ class ChangeProjectScope {
    * METHODS
    */
   async checkGuidance() {
-    await this.guidance.filter({ hasText: this.guidanceCopyDescription }).isVisible();
-    await this.guidance.filter({ hasText: this.guidanceCopySummary }).isVisible();
+    await expect(this.guidance.filter({ hasText: this.guidanceCopyDescription })).toBeVisible();
+    await expect(this.guidance.filter({ hasText: this.guidanceCopySummary })).toBeVisible();
     for (const li of this.guidanceCopyList) {
-      await this.listItem.filter({ hasText: li }).isVisible();
+      await expect(this.listItem.filter({ hasText: li })).toBeVisible();
     }
   }
 
@@ -240,8 +274,10 @@ class ChangeProjectScope {
   }
 
   async emptySummaryPage() {
+    let i = 1;
     for (const [section, content] of this.emptySummary) {
-      await this.commands.getListItemFromKey(section, content);
+      await this.commands.getListItemFromKey(section, content, i);
+      i++;
     }
   }
 }

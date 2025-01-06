@@ -277,10 +277,18 @@ class ApproveNewSubcontractor {
   @Then("the summary page correctly displays the saved information")
   async correctSummaryPage(table: DataTable) {
     const data = table.hashes();
+    const loremQaList = [
+      this.summaryQaList[0],
+      this.summaryQaList[1],
+      this.summaryQaList[3],
+      this.summaryQaList[4],
+      this.summaryQaList[5],
+      this.summaryQaList[7],
+    ];
+    let i = 0;
     for (const row of data) {
-      let i = 0;
       let lorem = getLorem(Number(row["Lorem"]));
-      await this.commands.getListItemFromKey(row["Field name"], lorem, i);
+      await this.commands.getListItemFromKey(row["Field name"], lorem, 1, false, loremQaList[i]);
       i++;
     }
     await expect(this.summaryKey.filter({ hasText: this.isThereRelationship })).toBeVisible();

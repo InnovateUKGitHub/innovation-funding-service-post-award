@@ -85,7 +85,13 @@ class Commands {
   /**
    * Get a list item from its key
    */
-  async getListItemFromKey(label: string | RegExp, item: string | RegExp, clickable?: boolean, qaTag?: string) {
+  async getListItemFromKey(
+    label: string | RegExp,
+    item: string | RegExp,
+    divNumber: number,
+    clickable?: boolean,
+    qaTag?: string,
+  ) {
     if (qaTag) {
       const qakey = this.page.locator("css=dt").filter({ hasText: label });
       const qaparent = this.page.getByTestId(`${qaTag}`).filter({ has: qakey });
@@ -195,7 +201,7 @@ class Commands {
    * Gets a legend tag based on string or RegExp
    */
   async getByLegend(name: string | RegExp) {
-    await this.page.locator("css=legend").filter({ hasText: name }).isVisible();
+    await expect(this.page.locator("css=legend").filter({ hasText: name })).toBeVisible();
   }
 
   /**
@@ -252,7 +258,7 @@ class Commands {
   }
 
   async validationMessage(message: string) {
-    await this.page.getByTestId("validation-summary").filter({ hasText: message }).isVisible();
+    await expect(this.page.getByTestId("validation-summary").filter({ hasText: message })).toBeVisible();
   }
 
   async heading(title: string) {
@@ -383,16 +389,16 @@ class Commands {
   dateToday(long: boolean) {
     let date = new Date();
     let day = date.getDate();
-    let month = date.setDate(date.getMonth());
+    let month = date.getMonth();
     let accurateMonth = Number(month) + 1;
     if (long) {
-      const formatter = new Intl.DateTimeFormat("en-UK", { month: "long" });
+      const formatter = new Intl.DateTimeFormat("en-GB", { month: "long" });
       const fullMonth = formatter.format(accurateMonth);
       let year = date.getFullYear();
       let datetoday = `${day} ${fullMonth} ${year}`;
       return datetoday;
     } else {
-      const formatter = new Intl.DateTimeFormat("en-UK", { month: "short" });
+      const formatter = new Intl.DateTimeFormat("en-GB", { month: "short" });
       let year = date.getFullYear();
       let shortMonth = formatter.format(accurateMonth);
       let datetoday = `${day} ${shortMonth} ${year}`;
@@ -535,10 +541,10 @@ class Commands {
       .filter({ hasText: "Learn more about files you can upload" })
       .getAttribute("open");
     for (const txt of guidanceText) {
-      await this.page.getByRole("paragraph").filter({ hasText: txt }).isVisible();
+      await expect(this.page.getByRole("paragraph").filter({ hasText: txt })).toBeVisible();
     }
     for (const li of fileList) {
-      await this.page.getByRole("list").filter({ hasText: li }).isVisible();
+      await expect(this.page.getByRole("list").filter({ hasText: li })).toBeVisible();
     }
   }
 
