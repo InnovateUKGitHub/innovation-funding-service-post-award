@@ -138,30 +138,31 @@ function getClaimMessages(project: Project, partner: Partner) {
 const ProjectOverviewTiles = ({
   project,
   partner,
+  partners,
   routes,
   user,
   accessControlOptions,
 }: {
   project: Project;
   partner: Partner;
+  partners: Partner[];
   routes: IRoutes;
   user: IClientUser;
   accessControlOptions: IAccessControlOptions;
 }) => {
   const { isLoans } = checkProjectCompetition(project.competitionType);
   const isPmOrMo = project?.roles?.isPm || project?.roles?.isMo;
+  const isMultipleFc = partners.filter(x => x.roles.isFc).length > 1;
   const projectId = project.id;
   const partnerId = partner.id;
 
   let links: ILinks[] = [
     {
       textContent: x => x.pages.projectOverview.claimsLink,
-      link: routes.allClaimsDashboard.getLink({ projectId }),
-      messages: () => getClaimMessages(project, partner),
-    },
-    {
-      textContent: x => x.pages.projectOverview.claimsLink,
-      link: routes.claimsDashboard.getLink({ projectId, partnerId }),
+      link:
+        isPmOrMo || isMultipleFc
+          ? routes.allClaimsDashboard.getLink({ projectId })
+          : routes.claimsDashboard.getLink({ projectId, partnerId }),
       messages: () => getClaimMessages(project, partner),
     },
     {

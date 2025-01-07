@@ -66,7 +66,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
   const isMultipleParticipants = partners.length > 1;
 
   const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
-  const { isFc } = getAuthRoles(project.roles);
+  const { isFc, isPmOrMo } = getAuthRoles(project.roles);
 
   const leadPartner = getLeadPartner(partners);
   const isLeadPartnerFc = leadPartner && getAuthRoles(leadPartner.roles).isFc;
@@ -94,7 +94,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
       </Section>
 
       <Section qa="closed-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
-        {renderPreviousClaimsSections(project, partners, previousClaims, props.routes)}
+        {renderPreviousClaimsSections(project, partners, previousClaims, props.routes, isPmOrMo)}
       </Section>
     </Page>
   );
@@ -239,20 +239,22 @@ const renderPreviousClaimsSections = (
   partners: PartnerType[],
   previousClaims: ClaimType[],
   routes: IRoutes,
+  isPmOrMo: boolean,
 ) => {
-  const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
-
   return (
     <Accordion qa="previous-claims">
-      {grouped.map((x, i) => {
-        const partnerName = getPartnerName(x.partner, true);
+      {partners
+        .filter(x => isPmOrMo || getAuthRoles(x.roles).isFc)
+        .map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }))
+        .map((x, i) => {
+          const partnerName = getPartnerName(x.partner, true);
 
-        return (
-          <AccordionItem key={i} title={partnerName} qa={`accordion-item-${i}`}>
-            {previousClaimsSection(project, x.partner, x.claims, routes)}
-          </AccordionItem>
-        );
-      })}
+          return (
+            <AccordionItem key={i} title={partnerName} qa={`accordion-item-${i}`}>
+              {previousClaimsSection(project, x.partner, x.claims, routes)}
+            </AccordionItem>
+          );
+        })}
     </Accordion>
   );
 };
@@ -317,5 +319,9 @@ export const AllClaimsDashboardRoute = defineRoute({
   accessControl: (auth, { projectId }) =>
     auth
       .forProject(projectId)
-      .hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer, ProjectRolePermissionBits.ProjectManager),
+      .hasAnyRoles(
+        ProjectRolePermissionBits.MonitoringOfficer,
+        ProjectRolePermissionBits.ProjectManager,
+        ProjectRolePermissionBits.FinancialContact,
+      ),
 });

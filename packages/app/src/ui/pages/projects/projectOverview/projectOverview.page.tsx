@@ -64,6 +64,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
       <ProjectOverviewTiles
         project={project}
         partner={highlightedPartner || partners[0]}
+        partners={partners}
         routes={props.routes}
         user={user}
         accessControlOptions={accessControlOptions}
