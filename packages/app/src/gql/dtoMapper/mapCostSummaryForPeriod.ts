@@ -2,6 +2,7 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 // on Acc_CostCategory__C
 type CostsSummaryForPeriodNode = GQL.PartialNode<{
@@ -55,7 +56,7 @@ const mapper: GQL.DtoMapper<
     const offerTotal = this["offerTotal"](node, additionalData);
     const costsClaimedToDate = this["costsClaimedToDate"](node, additionalData);
     const costsClaimedThisPeriod = this["costsClaimedThisPeriod"](node, additionalData);
-    return offerTotal - costsClaimedToDate - costsClaimedThisPeriod;
+    return roundCurrency(offerTotal - costsClaimedToDate - costsClaimedThisPeriod);
   },
 };
 

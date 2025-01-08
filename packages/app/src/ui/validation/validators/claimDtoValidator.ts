@@ -8,6 +8,7 @@ import { Results } from "@ui/validation/results";
 import * as Validation from "@ui/validation/validators/common";
 import { ClaimPcfIarSharedValidatorResult, iarValidation, pcfValidation } from "./shared/claimPcfIarSharedValidator";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 export const claimCommentsMaxLength = 1000;
 
@@ -98,7 +99,9 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
       return Validation.valid(this);
     }
 
-    const remainingOfferCosts = this.details.reduce((total, item) => total + item.remainingOfferCosts, 0);
+    const remainingOfferCosts = roundCurrency(
+      this.details.reduce((total, item) => total + item.remainingOfferCosts, 0),
+    );
 
     return Validation.isPositiveFloat(
       this,

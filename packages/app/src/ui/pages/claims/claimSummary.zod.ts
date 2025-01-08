@@ -1,6 +1,7 @@
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
+import { roundCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import {
   ClaimPcfIarSharedValidatorResult,
@@ -55,7 +56,9 @@ export const getClaimSummarySchema = ({
       button_submit: z.literal("submit"),
       form: z.literal(FormTypes.ClaimSummary),
       status: z.string().superRefine((_, ctx) => {
-        const remainingOfferCosts = claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0);
+        const remainingOfferCosts = roundCurrency(
+          claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
+        );
 
         if (remainingOfferCosts < 0) {
           ctx.addIssue({

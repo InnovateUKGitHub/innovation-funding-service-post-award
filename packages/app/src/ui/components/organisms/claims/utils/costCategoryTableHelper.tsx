@@ -122,11 +122,11 @@ function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): Claim
   for (const item of claimDetails) {
     totalRowCosts = {
       costCategoryId: "" as CostCategoryId,
-      offerTotal: totalRowCosts.offerTotal + item.offerTotal,
-      forecastThisPeriod: totalRowCosts.forecastThisPeriod + item.forecastThisPeriod,
-      costsClaimedToDate: totalRowCosts.costsClaimedToDate + item.costsClaimedToDate,
-      costsClaimedThisPeriod: totalRowCosts.costsClaimedThisPeriod + item.costsClaimedThisPeriod,
-      remainingOfferCosts: totalRowCosts.remainingOfferCosts + item.remainingOfferCosts,
+      offerTotal: roundCurrency(totalRowCosts.offerTotal + item.offerTotal),
+      forecastThisPeriod: roundCurrency(totalRowCosts.forecastThisPeriod + item.forecastThisPeriod),
+      costsClaimedToDate: roundCurrency(totalRowCosts.costsClaimedToDate + item.costsClaimedToDate),
+      costsClaimedThisPeriod: roundCurrency(totalRowCosts.costsClaimedThisPeriod + item.costsClaimedThisPeriod),
+      remainingOfferCosts: roundCurrency(totalRowCosts.remainingOfferCosts + item.remainingOfferCosts),
     };
   }
 

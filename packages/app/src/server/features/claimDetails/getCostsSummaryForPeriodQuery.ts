@@ -4,6 +4,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetFilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { AuthorisedAsyncQueryBase } from "../common/queryBase";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 export class GetCostsSummaryForPeriodQuery extends AuthorisedAsyncQueryBase<CostsSummaryForPeriodDto[]> {
   public readonly runnableName: string = "GetCostsSummaryForPeriodQuery";
@@ -51,7 +52,7 @@ export class GetCostsSummaryForPeriodQuery extends AuthorisedAsyncQueryBase<Cost
           .filter(x => x.Acc_CostCategory__c === costCategory.id && x.Acc_ProjectPeriodNumber__c === this.periodId)
           .map(x => x.Acc_PeriodCostCategoryTotal__c)[0] || 0;
 
-      const remainingOfferCosts = offerTotal - costsClaimedToDate - costsClaimedThisPeriod;
+      const remainingOfferCosts = roundCurrency(offerTotal - costsClaimedToDate - costsClaimedThisPeriod);
 
       return {
         costCategoryId: costCategory.id,
