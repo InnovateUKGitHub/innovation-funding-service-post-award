@@ -59,6 +59,12 @@ export const LoanDrawdownExtensionSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          mapper={({ availabilityPeriodChange, extensionPeriodChange, repaymentPeriodChange, ...data }) => ({
+            ...data,
+            availabilityPeriodChange: Number(availabilityPeriodChange),
+            extensionPeriodChange: Number(extensionPeriodChange),
+            repaymentPeriodChange: Number(repaymentPeriodChange),
+          })}
         >
           <input type="hidden" name="availabilityPeriod" value={pcrItem.availabilityPeriod ?? 0} />
           <input type="hidden" name="extensionPeriod" value={pcrItem.extensionPeriod ?? 0} />
