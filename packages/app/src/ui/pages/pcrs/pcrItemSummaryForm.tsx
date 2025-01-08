@@ -19,12 +19,14 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   handleSubmit,
   watch,
   children,
+  mapper,
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   watch: UseFormWatch<FormValues>;
   children?: ReactNode;
+  mapper?: (values: FormValues) => Partial<FullPCRItemDto>;
 }) => {
   const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit, setMarkedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
@@ -45,7 +47,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
       onSubmit={handleSubmit((data: FormValues) => {
         return onSave({
           data: {
-            ...data,
+            ...(mapper ? mapper(data) : data),
             status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
           },
           context: {
