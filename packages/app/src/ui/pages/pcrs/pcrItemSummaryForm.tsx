@@ -19,14 +19,16 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   handleSubmit,
   watch,
   children,
-  mapper,
+  mapper = x => x, // Default mapper is one2one relationship
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   watch: UseFormWatch<FormValues>;
   children?: ReactNode;
-  mapper?: (values: FormValues) => Partial<FullPCRItemDto>;
+  mapper?: (values: FormValues) => Partial<FullPCRItemDto> & {
+    button_submit?: string | null;
+  };
 }) => {
   const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit, setMarkedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
@@ -47,7 +49,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
       onSubmit={handleSubmit((data: FormValues) => {
         return onSave({
           data: {
-            ...(mapper ? mapper(data) : data),
+            ...mapper(data),
             status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
           },
           context: {
