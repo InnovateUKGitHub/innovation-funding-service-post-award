@@ -177,7 +177,7 @@ class RemovePartner {
   async removePartnerSummary() {
     let i = 0;
     for (const [key, list] of this.summaryData)
-      await this.commands.getListItemFromKey(key, list, 1, false, "name-change-summary-list");
+      await this.commands.getListItemFromKey(key, list, true, false, "name-change-summary-list");
     i++;
   }
 
@@ -192,9 +192,7 @@ class RemovePartner {
   async removePartnerMOSummary(table: DataTable) {
     let data = table.hashes();
     for (const row of data) {
-      let i = 0;
-      await this.commands.getListItemFromKey(row["Section"], row["Content"], 1, false, "name-change-summary-list");
-      i++;
+      await this.commands.getListItemFromKey(row["Section"], row["Content"], true, false, "name-change-summary-list");
     }
   }
 }

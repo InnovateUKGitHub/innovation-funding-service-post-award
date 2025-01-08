@@ -92,7 +92,7 @@ class Validators {
       console.log("Moving forward to the document area again");
       await this.page.getByRole("link").filter({ hasText: access }).click();
       console.log(pcrArea);
-      await this.commands.getListItemFromKey(pcrArea, "Edit", 1, true, "supportingDocuments");
+      await this.commands.getListItemFromKey(pcrArea, "Edit", true, true, "supportingDocuments");
     } else if (loans) {
       await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
       await expect(this.page.getByRole("heading").filter({ hasText: headerAssertion })).toBeVisible();

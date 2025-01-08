@@ -203,7 +203,7 @@ class ProjectDetails {
   @Then("the partner information page is displayed")
   async partnerInfo() {
     for (const [key, item, qa] of this.projectInfoList) {
-      await this.commands.getListItemFromKey(key, item, 1, false, qa);
+      await this.commands.getListItemFromKey(key, item, true, false, qa);
     }
   }
 
@@ -231,7 +231,7 @@ class ProjectDetails {
 
   @Then("the new location is displayed on Partner information page")
   async projectInformationLocation() {
-    await this.commands.getListItemFromKey("Location", this.newPostcode, 1);
+    await this.commands.getListItemFromKey("Location", this.newPostcode, true);
   }
 
   @When("the user navigates back to Project details")

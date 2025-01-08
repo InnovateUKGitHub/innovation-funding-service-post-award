@@ -32,6 +32,7 @@ import { ChangeProjectScope } from "./acc/pages/PCRs/changeScope";
 import { ChangePartnerName } from "./acc/pages/PCRs/changePartnerName";
 import { AccProjectWithoutFC } from "./projectFactory/AccProjectWithoutFC";
 import { AccIsLoaded } from "./acc/AccIsLoaded";
+import { ChangeProjectDuration } from "./acc/pages/PCRs/changeProjectDuration";
 
 type AccFixtures = {
   // Pages
@@ -50,6 +51,7 @@ type AccFixtures = {
   projectDetails: ProjectDetails;
   projectDocuments: ProjectDocuments;
   changePartnerName: ChangePartnerName;
+  changeProjectDuration: ChangeProjectDuration;
 
   // Misc
   accNavigation: AccNavigation;
@@ -117,7 +119,8 @@ export const test = base.extend<AccFixtures, Workers>({
     ),
   changePartnerName: ({ page, commands, projectChangeRequests, accNavigation, validators }, use) =>
     use(new ChangePartnerName({ page, commands, projectChangeRequests, accNavigation, validators })),
-
+  changeProjectDuration: ({ page, commands, projectChangeRequests }, use) =>
+    use(new ChangeProjectDuration({ page, commands, projectChangeRequests })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),

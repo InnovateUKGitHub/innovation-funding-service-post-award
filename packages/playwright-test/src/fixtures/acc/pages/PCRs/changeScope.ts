@@ -143,7 +143,7 @@ class ChangeProjectScope {
     await expect(this.textBox).toHaveValue("This is a project summary");
     await this.textBox.clear();
     await this.saveContinueButton.click();
-    await this.commands.getListItemFromKey("Existing public description", "This is a public description", 1);
+    await this.commands.getListItemFromKey("Existing public description", "This is a public description", true);
     await this.pcr.markAsCompleteSection(true);
   }
 
@@ -201,28 +201,28 @@ class ChangeProjectScope {
     await this.commands.getListItemFromKey(
       "Existing public description",
       "This is a public description",
-      1,
+      true,
       false,
       "currentPublicDescription",
     );
     await this.commands.getListItemFromKey(
       "New public description",
       this.newPublicDescription,
-      1,
+      true,
       false,
       "newPublicDescription",
     );
     await this.commands.getListItemFromKey(
       "Existing project summary",
       "This is a project summary",
-      1,
+      true,
       false,
       "currentProjectSummary",
     );
     await this.commands.getListItemFromKey(
       "New project summary",
       this.newProjectSummary,
-      1,
+      true,
       false,
       "newProjectSummary",
     );
@@ -276,7 +276,7 @@ class ChangeProjectScope {
   async emptySummaryPage() {
     let i = 1;
     for (const [section, content] of this.emptySummary) {
-      await this.commands.getListItemFromKey(section, content, i);
+      await this.commands.getListItemFromKey(section, content, true);
       i++;
     }
   }

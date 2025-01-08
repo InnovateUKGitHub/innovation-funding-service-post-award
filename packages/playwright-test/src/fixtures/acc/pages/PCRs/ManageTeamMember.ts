@@ -495,7 +495,7 @@ class ManageTeamMember {
     ];
 
     for (const [key, item] of data) {
-      await this.commands.getListItemFromKey(key, item, 1);
+      await this.commands.getListItemFromKey(key, item, true);
     }
 
     await this.returnToPcrsButton.isVisible();
@@ -689,10 +689,8 @@ class ManageTeamMember {
       ["Type", "Manage team members"],
       ["Action", actiontype],
     ];
-    let i = 1;
     for (const [key, list] of listData) {
-      await this.commands.getListItemFromKey(key, list, i);
-      i++;
+      await this.commands.getListItemFromKey(key, list, true);
     }
   }
 
@@ -739,7 +737,7 @@ class ManageTeamMember {
     ];
     await expect(this.page.getByRole("heading").filter({ hasText: "Team member being replaced" })).toBeVisible();
     for (const [key, list, qa] of existingData) {
-      await this.commands.getListItemFromKey(key, list, 1, false, qa);
+      await this.commands.getListItemFromKey(key, list, true, false, qa);
     }
   }
 
@@ -765,7 +763,7 @@ class ManageTeamMember {
     ];
     await expect(this.page.getByRole("heading").filter({ hasText: "Team member being invited" })).toBeVisible();
     for (const [key, list, qa] of newData) {
-      await this.commands.getListItemFromKey(key, list, 1, false, qa);
+      await this.commands.getListItemFromKey(key, list, true, false, qa);
     }
   }
   @Then("the PM has logged in and created a PCR")

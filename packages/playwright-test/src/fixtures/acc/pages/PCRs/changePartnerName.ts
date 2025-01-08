@@ -202,7 +202,7 @@ class ChangePartnerName {
       ["Change of name certificate", "testfile.doc"],
     ];
     for (const [key, item] of data) {
-      await this.commands.getListItemFromKey(key, item, 1);
+      await this.commands.getListItemFromKey(key, item, true);
     }
   }
 }

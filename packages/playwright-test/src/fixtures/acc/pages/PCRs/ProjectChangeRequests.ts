@@ -124,7 +124,7 @@ class ProjectChangeRequests {
     await expect(this.requestHeading).toBeVisible();
     await this.page.getByRole("link").filter({ hasText: "Provide reasons to Innovate UK" }).click();
     await this.commands.getByLegend("Mark as complete");
-    await this.commands.getListItemFromKey("Comments", "Edit", 1, true, "comments");
+    await this.commands.getListItemFromKey("Comments", "Edit", true, true, "comments");
     await this.commands.getByLegend("Reasons");
     await this.page.getByRole("textbox").fill(this.pcrReasoning);
     await this.commands.button("Save and continue").click();
@@ -160,7 +160,7 @@ class ProjectChangeRequests {
     ];
     let i = 1;
     for (const [key, list] of submissionList) {
-      await this.commands.getListItemFromKey(key, list, i);
+      await this.commands.getListItemFromKey(key, list, true);
       i++;
     }
 
@@ -193,7 +193,7 @@ class ProjectChangeRequests {
     const data = table.hashes();
     let i = 1;
     for (const row of data) {
-      await this.commands.getListItemFromKey(row["Key"], row["List item"], i);
+      await this.commands.getListItemFromKey(row["Key"], row["List item"], true);
       i++;
     }
   }

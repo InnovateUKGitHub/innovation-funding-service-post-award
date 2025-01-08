@@ -288,7 +288,7 @@ class ApproveNewSubcontractor {
     let i = 0;
     for (const row of data) {
       let lorem = getLorem(Number(row["Lorem"]));
-      await this.commands.getListItemFromKey(row["Field name"], lorem, 1, false, loremQaList[i]);
+      await this.commands.getListItemFromKey(row["Field name"], lorem, true, false, loremQaList[i]);
       i++;
     }
     await expect(this.summaryKey.filter({ hasText: this.isThereRelationship })).toBeVisible();

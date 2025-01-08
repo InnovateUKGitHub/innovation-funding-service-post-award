@@ -88,7 +88,7 @@ class Commands {
   async getListItemFromKey(
     label: string | RegExp,
     item: string | RegExp,
-    divNumber: number,
+    exactMatch: boolean,
     clickable?: boolean,
     qaTag?: string,
   ) {
@@ -98,7 +98,11 @@ class Commands {
       if (clickable) {
         return await qaparent.locator("css=dd").getByRole("link").filter({ hasText: item }).click();
       } else {
-        return await expect(qaparent.locator("css=dd").filter({ hasText: item })).toHaveText(item);
+        if (exactMatch) {
+          return await expect(qaparent.locator("css=dd").filter({ hasText: item })).toHaveText(item);
+        } else {
+          return await expect(qaparent.locator("css=dd").filter({ hasText: item })).toContainText(item);
+        }
       }
     } else {
       const key = this.page.locator("css=dt").nth(0).filter({ hasText: label });
@@ -107,7 +111,11 @@ class Commands {
       if (clickable) {
         return await parent.locator("css=dd").nth(0).getByRole("link").filter({ hasText: item }).click();
       } else {
-        return await expect(parent.locator("css=dd").nth(0).filter({ hasText: item })).toHaveText(item);
+        if (exactMatch) {
+          return await expect(parent.locator("css=dd").nth(0).filter({ hasText: item })).toHaveText(item);
+        } else {
+          return await expect(parent.locator("css=dd").nth(0).filter({ hasText: item })).toContainText(item);
+        }
       }
     }
   }
