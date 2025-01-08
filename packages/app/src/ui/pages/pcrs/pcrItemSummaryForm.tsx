@@ -100,6 +100,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
             <Checkbox
               defaultChecked={pcrItem.status === PCRItemStatus.Complete}
               id="marked-as-complete"
+              disabled={isFetching}
               label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)}
             />
           </CheckboxList>
