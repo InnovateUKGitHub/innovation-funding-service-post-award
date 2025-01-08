@@ -22,7 +22,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   children,
   onUpdate,
   isFetching: isFetchingFromProps,
-  mapper,
+  mapper = x => x, // Default mapper is one2one relationship
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
@@ -31,7 +31,9 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   children?: ReactNode;
   onUpdate?: ({ data, context }: { data: FormValues; context?: { link: ILinkInfo } }) => Promise<void>;
   isFetching?: boolean;
-  mapper?: (values: FormValues) => Partial<FullPCRItemDto>;
+  mapper?: (values: FormValues) => Partial<FullPCRItemDto> & {
+    button_submit?: string | null;
+  };
 }) => {
   const {
     itemId,
@@ -63,7 +65,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
         return onSaveHandler({
           // @ts-expect-error
           data: {
-            ...(mapper ? mapper(data) : data),
+            ...mapper(data),
             status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
           },
           context: {
