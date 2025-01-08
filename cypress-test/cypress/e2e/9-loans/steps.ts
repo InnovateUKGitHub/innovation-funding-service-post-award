@@ -400,6 +400,7 @@ export const markAndContinue = () => {
   cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change.").check();
   cy.submitButton("Save and return to request").click();
+  cy.heading("Request");
 };
 
 export const currentLoanTable = () => {
@@ -493,6 +494,7 @@ export const loanDurationGuidance = () => {
 export const markAndReturn = () => {
   cy.getByLabel("I agree with this change").click();
   cy.submitButton("Save and return to request").click();
+  cy.heading("Request");
 };
 
 export const assertForMissingPcr = () => {
