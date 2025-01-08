@@ -28,7 +28,8 @@ class ProjectDetails {
   private readonly fc2Email: string;
   private readonly fc2Details: Array<[string, string]>;
   private readonly changeGuidance: Locator;
-  private readonly grantsEmail: Locator;
+  private readonly changeLink: Locator;
+  private readonly changeGuidanceEnd: Locator;
   private readonly otherContactsHeading: Locator;
   private readonly otherContactsGuidance: Locator;
   private readonly partnerInfoHeading: Locator;
@@ -86,10 +87,11 @@ class ProjectDetails {
       ["Partner", "Hedge's Secondary Ltd."],
       ["Email", this.fc2Email],
     ];
-    this.changeGuidance = this.page
-      .getByRole("paragraph")
-      .filter({ hasText: "If you need to change the lead project manager or finance contact, please email " });
-    this.grantsEmail = this.page.getByRole("link").filter({ hasText: "grants_service@iuk.ukri.org" });
+    this.changeGuidance = this.page.getByRole("paragraph").filter({
+      hasText: "If you need to change the lead project manager or finance contact, submit a 'Manage team members' ",
+    });
+    this.changeLink = this.page.getByRole("link").filter({ hasText: "project change request" });
+    this.changeGuidanceEnd = this.page.getByRole("paragraph").filter({ hasText: "(PCR)" });
     this.otherContactsHeading = this.page.getByRole("heading").filter({ hasText: "Other contacts" });
     this.otherContactsGuidance = this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." });
     this.partnerInfoHeading = this.page.getByRole("heading").filter({ hasText: "Partner information" });
@@ -171,20 +173,22 @@ class ProjectDetails {
     await expect(this.fcHeading).toBeVisible();
     await expect(this.fcGuidance).toBeVisible();
     await this.checkTableDetails("finance-contact-details", 1, this.fcDetails);
-
     await this.checkTableDetails("finance-contact-details", 2, this.fc2Details);
-
-    await expect(this.changeGuidance).toBeVisible();
-    await expect(this.grantsEmail).toBeVisible();
     await expect(this.otherContactsHeading).toBeVisible();
     await expect(this.otherContactsGuidance).toBeVisible();
     await expect(this.partnerInfoHeading).toBeVisible();
     if (user === "Finance Contact") {
       await this.checkTableDetails("partner-information", 1, this.partnerInfoDetailsFc);
       await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsFc);
+      await expect(this.changeGuidance).not.toBeVisible();
+      await expect(this.changeLink).not.toBeVisible();
+      await expect(this.changeGuidanceEnd).not.toBeVisible();
     } else if (user === "Project Manager") {
       await this.checkTableDetails("partner-information", 1, this.partnerInfoDetailsPmMO);
       await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsPmMo);
+      await expect(this.changeGuidance).toBeVisible();
+      await expect(this.changeLink).toBeVisible();
+      await expect(this.changeGuidanceEnd).toBeVisible();
     }
     await expect(this.projectInfoHeading).toBeVisible();
     await this.checkDataList();
@@ -260,6 +264,19 @@ class ProjectDetails {
   @Then("the postcode character limit is validated")
   async postCodeValidation() {
     await expect(this.postCodeValMsg).toBeVisible();
+  }
+
+  @When("the user clicks the Manage team members hyperlink")
+  async clickManage() {
+    await this.changeLink.click();
+  }
+
+  @Then("the user will be taken to the Manage team members page")
+  async manageTeamMembersLoaded() {
+    const headings = ["Manage team members", "Project manager", "Finance contacts"];
+    for (const heading of headings) {
+      await expect(this.page.getByRole("heading").filter({ hasText: heading })).toBeVisible();
+    }
   }
 
   /**

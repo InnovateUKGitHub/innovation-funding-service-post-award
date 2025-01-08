@@ -14,6 +14,9 @@ Feature: Project details
         When the user selects the "Project details" tile
         Then Project details will be displayed with correct information for "Project Manager"
 
+        When the user clicks the Manage team members hyperlink
+        Then the user will be taken to the Manage team members page
+
     Scenario: Updating the project location postcode
         Given a multi-partner CR&D project exists
         And the user is the "mainFcUser" user
