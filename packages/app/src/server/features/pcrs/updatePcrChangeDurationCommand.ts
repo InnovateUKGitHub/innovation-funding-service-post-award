@@ -14,27 +14,23 @@ export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBas
 > {
   public readonly runnableName: string = "UpdatePcrChangeDurationCommand";
   protected readonly projectId: ProjectId;
-  private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: ChangeDurationFormType;
   protected readonly dto: PcrChangeDurationDto;
 
   constructor({
     projectId,
-    pcrId,
     pcrItemId,
     pcr,
     form,
   }: {
     projectId: ProjectId;
-    pcrId: PcrId;
     pcrItemId: PcrItemId;
     pcr: PcrChangeDurationDto;
     form: ChangeDurationFormType;
   }) {
     super();
     this.projectId = projectId;
-    this.pcrId = pcrId;
     this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;

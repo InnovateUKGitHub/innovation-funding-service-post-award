@@ -44,7 +44,6 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       Context,
       {
         projectId: ProjectId;
-        pcrId: PcrId;
         pcrItemId: PcrItemId;
         pcr: PcrChangeDurationDto;
       }
@@ -196,7 +195,6 @@ class Controller
       "server",
       {
         projectId: ProjectId;
-        pcrId: PcrId;
         pcrItemId: PcrItemId;
         pcr: PcrChangeDurationDto;
       }
@@ -207,7 +205,6 @@ class Controller
     await context.runCommand(
       new UpdatePcrChangeDurationCommand({
         projectId: params.projectId,
-        pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,
         pcr: params.pcr,
         form: params.pcr.form,
