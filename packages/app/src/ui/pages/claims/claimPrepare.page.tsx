@@ -38,9 +38,10 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
   const { isFc, isPm } = getAuthRoles(data.project.roles);
   const { isLoans } = checkProjectCompetition(data.project.competitionType);
 
-  const backLink = isPm
-    ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
-    : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
+  const backLink =
+    isPm || data.project.partnerRoles.filter(x => x.isFc).length > 1
+      ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
+      : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
 
   return (
     <Page

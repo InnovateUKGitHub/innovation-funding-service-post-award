@@ -40,6 +40,7 @@ export const useClaimSummaryData = (
     "id",
     "competitionType",
     "roles",
+    "partnerRoles",
     "impactManagementParticipation",
     "isNonFec",
     "monitoringLevel",

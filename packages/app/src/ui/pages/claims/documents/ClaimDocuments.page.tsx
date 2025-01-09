@@ -250,7 +250,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           styling="SecondaryButton"
           id="save-claim"
           route={
-            project.roles.isPm || project.roles.isMo
+            project.roles.isPm || project.roles.isMo || project.partnerRoles.filter(x => x.isFc).length > 1
               ? props.routes.allClaimsDashboard.getLink({ projectId })
               : props.routes.claimsDashboard.getLink({ projectId, partnerId })
           }

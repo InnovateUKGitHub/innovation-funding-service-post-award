@@ -99,6 +99,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
     projectId,
     partnerId,
     refresh,
+    canViewAllClaims: isPm || project.partnerRoles.filter(x => x.isFc).length > 1,
   });
 
   useEffect(() => {

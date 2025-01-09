@@ -94,6 +94,11 @@ export class Authorisation {
     return new RoleChecker(roles);
   }
 
+  public allPartnerForProject(projectId: ProjectId): [string, RoleChecker][] {
+    const roles = this.getAllPartnerRolesForProject(projectId);
+    return Object.entries(roles).map(([key, value]) => [key, new RoleChecker(value)]);
+  }
+
   private getRolesForPartner(projectId: ProjectId, partnerId: PartnerId | LinkedEntityId) {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
@@ -109,6 +114,14 @@ export class Authorisation {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
       return project.projectRoles;
+    }
+    return ProjectRolePermissionBits.Unknown;
+  }
+
+  private getAllPartnerRolesForProject(projectId: ProjectId) {
+    const project = this.permissions[projectId];
+    if (project) {
+      return project.partnerRoles;
     }
     return ProjectRolePermissionBits.Unknown;
   }

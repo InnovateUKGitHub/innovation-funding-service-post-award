@@ -66,9 +66,10 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
 
   const { isPmOrMo } = getAuthRoles(data.project.roles);
 
-  const updateLink = isPmOrMo
-    ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
-    : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
+  const updateLink =
+    isPmOrMo || data.project.partnerRoles.filter(x => x.isFc).length > 1
+      ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
+      : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
 
   const { onUpdate, apiError, isFetching } = useOnUpdateClaimSummary(
     props.partnerId,

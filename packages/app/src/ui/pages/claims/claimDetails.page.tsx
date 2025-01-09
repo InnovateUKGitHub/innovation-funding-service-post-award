@@ -90,9 +90,11 @@ interface ClaimData {
 export const ClaimsDetailsPage = (props: Params & BaseProps) => {
   const data = useClaimDetailsPageData(props.projectId, props.partnerId, props.periodId);
   const { isPmOrMo, isFc } = getAuthRoles(data.project.roles);
-  const backLink = isPmOrMo
-    ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
-    : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
+  const isMultipleFc = data.project.partnerRoles.filter(x => x.isFc).length > 1;
+  const backLink =
+    isPmOrMo || isMultipleFc
+      ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
+      : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
 
   return (
     <Page

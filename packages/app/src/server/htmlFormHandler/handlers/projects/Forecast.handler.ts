@@ -89,9 +89,15 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
           periodId: params.periodId as PeriodId,
         }).path;
       case FormTypes.ClaimForecastSaveAndQuit:
-        // if pm as well as fc then go to all claims route
-        const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
-        if (roles.hasRole(ProjectRolePermissionBits.ProjectManager)) {
+        // if pm as well as multi fc then go to all claims route
+        const roles = await context.runQuery(new GetAllProjectRolesForUser());
+        const projectRoles = roles.forProject(params.projectId);
+        const partnerRoles = roles.allPartnerForProject(params.projectId);
+
+        if (
+          projectRoles.hasRole(ProjectRolePermissionBits.ProjectManager) ||
+          partnerRoles.filter(([, roles]) => roles.hasRole(ProjectRolePermissionBits.FinancialContact)).length > 1
+        ) {
           return AllClaimsDashboardRoute.getLink({
             projectId: input.projectId,
           }).path;

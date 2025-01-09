@@ -70,7 +70,10 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   const routes = useRoutes();
   const { getContent } = useContent();
 
-  const { onUpdate, isFetching, apiError } = useOnInitialForecastUpdate({ projectId, partnerId });
+  const { onUpdate, isFetching, apiError } = useOnInitialForecastUpdate({
+    projectId,
+    partnerId,
+  });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<SetupSpendProfileSchemaType>>(setError, formState.errors);
