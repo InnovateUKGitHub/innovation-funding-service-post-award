@@ -47,6 +47,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       {
         projectId: ProjectId;
         pcrItemId: PcrItemId;
+        pcrId: PcrId;
         pcr: PcrChangeDurationDto;
       }
     >,

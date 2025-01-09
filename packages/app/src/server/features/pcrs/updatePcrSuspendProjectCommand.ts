@@ -13,6 +13,10 @@ import {
   ProjectSuspensionSummarySchema,
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { combineDate } from "@ui/components/atoms/Date";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { Clock } from "@framework/util/clock";
+
+const clock = new Clock();
 
 const isSummaryData = (
   data: z.output<ProjectSuspensionSchema> | z.output<ProjectSuspensionSummarySchema>,
@@ -29,14 +33,12 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
 > {
   public readonly runnableName: string = "UpdatePcrSuspendProjectCommand";
   protected readonly projectId: ProjectId;
-  private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: SuspendProjectFormType;
   protected readonly dto: PcrSuspendProjectDto;
 
   constructor({
     projectId,
-    pcrId,
     pcrItemId,
     pcr,
     form,
@@ -49,7 +51,6 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
   }) {
     super();
     this.projectId = projectId;
-    this.pcrId = pcrId;
     this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;
@@ -74,7 +75,7 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
         projectStartDate: new Date(this.dto.projectStartDate),
         projectEndDate: new Date(this.dto.projectEndDate),
         markedAsComplete: this.dto.markedAsComplete ?? false,
-        suspensionStartData_month: this.dto.suspensionStartDate_month,
+        suspensionStartDate_month: this.dto.suspensionStartDate_month,
         suspensionStartDate_year: this.dto.suspensionStartDate_year,
         suspensionEndDate_month: this.dto.suspensionEndDate_month,
         suspensionEndDate_year: this.dto.suspensionEndDate_year,
@@ -96,29 +97,20 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
     validatedData: z.output<ProjectSuspensionSchema> | z.output<ProjectSuspensionSummarySchema>,
   ): Promise<boolean> {
     if (isStepData(validatedData)) {
-      await context.repositories.projectChangeRequests.updateSingleItem({
-        id: this.pcrItemId,
-        projectId: this.projectId,
-        pcrId: this.pcrId,
-        status: this.dto.status,
-        suspensionStartDate: combineDate(
-          validatedData.suspensionStartDate_month,
-          validatedData.suspensionStartDate_year,
-          true,
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_SuspensionStarts__c: clock.formatOptionalSalesforceDate(
+          combineDate(validatedData.suspensionStartDate_month, validatedData.suspensionStartDate_year, true),
         ),
-        suspensionEndDate: combineDate(
-          validatedData.suspensionEndDate_month,
-          validatedData.suspensionEndDate_year,
-          false,
+        Acc_SuspensionEnds__c: clock.formatOptionalSalesforceDate(
+          combineDate(validatedData.suspensionEndDate_month, validatedData.suspensionEndDate_year, false),
         ),
       });
     } else if (isSummaryData(validatedData)) {
-      await context.repositories.projectChangeRequests.updateSingleItem({
-        id: this.pcrItemId,
-        projectId: this.projectId,
-        pcrId: this.pcrId,
-        status: this.dto.status,
-        suspensionStartDate: validatedData.suspensionStartDate,
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
       });
     }
     return true;
