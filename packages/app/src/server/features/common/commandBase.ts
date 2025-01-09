@@ -30,6 +30,7 @@ export abstract class ZodAuthorisedAsyncCommandBase<
     | z.ZodDiscriminatedUnion<string, z.ZodObject<ZodRawShape>[]>,
   Dto extends AnyObject,
 > extends AuthorisedAsyncCommandBase<T> {
+  protected shouldSkipIsActiveCheck = false;
   protected abstract readonly dto: Dto;
   protected abstract getZodSchema(context: IContext): Promise<{ schema: Schema; errorMap: z.ZodErrorMap }>;
   protected abstract readonly projectId: ProjectId;
@@ -43,8 +44,10 @@ export abstract class ZodAuthorisedAsyncCommandBase<
 
   protected async run(context: IContext): Promise<T> {
     try {
-      const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
-      if (!isProjectActive) throw new InActiveProjectError();
+      if (!this.shouldSkipIsActiveCheck) {
+        const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+        if (!isProjectActive) throw new InActiveProjectError();
+      }
 
       const { schema, errorMap } = await this.getZodSchema(context);
       const data = await this.mapToZod(context);
