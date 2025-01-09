@@ -20,7 +20,6 @@ import {
   UpdatePcrItemEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
-import { configuration } from "@server/features/common/config";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { mapToSalesforcePCRManageTeamMemberType, mapProjectRoleToName } from "@framework/mappers/pcr";
@@ -30,6 +29,9 @@ export interface IProjectChangeRequestRepository {
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   updateSingleItem(item: UpdatePcrItemEntity): Promise<void>;
+  updateSingleSalesforceItem: (
+    item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">,
+  ) => Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
   getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
@@ -407,6 +409,10 @@ export class ProjectChangeRequestRepository
     });
   }
 
+  async updateSingleSalesforceItem(item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">) {
+    await super.updateItem(item);
+  }
+
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
     let headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
@@ -525,18 +531,13 @@ export class ProjectChangeRequestRepository
       Acc_Email__c: x.manageTeamMemberEmail,
       Acc_Role__c: mapProjectRoleToName(x.manageTeamMemberRole),
       Acc_Start_Date__c: this.toOptionalSFDate(x.manageTeamMemberAssociateStartDate),
-
-      ...(configuration.features.approveNewSubcontractor
-        ? {
-            // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
-            Relationship_between_partners__c: x.subcontractorRelationship ?? false,
-            Relationship_justification__c: x.subcontractorRelationshipJustification,
-            Country_where_work_will_be_carried_out__c: x.subcontractorLocation,
-            Role_in_the_project__c: x.subcontractorDescription,
-            Cost_of_work__c: x.subcontractorCost,
-            Justification__c: x.subcontractorJustification,
-          }
-        : {}),
+      // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
+      Relationship_between_partners__c: x.subcontractorRelationship ?? false,
+      Relationship_justification__c: x.subcontractorRelationshipJustification,
+      Country_where_work_will_be_carried_out__c: x.subcontractorLocation,
+      Role_in_the_project__c: x.subcontractorDescription,
+      Cost_of_work__c: x.subcontractorCost,
+      Justification__c: x.subcontractorJustification,
     };
   }
 }
