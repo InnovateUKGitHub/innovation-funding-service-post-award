@@ -386,6 +386,6 @@ export interface PcrRemovePartnerDto extends PcrDtoCommon {
 export type ChangeDurationFormType = FormTypes.PcrChangeDurationStep | FormTypes.PcrChangeDurationSummary;
 
 export interface PcrChangeDurationDto extends PcrDtoCommon {
-  offsetMonths: number;
+  timeExtension: string;
   form: ChangeDurationFormType;
 }

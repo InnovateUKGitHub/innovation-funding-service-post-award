@@ -99,7 +99,7 @@ export const TimeExtensionStep = () => {
 
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data: { ...data, offsetMonths: newOffset }, context: { link: nextLink } });
+          onSave({ data, context: { link: nextLink } });
         })}
       >
         <input type="hidden" name="form" value={FormTypes.PcrChangeDurationStep} />

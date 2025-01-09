@@ -5,6 +5,7 @@ import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { pcrTimeExtensionSchema, TimeExtensionSchema, errorMap } from "@ui/pages/pcrs/timeExtension/timeExtension.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -52,7 +53,7 @@ export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBas
   protected async mapToZod() {
     return {
       markedAsComplete: this.dto.markedAsComplete ?? false,
-      timeExtension: String(this.dto.offsetMonths),
+      timeExtension: this.dto.timeExtension,
       form: this.form,
     };
   }
@@ -61,12 +62,10 @@ export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBas
     context: IContext,
     validatedData: z.output<TimeExtensionSchema>,
   ): Promise<boolean> {
-    await context.repositories.projectChangeRequests.updateSingleItem({
-      id: this.pcrItemId,
-      projectId: this.projectId,
-      pcrId: this.pcrId,
-      status: this.dto.status,
-      offsetMonths: Number(validatedData.timeExtension),
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: this.pcrItemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_AdditionalNumberofMonths__c: Number(validatedData.timeExtension),
     });
 
     return true;
