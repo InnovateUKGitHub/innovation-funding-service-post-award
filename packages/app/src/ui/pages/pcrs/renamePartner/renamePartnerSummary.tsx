@@ -15,7 +15,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const RenamePartnerSummary = () => {
-  const { projectId, itemId, fetchKey, displayCompleteForm, pcrId } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem, partners, documents } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
   const multiplePartnerProject = partners.length > 1;
@@ -76,9 +76,6 @@ export const RenamePartnerSummary = () => {
           pcrItem={pcrItem}
         >
           <input type="hidden" value={FormTypes.PcrRenamePartnerSummary} {...register("form")} />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
         </PcrItemSummaryForm>
       )}
     </PcrPage>

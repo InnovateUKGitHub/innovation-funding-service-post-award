@@ -12,6 +12,7 @@ import {
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { zodEmptySchema, ZodEmptySchema } from "@ui/zod/helperValidators/helperValidators.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -83,11 +84,11 @@ export class UpdatePcrRenamePartnerCommand extends ZodAuthorisedAsyncCommandBase
       return true;
     }
 
-    await context.repositories.projectChangeRequests.updateSingleItem({
-      id: this.pcrItemId,
-      status: this.dto.status,
-      ...validatedData,
-      pcrId: this.pcrId,
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: this.pcrItemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_NewOrganisationName__c: validatedData.accountName,
+      Acc_Project_Participant__c: validatedData.partnerId,
     });
 
     return true;

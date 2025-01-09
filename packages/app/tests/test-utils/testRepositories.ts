@@ -88,7 +88,7 @@ import {
   IProfileTotalCostCategoryRepository,
   ISalesforceProfileTotalCostCategory,
 } from "@server/repositories/profileTotalCostCategoryRepository";
-import { IProjectChangeRequestRepository } from "@server/repositories/projectChangeRequestRepository";
+import { IProjectChangeRequestRepository, ISalesforcePCR } from "@server/repositories/projectChangeRequestRepository";
 import {
   ICreateProjectChangeRequestStatusChange,
   IProjectChangeRequestStatusChangeRepository,
@@ -835,6 +835,13 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateSingleItem(_item: UpdatePcrItemEntity): Promise<void> {
+    return Promise.resolve();
+  }
+
+  updateSingleSalesforceItem(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">,
+  ): Promise<void> {
     return Promise.resolve();
   }
 

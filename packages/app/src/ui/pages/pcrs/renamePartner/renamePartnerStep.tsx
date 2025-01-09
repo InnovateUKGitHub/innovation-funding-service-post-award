@@ -28,7 +28,6 @@ export const RenamePartnerStep = () => {
   const {
     projectId,
     itemId,
-    pcrId,
     fetchKey,
     getRequiredToCompleteMessage,
     onSave,
@@ -47,9 +46,6 @@ export const RenamePartnerStep = () => {
         partnerId: pcrItem.partnerId as string,
         form: FormTypes.PcrRenamePartnerStep,
         existingAccountName: partners.find(x => x.id === pcrItem.partnerId)?.name ?? "",
-        pcrItemId: itemId,
-        projectId,
-        pcrId,
       },
       resolver: zodResolver(renamePartnerSchema, {
         errorMap: renamePartnerErrorMap,
@@ -85,9 +81,6 @@ export const RenamePartnerStep = () => {
           })}
         >
           <input type="hidden" name="form" value={FormTypes.PcrRenamePartnerStep} />
-          <input type="hidden" name="projectId" value={projectId} />
-          <input type="hidden" name="pcrId" value={pcrId} />
-          <input type="hidden" name="pcrItemId" value={itemId} />
 
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrNameChange.headingSelectPartner)}</Legend>

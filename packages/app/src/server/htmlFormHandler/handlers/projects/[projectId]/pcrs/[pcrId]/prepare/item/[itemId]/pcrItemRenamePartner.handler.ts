@@ -45,9 +45,6 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
 
     return {
       form: input.form,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       partnerId: input.partnerId ?? null,
       accountName: input.accountName,
       markedAsComplete: input.markedAsComplete === "on",
@@ -62,18 +59,18 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
   }: {
     input: z.output<RenamePartnerSchema>;
     context: IContext;
-    params: { step?: number };
+    params: ProjectChangeRequestPrepareItemParams & { step?: number };
   }): Promise<string> {
     await context.runCommand(
       new UpdatePCRCommand({
-        projectId: input.projectId,
-        projectChangeRequestId: input.pcrId,
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
         pcr: {
-          projectId: input.projectId,
-          id: input.pcrId,
+          projectId: params.projectId,
+          id: params.pcrId,
           items: [
             {
-              id: input.pcrItemId,
+              id: params.itemId,
               accountName: input.accountName,
               partnerId: input.partnerId,
               ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
@@ -84,9 +81,9 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
     );
 
     return PCRPrepareItemRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      itemId: input.pcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      itemId: params.itemId,
       step: isNil(params.step) ? undefined : Number(params.step) + 1,
     }).path;
   }

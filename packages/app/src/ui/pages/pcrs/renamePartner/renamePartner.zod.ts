@@ -4,9 +4,6 @@ import {
   emptyStringToNullValidation,
   evaluateObject,
   partnerIdValidation,
-  pcrIdValidation,
-  pcrItemIdValidation,
-  projectIdValidation,
 } from "@ui/zod/helperValidators/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
@@ -25,9 +22,6 @@ export const renamePartnerSchema = evaluateObject((data: { markedAsComplete: boo
   }),
   partnerId: data.markedAsComplete ? partnerIdValidation : z.union([emptyStringToNullValidation, partnerIdValidation]),
   form: z.union([z.literal(FormTypes.PcrRenamePartnerSummary), z.literal(FormTypes.PcrRenamePartnerStep)]),
-  projectId: projectIdValidation,
-  pcrId: pcrIdValidation,
-  pcrItemId: pcrItemIdValidation,
 })).superRefine((data, ctx) => {
   if (data.partnerId) {
     if (data.existingAccountName === data.accountName) {
