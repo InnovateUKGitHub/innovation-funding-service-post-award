@@ -90,7 +90,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
       <Messages messages={props.messages} />
 
       <Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
-        {renderCurrentClaimsPerPeriod(currentClaims, project, partners, props.routes)}
+        {renderCurrentClaimsPerPeriod(currentClaims, project, partners, props.routes, isPmOrMo)}
       </Section>
 
       <Section qa="closed-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
@@ -115,10 +115,16 @@ const renderGuidanceMessage = (isContractsForInnovation: boolean, partners: Part
   return <ClaimsDashboardGuidance overdueProject={!!isCurrentOverduePartner?.overdueProject} />;
 };
 
-const groupClaimsByPeriod = (claims: ClaimType[]) => {
-  const distinctPeriods = [...new Set(claims.map(x => x.periodId))].sort((a, b) => a - b);
+const groupClaimsByPeriod = (claims: ClaimType[], partners: PartnerType[], isPmOrMo: boolean) => {
+  const visibleClaims = claims.filter(
+    x => isPmOrMo || partners.some(y => x.partnerId === y.id && getAuthRoles(y.roles).isFc),
+  );
+  const distinctPeriods = [...new Set(visibleClaims.map(x => x.periodId))].sort((a, b) => a - b);
   return distinctPeriods.map(period => {
-    const periodClaims = claims.filter(x => x.periodId === period);
+    const periodClaims = visibleClaims.filter(
+      x =>
+        x.periodId === period && (isPmOrMo || partners.some(y => x.partnerId === y.id && getAuthRoles(y.roles).isFc)),
+    );
     return {
       periodId: period,
       claims: periodClaims,
@@ -133,8 +139,9 @@ const renderCurrentClaimsPerPeriod = (
   project: ProjectType,
   partners: PartnerType[],
   routes: IRoutes,
+  isPmOrMo: boolean,
 ) => {
-  const groupedClaims = groupClaimsByPeriod(claims);
+  const groupedClaims = groupClaimsByPeriod(claims, partners, isPmOrMo);
   if (groupedClaims.length === 0) {
     if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
       return (
