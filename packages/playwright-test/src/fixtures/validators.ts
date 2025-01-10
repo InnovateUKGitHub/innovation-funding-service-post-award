@@ -87,7 +87,7 @@ class Validators {
       await expect(this.page.getByRole("heading").filter({ hasText: headerAssertion })).toBeVisible();
       const validation = this.page.getByTestId("validation-message-content");
       if (main.filter({ has: validation }).isVisible()) {
-        expect(this.page.getByText("has been uploaded")).not.toBeVisible();
+        await expect(this.page.getByText("has been uploaded")).not.toBeVisible();
       }
       console.log("Moving forward to the document area again");
       await this.page.getByRole("link").filter({ hasText: access }).click();
@@ -97,7 +97,7 @@ class Validators {
       await this.commands.backLink(`Back to ${backLinkSuffix}`).click();
       await expect(this.page.getByRole("heading").filter({ hasText: headerAssertion })).toBeVisible();
       if (main.filter({ has: validation }).isVisible()) {
-        expect(this.page.getByText("has been uploaded")).not.toBeVisible();
+        await expect(this.page.getByText("has been uploaded")).not.toBeVisible();
       }
       console.log("Moving forward to the document area again");
       await this.commands.clickOn(access);
@@ -128,7 +128,7 @@ class Validators {
     await this.uploadTriggerValidation("Biggun.txt", "The selected file must be no larger than 32MB.", true);
     console.log("Creating 3 separate larger files");
     for (const doc of this.commands.largerDocs) {
-      this.commands.createTestFile(`${doc}`, 11);
+      await this.commands.createTestFile(`${doc}`, 11);
     }
     if (docType) {
       await this.docTypeDropdown(docType);
