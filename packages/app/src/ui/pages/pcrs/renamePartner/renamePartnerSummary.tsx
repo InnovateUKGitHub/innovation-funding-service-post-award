@@ -4,7 +4,7 @@ import { DocumentList } from "@ui/components/organisms/documents/DocumentList/Do
 import { Section } from "@ui/components/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
+import { useOnUpdateRenamePartner, useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { useForm } from "react-hook-form";
 import { RenamePartnerSchemaType, renamePartnerErrorMap, renamePartnerSchema } from "./renamePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +34,8 @@ export const RenamePartnerSummary = () => {
   });
 
   const validationErrors = useZodErrors(setError, formState.errors);
+
+  const { onUpdate, isFetching } = useOnUpdateRenamePartner();
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -74,6 +76,8 @@ export const RenamePartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" value={FormTypes.PcrRenamePartnerSummary} {...register("form")} />
         </PcrItemSummaryForm>

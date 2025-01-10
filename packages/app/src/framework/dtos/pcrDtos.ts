@@ -340,10 +340,6 @@ export type FullPCRItemDto = {
 export type PCRTypeWithoutBase<T> = Omit<T, Exclude<keyof PCRItemBaseDto, "type">>;
 
 interface PcrDtoCommon {
-  pcrItemId: PcrItemId;
-  pcrId: PcrId;
-  projectId: ProjectId;
-  type: PCRItemType;
   status?: PCRItemStatus;
   markedAsComplete?: boolean;
 }
@@ -365,9 +361,9 @@ export type RenamePartnerFormType =
   | FormTypes.PcrRenamePartnerFilesStep;
 
 export interface PcrRenamePartnerDto extends PcrDtoCommon {
-  accountName: string;
-  existingAccountName: string;
-  partnerId: PartnerId;
+  accountName: string | null;
+  existingAccountName: string | null;
+  partnerId: PartnerId | null;
   form: RenamePartnerFormType;
 }
 
@@ -377,9 +373,9 @@ export type RemovePartnerFormType =
   | FormTypes.PcrRemovePartnerFilesStep;
 
 export interface PcrRemovePartnerDto extends PcrDtoCommon {
-  numberOfPeriods: number;
-  removalPeriod: number;
-  partnerId: PartnerId;
+  numberOfPeriods: number | null;
+  removalPeriod: number | null;
+  partnerId: PartnerId | null;
   form: RemovePartnerFormType;
 }
 
@@ -393,13 +389,13 @@ export interface PcrChangeDurationDto extends PcrDtoCommon {
 export type SuspendProjectFormType = FormTypes.PcrProjectSuspensionStep | FormTypes.PcrProjectSuspensionSummary;
 
 export interface PcrSuspendProjectDto extends PcrDtoCommon {
-  suspensionStartDate: Date;
-  suspensionEndDate: Date;
+  suspensionStartDate: Date | null;
+  suspensionEndDate: Date | null;
   suspensionStartDate_month: string;
   suspensionStartDate_year: string;
   suspensionEndDate_month: string;
   suspensionEndDate_year: string;
-  projectStartDate: Date;
-  projectEndDate: Date;
+  projectStartDate: Date | null;
+  projectEndDate: Date | null;
   form: SuspendProjectFormType;
 }

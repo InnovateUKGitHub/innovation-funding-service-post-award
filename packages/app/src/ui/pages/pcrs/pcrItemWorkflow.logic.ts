@@ -8,15 +8,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import {
-  FullPCRItemDto,
-  PcrChangeDurationDto,
-  PCRDto,
-  PcrRemovePartnerDto,
-  PcrRenamePartnerDto,
-  PcrScopeChangeDto,
-  PcrSuspendProjectDto,
-} from "@framework/dtos/pcrDtos";
+import { FullPCRItemDto, PCRDto, PcrRemovePartnerDto, PcrRenamePartnerDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
@@ -98,17 +90,11 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
 
   const { clearMessages } = useMessageContext();
 
-  type SubmitData = T extends PCRItemType.ScopeChange
-    ? PcrScopeChangeDto
-    : T extends PCRItemType.AccountNameChange
-      ? PcrRenamePartnerDto
-      : T extends PCRItemType.PartnerWithdrawal
-        ? PcrRemovePartnerDto
-        : T extends PCRItemType.TimeExtension
-          ? PcrChangeDurationDto
-          : T extends PCRItemType.ProjectSuspension | PCRItemType.ProjectTermination
-            ? PcrSuspendProjectDto
-            : Partial<FullPCRItemDto & { form: FormTypes }>;
+  type SubmitData = T extends PCRItemType.AccountNameChange
+    ? PcrRenamePartnerDto
+    : T extends PCRItemType.PartnerWithdrawal
+      ? PcrRemovePartnerDto
+      : Partial<FullPCRItemDto & { form: FormTypes }>;
 
   /**
    * on success callback for every pcr update
@@ -121,38 +107,6 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
     clearMessages();
     setFetchKey(k => k + 1);
     navigate(context?.link?.path ?? "");
-  }
-
-  if (pcrType === PCRItemType.ScopeChange) {
-    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
-      req: data =>
-        clientsideApiClient.pcrs.scopeChange({
-          projectId,
-          pcrId,
-          pcrItemId,
-          pcr: {
-            ...(data as PcrScopeChangeDto),
-            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        }),
-      onSuccess,
-    });
-  }
-
-  if (pcrType === PCRItemType.ProjectSuspension || pcrType === PCRItemType.ProjectTermination) {
-    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
-      req: data =>
-        clientsideApiClient.pcrs.suspendProject({
-          projectId,
-          pcrId,
-          pcrItemId,
-          pcr: {
-            ...(data as PcrSuspendProjectDto),
-            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        }),
-      onSuccess,
-    });
   }
 
   if (pcrType === PCRItemType.AccountNameChange) {
@@ -180,22 +134,6 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
           pcrItemId,
           pcr: {
             ...(data as PcrRemovePartnerDto),
-            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        }),
-      onSuccess,
-    });
-  }
-
-  if (pcrType === PCRItemType.TimeExtension) {
-    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
-      req: data =>
-        clientsideApiClient.pcrs.changeDuration({
-          projectId,
-          pcrId,
-          pcrItemId,
-          pcr: {
-            ...(data as PcrChangeDurationDto),
             ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
           },
         }),

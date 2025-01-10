@@ -5,7 +5,7 @@ import { ShortDateRangeFromDuration, Months } from "@ui/components/atoms/Date";
 import { useMounted } from "@ui/context/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import React from "react";
-import { usePcrTimeExtensionWorkflowQuery, generateOptions } from "./timeExtension.logic";
+import { usePcrTimeExtensionWorkflowQuery, generateOptions, useOnUpdateTimeExtension } from "./timeExtension.logic";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
@@ -29,8 +29,7 @@ export const TimeExtensionStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const { projectId, itemId, onSave, config, isFetching, fetchKey, markedAsCompleteHasBeenChecked } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, config, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -71,6 +70,8 @@ export const TimeExtensionStep = () => {
     }),
   });
 
+  const { onUpdate, isFetching } = useOnUpdateTimeExtension();
+
   const newOffset = Number(watch("timeExtension"));
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
@@ -99,7 +100,7 @@ export const TimeExtensionStep = () => {
 
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data, context: { link: nextLink } });
+          onUpdate({ data, context: { link: nextLink } });
         })}
       >
         <input type="hidden" name="form" value={FormTypes.PcrChangeDurationStep} />

@@ -10,7 +10,7 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
+import { useOnUpdateSuspendProject, usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
@@ -20,7 +20,7 @@ import {
   ProjectSuspensionSchemaType,
 } from "./suspendProject.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { combineDate, getMonth, getYear } from "@ui/components/atoms/Date";
+import { getMonth, getYear } from "@ui/components/atoms/Date";
 import { PcrPage } from "../pcrPage";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -28,15 +28,8 @@ import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const SuspendProjectStep = () => {
   const { getContent } = useContent();
-  const {
-    projectId,
-    itemId,
-    fetchKey,
-    getRequiredToCompleteMessage,
-    onSave,
-    isFetching,
-    markedAsCompleteHasBeenChecked,
-  } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, getRequiredToCompleteMessage, markedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
 
   const { project, pcrItem } = usePcrSuspendProjectWorkflowQuery(projectId, itemId, fetchKey);
   const { isPm } = getAuthRoles(project.roles);
@@ -71,6 +64,8 @@ export const SuspendProjectStep = () => {
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
+  const { onUpdate, isFetching } = useOnUpdateSuspendProject();
+
   return (
     <PcrPage validationErrors={validationErrors}>
       {isPm && (
@@ -83,12 +78,8 @@ export const SuspendProjectStep = () => {
         <Form
           data-qa="projectSuspension"
           onSubmit={handleSubmit(data => {
-            onSave({
-              data: {
-                ...data,
-                suspensionStartDate: combineDate(data.suspensionStartDate_month, data.suspensionStartDate_year, true),
-                suspensionEndDate: combineDate(data.suspensionEndDate_month, data.suspensionEndDate_year, false),
-              },
+            onUpdate({
+              data,
               context: { link: nextLink },
             });
           })}

@@ -17,7 +17,7 @@ import { z } from "zod";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
 import { useNextLink } from "../utils/useNextLink";
-import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import { useOnUpdateScopeChange, useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import {
   PcrScopeChangePublicDescriptionSchemaType,
   getPcrScopeChangePublicDescriptionSchema,
@@ -25,27 +25,17 @@ import {
 } from "./scopeChange.zod";
 
 export const PublicDescriptionChangeStep = () => {
-  const {
-    projectId,
-    pcrId,
-    itemId,
-    fetchKey,
-    isFetching,
-    getRequiredToCompleteMessage,
-    onSave,
-    markedAsCompleteHasBeenChecked,
-  } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, getRequiredToCompleteMessage, markedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
+
   const defaults = useServerInput<z.output<PcrScopeChangePublicDescriptionSchemaType>>();
   const { register, handleSubmit, watch, setError, formState, trigger } = useForm<
     z.output<PcrScopeChangePublicDescriptionSchemaType>
   >({
     defaultValues: {
       form: FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue,
-      projectId,
-      pcrId,
-      pcrItemId: itemId,
       publicDescription: defaults?.publicDescription ?? pcrItem.publicDescription ?? "",
     },
     resolver: zodResolver(getPcrScopeChangePublicDescriptionSchema(markedAsCompleteHasBeenChecked), {
@@ -64,12 +54,14 @@ export const PublicDescriptionChangeStep = () => {
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
+  const { onUpdate, isFetching } = useOnUpdateScopeChange<"description">();
+
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section data-qa="newDescriptionSection">
         <Form
           onSubmit={handleSubmit(data => {
-            onSave({ data, context: { link: nextLink } });
+            onUpdate({ data, context: { link: nextLink } });
           })}
         >
           <input
@@ -77,9 +69,6 @@ export const PublicDescriptionChangeStep = () => {
             value={FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue}
             {...register("form")}
           />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
 
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription)}</Legend>

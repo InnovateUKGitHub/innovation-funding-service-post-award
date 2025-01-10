@@ -67,9 +67,6 @@ class ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler extends Zod
 
     return {
       form: FormTypes.PcrChangeProjectScopeSummary,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       markedAsComplete: input.markedAsComplete === "on",
       projectSummary: item.projectSummary ?? "",
       publicDescription: item.publicDescription ?? "",
@@ -79,20 +76,22 @@ class ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler extends Zod
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<PcrScopeChangeSchemaType>;
     context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
     await context.runCommand(
       new UpdatePCRCommand({
-        projectId: input.projectId,
-        projectChangeRequestId: input.pcrId,
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
         pcr: {
-          projectId: input.projectId,
-          id: input.pcrId,
+          projectId: params.projectId,
+          id: params.pcrId,
           items: [
             {
-              id: input.pcrItemId,
+              id: params.itemId,
               status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
             },
           ],
@@ -101,8 +100,8 @@ class ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler extends Zod
     );
 
     return ProjectChangeRequestPrepareRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
     }).path;
   }
 }

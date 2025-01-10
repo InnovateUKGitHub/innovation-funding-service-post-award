@@ -70,8 +70,6 @@ export class UpdatePcrRemovePartnerCommand extends ZodAuthorisedAsyncCommandBase
       partnerId: this.dto.partnerId,
       form: this.form,
       projectId: this.projectId,
-      pcrId: this.dto.pcrId,
-      pcrItemId: this.dto.pcrItemId,
     };
   }
 

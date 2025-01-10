@@ -2,7 +2,7 @@ import { Section } from "@ui/components/atoms/Section/Section";
 import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
+import { useOnUpdateRenamePartner, useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
@@ -25,15 +25,8 @@ import { useEffect } from "react";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
-  const {
-    projectId,
-    itemId,
-    fetchKey,
-    getRequiredToCompleteMessage,
-    onSave,
-    isFetching,
-    markedAsCompleteHasBeenChecked,
-  } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, getRequiredToCompleteMessage, markedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
 
   const { partners, pcrItem } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -64,6 +57,8 @@ export const RenamePartnerStep = () => {
   }, [watch, setValue, partners]);
   watch(values => values);
 
+  const { onUpdate, isFetching } = useOnUpdateRenamePartner();
+
   const partnerOptions = partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({
@@ -77,7 +72,7 @@ export const RenamePartnerStep = () => {
       <Section>
         <Form
           onSubmit={handleSubmit(data => {
-            onSave({ data, context: { link: nextLink } });
+            onUpdate({ data, context: { link: nextLink } });
           })}
         >
           <input type="hidden" name="form" value={FormTypes.PcrRenamePartnerStep} />

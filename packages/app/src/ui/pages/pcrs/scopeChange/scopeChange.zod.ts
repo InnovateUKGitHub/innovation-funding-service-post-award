@@ -1,21 +1,13 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  evaluateObject,
-  pcrIdValidation,
-  pcrItemIdValidation,
-  projectIdValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
+import { evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const scopeChangeErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "scopeChange"] });
 
 export const pcrScopeChangeSchema = evaluateObject(data => ({
   form: z.literal(FormTypes.PcrChangeProjectScopeSummary),
-  projectId: projectIdValidation,
-  pcrId: pcrIdValidation,
-  pcrItemId: pcrItemIdValidation,
   markedAsComplete: z.boolean(),
   projectSummary: getTextValidation({
     maxLength: 32_000,
@@ -27,27 +19,21 @@ export const pcrScopeChangeSchema = evaluateObject(data => ({
   }),
 }));
 
-export const getPcrScopeChangeProjectSummarySchema = (markedAsComplete: boolean) =>
+export const getPcrScopeChangeProjectSummarySchema = (markedAsCompleteHasBeenChecked: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue),
-    projectId: projectIdValidation,
-    pcrId: pcrIdValidation,
-    pcrItemId: pcrItemIdValidation,
     projectSummary: getTextValidation({
       maxLength: 32_000,
-      required: markedAsComplete,
+      required: markedAsCompleteHasBeenChecked,
     }),
   });
 
-export const getPcrScopeChangePublicDescriptionSchema = (markedAsComplete: boolean) =>
+export const getPcrScopeChangePublicDescriptionSchema = (markedAsCompleteHasBeenChecked: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue),
-    projectId: projectIdValidation,
-    pcrId: pcrIdValidation,
-    pcrItemId: pcrItemIdValidation,
     publicDescription: getTextValidation({
       maxLength: 32_000,
-      required: markedAsComplete,
+      required: markedAsCompleteHasBeenChecked,
     }),
   });
 

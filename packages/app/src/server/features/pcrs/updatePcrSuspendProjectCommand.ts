@@ -72,8 +72,8 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
   protected async mapToZod() {
     if (this.form === FormTypes.PcrProjectSuspensionStep) {
       return {
-        projectStartDate: new Date(this.dto.projectStartDate),
-        projectEndDate: new Date(this.dto.projectEndDate),
+        projectStartDate: this.dto.projectStartDate,
+        projectEndDate: this.dto.projectEndDate,
         markedAsComplete: this.dto.markedAsComplete ?? false,
         suspensionStartDate_month: this.dto.suspensionStartDate_month,
         suspensionStartDate_year: this.dto.suspensionStartDate_year,

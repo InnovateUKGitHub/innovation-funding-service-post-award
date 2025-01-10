@@ -4,7 +4,7 @@ import { DocumentList } from "@ui/components/organisms/documents/DocumentList/Do
 import { Section } from "@ui/components/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
+import { useOnUpdateRemovePartner, useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { useForm } from "react-hook-form";
 import { RemovePartnerSchemaType, removePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,6 +33,8 @@ export const RemovePartnerSummary = () => {
   });
 
   const validationErrors = useZodErrors(setError, formState.errors);
+
+  const { onUpdate, isFetching } = useOnUpdateRemovePartner();
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -73,6 +75,8 @@ export const RemovePartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" {...register("form")} value={FormTypes.PcrRemovePartnerSummary} />
           <input type="hidden" name="numberOfPeriods" value={project.numberOfPeriods} />

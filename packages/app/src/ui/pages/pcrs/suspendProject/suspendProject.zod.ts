@@ -118,6 +118,7 @@ export const pcrProjectSuspensionSummarySchema = z
     form: z.literal(FormTypes.PcrProjectSuspensionSummary),
     markedAsComplete: z.boolean(),
     suspensionStartDate: z.date().nullable(),
+    suspensionEndDate: z.date().nullable(),
   })
   .refine(data => !data.markedAsComplete || data.suspensionStartDate instanceof Date, {
     path: ["suspensionStartDate"],

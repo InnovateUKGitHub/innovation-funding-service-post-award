@@ -7,6 +7,15 @@ import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
+import { useNavigate } from "react-router-dom";
+import { useMessageContext } from "@ui/context/messages";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { RenamePartnerSchema } from "./renamePartner.zod";
+import { clientsideApiClient } from "@ui/apiClient";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { z } from "zod";
 
 export const useRenamePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<RenamePartnerWorkflowQuery>(
@@ -48,4 +57,37 @@ export const useRenamePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: P
   const pcrItem = mapPcrItemDto(pcrNode, ["accountName", "partnerId", "partnerNameSnapshot", "status", "type"], {});
 
   return { project, pcrItem, partners, documents, fragmentRef: data?.salesforce?.uiapi };
+};
+
+export const useOnUpdateRenamePartner = () => {
+  const navigate = useNavigate();
+
+  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
+  const { clearMessages } = useMessageContext();
+
+  return useOnUpdate<z.output<RenamePartnerSchema>, boolean, { link: ILinkInfo }>({
+    req: data =>
+      clientsideApiClient.pcrs.renamePartner({
+        projectId,
+        pcrId,
+        pcrItemId: itemId,
+        pcr: {
+          markedAsComplete: data.markedAsComplete,
+          form: data.form,
+          partnerId: data.partnerId ?? null,
+          accountName: data.accountName ?? null,
+          existingAccountName: data.existingAccountName ?? null,
+          ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+        },
+      }),
+    onSuccess: async function (
+      _: z.output<RenamePartnerSchema>,
+      __: boolean,
+      context: { link: ILinkInfo } | undefined,
+    ) {
+      clearMessages();
+      setFetchKey(k => k + 1);
+      navigate(context?.link?.path ?? "");
+    },
+  });
 };

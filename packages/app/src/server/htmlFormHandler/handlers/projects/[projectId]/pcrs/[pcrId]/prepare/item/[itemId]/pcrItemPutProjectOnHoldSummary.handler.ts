@@ -42,6 +42,8 @@ export class PcrItemPutProjectOnHoldSummaryHandler extends ZodFormHandlerBase<
         !input.suspensionStartDate || input.suspensionStartDate.trim() === ""
           ? null
           : new Date(input.suspensionStartDate),
+      suspensionEndDate:
+        !input.suspensionEndDate || input.suspensionEndDate.trim() === "" ? null : new Date(input.suspensionEndDate),
       markedAsComplete: input.markedAsComplete === "on",
     };
   }

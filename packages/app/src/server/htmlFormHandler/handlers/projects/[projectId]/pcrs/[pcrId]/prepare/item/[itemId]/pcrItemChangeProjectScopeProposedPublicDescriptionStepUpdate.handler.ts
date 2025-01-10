@@ -46,16 +46,16 @@ class ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpd
 
   protected async getZodSchema({
     context,
-    input,
+    params,
   }: {
     context: IContext;
-    input: z.input<PcrScopeChangePublicDescriptionSchemaType>;
+    params: ProjectChangeRequestPrepareItemParams;
   }) {
     const item = await this.getItem({
       context,
-      projectId: input.projectId as ProjectId,
-      pcrId: input.pcrId as PcrId,
-      pcrItemId: input.pcrItemId as PcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      pcrItemId: params.itemId,
     });
 
     return {
@@ -71,9 +71,6 @@ class ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpd
   }): Promise<z.input<PcrScopeChangePublicDescriptionSchemaType>> {
     return {
       form: input.form,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       publicDescription: input.publicDescription,
     };
   }
@@ -81,27 +78,29 @@ class ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpd
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<PcrScopeChangePublicDescriptionSchemaType>;
     context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
     const item = await this.getItem({
       context,
-      projectId: input.projectId as ProjectId,
-      pcrId: input.pcrId as PcrId,
-      pcrItemId: input.pcrItemId as PcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      pcrItemId: params.itemId,
     });
 
     await context.runCommand(
       new UpdatePCRCommand({
-        projectId: input.projectId,
-        projectChangeRequestId: input.pcrId,
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
         pcr: {
-          projectId: input.projectId,
-          id: input.pcrId,
+          projectId: params.projectId,
+          id: params.pcrId,
           items: [
             {
-              id: input.pcrItemId,
+              id: params.itemId,
               publicDescription: input.publicDescription,
             },
           ],
@@ -117,9 +116,9 @@ class ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpd
     if (!nextInfo) throw new Error("Cannot find next workflow step to navigate to");
 
     return PCRPrepareItemRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      itemId: input.pcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      itemId: params.itemId,
       step: nextInfo.stepNumber,
     }).path;
   }

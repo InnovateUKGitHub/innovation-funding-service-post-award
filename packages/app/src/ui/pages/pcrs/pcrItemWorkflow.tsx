@@ -74,6 +74,7 @@ type PcrWorkflowContextProps = Data &
     }) => Promise<void>;
     workflow: PcrWorkflow;
     fetchKey: number;
+    setFetchKey: Dispatch<SetStateAction<number>>;
     displayCompleteForm: boolean;
     allowSubmit: boolean;
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
@@ -81,6 +82,7 @@ type PcrWorkflowContextProps = Data &
     setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
     apiError: ClientErrorResponse | null;
     refreshItemWorkflowQuery: () => Promise<void>;
+    step: number | undefined;
   };
 
 const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknown as PcrWorkflowContextProps);
@@ -131,6 +133,8 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
         allowSubmit,
         markedAsCompleteHasBeenChecked,
         setMarkedAsCompleteHasBeenChecked,
+        setFetchKey,
+        step: props.step,
       }}
     >
       <Helmet>

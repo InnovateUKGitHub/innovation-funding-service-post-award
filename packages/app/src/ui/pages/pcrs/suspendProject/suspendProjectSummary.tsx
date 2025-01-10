@@ -3,7 +3,7 @@ import { Section } from "@ui/components/molecules/Section/section";
 import { ShortDate } from "@ui/components/atoms/Date";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
+import { useOnUpdateSuspendProjectSummary, usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -27,6 +27,7 @@ export const SuspendProjectSummary = () => {
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       suspensionStartDate: pcrItem.suspensionStartDate,
+      suspensionEndDate: pcrItem.suspensionEndDate,
       form: FormTypes.PcrProjectSuspensionSummary,
     },
     resolver: zodResolver(pcrProjectSuspensionSummarySchema, {
@@ -35,6 +36,8 @@ export const SuspendProjectSummary = () => {
   });
 
   const validationErrors = useZodErrors(setError, formState.errors);
+
+  const { onUpdate, isFetching } = useOnUpdateSuspendProjectSummary();
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -79,6 +82,8 @@ export const SuspendProjectSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" name="suspensionStartDate" value={pcrItem.suspensionStartDate?.toISOString()} />
           <input type="hidden" name="form" value={FormTypes.PcrProjectSuspensionSummary} />

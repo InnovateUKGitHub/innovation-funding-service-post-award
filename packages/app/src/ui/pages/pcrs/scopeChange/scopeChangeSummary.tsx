@@ -10,12 +10,12 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
-import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import { useOnUpdateScopeChange, useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { PcrScopeChangeSchemaType, pcrScopeChangeSchema, scopeChangeErrorMap } from "./scopeChange.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 
 export const ScopeChangeSummary = () => {
-  const { projectId, pcrId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -31,6 +31,8 @@ export const ScopeChangeSummary = () => {
   });
 
   const validationErrors = useZodErrors(setError, formState.errors);
+
+  const { onUpdate, isFetching } = useOnUpdateScopeChange<"summary">();
 
   return (
     <PcrPage validationErrors={validationErrors}>
@@ -69,11 +71,10 @@ export const ScopeChangeSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" value={FormTypes.PcrChangeProjectScopeSummary} {...register("form")} />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
         </PcrItemSummaryForm>
       )}
     </PcrPage>

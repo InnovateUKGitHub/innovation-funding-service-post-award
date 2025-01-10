@@ -4,7 +4,7 @@ import { Section } from "@ui/components/molecules/Section/section";
 import { ShortDateRangeFromDuration, Months } from "@ui/components/atoms/Date";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { usePcrTimeExtensionWorkflowQuery } from "./timeExtension.logic";
+import { useOnUpdateTimeExtension, usePcrTimeExtensionWorkflowQuery } from "./timeExtension.logic";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +32,8 @@ export const TimeExtensionSummary = () => {
       errorMap,
     }),
   });
+
+  const { onUpdate, isFetching } = useOnUpdateTimeExtension();
 
   const validationErrors = useZodErrors(setError, formState?.errors);
 
@@ -77,6 +79,8 @@ export const TimeExtensionSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" name="form" value={FormTypes.PcrChangeDurationSummary} />
           <input type="hidden" name="timeExtension" value={String(pcrItem.offsetMonths ?? 0)} />

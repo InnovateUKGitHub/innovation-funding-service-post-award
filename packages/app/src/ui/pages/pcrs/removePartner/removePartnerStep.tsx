@@ -2,7 +2,7 @@ import { Section } from "@ui/components/atoms/Section/Section";
 import { getPartnerName } from "@ui/components/organisms/partners/utils/partnerName";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
+import { useOnUpdateRemovePartner, useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Radio, RadioList } from "@ui/components/atoms/form/Radio/Radio";
@@ -24,7 +24,7 @@ import { Label } from "@ui/components/atoms/form/Label/Label";
 
 export const RemovePartnerStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { partners, pcrItem, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -52,6 +52,8 @@ export const RemovePartnerStep = () => {
       label: getPartnerName(x),
     }));
 
+  const { onUpdate, isFetching } = useOnUpdateRemovePartner();
+
   const nextLink = useNextLink();
 
   return (
@@ -59,7 +61,7 @@ export const RemovePartnerStep = () => {
       <Section>
         <Form
           onSubmit={handleSubmit(data => {
-            onSave({ data, context: { link: nextLink } });
+            onUpdate({ data, context: { link: nextLink } });
           })}
         >
           <input type="hidden" name="form" value={FormTypes.PcrRemovePartnerStep} />

@@ -45,16 +45,16 @@ class ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate
 
   protected async getZodSchema({
     context,
-    input,
+    params,
   }: {
     context: IContext;
-    input: z.input<PcrScopeChangeProjectSummarySchemaType>;
+    params: ProjectChangeRequestPrepareItemParams;
   }) {
     const item = await this.getItem({
       context,
-      projectId: input.projectId as ProjectId,
-      pcrId: input.pcrId as PcrId,
-      pcrItemId: input.pcrItemId as PcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      pcrItemId: params.itemId,
     });
 
     return {
@@ -66,9 +66,6 @@ class ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<PcrScopeChangeProjectSummarySchemaType>> {
     return {
       form: input.form,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       projectSummary: input.projectSummary,
     };
   }
@@ -76,20 +73,22 @@ class ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<PcrScopeChangeProjectSummarySchemaType>;
     context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
     await context.runCommand(
       new UpdatePCRCommand({
-        projectId: input.projectId,
-        projectChangeRequestId: input.pcrId,
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
         pcr: {
-          projectId: input.projectId,
-          id: input.pcrId,
+          projectId: params.projectId,
+          id: params.pcrId,
           items: [
             {
-              id: input.pcrItemId,
+              id: params.itemId,
               projectSummary: input.projectSummary,
             },
           ],
@@ -98,9 +97,9 @@ class ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate
     );
 
     return PCRPrepareItemRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      itemId: input.pcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      itemId: params.itemId,
       step: undefined,
     }).path;
   }

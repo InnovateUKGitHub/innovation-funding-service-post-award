@@ -15,11 +15,17 @@ import {
   scopeChangeErrorMap,
 } from "@ui/pages/pcrs/scopeChange/scopeChange.zod";
 import { z } from "zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 type ScopeChangeSchema =
   | PcrScopeChangeSchemaType
   | PcrScopeChangePublicDescriptionSchemaType
   | PcrScopeChangeProjectSummarySchemaType;
+
+type SchemaOutput =
+  | z.output<PcrScopeChangeSchemaType>
+  | z.output<PcrScopeChangePublicDescriptionSchemaType>
+  | z.output<PcrScopeChangeProjectSummarySchemaType>;
 
 export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -76,25 +82,18 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
       case FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue:
         return {
           form: this.form,
-          projectId: this.dto.projectId,
-          pcrId: this.dto.pcrId,
-          pcrItemId: this.dto.pcrItemId,
           projectSummary: this.dto.projectSummary,
+          markedAsComplete: this.dto.markedAsComplete ?? false,
         };
       case FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue:
         return {
           form: this.form,
-          projectId: this.dto.projectId,
-          pcrId: this.dto.pcrId,
-          pcrItemId: this.dto.pcrItemId,
           publicDescription: this.dto.publicDescription,
+          markedAsComplete: this.dto.markedAsComplete ?? false,
         };
       case FormTypes.PcrChangeProjectScopeSummary:
         return {
           form: this.form,
-          projectId: this.dto.projectId,
-          pcrId: this.dto.pcrId,
-          pcrItemId: this.dto.pcrItemId,
           publicDescription: this.dto.publicDescription,
           projectSummary: this.dto.projectSummary,
           markedAsComplete: this.dto.markedAsComplete ?? false,
@@ -102,16 +101,25 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
     }
   }
 
-  protected async runRepositoryCommands(
-    context: IContext,
-    validatedData: z.output<ScopeChangeSchema>,
-  ): Promise<boolean> {
-    await context.repositories.projectChangeRequests.updateSingleItem({
-      id: this.pcrItemId,
-      status: this.dto.status,
-      ...validatedData,
-      pcrId: this.pcrId,
-    });
+  protected async runRepositoryCommands(context: IContext, validatedData: SchemaOutput): Promise<boolean> {
+    if (validatedData.form === FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_NewProjectSummary__c: validatedData?.projectSummary ?? null,
+      });
+    } else if (validatedData.form === FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_NewPublicDescription__c: validatedData?.publicDescription ?? null,
+      });
+    } else {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      });
+    }
 
     return true;
   }
