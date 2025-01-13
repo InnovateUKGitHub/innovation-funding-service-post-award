@@ -30,14 +30,14 @@ export function useFormRevalidate<T extends FieldValues>(
     hasSubmitted.current = true;
   };
 
-  if (shouldInitiallyValidate && !hasFiredOnce.current) {
-    trigger();
-    hasFiredOnce.current = true;
-  }
-
   useEffect(() => {
     // sets the hasSubmitted to true on the event
     window.addEventListener("submit", submitFormHandler);
+
+    if (shouldInitiallyValidate && !hasFiredOnce.current) {
+      trigger();
+      hasFiredOnce.current = true;
+    }
 
     const subscription = watch(() => {
       if (hasSubmitted.current) {
