@@ -58,6 +58,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   return (
     <Form
       onSubmit={handleSubmit((data: FormValues) => {
+        console.log("pcritem summarydata", data);
         return onSaveHandler({
           data: {
             ...data,
