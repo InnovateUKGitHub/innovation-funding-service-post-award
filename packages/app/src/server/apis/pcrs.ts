@@ -1,6 +1,7 @@
 import {
   CreatePcrDto,
   FullPCRItemDto,
+  PcrAddPartnerRoleAndOrganisationDto,
   PcrChangeDurationDto,
   PCRDto,
   PcrRemovePartnerDto,
@@ -22,6 +23,7 @@ import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRe
 import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRemovePartnerCommand";
 import { UpdatePcrChangeDurationCommand } from "@server/features/pcrs/updatePcrChangeDurationCommand";
 import { UpdatePcrSuspendProjectCommand } from "@server/features/pcrs/updatePcrSuspendProjectCommand";
+import { UpdatePcrAddPartnerRoleAndOrganisationCommand } from "@server/features/pcrs/updatePcrAddPartnerRoleAndOrganisationCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -40,6 +42,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PCRDto>;
+
+  addPartnerRoleAndOrganisation(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerRoleAndOrganisationDto;
+      }
+    >,
+  ): Promise<boolean>;
 
   changeDuration: (
     params: ApiParams<
@@ -126,6 +140,17 @@ class Controller
       this.update,
     );
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/role-and-organisation",
+      (p, _, b: PcrAddPartnerRoleAndOrganisationDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.addPartnerRoleAndOrganisation,
+    );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/change-duration",
@@ -215,6 +240,31 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async addPartnerRoleAndOrganisation(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerRoleAndOrganisationDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrAddPartnerRoleAndOrganisationCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async changeDuration(

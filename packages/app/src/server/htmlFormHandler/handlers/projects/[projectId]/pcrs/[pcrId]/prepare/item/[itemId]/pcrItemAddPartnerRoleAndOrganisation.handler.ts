@@ -4,7 +4,7 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
-import { setData } from "@ui/pages/pcrs/addPartner/steps/roleAndOrganisationStep";
+import { setData } from "@ui/pages/pcrs/addPartner/steps/roleAndOrganisation.logic";
 import {
   RoleAndOrganisationSchemaType,
   roleAndOrganisationSchema,

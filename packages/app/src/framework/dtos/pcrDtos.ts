@@ -399,3 +399,11 @@ export interface PcrSuspendProjectDto extends PcrDtoCommon {
   projectEndDate: Date | null;
   form: SuspendProjectFormType;
 }
+
+export interface PcrAddPartnerRoleAndOrganisationDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerRoleAndOrganisationStep;
+  button_submit: string;
+  projectRole: number;
+  isCommercialWork: string;
+  partnerType: PCRPartnerType;
+}

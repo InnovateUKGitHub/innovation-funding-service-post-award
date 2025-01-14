@@ -109,7 +109,9 @@ export const useOnUpdateTimeExtension = () => {
         pcrItemId: itemId,
         pcr: {
           ...data,
-          ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+          ...(typeof step === "number"
+            ? { status: PCRItemStatus.Incomplete }
+            : { status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete }),
         },
       }),
     onSuccess: async function (

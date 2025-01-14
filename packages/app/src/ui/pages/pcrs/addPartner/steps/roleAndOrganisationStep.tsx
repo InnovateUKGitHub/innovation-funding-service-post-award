@@ -22,41 +22,16 @@ import { pcrPartnerTypes } from "@framework/picklist/pcrPartnerTypes";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atoms/form/Label/Label";
 import { createRegisterButton } from "@framework/util/registerButton";
-import {
-  PCROrganisationType,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectRole,
-  getPCROrganisationType,
-} from "@framework/constants/pcrConstants";
+import { PCRPartnerType, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { RoleAndOrganisationSchema, roleAndOrganisationSchema } from "./schemas/roleAndOrganisation.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-
-export const setData = (data: RoleAndOrganisationSchema) => {
-  // It's not possible to come back to this page after it's submitted
-  // so we can assume that the participant size hasn't explicitly been set by the user yet
-  // and it's safe for us to reset it
-  let participantSize = PCRParticipantSize.Unknown;
-
-  // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
-  const organisationType = getPCROrganisationType(data.partnerType);
-  if (organisationType === PCROrganisationType.Academic) {
-    participantSize = PCRParticipantSize.Academic;
-  }
-
-  return {
-    ...data,
-    organisationType,
-    participantSize,
-    isCommercialWork: data.isCommercialWork === "true",
-  };
-};
+import { useOnUpdateAddPartnerPartnerRoleAndOrganisation } from "./roleAndOrganisation.logic";
 
 export const RoleAndOrganisationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, refreshItemWorkflowQuery, markedAsCompleteHasBeenChecked } =
+  const { projectId, itemId, fetchKey, refreshItemWorkflowQuery, markedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
@@ -75,6 +50,8 @@ export const RoleAndOrganisationStep = () => {
       errorMap: addPartnerErrorMap,
     }),
   });
+
+  const { isFetching, onUpdate } = useOnUpdateAddPartnerPartnerRoleAndOrganisation(formHasBeenFilled);
 
   const disabled = formHasBeenFilled || isFetching;
 
@@ -107,8 +84,8 @@ export const RoleAndOrganisationStep = () => {
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: formHasBeenFilled ? {} : setData(data),
+            onUpdate({
+              data,
               context: link(data),
             }).then(() => refreshItemWorkflowQuery()),
           )}
