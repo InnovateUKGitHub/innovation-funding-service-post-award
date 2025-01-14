@@ -10,19 +10,24 @@ import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
-export const renamePartnerSchema = evaluateObject((data: { markedAsComplete: boolean }) => ({
-  markedAsComplete: z.boolean(),
-  accountName: getTextValidation({
-    maxLength: 256,
-    required: data.markedAsComplete,
-  }),
-  existingAccountName: getTextValidation({
-    maxLength: 256,
-    required: data.markedAsComplete,
-  }),
-  partnerId: data.markedAsComplete ? partnerIdValidation : z.union([emptyStringToNullValidation, partnerIdValidation]),
-  form: z.union([z.literal(FormTypes.PcrRenamePartnerSummary), z.literal(FormTypes.PcrRenamePartnerStep)]),
-})).superRefine((data, ctx) => {
+export const renamePartnerSchema = evaluateObject((data: { markedAsComplete: boolean }) => {
+  console.log("data", data);
+  return {
+    markedAsComplete: z.boolean(),
+    accountName: getTextValidation({
+      maxLength: 256,
+      required: data.markedAsComplete,
+    }),
+    existingAccountName: getTextValidation({
+      maxLength: 256,
+      required: false,
+    }),
+    partnerId: data.markedAsComplete
+      ? partnerIdValidation
+      : z.union([emptyStringToNullValidation, partnerIdValidation]),
+    form: z.union([z.literal(FormTypes.PcrRenamePartnerSummary), z.literal(FormTypes.PcrRenamePartnerStep)]),
+  };
+}).superRefine((data, ctx) => {
   if (data.partnerId) {
     if (data.existingAccountName === data.accountName) {
       ctx.addIssue({
