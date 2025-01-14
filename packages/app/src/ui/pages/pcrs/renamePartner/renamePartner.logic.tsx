@@ -66,12 +66,13 @@ export const useOnUpdateRenamePartner = () => {
   const { clearMessages } = useMessageContext();
 
   return useOnUpdate<z.output<RenamePartnerSchema>, boolean, { link: ILinkInfo }>({
-    req: data =>
-      clientsideApiClient.pcrs.renamePartner({
+    req: data => {
+      const payload = {
         projectId,
         pcrId,
         pcrItemId: itemId,
         pcr: {
+          ...data,
           markedAsComplete: data.markedAsComplete,
           form: data.form,
           partnerId: data.partnerId ?? null,
@@ -79,7 +80,10 @@ export const useOnUpdateRenamePartner = () => {
           existingAccountName: data.existingAccountName ?? null,
           ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
         },
-      }),
+      };
+
+      return clientsideApiClient.pcrs.renamePartner(payload);
+    },
     onSuccess: async function (
       _: z.output<RenamePartnerSchema>,
       __: boolean,

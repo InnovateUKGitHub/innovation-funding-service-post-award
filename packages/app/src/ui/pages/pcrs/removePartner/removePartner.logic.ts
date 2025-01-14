@@ -76,6 +76,7 @@ export const useOnUpdateRemovePartner = () => {
         pcrId,
         pcrItemId: itemId,
         pcr: {
+          ...data,
           markedAsComplete: data.markedAsComplete,
           form: data.form,
           numberOfPeriods: data.numberOfPeriods,
