@@ -1,5 +1,5 @@
 import { ClaimStatus } from "../types/ClaimStatus";
-import { SObjectFieldType } from "../types/SObjectFieldType";
+import { SObjectFieldIdType, SObjectFieldType } from "../types/SObjectFieldType";
 import { AbstractSObject, SObjectField } from "./AbstractProjectFactory";
 
 class Acc_Claims__c extends AbstractSObject {
@@ -21,7 +21,7 @@ class Acc_Claims__c extends AbstractSObject {
   accessor Acc_CostCategory__c: SObjectFieldType<string>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Acc_ParentId__c: SObjectFieldType<string>;
+  accessor Acc_ParentId__c: SObjectFieldIdType;
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Acc_LineItemCost__c: SObjectFieldType<number>;
