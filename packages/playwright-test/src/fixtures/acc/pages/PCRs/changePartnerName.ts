@@ -105,13 +105,14 @@ class ChangePartnerName {
 
   @Then("validation messages will advise the PCR is empty")
   async validateEmptyPcr() {
-    await this.commands.validationMessage(this.enterNameValidationMessage);
-    await this.commands.validationMessage(this.selectPartnerValidationMessage);
+    await this.commands.validationLink(this.enterNameValidationMessage);
+    await this.commands.validationLink(this.selectPartnerValidationMessage);
+    await expect(this.page.getByRole("link").filter({ hasText: "Enter forms.label." })).not.toBeVisible();
     const editLinkRow = this.page.getByTestId("currentPartnerName");
     await editLinkRow.getByRole("link").filter({ hasText: "Edit" }).click();
     await expect(this.selectPartnerSubheading).toBeVisible();
-    await this.commands.validationMessage(this.enterNameValidationMessage);
-    await this.commands.validationMessage(this.selectPartnerValidationMessage);
+    await this.commands.validationLink(this.enterNameValidationMessage);
+    await this.commands.validationLink(this.selectPartnerValidationMessage);
     await this.commands.paragraph(this.enterNameValidationMessage);
     await this.commands.paragraph(this.selectPartnerValidationMessage);
   }
@@ -154,15 +155,13 @@ class ChangePartnerName {
       false,
       "Change of name certificate",
     );
-    await this.page.waitForTimeout(2500);
+    await this.page.waitForTimeout(3000);
     await this.commands.fileInput(["testfile.doc"]);
     await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
     await expect(this.page.locator("css=td").filter({ hasText: "Certificate of name change" })).toBeVisible();
     await this.saveAndContinueButton.click();
     await this.completedSummary();
-    await this.commands.getByLabel(this.agreeWithChangeBox).check();
-    await this.saveAndReturn.click();
-    await expect(this.page.getByRole("heading").filter({ hasText: "Request" })).toBeVisible();
+    await this.pcr.saveAssertStatus("Change a partner's name");
     await this.pcr.viewRequestPage("Change a partner's name");
     await this.pcr.completePcrReasons();
     await this.pcr.submitRequest();

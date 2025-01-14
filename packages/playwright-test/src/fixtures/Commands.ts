@@ -555,7 +555,10 @@ class Commands {
       await expect(this.page.getByRole("list").filter({ hasText: li })).toBeVisible();
     }
   }
-
+  /**
+   *
+   * The wait in this case is a necessary one regrettably.
+   */
   async fileInput(names: Array<string>) {
     let fileList = [];
     for (const file of names) {
@@ -563,7 +566,7 @@ class Commands {
       fileList.push(name);
     }
     await this.page.locator("css=#files").setInputFiles(fileList);
-    await this.page.waitForTimeout(2500);
+    await this.page.waitForTimeout(3000);
     await this.clickOn("Upload documents");
   }
 
@@ -579,7 +582,7 @@ class Commands {
     const row = this.page.locator("css=tr").filter({ hasText: file });
     await row.locator("td").getByRole("button").filter({ hasText: "Remove" }).click();
     await expect(row.locator("td").getByRole("button").filter({ hasText: "Remove" })).toBeDisabled();
-    await this.validationNotification(`'${file}' has been removed.`).isVisible();
+    await expect(this.validationNotification(`'${file}' has been removed.`)).toBeVisible();
   }
 
   async createTestFile(name: string, size: number) {
@@ -628,7 +631,9 @@ class Commands {
 
   async uploadBatchOfDocs(files = []) {
     await this.fileInput(files);
-    await this.getByAriaLabel("success message").filter({ hasText: "10 documents have been uploaded." }).isVisible();
+    await expect(
+      this.getByAriaLabel("success message").filter({ hasText: "10 documents have been uploaded." }),
+    ).toBeVisible();
   }
 
   largerDocs = ["11MB_1", "11MB_2", "11MB_3"];

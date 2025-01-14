@@ -72,7 +72,7 @@ class Validators {
     } else {
       await this.commands.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
     }
-    this.commands.learnFiles();
+    await this.commands.learnFiles();
     await this.commands.paragraph("No documents uploaded.");
     console.log("Validating upload button without document selected and then uploading a document");
     await this.commands.button("Upload documents").click();
@@ -147,7 +147,7 @@ class Validators {
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
       await expect(this.commands.validationNotification(`'${file}' has been removed.`)).toBeVisible();
-      //This timeout is regrettable but required. Otherwise it fails to actually select a fail for upload.
+      //This timeout is regrettable but required. Otherwise it fails to actually select a file for upload.
       await this.page.waitForTimeout(4000);
     }
     console.log("Checking uppercase file extensions are allowed");

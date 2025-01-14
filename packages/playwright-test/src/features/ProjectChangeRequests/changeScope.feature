@@ -18,7 +18,7 @@ Feature: Change project scope
         When the user validates 32000 characters in each section correctly
         Then a completed summary page is displayed
 
-        When the user clicks Save and return to request
+        When the user saves the "Change project scope" pcr after marking as complete
         Then the request page will show "Change project scope" as "Complete"
 
         When the user completes the reasons section

@@ -26,7 +26,7 @@ Feature: Remove a partner
         And the user clicks Save and continue
         Then the Remove a partner summary page is displayed
 
-        When the user marks as complete and saves
+        When the user saves the "Remove a partner" pcr after marking as complete
         Then the request page will show "Remove a partner" as "Complete"
 
         When the user completes the reasons section

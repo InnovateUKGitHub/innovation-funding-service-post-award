@@ -93,8 +93,9 @@ class ChangeProjectDuration {
     await this.dropDownMenu.selectOption({ value: `1` });
     await expect(this.page.locator("//form/div[1]/div/p[2]/span").filter({ hasText: `37 months` })).toBeVisible();
     await this.saveContinueButton.click();
+    await this.pcr.saveAssertStatus("Change project duration");
+    await this.pcr.selectPcrType("Change project duration");
     await this.summaryPage(true);
-    await this.pcr.requestPagePcrStatus("Change project duration", "Complete");
     await this.pcr.completePcrReasons();
     await this.pcr.submitRequest();
   }

@@ -124,6 +124,7 @@ class ApproveNewSubcontractor {
       await this.commands.validationLink(msg);
     }
     await expect(this.page.getByTestId(this.valQa).getByText(this.relationshipValidation)).not.toBeVisible();
+    await expect(this.page.getByRole("link").filter({ hasText: "Enter forms.label." })).not.toBeVisible();
   }
 
   @When("the user clicks one of the Edit links")
@@ -333,7 +334,8 @@ class ApproveNewSubcontractor {
     }
     await this.relationshipBoxLabel.fill("Lorem 7");
     await this.page.getByLabel(this.costField).fill("1000.33");
-    this.charactersRemaining(7);
+    await this.charactersRemaining(7);
+    await this.saveAndContinue();
   }
 
   /**

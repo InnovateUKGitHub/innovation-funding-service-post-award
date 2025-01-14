@@ -290,4 +290,13 @@ class ProjectChangeRequests {
   async clickCreateRequest() {
     await this.commands.button("Create request").click();
   }
+  @When("the user saves the {string} pcr after marking as complete")
+  async saveAssertStatus(pcrType: PcrType) {
+    await expect(this.markAsComplete).toBeVisible();
+    await this.saveAndReturnButton.click();
+    await this.requestPagePcrStatus(pcrType, "Incomplete");
+    await this.selectPcrType(pcrType);
+    await this.markAsCompleteSection(true);
+    await this.requestPagePcrStatus(pcrType, "Complete");
+  }
 }

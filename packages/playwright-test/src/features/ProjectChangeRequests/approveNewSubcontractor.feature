@@ -89,7 +89,7 @@ Feature: Approve a new subcontractor
     Scenario: The user can complete a valid Approve a new subcontractor PCR
         Given the user has created and is in Approve a new subcontractor
         When the user completes the Approve a new subcontractor form
-        And the user attempts to mark as complete and save
+        And the user saves the "Approve a new subcontractor" pcr after marking as complete
         Then the request page will show "Approve a new subcontractor" as "Complete"
 
         When the user completes the reasons section
