@@ -3,6 +3,7 @@ import { Fixture } from "playwright-bdd/decorators";
 import path from "path";
 import * as fs from "fs";
 import { getLorem } from "../components/lorem";
+import { PageHeading } from "../components/PageHeading";
 
 export
 @Fixture("commands")
@@ -270,7 +271,8 @@ class Commands {
   }
 
   async heading(title: string) {
-    expect(await this.page.locator("h1", { hasText: title }).innerText()).toBe;
+    const heading = new PageHeading({ page: this.page, title });
+    await heading.isVisible();
   }
 
   /**

@@ -80,6 +80,9 @@ class Acc_ProjectParticipant__c extends AbstractSObject {
 
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_CreateClaims__c: SObjectFieldType<boolean>;
+
+  @SObjectField({ nullable: false, readonly: false })
+  accessor Acc_WorkdaySupplierSetupComplete__c: SObjectFieldType<boolean>;
 }
 
 export { Acc_ProjectParticipant__c };

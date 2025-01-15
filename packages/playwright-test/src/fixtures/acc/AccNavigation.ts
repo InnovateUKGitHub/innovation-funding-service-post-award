@@ -80,6 +80,42 @@ class AccNavigation {
     await this.accIsLoaded.forecastsLoaded();
   }
 
+  @Given("the user is on the claims dashboard")
+  async gotoClaimsDashboard() {
+    await this.testCache.cache(
+      ["gotoClaimsDashboard", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Claims").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.claimsLoaded();
+  }
+
+  @Given("the user is on the finance summary page")
+  async gotoFinanceSummary() {
+    await this.testCache.cache(
+      ["gotoFinanceSummary", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Finance summary").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.financeSummaryLoaded();
+  }
+
   @Given("the user has navigated to the monitoring reports page")
   async gotoMonitoringReports() {
     await this.testCache.cache(

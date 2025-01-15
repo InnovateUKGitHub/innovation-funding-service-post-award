@@ -29,8 +29,16 @@ class AccIsLoaded {
     await this.commands.heading("Project overview");
   }
 
+  async claimsLoaded() {
+    await this.commands.heading("Claims");
+  }
+
   async forecastsLoaded() {
     await this.commands.heading("Forecasts");
+  }
+
+  async financeSummaryLoaded() {
+    await this.commands.heading("Finance summary");
   }
 
   async moReportLoaded() {

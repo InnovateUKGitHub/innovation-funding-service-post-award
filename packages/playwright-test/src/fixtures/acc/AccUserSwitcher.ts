@@ -40,7 +40,8 @@ class AccUserSwitcher {
     return this.switch("");
   }
 
-  private async switch(username: string = "") {
+  @Given("the user has the username {string}")
+  public async switch(username: string = "") {
     console.log("acc user switcher", username);
 
     while (true) {

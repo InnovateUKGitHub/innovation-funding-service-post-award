@@ -14,6 +14,8 @@ import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 import { overwriteProfiles } from "../helpers/overwriteProfiles";
+import { Acc_Prepayment__c } from "../sobjects/Acc_Prepayment__c";
+import { approveSObject } from "../helpers/approveSObject";
 
 interface TwoParticipantProjectFactoryScriptArguments {
   competitionType: "CR&D" | "SBRI";
@@ -40,6 +42,7 @@ type TwoParticipantProjectFactoryScriptContext = {
   pmPcl: Acc_ProjectContactLink__c;
   mainFcPcl: Acc_ProjectContactLink__c;
   secondaryFcPcl: Acc_ProjectContactLink__c;
+  grantAdjustment: Acc_Prepayment__c;
 };
 
 class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
@@ -142,6 +145,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     mainProjectParticipant.Acc_OrganisationType__c = "Industrial";
     mainProjectParticipant.Acc_CreateProfiles__c = false;
     mainProjectParticipant.Acc_CreateClaims__c = false;
+    mainProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
     const secondaryProjectParticipant = new Acc_ProjectParticipant__c();
     secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
@@ -160,6 +164,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     secondaryProjectParticipant.Acc_OrganisationType__c = "Academic";
     secondaryProjectParticipant.Acc_CreateProfiles__c = false;
     secondaryProjectParticipant.Acc_CreateClaims__c = false;
+    secondaryProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
     // Disable Trigger__mdt so we can insert profiles/claims with impunity
     disableClaimTrigger();
@@ -379,6 +384,16 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
       await Database.upsert([...mainClaims.claimLineItems, ...secondaryClaims.claimLineItems]);
     }
 
+    const grantAdjustment = new Acc_Prepayment__c();
+    grantAdjustment.Acc_PeriodNumber__c = 1;
+    grantAdjustment.Acc_Adjustment_Type__c = "Prepayment";
+    grantAdjustment.Acc_Status__c = "New";
+    grantAdjustment.Acc_ProjectParticipant__c = mainProjectParticipant.Id;
+    grantAdjustment.Acc_ReasonForPrepayment__c = "'it's just optional, you know' - Olu";
+    grantAdjustment.Acc_GranttobePaid__c = 10_000_000;
+    await Database.insert(grantAdjustment);
+    // await approveSObject(connection, grantAdjustment.Id);
+
     // Re-enable Trigger__mdt for normal projects
     enableClaimTrigger();
     await Database.update(triggers);
@@ -403,6 +418,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
       pmPcl,
       mainFcPcl,
       secondaryFcPcl,
+      grantAdjustment,
     };
   }
 }

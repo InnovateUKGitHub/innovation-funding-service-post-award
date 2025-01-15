@@ -36,6 +36,8 @@ import { ChangeProjectDuration } from "./acc/pages/PCRs/changeProjectDuration";
 import { Acc1CypressDoNotTouch } from "./projectFactory/Acc1CypressDoNotTouch";
 import { CrdClaims } from "./acc/pages/Claims/crdClaims";
 import { AddPartner } from "./acc/pages/PCRs/addPartner";
+import { AccClaimsDashboard } from "./acc/pages/claims/AccClaimsDashboard";
+import { AccFinanceSummary } from "./acc/pages/AccFinanceSummary";
 
 type AccFixtures = {
   // Pages
@@ -56,7 +58,9 @@ type AccFixtures = {
   changePartnerName: ChangePartnerName;
   changeProjectDuration: ChangeProjectDuration;
   crdClaims: CrdClaims;
-  addPartner: AddPartner
+  addPartner: AddPartner;
+  accClaimsDashboard: AccClaimsDashboard;
+  accFinanceSummary: AccFinanceSummary;
 
   // Misc
   accNavigation: AccNavigation;
@@ -129,9 +133,11 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new ChangeProjectDuration({ page, commands, projectChangeRequests })),
   crdClaims: ({ page, commands, validators, accNavigation }, use) =>
     use(new CrdClaims({ page, commands, validators, accNavigation })),
-
   addPartner: ({ page, commands, projectChangeRequests }, use) =>
-    use( new AddPartner({ page, commands, projectChangeRequests})),
+    use(new AddPartner({ page, commands, projectChangeRequests })),
+  accClaimsDashboard: ({ page }, use) => use(new AccClaimsDashboard({ page })),
+  accFinanceSummary: ({ page }, use) => use(new AccFinanceSummary({ page })),
+
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -174,7 +180,7 @@ export const test = base.extend<AccFixtures, Workers>({
         commands,
       }),
     ),
-  projectState: [({}, use) => use(new ProjectState()), { scope: "worker" }],
+  projectState: [({ sfdcApi }, use) => use(new ProjectState({ sfdcApi })), { scope: "worker" }],
   commands: ({ page }, use) => use(new Commands({ page })),
   accUserSwitcher: ({ context, projectState, sfdcApi }, use) =>
     use(new AccUserSwitcher({ context, projectState, sfdcApi })),
