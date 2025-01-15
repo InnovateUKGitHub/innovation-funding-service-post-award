@@ -23,6 +23,7 @@ import { ProjectLocationSchema, getProjectLocationSchema } from "./schemas/proje
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerProjectLocation } from "./projectLocation.logic";
 
 const pcrProjectLocation = [
   {
@@ -41,7 +42,7 @@ const pcrProjectLocation = [
 
 export const ProjectLocationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -54,7 +55,7 @@ export const ProjectLocationStep = () => {
       projectPostcode: pcrItem.projectPostcode ?? "",
       projectCity: pcrItem.projectCity ?? "",
       form: FormTypes.PcrAddPartnerProjectLocationStep,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
     },
     resolver: zodResolver(getProjectLocationSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
@@ -63,6 +64,8 @@ export const ProjectLocationStep = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
+
+  const { onUpdate, isFetching } = useOnUpdateAddPartnerProjectLocation();
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
@@ -73,7 +76,7 @@ export const ProjectLocationStep = () => {
 
         <Form
           onSubmit={handleSubmit(data =>
-            onSave({
+            onUpdate({
               data,
               context: link(data),
             }),

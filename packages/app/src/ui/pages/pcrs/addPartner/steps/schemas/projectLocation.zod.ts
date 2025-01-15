@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const getProjectLocationSchema = (markedAsComplete: boolean) =>
   z.object({
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     form: z.literal(FormTypes.PcrAddPartnerProjectLocationStep),
     button_submit: z.string(),
     projectLocation: z.coerce.number().gt(0),

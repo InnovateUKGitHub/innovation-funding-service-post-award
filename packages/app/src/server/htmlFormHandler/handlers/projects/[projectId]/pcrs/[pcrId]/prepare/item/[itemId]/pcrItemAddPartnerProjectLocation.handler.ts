@@ -4,11 +4,14 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   ProjectLocationSchemaType,
   getProjectLocationSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/projectLocation.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
 
 export class PcrItemAddPartnerProjectLocationHandler extends ZodFormHandlerBase<
   ProjectLocationSchemaType,
@@ -33,7 +36,7 @@ export class PcrItemAddPartnerProjectLocationHandler extends ZodFormHandlerBase<
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ProjectLocationSchemaType>> {
     return {
       form: input.form,
-      markedAsComplete: input.markedAsComplete,
+      markedAsComplete: input.markedAsComplete === "true",
       button_submit: input.button_submit,
       projectLocation: input.projectLocation,
       projectCity: input.projectCity,
@@ -50,7 +53,13 @@ export class PcrItemAddPartnerProjectLocationHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await updatePcrItem({ params, context, data: input });
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_ProjectPostcode__c: input.projectPostcode,
+      Acc_ProjectCity__c: input.projectCity,
+      Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(input.projectLocation),
+    });
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,
