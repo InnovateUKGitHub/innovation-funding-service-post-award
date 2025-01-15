@@ -29,9 +29,7 @@ export interface IProjectChangeRequestRepository {
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   updateSingleItem(item: UpdatePcrItemEntity): Promise<void>;
-  updateSingleSalesforceItem: (
-    item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">,
-  ) => Promise<void>;
+  updateSingleSalesforceItem: (item: PickRequiredFromPartial<ISalesforcePCR, "Id">) => Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
   getById(projectId: ProjectId, pcrId: PcrId | PcrItemId): Promise<ProjectChangeRequestEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
@@ -409,7 +407,7 @@ export class ProjectChangeRequestRepository
     });
   }
 
-  async updateSingleSalesforceItem(item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">) {
+  async updateSingleSalesforceItem(item: PickRequiredFromPartial<ISalesforcePCR, "Id">) {
     await super.updateItem(item);
   }
 

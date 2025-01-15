@@ -3,12 +3,14 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   AcademicOrganisationSchemaType,
   getAcademicOrganisationSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/academicOrganisation.zod";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHandlerBase<
   AcademicOrganisationSchemaType,
@@ -35,7 +37,7 @@ export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHan
       form: input.form,
       organisationName: input.organisationName,
       button_submit: input.button_submit,
-      markedAsComplete: input.markedAsComplete,
+      markedAsComplete: input.markedAsComplete === "true",
     };
   }
 
@@ -48,12 +50,10 @@ export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHan
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams & { step?: number };
   }): Promise<string> {
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        organisationName: input.organisationName,
-      },
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_OrganisationName__c: input.organisationName,
     });
 
     return await getNextAddPartnerStep({

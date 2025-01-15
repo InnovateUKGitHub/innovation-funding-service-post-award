@@ -407,3 +407,9 @@ export interface PcrAddPartnerRoleAndOrganisationDto extends PcrDtoCommon {
   isCommercialWork: string;
   partnerType: PCRPartnerType;
 }
+
+export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
+  button_submit: string;
+  organisationName: string;
+}

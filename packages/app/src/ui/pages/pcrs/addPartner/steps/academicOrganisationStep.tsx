@@ -29,12 +29,13 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { noop } from "lodash";
 import { usePreloadedDataContext } from "@ui/context/preloaded-data";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerAcademicOrganisation } from "./academicOrganisation.logic";
 
 export const AcademicOrganisationStep = () => {
   const preloadedData = usePreloadedDataContext();
 
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
@@ -44,7 +45,7 @@ export const AcademicOrganisationStep = () => {
     {
       defaultValues: {
         form: FormTypes.PcrAddPartnerAcademicOrganisationStep,
-        markedAsComplete: String(markedAsCompleteHasBeenChecked),
+        markedAsComplete: markedAsCompleteHasBeenChecked,
         button_submit: "submit",
         organisationName: pcrItem.organisationName ?? undefined,
       },
@@ -62,6 +63,8 @@ export const AcademicOrganisationStep = () => {
   const [searchInputValue, setSearchInputValue] = useState<string>("");
 
   const { isLoading, jesAccounts: queriedJesAccounts } = useJesSearchQuery(searchInputValue);
+
+  const { isFetching, onUpdate } = useOnUpdateAddPartnerAcademicOrganisation();
 
   const jesAccounts = queriedJesAccounts || preloadedData?.data?.jesSearchResults || [];
 
@@ -102,7 +105,7 @@ export const AcademicOrganisationStep = () => {
           )}
         </form>
 
-        <Form onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+        <Form onSubmit={handleSubmit(data => onUpdate({ data, context: link(data) }))}>
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerAcademicOrganisationStep} />
           <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
 

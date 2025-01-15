@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getAcademicOrganisationSchema = (markedAsComplete: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrAddPartnerAcademicOrganisationStep),
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     button_submit: z.string(),
     organisationName: getTextValidation({ required: markedAsComplete, maxLength: 256 }),
   });

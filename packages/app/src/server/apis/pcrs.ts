@@ -1,6 +1,7 @@
 import {
   CreatePcrDto,
   FullPCRItemDto,
+  PcrAddPartnerAcademicOrganisationDto,
   PcrAddPartnerRoleAndOrganisationDto,
   PcrChangeDurationDto,
   PCRDto,
@@ -24,6 +25,7 @@ import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRe
 import { UpdatePcrChangeDurationCommand } from "@server/features/pcrs/updatePcrChangeDurationCommand";
 import { UpdatePcrSuspendProjectCommand } from "@server/features/pcrs/updatePcrSuspendProjectCommand";
 import { UpdatePcrAddPartnerRoleAndOrganisationCommand } from "@server/features/pcrs/updatePcrAddPartnerRoleAndOrganisationCommand";
+import { UpdatePcrAddPartnerAcademicOrganisationCommand } from "@server/features/pcrs/updatePcrAddPartnerAcademicOrganisationCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -42,6 +44,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PCRDto>;
+
+  addPartnerAcademicOrganisation(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerAcademicOrganisationDto;
+      }
+    >,
+  ): Promise<boolean>;
 
   addPartnerRoleAndOrganisation(
     params: ApiParams<
@@ -142,6 +156,17 @@ class Controller
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/academic-organisation",
+      (p, _, b: PcrAddPartnerAcademicOrganisationDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.addPartnerAcademicOrganisation,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/role-and-organisation",
       (p, _, b: PcrAddPartnerRoleAndOrganisationDto) => ({
         projectId: p.projectId,
@@ -240,6 +265,31 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async addPartnerAcademicOrganisation(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerAcademicOrganisationDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrAddPartnerAcademicOrganisationCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async addPartnerRoleAndOrganisation(
