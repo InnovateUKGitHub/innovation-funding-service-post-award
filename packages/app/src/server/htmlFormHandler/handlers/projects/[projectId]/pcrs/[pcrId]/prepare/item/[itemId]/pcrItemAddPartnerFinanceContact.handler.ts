@@ -5,11 +5,14 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   FinanceContactSchemaType,
   getFinanceContactSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/financeContact.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PcrContactRoleMapper } from "@framework/mappers/pcr";
+import { PCRContactRole, PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemAddPartnerFinanceContactHandler extends ZodFormHandlerBase<
   FinanceContactSchemaType,
@@ -52,7 +55,17 @@ export class PcrItemAddPartnerFinanceContactHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await updatePcrItem({ params, context, data: input });
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(
+        PCRContactRole.FinanceContact,
+      ),
+      Acc_Contact1Forename__c: input.contact1Forename,
+      Acc_Contact1Surname__c: input.contact1Surname,
+      Acc_Contact1Phone__c: input.contact1Phone,
+      Acc_Contact1EmailAddress__c: input.contact1Email,
+    });
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,

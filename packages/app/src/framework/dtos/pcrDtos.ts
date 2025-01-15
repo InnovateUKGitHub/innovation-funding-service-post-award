@@ -421,3 +421,12 @@ export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   projectLocation?: number;
   projectPostcode?: string;
 }
+
+export interface PcrAddPartnerFinanceContactDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerFinanceContactStep;
+  button_submit: string;
+  contact1Email?: string;
+  contact1Forename?: string;
+  contact1Surname?: string;
+  contact1Phone?: string;
+}

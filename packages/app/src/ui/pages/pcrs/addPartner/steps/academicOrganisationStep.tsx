@@ -64,12 +64,12 @@ export const AcademicOrganisationStep = () => {
 
   const { isLoading, jesAccounts: queriedJesAccounts } = useJesSearchQuery(searchInputValue);
 
-  const { isFetching, onUpdate } = useOnUpdateAddPartnerAcademicOrganisation();
+  const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerAcademicOrganisation();
 
   const jesAccounts = queriedJesAccounts || preloadedData?.data?.jesSearchResults || [];
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <form onSubmit={noop} method="POST">
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerAcademicOrganisationSearchStep} />

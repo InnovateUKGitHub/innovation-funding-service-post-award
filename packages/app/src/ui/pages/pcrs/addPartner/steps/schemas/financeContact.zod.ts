@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getFinanceContactSchema = (markedAsComplete: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrAddPartnerFinanceContactStep),
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     button_submit: z.string(),
     contact1Forename: getTextValidation({ required: markedAsComplete, maxLength: 50 }),
     contact1Surname: getTextValidation({ required: markedAsComplete, maxLength: 50 }),

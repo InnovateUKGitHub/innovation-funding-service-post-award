@@ -1,5 +1,5 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { PcrAddPartnerProjectLocationDto } from "@framework/dtos/pcrDtos";
+import { PcrAddPartnerFinanceContactDto } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
@@ -9,22 +9,23 @@ import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeReque
 
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import {
-  getProjectLocationSchema,
-  ProjectLocationSchemaType,
-} from "@ui/pages/pcrs/addPartner/steps/schemas/projectLocation.zod";
-import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
+  FinanceContactSchemaType,
+  getFinanceContactSchema,
+} from "@ui/pages/pcrs/addPartner/steps/schemas/financeContact.zod";
+import { PcrContactRoleMapper } from "@framework/mappers/pcr";
+import { PCRContactRole } from "@framework/constants/pcrConstants";
 
-export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyncCommandBase<
+export class UpdatePcrAddPartnerFinanceContactCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  ProjectLocationSchemaType,
-  PcrAddPartnerProjectLocationDto
+  FinanceContactSchemaType,
+  PcrAddPartnerFinanceContactDto
 > {
-  public readonly runnableName: string = "UpdatePcrAddPartnerProjectLocationCommand";
+  public readonly runnableName: string = "UpdatePcrAddPartnerFinanceContactCommand";
   protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
-  private readonly form: FormTypes.PcrAddPartnerProjectLocationStep;
-  protected readonly dto: PcrAddPartnerProjectLocationDto;
+  private readonly form: FormTypes.PcrAddPartnerFinanceContactStep;
+  protected readonly dto: PcrAddPartnerFinanceContactDto;
 
   constructor({
     projectId,
@@ -36,8 +37,8 @@ export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyn
     projectId: ProjectId;
     pcrId: PcrId;
     pcrItemId: PcrItemId;
-    pcr: PcrAddPartnerProjectLocationDto;
-    form: FormTypes.PcrAddPartnerProjectLocationStep;
+    pcr: PcrAddPartnerFinanceContactDto;
+    form: FormTypes.PcrAddPartnerFinanceContactStep;
   }) {
     super();
     this.projectId = projectId;
@@ -54,7 +55,7 @@ export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyn
   }
 
   protected async getZodSchema() {
-    return { schema: getProjectLocationSchema(!!this.dto.markedAsComplete), errorMap: addPartnerErrorMap };
+    return { schema: getFinanceContactSchema(!!this.dto.markedAsComplete), errorMap: addPartnerErrorMap };
   }
 
   protected async mapToZod() {
@@ -62,22 +63,27 @@ export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyn
       form: this.form,
       button_submit: this.dto.button_submit,
       markedAsComplete: !!this.dto.markedAsComplete,
-      projectLocation: this.dto.projectLocation ?? 0,
-      projectCity: this.dto.projectCity,
-      projectPostcode: this.dto.projectPostcode,
+      contact1Email: this.dto.contact1Email,
+      contact1Forename: this.dto.contact1Forename,
+      contact1Surname: this.dto.contact1Surname,
+      contact1Phone: this.dto.contact1Phone,
     };
   }
 
   protected async runRepositoryCommands(
     context: IContext,
-    validatedData: z.output<ProjectLocationSchemaType>,
+    validatedData: z.output<FinanceContactSchemaType>,
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
       Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
-      Acc_ProjectPostcode__c: validatedData.projectPostcode,
-      Acc_ProjectCity__c: validatedData.projectCity,
-      Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(validatedData.projectLocation),
+      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(
+        PCRContactRole.FinanceContact,
+      ),
+      Acc_Contact1Forename__c: validatedData.contact1Forename,
+      Acc_Contact1Surname__c: validatedData.contact1Surname,
+      Acc_Contact1Phone__c: validatedData.contact1Phone,
+      Acc_Contact1EmailAddress__c: validatedData.contact1Email,
     });
 
     return true;

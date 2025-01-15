@@ -25,10 +25,11 @@ import { FinanceContactSchema, getFinanceContactSchema } from "./schemas/finance
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerFinanceContact } from "./financeContact.logic";
 
 export const FinanceContactStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -37,7 +38,7 @@ export const FinanceContactStep = () => {
   const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<FinanceContactSchema>({
     defaultValues: {
       form: FormTypes.PcrAddPartnerFinanceContactStep,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       contact1Forename: pcrItem.contact1Forename ?? "",
       contact1Surname: pcrItem.contact1Surname ?? "",
@@ -54,16 +55,18 @@ export const FinanceContactStep = () => {
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
+  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerFinanceContact();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerProjectContacts.sectionTitle)}</H2>
         <P>{getContent(x => x.pages.pcrAddPartnerProjectContacts.guidance)}</P>
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: { ...data, contact1ProjectRole: PCRContactRole.FinanceContact },
+            onUpdate({
+              data,
               context: link(data),
             }),
           )}

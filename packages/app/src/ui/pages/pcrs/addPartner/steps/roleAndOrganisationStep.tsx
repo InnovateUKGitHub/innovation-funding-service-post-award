@@ -51,7 +51,7 @@ export const RoleAndOrganisationStep = () => {
     }),
   });
 
-  const { isFetching, onUpdate } = useOnUpdateAddPartnerPartnerRoleAndOrganisation(formHasBeenFilled);
+  const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerPartnerRoleAndOrganisation(formHasBeenFilled);
 
   const disabled = formHasBeenFilled || isFetching;
 
@@ -79,7 +79,7 @@ export const RoleAndOrganisationStep = () => {
   ];
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="role-and-partner-type" title={x => x.pages.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form
           data-qa="addPartnerForm"

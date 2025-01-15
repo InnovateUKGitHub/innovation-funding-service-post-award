@@ -65,12 +65,12 @@ export const ProjectLocationStep = () => {
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
-  const { onUpdate, isFetching } = useOnUpdateAddPartnerProjectLocation();
+  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerProjectLocation();
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pcrAddPartnerLabels.projectLocationHeading)}</H2>
 
