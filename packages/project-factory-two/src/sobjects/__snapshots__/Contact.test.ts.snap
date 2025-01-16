@@ -4,10 +4,17 @@ exports[`Contact Factory contact can be made 1`] = `
 [
   {
     "name": "ContactMigrationId__c",
-    "nullable": false,
+    "nullable": true,
     "readonly": false,
     "set": true,
     "value": "1234",
+  },
+  {
+    "name": "Salutation",
+    "nullable": true,
+    "readonly": false,
+    "set": false,
+    "value": undefined,
   },
   {
     "name": "FirstName",
@@ -29,6 +36,13 @@ exports[`Contact Factory contact can be made 1`] = `
     "readonly": false,
     "set": true,
     "value": "marks@spencer.x.gov.uk",
+  },
+  {
+    "name": "Email__c",
+    "nullable": true,
+    "readonly": false,
+    "set": false,
+    "value": undefined,
   },
   {
     "name": "AccountId",
