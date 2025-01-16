@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getProjectManagerSchema = (markedAsComplete: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrAddPartnerProjectManagerStep),
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     button_submit: z.string(),
     contact2Forename: getTextValidation({ required: markedAsComplete, maxLength: 50 }),
     contact2Surname: getTextValidation({ required: markedAsComplete, maxLength: 50 }),

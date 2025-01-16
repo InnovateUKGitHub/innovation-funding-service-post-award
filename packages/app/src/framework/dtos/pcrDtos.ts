@@ -430,3 +430,12 @@ export interface PcrAddPartnerFinanceContactDto extends PcrDtoCommon {
   contact1Surname?: string;
   contact1Phone?: string;
 }
+
+export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerProjectManagerStep;
+  button_submit: string;
+  contact2Email?: string;
+  contact2Forename?: string;
+  contact2Surname?: string;
+  contact2Phone?: string;
+}
