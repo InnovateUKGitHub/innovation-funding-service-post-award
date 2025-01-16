@@ -33,12 +33,12 @@ export const TimeExtensionSummary = () => {
     }),
   });
 
-  const { onUpdate, isFetching } = useOnUpdateTimeExtension();
+  const { onUpdate, isFetching, apiError } = useOnUpdateTimeExtension();
 
   const validationErrors = useZodErrors(setError, formState?.errors);
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section title="Existing project details">
         <SummaryList qa="existingProjectDetails">
           <SummaryListItem

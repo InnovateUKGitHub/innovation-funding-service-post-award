@@ -34,10 +34,10 @@ export const RemovePartnerSummary = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { onUpdate, isFetching } = useOnUpdateRemovePartner();
+  const { onUpdate, isFetching, apiError } = useOnUpdateRemovePartner();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="name-change-summary">
         <SummaryList qa="name-change-summary-list">
           <SummaryListItem

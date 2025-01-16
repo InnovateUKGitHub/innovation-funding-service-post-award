@@ -35,10 +35,10 @@ export const RenamePartnerSummary = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { onUpdate, isFetching } = useOnUpdateRenamePartner();
+  const { onUpdate, isFetching, apiError } = useOnUpdateRenamePartner();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="name-change-summary">
         <SummaryList qa="name-change-summary-list">
           <SummaryListItem

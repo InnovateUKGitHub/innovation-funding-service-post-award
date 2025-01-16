@@ -70,7 +70,7 @@ export const TimeExtensionStep = () => {
     }),
   });
 
-  const { onUpdate, isFetching } = useOnUpdateTimeExtension();
+  const { onUpdate, isFetching, apiError } = useOnUpdateTimeExtension();
 
   const newOffset = Number(watch("timeExtension"));
 
@@ -81,7 +81,7 @@ export const TimeExtensionStep = () => {
   const validationErrors = useZodErrors(setError, formState.errors);
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <Content markdown value={x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint} />
       </Section>

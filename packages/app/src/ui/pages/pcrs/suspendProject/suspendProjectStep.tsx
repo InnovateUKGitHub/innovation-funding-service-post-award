@@ -64,10 +64,10 @@ export const SuspendProjectStep = () => {
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
-  const { onUpdate, isFetching } = useOnUpdateSuspendProject();
+  const { onUpdate, isFetching, apiError } = useOnUpdateSuspendProject();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       {isPm && (
         <Section>
           <SimpleString>{suspendProjectIntro}</SimpleString>

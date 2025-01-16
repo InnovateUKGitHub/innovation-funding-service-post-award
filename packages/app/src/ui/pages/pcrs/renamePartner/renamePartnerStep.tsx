@@ -57,7 +57,7 @@ export const RenamePartnerStep = () => {
   }, [watch, setValue, partners]);
   watch(values => values);
 
-  const { onUpdate, isFetching } = useOnUpdateRenamePartner();
+  const { onUpdate, isFetching, apiError } = useOnUpdateRenamePartner();
 
   const partnerOptions = partners
     .filter(x => !x.isWithdrawn)
@@ -68,7 +68,7 @@ export const RenamePartnerStep = () => {
 
   const nextLink = useNextLink();
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <Form
           onSubmit={handleSubmit(data => {

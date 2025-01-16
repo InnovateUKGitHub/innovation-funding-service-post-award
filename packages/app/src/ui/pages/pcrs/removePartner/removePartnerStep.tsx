@@ -52,12 +52,12 @@ export const RemovePartnerStep = () => {
       label: getPartnerName(x),
     }));
 
-  const { onUpdate, isFetching } = useOnUpdateRemovePartner();
+  const { onUpdate, isFetching, apiError } = useOnUpdateRemovePartner();
 
   const nextLink = useNextLink();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <Form
           onSubmit={handleSubmit(data => {

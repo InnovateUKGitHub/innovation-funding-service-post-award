@@ -50,10 +50,10 @@ export const ProjectSummaryChangeStep = () => {
   const nextLink = useNextLink();
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
-  const { onUpdate, isFetching } = useOnUpdateScopeChange<"projectSummary">();
+  const { onUpdate, isFetching, apiError } = useOnUpdateScopeChange<"projectSummary">();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section data-qa="newSummarySection">
         <Form
           onSubmit={handleSubmit(data => {

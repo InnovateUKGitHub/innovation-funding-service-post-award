@@ -54,10 +54,10 @@ export const PublicDescriptionChangeStep = () => {
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
-  const { onUpdate, isFetching } = useOnUpdateScopeChange<"description">();
+  const { onUpdate, isFetching, apiError } = useOnUpdateScopeChange<"description">();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section data-qa="newDescriptionSection">
         <Form
           onSubmit={handleSubmit(data => {

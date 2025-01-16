@@ -37,10 +37,10 @@ export const SuspendProjectSummary = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { onUpdate, isFetching } = useOnUpdateSuspendProjectSummary();
+  const { onUpdate, isFetching, apiError } = useOnUpdateSuspendProjectSummary();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <SummaryList qa="projectSuspension">
           <SummaryListItem

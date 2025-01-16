@@ -32,10 +32,10 @@ export const ScopeChangeSummary = () => {
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
-  const { onUpdate, isFetching } = useOnUpdateScopeChange<"summary">();
+  const { onUpdate, isFetching, apiError } = useOnUpdateScopeChange<"summary">();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="scope-change-summary">
         <SummaryList qa="scope-change-summary-list">
           <SummaryListItem
