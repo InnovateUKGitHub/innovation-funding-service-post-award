@@ -15,6 +15,7 @@ import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectRole } from "./projectContactDto";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { CostCategoryType } from "@framework/constants/enums";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -416,6 +417,19 @@ export interface PcrAddPartnerRoleAndOrganisationDto extends PcrDtoCommon {
   projectRole: number;
   isCommercialWork: string;
   partnerType: PCRPartnerType;
+}
+
+export interface PcrAddPartnerAcademicCostsDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerAcademicCostsStep;
+  button_submit: string;
+  tsbReference?: string;
+  costs: Array<{
+    costCategory: CostCategoryType;
+    costCategoryId: CostCategoryId;
+    description: string;
+    id?: CostId | undefined;
+    value: string | null;
+  }>;
 }
 
 export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {

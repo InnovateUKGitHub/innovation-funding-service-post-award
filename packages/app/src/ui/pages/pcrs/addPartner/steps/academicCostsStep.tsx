@@ -24,11 +24,11 @@ import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { useOnUpdateAddPartnerAcademicCosts } from "./academicCosts.logic";
 
 type AcademicCostsRhfError = {
   tsbReference: RhfError;
@@ -41,7 +41,7 @@ type AcademicCostsRhfError = {
 export const AcademicCostsStep = () => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const link = useLinks();
 
@@ -52,7 +52,7 @@ export const AcademicCostsStep = () => {
   const { handleSubmit, register, setError, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
     defaultValues: {
       form: FormTypes.PcrAddPartnerAcademicCostsStep,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       tsbReference: pcrItem.tsbReference ?? "",
       costs: initialCosts,
@@ -69,24 +69,18 @@ export const AcademicCostsStep = () => {
 
   const total = watch("costs").reduce((acc, cur) => acc + (parseCurrency(cur.value) || 0), 0);
 
+  const { isFetching, apiError, onUpdate } = useOnUpdateAddPartnerAcademicCosts();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pcrAddPartnerLabels.projectCostsHeading)}</H2>
         <P>{getContent(x => x.pages.pcrAddPartnerAcademicCosts.stepGuidance)}</P>
         <Form
           data-qa="academic-costs-form"
           onSubmit={handleSubmit(data => {
-            return onSave({
-              data: {
-                tsbReference: data.tsbReference,
-                button_submit: data.button_submit,
-                type: pcrItem.type,
-                spendProfile: {
-                  ...spendProfile,
-                  costs: data.costs.map(x => ({ ...x, value: parseCurrency(x.value) })) as PcrSpendProfileDto["costs"],
-                },
-              },
+            return onUpdate({
+              data,
               context: link(data),
             });
           })}

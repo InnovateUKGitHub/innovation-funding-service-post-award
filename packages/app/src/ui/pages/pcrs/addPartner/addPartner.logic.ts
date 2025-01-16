@@ -169,7 +169,7 @@ export const getInitialAcademicCosts = (
       }
 
       return {
-        id: "" as PcrId,
+        id: undefined,
         value: "0",
         costCategoryId: x.id,
         description: x.name ?? "",

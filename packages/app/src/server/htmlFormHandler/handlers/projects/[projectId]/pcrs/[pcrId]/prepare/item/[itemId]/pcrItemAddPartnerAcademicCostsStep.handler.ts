@@ -4,15 +4,16 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import { set } from "lodash";
 
 import {
   AcademicCostsSchemaType,
   getAcademicCostsSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/academicCosts.zod";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
+import { parseCurrency } from "@framework/util/numberHelper";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemAddPartnerAcademicCostsHandler extends ZodFormHandlerBase<
   AcademicCostsSchemaType,
@@ -85,19 +86,21 @@ export class PcrItemAddPartnerAcademicCostsHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const newCostItems = input.costs
+      .filter(x => !x.id)
+      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: params.itemId }));
+    const updatedCostItems = input.costs
+      .filter(x => !!x.id)
+      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: params.itemId, id: x.id as CostId }));
 
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        tsbReference: input.tsbReference,
-        spendProfile: {
-          ...spendProfile,
-          costs: input.costs.map(x => ({ ...x, value: Number(x.value) })) as PcrSpendProfileDto["costs"],
-        },
-      },
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_TSBReference__c: input.tsbReference,
     });
+
+    await context.repositories.pcrSpendProfile.insertSpendProfiles(newCostItems);
+    await context.repositories.pcrSpendProfile.updateSpendProfiles(updatedCostItems);
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,

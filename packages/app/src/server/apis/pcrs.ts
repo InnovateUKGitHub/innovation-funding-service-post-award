@@ -2,6 +2,7 @@ import {
   CreatePcrDto,
   FullPCRItemDto,
   LoanDrawdownExtensionDto,
+  PcrAddPartnerAcademicCostsDto,
   PcrAddPartnerAcademicOrganisationDto,
   PcrAddPartnerFinanceContactDto,
   PcrAddPartnerProjectLocationDto,
@@ -34,6 +35,7 @@ import { UpdatePcrAddPartnerProjectLocationCommand } from "@server/features/pcrs
 import { UpdatePcrAddPartnerFinanceContactCommand } from "@server/features/pcrs/updatePcrAddPartnerFinanceContactCommand";
 import { UpdatePcrAddPartnerProjectManagerCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectManagerCommand";
 import { UpdatePcrLoanDurationExtensionCommand } from "@server/features/pcrs/updateLoanDurationExtensionCommand";
+import { UpdatePcrAddPartnerAcademicCostsCommand } from "@server/features/pcrs/updatePcrAddPartnerAcademicCostsCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -52,6 +54,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<PCRDto>;
+
+  addPartnerAcademicCosts(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerAcademicCostsDto;
+      }
+    >,
+  ): Promise<boolean>;
 
   addPartnerAcademicOrganisation(
     params: ApiParams<
@@ -212,6 +226,17 @@ class Controller
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/academic-costs",
+      (p, _, b: PcrAddPartnerAcademicCostsDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.addPartnerAcademicCosts,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-organisation",
       (p, _, b: PcrAddPartnerAcademicOrganisationDto) => ({
         projectId: p.projectId,
@@ -365,6 +390,31 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async addPartnerAcademicCosts(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerAcademicCostsDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrAddPartnerAcademicCostsCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async addPartnerAcademicOrganisation(

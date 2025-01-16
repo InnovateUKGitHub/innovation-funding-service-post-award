@@ -1,6 +1,7 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { costCategoryIdValidation, costIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -8,7 +9,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
   markedAsComplete
     ? z.object({
         form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
-        markedAsComplete: z.string(),
+        markedAsComplete: z.boolean(),
         button_submit: z.string(),
         tsbReference: getTextValidation({
           required: true,
@@ -19,8 +20,8 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
             value: getGenericCurrencyValidation({
               required: true,
             }),
-            costCategoryId: z.string(),
-            id: z.string(),
+            costCategoryId: costCategoryIdValidation,
+            id: costIdValidation.optional(),
             description: z.string(),
             costCategory: z.number().transform(x => x as CostCategoryType),
           }),
@@ -29,7 +30,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
     : z.object({
         form: z.literal(FormTypes.PcrAddPartnerAcademicCostsStep),
         button_submit: z.string(),
-        markedAsComplete: z.string(),
+        markedAsComplete: z.boolean(),
         tsbReference: getTextValidation({
           required: false,
           maxLength: 256,
@@ -39,8 +40,8 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
             value: getGenericCurrencyValidation({
               required: true,
             }),
-            costCategoryId: z.string(),
-            id: z.string(),
+            costCategoryId: costCategoryIdValidation,
+            id: costIdValidation.optional(),
             description: z.string(),
             costCategory: z.number().transform(x => x as CostCategoryType),
           }),

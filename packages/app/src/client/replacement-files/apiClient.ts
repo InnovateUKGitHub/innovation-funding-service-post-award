@@ -104,6 +104,11 @@ const clientApi: IApiClient<"client"> = {
   pcrs: {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
+    addPartnerAcademicCosts: params =>
+      ajaxPut(
+        `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/academic-costs`,
+        params.pcr,
+      ),
     addPartnerAcademicOrganisation: params =>
       ajaxPut(
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/academic-organisation`,
