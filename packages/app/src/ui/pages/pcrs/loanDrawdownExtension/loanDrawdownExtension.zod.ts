@@ -59,3 +59,59 @@ export const loanDrawdownExtensionSchema = ({
 export type LoanDrawdownExtensionSchemaType = ReturnType<typeof loanDrawdownExtensionSchema>;
 
 export type LoanDrawdownExtensionSchema = z.infer<LoanDrawdownExtensionSchemaType>;
+
+export const loanDrawdownExtensionSummarySchema = ({
+  availabilityPeriod,
+  extensionPeriod,
+  repaymentPeriod,
+}: {
+  availabilityPeriod: number;
+  extensionPeriod: number;
+  repaymentPeriod: number;
+}) =>
+  z
+    .object({
+      markedAsComplete: z.boolean(),
+      availabilityPeriodChange: z.number(),
+      extensionPeriodChange: z.number(),
+      repaymentPeriodChange: z.number(),
+    })
+    .superRefine((data, ctx) => {
+      if (data.markedAsComplete) {
+        if (Number(data.availabilityPeriodChange) % quarterlyOffset !== 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["availabilityPeriodChange"],
+          });
+        }
+
+        if (Number(data.extensionPeriodChange) % quarterlyOffset !== 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["extensionPeriodChange"],
+          });
+        }
+
+        if (Number(data.repaymentPeriodChange) % quarterlyOffset !== 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["repaymentPeriodChange"],
+          });
+        }
+
+        if (
+          Number(data.availabilityPeriodChange) === availabilityPeriod &&
+          Number(data.extensionPeriodChange) === extensionPeriod &&
+          Number(data.repaymentPeriodChange) === repaymentPeriod
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["loanDrawdownExtension"],
+          });
+        }
+      }
+    });
+
+export type LoanDrawdownExtensionSummarySchemaType = ReturnType<typeof loanDrawdownExtensionSummarySchema>;
+
+export type LoanDrawdownExtensionSummarySchema = z.infer<LoanDrawdownExtensionSummarySchemaType>;

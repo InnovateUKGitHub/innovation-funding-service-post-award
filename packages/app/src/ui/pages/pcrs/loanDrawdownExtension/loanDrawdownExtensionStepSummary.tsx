@@ -4,10 +4,13 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoanDrawdownExtensionSchema, errorMap } from "./loanDrawdownExtension.zod";
+import {
+  LoanDrawdownExtensionSummarySchema,
+  errorMap,
+  loanDrawdownExtensionSummarySchema,
+} from "./loanDrawdownExtension.zod";
 import { PcrPage } from "../pcrPage";
 import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
-import { loanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { LoanDrawdownTable } from "./loanDrawdownTable";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
@@ -17,15 +20,15 @@ export const LoanDrawdownExtensionSummary = () => {
 
   const { pcrItem } = useLoanDrawdownExtensionQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch, setError } = useForm<LoanDrawdownExtensionSchema>({
+  const { register, handleSubmit, formState, watch, setError } = useForm<LoanDrawdownExtensionSummarySchema>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
-      availabilityPeriodChange: String(pcrItem.availabilityPeriodChange ?? 0),
-      extensionPeriodChange: String(pcrItem.extensionPeriodChange ?? 0),
-      repaymentPeriodChange: String(pcrItem.repaymentPeriodChange ?? 0),
+      availabilityPeriodChange: pcrItem.availabilityPeriodChange ?? 0,
+      extensionPeriodChange: pcrItem.extensionPeriodChange ?? 0,
+      repaymentPeriodChange: pcrItem.repaymentPeriodChange ?? 0,
     },
     resolver: zodResolver(
-      loanDrawdownExtensionSchema({
+      loanDrawdownExtensionSummarySchema({
         availabilityPeriod: pcrItem.availabilityPeriod ?? 0,
         extensionPeriod: pcrItem.extensionPeriod ?? 0,
         repaymentPeriod: pcrItem.repaymentPeriod ?? 0,
@@ -54,7 +57,7 @@ export const LoanDrawdownExtensionSummary = () => {
       </Section>
 
       {displayCompleteForm && (
-        <PcrItemSummaryForm<LoanDrawdownExtensionSchema>
+        <PcrItemSummaryForm<LoanDrawdownExtensionSummarySchema>
           register={register}
           watch={watch}
           handleSubmit={handleSubmit}
