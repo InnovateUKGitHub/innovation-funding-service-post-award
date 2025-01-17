@@ -23,10 +23,12 @@ function useHeartbeat() {
   useEffect(() => {
     addEventListener("keydown", sendHeartbeat);
     addEventListener("click", sendHeartbeat);
+    addEventListener("scrollend", sendHeartbeat);
 
     return () => {
       removeEventListener("keydown", sendHeartbeat);
       removeEventListener("click", sendHeartbeat);
+      removeEventListener("scrollend", sendHeartbeat);
     };
   }, []);
 }
