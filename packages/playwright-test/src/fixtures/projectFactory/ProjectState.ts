@@ -33,7 +33,8 @@ class ProjectState {
   @Given("the grant adjustment {string} is approved by the system user")
   public async approveGrantAdjustment(adjustment: string) {
     const grantAdjustment = this.context[adjustment];
-    if (!(grantAdjustment instanceof Acc_Prepayment__c)) throw new Error("Project key is not of type Acc_Project__c");
+    if (!(grantAdjustment instanceof Acc_Prepayment__c))
+      throw new Error("Grant Adjustment key is not of type Acc_Prepayment__c");
     const conn = await this.sfdcApi.getTsforceConnection();
     return approveSObject(conn, grantAdjustment.Id);
   }
