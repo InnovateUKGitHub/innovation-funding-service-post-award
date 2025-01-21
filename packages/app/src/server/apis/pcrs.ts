@@ -5,6 +5,7 @@ import {
   PcrAddPartnerAcademicCostsDto,
   PcrAddPartnerAcademicOrganisationDto,
   PcrAddPartnerFinanceContactDto,
+  PcrAddPartnerJesStepDto,
   PcrAddPartnerProjectLocationDto,
   PcrAddPartnerProjectManagerDto,
   PcrAddPartnerRoleAndOrganisationDto,
@@ -36,6 +37,7 @@ import { UpdatePcrAddPartnerFinanceContactCommand } from "@server/features/pcrs/
 import { UpdatePcrAddPartnerProjectManagerCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectManagerCommand";
 import { UpdatePcrLoanDurationExtensionCommand } from "@server/features/pcrs/updateLoanDurationExtensionCommand";
 import { UpdatePcrAddPartnerAcademicCostsCommand } from "@server/features/pcrs/updatePcrAddPartnerAcademicCostsCommand";
+import { UpdatePcrAddPartnerJesStepCommand } from "@server/features/pcrs/updatePcrAddPartnerJesStepCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -87,6 +89,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         pcrId: PcrId;
         pcrItemId: PcrItemId;
         pcr: PcrAddPartnerFinanceContactDto;
+      }
+    >,
+  ): Promise<boolean>;
+
+  addPartnerJesStep(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerJesStepDto;
       }
     >,
   ): Promise<boolean>;
@@ -256,6 +270,17 @@ class Controller
         pcr: processDto(b),
       }),
       this.addPartnerFinanceContact,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/jes-step",
+      (p, _, b: PcrAddPartnerJesStepDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.addPartnerJesStep,
     );
 
     this.putItem(
@@ -457,6 +482,31 @@ class Controller
 
     await context.runCommand(
       new UpdatePcrAddPartnerFinanceContactCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async addPartnerJesStep(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerJesStepDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrAddPartnerJesStepCommand({
         projectId: params.projectId,
         pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,

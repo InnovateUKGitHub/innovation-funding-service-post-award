@@ -438,6 +438,11 @@ export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {
   organisationName: string;
 }
 
+export interface PcrAddPartnerJesStepDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerJesFormStep;
+  button_submit?: string;
+}
+
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectLocationStep;
   button_submit: string;

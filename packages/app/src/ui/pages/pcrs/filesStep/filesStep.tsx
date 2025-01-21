@@ -31,24 +31,51 @@ import { createRegisterButton } from "@framework/util/registerButton";
 import { useMessages } from "@framework/api-helpers/useMessages";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
-export const FilesStep = ({
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+
+type SubmitHandler = ({
+  data: { status, form },
+  context: { link },
+}: {
+  data: { status: PCRItemStatus.Incomplete; form: FormTypes };
+  context: { link: ILinkInfo };
+}) => Promise<void>;
+
+export const FilesStep = <T extends FormTypes = FormTypes>({
   heading,
   guidance,
   guidanceComponent: GuidanceComponent,
   documentDescription,
   returnToSummaryButton,
   formType,
+  onUpdate,
+  isFetching: isFetchingProp,
 }: {
   heading?: ContentSelector;
   guidance?: ContentSelector;
   guidanceComponent?: ReactNode;
   documentDescription: DocumentDescription;
   returnToSummaryButton?: boolean;
-  formType?: FormTypes;
+  formType?: T;
+  isFetching?: boolean;
+  onUpdate?: ({
+    data,
+    context,
+  }: {
+    data: { form: T; status: PCRItemStatus.Incomplete };
+    context?: { link: ILinkInfo };
+  }) => Promise<void>;
 }) => {
   const { getContent } = useContent();
 
-  const { config, projectId, itemId, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+  const {
+    config,
+    projectId,
+    itemId,
+    onSave,
+    isFetching: isFetchingFromContext,
+    markedAsCompleteHasBeenChecked,
+  } = usePcrWorkflowContext();
 
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
@@ -57,6 +84,8 @@ export const FilesStep = ({
     projectId,
     pcrItemId: itemId,
   });
+
+  const onSaveHandler = (typeof onUpdate === "function" ? onUpdate : onSave) as SubmitHandler;
 
   const { documents } = usePcrFilesQuery(projectId, itemId, refreshedQueryOptions);
 
@@ -79,6 +108,7 @@ export const FilesStep = ({
       reset();
     },
   });
+  const isFetching = isFetchingFromContext || isFetchingProp;
 
   const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
     async onSuccess() {
@@ -169,7 +199,7 @@ export const FilesStep = ({
       </Section>
       <Form
         onSubmit={handleFormSubmit(data =>
-          onSave({
+          onSaveHandler({
             data: { status: PCRItemStatus.Incomplete, form: data.form },
             context: { link: data.button_submit === "submit" ? nextLink : summaryLink },
           }),
