@@ -22,7 +22,7 @@ import { TextInput } from "@ui/components/atoms/form/TextInput/TextInput";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
-import { combineDate, getMonth, getYear } from "@ui/components/atoms/Date";
+import { getMonth, getYear } from "@ui/components/atoms/Date";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./schemas/otherSourcesOfFunding.zod";
@@ -34,6 +34,7 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { range } from "lodash";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerOtherSourcesOfFunding } from "./otherSourcesOfFundingStep.logic";
 
 type DateParts = {
   dateSecured_month: string;
@@ -41,7 +42,7 @@ type DateParts = {
 };
 
 const getEmptyFund = (costCategoryId: CostCategoryId) => ({
-  id: "" as CostId,
+  costId: "" as CostId,
   costCategoryId,
   costCategory: CostCategoryType.Other_Public_Sector_Funding,
   description: "",
@@ -49,6 +50,7 @@ const getEmptyFund = (costCategoryId: CostCategoryId) => ({
   dateSecured_month: "",
   dateSecured_year: "",
   value: "",
+  id: "",
 });
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
@@ -73,11 +75,13 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
   dateSecured: fund.dateSecured,
   value: String(fund.value ?? ""),
   id: fund.id ?? "",
+  costId: fund.id ?? "",
   costCategoryId: fund.costCategoryId,
   costCategory: fund.costCategory,
 });
 
-type SourceOfFundingRow = Omit<PCRSpendProfileOtherFundingDto, "value"> & DateParts & { value: Nullable<string> };
+type SourceOfFundingRow = Omit<PCRSpendProfileOtherFundingDto, "value" | "id"> &
+  DateParts & { value: Nullable<string>; costId: CostId; id: string };
 
 const NoJsSourcesOfFundingRows = ({
   rows,
@@ -94,6 +98,7 @@ const NoJsSourcesOfFundingRows = ({
   const extraFundItems: SourceOfFundingRow[] = range(extraRows).map(() => getEmptyFund(otherFundingCostCategory.id));
 
   const combinedRows = [...rows, ...extraFundItems];
+
   return (
     <>
       {combinedRows.map((x, i) => (
@@ -171,14 +176,17 @@ const SourcesOfFundingRows = ({
   register,
   isFetching,
   remove,
+  markCostOrFundAsDeleted,
 }: {
   validationErrors: FundingSourceRhfError;
   rows: SourceOfFundingRow[];
   register: UseFormRegister<OtherSourcesOfFundingSchema>;
   isFetching: boolean;
   remove: UseFieldArrayRemove;
+  markCostOrFundAsDeleted: (costId: CostId) => void;
 }) => {
   const { getContent } = useContent();
+
   return (
     <>
       {rows.map((x, i) => (
@@ -252,6 +260,10 @@ const SourcesOfFundingRows = ({
               link
               data-qa="remove-fund"
               onClick={() => {
+                if (x.costId) {
+                  markCostOrFundAsDeleted(x.costId);
+                }
+
                 remove(i);
               }}
             >
@@ -268,30 +280,30 @@ export const OtherSourcesOfFundingStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { costCategories, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem } =
     useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { spendProfile, funds } = useMemo(() => {
+  const { funds } = useMemo(() => {
     const costCategoryList =
       pcrItem.organisationType === PCROrganisationType.Academic ? academicCostCategories : spendProfileCostCategories;
 
     const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategoryList);
     return {
-      spendProfile,
       funds: spendProfile.funds
         .filter(x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding)
         .map(mapWithDateParts),
     };
   }, [itemId, isClient]);
 
-  const { handleSubmit, register, formState, trigger, setValue, watch, control, setError } =
+  const { handleSubmit, register, formState, trigger, setValue, watch, control, setError, getValues } =
     useForm<OtherSourcesOfFundingSchema>({
       defaultValues: {
         button_submit: "submit",
         funds,
         form: FormTypes.PcrAddPartnerOtherSourcesOfFundingStep,
+        deletedCostsOrFunds: [],
       },
       resolver: zodResolver(otherSourcesOfFundingSchema, {
         errorMap: addPartnerErrorMap,
@@ -313,33 +325,27 @@ export const OtherSourcesOfFundingStep = () => {
 
   const total = watch("funds").reduce((acc, cur) => acc + (parseCurrency(cur.value) || 0), 0);
 
+  const markFundAsDeleted = (costId: CostId) => {
+    const deletedCostsOrFunds = getValues("deletedCostsOrFunds");
+    setValue("deletedCostsOrFunds", [...deletedCostsOrFunds, costId]);
+  };
+
+  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerOtherSourcesOfFunding();
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
         <Content markdown value={x => x.pages.pcrAddPartnerOtherFundingSources.guidance} />
 
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: {
-                spendProfile: {
-                  ...spendProfile,
-                  funds: data.funds.map(x => ({
-                    description: x.description,
-                    value: parseCurrency(x.value),
-                    dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
-                    costCategory: x.costCategory,
-                    costCategoryId: x.costCategoryId,
-                    id: x.id as CostId,
-                  })),
-                },
-              },
+            onUpdate({
+              data,
               context: links(data),
             }),
           )}
         >
-          <input type="hidden" value={fields.length} {...register("itemsLength")} />
+          <input type="hidden" value={fields.length} name="itemsLength" />
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerOtherSourcesOfFundingStep} />
           <Fieldset>
             <Table>
@@ -364,6 +370,7 @@ export const OtherSourcesOfFundingStep = () => {
                     register={register}
                     validationErrors={validationErrors}
                     remove={remove}
+                    markCostOrFundAsDeleted={markFundAsDeleted}
                   />
                 ) : (
                   <NoJsSourcesOfFundingRows

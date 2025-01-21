@@ -14,7 +14,8 @@ const valueDescription = z.object({
     required: true,
     maxLength: 1000,
   }),
-  id: z.union([z.literal("").transform(x => x as CostId), costIdValidation]),
+  costId: z.union([z.literal("").transform(x => x as CostId), costIdValidation]),
+  id: z.string(),
   costCategory: z.number().transform(x => x as CostCategoryType),
   costCategoryId: z.string().transform(x => x as CostCategoryId),
 });
@@ -52,17 +53,14 @@ const dateSecured = z
     }
   });
 
-export const fundingSchema = z.object({
+const baseSchema = z.object({
+  button_submit: z.string(),
+  form: z.literal(FormTypes.PcrAddPartnerOtherSourcesOfFundingStep),
+  deletedCostsOrFunds: z.array(costIdValidation),
   funds: z.array(valueDescription.and(dateSecured)),
 });
 
-const baseSchema = z.object({
-  button_submit: z.string(),
-  itemsLength: z.string(),
-  form: z.literal(FormTypes.PcrAddPartnerOtherSourcesOfFundingStep),
-});
-
-export const otherSourcesOfFundingSchema = baseSchema.and(fundingSchema);
+export const otherSourcesOfFundingSchema = baseSchema;
 
 export type OtherSourcesOfFundingSchemaType = typeof otherSourcesOfFundingSchema;
 export type OtherSourcesOfFundingSchema = z.infer<typeof otherSourcesOfFundingSchema>;

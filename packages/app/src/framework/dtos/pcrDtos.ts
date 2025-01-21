@@ -449,6 +449,23 @@ export interface PcrAddPartnerOtherFundingDto extends PcrDtoCommon {
   hasOtherFunding?: string;
 }
 
+export interface PcrAddPartnerOtherSourcesOfFundingDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerOtherSourcesOfFundingStep;
+  button_submit: string;
+  funds: Array<{
+    dateSecured_month: string;
+    dateSecured_year: string;
+    dateSecured: Date | null;
+    value: string | null;
+    description: string;
+    costId: CostId;
+    costCategory: CostCategoryType;
+    costCategoryId: CostCategoryId;
+    id: string;
+  }>;
+  deletedCostsOrFunds: CostId[];
+}
+
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectLocationStep;
   button_submit: string;

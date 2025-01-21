@@ -59,10 +59,10 @@ export const OtherFundingStep = () => {
     };
   };
 
-  const { onUpdate, isFetching } = useOnUpdateAddPartnerOtherFunding();
+  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerOtherFunding();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <H2>{getContent(x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle)}</H2>
       <Section>
         <Content markdown value={x => x.pages.pcrAddPartnerOtherFunding.guidance} />

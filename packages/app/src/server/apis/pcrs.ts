@@ -7,6 +7,7 @@ import {
   PcrAddPartnerFinanceContactDto,
   PcrAddPartnerJesStepDto,
   PcrAddPartnerOtherFundingDto,
+  PcrAddPartnerOtherSourcesOfFundingDto,
   PcrAddPartnerProjectLocationDto,
   PcrAddPartnerProjectManagerDto,
   PcrAddPartnerRoleAndOrganisationDto,
@@ -40,6 +41,7 @@ import { UpdatePcrLoanDurationExtensionCommand } from "@server/features/pcrs/upd
 import { UpdatePcrAddPartnerAcademicCostsCommand } from "@server/features/pcrs/updatePcrAddPartnerAcademicCostsCommand";
 import { UpdatePcrAddPartnerJesStepCommand } from "@server/features/pcrs/updatePcrAddPartnerJesStepCommand";
 import { UpdatePcrAddPartnerOtherFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherFundingCommand";
+import { UpdatePcrAddPartnerOtherSourcesOfFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherSourcesOfFundingCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -115,6 +117,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         pcrId: PcrId;
         pcrItemId: PcrItemId;
         pcr: PcrAddPartnerOtherFundingDto;
+      }
+    >,
+  ): Promise<boolean>;
+
+  addPartnerOtherSourcesOfFunding(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerOtherSourcesOfFundingDto;
       }
     >,
   ): Promise<boolean>;
@@ -306,6 +320,17 @@ class Controller
         pcr: processDto(b),
       }),
       this.addPartnerOtherFunding,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/other-sources-of-funding",
+      (p, _, b: PcrAddPartnerOtherSourcesOfFundingDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.addPartnerOtherSourcesOfFunding,
     );
 
     this.putItem(
@@ -557,6 +582,31 @@ class Controller
 
     await context.runCommand(
       new UpdatePcrAddPartnerOtherFundingCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async addPartnerOtherSourcesOfFunding(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        pcr: PcrAddPartnerOtherSourcesOfFundingDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrAddPartnerOtherSourcesOfFundingCommand({
         projectId: params.projectId,
         pcrId: params.pcrId,
         pcrItemId: params.pcrItemId,
