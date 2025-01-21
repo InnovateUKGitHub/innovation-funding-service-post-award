@@ -443,6 +443,12 @@ export interface PcrAddPartnerJesStepDto extends PcrDtoCommon {
   button_submit?: string;
 }
 
+export interface PcrAddPartnerOtherFundingDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerOtherFundingStep;
+  button_submit: string;
+  hasOtherFunding?: string;
+}
+
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectLocationStep;
   button_submit: string;

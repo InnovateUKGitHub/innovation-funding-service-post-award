@@ -121,6 +121,11 @@ const clientApi: IApiClient<"client"> = {
       ),
     addPartnerJesStep: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/jes-step`, params.pcr),
+    addPartnerOtherFunding: params =>
+      ajaxPut(
+        `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/other-funding`,
+        params.pcr,
+      ),
     addPartnerProjectLocation: params =>
       ajaxPut(
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/project-location`,

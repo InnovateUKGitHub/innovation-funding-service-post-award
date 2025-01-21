@@ -17,37 +17,23 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { OtherFundingSchema, otherFundingSchema } from "./schemas/otherFunding.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
-import { PCROrganisationType } from "@framework/constants/pcrConstants";
-import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
-import { useMemo } from "react";
+
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerOtherFunding } from "./otherFunding.logic";
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
-  const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, routes, markedAsCompleteHasBeenChecked } =
-    usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, fetchKey, routes, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
-  const { pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem } = useAddPartnerWorkflowQuery(
-    projectId,
-    itemId,
-    fetchKey,
-  );
-
-  const { spendProfile } = useMemo(() => {
-    const costCategoryList =
-      pcrItem.organisationType === PCROrganisationType.Academic ? academicCostCategories : spendProfileCostCategories;
-
-    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategoryList);
-    return { spendProfile };
-  }, [itemId, pcrSpendProfile, academicCostCategories, spendProfileCostCategories, pcrItem]);
+  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const summaryLink = useSummaryLink();
   const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<OtherFundingSchema>({
     defaultValues: {
       form: FormTypes.PcrAddPartnerOtherFundingStep,
       button_submit: "submit",
-      hasOtherFunding: pcrItem.hasOtherFunding ? "true" : "false",
+      hasOtherFunding: String(pcrItem.hasOtherFunding),
     },
     resolver: zodResolver(otherFundingSchema, {
       errorMap: addPartnerErrorMap,
@@ -73,6 +59,8 @@ export const OtherFundingStep = () => {
     };
   };
 
+  const { onUpdate, isFetching } = useOnUpdateAddPartnerOtherFunding();
+
   return (
     <PcrPage validationErrors={validationErrors}>
       <H2>{getContent(x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle)}</H2>
@@ -83,22 +71,8 @@ export const OtherFundingStep = () => {
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data => {
-            const hasOtherFunding = data.hasOtherFunding === "true";
-            const funds = hasOtherFunding
-              ? {}
-              : {
-                  spendProfile: {
-                    ...spendProfile,
-                    funds: [],
-                  },
-                };
-
-            onSave({
-              data: {
-                ...data,
-                ...funds,
-                hasOtherFunding,
-              },
+            onUpdate({
+              data,
               context: getNextLink(data),
             });
           })}
