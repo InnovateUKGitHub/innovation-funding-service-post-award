@@ -4,10 +4,10 @@
   "scripts": {
     "build": "bddgen",
     "pw": "playwright test --ui",
-    "pw-cli": "playwright test"
+    "pw-run": "playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.45.1",
+    "@playwright/test": "^1.49.1",
     "@prettier/plugin-xml": "^3.4.1",
     "@types/node": "^20.14.10",
     "playwright-bdd": "^7.0.0-1",

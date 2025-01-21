@@ -25,7 +25,7 @@
         "@innovateuk/tsforce#build"
       ]
     },
-    "pw-cli": {
+    "pw-run": {
       "persistent": true,
       "cache": false,
       "env": [

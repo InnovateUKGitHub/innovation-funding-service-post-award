@@ -1,0 +1,4 @@
+ARG ACC_MONOREPO_BASE
+FROM $ACC_MONOREPO_BASE
+
+CMD ["npm", "run", "pw-run"]

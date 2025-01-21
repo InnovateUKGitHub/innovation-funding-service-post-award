@@ -2,20 +2,39 @@ apiVersion: skaffold/v2beta11
 kind: Config
 metadata:
   name: innovation-funding-service
+
 build:
+  local:
+    useDockerCLI: false
+    useBuildkit: false
+    tryImportMissing: false
+    push: true
+  tagPolicy:
+    envTemplate:
+      template: "{{.TAG_ID}}"
   artifacts:
-    - image: acc-ui
+    - image: acc-monorepo-base
       context: .
       docker:
-        dockerfile: packages/app/Dockerfile
+        dockerfile: Dockerfile
         buildArgs:
           ACC_BUILD_TAG: "{{.TAG_ID}}"
           ACC_BUILD_EPOCH: '{{cmd "date" "+%s"}}'
-  local:
-    useDockerCLI: true
-    useBuildkit: false
-    tryImportMissing: true
-    push: false
+    - image: acc-ui
+      context: .
+      requires:
+        - image: acc-monorepo-base
+          alias: ACC_MONOREPO_BASE
+      docker:
+        dockerfile: packages/app/Dockerfile
+    - image: acc-playwright
+      context: .
+      requires:
+        - image: acc-monorepo-base
+          alias: ACC_MONOREPO_BASE
+      docker:
+        dockerfile: packages/playwright-test/Dockerfile
+
 deploy:
   statusCheckDeadlineSeconds: 600
   kustomize:

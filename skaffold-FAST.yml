@@ -14,13 +14,27 @@ profiles:
         envTemplate:
           template: "{{.TAG_ID}}"
       artifacts:
-        - image: acc-ui
+        - image: acc-monorepo-base
           context: .
           docker:
-            dockerfile: packages/app/Dockerfile
+            dockerfile: Dockerfile
             buildArgs:
               ACC_BUILD_TAG: "{{.TAG_ID}}"
               ACC_BUILD_EPOCH: '{{cmd "date" "+%s"}}'
+        - image: acc-ui
+          context: .
+          requires:
+            - image: acc-monorepo-base
+              alias: ACC_MONOREPO_BASE
+          docker:
+            dockerfile: packages/app/Dockerfile
+        - image: acc-playwright
+          context: .
+          requires:
+            - image: acc-monorepo-base
+              alias: ACC_MONOREPO_BASE
+          docker:
+            dockerfile: packages/playwright-test/Dockerfile
 
   - name: custom
     build:
