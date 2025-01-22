@@ -4,7 +4,7 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   OtherSourcesOfFundingSchemaType,
   otherSourcesOfFundingSchema,
@@ -12,8 +12,8 @@ import {
 import { set } from "lodash";
 import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandlerBase<
   OtherSourcesOfFundingSchemaType,
@@ -42,9 +42,10 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
         value: string;
         dateSecured_month: string;
         dateSecured_year: string;
-        id: string;
+        costId: string;
         costCategory: number;
         costCategoryId: string;
+        id: "";
       }[];
     } = {
       funds: [],
@@ -75,8 +76,8 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
 
     return {
       form: input.form,
-      itemsLength: input.itemsLength,
       button_submit: input.button_submit,
+      deletedCostsOrFunds: input.deletedCostsOrFunds,
       funds,
     };
   }
@@ -90,18 +91,33 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const newFundItems = input.funds
+      .filter(x => !x.costId)
+      .map(x => ({
+        ...x,
+        value: parseCurrency(x.value),
+        pcrItemId: params.itemId,
+        dateOtherFundingSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false)?.toISOString(),
+      }));
 
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile: {
-          ...spendProfile,
-          funds: input.funds.map(x => ({ ...x, value: parseCurrency(x.value) })) as PcrSpendProfileDto["funds"],
-        },
-      },
+    const updatedFundItems = input.funds
+      .filter(x => !!x.costId)
+      .map(x => ({
+        ...x,
+        value: parseCurrency(x.value),
+        pcrItemId: params.itemId,
+        dateOtherFundingSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false)?.toISOString(),
+        id: x.costId,
+      }));
+
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
     });
+
+    await context.repositories.pcrSpendProfile.insertSpendProfiles(newFundItems);
+    await context.repositories.pcrSpendProfile.updateSpendProfiles(updatedFundItems);
+    await context.repositories.pcrSpendProfile.deleteSpendProfiles(input.deletedCostsOrFunds);
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,
