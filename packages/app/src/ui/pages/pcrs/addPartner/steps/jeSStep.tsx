@@ -104,6 +104,7 @@ export const JeSStep = () => {
       returnToSummaryButton
       onUpdate={onUpdate}
       isFetching={isFetching}
+      apiError={apiError}
     />
   );
 };

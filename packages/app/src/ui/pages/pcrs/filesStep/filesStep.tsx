@@ -32,6 +32,7 @@ import { useMessages } from "@framework/api-helpers/useMessages";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 type SubmitHandler = ({
   data: { status, form },
@@ -50,6 +51,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
   formType,
   onUpdate,
   isFetching: isFetchingProp,
+  apiError,
 }: {
   heading?: ContentSelector;
   guidance?: ContentSelector;
@@ -58,6 +60,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
   returnToSummaryButton?: boolean;
   formType?: T;
   isFetching?: boolean;
+  apiError?: ClientErrorResponse | null;
   onUpdate?: ({
     data,
     context,
@@ -138,7 +141,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
   const { clearMessages } = useMessages();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <Form
           encType="multipart/form-data"
