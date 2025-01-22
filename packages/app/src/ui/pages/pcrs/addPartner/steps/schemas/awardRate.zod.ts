@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getAwardRateSchema = (markedAsComplete: boolean) =>
   z.object({
     form: z.literal(FormTypes.PcrAddPartnerAwardRateStep),
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     button_submit: z.string(),
     awardRate: getNumberValidation({ min: 0, max: 100, required: markedAsComplete, decimalPlaces: 2 }),
   });

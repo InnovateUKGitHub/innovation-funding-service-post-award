@@ -19,10 +19,11 @@ import { AwardRateSchema, getAwardRateSchema } from "./schemas/awardRate.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { useOnUpdateAddPartnerAwardRate } from "./awardRate.logic";
 
 export const AwardRateStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -33,12 +34,14 @@ export const AwardRateStep = () => {
       form: FormTypes.PcrAddPartnerAwardRateStep,
       button_submit: "submit",
       awardRate: pcrItem.awardRate,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
     },
     resolver: zodResolver(getAwardRateSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
+
+  const { onUpdate, apiError, isFetching } = useOnUpdateAddPartnerAwardRate();
 
   const validationErrors = useZodErrors(setError, formState.errors);
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
@@ -46,11 +49,11 @@ export const AwardRateStep = () => {
   const registerButton = createRegisterButton(setValue, "button_submit");
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
         <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />
         <br />
-        <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+        <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onUpdate({ data, context: link(data) }))}>
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerAwardRateStep} />
           <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
 

@@ -483,6 +483,12 @@ export interface PcrAddPartnerFinanceContactDto extends PcrDtoCommon {
   contact1Phone?: string;
 }
 
+export interface PcrAddPartnerFundingLevelDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerAwardRateStep;
+  button_submit: string;
+  awardRate?: number | null;
+}
+
 export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectManagerStep;
   button_submit: string;
