@@ -107,14 +107,14 @@ class ProjectDetails {
     ];
     this.partner2InfoDetailsPmMo = [
       ["Name", "Hedge's Secondary Ltd."],
-      ["Partner type", "Business"],
+      ["Partner type", "Research"],
       ["Status", "Active"],
       ["Funding status", "Funded"],
       ["Location", ""],
     ];
     this.partner2InfoDetailsFc = [
       ["Name", "Hedge's Secondary Ltd."],
-      ["Partner type", "Business"],
+      ["Partner type", "Research"],
       ["Location", ""],
     ];
     this.partnerInfoDetailsUpdatedFc = [

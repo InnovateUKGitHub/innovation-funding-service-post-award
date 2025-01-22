@@ -298,8 +298,8 @@ class Commands {
   /**
    * Finds the notification text when uploading or deleting a document
    */
-  validationNotification(message: string) {
-    return this.page.getByTestId("validation-message-content").filter({ hasText: message });
+  async validationNotification(message: string) {
+    return await expect(this.page.getByTestId("validation-message-content").filter({ hasText: message })).toBeVisible();
   }
 
   // /*
@@ -414,6 +414,21 @@ class Commands {
     }
   }
 
+  timeNow() {
+    let date = new Date();
+    let hours = date.getHours();
+    let suffix: string;
+    if (hours >= 12) {
+      suffix = "pm";
+    } else {
+      suffix = "am";
+    }
+    let thetime = date.toLocaleTimeString("en-GB", { hour12: true, hour: "numeric", minute: "2-digit" });
+    let datestring = thetime.replace(`${suffix}`, "").trim();
+    let finaltime = `${datestring}${suffix}`;
+    return finaltime;
+  }
+
   startDate() {
     let date = new Date();
     let month = date.getMonth();
@@ -514,7 +529,7 @@ class Commands {
       await this.paragraph("You have 0 characters remaining");
     } else {
       if (this.page.locator("css=main").filter({ hasText: label })) {
-        await this.page.getByRole("textbox").press("End");
+        await this.page.getByLabel(label).press("End");
         await this.page.getByLabel(label).press("Backspace");
       }
     }
@@ -582,7 +597,7 @@ class Commands {
     const row = this.page.locator("css=tr").filter({ hasText: file });
     await row.locator("td").getByRole("button").filter({ hasText: "Remove" }).click();
     await expect(row.locator("td").getByRole("button").filter({ hasText: "Remove" })).toBeDisabled();
-    await expect(this.validationNotification(`'${file}' has been removed.`)).toBeVisible();
+    await this.validationNotification(`'${file}' has been removed.`);
   }
 
   async createTestFile(name: string, size: number) {

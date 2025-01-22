@@ -34,6 +34,7 @@ import { AccProjectWithoutFC } from "./projectFactory/AccProjectWithoutFC";
 import { AccIsLoaded } from "./acc/AccIsLoaded";
 import { ChangeProjectDuration } from "./acc/pages/PCRs/changeProjectDuration";
 import { Acc1CypressDoNotTouch } from "./projectFactory/Acc1CypressDoNotTouch";
+import { CrdClaims } from "./acc/pages/Claims/crdClaims";
 
 type AccFixtures = {
   // Pages
@@ -53,6 +54,7 @@ type AccFixtures = {
   projectDocuments: ProjectDocuments;
   changePartnerName: ChangePartnerName;
   changeProjectDuration: ChangeProjectDuration;
+  crdClaims: CrdClaims;
 
   // Misc
   accNavigation: AccNavigation;
@@ -123,6 +125,8 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new ChangePartnerName({ page, commands, projectChangeRequests, accNavigation, validators })),
   changeProjectDuration: ({ page, commands, projectChangeRequests }, use) =>
     use(new ChangeProjectDuration({ page, commands, projectChangeRequests })),
+  crdClaims: ({ page, commands, validators, accNavigation }, use) =>
+    use(new CrdClaims({ page, commands, validators, accNavigation })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),

@@ -157,4 +157,22 @@ class AccNavigation {
     await this.accIsLoaded.devToolsLoaded();
     await this.accIsLoaded.projectDocumentsLoaded();
   }
+
+  @Given("this user has navigated to the Claims page")
+  async gotoClaimsPage() {
+    await this.testCache.cache(
+      ["goToClaimsPage", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectOverview();
+        await DashboardTile.fromTitle(this.page, "Claims").click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.claimsPageIsLoaded();
+  }
 }

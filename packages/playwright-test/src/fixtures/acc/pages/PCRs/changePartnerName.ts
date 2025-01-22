@@ -157,7 +157,7 @@ class ChangePartnerName {
     );
     await this.page.waitForTimeout(3000);
     await this.commands.fileInput(["testfile.doc"]);
-    await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
+    await this.commands.validationNotification("has been uploaded.");
     await expect(this.page.locator("css=td").filter({ hasText: "Certificate of name change" })).toBeVisible();
     await this.saveAndContinueButton.click();
     await this.completedSummary();

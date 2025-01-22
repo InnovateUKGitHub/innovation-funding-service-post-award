@@ -34,7 +34,7 @@ class RemovePartner {
   private readonly noDocMsg: Locator;
   private readonly noDocValidation: string;
   private readonly removalPartner: string;
-  private readonly docSuccessMsg: Locator;
+  private readonly docSuccessMsg: string;
   private readonly summaryData: Array<[string, string]>;
   private readonly markCompleteHeading: Locator;
   private readonly iAgreeCheckBox: Locator;
@@ -88,7 +88,7 @@ class RemovePartner {
     this.noDocMsg = this.page.getByRole("paragraph").filter({ hasText: "No documents uploaded." });
     this.noDocValidation = "Choose a file to upload.";
     this.removalPartner = this.partners[1];
-    this.docSuccessMsg = this.commands.validationNotification("Your document has been uploaded.");
+    this.docSuccessMsg = "Your document has been uploaded.";
     this.summaryData = [
       ["Partner being removed", this.removalPartner],
       ["Last period", "5"],
@@ -170,7 +170,7 @@ class RemovePartner {
   async uploadRemoveCertificate() {
     await this.page.locator("css=#files").setInputFiles("src/components/testFiles/add.png");
     await this.uploadButton.click();
-    await expect(this.docSuccessMsg).toBeVisible();
+    await this.commands.validationNotification(this.docSuccessMsg);
   }
 
   @Then("the Remove a partner summary page is displayed")

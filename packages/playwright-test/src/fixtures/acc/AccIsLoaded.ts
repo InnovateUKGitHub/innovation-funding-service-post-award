@@ -49,6 +49,10 @@ class AccIsLoaded {
     await this.commands.heading("Project documents");
   }
 
+  async claimsPageIsLoaded() {
+    await this.commands.heading("Claims");
+  }
+
   async navToPartnerDetails(name: string) {
     await this.page.getByRole("link").filter({ hasText: name }).click();
     await this.page.getByRole("link").filter({ hasText: "Edit" }).click();

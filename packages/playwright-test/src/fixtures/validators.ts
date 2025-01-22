@@ -78,7 +78,7 @@ class Validators {
     await this.commands.button("Upload documents").click();
     await this.commands.validationLink("Choose a file to upload.");
     await this.commands.uploadAnyFile(testFile);
-    await this.commands.validationNotification("has been uploaded.").isVisible();
+    await this.commands.validationNotification("has been uploaded.");
     console.log(
       "Checking that the validation message does not persist when navigating back using 'suffix' and 'headerAssertion",
     );
@@ -143,10 +143,10 @@ class Validators {
         await this.docTypeDropdown(docType);
       }
       await this.commands.uploadAnyFile(file);
-      await expect(this.commands.validationNotification(`Your document has been uploaded.`)).toBeVisible();
+      await this.commands.validationNotification(`Your document has been uploaded.`);
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
-      await expect(this.commands.validationNotification(`'${file}' has been removed.`)).toBeVisible();
+      await this.commands.validationNotification(`'${file}' has been removed.`);
       //This timeout is regrettable but required. Otherwise it fails to actually select a file for upload.
       await this.page.waitForTimeout(4000);
     }
@@ -157,10 +157,10 @@ class Validators {
         await this.docTypeDropdown(docType);
       }
       await this.commands.uploadAnyFile(file);
-      await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
+      await this.commands.validationNotification("has been uploaded.");
       console.log("Deleting allowed special character file");
       await this.commands.deleteFileFromRow(file);
-      await expect(this.commands.validationNotification(`has been removed.`)).toBeVisible();
+      await this.commands.validationNotification(`has been removed.`);
       await this.page.waitForTimeout(4000);
     }
     console.log("Validating incorrect file type");
@@ -341,6 +341,9 @@ class Validators {
     await input.clear();
     await input.fill("35.45678");
     await this.commands.validationLink(`${firstPlaceErrorToken} must be 2 decimal places or fewer.`);
+    await input.clear();
+    await input.fill("9999999999999");
+    await this.commands.validationLink(`${firstPlaceErrorToken} must be £999,999,999,999.00 or less.`);
     await input.clear();
     await input.fill(validValue);
   }

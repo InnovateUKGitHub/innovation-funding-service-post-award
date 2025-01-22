@@ -131,7 +131,7 @@ class ProjectChangeRequests {
     await expect(this.uploadDocumentsHeading).toBeVisible();
     await expect(this.page.getByTestId("numberRow").filter({ hasText: "Request number" })).toBeVisible();
     await this.commands.fileInput(["testfile.doc"]);
-    await expect(this.commands.validationNotification("has been uploaded.")).toBeVisible();
+    await this.commands.validationNotification("has been uploaded.");
     await this.commands.button("Save and continue").click();
     await this.agreeWithChange.click();
     await this.commands.button("Save and return to request").click();
