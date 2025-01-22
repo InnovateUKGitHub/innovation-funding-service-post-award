@@ -4,8 +4,10 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import { OtherFundingSchemaType, otherFundingSchema } from "@ui/pages/pcrs/addPartner/steps/schemas/otherFunding.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class PcrItemAddPartnerOtherFundingHandler extends ZodFormHandlerBase<
   OtherFundingSchemaType,
@@ -44,8 +46,11 @@ export class PcrItemAddPartnerOtherFundingHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await updatePcrItem({ params, context, data: { hasOtherFunding: input.hasOtherFunding === "true" } });
-
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_OtherFunding__c: input.hasOtherFunding === "true",
+    });
     return await getNextAddPartnerStep({
       projectId: params.projectId,
       pcrId: params.pcrId,
