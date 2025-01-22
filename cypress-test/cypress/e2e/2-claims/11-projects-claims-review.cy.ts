@@ -151,7 +151,7 @@ describe("Claims > Review as MO", { tags: "smoke" }, () => {
 
   it("Should continue to re-submit the claim", claimReviewResubmit);
 
-  it("Should check for the correct title once resubmitted", { retries: 3 }, () => {
+  it("Should check for the correct title once resubmitted", () => {
     cy.heading("Claims");
   });
 

@@ -109,7 +109,8 @@ export default defineConfig({
       !!grepTags && grepTags.includes("js-disabled") ? [] : ["cypress/e2e/12-js-disabled/**/*.cy.ts"],
     ),
     env: {
-      BASIC_AUTH: process.env.BASIC_AUTH,
+      //BASIC_AUTH: process.env.BASIC_AUTH,
+      BASIC_AUTH: "hedgessledges:SettleProtrude",
       ABORT_EARLY: isTrue(process.env.ABORT_EARLY),
       ...(!!grepTags && { grepFilterSpecs: true, grepOmitFiltered: true, grepTags }),
     },

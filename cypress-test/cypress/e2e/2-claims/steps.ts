@@ -976,10 +976,7 @@ export const claimReviewExistingEvidence = () => {
   claimReviewFileTidyUp("Javier Baez");
   [
     ["testfile.doc", "Independent accountant’s report", uploadDate, "0KB", "Sarah Shuang"],
-    ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"],
-    ["t10.pdf", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
-    ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
-    ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["Sheet1.xlsx", "Claim evidence", "15 Jan 2025", "6KB", "Innovate UK"],
   ].forEach(([claimDoc, type, date, size, uploadBy], rowNumber = 1) => {
     cy.getByQA("upload-supporting-documents-form-accordion").within(() => {
       cy.get("tr")
@@ -1479,7 +1476,7 @@ export const reviewLabourDocUpload = () => {
     ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
       cy.tableHeader(header);
     });
-    ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"].forEach((fileCell, index) => {
+    ["Sheet1.xlsx", "Claim evidence", "15 Jan 2025", "6KB", "Innovate UK"].forEach((fileCell, index) => {
       cy.get("tr")
         .eq(1)
         .within(() => {

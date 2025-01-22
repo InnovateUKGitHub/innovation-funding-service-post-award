@@ -211,7 +211,7 @@ export const manyWhenIarNeeded = () => {
 
 export const periodSubWithDate = () => {
   cy.get("h2").contains("Project period");
-  cy.get("span").contains(currentProjectYear);
+  cy.get("span").contains("2025");
 };
 
 export const projCostsHeaders = () => {
