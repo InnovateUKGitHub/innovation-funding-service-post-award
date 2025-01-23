@@ -714,12 +714,12 @@ class ManageTeamMember {
       firstName = "Knowledge";
       lastName = "Base";
       emailAddress = context.kbAdminPcl.Acc_EmailOfSFContact__c;
-      role = "KB Admin";
+      role = "Knowledge base administrator";
     } else if (pcr === "Replace main company contact") {
       firstName = "Main";
       lastName = "Contact";
       emailAddress = context.mccPcl.Acc_EmailOfSFContact__c;
-      role = "Main Company Contact";
+      role = "Main company contact";
     }
     return { firstName, lastName, emailAddress, role };
   }
