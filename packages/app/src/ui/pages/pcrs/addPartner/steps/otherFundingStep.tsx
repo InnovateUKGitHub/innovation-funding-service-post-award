@@ -59,7 +59,7 @@ export const OtherFundingStep = () => {
     };
   };
 
-  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerOtherFunding();
+  const { onUpdate, isProcessing: isFetching, apiError } = useOnUpdateAddPartnerOtherFunding();
 
   return (
     <PcrPage validationErrors={validationErrors} apiError={apiError}>

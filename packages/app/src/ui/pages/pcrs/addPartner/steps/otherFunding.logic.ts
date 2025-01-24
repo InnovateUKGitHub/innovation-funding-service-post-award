@@ -11,7 +11,7 @@ import { OtherFundingSchemaType } from "./schemas/otherFunding.zod";
 export const useOnUpdateAddPartnerOtherFunding = () => {
   const navigate = useNavigate();
 
-  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
+  const { setFetchKey, pcrId, itemId, projectId, step, refreshItemWorkflowQuery } = usePcrWorkflowContext();
   const { clearMessages } = useMessageContext();
 
   return useOnUpdate<z.output<OtherFundingSchemaType>, boolean, { link: ILinkInfo }>({
@@ -32,6 +32,10 @@ export const useOnUpdateAddPartnerOtherFunding = () => {
       context: { link: ILinkInfo } | undefined,
     ) {
       clearMessages();
+      /**
+       * refresh the pcr item workflow in order to populate the workflow structure with the other funding sources step
+       */
+      await refreshItemWorkflowQuery();
       setFetchKey(k => k + 1);
       navigate(context?.link?.path ?? "");
     },
