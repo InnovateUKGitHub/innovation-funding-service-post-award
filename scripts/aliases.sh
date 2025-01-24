@@ -23,15 +23,6 @@ alias k8s_svc="kubectl get svc"
 alias k8s_configmap="kubectl get configmap"
 alias k8s_secrets="kubectl get secrets"
 
-alias skaffoldrender="python3 scripts/skaffoldrender"
-alias sopsman="python3 scripts/sopsman"
-
-skaffold_e() {
-  _assert_context
-  # Use sensible defaults to deploy 'external' resources
-  skaffold dev -f skaffold-EXT.yml --rpc-http-port=50054 --rpc-port=50053 --auto-build=false --auto-sync=false --auto-deploy=false --status-check=true --wait-for-deletions=true --tail=false
-}
-
 skaffold_dx() {
   _assert_context
   # Use sensible defaults to deploy dev and custom builds in a faster mode (use one at a time)
