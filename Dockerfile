@@ -1,5 +1,5 @@
 # See https://ukri.atlassian.net/wiki/spaces/ACC/pages/64192524 - How to upgrade NodeJS
-FROM docker-ifs.devops.innovateuk.org/acc/node:20.17.0
+FROM docker-ifs.devops.innovateuk.org/acc/node:22.13.0
 
 WORKDIR /externalui
 RUN chown node /externalui
