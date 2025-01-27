@@ -1,18 +1,18 @@
 @mode:serial
-Feature: Project details
+Feature: CR&D Project details
     Scenario: Reviewing the project details page as FC
         Given a multi-partner CR&D project exists
         And the user is the "mainFcUser" user
         And the user is on the project overview
         When the user selects the "Project details" tile
-        Then Project details will be displayed with correct information for "Finance Contact"
+        Then "CR&D" Project details will be displayed with correct information for "Finance Contact"
 
-    Scenario: Reviewing the project details page as PM
+    Scenario: Reviewing the project details page as PM on CR&D project
         Given a multi-partner CR&D project exists
         And the user is the "pmUser" user
         And the user is on the project overview
         When the user selects the "Project details" tile
-        Then Project details will be displayed with correct information for "Project Manager"
+        Then "CR&D" Project details will be displayed with correct information for "Project Manager"
 
         When the user clicks the Manage team members hyperlink
         Then the user will be taken to the Manage team members page
