@@ -3,6 +3,7 @@ import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../Commands";
 import { PageHeading } from "../../../components/PageHeading";
 import { getLorem } from "../../../components/lorem";
+import { privateDecrypt } from "crypto";
 
 export
 @Fixture("projectDetails")
@@ -30,6 +31,7 @@ class ProjectDetails {
   private readonly changeGuidance: Locator;
   private readonly changeLink: Locator;
   private readonly changeGuidanceEnd: Locator;
+  private readonly fcChangeGuidance: Locator;
   private readonly otherContactsHeading: Locator;
   private readonly otherContactsGuidance: Locator;
   private readonly partnerInfoHeading: Locator;
@@ -37,11 +39,16 @@ class ProjectDetails {
   private readonly partnerInfoDetailsFc: Array<[string, string]>;
   private readonly partner2InfoDetailsPmMo: Array<[string, string]>;
   private readonly partner2InfoDetailsFc: Array<[string, string]>;
+  private readonly ktpPartner2InfoDetailsFc: Array<[string, string]>;
+  private readonly ktpPartner2InforDetailsPmMo: Array<[string, string]>;
   private readonly partnerInfoDetailsUpdatedFc: Array<[string, string]>;
   private readonly partnerInfoDetailsUpdatedPm: Array<[string, string]>;
   private readonly projectInfoHeading: Locator;
   private readonly projectInfoDetails: Array<[string, string, string | RegExp]>;
+  private readonly ktpProjectInfoDetails: Array<[string, string, string | RegExp]>;
   private readonly projectInfoList: Array<[string, string, string]>;
+  private readonly otherContactsList: Array<[string, string, string, string]>;
+  private readonly otherContactsTable: Locator;
   private readonly updateLocationPage: Array<string>;
   private readonly locationPageHint: Locator;
   private readonly newPostcode: string;
@@ -92,6 +99,10 @@ class ProjectDetails {
     });
     this.changeLink = this.page.getByRole("link").filter({ hasText: "project change request" });
     this.changeGuidanceEnd = this.page.getByRole("paragraph").filter({ hasText: "(PCR)" });
+    this.fcChangeGuidance = this.page.getByRole("paragraph").filter({
+      hasText:
+        "Discuss any personnel changes with the project manager, who may then request a manage team members project change request (PCR).",
+    });
     this.otherContactsHeading = this.page.getByRole("heading").filter({ hasText: "Other contacts" });
     this.otherContactsGuidance = this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." });
     this.partnerInfoHeading = this.page.getByRole("heading").filter({ hasText: "Partner information" });
@@ -119,6 +130,18 @@ class ProjectDetails {
       ["Partner type", "Research"],
       ["Location", ""],
     ];
+    this.ktpPartner2InfoDetailsFc = [
+      ["Name", "Hedge's Secondary Ltd."],
+      ["Partner type", "Knowledge Base"],
+      ["Location", ""],
+    ];
+    this.ktpPartner2InforDetailsPmMo = [
+      ["Name", "Hedge's Secondary Ltd."],
+      ["Partner type", "Knowledge base"],
+      ["Status", "Active"],
+      ["Funding status", "Funded"],
+      ["Location", ""],
+    ];
     this.partnerInfoDetailsUpdatedFc = [
       ["Name", "Hedge's Primary Ltd. (Lead)"],
       ["Partner type", "Business"],
@@ -140,11 +163,25 @@ class ProjectDetails {
       ["periods", "Number of periods", "12"],
       ["scope", "Project scope statement", "This is a project summary"],
     ];
+    this.ktpProjectInfoDetails = [
+      ["competition-name", "Competition name", /^[a-zA-Z0-9]+$/],
+      ["competition-type", "Competition type", "KTP"],
+      ["end-date", "Project end date", `2027`],
+      ["duration", "Duration", "36"],
+      ["periods", "Number of periods", "12"],
+      ["scope", "Project scope statement", "This is a project summary"],
+    ];
     this.projectInfoList = [
       ["Name", "Hedge's Primary Ltd.", "partner-name"],
       ["Type", "Business", "partner-type"],
       ["Location", "Edit", "partner-postcode"],
     ];
+    this.otherContactsList = [
+      ["Name", "Anna Sociate", "Knowledge Base", "Main Contact"],
+      ["Role", "Associate", "KB Admin", "Main Company Contact"],
+      ["Email", "associate@x.gov.uk", "kb@x.gov.uk", "mcc@x.gov.uk"],
+    ];
+    this.otherContactsTable = this.page.getByTestId("contacts-table-details").locator("table");
     this.updateLocationPage = ["Current location", "New location"];
     this.locationPageHint = this.page.getByText("Enter the postcode.");
     this.updateLocationButton = this.page
@@ -157,8 +194,8 @@ class ProjectDetails {
       .filter({ hasText: "Project location postcode must be 10 characters or less." });
   }
 
-  @Then("Project details will be displayed with correct information for {string}")
-  async projectDetailsPage(user: string) {
+  @Then("{string} Project details will be displayed with correct information for {string}")
+  async projectDetailsPage(compType: string, user: string) {
     const daterange = this.projectDuration();
     await expect(this.goBack).toBeVisible();
     await expect(this.dashboardTitle.get()).toBeVisible();
@@ -167,31 +204,53 @@ class ProjectDetails {
     await expect(this.membersHeading).toBeVisible();
     await expect(this.moHeading).toBeVisible();
     await this.checkTableDetails("monitoring-officer-details", 1, this.moDetails);
-    await expect(this.pmHeading).toBeVisible();
-    await expect(this.pmGuidance).toBeVisible();
+    //This if needs removing once ticket ACC-11817 is resolved - KTP should also see this guidance copy.
+    if (compType === "KTP") {
+      await expect(this.pmHeading).toBeVisible();
+    } else {
+      await expect(this.pmHeading).toBeVisible();
+      await expect(this.pmGuidance).toBeVisible();
+    }
     await this.checkTableDetails("project-manager-details", 1, this.pmDetails);
     await expect(this.fcHeading).toBeVisible();
     await expect(this.fcGuidance).toBeVisible();
     await this.checkTableDetails("finance-contact-details", 1, this.fcDetails);
     await this.checkTableDetails("finance-contact-details", 2, this.fc2Details);
     await expect(this.otherContactsHeading).toBeVisible();
-    await expect(this.otherContactsGuidance).toBeVisible();
     await expect(this.partnerInfoHeading).toBeVisible();
+    if (compType === "KTP") {
+      await this.otherContactsTableAssertion();
+    } else {
+      await expect(this.otherContactsGuidance).toBeVisible();
+    }
     if (user === "Finance Contact") {
       await this.checkTableDetails("partner-information", 1, this.partnerInfoDetailsFc);
-      await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsFc);
+      if (compType === "KTP") {
+        await this.checkTableDetails("partner-information", 2, this.ktpPartner2InfoDetailsFc);
+      } else {
+        await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsFc);
+      }
       await expect(this.changeGuidance).not.toBeVisible();
       await expect(this.changeLink).not.toBeVisible();
-      await expect(this.changeGuidanceEnd).not.toBeVisible();
+      await expect(this.fcChangeGuidance).toBeVisible();
     } else if (user === "Project Manager") {
       await this.checkTableDetails("partner-information", 1, this.partnerInfoDetailsPmMO);
-      await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsPmMo);
+      if (compType === "KTP") {
+        await this.checkTableDetails("partner-information", 2, this.ktpPartner2InforDetailsPmMo);
+      } else {
+        await this.checkTableDetails("partner-information", 2, this.partner2InfoDetailsPmMo);
+      }
       await expect(this.changeGuidance).toBeVisible();
       await expect(this.changeLink).toBeVisible();
       await expect(this.changeGuidanceEnd).toBeVisible();
+      await expect(this.fcChangeGuidance).not.toBeVisible();
     }
     await expect(this.projectInfoHeading).toBeVisible();
-    await this.checkDataList();
+    if (compType === "KTP") {
+      await this.checkDataList(true);
+    } else {
+      await this.checkDataList(false);
+    }
   }
 
   @Given("the user can see the project details heading")
@@ -323,8 +382,14 @@ class ProjectDetails {
     }
   }
 
-  async checkDataList() {
-    for (const [qa, key, data] of this.projectInfoDetails) {
+  async checkDataList(ktp: boolean) {
+    let details: Array<[string, string, string | RegExp]>;
+    if (ktp) {
+      details = this.ktpProjectInfoDetails;
+    } else {
+      details = this.projectInfoDetails;
+    }
+    for (const [qa, key, data] of details) {
       await expect(this.page.getByTestId(qa).locator("css=dt").filter({ hasText: key })).toBeVisible();
       await expect(this.page.getByTestId(qa).locator("css=dd").nth(0).filter({ hasText: data })).toBeVisible();
     }
@@ -339,5 +404,23 @@ class ProjectDetails {
         .nth(0)
         .filter({ hasText: String(startdate) }),
     ).toBeVisible();
+  }
+
+  async otherContactsTableAssertion() {
+    let i = 0;
+    for (const [header, row1, row2, row3] of this.otherContactsList) {
+      await expect(this.otherContactsTable.locator("th").nth(i).filter({ hasText: header })).toBeVisible();
+      await expect(
+        this.otherContactsTable.locator("tbody").locator("tr").nth(0).locator("td").nth(i).filter({ hasText: row1 }),
+      ).toBeVisible();
+      await expect(
+        this.otherContactsTable.locator("tbody").locator("tr").nth(1).locator("td").nth(i).filter({ hasText: row2 }),
+      ).toBeVisible();
+      await expect(
+        this.otherContactsTable.locator("tbody").locator("tr").nth(2).locator("td").nth(i).filter({ hasText: row3 }),
+      ).toBeVisible();
+
+      i++;
+    }
   }
 }
