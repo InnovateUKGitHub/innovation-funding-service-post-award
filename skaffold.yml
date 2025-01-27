@@ -8,7 +8,7 @@ build:
     useDockerCLI: false
     useBuildkit: false
     tryImportMissing: false
-    push: true
+    push: false
   tagPolicy:
     envTemplate:
       template: "{{.TAG_ID}}"
