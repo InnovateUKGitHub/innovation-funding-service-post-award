@@ -43,7 +43,6 @@ export const usePcrItemWorkflowQuery = (
       "isCommercialWork",
       "typeOfAid",
       "organisationType",
-      "hasOtherFunding",
       "guidance",
       "status",
       "typeName",

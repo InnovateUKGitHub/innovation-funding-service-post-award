@@ -47,9 +47,6 @@ export const pcrItemWorkflowQuery = graphql`
                 Acc_CommercialWork__c {
                   value
                 }
-                Acc_OtherFunding__c {
-                  value
-                }
                 Acc_MarkedasComplete__c {
                   value
                 }

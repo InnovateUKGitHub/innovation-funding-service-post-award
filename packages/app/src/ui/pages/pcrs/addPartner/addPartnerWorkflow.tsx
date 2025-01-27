@@ -43,7 +43,7 @@ export type AddPartnerStepNames =
 
 export type AddPartnerWorkflowItem = Pick<
   PCRItemForPartnerAdditionDto,
-  "projectRole" | "partnerType" | "isCommercialWork" | "typeOfAid" | "organisationType" | "hasOtherFunding" | "type"
+  "projectRole" | "partnerType" | "isCommercialWork" | "typeOfAid" | "organisationType" | "type"
 >;
 
 export const getAddPartnerWorkflow = (item: AddPartnerWorkflowItem, step: number | undefined): IPCRWorkflow => {
@@ -66,6 +66,12 @@ export const getAddPartnerWorkflow = (item: AddPartnerWorkflowItem, step: number
         displayName: "Other public sector funding",
         stepNumber: 11,
         stepRender: OtherFundingStep,
+      },
+      {
+        stepName: PCRStepType.otherFundingSourcesStep,
+        displayName: "Other public sector funding",
+        stepNumber: 12,
+        stepRender: OtherSourcesOfFundingStep,
       },
       {
         stepName: PCRStepType.awardRateStep,
@@ -174,14 +180,14 @@ export const getAddPartnerWorkflow = (item: AddPartnerWorkflowItem, step: number
     });
   }
 
-  if (item.hasOtherFunding) {
-    workflow.steps.push({
-      stepName: PCRStepType.otherFundingSourcesStep,
-      displayName: "Other public sector funding",
-      stepNumber: 12,
-      stepRender: OtherSourcesOfFundingStep,
-    });
-  }
+  // if (item.hasOtherFunding) {
+  //   workflow.steps.push({
+  //     stepName: PCRStepType.otherFundingSourcesStep,
+  //     displayName: "Other public sector funding",
+  //     stepNumber: 12,
+  //     stepRender: OtherSourcesOfFundingStep,
+  //   });
+  // }
 
   return workflow;
 };
