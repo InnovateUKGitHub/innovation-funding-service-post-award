@@ -53,9 +53,7 @@
       "jesIntroduction": "This screen is not relevant to KTPs. Click save and continue."
     },
     "projectDetails": {
-      "financeContactInfo": "Only finance contacts can submit claims.",
-      "changeInfo": "If you need to change the finance contact, please email <0>{{ emailAddress }}</0>.",
-      "changeEmail": "ktpqueries@iuk.ukri.org"
+      "financeContactInfo": "Only finance contacts can submit claims."
     }
   },
   "spendProfileMessages": {
