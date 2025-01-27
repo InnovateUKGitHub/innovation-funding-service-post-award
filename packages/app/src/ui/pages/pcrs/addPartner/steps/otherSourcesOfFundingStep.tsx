@@ -107,6 +107,7 @@ const NoJsSourcesOfFundingRows = ({
             <input type="hidden" name={`funds.${i}.costCategory`} value={x.costCategory} />
             <input type="hidden" name={`funds.${i}.costCategoryId`} value={x.costCategoryId} />
             <input type="hidden" name={`funds.${i}.id`} value={x.id} />
+            <input type="hidden" name={`funds.${i}.costId`} value={x.costId} />
             <FormGroup
               noMarginBottom
               id={`funds_${i}_description`}
@@ -192,9 +193,6 @@ const SourcesOfFundingRows = ({
       {rows.map((x, i) => (
         <TR key={`funds.${i}.key`} className="govuk-table__row--editable">
           <TD>
-            <input type="hidden" name={`funds.${i}.costCategory`} value={x.costCategory} />
-            <input type="hidden" name={`funds.${i}.costCategoryId`} value={x.costCategoryId} />
-            <input type="hidden" name={`funds.${i}.id`} value={x.id} />
             <FormGroup
               noMarginBottom
               id={`funds_${i}_description`}

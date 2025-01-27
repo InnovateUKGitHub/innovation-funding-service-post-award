@@ -38,7 +38,7 @@ export class PcrItemAddPartnerProjectManagerHandler extends ZodFormHandlerBase<
     return {
       form: input.form,
       button_submit: input.button_submit,
-      markedAsComplete: input.markedAsComplete,
+      markedAsComplete: input.markedAsComplete === "true",
       contact2Email: input.contact2Email,
       contact2Forename: input.contact2Forename,
       contact2Surname: input.contact2Surname,

@@ -70,7 +70,7 @@ export class PcrItemAddPartnerAcademicCostsHandler extends ZodFormHandlerBase<
 
     return {
       form: input.form,
-      markedAsComplete: input.markedAsComplete,
+      markedAsComplete: input.markedAsComplete === "true",
       tsbReference: input.tsbReference,
       button_submit: input.button_submit,
       costs,

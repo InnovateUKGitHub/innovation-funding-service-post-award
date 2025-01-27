@@ -19,6 +19,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
   OtherSourcesOfFundingSchemaType,
   ProjectChangeRequestPrepareItemParams
 > {
+  deletedIds: CostId[] = [];
   constructor() {
     super({
       routes: [PCRPrepareItemRoute],
@@ -65,10 +66,15 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
         set(data, `funds.${index}.${field}`, input[key]);
       });
 
+    this.deletedIds = data.funds
+      .filter(x => !!x.costId && (!x.description || !x.value || !x.dateSecured_month || !x.dateSecured_year))
+      .map(x => x.costId as CostId);
+
     const funds = data.funds
       .filter(x => !!x.description || !!x.value || !!x.dateSecured_month || !!x.dateSecured_year)
       .map(x => ({
         ...x,
+        id: "",
         costCategory: Number(x.costCategory),
         value: x.value,
         dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
@@ -77,7 +83,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
     return {
       form: input.form,
       button_submit: input.button_submit,
-      deletedCostsOrFunds: input.deletedCostsOrFunds,
+      deletedCostsOrFunds: [],
       funds,
     };
   }
@@ -117,7 +123,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
 
     await context.repositories.pcrSpendProfile.insertSpendProfiles(newFundItems);
     await context.repositories.pcrSpendProfile.updateSpendProfiles(updatedFundItems);
-    await context.repositories.pcrSpendProfile.deleteSpendProfiles(input.deletedCostsOrFunds);
+    await context.repositories.pcrSpendProfile.deleteSpendProfiles(this.deletedIds);
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,

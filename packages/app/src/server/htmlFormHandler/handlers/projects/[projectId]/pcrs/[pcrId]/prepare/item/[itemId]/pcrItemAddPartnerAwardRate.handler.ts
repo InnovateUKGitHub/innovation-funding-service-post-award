@@ -34,7 +34,7 @@ export class PcrItemAddPartnerAwardRateHandler extends ZodFormHandlerBase<
     return {
       form: input.form,
       button_submit: input.button_submit,
-      markedAsComplete: input.markedAsComplete,
+      markedAsComplete: input.markedAsComplete === "true",
       awardRate: input.awardRate,
     };
   }
