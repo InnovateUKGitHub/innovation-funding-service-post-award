@@ -3,7 +3,6 @@ import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { Commands } from "../../Commands";
 import { PageHeading } from "../../../components/PageHeading";
 import { getLorem } from "../../../components/lorem";
-import { privateDecrypt } from "crypto";
 
 export
 @Fixture("projectDetails")
