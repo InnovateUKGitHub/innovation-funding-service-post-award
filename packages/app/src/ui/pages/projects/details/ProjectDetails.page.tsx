@@ -237,7 +237,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
               )
             }
             footnote={
-              project.roles.isPm && (
+              project.roles.isPm ? (
                 <SimpleString>
                   <Content
                     value={x => x.pages.projectDetails.changeInfo}
@@ -249,6 +249,8 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
                     ]}
                   />
                 </SimpleString>
+              ) : (
+                <SimpleString>{getContent(x => x.pages.projectDetails.discussChangeInfo)}</SimpleString>
               )
             }
           />

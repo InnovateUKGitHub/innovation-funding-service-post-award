@@ -409,6 +409,7 @@
       "projectManagerInfo": "Only project managers can raise project change requests.",
       "financeContactInfo": "Only finance contacts can submit claims.",
       "changeInfo": "If you need to change the lead project manager or finance contact, submit a 'Manage team members' <0>project change request</0> (PCR).",
+      "discussChangeInfo": "Discuss any personnel changes with the project manager, who may then request a manage team members project change request (PCR).",
       "leadPartner": "{{ name }} (Lead)",
       "unknownName": "Unknown Name",
       "unknownRole": "Unknown Role",
