@@ -1,6 +1,7 @@
 import { BrowserContext, Page } from "@playwright/test";
 import { Fixture } from "playwright-bdd/decorators";
 import { SfdcApi } from "./SfdcApi";
+import { error } from "console";
 
 export
 @Fixture("sfdcLightningPage")
@@ -46,11 +47,17 @@ class SfdcLightningPage {
 
   public async goto(path: string) {
     const tokenInfo = await this.sfdcApi.getSalesforceToken();
-    return this.page.goto(`${tokenInfo.url}${path}`);
+    let match = /https:\/\/([a-z-]+)\.sandbox/.exec(tokenInfo.url);
+    if (match) {
+      const sandbox = match[1];
+      return this.page.goto(`https://${sandbox}.sandbox.lightning.force.com${path}`);
+    }
+    throw new Error("Sandbox does not match sandbox URL format.");
   }
 
   public async loginAndGoto(path: string) {
     const tokenInfo = await this.sfdcApi.getSalesforceToken();
-    return this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retUrl=${encodeURIComponent(path)}`);
+    await this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retURL=${encodeURIComponent(path)}`);
+    await this.goto(path);
   }
 }
