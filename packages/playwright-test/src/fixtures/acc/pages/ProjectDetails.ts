@@ -100,7 +100,7 @@ class ProjectDetails {
     this.changeGuidanceEnd = this.page.getByRole("paragraph").filter({ hasText: "(PCR)" });
     this.fcChangeGuidance = this.page.getByRole("paragraph").filter({
       hasText:
-        "Discuss any personnel changes with the project manager, who may then request a manage team members project change request (PCR).",
+        "Discuss any changes with the project manager, who may then request a manage team members project change request (PCR).",
     });
     this.otherContactsHeading = this.page.getByRole("heading").filter({ hasText: "Other contacts" });
     this.otherContactsGuidance = this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." });
