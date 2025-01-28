@@ -12,9 +12,9 @@ import {
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { useContent } from "@ui/hooks/content.hook";
-import { PcrCreateSchemaType, PcrUpdateTypesSchemaType } from "@ui/zod/pcrValidator.zod";
 import { UseFormSetValue } from "react-hook-form";
 import { z } from "zod";
+import { PcrCreateSchemaType } from "../modifyOptions/pcrModifyOptions.zod";
 
 const usePcrItemsForThisCompetition = (
   competitionType: SalesforceCompetitionTypes,
@@ -59,6 +59,7 @@ const usePcrItemsForThisCompetition = (
       type: pcrItem.type,
       hidden: hiddenReason !== PCRItemHiddenReason.None,
       hiddenReason,
+      developerName: pcrItem.developerRecordTypeName,
     };
   });
 };
@@ -66,7 +67,7 @@ const usePcrItemsForThisCompetition = (
 const usePcrItemExclusivity = (
   pcrs: ReturnType<typeof usePcrItemsForThisCompetition>,
   selectedTypes: (string | PCRItemType)[],
-  setValue: UseFormSetValue<z.output<PcrCreateSchemaType | PcrUpdateTypesSchemaType>>,
+  setValue: UseFormSetValue<z.output<PcrCreateSchemaType>>,
 ) => {
   /**
    * N.B. Seems like React Hook Form treats all checkbox values as string

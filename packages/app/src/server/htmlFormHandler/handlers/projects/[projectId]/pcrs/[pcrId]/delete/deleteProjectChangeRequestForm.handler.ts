@@ -4,7 +4,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRsDashboardRoute } from "@ui/pages/pcrs/dashboard/PCRDashboard.page";
 import { PCRDeleteParams, PCRDeleteRoute } from "@ui/pages/pcrs/pcrDelete.page";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { pcrModifyErrorMap } from "@ui/zod/pcrValidator.zod";
+import { emptyErrorMap } from "@ui/zod/helperValidators/helperValidators.zod";
 import { z } from "zod";
 
 const emptySchema = z.object({
@@ -25,7 +25,7 @@ class ProjectChangeRequestDeleteFormHandler extends ZodFormHandlerBase<EmptySche
   protected async getZodSchema() {
     return {
       schema: emptySchema,
-      errorMap: pcrModifyErrorMap,
+      errorMap: emptyErrorMap,
     };
   }
 

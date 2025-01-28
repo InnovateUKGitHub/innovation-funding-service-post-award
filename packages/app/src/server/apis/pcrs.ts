@@ -100,7 +100,18 @@ type PcrUpdateMethod<Context extends "client" | "server", TDto, TReturn> = (
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
     params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
-  ) => Promise<PCRDto>;
+  ) => Promise<{ id: PcrId }>;
+
+  addPcrTypes: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        id: PcrId;
+        projectChangeRequestDto: CreatePcrDto;
+      }
+    >,
+  ) => Promise<{ id: PcrId }>;
 
   update: (
     params: ApiParams<
@@ -203,15 +214,15 @@ export interface IPCRsApi<Context extends "client" | "server"> {
 }
 
 class Controller
-  extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRDto | StandalonePcrDto>
+  extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRDto | StandalonePcrDto | { id: PcrId }>
   implements IPCRsApi<"server">
 {
   constructor() {
     super("pcrs");
 
     this.postItem(
-      "/:projectId",
-      (p, _, b: PCRDto) => ({
+      "/:projectId/create",
+      (p, _, b: CreatePcrDto) => ({
         projectId: p.projectId,
         projectChangeRequestDto: processDto(b),
       }),
@@ -255,7 +266,13 @@ class Controller
     );
 
     this.putItem(
-      "/:projectId/:pcrId",
+      "/:projectId/:pcrId/add-types",
+      (p, _, b: CreatePcrDto) => ({ projectId: p.projectId, id: p.pcrId, projectChangeRequestDto: processDto(b) }),
+      this.addPcrTypes,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/",
       (p, _, b: PCRDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
       this.update,
     );
@@ -449,14 +466,34 @@ class Controller
 
   async create(
     params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
-  ): Promise<PCRDto> {
+  ): Promise<{ id: PcrId }> {
     const context = await contextProvider.start(params);
+    const pcrId = await context.runCommand(
+      new CreateProjectChangeRequestCommand({
+        projectId: params.projectId,
+        pcrId: null,
+        projectChangeRequest: params.projectChangeRequestDto,
+        form: params.projectChangeRequestDto.form,
+      }),
+    );
 
-    const id = (await context.runCommand(
-      new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto),
-    )) as PcrId;
+    return { id: pcrId };
+  }
 
-    return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
+  async addPcrTypes(
+    params: ApiParams<"server", { projectId: ProjectId; id: PcrId; projectChangeRequestDto: CreatePcrDto }>,
+  ): Promise<{ id: PcrId }> {
+    const context = await contextProvider.start(params);
+    await context.runCommand(
+      new CreateProjectChangeRequestCommand({
+        projectId: params.projectId,
+        pcrId: params.id,
+        projectChangeRequest: params.projectChangeRequestDto,
+        form: params.projectChangeRequestDto.form,
+      }),
+    );
+
+    return { id: params.id };
   }
 
   async update(
@@ -476,6 +513,7 @@ class Controller
     await context.runCommand(
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
+
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 

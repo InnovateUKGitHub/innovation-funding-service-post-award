@@ -4,13 +4,14 @@ import { salesforceDateFormat } from "@framework/util/clock";
 import { PCRSpendProfileOverheadRate, PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { ISalesforcePcrSpendProfile } from "../pcrSpendProfileRepository";
+import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 
 const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 
 describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
     const expectedEntity: PcrSpendProfileEntity = {
-      id: "id1" as CostId,
+      id: `${SalesforcePrefixes.Acc_IFSSpendProfile__c}id1` as CostId,
       costCategoryId: "costCatId1" as CostCategoryId,
       pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,

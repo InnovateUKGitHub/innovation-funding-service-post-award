@@ -6,6 +6,7 @@ import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { DateTime } from "luxon";
 import { z, ZodIssueCode, ZodRawShape } from "zod";
 import { filenameValidator } from "./filenameValidator.zod";
+import { makeZodI18nMap } from "@shared/zodi18n";
 
 const y2k = new Date("2000-01-01");
 
@@ -294,3 +295,5 @@ export {
 
 export const zodEmptySchema = z.object({});
 export type ZodEmptySchema = typeof zodEmptySchema;
+
+export const emptyErrorMap = makeZodI18nMap({ keyPrefix: [] });

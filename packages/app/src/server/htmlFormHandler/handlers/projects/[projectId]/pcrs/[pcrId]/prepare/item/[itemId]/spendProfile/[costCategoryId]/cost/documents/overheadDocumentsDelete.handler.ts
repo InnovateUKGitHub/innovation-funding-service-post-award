@@ -7,9 +7,9 @@ import {
   PCRSpendProfileOverheadDocumentRoute,
 } from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { pcrModifyErrorMap } from "@ui/zod/pcrValidator.zod";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { z } from "zod";
+import { emptyErrorMap } from "@ui/zod/helperValidators/helperValidators.zod";
 
 const deleteSchema = z.object({
   form: z.literal(FormTypes.PcrAddPartnerProjectCostOverheadDocumentsDelete),
@@ -30,7 +30,7 @@ class OverheadDocumentsDeleteHandler extends ZodFormHandlerBase<DeleteSchema, Ov
   protected async getZodSchema() {
     return {
       schema: deleteSchema,
-      errorMap: pcrModifyErrorMap,
+      errorMap: emptyErrorMap,
     };
   }
 

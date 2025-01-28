@@ -102,7 +102,9 @@ const clientApi: IApiClient<"client"> = {
       ajax(`/api/monitoring-reports/${params.projectId}/${params.reportId}`, { method: "DELETE" }),
   },
   pcrs: {
-    create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
+    create: params => ajaxPost(`/api/pcrs/${params.projectId}/create`, params.projectChangeRequestDto),
+    addPcrTypes: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.id}/add-types`, params.projectChangeRequestDto),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     approveNewSubcontractor: params =>
       ajaxPut(

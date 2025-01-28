@@ -18,6 +18,7 @@ import {
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
   UpdatePcrItemEntity,
+  ProjectChangeRequestAddTypesEntity,
 } from "@framework/entities/projectChangeRequest";
 import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
@@ -26,6 +27,7 @@ import { mapToSalesforcePCRManageTeamMemberType, mapProjectRoleToName } from "@f
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
+  addPcrTypes(projectChangeRequest: ProjectChangeRequestAddTypesEntity): Promise<void>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   updateSingleItem(item: UpdatePcrItemEntity): Promise<void>;
@@ -409,6 +411,14 @@ export class ProjectChangeRequestRepository
 
   async updateSingleSalesforceItem(item: PickRequiredFromPartial<ISalesforcePCR, "Id">) {
     await super.updateItem(item);
+  }
+
+  async addPcrTypes(projectChangeRequest: ProjectChangeRequestAddTypesEntity) {
+    await super.updateItem({
+      Id: projectChangeRequest.id,
+      Acc_Comments__c: projectChangeRequest.comments,
+    });
+    await this.insertItems(projectChangeRequest.id, projectChangeRequest.items);
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {

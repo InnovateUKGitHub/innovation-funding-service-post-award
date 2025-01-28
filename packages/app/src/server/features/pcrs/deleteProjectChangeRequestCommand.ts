@@ -24,6 +24,7 @@ export class DeleteProjectChangeRequestCommand extends AuthorisedAsyncCommandBas
     if (existing.status !== PCRStatus.DraftWithProjectManager) {
       throw new BadRequestError("Can only delete draft project change requests");
     }
+
     await context.repositories.projectChangeRequests.delete(existing);
 
     return true;

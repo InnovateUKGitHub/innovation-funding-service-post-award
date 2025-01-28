@@ -13,6 +13,7 @@ import { Partner } from "@framework/entities/partner";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import {
+  ProjectChangeRequestAddTypesEntity,
   ProjectChangeRequestEntity,
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
@@ -815,6 +816,11 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
   }
 
   updateProjectChangeRequest(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addPcrTypes(projectChangeRequest: ProjectChangeRequestAddTypesEntity): Promise<void> {
     return Promise.resolve();
   }
 

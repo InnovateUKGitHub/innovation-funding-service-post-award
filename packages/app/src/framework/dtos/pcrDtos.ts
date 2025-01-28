@@ -58,12 +58,14 @@ export interface PCRItemBaseDto extends PCRItemSummaryDto {
   statusName: string;
 }
 
-export type CreatePcrItemDto = PickRequiredFromPartial<PCRItemDto, "type" | "status">;
-export type CreatePcrDto = Omit<
-  Pick<PCRDto, "projectId" | "reasoningStatus" | "status" | "manageTeamMemberStatus">,
-  "items"
-> & {
-  items: CreatePcrItemDto[];
+export type CreatePcrItemDto = PickRequiredFromPartial<PCRItemDto, "type">;
+
+export type CreatePcrDto = {
+  types: PCRItemType[];
+  form: FormTypes.ProjectChangeRequestCreate | FormTypes.ProjectChangeRequestUpdateTypes;
+  currentPcrItems: PCRItemType[];
+  numberOfPartners: number;
+  pcrItemInfo: Pick<PCRItemTypeDto, "type" | "hidden" | "hiddenReason" | "displayName">[];
 };
 
 export type PCRItemDto =
@@ -494,6 +496,12 @@ export interface PcrAddPartnerOrganisationDetailsDto extends PcrDtoCommon {
   button_submit: string;
   participantSize: number;
   numberOfEmployees: number | null;
+}
+
+export interface PcrAddPartnerOtherFundingDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerOtherFundingStep;
+  button_submit: string;
+  hasOtherFunding?: string;
 }
 
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {

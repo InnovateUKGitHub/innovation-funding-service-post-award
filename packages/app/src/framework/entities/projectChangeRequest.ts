@@ -20,6 +20,13 @@ export interface ProjectChangeRequestForCreateEntity {
   manageTeamMemberStatus: PCRStatus;
 }
 
+export interface ProjectChangeRequestAddTypesEntity {
+  items: ProjectChangeRequestItemForCreateEntity[];
+  projectId: ProjectId;
+  id: PcrId;
+  comments?: string;
+}
+
 export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreateEntity {
   comments: string;
   id: PcrId;
@@ -75,7 +82,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectSummary?: string | null;
   publicDescription?: string | null;
   recordTypeId: string;
-  developerRecordTypeName: string;
+  developerRecordTypeName: string | null;
   registeredAddress?: string | null;
   registrationNumber?: string | null;
   removalPeriod?: number | null;

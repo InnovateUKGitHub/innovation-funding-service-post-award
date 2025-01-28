@@ -17,7 +17,6 @@ import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Messages } from "@ui/components/molecules/Messages/messages";
 import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -31,7 +30,6 @@ export const PCRPrepareReasoningStep = () => {
   const { register, watch, handleSubmit, formState, trigger, setError } = useForm<PcrReasoningSchemaType>({
     defaultValues: {
       reasoningComments: pcr.reasoningComments ?? "",
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       form: FormTypes.PcrPrepareReasoningStep,
     },
     resolver: zodResolver(pcrReasoningSchema, {
@@ -54,13 +52,8 @@ export const PCRPrepareReasoningStep = () => {
       <Messages messages={messages} />
       <PcrItemListSection />
       <Section data-qa="reasoning-save-and-return">
-        <Form
-          onSubmit={handleSubmit(data =>
-            onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
-          )}
-        >
+        <Form onSubmit={handleSubmit(data => onUpdate({ data, context: { link: nextLink } }))}>
           <input type="hidden" value={FormTypes.PcrPrepareReasoningStep} {...register("form")} />
-          <input type="hidden" value={String(markedAsCompleteHasBeenChecked)} {...register("markedAsComplete")} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrReasoningPrepareReasoning.headingReasoning)}</Legend>
             <TextAreaField

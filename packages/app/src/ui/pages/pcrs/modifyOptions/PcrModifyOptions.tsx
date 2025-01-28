@@ -13,13 +13,7 @@ import { BaseProps } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  getPcrModifyTypesSchema,
-  PcrCreateSchemaType,
-  pcrModifyErrorMap,
-  PcrModifyTypesSchemaType,
-  PcrUpdateTypesSchemaType,
-} from "@ui/zod/pcrValidator.zod";
+import { pcrCreateSchema, PcrCreateSchemaType, pcrModifyErrorMap } from "./pcrModifyOptions.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
@@ -54,33 +48,27 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   );
 
   const { register, handleSubmit, setError, formState, getFieldState, watch, setValue } = useForm<
-    z.output<PcrCreateSchemaType | PcrUpdateTypesSchemaType>
+    z.output<PcrCreateSchemaType>
   >({
-    resolver: zodResolver(
-      getPcrModifyTypesSchema({
-        pcrItemInfo: visiblePcrItems,
-        numberOfPartners,
-        currentPcrItems: currentPcr?.items ?? [],
-      }),
-      { errorMap: pcrModifyErrorMap },
-    ),
+    resolver: zodResolver(pcrCreateSchema, { errorMap: pcrModifyErrorMap }),
     defaultValues: {
-      form: pcrId ? FormTypes.ProjectChangeRequestUpdateTypes : FormTypes.ProjectChangeRequestCreate,
-      projectId,
-      pcrId: undefined,
+      form: !!pcrId ? FormTypes.ProjectChangeRequestUpdateTypes : FormTypes.ProjectChangeRequestCreate,
       types: [],
+      pcrItemInfo: visiblePcrItems,
+      numberOfPartners,
+      currentPcrItems: (currentPcr?.items ?? []).map(x => x.type),
     },
   });
 
   const { apiError, isFetching, onUpdate } = useOnSubmit({ projectId });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<PcrModifyTypesSchemaType>>(setError, formState.errors);
-  const defaults = useServerInput<z.output<PcrModifyTypesSchemaType>>();
+  const allErrors = useZodErrors<z.output<PcrCreateSchemaType>>(setError, formState.errors);
+  const defaults = useServerInput<z.output<PcrCreateSchemaType>>();
 
   const pcrItems = usePcrItemExclusivity(visiblePcrItems, watch("types"), setValue);
 
-  const onChange = (dto: z.output<PcrModifyTypesSchemaType>) => {
+  const onChange = (dto: z.output<PcrCreateSchemaType>) => {
     onUpdate({
       data: dto,
     });
@@ -106,12 +94,8 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
       <Content markdown value={x => x.pages.pcrModifyOptions.guidance} />
 
       <Form onSubmit={handleSubmit(onChange)}>
-        <input type="hidden" {...register("projectId")} value={projectId} />
         {pcrId ? (
-          <>
-            <input type="hidden" {...register("pcrId")} value={pcrId} />
-            <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestUpdateTypes} />
-          </>
+          <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestUpdateTypes} />
         ) : (
           <input type="hidden" {...register("form")} value={FormTypes.ProjectChangeRequestCreate} />
         )}
