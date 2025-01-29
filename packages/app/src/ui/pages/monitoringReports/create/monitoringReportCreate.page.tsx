@@ -3,7 +3,7 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useMonitoringReportCreateQuery, useOnMonitoringReportCreate } from "./monitoringReportCreate.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { useForm } from "react-hook-form";
+import { useAutosaveForm } from "@ui/hooks/useAutosaveForm";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { Content } from "@ui/components/molecules/Content/content";
@@ -32,7 +32,9 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
   const { project, fragmentRef } = useMonitoringReportCreateQuery(props.projectId);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState, setValue, setError } = useForm<z.infer<MonitoringReportCreateSchema>>({
+  const { register, handleSubmit, formState, setValue, setError } = useAutosaveForm<
+    z.infer<MonitoringReportCreateSchema>
+  >({
     defaultValues: {
       period: undefined,
       button_submit: "saveAndContinue",

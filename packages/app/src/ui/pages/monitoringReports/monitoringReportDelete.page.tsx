@@ -6,7 +6,7 @@ import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
 import { BackLink } from "@ui/components/atoms/Links/links";
-import { useForm } from "react-hook-form";
+import { useAutosaveForm } from "@ui/hooks/useAutosaveForm";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
@@ -23,7 +23,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
   const { getContent } = useContent();
   const { fragmentRef } = useMonitoringReportDeleteQuery(props.projectId);
 
-  const { handleSubmit, formState, setError } = useForm<{}>({});
+  const { handleSubmit, formState, setError } = useAutosaveForm<{}>({});
 
   const {
     onUpdate: onDelete,

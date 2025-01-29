@@ -20,7 +20,6 @@ import {
   UseFormReset,
   UseFormTrigger,
   UseFormWatch,
-  useForm,
 } from "react-hook-form";
 import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBackLink";
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
@@ -34,6 +33,7 @@ import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useAutosaveForm } from "@ui/hooks/useAutosaveForm";
 
 type MonitoringReportContextType = {
   projectId: ProjectId;
@@ -112,7 +112,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState, setValue, reset, trigger, setError } = useForm<FormValues>({
+  const { register, watch, handleSubmit, formState, setValue, reset, trigger, setError } = useAutosaveForm<FormValues>({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
