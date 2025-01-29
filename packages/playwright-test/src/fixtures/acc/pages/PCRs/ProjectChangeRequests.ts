@@ -8,6 +8,7 @@ import { DataTable } from "playwright-bdd";
 export
 @Fixture("projectChangeRequests")
 class ProjectChangeRequests {
+  [x: string]: any;
   protected readonly page: Page;
   protected readonly commands: Commands;
   private readonly pcrPageHeading: Locator;
@@ -41,6 +42,16 @@ class ProjectChangeRequests {
   private readonly uploadDocumentsHeading: Locator;
   private readonly giveUsInfoSubheading: Locator;
   private readonly pcrReasoning: string;
+  private readonly pcrTask1: string;
+  private readonly pcrSummaryRowValue: string;
+  private readonly pcrSummaryRowlist: string;
+  private readonly nextPreviousPage: Locator;
+  private readonly submitPcrs: Locator;
+  private readonly iukRadioButton: string;
+  private readonly taskLink: Locator;
+  private readonly createReq: Locator;
+  private readonly submittedDetails: string;
+
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -85,6 +96,19 @@ class ProjectChangeRequests {
     this.uploadDocumentsHeading = this.page.locator("css=legend").filter({ hasText: "Upload documents" });
     this.giveUsInfoSubheading = this.page.locator("li").getByRole("heading").filter({ hasText: "Give us information" });
     this.pcrReasoning = "This is the reasoning for this PCR.";
+    this.pcrTask1 = '[data-qa="taskList"]';
+    this.pcrSummaryRowValue = '[data-qa="numberRow"] dd.govuk-summary-list__value';
+    this.pcrSummaryRowlist = '[data-qa="typesRow"] dd.govuk-summary-list__value';
+    this.nextPreviousPage = this.page.locator("//span[@class='govuk-navigation-arrows__button__label__category']");
+    this.submitPcrs = this.page.locator("//button[normalize-space()='Submit']");
+    this.iukRadioButton = "//label[contains(text(),'{text}')]";
+    this.createReq = this.page.locator('button:has-text("Create request")');
+    this.taskLink = this.page.locator("role=link");
+    this.submittedDetails = `//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`;
+
+
+
+
   }
 
   /**
@@ -137,6 +161,7 @@ class ProjectChangeRequests {
     await this.commands.button("Save and return to request").click();
     await expect(this.requestHeading).toBeVisible();
     await expect(this.reasoningQa.filter({ hasText: "Complete" })).toBeVisible();
+
   }
 
   @Then("the user clicks Submit request")
@@ -299,4 +324,80 @@ class ProjectChangeRequests {
     await this.markAsCompleteSection(true);
     await this.requestPagePcrStatus(pcrType, "Complete");
   }
+  async validatePcrTaskList(expectedSection: string, expectedTask: string) {
+    const taskText = await this.page.textContent(this.pcrTask1);
+
+    if (!taskText?.includes(expectedSection)) {
+      throw new Error(`task section:'${expectedSection}' not found.`);
+    }
+
+    if (!taskText?.includes(expectedTask)) {
+      throw new Error(`task:'${expectedTask}' not found.`);
+    }
+  }
+
+  async validatePcrDetails(expectedRequestNumber: string, expectedTypes: string) {
+    const requestNumber = await this.page.textContent(this.pcrSummaryRowValue);
+    const types = await this.page.textContent(this.pcrSummaryRowlist);
+
+    if (requestNumber !== expectedRequestNumber || types !== expectedTypes) {
+      throw new Error("Validation failed.");
+    }
+  }
+
+  async selectRadioButton(radioItem: string) {
+    const radioButton = this.page.locator(this.iukRadioButton.replace("{text}", radioItem));
+    await radioButton.click();
+  }
+
+
+  async clickTaskTodo(taskText: string) {
+    const todoLink = this.taskLink.count();
+    for (let i = 0; i < (await todoLink); i++) {
+      const ele = this.taskLink.nth(i);
+      const txt = ele.innerText();
+      if ((await txt) === taskText) {
+        await ele.click();
+        return;
+      }
+    }
+  }
+  async clickCreateReq() {
+    await this.createReq.click();
+  }
+
+  async validateSubmittedPcrDetails(fieldName: string, expectedValue: string | RegExp) {
+    const element = this.submittedDetails.replace("%s", fieldName);
+
+    const actualValue = await this.page.textContent(element);
+    if (!actualValue) {
+      throw new Error(`Field with name "${fieldName}" was not found.`);
+    }
+
+    expect(actualValue.trim()).toMatch(expectedValue);
+  }
 }
+function validatePcrTaskList(expectedSection: any, string: any, expectedTask: any, string1: any) {
+  throw new Error("Function not implemented.");
+}
+
+function validatePcrDetails(expectedRequestNumber: any, string: any, expectedTypes: any, string1: any) {
+  throw new Error("Function not implemented.");
+}
+
+function selectRadioButton(radioItem: any, string: any) {
+  throw new Error("Function not implemented.");
+}
+
+function clickTaskTodo(taskText: any, string: any) {
+  throw new Error("Function not implemented.");
+}
+
+function clickCreateReq() {
+  throw new Error("Function not implemented.");
+}
+
+function validateSubmittedPcrDetails(fieldName: any, string: any, expectedValue: any, arg3: number) {
+  throw new Error("Function not implemented.");
+}
+

@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Page, Locator } from "@playwright/test";
 import { Fixture } from "playwright-bdd/decorators";
 import path from "path";
 import * as fs from "fs";
@@ -391,6 +391,26 @@ class Commands {
   }
 
   /**
+   *  Verify the text and locator on the page for accuracy
+   */
+  async verifyTextOnPage(message: string, Locator?: Locator): Promise<void> {
+    
+    if (Locator) {
+      const matched = await Locator.evaluateAll((elements, text) =>
+        elements.some((el) => el.textContent?.includes(text)), message
+      );
+  
+      if (!matched) {
+        throw new Error(`Text "${message}" not found in any of the matched Locator elements.`);
+      }
+    } else {
+      const bodyContent = await this.page.textContent("body");
+      if (!bodyContent?.includes(message)) {
+        throw new Error(`Text "${message}" not found on the page.`);
+      }
+    }
+  }
+  /**
    *
    * Returns a string with full date with option for long or short month. E.g. Jan or January
    */
@@ -643,7 +663,6 @@ class Commands {
     }
     return newList;
   }
-
   async uploadBatchOfDocs(files = []) {
     await this.fileInput(files);
     await expect(
@@ -653,3 +672,4 @@ class Commands {
 
   largerDocs = ["11MB_1", "11MB_2", "11MB_3"];
 }
+
