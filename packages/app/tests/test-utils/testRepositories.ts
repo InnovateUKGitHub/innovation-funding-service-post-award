@@ -840,7 +840,7 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
 
   updateSingleSalesforceItem(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    item: PickRequiredFromPartial<ISalesforcePCR, "Id" | "Acc_MarkedasComplete__c">,
+    item: PickRequiredFromPartial<ISalesforcePCR, "Id">,
   ): Promise<void> {
     return Promise.resolve();
   }

@@ -8,8 +8,10 @@ describe("EmailContent", () => {
   beforeAll(async () => {
     await initStubTestIntl({
       pages: {
-        projectDetails: {
-          changeEmail: "testbed@iuk.ukri.org",
+        manageTeamMembers: {
+          modify: {
+            labels: { changeEmail: "testbed@iuk.ukri.org" },
+          },
         },
       },
     });
@@ -20,7 +22,7 @@ describe("EmailContent", () => {
   const setup = (props?: Partial<EmailContentProps>) =>
     render(
       <TestBed>
-        <EmailContent value={x => x.pages.projectDetails.changeEmail} {...props} />
+        <EmailContent value={x => x.pages.manageTeamMembers.modify.labels.changeEmail} {...props} />
       </TestBed>,
     );
 
