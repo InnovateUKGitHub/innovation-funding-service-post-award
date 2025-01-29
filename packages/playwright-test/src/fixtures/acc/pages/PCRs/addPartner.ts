@@ -104,11 +104,6 @@ class AddPartner {
         this.projectCity = this.page.locator("//input[@id='project-city']");
         this.projectPostcode = this.page.locator("//input[@id='project-postcode']");
 
-
-
-
-
-
     }
 
     async enterFieldData(field: string, value: string) {
@@ -376,7 +371,6 @@ class AddPartner {
         await this.newPartnerInformation("Collaborator", "Yes", "Business");
         await this.stateAid();
         await this.search.fill(getLorem(160));
-        //await this.commands.button("Save and continue").click();
         await this.commands.verifyTextOnPage("Search query must be 159 characters or less.");
         await this.companySearch("Man &");
         await this.companiesHouse("MAN & CAVE LTD");
