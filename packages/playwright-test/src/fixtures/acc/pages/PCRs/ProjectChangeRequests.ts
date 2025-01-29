@@ -8,7 +8,6 @@ import { DataTable } from "playwright-bdd";
 export
 @Fixture("projectChangeRequests")
 class ProjectChangeRequests {
-  [x: string]: any;
   protected readonly page: Page;
   protected readonly commands: Commands;
   private readonly pcrPageHeading: Locator;
