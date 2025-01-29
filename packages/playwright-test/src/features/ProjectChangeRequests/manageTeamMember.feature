@@ -136,3 +136,11 @@ Feature: Manage team member
         And the user clicks the "Invite associate" button
         And the user submits a valid "Invite a new associate" PCR
         Then a "Invite a new associate" confirmation screen is displayed
+
+    Scenario: Removing an existing associate
+        When the user creates a "Manage team members" PCR
+        And the user clicks Remove next to the existing associate
+        Then the Remove associate page is displayed
+
+        When the user clicks the Remove associate button
+        Then a "Manage team members" confirmation screen is displayed

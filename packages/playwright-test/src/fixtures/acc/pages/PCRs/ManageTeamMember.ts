@@ -71,6 +71,11 @@ class ManageTeamMember {
   private readonly confirmationPageGuidance: Locator;
   private readonly returnToPcrsButton: Locator;
   private readonly inviteButton: Locator;
+  private readonly removeAssociateHeading: PageHeading;
+  private readonly removeAssociateGuidance: Locator;
+  private readonly removeAssociateTable: Array<[string, string]>;
+  private readonly removeAssociateButton: Locator;
+  private readonly cancelLink: Locator;
 
   constructor({
     page,
@@ -189,6 +194,17 @@ class ManageTeamMember {
       .filter({ hasText: "Your project change request has been submitted." });
     this.returnToPcrsButton = this.page.getByRole("button").filter({ hasText: "Return to project change requests" });
     this.inviteButton = this.commands.button("Send invitation");
+    this.removeAssociateHeading = PageHeading.fromTitle(this.page, "Confirm removal of associate");
+    this.removeAssociateGuidance = this.page.getByRole("paragraph").filter({
+      hasText:
+        "This page allows you to remove the below associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
+    });
+    this.removeAssociateTable = [
+      ["Name", "Anna Sociate"],
+      ["Organisation", "Hedge's Primary Ltd."],
+    ];
+    this.removeAssociateButton = this.page.getByRole("button").filter({ hasText: "Remove associate" });
+    this.cancelLink = this.page.getByRole("link").filter({ hasText: "Cancel" });
   }
 
   //**STEP DEFINITIONS**//
@@ -467,10 +483,12 @@ class ManageTeamMember {
   async completeAndSubmit(pcr: string) {
     if (pcr === "Replace project manager") {
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
+      await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await this.confirmReplacementButton.click();
     } else if (pcr === "Replace finance contact") {
       await this.selectFc();
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
+      await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await this.confirmReplacementButton.click();
       await expect(this.page.getByRole("combobox")).toBeDisabled();
     } else if (pcr === "Invite a new associate") {
@@ -479,6 +497,7 @@ class ManageTeamMember {
       await this.inviteButton.click();
     } else {
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
+      await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await this.confirmReplacementButton.click();
     }
   }
@@ -486,11 +505,17 @@ class ManageTeamMember {
   @Then("a {string} confirmation screen is displayed")
   async confirmationScreen(pcr: string) {
     await this.confirmationPageGuidance.isVisible();
+    let status: string;
+    if (pcr === "Manage team members") {
+      status = "Approved";
+    } else {
+      status = "Submitted to Innovate UK";
+    }
     const data = [
       ["Request number", /[1-9]/],
       ["Request type", "Manage team members"],
       ["Request started", this.commands.dateToday(true)],
-      ["Request status", "Submitted to Innovate UK"],
+      ["Request status", status],
       ["Request last updated", this.commands.dateToday(true)],
     ];
 
@@ -501,13 +526,49 @@ class ManageTeamMember {
     await this.returnToPcrsButton.isVisible();
     await this.page.getByRole("link").filter({ hasText: "Review request" }).click();
     if (pcr === "Invite a new associate") {
-      await this.reviewScreenReasoning(true);
+      await this.reviewScreenReasoning(true, false);
       await this.reviewScreenNew(pcr);
+    } else if (pcr === "Manage team members") {
+      await this.reviewScreenReasoning(false, true);
+      await this.reviewScreenExisting(pcr);
     } else {
-      await this.reviewScreenReasoning(false);
+      await this.reviewScreenReasoning(false, false);
       await this.reviewScreenExisting(pcr);
       await this.reviewScreenNew(pcr);
     }
+  }
+
+  @Then("the user clicks Remove next to the existing associate")
+  async clickRemoveAssociateLink() {
+    await this.page
+      .getByTestId("associates-table")
+      .locator("tbody")
+      .locator("td")
+      .nth(2)
+      .getByRole("link")
+      .filter({ hasText: "Remove" })
+      .click();
+  }
+
+  @Then("the Remove associate page is displayed")
+  async removeAssociatePage() {
+    await this.removeAssociateHeading.isVisible();
+    await expect(this.backManageTeam).toBeVisible();
+    await expect(this.removeAssociateGuidance).toBeVisible();
+    let i = 0;
+    for (const [header, cell] of this.removeAssociateTable) {
+      await expect(this.page.locator("table").locator("thead").locator("th").nth(i)).toHaveText(header);
+      await expect(this.page.locator("table").locator("tbody").locator("td").nth(i)).toHaveText(cell);
+      i++;
+    }
+    await expect(this.removeAssociateButton).toBeVisible();
+    await expect(this.removeAssociateButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
+    await expect(this.cancelLink).toBeVisible();
+  }
+
+  @When("the user clicks the Remove associate button")
+  async clickRemoveAssociateButton() {
+    await this.removeAssociateButton.click();
   }
 
   // **METHODS**
@@ -586,6 +647,7 @@ class ManageTeamMember {
       await this.checkInviteLabelsExist();
       await expect(this.inviteOrgLabel).toHaveText("Organisation");
       await expect(this.confirmReplacementButton).toBeVisible();
+      await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await expect(this.page.getByRole("link").filter({ hasText: "Cancel" })).toBeVisible();
     } else if (fc) {
       await this.commands.heading("Replace finance contact");
@@ -605,7 +667,8 @@ class ManageTeamMember {
       await expect(this.replaceFcSubheading).toBeVisible();
       await expect(this.page.getByText(this.replaceFcHint)).toBeVisible();
       await expect(this.confirmReplacementButton).toBeVisible();
-      await expect(this.page.getByRole("link").filter({ hasText: "Cancel" })).toBeVisible();
+      await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
+      await expect(this.cancelLink).toBeVisible();
     } else if (associate) {
       await expect(this.page.getByRole("heading").filter({ hasText: "Invite a new associate" })).toBeVisible();
       await expect(this.backManageTeam).toBeVisible();
@@ -677,10 +740,12 @@ class ManageTeamMember {
     await this.page.getByLabel("Email").fill(email);
   }
 
-  async reviewScreenReasoning(associate: boolean) {
+  async reviewScreenReasoning(inviteAssociate: boolean, removeAssociate: boolean) {
     let actiontype: string;
-    if (associate) {
+    if (inviteAssociate) {
       actiontype = "Invite a team member";
+    } else if (removeAssociate) {
+      actiontype = "Remove a team member";
     } else {
       actiontype = "Replace a team member";
     }
@@ -703,23 +768,28 @@ class ManageTeamMember {
     if (pcr === "Replace project manager") {
       firstName = "Project";
       lastName = "Manager";
-      emailAddress = context.pmPcl.Acc_EmailOfSFContact__c;
+      emailAddress = String(context.pmPcl.Acc_EmailOfSFContact__c);
       role = "Project Manager";
     } else if (pcr === "Replace finance contact") {
       firstName = "Main Finance";
       lastName = "Contact";
-      emailAddress = context.mainFcPcl.Acc_EmailOfSFContact__c;
+      emailAddress = String(context.mainFcPcl.Acc_EmailOfSFContact__c);
       role = "Finance contact";
     } else if (pcr === "Replace knowledge base administrator") {
       firstName = "Knowledge";
       lastName = "Base";
-      emailAddress = context.kbAdminPcl.Acc_EmailOfSFContact__c;
+      emailAddress = String(context.kbAdminPcl.Acc_EmailOfSFContact__c);
       role = "Knowledge base administrator";
     } else if (pcr === "Replace main company contact") {
       firstName = "Main";
       lastName = "Contact";
-      emailAddress = context.mccPcl.Acc_EmailOfSFContact__c;
+      emailAddress = String(context.mccPcl.Acc_EmailOfSFContact__c);
       role = "Main company contact";
+    } else if (pcr === "Manage team members") {
+      firstName = "Anna";
+      lastName = "Sociate";
+      emailAddress = String(context.assPcl.Acc_EmailOfSFContact__c);
+      role = "Associate";
     }
     return { firstName, lastName, emailAddress, role };
   }
@@ -735,7 +805,11 @@ class ManageTeamMember {
       ["Email address", emailAddress, "before-email"],
       ["Role", role, "before-role"],
     ];
-    await expect(this.page.getByRole("heading").filter({ hasText: "Team member being replaced" })).toBeVisible();
+    if (pcr === "Manage team members") {
+      await expect(this.page.getByRole("heading").filter({ hasText: "Team member being removed" })).toBeVisible();
+    } else {
+      await expect(this.page.getByRole("heading").filter({ hasText: "Team member being replaced" })).toBeVisible();
+    }
     for (const [key, list, qa] of existingData) {
       await this.commands.getListItemFromKey(key, list, true, false, qa);
     }
@@ -766,6 +840,7 @@ class ManageTeamMember {
       await this.commands.getListItemFromKey(key, list, true, false, qa);
     }
   }
+
   @Then("the PM has logged in and created a PCR")
   async noFcCreatePcr() {
     await this.accUserswitcher.switchToUser("pmUser");

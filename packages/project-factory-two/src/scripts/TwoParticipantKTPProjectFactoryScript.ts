@@ -46,6 +46,9 @@ type TwoParticipantKTPProjectFactoryScriptContext = {
   secondaryFcPcl: Acc_ProjectContactLink__c;
   mccPcl: Acc_ProjectContactLink__c;
   kbAdminPcl: Acc_ProjectContactLink__c;
+  associateUser: User;
+  associateContact: Contact;
+  assPcl: Acc_ProjectContactLink__c;
 };
 
 class TwoParticipantKTPProjectFactoryScript extends AbstractProjectFactoryScript<
@@ -417,6 +420,9 @@ class TwoParticipantKTPProjectFactoryScript extends AbstractProjectFactoryScript
       secondaryFcPcl,
       mccPcl,
       kbAdminPcl,
+      associateUser,
+      associateContact,
+      assPcl,
     };
   }
 }
