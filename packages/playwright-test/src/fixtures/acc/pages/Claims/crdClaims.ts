@@ -53,8 +53,10 @@ class CrdClaims {
   private readonly addCostButton: Locator;
   private readonly firstLineItemDescription: Locator;
   private readonly firstLineItemCost: Locator;
-  private readonly lineItemCost: number;
-  private readonly lineItemCostGbp: string;
+  private readonly businessLineItemCost: number;
+  private readonly academicLineItemCost: number;
+  private readonly businessLineItemCostGbp: string;
+  private readonly academicLineItemCostGbp: string;
   private readonly lineItemTotal: Locator;
   private readonly emptyDescriptionValMsg: string;
   private readonly emptyCostValMsg: string;
@@ -218,8 +220,16 @@ class CrdClaims {
       .locator("tbody")
       .getByLabel("Description of claim line item 0");
     this.firstLineItemCost = this.page.getByRole("table").locator("tbody").getByLabel("Cost of claim line item 0");
-    this.lineItemCost = 1666.23;
-    this.lineItemCostGbp = this.lineItemCost.toLocaleString("EN-GB", { style: "currency", currency: "GBP" });
+    this.businessLineItemCost = 1666.23;
+    this.academicLineItemCost = 666.03;
+    this.businessLineItemCostGbp = this.businessLineItemCost.toLocaleString("EN-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    this.academicLineItemCostGbp = this.academicLineItemCost.toLocaleString("EN-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
     this.lineItemTotal = this.page.getByRole("table").locator("tfoot").locator("tr").nth(1).locator("td");
     this.emptyDescriptionValMsg = "Enter description.";
     this.emptyCostValMsg = "Enter cost.";
@@ -432,14 +442,16 @@ class CrdClaims {
     await expect(this.page.getByRole("heading").filter({ hasText: costCat })).toBeVisible();
   }
 
-  @Then("the {string} costs page is displayed")
-  async costCategoryPageDisplayed(costCat: string, rowAccess: number) {
+  @Then("the {string} {string} costs page is displayed")
+  async costCategoryPageDisplayed(costCat: string, costType: string, rowAccess: number) {
     await expect(this.backToClaim).toBeVisible();
     await expect(this.page.getByRole("heading").filter({ hasText: costCat })).toBeVisible();
-    await expect(this.claimLineWarning).toBeVisible();
+    if (costType === "Business") {
+      await expect(this.claimLineWarning).toBeVisible();
+    }
     await expect(this.claimLineGuidance).toBeVisible();
     await expect(this.claimCurrencyGuidance).toBeVisible();
-    await this.emptyLineItemTable();
+    await this.emptyLineItemTable(costType);
     await expect(this.supportingDocsHeading).toBeVisible();
     await expect(this.supportingDocsGuidance).toBeVisible();
     await expect(this.uploadRemoveDocsButton).toBeVisible();
@@ -456,8 +468,17 @@ class CrdClaims {
     await this.textbox.fill(`Comments for ${costCat}`);
   }
 
-  @When("the user adds line items for {string}")
-  async addValidateLineItem(costcat: string, rowNum: number, noValidation?: boolean) {
+  @When("the user adds {string} line items for {string}")
+  async addValidateLineItem(costType: string, costcat: string, rowNum: number, noValidation?: boolean) {
+    let cost: number;
+    let costGbp: string;
+    if (costType === "Business") {
+      cost = this.businessLineItemCost;
+      costGbp = this.businessLineItemCostGbp;
+    } else if (costType === "Academic") {
+      cost = this.academicLineItemCost;
+      costGbp = this.academicLineItemCostGbp;
+    }
     await this.addCostButton.click();
     if (noValidation) {
       await expect(this.firstLineItemDescription).toBeVisible();
@@ -465,8 +486,8 @@ class CrdClaims {
       await this.validateLineItem(costcat, rowNum);
     }
     await this.firstLineItemDescription.fill(this.lineItemDescription1);
-    await this.firstLineItemCost.fill(String(this.lineItemCost));
-    await expect(this.lineItemTotal.filter({ hasText: this.lineItemCostGbp })).toHaveText(String(this.lineItemCostGbp));
+    await this.firstLineItemCost.fill(String(cost));
+    await expect(this.lineItemTotal.filter({ hasText: costGbp })).toHaveText(String(costGbp));
   }
 
   @Then("uploads evidence for {string}")
@@ -487,20 +508,31 @@ class CrdClaims {
       i++;
     }
     await expect(this.firstLineItemDescription).toHaveValue(this.lineItemDescription1);
-    await expect(this.firstLineItemCost).toHaveValue(String(this.lineItemCost));
+    await expect(this.firstLineItemCost).toHaveValue(String(this.businessLineItemCost));
     await this.saveAndReturnButton.click();
   }
 
-  @When("the user updates the remaining cost categories")
-  async updateRemainingCostCats(table: DataTable) {
+  @When("the user updates the remaining {string} cost categories")
+  async updateRemainingCostCats(costType: string, table: DataTable) {
     const data = table.hashes();
-    let row = 2;
-    let docNumber = 1;
+    let row: number;
+    let docNumber: number;
+    if (costType === "Business") {
+      row = 2;
+      docNumber = 1;
+    } else if (costType === "Academic") {
+      row = 0;
+      docNumber = 0;
+    }
     for (const cat of data) {
       await this.clickCostCategory(cat["Category"], row);
-      await this.costCategoryPageDisplayed(cat["Category"], row);
-      await this.addValidateLineItem(cat["Category"], row);
-      await this.lineItemDocPageAssertion(cat["Category"], docNumber);
+      await this.costCategoryPageDisplayed(cat["Category"], costType, row);
+      if (costType === "Business") {
+        await this.addValidateLineItem(costType, cat["Category"], row);
+        await this.lineItemDocPageAssertion(cat["Category"], costType, docNumber);
+      } else if (costType === "Academic") {
+        await this.addValidateLineItem(costType, cat["Category"], row, true);
+      }
       await this.saveAndReturnButton.click();
       await this.costsToBeClaimedHeading.isVisible();
       row++;
@@ -522,15 +554,15 @@ class CrdClaims {
     await expect(this.uploadIarText).toBeVisible();
     await expect(this.continueForecastButton).toBeVisible();
     await expect(this.saveAndReturnButton).toBeVisible();
-    // await this.validators.testFileComponent(
-    //   "costs to be claimed",
-    //   "Costs to be claimed",
-    //   "Continue to claims documents",
-    //   false,
-    //   false,
-    //   "",
-    //   "Claim evidence",
-    // );
+    await this.validators.testFileComponent(
+      "costs to be claimed",
+      "Costs to be claimed",
+      "Continue to claims documents",
+      false,
+      false,
+      "",
+      "Claim evidence",
+    );
     for (const type of this.docTypeList) {
       await this.docTypeSelector.selectOption(type);
     }
@@ -775,10 +807,49 @@ class CrdClaims {
     await expect(this.moMustSubmitReport).toBeVisible();
   }
 
+  @When("the user clicks back to claim")
+  async clickBackToClaim() {
+    await this.backToClaim.click();
+    await this.costsToBeClaimedHeading.isVisible();
+  }
+
   @Then("submits the claim to Innovate UK")
   async submitClaimToIUK() {
     await this.page.locator("#comments").fill(this.commentForIUK);
     await this.submitButton.click();
+  }
+
+  @When("the user completes their Forecast")
+  async completeAcademicForecastTable(table: DataTable) {
+    const data = table.hashes();
+    const updateFigure = 48.45;
+    const rowTotal = "£1,198.98";
+    await this.continueToClaimsDocs.click();
+    await this.claimDocsHeading.isVisible();
+    await this.uploadIar();
+    await this.continueForecastButton.click();
+    await this.updateForecastHeading.isVisible();
+    for (const cat of data) {
+      for (let i = 0; i < 11; i++) {
+        await this.page.getByLabel(`${cat["Category"]} period ${i + 2}`).fill(String(updateFigure));
+        await expect(this.page.getByLabel(`${cat["Category"]} period ${i + 2}`)).toHaveValue(String(updateFigure));
+      }
+      await expect(
+        this.page
+          .getByRole("table")
+          .locator(`//tbody//tr[${Number(cat["Row number"])}]//td[14]//span`)
+          .filter({ hasText: rowTotal }),
+      ).toBeVisible();
+    }
+    await expect(this.page.getByTestId("forecasts-warning-fc-content")).not.toBeVisible();
+    await this.continueToSummaryButton.click();
+    await this.claimSummaryTitle.isVisible();
+  }
+
+  @When("the user submits the Academic claim")
+  async submitAcademicClaim() {
+    await this.textbox.fill(this.commentForMo);
+    await this.claimSubmitButton.click();
   }
 
   /**
@@ -872,10 +943,16 @@ class CrdClaims {
     }
   }
 
-  async emptyLineItemTable() {
+  async emptyLineItemTable(costType: string) {
     const headers = ["Description", "Cost", "Last updated"];
     const footers = ["Total costs", "Forecast costs", "Difference"];
-    const costs = ["£0.00", "£100,000.00", "-100.00%"];
+    let costs: Array<string>;
+    if (costType === "Business") {
+      costs = ["£0.00", "£100,000.00", "-100.00%"];
+    } else if (costType === "Academic") {
+      costs = ["£0.00", "£100.00", "-100.00%"];
+    }
+
     await expect(this.page.getByRole("table").locator("tfoot").locator("tr").nth(0).getByRole("button")).toHaveText(
       "Add a cost",
     );
@@ -921,19 +998,29 @@ class CrdClaims {
     await this.validators.validateCurrency(
       "Cost of claim line item 0",
       "Cost",
-      String(this.lineItemCost),
+      String(this.businessLineItemCost),
       "Save and return to claims",
     );
   }
 
-  async lineItemDocPageAssertion(costcat: string, docNumber: number) {
+  async lineItemDocPageAssertion(costcat: string, costType: string, docNumber: number) {
+    let fcContact: string;
+    let cost: number;
+    if (costType === "Business") {
+      fcContact = "Main Finance Contact";
+      cost = this.businessLineItemCost;
+    } else if (costType === "Academic") {
+      fcContact = "Secondary Finance Contact";
+      cost = this.academicLineItemCost;
+    }
     const fileTable = [
       ["File name", this.evidenceDocs[docNumber]],
       ["Type", "Claim evidence"],
       ["Date uploaded", this.commands.dateToday(false)],
       ["Size", "0KB"],
-      ["Uploaded by", "Main Finance Contact"],
+      ["Uploaded by", fcContact],
     ];
+
     await this.uploadRemoveDocsButton.click();
     await PageHeading.fromTitle(this.page, `${costcat} documents`).isVisible();
     await expect(this.costCatDocGuidance).toBeVisible();
@@ -949,7 +1036,7 @@ class CrdClaims {
       i++;
     }
     await expect(this.firstLineItemDescription).toHaveValue(this.lineItemDescription1);
-    await expect(this.firstLineItemCost).toHaveValue(String(this.lineItemCost));
+    await expect(this.firstLineItemCost).toHaveValue(String(cost));
     await expect(this.page.locator("css=textarea")).toHaveValue(`Comments for ${costcat}`);
   }
 

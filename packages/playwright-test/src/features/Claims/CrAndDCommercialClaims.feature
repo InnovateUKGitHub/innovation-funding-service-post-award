@@ -30,9 +30,9 @@ Feature: CR&D Claims
         And the user is the "mainFcUser" user
         And the user has accessed the Costs to be claimed page
         When the user clicks the "Labour" cost category
-        Then the "Labour" costs page is displayed
+        Then the "Labour" "Business" costs page is displayed
 
-        When the user adds line items for "Labour"
+        When the user adds "Business" line items for "Labour"
         And uploads evidence for "Labour"
         Then the user will see the Costs to be claimed page
             | Category               | Total eligible costs | Eligible costs claimed to date | Costs claimed this period | Remaining eligible costs |
@@ -49,7 +49,7 @@ Feature: CR&D Claims
             | Other costs 5          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
             | Total                  | £79,560,000.00       | £0.00                          | £1,999.48                 | £79,558,000.52           |
 
-        When the user updates the remaining cost categories
+        When the user updates the remaining "Business" cost categories
             | Category               |
             | Materials              |
             | Capital usage          |
