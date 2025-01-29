@@ -75,7 +75,7 @@ export class UpdatePcrAddPartnerAcademicCostsCommand extends ZodAuthorisedAsyncC
       .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: this.pcrItemId }));
     const updatedCostItems = validatedData.costs
       .filter(x => !!x.id)
-      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: this.pcrItemId, id: x.id as CostId }));
+      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: this.pcrItemId, id: x.id ?? "" }));
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,

@@ -91,7 +91,7 @@ export class PcrItemAddPartnerAcademicCostsHandler extends ZodFormHandlerBase<
       .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: params.itemId }));
     const updatedCostItems = input.costs
       .filter(x => !!x.id)
-      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: params.itemId, id: x.id as CostId }));
+      .map(x => ({ ...x, value: parseCurrency(x.value), pcrItemId: params.itemId, id: x.id }));
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: params.itemId,

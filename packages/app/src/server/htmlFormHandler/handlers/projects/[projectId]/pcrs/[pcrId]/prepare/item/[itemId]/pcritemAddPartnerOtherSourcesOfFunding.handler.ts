@@ -43,7 +43,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
         value: string;
         dateSecured_month: string;
         dateSecured_year: string;
-        costId: string;
+        costId: CostId;
         costCategory: number;
         costCategoryId: string;
         id: "";
@@ -68,7 +68,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
 
     this.deletedIds = data.funds
       .filter(x => !!x.costId && (!x.description || !x.value || !x.dateSecured_month || !x.dateSecured_year))
-      .map(x => x.costId as CostId);
+      .map(x => x.costId);
 
     const funds = data.funds
       .filter(x => !!x.description || !!x.value || !!x.dateSecured_month || !!x.dateSecured_year)
@@ -113,7 +113,7 @@ export class PcrItemAddPartnerOtherSourcesOfFundingHandler extends ZodFormHandle
         value: parseCurrency(x.value),
         pcrItemId: params.itemId,
         dateOtherFundingSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false)?.toISOString(),
-        id: x.costId,
+        id: x.costId as CostId,
       }));
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({

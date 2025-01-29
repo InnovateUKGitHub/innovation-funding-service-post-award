@@ -58,7 +58,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<
   public mapToSalesforce(x: PcrSpendProfileEntity): ISalesforcePcrSpendProfile {
     return {
       ...this.mapToSalesforceForCreate(x),
-      Id: x.id,
+      Id: x.id as CostId,
     };
   }
   public mapToSalesforceForCreate(x: PcrSpendProfileEntityForCreate): Insertable<ISalesforcePcrSpendProfile> {

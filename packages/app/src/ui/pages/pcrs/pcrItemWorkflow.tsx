@@ -31,7 +31,6 @@ type Data = {
     | "isCommercialWork"
     | "typeOfAid"
     | "organisationType"
-    | "hasOtherFunding"
     | "status"
     | "typeName"
   >;

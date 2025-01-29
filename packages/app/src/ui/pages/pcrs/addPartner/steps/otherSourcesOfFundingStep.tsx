@@ -50,7 +50,6 @@ const getEmptyFund = (costCategoryId: CostCategoryId) => ({
   dateSecured_month: "",
   dateSecured_year: "",
   value: "",
-  id: "",
 });
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
@@ -74,14 +73,13 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
   dateSecured_year: getYear(fund.dateSecured),
   dateSecured: fund.dateSecured,
   value: String(fund.value ?? ""),
-  id: fund.id ?? "",
   costId: fund.id ?? "",
   costCategoryId: fund.costCategoryId,
   costCategory: fund.costCategory,
 });
 
 type SourceOfFundingRow = Omit<PCRSpendProfileOtherFundingDto, "value" | "id"> &
-  DateParts & { value: Nullable<string>; costId: CostId; id: string };
+  DateParts & { value: Nullable<string>; costId: CostId | "" };
 
 const NoJsSourcesOfFundingRows = ({
   rows,
@@ -106,7 +104,6 @@ const NoJsSourcesOfFundingRows = ({
           <TD>
             <input type="hidden" name={`funds.${i}.costCategory`} value={x.costCategory} />
             <input type="hidden" name={`funds.${i}.costCategoryId`} value={x.costCategoryId} />
-            <input type="hidden" name={`funds.${i}.id`} value={x.id} />
             <input type="hidden" name={`funds.${i}.costId`} value={x.costId} />
             <FormGroup
               noMarginBottom

@@ -427,7 +427,7 @@ export interface PcrAddPartnerAcademicCostsDto extends PcrDtoCommon {
     costCategory: CostCategoryType;
     costCategoryId: CostCategoryId;
     description: string;
-    id?: CostId | undefined;
+    id: CostId;
     value: string | null;
   }>;
 }
@@ -463,10 +463,9 @@ export interface PcrAddPartnerOtherSourcesOfFundingDto extends PcrDtoCommon {
     dateSecured: Date | null;
     value: string | null;
     description: string;
-    costId: CostId;
     costCategory: CostCategoryType;
     costCategoryId: CostCategoryId;
-    id: string;
+    costId: CostId;
   }>;
   deletedCostsOrFunds: CostId[];
 }

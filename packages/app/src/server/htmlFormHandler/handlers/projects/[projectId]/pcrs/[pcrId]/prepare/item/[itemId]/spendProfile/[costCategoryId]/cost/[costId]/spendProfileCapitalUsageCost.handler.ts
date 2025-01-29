@@ -69,7 +69,7 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
       (parseCurrency(input.netPresentValue) - parseCurrency(input.residualValue)) * (Number(input.utilisation) / 100);
     spendProfile.costs.push({
       costCategory: input.costCategoryType,
-      id: input.id as CostId,
+      id: input.id ?? ("" as CostId),
       costCategoryId: params.costCategoryId,
       description: input.capitalUsageDescription,
       type: Number(input.itemType),

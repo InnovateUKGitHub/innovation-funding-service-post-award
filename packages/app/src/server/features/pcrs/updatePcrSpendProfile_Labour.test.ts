@@ -103,7 +103,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileLabourCostDto;
-      cost.id = insertedSpendProfileCost.id;
+      cost.id = insertedSpendProfileCost.id as CostId;
       cost.value = 30;
       cost.grossCostOfRole = 35;
       cost.description = "Queenie";

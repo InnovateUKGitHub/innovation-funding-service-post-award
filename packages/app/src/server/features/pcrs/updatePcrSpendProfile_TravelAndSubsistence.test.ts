@@ -45,7 +45,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto)),
       ).rejects.toThrow(ValidationError);
     });
-    it("should save new spend profile costs for travel and subsitence", async () => {
+    it("should save new spend profile costs for travel and subsistence", async () => {
       const { context, projectChangeRequest, recordType, project } = setup();
       const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
@@ -102,7 +102,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileTravelAndSubsCostDto;
-      cost.id = insertedSpendProfileCost.id;
+      cost.id = insertedSpendProfileCost.id as CostId;
       cost.value = 4950;
       cost.numberOfTimes = 33;
       cost.costOfEach = 150;

@@ -2,7 +2,7 @@ import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfi
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 
-import { setup as commonetup } from "@tests/test-utils/pcr-spend-profile-helpers";
+import { setup as commonSetup } from "@tests/test-utils/pcr-spend-profile-helpers";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRItemStatus, PCRProjectRole, PCRPartnerType } from "@framework/constants/pcrConstants";
 import { ValidationError } from "@shared/appError";
@@ -10,7 +10,7 @@ import { InActiveProjectError } from "../common/appError";
 
 describe("UpdatePCRSpendProfileCommand", () => {
   const setup = async () => {
-    const { context, projectChangeRequest, recordType, project } = commonetup();
+    const { context, projectChangeRequest, recordType, project } = commonSetup();
     const pcrItem = context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.Incomplete,
       projectRole: PCRProjectRole.Collaborator,
@@ -22,7 +22,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
   };
 
   test("should throw error when project is inactive", async () => {
-    const { context, project } = commonetup("On Hold");
+    const { context, project } = commonSetup("On Hold");
     const pcrItem = context.testData.createPCRItem();
     await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, pcrItem.id));
 

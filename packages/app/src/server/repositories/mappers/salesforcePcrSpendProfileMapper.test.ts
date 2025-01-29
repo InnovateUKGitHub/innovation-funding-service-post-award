@@ -35,7 +35,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
     };
 
     const pcrSpendProfile: ISalesforcePcrSpendProfile = {
-      Id: expectedEntity.id,
+      Id: expectedEntity.id as CostId,
       RecordTypeId: pcrSpendProfileType,
       Acc_CostCategoryID__c: expectedEntity.costCategoryId,
       Acc_ProjectChangeRequest__c: expectedEntity.pcrItemId,
@@ -88,7 +88,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       costOfEach: 7,
     };
     const sfRecord: ISalesforcePcrSpendProfile = {
-      Id: entity.id,
+      Id: entity.id as CostId,
       RecordTypeId: pcrSpendProfileType,
       Acc_CostCategoryID__c: entity.costCategoryId,
       Acc_ProjectChangeRequest__c: entity.pcrItemId,

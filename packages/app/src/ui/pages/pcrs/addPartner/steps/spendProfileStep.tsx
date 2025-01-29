@@ -124,7 +124,7 @@ const LinkToCostSummary = ({
 }: {
   costCategoryType: CostCategoryType;
   costCategoryId: CostCategoryId;
-  overheadCostId: CostId | null;
+  overheadCostId: CostId | "" | null;
 }) => {
   const { mode, routes, itemId, pcrId, projectId } = usePcrWorkflowContext();
   const costCategoryGroup = new CostCategoryList().fromId(costCategoryType);

@@ -58,7 +58,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(project.Id, item.id));
       spendProfileDto.costs.push({
-        id: "",
+        id: "" as CostId,
         value: 2100,
         costCategory: CostCategoryType.Subcontracting,
         costCategoryId: costCategory.id,
@@ -100,7 +100,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileSubcontractingCostDto;
-      cost.id = insertedSpendProfileCost.id;
+      cost.id = insertedSpendProfileCost.id as CostId;
       cost.value = 2102;
       cost.description = "Website";
       cost.subcontractorRoleAndDescription = "Tester";

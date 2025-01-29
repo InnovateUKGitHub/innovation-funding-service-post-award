@@ -6,6 +6,13 @@ import { costIdValidation } from "@ui/zod/helperValidators/helperValidators.zod"
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
+/**
+ * we must `costId` instead of `id` because a field `id` is added by react hook form's
+ * `useFieldArray` hook for tracking positioning within the array.
+ *
+ * This id is a GUID and will overwrite whatever we used for `id`
+ * Hence the field name is changed to `costId`
+ */
 const valueDescription = z.object({
   value: getGenericCurrencyValidation({
     required: true,
@@ -15,7 +22,6 @@ const valueDescription = z.object({
     maxLength: 1000,
   }),
   costId: z.union([z.literal("").transform(x => x as CostId), costIdValidation]),
-  id: z.string(),
   costCategory: z.number().transform(x => x as CostCategoryType),
   costCategoryId: z.string().transform(x => x as CostCategoryId),
 });

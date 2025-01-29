@@ -87,7 +87,7 @@ export class UpdatePcrAddPartnerOtherSourcesOfFundingCommand extends ZodAuthoris
         value: parseCurrency(x.value),
         pcrItemId: this.pcrItemId,
         dateOtherFundingSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false)?.toISOString(),
-        id: x.costId,
+        id: x.costId as CostId,
       }));
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
