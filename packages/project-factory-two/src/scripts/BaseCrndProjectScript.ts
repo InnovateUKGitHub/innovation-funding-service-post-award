@@ -124,6 +124,7 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
     mainProjectParticipant.Acc_OrganisationType__c = "Industrial";
     mainProjectParticipant.Acc_CreateProfiles__c = false;
     mainProjectParticipant.Acc_CreateClaims__c = false;
+    mainProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
     // Disable Trigger__mdt so we can insert profiles/claims with impunity
     disableClaimTrigger();

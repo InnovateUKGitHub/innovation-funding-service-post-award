@@ -7,6 +7,7 @@ import { Validators } from "../../../validators";
 import { UploadType } from "../../../../typings/files";
 import { getLorem } from "../../../../components/lorem";
 import { AccNavigation } from "../../AccNavigation";
+import { ViewForecast } from "../ViewForecast";
 
 export
 @Fixture("crdClaims")
@@ -15,6 +16,8 @@ class CrdClaims {
   protected readonly commands: Commands;
   protected readonly validators: Validators;
   protected readonly accNavigation: AccNavigation;
+  protected readonly viewForecast: ViewForecast;
+
   private readonly backToProject: Locator;
   private readonly pageTitle: PageHeading;
   private readonly guidanceCopyStart: string;
@@ -83,11 +86,7 @@ class CrdClaims {
   private readonly changesLastSaved: Locator;
   private readonly continueToSummaryButton: Locator;
   private readonly backToUpdateForecast: Locator;
-  private readonly invalidForecastData: Array<[string, string]>;
-  private readonly forecastCostsWarningQa: Locator;
-  private readonly forecastCostsWarningMessage: Locator;
-  private readonly forecastCostsWarningListItem: Locator;
-  private readonly forecastWarningMoStatement: Locator;
+
   //Summary page
   private readonly claimSummaryTitle: PageHeading;
   private readonly costsToBeClaimedSubheading: Locator;
@@ -137,16 +136,19 @@ class CrdClaims {
     commands,
     validators,
     accNavigation,
+    viewForecast,
   }: {
     page: Page;
     commands: Commands;
     validators: Validators;
     accNavigation: AccNavigation;
+    viewForecast: ViewForecast;
   }) {
     this.page = page;
     this.commands = commands;
     this.validators = validators;
     this.accNavigation = accNavigation;
+    this.viewForecast = viewForecast;
     this.backToProject = this.commands.backLink("Back to project");
     this.pageTitle = PageHeading.fromTitle(this.page, "Claims");
     this.guidanceCopyStart =
@@ -280,20 +282,7 @@ class CrdClaims {
       .filter({ hasText: `Changes last saved: ${this.commands.dateToday(true)}` });
     this.continueToSummaryButton = this.page.getByRole("button").filter({ hasText: "Continue to summary" });
     this.backToUpdateForecast = this.commands.backLink("Back to update forecast");
-    this.invalidForecastData = [
-      ["", "Enter forecast."],
-      ["10000000", "Your overall total cannot be higher than your total eligible costs."],
-      ["-10000000000", "Forecast must be -£1,000,000,000.00 or more."],
-      ["1000000000000", "Forecast must be £999,999,999,999.00 or less."],
-    ];
-    this.forecastCostsWarningQa = this.page.getByTestId("forecasts-warning-fc-content");
-    this.forecastCostsWarningMessage = this.forecastCostsWarningQa.filter({
-      hasText: "The amount you are requesting is more than the agreed costs for:",
-    });
-    this.forecastCostsWarningListItem = this.forecastCostsWarningQa.locator("ul").locator("li");
-    this.forecastWarningMoStatement = this.forecastCostsWarningQa.filter({
-      hasText: "Your Monitoring Officer will let you know if they have any concerns.",
-    });
+
     //Summary page
     this.claimSummaryTitle = PageHeading.fromTitle(this.page, "Claim summary");
     this.costsToBeClaimedSubheading = this.page.getByRole("heading").filter({ hasText: "Costs to be claimed" });
@@ -593,37 +582,6 @@ class CrdClaims {
     await this.claimSummaryTitle.isVisible();
   }
 
-  @When("the user enters invalid information")
-  async validateForecastTable() {
-    const labour2 = this.page.getByLabel(`Labour period 2`);
-    for (const [data, message] of this.invalidForecastData) {
-      await labour2.fill(data);
-      await this.continueToSummaryButton.click();
-      await this.commands.validationLink(message);
-    }
-    await labour2.fill("2000000");
-    await expect(this.forecastCostsWarningMessage).toBeVisible();
-    await expect(this.forecastCostsWarningListItem.filter({ hasText: "labour" })).toBeVisible();
-    await expect(this.forecastCostsWarningListItem.filter({ hasText: "overheads" })).toBeVisible();
-    await expect(this.forecastWarningMoStatement).toBeVisible();
-    await labour2.fill("");
-  }
-
-  @Then("the user will be advised of correct entries")
-  async validationMessageOnscreen() {
-    await this.commands.validationLink("Enter forecast.");
-  }
-
-  @When("the user updates and saves the forecast table")
-  async updateForecastTable(table: DataTable) {
-    await this.completeForecastTable(table, true);
-  }
-
-  @Then("the figures accurately reflect the changes")
-  async forecastTableUpdated(table: DataTable) {
-    await this.completeForecastTable(table, false);
-  }
-
   @When("the user clicks Continue to summary")
   async continueToSummary() {
     await this.continueToSummaryButton.click();
@@ -748,11 +706,6 @@ class CrdClaims {
     await expect(button).toHaveAttribute("aria-expanded", "false");
     await button.click();
     await expect(button).toHaveAttribute("aria-expanded", "true");
-  }
-
-  @Then("the user can see the view-only Forecast table")
-  async viewForecastTable(table: DataTable) {
-    await this.completeForecastTable(table, false, "#ifspa-forecast-table");
   }
 
   @Then("the user can see the status log")
@@ -1097,168 +1050,5 @@ class CrdClaims {
       }
       rowNum++;
     }
-  }
-
-  /**
-   * FORECAST METHODS
-   */
-
-  /**
-   * This function is setup to enable the feature to run independently of previous claims steps.
-   */
-  async completeForecastTable(table: DataTable, update: boolean, moViewID?: string) {
-    const data = table.hashes();
-    let updateFigure: number;
-    let overheadsPeriodCost: string;
-    let rowTotal: string;
-    let overheadsTotal: string;
-    let columnTotal: string;
-    let tableLocator: Locator;
-    let period: string;
-    let ifLabourPopulated: Locator;
-    if (moViewID) {
-      tableLocator = this.page.locator(moViewID);
-      period = "Period";
-    } else {
-      tableLocator = this.page.getByRole("table");
-      period = "period";
-    }
-    ifLabourPopulated = this.page.getByLabel(`Labour ${period} 1`).filter({ hasText: "£1,666.23" });
-    if (await ifLabourPopulated.isVisible()) {
-      updateFigure = 708939.43;
-      overheadsPeriodCost = "£141,787.89";
-      rowTotal = "£7,799,999.96";
-      overheadsTotal = "£1,560,000.04";
-      columnTotal = "£7,231,182.19";
-    } else {
-      updateFigure = 709090.9;
-      rowTotal = "£7,799,999.90";
-      overheadsPeriodCost = "£141,818.18";
-      overheadsTotal = "£1,559,999.98";
-      columnTotal = "£7,232,727.18";
-    }
-    //Table headers
-    if (moViewID) {
-      await this.forecastTableHeaders(moViewID);
-    } else {
-      await this.forecastTableHeaders();
-    }
-    //Table body
-    for (const cat of data) {
-      for (let i = 2; i < 13; i++) {
-        if (update) {
-          await this.page.getByLabel(`${cat["Category"]} ${period} ${i}`).fill(String(updateFigure));
-          await expect(this.page.getByLabel(`${cat["Category"]} ${period} ${i}`)).toHaveValue(String(updateFigure));
-          await expect(
-            this.page.getByLabel(`Overheads ${period} ${i}`).filter({ hasText: overheadsPeriodCost }),
-          ).toBeVisible();
-        } else {
-          if (moViewID) {
-            await expect(
-              this.page
-                .getByLabel(`${cat["Category"]} ${period} ${i}`)
-                .filter({ hasText: updateFigure.toLocaleString("en-GB", { style: "currency", currency: "GBP" }) }),
-            ).toBeVisible();
-          } else {
-            await expect(this.page.getByLabel(`${cat["Category"]} ${period} ${i}`)).toHaveValue(String(updateFigure));
-          }
-          await expect(
-            this.page.getByLabel(`Overheads ${period} ${i}`).filter({ hasText: overheadsPeriodCost }),
-          ).toBeVisible();
-        }
-      }
-      //Row totals
-      await expect(
-        tableLocator.locator(`//tbody//tr[${Number(cat["Row number"])}]//td[14]//span`).filter({ hasText: rowTotal }),
-      ).toBeVisible();
-    }
-    //Overheads total
-    await expect(
-      tableLocator.locator(`//tbody//tr[2]//td[14]//span`).filter({ hasText: overheadsTotal }),
-    ).toBeVisible();
-    //Column totals
-    for (let i = 1; i < 12; i++) {
-      await expect(
-        tableLocator.locator("tfoot").locator("tr").nth(0).locator("td").nth(i).filter({ hasText: columnTotal }),
-      ).toBeVisible();
-    }
-    if (moViewID) {
-    } else {
-      await this.continueToSummaryButton.click();
-      await this.claimSummaryTitle.isVisible();
-      await this.backToUpdateForecast.click();
-      await this.updateForecastHeading.isVisible();
-    }
-  }
-
-  async topThreeRows(moViewID?: string) {
-    let period1IarNeeded: string;
-    let locator: Locator;
-    if (moViewID) {
-      locator = this.page.locator(moViewID);
-      period1IarNeeded = "No";
-    } else {
-      locator = this.page.getByRole("table");
-      period1IarNeeded = "Yes";
-    }
-    const rowHeaders = [
-      ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-      ["IAR Due", period1IarNeeded, "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"],
-      [
-        "Month",
-        this.getPeriodDateRange(0),
-        this.getPeriodDateRange(3),
-        this.getPeriodDateRange(6),
-        this.getPeriodDateRange(9),
-        this.getPeriodDateRange(12),
-        this.getPeriodDateRange(15),
-        this.getPeriodDateRange(18),
-        this.getPeriodDateRange(21),
-        this.getPeriodDateRange(24),
-        this.getPeriodDateRange(27),
-        this.getPeriodDateRange(30),
-        this.getPeriodDateRange(33),
-      ],
-    ];
-    let rowNumber = 2;
-    for (const row of rowHeaders) {
-      for (let i = 1; i < 13; i++) {
-        await expect(
-          locator.locator(`//thead//tr[${rowNumber}]//th[${i}]`).filter({ hasText: row[i - 1] }),
-        ).toBeVisible();
-      }
-      rowNumber++;
-    }
-  }
-
-  async forecastTableHeaders(moViewID?: string) {
-    const topHeaders = ["Costs you are claiming", "Forecast", "Total", "Total eligible costs", "Difference"];
-    let i = 1;
-    let table: Locator;
-    if (moViewID) {
-      table = this.page.locator(moViewID);
-    } else {
-      table = this.page.getByRole("table");
-    }
-    for (const header of topHeaders) {
-      await expect(
-        table.locator("thead").locator("tr").nth(0).locator("th").nth(i).filter({ hasText: header }),
-      ).toBeVisible();
-      i++;
-    }
-    if (moViewID) {
-      await this.topThreeRows(moViewID);
-    } else {
-      await this.topThreeRows();
-    }
-  }
-
-  getPeriodDateRange(startIncrement: number) {
-    let date = new Date();
-    let startMonth = new Date(new Date(date).setMonth(date.getMonth() + startIncrement));
-    let startMonthString = startMonth.toLocaleDateString("en-US", { month: "short" });
-    let endMonth = new Date(new Date(date).setMonth(date.getMonth() + (startIncrement + 2)));
-    let endMonthString = endMonth.toLocaleDateString("en-US", { month: "short" });
-    return `${startMonthString} to ${endMonthString}`;
   }
 }

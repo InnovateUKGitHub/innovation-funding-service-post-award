@@ -151,6 +151,7 @@ class TwoParticipantKTPProjectFactoryScript extends AbstractProjectFactoryScript
     mainProjectParticipant.Acc_OrganisationType__c = "Industrial";
     mainProjectParticipant.Acc_CreateProfiles__c = false;
     mainProjectParticipant.Acc_CreateClaims__c = false;
+    mainProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
     const secondaryProjectParticipant = new Acc_ProjectParticipant__c();
     secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
@@ -169,6 +170,7 @@ class TwoParticipantKTPProjectFactoryScript extends AbstractProjectFactoryScript
     secondaryProjectParticipant.Acc_OrganisationType__c = "Industrial";
     secondaryProjectParticipant.Acc_CreateProfiles__c = false;
     secondaryProjectParticipant.Acc_CreateClaims__c = false;
+    secondaryProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
     // Disable Trigger__mdt so we can insert profiles/claims with impunity
     disableClaimTrigger();

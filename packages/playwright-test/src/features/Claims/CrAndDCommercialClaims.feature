@@ -87,10 +87,10 @@ Feature: CR&D Claims
         Given a multi-partner CR&D project with profiles exists
         And the user is the "mainFcUser" user
         And the user has accessed the Update forecast page
-        When the user enters invalid information
+        When the user enters invalid information into the "Claim" forecast
         Then the user will be advised of correct entries
 
-        When the user updates and saves the forecast table
+        When the user updates and saves the Claims forecast table
             | Category               | Row number |
             | Labour                 | 1          |
             | Materials              | 3          |
@@ -103,7 +103,7 @@ Feature: CR&D Claims
             | Other costs 4          | 10         |
             | Other costs 5          | 11         |
 
-        Then the figures accurately reflect the changes
+        Then the "Claim" figures accurately reflect the changes
             | Category               | Row number |
             | Labour                 | 1          |
             | Materials              | 3          |

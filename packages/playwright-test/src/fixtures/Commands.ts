@@ -396,12 +396,12 @@ class Commands {
    *  Verify the text and locator on the page for accuracy
    */
   async verifyTextOnPage(message: string, Locator?: Locator): Promise<void> {
-    
     if (Locator) {
-      const matched = await Locator.evaluateAll((elements, text) =>
-        elements.some((el) => el.textContent?.includes(text)), message
+      const matched = await Locator.evaluateAll(
+        (elements, text) => elements.some(el => el.textContent?.includes(text)),
+        message,
       );
-  
+
       if (!matched) {
         throw new Error(`Text "${message}" not found in any of the matched Locator elements.`);
       }
@@ -412,27 +412,26 @@ class Commands {
       }
     }
   }
+
   /**
    *
    * Returns a string with full date with option for long or short month. E.g. Jan or January
    */
   dateToday(long: boolean) {
-    let date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth();
-    let accurateMonth = Number(month) + 1;
     if (long) {
-      const formatter = new Intl.DateTimeFormat("en-GB", { month: "long" });
-      const fullMonth = formatter.format(accurateMonth);
-      let year = date.getFullYear();
-      let datetoday = `${day} ${fullMonth} ${year}`;
-      return datetoday;
+      let date = new Date().toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      return date;
     } else {
-      const formatter = new Intl.DateTimeFormat("en-GB", { month: "short" });
-      let year = date.getFullYear();
-      let shortMonth = formatter.format(accurateMonth);
-      let datetoday = `${day} ${shortMonth} ${year}`;
-      return datetoday;
+      let date = new Date().toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+      return date;
     }
   }
 
@@ -647,15 +646,15 @@ class Commands {
 
   allFileTypes = [
     "add.png",
-    "testFile.xlsx",
-    "testFile.csv",
-    "testFile.xps",
-    "testFile.odp",
-    "testFile.odt",
-    "testFile.pdf",
-    "testFile.ppt",
-    "testFile.rtf",
-    "testFile.txt",
+    "testfile.xlsx",
+    "testfile.csv",
+    "testfile.xps",
+    "testfile.odp",
+    "testfile.odt",
+    "testfile.pdf",
+    "testfile.ppt",
+    "testfile.rtf",
+    "testfile.txt",
   ];
 
   tooManyDocuments() {
@@ -674,4 +673,3 @@ class Commands {
 
   largerDocs = ["11MB_1", "11MB_2", "11MB_3"];
 }
-

@@ -34,7 +34,7 @@ class AccIsLoaded {
   }
 
   async forecastsLoaded() {
-    await this.commands.heading("Forecasts");
+    await this.commands.heading("Forecast");
   }
 
   async financeSummaryLoaded() {

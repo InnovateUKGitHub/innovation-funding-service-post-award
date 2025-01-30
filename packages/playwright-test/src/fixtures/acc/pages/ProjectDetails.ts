@@ -157,7 +157,7 @@ class ProjectDetails {
     this.projectInfoDetails = [
       ["competition-name", "Competition name", /^[a-zA-Z0-9]+$/],
       ["competition-type", "Competition type", "CR&D"],
-      ["end-date", "Project end date", `2027`],
+      ["end-date", "Project end date", `2028`],
       ["duration", "Duration", "36"],
       ["periods", "Number of periods", "12"],
       ["scope", "Project scope statement", "This is a project summary"],
@@ -165,7 +165,7 @@ class ProjectDetails {
     this.ktpProjectInfoDetails = [
       ["competition-name", "Competition name", /^[a-zA-Z0-9]+$/],
       ["competition-type", "Competition type", "KTP"],
-      ["end-date", "Project end date", `2027`],
+      ["end-date", "Project end date", `2028`],
       ["duration", "Duration", "36"],
       ["periods", "Number of periods", "12"],
       ["scope", "Project scope statement", "This is a project summary"],

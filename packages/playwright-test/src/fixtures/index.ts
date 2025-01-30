@@ -36,7 +36,7 @@ import { ChangeProjectDuration } from "./acc/pages/PCRs/changeProjectDuration";
 import { Acc1CypressDoNotTouch } from "./projectFactory/Acc1CypressDoNotTouch";
 import { CrdClaims } from "./acc/pages/Claims/crdClaims";
 import { AddPartner } from "./acc/pages/PCRs/addPartner";
-import { AccClaimsDashboard } from "./acc/pages/claims/AccClaimsDashboard";
+import { AccClaimsDashboard } from "./acc/pages/Claims/AccClaimsDashboard";
 import { AccFinanceSummary } from "./acc/pages/AccFinanceSummary";
 
 type AccFixtures = {
@@ -97,7 +97,8 @@ export const test = base.extend<AccFixtures, Workers>({
   developerHomepage: ({ page }, use) => use(new DeveloperHomepage({ page })),
   projectDashboard: ({ page }, use) => use(new ProjectDashboard({ page })),
   projectOverview: ({ page }, use) => use(new ProjectOverview({ page })),
-  projectForecasts: ({ page, commands }, use) => use(new ProjectForecasts({ page, commands })),
+  projectForecasts: ({ page, commands, accNavigation }, use) =>
+    use(new ProjectForecasts({ page, commands, accNavigation })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   putProjectOnHold: ({ page, commands, projectChangeRequests }, use) =>
@@ -131,13 +132,12 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new ChangePartnerName({ page, commands, projectChangeRequests, accNavigation, validators })),
   changeProjectDuration: ({ page, commands, projectChangeRequests }, use) =>
     use(new ChangeProjectDuration({ page, commands, projectChangeRequests })),
-  crdClaims: ({ page, commands, validators, accNavigation }, use) =>
-    use(new CrdClaims({ page, commands, validators, accNavigation })),
-  addPartner: ({ page, commands, projectChangeRequests }, use) =>
-    use(new AddPartner({ page, commands, projectChangeRequests })),
+  crdClaims: ({ page, commands, validators, accNavigation, viewForecast }, use) =>
+    use(new CrdClaims({ page, commands, validators, accNavigation, viewForecast })),
   accClaimsDashboard: ({ page }, use) => use(new AccClaimsDashboard({ page })),
   accFinanceSummary: ({ page }, use) => use(new AccFinanceSummary({ page })),
-
+  addPartner: ({ page, commands, projectChangeRequests }, use) =>
+    use(new AddPartner({ page, commands, projectChangeRequests })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
