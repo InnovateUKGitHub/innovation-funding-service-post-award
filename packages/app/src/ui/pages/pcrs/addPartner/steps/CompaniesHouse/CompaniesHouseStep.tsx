@@ -28,18 +28,15 @@ import {
 } from "../schemas/companiesHouse.zod";
 import { CompaniesHouseSearch } from "./CompaniesHouseSearch";
 import { CompaniesHouseSearchBox } from "./CompaniesHouseSearchBox";
-import { useDefaultCompaniesHouseResult } from "./CompaniesHouseStep.logic";
+import { useDefaultCompaniesHouseResult, useOnUpdateCompanyDetails } from "./CompaniesHouseStep.logic";
 
 export const CompaniesHouseStep = () => {
   const { getContent } = useContent();
   const {
     projectId,
-    pcrId,
     itemId,
     fetchKey,
     markedAsCompleteHasBeenChecked,
-    onSave,
-    isFetching,
     search: defaultSearchQuery,
   } = usePcrWorkflowContext();
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
@@ -52,9 +49,6 @@ export const CompaniesHouseStep = () => {
     z.output<PcrAddPartnerCompaniesHouseStepSchemaType>
   >({
     defaultValues: {
-      pcrId,
-      projectId,
-      pcrItemId: itemId,
       form: FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit,
       organisationName: pcrItem?.organisationName ?? "",
       registrationNumber: pcrItem?.registrationNumber ?? "",
@@ -68,10 +62,12 @@ export const CompaniesHouseStep = () => {
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
   const registerButton = createRegisterButton(setValue, "form");
+
+  const { onUpdate, apiError, isFetching } = useOnUpdateCompanyDetails();
   const disabled = isFetching;
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section data-qa="company-house">
         <H2>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}</H2>
 
@@ -81,7 +77,7 @@ export const CompaniesHouseStep = () => {
 
         <Form
           onSubmit={handleSubmit(data =>
-            onSave({
+            onUpdate({
               data,
               context: {
                 link: data.form === FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue ? nextLink : summaryLink,
@@ -89,9 +85,6 @@ export const CompaniesHouseStep = () => {
             }),
           )}
         >
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingForm)}</Legend>
 

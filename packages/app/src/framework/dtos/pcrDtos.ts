@@ -470,6 +470,13 @@ export interface PcrAddPartnerOtherSourcesOfFundingDto extends PcrDtoCommon {
   deletedCostsOrFunds: CostId[];
 }
 
+export interface PcrAddPartnerCompanyDetailsDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue | FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit;
+  organisationName?: string;
+  registrationNumber?: string;
+  registeredAddress?: string;
+}
+
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectLocationStep;
   button_submit: string;

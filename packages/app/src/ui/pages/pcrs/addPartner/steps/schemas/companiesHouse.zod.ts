@@ -1,10 +1,5 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  pcrIdValidation,
-  pcrItemIdValidation,
-  projectIdValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -35,9 +30,6 @@ const getPcrAddPartnerCompaniesHouseStepSchema = (markedAsComplete: boolean) =>
       z.literal(FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue),
       z.literal(FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit),
     ]),
-    projectId: projectIdValidation,
-    pcrId: pcrIdValidation,
-    pcrItemId: pcrItemIdValidation,
     organisationName: getTextValidation({
       maxLength: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
       required: markedAsComplete,

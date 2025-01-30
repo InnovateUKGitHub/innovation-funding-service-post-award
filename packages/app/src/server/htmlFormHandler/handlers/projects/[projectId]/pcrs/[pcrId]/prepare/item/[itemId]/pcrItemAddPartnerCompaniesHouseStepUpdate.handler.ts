@@ -11,7 +11,8 @@ import {
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 class ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler extends ZodFormHandlerBase<
   PcrAddPartnerCompaniesHouseStepSchemaType,
@@ -46,22 +47,9 @@ class ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler extends 
     return item as PCRItemForPartnerAdditionDto;
   }
 
-  protected async getZodSchema({
-    context,
-    input,
-  }: {
-    context: IContext;
-    input: z.input<PcrAddPartnerCompaniesHouseStepSchemaType>;
-  }) {
-    const item = await this.getItem({
-      context,
-      projectId: input.projectId as ProjectId,
-      pcrId: input.pcrId as PcrId,
-      pcrItemId: input.pcrItemId as PcrItemId,
-    });
-
+  protected async getZodSchema({ input }: { input: AnyObject }) {
     return {
-      schema: getPcrAddPartnerCompaniesHouseStepSchema(item?.status === PCRItemStatus.Complete),
+      schema: getPcrAddPartnerCompaniesHouseStepSchema(input.markedAsComplete === "on"),
       errorMap: pcrAddPartnerCompaniesHouseStepErrorMap,
     };
   }
@@ -73,9 +61,6 @@ class ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler extends 
   }): Promise<z.input<PcrAddPartnerCompaniesHouseStepSchemaType>> {
     return {
       form: input.form,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       organisationName: input.organisationName,
       registeredAddress: input.registeredAddress,
       registrationNumber: input.registrationNumber,
@@ -91,20 +76,18 @@ class ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler extends 
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams & { step?: number };
   }): Promise<string> {
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        organisationName: input.organisationName,
-        registeredAddress: input.registeredAddress,
-        registrationNumber: input.registrationNumber,
-      },
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_OrganisationName__c: input.organisationName,
+      Acc_RegistrationNumber__c: input.registrationNumber,
+      Acc_RegisteredAddress__c: input.registeredAddress,
     });
 
     return await getNextAddPartnerStep({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      pcrItemId: params.itemId,
       context,
       toSummary: input.form === FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndQuit,
       stepNumber: params.step,
