@@ -109,38 +109,6 @@ export const useOnSavePcrItem = <T extends PCRItemType = PCRItemType.Unknown>(
     navigate(context?.link?.path ?? "");
   }
 
-  if (pcrType === PCRItemType.AccountNameChange) {
-    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
-      req: data =>
-        clientsideApiClient.pcrs.renamePartner({
-          projectId,
-          pcrId,
-          pcrItemId,
-          pcr: {
-            ...(data as PcrRenamePartnerDto),
-            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        }),
-      onSuccess,
-    });
-  }
-
-  if (pcrType === PCRItemType.PartnerWithdrawal) {
-    return useOnUpdate<SubmitData, boolean, { link: ILinkInfo }>({
-      req: data =>
-        clientsideApiClient.pcrs.removePartner({
-          projectId,
-          pcrId,
-          pcrItemId,
-          pcr: {
-            ...(data as PcrRemovePartnerDto),
-            ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        }),
-      onSuccess,
-    });
-  }
-
   return useOnUpdate<SubmitData, PCRDto, { link: ILinkInfo }>({
     req: data =>
       clientsideApiClient.pcrs.update({
