@@ -13,6 +13,7 @@
         "PLAYWRIGHT_BROWSERS_PATH",
         "DISPLAY",
         "BASIC_AUTH",
+        "SERVER_URL",
         "TEST_SALESFORCE_SANDBOX",
         "SALESFORCE_PRIVATE_KEY",
         "SALESFORCE_USERNAME",
@@ -31,6 +32,7 @@
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "BASIC_AUTH",
+        "SERVER_URL",
         "TEST_SALESFORCE_SANDBOX",
         "SALESFORCE_PRIVATE_KEY",
         "SALESFORCE_USERNAME",
