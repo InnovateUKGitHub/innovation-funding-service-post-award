@@ -18,7 +18,7 @@ export const useJesSearchQuery = (searchInputValue: string) => {
   const { isLoading, data } = useQuery<JesSearchQuery>(
     jesSearchQuery,
     { search: gqlSearchValue },
-    refreshedQueryOptions,
+    { ...refreshedQueryOptions, skip: gqlSearchValue === "" },
   );
 
   const jesAccounts = getJesSearchResults(data);
@@ -26,7 +26,7 @@ export const useJesSearchQuery = (searchInputValue: string) => {
   const debouncedRefresh = useDebounce(refresh);
 
   useEffect(() => {
-    debouncedRefresh();
+    if (gqlSearchValue !== "") debouncedRefresh();
   }, [gqlSearchValue]);
 
   return { isLoading, jesAccounts };
