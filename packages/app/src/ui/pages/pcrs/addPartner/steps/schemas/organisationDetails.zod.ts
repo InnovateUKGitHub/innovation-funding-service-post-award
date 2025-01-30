@@ -6,7 +6,7 @@ const employeesLessThan = 100_000_000;
 
 export const getOrganisationDetailsSchema = (markedAsComplete: boolean) =>
   z.object({
-    markedAsComplete: z.string(),
+    markedAsComplete: z.boolean(),
     form: z.literal(FormTypes.PcrAddPartnerOrganisationDetailsStep),
     button_submit: z.string(),
     participantSize: z.coerce.number().gt(0),

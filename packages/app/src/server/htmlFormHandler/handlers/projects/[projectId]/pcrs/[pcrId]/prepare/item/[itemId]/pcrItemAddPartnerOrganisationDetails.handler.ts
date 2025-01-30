@@ -5,11 +5,14 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   OrganisationDetailsSchemaType,
   getOrganisationDetailsSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/organisationDetails.zod";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
 
 export class PcrItemAddPartnerOrganisationDetailsHandler extends ZodFormHandlerBase<
   OrganisationDetailsSchemaType,
@@ -50,7 +53,12 @@ export class PcrItemAddPartnerOrganisationDetailsHandler extends ZodFormHandlerB
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await updatePcrItem({ params, context, data: input });
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(input.participantSize),
+      Acc_Employees__c: input.numberOfEmployees,
+    });
 
     return await getNextAddPartnerStep({
       projectId: params.projectId,

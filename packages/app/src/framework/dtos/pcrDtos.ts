@@ -477,6 +477,13 @@ export interface PcrAddPartnerCompanyDetailsDto extends PcrDtoCommon {
   registeredAddress?: string;
 }
 
+export interface PcrAddPartnerOrganisationDetailsDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerOrganisationDetailsStep;
+  button_submit: string;
+  participantSize: number;
+  numberOfEmployees: number | null;
+}
+
 export interface PcrAddPartnerProjectLocationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerProjectLocationStep;
   button_submit: string;

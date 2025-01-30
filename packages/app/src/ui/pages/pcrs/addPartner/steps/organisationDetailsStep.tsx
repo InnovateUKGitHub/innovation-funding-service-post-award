@@ -24,10 +24,11 @@ import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { isNil } from "lodash";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerOrganisationDetails } from "./organisationDetails.logic";
 
 export const OrganisationDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -39,7 +40,7 @@ export const OrganisationDetailsStep = () => {
       numberOfEmployees: pcrItem.numberOfEmployees,
       participantSize: pcrItem.participantSize,
       form: FormTypes.PcrAddPartnerOrganisationDetailsStep,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
     },
     resolver: zodResolver(getOrganisationDetailsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
@@ -50,12 +51,12 @@ export const OrganisationDetailsStep = () => {
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
-
+  const { onUpdate, apiError, isFetching } = useOnUpdateAddPartnerOrganisationDetails();
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerOrganisationDetails.sectionTitle)}</H2>
-        <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+        <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onUpdate({ data, context: link(data) }))}>
           <input type="hidden" {...register("form")} value={FormTypes.PcrAddPartnerOrganisationDetailsStep} />
           <input type="hidden" {...register("markedAsComplete")} value={String(markedAsCompleteHasBeenChecked)} />
           <Fieldset>
