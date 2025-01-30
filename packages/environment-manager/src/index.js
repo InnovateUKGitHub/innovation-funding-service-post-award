@@ -7,33 +7,45 @@ class EnvironmentManager {
   /**
    * @type Record<string, string>
    */
-  sopsEnv;
+  sopsEnv = {};
+
+  /**
+   * @type Record<string, string>
+   */
+  configmapEnv = {};
 
   constructor(environment) {
-    const sopsFile = path.resolve(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "kustomize",
-      "acc-secrets",
-      "secrets",
-      "acc-ui-secret",
-      `acc-ui-secret.${environment}.yml`,
-    );
+    if (typeof environment === "string") {
+      const kustomize = path.resolve(__dirname, "..", "..", "..", "kustomize");
+      const sopsFile = path.resolve(
+        kustomize,
+        "acc-secrets",
+        "secrets",
+        "acc-ui-secret",
+        `acc-ui-secret.${environment}.yml`,
+      );
+      const configmapFile = path.resolve(kustomize, "config-mgmt", "env", "aws", environment, "acc-ui-configmap.yml");
 
-    if (fs.existsSync(sopsFile)) {
-      console.log("Reading SOPS YAML file at", sopsFile);
+      if (fs.existsSync(configmapFile)) {
+        console.log("Opening configmap file", configmapFile);
+        const configmapData = fs.readFileSync(configmapFile, { encoding: "utf-8" });
+        this.configmapEnv = yaml.parse(configmapData).data;
+      } else {
+        console.log("Could not read configmap file", configmapFile);
+      }
 
-      const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
-        stdio: "pipe",
-        encoding: "utf-8",
-      });
+      if (fs.existsSync(sopsFile)) {
+        console.log("Reading SOPS YAML file at", sopsFile);
 
-      this.sopsEnv = sops.stdout ? yaml.parse(sops.stdout).stringData : {};
-    } else {
-      console.log(`Cannot open ${sopsFile} - Will read env vars only`);
-      this.sopsEnv = {};
+        const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
+          stdio: "pipe",
+          encoding: "utf-8",
+        });
+
+        this.sopsEnv = sops.stdout ? yaml.parse(sops.stdout).stringData : {};
+      } else {
+        console.log("Could not read secrets file.", sopsFile);
+      }
     }
   }
 
@@ -44,7 +56,10 @@ class EnvironmentManager {
    */
   getEnv(key) {
     return (
-      this.sopsEnv[key] ?? process.env[key] ?? console.error(`Cannot find environment variable associated with ${key}`)
+      this.configmapEnv[key] ??
+      this.sopsEnv[key] ??
+      process.env[key] ??
+      console.error(`Cannot find environment variable associated with ${key}`)
     );
   }
 }
