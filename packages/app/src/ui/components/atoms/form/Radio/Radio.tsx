@@ -25,14 +25,16 @@ type RadioInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, 
   registerOptions?: RegisterOptions<FieldValues, string>;
 };
 
-const Radio = ({ label, registerOptions, ...props }: RadioInputProps) => {
+const Radio = ({ label, registerOptions, defaultChecked, ...props }: RadioInputProps) => {
   const { register, name } = useRadioListContext();
+  const { isServer } = useMounted();
   return (
     <div className="govuk-radios__item">
       <input
         value={props.value ?? props.id}
         className={cx("govuk-radios__input", props.className)}
         type="radio"
+        defaultChecked={isServer && defaultChecked}
         {...props}
         {...register(name, registerOptions)}
       />
