@@ -8,9 +8,9 @@ import {
   LoanDrawdownExtensionSchemaType,
   errorMap,
 } from "@ui/pages/pcrs/loanDrawdownExtension/loanDrawdownExtension.zod";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrItemLoanDurationChangeSummaryHandler extends ZodFormHandlerBase<
   LoanDrawdownExtensionSchemaType,
@@ -25,12 +25,9 @@ export class PcrItemLoanDurationChangeSummaryHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({ input }: { input: AnyObject }) {
-    const availabilityPeriod = Number(input.availabilityPeriod) ?? 0;
-    const extensionPeriod = Number(input.extensionPeriod) ?? 0;
-    const repaymentPeriod = Number(input.repaymentPeriod) ?? 0;
+  protected async getZodSchema() {
     return {
-      schema: loanDrawdownExtensionSchema({ availabilityPeriod, extensionPeriod, repaymentPeriod }),
+      schema: loanDrawdownExtensionSchema,
       errorMap,
     };
   }
@@ -41,6 +38,10 @@ export class PcrItemLoanDurationChangeSummaryHandler extends ZodFormHandlerBase<
       availabilityPeriodChange: input.availabilityPeriodChange,
       extensionPeriodChange: input.extensionPeriodChange,
       repaymentPeriodChange: input.repaymentPeriodChange,
+      availabilityPeriod: Number(input.availabilityPeriod) ?? 0,
+      extensionPeriod: Number(input.extensionPeriod) ?? 0,
+      repaymentPeriod: Number(input.repaymentPeriod) ?? 0,
+      form: input.form,
     };
   }
 
@@ -53,25 +54,12 @@ export class PcrItemLoanDurationChangeSummaryHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-              id: params.itemId,
-              availabilityPeriodChange: Number(input.availabilityPeriodChange),
-              extensionPeriodChange: Number(input.extensionPeriodChange),
-              repaymentPeriodChange: Number(input.repaymentPeriodChange),
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(
+        input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
+      ),
+    });
 
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,

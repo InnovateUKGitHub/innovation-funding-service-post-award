@@ -4,7 +4,11 @@ import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useContent } from "@ui/hooks/content.hook";
 import { PcrPage } from "../pcrPage";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
+import {
+  LoanDrawdownExtensionErrors,
+  useLoanDrawdownExtensionQuery,
+  useOnUpdateLoanDrawdownExtension,
+} from "./loanDrawdownExtension.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNextLink } from "../utils/useNextLink";
@@ -20,7 +24,7 @@ import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 export const LoanDrawdownExtensionStep = () => {
   const { getContent } = useContent();
 
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useLoanDrawdownExtensionQuery(projectId, itemId, fetchKey);
 
@@ -32,18 +36,17 @@ export const LoanDrawdownExtensionStep = () => {
       extensionPeriodChange: String(pcrItem.extensionPeriodChange ?? 0),
       repaymentPeriodChange: String(pcrItem.repaymentPeriodChange ?? 0),
       markedAsComplete: markedAsCompleteHasBeenChecked,
+      availabilityPeriod: pcrItem.availabilityPeriod ?? 0,
+      extensionPeriod: pcrItem.extensionPeriod ?? 0,
+      repaymentPeriod: pcrItem.repaymentPeriod ?? 0,
+      form: FormTypes.PcrLoanDurationChange,
     },
-    resolver: zodResolver(
-      loanDrawdownExtensionSchema({
-        availabilityPeriod: pcrItem.availabilityPeriod ?? 0,
-        extensionPeriod: pcrItem.extensionPeriod ?? 0,
-        repaymentPeriod: pcrItem.repaymentPeriod ?? 0,
-      }),
-      {
-        errorMap,
-      },
-    ),
+    resolver: zodResolver(loanDrawdownExtensionSchema, {
+      errorMap,
+    }),
   });
+
+  const { onUpdate, apiError, isFetching } = useOnUpdateLoanDrawdownExtension();
 
   const validationErrors = useZodErrors(setError, formState.errors) as LoanDrawdownExtensionErrors;
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
@@ -51,7 +54,7 @@ export const LoanDrawdownExtensionStep = () => {
   const nextLink = useNextLink();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <P>{getContent(x => x.forms.pcr.loanDrawdownExtension.information)}</P>
 
       <P>{getContent(x => x.forms.pcr.loanDrawdownExtension.startDate({ startDate: formattedStartDate }))}</P>
@@ -60,13 +63,8 @@ export const LoanDrawdownExtensionStep = () => {
         <Form
           data-qa="loanEditForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: {
-                ...data,
-                availabilityPeriodChange: Number(data.availabilityPeriodChange),
-                extensionPeriodChange: Number(data.extensionPeriodChange),
-                repaymentPeriodChange: Number(data.repaymentPeriodChange),
-              },
+            onUpdate({
+              data,
               context: { link: nextLink },
             }),
           )}

@@ -386,6 +386,16 @@ export interface PcrChangeDurationDto extends PcrDtoCommon {
   form: ChangeDurationFormType;
 }
 
+export interface LoanDrawdownExtensionDto extends PcrDtoCommon {
+  availabilityPeriodChange: string | number;
+  extensionPeriodChange: string | number;
+  repaymentPeriodChange: string | number;
+  availabilityPeriod: number | null;
+  extensionPeriod: number | null;
+  repaymentPeriod: number | null;
+  form: FormTypes.PcrLoanDurationChange | FormTypes.PcrLoanDurationChangeSummary;
+}
+
 export type SuspendProjectFormType = FormTypes.PcrProjectSuspensionStep | FormTypes.PcrProjectSuspensionSummary;
 
 export interface PcrSuspendProjectDto extends PcrDtoCommon {

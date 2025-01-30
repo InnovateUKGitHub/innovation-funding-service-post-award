@@ -6,6 +6,15 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { DateTime } from "luxon";
 import { ContentSelector } from "@copy/type";
+import { useNavigate } from "react-router-dom";
+import { usePcrWorkflowContext } from "../pcrItemWorkflow";
+import { useMessageContext } from "@ui/context/messages";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { z } from "zod";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { clientsideApiClient } from "@ui/apiClient";
+import { LoanDrawdownExtensionSchemaType } from "./loanDrawdownExtension.zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export const quarterlyOffset = 3;
 
@@ -101,4 +110,34 @@ export type LoanDrawdownExtensionErrors = {
   availabilityPeriodChange: RhfError;
   extensionPeriodChange: RhfError;
   repaymentPeriodChange: RhfError;
+};
+
+export const useOnUpdateLoanDrawdownExtension = () => {
+  const navigate = useNavigate();
+
+  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
+  const { clearMessages } = useMessageContext();
+
+  return useOnUpdate<z.output<LoanDrawdownExtensionSchemaType>, boolean, { link: ILinkInfo }>({
+    req: data =>
+      clientsideApiClient.pcrs.loanDrawdownExtension({
+        projectId,
+        pcrId,
+        pcrItemId: itemId,
+        pcr: {
+          ...data,
+          form: data.form,
+          ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+        },
+      }),
+    onSuccess: async function (
+      _: z.output<LoanDrawdownExtensionSchemaType>,
+      __: boolean,
+      context: { link: ILinkInfo } | undefined,
+    ) {
+      clearMessages();
+      setFetchKey(k => k + 1);
+      navigate(context?.link?.path ?? "");
+    },
+  });
 };

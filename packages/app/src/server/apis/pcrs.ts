@@ -1,6 +1,7 @@
 import {
   CreatePcrDto,
   FullPCRItemDto,
+  LoanDrawdownExtensionDto,
   PcrAddPartnerAcademicOrganisationDto,
   PcrAddPartnerFinanceContactDto,
   PcrAddPartnerProjectLocationDto,
@@ -32,6 +33,7 @@ import { UpdatePcrAddPartnerAcademicOrganisationCommand } from "@server/features
 import { UpdatePcrAddPartnerProjectLocationCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectLocationCommand";
 import { UpdatePcrAddPartnerFinanceContactCommand } from "@server/features/pcrs/updatePcrAddPartnerFinanceContactCommand";
 import { UpdatePcrAddPartnerProjectManagerCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectManagerCommand";
+import { UpdatePcrLoanDurationExtensionCommand } from "@server/features/pcrs/updateLoanDurationExtensionCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -119,6 +121,18 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         pcrItemId: PcrItemId;
         pcrId: PcrId;
         pcr: PcrChangeDurationDto;
+      }
+    >,
+  ) => Promise<boolean>;
+
+  loanDrawdownExtension: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrItemId: PcrItemId;
+        pcrId: PcrId;
+        pcr: LoanDrawdownExtensionDto;
       }
     >,
   ) => Promise<boolean>;
@@ -261,6 +275,17 @@ class Controller
         pcr: processDto(b),
       }),
       this.changeDuration,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/loan-duration-extension",
+      (p, _, b: LoanDrawdownExtensionDto) => ({
+        projectId: p.projectId,
+        pcrId: p.pcrId,
+        pcrItemId: p.pcrItemId,
+        pcr: processDto(b),
+      }),
+      this.loanDrawdownExtension,
     );
 
     this.putItem(
@@ -481,6 +506,30 @@ class Controller
 
     await context.runCommand(
       new UpdatePcrChangeDurationCommand({
+        projectId: params.projectId,
+        pcrItemId: params.pcrItemId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
+  }
+
+  async loanDrawdownExtension(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrItemId: PcrItemId;
+        pcrId: PcrId;
+        pcr: LoanDrawdownExtensionDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const context = await contextProvider.start(params);
+
+    await context.runCommand(
+      new UpdatePcrLoanDurationExtensionCommand({
         projectId: params.projectId,
         pcrItemId: params.pcrItemId,
         pcr: params.pcr,

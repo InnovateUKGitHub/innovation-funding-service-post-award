@@ -12,7 +12,7 @@ import { TBody, TCaption, TD, TH, THead, TR, Table } from "@ui/components/atoms/
 import { FullNumericDate } from "@ui/components/atoms/Date";
 import { DropdownSelect } from "@ui/components/atoms/form/Dropdown/Dropdown";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import { LoanDrawdownExtensionSchema, LoanDrawdownExtensionSummarySchema } from "./loanDrawdownExtension.zod";
+import { LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
@@ -64,8 +64,8 @@ export const LoanDrawdownTable = ({
     | "repaymentPeriodChange"
     | "projectStartDate"
   >;
-  watch: UseFormWatch<LoanDrawdownExtensionSchema> | UseFormWatch<LoanDrawdownExtensionSummarySchema>;
-  register: UseFormRegister<LoanDrawdownExtensionSchema> | UseFormRegister<LoanDrawdownExtensionSummarySchema>;
+  watch: UseFormWatch<LoanDrawdownExtensionSchema>;
+  register: UseFormRegister<LoanDrawdownExtensionSchema>;
   isFetching: boolean;
   readonlyTable?: boolean;
   validationErrors?: LoanDrawdownExtensionErrors;
