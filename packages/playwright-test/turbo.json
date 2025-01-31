@@ -18,7 +18,8 @@
         "SALESFORCE_PRIVATE_KEY",
         "SALESFORCE_USERNAME",
         "SALESFORCE_CLIENT_ID",
-        "SALESFORCE_CONNECTION_URL"
+        "SALESFORCE_CONNECTION_URL",
+        "CI"
       ],
       "dependsOn": [
         "@innovateuk/playwright-test#build",
@@ -37,7 +38,8 @@
         "SALESFORCE_PRIVATE_KEY",
         "SALESFORCE_USERNAME",
         "SALESFORCE_CLIENT_ID",
-        "SALESFORCE_CONNECTION_URL"
+        "SALESFORCE_CONNECTION_URL",
+        "CI"
       ],
       "dependsOn": [
         "@innovateuk/playwright-test#build",
