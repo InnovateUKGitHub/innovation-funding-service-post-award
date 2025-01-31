@@ -161,8 +161,12 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
     return this.putCustom<TParams, TSummaryDto[]>(path, getParams, run);
   }
 
-  protected postItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<Context, TParams, TDto | null>) {
-    return this.postCustom<TParams, TDto | null>(path, null, getParams, run);
+  protected postItem<TParams>(
+    path: string,
+    getParams: GetParams<TParams>,
+    run: Run<Context, TParams, TDto | null | { id: string }>,
+  ) {
+    return this.postCustom<TParams, TDto | null | { id: string }>(path, null, getParams, run);
   }
 
   protected postItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<Context, TParams, TSummaryDto[]>) {

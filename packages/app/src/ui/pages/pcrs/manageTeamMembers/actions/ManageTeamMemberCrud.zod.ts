@@ -28,7 +28,6 @@ const createTeamMemberValidator = z.object({
 
 const replaceTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersReplace),
-  projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   pclId: pclIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),

@@ -501,3 +501,14 @@ export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
   contact2Surname?: string;
   contact2Phone?: string;
 }
+
+export interface PcrReplaceTeamMemberDto {
+  form: FormTypes.ProjectManageTeamMembersReplace;
+  pclId: ProjectContactLinkId;
+  manageTeamMemberType: ManageTeamMemberMethod;
+  manageTeamMemberFirstName?: string;
+  manageTeamMemberLastName?: string;
+  manageTeamMemberEmail?: string;
+  manageTeamMemberRole: ProjectRole;
+  partnerId: PartnerId;
+}

@@ -26,21 +26,22 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
             pcrStatus = PCRStatus.SubmittedToInnovateUK;
           }
           break;
-        case FormTypes.ProjectManageTeamMembersReplace:
-          {
-            pcrStatus = PCRStatus.SubmittedToInnovateUK;
-            await clientsideApiClient.projectContacts.update({
-              projectId,
-              contacts: [
-                {
-                  id: data.pclId,
-                  replaced: true,
-                },
-              ],
-            });
-            pclId = data.pclId;
-          }
-          break;
+        case FormTypes.ProjectManageTeamMembersReplace: {
+          pcrStatus = PCRStatus.SubmittedToInnovateUK;
+          return await clientsideApiClient.pcrs.replaceTeamMember({
+            projectId,
+            pcr: {
+              form: FormTypes.ProjectManageTeamMembersReplace,
+              pclId: data.pclId,
+              manageTeamMemberType: ManageTeamMemberMethod.REPLACE,
+              manageTeamMemberFirstName: data.firstName,
+              manageTeamMemberLastName: data.lastName,
+              manageTeamMemberEmail: data.email,
+              manageTeamMemberRole: data.role,
+              partnerId: data.partnerId,
+            },
+          });
+        }
         case FormTypes.ProjectManageTeamMembersUpdate:
           {
             await clientsideApiClient.projectContacts.update({
@@ -78,9 +79,7 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
       }
 
       return await clientsideApiClient.pcrs.create({
-        projectId: data.projectId,
         projectChangeRequestDto: {
-          projectId: data.projectId,
           status: PCRStatus.Unknown,
           manageTeamMemberStatus: pcrStatus,
           reasoningStatus: PCRItemStatus.Complete,

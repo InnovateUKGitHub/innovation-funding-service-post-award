@@ -17,6 +17,7 @@ import {
   PCRDto,
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
+  PcrReplaceTeamMemberDto,
   PcrScopeChangeDto,
   PCRSummaryDto,
   PcrSuspendProjectDto,
@@ -46,6 +47,7 @@ import { UpdatePcrAddPartnerOtherFundingCommand } from "@server/features/pcrs/up
 import { UpdatePcrAddPartnerOtherSourcesOfFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherSourcesOfFundingCommand";
 import { UpdatePcrAddPartnerFundingLevelCommand } from "@server/features/pcrs/updatePcrAddPartnerFundingLevelCommand";
 import { UpdatePcrAddPartnerAgreementToPcrCommand } from "@server/features/pcrs/updatePcrAddPartnerAgreementToPcrCommand";
+import { UpdatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/updatePcrReplaceTeamMemberCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -221,6 +223,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<boolean>;
 
+  replaceTeamMember: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcr: PcrReplaceTeamMemberDto;
+      }
+    >,
+  ) => Promise<{ id: PcrId }>;
+
   scopeChange: (
     params: ApiParams<
       Context,
@@ -286,6 +298,15 @@ class Controller
         projectChangeRequestDto: processDto(b),
       }),
       this.create,
+    );
+
+    this.postItem(
+      "/:projectId/manage-team-member/replace",
+      (p, _, b: PcrReplaceTeamMemberDto) => ({
+        projectId: p.projectId,
+        pcr: processDto(b),
+      }),
+      this.replaceTeamMember,
     );
 
     this.putItem(
@@ -887,6 +908,29 @@ class Controller
       }),
     );
     return true;
+  }
+
+  async replaceTeamMember(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcr: PcrReplaceTeamMemberDto;
+      }
+    >,
+  ): Promise<{ id: PcrId }> {
+    const context = await contextProvider.start(params);
+
+    console.log("replace team member controller pcr", params.pcr);
+
+    const res = await context.runCommand(
+      new UpdatePcrReplaceTeamMemberCommand({
+        projectId: params.projectId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return res;
   }
 
   async scopeChange(
