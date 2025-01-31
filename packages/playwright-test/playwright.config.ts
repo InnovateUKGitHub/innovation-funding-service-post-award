@@ -50,9 +50,9 @@ export default defineConfig({
     trace: "on-first-retry",
     testIdAttribute: "data-qa",
   },
-  timeout: 5 * 60 * 3000,
+  timeout: 15 * 60_000,
   expect: {
-    timeout: 17 * 2000,
+    timeout: 15_000,
   },
 
   /* Configure projects for major browsers */
