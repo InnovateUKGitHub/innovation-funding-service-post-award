@@ -49,9 +49,7 @@ class AccUserSwitcher {
         // Wait until a login is successful
         await this.sfdcApi.getSalesforceToken(username);
         break;
-      } catch (e) {
-        console.log(e);
-      }
+      } catch {}
       await sleep(2000);
     }
 

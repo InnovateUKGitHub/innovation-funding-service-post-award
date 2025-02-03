@@ -27,24 +27,17 @@ class EnvironmentManager {
       const configmapFile = path.resolve(kustomize, "config-mgmt", "env", "aws", environment, "acc-ui-configmap.yml");
 
       if (fs.existsSync(configmapFile)) {
-        console.log("Opening configmap file", configmapFile);
         const configmapData = fs.readFileSync(configmapFile, { encoding: "utf-8" });
         this.configmapEnv = yaml.parse(configmapData).data;
-      } else {
-        console.log("Could not read configmap file", configmapFile);
       }
 
       if (fs.existsSync(sopsFile)) {
-        console.log("Reading SOPS YAML file at", sopsFile);
-
         const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
           stdio: "pipe",
           encoding: "utf-8",
         });
 
         this.sopsEnv = sops.stdout ? yaml.parse(sops.stdout).stringData : {};
-      } else {
-        console.log("Could not read secrets file.", sopsFile);
       }
     }
   }
