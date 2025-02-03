@@ -49,13 +49,21 @@ const rolesResolver: IFieldResolverOptions = {
     const project = roleData.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
+      const pcl: ExternalRoles = {
+        isMo: projectContactLink.Acc_Role__c.value === "Monitoring officer",
+        isFc: projectContactLink.Acc_Role__c.value === "Finance contact",
+        isPm: projectContactLink.Acc_Role__c.value === "Project Manager",
+        isAssociate: projectContactLink.Acc_Role__c.value === "Associate",
+        isSalesforceSystemUser,
+      };
+
       // console.log("roles.ts > rolesResolver > projectContactLink > Acc_Role__c", projectContactLink.Acc_Role__c.value);
       // If the user's Contact ID is the same as the Contact ID for the PCL, then apply the role for the PCL.
       if (projectContactLink?.Acc_ContactId__r?.Id === contactId) {
-        if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
-        if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
-        if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;
-        if (projectContactLink.Acc_Role__c.value === "Associate") permissions.isAssociate = true;
+        if (pcl.isMo) permissions.isMo = true;
+        if (pcl.isFc) permissions.isFc = true;
+        if (pcl.isPm) permissions.isPm = true;
+        if (pcl.isAssociate) permissions.isAssociate = true;
       }
 
       for (const { node: projectParticipant } of project.Acc_ProjectParticipantsProject__r.edges) {
@@ -65,7 +73,7 @@ const rolesResolver: IFieldResolverOptions = {
           isFc: isSalesforceSystemUser,
           isPm: isSalesforceSystemUser,
           isAssociate: false,
-          isSalesforceSystemUser: ctx.email === configuration.salesforceServiceUser.serviceUsername,
+          isSalesforceSystemUser,
           accountId: projectParticipant.Acc_AccountId__c.value,
           partnerId: projectParticipant.Id,
         };
@@ -74,9 +82,8 @@ const rolesResolver: IFieldResolverOptions = {
           projectContactLink?.Acc_ContactId__r?.Id === contactId &&
           projectContactLink.Acc_AccountId__c.value === projectParticipant.Acc_AccountId__c.value
         ) {
-          if (permissions.isFc) partnerPermissions.isFc = true;
-          if (permissions.isPm && projectParticipant.Acc_ProjectRole__c.value === "Lead")
-            partnerPermissions.isPm = true;
+          if (pcl.isFc) partnerPermissions.isFc = true;
+          if (pcl.isPm && projectParticipant.Acc_ProjectRole__c.value === "Lead") partnerPermissions.isPm = true;
 
           // TODO: find rules for partner permissions
         }
