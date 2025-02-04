@@ -21,19 +21,27 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
       let pclId: ProjectContactLinkId | null = null;
 
       switch (data.form) {
-        case FormTypes.ProjectManageTeamMembersCreate:
-          {
-            pcrStatus = PCRStatus.SubmittedToInnovateUK;
-          }
-          break;
+        case FormTypes.ProjectManageTeamMembersCreate: {
+          return await clientsideApiClient.pcrs.inviteTeamMember({
+            projectId,
+            pcr: {
+              form: FormTypes.ProjectManageTeamMembersCreate,
+              manageTeamMemberFirstName: data.firstName,
+              manageTeamMemberLastName: data.lastName,
+              manageTeamMemberEmail: data.email,
+              manageTeamMemberRole: data.role,
+              partnerId: data.partnerId,
+              manageTeamMemberAssociateStartDate: data.startDate,
+            },
+          });
+        }
+
         case FormTypes.ProjectManageTeamMembersReplace: {
-          pcrStatus = PCRStatus.SubmittedToInnovateUK;
           return await clientsideApiClient.pcrs.replaceTeamMember({
             projectId,
             pcr: {
               form: FormTypes.ProjectManageTeamMembersReplace,
               pclId: data.pclId,
-              manageTeamMemberType: ManageTeamMemberMethod.REPLACE,
               manageTeamMemberFirstName: data.firstName,
               manageTeamMemberLastName: data.lastName,
               manageTeamMemberEmail: data.email,

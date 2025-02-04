@@ -15,6 +15,7 @@ import {
   PcrAddPartnerRoleAndOrganisationDto,
   PcrChangeDurationDto,
   PCRDto,
+  PcrInviteTeamMemberDto,
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
   PcrReplaceTeamMemberDto,
@@ -47,7 +48,8 @@ import { UpdatePcrAddPartnerOtherFundingCommand } from "@server/features/pcrs/up
 import { UpdatePcrAddPartnerOtherSourcesOfFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherSourcesOfFundingCommand";
 import { UpdatePcrAddPartnerFundingLevelCommand } from "@server/features/pcrs/updatePcrAddPartnerFundingLevelCommand";
 import { UpdatePcrAddPartnerAgreementToPcrCommand } from "@server/features/pcrs/updatePcrAddPartnerAgreementToPcrCommand";
-import { UpdatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/updatePcrReplaceTeamMemberCommand";
+import { CreatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/createPcrReplaceTeamMemberCommand";
+import { CreatePcrInviteTeamMemberCommand } from "@server/features/pcrs/createPcrInviteTeamMemberCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -211,6 +213,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<boolean>;
 
+  inviteTeamMember: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcr: PcrInviteTeamMemberDto;
+      }
+    >,
+  ) => Promise<{ id: PcrId }>;
+
   loanDrawdownExtension: (
     params: ApiParams<
       Context,
@@ -298,6 +310,15 @@ class Controller
         projectChangeRequestDto: processDto(b),
       }),
       this.create,
+    );
+
+    this.postItem(
+      "/:projectId/manage-team-member/invite",
+      (p, _, b: PcrInviteTeamMemberDto) => ({
+        projectId: p.projectId,
+        pcr: processDto(b),
+      }),
+      this.inviteTeamMember,
     );
 
     this.postItem(
@@ -910,6 +931,27 @@ class Controller
     return true;
   }
 
+  async inviteTeamMember(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcr: PcrInviteTeamMemberDto;
+      }
+    >,
+  ): Promise<{ id: PcrId }> {
+    const context = await contextProvider.start(params);
+
+    const res = await context.runCommand(
+      new CreatePcrInviteTeamMemberCommand({
+        projectId: params.projectId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return res;
+  }
+
   async replaceTeamMember(
     params: ApiParams<
       "server",
@@ -921,10 +963,8 @@ class Controller
   ): Promise<{ id: PcrId }> {
     const context = await contextProvider.start(params);
 
-    console.log("replace team member controller pcr", params.pcr);
-
     const res = await context.runCommand(
-      new UpdatePcrReplaceTeamMemberCommand({
+      new CreatePcrReplaceTeamMemberCommand({
         projectId: params.projectId,
         pcr: params.pcr,
         form: params.pcr.form,

@@ -505,10 +505,22 @@ export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
 export interface PcrReplaceTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersReplace;
   pclId: ProjectContactLinkId;
-  manageTeamMemberType: ManageTeamMemberMethod;
-  manageTeamMemberFirstName?: string;
-  manageTeamMemberLastName?: string;
-  manageTeamMemberEmail?: string;
+  manageTeamMemberFirstName: string;
+  manageTeamMemberLastName: string;
+  manageTeamMemberEmail: string;
   manageTeamMemberRole: ProjectRole;
+  partnerId: PartnerId;
+}
+
+export interface PcrInviteTeamMemberDto {
+  form: FormTypes.ProjectManageTeamMembersCreate;
+  manageTeamMemberFirstName: string;
+  manageTeamMemberLastName: string;
+  manageTeamMemberEmail: string;
+  manageTeamMemberRole:
+    | ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR
+    | ProjectRole.MAIN_COMPANY_CONTACT
+    | ProjectRole.ASSOCIATE;
+  manageTeamMemberAssociateStartDate?: Date;
   partnerId: PartnerId;
 }

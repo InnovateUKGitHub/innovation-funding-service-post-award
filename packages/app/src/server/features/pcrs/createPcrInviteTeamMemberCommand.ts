@@ -1,26 +1,26 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { PcrReplaceTeamMemberDto } from "@framework/dtos/pcrDtos";
+import { PcrInviteTeamMemberDto } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
+  createTeamMemberValidator,
   manageTeamMemberErrorMap,
-  replaceTeamMemberValidator,
 } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCrud.zod";
 import { ManageTeamMemberMethod, PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
 import { GetAllPCRItemTypesQuery } from "./getAllItemTypesQuery";
 
-export class UpdatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommandBase<
+export class CreatePcrInviteTeamMemberCommand extends ZodAuthorisedAsyncCommandBase<
   { id: PcrId },
-  typeof replaceTeamMemberValidator,
-  PcrReplaceTeamMemberDto
+  typeof createTeamMemberValidator,
+  PcrInviteTeamMemberDto
 > {
-  public readonly runnableName: string = "UpdatePcrReplaceTeamMemberCommand";
+  public readonly runnableName: string = "CreatePcrInviteTeamMemberCommand";
   protected readonly projectId: ProjectId;
-  private readonly form: FormTypes.ProjectManageTeamMembersReplace;
-  protected readonly dto: PcrReplaceTeamMemberDto;
+  private readonly form: FormTypes.ProjectManageTeamMembersCreate;
+  protected readonly dto: PcrInviteTeamMemberDto;
 
   constructor({
     projectId,
@@ -28,13 +28,11 @@ export class UpdatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
     form,
   }: {
     projectId: ProjectId;
-    pcr: PcrReplaceTeamMemberDto;
-    form: FormTypes.ProjectManageTeamMembersReplace;
+    pcr: PcrInviteTeamMemberDto;
+    form: FormTypes.ProjectManageTeamMembersCreate;
   }) {
     super();
     this.projectId = projectId;
-    // this.pcrId = pcrId;
-    // this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;
   }
@@ -46,24 +44,24 @@ export class UpdatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
   }
 
   protected async getZodSchema() {
-    return { schema: replaceTeamMemberValidator, errorMap: manageTeamMemberErrorMap };
+    return { schema: createTeamMemberValidator, errorMap: manageTeamMemberErrorMap };
   }
 
   protected async mapToZod() {
     return {
       form: this.form,
       partnerId: this.dto.partnerId,
-      pclId: this.dto.pclId,
       firstName: this.dto.manageTeamMemberFirstName,
       lastName: this.dto.manageTeamMemberLastName,
       email: this.dto.manageTeamMemberEmail,
       role: this.dto.manageTeamMemberRole,
+      startDate: this.dto.manageTeamMemberAssociateStartDate,
     };
   }
 
   protected async runRepositoryCommands(
     context: IContext,
-    validatedData: z.output<typeof replaceTeamMemberValidator>,
+    validatedData: z.output<typeof createTeamMemberValidator>,
   ): Promise<{ id: PcrId }> {
     const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
 
@@ -80,23 +78,16 @@ export class UpdatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
           recordTypeId: matchedItem.recordTypeId,
           developerRecordTypeName: matchedItem.developerRecordTypeName,
           status: PCRItemStatus.Complete,
-          pclId: validatedData.pclId,
-          manageTeamMemberType: ManageTeamMemberMethod.REPLACE,
+          manageTeamMemberType: ManageTeamMemberMethod.CREATE,
           manageTeamMemberFirstName: validatedData.firstName,
           manageTeamMemberLastName: validatedData.lastName,
           manageTeamMemberEmail: validatedData.email,
           manageTeamMemberRole: validatedData.role,
+          manageTeamMemberAssociateStartDate: validatedData.startDate,
           partnerId: validatedData.partnerId,
         },
       ],
     });
-
-    await context.repositories.projectContacts.update([
-      {
-        Id: this.dto.pclId,
-        Acc_Replaced__c: true,
-      },
-    ]);
 
     return { id };
   }

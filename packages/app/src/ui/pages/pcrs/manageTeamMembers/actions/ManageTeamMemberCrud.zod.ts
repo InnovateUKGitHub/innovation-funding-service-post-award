@@ -13,7 +13,6 @@ import { z } from "zod";
 
 const createTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersCreate),
-  projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   firstName: getTextValidation({ maxLength: 100, required: true }),
   lastName: getTextValidation({ maxLength: 100, required: true }),
