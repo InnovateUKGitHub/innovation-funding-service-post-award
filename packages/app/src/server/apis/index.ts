@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response } from "express";
 import { getErrorResponse, getErrorStatus } from "@framework/util/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
@@ -13,6 +13,7 @@ import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
 import * as partners from "./partners";
 import * as projectContacts from "./projectContacts";
+import { IAppError } from "@framework/types/IAppError";
 
 export interface IApiClient<Context extends "client" | "server"> {
   claimDetails: claimDetails.IClaimDetailsApi<Context>;
@@ -50,7 +51,12 @@ export const router = express.Router();
   .map(key => ({ path: serverApis[key].path, controller: serverApis[key] }))
   .forEach(item => router.use("/" + item.path, item.controller.router));
 
-router.all("*", (req, res) => {
-  const error = new NotFoundError();
-  res.status(getErrorStatus(error)).json(getErrorResponse(error, res.locals.traceId));
-});
+router
+  .all("*", (req, res) => {
+    const error = new NotFoundError();
+    res.status(getErrorStatus(error)).json(getErrorResponse(error, res.locals.traceId));
+  })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  .use((err: IAppError, _: unknown, res: Response, __: unknown) => {
+    res.status(getErrorStatus(err)).json(getErrorResponse(err, res.locals.traceId));
+  });

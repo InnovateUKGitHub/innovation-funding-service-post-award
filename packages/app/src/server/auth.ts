@@ -12,6 +12,7 @@ import {
   getPassportSamlStrategy,
 } from "./passportSaml";
 import { getPassportOidcStrategy, passportOidcSuccessRoute } from "./developmentPassportOidc";
+import { UnauthenticatedError } from "@shared/appError";
 
 const logger = new Logger("Auth");
 
@@ -152,7 +153,7 @@ const getAuthRouter = async () => {
             req.session.redirect = req.url;
             res.redirect("/login");
           } else {
-            res.status(401);
+            next(new UnauthenticatedError());
           }
           return;
         }
@@ -170,7 +171,7 @@ const getAuthRouter = async () => {
             req.session.redirect = req.url;
             res.redirect("/developer/oidc/login");
           } else {
-            res.status(401);
+            next(new UnauthenticatedError());
           }
           return;
         }
