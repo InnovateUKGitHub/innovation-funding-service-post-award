@@ -17,8 +17,8 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
 
   return useOnUpdate<z.output<ManageTeamMemberValidatorSchema>, PCRDto, EmptyObject>({
     req: async data => {
-      let pcrStatus = PCRStatus.Approved;
-      let pclId: ProjectContactLinkId | null = null;
+      // let pcrStatus = PCRStatus.Approved;
+      // let pclId: ProjectContactLinkId | null = null;
 
       switch (data.form) {
         case FormTypes.ProjectManageTeamMembersCreate: {
@@ -35,7 +35,6 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
             },
           });
         }
-
         case FormTypes.ProjectManageTeamMembersReplace: {
           return await clientsideApiClient.pcrs.replaceTeamMember({
             projectId,
@@ -50,22 +49,21 @@ const useOnManageTeamMemberSubmit = ({ projectId }: { projectId: ProjectId }) =>
             },
           });
         }
-        case FormTypes.ProjectManageTeamMembersUpdate:
-          {
-            await clientsideApiClient.projectContacts.update({
-              projectId,
-              contacts: [
-                {
-                  id: data.pclId,
-                  firstName: data.firstName,
-                  lastName: data.lastName,
-                  edited: true,
-                },
-              ],
-            });
-            pclId = data.pclId;
-          }
-          break;
+
+        case FormTypes.ProjectManageTeamMembersUpdate: {
+          return await clientsideApiClient.pcrs.updateTeamMember({
+            projectId,
+            pcr: {
+              form: FormTypes.ProjectManageTeamMembersUpdate,
+              pclId: data.pclId,
+              manageTeamMemberFirstName: data.firstName,
+              manageTeamMemberLastName: data.lastName,
+              manageTeamMemberRole: data.role,
+              partnerId: data.partnerId,
+              contactId: data.contactId,
+            },
+          });
+        }
 
         case FormTypes.ProjectManageTeamMembersDelete:
           {

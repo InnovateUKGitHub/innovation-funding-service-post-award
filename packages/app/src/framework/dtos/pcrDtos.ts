@@ -524,3 +524,13 @@ export interface PcrInviteTeamMemberDto {
   manageTeamMemberAssociateStartDate?: Date;
   partnerId: PartnerId;
 }
+
+export interface PcrUpdateTeamMemberDto {
+  form: FormTypes.ProjectManageTeamMembersUpdate;
+  pclId: ProjectContactLinkId;
+  manageTeamMemberFirstName: string;
+  manageTeamMemberLastName: string;
+  manageTeamMemberRole: ProjectRole;
+  partnerId: PartnerId;
+  contactId: ContactId;
+}

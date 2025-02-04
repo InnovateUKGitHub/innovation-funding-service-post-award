@@ -166,6 +166,7 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/rename-partner`, params.pcr),
     inviteTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/invite`, params.pcr),
     replaceTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/replace`, params.pcr),
+    updateTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/update`, params.pcr),
     scopeChange: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/scope-change`, params.pcr),
     suspendProject: params =>

@@ -37,7 +37,6 @@ const replaceTeamMemberValidator = z.object({
 
 const updateTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersUpdate),
-  projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   pclId: pclIdValidation,
   contactId: contactIdValidation,

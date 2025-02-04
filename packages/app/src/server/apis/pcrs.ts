@@ -22,6 +22,7 @@ import {
   PcrScopeChangeDto,
   PCRSummaryDto,
   PcrSuspendProjectDto,
+  PcrUpdateTeamMemberDto,
   StandalonePcrDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
@@ -50,6 +51,7 @@ import { UpdatePcrAddPartnerFundingLevelCommand } from "@server/features/pcrs/up
 import { UpdatePcrAddPartnerAgreementToPcrCommand } from "@server/features/pcrs/updatePcrAddPartnerAgreementToPcrCommand";
 import { CreatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/createPcrReplaceTeamMemberCommand";
 import { CreatePcrInviteTeamMemberCommand } from "@server/features/pcrs/createPcrInviteTeamMemberCommand";
+import { CreatePcrUpdateTeamMemberCommand } from "@server/features/pcrs/createPcrUpdateTeamMemberCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -245,6 +247,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<{ id: PcrId }>;
 
+  updateTeamMember: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcr: PcrUpdateTeamMemberDto;
+      }
+    >,
+  ) => Promise<{ id: PcrId }>;
+
   scopeChange: (
     params: ApiParams<
       Context,
@@ -328,6 +340,15 @@ class Controller
         pcr: processDto(b),
       }),
       this.replaceTeamMember,
+    );
+
+    this.postItem(
+      "/:projectId/manage-team-member/update",
+      (p, _, b: PcrUpdateTeamMemberDto) => ({
+        projectId: p.projectId,
+        pcr: processDto(b),
+      }),
+      this.updateTeamMember,
     );
 
     this.putItem(
@@ -965,6 +986,27 @@ class Controller
 
     const res = await context.runCommand(
       new CreatePcrReplaceTeamMemberCommand({
+        projectId: params.projectId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return res;
+  }
+
+  async updateTeamMember(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcr: PcrUpdateTeamMemberDto;
+      }
+    >,
+  ): Promise<{ id: PcrId }> {
+    const context = await contextProvider.start(params);
+
+    const res = await context.runCommand(
+      new CreatePcrUpdateTeamMemberCommand({
         projectId: params.projectId,
         pcr: params.pcr,
         form: params.pcr.form,
