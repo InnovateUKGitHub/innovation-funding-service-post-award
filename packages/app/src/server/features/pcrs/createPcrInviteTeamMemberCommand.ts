@@ -64,7 +64,6 @@ export class CreatePcrInviteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
     validatedData: z.output<typeof createTeamMemberValidator>,
   ): Promise<{ id: PcrId }> {
     const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
-
     const matchedItem = itemTypes.find(t => t.type === PCRItemType.ManageTeamMembers);
     if (!matchedItem) throw new Error(`cannot find item matching ${PCRItemType.ManageTeamMembers}`);
     const id = await context.repositories.projectChangeRequests.createProjectChangeRequest({

@@ -98,18 +98,6 @@ export class CreatePcrUpdateTeamMemberCommand extends ZodAuthorisedAsyncCommandB
       ],
     });
 
-    //       id: data.pclId,
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   edited: true,
-
-    // await context.repositories.projectContacts.update([
-    //   {
-    //     Id: this.dto.pclId,
-    //     // Acc_Replaced__c: true,
-    //   },
-    // ]);
-
     await context.repositories.externalContacts.update({
       Id: validatedData.contactId,
       FirstName: validatedData.firstName,

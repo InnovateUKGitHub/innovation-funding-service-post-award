@@ -91,11 +91,6 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
       ],
     });
 
-    //       id: data.pclId,
-    //   firstName: data.firstName,
-    //   lastName: data.lastName,
-    //   edited: true,
-
     await context.repositories.projectContacts.update([
       {
         Id: this.dto.pclId,
