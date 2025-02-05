@@ -86,12 +86,15 @@ import { PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler } from "./handle
 import { PcrItemAddPartnerSpendProfileOtherCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileOtherCosts.handler";
 import { PcrItemAddPartnerSpendProfileDeleteItemHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileDeleteItem.handler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/editPartnerDetailsPostcode.handler";
-import { ManageTeamMemberProjectChangeRequestHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberProjectChangeRequestHandler.handler";
 import { OverheadDocumentsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocuments.handler";
 import { PcrItemLoanDrawdownChangeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChange.handler";
 import { PcrItemLoanDrawdownChangeSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDrawdownChangeSummary.handler";
 import { PcrItemLoanDurationChangeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDurationChange.handler";
 import { PcrItemLoanDurationChangeSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemLoanDurationChangeSummary.handler";
+import { ManageTeamMemberPcrDeleteHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrDelete.handler";
+import { ManageTeamMemberPcrReplaceHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrReplace.handler";
+import { ManageTeamMemberPcrUpdateHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrUpdate.handler";
+import { ManageTeamMemberPcrInviteHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrInvite.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
@@ -172,7 +175,10 @@ export const standardFormHandlers = [
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
-  new ManageTeamMemberProjectChangeRequestHandler(),
+  new ManageTeamMemberPcrDeleteHandler(),
+  new ManageTeamMemberPcrReplaceHandler(),
+  new ManageTeamMemberPcrUpdateHandler(),
+  new ManageTeamMemberPcrInviteHandler(),
 ] as const;
 
 export const developerFormHandlers = [new DeveloperUserSwitcherHandler(), new DeveloperPageCrasherHandler()] as const;
