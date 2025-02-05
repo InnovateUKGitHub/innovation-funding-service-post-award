@@ -505,32 +505,29 @@ export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
 export interface PcrReplaceTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersReplace;
   pclId: ProjectContactLinkId;
-  manageTeamMemberFirstName: string;
-  manageTeamMemberLastName: string;
-  manageTeamMemberEmail: string;
-  manageTeamMemberRole: ProjectRole;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: ProjectRole;
   partnerId: PartnerId;
 }
 
 export interface PcrInviteTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersCreate;
-  manageTeamMemberFirstName: string;
-  manageTeamMemberLastName: string;
-  manageTeamMemberEmail: string;
-  manageTeamMemberRole:
-    | ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR
-    | ProjectRole.MAIN_COMPANY_CONTACT
-    | ProjectRole.ASSOCIATE;
-  manageTeamMemberAssociateStartDate?: Date;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR | ProjectRole.MAIN_COMPANY_CONTACT | ProjectRole.ASSOCIATE;
+  startDate?: Date;
   partnerId: PartnerId;
 }
 
 export interface PcrUpdateTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersUpdate;
   pclId: ProjectContactLinkId;
-  manageTeamMemberFirstName: string;
-  manageTeamMemberLastName: string;
-  manageTeamMemberRole: ProjectRole;
+  firstName: string;
+  lastName: string;
+  role: ProjectRole;
   partnerId: PartnerId;
   contactId: ContactId;
 }
@@ -538,5 +535,5 @@ export interface PcrUpdateTeamMemberDto {
 export interface PcrDeleteTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersDelete;
   pclId: ProjectContactLinkId;
-  manageTeamMemberRole: ProjectRole;
+  role: ProjectRole;
 }

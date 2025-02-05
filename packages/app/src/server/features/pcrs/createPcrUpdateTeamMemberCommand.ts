@@ -54,9 +54,9 @@ export class CreatePcrUpdateTeamMemberCommand extends ZodAuthorisedAsyncCommandB
       form: this.form,
       partnerId: this.dto.partnerId,
       pclId: this.dto.pclId,
-      firstName: this.dto.manageTeamMemberFirstName,
-      lastName: this.dto.manageTeamMemberLastName,
-      role: this.dto.manageTeamMemberRole,
+      firstName: this.dto.firstName,
+      lastName: this.dto.lastName,
+      role: this.dto.role,
       contactId: this.dto.contactId,
     };
   }

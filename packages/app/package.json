@@ -6,7 +6,7 @@
     "clean": "rimraf ./dist ./public/build",
     "start": "node --enable-source-maps esbuild.js --watch --devtools",
     "esbuild": "node --enable-source-maps esbuild.js",
-    "serve": "node --env-file .env --watch --inspect --enable-source-maps ./dist/src/server/index.js",
+    "serve": "node --watch --inspect --enable-source-maps ./dist/src/server/index.js",
     "build": "webpack --env env=production",
     "test": "TZ=europe/london jest",
     "relay": "relay-compiler",

@@ -6,7 +6,6 @@ import {
   dateValidation,
   partnerIdValidation,
   pclIdValidation,
-  projectIdValidation,
 } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
@@ -47,7 +46,6 @@ const updateTeamMemberValidator = z.object({
 
 const deleteTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersDelete),
-  projectId: projectIdValidation,
   pclId: pclIdValidation,
   role: z.nativeEnum(ProjectRole),
 });

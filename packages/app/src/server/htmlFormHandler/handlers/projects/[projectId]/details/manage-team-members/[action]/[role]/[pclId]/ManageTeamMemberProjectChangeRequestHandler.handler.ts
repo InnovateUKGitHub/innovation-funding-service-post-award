@@ -52,7 +52,6 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ManageTeamMemberValidatorSchema>> {
     return {
       form: input.form,
-      projectId: input.projectId,
       partnerId: input.partnerId,
       firstName: input.firstName,
       lastName: input.lastName,
@@ -70,9 +69,11 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<ManageTeamMemberValidatorSchema>;
     context: IContext;
+    params: ManageTeamMemberProps;
   }): Promise<string> {
     let pcrStatus = PCRStatus.Approved;
     let pclId: ProjectContactLinkId | undefined;
@@ -87,7 +88,7 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
         {
           pcrStatus = PCRStatus.SubmittedToInnovateUK;
           await context.runCommand(
-            new UpdateProjectContactLinkCommand(input.projectId, [
+            new UpdateProjectContactLinkCommand(params.projectId, [
               {
                 id: input.pclId,
                 replaced: true,
@@ -100,7 +101,7 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
       case FormTypes.ProjectManageTeamMembersUpdate:
         {
           await context.runCommand(
-            new UpdateProjectContactLinkCommand(input.projectId, [
+            new UpdateProjectContactLinkCommand(params.projectId, [
               {
                 id: input.pclId,
                 firstName: input.firstName,
@@ -116,7 +117,7 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
       case FormTypes.ProjectManageTeamMembersDelete:
         {
           await context.runCommand(
-            new UpdateProjectContactLinkCommand(input.projectId, [
+            new UpdateProjectContactLinkCommand(params.projectId, [
               {
                 id: input.pclId,
                 endDate: new Date(),
@@ -131,8 +132,8 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
         throw new Error("Invalid manage team member action");
     }
 
-    const pcrCommand = new CreateProjectChangeRequestCommand(input.projectId, {
-      projectId: input.projectId,
+    const pcrCommand = new CreateProjectChangeRequestCommand(params.projectId, {
+      projectId: params.projectId,
       status: pcrStatus,
       manageTeamMemberStatus: PCRStatus.Unknown,
       reasoningStatus: PCRItemStatus.Complete,
@@ -149,10 +150,10 @@ export class ManageTeamMemberProjectChangeRequestHandler extends ZodFormHandlerB
 
     switch (pcrStatus) {
       case PCRStatus.Approved:
-        return ProjectChangeRequestCompletedRoute.getLink({ projectId: input.projectId, pcrId }).path;
+        return ProjectChangeRequestCompletedRoute.getLink({ projectId: params.projectId, pcrId }).path;
       case PCRStatus.SubmittedToInnovateUK:
       default:
-        return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId: input.projectId, pcrId }).path;
+        return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId: params.projectId, pcrId }).path;
     }
   }
 }

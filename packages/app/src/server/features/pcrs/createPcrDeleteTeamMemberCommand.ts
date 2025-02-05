@@ -53,7 +53,7 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
     return {
       form: this.form,
       pclId: this.dto.pclId,
-      role: this.dto.manageTeamMemberRole,
+      role: this.dto.role,
     };
   }
 
@@ -85,11 +85,8 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
           developerRecordTypeName: matchedItem.developerRecordTypeName,
           status: PCRItemStatus.Complete,
           pclId: validatedData.pclId,
-          manageTeamMemberType: ManageTeamMemberMethod.UPDATE,
-          manageTeamMemberFirstName: validatedData.firstName,
-          manageTeamMemberLastName: validatedData.lastName,
+          manageTeamMemberType: ManageTeamMemberMethod.DELETE,
           manageTeamMemberRole: validatedData.role,
-          partnerId: validatedData.partnerId,
         },
       ],
     });
@@ -103,7 +100,6 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
       {
         Id: this.dto.pclId,
         Acc_EndDate__c: new Date().toISOString(),
-        // Acc_Replaced__c: true,
       },
     ]);
 

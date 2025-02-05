@@ -52,10 +52,10 @@ export class CreatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
       form: this.form,
       partnerId: this.dto.partnerId,
       pclId: this.dto.pclId,
-      firstName: this.dto.manageTeamMemberFirstName,
-      lastName: this.dto.manageTeamMemberLastName,
-      email: this.dto.manageTeamMemberEmail,
-      role: this.dto.manageTeamMemberRole,
+      firstName: this.dto.firstName,
+      lastName: this.dto.lastName,
+      email: this.dto.email,
+      role: this.dto.role,
     };
   }
 

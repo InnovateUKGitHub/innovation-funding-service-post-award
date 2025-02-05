@@ -51,11 +51,11 @@ export class CreatePcrInviteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
     return {
       form: this.form,
       partnerId: this.dto.partnerId,
-      firstName: this.dto.manageTeamMemberFirstName,
-      lastName: this.dto.manageTeamMemberLastName,
-      email: this.dto.manageTeamMemberEmail,
-      role: this.dto.manageTeamMemberRole,
-      startDate: this.dto.manageTeamMemberAssociateStartDate,
+      firstName: this.dto.firstName,
+      lastName: this.dto.lastName,
+      email: this.dto.email,
+      role: this.dto.role,
+      startDate: this.dto.startDate,
     };
   }
 
