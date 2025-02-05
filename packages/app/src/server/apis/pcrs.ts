@@ -14,6 +14,7 @@ import {
   PcrAddPartnerProjectManagerDto,
   PcrAddPartnerRoleAndOrganisationDto,
   PcrChangeDurationDto,
+  PcrDeleteTeamMemberDto,
   PCRDto,
   PcrInviteTeamMemberDto,
   PcrRemovePartnerDto,
@@ -52,6 +53,7 @@ import { UpdatePcrAddPartnerAgreementToPcrCommand } from "@server/features/pcrs/
 import { CreatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/createPcrReplaceTeamMemberCommand";
 import { CreatePcrInviteTeamMemberCommand } from "@server/features/pcrs/createPcrInviteTeamMemberCommand";
 import { CreatePcrUpdateTeamMemberCommand } from "@server/features/pcrs/createPcrUpdateTeamMemberCommand";
+import { CreatePcrDeleteTeamMemberCommand } from "@server/features/pcrs/createPcrDeleteTeamMemberCommand";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -237,6 +239,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<boolean>;
 
+  deleteTeamMember: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcr: PcrDeleteTeamMemberDto;
+      }
+    >,
+  ) => Promise<{ id: PcrId }>;
+
   replaceTeamMember: (
     params: ApiParams<
       Context,
@@ -322,6 +334,15 @@ class Controller
         projectChangeRequestDto: processDto(b),
       }),
       this.create,
+    );
+
+    this.postItem(
+      "/:projectId/manage-team-member/delete",
+      (p, _, b: PcrDeleteTeamMemberDto) => ({
+        projectId: p.projectId,
+        pcr: processDto(b),
+      }),
+      this.deleteTeamMember,
     );
 
     this.postItem(
@@ -950,6 +971,27 @@ class Controller
       }),
     );
     return true;
+  }
+
+  async deleteTeamMember(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcr: PcrDeleteTeamMemberDto;
+      }
+    >,
+  ): Promise<{ id: PcrId }> {
+    const context = await contextProvider.start(params);
+
+    const res = await context.runCommand(
+      new CreatePcrDeleteTeamMemberCommand({
+        projectId: params.projectId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return res;
   }
 
   async inviteTeamMember(

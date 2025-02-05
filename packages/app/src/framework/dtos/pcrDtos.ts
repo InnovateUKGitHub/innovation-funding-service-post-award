@@ -534,3 +534,9 @@ export interface PcrUpdateTeamMemberDto {
   partnerId: PartnerId;
   contactId: ContactId;
 }
+
+export interface PcrDeleteTeamMemberDto {
+  form: FormTypes.ProjectManageTeamMembersDelete;
+  pclId: ProjectContactLinkId;
+  manageTeamMemberRole: ProjectRole;
+}
