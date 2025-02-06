@@ -25,10 +25,11 @@ import { ProjectManagerSchema, getProjectManagerSchema } from "./schemas/project
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerProjectManager } from "./projectManagerDetails.logic";
 
 export const ProjectManagerDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -57,16 +58,18 @@ export const ProjectManagerDetailsStep = () => {
 
   const { isClient } = useMounted();
 
+  const { isFetching, apiError, onUpdate } = useOnUpdateAddPartnerProjectManager();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerProjectContacts.sectionTitle)}</H2>
         <P>{getContent(x => x.pages.pcrAddPartnerProjectContacts.guidance)}</P>
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: { ...data, contact2ProjectRole: PCRContactRole.ProjectManager },
+            onUpdate({
+              data,
               context: link(data),
             }),
           )}
