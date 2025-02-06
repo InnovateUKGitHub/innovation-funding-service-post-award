@@ -7,7 +7,7 @@ import { IContext } from "@framework/types/IContext";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { RunnableBase } from "./Runnable";
-import { z, ZodError, ZodRawShape } from "zod";
+import { z, ZodError, ZodRawShape, ZodSchema } from "zod";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 export abstract class SyncCommandBase<T> extends RunnableBase<T> {}
@@ -24,10 +24,7 @@ export abstract class AuthorisedAsyncCommandBase<T> extends AsyncCommandBase<T> 
 
 export abstract class ZodAuthorisedAsyncCommandBase<
   T,
-  Schema extends
-    | z.ZodObject<ZodRawShape>
-    | z.ZodEffects<z.ZodObject<ZodRawShape>>
-    | z.ZodDiscriminatedUnion<string, z.ZodObject<ZodRawShape>[]>,
+  Schema extends ZodSchema,
   Dto extends AnyObject,
 > extends AuthorisedAsyncCommandBase<T> {
   protected shouldSkipIsActiveCheck = false;

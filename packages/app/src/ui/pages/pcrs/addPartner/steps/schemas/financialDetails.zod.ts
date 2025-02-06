@@ -69,7 +69,7 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
   markedAsComplete
     ? z
         .object({
-          markedAsComplete: z.string(),
+          markedAsComplete: z.boolean(),
           form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({
@@ -79,7 +79,7 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
         .and(dateSecuredRequired)
     : z
         .object({
-          markedAsComplete: z.string(),
+          markedAsComplete: z.boolean(),
           form: z.literal(FormTypes.PcrAddPartnerFinancialDetailsStep),
           button_submit: z.string(),
           financialYearEndTurnover: getGenericCurrencyValidation({

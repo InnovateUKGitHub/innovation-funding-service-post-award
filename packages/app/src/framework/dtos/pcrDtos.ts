@@ -501,6 +501,14 @@ export interface PcrAddPartnerFinanceContactDto extends PcrDtoCommon {
   contact1Phone?: string;
 }
 
+export interface PcrAddPartnerFinancialDetailsDto extends PcrDtoCommon {
+  form: FormTypes.PcrAddPartnerFinancialDetailsStep;
+  financialYearEndTurnover: string | null;
+  financialYearEndDate_month?: string;
+  financialYearEndDate_year?: string;
+  button_submit: string;
+}
+
 export interface PcrAddPartnerFundingLevelDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerAwardRateStep;
   button_submit: string;

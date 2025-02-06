@@ -17,18 +17,18 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { DateInputGroup } from "@ui/components/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atoms/DateInputs/DateInput";
-import { combineDate, getMonth, getYear } from "@ui/components/atoms/Date";
+import { getMonth, getYear } from "@ui/components/atoms/Date";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { FinanceDetailsSchema, getFinanceDetailsSchema } from "./schemas/financialDetails.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
-import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateAddPartnerFinancialDetails } from "./financeDetails.logic";
 
 export const FinanceDetailsStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -37,7 +37,7 @@ export const FinanceDetailsStep = () => {
   const { handleSubmit, register, formState, trigger, setValue, watch, setError } = useForm<FinanceDetailsSchema>({
     defaultValues: {
       form: FormTypes.PcrAddPartnerFinancialDetailsStep,
-      markedAsComplete: String(markedAsCompleteHasBeenChecked),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       financialYearEndTurnover: String(pcrItem.financialYearEndTurnover ?? ""),
       financialYearEndDate_month: getMonth(pcrItem.financialYearEndDate),
@@ -53,22 +53,17 @@ export const FinanceDetailsStep = () => {
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
+  const { isFetching, apiError, onUpdate } = useOnUpdateAddPartnerFinancialDetails();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerFinanceDetails.sectionTitle)}</H2>
         <Form
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
-            onSave({
-              data: {
-                financialYearEndDate: combineDate(
-                  data.financialYearEndDate_month,
-                  data.financialYearEndDate_year,
-                  false,
-                ),
-                financialYearEndTurnover: parseCurrency(data.financialYearEndTurnover),
-              },
+            onUpdate({
+              data,
               context: link(data),
             }),
           )}

@@ -55,9 +55,6 @@ const CompaniesHouseSearchResults = ({ searchQuery, setCompanyInfo }: CompaniesH
         setCompanyInfo({
           // N.B. It doesn't matter what form we use - it's overwritten when someone clicks a button
           form: FormTypes.PcrAddPartnerCompaniesHouseStepSaveAndContinue,
-          projectId,
-          pcrId,
-          pcrItemId,
           organisationName: selectedOption?.title,
           registeredAddress: selectedOption?.addressFull,
           registrationNumber: selectedOption?.registrationNumber,

@@ -1,4 +1,4 @@
-import {
+import type {
   CreatePcrDto,
   FullPCRItemDto,
   LoanDrawdownExtensionDto,
@@ -27,6 +27,7 @@ import {
   PcrSuspendProjectDto,
   PcrUpdateTeamMemberDto,
   StandalonePcrDto,
+  PcrAddPartnerFinancialDetailsDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -61,6 +62,7 @@ import { UpdatePcrAddPartnerOrganisationDetailsCommand } from "@server/features/
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ISessionUser } from "@framework/types/IUser";
 import { AuthorisedAsyncCommandBase } from "@server/features/common/commandBase";
+import { UpdatePcrAddPartnerFinancialDetailsCommand } from "@server/features/pcrs/updatePcrAddPartnerFinancialDetailsCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -134,6 +136,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   addPartnerAgreementToPcr: PcrUpdateMethod<Context, PcrAddPartnerAgreementToPcrDto, boolean>;
   addPartnerCompanyDetails: PcrUpdateMethod<Context, PcrAddPartnerCompanyDetailsDto, boolean>;
   addPartnerFinanceContact: PcrUpdateMethod<Context, PcrAddPartnerFinanceContactDto, boolean>;
+  addPartnerFinancialDetails: PcrUpdateMethod<Context, PcrAddPartnerFinancialDetailsDto, boolean>;
   addPartnerFundingLevel: PcrUpdateMethod<Context, PcrAddPartnerFundingLevelDto, boolean>;
   addPartnerJesStep: PcrUpdateMethod<Context, PcrAddPartnerJesStepDto, boolean>;
   addPartnerOtherFunding: PcrUpdateMethod<Context, PcrAddPartnerOtherFundingDto, boolean>;
@@ -239,6 +242,12 @@ class Controller
       "/:projectId/:pcrId/:pcrItemId/add-partner/finance-contact",
       requestParams<PcrAddPartnerFinanceContactDto>,
       this.addPartnerFinanceContact,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/financial-details",
+      requestParams<PcrAddPartnerFinancialDetailsDto>,
+      this.addPartnerFinancialDetails,
     );
 
     this.putItem(
@@ -374,6 +383,10 @@ class Controller
 
   async addPartnerFinanceContact(params: PcrUpdateParams<"server", PcrAddPartnerFinanceContactDto>) {
     return await runUpdateCommand(params, new UpdatePcrAddPartnerFinanceContactCommand(getParams(params)));
+  }
+
+  async addPartnerFinancialDetails(params: PcrUpdateParams<"server", PcrAddPartnerFinancialDetailsDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerFinancialDetailsCommand(getParams(params)));
   }
 
   async addPartnerFundingLevel(params: PcrUpdateParams<"server", PcrAddPartnerFundingLevelDto>) {
