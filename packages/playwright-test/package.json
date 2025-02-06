@@ -4,7 +4,7 @@
   "scripts": {
     "build": "bddgen",
     "pw": "playwright test --ui",
-    "pw-run": "playwright test"
+    "pw-run": "playwright test --grep-invert @debug"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.0",
