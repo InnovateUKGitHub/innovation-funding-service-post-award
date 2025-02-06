@@ -45,3 +45,7 @@ kustomize/acc-secrets
 
 # Turborepos
 .turbo
+
+# Salesforce Deluxe Projects
+.sfdx
+.sf
