@@ -11,8 +11,6 @@ import { ManageTeamMemberProps } from "@ui/pages/pcrs/manageTeamMembers/ManageTe
 import { ProjectChangeRequestCompletedRoute } from "@ui/pages/pcrs/submitSuccess/ProjectChangeRequestCompleted.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetAllForProjectQuery } from "@server/features/projectContacts/getAllForProjectQuery";
-import { NotFoundError } from "@shared/appError";
 import { GetAllPCRItemTypesQuery } from "@server/features/pcrs/getAllItemTypesQuery";
 
 export class ManageTeamMemberPcrDeleteHandler extends ZodFormHandlerBase<
@@ -52,14 +50,6 @@ export class ManageTeamMemberPcrDeleteHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ManageTeamMemberProps;
   }): Promise<string> {
-    const existingPcls = await context.runQuery(new GetAllForProjectQuery(params.projectId));
-
-    const existingPcl = existingPcls.find(x => x.id === input.pclId);
-
-    if (!existingPcl) {
-      throw new NotFoundError("Cannot find PCL");
-    }
-
     const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(params.projectId));
 
     const matchedItem = itemTypes.find(t => t.type === PCRItemType.ManageTeamMembers);
