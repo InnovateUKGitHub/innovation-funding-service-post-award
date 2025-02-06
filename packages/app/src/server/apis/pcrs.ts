@@ -34,7 +34,7 @@ import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteP
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
-import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
+import { ApiParams, ControllerBaseWithSummary, RequestQueryParams, RequestUrlParams } from "./controllerBase";
 import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
 import { UpdatePcrRenamePartnerCommand } from "@server/features/pcrs/updatePcrRenamePartnerCommand";
 import { UpdatePcrRemovePartnerCommand } from "@server/features/pcrs/updatePcrRemovePartnerCommand";
@@ -58,6 +58,18 @@ import { CreatePcrUpdateTeamMemberCommand } from "@server/features/pcrs/createPc
 import { CreatePcrDeleteTeamMemberCommand } from "@server/features/pcrs/createPcrDeleteTeamMemberCommand";
 import { UpdatePcrAddPartnerCompanyDetailsCommand } from "@server/features/pcrs/updatePcrAddPartnerCompanyDetailsCommand";
 import { UpdatePcrAddPartnerOrganisationDetailsCommand } from "@server/features/pcrs/updatePcrAddPartnerOrganisationDetailsCommand";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ISessionUser } from "@framework/types/IUser";
+import { AuthorisedAsyncCommandBase } from "@server/features/common/commandBase";
+
+type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
+  Context,
+  { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; pcr: TDto }
+>;
+
+type PcrUpdateMethod<Context extends "client" | "server", TDto, TReturn> = (
+  params: PcrUpdateParams<Context, TDto>,
+) => Promise<TReturn>;
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
@@ -77,174 +89,6 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<PCRDto>;
 
-  addPartnerAcademicCosts(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAcademicCostsDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerAcademicOrganisation(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAcademicOrganisationDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerAgreementToPcr(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAgreementToPcrDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerCompanyDetails(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerCompanyDetailsDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerFinanceContact(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerFinanceContactDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerFundingLevel(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerFundingLevelDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerJesStep(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerJesStepDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerOtherFunding(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOtherFundingDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerOtherSourcesOfFunding(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOtherSourcesOfFundingDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerOrganisationDetails(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOrganisationDetailsDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerProjectManager(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerProjectManagerDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerProjectLocation(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerProjectLocationDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  addPartnerRoleAndOrganisation(
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerRoleAndOrganisationDto;
-      }
-    >,
-  ): Promise<boolean>;
-
-  changeDuration: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrItemId: PcrItemId;
-        pcrId: PcrId;
-        pcr: PcrChangeDurationDto;
-      }
-    >,
-  ) => Promise<boolean>;
-
   inviteTeamMember: (
     params: ApiParams<
       Context,
@@ -254,18 +98,6 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<{ id: PcrId }>;
-
-  loanDrawdownExtension: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrItemId: PcrItemId;
-        pcrId: PcrId;
-        pcr: LoanDrawdownExtensionDto;
-      }
-    >,
-  ) => Promise<boolean>;
 
   deleteTeamMember: (
     params: ApiParams<
@@ -297,53 +129,25 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<{ id: PcrId }>;
 
-  scopeChange: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrScopeChangeDto;
-      }
-    >,
-  ) => Promise<boolean>;
-
-  renamePartner: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrRenamePartnerDto;
-      }
-    >,
-  ) => Promise<boolean>;
-
-  removePartner: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrRemovePartnerDto;
-      }
-    >,
-  ) => Promise<boolean>;
-
-  suspendProject: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrSuspendProjectDto;
-      }
-    >,
-  ) => Promise<boolean>;
+  addPartnerAcademicCosts: PcrUpdateMethod<Context, PcrAddPartnerAcademicCostsDto, boolean>;
+  addPartnerAcademicOrganisation: PcrUpdateMethod<Context, PcrAddPartnerAcademicOrganisationDto, boolean>;
+  addPartnerAgreementToPcr: PcrUpdateMethod<Context, PcrAddPartnerAgreementToPcrDto, boolean>;
+  addPartnerCompanyDetails: PcrUpdateMethod<Context, PcrAddPartnerCompanyDetailsDto, boolean>;
+  addPartnerFinanceContact: PcrUpdateMethod<Context, PcrAddPartnerFinanceContactDto, boolean>;
+  addPartnerFundingLevel: PcrUpdateMethod<Context, PcrAddPartnerFundingLevelDto, boolean>;
+  addPartnerJesStep: PcrUpdateMethod<Context, PcrAddPartnerJesStepDto, boolean>;
+  addPartnerOtherFunding: PcrUpdateMethod<Context, PcrAddPartnerOtherFundingDto, boolean>;
+  addPartnerOtherSourcesOfFunding: PcrUpdateMethod<Context, PcrAddPartnerOtherSourcesOfFundingDto, boolean>;
+  addPartnerOrganisationDetails: PcrUpdateMethod<Context, PcrAddPartnerOrganisationDetailsDto, boolean>;
+  addPartnerProjectManager: PcrUpdateMethod<Context, PcrAddPartnerProjectManagerDto, boolean>;
+  addPartnerProjectLocation: PcrUpdateMethod<Context, PcrAddPartnerProjectLocationDto, boolean>;
+  addPartnerRoleAndOrganisation: PcrUpdateMethod<Context, PcrAddPartnerRoleAndOrganisationDto, boolean>;
+  changeDuration: PcrUpdateMethod<Context, PcrChangeDurationDto, boolean>;
+  loanDrawdownExtension: PcrUpdateMethod<Context, LoanDrawdownExtensionDto, boolean>;
+  scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
+  renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
+  removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
+  suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
 
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
@@ -405,213 +209,115 @@ class Controller
       (p, _, b: PCRDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
       this.update,
     );
+
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-costs",
-      (p, _, b: PcrAddPartnerAcademicCostsDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerAcademicCostsDto>,
       this.addPartnerAcademicCosts,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-organisation",
-      (p, _, b: PcrAddPartnerAcademicOrganisationDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerAcademicOrganisationDto>,
       this.addPartnerAcademicOrganisation,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/agreement-to-pcr",
-      (p, _, b: PcrAddPartnerAgreementToPcrDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerAgreementToPcrDto>,
       this.addPartnerAgreementToPcr,
     );
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/company-details",
-      (p, _, b: PcrAddPartnerCompanyDetailsDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerCompanyDetailsDto>,
       this.addPartnerCompanyDetails,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/finance-contact",
-      (p, _, b: PcrAddPartnerFinanceContactDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerFinanceContactDto>,
       this.addPartnerFinanceContact,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/funding-level",
-      (p, _, b: PcrAddPartnerFundingLevelDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerFundingLevelDto>,
       this.addPartnerFundingLevel,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/jes-step",
-      (p, _, b: PcrAddPartnerJesStepDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerJesStepDto>,
       this.addPartnerJesStep,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/other-funding",
-      (p, _, b: PcrAddPartnerOtherFundingDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerOtherFundingDto>,
       this.addPartnerOtherFunding,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/other-sources-of-funding",
-      (p, _, b: PcrAddPartnerOtherSourcesOfFundingDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerOtherSourcesOfFundingDto>,
       this.addPartnerOtherSourcesOfFunding,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/organisation-details",
-      (p, _, b: PcrAddPartnerOrganisationDetailsDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerOrganisationDetailsDto>,
       this.addPartnerOrganisationDetails,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/project-location",
-      (p, _, b: PcrAddPartnerProjectLocationDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerProjectLocationDto>,
       this.addPartnerProjectLocation,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/project-manager",
-      (p, _, b: PcrAddPartnerProjectManagerDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerProjectManagerDto>,
       this.addPartnerProjectManager,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/role-and-organisation",
-      (p, _, b: PcrAddPartnerRoleAndOrganisationDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrAddPartnerRoleAndOrganisationDto>,
       this.addPartnerRoleAndOrganisation,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/change-duration",
-      (p, _, b: PcrChangeDurationDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrChangeDurationDto>,
       this.changeDuration,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/loan-duration-extension",
-      (p, _, b: LoanDrawdownExtensionDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<LoanDrawdownExtensionDto>,
       this.loanDrawdownExtension,
     );
 
-    this.putItem(
-      "/:projectId/:pcrId/:pcrItemId/scope-change",
-      (p, _, b: PcrScopeChangeDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
-      this.scopeChange,
-    );
+    this.putItem("/:projectId/:pcrId/:pcrItemId/scope-change", requestParams<PcrScopeChangeDto>, this.scopeChange);
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/rename-partner",
-      (p, _, b: PcrRenamePartnerDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrRenamePartnerDto>,
       this.renamePartner,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/remove-partner",
-      (p, _, b: PcrRemovePartnerDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrRemovePartnerDto>,
       this.removePartner,
     );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/suspend-project",
-      (p, _, b: PcrSuspendProjectDto) => ({
-        projectId: p.projectId,
-        pcrId: p.pcrId,
-        pcrItemId: p.pcrItemId,
-        pcr: processDto(b),
-      }),
+      requestParams<PcrSuspendProjectDto>,
       this.suspendProject,
     );
 
@@ -650,426 +356,80 @@ class Controller
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
-  async addPartnerAcademicCosts(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAcademicCostsDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerAcademicCostsCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerAcademicCosts(params: PcrUpdateParams<"server", PcrAddPartnerAcademicCostsDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerAcademicCostsCommand(getParams(params)));
   }
 
-  async addPartnerAcademicOrganisation(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAcademicOrganisationDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerAcademicOrganisationCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerAcademicOrganisation(params: PcrUpdateParams<"server", PcrAddPartnerAcademicOrganisationDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerAcademicOrganisationCommand(getParams(params)));
   }
 
-  async addPartnerAgreementToPcr(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerAgreementToPcrDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerAgreementToPcrCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerAgreementToPcr(params: PcrUpdateParams<"server", PcrAddPartnerAgreementToPcrDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerAgreementToPcrCommand(getParams(params)));
   }
 
-  async addPartnerCompanyDetails(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerCompanyDetailsDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerCompanyDetailsCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerCompanyDetails(params: PcrUpdateParams<"server", PcrAddPartnerCompanyDetailsDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerCompanyDetailsCommand(getParams(params)));
   }
 
-  async addPartnerFinanceContact(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerFinanceContactDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerFinanceContactCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerFinanceContact(params: PcrUpdateParams<"server", PcrAddPartnerFinanceContactDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerFinanceContactCommand(getParams(params)));
   }
 
-  async addPartnerFundingLevel(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerFundingLevelDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerFundingLevelCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerFundingLevel(params: PcrUpdateParams<"server", PcrAddPartnerFundingLevelDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerFundingLevelCommand(getParams(params)));
   }
 
-  async addPartnerJesStep(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerJesStepDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerJesStepCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerJesStep(params: PcrUpdateParams<"server", PcrAddPartnerJesStepDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerJesStepCommand(getParams(params)));
   }
 
-  async addPartnerOtherFunding(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOtherFundingDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerOtherFundingCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerOtherFunding(params: PcrUpdateParams<"server", PcrAddPartnerOtherFundingDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerOtherFundingCommand(getParams(params)));
   }
 
-  async addPartnerOtherSourcesOfFunding(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOtherSourcesOfFundingDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerOtherSourcesOfFundingCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerOtherSourcesOfFunding(params: PcrUpdateParams<"server", PcrAddPartnerOtherSourcesOfFundingDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerOtherSourcesOfFundingCommand(getParams(params)));
   }
 
-  async addPartnerOrganisationDetails(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerOrganisationDetailsDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerOrganisationDetailsCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerOrganisationDetails(params: PcrUpdateParams<"server", PcrAddPartnerOrganisationDetailsDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerOrganisationDetailsCommand(getParams(params)));
   }
 
-  async addPartnerProjectLocation(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerProjectLocationDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerProjectLocationCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerProjectLocation(params: PcrUpdateParams<"server", PcrAddPartnerProjectLocationDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerProjectLocationCommand(getParams(params)));
   }
 
-  async addPartnerProjectManager(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerProjectManagerDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerProjectManagerCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerProjectManager(params: PcrUpdateParams<"server", PcrAddPartnerProjectManagerDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerProjectManagerCommand(getParams(params)));
   }
 
-  async addPartnerRoleAndOrganisation(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrAddPartnerRoleAndOrganisationDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrAddPartnerRoleAndOrganisationCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async addPartnerRoleAndOrganisation(params: PcrUpdateParams<"server", PcrAddPartnerRoleAndOrganisationDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerRoleAndOrganisationCommand(getParams(params)));
   }
 
-  async changeDuration(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrItemId: PcrItemId;
-        pcr: PcrChangeDurationDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrChangeDurationCommand({
-        projectId: params.projectId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async changeDuration(params: PcrUpdateParams<"server", PcrChangeDurationDto>) {
+    return await runUpdateCommand(params, new UpdatePcrChangeDurationCommand(getParams(params)));
   }
 
-  async loanDrawdownExtension(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrItemId: PcrItemId;
-        pcrId: PcrId;
-        pcr: LoanDrawdownExtensionDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrLoanDurationExtensionCommand({
-        projectId: params.projectId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {
+    return await runUpdateCommand(params, new UpdatePcrLoanDurationExtensionCommand(getParams(params)));
   }
 
-  async removePartner(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrRemovePartnerDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrRemovePartnerCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async removePartner(params: PcrUpdateParams<"server", PcrRemovePartnerDto>) {
+    return await runUpdateCommand(params, new UpdatePcrRemovePartnerCommand(getParams(params)));
   }
 
-  async renamePartner(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrRenamePartnerDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
+  async renamePartner(params: PcrUpdateParams<"server", PcrRenamePartnerDto>) {
+    return await runUpdateCommand(params, new UpdatePcrRenamePartnerCommand(getParams(params)));
+  }
 
-    await context.runCommand(
-      new UpdatePcrRenamePartnerCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
+  async scopeChange(params: PcrUpdateParams<"server", PcrScopeChangeDto>) {
+    return await runUpdateCommand(params, new UpdatePcrScopeChangeCommand(getParams(params)));
+  }
+
+  async suspendProject(params: PcrUpdateParams<"server", PcrSuspendProjectDto>) {
+    return await runUpdateCommand(params, new UpdatePcrSuspendProjectCommand(getParams(params)));
   }
 
   async deleteTeamMember(
@@ -1156,56 +516,6 @@ class Controller
     return res;
   }
 
-  async scopeChange(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrScopeChangeDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrScopeChangeCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
-  }
-
-  async suspendProject(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        pcrId: PcrId;
-        pcrItemId: PcrItemId;
-        pcr: PcrSuspendProjectDto;
-      }
-    >,
-  ): Promise<boolean> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePcrSuspendProjectCommand({
-        projectId: params.projectId,
-        pcrId: params.pcrId,
-        pcrItemId: params.pcrItemId,
-        pcr: params.pcr,
-        form: params.pcr.form,
-      }),
-    );
-    return true;
-  }
-
   async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
     return (await contextProvider.start(params)).runCommand(command);
@@ -1213,3 +523,47 @@ class Controller
 }
 
 export const controller = new Controller();
+
+/**
+ * Runs an AuthorisedAsyncCommandBase with the given parameters and returns true if the command
+ * runs successfully. The command is run in a context started with the provided parameters.
+ */
+async function runUpdateCommand(
+  params: { user: ISessionUser; traceId: string },
+  command: AuthorisedAsyncCommandBase<boolean>,
+) {
+  const context = await contextProvider.start(params);
+  await context.runCommand(command);
+
+  return true;
+}
+
+/**
+ * generates params to pass from the request to the request controller
+ */
+function requestParams<T>(p: RequestUrlParams, q: RequestQueryParams, b: T) {
+  return {
+    projectId: p.projectId,
+    pcrId: p.pcrId,
+    pcrItemId: p.pcrItemId,
+    pcr: processDto(b),
+  };
+}
+
+/**
+ * generates params to pass from the request controller to the command
+ */
+function getParams<T extends { form: FormTypes }>(params: {
+  projectId: ProjectId;
+  pcrId: PcrId;
+  pcrItemId: PcrItemId;
+  pcr: T;
+}) {
+  return {
+    projectId: params.projectId,
+    pcrId: params.pcrId,
+    pcrItemId: params.pcrItemId,
+    pcr: params.pcr,
+    form: params.pcr.form as T extends { form: infer TForm } ? TForm : never,
+  };
+}
