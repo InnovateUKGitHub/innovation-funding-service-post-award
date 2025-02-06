@@ -1,0 +1,16 @@
+{
+  "name": "@innovateuk/salesforce-sandbox-refresh",
+  "private": true,
+  "main": "src/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@innovateuk/environment-manager": "*",
+    "@innovateuk/salesforce-deluxe": "*"
+  },
+  "peerDependencies": {
+    "@salesforce/cli": "^2.74.6"
+  },
+  "scripts": {
+    "salesforce-sandbox-refresh": "node src/"
+  }
+}

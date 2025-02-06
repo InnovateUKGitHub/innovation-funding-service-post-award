@@ -18,7 +18,7 @@
     "lint:staged": "lint-staged",
     "report:mac": "open mochawesome-report/mochawesome.html",
     "postinstall": "patch-package",
-    "typecheck": "tsc --watch --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
