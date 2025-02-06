@@ -5,3 +5,7 @@ node_modules/
 /playwright/.cache/
 /.features-gen/
 playwright/.auth
+/src/components/testFiles/11MB_1.txt
+/src/components/testFiles/11MB_2.txt
+/src/components/testFiles/11MB_3.txt
+/src/components/testFiles/Biggun.txt

@@ -45,7 +45,13 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+<<<<<<< HEAD
     baseURL: envman.getEnv("SERVER_URL"),
+=======
+    baseURL: "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org",
+    //baseURL: "https://www-acc-at.apps.ocp4.innovateuk.ukri.org",
+    // baseURL: "http://127.0.0.1:3000",
+>>>>>>> bdf503e23 (ACC-11800: (pw) revert unwanted changes)
     httpCredentials,
     trace: "on-first-retry",
     testIdAttribute: "data-qa",
