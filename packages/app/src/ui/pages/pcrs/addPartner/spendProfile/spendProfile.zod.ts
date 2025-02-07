@@ -43,7 +43,7 @@ export const overheadSchema = evaluateObject(
   (data: { overheadRate: PCRSpendProfileOverheadRate; button_submit: string }) => {
     return {
       id: costIdValidation.nullable(),
-      form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadCost),
+      form: z.literal(FormTypes.PcrAddPartnerProjectCostOverhead),
       overheadRate: z.coerce.number().transform(x => x as PCRSpendProfileOverheadRate),
       calculatedValue: getGenericCurrencyValidation({
         required:
@@ -51,6 +51,7 @@ export const overheadSchema = evaluateObject(
       }),
       button_submit: z.string(),
       costCategoryType: z.nativeEnum(CostCategoryType),
+      costCategoryId: costCategoryIdValidation,
     };
   },
 ).superRefine((data, ctx) => {
@@ -72,7 +73,7 @@ export type OverheadSchemaType = typeof overheadSchema;
 export type OverheadSchema = z.infer<typeof overheadSchema>;
 
 export const overheadDocumentsSchema = z.object({
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocuments),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostOverheadDocuments),
 });
 
 export type OverheadDocumentsSchemaType = typeof overheadDocumentsSchema;

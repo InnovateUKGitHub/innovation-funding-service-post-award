@@ -7,8 +7,8 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { Form } from "@ui/components/atoms/form/Form/Form";
-import { useContext, useMemo } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { useContext, useEffect, useMemo } from "react";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OverheadSchema, overheadSchema, errorMap } from "./spendProfile.zod";
@@ -33,6 +33,7 @@ import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateOverheads } from "./overheads.logic";
 
 const isOverheadsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -43,9 +44,7 @@ const isOverheadsCostDto = function (
 export const OverheadsFormComponent = ({}) => {
   const {
     cost,
-    isFetching,
     costCategory,
-    onUpdate,
     routes,
     pcrId,
     projectId,
@@ -104,8 +103,9 @@ export const OverheadsFormComponent = ({}) => {
       calculatedValue: defaultCost.value ? String(defaultCost.value) : null,
       overheadRate: defaultCost?.overheadRate ?? PCRSpendProfileOverheadRate.Unknown,
       button_submit: "submit",
-      form: FormTypes.PcrAddPartnerSpendProfileOverheadCost,
+      form: FormTypes.PcrAddPartnerProjectCostOverhead,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(overheadSchema, {
       errorMap,
@@ -156,30 +156,24 @@ export const OverheadsFormComponent = ({}) => {
 
   const calculatedTotalCost = getOverheadsCostValue(overheadRate);
 
-  useFormRevalidate(watch, trigger);
+  useEffect(() => {
+    if (overheadRate === PCRSpendProfileOverheadRate.Twenty) {
+      setValue("calculatedValue", String(calculatedTotalCost));
+    } else if (overheadRate === PCRSpendProfileOverheadRate.Zero) {
+      setValue("calculatedValue", String(0));
+    } else if (overheadRate === PCRSpendProfileOverheadRate.Calculated) {
+      setValue("calculatedValue", defaultCost.value ? String(defaultCost.value) : "");
+    }
+  }, [overheadRate]);
 
+  useFormRevalidate(watch, trigger);
+  const { apiError, onUpdate, isFetching } = useOnUpdateOverheads();
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  ...data,
-                  id: data.id ?? ("" as CostId),
-                  description: "",
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  overheadRate: Number(data.overheadRate),
-                  value:
-                    typeof data.calculatedValue === "string" && data.calculatedValue.trim().length > 0
-                      ? parseCurrency(data.calculatedValue)
-                      : 0,
-                }),
-              },
-            },
+            data,
             context: {
               link: data.button_submit === "uploadDocuments" ? getUploadDocumentsLink() : stepRoute,
             },
@@ -188,9 +182,10 @@ export const OverheadsFormComponent = ({}) => {
         data-qa="overheadsForm"
       >
         <Fieldset data-qa="overhead-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOverheadCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostOverhead} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
           <FormGroup hasError={!!validationErrors.overheadRate}>
             <ValidationError error={validationErrors?.overheadRate} />
             <RadioList register={register} name="overheadRate">

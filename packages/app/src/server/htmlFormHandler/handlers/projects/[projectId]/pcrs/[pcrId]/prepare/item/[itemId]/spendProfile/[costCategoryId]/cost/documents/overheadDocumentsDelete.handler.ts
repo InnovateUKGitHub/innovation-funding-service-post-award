@@ -12,7 +12,7 @@ import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumen
 import { z } from "zod";
 
 const deleteSchema = z.object({
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostOverheadDocumentsDelete),
   documentId: z.string(),
 });
 type DeleteSchema = typeof deleteSchema;
@@ -21,7 +21,7 @@ class OverheadDocumentsDeleteHandler extends ZodFormHandlerBase<DeleteSchema, Ov
   constructor() {
     super({
       routes: [PCRSpendProfileOverheadDocumentRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete],
+      forms: [FormTypes.PcrAddPartnerProjectCostOverheadDocumentsDelete],
     });
   }
 

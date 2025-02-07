@@ -612,3 +612,10 @@ export interface PcrAddPartnerProjectCostSubcontractingDto extends PcrAddPartner
   subcontractorCost: string | null;
   form: FormTypes.PcrAddPartnerProjectCostSubcontracting;
 }
+
+export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjectCost {
+  overheadRate: number;
+  calculatedValue: string | null;
+  form: FormTypes.PcrAddPartnerProjectCostOverhead;
+  button_submit: string;
+}

@@ -132,7 +132,7 @@ type OverheadDocumentUploadSchemaType = ReturnType<typeof getOverheadDocumentUpl
 
 const getOverheadDocumentUpload = ({ config }: { config: IAppOptions }) =>
   z.object({
-    form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload),
+    form: z.literal(FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload),
     projectId: projectIdValidation,
     projectChangeRequestIdOrItemId: pcrItemIdValidation,
     description: z.union([
@@ -195,7 +195,7 @@ const pcrLevelDelete = z.object({
 });
 
 const overheadDocumentDelete = z.object({
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostOverheadDocumentsDelete),
   projectId: projectIdValidation,
   projectChangeRequestIdOrItemId: z.union([pcrItemIdValidation, pcrIdValidation]),
   documentId: z.string(),

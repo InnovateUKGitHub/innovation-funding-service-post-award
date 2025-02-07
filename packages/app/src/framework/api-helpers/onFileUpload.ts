@@ -22,7 +22,7 @@ type InputOptions =
   | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>)
   | ({ form: FormTypes.LoanLevelUpload } & z.output<LoanLevelUploadSchemaType>)
   | ({ form: FormTypes.ProjectSetupBankStatementUpload } & z.output<UploadBankStatementSchemaType>)
-  | ({ form: FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload } & z.output<OverheadDocumentUploadSchemaType>);
+  | ({ form: FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload } & z.output<OverheadDocumentUploadSchemaType>);
 
 const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
   data.form === FormTypes.ProjectLevelUpload;
@@ -43,7 +43,7 @@ const isBankStatementUpload = (data: InputOptions): data is z.output<UploadBankS
   data.form === FormTypes.ProjectSetupBankStatementUpload;
 
 const isOverheadDocumentUpload = (data: InputOptions): data is z.output<OverheadDocumentUploadSchemaType> =>
-  data.form === FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload;
+  data.form === FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload;
 
 export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();

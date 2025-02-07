@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { errorMap, OverheadSchemaType, overheadSchema } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
@@ -13,8 +12,8 @@ import {
 import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 import { PCRSpendProfileOverheadDocumentRoute } from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
+import { PcrSpendProfileOverheadRateMapper } from "@framework/mappers/spendProfileOverheadMapper";
 
 export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHandlerBase<
   OverheadSchemaType,
@@ -23,7 +22,7 @@ export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHa
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileOverheadCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostOverhead],
     });
   }
 
@@ -46,6 +45,7 @@ export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHa
       overheadRate: input.overheadRate,
       calculatedValue: input.calculatedValue,
       button_submit: input.button_submit,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -66,26 +66,23 @@ export class PcrItemAddPartnerSpendProfileOverheadCostsHandler extends ZodFormHa
         costCategoryId: params.costCategoryId,
       }).path;
     }
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_OverheadRate__c: new PcrSpendProfileOverheadRateMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(
+        input.overheadRate,
+      ),
+      Acc_TotalCost__c: parseCurrency(input.calculatedValue),
+    };
 
-    spendProfile.costs.push({
-      description: "",
-      costCategory: input.costCategoryType,
-      id: input.id as CostId,
-      costCategoryId: params.costCategoryId,
-      overheadRate: Number(input.overheadRate),
-      value:
-        typeof input.calculatedValue === "string" && input.calculatedValue.trim().length > 0
-          ? parseCurrency(input.calculatedValue)
-          : 0,
-    }),
-      await updatePcrItem({
-        params,
-        context,
-        data: {
-          spendProfile,
-        },
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
       });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

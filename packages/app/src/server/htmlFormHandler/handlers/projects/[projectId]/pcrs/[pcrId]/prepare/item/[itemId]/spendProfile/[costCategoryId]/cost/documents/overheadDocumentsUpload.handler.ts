@@ -23,7 +23,7 @@ class OverheadDocumentsUploadHandler extends ZodFormHandlerBase<
   constructor() {
     super({
       routes: [PCRSpendProfileOverheadDocumentRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload],
+      forms: [FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload],
     });
   }
 
@@ -41,7 +41,7 @@ class OverheadDocumentsUploadHandler extends ZodFormHandlerBase<
     files: ServerFileWrapper[];
   }): Promise<z.input<OverheadDocumentUploadSchemaType>> {
     return {
-      form: FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload,
+      form: FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload,
       files,
       description: input.description,
       projectId: input.projectId,

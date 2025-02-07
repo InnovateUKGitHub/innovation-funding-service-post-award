@@ -5,7 +5,7 @@ export class PcrSpendProfileOverheadRateMapper {
     zero: "0%",
     twenty: "20%",
     calculated: "Calculated",
-  };
+  } as const;
 
   public mapFromSalesforcePcrSpendProfileOverheadRateOption = (
     option: string | undefined,

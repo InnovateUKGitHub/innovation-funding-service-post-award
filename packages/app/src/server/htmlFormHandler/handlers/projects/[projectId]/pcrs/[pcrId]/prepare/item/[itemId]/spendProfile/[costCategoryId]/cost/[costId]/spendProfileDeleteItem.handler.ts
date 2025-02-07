@@ -12,7 +12,7 @@ import {
   PCRSpendProfileDeleteCostRoute,
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
 
-const emptySchema = z.object({ form: z.literal(FormTypes.PcrAddPartnerSPendProfileDeleteItem) });
+const emptySchema = z.object({ form: z.literal(FormTypes.PcrAddPartnerProjectCostDeleteItem) });
 type EmptySchema = typeof emptySchema;
 
 export class PcrItemAddPartnerSpendProfileDeleteItemHandler extends ZodFormHandlerBase<
@@ -22,7 +22,7 @@ export class PcrItemAddPartnerSpendProfileDeleteItemHandler extends ZodFormHandl
   constructor() {
     super({
       routes: [PCRSpendProfileDeleteCostRoute],
-      forms: [FormTypes.PcrAddPartnerSPendProfileDeleteItem],
+      forms: [FormTypes.PcrAddPartnerProjectCostDeleteItem],
     });
   }
 

@@ -17,7 +17,7 @@ class OverheadDocumentsHandler extends ZodFormHandlerBase<OverheadDocumentsSchem
   constructor() {
     super({
       routes: [PCRSpendProfileOverheadDocumentRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileOverheadDocuments],
+      forms: [FormTypes.PcrAddPartnerProjectCostOverheadDocuments],
     });
   }
 

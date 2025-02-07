@@ -119,7 +119,7 @@ const SpendProfileDeleteCostPage = ({
             }),
           )}
         >
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSPendProfileDeleteItem} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostDeleteItem} />
           <input type="hidden" name="id" value={cost?.id} />
           <SwitchComponent cost={cost} costCategory={costCategory} />
           <Fieldset>

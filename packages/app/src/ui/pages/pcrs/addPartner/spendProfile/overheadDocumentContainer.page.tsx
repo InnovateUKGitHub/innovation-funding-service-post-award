@@ -104,7 +104,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
 
   const { handleSubmit: handleFormSubmit, setError } = useForm<OverheadDocumentsSchema>({
     defaultValues: {
-      form: FormTypes.PcrAddPartnerSpendProfileOverheadDocuments,
+      form: FormTypes.PcrAddPartnerProjectCostOverheadDocuments,
     },
   });
 
@@ -163,7 +163,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
             <input type="hidden" value={itemId} {...register("projectChangeRequestIdOrItemId")} />
             <input
               type="hidden"
-              value={FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsUpload}
+              value={FormTypes.PcrAddPartnerProjectCostOverheadDocumentsUpload}
               {...register("form")}
             />
 
@@ -205,7 +205,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
             })
           }
           documents={documents}
-          formType={FormTypes.PcrAddPartnerSpendProfileOverheadDocumentsDelete}
+          formType={FormTypes.PcrAddPartnerProjectCostOverheadDocumentsDelete}
           disabled={disabled}
         />
       </Section>
@@ -217,7 +217,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
           }),
         )}
       >
-        <input type="hidden" value={FormTypes.PcrAddPartnerSpendProfileOverheadDocuments} name="form" />
+        <input type="hidden" value={FormTypes.PcrAddPartnerProjectCostOverheadDocuments} name="form" />
         <Fieldset>
           <Button disabled={disabled} type="submit">
             {getContent(x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit)}
