@@ -604,3 +604,11 @@ export interface PcrAddPartnerProjectCostTravelAndSubsistenceDto extends PcrAddP
   form: FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence;
   totalCost: number;
 }
+
+export interface PcrAddPartnerProjectCostSubcontractingDto extends PcrAddPartnerProjectCost {
+  subcontractorName: string;
+  subcontractorCountry: string;
+  subcontractorRoleAndDescription: string;
+  subcontractorCost: string | null;
+  form: FormTypes.PcrAddPartnerProjectCostSubcontracting;
+}

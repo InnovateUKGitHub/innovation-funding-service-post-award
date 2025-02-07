@@ -8,7 +8,7 @@ import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SubcontractingSchema, subcontractingSchema, errorMap } from "./spendProfile.zod";
 import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
@@ -18,9 +18,9 @@ import { Button } from "@ui/components/atoms/form/Button/Button";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/molecules/form/Field/Field";
 import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
-import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateSubcontracting } from "./subcontracting.logic";
 
 const isSubcontractingCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -32,19 +32,8 @@ const isSubcontractingCostDto = function (
 };
 
 export const SubcontractingFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultValues: MaybeNewCostDto<PCRSpendProfileSubcontractingCostDto>;
 
@@ -71,8 +60,9 @@ export const SubcontractingFormComponent = () => {
       subcontractorCountry: defaultValues.subcontractorCountry ?? "",
       subcontractorRoleAndDescription: defaultValues.subcontractorRoleAndDescription ?? "",
       subcontractorCost: String(defaultValues.value ?? ""),
-      form: FormTypes.PcrAddPartnerSpendProfileSubcontractingCost,
+      form: FormTypes.PcrAddPartnerProjectCostSubcontracting,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(subcontractingSchema, {
       errorMap,
@@ -83,32 +73,22 @@ export const SubcontractingFormComponent = () => {
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<SubcontractingSchema>;
 
+  const { isFetching, onUpdate, apiError } = useOnUpdateSubcontracting();
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  ...data,
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  description: data?.subcontractorName,
-                  value: parseCurrency(data.subcontractorCost),
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
       >
         <Fieldset data-qa="subcontracting-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileSubcontractingCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostSubcontracting} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
 
           <Field
             error={validationErrors?.subcontractorName}

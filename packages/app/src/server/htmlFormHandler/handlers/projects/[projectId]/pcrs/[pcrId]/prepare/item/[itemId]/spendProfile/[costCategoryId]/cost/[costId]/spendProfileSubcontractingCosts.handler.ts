@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   errorMap,
   SubcontractingSchemaType,
@@ -17,7 +16,6 @@ import {
 import { parseCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileSubcontractingCostsHandler extends ZodFormHandlerBase<
   SubcontractingSchemaType,
@@ -26,7 +24,7 @@ export class PcrItemAddPartnerSpendProfileSubcontractingCostsHandler extends Zod
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileSubcontractingCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostSubcontracting],
     });
   }
 
@@ -50,6 +48,7 @@ export class PcrItemAddPartnerSpendProfileSubcontractingCostsHandler extends Zod
       subcontractorCountry: input.subcontractorCountry,
       subcontractorRoleAndDescription: input.subcontractorRoleAndDescription,
       subcontractorCost: input.subcontractorCost,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -62,25 +61,23 @@ export class PcrItemAddPartnerSpendProfileSubcontractingCostsHandler extends Zod
     context: IContext;
     params: PcrAddSpendProfileCostParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_Country__c: input.subcontractorCountry,
+      Acc_RoleAndDescription__c: input.subcontractorRoleAndDescription,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_ItemDescription__c: input.subcontractorName,
+      Acc_TotalCost__c: parseCurrency(input.subcontractorCost),
+    };
 
-    spendProfile.costs.push({
-      costCategory: input.costCategoryType,
-      id: input.id as CostId,
-      costCategoryId: params.costCategoryId,
-      description: input.subcontractorName,
-      subcontractorRoleAndDescription: input.subcontractorRoleAndDescription,
-      subcontractorCountry: input.subcontractorCountry,
-      value: parseCurrency(input.subcontractorCost),
-    });
-
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile,
-      },
-    });
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
+      });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,
