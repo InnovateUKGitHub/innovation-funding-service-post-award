@@ -27,7 +27,7 @@ import { MonitoringReportWorkflowRoute } from "@ui/pages/monitoringReports/workf
 import { PCRSpendProfileOverheadDocumentRoute } from "@ui/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import { PCRSpendProfileReviewCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummaryReview.page";
-import { PCRSpendProfileDeleteCostRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
+import { PCRSpendProfileDeleteCostRoute } from "@ui/pages/pcrs/addPartner/spendProfile/deleteProjectCost.page";
 import {
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,

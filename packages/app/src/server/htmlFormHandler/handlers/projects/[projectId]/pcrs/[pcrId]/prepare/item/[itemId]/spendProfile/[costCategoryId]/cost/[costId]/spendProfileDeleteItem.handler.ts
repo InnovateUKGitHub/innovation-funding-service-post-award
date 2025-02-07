@@ -2,22 +2,19 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { errorMap } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
-
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 import {
-  PcrDeleteSpendProfileCostParams,
+  PcrDeleteProjectCostParams,
   PCRSpendProfileDeleteCostRoute,
-} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
+} from "@ui/pages/pcrs/addPartner/spendProfile/deleteProjectCost.page";
 
 const emptySchema = z.object({ form: z.literal(FormTypes.PcrAddPartnerProjectCostDeleteItem) });
 type EmptySchema = typeof emptySchema;
 
 export class PcrItemAddPartnerSpendProfileDeleteItemHandler extends ZodFormHandlerBase<
   EmptySchema,
-  PcrDeleteSpendProfileCostParams
+  PcrDeleteProjectCostParams
 > {
   constructor() {
     super({
@@ -41,29 +38,8 @@ export class PcrItemAddPartnerSpendProfileDeleteItemHandler extends ZodFormHandl
     };
   }
 
-  protected async run({
-    context,
-    params,
-  }: {
-    context: IContext;
-    params: PcrDeleteSpendProfileCostParams;
-  }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
-
-    const itemIndex = spendProfile.costs.findIndex(x => x.id === params.costId);
-
-    const nextCosts = [...spendProfile.costs.slice(0, itemIndex), ...spendProfile.costs.slice(itemIndex + 1)];
-
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile: {
-          ...spendProfile,
-          costs: nextCosts,
-        },
-      },
-    });
+  protected async run({ context, params }: { context: IContext; params: PcrDeleteProjectCostParams }): Promise<string> {
+    context.repositories.pcrSpendProfile.deleteSingleItem(params.costId);
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

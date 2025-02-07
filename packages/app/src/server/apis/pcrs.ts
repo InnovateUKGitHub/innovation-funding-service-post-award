@@ -77,6 +77,7 @@ import { UpdatePcrAddPartnerProjectCostCapitalUsageCommand } from "@server/featu
 import { UpdatePcrAddPartnerProjectCostTravelAndSubsistenceCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostTravelAndSubsistenceCommand";
 import { UpdatePcrAddPartnerProjectCostSubcontractingCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostSubcontractingCommand";
 import { UpdatePcrAddPartnerProjectCostOverheadCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostOverheadCommand";
+import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPartnerProjectCostCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -176,7 +177,9 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
-
+  deleteProjectCost: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
+  ) => Promise<boolean>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
 }
 
@@ -395,6 +398,12 @@ class Controller
       "/:projectId/:pcrId/:pcrItemId/suspend-project",
       requestParams<PcrSuspendProjectDto>,
       this.suspendProject,
+    );
+
+    this.deleteItem(
+      "/:projectId/:pcrId/:pcrItemId/:costId",
+      p => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, costId: p.costId as CostId }),
+      this.deleteProjectCost,
     );
 
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
@@ -634,6 +643,15 @@ class Controller
   async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
     return (await contextProvider.start(params)).runCommand(command);
+  }
+
+  async deleteProjectCost(
+    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
+  ): Promise<boolean> {
+    return await runUpdateCommand(
+      params,
+      new DeleteProjectCostCommand(params.projectId, params.pcrId, params.pcrItemId, params.costId),
+    );
   }
 }
 

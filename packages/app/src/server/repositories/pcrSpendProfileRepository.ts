@@ -62,6 +62,7 @@ export interface IPcrSpendProfileRepository {
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   updateSingleItem(item: PickRequiredFromPartial<ISalesforcePcrSpendProfile, "Id">): Promise<void>;
   deleteSpendProfiles(items: string[]): Promise<void>;
+  deleteSingleItem(item: string): Promise<void>;
   getCapitalUsageTypes(): Promise<IPicklistEntry[]>;
   getOverheadRateOptions(): Promise<IPicklistEntry[]>;
 }
@@ -151,6 +152,10 @@ export class PcrSpendProfileRepository
 
   public async deleteSpendProfiles(ids: string[]) {
     return super.deleteAll(ids);
+  }
+
+  public async deleteSingleItem(id: string) {
+    return super.deleteItem(id);
   }
 
   getCapitalUsageTypes(): Promise<IPicklistEntry[]> {
