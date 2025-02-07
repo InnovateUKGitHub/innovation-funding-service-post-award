@@ -596,3 +596,11 @@ export interface PcrAddPartnerProjectCostCapitalUsageDto extends PcrAddPartnerPr
   utilisation: number;
   form: FormTypes.PcrAddPartnerProjectCostCapitalUsage;
 }
+
+export interface PcrAddPartnerProjectCostTravelAndSubsistenceDto extends PcrAddPartnerProjectCost {
+  descriptionOfCost: string;
+  numberOfTimes: number;
+  costOfEach: string | null;
+  form: FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence;
+  totalCost: number;
+}

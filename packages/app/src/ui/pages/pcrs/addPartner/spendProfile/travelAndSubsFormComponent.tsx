@@ -6,7 +6,7 @@ import {
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +28,7 @@ import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateTravelAndSubsistence } from "./travelAndSubs.logic";
 
 const isTravelAndSubsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -36,19 +37,8 @@ const isTravelAndSubsCostDto = function (
 };
 
 export const TravelAndSubsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileTravelAndSubsCostDto>;
@@ -76,8 +66,9 @@ export const TravelAndSubsFormComponent = () => {
       numberOfTimes: defaultCost.numberOfTimes ?? undefined,
       costOfEach: String(defaultCost.costOfEach ?? ""),
       totalCost: defaultCost.value ?? 0,
-      form: FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost,
+      form: FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(travelAndASubsistenceSchema, {
       errorMap,
@@ -94,33 +85,23 @@ export const TravelAndSubsFormComponent = () => {
   ) as ValidationErrorType<TravelAndASubsistenceSchema>;
   useFormRevalidate(watch, trigger);
 
+  const { apiError, isFetching, onUpdate } = useOnUpdateTravelAndSubsistence();
+
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  id: data.id ?? ("" as CostId),
-                  description: data.descriptionOfCost,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  numberOfTimes: Number(data.numberOfTimes),
-                  costOfEach: parseCurrency(data.costOfEach),
-                  value: totalCost,
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
       >
         <Fieldset data-qa="travel-and-subs-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
 
           <Field
             error={validationErrors.descriptionOfCost}

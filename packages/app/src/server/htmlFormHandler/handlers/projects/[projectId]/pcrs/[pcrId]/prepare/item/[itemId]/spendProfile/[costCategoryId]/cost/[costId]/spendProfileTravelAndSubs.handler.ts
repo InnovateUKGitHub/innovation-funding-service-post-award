@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   errorMap,
   TravelAndSubsistenceSchemaType,
@@ -14,10 +13,9 @@ import {
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodFormHandlerBase<
   TravelAndSubsistenceSchemaType,
@@ -26,7 +24,7 @@ export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodF
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence],
     });
   }
 
@@ -50,6 +48,7 @@ export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodF
       numberOfTimes: input.numberOfTimes,
       costOfEach: input.costOfEach,
       totalCost,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -62,26 +61,23 @@ export class PcrItemAddPartnerSpendProfileTravelAndSubsCostsHandler extends ZodF
     context: IContext;
     params: PcrAddSpendProfileCostParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_ItemDescription__c: input.descriptionOfCost,
+      Acc_NumberOfTimes__c: input.numberOfTimes,
+      Acc_CostEach__c: parseCurrency(input.costOfEach),
+      Acc_TotalCost__c: roundCurrency(parseCurrency(input.costOfEach) * input.numberOfTimes),
+    };
 
-    const totalCost = Number(input.numberOfTimes ?? 0) * parseCurrency(input.costOfEach ?? 0);
-    spendProfile.costs.push({
-      costCategory: input.costCategoryType,
-      id: input.id as CostId,
-      costCategoryId: params.costCategoryId,
-      description: input.descriptionOfCost,
-      numberOfTimes: Number(input.numberOfTimes),
-      costOfEach: parseCurrency(input.costOfEach),
-      value: totalCost,
-    });
-
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile,
-      },
-    });
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
+      });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

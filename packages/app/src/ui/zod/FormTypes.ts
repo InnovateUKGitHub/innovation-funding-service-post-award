@@ -114,7 +114,7 @@ enum FormTypes {
   PcrAddPartnerProjectCostMaterials = "pcrAddPartnerProjectCostMaterials",
   PcrAddPartnerProjectCostCapitalUsage = "pcrAddPartnerProjectCostCapitalUsage",
   PcrAddPartnerSpendProfileSubcontractingCost = "pcrAddPartnerSpendProfileSubcontractingCost",
-  PcrAddPartnerSpendProfileTravelAndSubsistenceCost = "pcrAddPartnerSpendProfileTravelAndSubsistenceCost",
+  PcrAddPartnerProjectCostTravelAndSubsistence = "pcrAddPartnerProjectCostTravelAndSubsistence",
   PcrAddPartnerProjectCostOtherCost = "pcrAddPartnerProjectCostOther",
   PcrAddPartnerSPendProfileDeleteItem = "pcrAddPartnerSpendProfileDeleteItem",
 

@@ -149,8 +149,9 @@ export const travelAndASubsistenceSchema = z
       required: true,
     }),
     totalCost: z.number(),
-    form: z.literal(FormTypes.PcrAddPartnerSpendProfileTravelAndSubsistenceCost),
+    form: z.literal(FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence),
     costCategoryType: z.nativeEnum(CostCategoryType),
+    costCategoryId: costCategoryIdValidation,
   })
   .superRefine((data, ctx) => {
     const totalCost = data.numberOfTimes * parseCurrency(data.costOfEach);

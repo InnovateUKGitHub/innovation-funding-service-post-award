@@ -32,6 +32,7 @@ import type {
   PcrAddPartnerProjectCostLabourDto,
   PcrAddPartnerProjectCostMaterialsDto,
   PcrAddPartnerProjectCostCapitalUsageDto,
+  PcrAddPartnerProjectCostTravelAndSubsistenceDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -71,6 +72,7 @@ import { UpdatePcrAddPartnerProjectCostOtherCommand } from "@server/features/pcr
 import { UpdatePcrAddPartnerProjectCostLabourCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostLabourCommand";
 import { UpdatePcrAddPartnerProjectCostMaterialsCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostMaterialsCommand";
 import { UpdatePcrAddPartnerProjectCostCapitalUsageCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostCapitalUsageCommand";
+import { UpdatePcrAddPartnerProjectCostTravelAndSubsistenceCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostTravelAndSubsistenceCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -157,6 +159,11 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   addPartnerProjectCostLabour: PcrUpdateMethod<Context, PcrAddPartnerProjectCostLabourDto, boolean>;
   addPartnerProjectCostMaterials: PcrUpdateMethod<Context, PcrAddPartnerProjectCostMaterialsDto, boolean>;
   addPartnerProjectCostOtherCost: PcrUpdateMethod<Context, PcrAddPartnerProjectCostOtherCostDto, boolean>;
+  addPartnerProjectCostTravelAndSubsistence: PcrUpdateMethod<
+    Context,
+    PcrAddPartnerProjectCostTravelAndSubsistenceDto,
+    boolean
+  >;
   changeDuration: PcrUpdateMethod<Context, PcrChangeDurationDto, boolean>;
   loanDrawdownExtension: PcrUpdateMethod<Context, LoanDrawdownExtensionDto, boolean>;
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
@@ -335,6 +342,12 @@ class Controller
     );
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/project-cost/travel-and-subsistence",
+      requestParams<PcrAddPartnerProjectCostTravelAndSubsistenceDto>,
+      this.addPartnerProjectCostTravelAndSubsistence,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/change-duration",
       requestParams<PcrChangeDurationDto>,
       this.changeDuration,
@@ -471,6 +484,15 @@ class Controller
 
   async addPartnerProjectCostOtherCost(params: PcrUpdateParams<"server", PcrAddPartnerProjectCostOtherCostDto>) {
     return await runUpdateCommand(params, new UpdatePcrAddPartnerProjectCostOtherCommand(getParams(params)));
+  }
+
+  async addPartnerProjectCostTravelAndSubsistence(
+    params: PcrUpdateParams<"server", PcrAddPartnerProjectCostTravelAndSubsistenceDto>,
+  ) {
+    return await runUpdateCommand(
+      params,
+      new UpdatePcrAddPartnerProjectCostTravelAndSubsistenceCommand(getParams(params)),
+    );
   }
 
   async changeDuration(params: PcrUpdateParams<"server", PcrChangeDurationDto>) {
