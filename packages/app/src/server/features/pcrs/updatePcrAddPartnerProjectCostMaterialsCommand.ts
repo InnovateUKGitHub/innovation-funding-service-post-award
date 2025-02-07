@@ -1,24 +1,28 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { PcrAddPartnerProjectCostLabourDto } from "@framework/dtos/pcrDtos";
+import { PcrAddPartnerProjectCostMaterialsDto } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { errorMap, LabourSchemaType, labourSchema } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
+import {
+  errorMap,
+  MaterialsSchemaType,
+  materialsSchema,
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 
-export class UpdatePcrAddPartnerProjectCostLabourCommand extends ZodAuthorisedAsyncCommandBase<
+export class UpdatePcrAddPartnerProjectCostMaterialsCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  LabourSchemaType,
-  PcrAddPartnerProjectCostLabourDto
+  MaterialsSchemaType,
+  PcrAddPartnerProjectCostMaterialsDto
 > {
-  public readonly runnableName: string = "UpdatePcrAddPartnerProjectCostLabourCommand";
+  public readonly runnableName: string = "UpdatePcrAddPartnerProjectCostMaterialsCommand";
   protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
-  private readonly form: FormTypes.PcrAddPartnerProjectCostLabour;
-  protected readonly dto: PcrAddPartnerProjectCostLabourDto;
+  private readonly form: FormTypes.PcrAddPartnerProjectCostMaterials;
+  protected readonly dto: PcrAddPartnerProjectCostMaterialsDto;
 
   constructor({
     projectId,
@@ -30,8 +34,8 @@ export class UpdatePcrAddPartnerProjectCostLabourCommand extends ZodAuthorisedAs
     projectId: ProjectId;
     pcrId: PcrId;
     pcrItemId: PcrItemId;
-    pcr: PcrAddPartnerProjectCostLabourDto;
-    form: FormTypes.PcrAddPartnerProjectCostLabour;
+    pcr: PcrAddPartnerProjectCostMaterialsDto;
+    form: FormTypes.PcrAddPartnerProjectCostMaterials;
   }) {
     super();
     this.projectId = projectId;
@@ -46,17 +50,16 @@ export class UpdatePcrAddPartnerProjectCostLabourCommand extends ZodAuthorisedAs
   }
 
   protected async getZodSchema() {
-    return { schema: labourSchema, errorMap };
+    return { schema: materialsSchema, errorMap };
   }
 
   protected async mapToZod() {
     return {
       id: this.dto.id,
       form: this.form,
-      labourDescription: this.dto.labourDescription,
-      grossCostOfRole: this.dto.grossCostOfRole,
-      daysSpentOnProject: this.dto.daysSpentOnProject,
-      ratePerDay: this.dto.ratePerDay,
+      materialsDescription: this.dto.materialsDescription,
+      costPerItem: this.dto.costPerItem,
+      quantityOfMaterialItems: this.dto.quantityOfMaterialItems,
       costCategoryId: this.dto.costCategoryId,
       costCategoryType: this.dto.costCategoryType,
     };
@@ -64,16 +67,15 @@ export class UpdatePcrAddPartnerProjectCostLabourCommand extends ZodAuthorisedAs
 
   protected async runRepositoryCommands(
     context: IContext,
-    validatedData: z.output<LabourSchemaType>,
+    validatedData: z.output<MaterialsSchemaType>,
   ): Promise<boolean> {
     const payload = {
       Acc_CostCategoryID__c: validatedData.costCategoryId,
       Acc_ProjectChangeRequest__c: this.pcrItemId,
-      Acc_ItemDescription__c: validatedData.labourDescription,
-      Acc_DaysSpentOnProject__c: validatedData.daysSpentOnProject,
-      Acc_GrossCostOfRole__c: parseCurrency(validatedData.grossCostOfRole),
-      Acc_Rate__c: parseCurrency(validatedData.ratePerDay),
-      Acc_TotalCost__c: roundCurrency(parseCurrency(validatedData.ratePerDay) * validatedData.daysSpentOnProject),
+      Acc_ItemDescription__c: validatedData.materialsDescription,
+      Acc_CostPerItem__c: parseCurrency(validatedData.costPerItem),
+      Acc_Quantity__c: validatedData.quantityOfMaterialItems,
+      Acc_TotalCost__c: roundCurrency(parseCurrency(validatedData.costPerItem) * validatedData.quantityOfMaterialItems),
     };
 
     if (validatedData.id) {

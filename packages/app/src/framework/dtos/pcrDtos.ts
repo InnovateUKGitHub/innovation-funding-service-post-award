@@ -579,3 +579,10 @@ export interface PcrAddPartnerProjectCostLabourDto extends PcrAddPartnerProjectC
   daysSpentOnProject: number;
   form: FormTypes.PcrAddPartnerProjectCostLabour;
 }
+
+export interface PcrAddPartnerProjectCostMaterialsDto extends PcrAddPartnerProjectCost {
+  materialsDescription: string;
+  costPerItem: string | null;
+  quantityOfMaterialItems: number;
+  form: FormTypes.PcrAddPartnerProjectCostMaterials;
+}

@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   errorMap,
   MaterialsSchemaType,
@@ -14,10 +13,9 @@ import {
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileMaterialsCostsHandler extends ZodFormHandlerBase<
   MaterialsSchemaType,
@@ -26,7 +24,7 @@ export class PcrItemAddPartnerSpendProfileMaterialsCostsHandler extends ZodFormH
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileMaterialsCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostMaterials],
     });
   }
 
@@ -49,6 +47,7 @@ export class PcrItemAddPartnerSpendProfileMaterialsCostsHandler extends ZodFormH
       materialsDescription: input.materialsDescription,
       quantityOfMaterialItems: input.quantityOfMaterialItems,
       costPerItem: input.costPerItem,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -61,25 +60,23 @@ export class PcrItemAddPartnerSpendProfileMaterialsCostsHandler extends ZodFormH
     context: IContext;
     params: PcrAddSpendProfileCostParams | PcrEditSpendProfileCostParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_ItemDescription__c: input.materialsDescription,
+      Acc_CostPerItem__c: parseCurrency(input.costPerItem),
+      Acc_Quantity__c: input.quantityOfMaterialItems,
+      Acc_TotalCost__c: roundCurrency(parseCurrency(input.costPerItem) * input.quantityOfMaterialItems),
+    };
 
-    spendProfile.costs.push({
-      costCategory: input.costCategoryType,
-      id: input.id as CostId,
-      costCategoryId: params.costCategoryId,
-      description: input.materialsDescription,
-      quantity: Number(input.quantityOfMaterialItems),
-      costPerItem: parseCurrency(input.costPerItem),
-      value: parseCurrency(input.costPerItem) * Number(input.quantityOfMaterialItems),
-    });
-
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile,
-      },
-    });
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
+      });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

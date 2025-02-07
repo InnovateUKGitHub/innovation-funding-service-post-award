@@ -90,8 +90,9 @@ export const materialsSchema = z.object({
     integer: true,
     required: true,
   }),
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileMaterialsCost),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostMaterials),
   costCategoryType: z.nativeEnum(CostCategoryType),
+  costCategoryId: costCategoryIdValidation,
 });
 
 export type MaterialsSchemaType = typeof materialsSchema;

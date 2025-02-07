@@ -1,7 +1,7 @@
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +26,7 @@ import { Field } from "@ui/components/molecules/form/Field/Field";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { useOnUpdateMaterials } from "./materials.logic";
 
 const isMaterialsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -34,19 +35,8 @@ const isMaterialsCostDto = function (
 };
 
 export const MaterialsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileMaterialsCostDto>;
@@ -73,8 +63,9 @@ export const MaterialsFormComponent = () => {
       materialsDescription: defaultCost.description ?? "",
       quantityOfMaterialItems: defaultCost.quantity ?? undefined,
       costPerItem: String(defaultCost.costPerItem ?? ""),
-      form: FormTypes.PcrAddPartnerSpendProfileMaterialsCost,
+      form: FormTypes.PcrAddPartnerProjectCostMaterials,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(materialsSchema, {
       errorMap,
@@ -87,33 +78,23 @@ export const MaterialsFormComponent = () => {
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<MaterialsSchema>;
 
+  const { apiError, isFetching, onUpdate } = useOnUpdateMaterials();
+
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data?.materialsDescription,
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  quantity: Number(data.quantityOfMaterialItems),
-                  costPerItem: parseCurrency(data.costPerItem),
-                  value: totalCost,
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
       >
         <Fieldset data-qa="materials-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileMaterialsCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostMaterials} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
           <Field
             error={validationErrors?.materialsDescription}
             id="materialsDescription"
