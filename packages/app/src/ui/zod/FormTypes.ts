@@ -106,7 +106,7 @@ enum FormTypes {
   PcrAddPartnerDeMinimisFilesStep = "pcrAddPartnerDeMinimisFilesStep",
   PcrAddPartnerSummary = "pcrAddPartnerSummary",
 
-  PcrAddPartnerSpendProfileLabourCost = "pcrAddPartnerSpendProfileLabourCost",
+  PcrAddPartnerProjectCostLabour = "pcrAddPartnerProjectCostLabour",
   PcrAddPartnerSpendProfileOverheadCost = "pcrAddPartnerSpendProfileOverheadCost",
   PcrAddPartnerSpendProfileOverheadDocuments = "pcrAddPartnerSpendProfileOverheadDocuments",
   PcrAddPartnerSpendProfileOverheadDocumentsUpload = "pcrAddPartnerSpendProfileOverheadDocumentsUpload",
@@ -115,7 +115,7 @@ enum FormTypes {
   PcrAddPartnerSpendProfileCapitalUsageCost = "pcrAddPartnerSpendProfileCapitalUsageCost",
   PcrAddPartnerSpendProfileSubcontractingCost = "pcrAddPartnerSpendProfileSubcontractingCost",
   PcrAddPartnerSpendProfileTravelAndSubsistenceCost = "pcrAddPartnerSpendProfileTravelAndSubsistenceCost",
-  PcrAddPartnerSpendProfileOtherCost = "pcrAddPartnerSpendProfileOtherCost",
+  PcrAddPartnerProjectCostOtherCost = "pcrAddPartnerProjectCostOther",
   PcrAddPartnerSPendProfileDeleteItem = "pcrAddPartnerSpendProfileDeleteItem",
 
   PcrProjectSuspensionStep = "pcrProjectSuspensionStep",

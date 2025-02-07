@@ -12,7 +12,7 @@ import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
@@ -25,6 +25,7 @@ import { isObject } from "lodash";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateLabour } from "./labour.logic";
 
 const isLabourCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -35,19 +36,8 @@ const isLabourCostDto = function (
 };
 
 export const LabourFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileLabourCostDto>;
 
@@ -73,12 +63,13 @@ export const LabourFormComponent = () => {
   const { handleSubmit, watch, formState, register, setError } = useForm<LabourSchema>({
     defaultValues: {
       id: defaultCost.id,
-      form: FormTypes.PcrAddPartnerSpendProfileLabourCost,
+      form: FormTypes.PcrAddPartnerProjectCostLabour,
       labourDescription: defaultCost.description ?? "",
       grossCostOfRole: String(defaultCost.grossCostOfRole ?? ""),
       ratePerDay: String(defaultCost.ratePerDay ?? ""),
       daysSpentOnProject: defaultCost.daysSpentOnProject ?? undefined,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(labourSchema, {
       errorMap,
@@ -91,35 +82,23 @@ export const LabourFormComponent = () => {
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<LabourSchema>;
 
+  const { apiError, isFetching, onUpdate } = useOnUpdateLabour();
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         data-qa="addPartnerForm"
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data.labourDescription,
-                  id: data.id as CostId,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  grossCostOfRole: parseCurrency(data.grossCostOfRole),
-                  ratePerDay: parseCurrency(data.ratePerDay),
-                  daysSpentOnProject: Number(data.daysSpentOnProject),
-                  value: totalCost,
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
       >
-        <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileLabourCost} />
+        <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostLabour} />
         <Fieldset data-qa="labour-costs">
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
 
           <Field
             error={validationErrors?.labourDescription}

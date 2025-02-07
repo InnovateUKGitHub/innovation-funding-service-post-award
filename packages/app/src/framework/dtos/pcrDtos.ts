@@ -569,5 +569,13 @@ export interface PcrAddPartnerProjectCost {
 export interface PcrAddPartnerProjectCostOtherCostDto extends PcrAddPartnerProjectCost {
   description: string | null;
   value: string | null;
-  form: FormTypes.PcrAddPartnerSpendProfileOtherCost;
+  form: FormTypes.PcrAddPartnerProjectCostOtherCost;
+}
+
+export interface PcrAddPartnerProjectCostLabourDto extends PcrAddPartnerProjectCost {
+  labourDescription: string | null;
+  grossCostOfRole: string | null;
+  ratePerDay: string | null;
+  daysSpentOnProject: number;
+  form: FormTypes.PcrAddPartnerProjectCostLabour;
 }

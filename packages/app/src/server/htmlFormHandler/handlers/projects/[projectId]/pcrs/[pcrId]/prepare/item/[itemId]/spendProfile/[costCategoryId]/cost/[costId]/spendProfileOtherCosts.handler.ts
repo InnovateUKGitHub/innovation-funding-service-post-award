@@ -24,7 +24,7 @@ export class PcrItemAddPartnerSpendProfileOtherCostsHandler extends ZodFormHandl
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileOtherCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostOtherCost],
     });
   }
 

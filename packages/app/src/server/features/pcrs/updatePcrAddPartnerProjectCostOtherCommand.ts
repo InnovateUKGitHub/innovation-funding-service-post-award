@@ -12,16 +12,16 @@ import {
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 
-export class UpdatePcrAddPartnerSpendProfileOtherCostCommand extends ZodAuthorisedAsyncCommandBase<
+export class UpdatePcrAddPartnerProjectCostOtherCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
   OtherCostsSchemaType,
   PcrAddPartnerProjectCostOtherCostDto
 > {
-  public readonly runnableName: string = "UpdatePcrAddPartnerSpendProfileOtherCostCommand";
+  public readonly runnableName: string = "UpdatePcrAddPartnerProjectCostOtherCommand";
   protected readonly projectId: ProjectId;
   private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
-  private readonly form: FormTypes.PcrAddPartnerSpendProfileOtherCost;
+  private readonly form: FormTypes.PcrAddPartnerProjectCostOtherCost;
   protected readonly dto: PcrAddPartnerProjectCostOtherCostDto;
 
   constructor({
@@ -35,7 +35,7 @@ export class UpdatePcrAddPartnerSpendProfileOtherCostCommand extends ZodAuthoris
     pcrId: PcrId;
     pcrItemId: PcrItemId;
     pcr: PcrAddPartnerProjectCostOtherCostDto;
-    form: FormTypes.PcrAddPartnerSpendProfileOtherCost;
+    form: FormTypes.PcrAddPartnerProjectCostOtherCost;
   }) {
     super();
     this.projectId = projectId;
@@ -69,21 +69,20 @@ export class UpdatePcrAddPartnerSpendProfileOtherCostCommand extends ZodAuthoris
     context: IContext,
     validatedData: z.output<OtherCostsSchemaType>,
   ): Promise<boolean> {
+    const payload = {
+      Acc_CostCategoryID__c: validatedData.costCategoryId,
+      Acc_ProjectChangeRequest__c: this.pcrItemId,
+      Acc_ItemDescription__c: validatedData.otherCostDescription,
+      Acc_TotalCost__c: parseCurrency(validatedData.estimatedCost),
+    };
+
     if (validatedData.id) {
       context.repositories.pcrSpendProfile.updateSingleItem({
         Id: validatedData.id,
-        Acc_CostCategoryID__c: validatedData.costCategoryId,
-        Acc_ProjectChangeRequest__c: this.pcrItemId,
-        Acc_ItemDescription__c: validatedData.otherCostDescription,
-        Acc_TotalCost__c: parseCurrency(validatedData.estimatedCost),
+        ...payload,
       });
     } else {
-      context.repositories.pcrSpendProfile.insertSingleItem({
-        Acc_CostCategoryID__c: validatedData.costCategoryId,
-        Acc_ProjectChangeRequest__c: this.pcrItemId,
-        Acc_ItemDescription__c: validatedData.otherCostDescription,
-        Acc_TotalCost__c: parseCurrency(validatedData.estimatedCost),
-      });
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
     }
 
     return true;

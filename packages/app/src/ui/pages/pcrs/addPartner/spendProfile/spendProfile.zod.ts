@@ -18,7 +18,7 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spend
 const description = getTextValidation({ required: true, maxLength: 1_000 });
 export const labourSchema = z.object({
   id: costIdValidation.nullable(),
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileLabourCost),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostLabour),
   labourDescription: description,
   grossCostOfRole: getGenericCurrencyValidation({
     required: true,
@@ -33,6 +33,7 @@ export const labourSchema = z.object({
     required: true,
   }),
   costCategoryType: z.nativeEnum(CostCategoryType),
+  costCategoryId: costCategoryIdValidation,
 });
 
 export type LabourSchemaType = typeof labourSchema;
@@ -171,7 +172,7 @@ export const otherCostsSchema = z.object({
   estimatedCost: getGenericCurrencyValidation({
     required: true,
   }),
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileOtherCost),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostOtherCost),
   costCategoryType: z.nativeEnum(CostCategoryType),
   costCategoryId: costCategoryIdValidation,
 });

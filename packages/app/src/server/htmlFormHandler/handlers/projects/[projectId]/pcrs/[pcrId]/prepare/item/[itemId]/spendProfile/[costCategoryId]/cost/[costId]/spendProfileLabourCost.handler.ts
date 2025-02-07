@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { labourSchema, LabourSchemaType, errorMap } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import {
   PcrAddSpendProfileCostParams,
@@ -13,7 +12,6 @@ import {
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
 
 export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHandlerBase<
   LabourSchemaType,
@@ -22,7 +20,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileLabourCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostLabour],
     });
   }
 
@@ -46,6 +44,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       ratePerDay: input.ratePerDay,
       daysSpentOnProject: input.daysSpentOnProject,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -58,26 +57,24 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
     context: IContext;
     params: PcrAddSpendProfileCostParams | PcrEditSpendProfileCostParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_ItemDescription__c: input.labourDescription,
+      Acc_DaysSpentOnProject__c: input.daysSpentOnProject,
+      Acc_GrossCostOfRole__c: parseCurrency(input.grossCostOfRole),
+      Acc_Rate__c: parseCurrency(input.ratePerDay),
+      Acc_TotalCost__c: roundCurrency(parseCurrency(input.ratePerDay) * input.daysSpentOnProject),
+    };
 
-    spendProfile.costs.push({
-      costCategory: input.costCategoryType,
-      id: input.id as CostId,
-      costCategoryId: params.costCategoryId,
-      description: input.labourDescription,
-      daysSpentOnProject: input.daysSpentOnProject,
-      grossCostOfRole: parseCurrency(input.grossCostOfRole),
-      ratePerDay: parseCurrency(input.ratePerDay),
-      value: roundCurrency(parseCurrency(input.ratePerDay) * input.daysSpentOnProject),
-    });
-
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile,
-      },
-    });
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
+      });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

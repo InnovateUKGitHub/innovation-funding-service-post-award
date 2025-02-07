@@ -53,7 +53,7 @@ export const OtherCostsFormComponent = () => {
       id: defaultCost.id,
       otherCostDescription: defaultCost?.description ?? "",
       estimatedCost: String(defaultCost?.value ?? ""),
-      form: FormTypes.PcrAddPartnerSpendProfileOtherCost,
+      form: FormTypes.PcrAddPartnerProjectCostOtherCost,
       costCategoryType: costCategory.type,
       costCategoryId,
     },
@@ -79,7 +79,7 @@ export const OtherCostsFormComponent = () => {
         )}
       >
         <Fieldset data-qa="other-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOtherCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostOtherCost} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <input type="hidden" name="costCategoryId" value={costCategoryId} />
