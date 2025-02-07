@@ -5,7 +5,11 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getNumberValidation } from "@ui/zod/numericValidator.zod";
-import { costIdValidation, evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
+import {
+  costCategoryIdValidation,
+  costIdValidation,
+  evaluateObject,
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
@@ -169,6 +173,7 @@ export const otherCostsSchema = z.object({
   }),
   form: z.literal(FormTypes.PcrAddPartnerSpendProfileOtherCost),
   costCategoryType: z.nativeEnum(CostCategoryType),
+  costCategoryId: costCategoryIdValidation,
 });
 
 export type OtherCostsSchemaType = typeof otherCostsSchema;

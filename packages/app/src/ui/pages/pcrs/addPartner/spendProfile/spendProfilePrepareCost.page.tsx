@@ -87,6 +87,7 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
         stepRoute,
         addNewItem: !costId,
         fragmentRef,
+        setFetchKey,
       }}
     >
       <SpendProfilePrepareFormSection />

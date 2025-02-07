@@ -7,7 +7,7 @@ import { SpendProfile, mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpen
 
 import { spendProfileCostsQuery } from "./SpendProfileCosts.query";
 import { noop } from "lodash";
-import { createContext } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryItem } from "@framework/types/CostCategory";
 import { BaseProps } from "@ui/app/containerBase";
@@ -160,6 +160,7 @@ type SpendProfileContextType = {
   stepRoute: ILinkInfo;
   addNewItem: boolean;
   fragmentRef: unknown;
+  setFetchKey: Dispatch<SetStateAction<number>>;
 };
 
 export const SpendProfileContext = createContext<SpendProfileContextType>({

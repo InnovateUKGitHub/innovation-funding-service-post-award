@@ -58,7 +58,9 @@ interface ISalesforcePcrSpendProfileFilterableFields extends ISalesforcePcrSpend
 export interface IPcrSpendProfileRepository {
   getAllForPcr(projectId: ProjectId, pcrItemId: PcrItemId | undefined): Promise<PcrSpendProfileEntity[]>;
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]): Promise<string[]>;
+  insertSingleItem(item: Partial<ISalesforcePcrSpendProfile>): Promise<void>;
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
+  updateSingleItem(item: PickRequiredFromPartial<ISalesforcePcrSpendProfile, "Id">): Promise<void>;
   deleteSpendProfiles(items: string[]): Promise<void>;
   getCapitalUsageTypes(): Promise<IPicklistEntry[]>;
   getOverheadRateOptions(): Promise<IPicklistEntry[]>;
@@ -137,6 +139,14 @@ export class PcrSpendProfileRepository
     const mapper = new SalesforcePcrSpendProfileMapper(pcrRecordTypeId);
     const updatables: ISalesforcePcrSpendProfile[] = items.map(x => mapper.mapToSalesforce(x));
     return super.updateAll(updatables);
+  }
+
+  async insertSingleItem(item: Partial<ISalesforcePcrSpendProfile>) {
+    await super.insertItem(item);
+  }
+
+  async updateSingleItem(item: PickRequiredFromPartial<ISalesforcePcrSpendProfile, "Id">) {
+    await super.updateItem(item);
   }
 
   public async deleteSpendProfiles(ids: string[]) {

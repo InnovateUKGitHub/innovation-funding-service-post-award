@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SpendProfileContext, appendOrMerge } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { OtherCostsSchema, otherCostsSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,9 +18,9 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
 import { Field } from "@ui/components/molecules/form/Field/Field";
-import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateOtherCosts } from "./otherCosts.logic";
 
 const isOtherCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -29,19 +29,8 @@ const isOtherCostDto = function (
 };
 
 export const OtherCostsFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileOtherCostsDto>;
 
@@ -66,6 +55,7 @@ export const OtherCostsFormComponent = () => {
       estimatedCost: String(defaultCost?.value ?? ""),
       form: FormTypes.PcrAddPartnerSpendProfileOtherCost,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(otherCostsSchema, {
       errorMap,
@@ -76,23 +66,14 @@ export const OtherCostsFormComponent = () => {
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<OtherCostsSchema>;
 
+  const { apiError, isFetching, onUpdate } = useOnUpdateOtherCosts();
+
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  id: data.id ?? ("" as CostId),
-                  description: data.otherCostDescription,
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  value: parseCurrency(data.estimatedCost),
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
@@ -101,6 +82,7 @@ export const OtherCostsFormComponent = () => {
           <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileOtherCost} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
           <FormGroup hasError={!!validationErrors.otherCostDescription}>
             <TextAreaField
               {...register("otherCostDescription")}

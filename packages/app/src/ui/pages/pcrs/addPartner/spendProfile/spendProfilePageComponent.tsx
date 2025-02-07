@@ -11,13 +11,16 @@ import { PCRStepType } from "@framework/constants/pcrConstants";
 import { CostCategoryGroupType } from "@framework/constants/enums";
 import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { CostCategoryList } from "@framework/types/CostCategory";
+import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export const SpendProfilePreparePage = ({
   validationErrors,
   children,
+  apiError: pcrLevelApiError,
 }: {
   validationErrors: RhfErrors;
   children: ReactNode;
+  apiError?: ClientErrorResponse | null;
 }) => {
   const {
     costCategory,
@@ -63,7 +66,7 @@ export const SpendProfilePreparePage = ({
           <Content value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })} />
         </BackLink>
       }
-      apiError={apiError}
+      apiError={apiError || pcrLevelApiError}
       validationErrors={validationErrors}
       fragmentRef={fragmentRef}
     >

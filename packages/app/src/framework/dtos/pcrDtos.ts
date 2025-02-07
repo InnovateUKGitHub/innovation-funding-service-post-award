@@ -559,3 +559,15 @@ export interface PcrDeleteTeamMemberDto {
   pclId: ProjectContactLinkId;
   role: ProjectRole;
 }
+
+export interface PcrAddPartnerProjectCost {
+  costCategoryType: CostCategoryType;
+  id: CostId | null;
+  costCategoryId: CostCategoryId;
+}
+
+export interface PcrAddPartnerProjectCostOtherCostDto extends PcrAddPartnerProjectCost {
+  description: string | null;
+  value: string | null;
+  form: FormTypes.PcrAddPartnerSpendProfileOtherCost;
+}

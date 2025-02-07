@@ -171,6 +171,12 @@ const clientApi: IApiClient<"client"> = {
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/role-and-organisation`,
         params.pcr,
       ),
+    addPartnerProjectCostOtherCost: params =>
+      ajaxPut(
+        `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/project-costs/other-cost`,
+        params.pcr,
+      ),
+
     changeDuration: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/change-duration`, params.pcr),
     loanDrawdownExtension: params =>
