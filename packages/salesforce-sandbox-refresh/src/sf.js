@@ -39,7 +39,7 @@ const sf = async props => {
 
   const sfCli = await which("sf");
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const child = childProcess.spawn(sfCli, [...argv, ...flag], {
       env,
       stdio: ["pipe", output === "stdout" ? "inherit" : "pipe", "inherit"],
@@ -58,7 +58,9 @@ const sf = async props => {
       result += data.toString();
     });
 
-    child.on("exit", () => {
+    child.on("exit", code => {
+      if (code) reject(code);
+
       switch (output) {
         case "json":
           resolve(JSON.parse(result));
