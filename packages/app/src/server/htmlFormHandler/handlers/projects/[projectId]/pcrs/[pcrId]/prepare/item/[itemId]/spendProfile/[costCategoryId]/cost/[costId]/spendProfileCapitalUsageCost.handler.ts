@@ -2,7 +2,6 @@ import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   errorMap,
   CapitalUsageSchemaType,
@@ -14,10 +13,10 @@ import {
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileEditCostRoute,
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
-import { updatePcrItem } from "../../../../addPartnerUtils";
+import { PcrSpendProfileCapitalUsageTypeMapper } from "@framework/mappers/spendProfileTypeMapper";
 
 export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFormHandlerBase<
   CapitalUsageSchemaType,
@@ -26,7 +25,7 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
   constructor() {
     super({
       routes: [PCRSpendProfileAddCostRoute, PCRSpendProfileEditCostRoute],
-      forms: [FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost],
+      forms: [FormTypes.PcrAddPartnerProjectCostCapitalUsage],
     });
   }
 
@@ -52,6 +51,7 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
       netPresentValue: input.netPresentValue,
       residualValue: input.residualValue,
       utilisation: input.utilisation,
+      costCategoryId: input.costCategoryId,
     };
   }
 
@@ -64,29 +64,32 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
     context: IContext;
     params: PcrAddSpendProfileCostParams;
   }): Promise<string> {
-    const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(params.projectId, params.itemId));
-    const netCost =
-      (parseCurrency(input.netPresentValue) - parseCurrency(input.residualValue)) * (Number(input.utilisation) / 100);
-    spendProfile.costs.push({
-      costCategory: input.costCategoryType,
-      id: input.id ?? ("" as CostId),
-      costCategoryId: params.costCategoryId,
-      description: input.capitalUsageDescription,
-      type: Number(input.itemType),
-      depreciationPeriod: Number(input.depreciationPeriod),
-      netPresentValue: parseCurrency(input.netPresentValue),
-      residualValue: parseCurrency(input.residualValue),
-      utilisation: Number(input.utilisation),
-      value: netCost,
-    });
+    const netCost = roundCurrency(
+      (parseCurrency(input.netPresentValue) - parseCurrency(input.residualValue)) * (Number(input.utilisation) / 100),
+    );
 
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        spendProfile,
-      },
-    });
+    const payload = {
+      Acc_CostCategoryID__c: input.costCategoryId,
+      Acc_ProjectChangeRequest__c: params.itemId,
+      Acc_ItemDescription__c: input.capitalUsageDescription,
+      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(
+        input.itemType,
+      ),
+      Acc_DepreciationPeriod__c: input.depreciationPeriod,
+      Acc_NetPresentValue__c: parseCurrency(input.netPresentValue),
+      Acc_ResidualValue__c: parseCurrency(input.residualValue),
+      Acc_Utilisation__c: input.utilisation,
+      Acc_TotalCost__c: netCost,
+    };
+
+    if (input.id) {
+      context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.id,
+        ...payload,
+      });
+    } else {
+      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

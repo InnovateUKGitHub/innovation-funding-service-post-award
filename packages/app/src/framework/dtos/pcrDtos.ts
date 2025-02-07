@@ -586,3 +586,13 @@ export interface PcrAddPartnerProjectCostMaterialsDto extends PcrAddPartnerProje
   quantityOfMaterialItems: number;
   form: FormTypes.PcrAddPartnerProjectCostMaterials;
 }
+
+export interface PcrAddPartnerProjectCostCapitalUsageDto extends PcrAddPartnerProjectCost {
+  capitalUsageDescription: string;
+  depreciationPeriod: number;
+  itemType: number;
+  netPresentValue: string | null;
+  residualValue: string | null;
+  utilisation: number;
+  form: FormTypes.PcrAddPartnerProjectCostCapitalUsage;
+}

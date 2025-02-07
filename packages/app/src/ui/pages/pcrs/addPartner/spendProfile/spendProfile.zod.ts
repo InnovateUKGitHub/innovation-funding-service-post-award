@@ -130,8 +130,9 @@ export const capitalUsageSchema = z.object({
     required: true,
   }),
   utilisation: getNumberValidation({ lt: 100, min: 0, required: true, decimalPlaces: 2 }),
-  form: z.literal(FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost),
+  form: z.literal(FormTypes.PcrAddPartnerProjectCostCapitalUsage),
   costCategoryType: z.nativeEnum(CostCategoryType),
+  costCategoryId: costCategoryIdValidation,
 });
 
 export type CapitalUsageSchemaType = typeof capitalUsageSchema;

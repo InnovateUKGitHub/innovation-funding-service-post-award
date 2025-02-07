@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { useMounted } from "@ui/context/Mounted";
-import { appendOrMerge, SpendProfileContext } from "./spendProfileCosts.logic";
+import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { useForm } from "react-hook-form";
 import { CapitalUsageSchema, capitalUsageSchema, errorMap } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +30,7 @@ import { ValidationError } from "@ui/components/atoms/validation/ValidationError
 import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { useOnUpdateCapitalUsage } from "./capitalUsage.logic";
 
 const isCapitalUsageCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -41,19 +42,8 @@ const isCapitalUsageCostDto = function (
 };
 
 export const CapitalUsageFormComponent = () => {
-  const {
-    cost,
-    isFetching,
-    costCategory,
-    onUpdate,
-    routes,
-    pcrId,
-    projectId,
-    itemId,
-    costCategoryId,
-    spendProfile,
-    addNewItem,
-  } = useContext(SpendProfileContext);
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+    useContext(SpendProfileContext);
   const { isClient } = useMounted();
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileCapitalUsageCostDto>;
@@ -87,8 +77,9 @@ export const CapitalUsageFormComponent = () => {
       residualValue: String(defaultCost.residualValue ?? ""),
       utilisation: defaultCost.utilisation ?? undefined,
       itemType: defaultCost.type ?? PCRSpendProfileCapitalUsageType.Unknown,
-      form: FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost,
+      form: FormTypes.PcrAddPartnerProjectCostCapitalUsage,
       costCategoryType: costCategory.type,
+      costCategoryId,
     },
     resolver: zodResolver(capitalUsageSchema, {
       errorMap,
@@ -119,37 +110,23 @@ export const CapitalUsageFormComponent = () => {
 
   const netCost =
     (parseCurrency(values.netPresentValue) - parseCurrency(values.residualValue)) * (Number(values.utilisation) / 100);
+
+  const { apiError, isFetching, onUpdate } = useOnUpdateCapitalUsage();
   return (
-    <SpendProfilePreparePage validationErrors={validationErrors}>
+    <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            data: {
-              spendProfile: {
-                ...spendProfile,
-                costs: appendOrMerge(spendProfile.costs, {
-                  description: data.capitalUsageDescription,
-                  type: Number(data.itemType),
-                  id: data.id ?? ("" as CostId),
-                  costCategoryId,
-                  costCategory: costCategory.type,
-                  depreciationPeriod: Number(data.depreciationPeriod),
-                  netPresentValue: parseCurrency(data.netPresentValue),
-                  residualValue: parseCurrency(data.residualValue),
-                  utilisation: Number(data.utilisation),
-                  typeLabel: typeOptions.find(x => x.value === Number(data.itemType))?.label ?? "",
-                  value: netCost,
-                }),
-              },
-            },
+            data,
             context: { link: routes.pcrSpendProfileCostsSummary.getLink({ projectId, pcrId, itemId, costCategoryId }) },
           }),
         )}
       >
         <Fieldset data-qa="capital-usage-costs">
-          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerSpendProfileCapitalUsageCost} />
+          <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostCapitalUsage} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
+          <input type="hidden" name="costCategoryId" value={costCategoryId} />
           <FormGroup>
             <TextAreaField
               {...register("capitalUsageDescription")}
