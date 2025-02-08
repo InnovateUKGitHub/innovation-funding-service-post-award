@@ -3,9 +3,9 @@ import { Section } from "@ui/components/molecules/Section/section";
 import { Currency } from "@ui/components/atoms/Currency/currency";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
-import { SpendProfileDeleteFormProps } from "./spendProfileDeleteCost.page";
+import { DeleteProjectCostFormProps } from "./deleteProjectCost.page";
 
-export const DeleteOtherCostFormComponent = (props: SpendProfileDeleteFormProps<PCRSpendProfileOtherCostsDto>) => {
+export const DeleteOtherCostFormComponent = (props: DeleteProjectCostFormProps<PCRSpendProfileOtherCostsDto>) => {
   const { data, costCategory } = props;
   return (
     <Section title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}>

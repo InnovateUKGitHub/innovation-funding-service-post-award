@@ -4,10 +4,10 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
-import { SpendProfileDeleteFormProps } from "./spendProfileDeleteCost.page";
+import { DeleteProjectCostFormProps } from "./deleteProjectCost.page";
 
 export const DeleteCapitalUsageCostFormComponent = (
-  props: SpendProfileDeleteFormProps<PCRSpendProfileCapitalUsageCostDto>,
+  props: DeleteProjectCostFormProps<PCRSpendProfileCapitalUsageCostDto>,
 ) => {
   const { data, costCategory } = props;
   return (
