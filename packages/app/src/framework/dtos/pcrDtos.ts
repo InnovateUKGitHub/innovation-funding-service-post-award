@@ -567,8 +567,8 @@ export interface PcrAddPartnerProjectCost {
 }
 
 export interface PcrAddPartnerProjectCostOtherCostDto extends PcrAddPartnerProjectCost {
-  description: string | null;
-  value: string | null;
+  otherCostDescription: string | null;
+  estimatedCost: string | null;
   form: FormTypes.PcrAddPartnerProjectCostOtherCost;
 }
 

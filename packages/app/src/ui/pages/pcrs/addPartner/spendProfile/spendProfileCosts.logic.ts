@@ -4,7 +4,6 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { SpendProfile, mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpendProfile";
-
 import { spendProfileCostsQuery } from "./SpendProfileCosts.query";
 import { noop } from "lodash";
 import { createContext, Dispatch, SetStateAction } from "react";
@@ -12,10 +11,15 @@ import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryItem } from "@framework/types/CostCategory";
 import { BaseProps } from "@ui/app/containerBase";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { SpendProfileCostsQuery } from "./__generated__/SpendProfileCostsQuery.graphql";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ClientErrorResponse } from "@framework/util/errorHandlers";
+import { useNavigate } from "react-router-dom";
+import { useMessageContext } from "@ui/context/messages";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { z, ZodSchema } from "zod";
+import { useContext } from "react";
 
 export const useSpendProfileCostsQuery = (
   projectId: ProjectId,
@@ -177,4 +181,37 @@ export const appendOrMerge = <T extends { id?: string | null }>(costs: T[], cost
   } else {
     return [...costs, cost];
   }
+};
+
+type PcrApiParams<T extends ZodSchema> = {
+  projectId: ProjectId;
+  pcrId: PcrId;
+  pcrItemId: PcrItemId;
+  pcr: z.output<T>;
+};
+
+type Updater<T extends ZodSchema> = (params: PcrApiParams<T>) => Promise<boolean>;
+
+export const projectCostUpdater = <T extends ZodSchema, U extends Updater<T>>(apiMethod: U) => {
+  const navigate = useNavigate();
+
+  const { pcrId, itemId, projectId, setFetchKey } = useContext(SpendProfileContext);
+  const { clearMessages } = useMessageContext();
+
+  return useOnUpdate<z.output<T>, boolean, { link: ILinkInfo }>({
+    req: data => {
+      return apiMethod({
+        projectId,
+        pcrId,
+        pcrItemId: itemId,
+        pcr: data,
+      });
+    },
+
+    onSuccess: async function (_: z.output<T>, __: boolean, context: { link: ILinkInfo } | undefined) {
+      clearMessages();
+      setFetchKey(k => k + 1);
+      navigate(context?.link?.path ?? "");
+    },
+  });
 };

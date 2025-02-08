@@ -57,9 +57,8 @@ export class UpdatePcrAddPartnerProjectCostOtherCommand extends ZodAuthorisedAsy
     return {
       id: this.dto.id,
       form: this.form,
-      value: this.dto.value,
-      otherCostDescription: this.dto.description,
-      estimatedCost: this.dto.value,
+      otherCostDescription: this.dto.otherCostDescription,
+      estimatedCost: this.dto.estimatedCost,
       costCategoryType: this.dto.costCategoryType,
       costCategoryId: this.dto.costCategoryId,
     };

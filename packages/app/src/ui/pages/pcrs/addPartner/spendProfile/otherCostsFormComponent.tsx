@@ -82,7 +82,6 @@ export const OtherCostsFormComponent = () => {
           <input type="hidden" name="form" value={FormTypes.PcrAddPartnerProjectCostOtherCost} />
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
-          <input type="hidden" name="costCategoryId" value={costCategoryId} />
           <FormGroup hasError={!!validationErrors.otherCostDescription}>
             <TextAreaField
               {...register("otherCostDescription")}
