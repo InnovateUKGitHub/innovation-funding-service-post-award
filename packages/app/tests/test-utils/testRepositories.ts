@@ -77,7 +77,7 @@ import {
   ISalesforceMonitoringReportStatusChange,
 } from "@server/repositories/monitoringReportStatusChangeRepository";
 import { IPartnerRepository, ISalesforcePartner } from "@server/repositories/partnersRepository";
-import { IPcrSpendProfileRepository } from "@server/repositories/pcrSpendProfileRepository";
+import { IPcrSpendProfileRepository, ISalesforcePcrSpendProfile } from "@server/repositories/pcrSpendProfileRepository";
 import { IPermissionGroupRepository } from "@server/repositories/permissionGroupsRepository";
 import { IProfileDetailsRepository, ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import {
@@ -953,6 +953,13 @@ class PcrSpendProfileTestRepository
     return Promise.resolve(newIds);
   }
 
+  insertSingleItem(item: Partial<ISalesforcePcrSpendProfile>) {
+    const id = `PcrSpendProfile-${this.Items.length}` as CostId;
+    // @ts-expect-error some type clash but for just a mock anyway not worth fixing
+    this.Items.push({ ...item, id });
+    return Promise.resolve(id);
+  }
+
   updateSpendProfiles(updates: PcrSpendProfileEntity[]) {
     updates.forEach(update => {
       const item = this.Items.find(x => x.id === update.id);
@@ -961,8 +968,19 @@ class PcrSpendProfileTestRepository
     return Promise.resolve(true);
   }
 
+  updateSingleItem(item: PickRequiredFromPartial<ISalesforcePcrSpendProfile, "Id">): Promise<void> {
+    const matchedItem = this.Items.find(x => x.id === item.Id);
+    if (matchedItem) Object.assign(matchedItem, item);
+    return Promise.resolve();
+  }
+
   deleteSpendProfiles(ids: string[]) {
     ids.forEach(x => (this.Items = this.Items.filter(element => element.id !== x)));
+    return Promise.resolve();
+  }
+
+  deleteSingleItem(id: CostId): Promise<void> {
+    this.Items = this.Items.filter(element => element.id !== id);
     return Promise.resolve();
   }
 
