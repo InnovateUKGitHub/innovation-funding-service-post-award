@@ -62,7 +62,7 @@ const DeleteProjectCostPage = ({
 
   const { handleSubmit } = useForm<EmptyObject>({});
 
-  const { onUpdate, isFetching, apiError } = useOnDeleteProjectCost();
+  const { onUpdate, isFetching, apiError } = useOnDeleteProjectCost({ projectId, pcrId, itemId, costId });
 
   return (
     <Page
