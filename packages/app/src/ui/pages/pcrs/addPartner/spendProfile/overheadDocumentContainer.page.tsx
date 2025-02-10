@@ -24,14 +24,11 @@ import { pcrFilesQuery } from "../../filesStep/PcrFiles.query";
 import { z } from "zod";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { PCRItemType } from "@framework/constants/pcrConstants";
 import { useMessages } from "@framework/api-helpers/useMessages";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { BaseProps, defineRoute } from "@ui/app/containerBase";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
-import { noop } from "lodash";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { H2, H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { LinksList } from "@ui/components/atoms/LinksList/linksList";
@@ -39,6 +36,7 @@ import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { Messages } from "@ui/components/molecules/Messages/messages";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { OverheadDocumentsSchema } from "./spendProfile.zod";
+import { useOnUpdateOverheadDocuments } from "./overheads.logic";
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
@@ -108,15 +106,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
     },
   });
 
-  const { onUpdate, isFetching } = useOnSavePcrItem(
-    projectId,
-    pcrId,
-    itemId,
-    noop,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
+  const { apiError, isFetching, onUpdate } = useOnUpdateOverheadDocuments();
 
   const validationErrors = useZodErrors(setError, formState?.errors);
 
@@ -133,6 +123,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
       }
       validationErrors={validationErrors}
       fragmentRef={fragmentRef}
+      apiError={apiError}
     >
       <Messages messages={props.messages} />
       <Section>
