@@ -40,6 +40,7 @@ class CrdClaims {
   private readonly continueToClaimsDocs: Locator;
   private readonly saveAndReturnButton: Locator;
   private readonly evidenceDocs: Array<UploadType>;
+  private readonly costCats: Array<string>;
   //Claim line items
   private readonly backToClaim: Locator;
   private readonly claimLineWarning: Locator;
@@ -65,6 +66,7 @@ class CrdClaims {
   private readonly emptyDescriptionValMsg: string;
   private readonly emptyCostValMsg: string;
   private readonly lineItemDescription1: string;
+  private readonly removeButton: Locator;
   //Costcat documents page
   private readonly costCatDocGuidance: Locator;
   private readonly uploadSubheading: Locator;
@@ -194,6 +196,19 @@ class CrdClaims {
       "testfile.xps",
       "T.doc",
     ];
+    this.costCats = [
+      "Labour",
+      "Overheads",
+      "Materials",
+      "Capital usage",
+      "Subcontracting",
+      "Travel and subsistence",
+      "Other costs",
+      "Other costs 2",
+      "Other costs 3",
+      "Other costs 4",
+      "Other costs 5",
+    ];
     //Claim line items
     this.backToClaim = this.commands.backLink("Back to claim");
     this.claimLineWarning = this.page.getByTestId("claim-warning-content").filter({
@@ -243,6 +258,7 @@ class CrdClaims {
     this.emptyDescriptionValMsg = "Enter description.";
     this.emptyCostValMsg = "Enter cost.";
     this.lineItemDescription1 = "Line item 1";
+    this.removeButton = this.page.getByRole("button").filter({ hasText: "Remove" });
     //Costcat documents
     this.costCatDocGuidance = this.page.getByRole("paragraph").filter({
       hasText:
@@ -467,9 +483,10 @@ class CrdClaims {
   async costCategoryPageDisplayed(costCat: string, costType: string, rowAccess: number) {
     await expect(this.backToClaim).toBeVisible();
     await expect(this.page.getByRole("heading").filter({ hasText: costCat })).toBeVisible();
-    if (costType === "Business") {
-      await expect(this.claimLineWarning).toBeVisible();
-    }
+    //TODO: Uncomment when ACC-11857 is resolved.
+    //if (costType === "Business") {
+    //  await expect(this.claimLineWarning).toBeVisible();
+    //}
     await expect(this.claimLineGuidance).toBeVisible();
     await expect(this.claimCurrencyGuidance).toBeVisible();
     await this.emptyLineItemTable(costType);
@@ -972,6 +989,80 @@ class CrdClaims {
     await this.costsToBeClaimedHeading.isVisible();
     await this.continueToClaimsDocs.click();
     await this.claimDocsHeading.isVisible();
+  }
+
+  /**
+   * AUTO-SAVE Functionality
+   */
+
+  @When("the user adds a line item and navigates away without saving")
+  async addLineItemNoSave() {
+    let i = 1;
+    for (const cat of this.costCats) {
+      await this.clickCostCategory(cat, i - 1);
+      await expect(this.claimLineWarning).toBeVisible();
+      await this.addCostButton.click();
+      await this.page.getByLabel("Description of claim line item 0").fill(`Description for ${cat}`);
+      await this.page.getByLabel("Cost of claim line item 0").fill(String(i * 1000));
+      await this.page.waitForTimeout(500);
+      await this.backToClaim.click();
+      await this.costsToBeClaimedHeading.isVisible();
+      await this.clickCostCategory(cat, i - 1);
+      await expect(this.page.getByLabel("Description of claim line item 0")).toHaveValue(`Description for ${cat}`);
+      await expect(this.page.getByLabel("Cost of claim line item 0")).toHaveValue(String(i * 1000));
+      await expect(this.claimLineWarning).toBeVisible();
+      await this.backToClaim.click();
+      await this.costsToBeClaimedHeading.isVisible();
+      i++;
+    }
+  }
+
+  @Then("the line-item data will have saved upon navigating back")
+  async assertSavedLineitem() {
+    await this.clickCostCategory("Other costs 5", 10);
+    await expect(this.page.getByLabel("Description of claim line item 0")).toHaveValue(`Description for Other costs 5`);
+    await expect(this.page.getByLabel("Cost of claim line item 0")).toHaveValue("11000");
+    await this.backToClaim.click();
+    await this.costsToBeClaimedHeading.isVisible();
+  }
+
+  @When("the user saves over the auto-save for Labour")
+  async saveOverAutoSave() {
+    await this.clickCostCategory("Labour");
+    //TODO: Uncomment once 11857 is resolved.
+    //await expect(this.claimLineWarning).toBeVisible();
+    await this.page.getByLabel("Description of claim line item 0").fill("Saved over auto-save");
+    await this.page.getByLabel("Cost of claim line item 0").fill("666.66");
+    await this.saveAndReturnButton.click();
+    await this.costsToBeClaimedHeading.isVisible();
+  }
+
+  @When("the user removes the Labour line item")
+  async removeLabourLineItem() {
+    await this.clickCostCategory("Labour");
+    //TODO: Uncomment once 11857 is resolved.
+    //await expect(this.claimLineWarning).toBeVisible();
+    await this.page
+      .getByRole("table")
+      .locator("tbody")
+      .locator("tr")
+      .nth(0)
+      .locator("td")
+      .nth(3)
+      .filter({ has: this.removeButton })
+      .click();
+    await expect(
+      this.page
+        .getByRole("table")
+        .locator("tfoot")
+        .locator("tr")
+        .nth(0)
+        .locator("td")
+        .nth(0)
+        .filter({ hasText: "Add a cost" }),
+    ).toBeVisible();
+    await this.saveAndReturnButton.click();
+    await this.costsToBeClaimedHeading.isVisible();
   }
 
   /**

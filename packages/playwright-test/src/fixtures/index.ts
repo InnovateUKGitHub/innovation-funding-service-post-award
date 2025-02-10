@@ -119,7 +119,8 @@ export const test = base.extend<AccFixtures, Workers>({
   projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
   putProjectOnHold: ({ page, commands, projectChangeRequests }, use) =>
     use(new PutProjectOnHold({ page, commands, projectChangeRequests })),
-  monitoringReports: ({ page, commands }, use) => use(new MonitoringReports({ page, commands })),
+  monitoringReports: ({ page, commands, accNavigation }, use) =>
+    use(new MonitoringReports({ page, commands, accNavigation })),
   approveNewSubcontractor: ({ page, commands, projectChangeRequests }, use) =>
     use(new ApproveNewSubcontractor({ page, commands, projectChangeRequests })),
   changeScope: ({ page, commands, projectChangeRequests, validators }, use) =>

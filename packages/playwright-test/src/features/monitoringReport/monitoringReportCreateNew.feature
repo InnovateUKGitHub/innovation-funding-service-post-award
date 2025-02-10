@@ -20,3 +20,12 @@ Feature: New Monitoring Report
     When the internal user is on the project flexipage
     And the internal user goes to the "Monitoring Reports" tab
     Then the internal user sees 1 result in the "Monitoring Answers" box
+
+  Scenario: Auto-save functionality
+    Given a standard CR&D project exists
+    And the user is the "mspUser" user
+    And the user has started a Monitoring Report
+    When the user types into each section and navigates without saving
+    Then the MO report data will have saved upon navigating back
+    When the user saves over an auto-save value
+    Then the new value will be saved

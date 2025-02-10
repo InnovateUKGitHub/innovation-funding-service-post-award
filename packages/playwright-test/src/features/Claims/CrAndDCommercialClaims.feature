@@ -25,6 +25,37 @@ Feature: CR&D Claims
             | Other costs 5          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
             | Total                  | £79,560,000.00       | £0.00                          | £0.00                     | £79,560,000.00           |
 
+    Scenario: Auto-save functionality for cost categories
+        Given a multi-partner CR&D project with profiles exists
+        And the user is the "mainFcUser" user
+        And the user has accessed the Costs to be claimed page
+        When the user adds a line item and navigates away without saving
+        Then the line-item data will have saved upon navigating back
+        And the user will see the Costs to be claimed page
+            | Category               | Total eligible costs | Eligible costs claimed to date | Costs claimed this period | Remaining eligible costs |
+            | Labour                 | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Overheads              | £1,560,000.00        | £0.00                          | £0.00                     | £1,560,000.00            |
+            | Materials              | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Capital usage          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Subcontracting         | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Travel and subsistence | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Other costs            | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Other costs 2          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Other costs 3          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Other costs 4          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Other costs 5          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+            | Total                  | £79,560,000.00       | £0.00                          | £0.00                     | £79,560,000.00           |
+        When the user saves over the auto-save for Labour
+        Then the user will see the Costs to be claimed page
+            | Category | Total eligible costs | Eligible costs claimed to date | Costs claimed this period | Remaining eligible costs |
+            | Labour   | £7,800,000.00        | £0.00                          | £666.66                   | £7,799,333.34            |
+        When the user removes the Labour line item
+        Then the user will see the Costs to be claimed page
+            | Category | Total eligible costs | Eligible costs claimed to date | Costs claimed this period | Remaining eligible costs |
+            | Labour   | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
+
+
+
     Scenario: Updating Claim cost categories
         Given a multi-partner CR&D project with profiles exists
         And the user is the "mainFcUser" user

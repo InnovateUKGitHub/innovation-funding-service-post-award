@@ -121,7 +121,7 @@ class AccNavigation {
   @Given("the user has navigated to the monitoring reports page")
   async gotoMonitoringReports() {
     await this.testCache.cache(
-      ["gotoProjectForecasts", this.projectState.prefixedProjectNumber()],
+      ["gotoMonitoringReports", this.projectState.prefixedProjectNumber()],
       async () => {
         await this.gotoProjectOverview();
         await DashboardTile.fromTitle(this.page, "Monitoring reports").click();

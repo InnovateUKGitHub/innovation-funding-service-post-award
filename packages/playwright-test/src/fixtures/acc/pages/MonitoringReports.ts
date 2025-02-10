@@ -5,12 +5,14 @@ import { Button } from "../../../components/Button";
 import { moAnswers } from "../../../components/Monitoring/MonitoringAnswers";
 import { getLorem } from "../../../components/lorem";
 import { Commands } from "../../Commands";
+import { AccNavigation } from "../AccNavigation";
 
 export
 @Fixture("monitoringReports")
 class MonitoringReports {
   protected readonly page: Page;
   protected readonly commands: Commands;
+  protected readonly accNavigation: AccNavigation;
   private readonly dashboardTitle: PageHeading;
   private readonly reportTitle: PageHeading;
   private readonly startButton: Locator;
@@ -44,9 +46,10 @@ class MonitoringReports {
   private readonly submissionGuidance: string;
   private readonly issuesAndActionsEditLink: Locator;
 
-  constructor({ page, commands }: { page: Page; commands: Commands }) {
+  constructor({ page, commands, accNavigation }: { page: Page; commands: Commands; accNavigation: AccNavigation }) {
     this.page = page;
     this.commands = commands;
+    this.accNavigation = accNavigation;
     this.dashboardTitle = PageHeading.fromTitle(page, "Monitoring reports");
     this.reportTitle = PageHeading.fromTitle(page, "Monitoring Report");
     this.startButton = this.page.getByRole("link", { name: "Start a new report" });
@@ -152,6 +155,14 @@ class MonitoringReports {
   @When("the user clicks start a new report")
   async clickStartReport() {
     await this.startButton.click();
+  }
+
+  @Then("the user has started a Monitoring Report")
+  async startMoReport() {
+    await this.accNavigation.gotoMonitoringReports();
+    await this.clickStartReport();
+    await this.continueToSectionOne();
+    await this.seeMOSectionHeading("Scope");
   }
 
   /**
@@ -433,5 +444,88 @@ class MonitoringReports {
   async submittedStatus(status: string) {
     await expect(this.dashboardTitle.get()).toBeVisible();
     await expect(this.page.getByRole("table")).toContainText(status);
+  }
+
+  /**
+   * Auto-save functionality
+   */
+
+  @When("the user types into each section and navigates without saving")
+  async completeWithOutSaving() {
+    await this.fillAndNavigate(`Auto-save comments for Scope`);
+    const remainingSections = [
+      "Time",
+      "Cost",
+      "Exploitation",
+      "Risk management",
+      "Project planning",
+      "Summary",
+      "Issues and actions",
+    ];
+    let i = 2;
+    for (const section of remainingSections) {
+      await this.accessSummarySection(i, section);
+      await this.fillAndNavigate(`Auto-save comments for ${section}`);
+      i++;
+    }
+    await this.accNavigation.gotoMonitoringReports();
+    await this.page.getByRole("link").filter({ hasText: "Edit report" }).click();
+    await this.reportTitle.isVisible();
+  }
+
+  @Then("the MO report data will have saved upon navigating back")
+  async checkAutoSaveData() {
+    await this.reportTitle.isVisible();
+    let i = 1;
+    for (const section of this.summarySubheadings) {
+      await expect(this.page.getByTestId(`questions-${i}-comments`)).not.toHaveText(
+        `Auto-save comments for ${section}`,
+      );
+      i++;
+    }
+    let ii = 1;
+    for (const section of this.summarySubheadings) {
+      await this.accessSummarySection(ii, section, `Auto-save comments for ${section}`);
+      await this.accNavigation.gotoMonitoringReports();
+      await this.page.getByRole("link").filter({ hasText: "Edit report" }).click();
+      await this.reportTitle.isVisible();
+      ii++;
+    }
+  }
+
+  @When("the user saves over an auto-save value")
+  async saveOverAutosave() {
+    await this.page.getByTestId("question-1-score").getByRole("link").filter({ hasText: "Edit" }).click();
+    await expect(this.page.locator("legend").filter({ hasText: "Scope" })).toBeVisible();
+    await this.page.getByLabel(String(moAnswers["Scope"][0])).click();
+    await this.page.getByRole("textbox").fill("Overwritten auto-save comments");
+    await this.saveAndReturnSummary.click();
+    await this.reportTitle.isVisible();
+  }
+  @Then("the new value will be saved")
+  async autoSaveOverwritten() {
+    await expect(
+      this.page.getByTestId("questions-1-comments").filter({ hasText: "Overwritten auto-save comments" }),
+    ).toBeVisible();
+    await this.page.getByTestId("question-1-score").getByRole("link").filter({ hasText: "Edit" }).click();
+    await expect(this.page.getByRole("textbox")).toHaveValue("Overwritten auto-save comments");
+  }
+
+  /**
+   * Methods for auto-save
+   */
+  async fillAndNavigate(comment: string) {
+    await this.commentsBox.fill(comment);
+    await this.accNavigation.gotoMonitoringReports();
+    await this.page.getByRole("link").filter({ hasText: "Edit report" }).click();
+    await this.reportTitle.isVisible();
+  }
+
+  async accessSummarySection(qnum: number, section: string, checkComment?: string) {
+    await this.page.getByTestId(`summary-question-${qnum}`).getByRole("link").filter({ hasText: "Edit" }).click();
+    await this.seeMOSectionHeading(section);
+    if (checkComment) {
+      await expect(this.page.getByRole("textbox")).toHaveValue(checkComment);
+    }
   }
 }
