@@ -4,7 +4,7 @@ import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -17,12 +17,7 @@ import { ValidationMessage } from "@ui/components/molecules/validation/Validatio
 import { Info } from "@ui/components/atoms/Details/Details";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { useSpendProfileCostsQuery } from "./spendProfileCosts.logic";
-import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
-import { Button } from "@ui/components/atoms/form/Button/Button";
-import { useForm } from "react-hook-form";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
-import { noop } from "lodash";
 import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
@@ -37,6 +32,8 @@ export interface PcrSpendProfileCostSummaryParams {
 
 const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
   const { pcrId, itemId, projectId, routes, costCategoryId } = props;
+
+  const { getContent } = useContent();
 
   const { project, pcrItem, spendProfile, costCategory, fragmentRef } = useSpendProfileCostsQuery(
     projectId,
@@ -61,17 +58,6 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
 
   const costs = spendProfile.costs.filter(x => x.costCategoryId === costCategoryId);
   const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
-
-  const { onUpdate, isFetching } = useOnSavePcrItem(
-    projectId,
-    pcrId,
-    itemId,
-    noop,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
-  const { handleSubmit } = useForm({});
 
   return (
     <Page
@@ -112,13 +98,11 @@ const SpendProfileCostsSummaryComponent = (props: PcrSpendProfileCostSummaryPara
           costCategoryId={costCategoryId}
           caption={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
         />
-        <Form data-qa="submit_costs" onSubmit={handleSubmit(data => onUpdate({ data, context: { link: stepRoute } }))}>
-          <Fieldset>
-            <Button type="submit" disabled={isFetching}>
-              <Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonSubmit} />
-            </Button>
-          </Fieldset>
-        </Form>
+        <Fieldset>
+          <Link route={stepRoute} styling="PrimaryButton">
+            {getContent(x => x.pages.pcrSpendProfileCostsSummary.buttonSubmit)}
+          </Link>
+        </Fieldset>
       </Section>
     </Page>
   );
