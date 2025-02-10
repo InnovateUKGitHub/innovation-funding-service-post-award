@@ -15,7 +15,7 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddPartnerSchema, addPartnerErrorMap, getAddPartnerSummarySchema } from "./addPartnerSummary.zod";
+import { AddPartnerSchema, addPartnerErrorMap, addPartnerSummarySchema } from "./addPartnerSummary.zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
@@ -24,6 +24,7 @@ import { useMemo } from "react";
 import { useContent } from "@ui/hooks/content.hook";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { useOnUpdateAddPartnerSummary } from "./addPartnerSUmmary.logic";
 
 export const AddPartnerSummary = () => {
   const { projectId, itemId, fetchKey, mode, displayCompleteForm } = usePcrWorkflowContext();
@@ -55,12 +56,9 @@ export const AddPartnerSummary = () => {
       projectPostcode: pcrItem.projectPostcode ?? undefined,
       tsbReference: pcrItem.tsbReference ?? undefined,
     },
-    resolver: zodResolver(
-      getAddPartnerSummarySchema({ projectRole: pcrItem.projectRole, organisationType: pcrItem.organisationType }),
-      {
-        errorMap: addPartnerErrorMap,
-      },
-    ),
+    resolver: zodResolver(addPartnerSummarySchema, {
+      errorMap: addPartnerErrorMap,
+    }),
   });
 
   const { getContent } = useContent();
@@ -86,8 +84,10 @@ export const AddPartnerSummary = () => {
     return { totalProjectCosts, totalOtherFunding, fundingSought, partnerContribution };
   }, []);
 
+  const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerSummary();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section title={x => x.pcrAddPartnerLabels.organisationSectionTitle} qa="add-partner-summary-organisation">
         <SummaryList qa="add-partner-summary-list-organisation">
           <SummaryListItem
@@ -426,6 +426,8 @@ export const AddPartnerSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" name="projectRole" value={pcrItem.projectRole} />
           <input type="hidden" name="organisationType" value={pcrItem.organisationType} />

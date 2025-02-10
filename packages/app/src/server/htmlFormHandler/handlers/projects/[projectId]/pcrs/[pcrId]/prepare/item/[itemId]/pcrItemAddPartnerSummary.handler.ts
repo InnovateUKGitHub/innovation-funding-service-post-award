@@ -1,21 +1,18 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
-
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
-
 import {
   AddPartnerSchemaType,
-  getAddPartnerSummarySchema,
+  addPartnerSummarySchema,
   addPartnerErrorMap,
 } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrAddPartnerSummaryHandler extends ZodFormHandlerBase<
   AddPartnerSchemaType,
@@ -30,11 +27,9 @@ export class PcrAddPartnerSummaryHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({ input }: { input: AnyObject }) {
-    const projectRole = Number(input.projectRole);
-    const organisationType = input.organisationType;
+  protected async getZodSchema() {
     return {
-      schema: getAddPartnerSummarySchema({ projectRole, organisationType }),
+      schema: addPartnerSummarySchema,
       errorMap: addPartnerErrorMap,
     };
   }
@@ -88,22 +83,12 @@ export class PcrAddPartnerSummaryHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            },
-          ],
-        },
-      }),
-    );
+    const status = input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(status),
+    });
 
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,

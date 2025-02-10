@@ -35,6 +35,7 @@ import type {
   PcrAddPartnerProjectCostTravelAndSubsistenceDto,
   PcrAddPartnerProjectCostSubcontractingDto,
   PcrAddPartnerProjectCostOverheadDto,
+  PcrAddPartnerSummaryDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -78,6 +79,7 @@ import { UpdatePcrAddPartnerProjectCostTravelAndSubsistenceCommand } from "@serv
 import { UpdatePcrAddPartnerProjectCostSubcontractingCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostSubcontractingCommand";
 import { UpdatePcrAddPartnerProjectCostOverheadCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostOverheadCommand";
 import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPartnerProjectCostCommand";
+import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updatePcrAddPartnerSummaryCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -171,6 +173,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     PcrAddPartnerProjectCostTravelAndSubsistenceDto,
     boolean
   >;
+  addPartnerSummary: PcrUpdateMethod<Context, PcrAddPartnerSummaryDto, boolean>;
   changeDuration: PcrUpdateMethod<Context, PcrChangeDurationDto, boolean>;
   loanDrawdownExtension: PcrUpdateMethod<Context, LoanDrawdownExtensionDto, boolean>;
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
@@ -324,6 +327,12 @@ class Controller
       "/:projectId/:pcrId/:pcrItemId/add-partner/role-and-organisation",
       requestParams<PcrAddPartnerRoleAndOrganisationDto>,
       this.addPartnerRoleAndOrganisation,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/add-partner/summary",
+      requestParams<PcrAddPartnerSummaryDto>,
+      this.addPartnerSummary,
     );
 
     this.putItem(
@@ -495,6 +504,10 @@ class Controller
 
   async addPartnerRoleAndOrganisation(params: PcrUpdateParams<"server", PcrAddPartnerRoleAndOrganisationDto>) {
     return await runUpdateCommand(params, new UpdatePcrAddPartnerRoleAndOrganisationCommand(getParams(params)));
+  }
+
+  async addPartnerSummary(params: PcrUpdateParams<"server", PcrAddPartnerSummaryDto>) {
+    return await runUpdateCommand(params, new UpdatePcrAddPartnerSummaryCommand(getParams(params)));
   }
 
   async addPartnerProjectCostCapitalUsage(params: PcrUpdateParams<"server", PcrAddPartnerProjectCostCapitalUsageDto>) {

@@ -619,3 +619,33 @@ export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjec
   form: FormTypes.PcrAddPartnerProjectCostOverhead;
   button_submit: string;
 }
+
+export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
+  organisationName?: string;
+  registrationNumber?: string;
+  registeredAddress?: string;
+  participantSize?: number;
+  numberOfEmployees?: number | null;
+  financialYearEndDate?: Date | null;
+  financialYearEndTurnover: number | null;
+  projectLocation?: number;
+  projectCity?: string;
+  projectPostcode?: string;
+  contact1Forename?: string;
+  contact1Surname?: string;
+  contact1Phone?: string;
+  contact1Email?: string;
+  contact2Forename?: string;
+  contact2Phone?: string;
+  contact2Surname?: string;
+  contact2Email?: string;
+  awardRate?: number | null;
+  partnerType: number;
+  projectRole: number;
+  isCommercialWork?: boolean | null;
+  hasOtherFunding?: boolean | null;
+  organisationType?: string;
+  tsbReference?: string;
+  markedAsComplete?: boolean;
+  form: FormTypes.PcrAddPartnerSummary;
+}

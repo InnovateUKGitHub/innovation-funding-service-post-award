@@ -8,14 +8,8 @@ import { getNumberValidation } from "@ui/zod/numericValidator.zod";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
-export const getAddPartnerSummarySchema = ({
-  projectRole,
-  organisationType,
-}: {
-  projectRole: PCRProjectRole;
-  organisationType: PCROrganisationType;
-}) =>
-  evaluateObject(({ markedAsComplete: required }) => ({
+export const addPartnerSummarySchema = evaluateObject(
+  ({ markedAsComplete: required, organisationType, projectRole }) => ({
     organisationName: getTextValidation({ required, maxLength: 256 }),
     registrationNumber: getTextValidation({
       required: required && organisationType === PCROrganisationType.Industrial,
@@ -25,7 +19,7 @@ export const getAddPartnerSummarySchema = ({
       required: required && organisationType === PCROrganisationType.Industrial,
       maxLength: 32768,
     }),
-    participantSize: required ? z.number().gt(0) : z.number().nullable().optional(),
+    participantSize: required ? z.number().gt(0) : z.number().optional(),
     numberOfEmployees: getNumberValidation({
       min: 0,
       lt: 100_000_000,
@@ -45,7 +39,6 @@ export const getAddPartnerSummarySchema = ({
       : z
           .number()
           .transform(x => x as PCRProjectLocation)
-          .nullable()
           .optional(),
     projectCity: getTextValidation({ required, maxLength: 40 }),
     projectPostcode: getTextValidation({ required: false, maxLength: 10 }),
@@ -84,9 +77,10 @@ export const getAddPartnerSummarySchema = ({
     }),
     markedAsComplete: z.literal(required),
     form: z.literal(FormTypes.PcrAddPartnerSummary),
-  }));
+  }),
+);
 
-export type AddPartnerSchemaType = ReturnType<typeof getAddPartnerSummarySchema>;
+export type AddPartnerSchemaType = typeof addPartnerSummarySchema;
 export type AddPartnerSchema = Omit<z.output<AddPartnerSchemaType>, "markedAsComplete"> & {
   markedAsComplete: boolean;
 };
