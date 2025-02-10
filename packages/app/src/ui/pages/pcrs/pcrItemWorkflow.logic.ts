@@ -14,6 +14,8 @@ import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
 import { PCRItemStatus, PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { usePcrWorkflowContext } from "./pcrItemWorkflow";
+import { z, ZodSchema } from "zod";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -136,4 +138,38 @@ export const getDisplayName = (typeName: string) => {
   } else {
     return typeName;
   }
+};
+
+type PcrApiParams<T extends ZodSchema> = {
+  projectId: ProjectId;
+  pcrId: PcrId;
+  pcrItemId: PcrItemId;
+  pcr: z.output<T>;
+};
+
+type Updater<T extends ZodSchema> = (params: PcrApiParams<T>) => Promise<boolean>;
+
+export const pcrUpdater = <T extends ZodSchema, U extends Updater<T>>(apiMethod: U) => {
+  const navigate = useNavigate();
+
+  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
+  const { clearMessages } = useMessageContext();
+
+  return useOnUpdate<z.output<T>, boolean, { link: ILinkInfo }>({
+    req: data => {
+      return apiMethod({
+        projectId,
+        pcrId,
+        pcrItemId: itemId,
+        pcr: data,
+        ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
+      });
+    },
+
+    onSuccess: async function (_: z.output<T>, __: boolean, context: { link: ILinkInfo } | undefined) {
+      clearMessages();
+      setFetchKey(k => k + 1);
+      navigate(context?.link?.path ?? "");
+    },
+  });
 };

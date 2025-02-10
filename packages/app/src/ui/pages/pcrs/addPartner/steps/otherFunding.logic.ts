@@ -1,39 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
-import { useMessageContext } from "@ui/context/messages";
-import { z } from "zod";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { OtherFundingSchemaType } from "./schemas/otherFunding.zod";
+import { pcrUpdater } from "../../pcrItemWorkflow.logic";
+import { IPCRsApi } from "@server/apis/pcrs";
 
 export const useOnUpdateAddPartnerOtherFunding = () => {
-  const navigate = useNavigate();
-
-  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
-  const { clearMessages } = useMessageContext();
-
-  return useOnUpdate<z.output<OtherFundingSchemaType>, boolean, { link: ILinkInfo }>({
-    req: data =>
-      clientsideApiClient.pcrs.addPartnerOtherFunding({
-        projectId,
-        pcrId,
-        pcrItemId: itemId,
-        pcr: {
-          ...data,
-          form: data.form,
-          ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-        },
-      }),
-    onSuccess: async function (
-      _: z.output<OtherFundingSchemaType>,
-      __: boolean,
-      context: { link: ILinkInfo } | undefined,
-    ) {
-      clearMessages();
-      setFetchKey(k => k + 1);
-      navigate(context?.link?.path ?? "");
-    },
-  });
+  return pcrUpdater<OtherFundingSchemaType, IPCRsApi<"client">["addPartnerOtherFunding"]>(
+    clientsideApiClient.pcrs.addPartnerOtherFunding,
+  );
 };

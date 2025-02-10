@@ -362,8 +362,8 @@ export type RenamePartnerFormType =
   | FormTypes.PcrRenamePartnerFilesStep;
 
 export interface PcrRenamePartnerDto extends PcrDtoCommon {
-  accountName: string | null;
-  existingAccountName: string | null;
+  accountName?: string;
+  existingAccountName?: string;
   partnerId: PartnerId | null;
   form: RenamePartnerFormType;
 }
@@ -440,7 +440,7 @@ export interface PcrAddPartnerAgreementToPcrDto extends PcrDtoCommon {
 export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
   button_submit: string;
-  organisationName: string;
+  organisationName?: string;
 }
 
 export interface PcrAddPartnerJesStepDto extends PcrDtoCommon {
