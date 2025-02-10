@@ -39,7 +39,7 @@ export class PcrItemAddPartnerSpendProfileDeleteItemHandler extends ZodFormHandl
   }
 
   protected async run({ context, params }: { context: IContext; params: PcrDeleteProjectCostParams }): Promise<string> {
-    context.repositories.pcrSpendProfile.deleteSingleItem(params.costId);
+    await context.repositories.pcrSpendProfile.deleteSingleItem(params.costId);
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

@@ -83,12 +83,12 @@ export class PcrItemAddPartnerSpendProfileCapitalUsageCostsHandler extends ZodFo
     };
 
     if (input.id) {
-      context.repositories.pcrSpendProfile.updateSingleItem({
+      await context.repositories.pcrSpendProfile.updateSingleItem({
         Id: input.id,
         ...payload,
       });
     } else {
-      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+      await context.repositories.pcrSpendProfile.insertSingleItem(payload);
     }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({

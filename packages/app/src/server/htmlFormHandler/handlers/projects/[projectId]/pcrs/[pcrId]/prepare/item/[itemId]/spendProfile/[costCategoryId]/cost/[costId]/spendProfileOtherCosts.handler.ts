@@ -60,7 +60,7 @@ export class PcrItemAddPartnerSpendProfileOtherCostsHandler extends ZodFormHandl
     params: PcrAddSpendProfileCostParams;
   }): Promise<string> {
     if (input.id) {
-      context.repositories.pcrSpendProfile.updateSingleItem({
+      await context.repositories.pcrSpendProfile.updateSingleItem({
         Id: input.id,
         Acc_CostCategoryID__c: input.costCategoryId,
         Acc_ProjectChangeRequest__c: params.itemId,
@@ -68,7 +68,7 @@ export class PcrItemAddPartnerSpendProfileOtherCostsHandler extends ZodFormHandl
         Acc_TotalCost__c: parseCurrency(input.estimatedCost),
       });
     } else {
-      context.repositories.pcrSpendProfile.insertSingleItem({
+      await context.repositories.pcrSpendProfile.insertSingleItem({
         Acc_CostCategoryID__c: input.costCategoryId,
         Acc_ProjectChangeRequest__c: params.itemId,
         Acc_ItemDescription__c: input.otherCostDescription,
