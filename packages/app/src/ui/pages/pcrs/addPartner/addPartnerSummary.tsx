@@ -24,7 +24,7 @@ import { useMemo } from "react";
 import { useContent } from "@ui/hooks/content.hook";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useOnUpdateAddPartnerSummary } from "./addPartnerSUmmary.logic";
+import { useOnUpdateAddPartnerSummary } from "./addPartnerSummary.logic";
 
 export const AddPartnerSummary = () => {
   const { projectId, itemId, fetchKey, mode, displayCompleteForm } = usePcrWorkflowContext();

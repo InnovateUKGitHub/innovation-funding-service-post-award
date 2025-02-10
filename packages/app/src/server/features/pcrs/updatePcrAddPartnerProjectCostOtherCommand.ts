@@ -76,12 +76,12 @@ export class UpdatePcrAddPartnerProjectCostOtherCommand extends ZodAuthorisedAsy
     };
 
     if (validatedData.id) {
-      context.repositories.pcrSpendProfile.updateSingleItem({
+      await context.repositories.pcrSpendProfile.updateSingleItem({
         Id: validatedData.id,
         ...payload,
       });
     } else {
-      context.repositories.pcrSpendProfile.insertSingleItem(payload);
+      await context.repositories.pcrSpendProfile.insertSingleItem(payload);
     }
 
     return true;

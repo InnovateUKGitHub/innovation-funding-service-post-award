@@ -19,7 +19,7 @@ export class DeleteProjectCostCommand extends AuthorisedAsyncCommandBase<boolean
   }
 
   protected async run(context: IContext) {
-    context.repositories.pcrSpendProfile.deleteSingleItem(this.costId);
+    await context.repositories.pcrSpendProfile.deleteSingleItem(this.costId);
     return true;
   }
 }
