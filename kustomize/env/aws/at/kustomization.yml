@@ -4,4 +4,4 @@ commonAnnotations:
 
 resources:
   - ../aws-base
-  - ../../../config-mgmt/env/aws/demo
+  - ../../../config-mgmt/env/aws/at

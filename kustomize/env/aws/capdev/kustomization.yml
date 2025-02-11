@@ -4,4 +4,4 @@ commonAnnotations:
 
 resources:
   - ../aws-base
-  - ../../../config-mgmt/env/aws/capconfig
+  - ../../../config-mgmt/env/aws/capdev
