@@ -1065,6 +1065,15 @@ class CrdClaims {
     await this.costsToBeClaimedHeading.isVisible();
   }
 
+  @When("the user navigates out of claims and back to Forecast again")
+  async navigateOutAndBackToForecast() {
+    await this.backToDocumentsLink.click();
+    await this.backToCosts.click();
+    await this.backToClaims.click();
+    await this.backToProject.click();
+    await this.accessUpdateForecastPage();
+  }
+
   /**
    * METHODS
    */

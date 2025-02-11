@@ -11,7 +11,7 @@ class ViewForecast {
   protected readonly page: Page;
   protected readonly commands: Commands;
 
-  private readonly pageTitle: PageHeading;
+  private readonly forecastPageTitle: PageHeading;
   private readonly continueToSummaryButton: Locator;
   private readonly claimSummaryTitle: PageHeading;
   private readonly backToUpdateForecast: Locator;
@@ -38,11 +38,15 @@ class ViewForecast {
     "Nov",
     "Dec",
   ];
+  private readonly backToForecast: Locator;
+  private readonly backToProject: Locator;
+  private readonly projectOverviewTitle: PageHeading;
+  private readonly editForecastButton: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
     this.commands = commands;
-    this.pageTitle = PageHeading.fromTitle(page, "Forecast");
+    this.forecastPageTitle = PageHeading.fromTitle(page, "Forecast");
     this.continueToSummaryButton = this.page.getByRole("button").filter({ hasText: "Continue to summary" });
     this.claimSummaryTitle = PageHeading.fromTitle(this.page, "Claim summary");
     this.backToUpdateForecast = this.commands.backLink("Back to update forecast");
@@ -64,11 +68,15 @@ class ViewForecast {
     this.forecastWarningMoStatement = this.forecastCostsWarningQa.filter({
       hasText: "Your Monitoring Officer will let you know if they have any concerns.",
     });
+    this.backToForecast = this.commands.backLink("Back to forecast");
+    this.backToProject = this.commands.backLink("Back to project");
+    this.projectOverviewTitle = PageHeading.fromTitle(this.page, "Project overview");
+    this.editForecastButton = this.commands.button("Edit forecast");
   }
 
   @Then("the user sees the project forecast for {string}")
   async isPage(partnerName: string, table: DataTable) {
-    await expect(this.pageTitle.get()).toBeVisible();
+    await expect(this.forecastPageTitle.get()).toBeVisible();
     await expect(this.page.locator("h2,h3,h4,h5,h6").filter({ hasText: partnerName })).toBeVisible();
     await this.viewForecastTable(table, true);
     await expect(this.xlsDownloadLink).toBeVisible();
@@ -178,6 +186,51 @@ class ViewForecast {
     } else {
       await this.completeForecastTable(table, false);
     }
+  }
+
+  @When("the user enters forecast figures without saving")
+  async forecastFiguresNoSave() {
+    await this.enterForecastNoSave(true);
+  }
+
+  @When("the user enters claims forecast figures without saving")
+  async claimForecastFiguresNoSave() {
+    await this.enterForecastNoSave(false);
+  }
+
+  @When("the user navigates away and back again")
+  async navigateAwayAndBack() {
+    await this.backToForecast.click();
+    await this.backToProject.click();
+    await this.projectOverviewTitle.isVisible();
+    await this.commands.selectTile("Forecast");
+    await this.forecastPageTitle.isVisible();
+  }
+
+  @When("the user clicks the Edit forecast button")
+  async clickEditForecastButton() {
+    await this.editForecastButton.click();
+  }
+
+  @Then("the figures will have saved locally")
+  async locallySavedFigures() {
+    let labourTotal: string;
+    let overheadTotal: string;
+    const ifLabourPopulated = this.page.getByLabel(`Labour Period 1`).filter({ hasText: "£1,666.23" });
+    if (await ifLabourPopulated.isVisible()) {
+      labourTotal = "£2,399.49";
+      overheadTotal = "£479.88";
+    } else {
+      labourTotal = "£733.26";
+      overheadTotal = "£146.63";
+    }
+    const tableLocator = this.page.getByRole("table");
+    for (let i = 2; i < 13; i++) {
+      await this.checkCell(false, "Labour", "Period", i, "66.66");
+      await this.checkCell(true, "Overheads", "Period", i, "£13.33");
+    }
+    await this.checkRowTotal(tableLocator, 1, 14, labourTotal);
+    await this.checkRowTotal(tableLocator, 2, 14, overheadTotal);
   }
 
   /**
@@ -437,5 +490,29 @@ class ViewForecast {
     //const endMonth = (startMonth + 2) % 12;
     //const endMonthString = this.monthList[endMonth];
     return startMonthString;
+  }
+
+  async enterForecastNoSave(forecastTile: boolean) {
+    const tableLocator = this.page.getByRole("table");
+    let labourTotal: string;
+    let overheadTotal: string;
+    const ifLabourPopulated = this.page.getByLabel(`Labour Period 1`).filter({ hasText: "£1,666.23" });
+    if (await ifLabourPopulated.isVisible()) {
+      labourTotal = "£2,399.49";
+      overheadTotal = "£479.88";
+    } else {
+      labourTotal = "£733.26";
+      overheadTotal = "£146.63";
+    }
+    if (forecastTile) {
+      await this.editForecastButton.click();
+    }
+    for (let i = 2; i < 13; i++) {
+      await this.fillCell("Labour", "Period", i, "66.66");
+      await this.checkCell(true, "Overheads", "Period", i, "£13.33");
+    }
+    await this.checkRowTotal(tableLocator, 1, 14, labourTotal);
+    await this.checkRowTotal(tableLocator, 2, 14, overheadTotal);
+    await this.page.waitForTimeout(1000);
   }
 }

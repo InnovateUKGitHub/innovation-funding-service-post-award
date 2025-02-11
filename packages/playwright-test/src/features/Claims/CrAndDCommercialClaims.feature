@@ -114,6 +114,14 @@ Feature: CR&D Claims
         When the user accesses the Claim documents page
         Then the user will see the Claim documents page
 
+    Scenario: Auto-save functionality for claims forecast
+        Given a multi-partner CR&D project with profiles exists
+        And the user is the "mainFcUser" user
+        And the user has accessed the Update forecast page
+        When the user enters claims forecast figures without saving
+        And the user navigates out of claims and back to Forecast again
+        Then the figures will have saved locally
+
     Scenario: Validating and updating the forecast page
         Given a multi-partner CR&D project with profiles exists
         And the user is the "mainFcUser" user
