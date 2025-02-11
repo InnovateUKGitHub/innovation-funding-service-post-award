@@ -57,7 +57,7 @@ export const PCRReasoningSummary = () => {
   const { register, handleSubmit, watch, formState, setError } = useForm<PcrReasoningSummarySchemaType>({
     defaultValues: {
       reasoningComments: pcr.reasoningComments,
-      reasoningStatus: pcr.reasoningStatus === PCRItemStatus.Complete,
+      markedAsComplete: pcr.reasoningStatus === PCRItemStatus.Complete,
     },
     resolver: zodResolver(pcrReasoningSummarySchema, {
       errorMap: pcrReasoningErrorMap,
@@ -66,7 +66,7 @@ export const PCRReasoningSummary = () => {
 
   const { getContent } = useContent();
 
-  const watchedCheckbox = watch("reasoningStatus");
+  const watchedCheckbox = watch("markedAsComplete");
 
   const validationErrors = useZodErrors<z.output<PcrReasoningSummarySchema>>(setError, formState.errors);
   useEffect(() => {
@@ -128,9 +128,7 @@ export const PCRReasoningSummary = () => {
           <Form
             onSubmit={handleSubmit(data => {
               return onUpdate({
-                data: {
-                  reasoningStatus: data.reasoningStatus ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-                },
+                data,
                 context: {
                   link: routes.pcrPrepare.getLink({
                     projectId,
@@ -145,7 +143,7 @@ export const PCRReasoningSummary = () => {
             <Fieldset>
               <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
               <FormGroup>
-                <CheckboxList name="reasoningStatus" register={register} disabled={isFetching}>
+                <CheckboxList name="markedAsComplete" register={register} disabled={isFetching}>
                   <Checkbox
                     defaultChecked={pcr.reasoningStatus === PCRItemStatus.Complete}
                     id="reasoning-status"

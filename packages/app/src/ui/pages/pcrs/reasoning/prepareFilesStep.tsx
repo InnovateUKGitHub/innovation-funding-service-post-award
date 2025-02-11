@@ -23,7 +23,6 @@ import { PcrItemListSection } from "./pcrReasoningWorkflow.page";
 import { Messages } from "@ui/components/molecules/Messages/messages";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
 import { useMessages } from "@framework/api-helpers/useMessages";
 import { PcrReasoningFilesSchema, PcrReasoningFilesSchemaType, pcrReasoningFilesSchema } from "./pcrReasoning.zod";
@@ -143,11 +142,7 @@ export const PCRPrepareReasoningFilesStep = () => {
           disabled={disabled}
         />
       </Section>
-      <Form
-        onSubmit={handleFormSubmit(data =>
-          onUpdate({ data: { ...data, reasoningStatus: PCRItemStatus.Incomplete }, context: { link: nextLink } }),
-        )}
-      >
+      <Form onSubmit={handleFormSubmit(data => onUpdate({ data, context: { link: nextLink } }))}>
         <input type="hidden" value={FormTypes.PcrPrepareReasoningFilesStep} {...register("form")} />
         <Fieldset>
           <Button disabled={disabled} type="submit">

@@ -35,6 +35,7 @@ import type {
   PcrAddPartnerProjectCostOverheadDto,
   PcrAddPartnerSummaryDto,
   PcrFilesStepDto,
+  ReasoningDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -79,6 +80,7 @@ import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPart
 import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updatePcrAddPartnerSummaryCommand";
 import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartnerLabourCostCommand";
 import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesStepCommand";
+import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -177,6 +179,9 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
+  reasoning: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>,
+  ) => Promise<boolean>;
   deleteProjectCost: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
   ) => Promise<boolean>;
@@ -394,6 +399,8 @@ class Controller
       this.removePartner,
     );
 
+    this.putItem("/:projectId/:pcrId/reasoning", requestParams<ReasoningDto>, this.reasoning);
+
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/suspend-project",
       requestParams<PcrSuspendProjectDto>,
@@ -544,6 +551,18 @@ class Controller
 
   async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {
     return await runUpdateCommand(params, new UpdatePcrLoanDurationExtensionCommand(getParams(params)));
+  }
+
+  async reasoning(params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>) {
+    return await runUpdateCommand(
+      params,
+      new UpdatePcrReasoningCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
   }
 
   async removePartner(params: PcrUpdateParams<"server", PcrRemovePartnerDto>) {

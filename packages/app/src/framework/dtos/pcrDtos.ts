@@ -647,3 +647,12 @@ export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
   markedAsComplete?: boolean;
   form: FormTypes.PcrAddPartnerSummary;
 }
+
+export interface ReasoningDto {
+  reasoningComments?: string;
+  markedAsComplete?: boolean;
+  form:
+    | FormTypes.PcrPrepareReasoningStep
+    | FormTypes.PcrPrepareReasoningFilesStep
+    | FormTypes.PcrPrepareReasoningSummary;
+}
