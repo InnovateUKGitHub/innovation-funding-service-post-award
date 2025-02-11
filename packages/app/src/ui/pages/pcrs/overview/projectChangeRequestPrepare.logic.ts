@@ -6,12 +6,9 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPcrStatusDtoArray } from "@gql/dtoMapper/mapPcrStatus";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { PCRStatus } from "@framework/constants/pcrConstants";
-import { PCRDto } from "@framework/dtos/pcrDtos";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { useRoutes } from "@ui/context/routesProvider";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 import { z } from "zod";
@@ -82,53 +79,17 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   };
 };
 
-const getPayload = (
-  saveAndContinue: boolean,
-  project: Pick<ProjectDto, "monitoringLevel" | "id">,
-  pcr: Pick<PCRDto, "status" | "id">,
-  data: Pick<z.output<PcrPrepareSchema>, "comments">,
-) => {
-  const payload = { ...pcr, comments: data.comments, projectId: project.id };
-  if (saveAndContinue) {
-    switch (pcr.status) {
-      case PCRStatus.DraftWithProjectManager:
-      case PCRStatus.QueriedByMonitoringOfficer:
-        if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
-          payload.status = PCRStatus.SubmittedToInnovateUK;
-        } else {
-          payload.status = PCRStatus.SubmittedToMonitoringOfficer;
-        }
-        break;
-      case PCRStatus.QueriedToProjectManager:
-        payload.status = PCRStatus.SubmittedToInnovateUK;
-        break;
-      default:
-        payload.status = pcr.status;
-        break;
-    }
-  }
-
-  return payload;
-};
-
-export const useOnUpdatePcrPrepare = (
-  pcrId: PcrId,
-  pcr: Pick<PCRDto, "status" | "id">,
-  project: Pick<ProjectDto, "monitoringLevel" | "id">,
-) => {
+export const useOnUpdatePcrPrepare = (pcrId: PcrId, project: Pick<ProjectDto, "monitoringLevel" | "id">) => {
   const routes = useRoutes();
   const navigate = useNavigate();
-  const { id: projectId } = project;
-
-  return useOnUpdate<z.output<PcrPrepareSchema>, PCRDto>({
+  const projectId = project.id;
+  return useOnUpdate<z.output<PcrPrepareSchema>, boolean>({
     req(data) {
-      const payload = {
+      return clientsideApiClient.pcrs.submitPcr({
         projectId,
-        id: pcrId,
-        pcr: getPayload(data.button_submit === "submit", project, pcr, data),
-      };
-
-      return clientsideApiClient.pcrs.update(payload);
+        pcrId,
+        pcr: { ...data, monitoringLevel: project.monitoringLevel },
+      });
     },
     onSuccess(data) {
       if (data.button_submit === "submit") {

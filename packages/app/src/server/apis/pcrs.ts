@@ -36,6 +36,7 @@ import type {
   PcrAddPartnerSummaryDto,
   PcrFilesStepDto,
   ReasoningDto,
+  PcrSubmitDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -81,6 +82,7 @@ import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updateP
 import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartnerLabourCostCommand";
 import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesStepCommand";
 import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
+import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -179,6 +181,9 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
+  submitPcr: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: PcrSubmitDto }>,
+  ) => Promise<boolean>;
   reasoning: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>,
   ) => Promise<boolean>;
@@ -406,6 +411,8 @@ class Controller
       requestParams<PcrSuspendProjectDto>,
       this.suspendProject,
     );
+
+    this.putItem("/:projectId/:pcrId/submit-pcr", requestParams<PcrSubmitDto>, this.submitPcr);
 
     this.deleteItem(
       "/:projectId/:pcrId/:pcrItemId/:costId",
@@ -663,6 +670,19 @@ class Controller
       }),
     );
     return res;
+  }
+
+  async submitPcr(params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcr: PcrSubmitDto }>) {
+    const context = await contextProvider.start(params);
+    await context.runCommand(
+      new SubmitPcrCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {

@@ -222,6 +222,7 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/suspend-project`, params.pcr),
     deleteLabourCost: params =>
       ajaxDelete(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.costId}/labour`),
+    submitPcr: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/submit-pcr`, params.pcr),
     deleteProjectCost: params =>
       ajaxDelete(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.costId}`),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
