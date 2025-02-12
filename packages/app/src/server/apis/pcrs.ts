@@ -80,6 +80,7 @@ import { UpdatePcrAddPartnerProjectCostSubcontractingCommand } from "@server/fea
 import { UpdatePcrAddPartnerProjectCostOverheadCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectCostOverheadCommand";
 import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPartnerProjectCostCommand";
 import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updatePcrAddPartnerSummaryCommand";
+import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartnerLabourCostCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -181,6 +182,9 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
   deleteProjectCost: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
+  ) => Promise<boolean>;
+  deleteLabourCost: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
   ) => Promise<boolean>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
@@ -413,6 +417,12 @@ class Controller
       "/:projectId/:pcrId/:pcrItemId/:costId",
       p => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, costId: p.costId as CostId }),
       this.deleteProjectCost,
+    );
+
+    this.deleteItem(
+      "/:projectId/:pcrId/:pcrItemId/:costId/labour",
+      p => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, costId: p.costId as CostId }),
+      this.deleteLabourCost,
     );
 
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
@@ -664,6 +674,15 @@ class Controller
     return await runUpdateCommand(
       params,
       new DeleteProjectCostCommand(params.projectId, params.pcrId, params.pcrItemId, params.costId),
+    );
+  }
+
+  async deleteLabourCost(
+    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
+  ): Promise<boolean> {
+    return await runUpdateCommand(
+      params,
+      new DeleteLabourCostCommand(params.projectId, params.pcrId, params.pcrItemId, params.costId),
     );
   }
 }

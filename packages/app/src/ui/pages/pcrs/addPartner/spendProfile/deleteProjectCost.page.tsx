@@ -62,7 +62,19 @@ const DeleteProjectCostPage = ({
 
   const { handleSubmit } = useForm<EmptyObject>({});
 
-  const { onUpdate, isFetching, apiError } = useOnDeleteProjectCost({ projectId, pcrId, itemId, costId });
+  /**
+   * TODO: deprecate the special case for labour once overhead calculations moved to salesforce
+   */
+
+  const costCategoryType = new CostCategoryList().fromId(costCategory.type);
+
+  const { onUpdate, isFetching, apiError } = useOnDeleteProjectCost({
+    projectId,
+    pcrId,
+    itemId,
+    costId,
+    isLabourCost: costCategoryType.group === CostCategoryGroupType.Labour,
+  });
 
   return (
     <Page

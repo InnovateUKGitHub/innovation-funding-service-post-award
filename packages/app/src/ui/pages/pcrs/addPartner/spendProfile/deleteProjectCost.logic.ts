@@ -12,11 +12,13 @@ export const useOnDeleteProjectCost = ({
   itemId,
   projectId,
   costId,
+  isLabourCost,
 }: {
   pcrId: PcrId;
   itemId: PcrItemId;
   projectId: ProjectId;
   costId: CostId;
+  isLabourCost: boolean;
 }) => {
   const navigate = useNavigate();
 
@@ -33,7 +35,9 @@ export const useOnDeleteProjectCost = ({
         costId: costId as CostId,
       };
 
-      return clientsideApiClient.pcrs.deleteProjectCost(payload);
+      return isLabourCost
+        ? clientsideApiClient.pcrs.deleteLabourCost(payload)
+        : clientsideApiClient.pcrs.deleteProjectCost(payload);
     },
     onSuccess: async function (_: z.output<ZodEmptySchema>, __: boolean, context: { link: ILinkInfo } | undefined) {
       clearMessages();
