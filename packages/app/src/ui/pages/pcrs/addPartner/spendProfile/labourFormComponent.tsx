@@ -11,7 +11,7 @@ import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
 import {
   MaybeNewCostDto,
   PCRSpendProfileCostDto,
+  PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isObject } from "lodash";
@@ -26,6 +27,40 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { useOnUpdateLabour } from "./labour.logic";
+import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
+
+/**
+ * getOverhead
+ * -----------
+ *
+ * in the case that overhead rate has already been set to be 20%
+ * then we need to recalculate the overhead total as part of updating the labour costs,
+ * since the basic calculation of overheads is 20% of the labour costs.
+ *
+ * for this we need to send the total running labour profile and the costId of the overhead rate
+ * to be updated
+ */
+const getOverheadData = (spendProfile: PcrSpendProfileDto) => {
+  const overhead = spendProfile.costs.find(x => "overheadRate" in x);
+
+  if (!overhead || overhead.overheadRate !== PCRSpendProfileOverheadRate.Twenty) {
+    return {
+      overheadCostId: null,
+      labourProfile: [],
+    };
+  }
+  const labourProfile = spendProfile.costs
+    .filter(x => "grossCostOfRole" in x)
+    .map(x => ({
+      id: x.id,
+      value: x.value,
+    }));
+
+  return {
+    overheadCostId: overhead.id,
+    labourProfile,
+  };
+};
 
 const isLabourCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
@@ -36,10 +71,12 @@ const isLabourCostDto = function (
 };
 
 export const LabourFormComponent = () => {
-  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
+  const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem, spendProfile } =
     useContext(SpendProfileContext);
 
   let defaultCost: MaybeNewCostDto<PCRSpendProfileLabourCostDto>;
+
+  const { labourProfile, overheadCostId } = useMemo(() => getOverheadData(spendProfile), [spendProfile]);
 
   if (addNewItem) {
     defaultCost = {
@@ -70,6 +107,8 @@ export const LabourFormComponent = () => {
       daysSpentOnProject: defaultCost.daysSpentOnProject ?? undefined,
       costCategoryType: costCategory.type,
       costCategoryId,
+      overheadCostId,
+      labourProfile,
     },
     resolver: zodResolver(labourSchema, {
       errorMap,
@@ -99,7 +138,13 @@ export const LabourFormComponent = () => {
           <input type="hidden" name="id" value={cost?.id} />
           <input type="hidden" name="costCategoryType" value={costCategory.type} />
           <input type="hidden" name="costCategoryId" value={costCategoryId} />
-
+          <input type="hidden" name="overheadCostId" value={overheadCostId ?? undefined} />
+          {labourProfile.map((x, i) => (
+            <>
+              <input type="hidden" key={`${x.id}-id`} name={`labourProfile.${i}.id`} value={x.id} />
+              <input type="hidden" key={`${x.id}-value`} name={`labourProfile.${i}.value`} value={String(x.value)} />
+            </>
+          ))}
           <Field
             error={validationErrors?.labourDescription}
             label={getContent(x => x.pcrSpendProfileLabels.labour.role)}

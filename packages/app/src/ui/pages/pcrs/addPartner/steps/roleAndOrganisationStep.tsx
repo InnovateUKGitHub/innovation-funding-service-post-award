@@ -51,7 +51,7 @@ export const RoleAndOrganisationStep = () => {
     }),
   });
 
-  const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerPartnerRoleAndOrganisation(formHasBeenFilled);
+  const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerPartnerRoleAndOrganisation();
 
   const disabled = formHasBeenFilled || isFetching;
 

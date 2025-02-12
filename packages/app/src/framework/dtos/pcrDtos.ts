@@ -10,6 +10,7 @@ import {
   PCRProjectRole,
   PCRItemHiddenReason,
   ManageTeamMemberMethod,
+  PCRSpendProfileOverheadRate,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -578,6 +579,8 @@ export interface PcrAddPartnerProjectCostLabourDto extends PcrAddPartnerProjectC
   ratePerDay: string | null;
   daysSpentOnProject: number;
   form: FormTypes.PcrAddPartnerProjectCostLabour;
+  overheadCostId: CostId | null;
+  labourProfile: { id: CostId; value: number | null }[];
 }
 
 export interface PcrAddPartnerProjectCostMaterialsDto extends PcrAddPartnerProjectCost {
@@ -614,7 +617,7 @@ export interface PcrAddPartnerProjectCostSubcontractingDto extends PcrAddPartner
 }
 
 export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjectCost {
-  overheadRate: number;
+  overheadRate: PCRSpendProfileOverheadRate;
   calculatedValue: string | null;
   form: FormTypes.PcrAddPartnerProjectCostOverhead;
   button_submit: string;

@@ -34,6 +34,8 @@ export const labourSchema = z.object({
   }),
   costCategoryType: z.nativeEnum(CostCategoryType),
   costCategoryId: costCategoryIdValidation,
+  overheadCostId: costIdValidation.nullable(),
+  labourProfile: z.array(z.object({ id: costIdValidation, value: z.number().nullable() })),
 });
 
 export type LabourSchemaType = typeof labourSchema;

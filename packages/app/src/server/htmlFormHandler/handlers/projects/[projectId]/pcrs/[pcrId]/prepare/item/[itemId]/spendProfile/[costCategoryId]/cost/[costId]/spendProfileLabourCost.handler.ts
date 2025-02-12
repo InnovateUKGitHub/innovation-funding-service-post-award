@@ -12,6 +12,7 @@ import {
 import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { set, sumBy } from "lodash";
 
 export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHandlerBase<
   LabourSchemaType,
@@ -35,6 +36,12 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<LabourSchemaType>> {
     const id = typeof input.id === "string" && input.id.trim().length > 0 ? input.id : null;
+    const data = { labourProfile: [] };
+    Object.values(input).reduce((acc, cur) => {
+      if (/labourProfile/.test(cur[0])) {
+        set(data, [cur[0]], parseCurrency(cur[1]));
+      }
+    }, []);
 
     return {
       id,
@@ -45,6 +52,8 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       daysSpentOnProject: input.daysSpentOnProject,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
       costCategoryId: input.costCategoryId,
+      overheadCostId: input.overheadCostId,
+      labourProfile: data.labourProfile,
     };
   }
 
@@ -57,6 +66,28 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
     context: IContext;
     params: PcrAddSpendProfileCostParams | PcrEditSpendProfileCostParams;
   }): Promise<string> {
+    const totalCost = roundCurrency(parseCurrency(input.ratePerDay) * input.daysSpentOnProject);
+
+    /**
+     * need to recalculate overheads in the case that they have already been set to 20%
+     * inferred by presence of a matching overhead cost id
+     */
+    const shouldUpdateOverheads = !!input.overheadCostId;
+    let newLabourTotal = 0;
+
+    if (shouldUpdateOverheads) {
+      if (input.id) {
+        newLabourTotal = sumBy(input.labourProfile, x => (x.id === input.id ? totalCost : (x.value ?? 0)));
+      } else {
+        newLabourTotal = sumBy(input.labourProfile, x => x.value ?? 0) + totalCost;
+      }
+
+      await context.repositories.pcrSpendProfile.updateSingleItem({
+        Id: input.overheadCostId as CostId,
+        Acc_TotalCost__c: roundCurrency(newLabourTotal * 0.2),
+      });
+    }
+
     const payload = {
       Acc_CostCategoryID__c: input.costCategoryId,
       Acc_ProjectChangeRequest__c: params.itemId,
@@ -64,7 +95,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       Acc_DaysSpentOnProject__c: input.daysSpentOnProject,
       Acc_GrossCostOfRole__c: parseCurrency(input.grossCostOfRole),
       Acc_Rate__c: parseCurrency(input.ratePerDay),
-      Acc_TotalCost__c: roundCurrency(parseCurrency(input.ratePerDay) * input.daysSpentOnProject),
+      Acc_TotalCost__c: totalCost,
     };
 
     if (input.id) {
