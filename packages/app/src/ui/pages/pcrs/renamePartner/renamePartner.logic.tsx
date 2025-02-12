@@ -8,9 +8,7 @@ import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { RenamePartnerSchema } from "./renamePartner.zod";
-import { clientsideApiClient } from "@ui/apiClient";
 import { pcrUpdater } from "../pcrItemWorkflow.logic";
-import { IPCRsApi } from "@server/apis/pcrs";
 
 export const useRenamePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<RenamePartnerWorkflowQuery>(
@@ -55,5 +53,5 @@ export const useRenamePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: P
 };
 
 export const useOnUpdateRenamePartner = () => {
-  return pcrUpdater<RenamePartnerSchema, IPCRsApi<"client">["renamePartner"]>(clientsideApiClient.pcrs.renamePartner);
+  return pcrUpdater<RenamePartnerSchema>("renamePartner");
 };

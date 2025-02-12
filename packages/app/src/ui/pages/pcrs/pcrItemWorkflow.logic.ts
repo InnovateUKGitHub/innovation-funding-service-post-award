@@ -16,6 +16,7 @@ import { PCRItemStatus, PCRItemType, pcrItemTypes } from "@framework/constants/p
 import { FormTypes } from "@ui/zod/FormTypes";
 import { usePcrWorkflowContext } from "./pcrItemWorkflow";
 import { z, ZodSchema } from "zod";
+import { IPCRsApi } from "@server/apis/pcrs";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -149,7 +150,19 @@ type PcrApiParams<T extends ZodSchema> = {
 
 type Updater<T extends ZodSchema> = (params: PcrApiParams<T>) => Promise<boolean>;
 
-export const pcrUpdater = <T extends ZodSchema, U extends Updater<T>>(apiMethod: U) => {
+type AllowedMethods = Exclude<
+  keyof IPCRsApi<"client">,
+  | "update"
+  | "create"
+  | "inviteTeamMember"
+  | "deleteTeamMember"
+  | "replaceTeamMember"
+  | "updateTeamMember"
+  | "deleteProjectCost"
+  | "delete"
+>;
+
+export const pcrUpdater = <T extends ZodSchema>(apiPath: AllowedMethods) => {
   const navigate = useNavigate();
 
   const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
@@ -157,7 +170,7 @@ export const pcrUpdater = <T extends ZodSchema, U extends Updater<T>>(apiMethod:
 
   return useOnUpdate<z.output<T>, boolean, { link: ILinkInfo }>({
     req: data => {
-      return apiMethod({
+      return (clientsideApiClient.pcrs[apiPath] as Updater<T>)({
         projectId,
         pcrId,
         pcrItemId: itemId,

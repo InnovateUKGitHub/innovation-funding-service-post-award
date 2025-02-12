@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { clientsideApiClient } from "@ui/apiClient";
 import { RoleAndOrganisationSchemaType } from "./schemas/roleAndOrganisation.zod";
 import { getPCROrganisationType, PCROrganisationType, PCRParticipantSize } from "@framework/constants/pcrConstants";
 import { pcrUpdater } from "../../pcrItemWorkflow.logic";
-import { IPCRsApi } from "@server/apis/pcrs";
 
 export const setData = (data: z.output<RoleAndOrganisationSchemaType>) => {
   // It's not possible to come back to this page after it's submitted
@@ -26,7 +24,5 @@ export const setData = (data: z.output<RoleAndOrganisationSchemaType>) => {
 };
 
 export const useOnUpdateAddPartnerPartnerRoleAndOrganisation = () => {
-  return pcrUpdater<RoleAndOrganisationSchemaType, IPCRsApi<"client">["addPartnerRoleAndOrganisation"]>(
-    clientsideApiClient.pcrs.addPartnerRoleAndOrganisation,
-  );
+  return pcrUpdater<RoleAndOrganisationSchemaType>("addPartnerRoleAndOrganisation");
 };

@@ -20,6 +20,8 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { z, ZodSchema } from "zod";
 import { useContext } from "react";
+import { IPCRsApi } from "@server/apis/pcrs";
+import { clientsideApiClient } from "@ui/apiClient";
 
 export const useSpendProfileCostsQuery = (
   projectId: ProjectId,
@@ -192,7 +194,18 @@ type PcrApiParams<T extends ZodSchema> = {
 
 type Updater<T extends ZodSchema> = (params: PcrApiParams<T>) => Promise<boolean>;
 
-export const projectCostUpdater = <T extends ZodSchema, U extends Updater<T>>(apiMethod: U) => {
+type AllowedMethods = Extract<
+  keyof IPCRsApi<"client">,
+  | "addPartnerProjectCostOverhead"
+  | "addPartnerProjectCostLabour"
+  | "addPartnerProjectCostMaterials"
+  | "addPartnerProjectCostOtherCost"
+  | "addPartnerProjectCostCapitalUsage"
+  | "addPartnerProjectCostSubcontracting"
+  | "addPartnerProjectCostTravelAndSubsistence"
+>;
+
+export const projectCostUpdater = <T extends ZodSchema>(apiPath: AllowedMethods) => {
   const navigate = useNavigate();
 
   const { pcrId, itemId, projectId, setFetchKey } = useContext(SpendProfileContext);
@@ -200,7 +213,7 @@ export const projectCostUpdater = <T extends ZodSchema, U extends Updater<T>>(ap
 
   return useOnUpdate<z.output<T>, boolean, { link: ILinkInfo }>({
     req: data => {
-      return apiMethod({
+      return (clientsideApiClient.pcrs[apiPath] as Updater<T>)({
         projectId,
         pcrId,
         pcrItemId: itemId,

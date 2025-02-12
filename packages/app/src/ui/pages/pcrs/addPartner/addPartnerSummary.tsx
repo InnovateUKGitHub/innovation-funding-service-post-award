@@ -85,7 +85,6 @@ export const AddPartnerSummary = () => {
   }, []);
 
   const { isFetching, onUpdate, apiError } = useOnUpdateAddPartnerSummary();
-
   return (
     <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section title={x => x.pcrAddPartnerLabels.organisationSectionTitle} qa="add-partner-summary-organisation">
