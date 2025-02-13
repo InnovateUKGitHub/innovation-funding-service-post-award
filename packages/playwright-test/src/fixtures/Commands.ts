@@ -412,6 +412,17 @@ class Commands {
       }
     }
   }
+  
+   // get current date
+   dateFormatter(): string {
+    return new Date()
+      .toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(/(\d{1,2})\/(\w+)/, "$1 $2");
+    }
   /**
    *
    * Returns a string with full date with option for long or short month. E.g. Jan or January
