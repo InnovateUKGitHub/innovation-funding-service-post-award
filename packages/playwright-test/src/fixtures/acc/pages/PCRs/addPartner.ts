@@ -67,8 +67,8 @@ class AddPartner {
     private readonly tablerow1: Locator;
     private readonly tablerow2: Locator;
     private readonly fundingTable1: Locator;
-    private readonly pcrTableCell: Locator;
- 
+   
+
     constructor({
         page,
         commands,
@@ -134,7 +134,6 @@ class AddPartner {
         this.fundingCost = this.page.locator("td:nth-child(3) input");
         this.tablerow1 = this.page.locator('td:nth-child(1)');
         this.tablerow2 = this.page.locator('td:nth-child(2) .currency');
-        this.pcrTableCell = this.page.locator(".govuk-table__cell");
 
     }
 
@@ -726,7 +725,7 @@ class AddPartner {
         await this.pcr.clickCreateReq();
         await this.pcr.validatePcrDetails("2", "Add a partner");
         await this.pcr.clickTaskTodo("Add a partner");
-       
+
     }
 
     @When('the user completes the new partner information page')
@@ -1125,15 +1124,16 @@ class AddPartner {
         await this.page.waitForTimeout(5000);
         await this.page.getByRole("link").filter({ hasText: "Back to project costs" }).click();
         await this.commands.button("Return to summary").click();
-        await this.page.getByRole("link").filter({ hasText: "Back to request" }).click();   
+        await this.page.getByRole("link").filter({ hasText: "Back to request" }).click();
     }
 
     @Then('the request should be successfully submitted to Innovate')
     async verifySubmittedRequest() {
+        await this.page.waitForTimeout(2000);
         await this.pcr.enterComments("Monitoring Officer");
         await this.pcr.selectSend();
-        await this.putProjectonHold.moSubmitPcr();
-        expect((this.pcrTableCell).textContent()).toContain("Submitted to Innovate UK");
+        await this.pcr.clickSubmitButton();
         await this.page.waitForTimeout(5000);
+        expect((await this.page.locator("//td[normalize-space()='Submitted to Innovate UK']").textContent()).trim()).toBe('Submitted to Innovate UK');
     }
 }

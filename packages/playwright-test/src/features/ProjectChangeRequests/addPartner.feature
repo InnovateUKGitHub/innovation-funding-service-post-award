@@ -148,7 +148,7 @@ Feature: Add a partner
       | Exceptions - Equipment                     | /\@£$%%^^&*   | Cost must be in pounds (£).               |
       | Exceptions - Other costs                   | 1.            | Cost must be a valid currency.            |
   # | Tsb reference                              | We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to9 | TSB reference must be 256 characters or less. |
-
+  # Enable the step above - ACC-11846
 
   Scenario: Je-s cost categories valid test
     Given the user is on the Je-s cost categories page
