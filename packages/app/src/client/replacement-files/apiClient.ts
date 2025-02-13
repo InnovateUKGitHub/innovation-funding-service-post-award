@@ -114,11 +114,6 @@ const clientApi: IApiClient<"client"> = {
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/academic-organisation`,
         params.pcr,
       ),
-    addPartnerAgreementToPcr: params =>
-      ajaxPut(
-        `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/agreement-to-pcr`,
-        params.pcr,
-      ),
     addPartnerCompanyDetails: params =>
       ajaxPut(
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/company-details`,
@@ -139,8 +134,6 @@ const clientApi: IApiClient<"client"> = {
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/funding-level`,
         params.pcr,
       ),
-    addPartnerJesStep: params =>
-      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/jes-step`, params.pcr),
     addPartnerOtherFunding: params =>
       ajaxPut(
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/other-funding`,

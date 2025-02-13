@@ -16,7 +16,6 @@ import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Link } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useOnUpdateAddPartnerJesStep } from "./jesStep.logic";
 
 const useJesContent = () => {
   const { getContent } = useContent();
@@ -70,11 +69,9 @@ export const JeSStep = () => {
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
 
-  const { onUpdate, isFetching, apiError } = useOnUpdateAddPartnerJesStep();
-
   if (isKTP) {
     return (
-      <PcrPage apiError={apiError}>
+      <PcrPage>
         <H2>{content.jesHeading}</H2>
         <ValidationMessage
           messageType="info"
@@ -102,9 +99,6 @@ export const JeSStep = () => {
       guidanceComponent={<JesGuidance />}
       formType={FormTypes.PcrAddPartnerJesFormStep}
       returnToSummaryButton
-      onUpdate={onUpdate}
-      isFetching={isFetching}
-      apiError={apiError}
     />
   );
 };

@@ -4,11 +4,9 @@ import type {
   LoanDrawdownExtensionDto,
   PcrAddPartnerAcademicCostsDto,
   PcrAddPartnerAcademicOrganisationDto,
-  PcrAddPartnerAgreementToPcrDto,
   PcrAddPartnerCompanyDetailsDto,
   PcrAddPartnerFinanceContactDto,
   PcrAddPartnerFundingLevelDto,
-  PcrAddPartnerJesStepDto,
   PcrAddPartnerOtherFundingDto,
   PcrAddPartnerOtherSourcesOfFundingDto,
   PcrAddPartnerOrganisationDetailsDto,
@@ -57,11 +55,9 @@ import { UpdatePcrAddPartnerFinanceContactCommand } from "@server/features/pcrs/
 import { UpdatePcrAddPartnerProjectManagerCommand } from "@server/features/pcrs/updatePcrAddPartnerProjectManagerCommand";
 import { UpdatePcrLoanDurationExtensionCommand } from "@server/features/pcrs/updateLoanDurationExtensionCommand";
 import { UpdatePcrAddPartnerAcademicCostsCommand } from "@server/features/pcrs/updatePcrAddPartnerAcademicCostsCommand";
-import { UpdatePcrAddPartnerJesStepCommand } from "@server/features/pcrs/updatePcrAddPartnerJesStepCommand";
 import { UpdatePcrAddPartnerOtherFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherFundingCommand";
 import { UpdatePcrAddPartnerOtherSourcesOfFundingCommand } from "@server/features/pcrs/updateAddPartnerOtherSourcesOfFundingCommand";
 import { UpdatePcrAddPartnerFundingLevelCommand } from "@server/features/pcrs/updatePcrAddPartnerFundingLevelCommand";
-import { UpdatePcrAddPartnerAgreementToPcrCommand } from "@server/features/pcrs/updatePcrAddPartnerAgreementToPcrCommand";
 import { CreatePcrReplaceTeamMemberCommand } from "@server/features/pcrs/createPcrReplaceTeamMemberCommand";
 import { CreatePcrInviteTeamMemberCommand } from "@server/features/pcrs/createPcrInviteTeamMemberCommand";
 import { CreatePcrUpdateTeamMemberCommand } from "@server/features/pcrs/createPcrUpdateTeamMemberCommand";
@@ -153,12 +149,10 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   pcrFilesStep: PcrUpdateMethod<Context, PcrFilesStepDto, boolean>;
   addPartnerAcademicCosts: PcrUpdateMethod<Context, PcrAddPartnerAcademicCostsDto, boolean>;
   addPartnerAcademicOrganisation: PcrUpdateMethod<Context, PcrAddPartnerAcademicOrganisationDto, boolean>;
-  addPartnerAgreementToPcr: PcrUpdateMethod<Context, PcrAddPartnerAgreementToPcrDto, boolean>;
   addPartnerCompanyDetails: PcrUpdateMethod<Context, PcrAddPartnerCompanyDetailsDto, boolean>;
   addPartnerFinanceContact: PcrUpdateMethod<Context, PcrAddPartnerFinanceContactDto, boolean>;
   addPartnerFinancialDetails: PcrUpdateMethod<Context, PcrAddPartnerFinancialDetailsDto, boolean>;
   addPartnerFundingLevel: PcrUpdateMethod<Context, PcrAddPartnerFundingLevelDto, boolean>;
-  addPartnerJesStep: PcrUpdateMethod<Context, PcrAddPartnerJesStepDto, boolean>;
   addPartnerOtherFunding: PcrUpdateMethod<Context, PcrAddPartnerOtherFundingDto, boolean>;
   addPartnerOtherSourcesOfFunding: PcrUpdateMethod<Context, PcrAddPartnerOtherSourcesOfFundingDto, boolean>;
   addPartnerOrganisationDetails: PcrUpdateMethod<Context, PcrAddPartnerOrganisationDetailsDto, boolean>;
@@ -267,11 +261,6 @@ class Controller
     );
 
     this.putItem(
-      "/:projectId/:pcrId/:pcrItemId/add-partner/agreement-to-pcr",
-      requestParams<PcrAddPartnerAgreementToPcrDto>,
-      this.addPartnerAgreementToPcr,
-    );
-    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/company-details",
       requestParams<PcrAddPartnerCompanyDetailsDto>,
       this.addPartnerCompanyDetails,
@@ -293,12 +282,6 @@ class Controller
       "/:projectId/:pcrId/:pcrItemId/add-partner/funding-level",
       requestParams<PcrAddPartnerFundingLevelDto>,
       this.addPartnerFundingLevel,
-    );
-
-    this.putItem(
-      "/:projectId/:pcrId/:pcrItemId/add-partner/jes-step",
-      requestParams<PcrAddPartnerJesStepDto>,
-      this.addPartnerJesStep,
     );
 
     this.putItem(
@@ -476,10 +459,6 @@ class Controller
     return await runUpdateCommand(params, new UpdatePcrAddPartnerAcademicOrganisationCommand(getParams(params)));
   }
 
-  async addPartnerAgreementToPcr(params: PcrUpdateParams<"server", PcrAddPartnerAgreementToPcrDto>) {
-    return await runUpdateCommand(params, new UpdatePcrAddPartnerAgreementToPcrCommand(getParams(params)));
-  }
-
   async addPartnerCompanyDetails(params: PcrUpdateParams<"server", PcrAddPartnerCompanyDetailsDto>) {
     return await runUpdateCommand(params, new UpdatePcrAddPartnerCompanyDetailsCommand(getParams(params)));
   }
@@ -494,10 +473,6 @@ class Controller
 
   async addPartnerFundingLevel(params: PcrUpdateParams<"server", PcrAddPartnerFundingLevelDto>) {
     return await runUpdateCommand(params, new UpdatePcrAddPartnerFundingLevelCommand(getParams(params)));
-  }
-
-  async addPartnerJesStep(params: PcrUpdateParams<"server", PcrAddPartnerJesStepDto>) {
-    return await runUpdateCommand(params, new UpdatePcrAddPartnerJesStepCommand(getParams(params)));
   }
 
   async addPartnerOtherFunding(params: PcrUpdateParams<"server", PcrAddPartnerOtherFundingDto>) {

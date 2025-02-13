@@ -433,20 +433,10 @@ export interface PcrAddPartnerAcademicCostsDto extends PcrDtoCommon {
   }>;
 }
 
-export interface PcrAddPartnerAgreementToPcrDto extends PcrDtoCommon {
-  form: FormTypes.PcrAddPartnerAgreementFilesStep;
-  button_submit?: string;
-}
-
 export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
   button_submit: string;
   organisationName?: string;
-}
-
-export interface PcrAddPartnerJesStepDto extends PcrDtoCommon {
-  form: FormTypes.PcrAddPartnerJesFormStep;
-  button_submit?: string;
 }
 
 export interface PcrFilesStepDto extends PcrDtoCommon {

@@ -71,14 +71,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
 }) => {
   const { getContent } = useContent();
 
-  const {
-    config,
-    projectId,
-    itemId,
-    // onSave,
-    // isFetching: isFetchingFromContext,
-    markedAsCompleteHasBeenChecked,
-  } = usePcrWorkflowContext();
+  const { config, projectId, itemId, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
@@ -208,7 +201,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
       <Form
         onSubmit={handleFormSubmit(data =>
           onSaveHandler({
-            data: { status: PCRItemStatus.Incomplete, form: data.form },
+            data: { ...data, status: PCRItemStatus.Incomplete },
             context: { link: data.button_submit === "submit" ? nextLink : summaryLink },
           }),
         )}
