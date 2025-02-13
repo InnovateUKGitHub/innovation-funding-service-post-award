@@ -77,13 +77,13 @@ export class UpdatePcrAddPartnerProjectManagerCommand extends ZodAuthorisedAsync
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
       Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
-      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(
+      Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(
         PCRContactRole.ProjectManager,
       ),
-      Acc_Contact1Forename__c: validatedData.contact2Forename,
-      Acc_Contact1Surname__c: validatedData.contact2Surname,
-      Acc_Contact1Phone__c: validatedData.contact2Phone,
-      Acc_Contact1EmailAddress__c: validatedData.contact2Email,
+      Acc_Contact2Forename__c: validatedData.contact2Forename,
+      Acc_Contact2Surname__c: validatedData.contact2Surname,
+      Acc_Contact2Phone__c: validatedData.contact2Phone,
+      Acc_Contact2EmailAddress__c: validatedData.contact2Email,
     });
 
     return true;
