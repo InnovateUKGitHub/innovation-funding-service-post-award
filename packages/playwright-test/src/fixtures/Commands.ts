@@ -412,7 +412,6 @@ class Commands {
       }
     }
   }
-
   /**
    *
    * Returns a string with full date with option for long or short month. E.g. Jan or January

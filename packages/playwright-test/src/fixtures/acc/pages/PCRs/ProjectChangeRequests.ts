@@ -376,27 +376,3 @@ class ProjectChangeRequests {
     expect(actualValue.trim()).toMatch(expectedValue);
   }
 }
-function validatePcrTaskList(expectedSection: any, string: any, expectedTask: any, string1: any) {
-  throw new Error("Function not implemented.");
-}
-
-function validatePcrDetails(expectedRequestNumber: any, string: any, expectedTypes: any, string1: any) {
-  throw new Error("Function not implemented.");
-}
-
-function selectRadioButton(radioItem: any, string: any) {
-  throw new Error("Function not implemented.");
-}
-
-function clickTaskTodo(taskText: any, string: any) {
-  throw new Error("Function not implemented.");
-}
-
-function clickCreateReq() {
-  throw new Error("Function not implemented.");
-}
-
-function validateSubmittedPcrDetails(fieldName: any, string: any, expectedValue: any, arg3: number) {
-  throw new Error("Function not implemented.");
-}
-

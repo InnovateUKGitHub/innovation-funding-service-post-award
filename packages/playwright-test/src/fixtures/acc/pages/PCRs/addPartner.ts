@@ -7,6 +7,7 @@ import path from "path";
 import { DataTable } from "playwright-bdd";
 import { Commands } from "../../../Commands";
 import { ProjectChangeRequests } from "./ProjectChangeRequests";
+import { PutProjectOnHold } from "./putProjectOnHold";
 
 export
 @Fixture("addPartner")
@@ -14,6 +15,7 @@ class AddPartner {
     protected readonly page: Page;
     protected readonly commands: Commands;
     protected readonly pcr: ProjectChangeRequests;
+    protected readonly putProjectonHold: PutProjectOnHold;
     private readonly pageTitle: PageHeading;
     private readonly pageHeading: Locator;
     private readonly orgTypeText: Locator;
@@ -50,25 +52,40 @@ class AddPartner {
     private readonly jesSearch: Locator;
     private readonly projectCity: Locator;
     private readonly projectPostcode: Locator;
-
-
-
-
-
+    private readonly contact1Forename: Locator;
+    private readonly contact1Surname: Locator;
+    private readonly contact1Phone: Locator;
+    private readonly contact1Email: Locator;
+    private readonly PageHeading2: Locator;
+    private readonly chooseFile: Locator;
+    private readonly fileTable: Locator;
+    private readonly tsbRef: Locator;
+    private readonly fundingTable: string;
+    private readonly fundingSource: Locator;
+    private readonly fundingDate: Locator;
+    private readonly fundingCost: Locator;
+    private readonly tablerow1: Locator;
+    private readonly tablerow2: Locator;
+    private readonly fundingTable1: Locator;
+    private readonly pcrTableCell: Locator;
+ 
     constructor({
         page,
         commands,
         projectChangeRequests,
+        putProjectonHold,
     }: {
         page: Page;
         commands: Commands;
         projectChangeRequests: ProjectChangeRequests;
+        putProjectonHold: PutProjectOnHold;
     }) {
         this.page = page;
         this.commands = commands;
         this.pcr = projectChangeRequests;
         this.pageTitle = PageHeading.fromTitle(page, "Project change requests");
         this.pageHeading = this.page.locator("//*[@class='govuk-heading-xl clearFix']");
+        this.PageHeading2 = this.page.locator("//*[@class='govuk-heading-l']");
         this.orgTypeText = this.page.locator("//span[normalize-space()='What are the different types?']");
         this.orgContext = this.page.locator("//fieldset[@class='govuk-fieldset']//details[@class='govuk-details']");
         this.errorMsg = this.page.locator(".govuk-error-message");
@@ -103,7 +120,158 @@ class AddPartner {
         this.jesSearch = this.page.locator("//input[@id='searchJesOrganisations']");
         this.projectCity = this.page.locator("//input[@id='project-city']");
         this.projectPostcode = this.page.locator("//input[@id='project-postcode']");
+        this.contact1Forename = this.page.locator("//input[@id='contact1Forename']");
+        this.contact1Surname = this.page.locator("//input[@id='contact1Surname']");
+        this.contact1Phone = this.page.locator("//input[@id='contact1Phone']");
+        this.contact1Email = this.page.locator("//input[@id='contact1Email']");
+        this.chooseFile = this.page.locator("//input[@id='files']");
+        this.fileTable = this.page.locator(".govuk-table");
+        this.tsbRef = this.page.locator("//input[@id='tsb-reference']");
+        this.fundingTable = ("table tbody tr");
+        this.fundingTable1 = this.page.locator('.govuk-table tbody tr tfoot tr');
+        this.fundingSource = this.page.locator("td:nth-child(1) input");
+        this.fundingDate = this.page.locator("td:nth-child(2) input");
+        this.fundingCost = this.page.locator("td:nth-child(3) input");
+        this.tablerow1 = this.page.locator('td:nth-child(1)');
+        this.tablerow2 = this.page.locator('td:nth-child(2) .currency');
+        this.pcrTableCell = this.page.locator(".govuk-table__cell");
 
+    }
+
+    async editOrReviewBLink(index: number) {
+        await this.page.locator("a").nth(index).click();
+    }
+
+    async enterTableData(data: Array<{ fund: string; mm: string; yyyy: string; cost: string }>): Promise<void> {
+        const rows = this.page.locator(this.fundingTable);
+
+        for (let i = 0; i < data.length; i++) {
+            const row = rows.nth(i);
+
+            await row.locator(this.fundingSource).fill(data[i].fund);
+
+            const mmInput = row.locator(this.fundingDate).first();
+            const yyyyInput = row.locator(this.fundingDate).last();
+
+            await mmInput.fill(data[i].mm);
+            await yyyyInput.fill(data[i].yyyy);
+
+            await row.locator(this.fundingCost).fill(data[i].cost);
+        }
+    }
+
+    async addAnotherSource(index: number) {
+        for (let i = 0; i < index; i++) {
+            await this.commands.button("Add another source of funding").click();
+            await this.page.waitForTimeout(2000);
+        }
+    }
+
+    async fillInput(field: string, value: string) {
+        const normalizedField = field.replace(/\s+/g, ' ').trim().toLowerCase();
+
+        switch (normalizedField) {
+            case 'directly incurred - staff':
+                await this.govInput.nth(1).fill(value);
+                break;
+
+            case 'directly incurred - travel and subsistence':
+                await this.govInput.nth(2).fill(value);
+                break;
+
+            case 'directly incurred - equipment':
+                await this.govInput.nth(3).fill(value);
+                break;
+
+            case 'directly incurred - other costs':
+                await this.govInput.nth(4).fill(value);
+                break;
+
+            case 'directly allocated - investigations':
+                await this.govInput.nth(5).fill(value);
+                break;
+
+            case 'directly allocated - estates costs':
+                await this.govInput.nth(6).fill(value);
+                break;
+
+            case 'directly allocated - other costs':
+                await this.govInput.nth(7).fill(value);
+                break;
+
+            case 'indirect costs - investigations':
+                await this.govInput.nth(8).fill(value);
+                break;
+
+            case 'exceptions - staff':
+                await this.govInput.nth(9).fill(value);
+                break;
+
+            case 'exceptions - travel and subsistence':
+                await this.govInput.nth(10).fill(value);
+                break;
+
+            case 'exceptions - equipment':
+                await this.govInput.nth(11).fill(value);
+                break;
+
+            case 'exceptions - other costs':
+                await this.govInput.nth(12).fill(value);
+                break;
+
+            case 'tsb reference':
+                await this.tsbRef.fill(value);
+                break;
+
+            default:
+                throw new Error(`Field "${field}" not found`);
+        }
+    }
+
+    async fileUpload() {
+        await this.chooseFile.setInputFiles(path.join("src/components/testFiles/add.png"));
+        await this.commands.button("Upload documents").click()
+        await this.page.waitForTimeout(2000);
+    }
+
+    async enterFinanceDetails(field: string, value: string) {
+        switch (field.toLowerCase()) {
+            case 'fname':
+                await this.contact1Forename.fill(value);
+                break;
+
+            case 'lname':
+                await this.contact1Surname.fill(value);
+                break;
+
+            case 'phone':
+                await this.contact1Phone.fill(value);
+                break;
+
+            case 'email':
+                await this.contact1Email.fill(value);
+                break;
+        }
+    }
+
+    async clearFinanceDetails(field: string) {
+        switch (field.toLowerCase()) {
+            case 'fname':
+                await this.contact1Forename.clear();
+                break;
+
+            case 'lname':
+                await this.contact1Surname.clear();
+                break;
+
+            case 'phone':
+                await this.contact1Phone.clear();
+                break;
+
+            case 'email':
+                await this.contact1Email.clear();
+                break;
+        }
     }
 
     async enterFieldData(field: string, value: string) {
@@ -191,7 +359,6 @@ class AddPartner {
         await this.govInput.nth(1).fill(country);
         await this.textarea.fill(role);
         await this.govInput.nth(2).fill(cost);
-        // await this.govInput.nth(3).fill(cost);
         await this.commands.button("Save and return to subcontracting").click();
         await this.costGuidance.click();
         await this.commands.verifyTextOnPage("Subcontracting associate companies should be charged at cost.", this.markDown);
@@ -513,7 +680,6 @@ class AddPartner {
 
         //Agreement 
         await this.partnerAgreement();
-
     }
 
     @When('the user sees the summary table with the following details:')
@@ -553,7 +719,6 @@ class AddPartner {
     }
 
     //Research partner
-
     @When('the user selects add a partner')
     async addResearchPartner() {
         await this.pcr.clickCreateRequest()
@@ -561,36 +726,31 @@ class AddPartner {
         await this.pcr.clickCreateReq();
         await this.pcr.validatePcrDetails("2", "Add a partner");
         await this.pcr.clickTaskTodo("Add a partner");
-        await this.page.waitForTimeout(5000);
+       
     }
 
     @When('the user completes the new partner information page')
     async newPartnerInfo() {
-        await this.page.waitForTimeout(5000);
         await this.govRadioButtons("Collaborator");
         await this.govRadioButtons("No");
         await this.govRadioButtons("Research");
-
-
     }
 
     @When('the user navagigates to the summary page')
     async navigateToSummary() {
         await this.commands.button("Save and return to summary").click();
-        await this.page.waitForTimeout(5000);
-
+        //   await this.page.waitForTimeout(5000);
     }
-
 
     @When('the user attempts to mark the request as complete without completing the relevant fields')
     async markComplete() {
         await this.pcr.markAsCompleteSection(true);
-        await this.page.waitForTimeout(5000);
-
+        //   await this.page.waitForTimeout(5000);
     }
 
     @Then('the following validation errors should be displayed:')
     async getError(dataTable: DataTable) {
+        // await this.page.waitForTimeout(5000);
 
         await expect(this.summaryError).toBeVisible();
 
@@ -647,12 +807,10 @@ class AddPartner {
 
     @Then('the Project location page should be displayed with an error message')
     async locationValidation() {
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForTimeout(7000);
         await this.commands.verifyTextOnPage("Select project location.Enter project city.", this.errorMsg && this.errorBody);
-
     }
     // research location page 
-
     @Given('the user is on the project location page')
     async projectLocationPage() {
         await this.pcr.clickTaskTodo("Edit");
@@ -665,6 +823,7 @@ class AddPartner {
     @Given('the user enters an invalid {string} data {string}')
     async invalidInput(field: string, value: string) {
         await this.enterFieldData(field, value);
+
     }
 
     @Then('the user sees error message {string}')
@@ -686,5 +845,295 @@ class AddPartner {
     async addPerson() {
         await this.page.waitForTimeout(3000);
         await this.commands.verifyTextOnPage("Add a partner", this.pageHeading);
+    }
+
+    @Given('the user is on the add person page')
+    async addPersonPage() {
+        await this.pcr.clickTaskTodo("Edit");
+        await this.page.waitForTimeout(5000);
+        await this.pcr.clickTaskTodo("Add a partner (Swindon University)");
+        await this.editByVisibleText("Phone number");
+    }
+
+    @When('the user attempts to submit invalid data an error should be displayed')
+    async addPersonInvalidData(dataTable: { rawTable: string[][] }) {
+        const rows = dataTable.rawTable.slice(1);
+
+        for (const [field, value, expectedError] of rows) {
+
+            await this.enterFinanceDetails(field, value);
+            await this.commands.button("Save and continue").click();
+
+            const error1 = await this.errorBody.textContent()
+            const error2 = await this.errorMsg.textContent()
+            expect(error1?.trim()).toContain(expectedError);
+            expect(error2?.trim()).toContain(expectedError);
+
+            await this.clearFinanceDetails(field);
+        }
+    }
+
+    @Then('the user enters a valid data:')
+    async addPersonValidData(dataTable: { rawTable: string[][] }) {
+
+        const rows = dataTable.rawTable.slice(1);
+
+        for (const [field, value] of rows) {
+            await this.enterFinanceDetails(field, value);
+        }
+    }
+    //Jes
+    @Then('the Je-s document page should be displayed')
+    async verifyJesDocPage() {
+        await this.page.waitForTimeout(9000);
+        await this.commands.verifyTextOnPage("Files uploaded", this.PageHeading2);
+    }
+
+    @Given('the user is on the Je-s document page')
+    async jesFileUpload() {
+        await this.pcr.clickTaskTodo("Edit");
+        await this.page.waitForTimeout(5000);
+        await this.pcr.clickTaskTodo("Add a partner (Swindon University)");
+        await this.editByVisibleText("Je-S form")
+        await this.commands.verifyTextOnPage("Files uploaded", this.PageHeading2);
+        await this.commands.verifyTextOnPage("Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:");
+        await this.commands.verifyTextOnPage("Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected.");
+        await this.commands.verifyTextOnPage("Guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)The Je-S website (opens in a new window)");
+    }
+
+    @When('the user user uploads a valid document')
+    async jesFileUploaded() {
+        await this.fileUpload();
+        await this.page.waitForTimeout(5000);
+        await this.commands.validationNotification("Your document has been uploaded.");
+    }
+
+    @Then('the user sees the document table')
+    async docTable(dataTable: DataTable) {
+        const expectedTableData = dataTable.hashes()[0];
+        const actualTableData = this.fileTable.first();
+
+        const currentDate = this.commands.dateFormatter();
+
+        await expect(actualTableData.locator("td").nth(0)).toHaveText(expectedTableData.file_name);
+        await expect(actualTableData.locator("td").nth(1)).toHaveText(expectedTableData.type);
+        await expect(actualTableData.locator("td").nth(2)).toHaveText(currentDate);
+        await expect(actualTableData.locator("td").nth(3)).toHaveText(expectedTableData.size);
+        await expect(actualTableData.locator("td").nth(4)).toHaveText(expectedTableData.uploaded_by);
+        await expect(actualTableData.locator("td").nth(5)).toHaveText(expectedTableData.action);
+    }
+
+    @Then('the Je-s cost categories page should be displayed')
+    async jesProjectCostPage() {
+        await this.page.waitForTimeout(5000);
+        await this.commands.verifyTextOnPage("Project costs for new partner", this.PageHeading2);
+    }
+
+    @Given('the user is on the Je-s cost categories page')
+    async jesCostpage() {
+        await this.pcr.clickTaskTodo("Edit");
+        await this.page.waitForTimeout(5000);
+        await this.pcr.clickTaskTodo("Add a partner (Swindon University)");
+        await this.editByVisibleText("Project costs for new partner")
+    }
+    @When('the user validates each cost {string} with an invalid data {string}')
+    async invalidJesCost(field: string, value: string) {
+        try {
+            await this.page.waitForTimeout(5000);
+            await this.fillInput(field, value);
+        } catch (error) {
+            console.error(`Error filling input for field "${field}": ${error.message}`);
+            throw error;
+        }
+    }
+
+    @Then('the user sees cost message {string}')
+    async jesError(expectedError: string) {
+        const error1 = await this.errorBody.textContent()
+        const error2 = await this.errorMsg.textContent()
+        expect(error1?.trim()).toContain(expectedError);
+        expect(error2?.trim()).toContain(expectedError);
+    }
+
+    @Given('the user enters a valid jes costs')
+    async entervalidJesCosts(dataTable: { rawTable: string[][] }) {
+        const rows = dataTable.rawTable.slice(1);
+
+        for (const [field, value] of rows) {
+            await this.fillInput(field, value);
+        }
+    }
+
+    @Then('the Other public sector funding page should be displayed')
+    async getPublicFundingPage() {
+        await this.page.waitForTimeout(7000);
+        await this.commands.verifyTextOnPage("Other public sector funding?", this.PageHeading2);
+        await this.commands.button("Save and continue").click();
+        await this.commands.button("Save and return to summary").click();
+    }
+
+    @Given('the user is on the Other public sector funding page')
+    async getOtherFundingPage() {
+        await this.pcr.clickTaskTodo("Edit");
+        await this.page.waitForTimeout(5000);
+        await this.pcr.clickTaskTodo("Add a partner (Swindon University)");
+        await this.editByVisibleText("Other sources of funding?")
+        await this.govRadioButtons("Yes");
+        await this.commands.button("Save and continue").click();
+        await this.commands.verifyTextOnPage("Other public sector funding?", this.PageHeading2);
+    }
+
+    @When('the user enters the following invalid funding data:')
+    async invalidFunding(dataTable: DataTable) {
+        await this.addAnotherSource(5);
+
+        const tableData = dataTable.hashes().map(row => ({
+            fund: row.fund,
+            mm: row.mm.toString(),
+            yyyy: row.yyyy.toString(),
+            cost: row.cost.toString()
+        }));
+        await this.enterTableData(tableData);
+    }
+
+    @When('the user enters the following table data:')
+    async enterFundingData(dataTable: DataTable) {
+        await this.page.waitForTimeout(2000);
+        await this.page.reload();
+        await this.addAnotherSource(20);
+
+        const tableData = dataTable.hashes().map(row => ({
+            fund: row.fund,
+            mm: row.mm.toString().padStart(2, '0'),
+            yyyy: row.yyyy.toString(),
+            cost: row.cost.toString()
+        }));
+        await this.enterTableData(tableData);
+    }
+
+    @Then('the funding level page should be displayed')
+    async fundingLevel() {
+        await this.page.waitForTimeout(5000);
+        await this.commands.verifyTextOnPage("Add a partner", this.pageHeading);
+        await this.govInput.nth(0).fill("80");
+        await this.commands.button("Save and continue").click();
+    }
+
+    @Given('the user is on the agreement page')
+    async agreementDocPage() {
+        await this.pcr.clickTaskTodo("Edit");
+        await this.page.waitForTimeout(5000);
+        await this.pcr.clickTaskTodo("Add a partner (Swindon University)");
+        await this.editByVisibleText("Partner agreement")
+    }
+
+    @When('the user uploads the agreement document')
+    async agreementDoc() {
+        await this.page.waitForTimeout(5000);
+        await this.fileUpload();
+        await this.commands.validationNotification("Your document has been uploaded.");
+    }
+
+    @Given('And the use verifies the table')
+    async getFundingTable() {
+        await this.page.waitForTimeout(5000);
+        const tableData = this.spendTable;
+        await expect(tableData.locator('th')).toContainText(["Total other funding", "£13,049,025.21"]);
+        await this.commands.button("Save and return to summary").click();
+        await this.pcr.markAsCompleteSection(true);
+    }
+
+    @Then('the request should be submitted.')
+    async getSubmittedRequest() {
+        await this.pcr.validateSubmittedPcrDetails("Request number", "2");
+        await this.pcr.validateSubmittedPcrDetails("Request type", "Add a partner");
+        await this.pcr.validateSubmittedPcrDetails("Request status", "Submitted to Monitoring Officer")
+    }
+
+    @When('the user selects specific PCR')
+    async clickPcr() {
+        await this.editOrReviewBLink(9);
+        await this.page.getByRole("link").filter({ hasText: "Add a partner" }).click();
+        await this.page.waitForTimeout(5000);
+    }
+
+    @Then('the user sees the agreement section displaying the following details:')
+    async getAgreementSec(dataTable: DataTable) {
+        await this.validateSectionDetails(this.agreementSectionLocator, dataTable);
+    }
+
+    @When('the user clicks view')
+    async viewPcrDetails() {
+        await this.page.waitForTimeout(5000);
+        await this.page.getByRole("link").filter({ hasText: "View" }).click();
+    }
+    //Todo: Encapsulate the locators
+    @Then('the user sees the cost category table below')
+    async viewJesTable(dataTable: DataTable) {
+        await this.page.waitForTimeout(5000);
+
+        const expectedData = dataTable.hashes();
+
+        const tableRows = await this.page.locator("(//table[@class='govuk-table'])[1]//tbody/tr").all();
+
+        expect(tableRows.length).toBe(expectedData.length);
+
+        for (let i = 0; i < expectedData.length; i++) {
+            const categoryText = await tableRows[i].locator('td:nth-child(1)').textContent();
+            const costText = await tableRows[i].locator('td:nth-child(2) span.currency').textContent();
+
+            expect(categoryText.trim()).toBe(expectedData[i].Category);
+            expect(costText.trim()).toBe(expectedData[i].Cost);
+        }
+        expect((await this.page.locator("//tfoot//span[@class='currency']").textContent()).trim()).toBe("£3,242,739,716.50");
+    }
+
+    @Then('the user views a cost category')
+    async viewCost(dataTable: DataTable) {
+        await this.page.locator("//*[text()='Labour']//following::a[1]").click();
+    }
+
+    @Then('the user sees the cost table')
+    async costTable(dataTable: DataTable) {
+        await this.page.waitForTimeout(9000);
+        const expectedData = dataTable.hashes();
+
+        const tableRows = await this.page.locator("(//table[@class='govuk-table'])[1]//tbody/tr").all();
+
+        expect(tableRows.length).toBe(expectedData.length);
+
+        for (let i = 0; i < expectedData.length; i++) {
+            const row = tableRows[i];
+
+            const role = await row.locator('td:nth-child(1)').textContent();
+            const grossEmployeeCost = await row.locator('td:nth-child(2) .currency').textContent();
+            const rate = await row.locator('td:nth-child(3) .currency').textContent();
+            const daysSpent = await row.locator('td:nth-child(4)').textContent();
+            const totalCost = await row.locator('td:nth-child(5) .currency').textContent();
+
+            expect(role?.trim()).toBe(expectedData[i]['Role within project']);
+            expect(grossEmployeeCost?.trim()).toBe(expectedData[i]['Gross employee cost']);
+            expect(rate?.trim()).toBe(expectedData[i]['Rate']);
+            expect(daysSpent?.trim()).toBe(expectedData[i]['Days to be spent']);
+            expect(totalCost?.trim()).toBe(expectedData[i]['Total cost']);
+        }
+        expect((await this.page.locator("//tfoot//span[@class='currency']").textContent()).trim()).toBe('£2,701,520,000.00');
+    }
+
+    @When('the user navigates back followed by submitting the request')
+    async backToPreviousPage() {
+        await this.page.waitForTimeout(5000);
+        await this.page.getByRole("link").filter({ hasText: "Back to project costs" }).click();
+        await this.commands.button("Return to summary").click();
+        await this.page.getByRole("link").filter({ hasText: "Back to request" }).click();   
+    }
+
+    @Then('the request should be successfully submitted to Innovate')
+    async verifySubmittedRequest() {
+        await this.pcr.enterComments("Monitoring Officer");
+        await this.pcr.selectSend();
+        await this.putProjectonHold.moSubmitPcr();
+        expect((this.pcrTableCell).textContent()).toContain("Submitted to Innovate UK");
+        await this.page.waitForTimeout(5000);
     }
 }
