@@ -5,6 +5,8 @@ import { ProjectCard } from "../../components/ProjectCard";
 import { TestCache } from "../../helpers/TestCache";
 import { ProjectState } from "../projectFactory/ProjectState";
 import { AccIsLoaded } from "./AccIsLoaded";
+import { Acc_Claims__c } from "@innovateuk/project-factory-two/sobjects/Acc_Claims__c";
+import { Acc_Project__c } from "@innovateuk/project-factory-two/sobjects/Acc_Project__c";
 export
 @Fixture("accNavigation")
 class AccNavigation {
@@ -210,5 +212,29 @@ class AccNavigation {
 
     await this.accIsLoaded.devToolsLoaded();
     await this.accIsLoaded.claimsPageIsLoaded();
+  }
+
+  @Given("the user is on the prepare {string} claim summary page")
+  async gotoClaimPrepareSummaryPageFromClaimTotalProjectPeriod(claimPeriodKey: string) {
+    const claim = this.projectState.context[claimPeriodKey];
+    const project = this.projectState.context.project;
+    if (!(project instanceof Acc_Project__c)) throw new Error("Project is not of type Acc_Project__c");
+    if (!(claim instanceof Acc_Claims__c)) throw new Error(`${claimPeriodKey} is not of type Acc_Claims__c`);
+
+    await this.page.goto(
+      `/projects/${project.Id}/claims/${claim.Acc_ProjectParticipant__c}/prepare/${claim.Acc_ProjectPeriodNumber__c}/summary`,
+    );
+  }
+
+  @Given("the user is on the review {string} claim summary page")
+  async gotoClaimReviewSummaryPageFromClaimTotalProjectPeriod(claimPeriodKey: string) {
+    const claim = this.projectState.context[claimPeriodKey];
+    const project = this.projectState.context.project;
+    if (!(project instanceof Acc_Project__c)) throw new Error("Project is not of type Acc_Project__c");
+    if (!(claim instanceof Acc_Claims__c)) throw new Error(`${claimPeriodKey} is not of type Acc_Claims__c`);
+
+    await this.page.goto(
+      `/projects/${project.Id}/claims/${claim.Acc_ProjectParticipant__c}/review/${claim.Acc_ProjectPeriodNumber__c}`,
+    );
   }
 }

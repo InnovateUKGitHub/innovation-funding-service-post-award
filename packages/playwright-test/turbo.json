@@ -8,7 +8,6 @@
     },
     "pw": {
       "persistent": true,
-      "cache": false,
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "DISPLAY",
@@ -29,7 +28,6 @@
     },
     "pw-run": {
       "persistent": true,
-      "cache": false,
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "BASIC_AUTH",

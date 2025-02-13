@@ -122,3 +122,4 @@ const makeClaims = ({
 };
 
 export { makeClaims };
+export type { ClaimPeriodInfo };

@@ -1,10 +1,8 @@
 import { AbstractSObject } from "@innovateuk/project-factory-two/sobjects/AbstractProjectFactory";
 import { Acc_Project__c } from "@innovateuk/project-factory-two/sobjects/Acc_Project__c";
 import { User } from "@innovateuk/project-factory-two/sobjects/User";
-import { Fixture, Given, When } from "playwright-bdd/decorators";
+import { Fixture, Given } from "playwright-bdd/decorators";
 import { SfdcApi } from "../sfdc/SfdcApi";
-import { approveSObject } from "@innovateuk/project-factory-two/helpers/approveSObject";
-import { Acc_Prepayment__c } from "@innovateuk/project-factory-two/sobjects/Acc_Prepayment__c";
 
 export
 @Fixture("projectState")
@@ -28,15 +26,6 @@ class ProjectState {
     const user = new User();
     user.Username = username;
     this.context[id] = user;
-  }
-
-  @Given("the grant adjustment {string} is approved by the system user")
-  public async approveGrantAdjustment(adjustment: string) {
-    const grantAdjustment = this.context[adjustment];
-    if (!(grantAdjustment instanceof Acc_Prepayment__c))
-      throw new Error("Grant Adjustment key is not of type Acc_Prepayment__c");
-    const conn = await this.sfdcApi.getTsforceConnection();
-    return approveSObject(conn, grantAdjustment.Id);
   }
 
   prefixedProjectNumber(): string {

@@ -42,6 +42,8 @@ import { AccProjectLoans } from "./projectFactory/AccProjectLoans";
 import { LoanDrawdowns } from "./acc/pages/Loans/LoanDrawdowns";
 import { LoanDrawdownChange } from "./acc/pages/PCRs/loanDrawdownChange";
 import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
+import { SfdcExecuteApprovalProcessScript } from "./projectFactory/SfdcExecuteApprovalProcessScript";
+import { SfdcSObject } from "./sfdc/SfdcSObject";
 
 type AccFixtures = {
   // Pages
@@ -95,6 +97,8 @@ interface Workers {
   accProjectWithoutFc: AccProjectWithoutFC;
   acc1CypressDoNotTouch: Acc1CypressDoNotTouch;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
+  sfdcExecuteApprovalProcessScript: SfdcExecuteApprovalProcessScript;
+  sfdcSObject: SfdcSObject;
   projectState: ProjectState;
   accProjectLoans: AccProjectLoans;
   accProjectFinalClaim: AccProjectFinalClaim;
@@ -162,6 +166,10 @@ export const test = base.extend<AccFixtures, Workers>({
     ({ sfdcApi, projectState }, use) => use(new ProjectFactoryHelloWorld({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
+  sfdcExecuteApprovalProcessScript: [
+    ({ sfdcApi, projectState }, use) => use(new SfdcExecuteApprovalProcessScript({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
   accProjectKtp: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectKtp({ sfdcApi, projectState })),
     { scope: "worker" },
@@ -212,6 +220,7 @@ export const test = base.extend<AccFixtures, Workers>({
   sfdcIfspaAppAccProjectPage: SfdcIfspaAppAccProjectPage.create,
   sfdcNavigation: SfdcNavigation.create,
   sfdcSearchResultsPage: SfdcSearchResultsPage.create,
+  sfdcSObject: [SfdcSObject.create, { scope: "worker" }],
 });
 
 export { AccFixtures };

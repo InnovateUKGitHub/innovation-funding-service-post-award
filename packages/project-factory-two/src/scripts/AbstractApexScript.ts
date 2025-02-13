@@ -2,12 +2,20 @@ import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 import * as prettier from "prettier";
 
-abstract class AbstractApexScript extends AbstractProjectFactoryScript<Record<string, never>, Record<string, never>> {
-  abstract apex: string;
+abstract class AbstractApexScript<Arguments> extends AbstractProjectFactoryScript<Record<string, never>, Arguments> {
+  abstract getApex(args: Arguments): string;
 
-  async script({ connection }: { connection: ITsforceConnection }): Promise<Record<string, never>> {
+  async script({
+    connection,
+    args,
+  }: {
+    connection: ITsforceConnection;
+    args: Arguments;
+  }): Promise<Record<string, never>> {
+    const apexCode = this.getApex(args);
+
     const text = await connection.executeApex({
-      query: this.apex,
+      query: apexCode,
     });
 
     if (text.includes(`<success>false</success>`)) {
@@ -20,12 +28,12 @@ abstract class AbstractApexScript extends AbstractProjectFactoryScript<Record<st
         parser: "xml",
       });
 
-      let badApex = this.apex;
+      let badApex = apexCode;
 
       if (lineStr) {
         const lineNumber = Number(lineStr);
 
-        badApex = this.apex
+        badApex = apexCode
           .split("\n")
           .map((x, i) => `${i + 1 === lineNumber ? ">>>" : "   "} ${String(i + 1).padStart(4, " ")} | ${x}`)
           .filter((_, i) => i > lineNumber - 5 && i < lineNumber + 3)

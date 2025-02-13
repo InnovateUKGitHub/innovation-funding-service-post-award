@@ -3,7 +3,7 @@ import { DatabaseConnector } from "../database/DatabaseConnector";
 import { awaitResults } from "../helpers/awaitResults";
 import { batch } from "../helpers/batch";
 import { getRecordType } from "../helpers/getRecordType";
-import { makeClaims } from "../helpers/makeClaims";
+import { ClaimPeriodInfo, makeClaims } from "../helpers/makeClaims";
 import { useTriggerMdt } from "../helpers/triggerMdtToggles";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
@@ -14,6 +14,7 @@ import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 import { overwriteProfiles } from "../helpers/overwriteProfiles";
+import { Acc_Claims__c } from "../sobjects/Acc_Claims__c";
 
 interface BaseCrndProjectScriptArguments {}
 
@@ -32,6 +33,18 @@ type BaseCrndProjectScriptContext = {
   mspPcl: Acc_ProjectContactLink__c;
   pmPcl: Acc_ProjectContactLink__c;
   mainFcPcl: Acc_ProjectContactLink__c;
+  claimPeriod1: Acc_Claims__c;
+  claimPeriod2: Acc_Claims__c;
+  claimPeriod3: Acc_Claims__c;
+  claimPeriod4: Acc_Claims__c;
+  claimPeriod5: Acc_Claims__c;
+  claimPeriod6: Acc_Claims__c;
+  claimPeriod7: Acc_Claims__c;
+  claimPeriod8: Acc_Claims__c;
+  claimPeriod9: Acc_Claims__c;
+  claimPeriod10: Acc_Claims__c;
+  claimPeriod11: Acc_Claims__c;
+  claimPeriod12: Acc_Claims__c;
 };
 
 class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
@@ -198,14 +211,6 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
 
     await Database.insert([mspPcl, pmPcl, mainFcPcl]);
 
-    const mainClaimsAndProfiles = makeClaims({
-      recordTypes,
-      projectParticipant: mainProjectParticipant,
-      project,
-    });
-
-    await Database.insert(mainClaimsAndProfiles.claimTotalProjectPeriods);
-
     project.Acc_ClaimFrequency__c = "Quarterly";
     project.Acc_NonFEC__c = false;
     project.Acc_MonitoringLevel__c = "Platinum";
@@ -227,11 +232,11 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
 
     const profiles = await awaitResults(() =>
       Database.query(
-        `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
+        `SELECT Id, RecordTypeId, Acc_CostCategoryDescription__c, Acc_CostCategory__c FROM Acc_Profile__c WHERE Acc_ProjectID__c = '${project.Id}'`,
       ),
     );
 
-    const updates = overwriteProfiles({
+    const profileUpdates = overwriteProfiles({
       profiles,
       profileTotalCostCategoryRecordType,
       profileProfileDetailRecordType,
@@ -248,9 +253,48 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
       },
     });
 
-    for (const updateBatch of batch(updates)) {
+    for (const updateBatch of batch(profileUpdates)) {
       await Database.update(updateBatch);
     }
+
+    const claimTotalProjectPeriods = await awaitResults(() =>
+      Database.query(
+        `SELECT Id, RecordTypeId, Acc_ProjectPeriodNumber__c, Acc_ProjectParticipant__c FROM Acc_Claims__c WHERE Acc_ProjectID__c = '${project.Id}' AND RecordType.DeveloperName = 'Total_Project_Period'`,
+      ),
+    );
+
+    const claimOverrides: ClaimPeriodInfo[] = [];
+
+    for (let i = 1; i <= project.Acc_Duration__c / 3; i++) {
+      claimOverrides.push({
+        period: i,
+        claimStatus: i === 1 ? "Draft" : "New",
+        claimDetails: [
+          {
+            costCategory: "Subcontracting",
+            claimLineItems: [
+              {
+                name: "Licenced Cypress Engineer",
+                value: parseFloat(`99.${String(i).padStart(2, "0")}`),
+              },
+            ],
+          },
+        ],
+      });
+    }
+
+    const mainClaimsAndProfiles = makeClaims({
+      recordTypes,
+      projectParticipant: mainProjectParticipant,
+      project,
+      profiles,
+      claimTotalProjectPeriods,
+      claimOverrides,
+    });
+
+    await Database.upsert(mainClaimsAndProfiles.claimTotalProjectPeriods);
+    await Database.upsert(mainClaimsAndProfiles.claimDetails);
+    await Database.upsert(mainClaimsAndProfiles.claimLineItems);
 
     return {
       competition,
@@ -267,6 +311,18 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
       mspPcl,
       pmPcl,
       mainFcPcl,
+      claimPeriod1: mainClaimsAndProfiles.claimTotalProjectPeriods[0],
+      claimPeriod2: mainClaimsAndProfiles.claimTotalProjectPeriods[1],
+      claimPeriod3: mainClaimsAndProfiles.claimTotalProjectPeriods[2],
+      claimPeriod4: mainClaimsAndProfiles.claimTotalProjectPeriods[3],
+      claimPeriod5: mainClaimsAndProfiles.claimTotalProjectPeriods[4],
+      claimPeriod6: mainClaimsAndProfiles.claimTotalProjectPeriods[5],
+      claimPeriod7: mainClaimsAndProfiles.claimTotalProjectPeriods[6],
+      claimPeriod8: mainClaimsAndProfiles.claimTotalProjectPeriods[7],
+      claimPeriod9: mainClaimsAndProfiles.claimTotalProjectPeriods[8],
+      claimPeriod10: mainClaimsAndProfiles.claimTotalProjectPeriods[9],
+      claimPeriod11: mainClaimsAndProfiles.claimTotalProjectPeriods[10],
+      claimPeriod12: mainClaimsAndProfiles.claimTotalProjectPeriods[11],
     };
   }
 }

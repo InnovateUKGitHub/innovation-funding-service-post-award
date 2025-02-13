@@ -7,7 +7,6 @@ import { ProjectFactoryDatabaseQueryInvalidSoqlException } from "../exceptions/P
 import { sobjects, SObjectInstanceFromQuery, GetSobjectName } from "../sobjects/factories";
 import { ProjectFactoryUnknownSobjectException } from "../exceptions/ProjectFactoryUnknownSobjectException";
 import { ProjectFactoryDatabaseIdMissingException } from "../exceptions/ProjectFactoryDatabaseIdMissingException";
-import { batch } from "../helpers/batch";
 
 class DatabaseConnector implements IDatabaseConnector {
   private readonly connection: ITsforceConnection;
