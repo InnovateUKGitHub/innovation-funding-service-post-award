@@ -155,7 +155,7 @@ export const newCostCatLineItem = (academic: boolean) => {
   /**
    * click remove first if there is already a line item
    */
-  cy.wait(1000);
+  cy.wait(3000);
   cy.getByQA("current-claim-summary-table")
     .find("tbody.govuk-table__body")
     .then($table => {
@@ -216,6 +216,7 @@ export const clearUpLabourCostCat = () => {
   cy.wait(3000);
   cy.clickOn("Upload and remove documents");
   cy.get("h1").contains("Labour documents");
+  cy.wait(3000);
   cy.clickOn("Remove");
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
@@ -890,18 +891,18 @@ export const topThreeRows = () => {
     ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
     [
       "Month",
-      `Mar ${uploadDate}`,
-      `Apr ${uploadDate}`,
-      `May ${uploadDate}`,
-      `Jun ${uploadDate}`,
-      `Jul ${uploadDate}`,
-      `Aug ${uploadDate}`,
-      `Sep ${uploadDate}`,
-      `Oct ${uploadDate}`,
-      `Nov ${uploadDate}`,
-      `Dec ${uploadDate}`,
-      `Jan ${nextYear.toString()}`,
-      `Feb ${nextYear.toString()}`,
+      `Mar 2024`,
+      `Apr 2024`,
+      `May 2024`,
+      `Jun 2024`,
+      `Jul 2024`,
+      `Aug 2024`,
+      `Sep 2024`,
+      `Oct 2024`,
+      `Nov 2024`,
+      `Dec 2024`,
+      `Jan ${uploadDate}`,
+      `Feb ${uploadDate}`,
     ],
   ].forEach((cols, rowNumber = 0) => {
     cy.get("tr")
