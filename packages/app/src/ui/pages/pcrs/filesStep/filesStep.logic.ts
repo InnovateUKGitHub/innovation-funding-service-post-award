@@ -8,6 +8,8 @@ import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
+import { pcrUpdater } from "../pcrItemWorkflow.logic";
+import { FilesStepSchema } from "./filesSchema";
 
 export const usePcrFilesQuery = (
   projectId: ProjectId,
@@ -50,4 +52,8 @@ export const usePcrFilesQuery = (
   const pcrItem = mapPcrItemDto(pcrNode, ["accountName", "partnerId", "partnerNameSnapshot", "status", "type"], {});
 
   return { project, pcrItem, partners, documents, fragmentRef: data?.salesforce?.uiapi };
+};
+
+export const useOnUpdateFilesStep = () => {
+  return pcrUpdater<FilesStepSchema>("pcrFilesStep");
 };

@@ -44,8 +44,6 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       }
     }, []);
 
-    console.log("data", data);
-
     return {
       id,
       form: input.form,

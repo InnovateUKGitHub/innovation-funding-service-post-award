@@ -11,7 +11,6 @@ import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
 export const renamePartnerSchema = evaluateObject((data: { markedAsComplete: boolean }) => {
-  console.log("data", data);
   return {
     markedAsComplete: z.boolean(),
     accountName: getTextValidation({

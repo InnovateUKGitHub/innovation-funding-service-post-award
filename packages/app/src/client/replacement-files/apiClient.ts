@@ -216,6 +216,8 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/remove-partner`, params.pcr),
     renamePartner: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/rename-partner`, params.pcr),
+    pcrFilesStep: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/pcr-files`, params.pcr),
     deleteTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/delete`, params.pcr),
     inviteTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/invite`, params.pcr),
     replaceTeamMember: params => ajaxPost(`/api/pcrs/${params.projectId}/manage-team-member/replace`, params.pcr),

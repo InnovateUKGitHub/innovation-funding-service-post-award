@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { PcrLevelUploadSchemaType, documentsErrorMap, getPcrLevelUpload } from "@ui/zod/documentValidators.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
-import { usePcrFilesQuery } from "./filesStep.logic";
+import { useOnUpdateFilesStep, usePcrFilesQuery } from "./filesStep.logic";
 import { pcrFilesQuery } from "./PcrFiles.query";
 import { z } from "zod";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
@@ -75,8 +75,8 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
     config,
     projectId,
     itemId,
-    onSave,
-    isFetching: isFetchingFromContext,
+    // onSave,
+    // isFetching: isFetchingFromContext,
     markedAsCompleteHasBeenChecked,
   } = usePcrWorkflowContext();
 
@@ -88,7 +88,12 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
     pcrItemId: itemId,
   });
 
-  const onSaveHandler = (typeof onUpdate === "function" ? onUpdate : onSave) as SubmitHandler;
+  const {
+    onUpdate: onUpdateDefault,
+    isFetching: isFetchingDefault,
+    apiError: apiErrorDefault,
+  } = useOnUpdateFilesStep();
+  const onSaveHandler = (typeof onUpdate === "function" ? onUpdate : onUpdateDefault) as SubmitHandler;
 
   const { documents } = usePcrFilesQuery(projectId, itemId, refreshedQueryOptions);
 
@@ -111,7 +116,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
       reset();
     },
   });
-  const isFetching = isFetchingFromContext || isFetchingProp;
+  const isFetching = isFetchingDefault || isFetchingProp;
 
   const { onUpdate: onFileUpload, isProcessing: isUploading } = useOnUpload({
     async onSuccess() {
@@ -141,7 +146,7 @@ export const FilesStep = <T extends FormTypes = FormTypes>({
   const { clearMessages } = useMessages();
 
   return (
-    <PcrPage validationErrors={validationErrors} apiError={apiError}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError || apiErrorDefault}>
       <Section>
         <Form
           encType="multipart/form-data"

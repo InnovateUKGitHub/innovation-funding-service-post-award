@@ -36,6 +36,7 @@ import type {
   PcrAddPartnerProjectCostSubcontractingDto,
   PcrAddPartnerProjectCostOverheadDto,
   PcrAddPartnerSummaryDto,
+  PcrFilesStepDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -81,6 +82,7 @@ import { UpdatePcrAddPartnerProjectCostOverheadCommand } from "@server/features/
 import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPartnerProjectCostCommand";
 import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updatePcrAddPartnerSummaryCommand";
 import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartnerLabourCostCommand";
+import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesStepCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -148,7 +150,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<{ id: PcrId }>;
-
+  pcrFilesStep: PcrUpdateMethod<Context, PcrFilesStepDto, boolean>;
   addPartnerAcademicCosts: PcrUpdateMethod<Context, PcrAddPartnerAcademicCostsDto, boolean>;
   addPartnerAcademicOrganisation: PcrUpdateMethod<Context, PcrAddPartnerAcademicOrganisationDto, boolean>;
   addPartnerAgreementToPcr: PcrUpdateMethod<Context, PcrAddPartnerAgreementToPcrDto, boolean>;
@@ -249,6 +251,8 @@ class Controller
     );
 
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
+
+    this.putItem("/:projectId/:pcrId/:pcrItemId/pcr-files", requestParams<PcrFilesStepDto>, this.pcrFilesStep);
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-costs",
@@ -458,6 +462,10 @@ class Controller
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async pcrFilesStep(params: PcrUpdateParams<"server", PcrFilesStepDto>) {
+    return await runUpdateCommand(params, new UpdatePcrFilesStepCommand(getParams(params)));
   }
 
   async addPartnerAcademicCosts(params: PcrUpdateParams<"server", PcrAddPartnerAcademicCostsDto>) {

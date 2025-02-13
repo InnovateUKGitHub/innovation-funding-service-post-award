@@ -449,6 +449,11 @@ export interface PcrAddPartnerJesStepDto extends PcrDtoCommon {
   button_submit?: string;
 }
 
+export interface PcrFilesStepDto extends PcrDtoCommon {
+  form: FormTypes;
+  button_submit?: string;
+}
+
 export interface PcrAddPartnerOtherFundingDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerOtherFundingStep;
   button_submit: string;
