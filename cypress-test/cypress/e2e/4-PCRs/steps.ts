@@ -2486,7 +2486,7 @@ export const displayUpliftInProgress = () => {
   cy.contains("td", "Uplift")
     .parent()
     .within(() => {
-      ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((td, index) => {
+      ["183", "Uplift", "2024", "In Progress", "2024", "View"].forEach((td, index) => {
         cy.get(`td:nth-child(${index + 1})`).contains(td);
       });
     });
@@ -2496,7 +2496,7 @@ export const clickViewLoadUplift = () => {
   cy.contains("td", "Uplift")
     .parent()
     .within(() => {
-      ["183", "Uplift", uploadDate, "In Progress", uploadDate, "View"].forEach((td, index) => {
+      ["183", "Uplift", "2024", "In Progress", "2024", "View"].forEach((td, index) => {
         cy.get(`td:nth-child(${index + 1})`).contains(td);
       });
       cy.get("td:nth-child(6)").contains("View").click();
