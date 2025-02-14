@@ -7,15 +7,8 @@ import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
-import { useNavigate } from "react-router-dom";
-import { usePcrWorkflowContext } from "../pcrItemWorkflow";
-import { useMessageContext } from "@ui/context/messages";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { z } from "zod";
 import { RemovePartnerSchema } from "./removePartner.zod";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { clientsideApiClient } from "@ui/apiClient";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { pcrUpdater } from "../pcrItemWorkflow.logic";
 
 export const useRemovePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<RemovePartnerWorkflowQuery>(
@@ -64,35 +57,5 @@ export const useRemovePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: P
 };
 
 export const useOnUpdateRemovePartner = () => {
-  const navigate = useNavigate();
-
-  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
-  const { clearMessages } = useMessageContext();
-
-  return useOnUpdate<z.output<RemovePartnerSchema>, boolean, { link: ILinkInfo }>({
-    req: data =>
-      clientsideApiClient.pcrs.removePartner({
-        projectId,
-        pcrId,
-        pcrItemId: itemId,
-        pcr: {
-          ...data,
-          markedAsComplete: data.markedAsComplete,
-          form: data.form,
-          numberOfPeriods: data.numberOfPeriods,
-          removalPeriod: data.removalPeriod,
-          partnerId: data.partnerId,
-          ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}),
-        },
-      }),
-    onSuccess: async function (
-      _: z.output<RemovePartnerSchema>,
-      __: boolean,
-      context: { link: ILinkInfo } | undefined,
-    ) {
-      clearMessages();
-      setFetchKey(k => k + 1);
-      navigate(context?.link?.path ?? "");
-    },
-  });
+  return pcrUpdater<RemovePartnerSchema>("removePartner");
 };
