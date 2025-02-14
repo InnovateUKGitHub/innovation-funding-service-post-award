@@ -2,8 +2,8 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { PCRItemForApproveNewSubcontractorDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import {
   ApproveNewSubcontractorSchemaType,
   approveNewSubcontractorErrorMap,
@@ -58,9 +58,6 @@ class ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler extend
 
     return {
       form: FormTypes.PcrApproveNewSubcontractorSummary,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       markedAsComplete: input.markedAsComplete === "on",
       subcontractorDescription: subcontractorDescription ?? "",
       subcontractorJustification: subcontractorJustification ?? "",
@@ -76,30 +73,21 @@ class ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler extend
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<ApproveNewSubcontractorSchemaType>;
     context: IContext;
+    params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: input.projectId,
-        projectChangeRequestId: input.pcrId,
-        pcr: {
-          projectId: input.projectId,
-          id: input.pcrId,
-          items: [
-            {
-              id: input.pcrItemId,
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            },
-          ],
-        },
-      }),
-    );
-
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(
+        input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
+      ),
+    });
     return ProjectChangeRequestPrepareRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
     }).path;
   }
 }

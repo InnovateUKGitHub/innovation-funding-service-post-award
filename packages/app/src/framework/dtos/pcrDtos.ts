@@ -618,6 +618,18 @@ export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjec
   button_submit: string;
 }
 
+export interface ApproveNewSubcontractorDto extends PcrDtoCommon {
+  form: FormTypes.PcrApproveNewSubcontractorStep | FormTypes.PcrApproveNewSubcontractorSummary;
+  subcontractorName?: string;
+  subcontractorRegistrationNumber?: string;
+  subcontractorRelationship?: boolean;
+  subcontractorRelationshipJustification?: string;
+  subcontractorLocation?: string;
+  subcontractorDescription?: string;
+  subcontractorJustification?: string;
+  subcontractorCost?: string | null;
+}
+
 export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
   organisationName?: string;
   registrationNumber?: string;

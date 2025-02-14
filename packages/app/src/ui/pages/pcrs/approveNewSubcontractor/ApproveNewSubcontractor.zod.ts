@@ -1,13 +1,7 @@
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
-import {
-  evaluateObject,
-  projectIdValidation,
-  pcrIdValidation,
-  pcrItemIdValidation,
-  booleanValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
+import { evaluateObject, booleanValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
@@ -22,9 +16,6 @@ const subcontractorJustificationMaxChars = 32000 as const;
 
 const approveNewSubcontractorSchema = evaluateObject(data => {
   return {
-    projectId: projectIdValidation,
-    pcrId: pcrIdValidation,
-    pcrItemId: pcrItemIdValidation,
     form: z.union([
       z.literal(FormTypes.PcrApproveNewSubcontractorStep),
       z.literal(FormTypes.PcrApproveNewSubcontractorSummary),

@@ -37,6 +37,7 @@ import type {
   PcrFilesStepDto,
   ReasoningDto,
   PcrSubmitDto,
+  ApproveNewSubcontractorDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -83,6 +84,7 @@ import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartn
 import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesStepCommand";
 import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
 import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
+import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -187,6 +189,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   reasoning: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>,
   ) => Promise<boolean>;
+  approveNewSubcontractor: PcrUpdateMethod<Context, ApproveNewSubcontractorDto, boolean>;
   deleteProjectCost: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
   ) => Promise<boolean>;
@@ -257,6 +260,12 @@ class Controller
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem("/:projectId/:pcrId/:pcrItemId/pcr-files", requestParams<PcrFilesStepDto>, this.pcrFilesStep);
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/approve-new-subcontractor",
+      requestParams<ApproveNewSubcontractorDto>,
+      this.approveNewSubcontractor,
+    );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-costs",
@@ -463,6 +472,10 @@ class Controller
 
   async pcrFilesStep(params: PcrUpdateParams<"server", PcrFilesStepDto>) {
     return await runUpdateCommand(params, new UpdatePcrFilesStepCommand(getParams(params)));
+  }
+
+  async approveNewSubcontractor(params: PcrUpdateParams<"server", ApproveNewSubcontractorDto>) {
+    return await runUpdateCommand(params, new UpdatePcrApproveNewSubcontractorCommand(getParams(params)));
   }
 
   async addPartnerAcademicCosts(params: PcrUpdateParams<"server", PcrAddPartnerAcademicCostsDto>) {
