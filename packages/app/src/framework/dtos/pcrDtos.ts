@@ -398,6 +398,22 @@ export interface LoanDrawdownExtensionDto extends PcrDtoCommon {
   form: FormTypes.PcrLoanDurationChange | FormTypes.PcrLoanDurationChangeSummary;
 }
 
+export interface LoanDrawdownChangeDto extends PcrDtoCommon {
+  loans: {
+    id: LoanDrawdownId;
+    isEditable: boolean;
+    period: number;
+    currentDate: Date;
+    currentValue: number;
+    newDate?: Date | null;
+    newDate_day?: string;
+    newDate_month?: string;
+    newDate_year?: string;
+    newValue?: string | number | null;
+  }[];
+  form: FormTypes.PcrLoanDrawdownChange | FormTypes.PcrLoanDrawdownChangeSummary;
+}
+
 export type SuspendProjectFormType = FormTypes.PcrProjectSuspensionStep | FormTypes.PcrProjectSuspensionSummary;
 
 export interface PcrSuspendProjectDto extends PcrDtoCommon {

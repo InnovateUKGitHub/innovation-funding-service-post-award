@@ -15,6 +15,7 @@ declare type CostCategoryId = Nominal<string, "CostCategoryId">;
 declare type CostId = Nominal<string, "CostId">;
 declare type FinancialVirementForParticipantId = Nominal<string, "FinancialVirementForParticipantId">;
 declare type FinancialVirementForCostsId = Nominal<string, "FinancialVirementForCostsId">;
+declare type LoanDrawdownId = Nominal<string, "LoanDrawdownId">;
 declare type SerialisedProjectChangeRequestAddPartnerCompaniesHouseResult = Nominal<
   string,
   "SerialisedProjectChangeRequestAddPartnerCompaniesHouseResult"

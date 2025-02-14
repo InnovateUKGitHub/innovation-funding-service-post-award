@@ -4,14 +4,19 @@ import { isNil, sumBy } from "lodash";
 import { combineDayMonthYear, validateDayMonthYear } from "@ui/components/atoms/Date";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { loanDrawdownIdValidation, loanIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "loanDrawdownChange"] });
 
 export const loanDrawdownChangeSchema = z
   .object({
     markedAsComplete: z.boolean(),
+    form: z.literal(FormTypes.PcrLoanDrawdownChange),
     loans: z.array(
       z.object({
+        id: loanIdValidation,
+        isEditable: z.boolean(),
         period: z.number(),
         currentDate: z.date(),
         currentValue: z.number(),
@@ -57,7 +62,7 @@ export const loanDrawdownChangeSchema = z
 
       const dateIsOutOfOrder = currentNewDate && lastNewDate && currentNewDate < lastNewDate;
 
-      if (dateIsOutOfOrder) {
+      if (loan.isEditable && dateIsOutOfOrder) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           params: {
@@ -74,8 +79,11 @@ export const loanDrawdownChangeSchema = z
 export const loanDrawdownChangeSummarySchema = z
   .object({
     markedAsComplete: z.boolean(),
+    form: z.literal(FormTypes.PcrLoanDrawdownChangeSummary),
     loans: z.array(
       z.object({
+        id: loanDrawdownIdValidation,
+        isEditable: z.boolean(),
         period: z.number(),
         currentDate: z.date(),
         currentValue: z.number(),
@@ -103,7 +111,7 @@ export const loanDrawdownChangeSummarySchema = z
 
       data.loans.forEach((loan, i, arr) => {
         const lastLoan = arr[i - 1];
-        if (i > 0 && loan.newDate < lastLoan.newDate) {
+        if (loan.isEditable && i > 0 && loan.newDate < lastLoan.newDate) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             params: {

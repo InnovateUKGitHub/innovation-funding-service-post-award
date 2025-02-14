@@ -74,7 +74,10 @@ export class PcrItemLoanDrawdownChangeHandler extends ZodFormHandlerBase<
 
     return {
       markedAsComplete: input.markedAsComplete === "on",
+      form: input.form,
       loans: loanData.map(loan => ({
+        id: loan.id,
+        isEditable: loan.isEditable,
         period: loan.period,
         currentDate: loan.currentDate,
         currentValue: loan.currentValue,

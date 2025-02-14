@@ -59,6 +59,11 @@ const loanIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_Prepayment__c)
   .transform(x => x as LoanId);
 
+const loanDrawdownIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_Virements__c)
+  .transform(x => x as LoanId);
+
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
 
 const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
@@ -276,6 +281,7 @@ export {
   getMultiFileValidation,
   getSingleFileValidation,
   loanIdValidation,
+  loanDrawdownIdValidation,
   partnerIdValidation,
   pclIdValidation,
   pcrIdValidation,
