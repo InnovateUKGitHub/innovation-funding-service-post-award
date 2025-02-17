@@ -322,6 +322,9 @@ class ApproveNewSubcontractor {
     await expect(
       this.page.getByTestId(this.summaryQaList[3]).filter({ hasText: "Text to be deleted" }),
     ).not.toBeVisible();
+    await this.clickEditLink();
+    await this.selectRelationship("Yes");
+    await expect(this.relationshipBoxLabel).toHaveValue("");
   }
 
   @When("the user completes the Approve a new subcontractor form")
