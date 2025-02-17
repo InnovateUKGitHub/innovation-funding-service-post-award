@@ -20,10 +20,8 @@ Feature: Loan Drawdowns
             | 10       | £209,000        |
             | 11       | £220,000        |
             | 12       | £231,000        |
-
         When the user clicks the View button
         Then the user will see the "PM" drawdown
-
         When this user clicks the change drawdown link
         Then the user will see the PCR Start a new request page
 
@@ -66,9 +64,21 @@ Feature: Loan Drawdowns
         Then the Drawdown validation messages will no longer appear
 
         When the user submits the Drawdown request
-        Then the Drawdown status will be Requested
+        Then the period 1 Drawdown status will be "Requested"
         And the Drawdown request button will be disabled
 
+    Scenario: Approving Drawdown in Salesforce
+        Given the internal user is on the project flexipage
+        When the Salesforce user access the Drawdown
+        And the user submits the Drawdown for approval
+        Then the Salesforce status will show Approved
 
+    Scenario: Accessing the Drawdowns once Drawdown 1 is approved
+        Given a standard Loans project exists
+        And the user is the "mainFcUser" user
+        And the user is on the project overview
+        When the user selects the "Drawdowns" tile
+        Then the period 1 Drawdown status will be "Approved"
+        And the user can access the second Drawdown
 
 

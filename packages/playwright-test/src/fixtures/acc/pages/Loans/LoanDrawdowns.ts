@@ -34,10 +34,23 @@ class LoanDrawdowns {
   private readonly nowSendHeading: Locator;
   private readonly submissionGuidance: Locator;
   private readonly uploadDocumentsButton: Locator;
+  private readonly fileTableHeaders: Array<string>;
+  private readonly fileTableRow: Array<string>;
+  private readonly fileTableHead: Locator;
+  private readonly fileTableBody: Locator;
   private readonly noDocsUploadedText: Locator;
   private readonly acceptAndSendButton: Locator;
   private readonly drawdownTextbox: Locator;
   private readonly requestedPeriod1DrawdownRow: Array<string>;
+  private readonly approvedPeriod1DrawdownRow: Array<string>;
+  private readonly sfParticipantsTab: Locator;
+  private readonly sfParticipantTable: Locator;
+  private readonly sfGrantAdjustmentsTab: Locator;
+  private readonly sfSubmitApprovalButton: Locator;
+  private readonly sfDialogueBox: Locator;
+  private readonly sfApprovalsTab: Locator;
+  private readonly sfTabPanel: Locator;
+  private readonly sfPaymentInfoHeading: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -93,10 +106,42 @@ class LoanDrawdowns {
         "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
     });
     this.uploadDocumentsButton = this.page.getByRole("button").filter({ hasText: "Upload documents" });
+    this.fileTableHeaders = ["File name", "Type", "Date uploaded", "Size", "Uploaded by"];
+    this.fileTableRow = [
+      "testfile.doc",
+      "Drawdown approval",
+      this.commands.dateToday(false),
+      "0KB",
+      "Main Finance Contact",
+    ];
+    this.fileTableHead = this.page
+      .getByTestId("prepare-item-file-for-partner-documents-container")
+      .getByRole("table")
+      .locator("thead")
+      .locator("th");
+    this.fileTableBody = this.page
+      .getByTestId("prepare-item-file-for-partner-documents-container")
+      .getByRole("table")
+      .locator("tbody")
+      .locator("td");
     this.noDocsUploadedText = this.page.getByRole("paragraph").filter({ hasText: "No documents uploaded." });
     this.acceptAndSendButton = this.page.getByRole("button").filter({ hasText: "Accept and send" });
     this.drawdownTextbox = this.page.locator("#comments");
     this.requestedPeriod1DrawdownRow = ["1", this.getDrawdownDate(0), "£110,000", "Requested"];
+    this.approvedPeriod1DrawdownRow = ["1", this.getDrawdownDate(0), "£110,000", "Approved"];
+    this.sfParticipantsTab = this.page.locator("#customTab__item").filter({ hasText: "Participants" });
+    this.sfParticipantTable = this.page
+      .getByLabel("Project Participants")
+      .locator("table")
+      .locator("tbody")
+      .locator("tr")
+      .nth(0);
+    this.sfGrantAdjustmentsTab = this.page.getByRole("tab").filter({ hasText: "Grant Adjustments" });
+    this.sfSubmitApprovalButton = this.page.getByRole("button").filter({ hasText: "Submit for Approval" });
+    this.sfDialogueBox = this.page.getByRole("dialog");
+    this.sfApprovalsTab = this.page.getByRole("tab").filter({ hasText: "Approval History" });
+    this.sfTabPanel = this.page.getByRole("tabpanel");
+    this.sfPaymentInfoHeading = this.page.getByRole("heading").filter({ hasText: "Payment Information" });
   }
 
   @Then("the user will see the {string} Drawdowns page")
@@ -152,6 +197,7 @@ class LoanDrawdowns {
   @When("the enters 4 characters only and attempts to submit")
   async submit4Characters() {
     await this.drawdownTextbox.fill(getLorem(4));
+    await expect(this.page.getByRole("paragraph").filter({ hasText: "You have 4 characters" })).toBeVisible();
     await this.acceptAndSendButton.click();
   }
 
@@ -167,7 +213,17 @@ class LoanDrawdowns {
   @When("the user uploads a document and enters 5 characters")
   async drawdownValidState() {
     await this.commands.fileInput(["testfile.doc"]);
+    let i = 0;
+    for (const header of this.fileTableHeaders) {
+      await expect(this.fileTableHead.nth(i).filter({ hasText: header })).toBeVisible();
+      await expect(this.fileTableBody.nth(i).filter({ hasText: this.fileTableRow[i] })).toBeVisible();
+      i++;
+    }
+    await this.fileTableBody.nth(5).getByRole("button").filter({ hasText: "Remove" }).click();
+    await this.commands.validationNotification("'testfile.doc' has been removed.");
+    await this.commands.fileInput(["testfile.doc"]);
     await this.drawdownTextbox.fill(getLorem(5));
+    await expect(this.page.getByRole("paragraph").filter({ hasText: "You have 5 characters" })).toBeVisible();
   }
 
   @Then("the Drawdown validation messages will no longer appear")
@@ -177,14 +233,22 @@ class LoanDrawdowns {
 
   @When("the user submits the Drawdown request")
   async submitDrawdown() {
+    await this.drawdownTextbox.fill(getLorem(32_768));
+    await expect(this.page.getByRole("paragraph").filter({ hasText: "You have 32768 characters" })).toBeVisible();
     await this.acceptAndSendButton.click();
   }
 
-  @Then("the Drawdown status will be Requested")
-  async drawdownRequestedStatus() {
+  @Then("the period 1 Drawdown status will be {string}")
+  async drawdownRequestedStatus(status: string) {
     await this.drawdownsHeading.isVisible();
+    let array: Array<string>;
+    if (status === "Requested") {
+      array = this.requestedPeriod1DrawdownRow;
+    } else if (status === "Approved") {
+      array = this.approvedPeriod1DrawdownRow;
+    }
     let i = 1;
-    for (const cell of this.requestedPeriod1DrawdownRow) {
+    for (const cell of array) {
       await expect(this.page.getByTestId("drawdown-list").locator(`//table//tbody//tr[1]//td[${i}]`)).toHaveText(cell);
       i++;
     }
@@ -193,6 +257,40 @@ class LoanDrawdowns {
   @Then("the Drawdown request button will be disabled")
   async requestButtonDisabled() {
     await expect(this.requestButton).toBeDisabled();
+  }
+
+  @When("the Salesforce user access the Drawdown")
+  async salesforceAccessDrawdown() {
+    await this.sfParticipantsTab.click();
+    await this.sfParticipantTable.locator("th").nth(0).getByRole("link").click();
+    await this.sfGrantAdjustmentsTab.click();
+    const cell = this.page.locator("td").nth(2).filter({ hasText: "£110,000.00" });
+    const row = this.page.getByLabel("Grant Adjustments").locator("tbody").locator("tr").filter({ has: cell });
+    await row.locator("th").nth(0).getByRole("link").click();
+  }
+
+  @When("the user submits the Drawdown for approval")
+  async sfSubmitforApproval() {
+    await this.sfSubmitApprovalButton.click();
+    await this.sfDialogueBox.getByRole("textbox").fill("Approval comments");
+    await this.sfDialogueBox.getByRole("button").filter({ hasText: "Submit" }).click();
+    await this.sfApprovalsTab.click();
+    await this.page.getByRole("button").filter({ hasText: "Approve" }).click();
+    await this.sfDialogueBox.getByRole("textbox").fill("Approval comments");
+    await this.sfDialogueBox.getByRole("button").filter({ hasText: "Approve" }).click();
+  }
+
+  @Then("the Salesforce status will show Approved")
+  async sfStatusApproved() {
+    await this.page.getByRole("tab").filter({ hasText: "Details" }).click();
+    const panelSection = this.sfTabPanel.filter({ has: this.sfPaymentInfoHeading });
+    await expect(panelSection.filter({ has: this.page.locator("dd").filter({ hasText: "Approved" }) })).toBeVisible();
+  }
+
+  @Then("the user can access the second Drawdown")
+  async accessSecondDrawdown() {
+    await this.requestButton2.click();
+    await expect(this.page.locator("//table/tbody/tr[1]//td[1]").filter({ hasText: "2" })).toBeVisible();
   }
 
   /**
