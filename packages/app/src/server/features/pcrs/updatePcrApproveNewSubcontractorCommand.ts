@@ -63,7 +63,9 @@ export class UpdatePcrApproveNewSubcontractorCommand extends ZodAuthorisedAsyncC
       subcontractorName: this.dto.subcontractorName,
       subcontractorRegistrationNumber: this.dto.subcontractorRegistrationNumber,
       subcontractorRelationship: !!this.dto.subcontractorRelationship,
-      subcontractorRelationshipJustification: this.dto.subcontractorRelationshipJustification,
+      subcontractorRelationshipJustification: !!this.dto.subcontractorRelationship
+        ? this.dto.subcontractorRelationshipJustification
+        : "",
       subcontractorLocation: this.dto.subcontractorLocation,
       subcontractorDescription: this.dto.subcontractorDescription,
       subcontractorJustification: this.dto.subcontractorJustification,

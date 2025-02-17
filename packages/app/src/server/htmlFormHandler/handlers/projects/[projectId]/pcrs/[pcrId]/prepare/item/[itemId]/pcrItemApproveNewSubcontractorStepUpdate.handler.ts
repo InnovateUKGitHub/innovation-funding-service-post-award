@@ -65,8 +65,10 @@ class ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler extends Z
       New_company_subcontractor_name__c: input.subcontractorName,
       Company_registration_number__c: input.subcontractorRegistrationNumber,
       // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
-      Relationship_between_partners__c: input.subcontractorRelationship ?? false,
-      Relationship_justification__c: input.subcontractorRelationshipJustification,
+      Relationship_between_partners__c: !!input.subcontractorRelationship,
+      Relationship_justification__c: !!input.subcontractorRelationship
+        ? input.subcontractorRelationshipJustification
+        : "",
       Country_where_work_will_be_carried_out__c: input.subcontractorLocation,
       Role_in_the_project__c: input.subcontractorDescription,
       Cost_of_work__c: parseCurrency(input.subcontractorCost),
