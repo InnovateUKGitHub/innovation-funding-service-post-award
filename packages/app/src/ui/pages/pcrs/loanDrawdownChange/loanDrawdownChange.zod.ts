@@ -5,7 +5,7 @@ import { combineDayMonthYear, validateDayMonthYear } from "@ui/components/atoms/
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { loanDrawdownIdValidation, loanIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
+import { loanDrawdownIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "loanDrawdownChange"] });
 
@@ -15,7 +15,7 @@ export const loanDrawdownChangeSchema = z
     form: z.literal(FormTypes.PcrLoanDrawdownChange),
     loans: z.array(
       z.object({
-        id: loanIdValidation,
+        id: loanDrawdownIdValidation,
         isEditable: z.boolean(),
         period: z.number(),
         currentDate: z.date(),
