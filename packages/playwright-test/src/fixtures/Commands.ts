@@ -614,6 +614,7 @@ class Commands {
     await this.page.locator("css=#files").setInputFiles(fileList);
     await this.page.waitForTimeout(3000);
     await this.clickOn("Upload documents");
+    await this.validationNotification("Your document has been uploaded.");
   }
 
   async uploadAnyFile(name: string) {

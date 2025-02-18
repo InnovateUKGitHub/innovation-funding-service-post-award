@@ -48,7 +48,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
   const pcrItems = pcr.items.map(x => ({
     shortName: getPcrItemContent(x.shortName).name,
-    status: getPcrItemTaskStatus(x.status),
+    status: x.status,
     id: x.id,
   }));
 
@@ -64,15 +64,16 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       form: FormTypes.PcrPrepare,
       comments: pcr.comments ?? "",
       items: pcrItems,
-      reasoningStatus: getPcrItemTaskStatus(pcr.reasoningStatus),
+      reasoningStatus: pcr.reasoningStatus,
       button_submit: "save-and-return",
+      status: pcr.status,
     },
     resolver: zodResolver(pcrPrepareSchema, { errorMap: pcrPrepareErrorMap }),
   });
 
   const registerButton = createRegisterButton(setValue, "button_submit");
 
-  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.pcrId, pcr, project);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.pcrId, project);
 
   const { getContent } = useContent();
   const characterCount = watch("comments")?.length ?? 0;
@@ -109,6 +110,8 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
         <input type="hidden" name="form" value={FormTypes.PcrPrepare} />
         <input type="hidden" {...register("reasoningStatus")} value={getPcrItemTaskStatus(pcr.reasoningStatus)} />
         <input type="hidden" name="items" value={JSON.stringify(pcrItems)} />
+        <input type="hidden" name="status" value={pcr.status} />
+        <input type="hidden" name="monitoringLevel" value={project.monitoringLevel} />
         <Fieldset>
           <Legend>{getContent(x => x.pages.pcrOverview.addComments)}</Legend>
           <TextAreaField

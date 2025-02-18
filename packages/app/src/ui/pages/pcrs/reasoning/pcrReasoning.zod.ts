@@ -13,7 +13,6 @@ export const pcrReasoningSchema = evaluateObject((data: { markedAsComplete: bool
     maxLength: reasoningMaxChars,
     required: data.markedAsComplete,
   }),
-  markedAsComplete: z.boolean(),
   form: z.literal(FormTypes.PcrPrepareReasoningStep),
 }));
 
@@ -32,7 +31,7 @@ export const pcrReasoningSummarySchema = evaluateObject((data: { reasoningStatus
     maxLength: reasoningMaxChars,
     required: data.reasoningStatus,
   }),
-  reasoningStatus: z.boolean(),
+  markedAsComplete: z.boolean(),
   form: z.literal(FormTypes.PcrPrepareReasoningSummary),
 }));
 

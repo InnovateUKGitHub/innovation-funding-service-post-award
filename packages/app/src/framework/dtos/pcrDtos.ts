@@ -12,7 +12,7 @@ import {
   ManageTeamMemberMethod,
   PCRSpendProfileOverheadRate,
 } from "@framework/constants/pcrConstants";
-import { TypeOfAid } from "@framework/constants/project";
+import { ProjectMonitoringLevel, TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectRole } from "./projectContactDto";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -618,6 +618,18 @@ export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjec
   button_submit: string;
 }
 
+export interface ApproveNewSubcontractorDto extends PcrDtoCommon {
+  form: FormTypes.PcrApproveNewSubcontractorStep | FormTypes.PcrApproveNewSubcontractorSummary;
+  subcontractorName?: string;
+  subcontractorRegistrationNumber?: string;
+  subcontractorRelationship?: boolean;
+  subcontractorRelationshipJustification?: string;
+  subcontractorLocation?: string;
+  subcontractorDescription?: string;
+  subcontractorJustification?: string;
+  subcontractorCost?: string | null;
+}
+
 export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
   organisationName?: string;
   registrationNumber?: string;
@@ -646,4 +658,23 @@ export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
   tsbReference?: string;
   markedAsComplete?: boolean;
   form: FormTypes.PcrAddPartnerSummary;
+}
+
+export interface ReasoningDto {
+  reasoningComments?: string;
+  markedAsComplete?: boolean;
+  form:
+    | FormTypes.PcrPrepareReasoningStep
+    | FormTypes.PcrPrepareReasoningFilesStep
+    | FormTypes.PcrPrepareReasoningSummary;
+}
+
+export interface PcrSubmitDto {
+  comments?: string;
+  reasoningStatus: PCRItemStatus;
+  form: FormTypes.PcrPrepare;
+  button_submit: string;
+  monitoringLevel: ProjectMonitoringLevel;
+  status: PCRStatus;
+  items: { status: PCRItemStatus; shortName: string; id: PcrItemId }[];
 }

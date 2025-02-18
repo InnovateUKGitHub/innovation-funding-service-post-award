@@ -21,9 +21,10 @@ import { PcrReasoningFilesQuery } from "./__generated__/PcrReasoningFilesQuery.g
 import { pcrReasoningFilesQuery } from "./PcrReasoningFiles.query";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
-import { PcrReasoningSchemaType } from "./pcrReasoning.zod";
+import { PcrReasoningFilesSchema, PcrReasoningSchema, PcrReasoningSummarySchema } from "./pcrReasoning.zod";
 import { usePcrReasoningContext } from "./pcrReasoningContext";
 import { Dispatch, SetStateAction } from "react";
+import { z } from "zod";
 
 export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId, fetchKey: number) => {
   const data = useLazyLoadQuery<PcrReasoningWorkflowQuery>(
@@ -115,25 +116,6 @@ type PcrDtoForReasoning = Partial<Omit<PCRDto, "items">> & {
   items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
 };
 
-const createMinimalPcrUpdateDto = ({
-  projectId,
-  pcrId,
-  pcr,
-  data,
-}: {
-  projectId: ProjectId;
-  pcrId: PcrId;
-  pcr: PcrDtoForReasoning;
-  data: Omit<PcrReasoningSchemaType, "markedAsComplete" | "form">;
-}) => {
-  return {
-    ...pcr,
-    ...data,
-    id: pcrId,
-    projectId,
-  };
-};
-
 export const useOnSavePcrReasoning = (
   projectId: ProjectId,
   pcrId: PcrId,
@@ -142,17 +124,16 @@ export const useOnSavePcrReasoning = (
 ) => {
   const navigate = useNavigate();
   const { clearMessages } = useMessages();
-  return useOnUpdate<Omit<PcrReasoningSchemaType, "markedAsComplete" | "form">, PCRDto, { link: ILinkInfo }>({
+  return useOnUpdate<
+    z.output<PcrReasoningSchema> | z.output<PcrReasoningFilesSchema> | z.output<PcrReasoningSummarySchema>,
+    boolean,
+    { link: ILinkInfo }
+  >({
     req: data => {
-      return clientsideApiClient.pcrs.update({
+      return clientsideApiClient.pcrs.reasoning({
         projectId,
-        id: pcrId,
-        pcr: createMinimalPcrUpdateDto({
-          pcrId,
-          projectId,
-          pcr,
-          data,
-        }),
+        pcrId,
+        pcr: data,
       });
     },
     onSuccess: (_, __, context) => {

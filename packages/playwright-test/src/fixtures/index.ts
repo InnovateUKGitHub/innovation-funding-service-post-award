@@ -38,6 +38,8 @@ import { CrdClaims } from "./acc/pages/Claims/crdClaims";
 import { AddPartner } from "./acc/pages/PCRs/addPartner";
 import { AccClaimsDashboard } from "./acc/pages/Claims/AccClaimsDashboard";
 import { AccFinanceSummary } from "./acc/pages/AccFinanceSummary";
+import { AccProjectLoans } from "./projectFactory/AccProjectLoans";
+import { LoanDrawdowns } from "./acc/pages/Loans/LoanDrawdowns";
 
 type AccFixtures = {
   // Pages
@@ -61,6 +63,7 @@ type AccFixtures = {
   addPartner: AddPartner;
   accClaimsDashboard: AccClaimsDashboard;
   accFinanceSummary: AccFinanceSummary;
+  loanDrawdowns: LoanDrawdowns;
 
   // Misc
   accNavigation: AccNavigation;
@@ -90,6 +93,7 @@ interface Workers {
   acc1CypressDoNotTouch: Acc1CypressDoNotTouch;
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
+  accProjectLoans: AccProjectLoans;
 }
 
 export const test = base.extend<AccFixtures, Workers>({
@@ -138,7 +142,7 @@ export const test = base.extend<AccFixtures, Workers>({
   accFinanceSummary: ({ page }, use) => use(new AccFinanceSummary({ page })),
   addPartner: ({ page, commands, projectChangeRequests }, use) =>
     use(new AddPartner({ page, commands, projectChangeRequests })),
-
+  loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
@@ -162,6 +166,10 @@ export const test = base.extend<AccFixtures, Workers>({
   ],
   acc1CypressDoNotTouch: [
     ({ sfdcApi, projectState }, use) => use(new Acc1CypressDoNotTouch({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectLoans: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectLoans({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
 

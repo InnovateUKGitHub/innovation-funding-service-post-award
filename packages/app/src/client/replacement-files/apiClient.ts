@@ -104,6 +104,11 @@ const clientApi: IApiClient<"client"> = {
   pcrs: {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
+    approveNewSubcontractor: params =>
+      ajaxPut(
+        `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/approve-new-subcontractor`,
+        params.pcr,
+      ),
     addPartnerAcademicCosts: params =>
       ajaxPut(
         `/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/add-partner/academic-costs`,
@@ -205,6 +210,7 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/change-duration`, params.pcr),
     loanDrawdownExtension: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/loan-duration-extension`, params.pcr),
+    reasoning: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/reasoning`, params.pcr),
     removePartner: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/remove-partner`, params.pcr),
     renamePartner: params =>
@@ -221,6 +227,7 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/suspend-project`, params.pcr),
     deleteLabourCost: params =>
       ajaxDelete(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.costId}/labour`),
+    submitPcr: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/submit-pcr`, params.pcr),
     deleteProjectCost: params =>
       ajaxDelete(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.costId}`),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),

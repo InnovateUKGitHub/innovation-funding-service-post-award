@@ -1,7 +1,7 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   PcrReasoningFilesSchema,
@@ -37,13 +37,13 @@ class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = false;
 
-  protected async getZodSchema({ params }: { params: { step?: number } }) {
-    if (!params.step) {
+  protected async getZodSchema({ input }: { input: AnyObject }) {
+    if (input.form === FormTypes.PcrPrepareReasoningSummary) {
       return {
         schema: pcrReasoningSummarySchema,
         errorMap: pcrReasoningErrorMap,
       };
-    } else if (Number(params.step) === 1) {
+    } else if (input.form === FormTypes.PcrPrepareReasoningStep) {
       return {
         schema: pcrReasoningSchema,
         errorMap: pcrReasoningErrorMap,
@@ -58,27 +58,41 @@ class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
 
   protected async mapToZod({
     input,
-    params,
   }: {
     input: AnyObject;
-    params: { step?: number };
   }): Promise<z.input<PcrReasoningSchema | PcrReasoningSummarySchema | PcrReasoningFilesSchema>> {
-    if (Number(params.step) === 1) {
+    if (input.form === FormTypes.PcrPrepareReasoningStep) {
       return {
         form: input.form,
-        markedAsComplete: input.markedAsComplete === "true",
         reasoningComments: input.reasoningComments ?? "",
       };
-    } else if (Number(params.step) === 2) {
+    } else if (input.form === FormTypes.PcrPrepareReasoningFilesStep) {
       return {
         form: input.form,
       };
     }
     return {
       form: input.form,
-      reasoningComments: input.reasoningComments ?? "",
-      reasoningStatus: input.reasoningStatus === "on",
+      markedAsComplete: input.markedAsComplete === "on",
     };
+  }
+
+  private isSummary(
+    output: z.output<PcrReasoningSchema> | z.output<PcrReasoningSummarySchema> | z.output<PcrReasoningFilesSchema>,
+  ): output is z.output<PcrReasoningSummarySchema> {
+    return output.form === FormTypes.PcrPrepareReasoningSummary;
+  }
+
+  private isReasonStep(
+    output: z.output<PcrReasoningSchema> | z.output<PcrReasoningSummarySchema> | z.output<PcrReasoningFilesSchema>,
+  ): output is z.output<PcrReasoningSchema> {
+    return output.form === FormTypes.PcrPrepareReasoningStep;
+  }
+
+  private isFilesStep(
+    output: z.output<PcrReasoningSchema> | z.output<PcrReasoningSummarySchema> | z.output<PcrReasoningFilesSchema>,
+  ): output is z.output<PcrReasoningFilesSchema> {
+    return output.form === FormTypes.PcrPrepareReasoningFilesStep;
   }
 
   protected async run({
@@ -90,46 +104,28 @@ class ProjectChangeRequestReasoningUpdateHandler extends ZodFormHandlerBase<
     params: ProjectChangeRequestPrepareReasoningParams;
     context: IContext;
   }): Promise<string> {
-    if (input.form === FormTypes.PcrPrepareReasoningStep) {
-      await context.runCommand(
-        new UpdatePCRCommand({
-          projectId: params.projectId,
-          projectChangeRequestId: params.pcrId,
-          pcr: {
-            projectId: params.projectId,
-            id: params.pcrId,
-            reasoningComments: input.reasoningComments ?? "",
-            reasoningStatus: PCRItemStatus.Incomplete,
-          },
-        }),
-      );
-    } else if (input.form === FormTypes.PcrPrepareReasoningSummary) {
-      await context.runCommand(
-        new UpdatePCRCommand({
-          projectId: params.projectId,
-          projectChangeRequestId: params.pcrId,
-          pcr: {
-            projectId: params.projectId,
-            id: params.pcrId,
-            reasoningStatus: input.reasoningStatus ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            reasoningComments: input.reasoningComments ?? "",
-          },
-        }),
-      );
-    } else {
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          reasoningStatus: PCRItemStatus.Incomplete,
-        },
+    if (this.isReasonStep(input)) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: params.pcrId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+        Acc_Reasoning__c: input.reasoningComments,
+      });
+    } else if (this.isFilesStep(input)) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: params.pcrId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      });
+    } else if (this.isSummary(input)) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: params.pcrId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(
+          input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
+        ),
       });
     }
 
     // If on the summary
-    if (!params.step) {
+    if (input.form === FormTypes.PcrPrepareReasoningSummary) {
       // go back to the prepare page
       return ProjectChangeRequestPrepareRoute.getLink({
         projectId: params.projectId,

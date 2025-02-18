@@ -3,6 +3,8 @@ import { approveNewSubcontractorQuery } from "./ApproveNewSubcontractor.query";
 import { ApproveNewSubcontractorQuery } from "./__generated__/ApproveNewSubcontractorQuery.graphql";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { getFirstEdge } from "@gql/selectors/edges";
+import { ApproveNewSubcontractorSchemaType } from "./ApproveNewSubcontractor.zod";
+import { pcrUpdater } from "../pcrItemWorkflow.logic";
 
 interface UseApproveNewSubcontractorQueryProps {
   projectId: ProjectId;
@@ -35,6 +37,10 @@ const useApproveNewSubcontractorQuery = ({ itemId, fetchKey }: UseApproveNewSubc
   );
 
   return { pcrItem };
+};
+
+export const useOnUpdateApproveNewSubcontractor = () => {
+  return pcrUpdater<ApproveNewSubcontractorSchemaType>("approveNewSubcontractor");
 };
 
 export { useApproveNewSubcontractorQuery };

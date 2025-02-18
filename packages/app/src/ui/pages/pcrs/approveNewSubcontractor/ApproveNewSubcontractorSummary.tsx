@@ -1,5 +1,5 @@
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Section } from "@ui/components/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryList/summaryList";
@@ -11,7 +11,7 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
-import { useApproveNewSubcontractorQuery } from "./ApproveNewSubcontractor.logic";
+import { useApproveNewSubcontractorQuery, useOnUpdateApproveNewSubcontractor } from "./ApproveNewSubcontractor.logic";
 import {
   ApproveNewSubcontractorSchemaType,
   approveNewSubcontractorErrorMap,
@@ -21,8 +21,7 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { Markdown } from "@ui/components/atoms/Markdown/markdown";
 
 const ApproveNewSubcontractorSummary = () => {
-  const { projectId, pcrId, itemId, fetchKey, displayCompleteForm, markedAsCompleteHasBeenChecked } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
   const { getContent } = useContent();
 
   const { pcrItem } = useApproveNewSubcontractorQuery({ projectId, itemId, fetchKey });
@@ -34,11 +33,8 @@ const ApproveNewSubcontractorSummary = () => {
       errorMap: approveNewSubcontractorErrorMap,
     }),
     defaultValues: {
-      projectId,
-      pcrId,
-      pcrItemId: itemId,
       form: FormTypes.PcrApproveNewSubcontractorSummary,
-      markedAsComplete: markedAsCompleteHasBeenChecked,
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       subcontractorName: pcrItem.subcontractorName ?? "",
       subcontractorRegistrationNumber: pcrItem.subcontractorRegistrationNumber ?? "",
       subcontractorRelationship: pcrItem.subcontractorRelationship ?? false,
@@ -51,9 +47,10 @@ const ApproveNewSubcontractorSummary = () => {
   });
 
   const validationErrors = useZodErrors<z.output<ApproveNewSubcontractorSchemaType>>(setError, formState.errors);
+  const { apiError, onUpdate, isFetching } = useOnUpdateApproveNewSubcontractor();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="approve-a-new-subcontractor-summary">
         <SummaryList qa="approve-a-new-subcontractor-list">
           <SummaryListItem
@@ -138,11 +135,10 @@ const ApproveNewSubcontractorSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" value={FormTypes.PcrApproveNewSubcontractorSummary} {...register("form")} />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
         </PcrItemSummaryForm>
       )}
     </PcrPage>

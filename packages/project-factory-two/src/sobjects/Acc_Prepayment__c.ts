@@ -32,10 +32,10 @@ class Acc_Prepayment__c extends AbstractSObject {
   @SObjectField({ nullable: true, readonly: false })
   accessor Acc_GranttobePaid__c: SObjectFieldThunkType<number>;
 
-  @SObjectField({ nullable: true, readonly: true })
+  @SObjectField({ nullable: true, readonly: false })
   accessor Loan_InitialForecastDrawdown: SObjectFieldThunkType<number>;
 
-  @SObjectField({ nullable: true, readonly: true })
+  @SObjectField({ nullable: true, readonly: false })
   accessor Loan_LatestForecastDrawdown__c: SObjectFieldThunkType<number>;
 
   @SObjectField({ nullable: true, readonly: false })
@@ -48,7 +48,7 @@ class Acc_Prepayment__c extends AbstractSObject {
   accessor Acc_PeriodNumber__c: SObjectFieldThunkType<number>;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor Loan_PlannedDateForDrawdown__c: SObjectFieldThunkType<number>;
+  accessor Loan_PlannedDateForDrawdown__c: SObjectFieldThunkType<Date>;
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Acc_PreviousPrepaymentStatus__c: SObjectFieldThunkType<string>;
@@ -64,6 +64,12 @@ class Acc_Prepayment__c extends AbstractSObject {
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Loan_UserComments__c: SObjectFieldThunkType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_ProjectPeriodStartDate__c: SObjectFieldThunkType<number>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Loan_InitialForecastDrawdown__c: SObjectFieldThunkType<number>;
 }
 
 export { Acc_Prepayment__c };

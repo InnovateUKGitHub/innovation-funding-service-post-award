@@ -35,6 +35,9 @@ import type {
   PcrAddPartnerProjectCostOverheadDto,
   PcrAddPartnerSummaryDto,
   PcrFilesStepDto,
+  ReasoningDto,
+  PcrSubmitDto,
+  ApproveNewSubcontractorDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -79,6 +82,9 @@ import { DeleteProjectCostCommand } from "@server/features/pcrs/deletePcrAddPart
 import { UpdatePcrAddPartnerSummaryCommand } from "@server/features/pcrs/updatePcrAddPartnerSummaryCommand";
 import { DeleteLabourCostCommand } from "@server/features/pcrs/deletePcrAddPartnerLabourCostCommand";
 import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesStepCommand";
+import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
+import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
+import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -177,6 +183,13 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
+  submitPcr: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: PcrSubmitDto }>,
+  ) => Promise<boolean>;
+  reasoning: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>,
+  ) => Promise<boolean>;
+  approveNewSubcontractor: PcrUpdateMethod<Context, ApproveNewSubcontractorDto, boolean>;
   deleteProjectCost: (
     params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; costId: CostId }>,
   ) => Promise<boolean>;
@@ -247,6 +260,12 @@ class Controller
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
 
     this.putItem("/:projectId/:pcrId/:pcrItemId/pcr-files", requestParams<PcrFilesStepDto>, this.pcrFilesStep);
+
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/approve-new-subcontractor",
+      requestParams<ApproveNewSubcontractorDto>,
+      this.approveNewSubcontractor,
+    );
 
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/add-partner/academic-costs",
@@ -394,11 +413,15 @@ class Controller
       this.removePartner,
     );
 
+    this.putItem("/:projectId/:pcrId/reasoning", requestParams<ReasoningDto>, this.reasoning);
+
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId/suspend-project",
       requestParams<PcrSuspendProjectDto>,
       this.suspendProject,
     );
+
+    this.putItem("/:projectId/:pcrId/submit-pcr", requestParams<PcrSubmitDto>, this.submitPcr);
 
     this.deleteItem(
       "/:projectId/:pcrId/:pcrItemId/:costId",
@@ -449,6 +472,10 @@ class Controller
 
   async pcrFilesStep(params: PcrUpdateParams<"server", PcrFilesStepDto>) {
     return await runUpdateCommand(params, new UpdatePcrFilesStepCommand(getParams(params)));
+  }
+
+  async approveNewSubcontractor(params: PcrUpdateParams<"server", ApproveNewSubcontractorDto>) {
+    return await runUpdateCommand(params, new UpdatePcrApproveNewSubcontractorCommand(getParams(params)));
   }
 
   async addPartnerAcademicCosts(params: PcrUpdateParams<"server", PcrAddPartnerAcademicCostsDto>) {
@@ -544,6 +571,18 @@ class Controller
 
   async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {
     return await runUpdateCommand(params, new UpdatePcrLoanDurationExtensionCommand(getParams(params)));
+  }
+
+  async reasoning(params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>) {
+    return await runUpdateCommand(
+      params,
+      new UpdatePcrReasoningCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
   }
 
   async removePartner(params: PcrUpdateParams<"server", PcrRemovePartnerDto>) {
@@ -644,6 +683,19 @@ class Controller
       }),
     );
     return res;
+  }
+
+  async submitPcr(params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcr: PcrSubmitDto }>) {
+    const context = await contextProvider.start(params);
+    await context.runCommand(
+      new SubmitPcrCommand({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        pcr: params.pcr,
+        form: params.pcr.form,
+      }),
+    );
+    return true;
   }
 
   async delete(params: ApiParams<"server", { projectId: ProjectId; id: PcrId }>): Promise<boolean> {

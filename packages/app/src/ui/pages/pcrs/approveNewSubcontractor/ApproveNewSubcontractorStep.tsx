@@ -1,5 +1,4 @@
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
-import { parseCurrency } from "@framework/util/numberHelper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atoms/form/Form/Form";
@@ -17,7 +16,7 @@ import { z } from "zod";
 import { usePcrWorkflowContext } from "../pcrItemWorkflow";
 import { PcrPage } from "../pcrPage";
 import { useNextLink } from "../utils/useNextLink";
-import { useApproveNewSubcontractorQuery } from "./ApproveNewSubcontractor.logic";
+import { useApproveNewSubcontractorQuery, useOnUpdateApproveNewSubcontractor } from "./ApproveNewSubcontractor.logic";
 import {
   ApproveNewSubcontractorSchemaType,
   approveNewSubcontractorErrorMap,
@@ -31,8 +30,7 @@ import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 const ApproveNewSubcontractorStep = () => {
-  const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
   const nextLink = useNextLink();
   const { getContent } = useContent();
 
@@ -46,10 +44,7 @@ const ApproveNewSubcontractorStep = () => {
       errorMap: approveNewSubcontractorErrorMap,
     }),
     defaultValues: {
-      projectId,
-      pcrId,
-      pcrItemId: itemId,
-      form: FormTypes.PcrApproveNewSubcontractorSummary,
+      form: FormTypes.PcrApproveNewSubcontractorStep,
       markedAsComplete: markedAsCompleteHasBeenChecked,
       subcontractorName: defaults?.subcontractorName ?? pcrItem.subcontractorName ?? "",
       subcontractorRegistrationNumber:
@@ -75,30 +70,21 @@ const ApproveNewSubcontractorStep = () => {
 
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
+  const { apiError, onUpdate, isFetching } = useOnUpdateApproveNewSubcontractor();
+
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section qa="approve-a-new-subcontractor-step">
         <P>{getContent(x => x.pcrApproveNewSubcontractorLabels.guidance)}</P>
         <Form
           onSubmit={handleSubmit(data => {
-            onSave({
-              data: {
-                ...data,
-                subcontractorCost: parseCurrency(data.subcontractorCost),
-
-                // If NO RELATIONSHIP selected, set field to empty string
-                subcontractorRelationshipJustification: data.subcontractorRelationship
-                  ? data.subcontractorRelationshipJustification
-                  : "",
-              },
+            onUpdate({
+              data,
               context: { link: nextLink },
             });
           })}
         >
           <input type="hidden" value={FormTypes.PcrApproveNewSubcontractorStep} {...register("form")} />
-          <input type="hidden" value={projectId} {...register("projectId")} />
-          <input type="hidden" value={pcrId} {...register("pcrId")} />
-          <input type="hidden" value={itemId} {...register("pcrItemId")} />
           <input type="hidden" value={String(markedAsCompleteHasBeenChecked)} {...register("markedAsComplete")} />
           <Fieldset>
             <FormGroup hasError={!!getFieldState("subcontractorName").error}>
