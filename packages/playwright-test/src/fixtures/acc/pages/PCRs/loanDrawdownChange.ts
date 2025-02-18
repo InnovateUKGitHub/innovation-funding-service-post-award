@@ -142,7 +142,7 @@ class LoanDrawdownChange {
       drawdownValue = drawdownValue + 11000;
       dateIncrement = dateIncrement + 3;
     }
-    await this.drawdownTableFooter(2046000.0);
+    await this.drawdownTableFooter(2046000);
   }
 
   async validateEmptyDrawdownChangeTable() {
@@ -196,7 +196,7 @@ class LoanDrawdownChange {
     for (let i = 0; i < 12; i++) {
       await this.currencyInput(i, "170500");
     }
-    await this.drawdownTableFooter(2046000.0);
+    await this.drawdownTableFooter(2046000);
     await expect(this.page.getByTestId("validation-summary")).not.toHaveText(
       "The new drawdown total cannot exceed the current drawdown total.",
     );
@@ -212,7 +212,7 @@ class LoanDrawdownChange {
     for (let i = 0; i < 12; i++) {
       await this.currencyInput(i, "170500");
     }
-    await this.drawdownTableFooter(2046000.0);
+    await this.drawdownTableFooter(2046000);
     await this.continueSummaryButton.click();
     await this.pcr.markAsCompleteSection(false);
     await this.summaryTable();
@@ -284,7 +284,7 @@ class LoanDrawdownChange {
       rowNum = rowNum + 1;
       drawdownValue = drawdownValue + 11000;
     }
-    await this.drawdownTableFooter(2046000.0);
+    await this.drawdownTableFooter(2046000);
   }
 
   async drawdownTableFooter(newTotal: number) {
