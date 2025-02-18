@@ -93,7 +93,6 @@ export class UpdatePcrLoanDrawdownChangeCommand extends ZodAuthorisedAsyncComman
         .map(x => ({
           Id: x.id,
           Acc_ProjectChangeRequest__c: this.pcrItemId,
-          Loan_PeriodNumber__c: x.period,
           Loan_NewDrawdownValue__c: parseCurrency(x.newValue),
           Loan_NewDrawdownDate__c: combineDayMonthYear(x.newDate_day, x.newDate_month, x.newDate_year)?.toISOString(),
         }));
