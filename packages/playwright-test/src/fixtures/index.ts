@@ -40,6 +40,7 @@ import { AccClaimsDashboard } from "./acc/pages/Claims/AccClaimsDashboard";
 import { AccFinanceSummary } from "./acc/pages/AccFinanceSummary";
 import { AccProjectLoans } from "./projectFactory/AccProjectLoans";
 import { LoanDrawdowns } from "./acc/pages/Loans/LoanDrawdowns";
+import { LoanDrawdownChange } from "./acc/pages/PCRs/loanDrawdownChange";
 
 type AccFixtures = {
   // Pages
@@ -64,6 +65,7 @@ type AccFixtures = {
   accClaimsDashboard: AccClaimsDashboard;
   accFinanceSummary: AccFinanceSummary;
   loanDrawdowns: LoanDrawdowns;
+  loanDrawdownChange: LoanDrawdownChange;
 
   // Misc
   accNavigation: AccNavigation;
@@ -143,6 +145,8 @@ export const test = base.extend<AccFixtures, Workers>({
   addPartner: ({ page, commands, projectChangeRequests }, use) =>
     use(new AddPartner({ page, commands, projectChangeRequests })),
   loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
+  loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
+    use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
