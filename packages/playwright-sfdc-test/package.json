@@ -1,0 +1,22 @@
+{
+  "name": "@innovateuk/playwright-sfdc-test",
+  "private": true,
+  "scripts": {
+    "build": "bddgen",
+    "pw-sfdc": "playwright test --ui",
+    "pw-sfdc-run": "playwright test --grep-invert @debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@prettier/plugin-xml": "^3.4.1",
+    "@types/node": "^20.14.10",
+    "playwright-bdd": "^7.0.0-1",
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "@innovateuk/environment-manager": "*",
+    "@innovateuk/project-factory-two": "*",
+    "@innovateuk/tsforce": "*",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
