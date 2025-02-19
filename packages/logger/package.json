@@ -4,7 +4,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist --sourcemap",
+    "build-client": "esbuild src/index.ts --bundle --platform=node --outdir=dist --sourcemap",
+    "build-server": "esbuild src/clientIndexReplacement.ts --bundle --platform=node --outdir=dist --sourcemap",
     "typegen": "tsc"
   },
   "devDependencies": {

@@ -10,8 +10,8 @@ const replaceModulesPlugin = {
     buildProcess.onResolve({ filter: /isomorphicFileWrapper/ }, () => {
       return { path: path.join(__dirname, "../../src/client/replacement-files", "isomorphicFileWrapper.ts") };
     });
-    buildProcess.onResolve({ filter: /developmentLogger/ }, () => {
-      return { path: path.join(__dirname, "../../src/client/replacement-files", "developmentLogger.ts") };
+    buildProcess.onResolve({ filter: /@innovateuk\/logger/ }, () => {
+      return { path: path.join(require.resolve("@innovateuk/logger"), "..", "clientIndexReplacement.js") };
     });
   },
 };
