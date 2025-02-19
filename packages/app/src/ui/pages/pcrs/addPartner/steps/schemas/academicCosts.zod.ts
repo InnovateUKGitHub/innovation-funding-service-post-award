@@ -13,7 +13,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         button_submit: z.string(),
         tsbReference: getTextValidation({
           required: true,
-          maxLength: 256,
+          maxLength: 255,
         }),
         costs: z.array(
           z.object({
@@ -33,7 +33,7 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
         markedAsComplete: z.boolean(),
         tsbReference: getTextValidation({
           required: false,
-          maxLength: 256,
+          maxLength: 255,
         }),
         costs: z.array(
           z.object({
