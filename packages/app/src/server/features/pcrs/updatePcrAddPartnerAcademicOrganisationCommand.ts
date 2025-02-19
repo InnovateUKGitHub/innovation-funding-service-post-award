@@ -20,27 +20,23 @@ export class UpdatePcrAddPartnerAcademicOrganisationCommand extends ZodAuthorise
 > {
   public readonly runnableName: string = "UpdatePcrAddPartnerAcademicOrganisationCommand";
   protected readonly projectId: ProjectId;
-  private readonly pcrId: PcrId;
   private readonly pcrItemId: PcrItemId;
   private readonly form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
   protected readonly dto: PcrAddPartnerAcademicOrganisationDto;
 
   constructor({
     projectId,
-    pcrId,
     pcrItemId,
     pcr,
     form,
   }: {
     projectId: ProjectId;
-    pcrId: PcrId;
     pcrItemId: PcrItemId;
     pcr: PcrAddPartnerAcademicOrganisationDto;
     form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
   }) {
     super();
     this.projectId = projectId;
-    this.pcrId = pcrId;
     this.pcrItemId = pcrItemId;
     this.dto = pcr;
     this.form = form;
@@ -59,9 +55,8 @@ export class UpdatePcrAddPartnerAcademicOrganisationCommand extends ZodAuthorise
   protected async mapToZod() {
     return {
       form: this.form,
-      button_submit: this.dto.button_submit,
-      organisationName: this.dto.organisationName,
-      markedAsComplete: !!this.dto.markedAsComplete,
+      accountId: this.dto.accountId,
+      button_submit: this.dto.button_submit as "submit" | "returnToSummary",
     };
   }
 
@@ -69,11 +64,18 @@ export class UpdatePcrAddPartnerAcademicOrganisationCommand extends ZodAuthorise
     context: IContext,
     validatedData: z.output<AcademicOrganisationSchemaType>,
   ): Promise<boolean> {
-    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
-      Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
-      Acc_OrganisationName__c: validatedData.organisationName,
-    });
+    if (this.dto.accountId !== "search" && this.dto.accountId) {
+      const account = await context.repositories.accounts.getById(this.dto.accountId);
+
+      if (account.JES_Organisation__c !== "Yes") throw new Error("not a jes");
+
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_OrganisationName__c: account.Name,
+        Acc_Account__c: account.Id,
+      });
+    }
 
     return true;
   }

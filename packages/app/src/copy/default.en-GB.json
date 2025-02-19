@@ -279,6 +279,13 @@
     "projectSuspensionMessage": {
       "message": "Please note this project is currently under suspension",
       "subMessage": "Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
+    },
+    "search": {
+      "button": "Search",
+      "loading": "Loading search results...",
+      "noResults": "No search results found for '{{ input }}'.",
+      "results_one": "{{ count }} search result found for '{{ input }}'.",
+      "results_other": "{{ count }} search results found for '{{ input }}'."
     }
   },
   "pages": {
@@ -1004,10 +1011,8 @@
       "tableCaption": "Academic costs table"
     },
     "pcrAddPartnerAcademicOrganisation": {
-      "hint": "Enter the name of the organisation that you work for.",
-      "loading": "Loading Je-S organisations...",
-      "jesSearchResults": "Je-S search results",
-      "noResultsFound": "No results found"
+      "sectionTitle": "Je-S organisation",
+      "hint": "Enter the name of the organisation that you work for."
     },
     "pcrAddPartnerCompanyHouse": {
       "sectionTitle": "Company house",
@@ -1758,6 +1763,7 @@
   },
   "pcrItem": {
     "submitButton": "Save and continue",
+    "continueButton": "Continue",
     "continueToSummaryButton": "Continue to summary",
     "saveAndReturnToSummaryButton": "Save and return to summary",
     "returnToRequestButton": "Save and return to request",
@@ -2272,6 +2278,9 @@
       "percent": "%",
       "days": "days",
       "months": "months"
+    },
+    "radio": {
+      "divider": "or"
     },
     "errors": {
       "invalid": "A validation error occurred.",

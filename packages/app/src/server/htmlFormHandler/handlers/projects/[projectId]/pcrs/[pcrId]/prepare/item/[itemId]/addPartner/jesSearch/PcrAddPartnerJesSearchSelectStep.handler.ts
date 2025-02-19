@@ -1,18 +1,18 @@
 import { IContext } from "@framework/types/IContext";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { getNextAddPartnerStep } from "./addPartnerUtils";
+import { getAddPartnerStep } from "../../addPartnerUtils";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import {
   AcademicOrganisationSchemaType,
   getAcademicOrganisationSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/academicOrganisation.zod";
-import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
-export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHandlerBase<
+export class PcrAddPartnerJesSearchSelectStepHandler extends ZodFormHandlerBase<
   AcademicOrganisationSchemaType,
   ProjectChangeRequestPrepareItemParams
 > {
@@ -35,9 +35,8 @@ export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHan
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<AcademicOrganisationSchemaType>> {
     return {
       form: input.form,
-      organisationName: input.organisationName,
+      accountId: input.accountId,
       button_submit: input.button_submit,
-      markedAsComplete: input.markedAsComplete === "true",
     };
   }
 
@@ -48,21 +47,32 @@ export class PcrItemAddPartnerAcademicOrganisationStepHandler extends ZodFormHan
   }: {
     input: z.output<AcademicOrganisationSchemaType>;
     context: IContext;
-    params: ProjectChangeRequestPrepareItemParams & { step?: number };
-  }): Promise<string> {
-    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
-      Id: params.itemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
-      Acc_OrganisationName__c: input.organisationName,
-    });
+    params: ProjectChangeRequestPrepareItemParams;
+  }) {
+    if (input.accountId !== "search" && input.accountId) {
+      const account = await context.repositories.accounts.getById(input.accountId);
 
-    return await getNextAddPartnerStep({
+      if (account.JES_Organisation__c !== "Yes") throw new Error("not a jes");
+
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: params.itemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+        Acc_OrganisationName__c: account.Name,
+        Acc_Account__c: account.Id,
+      });
+    }
+
+    return await getAddPartnerStep({
       projectId: params.projectId,
       pcrId: params.pcrId,
       pcrItemId: params.itemId,
       context,
-      toSummary: input.button_submit === "returnToSummary",
+      toSummary: false,
       stepNumber: params.step,
+      nextStep: input.accountId !== "search",
+      params: {
+        search: input.accountId === "search" ? "" : undefined,
+      },
     });
   }
 }

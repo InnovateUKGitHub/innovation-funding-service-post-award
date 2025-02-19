@@ -255,6 +255,7 @@ export type ManageTeamMemberPcrDto = PCRBaseDto & {
 };
 
 export type FullPCRItemDto = {
+  accountId: AccountId | null;
   accountName: string | null;
   availabilityPeriod: number | null;
   availabilityPeriodChange: number | null;
@@ -452,7 +453,7 @@ export interface PcrAddPartnerAcademicCostsDto extends PcrDtoCommon {
 export interface PcrAddPartnerAcademicOrganisationDto extends PcrDtoCommon {
   form: FormTypes.PcrAddPartnerAcademicOrganisationStep;
   button_submit: string;
-  organisationName?: string;
+  accountId: AccountId | "search" | undefined;
 }
 
 export interface PcrFilesStepDto extends PcrDtoCommon {

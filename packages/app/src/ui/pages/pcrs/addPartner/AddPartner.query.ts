@@ -136,6 +136,9 @@ export const addPartnerWorkflowQuery = graphql`
             edges {
               node {
                 Id
+                Acc_Account__c {
+                  value
+                }
                 Acc_AwardRate__c {
                   value
                 }

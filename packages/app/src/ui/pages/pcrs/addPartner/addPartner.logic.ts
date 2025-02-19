@@ -95,6 +95,7 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
   const pcrItem = mapPcrItemDto(
     pcrNode,
     [
+      "accountId",
       "awardRate",
       "contact1Email",
       "contact1Forename",

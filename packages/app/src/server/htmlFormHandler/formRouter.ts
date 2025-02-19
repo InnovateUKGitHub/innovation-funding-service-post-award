@@ -73,8 +73,6 @@ import { PcrItemAddPartnerOtherFundingHandler } from "./handlers/projects/[proje
 import { PcrItemAddPartnerOtherSourcesOfFundingHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcritemAddPartnerOtherSourcesOfFunding.handler";
 import { PcrItemAddPartnerProjectManagerHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerProjectManager.handler";
 import { PcrItemAddPartnerAwardRateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAwardRate.handler";
-import { PcrItemAddPartnerAcademicOrganisationStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationStep.handler";
-import { PcrItemAddPartnerAcademicOrganisationSearchStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicOrganisationSearchStep.handler";
 import { PcrItemAddPartnerAcademicCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerAcademicCostsStep.handler";
 import { PcrAddPartnerSummaryHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemAddPartnerSummary.handler";
 import { PcrItemAddPartnerSpendProfileLabourCostsHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/[costId]/spendProfileLabourCost.handler";
@@ -95,6 +93,7 @@ import { ManageTeamMemberPcrDeleteHandler } from "./handlers/projects/[projectId
 import { ManageTeamMemberPcrReplaceHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrReplace.handler";
 import { ManageTeamMemberPcrUpdateHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrUpdate.handler";
 import { ManageTeamMemberPcrInviteHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrInvite.handler";
+import { PcrAddPartnerJesSearchSelectStepHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/addPartner/jesSearch/PcrAddPartnerJesSearchSelectStep.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
@@ -111,7 +110,7 @@ export const standardFormHandlers = [
   new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
   new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
   new ProjectChangeRequestItemAddPartnerCompaniesHouseStepUpdateHandler(),
-  new PcrItemAddPartnerAcademicOrganisationSearchStepHandler(),
+  new PcrAddPartnerJesSearchSelectStepHandler(),
   new PcrItemAddPartnerRoleAndOrganisationHandler(),
   new PcrItemAddPartnerFinancialDetailsHandler(),
   new PcrItemAddPartnerProjectLocationHandler(),
@@ -139,7 +138,6 @@ export const standardFormHandlers = [
   new PcrItemAddPartnerOrganisationDetailsHandler(),
   new PcrItemPutProjectOnHoldHandler(),
   new PcrItemPutProjectOnHoldSummaryHandler(),
-  new PcrItemAddPartnerAcademicOrganisationStepHandler(),
   new PcrChangeDurationSummaryHandler(),
   new PcrChangeDurationHandler(),
   new PcrItemLoanDrawdownChangeHandler(),

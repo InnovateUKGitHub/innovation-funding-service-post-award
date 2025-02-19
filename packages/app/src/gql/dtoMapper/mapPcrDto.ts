@@ -24,6 +24,7 @@ const clock = new Clock();
 
 export type PcrNode = GQL.PartialNode<{
   Id: GQL.Maybe<string>;
+  Acc_Account__c: GQL.Value<string>;
   Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
   Acc_AwardRate__c: GQL.Value<number>;
   Acc_Comments__c: GQL.Value<string>;
@@ -119,6 +120,7 @@ type PcrDtoMapping = Pick<
 
 export type PcrItemDtoMapping = Pick<
   FullPCRItemDto,
+  | "accountId"
   | "accountName"
   | "availabilityPeriod"
   | "availabilityPeriodChange"
@@ -210,6 +212,9 @@ const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset
  * Mapper for PCR Child items
  */
 const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string | TypeOfAid }> = {
+  accountId(node) {
+    return (node?.Acc_Account__c?.value as AccountId) ?? null;
+  },
   accountName(node) {
     return node?.Acc_NewOrganisationName__c?.value ?? null;
   },

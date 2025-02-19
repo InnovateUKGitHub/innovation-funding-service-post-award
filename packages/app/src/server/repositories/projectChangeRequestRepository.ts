@@ -120,6 +120,7 @@ export interface ISalesforcePCR {
   Acc_TotalOtherFunding__c: number | null;
   Acc_CommercialWork__c: boolean | null;
   Acc_TSBReference__c: string | null;
+  Acc_Account__c: string | null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number | null;

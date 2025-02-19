@@ -5,7 +5,7 @@ import { useMounted } from "../../../../context/Mounted";
 
 interface IRadioListContext<TFormValues extends FieldValues> {
   name: string;
-  register: UseFormRegister<TFormValues>;
+  register?: UseFormRegister<TFormValues>;
 }
 
 const RadioListContext = createContext<IRadioListContext<FieldValues> | undefined>(undefined);
@@ -34,7 +34,7 @@ const Radio = ({ label, registerOptions, ...props }: RadioInputProps) => {
         className={cx("govuk-radios__input", props.className)}
         type="radio"
         {...props}
-        {...register(name, registerOptions)}
+        {...register?.(name, registerOptions)}
       />
       <label className="govuk-label govuk-radios__label" htmlFor={props.id}>
         {label}
@@ -45,7 +45,7 @@ const Radio = ({ label, registerOptions, ...props }: RadioInputProps) => {
 
 type RadioListProps<TFormValues extends FieldValues> = {
   name: string;
-  register: UseFormRegister<TFormValues>;
+  register?: UseFormRegister<TFormValues>;
   inline?: boolean;
   children: ReactNode;
   hasError?: boolean;
@@ -61,7 +61,7 @@ const RadioList = <TFormValues extends FieldValues>({
   ...props
 }: RadioListProps<TFormValues>) => {
   return (
-    <RadioListContext.Provider value={{ name, register: register as UseFormRegister<FieldValues> }}>
+    <RadioListContext.Provider value={{ name, register: register as UseFormRegister<FieldValues> | undefined }}>
       <div
         className={cx("govuk-radios", { "govuk-radios--inline": inline, "govuk-radios--error": hasError }, className)}
         {...props}

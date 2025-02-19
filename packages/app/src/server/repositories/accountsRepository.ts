@@ -7,13 +7,17 @@ export interface ISalesforceAccount {
   JES_Organisation__c: string;
 }
 
-export type IAccountsRepository = Pick<AccountsRepository, "getAllByJesName">;
+export type IAccountsRepository = Pick<AccountsRepository, "getAllByJesName" | "getById">;
 
 export class AccountsRepository extends SalesforceRepositoryBase<ISalesforceAccount> {
   private jesEnabled = "Yes";
 
   protected readonly salesforceObjectName = "Account";
   protected readonly salesforceFieldNames = ["Id", "Name", "JES_Organisation__c"];
+
+  getById(id: AccountId) {
+    return super.loadItem({ Id: id });
+  }
 
   getAllByJesName(searchString?: string): Promise<ISalesforceAccount[]> {
     const jesFilter = `JES_Organisation__c = '${sss(this.jesEnabled)}'`;

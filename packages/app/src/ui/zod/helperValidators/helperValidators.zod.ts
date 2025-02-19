@@ -9,63 +9,27 @@ import { filenameValidator } from "./filenameValidator.zod";
 
 const y2k = new Date("2000-01-01");
 
-const projectIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_Project__c)
-  .transform(x => x as ProjectId);
+const baseIdValidation = <Type>(prefix: SalesforcePrefixes) =>
+  z
+    .string()
+    .startsWith(prefix)
+    .transform(x => x as Type);
 
-const pcrIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_ProjectChangeRequest__c)
-  .transform(x => x as PcrId);
-
-const pcrItemIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_ProjectChangeRequest__c)
-  .transform(x => x as PcrItemId);
-
-const financialVirementForCostsIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_Virements__c)
-  .transform(x => x as FinancialVirementForCostsId);
-
-const partnerIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_ProjectParticipant__c)
-  .transform(x => x as PartnerId);
-
-const costCategoryIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_CostCategory__c)
-  .transform(x => x as CostCategoryId);
-
-const pclIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_ProjectContactLink__c)
-  .transform(x => x as ProjectContactLinkId);
-
-const contactIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_ContactId__c)
-  .transform(x => x as ContactId);
-
-const costIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_IFSSpendProfile__c)
-  .transform(x => x as CostId);
-
-const loanIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_Prepayment__c)
-  .transform(x => x as LoanId);
-
-const loanDrawdownIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_Virements__c)
-  .transform(x => x as LoanId);
-
+const loanDrawdownIdValidation = baseIdValidation<LoanId>(SalesforcePrefixes.Acc_Virements__c);
+const projectIdValidation = baseIdValidation<ProjectId>(SalesforcePrefixes.Acc_Project__c);
+const pcrIdValidation = baseIdValidation<PcrId>(SalesforcePrefixes.Acc_ProjectChangeRequest__c);
+const pcrItemIdValidation = baseIdValidation<PcrItemId>(SalesforcePrefixes.Acc_ProjectChangeRequest__c);
+const financialVirementForCostsIdValidation = baseIdValidation<FinancialVirementForCostsId>(
+  SalesforcePrefixes.Acc_Virements__c,
+);
+const partnerIdValidation = baseIdValidation<PartnerId>(SalesforcePrefixes.Acc_ProjectParticipant__c);
+const costCategoryIdValidation = baseIdValidation<CostCategoryId>(SalesforcePrefixes.Acc_CostCategory__c);
+const pclIdValidation = baseIdValidation<ProjectContactLinkId>(SalesforcePrefixes.Acc_ProjectContactLink__c);
+const contactIdValidation = baseIdValidation<ContactId>(SalesforcePrefixes.Acc_ContactId__c);
+const costIdValidation = baseIdValidation<CostId>(SalesforcePrefixes.Acc_IFSSpendProfile__c);
+const loanIdValidation = baseIdValidation<LoanId>(SalesforcePrefixes.Acc_Prepayment__c);
+const accountIdValidation = baseIdValidation<AccountId>(SalesforcePrefixes.Account);
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
-
 const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
 
 const emptyStringToUndefinedValidation = z
@@ -267,6 +231,7 @@ const evaluateObject = <T extends (validationData: any) => ZodRawShape>(validato
 };
 
 export {
+  accountIdValidation,
   booleanValidation,
   claimIdValidation,
   contactIdValidation,

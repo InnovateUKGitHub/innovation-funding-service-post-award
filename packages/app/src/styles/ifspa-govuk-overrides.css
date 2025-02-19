@@ -766,6 +766,10 @@ p.govuk-body--multiline {
   padding-right: 1em;
 }
 
+.autocomplete__menu {
+  font-family: "GDS Transport", arial, sans-serif;
+}
+
 :root {
   --govukBorderColour: #b1b4b6;
   --govukColourBlack: #0b0c0c;

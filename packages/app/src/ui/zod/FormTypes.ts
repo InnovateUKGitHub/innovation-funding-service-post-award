@@ -98,7 +98,7 @@ enum FormTypes {
   PcrAddPartnerOtherFundingStep = "pcrAddPartnerOtherFundingStep",
   PcrAddPartnerOtherSourcesOfFundingStep = "pcrAddPartnerOtherSourcesOfFundingStep",
   PcrAddPartnerAcademicOrganisationStep = "pcrAddPartnerAcademicOrganisationStep",
-  PcrAddPartnerAcademicOrganisationSearchStep = "pcrAddPartnerAcademicOrganisationSearchStep",
+
   PcrAddPartnerAwardRateStep = "pcrAddPartnerAwardRateStep",
   PcrAddPartnerAgreementFilesStep = "pcrAddPartnerAgreementFilesStep",
   PcrAddPartnerJesFormStep = "pcrAddPartnerJesFormFilesStep",

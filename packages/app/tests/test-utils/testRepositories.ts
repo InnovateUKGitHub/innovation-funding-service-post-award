@@ -1120,6 +1120,9 @@ class LoansTestRepository {
 }
 
 class AccountsTestRepository extends TestRepository<ISalesforceAccount> implements IAccountsRepository {
+  getById(Id: string) {
+    return super.getOne(x => x.Id === Id);
+  }
   getAllByJesName(searchString = "") {
     if (searchString?.length && searchString.length < 3) {
       throw new BadRequestError("You must include at least 3 characters to filter on.");

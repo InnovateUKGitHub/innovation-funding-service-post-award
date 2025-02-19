@@ -79,10 +79,12 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     auth.forProject(projectId).hasAnyRoles(ProjectRolePermissionBits.MonitoringOfficer),
 });
 
-export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+export const PCRPrepareItemRoute = defineRoute<
+  ProjectChangeRequestPrepareItemParams & ProjectChangeRequestPrepareItemSearchParams
+>({
   routeName: "pcrPrepareItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
-  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
+  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step&:search",
   container: function PCRPrepareItemContainer(props) {
     return <PCRItemContainer {...props} mode="prepare" />;
   },
