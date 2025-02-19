@@ -27,6 +27,9 @@ import { mapToSalesforcePCRManageTeamMemberType, mapProjectRoleToName } from "@f
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
+  createProjectChangeRequestHeader(
+    projectChangeRequest: Pick<ProjectChangeRequestForCreateEntity, "projectId" | "items">,
+  ): Promise<PcrId>;
   addPcrTypes(projectChangeRequest: ProjectChangeRequestAddTypesEntity): Promise<void>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
@@ -414,14 +417,12 @@ export class ProjectChangeRequestRepository
   }
 
   async addPcrTypes(projectChangeRequest: ProjectChangeRequestAddTypesEntity) {
-    await super.updateItem({
-      Id: projectChangeRequest.id,
-      Acc_Comments__c: projectChangeRequest.comments,
-    });
     await this.insertItems(projectChangeRequest.id, projectChangeRequest.items);
   }
 
-  async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
+  async createProjectChangeRequestHeader(
+    projectChangeRequest: Pick<ProjectChangeRequestForCreateEntity, "projectId" | "items">,
+  ) {
     let headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
     if (
@@ -437,23 +438,29 @@ export class ProjectChangeRequestRepository
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,
-      Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
-      Acc_Status__c: this.mapStatus(projectChangeRequest.status),
-      Acc_Manage_Team_Member_Status__c: this.mapStatus(projectChangeRequest.manageTeamMemberStatus),
+      Acc_MarkedasComplete__c: this.mapItemStatus(PCRItemStatus.ToDo),
+      Acc_Status__c: this.mapStatus(PCRStatus.DraftWithProjectManager),
+      Acc_Manage_Team_Member_Status__c: this.mapStatus(PCRStatus.Unknown),
       Acc_Project__c: projectChangeRequest.projectId,
     });
+
+    return id as PcrId;
+  }
+
+  async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
+    const id = await this.createProjectChangeRequestHeader(projectChangeRequest);
     // Insert sub-items
     await this.insertItems(id, projectChangeRequest.items);
     return id as PcrId;
   }
 
-  async insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]) {
+  async insertItems(headerId: PcrId, items: ProjectChangeRequestItemForCreateEntity[]) {
     await super.insertAll(
       items.map(x => ({
         Acc_RequestHeader__c: headerId,
         RecordTypeId: x.recordTypeId,
         Acc_Project__c: x.projectId,
-        ...this.mapCreateDto(x),
+        Acc_MarkedasComplete__c: this.mapItemStatus(PCRItemStatus.ToDo),
       })),
     );
   }

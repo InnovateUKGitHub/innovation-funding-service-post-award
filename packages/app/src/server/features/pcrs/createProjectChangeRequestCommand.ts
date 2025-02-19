@@ -4,7 +4,7 @@ import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities/pro
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   pcrCreateSchema,
@@ -65,16 +65,6 @@ export class CreateProjectChangeRequestCommand extends ZodAuthorisedAsyncCommand
     };
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: PcrId): Promise<string> {
-    const pcrToBeChanged = {
-      Acc_ProjectChangeRequest__c: projectChangeRequestId,
-      Acc_ExternalComment__c: "",
-      Acc_ParticipantVisibility__c: true,
-    };
-
-    return await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
-  }
-
   protected async runRepositoryCommands(context: IContext, validatedData: z.output<PcrCreateSchemaType>) {
     const itemTypes = await context.runQuery(new GetAllPCRItemTypesQuery(this.projectId));
 
@@ -84,19 +74,22 @@ export class CreateProjectChangeRequestCommand extends ZodAuthorisedAsyncCommand
         projectId: this.projectId,
         items: validatedData.types.map(x => this.mapItem(x, itemTypes)),
       });
-
       return this.pcrId;
     } else {
       const newPCR = {
         projectId: this.projectId,
-        reasoningStatus: PCRItemStatus.ToDo,
-        status: PCRStatus.DraftWithProjectManager,
-        manageTeamMemberStatus: PCRStatus.Unknown,
         items: validatedData.types.map(x => this.mapItem(x, itemTypes)),
       };
+      const pcrId = await context.repositories.projectChangeRequests.createProjectChangeRequestHeader(newPCR);
+      await Promise.allSettled([
+        context.repositories.projectChangeRequestStatusChange.createStatusChange({
+          Acc_ProjectChangeRequest__c: pcrId,
+          Acc_ExternalComment__c: "",
+          Acc_ParticipantVisibility__c: true,
+        }),
+        context.repositories.projectChangeRequests.insertItems(pcrId, newPCR.items),
+      ]);
 
-      const pcrId = await context.repositories.projectChangeRequests.createProjectChangeRequest(newPCR);
-      await this.insertStatusChange(context, pcrId);
       return pcrId;
     }
   }
