@@ -101,6 +101,7 @@
         "NEW_RELIC_EVENTS_URL",
         "NEW_RELIC_API_KEY",
         "NEW_RELIC_APP_NAME",
+        "NEW_RELIC_LICENSE_KEY",
         "PORT",
         "SERVER_URL",
         "DEVELOPER_WRITE_GRAPHQL",

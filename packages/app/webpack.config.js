@@ -166,7 +166,12 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       minimize: false,
     },
     target: "node",
-    externals: [nodeExternals({ additionalModuleDirs: [path.resolve("..", "..", "node_modules")] })],
+    externals: [
+      nodeExternals({
+        additionalModuleDirs: [path.resolve("..", "..", "node_modules")],
+        allowList: ["@innovateuk/logger"],
+      }),
+    ],
   };
 
   return [clientConfig, serverConfig];

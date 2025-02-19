@@ -58,7 +58,7 @@ class ESBuildConfiguration {
       minify: false,
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
-      plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      plugins: [nodeExternalsPlugin({ allowList: ["@innovateuk/logger"] }), replaceGraphqlRelayPlugin],
       banner: {
         js: "const newrelic = process.env.NEW_RELIC_ENABLED === 'true' ? require('newrelic') : null;",
       },
@@ -95,7 +95,7 @@ class ESBuildConfiguration {
       minify: false,
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
-      plugins: [nodeExternalsPlugin()],
+      plugins: [nodeExternalsPlugin({ allowList: ["@innovateuk/logger"] })],
       loader: {
         ".apex": "text",
         ".gql": "text",
