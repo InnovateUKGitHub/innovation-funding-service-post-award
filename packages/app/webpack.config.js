@@ -17,18 +17,6 @@ const nodeExternals = require("webpack-node-externals");
 const getPath = (relativePath, replacementPath = "") => path.resolve(__dirname, relativePath, replacementPath);
 
 /**
- * Generate the regex/string pair to detect and then
- * replace files.
- *
- * @param {string} fileName
- * @returns {[RegExp, string]}
- */
-const getNormalReplacementParams = fileName => [
-  new RegExp(fileName),
-  getPath("src/client/replacement-files", fileName),
-];
-
-/**
  * Generate both the client and server webpack configurations.
  * Can be used directly by Webpack - just export with `module.exports`
  *
@@ -115,9 +103,21 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       path: getPath("public/build"),
     },
     plugins: [
-      new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
-      new NormalModuleReplacementPlugin(...getNormalReplacementParams("isomorphicFileWrapper.ts")),
-      new NormalModuleReplacementPlugin(...getNormalReplacementParams("developmentLogger.ts")),
+      new NormalModuleReplacementPlugin(/apiClient\.ts/, getPath("src/client/replacement-files", "apiClient.ts")),
+      new NormalModuleReplacementPlugin(
+        /isomorphicFileWrapper\.ts/,
+        getPath("src/client/replacement-files", "isomorphicFileWrapper.ts"),
+      ),
+      new NormalModuleReplacementPlugin(/logger/, result => {
+        console.log(result);
+
+        if (result.createData?.resource) {
+          result.createData.resource = result.createData.resource
+            .replace("packages/logger/dist/index.js", "packages/logger/dist/clientIndexReplacement.js")
+            .replace("packages/logger/src/index.ts", "packages/logger/src/clientIndexReplacement.ts")
+            .replace("packages/logger/src/ServerLogger.ts", "packages/logger/src/ClientLogger.ts");
+        }
+      }),
       new MiniCssExtractPlugin({
         filename: "styles.css",
       }),
@@ -169,7 +169,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
     externals: [
       nodeExternals({
         additionalModuleDirs: [path.resolve("..", "..", "node_modules")],
-        allowList: ["@innovateuk/logger"],
+        allowlist: ["@innovateuk/logger"],
       }),
     ],
   };
