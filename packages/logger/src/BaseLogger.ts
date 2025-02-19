@@ -1,12 +1,10 @@
 import { ILogger } from "./ILogger";
 import { LogLevel, getLogLevelNumber, parseLogLevel } from "./LogLevel";
-import type NewRelic from "newrelic";
 
 interface LoggerOptions {
   prefixLines: (string | Record<string, any>)[];
   logLevel: LogLevel;
   colourfulLogging: boolean;
-  newRelic: typeof NewRelic | null | false;
 }
 
 abstract class BaseLogger implements ILogger {
@@ -14,7 +12,6 @@ abstract class BaseLogger implements ILogger {
     prefixLines: [],
     logLevel: LogLevel.ERROR,
     colourfulLogging: false,
-    newRelic: false,
   };
 
   static setDefaultOptions(options?: Partial<LoggerOptions>) {
@@ -41,7 +38,6 @@ abstract class BaseLogger implements ILogger {
 
     if (options?.logLevel) this.options.logLevel = options?.logLevel;
     if (options?.prefixLines) this.options.prefixLines = options?.prefixLines;
-    if (options?.newRelic) this.options.newRelic = options?.newRelic;
     if (options?.colourfulLogging) this.options.colourfulLogging = options?.colourfulLogging;
   }
 
