@@ -3,6 +3,14 @@
   "extends": ["//"],
   "tasks": {
     "build": {
+      "dependsOn": ["@innovateuk/logger#build-client", "@innovateuk/logger#build-server", "@innovateuk/logger#typegen"]
+    },
+    "build-client": {
+      "inputs": ["src/**"],
+      "outputs": ["dist/**"],
+      "dependsOn": ["@innovateuk/logger#typegen"]
+    },
+    "build-server": {
       "inputs": ["src/**"],
       "outputs": ["dist/**"],
       "dependsOn": ["@innovateuk/logger#typegen"]
