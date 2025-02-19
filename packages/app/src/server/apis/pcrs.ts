@@ -38,6 +38,7 @@ import type {
   ReasoningDto,
   PcrSubmitDto,
   ApproveNewSubcontractorDto,
+  LoanDrawdownChangeDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -85,6 +86,7 @@ import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesS
 import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
 import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
 import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
+import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDurationChangeCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -179,6 +181,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   addPartnerSummary: PcrUpdateMethod<Context, PcrAddPartnerSummaryDto, boolean>;
   changeDuration: PcrUpdateMethod<Context, PcrChangeDurationDto, boolean>;
   loanDrawdownExtension: PcrUpdateMethod<Context, LoanDrawdownExtensionDto, boolean>;
+  loanDrawdownChange: PcrUpdateMethod<Context, LoanDrawdownChangeDto, boolean>;
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
@@ -399,6 +402,12 @@ class Controller
       this.loanDrawdownExtension,
     );
 
+    this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/loan-drawdown-change",
+      requestParams<LoanDrawdownChangeDto>,
+      this.loanDrawdownChange,
+    );
+
     this.putItem("/:projectId/:pcrId/:pcrItemId/scope-change", requestParams<PcrScopeChangeDto>, this.scopeChange);
 
     this.putItem(
@@ -567,6 +576,10 @@ class Controller
 
   async changeDuration(params: PcrUpdateParams<"server", PcrChangeDurationDto>) {
     return await runUpdateCommand(params, new UpdatePcrChangeDurationCommand(getParams(params)));
+  }
+
+  async loanDrawdownChange(params: PcrUpdateParams<"server", LoanDrawdownChangeDto>) {
+    return await runUpdateCommand(params, new UpdatePcrLoanDrawdownChangeCommand(getParams(params)));
   }
 
   async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {

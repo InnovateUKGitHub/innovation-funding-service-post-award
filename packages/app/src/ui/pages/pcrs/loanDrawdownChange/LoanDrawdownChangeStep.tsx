@@ -18,15 +18,16 @@ import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 
 export const LoanDrawdownChangeStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+  const { itemId, fetchKey, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
-  const { pcrItem, loans } = useLoanDrawdownChangeQuery(itemId, fetchKey);
+  const { loans } = useLoanDrawdownChangeQuery(itemId, fetchKey);
 
   const { handleSubmit, register, formState, trigger, watch, setError } = useForm<InferredLoanDrawdownChangeSchema>({
     defaultValues: {
-      // take the marked as complete state from the current checkbox state on the summary
       markedAsComplete: markedAsCompleteHasBeenChecked,
+      form: FormTypes.PcrLoanDrawdownChange,
       loans: loans.map(x => ({
+        id: x.id,
         period: x.period,
         currentDate: x.currentDate,
         currentValue: x.currentValue,
@@ -35,6 +36,7 @@ export const LoanDrawdownChangeStep = () => {
         newDate_month: getMonth(x.newDate),
         newDate_year: getYear(x.newDate),
         newValue: String(x.newValue),
+        isEditable: x.isEditable,
       })),
     },
     resolver: zodResolver(loanDrawdownChangeSchema, {
@@ -42,37 +44,35 @@ export const LoanDrawdownChangeStep = () => {
     }),
   });
 
-  const { isFetching: isUpdatingLoans, onUpdate: onUpdateLoans } = useOnUpdateLoanChange(projectId, itemId, loans);
+  const { isFetching, onUpdate, apiError } = useOnUpdateLoanChange();
 
   const validationErrors = useZodErrors(setError, formState.errors) as LoanDrawdownEditErrors;
   useFormRevalidate(watch, trigger, markedAsCompleteHasBeenChecked);
 
   const nextLink = useNextLink();
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section data-qa="uploadFileSection">
         <Form
           data-qa="loanEditForm"
-          onSubmit={handleSubmit(async data => {
-            await onUpdateLoans({ data });
-
-            onSave({
-              data: pcrItem,
+          onSubmit={handleSubmit(data =>
+            onUpdate({
+              data,
               context: { link: nextLink },
-            });
-          })}
+            }),
+          )}
         >
           <input type="hidden" name="form" value={FormTypes.PcrLoanDrawdownChange} />
           <LoanDrawdownChangeEditTable
             loans={loans}
             register={register}
             watch={watch}
-            disabled={isFetching || isUpdatingLoans}
+            disabled={isFetching}
             errors={validationErrors}
           />
 
           <Fieldset>
-            <Button disabled={isFetching || isUpdatingLoans} type="submit">
+            <Button disabled={isFetching} type="submit">
               {getContent(x => x.pcrItem.continueToSummaryButton)}
             </Button>
           </Fieldset>

@@ -208,6 +208,8 @@ const clientApi: IApiClient<"client"> = {
       ),
     changeDuration: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/change-duration`, params.pcr),
+    loanDrawdownChange: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/loan-drawdown-change`, params.pcr),
     loanDrawdownExtension: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/loan-duration-extension`, params.pcr),
     reasoning: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/reasoning`, params.pcr),

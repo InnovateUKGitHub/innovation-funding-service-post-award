@@ -1,6 +1,6 @@
 import { Section } from "@ui/components/atoms/Section/Section";
 import { PcrPage } from "../pcrPage";
-import { useLoanDrawdownChangeQuery } from "./loanDrawdownChange.logic";
+import { useLoanDrawdownChangeQuery, useOnUpdateLoanChangeSummary } from "./loanDrawdownChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   errorMap,
@@ -24,6 +24,7 @@ export const LoanDrawdownChangeSummary = () => {
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       loans,
+      form: FormTypes.PcrLoanDrawdownChangeSummary,
     },
     resolver: zodResolver(loanDrawdownChangeSummarySchema, {
       errorMap,
@@ -31,9 +32,10 @@ export const LoanDrawdownChangeSummary = () => {
   });
 
   const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownErrors;
+  const { isFetching, onUpdate, apiError } = useOnUpdateLoanChangeSummary();
 
   return (
-    <PcrPage validationErrors={validationErrors}>
+    <PcrPage validationErrors={validationErrors} apiError={apiError}>
       <Section>
         <LoanDrawdownChangeReviewTable loans={loans} errors={validationErrors} />
       </Section>
@@ -44,6 +46,8 @@ export const LoanDrawdownChangeSummary = () => {
           watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
+          onUpdate={onUpdate}
+          isFetching={isFetching}
         >
           <input type="hidden" name="form" value={FormTypes.PcrLoanDrawdownChangeSummary} />
         </PcrItemSummaryForm>

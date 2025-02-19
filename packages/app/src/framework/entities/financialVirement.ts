@@ -2,7 +2,16 @@ import { LoanDto } from "@framework/dtos/loanDto";
 
 export interface LoanFinancialVirement extends Pick<LoanDto, "id" | "status" | "period"> {
   // Note: Derived from loan status
+  currentDate: Date;
+  currentValue: number;
+  isEditable: boolean;
+  newDate: Date;
+  newValue: number;
+}
 
+export interface LoanDrawdownVirement extends Pick<LoanDto, "status" | "period"> {
+  // Note: Derived from loan status
+  id: LoanDrawdownId;
   currentDate: Date;
   currentValue: number;
   isEditable: boolean;

@@ -6,15 +6,8 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { PCRTimeExtensionOption } from "@framework/dtos/pcrDtos";
 import { monthDifference, totalCalendarMonths } from "@shared/date-helpers";
-import { useNavigate } from "react-router-dom";
-import { useMessageContext } from "@ui/context/messages";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { clientsideApiClient } from "@ui/apiClient";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { z } from "zod";
 import { TimeExtensionSchema } from "./timeExtension.zod";
-import { usePcrWorkflowContext } from "../pcrItemWorkflow";
+import { pcrUpdater } from "../pcrItemWorkflow.logic";
 
 export const usePcrTimeExtensionWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<PcrTimeExtensionWorkflowQuery>(
@@ -96,32 +89,5 @@ export function generateOptions(endDate: Date, maxFutureLimitInYears: number): P
 }
 
 export const useOnUpdateTimeExtension = () => {
-  const navigate = useNavigate();
-
-  const { setFetchKey, pcrId, itemId, projectId, step } = usePcrWorkflowContext();
-  const { clearMessages } = useMessageContext();
-
-  return useOnUpdate<z.output<TimeExtensionSchema>, boolean, { link: ILinkInfo }>({
-    req: data =>
-      clientsideApiClient.pcrs.changeDuration({
-        projectId,
-        pcrId,
-        pcrItemId: itemId,
-        pcr: {
-          ...data,
-          ...(typeof step === "number"
-            ? { status: PCRItemStatus.Incomplete }
-            : { status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete }),
-        },
-      }),
-    onSuccess: async function (
-      _: z.output<TimeExtensionSchema>,
-      __: boolean,
-      context: { link: ILinkInfo } | undefined,
-    ) {
-      clearMessages();
-      setFetchKey(k => k + 1);
-      navigate(context?.link?.path ?? "");
-    },
-  });
+  return pcrUpdater<TimeExtensionSchema>("changeDuration");
 };

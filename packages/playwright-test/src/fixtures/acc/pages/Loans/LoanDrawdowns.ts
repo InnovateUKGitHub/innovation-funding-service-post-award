@@ -340,10 +340,27 @@ class LoanDrawdowns {
     }
   }
 
-  getDrawdownDate(increment: number) {
+  getDrawdownDate(increment: number, full?: boolean) {
     let date = new Date();
     let fullDate = new Date(date.getFullYear(), date.getMonth() + increment, 1, 12);
-    return `01/${fullDate.toLocaleDateString("en-GB", { month: "2-digit", year: "numeric" })}`;
+    if (full) {
+      return `1 ${fullDate.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}`;
+    } else {
+      return `01/${fullDate.toLocaleDateString("en-GB", { month: "2-digit", year: "numeric" })}`;
+    }
+  }
+
+  getDrawdownMonthDigit(increment: number) {
+    let date = new Date();
+    let fullDate = new Date(date.getFullYear(), date.getMonth() + increment, 1, 12);
+
+    return fullDate.toLocaleDateString("en-GB", { month: "2-digit" });
+  }
+
+  getDrawdownYear(increment: number) {
+    let date = new Date();
+    let fullDate = new Date(date.getFullYear(), date.getMonth() + increment, 1, 12);
+    return fullDate.toLocaleDateString("en-GB", { year: "numeric" });
   }
 
   async pmOnlyDrawdown() {
