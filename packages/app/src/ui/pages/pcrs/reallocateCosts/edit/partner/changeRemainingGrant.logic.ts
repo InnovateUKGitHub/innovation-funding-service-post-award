@@ -1,10 +1,95 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
-import { pick, sumBy } from "lodash";
 import { useNavigate } from "react-router-dom";
-import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
-import { ChangeRemainingGrantSchema } from "./changeRemainingGrant.zod";
+import { ChangeRemainingGrantSchemaType } from "./changeRemainingGrant.zod";
+import { z } from "zod";
+import { useMessageContext } from "@ui/context/messages";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
+import { useLazyLoadQuery } from "react-relay";
+import { ChangeRemainingGrantQuery } from "./__generated__/ChangeRemainingGrantQuery.graphql";
+import { changeRemainingGrantQuery } from "./ChangeRemainingGrant.query";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToFinancialVirementForParticipantDtoArray } from "@gql/dtoMapper/mapFinancialVirementForParticipant";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { getFirstEdge } from "@gql/selectors/edges";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinancialVirementForCosts";
+import { sumBy } from "lodash";
+import { partnerSorterLeadFirst } from "@framework/util/partnerHelper";
+
+export const useChangeRemainingGrantData = ({
+  projectId,
+  pcrItemId,
+  fetchKey,
+}: {
+  projectId: ProjectId;
+  pcrItemId: PcrItemId;
+  fetchKey: number;
+}) => {
+  const data = useLazyLoadQuery<ChangeRemainingGrantQuery>(
+    changeRemainingGrantQuery,
+    { projectId, pcrItemId },
+    { fetchPolicy: "network-only", fetchKey },
+  );
+
+  const project = mapToProjectDto(getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges).node, [
+    "isNonFec",
+    "roles",
+    "competitionType",
+  ]);
+
+  const partners = mapToPartnerDtoArray(
+    data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
+    ["id", "name", "isLead"],
+    {},
+  );
+
+  const financialVirementsForParticipants = mapToFinancialVirementForParticipantDtoArray(
+    data.salesforce.uiapi.query.Acc_VirementsForParticipant?.edges ?? [],
+    ["id", "newEligibleCosts", "newFundingLevel", "newRemainingGrant", "originalFundingLevel", "partnerId"],
+  );
+
+  const financialVirementsForCosts = mapToFinancialVirementForCostsDtoArray(
+    data.salesforce.uiapi.query.Acc_VirementsForCosts?.edges ?? [],
+    ["id", "parentId", "originalEligibleCosts", "newEligibleCosts"],
+  );
+
+  const partnerData = financialVirementsForParticipants
+    .map(x => {
+      const matchingCostData = financialVirementsForCosts.filter(y => y.parentId === x.id);
+      const originalRemainingCosts = sumBy(matchingCostData, v => v.originalEligibleCosts);
+      const originalRemainingGrant = roundCurrency(originalRemainingCosts * (x.originalFundingLevel / 100));
+      const newRemainingCosts = sumBy(matchingCostData, v => v.newEligibleCosts);
+      const matchingPartner = partners.find(z => z.id === x.partnerId)!;
+      return {
+        ...x,
+        name: matchingPartner.name,
+        isLead: matchingPartner.isLead,
+        originalRemainingCosts,
+        originalRemainingGrant,
+        newRemainingCosts,
+      };
+    })
+    .sort(partnerSorterLeadFirst);
+
+  const originalRemainingGrant = sumBy(partnerData, "originalRemainingGrant");
+  const newRemainingGrant = sumBy(partnerData, "newRemainingGrant");
+  const originalRemainingCosts = sumBy(partnerData, "originalRemainingCosts");
+  const newRemainingCosts = sumBy(partnerData, "newRemainingCosts");
+  const originalFundingLevel = roundCurrency(
+    originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0,
+  );
+  return {
+    project,
+    partnerData,
+    originalRemainingGrant,
+    newRemainingGrant,
+    originalRemainingCosts,
+    newRemainingCosts,
+    originalFundingLevel,
+    fragmentRef: data.salesforce.uiapi,
+  };
+};
 
 export const useOnUpdateChangeRemainingGrant = (
   projectId: ProjectId,
@@ -13,17 +98,22 @@ export const useOnUpdateChangeRemainingGrant = (
   navigateTo: string,
 ) => {
   const navigate = useNavigate();
+  const { clearMessages } = useMessageContext();
+  const [, setFetchKey] = useFetchKey();
 
   return useOnUpdate({
-    req: (financialVirement: ReturnType<typeof getPayload>) =>
-      clientsideApiClient.financialVirements.update({
+    req: (data: z.output<ChangeRemainingGrantSchemaType>) =>
+      clientsideApiClient.pcrs.changeRemainingGrant({
         projectId,
         pcrId,
         pcrItemId,
-        financialVirement,
-        submit: true,
+        pcr: data,
       }),
-    onSuccess: () => navigate(navigateTo),
+    onSuccess: () => {
+      clearMessages();
+      setFetchKey(k => k + 1);
+      navigate(navigateTo);
+    },
   });
 };
 
@@ -32,63 +122,4 @@ export const getNewFundingLevel = (newRemainingCosts: number, newRemainingGrant:
     return newFundingLevel;
   }
   return (newRemainingGrant / newRemainingCosts) * 100;
-};
-
-export const getPayload = (
-  data: ChangeRemainingGrantSchema,
-  virementData: ReturnType<typeof useMapFinancialVirements>["virementData"],
-  itemId: PcrItemId,
-) => {
-  const newRemainingGrantTotal = roundCurrency(sumBy(data.partners, x => parseCurrency(x.newRemainingGrant)));
-
-  const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
-
-  return {
-    pcrItemId: itemId,
-    ...pick(virementData, [
-      "costsClaimedToDate",
-      "originalEligibleCosts",
-      "originalRemainingCosts",
-      "originalRemainingGrant",
-      "originalFundingLevel",
-      "newEligibleCosts",
-      "newRemainingCosts",
-    ]),
-    newFundingLevel: newFundingLevelTotal,
-    newRemainingGrant: newRemainingGrantTotal,
-    partners: virementData.partners.map(x => {
-      const matchingPartner = data.partners.find(v => v.partnerId === x.partnerId);
-      if (!matchingPartner) throw new Error("cannot find matching partner id");
-
-      const newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant);
-      const newFundingLevel = getNewFundingLevel(x.newRemainingCosts, newRemainingGrant, x.newFundingLevel);
-
-      return {
-        ...pick(x, [
-          "partnerId",
-          "costsClaimedToDate",
-          "originalEligibleCosts",
-          "originalRemainingCosts",
-          "originalRemainingGrant",
-          "originalFundingLevel",
-          "newEligibleCosts",
-          "newRemainingCosts",
-        ]),
-        newRemainingGrant,
-        newFundingLevel,
-        virements: x.virements.map(virement => ({
-          ...pick(virement, [
-            "originalEligibleCosts",
-            "newEligibleCosts",
-            "originalRemainingGrant",
-            "newRemainingGrant",
-            "originalRemainingCosts",
-            "newRemainingCosts",
-            "costCategoryId",
-          ]),
-          costsClaimedToDate: virement.costsClaimedToDate,
-        })),
-      };
-    }),
-  };
 };

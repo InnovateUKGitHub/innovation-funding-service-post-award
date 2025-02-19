@@ -12,18 +12,17 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { TBody, TCaption, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atoms/table/tableComponents";
 import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { useMapFinancialVirements } from "../../../utils/useMapFinancialVirements";
 import { useForm } from "react-hook-form";
 import { ChangeRemainingGrantSchema, changeRemainingGrantSchema, errorMap } from "./changeRemainingGrant.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
 import { sumBy } from "lodash";
-import { useOnUpdateChangeRemainingGrant, getPayload } from "./changeRemainingGrant.logic";
+import { useChangeRemainingGrantData, useOnUpdateChangeRemainingGrant } from "./changeRemainingGrant.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
-import { usePcrReallocateCostsData } from "../../PcrReallocateCosts.logic";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { useFetchKey } from "@ui/context/FetchKeyProvider";
 
 /**
  * Hook returns content for edit partner view
@@ -63,44 +62,43 @@ type ChangeRemainingGrantErrors = {
 };
 
 const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) => {
-  const {
-    project,
-    financialVirementsForParticipants,
-    financialVirementsForCosts,
-    claimOverrideAwardRates,
-    partners,
-    fragmentRef,
-  } = usePcrReallocateCostsData({
-    projectId: props.projectId,
-    pcrId: props.pcrId,
-    itemId: props.itemId,
-  });
-  const content = useChangeRemainingGrantContent();
+  const [fetchKey] = useFetchKey();
 
-  const { virementData } = useMapFinancialVirements({
-    financialVirementsForCosts,
-    financialVirementsForParticipants,
-    claimOverrideAwardRates,
-    partners,
+  const {
+    partnerData,
+    project,
+    fragmentRef,
+    originalRemainingGrant,
+    originalFundingLevel,
+    newRemainingGrant,
+    originalRemainingCosts,
+    newRemainingCosts,
+  } = useChangeRemainingGrantData({
+    projectId: props.projectId,
     pcrItemId: props.itemId,
+    fetchKey,
   });
+
+  const content = useChangeRemainingGrantContent();
 
   const { register, watch, setError, formState, handleSubmit, getFieldState, setValue } =
     useForm<ChangeRemainingGrantSchema>({
       defaultValues: {
         form: FormTypes.PcrReallocateCostsChangeRemainingGrant,
-        partners: virementData.partners.map(x => ({
+        partners: partnerData.map(x => ({
           partnerId: x.partnerId,
+          virementParticipantId: x.id,
           newRemainingGrant: String(x.newRemainingGrant ?? 0),
           newRemainingCosts: x.newRemainingCosts,
           newFundingLevel: x.newFundingLevel,
           originalFundingLevel: x.originalFundingLevel,
           originalRemainingCosts: x.originalRemainingCosts,
           originalRemainingGrant: x.originalRemainingGrant,
+          currentNewRemainingGrant: x.newRemainingGrant ?? 0,
         })),
-        originalRemainingGrant: virementData.originalRemainingGrant,
-        newRemainingGrant: virementData.newRemainingGrant,
-        newRemainingCosts: virementData.newRemainingCosts,
+        originalRemainingGrant,
+        newRemainingGrant,
+        newRemainingCosts,
       },
       resolver: zodResolver(changeRemainingGrantSchema, {
         errorMap,
@@ -123,11 +121,11 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
   const validationErrors = useZodErrors(setError, formState?.errors) as ChangeRemainingGrantErrors;
 
   const getNewFundingLevel = (index: number) => {
-    if (virementData.partners[index].newRemainingCosts === 0) {
-      return virementData.partners[index].newFundingLevel;
+    if (partnerData[index].newRemainingCosts === 0) {
+      return partnerData[index].newFundingLevel;
     }
     const value = parseCurrency(watch(`partners.${index}.newRemainingGrant`));
-    return (value / virementData.partners[index].newRemainingCosts) * 100;
+    return (value / partnerData[index].newRemainingCosts) * 100;
   };
 
   const newRemainingGrantTotal = sumBy(watch("partners"), x => parseCurrency(x.newRemainingGrant) || 0);
@@ -135,7 +133,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
   useEffect(() => {
     setValue("newRemainingGrant", newRemainingGrantTotal, { shouldValidate: formState.isSubmitted });
   }, [newRemainingGrantTotal, setValue, formState.isSubmitted]);
-  const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
+  const newFundingLevelTotal = (newRemainingGrantTotal / newRemainingCosts) * 100;
 
   return (
     <Page
@@ -166,14 +164,14 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
         <Form
           onSubmit={handleSubmit(data =>
             onUpdate({
-              data: getPayload(data, virementData, props.itemId),
+              data,
             }),
           )}
         >
           <input type="hidden" value={FormTypes.PcrReallocateCostsChangeRemainingGrant} {...register("form")} />
-          <input type="hidden" value={virementData.originalRemainingGrant} {...register("originalRemainingGrant")} />
-          <input type="hidden" value={virementData.newRemainingGrant} {...register("newRemainingGrant")} />
-          <input type="hidden" value={virementData.newRemainingCosts} {...register("newRemainingCosts")} />
+          <input type="hidden" value={originalRemainingGrant} {...register("originalRemainingGrant")} />
+          <input type="hidden" value={newRemainingGrant} {...register("newRemainingGrant")} />
+          <input type="hidden" value={newRemainingCosts} {...register("newRemainingCosts")} />
           <Table data-qa="partner-virements">
             <TCaption hidden>{content.tableCaption}</TCaption>
             <THead>
@@ -190,11 +188,12 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
               </TR>
             </THead>
             <TBody>
-              {virementData.partners.map((x, i) => (
+              {partnerData.map((x, i) => (
                 <TR key={x.partnerId}>
                   <TD dividerRight>
                     <input type="hidden" value={x.partnerId} {...register(`partners.${i}.partnerId`)} />
-                    {partners.find(p => p.id === x.partnerId)?.name}
+                    <input type="hidden" value={x.id} {...register(`partners.${i}.virementParticipantId`)} />
+                    {x.name}
                   </TD>
                   <TD numeric>
                     <input
@@ -236,6 +235,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                       defaultValue={String(x.newRemainingGrant ?? 0)}
                       prefix={content.gbp}
                     />
+                    <input type="hidden" value={x.newRemainingGrant} name={`partners.${i}currentNewRemainingGrant`} />
                   </TD>
                   <TD numeric>
                     <input type="hidden" value={x.newFundingLevel} {...register(`partners.${i}.newFundingLevel`)} />
@@ -248,16 +248,16 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
               <TR>
                 <TH dividerRight>{content.projectTotals}</TH>
                 <TH numeric>
-                  <Currency value={virementData.originalRemainingCosts} />
+                  <Currency value={originalRemainingCosts} />
                 </TH>
                 <TH numeric>
-                  <Currency value={virementData.originalRemainingGrant} />
+                  <Currency value={originalRemainingGrant} />
                 </TH>
                 <TH numeric dividerRight>
-                  <Percentage value={virementData.originalFundingLevel} />
+                  <Percentage value={originalFundingLevel} />
                 </TH>
                 <TH numeric>
-                  <Currency value={virementData.newRemainingCosts} />
+                  <Currency value={newRemainingCosts} />
                 </TH>
                 <TH id="newRemainingGrant" numeric>
                   <ValidationError error={getFieldState("newRemainingGrant").error} />

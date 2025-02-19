@@ -21,12 +21,14 @@ import { z } from "zod";
 
 type PartnerData = {
   partnerId: PartnerId;
+  virementParticipantId: FinancialVirementForParticipantId;
   newRemainingCosts: number;
   newRemainingGrant: string;
   originalRemainingCosts: number;
   originalRemainingGrant: number;
   originalFundingLevel: number;
   newFundingLevel: number;
+  currentNewRemainingGrant: number;
 };
 
 export class ChangeRemainingGrantUpdateHandler extends ZodFormHandlerBase<
@@ -66,11 +68,14 @@ export class ChangeRemainingGrantUpdateHandler extends ZodFormHandlerBase<
         acc[idx] = {} as PartnerData;
       }
       if (field === "partnerId") acc[idx][field] = v as PartnerId;
+      if (field === "virementParticipantId") acc[idx][field] = v as FinancialVirementForParticipantId;
       if (field === "newRemainingCosts") acc[idx][field] = parseCurrency(v ?? "0");
       if (field === "newRemainingGrant") acc[idx][field] = v || "0";
       if (field === "originalRemainingCosts") acc[idx][field] = parseCurrency(v ?? "0");
       if (field === "originalRemainingGrant") acc[idx][field] = parseCurrency(v ?? "0");
       if (field === "originalFundingLevel") acc[idx][field] = parseFloat(v ?? "0");
+      if (field === "currentNewRemainingGrant") acc[idx][field] = parseFloat(v ?? "0");
+
       return acc;
     }, []);
 

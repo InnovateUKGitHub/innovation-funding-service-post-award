@@ -71,7 +71,6 @@ const usePcrReallocateCostsData = ({ projectId, pcrId, itemId, fetchKey }: UsePc
       "costCategoryName",
       "newEligibleCosts",
       "originalCostsClaimedToDate",
-      "originalCostsClaimedToDate",
       "originalEligibleCosts",
     ],
   );

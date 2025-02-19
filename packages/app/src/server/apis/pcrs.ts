@@ -39,6 +39,7 @@ import type {
   PcrSubmitDto,
   ApproveNewSubcontractorDto,
   LoanDrawdownChangeDto,
+  ChangeRemainingGrantDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -87,6 +88,7 @@ import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReason
 import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
 import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
 import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDurationChangeCommand";
+import { UpdatePcrChangeRemainingGrantCommand } from "@server/features/pcrs/updatePcrChangeRemainingGrantCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -194,6 +196,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   loanDrawdownExtension: PcrUpdateMethod<Context, LoanDrawdownExtensionDto, boolean>;
   loanDrawdownChange: PcrUpdateMethod<Context, LoanDrawdownChangeDto, boolean>;
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
+  changeRemainingGrant: PcrUpdateMethod<Context, ChangeRemainingGrantDto, boolean>;
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
@@ -414,6 +417,12 @@ class Controller
     );
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/change-remaining-grant",
+      requestParams<ChangeRemainingGrantDto>,
+      this.changeRemainingGrant,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/loan-duration-extension",
       requestParams<LoanDrawdownExtensionDto>,
       this.loanDrawdownExtension,
@@ -614,6 +623,10 @@ class Controller
 
   async changeDuration(params: PcrUpdateParams<"server", PcrChangeDurationDto>) {
     return await runUpdateCommand(params, new UpdatePcrChangeDurationCommand(getParams(params)));
+  }
+
+  async changeRemainingGrant(params: PcrUpdateParams<"server", ChangeRemainingGrantDto>) {
+    return await runUpdateCommand(params, new UpdatePcrChangeRemainingGrantCommand(getParams(params)));
   }
 
   async loanDrawdownChange(params: PcrUpdateParams<"server", LoanDrawdownChangeDto>) {

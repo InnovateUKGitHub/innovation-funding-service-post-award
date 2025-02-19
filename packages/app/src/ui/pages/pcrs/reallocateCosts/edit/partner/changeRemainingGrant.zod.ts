@@ -2,7 +2,10 @@ import { roundCurrency, parseCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
-import { partnerIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
+import {
+  financialVirementForPartnerIdValidation,
+  partnerIdValidation,
+} from "@ui/zod/helperValidators/helperValidators.zod";
 import { z } from "zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "changeRemainingGrant"] });
@@ -22,6 +25,8 @@ export const changeRemainingGrantSchema = z
           originalRemainingCosts: z.number(),
           originalRemainingGrant: z.number(),
           partnerId: partnerIdValidation,
+          virementParticipantId: financialVirementForPartnerIdValidation,
+          currentNewRemainingGrant: z.number(),
         })
         .superRefine((data, ctx) => {
           if (roundCurrency(parseCurrency(data.newRemainingGrant)) > roundCurrency(data.newRemainingCosts)) {

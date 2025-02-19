@@ -17,6 +17,8 @@ import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectRole } from "./projectContactDto";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { CostCategoryType } from "@framework/constants/enums";
+import { z } from "zod";
+import { ChangeRemainingGrantSchemaType } from "@ui/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.zod";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -683,6 +685,8 @@ export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
   markedAsComplete?: boolean;
   form: FormTypes.PcrAddPartnerSummary;
 }
+
+export type ChangeRemainingGrantDto = z.output<ChangeRemainingGrantSchemaType>;
 
 export interface ReasoningDto {
   reasoningComments?: string;

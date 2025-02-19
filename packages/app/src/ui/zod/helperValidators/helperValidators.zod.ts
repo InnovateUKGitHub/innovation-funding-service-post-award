@@ -30,6 +30,11 @@ const financialVirementForCostsIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_Virements__c)
   .transform(x => x as FinancialVirementForCostsId);
 
+const financialVirementForPartnerIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_Virements__c)
+  .transform(x => x as FinancialVirementForParticipantId);
+
 const partnerIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_ProjectParticipant__c)
@@ -279,6 +284,7 @@ export {
   emptyStringToUndefinedValidation,
   evaluateObject,
   financialVirementForCostsIdValidation,
+  financialVirementForPartnerIdValidation,
   getMultiFileValidation,
   getSingleFileValidation,
   loanIdValidation,
