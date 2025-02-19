@@ -420,9 +420,7 @@ export class ProjectChangeRequestRepository
     await this.insertItems(projectChangeRequest.id, projectChangeRequest.items);
   }
 
-  async createProjectChangeRequestHeader(
-    projectChangeRequest: Pick<ProjectChangeRequestForCreateEntity, "projectId" | "items">,
-  ) {
+  async createProjectChangeRequestHeader(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
     let headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
     if (
@@ -438,9 +436,9 @@ export class ProjectChangeRequestRepository
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,
-      Acc_MarkedasComplete__c: this.mapItemStatus(PCRItemStatus.ToDo),
-      Acc_Status__c: this.mapStatus(PCRStatus.DraftWithProjectManager),
-      Acc_Manage_Team_Member_Status__c: this.mapStatus(PCRStatus.Unknown),
+      Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
+      Acc_Status__c: this.mapStatus(projectChangeRequest.status),
+      Acc_Manage_Team_Member_Status__c: this.mapStatus(projectChangeRequest.manageTeamMemberStatus),
       Acc_Project__c: projectChangeRequest.projectId,
     });
 
