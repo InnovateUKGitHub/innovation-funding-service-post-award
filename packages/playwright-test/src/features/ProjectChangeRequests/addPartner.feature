@@ -134,21 +134,21 @@ Feature: Add a partner
     Then the user sees cost message "<Expected Error>"
 
     Examples:
-      | Field                                      | Value         | Expected Error                            |
-      | Directly incurred - Staff                  | -10           | Cost must be £0.00 or more.               |
-      | Directly incurred - Travel and subsistence | a1@           | Cost must be a number.                    |
-      | Directly incurred - Equipment              | $1299999      | Cost must be in pounds (£).               |
-      | Directly incurred - Other costs            |               | Enter cost.                               |
-      | Directly allocated - Investigations        | 9999999999990 | Cost must be £999,999,999,999.00 or less. |
-      | Directly allocated - Estates costs         | £1000£        | Cost must be a valid currency.            |
-      | Directly allocated - Other costs           | <tr>          | Cost must be a number.                    |
-      | Indirect costs - Investigations            | 'OFFICE'      | Cost must be a number.                    |
-      | Exceptions - Staff                         | 1.00000       | Cost must be 2 decimal places or fewer.   |
-      | Exceptions - Travel and subsistence        | 11111@iuk     | Cost must be a valid currency.            |
-      | Exceptions - Equipment                     | /\@£$%%^^&*   | Cost must be in pounds (£).               |
-      | Exceptions - Other costs                   | 1.            | Cost must be a valid currency.            |
-  # | Tsb reference                              | We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to9 | TSB reference must be 256 characters or less. |
-  # Enable the step above - ACC-11846
+      | Field                                      | Value         | Expected Error                                |
+      | Directly incurred - Staff                  | -10           | Cost must be £0.00 or more.                   |
+      | Directly incurred - Travel and subsistence | a1@           | Cost must be a number.                        |
+      | Directly incurred - Equipment              | $1299999      | Cost must be in pounds (£).                   |
+      | Directly incurred - Other costs            |               | Enter cost.                                   |
+      | Directly allocated - Investigations        | 9999999999990 | Cost must be £999,999,999,999.00 or less.     |
+      | Directly allocated - Estates costs         | £1000£        | Cost must be a valid currency.                |
+      | Directly allocated - Other costs           | <tr>          | Cost must be a number.                        |
+      | Indirect costs - Investigations            | 'OFFICE'      | Cost must be a number.                        |
+      | Exceptions - Staff                         | 1.00000       | Cost must be 2 decimal places or fewer.       |
+      | Exceptions - Travel and subsistence        | 11111@iuk     | Cost must be a valid currency.                |
+      | Exceptions - Equipment                     | /\@£$%%^^&*   | Cost must be in pounds (£).                   |
+      | Exceptions - Other costs                   | 1.            | Cost must be a valid currency.                |
+      | Tsb reference                              | We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to contact the partner for more information about this request.We may use this to9 | TSB reference must be 255 characters or less. |
+
 
   Scenario: Je-s cost categories valid test
     Given the user is on the Je-s cost categories page
@@ -328,7 +328,7 @@ Feature: Add a partner
       | Other costs 5          | £0.00             |
 
     And the user views a cost category
-    Then the user sees the cost table 
+    Then the user sees the cost table
       | Role within project | Gross employee cost | Rate    | Days to be spent | Total cost      |
       | Lorem/tester        | £120,000.00         | £900.00 | 1000000          | £900,000,000.00 |
       | /tester             | £1,200.99           | £900.76 | 1000000          | £900,760,000.00 |
