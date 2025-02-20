@@ -77,7 +77,7 @@ export const AcademicOrganisationStep = () => {
             />
             <Fieldset>
               <Link route={link({ button_submit: "submit" }).link}>
-                <Button styling="Secondary">{getContent(x => x.pcrItem.continueButton)}</Button>
+                <Button styling="Primary">{getContent(x => x.pcrItem.continueButton)}</Button>
               </Link>
               <Link route={link({ button_submit: "returnToSummary" }).link}>
                 <Button styling="Secondary">{getContent(x => x.pcrItem.returnToSummaryButton)}</Button>
