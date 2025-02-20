@@ -412,9 +412,9 @@ class Commands {
       }
     }
   }
-  
-   // get current date
-   dateFormatter(): string {
+
+  // get current date
+  dateFormatter(): string {
     return new Date()
       .toLocaleDateString("en-GB", {
         day: "numeric",
@@ -422,7 +422,7 @@ class Commands {
         year: "numeric",
       })
       .replace(/(\d{1,2})\/(\w+)/, "$1 $2");
-    }
+  }
   /**
    *
    * Returns a string with full date with option for long or short month. E.g. Jan or January
@@ -605,7 +605,7 @@ class Commands {
    *
    * The wait in this case is a necessary one regrettably.
    */
-  async fileInput(names: Array<string>) {
+  async fileInput(names: Array<string>, uploadSuccess?: boolean) {
     let fileList = [];
     for (const file of names) {
       let name = path.join(`src/components/testFiles/`, file);
@@ -614,7 +614,9 @@ class Commands {
     await this.page.locator("css=#files").setInputFiles(fileList);
     await this.page.waitForTimeout(3000);
     await this.clickOn("Upload documents");
-    await this.validationNotification("Your document has been uploaded.");
+    if (uploadSuccess) {
+      await this.validationNotification("Your document has been uploaded.");
+    }
   }
 
   async uploadAnyFile(name: string) {

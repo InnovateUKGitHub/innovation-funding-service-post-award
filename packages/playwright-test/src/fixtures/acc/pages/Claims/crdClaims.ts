@@ -486,8 +486,7 @@ class CrdClaims {
     await expect(this.costCatDocGuidance).toBeVisible();
     await expect(this.uploadSubheading).toBeVisible();
     await this.validators.testFileComponent(costcat, costcat, "Upload and remove documents", false, false);
-    await this.commands.fileInput([this.evidenceDocs[0]]);
-    await this.commands.validationNotification("Your document has been uploaded.");
+    await this.commands.fileInput([this.evidenceDocs[0]], true);
     await this.commands.backLink(`Back to ${costcat}`).click();
     await expect(this.page.getByRole("heading").filter({ hasText: costcat })).toBeVisible();
     let i = 0;
@@ -679,8 +678,7 @@ class CrdClaims {
   @When("the user uploads an Independent Accountant's Report")
   async uploadIar() {
     await this.docTypeSelector.selectOption(this.docTypeList[1]);
-    await this.commands.fileInput(["IAR.doc"]);
-    await this.commands.validationNotification("Your document has been uploaded.");
+    await this.commands.fileInput(["IAR.doc"], true);
     await expect(this.claimDocTable.locator("td").filter({ hasText: "IAR.doc" })).toBeVisible();
   }
 
@@ -735,8 +733,7 @@ class CrdClaims {
       await this.docTypeSelector.selectOption(type);
     }
     await this.validators.docTypeDropdown("Statement of expenditure");
-    await this.commands.fileInput(["MoDoc.doc"]);
-    await this.commands.validationNotification("Your document has been uploaded.");
+    await this.commands.fileInput(["MoDoc.doc"], true);
     await this.summaryDocTable(table, "claim-documents-container");
   }
 
@@ -978,8 +975,7 @@ class CrdClaims {
     await PageHeading.fromTitle(this.page, `${costcat} documents`).isVisible();
     await expect(this.costCatDocGuidance).toBeVisible();
     await expect(this.uploadSubheading).toBeVisible();
-    await this.commands.fileInput([this.evidenceDocs[docNumber]]);
-    await this.commands.validationNotification("Your document has been uploaded.");
+    await this.commands.fileInput([this.evidenceDocs[docNumber]], true);
     await this.commands.backLink(`Back to ${costcat}`).click();
     await expect(this.page.getByRole("heading").filter({ hasText: costcat })).toBeVisible();
     let i = 0;
@@ -995,7 +991,7 @@ class CrdClaims {
 
   async uploadInvoice() {
     await this.docTypeSelector.selectOption("Invoice");
-    await this.commands.fileInput([this.evidenceDocs[10]]);
+    await this.commands.fileInput([this.evidenceDocs[10]], true);
     const fileTable = [
       ["File name", this.evidenceDocs[10]],
       ["Type", "Invoice"],

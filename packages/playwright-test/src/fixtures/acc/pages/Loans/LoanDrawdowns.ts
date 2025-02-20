@@ -212,7 +212,7 @@ class LoanDrawdowns {
 
   @When("the user uploads a document and enters 5 characters")
   async drawdownValidState() {
-    await this.commands.fileInput(["testfile.doc"]);
+    await this.commands.fileInput(["testfile.doc"], true);
     let i = 0;
     for (const header of this.fileTableHeaders) {
       await expect(this.fileTableHead.nth(i).filter({ hasText: header })).toBeVisible();
@@ -221,7 +221,7 @@ class LoanDrawdowns {
     }
     await this.fileTableBody.nth(5).getByRole("button").filter({ hasText: "Remove" }).click();
     await this.commands.validationNotification("'testfile.doc' has been removed.");
-    await this.commands.fileInput(["testfile.doc"]);
+    await this.commands.fileInput(["testfile.doc"], true);
     await this.drawdownTextbox.fill(getLorem(5));
     await expect(this.page.getByRole("paragraph").filter({ hasText: "You have 5 characters" })).toBeVisible();
   }

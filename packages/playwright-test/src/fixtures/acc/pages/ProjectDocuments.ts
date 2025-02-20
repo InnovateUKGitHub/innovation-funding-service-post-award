@@ -105,7 +105,7 @@ class ProjectDocuments {
     await this.validators.testFileComponent("project", "Project overview", "Documents", false, false, "", "Plans");
     await this.validators.docTypeDropdown("Plans");
     await this.page.locator("css=#description").selectOption("Plans");
-    await this.commands.fileInput(["testfile.doc"]);
+    await this.commands.fileInput(["testfile.doc"], true);
   }
 
   @Then("a document table will be visible")
@@ -128,7 +128,7 @@ class ProjectDocuments {
   async moUploadIUKOnly() {
     const access = this.page.getByLabel("Access Control");
     await access.selectOption(this.accessControlOptions[0]);
-    await this.commands.fileInput(["testfile.doc"]);
+    await this.commands.fileInput(["testfile.doc"], true);
     await expect(
       this.page.getByTestId("validation-message-content").filter({ hasText: "Your document has been uploaded." }),
     ).toBeVisible();
@@ -157,7 +157,7 @@ class ProjectDocuments {
   async moUploadToSecondary(partnerName) {
     const access = this.page.getByLabel("Access Control");
     await access.selectOption(this.accessControlOptions[1]);
-    await this.commands.fileInput(["testfile.pdf"]);
+    await this.commands.fileInput(["testfile.pdf"], true);
     await expect(
       this.page.getByTestId("validation-message-content").filter({ hasText: "has been uploaded." }),
     ).toBeVisible();
@@ -236,7 +236,7 @@ class ProjectDocuments {
 
   async uploadNavigateBack(filename: string) {
     await this.validators.docTypeDropdown("Plans");
-    await this.commands.fileInput([filename]);
+    await this.commands.fileInput([filename], true);
     await expect(
       this.page.getByTestId("validation-message-content").filter({ hasText: "has been uploaded." }),
     ).toBeVisible();

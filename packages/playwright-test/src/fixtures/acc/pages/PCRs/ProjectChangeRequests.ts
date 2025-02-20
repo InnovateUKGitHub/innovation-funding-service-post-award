@@ -1,9 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { Fixture, When, Then } from "playwright-bdd/decorators";
+import { Fixture, When, Then, Given } from "playwright-bdd/decorators";
 import { Commands } from "../../../Commands";
 import { PcrType } from "../../../../typings/pcr";
 import { Button } from "../../../../components/Button";
-import { loremIpsum100Char } from "../../../../components/lorem";
 import { DataTable } from "playwright-bdd";
 export
 @Fixture("projectChangeRequests")
@@ -50,7 +49,13 @@ class ProjectChangeRequests {
   private readonly taskLink: Locator;
   private readonly createReq: Locator;
   private readonly submittedDetails: string;
-
+  private readonly existingPcrTableHeadings: Array<string>;
+  private readonly tbodyRowCell: Locator;
+  private readonly editLink: Locator;
+  private readonly deleteLink: Locator;
+  private readonly deleteDraftRequestHeading: Locator;
+  private readonly deleteGuidance: string;
+  private readonly deleteRequestButton: Locator;
 
   constructor({ page, commands }: { page: Page; commands: Commands }) {
     this.page = page;
@@ -104,10 +109,13 @@ class ProjectChangeRequests {
     this.createReq = this.page.locator('button:has-text("Create request")');
     this.taskLink = this.page.locator("role=link");
     this.submittedDetails = `//dl[@class='govuk-summary-list']//dt[text()='%s']/following-sibling::dd[@class='govuk-summary-list__value']`;
-
-
-
-
+    this.existingPcrTableHeadings = ["Request number", "Types", "Started", "Status", "Last updated"];
+    this.tbodyRowCell = this.page.getByRole("table").locator("tbody").locator("tr").locator("td");
+    this.editLink = this.page.getByRole("link").filter({ hasText: "Edit" });
+    this.deleteLink = this.page.getByRole("link").filter({ hasText: "Delete" });
+    this.deleteDraftRequestHeading = this.page.getByRole("heading").filter({ hasText: "Delete draft request" });
+    this.deleteGuidance = "All the information will be permanently deleted.";
+    this.deleteRequestButton = this.page.getByRole("button").filter({ hasText: "Delete request" });
   }
 
   /**
@@ -121,13 +129,13 @@ class ProjectChangeRequests {
   }
 
   @Then("the user clicks the {string} PCR type")
-  async selectPcrType(pcr: PcrType) {
+  async selectPcrType(pcr: PcrType | string) {
     await this.page.getByRole("link").getByText(pcr).click();
     await this.commands.heading(pcr);
   }
 
   @Then("the request page will show {string} as {string}")
-  async requestPagePcrStatus(pcr: PcrType, status: string) {
+  async requestPagePcrStatus(pcr: PcrType | string, status: string) {
     await this.commands.heading("Request");
     await expect(this.giveUsInfoQa.filter({ hasText: pcr })).toBeVisible();
     await expect(this.giveUsInfoQa.filter({ hasText: status })).toBeVisible();
@@ -153,14 +161,12 @@ class ProjectChangeRequests {
     await this.commands.button("Save and continue").click();
     await expect(this.uploadDocumentsHeading).toBeVisible();
     await expect(this.page.getByTestId("numberRow").filter({ hasText: "Request number" })).toBeVisible();
-    await this.commands.fileInput(["testfile.doc"]);
-    await this.commands.validationNotification("has been uploaded.");
+    await this.commands.fileInput(["testfile.doc"], true);
     await this.commands.button("Save and continue").click();
     await this.agreeWithChange.click();
     await this.commands.button("Save and return to request").click();
     await expect(this.requestHeading).toBeVisible();
     await expect(this.reasoningQa.filter({ hasText: "Complete" })).toBeVisible();
-
   }
 
   @Then("the user clicks Submit request")
@@ -290,6 +296,111 @@ class ProjectChangeRequests {
     await this.page.getByRole("textbox").fill(this.finalComments);
   }
 
+  @When("the user saves the {string} pcr after marking as complete")
+  async saveAssertStatus(pcrType: PcrType) {
+    await expect(this.markAsComplete).toBeVisible();
+    await this.saveAndReturnButton.click();
+    await this.requestPagePcrStatus(pcrType, "Incomplete");
+    await this.selectPcrType(pcrType);
+    await this.markAsCompleteSection(true);
+    await this.requestPagePcrStatus(pcrType, "Complete");
+  }
+
+  @When("the user adds all PCR types to the request")
+  async addAllPcrTypes(table: DataTable) {
+    const data = table.hashes();
+    await this.clickCreateRequest();
+    await expect(this.page.getByRole("heading").filter({ hasText: this.startRequestHeader })).toBeVisible();
+    for (const row of data) {
+      await this.commands.selectPcrType(row["PCR"]);
+    }
+    await this.clickCreateRequest();
+    await expect(this.requestHeading).toBeVisible();
+  }
+
+  @Then("the Request page will show all PCR types as {string}")
+  async requestPageShowsAllPcrs(status: string, table: DataTable) {
+    const data = table.hashes();
+    for (const row of data) {
+      await this.requestPagePcrStatus(row["PCR"], status);
+    }
+  }
+
+  @When("the user clicks into each PCR in turn")
+  async accessEachPcrType(table: DataTable) {
+    const data = table.hashes();
+    for (const row of data) {
+      await this.selectPcrType(row["PCR"]);
+      await expect(this.page.getByRole("heading").filter({ hasText: row["PCR"] })).toBeVisible();
+      await this.backToRequest.click();
+      await expect(this.requestHeading).toBeVisible();
+    }
+  }
+
+  @Then("they will arrive lastly at the {string} page")
+  async correctPageDisplayed(pcr: PcrType | string) {
+    await this.selectPcrType(pcr);
+    await expect(this.page.getByRole("heading").filter({ hasText: pcr })).toBeVisible();
+  }
+
+  @Given("the user can see the existing PCR in {string}")
+  async seeExistingPCR(status: string, table: DataTable) {
+    const data = table.hashes();
+
+    const rowEnd = [this.commands.dateToday(false), status, this.commands.dateToday(false)];
+    let i = 0;
+    for (const header of this.existingPcrTableHeadings) {
+      await expect(this.page.getByRole("table").locator("thead").locator("th").nth(i)).toHaveText(header);
+      i++;
+    }
+    await expect(this.tbodyRowCell.nth(0)).toHaveText(/^[1-10]$/);
+    for (const row of data) {
+      await expect(this.tbodyRowCell.nth(1).filter({ hasText: row["PCR"] })).toBeVisible();
+    }
+    let cellNum = 2;
+    for (const cell of rowEnd) {
+      await expect(this.tbodyRowCell.nth(cellNum)).toHaveText(cell);
+      cellNum++;
+    }
+    await expect(this.tbodyRowCell.nth(5).filter({ has: this.editLink })).toBeVisible();
+    await expect(this.tbodyRowCell.nth(5).filter({ has: this.deleteLink })).toBeVisible();
+  }
+
+  @When("the user clicks the Delete link")
+  async clickDeleteLink() {
+    await this.deleteLink.nth(0).click();
+    await expect(this.deleteDraftRequestHeading).toBeVisible();
+  }
+
+  @Then("the user will see the Delete PCR page")
+  async deletePCRPage(table: DataTable) {
+    const data = table.hashes();
+    await expect(this.deleteDraftRequestHeading).toBeVisible();
+    await expect(this.backtoPcr).toBeVisible();
+    await this.commands.validationNotification(this.deleteGuidance);
+    await this.commands.getListItemFromKey("Request", /^[1-10]$/, true, false, "requestNumber");
+    for (const row of data) {
+      await this.commands.getListItemFromKey("Types", row["PCR"], false, false, "types");
+    }
+    await this.commands.getListItemFromKey("Started", this.commands.dateToday(false), true, false, "started");
+    await this.commands.getListItemFromKey("Last updated", this.commands.dateToday(false), true, false, "lastUpdated");
+    await expect(this.deleteRequestButton).toBeVisible();
+  }
+
+  @When("the user clicks the Delete request button")
+  async clickDeleteRequestButton() {
+    await this.deleteRequestButton.click();
+  }
+
+  @Then("the PCR will no longer exist")
+  async noPcrCreated() {
+    await this.pcrPageHeading.isVisible();
+    await expect(this.page.getByTestId("pcr-table")).not.toBeVisible();
+  }
+
+  /**
+   * METHODS
+   */
   async markAsCompleteSection(markAndSubmit: boolean) {
     await this.markAsComplete.isVisible();
     if (markAndSubmit) {
@@ -314,15 +425,7 @@ class ProjectChangeRequests {
   async clickCreateRequest() {
     await this.commands.button("Create request").click();
   }
-  @When("the user saves the {string} pcr after marking as complete")
-  async saveAssertStatus(pcrType: PcrType) {
-    await expect(this.markAsComplete).toBeVisible();
-    await this.saveAndReturnButton.click();
-    await this.requestPagePcrStatus(pcrType, "Incomplete");
-    await this.selectPcrType(pcrType);
-    await this.markAsCompleteSection(true);
-    await this.requestPagePcrStatus(pcrType, "Complete");
-  }
+
   async validatePcrTaskList(expectedSection: string, expectedTask: string) {
     const taskText = await this.page.textContent(this.pcrTask1);
 
@@ -348,7 +451,6 @@ class ProjectChangeRequests {
     const radioButton = this.page.locator(this.iukRadioButton.replace("{text}", radioItem));
     await radioButton.click();
   }
-
 
   async clickTaskTodo(taskText: string) {
     const todoLink = this.taskLink.count();

@@ -318,7 +318,7 @@ const createPcr = (pcr: PcrType, options?: { jsDisabled?: boolean }) => {
   } else {
     cy.wait(500);
     cy.clickCheckBox(pcr);
-    cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
+    cy.intercept("POST", "/api/pcrs/*/create").as("pcrPrepare");
     cy.wait(500);
     cy.button("Create request").click();
     cy.wait("@pcrPrepare");
