@@ -458,7 +458,7 @@ export class ProjectChangeRequestRepository
         Acc_RequestHeader__c: headerId,
         RecordTypeId: x.recordTypeId,
         Acc_Project__c: x.projectId,
-        Acc_MarkedasComplete__c: this.mapItemStatus(PCRItemStatus.ToDo),
+        ...this.mapCreateDto(x),
       })),
     );
   }
