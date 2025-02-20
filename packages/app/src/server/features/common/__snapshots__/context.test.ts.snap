@@ -10,7 +10,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -37,7 +36,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -73,7 +71,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -105,7 +102,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -136,7 +132,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -163,7 +158,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -215,7 +209,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -249,7 +242,6 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "colourfulLogging": false,
           "logLevel": "ERROR",
-          "newRelic": false,
           "prefixLines": [
             {
               "traceId": "ctx",
@@ -275,7 +267,6 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "colourfulLogging": false,
           "logLevel": "ERROR",
-          "newRelic": false,
           "prefixLines": [
             {
               "traceId": "ctx",
@@ -299,7 +290,6 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "colourfulLogging": false,
           "logLevel": "ERROR",
-          "newRelic": false,
           "prefixLines": [
             {
               "traceId": "ctx",
@@ -331,7 +321,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -349,7 +338,6 @@ exports[`Context should contain the repositories 1`] = `
         "options": {
           "colourfulLogging": false,
           "logLevel": "ERROR",
-          "newRelic": false,
           "prefixLines": [
             {
               "traceId": "ctx",
@@ -375,7 +363,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -402,7 +389,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -436,7 +422,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -474,7 +459,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -509,7 +493,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -542,7 +525,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -574,7 +556,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -602,7 +583,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -632,7 +612,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -723,7 +702,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -770,7 +748,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -800,7 +777,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -833,7 +809,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -865,7 +840,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -897,7 +871,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -932,7 +905,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -1042,7 +1014,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -1087,7 +1058,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
@@ -1146,7 +1116,6 @@ exports[`Context should contain the repositories 1`] = `
       "options": {
         "colourfulLogging": false,
         "logLevel": "ERROR",
-        "newRelic": false,
         "prefixLines": [
           {
             "traceId": "ctx",
