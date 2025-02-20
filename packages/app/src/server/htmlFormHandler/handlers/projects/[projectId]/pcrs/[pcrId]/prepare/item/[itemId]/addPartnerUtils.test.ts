@@ -101,7 +101,7 @@ describe("getNextAddPartnerStep", () => {
       stepNumber: 1,
     });
 
-    expect(result).toEqual("/projects/123/pcrs/456/prepare/item/0?:step");
+    expect(result).toEqual("/projects/123/pcrs/456/prepare/item/0");
   });
 
   it("should navigate to the `Non aid eligibility` step from role and organisation step if is not commercial work", async () => {

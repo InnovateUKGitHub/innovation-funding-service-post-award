@@ -1,8 +1,12 @@
+const urlQueryParamRegex = /[&?]:(\w+)/gi;
+
 /**
  * Constructs a url based on the passed in parameters
  */
 export function makeUrlWithQuery(path: string, routeParams: AnyObject): string {
-  if (!routeParams || Object.keys(routeParams).length === 0) return path.replace(/\?:.+/, "");
+  let newPath = path.replace(/[&?]:.+/, "");
+  if (!routeParams || Object.keys(routeParams).length === 0) return newPath;
+
   const tokenKeysAsString = Object.keys(routeParams).join("|");
 
   /**
@@ -13,17 +17,26 @@ export function makeUrlWithQuery(path: string, routeParams: AnyObject): string {
    */
   const tokenRegex = new RegExp(`([^?^&]):(${tokenKeysAsString})`, "g");
 
-  /**
-   * replace query parameter but preserve the label.
-   *
-   * @example
-   * `project?:search` => `project?search=123`
-   */
-  const queryRegex = new RegExp(`([&?]):(${tokenKeysAsString})`, "g");
+  newPath = newPath.replace(
+    tokenRegex,
+    (_: string, p1: string, p2: string) => `${p1}${encodeURIComponent(routeParams[p2])}`,
+  );
 
-  return path
-    .replace(tokenRegex, (_: string, p1: string, p2: string) => `${p1}${encodeURIComponent(routeParams[p2])}`)
-    .replace(queryRegex, (_: string, p1: string, p2: string) => `${p1}${p2}=${encodeURIComponent(routeParams[p2])}`);
+  const params: { key: string; value: string }[] = [];
+
+  // Find all instances of `?:foo` and `&:bar`
+  // Check if `foo` and `bar` are in our routeParams object
+  //   if they are, add it to our urlSearchParams collection
+  for (const match of path.matchAll(urlQueryParamRegex)) {
+    if (typeof routeParams[match[1]] !== "undefined") params.push({ key: match[1], value: routeParams[match[1]] });
+  }
+
+  if (params.length) {
+    newPath += "?";
+    newPath += params.map(({ key, value }) => `${key}=${encodeURIComponent(value)}`).join("&");
+  }
+
+  return newPath;
 }
 
 /**
