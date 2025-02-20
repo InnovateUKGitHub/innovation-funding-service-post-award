@@ -61,6 +61,7 @@ export const AcademicOrganisationStep = () => {
           qa="jes-organisation-info"
           message={x => x.pcrAddPartnerLabels.jesOrganisationInfo}
         />
+        {isLoading && <P>{getContent(x => x.components.search.loading)}</P>}
         {query !== null && query !== "" && !isLoading && searchResults.length === 0 && (
           <P>{getContent(x => x.components.search.noResults({ input: query }))}</P>
         )}
