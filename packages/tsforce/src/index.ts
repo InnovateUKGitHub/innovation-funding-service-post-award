@@ -1,5 +1,6 @@
 export * from "./exceptions/TsforceInvalidUsernameException";
 export * from "./exceptions/TsforceTokenException";
+export * from "./exceptions/TsforceSalesforceErrorException";
 
 export * from "./requests/BaseTsforceRequest";
 export * from "./requests/BaseTsforceSubrequest";

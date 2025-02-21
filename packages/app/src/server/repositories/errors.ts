@@ -83,6 +83,21 @@ export class SalesforceDataChangeError extends SalesforceDetailedErrorResponse {
   }
 }
 
+export class SalesforceEmailBounceError extends SalesforceDetailedErrorResponse {
+  constructor() {
+    super({
+      errorCode: "SFDC_EMAIL_BOUNCED",
+      message:
+        "We were unable to invite the associate. Check the email address is correct or try using a different email address.",
+      details: [
+        {
+          code: DetailedErrorCode.SFDC_EMAIL_BOUNCED,
+        },
+      ],
+    });
+  }
+}
+
 export const isSalesforceTokenError = (err: unknown): err is TsforceTokenException =>
   err instanceof TsforceTokenException ||
   (typeof err === "object" && err !== null && "message" in err && "tokenError" in err);

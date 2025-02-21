@@ -10,6 +10,14 @@ interface TsforceCompositeSubrequestResult<T> {
   referenceId: string;
 }
 
+type TsforceCompositeSubrequestError = TsforceCompositeSubrequestResult<
+  {
+    message: string;
+    errorCode: string;
+    fields: [];
+  }[]
+>;
+
 interface TsforceCompositeResponseBody {
   compositeResponse: TsforceCompositeSubrequestResult<unknown>[];
 }
@@ -71,4 +79,4 @@ class TsforceConnectionDataloader {
   }
 }
 
-export { TsforceCompositeSubrequestResult, TsforceConnectionDataloader };
+export { TsforceCompositeSubrequestResult, TsforceCompositeSubrequestError, TsforceConnectionDataloader };

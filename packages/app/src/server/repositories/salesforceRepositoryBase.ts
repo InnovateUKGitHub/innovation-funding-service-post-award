@@ -8,6 +8,7 @@ import {
   TsforceDescribeSObjectField,
   TsforceDescribeSObjectResult,
 } from "@innovateuk/tsforce/requests/TsforceDescribeSubrequest";
+import { TsforceSalesforceErrorException } from "@innovateuk/tsforce/exceptions/TsforceSalesforceErrorException";
 import { TsforceQuerySubrequest } from "@innovateuk/tsforce/requests/TsforceQuerySubrequest";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { TsforceSalesforceResponse } from "@innovateuk/tsforce/types/TsforceSalesforceResponse";
@@ -45,6 +46,15 @@ export abstract class RepositoryBase {
   ) {
     if (e instanceof Errors.SalesforceDetailedErrorResponse) return e;
 
+    if (e instanceof TsforceSalesforceErrorException && e.info) {
+      if (
+        e.info.body.length === 1 &&
+        e.info.body[0].message.includes("The target object email address is currently marked as bounced.")
+      ) {
+        return new Errors.SalesforceEmailBounceError();
+      }
+    }
+
     if (Errors.isSalesforceErrorResponse(e)) {
       if (e.message.length < 10_000) {
         this.logger.error(
@@ -64,22 +74,27 @@ export abstract class RepositoryBase {
       }
 
       if (e.errorCode === "INVALID_FIELD") {
-        new Errors.BadSalesforceQuery({ errorReason: e.errorCode, errorDetail: e.errorCode, cause: e });
+        return new Errors.BadSalesforceQuery({ errorReason: e.errorCode, errorDetail: e.errorCode, cause: e });
       }
       if (e.errorCode === "ERROR_HTTP_503") {
-        new Errors.SalesforceUnavailableError({ message: "Salesforce unavailable", cause: e });
+        return new Errors.SalesforceUnavailableError({ message: "Salesforce unavailable", cause: e });
       }
       if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-        new Errors.SalesforceInvalidFilterError({ message: "Salesforce filter error", cause: e });
+        return new Errors.SalesforceInvalidFilterError({ message: "Salesforce filter error", cause: e });
       }
       if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
-        new Errors.FileTypeNotAllowedError({ message: e.message, cause: e });
+        return new Errors.FileTypeNotAllowedError({ message: e.message, cause: e });
       }
       if (e.errorCode === "FIELD_CUSTOM_VALIDATION_EXCEPTION") {
-        new Errors.SalesforceFieldCustomValidationError({ message: e.message, cause: e });
+        return new Errors.SalesforceFieldCustomValidationError({ message: e.message, cause: e });
       }
 
-      new Errors.SalesforceDetailedErrorResponse({ errorCode: e.errorCode, message: e.message, details: [], cause: e });
+      return new Errors.SalesforceDetailedErrorResponse({
+        errorCode: e.errorCode,
+        message: e.message,
+        details: [],
+        cause: e,
+      });
     }
     return e instanceof Error ? e : new Error(`${e}`);
   }
