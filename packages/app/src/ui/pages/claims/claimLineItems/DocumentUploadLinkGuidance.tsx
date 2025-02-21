@@ -10,9 +10,9 @@ interface UploadDocumentsSectionProps {
 }
 
 const DocumentUploadLinkGuidance = ({ project }: UploadDocumentsSectionProps) => {
-  const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+  const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
 
-  if (isCombinationOfSBRI) {
+  if (isContractsForInnovation) {
     return (
       <>
         <SimpleString>

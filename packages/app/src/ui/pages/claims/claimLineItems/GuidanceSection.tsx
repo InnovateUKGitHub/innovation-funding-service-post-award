@@ -16,14 +16,14 @@ interface GuidanceSectionProps {
 const GuidanceSection = ({ project, costCategory }: GuidanceSectionProps) => {
   const { getContent } = useContent();
   const { isClient, isServer } = useMounted();
-  const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+  const { isKTP, isContractsForInnovation } = checkProjectCompetition(project.competitionType);
   const costCategoryInfo = new CostCategoryList(project.competitionType).fromId(costCategory.type);
   const isOtherCosts = costCategoryInfo.group === CostCategoryGroupType.Other_Costs;
   const isVAT = costCategory.type === CostCategoryType.VAT;
 
   return (
     <>
-      {isCombinationOfSBRI ? (
+      {isContractsForInnovation ? (
         <>
           {isOtherCosts && (
             <SimpleString qa="other-costs-guidance-message">

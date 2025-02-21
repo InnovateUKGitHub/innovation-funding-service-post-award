@@ -23,7 +23,7 @@ export function ClaimDocumentAdvice({
   competitionType,
 }: ClaimDocumentAdviceProps) {
   const { getContent } = useContent();
-  const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
+  const { isKTP, isContractsForInnovation } = checkProjectCompetition(competitionType);
 
   const getAdvice = () => {
     if (isKTP) {
@@ -44,7 +44,7 @@ export function ClaimDocumentAdvice({
       );
     }
 
-    if (isCombinationOfSBRI) {
+    if (isContractsForInnovation) {
       const competition = competitionType.replace(" ", "-").toLowerCase();
 
       return (

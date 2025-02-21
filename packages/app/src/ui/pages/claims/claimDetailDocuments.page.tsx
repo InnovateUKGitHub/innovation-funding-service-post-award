@@ -65,7 +65,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
   );
 
   const costCategory = costCategories.find(x => x.id === props.costCategoryId) || ({} as CostCategoryDto);
-  const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+  const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
 
   const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
     z.output<ClaimDetailLevelUploadSchemaType>
@@ -146,7 +146,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
             : getContent(x => x.pages.claimDetails.defaultHtmlTitle)}
         </title>
       </Helmet>
-      {isCombinationOfSBRI ? (
+      {isContractsForInnovation ? (
         <>
           <SimpleString qa="sbriDocumentGuidance">
             <Content

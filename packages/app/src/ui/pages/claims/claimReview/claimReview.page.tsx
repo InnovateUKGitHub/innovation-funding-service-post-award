@@ -97,7 +97,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
     claim,
   });
 
-  const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+  const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
   const { isMo } = getAuthRoles(project.roles);
 
   const disabled = isProcessing || onUploadProcessing || onDeleteProcessing;
@@ -123,7 +123,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
         <span className="govuk-!-font-weight-bold">{content.competitionType}:</span> {project.competitionType}
       </P>
 
-      {isMo && isCombinationOfSBRI && (
+      {isMo && isContractsForInnovation && (
         <>
           <P>
             <Content value={x => x.claimsMessages.milestoneContractAchievement} />

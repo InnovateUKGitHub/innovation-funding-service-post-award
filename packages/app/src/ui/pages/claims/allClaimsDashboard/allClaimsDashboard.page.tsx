@@ -65,7 +65,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
 
   const isMultipleParticipants = partners.length > 1;
 
-  const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+  const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
   const { isFc } = getAuthRoles(project.roles);
 
   const leadPartner = getLeadPartner(partners);
@@ -81,7 +81,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
       fragmentRef={fragmentRef}
       partnerId={isLeadPartnerFc ? leadPartner.id : undefined}
     >
-      {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
+      {isMultipleParticipants && isFc && renderGuidanceMessage(isContractsForInnovation, partners)}
 
       {hasWithdrawnPartners && (
         <ValidationMessage messageType="info" message={x => x.claimsMessages.hasWithdrawnPartner} />
@@ -100,11 +100,11 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
   );
 };
 
-const renderGuidanceMessage = (isCombinationOfSBRI: boolean, partners: PartnerType[]) => {
+const renderGuidanceMessage = (isContractsForInnovation: boolean, partners: PartnerType[]) => {
   // Note: we can ensure that the PM as we can check isLead as only one FC can have this
   const isCurrentOverduePartner = partners.find(x => x.isLead && x.overdueProject);
 
-  if (!isCurrentOverduePartner && isCombinationOfSBRI) {
+  if (!isCurrentOverduePartner && isContractsForInnovation) {
     return (
       <SimpleString qa="theFinalClaimApprovedNotificationMessage">
         <Content value={x => x.pages.allClaimsDashboard.sbriGuidanceMessage} />

@@ -12,14 +12,12 @@ export function checkProjectCompetition(competition: string) {
 
   const isSBRI: boolean = competition === "SBRI";
   const isSBRI_IFS: boolean = competition === "SBRI IFS"; // Note: this is a valid exception due to how hard it would be to read two i's in a row
-  const isCombinationOfSBRI: boolean = isSBRI || isSBRI_IFS;
+  const isContractsForInnovation: boolean = isSBRI || isSBRI_IFS || competition === "Contracts for Innovation";
 
   return {
     isCRandD,
     isContracts,
-    isSBRI,
-    isSBRI_IFS,
-    isCombinationOfSBRI,
+    isContractsForInnovation,
     isKTP,
     isCatapults,
     isLoans,

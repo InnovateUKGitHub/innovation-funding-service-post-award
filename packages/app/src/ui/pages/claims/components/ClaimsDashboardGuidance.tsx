@@ -33,11 +33,11 @@ export const ClaimsDashboardGuidance = ({
     );
   } else {
     const isPartnerFc = getAuthRoles(roles).isFc;
-    const { isCombinationOfSBRI } = checkProjectCompetition(competitionType);
+    const { isContractsForInnovation } = checkProjectCompetition(competitionType);
 
     const defaultGuidanceMessage = getContent(x => x.claimsMessages.guidanceMessage);
 
-    const displaySbriGuidance = isPartnerFc && isCombinationOfSBRI;
+    const displaySbriGuidance = isPartnerFc && isContractsForInnovation;
 
     if (displaySbriGuidance) {
       return <SimpleString>{defaultGuidanceMessage}</SimpleString>;
