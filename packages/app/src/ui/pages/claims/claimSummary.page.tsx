@@ -209,7 +209,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
           <Fieldset>
             <P>{getContent(x => x.claimsMessages.submitClaimConfirmation)}</P>
 
-            <Button disabled={imDisabled || isFetching} type="submit" {...registerButton("submit")}>
+            <Button disabled={isFetching} type="submit" {...registerButton("submit")}>
               {getContent(x => x.pages.claimPrepareSummary.submitClaimMessage)}
             </Button>
 
