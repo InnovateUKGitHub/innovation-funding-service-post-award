@@ -10,6 +10,8 @@ import {
   TitleContentResult,
 } from "./type";
 import { isString } from "lodash";
+import { CopyNamespaces } from "./data";
+import { mapSalesforceCompetitionTypeToCopyCollection } from "@framework/constants/competitionTypes";
 
 export class CopyContentInvalidInputKeyError extends Error {}
 
@@ -27,12 +29,12 @@ const isI18nDetailedResult = (i18nResult: string | object): i18nResult is TFunct
  */
 class Copy {
   private logger = new Logger("Copy");
-  protected competitionType?: string;
+  protected copyNamespace: CopyNamespaces;
   protected monitoringLevel?: ProjectMonitoringLevel;
   public i18n: i18n;
 
   constructor({ competitionType, monitoringLevel, i18n }: ICopy = {}) {
-    this.competitionType = competitionType?.replace(/ /g, "-").toLowerCase();
+    this.copyNamespace = mapSalesforceCompetitionTypeToCopyCollection(competitionType);
     this.monitoringLevel = monitoringLevel;
     this.i18n = i18n ?? i18next;
   }
@@ -77,9 +79,9 @@ class Copy {
       throw new CopyContentInvalidInputKeyError(`Cannot translate invalid non-string/function key '${fullKey}'.`);
     }
 
-    // If a competition type is specified, prefix all keys with the namespace.
-    if (this.competitionType) {
-      i18nKey = `${this.competitionType}:${i18nKey}`;
+    // If a copy namespace is specified, prefix all keys with the namespace.
+    if (this.copyNamespace !== CopyNamespaces.DEFAULT) {
+      i18nKey = `${this.copyNamespace}:${i18nKey}`;
     }
 
     // Return resolved information.

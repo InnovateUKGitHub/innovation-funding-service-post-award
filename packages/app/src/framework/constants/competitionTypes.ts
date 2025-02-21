@@ -1,9 +1,11 @@
+import { CopyNamespaces } from "@copy/data";
 import type { ContentSelector } from "@copy/type";
 
 enum SalesforceCompetitionTypes {
   unknown = "unknown",
   crnd = "crnd",
   contracts = "contracts",
+  contractsForInnovation = "contractsForInnovation",
   sbri = "sbri",
   sbriIfs = "sbriIfs",
   ktp = "ktp",
@@ -37,6 +39,7 @@ enum ImpactManagementPhase {
 const allSalesforceCompetitionTypes = [
   SalesforceCompetitionTypes.crnd,
   SalesforceCompetitionTypes.contracts,
+  SalesforceCompetitionTypes.contractsForInnovation,
   SalesforceCompetitionTypes.sbri,
   SalesforceCompetitionTypes.sbriIfs,
   SalesforceCompetitionTypes.ktp,
@@ -53,6 +56,8 @@ const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTyp
       return SalesforceCompetitionTypes.crnd;
     case "CONTRACTS":
       return SalesforceCompetitionTypes.contracts;
+    case "Contracts for Innovation":
+      return SalesforceCompetitionTypes.contractsForInnovation;
     case "SBRI":
       return SalesforceCompetitionTypes.sbri;
     case "SBRI IFS":
@@ -81,9 +86,9 @@ const mapSalesforceCompetitionTypeToCopy = (type: SalesforceCompetitionTypes): C
     case SalesforceCompetitionTypes.contracts:
       return x => x.enums.competitionTypes.contracts;
     case SalesforceCompetitionTypes.sbri:
-      return x => x.enums.competitionTypes.sbri;
     case SalesforceCompetitionTypes.sbriIfs:
-      return x => x.enums.competitionTypes.sbriIfs;
+    case SalesforceCompetitionTypes.contractsForInnovation:
+      return x => x.enums.competitionTypes.contractsForInnovation;
     case SalesforceCompetitionTypes.ktp:
       return x => x.enums.competitionTypes.ktp;
     case SalesforceCompetitionTypes.catapults:
@@ -101,6 +106,29 @@ const mapSalesforceCompetitionTypeToCopy = (type: SalesforceCompetitionTypes): C
   }
 };
 
+const mapSalesforceCompetitionTypeToCopyCollection = (type: unknown): CopyNamespaces => {
+  switch (type) {
+    case "Contracts for Innovation":
+    case "SBRI":
+    case "SBRI IFS":
+    case SalesforceCompetitionTypes.sbri:
+    case SalesforceCompetitionTypes.sbriIfs:
+    case SalesforceCompetitionTypes.contractsForInnovation:
+      return CopyNamespaces.CONTRACTS_FOR_INNOVATION;
+    case SalesforceCompetitionTypes.ktp:
+    case "KTP":
+      return CopyNamespaces.KTP;
+    case SalesforceCompetitionTypes.loans:
+    case "LOANS":
+      return CopyNamespaces.LOANS;
+    case SalesforceCompetitionTypes.horizonEurope:
+    case "Horizon Europe Participation":
+      return CopyNamespaces.HORIZON_EUROPE_PARTICIPATION;
+    default:
+      return CopyNamespaces.DEFAULT;
+  }
+};
+
 export {
   allSalesforceCompetitionTypes,
   SalesforceCompetitionTypes,
@@ -108,4 +136,5 @@ export {
   ImpactManagementPhase,
   mapToSalesforceCompetitionTypes,
   mapSalesforceCompetitionTypeToCopy,
+  mapSalesforceCompetitionTypeToCopyCollection,
 };

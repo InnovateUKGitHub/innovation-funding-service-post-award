@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { enCopy, horizonEuropeParticipationEnCopy, ktpEnCopy, loansEnCopy, sbriEnCopy } from "@copy/data";
+import {
+  enCopy,
+  horizonEuropeParticipationEnCopy,
+  ktpEnCopy,
+  loansEnCopy,
+  contractsForInnovationEnCopy,
+} from "@copy/data";
 
 // The type that is returned from fetching a translation from the JSON.
 export type TranslationResult = string;
@@ -27,7 +33,7 @@ export type TranslationResultFunction = (options: DataOption) => TranslationResu
 // An interface-like-type with ALL possible copy keys, mapped from key -> string
 export type PossibleCopyStrings = typeof enCopy &
   typeof ktpEnCopy &
-  typeof sbriEnCopy &
+  typeof contractsForInnovationEnCopy &
   typeof loansEnCopy &
   typeof horizonEuropeParticipationEnCopy;
 

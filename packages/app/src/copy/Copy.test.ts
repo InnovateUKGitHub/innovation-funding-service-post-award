@@ -54,7 +54,7 @@ describe("Copy", () => {
       `("with $name", ({ contentSelector, result }) => {
         expect(copy.getCopyString(contentSelector)).toEqual(result);
         expect(ktpCopy.getCopyString(contentSelector)).toEqual("ktp:" + result);
-        expect(invalidNamespaceCopy.getCopyString(contentSelector)).toEqual("not-a-valid-namespace:" + result);
+        expect(invalidNamespaceCopy.getCopyString(contentSelector)).toEqual(result);
       });
     });
 

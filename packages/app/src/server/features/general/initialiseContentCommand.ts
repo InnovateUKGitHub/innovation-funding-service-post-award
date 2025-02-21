@@ -2,7 +2,7 @@ import {
   enCopy,
   ktpEnCopy,
   loansEnCopy,
-  sbriEnCopy,
+  contractsForInnovationEnCopy,
   horizonEuropeParticipationEnCopy,
   CopyNamespaces,
 } from "@copy/data";
@@ -62,8 +62,10 @@ export class InitialiseContentCommand extends AsyncCommandBase<boolean> {
 
   private setCompetitionContent(context: IContext): void {
     context.internationalisation.addResourceBundle(ktpEnCopy, CopyNamespaces.KTP);
-    context.internationalisation.addResourceBundle(sbriEnCopy, CopyNamespaces.SBRI);
-    context.internationalisation.addResourceBundle(sbriEnCopy, CopyNamespaces.SBRI_IFS);
+    context.internationalisation.addResourceBundle(
+      contractsForInnovationEnCopy,
+      CopyNamespaces.CONTRACTS_FOR_INNOVATION,
+    );
     context.internationalisation.addResourceBundle(loansEnCopy, CopyNamespaces.LOANS);
     context.internationalisation.addResourceBundle(
       horizonEuropeParticipationEnCopy,
