@@ -907,6 +907,26 @@ class PCRTestRepository extends TestRepository<ProjectChangeRequestEntity> imple
     return id;
   }
 
+  async createProjectChangeRequestHeader(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId> {
+    const id = `ProjectChangeRequest${this.Items.length}` as PcrId;
+    const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
+
+    await super.insertOne({
+      ...projectChangeRequest,
+      id,
+      items,
+      number: 0,
+      started: new Date("2009-08-07"),
+      updated: new Date("2012-02-12"),
+      statusName: "",
+      reasoningStatusName: "",
+      reasoning: "",
+      comments: "",
+    });
+
+    return id;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   createStandaloneProjectChangeRequest(_: { projectId: ProjectId; recordTypeId: string; status: PCRStatus }) {
     return Promise.resolve("new_PcrId" as PcrId);
