@@ -195,3 +195,20 @@ acc_clone_secrets() {
   # Clone or Git Pull the latest acc-secrets
   git -C kustomize/acc-secrets/ pull || git clone $(git config --get remote.origin.url)/../acc-secrets.git kustomize/acc-secrets
 }
+
+_load_secret() {
+  PROJECT=$1
+  ENVVAR=$2
+  export $2="$(sops --extract "[\"stringData\"][\"$2\"]" --decrypt kustomize/acc-secrets/secrets/acc-ui-secret/acc-ui-secret.$PROJECT.yml)"
+}
+
+load_secrets() {
+  acc_clone_secrets
+  PROJECT=$1
+  export ACC_ENVIRONMENT=local-$PROJECT
+  _load_secret $PROJECT SALESFORCE_USERNAME
+  _load_secret $PROJECT SALESFORCE_CONNECTION_URL
+  _load_secret $PROJECT SALESFORCE_CLIENT_ID
+  _load_secret $PROJECT SALESFORCE_BANK_DETAILS_VALIDATION_USERNAME
+  _load_secret $PROJECT SALESFORCE_PRIVATE_KEY
+}
