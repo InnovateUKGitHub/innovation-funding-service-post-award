@@ -216,6 +216,8 @@ const clientApi: IApiClient<"client"> = {
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/loan-drawdown-change`, params.pcr),
     loanDrawdownExtension: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/loan-duration-extension`, params.pcr),
+    reallocateCostsSummary: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/reallocate-costs-summary`, params.pcr),
     reasoning: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/reasoning`, params.pcr),
     removePartner: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/${params.pcrItemId}/remove-partner`, params.pcr),

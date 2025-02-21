@@ -40,6 +40,7 @@ import type {
   ApproveNewSubcontractorDto,
   LoanDrawdownChangeDto,
   ChangeRemainingGrantDto,
+  ReallocateCostsSummaryDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -89,6 +90,7 @@ import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
 import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
 import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDurationChangeCommand";
 import { UpdatePcrChangeRemainingGrantCommand } from "@server/features/pcrs/updatePcrChangeRemainingGrantCommand";
+import { UpdatePcrReallocateCostsSummaryCommand } from "@server/features/pcrs/updatePcrReallocateCostsSummaryCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -197,6 +199,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   loanDrawdownChange: PcrUpdateMethod<Context, LoanDrawdownChangeDto, boolean>;
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
   changeRemainingGrant: PcrUpdateMethod<Context, ChangeRemainingGrantDto, boolean>;
+  reallocateCostsSummary: PcrUpdateMethod<Context, ReallocateCostsSummaryDto, boolean>;
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
@@ -437,6 +440,12 @@ class Controller
     this.putItem("/:projectId/:pcrId/:pcrItemId/scope-change", requestParams<PcrScopeChangeDto>, this.scopeChange);
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/reallocate-costs-summary",
+      requestParams<ReallocateCostsSummaryDto>,
+      this.reallocateCostsSummary,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/rename-partner",
       requestParams<PcrRenamePartnerDto>,
       this.renamePartner,
@@ -635,6 +644,10 @@ class Controller
 
   async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {
     return await runUpdateCommand(params, new UpdatePcrLoanDurationExtensionCommand(getParams(params)));
+  }
+
+  async reallocateCostsSummary(params: PcrUpdateParams<"server", ReallocateCostsSummaryDto>) {
+    return await runUpdateCommand(params, new UpdatePcrReallocateCostsSummaryCommand(getParams(params)));
   }
 
   async reasoning(params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcr: ReasoningDto }>) {

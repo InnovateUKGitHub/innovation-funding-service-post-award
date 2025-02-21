@@ -1,3 +1,5 @@
+import { ReallocateCostsSummaryValidatorSchema } from "./ReallocateCostsSummary.zod";
+import { pcrUpdater } from "../../pcrItemWorkflow.logic";
 import { useContent } from "@ui/hooks/content.hook";
 
 const useGrantMessage = ({
@@ -29,3 +31,6 @@ const useGrantMessage = ({
 };
 
 export { useGrantMessage };
+
+export const useOnUpdateReallocateCostsSummary = () =>
+  pcrUpdater<ReallocateCostsSummaryValidatorSchema>("reallocateCostsSummary");

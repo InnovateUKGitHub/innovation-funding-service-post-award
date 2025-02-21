@@ -15,11 +15,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflow";
 import { PcrPage } from "../../pcrPage";
-import { useGrantMessage } from "./ReallocateCostsSummary.logic";
+import { useGrantMessage, useOnUpdateReallocateCostsSummary } from "./ReallocateCostsSummary.logic";
 import {
   ReallocateCostsSummaryValidatorSchema,
   reallocateCostsSummaryErrorMap,
-  getReallocateCostsSummaryValidator,
+  reallocateCostsSummaryValidator,
 } from "./ReallocateCostsSummary.zod";
 import { Section } from "@ui/components/molecules/Section/section";
 import { useContent } from "@ui/hooks/content.hook";
@@ -35,13 +35,12 @@ import { SummaryList, SummaryListItem } from "@ui/components/molecules/SummaryLi
 import { FinancialVirementsViewTable } from "./ReallocateCostsViewTable";
 import { usePcrReallocateCostsData } from "../PcrReallocateCosts.logic";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
-import { parseCurrency } from "@framework/util/numberHelper";
 
 export const FinancialVirementSummary = () => {
   const { getContent } = useContent();
   const routes = useRoutes();
 
-  const { projectId, pcrId, itemId, onSave, isFetching, mode, fetchKey } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, mode, fetchKey } = usePcrWorkflowContext();
   const { project, partners, pcrItem, financialVirementsForCosts, financialVirementsForParticipants } =
     usePcrReallocateCostsData({ projectId, pcrId, itemId, fetchKey });
 
@@ -53,46 +52,37 @@ export const FinancialVirementSummary = () => {
   });
   const defaults = useServerInput<z.output<ReallocateCostsSummaryValidatorSchema>>();
 
+  const defaultVirementData = {
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    partners,
+    pcrItemId: itemId,
+  };
+
   const { register, formState, handleSubmit, setError, getFieldState } = useForm<
     z.output<ReallocateCostsSummaryValidatorSchema>
   >({
-    resolver: zodResolver(
-      getReallocateCostsSummaryValidator({
-        mapFinancialVirementProps: {
-          financialVirementsForCosts,
-          financialVirementsForParticipants,
-          partners,
-          pcrItemId: itemId,
-        },
-      }),
-      { errorMap: reallocateCostsSummaryErrorMap },
-    ),
+    defaultValues: {
+      markedAsComplete: defaults?.markedAsComplete ?? pcrItem?.status === PCRItemStatus.Complete,
+      grantMovingOverFinancialYear: String(
+        defaults?.grantMovingOverFinancialYear ?? pcrItem.grantMovingOverFinancialYear ?? "",
+      ),
+      financialVirements: defaultVirementData,
+    },
+    resolver: zodResolver(reallocateCostsSummaryValidator, { errorMap: reallocateCostsSummaryErrorMap }),
   });
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ReallocateCostsSummaryValidatorSchema>>(setError, formState.errors);
 
   const colClass = "acc-table__cell-right-border";
 
-  const onSubmitUpdate = (dto: z.output<ReallocateCostsSummaryValidatorSchema>) => {
-    onSave({
-      data: {
-        id: itemId,
-        grantMovingOverFinancialYear: dto?.grantMovingOverFinancialYear
-          ? parseCurrency(dto.grantMovingOverFinancialYear)
-          : undefined,
-        status: dto?.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-      },
-      context: {
-        link: routes.pcrPrepare.getLink({ projectId, pcrId }),
-      },
-    });
-  };
+  const { onUpdate, isFetching, apiError } = useOnUpdateReallocateCostsSummary();
 
   const grantMessage = useGrantMessage(virementMeta);
   const displayHighlight = !!grantMessage && (isSummaryValid ? "positive-hightlight" : "negative-hightlight");
 
   return (
-    <PcrPage validationErrors={allErrors}>
+    <PcrPage validationErrors={allErrors} apiError={apiError}>
       {grantMessage && (
         <ValidationMessage
           markdown
@@ -228,11 +218,13 @@ export const FinancialVirementSummary = () => {
               </Section>
             </>
           )}
-          <Form onSubmit={handleSubmit(onSubmitUpdate)} aria-disabled={isFetching}>
+          <Form
+            onSubmit={handleSubmit(data => {
+              onUpdate({ data, context: { link: routes.pcrPrepare.getLink({ projectId, pcrId }) } });
+            })}
+            aria-disabled={isFetching}
+          >
             <input type="hidden" value={FormTypes.PcrReallocateCostsSummary} {...register("form")} />
-            <input type="hidden" value={projectId} {...register("projectId")} />
-            <input type="hidden" value={pcrId} {...register("pcrId")} />
-            <input type="hidden" value={itemId} {...register("pcrItemId")} />
 
             <Fieldset>
               <Legend>{getContent(x => x.reallocateCostsLabels.grantMovingOverYear)}</Legend>

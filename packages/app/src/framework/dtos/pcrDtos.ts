@@ -19,6 +19,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { CostCategoryType } from "@framework/constants/enums";
 import { z } from "zod";
 import { ChangeRemainingGrantSchemaType } from "@ui/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.zod";
+import { ReallocateCostsSummaryValidatorSchema } from "@ui/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -687,6 +688,8 @@ export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
 }
 
 export type ChangeRemainingGrantDto = z.output<ChangeRemainingGrantSchemaType>;
+
+export type ReallocateCostsSummaryDto = z.output<ReallocateCostsSummaryValidatorSchema>;
 
 export interface ReasoningDto {
   reasoningComments?: string;
