@@ -1,18 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../fixtures";
 
-test("has title", async ({ page }) => {
-  await page.goto("https://playwright.dev/");
+test("Testing a connection to Salesforce", { tag: ["@debug"] }, async ({ sfdcApi }) => {
+  const conn = await sfdcApi.getTsforceConnection();
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+  await conn.executeApex({ query: "System.debug('Steven Killen says hi!');" });
 
-test("get started link", async ({ page }) => {
-  await page.goto("https://playwright.dev/");
-
-  // Click the get started link.
-  await page.getByRole("link", { name: "Get started" }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole("heading", { name: "Installation" })).toBeVisible();
+  const data = await conn.executeSOQL({ query: "SELECT Id FROM Acc_MonitoringQuestion__c" });
+  expect(data.totalSize).toBeGreaterThan(-1);
 });

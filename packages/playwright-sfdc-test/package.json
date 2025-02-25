@@ -2,7 +2,6 @@
   "name": "@innovateuk/playwright-sfdc-test",
   "private": true,
   "scripts": {
-    "build": "bddgen",
     "pw-sfdc": "playwright test --ui",
     "pw-sfdc-run": "playwright test --grep-invert @debug"
   },
