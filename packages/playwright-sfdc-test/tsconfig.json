@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "Preserve",
+    "esModuleInterop": true,
+    "target": "ES2021",
+    "lib": ["es2021"],
+    "moduleResolution": "bundler"
+  }
+}
