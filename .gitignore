@@ -1,7 +1,8 @@
 .vagrant
 node_modules/
 dist/
-/.vscode/
+/.vscode/*
+!/.vscode/settings.example.jsonc
 /**/test-report.json
 /**/.idea
 bamboo-specs.iml

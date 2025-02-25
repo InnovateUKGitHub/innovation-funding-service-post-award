@@ -1,0 +1,20 @@
+/**
+ * Visual Studio Code suggested settings
+ * Copy and paste what you need into `settings.json`
+ */
+
+{
+  // Instructions on where to find BDD style steps
+  "cucumberautocomplete.steps": ["packages/playwright-test/src/fixtures/**/*.ts"],
+
+  // Set Salesforce Sandbox for Playwright VScode extension
+  "playwright.env": {
+    "TEST_SALESFORCE_SANDBOX": "accdev",
+  },
+
+  // Remove unnecessary folders from search results
+  "search.exclude": {
+    "**/testframework": true,
+    "**/.git": true,
+  },
+}
