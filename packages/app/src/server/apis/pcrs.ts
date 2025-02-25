@@ -41,6 +41,7 @@ import type {
   LoanDrawdownChangeDto,
   ChangeRemainingGrantDto,
   ReallocateCostsSummaryDto,
+  ReallocateCostsDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -91,6 +92,7 @@ import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/u
 import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDurationChangeCommand";
 import { UpdatePcrChangeRemainingGrantCommand } from "@server/features/pcrs/updatePcrChangeRemainingGrantCommand";
 import { UpdatePcrReallocateCostsSummaryCommand } from "@server/features/pcrs/updatePcrReallocateCostsSummaryCommand";
+import { UpdatePcrReallocateCostsCommand } from "@server/features/pcrs/updatePcrReallocateCostsCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -200,6 +202,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   scopeChange: PcrUpdateMethod<Context, PcrScopeChangeDto, boolean>;
   changeRemainingGrant: PcrUpdateMethod<Context, ChangeRemainingGrantDto, boolean>;
   reallocateCostsSummary: PcrUpdateMethod<Context, ReallocateCostsSummaryDto, boolean>;
+  reallocateCosts: PcrUpdateMethod<Context, ReallocateCostsDto, boolean>;
   renamePartner: PcrUpdateMethod<Context, PcrRenamePartnerDto, boolean>;
   removePartner: PcrUpdateMethod<Context, PcrRemovePartnerDto, boolean>;
   suspendProject: PcrUpdateMethod<Context, PcrSuspendProjectDto, boolean>;
@@ -446,6 +449,12 @@ class Controller
     );
 
     this.putItem(
+      "/:projectId/:pcrId/:pcrItemId/reallocate-costs",
+      requestParams<ReallocateCostsDto>,
+      this.reallocateCosts,
+    );
+
+    this.putItem(
       "/:projectId/:pcrId/:pcrItemId/rename-partner",
       requestParams<PcrRenamePartnerDto>,
       this.renamePartner,
@@ -644,6 +653,10 @@ class Controller
 
   async loanDrawdownExtension(params: PcrUpdateParams<"server", LoanDrawdownExtensionDto>) {
     return await runUpdateCommand(params, new UpdatePcrLoanDurationExtensionCommand(getParams(params)));
+  }
+
+  async reallocateCosts(params: PcrUpdateParams<"server", ReallocateCostsDto>) {
+    return await runUpdateCommand(params, new UpdatePcrReallocateCostsCommand(getParams(params)));
   }
 
   async reallocateCostsSummary(params: PcrUpdateParams<"server", ReallocateCostsSummaryDto>) {

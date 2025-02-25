@@ -1,9 +1,6 @@
 import { IContext } from "@framework/types/IContext";
 import { parseCurrency } from "@framework/util/numberHelper";
-import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
-import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { BadRequestError } from "@shared/appError";
 import { getNewFundingLevel } from "@ui/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.logic";
 import {
   ChangeRemainingGrantRoute,
@@ -28,7 +25,7 @@ type PartnerData = {
   originalRemainingGrant: number;
   originalFundingLevel: number;
   newFundingLevel: number;
-  currentNewRemainingGrant: number;
+  initialNewRemainingGrant: number;
 };
 
 export class ChangeRemainingGrantUpdateHandler extends ZodFormHandlerBase<
@@ -74,7 +71,7 @@ export class ChangeRemainingGrantUpdateHandler extends ZodFormHandlerBase<
       if (field === "originalRemainingCosts") acc[idx][field] = parseCurrency(v ?? "0");
       if (field === "originalRemainingGrant") acc[idx][field] = parseCurrency(v ?? "0");
       if (field === "originalFundingLevel") acc[idx][field] = parseFloat(v ?? "0");
-      if (field === "currentNewRemainingGrant") acc[idx][field] = parseFloat(v ?? "0");
+      if (field === "initialNewRemainingGrant") acc[idx][field] = parseFloat(v ?? "0");
 
       return acc;
     }, []);
@@ -114,27 +111,21 @@ export class ChangeRemainingGrantUpdateHandler extends ZodFormHandlerBase<
   }): Promise<string> {
     const { projectId, pcrId, itemId } = params;
 
-    const virementDto = await context.runQuery(new GetFinancialVirementQuery(projectId, itemId));
-    if (!virementDto) {
-      throw new BadRequestError("Virement not found");
+    const updates = input.partners
+      .filter(x => parseCurrency(x.newRemainingGrant) !== x.initialNewRemainingGrant)
+      .map(x => ({
+        Id: x.virementParticipantId,
+        Acc_NewAwardRate__c: getNewFundingLevel(
+          x.newRemainingCosts,
+          parseCurrency(x.newRemainingGrant),
+          x.originalFundingLevel,
+        ),
+        Acc_NewRemainingGrant__c: parseCurrency(x.newRemainingGrant),
+      }));
+
+    if (updates.length) {
+      await context.repositories.financialVirements.updateVirements(updates);
     }
-
-    virementDto.partners.forEach(partner => {
-      const matchingPartner = input.partners.find(x => x.partnerId === partner.partnerId);
-      if (!matchingPartner) return;
-
-      partner.newRemainingGrant = parseCurrency(matchingPartner.newRemainingGrant);
-      partner.newFundingLevel = matchingPartner.newFundingLevel;
-    });
-
-    virementDto.newRemainingGrant = virementDto.partners.reduce(
-      (total, current) => total + (current.newRemainingGrant || 0),
-      0,
-    );
-
-    virementDto.newFundingLevel = (100 * virementDto.newRemainingGrant) / virementDto.newRemainingCosts;
-
-    await context.runCommand(new UpdateFinancialVirementCommand(projectId, pcrId, itemId, virementDto, true));
 
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId }).path;
   }

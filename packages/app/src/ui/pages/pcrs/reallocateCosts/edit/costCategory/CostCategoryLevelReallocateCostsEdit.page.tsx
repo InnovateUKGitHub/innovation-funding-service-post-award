@@ -36,7 +36,7 @@ import {
 import {
   CostCategoryLevelReallocateCostsEditSchemaType,
   costCategoryLevelReallocateCostsEditErrorMap,
-  getCostCategoryLevelReallocateCostsEditSchema,
+  costCategoryLevelReallocateCostsEditSchema,
 } from "./CostCategoryLevelReallocateCostsEdit.zod";
 
 interface PartnerLevelReallocateCostsParams {
@@ -74,35 +74,39 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
   };
 
   const mapFinancialVirement = useMapOverwrittenFinancialVirements(mapReallocateCostsProps);
+  const defaults = useServerInput();
+  const defaultVirementData = {
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    partners,
+    pcrItemId: itemId,
+  };
+
+  // console.log("default virement dataa", defaultVirementData);
 
   const { register, watch, handleSubmit, setError, formState, getFieldState } = useForm<
-    z.input<CostCategoryLevelReallocateCostsEditSchemaType>
+    z.infer<CostCategoryLevelReallocateCostsEditSchemaType>
   >({
-    resolver: zodResolver(
-      getCostCategoryLevelReallocateCostsEditSchema({
-        mapReallocateCostsProps,
-      }),
-      {
-        errorMap: costCategoryLevelReallocateCostsEditErrorMap,
-      },
-    ),
+    defaultValues: {
+      financialVirements: defaultVirementData,
+    },
+    resolver: zodResolver(costCategoryLevelReallocateCostsEditSchema, {
+      errorMap: costCategoryLevelReallocateCostsEditErrorMap,
+    }),
   });
 
-  const defaults = useServerInput();
   const validationErrors = useZodErrors(setError, formState.errors);
 
   const { virementData } = mapFinancialVirement(isServer ? defaults?.virements : watch("virements"));
 
-  const { onUpdate, isProcessing, apiError } = useOnUpdateCostCategoryLevel({
-    mapFinancialVirement,
-  });
+  const { onUpdate, isProcessing, apiError } = useOnUpdateCostCategoryLevel({ projectId, pcrId, pcrItemId: itemId });
 
   const partnerVirement = virementData.partners.find(x => x.partnerId === partnerId)!;
 
   const { isPm } = getAuthRoles(project.roles);
   const { isKTP } = checkProjectCompetition(project.competitionType);
   const displayIntroMessage: boolean = isKTP && isPm;
-
+  // console.log("watch", watch());
   return (
     <Page
       backLink={
@@ -136,16 +140,11 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
       <Form
         onSubmit={handleSubmit(data =>
           onUpdate({
-            // RHF reports the type as the input type,
-            // but it has already been transformed to the output type.
-            data: data as unknown as z.output<CostCategoryLevelReallocateCostsEditSchemaType>,
+            data,
           }),
         )}
       >
         <input type="hidden" value={FormTypes.PcrReallocateCostsCostCategorySaveAndContinue} {...register("form")} />
-        <input type="hidden" value={projectId} {...register("projectId")} />
-        <input type="hidden" value={pcrId} {...register("pcrId")} />
-        <input type="hidden" value={itemId} {...register("pcrItemId")} />
         <input type="hidden" value={partnerId} {...register("partnerId")} />
 
         <Section title={partner.name}>
@@ -192,6 +191,11 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
                           defaultValue={isNaN(defaultValue) ? undefined : defaultValue}
                           aria-label={x.costCategoryName}
                           prefix={getContent(x => x.forms.prefix.gbp)}
+                        />
+                        <input
+                          type="hidden"
+                          {...register(`virements.${i}.initialNewEligibleCosts`)}
+                          value={isNaN(defaultValue) ? undefined : defaultValue}
                         />
                       </Fieldset>
                     </TD>

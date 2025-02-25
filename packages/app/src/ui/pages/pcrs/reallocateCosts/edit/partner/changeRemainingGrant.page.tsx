@@ -94,7 +94,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
           originalFundingLevel: x.originalFundingLevel,
           originalRemainingCosts: x.originalRemainingCosts,
           originalRemainingGrant: x.originalRemainingGrant,
-          currentNewRemainingGrant: x.newRemainingGrant ?? 0,
+          initialNewRemainingGrant: x.newRemainingGrant ?? 0,
         })),
         originalRemainingGrant,
         newRemainingGrant,
@@ -235,7 +235,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                       defaultValue={String(x.newRemainingGrant ?? 0)}
                       prefix={content.gbp}
                     />
-                    <input type="hidden" value={x.newRemainingGrant} name={`partners.${i}currentNewRemainingGrant`} />
+                    <input type="hidden" value={x.newRemainingGrant} name={`partners.${i}.initialNewRemainingGrant`} />
                   </TD>
                   <TD numeric>
                     <input type="hidden" value={x.newFundingLevel} {...register(`partners.${i}.newFundingLevel`)} />

@@ -26,7 +26,7 @@ export const changeRemainingGrantSchema = z
           originalRemainingGrant: z.number(),
           partnerId: partnerIdValidation,
           virementParticipantId: financialVirementForPartnerIdValidation,
-          currentNewRemainingGrant: z.number(),
+          initialNewRemainingGrant: z.number(),
         })
         .superRefine((data, ctx) => {
           if (roundCurrency(parseCurrency(data.newRemainingGrant)) > roundCurrency(data.newRemainingCosts)) {

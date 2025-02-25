@@ -1,13 +1,8 @@
 import { IContext } from "@framework/types/IContext";
 import { GetClaimOverrideRates } from "@server/features/claims/getClaimOverrideRates";
-import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import {
-  mapOverwrittenFinancialVirements,
-  patchFinancialVirementsForCosts,
-} from "@ui/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.logic";
 import {
   PartnerLevelReallocateCostsParams,
   PartnerLevelReallocateCostsRoute,
@@ -15,11 +10,12 @@ import {
 import {
   CostCategoryLevelReallocateCostsEditSchemaType,
   costCategoryLevelReallocateCostsEditErrorMap,
-  getCostCategoryLevelReallocateCostsEditSchema,
+  costCategoryLevelReallocateCostsEditSchema,
 } from "@ui/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.zod";
 import { PCRPrepareItemRoute } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+import { parseCurrency } from "@framework/util/numberHelper";
 
 class ProjectChangeRequestItemReallocateCostsCostCategoryUpdate extends ZodFormHandlerBase<
   CostCategoryLevelReallocateCostsEditSchemaType,
@@ -35,21 +31,42 @@ class ProjectChangeRequestItemReallocateCostsCostCategoryUpdate extends ZodFormH
   public readonly acceptFiles = false;
   private static readonly MAX_NUMBER_COST_CATS = 50;
 
-  protected async getZodSchema({
+  protected async getZodSchema() {
+    return {
+      schema: costCategoryLevelReallocateCostsEditSchema,
+      errorMap: costCategoryLevelReallocateCostsEditErrorMap,
+    };
+  }
+
+  protected async mapToZod({
     input,
     context,
+    params,
   }: {
-    input: z.input<CostCategoryLevelReallocateCostsEditSchemaType>;
+    input: AnyObject;
     context: IContext;
-  }) {
-    const partnersPromise = context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
+    params: PartnerLevelReallocateCostsParams;
+  }): Promise<z.input<CostCategoryLevelReallocateCostsEditSchemaType>> {
+    const virements: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"] = [];
+
+    for (let i = 0; i < ProjectChangeRequestItemReallocateCostsCostCategoryUpdate.MAX_NUMBER_COST_CATS; i++) {
+      const virementCostId = input[`virements.${i}.virementCostId`];
+      const newEligibleCosts = input[`virements.${i}.newEligibleCosts`];
+      const initialNewEligibleCosts = input[`virements.${i}.initialNewEligibleCosts`];
+
+      if (virementCostId && newEligibleCosts) {
+        virements.push({ virementCostId, newEligibleCosts, initialNewEligibleCosts });
+      } else {
+        break;
+      }
+    }
+
+    const partnersPromise = context.runQuery(new GetAllForProjectQuery(params.projectId));
     const financialVirementsForParticipantsPromise = await context.repositories.financialVirements.getAllForPcr(
-      input.pcrItemId as PcrItemId,
+      params.itemId,
     );
     const claimOverrideAwardRatesPromise = context.runQuery(new GetClaimOverrideRates(input.partnerId as PartnerId));
-    const projectChangeRequestPromise = context.runQuery(
-      new GetPCRByIdQuery(input.projectId as ProjectId, input.pcrId as PcrId),
-    );
+    const projectChangeRequestPromise = context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const [partners, financialVirementsForParticipants, claimOverrideAwardRates, pcr] = await Promise.all([
       partnersPromise,
@@ -58,91 +75,49 @@ class ProjectChangeRequestItemReallocateCostsCostCategoryUpdate extends ZodFormH
       projectChangeRequestPromise,
     ]);
 
-    const pcrItem = pcr.items.find(x => x.id === input.pcrItemId);
+    const pcrItem = pcr.items.find(x => x.id === params.itemId);
 
     if (!pcrItem) throw new Error("cannae find pcr item");
 
     return {
-      schema: getCostCategoryLevelReallocateCostsEditSchema({
-        mapReallocateCostsProps: {
-          partners,
-          financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
-            x.virements.map(y => ({ ...y, parentId: x.id })),
-          ),
-          financialVirementsForParticipants,
-          claimOverrideAwardRates,
-          pcrItemId: input.pcrItemId as PcrItemId,
-        },
-      }),
-      errorMap: costCategoryLevelReallocateCostsEditErrorMap,
-    };
-  }
-
-  protected async mapToZod({
-    input,
-  }: {
-    input: AnyObject;
-  }): Promise<z.input<CostCategoryLevelReallocateCostsEditSchemaType>> {
-    const virements: z.input<CostCategoryLevelReallocateCostsEditSchemaType>["virements"] = [];
-
-    for (let i = 0; i < ProjectChangeRequestItemReallocateCostsCostCategoryUpdate.MAX_NUMBER_COST_CATS; i++) {
-      const virementCostId = input[`virements.${i}.virementCostId`];
-      const newEligibleCosts = input[`virements.${i}.newEligibleCosts`];
-
-      if (virementCostId && newEligibleCosts) {
-        virements.push({ virementCostId, newEligibleCosts });
-      } else {
-        break;
-      }
-    }
-
-    return {
       form: FormTypes.PcrReallocateCostsCostCategorySaveAndContinue,
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      pcrItemId: input.pcrItemId,
       partnerId: input.partnerId,
       virements,
+      financialVirements: {
+        partners,
+        financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
+          x.virements.map(y => ({ ...y, parentId: x.id })),
+        ),
+        financialVirementsForParticipants,
+        claimOverrideAwardRates,
+        pcrItemId: params.itemId,
+      },
     };
   }
 
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<CostCategoryLevelReallocateCostsEditSchemaType>;
     context: IContext;
+    params: PartnerLevelReallocateCostsParams;
   }): Promise<string> {
-    const partnersPromise = context.runQuery(new GetAllForProjectQuery(input.projectId as ProjectId));
-    const financialVirementsForParticipantsPromise = await context.repositories.financialVirements.getAllForPcr(
-      input.pcrItemId as PcrItemId,
-    );
-    const claimOverrideAwardRatesPromise = context.runQuery(new GetClaimOverrideRates(input.partnerId as PartnerId));
-    const [partners, financialVirementsForParticipants, claimOverrideAwardRates] = await Promise.all([
-      partnersPromise,
-      financialVirementsForParticipantsPromise,
-      claimOverrideAwardRatesPromise,
-    ]);
-
-    const dto = mapOverwrittenFinancialVirements({
-      partners,
-      financialVirementsForCosts: patchFinancialVirementsForCosts(
-        financialVirementsForParticipants.flatMap(x => x.virements),
-        input.virements,
-      ),
-      financialVirementsForParticipants,
-      claimOverrideAwardRates,
-      pcrItemId: input.pcrItemId as PcrItemId,
-    })(input.virements);
-
-    await context.runCommand(
-      new UpdateFinancialVirementCommand(input.projectId, input.pcrId, input.pcrItemId, dto.virementData, true),
-    );
+    const updates = input.virements
+      .filter(x => parseCurrency(x.newEligibleCosts) !== parseCurrency(x.initialNewEligibleCosts))
+      .map(x => ({
+        Id: x.virementCostId,
+        Acc_NewCosts__c: parseCurrency(x.newEligibleCosts),
+      }));
+    if (updates.length) {
+      await context.repositories.financialVirements.updateVirements(updates);
+    }
 
     return PCRPrepareItemRoute.getLink({
-      projectId: input.projectId,
-      pcrId: input.pcrId,
-      itemId: input.pcrItemId,
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      itemId: params.itemId,
     }).path;
   }
 }

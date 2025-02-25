@@ -25,7 +25,6 @@ import { MonitoringReportSummaryFormHandler } from "./handlers/projects/[project
 import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectId]/pcrs/create/ProjectChangeRequestCreate.handler";
 import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestForm.handler";
 import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddType.handler";
-import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/reallocateCostsChangeRemainingGrantUpdate.handler";
 import { OverheadDocumentsDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsDelete.handler";
 import { OverheadDocumentsUploadHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/spendProfile/[costCategoryId]/cost/documents/overheadDocumentsUpload.handler";
 import { ProjectChangeRequestPrepareFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/prepareProjectChangeRequestForm.handler";
@@ -95,6 +94,7 @@ import { ManageTeamMemberPcrDeleteHandler } from "./handlers/projects/[projectId
 import { ManageTeamMemberPcrReplaceHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrReplace.handler";
 import { ManageTeamMemberPcrUpdateHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrUpdate.handler";
 import { ManageTeamMemberPcrInviteHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrInvite.handler";
+import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemReallocateCostsChangeRemainingGrantUpdate.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),

@@ -64,7 +64,7 @@ export class UpdatePcrChangeRemainingGrantCommand extends ZodAuthorisedAsyncComm
         originalRemainingGrant: x.originalRemainingGrant,
         partnerId: x.partnerId,
         virementParticipantId: x.virementParticipantId,
-        currentNewRemainingGrant: x.currentNewRemainingGrant,
+        initialNewRemainingGrant: x.initialNewRemainingGrant,
       })),
       originalRemainingGrant: this.dto.originalRemainingGrant,
       newRemainingGrant: this.dto.newRemainingGrant,
@@ -77,7 +77,7 @@ export class UpdatePcrChangeRemainingGrantCommand extends ZodAuthorisedAsyncComm
     validatedData: z.output<ChangeRemainingGrantSchemaType>,
   ): Promise<boolean> {
     const updates = validatedData.partners
-      .filter(x => parseCurrency(x.newRemainingGrant) !== x.currentNewRemainingGrant)
+      .filter(x => parseCurrency(x.newRemainingGrant) !== x.initialNewRemainingGrant)
       .map(x => ({
         Id: x.virementParticipantId,
         Acc_NewAwardRate__c: getNewFundingLevel(

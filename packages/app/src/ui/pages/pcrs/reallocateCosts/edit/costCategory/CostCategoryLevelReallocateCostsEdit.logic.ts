@@ -22,29 +22,32 @@ const patchFinancialVirementsForCosts = (
 };
 
 export const useOnUpdateCostCategoryLevel = ({
-  mapFinancialVirement,
+  projectId,
+  pcrId,
+  pcrItemId,
 }: {
-  mapFinancialVirement: ReturnType<typeof useMapOverwrittenFinancialVirements>;
+  projectId: ProjectId;
+  pcrId: PcrId;
+  pcrItemId: PcrItemId;
 }) => {
   const routes = useRoutes();
   const navigate = useNavigate();
 
   return useOnUpdate<z.output<CostCategoryLevelReallocateCostsEditSchemaType>, unknown>({
     req: data => {
-      return clientsideApiClient.financialVirements.update({
-        projectId: data.projectId,
-        pcrId: data.pcrId,
-        pcrItemId: data.pcrItemId,
-        financialVirement: mapFinancialVirement(data.virements).virementData,
-        submit: false,
+      return clientsideApiClient.pcrs.reallocateCosts({
+        projectId,
+        pcrId,
+        pcrItemId,
+        pcr: data,
       });
     },
-    onSuccess: data =>
+    onSuccess: () =>
       navigate(
         routes.pcrPrepareItem.getLink({
-          projectId: data.projectId,
-          pcrId: data.pcrId,
-          itemId: data.pcrItemId,
+          projectId,
+          pcrId,
+          itemId: pcrItemId,
         }).path,
       ),
   });

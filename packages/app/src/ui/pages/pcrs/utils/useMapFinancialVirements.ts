@@ -311,10 +311,10 @@ const financialVirementValidator = z.object({
   financialVirementsForCosts: z.array(
     z.object({
       costCategoryId: costCategoryIdValidation,
-      costCategoryName: z.string(),
+      costCategoryName: z.string().nullable().optional(),
       id: financialVirementForCostsIdValidation,
-      newEligibleCosts: z.number(),
-      originalCostsClaimedToDate: z.number(),
+      newEligibleCosts: z.number().nullable().optional(),
+      originalCostsClaimedToDate: z.number().nullable(),
       originalEligibleCosts: z.number(),
       profileId: profileIdValidation,
       parentId: financialVirementForPartnerIdValidation,
@@ -324,10 +324,10 @@ const financialVirementValidator = z.object({
     z.object({
       id: financialVirementForPartnerIdValidation,
       partnerId: partnerIdValidation,
-      newEligibleCosts: z.number(),
+      newEligibleCosts: z.number().nullable().optional(),
       newFundingLevel: z.number(),
       originalFundingLevel: z.number(),
-      newRemainingGrant: z.number(),
+      newRemainingGrant: z.number().nullable().optional(),
     }),
   ),
   partners: z.array(
@@ -337,34 +337,23 @@ const financialVirementValidator = z.object({
       isLead: z.boolean(),
     }),
   ),
-  // claimOverrideAwardRates: z
-  //   .discriminatedUnion("type", [
-  //     z.object({
-  //       type: z.literal(AwardRateOverrideType.BY_PERIOD),
-  //       overrides: z.array(
-  //         z.object({
-  //           period: periodIdValidation,
-  //           amount: z.number(),
-  //           target: z.number().transform(x => x as unknown as AwardRateOverrideTarget),
-  //           targetId: partnerIdValidation.optional(),
-  //         }),
-  //       ),
-  //     }),
-  //     z.object({
-  //       type: z.literal(AwardRateOverrideType.BY_COST_CATEGORY),
-  //       overrides: z.array(
-  //         z.object({
-  //           id: costCategoryIdValidation,
-  //           name: z.string(),
-  //           amount: z.number(),
-  //           target: z.number().transform(x => x as unknown as AwardRateOverrideTarget),
-  //           targetId: partnerIdValidation.optional(),
-  //         }),
-  //       ),
-  //     }),
-  //     z.object({ type: z.literal(AwardRateOverrideType.NONE), overrides: z.array(z.never()) }),
-  //   ])
-  //   .optional(),
+  claimOverrideAwardRates: z
+    .object({
+      type: z.string(),
+      overrides: z
+        .object({
+          name: z.string().optional(),
+          amount: z.number().optional(),
+          target: z
+            .number()
+            .transform(x => x as unknown as AwardRateOverrideTarget)
+            .optional(),
+          targetId: partnerIdValidation.optional(),
+        })
+        .optional()
+        .array(),
+    })
+    .optional(),
   pcrItemId: pcrItemIdValidation,
   currentPartnerId: partnerIdValidation.optional(),
 });

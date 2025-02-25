@@ -1,9 +1,7 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   ReallocateCostsSummaryValidatorSchema,
@@ -32,14 +30,6 @@ class ProjectChangeRequestItemReallocateCostsSummaryUpdate extends ZodFormHandle
 
   protected async getZodSchema() {
     return {
-      // schema: getReallocateCostsSummaryValidator({
-      //   mapFinancialVirementProps: {
-      //     partners,
-      //     financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
-      //     financialVirementsForParticipants,
-      //     pcrItemId: input.pcrItemId as PcrItemId,
-      //   },
-      // }),
       schema: reallocateCostsSummaryValidator,
       errorMap: reallocateCostsSummaryErrorMap,
     };
@@ -66,7 +56,7 @@ class ProjectChangeRequestItemReallocateCostsSummaryUpdate extends ZodFormHandle
       projectChangeRequestPromise,
     ]);
 
-    const pcrItem = pcr.items.find(x => x.id === input.pcrItemId);
+    const pcrItem = pcr.items.find(x => x.id === params.itemId);
 
     if (!pcrItem) throw new Error("cannae find pcr item");
 
@@ -76,9 +66,8 @@ class ProjectChangeRequestItemReallocateCostsSummaryUpdate extends ZodFormHandle
         partners,
         financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
         financialVirementsForParticipants,
-        pcrItemId: input.pcrItemId as PcrItemId,
+        pcrItemId: params.itemId,
       },
-
       grantMovingOverFinancialYear: input.grantMovingOverFinancialYear,
       markedAsComplete: input.markedAsComplete === "on",
     };
