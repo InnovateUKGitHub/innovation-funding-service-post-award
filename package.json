@@ -27,7 +27,6 @@
     "pw-run:accdev": "TEST_SALESFORCE_SANDBOX=accdev node turbo.mjs run pw-run --",
     "pw-run:at": "TEST_SALESFORCE_SANDBOX=at node turbo.mjs run pw-run --",
     "salesforce-sandbox-refresh": "node turbo.mjs run salesforce-sandbox-refresh --",
-    "salesforce-sandbox-refresh:bjssdev1": "node turbo.mjs run salesforce-sandbox-refresh -- bjssdev1",
     "start": "node --env-file .env turbo.mjs run start --",
     "typegen": "node turbo.mjs run typegen --",
     "typecheck": "node turbo.mjs run typecheck --",

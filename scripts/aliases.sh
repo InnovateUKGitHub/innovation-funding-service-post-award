@@ -195,3 +195,32 @@ acc_clone_secrets() {
   # Clone or Git Pull the latest acc-secrets
   git -C kustomize/acc-secrets/ pull || git clone $(git config --get remote.origin.url)/../acc-secrets.git kustomize/acc-secrets
 }
+
+move() {
+  sf data query \
+    --target-org leondro.lio@iuk.ukri.org \
+    --result-format csv \
+    --query "SELECT Acc_ActiveFlag__c, Acc_DisplayOrder__c, Acc_QuestionDescription__c, Acc_QuestionName__c, Acc_QuestionScore__c, Acc_QuestionText__c, Acc_ScoredQuestion__c FROM Acc_MonitoringQuestion__c" \
+    --output-file Acc_MonitoringQuestion__c.csv
+
+  sf data query \
+    --target-org leondro.lio@iuk.ukri.org \
+    --result-format csv \
+    --query "SELECT Acc_CompetitionType__c, Acc_CostCategoryDescription__c, Acc_CostCategoryId__c, Acc_CostCategoryName__c, Acc_DisplayOrder__c, Acc_HintText__c, Acc_OrganisationType__c, Acc_OverrideAwardRate__c, VAT_Cost_Category__c FROM Acc_CostCategory__c" \
+    --output-file Acc_CostCategory__c.csv
+
+  sf data import bulk \
+    --file Acc_MonitoringQuestion__c.csv \
+    --sobject Acc_MonitoringQuestion__c \
+    --wait 120 \
+    --target-org leondro.lio@iuk.ukri.org.accat
+
+  sf data import bulk \
+    --file Acc_CostCategory__c.csv \
+    --sobject Acc_CostCategory__c \
+    --wait 120 \
+    --target-org leondro.lio@iuk.ukri.org.accat
+
+  rm Acc_MonitoringQuestion__c.csv
+  rm Acc_CostCategory__c.csv
+}
