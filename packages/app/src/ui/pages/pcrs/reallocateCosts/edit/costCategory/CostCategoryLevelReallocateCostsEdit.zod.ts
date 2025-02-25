@@ -5,9 +5,9 @@ import {
   partnerIdValidation,
 } from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
-import { financialVirementValidator } from "../../../utils/useMapFinancialVirements";
 import { mapOverwrittenFinancialVirements } from "./CostCategoryLevelReallocateCostsEdit.logic";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { financialVirementValidator } from "@ui/pages/pcrs/utils/mapFinancialVirements.zod";
 
 const costCategoryLevelReallocateCostsEditErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "reallocateCosts", "costCategoryLevel"],

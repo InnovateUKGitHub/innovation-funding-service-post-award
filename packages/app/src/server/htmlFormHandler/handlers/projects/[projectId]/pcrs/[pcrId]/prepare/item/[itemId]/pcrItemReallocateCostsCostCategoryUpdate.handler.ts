@@ -79,19 +79,25 @@ class ProjectChangeRequestItemReallocateCostsCostCategoryUpdate extends ZodFormH
 
     if (!pcrItem) throw new Error("cannae find pcr item");
 
+    const financialVirements = {
+      partners,
+      financialVirementsForCosts: financialVirementsForParticipants
+        .flatMap(x => x.virements.map(y => ({ ...y, parentId: x.id })))
+        .map(x => ({ ...x, newEligibleCosts: x.newEligibleCosts ?? 0 })),
+      financialVirementsForParticipants: financialVirementsForParticipants.map(x => ({
+        ...x,
+        newEligibleCosts: x.newEligibleCosts ?? 0,
+        newRemainingGrant: x.newRemainingGrant ?? 0,
+      })),
+      claimOverrideAwardRates,
+      pcrItemId: params.itemId,
+    };
+
     return {
       form: FormTypes.PcrReallocateCostsCostCategorySaveAndContinue,
       partnerId: input.partnerId,
       virements,
-      financialVirements: {
-        partners,
-        financialVirementsForCosts: financialVirementsForParticipants.flatMap(x =>
-          x.virements.map(y => ({ ...y, parentId: x.id })),
-        ),
-        financialVirementsForParticipants,
-        claimOverrideAwardRates,
-        pcrItemId: params.itemId,
-      },
+      financialVirements,
     };
   }
 

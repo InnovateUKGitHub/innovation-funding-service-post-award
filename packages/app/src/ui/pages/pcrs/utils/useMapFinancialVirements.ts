@@ -1,4 +1,4 @@
-import { AwardRateOverrideTarget, AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
 import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import {
   CostCategoryVirementDto,
@@ -9,17 +9,7 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities/financialVirement";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
-import {
-  costCategoryIdValidation,
-  financialVirementForCostsIdValidation,
-  financialVirementForPartnerIdValidation,
-  partnerIdValidation,
-  pcrItemIdValidation,
-  periodIdValidation,
-  profileIdValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
 import { useMemo } from "react";
-import { z } from "zod";
 
 type FinancialVirementForCost = Pick<
   CostCategoryFinancialVirement,
@@ -307,58 +297,5 @@ const useMapFinancialVirements = (props: MapVirements) => {
 
 type MappedFinancialVirements = ReturnType<typeof mapVirements>;
 
-const financialVirementValidator = z.object({
-  financialVirementsForCosts: z.array(
-    z.object({
-      costCategoryId: costCategoryIdValidation,
-      costCategoryName: z.string().nullable().optional(),
-      id: financialVirementForCostsIdValidation,
-      newEligibleCosts: z.number().nullable().optional(),
-      originalCostsClaimedToDate: z.number().nullable(),
-      originalEligibleCosts: z.number(),
-      profileId: profileIdValidation,
-      parentId: financialVirementForPartnerIdValidation,
-    }),
-  ),
-  financialVirementsForParticipants: z.array(
-    z.object({
-      id: financialVirementForPartnerIdValidation,
-      partnerId: partnerIdValidation,
-      newEligibleCosts: z.number().nullable().optional(),
-      newFundingLevel: z.number(),
-      originalFundingLevel: z.number(),
-      newRemainingGrant: z.number().nullable().optional(),
-    }),
-  ),
-  partners: z.array(
-    z.object({
-      id: partnerIdValidation,
-      name: z.string(),
-      isLead: z.boolean(),
-    }),
-  ),
-  claimOverrideAwardRates: z
-    .object({
-      type: z.string(),
-      overrides: z
-        .object({
-          name: z.string().optional(),
-          amount: z.number().optional(),
-          target: z
-            .number()
-            .transform(x => x as unknown as AwardRateOverrideTarget)
-            .optional(),
-          targetId: partnerIdValidation.optional(),
-        })
-        .optional()
-        .array(),
-    })
-    .optional(),
-  pcrItemId: pcrItemIdValidation,
-  currentPartnerId: partnerIdValidation.optional(),
-});
-
-type FinancialVirementValidator = typeof financialVirementValidator;
-
-export { mapVirements, useMapFinancialVirements, MapVirements, financialVirementValidator };
-export type { MappedFinancialVirements, FinancialVirementForCost, FinancialVirementValidator };
+export { mapVirements, useMapFinancialVirements, MapVirements };
+export type { MappedFinancialVirements, FinancialVirementForCost };

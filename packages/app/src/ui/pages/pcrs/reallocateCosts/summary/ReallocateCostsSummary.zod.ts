@@ -2,8 +2,9 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
-import { financialVirementValidator, MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
+import { MapVirements, mapVirements } from "../../utils/useMapFinancialVirements";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
+import { financialVirementValidator } from "../../utils/mapFinancialVirements.zod";
 
 const reallocateCostsSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "reallocateCosts"] });
 

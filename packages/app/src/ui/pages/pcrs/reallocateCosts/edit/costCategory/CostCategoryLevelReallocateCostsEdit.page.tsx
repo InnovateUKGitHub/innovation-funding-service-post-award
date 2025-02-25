@@ -106,7 +106,6 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
   const { isPm } = getAuthRoles(project.roles);
   const { isKTP } = checkProjectCompetition(project.competitionType);
   const displayIntroMessage: boolean = isKTP && isPm;
-  // console.log("watch", watch());
   return (
     <Page
       backLink={

@@ -60,14 +60,21 @@ class ProjectChangeRequestItemReallocateCostsSummaryUpdate extends ZodFormHandle
 
     if (!pcrItem) throw new Error("cannae find pcr item");
 
+    const financialVirements = {
+      partners,
+      financialVirementsForCosts: financialVirementsForParticipants
+        .flatMap(x => x.virements.map(y => ({ ...y, parentId: x.id })))
+        .map(x => ({ ...x, newEligibleCosts: x.newEligibleCosts ?? 0 })),
+      financialVirementsForParticipants: financialVirementsForParticipants.map(x => ({
+        ...x,
+        newEligibleCosts: x.newEligibleCosts ?? 0,
+        newRemainingGrant: x.newRemainingGrant ?? 0,
+      })),
+      pcrItemId: params.itemId,
+    };
     return {
       form: FormTypes.PcrReallocateCostsSummary,
-      financialVirements: {
-        partners,
-        financialVirementsForCosts: financialVirementsForParticipants.flatMap(x => x.virements),
-        financialVirementsForParticipants,
-        pcrItemId: params.itemId,
-      },
+      financialVirements,
       grantMovingOverFinancialYear: input.grantMovingOverFinancialYear,
       markedAsComplete: input.markedAsComplete === "on",
     };

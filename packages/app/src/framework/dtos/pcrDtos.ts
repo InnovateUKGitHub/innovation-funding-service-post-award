@@ -10,7 +10,6 @@ import {
   PCRProjectRole,
   PCRItemHiddenReason,
   ManageTeamMemberMethod,
-  PCRSpendProfileOverheadRate,
 } from "@framework/constants/pcrConstants";
 import { ProjectMonitoringLevel, TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -21,6 +20,17 @@ import { z } from "zod";
 import { ChangeRemainingGrantSchemaType } from "@ui/pages/pcrs/reallocateCosts/edit/partner/changeRemainingGrant.zod";
 import { ReallocateCostsSummaryValidatorSchema } from "@ui/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
 import { CostCategoryLevelReallocateCostsEditSchemaType } from "@ui/pages/pcrs/reallocateCosts/edit/costCategory/CostCategoryLevelReallocateCostsEdit.zod";
+import {
+  CapitalUsageSchemaType,
+  LabourSchemaType,
+  MaterialsSchemaType,
+  OtherCostsSchemaType,
+  OverheadSchemaType,
+  SubcontractingSchemaType,
+  TravelAndSubsistenceSchemaType,
+} from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
+import { AddPartnerSchemaType } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
+import { ApproveNewSubcontractorSchemaType } from "@ui/pages/pcrs/approveNewSubcontractor/ApproveNewSubcontractor.zod";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -590,103 +600,23 @@ export interface PcrAddPartnerProjectCost {
   costCategoryId: CostCategoryId;
 }
 
-export interface PcrAddPartnerProjectCostOtherCostDto extends PcrAddPartnerProjectCost {
-  otherCostDescription: string | null;
-  estimatedCost: string | null;
-  form: FormTypes.PcrAddPartnerProjectCostOtherCost;
-}
+export type PcrAddPartnerProjectCostOtherCostDto = z.output<OtherCostsSchemaType>;
 
-export interface PcrAddPartnerProjectCostLabourDto extends PcrAddPartnerProjectCost {
-  labourDescription: string | null;
-  grossCostOfRole: string | null;
-  ratePerDay: string | null;
-  daysSpentOnProject: number;
-  form: FormTypes.PcrAddPartnerProjectCostLabour;
-  overheadCostId: CostId | null;
-  labourProfile: { id: CostId; value: number | null }[];
-}
+export type PcrAddPartnerProjectCostLabourDto = z.output<LabourSchemaType>;
 
-export interface PcrAddPartnerProjectCostMaterialsDto extends PcrAddPartnerProjectCost {
-  materialsDescription: string;
-  costPerItem: string | null;
-  quantityOfMaterialItems: number;
-  form: FormTypes.PcrAddPartnerProjectCostMaterials;
-}
+export type PcrAddPartnerProjectCostMaterialsDto = z.output<MaterialsSchemaType>;
 
-export interface PcrAddPartnerProjectCostCapitalUsageDto extends PcrAddPartnerProjectCost {
-  capitalUsageDescription: string;
-  depreciationPeriod: number;
-  itemType: number;
-  netPresentValue: string | null;
-  residualValue: string | null;
-  utilisation: number;
-  form: FormTypes.PcrAddPartnerProjectCostCapitalUsage;
-}
+export type PcrAddPartnerProjectCostCapitalUsageDto = z.output<CapitalUsageSchemaType>;
 
-export interface PcrAddPartnerProjectCostTravelAndSubsistenceDto extends PcrAddPartnerProjectCost {
-  descriptionOfCost: string;
-  numberOfTimes: number;
-  costOfEach: string | null;
-  form: FormTypes.PcrAddPartnerProjectCostTravelAndSubsistence;
-  totalCost: number;
-}
+export type PcrAddPartnerProjectCostTravelAndSubsistenceDto = z.output<TravelAndSubsistenceSchemaType>;
 
-export interface PcrAddPartnerProjectCostSubcontractingDto extends PcrAddPartnerProjectCost {
-  subcontractorName: string;
-  subcontractorCountry: string;
-  subcontractorRoleAndDescription: string;
-  subcontractorCost: string | null;
-  form: FormTypes.PcrAddPartnerProjectCostSubcontracting;
-}
+export type PcrAddPartnerProjectCostSubcontractingDto = z.output<SubcontractingSchemaType>;
 
-export interface PcrAddPartnerProjectCostOverheadDto extends PcrAddPartnerProjectCost {
-  overheadRate: PCRSpendProfileOverheadRate;
-  calculatedValue: string | null;
-  form: FormTypes.PcrAddPartnerProjectCostOverhead;
-  button_submit: string;
-}
+export type PcrAddPartnerProjectCostOverheadDto = z.output<OverheadSchemaType>;
 
-export interface ApproveNewSubcontractorDto extends PcrDtoCommon {
-  form: FormTypes.PcrApproveNewSubcontractorStep | FormTypes.PcrApproveNewSubcontractorSummary;
-  subcontractorName?: string;
-  subcontractorRegistrationNumber?: string;
-  subcontractorRelationship?: boolean;
-  subcontractorRelationshipJustification?: string;
-  subcontractorLocation?: string;
-  subcontractorDescription?: string;
-  subcontractorJustification?: string;
-  subcontractorCost?: string | null;
-}
+export type ApproveNewSubcontractorDto = z.output<ApproveNewSubcontractorSchemaType>;
 
-export interface PcrAddPartnerSummaryDto extends PcrDtoCommon {
-  organisationName?: string;
-  registrationNumber?: string;
-  registeredAddress?: string;
-  participantSize?: number;
-  numberOfEmployees?: number | null;
-  financialYearEndDate?: Date | null;
-  financialYearEndTurnover: number | null;
-  projectLocation?: number;
-  projectCity?: string;
-  projectPostcode?: string;
-  contact1Forename?: string;
-  contact1Surname?: string;
-  contact1Phone?: string;
-  contact1Email?: string;
-  contact2Forename?: string;
-  contact2Phone?: string;
-  contact2Surname?: string;
-  contact2Email?: string;
-  awardRate?: number | null;
-  partnerType: number;
-  projectRole: number;
-  isCommercialWork?: boolean | null;
-  hasOtherFunding?: boolean | null;
-  organisationType?: string;
-  tsbReference?: string;
-  markedAsComplete?: boolean;
-  form: FormTypes.PcrAddPartnerSummary;
-}
+export type PcrAddPartnerSummaryDto = z.output<AddPartnerSchemaType>;
 
 export type ChangeRemainingGrantDto = z.output<ChangeRemainingGrantSchemaType>;
 

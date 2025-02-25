@@ -55,7 +55,6 @@ export class UpdatePcrReallocateCostsCommand extends ZodAuthorisedAsyncCommandBa
   }
 
   protected async mapToZod() {
-    console.log("this.dto", this.dto);
     return {
       financialVirements: this.dto.financialVirements,
       partnerId: this.dto.partnerId,
