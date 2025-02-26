@@ -41,6 +41,7 @@ import { AccFinanceSummary } from "./acc/pages/AccFinanceSummary";
 import { AccProjectLoans } from "./projectFactory/AccProjectLoans";
 import { LoanDrawdowns } from "./acc/pages/Loans/LoanDrawdowns";
 import { LoanDrawdownChange } from "./acc/pages/PCRs/loanDrawdownChange";
+import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
 
 type AccFixtures = {
   // Pages
@@ -96,6 +97,7 @@ interface Workers {
   projectFactoryHelloWorld: ProjectFactoryHelloWorld;
   projectState: ProjectState;
   accProjectLoans: AccProjectLoans;
+  accProjectFinalClaim: AccProjectFinalClaim;
 }
 
 export const test = base.extend<AccFixtures, Workers>({
@@ -142,8 +144,8 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new CrdClaims({ page, commands, validators, accNavigation, viewForecast })),
   accClaimsDashboard: ({ page }, use) => use(new AccClaimsDashboard({ page })),
   accFinanceSummary: ({ page }, use) => use(new AccFinanceSummary({ page })),
-  addPartner: ({ page, commands, projectChangeRequests }, use) =>
-    use(new AddPartner({ page, commands, projectChangeRequests })),
+  addPartner: ({ page, commands, projectChangeRequests, putProjectOnHold }, use) =>
+    use(new AddPartner({ page, commands, projectChangeRequests, putProjectOnHold })),
   loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
   loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
@@ -174,6 +176,10 @@ export const test = base.extend<AccFixtures, Workers>({
   ],
   accProjectLoans: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectLoans({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectFinalClaim: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectFinalClaim({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
 

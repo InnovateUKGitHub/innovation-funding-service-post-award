@@ -24,6 +24,9 @@ class Competition__c extends AbstractSObject {
 
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_CompetitionName__c: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Impact_Management_participation__c: SObjectFieldType<"Yes" | "No">;
 }
 
 export { Competition__c };

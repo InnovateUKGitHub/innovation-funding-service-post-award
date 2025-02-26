@@ -21,6 +21,7 @@ interface ClaimPeriodInfo {
   period: number;
   claimStatus: ClaimStatus;
   claimDetails: ClaimDetailInfo[];
+  finalClaim: boolean;
 }
 
 const makeClaims = ({
@@ -73,6 +74,7 @@ const makeClaims = ({
 
     if (claimOverride) {
       claim.Acc_ClaimStatus__c = claimOverride.claimStatus;
+      claim.Acc_FinalClaim__c = claimOverride.finalClaim;
 
       for (const claimDetailInfo of claimOverride.claimDetails) {
         const costCategory = profiles.find(

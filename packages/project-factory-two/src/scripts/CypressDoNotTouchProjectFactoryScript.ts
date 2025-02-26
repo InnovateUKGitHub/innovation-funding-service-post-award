@@ -44,6 +44,8 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     competition.Acc_CompetitionCode__c = prefix("342463");
     competition.Acc_CompetitionName__c = "SteveTest";
     competition.Acc_CompetitionType__c = "CR&D";
+    competition.Impact_Management_participation__c = "No";
+
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
@@ -366,6 +368,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
             { costCategory: "Other costs 4", claimLineItems: [{ name: "", value: 35000 }] },
             { costCategory: "Other costs 5", claimLineItems: [{ name: "", value: 35000 }] },
           ],
+          finalClaim: false,
         },
       ],
     });
@@ -381,11 +384,13 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
           period: 1,
           claimStatus: "Payment being processed",
           claimDetails: [{ costCategory: "Exceptions - Staff", claimLineItems: [{ name: "Labour1", value: 49000 }] }],
+          finalClaim: false,
         },
         {
           period: 2,
           claimStatus: "Draft",
           claimDetails: [],
+          finalClaim: false,
         },
       ],
     });
@@ -401,6 +406,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
           period: 1,
           claimStatus: "New", // Default for period 1 is usually Draft
           claimDetails: [],
+          finalClaim: false,
         },
       ],
     });

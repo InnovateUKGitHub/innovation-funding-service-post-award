@@ -31,6 +31,7 @@ class CrdClaims {
   private readonly costsToBeClaimedHeading: PageHeading;
   private readonly backToClaims: Locator;
   private readonly period1Subheading: Locator;
+  private readonly period12Subheading: Locator;
   private readonly costsClaimedTable: Locator;
   private readonly statusAndCommentsLog: Locator;
   private readonly statusLogShow: Locator;
@@ -78,6 +79,8 @@ class CrdClaims {
   private readonly docTypeList: Array<string>;
   private readonly claimDocTable: Locator;
   private readonly continueForecastButton: Locator;
+  private readonly completeSurveyCopy: Locator;
+  private readonly pcfSurveyList: Array<string>;
   //Forecast page
   private readonly updateForecastHeading: PageHeading;
   private readonly backToDocumentsLink: Locator;
@@ -91,6 +94,7 @@ class CrdClaims {
   private readonly claimSummaryTitle: PageHeading;
   private readonly costsToBeClaimedSubheading: Locator;
   private readonly costsClaimedListing: Array<[string, string]>;
+  private readonly finalClaimCostsClaimedListing: Array<[string, string]>;
   private readonly costsClaimedQaTags: Array<string>;
   private readonly editCostsClaimedLink: Locator;
   private readonly claimDocumentsSubheading: Locator;
@@ -108,8 +112,10 @@ class CrdClaims {
   private readonly claimConfirmationStatement: Locator;
   private readonly claimSubmitButton: Locator;
   private readonly iarValidationMessage: string;
+  private readonly pcfValidationMessage: string;
   private readonly summaryCharValidation: string;
   private readonly commentForMo: string;
+  private readonly tenDocList: Array<string>;
   //MSP review
   private readonly claimHeading: PageHeading;
   private readonly competitionName: Locator;
@@ -167,6 +173,7 @@ class CrdClaims {
     this.costsToBeClaimedHeading = PageHeading.fromTitle(this.page, "Costs to be claimed");
     this.backToClaims = this.commands.backLink("Back to claims");
     this.period1Subheading = this.page.getByRole("heading").filter({ hasText: "Period 1:" });
+    this.period12Subheading = this.page.getByRole("heading").filter({ hasText: "Period 12:" });
     this.costsClaimedTable = this.page.getByRole("table").first();
     this.statusAndCommentsLog = this.page.getByRole("button").filter({ hasText: "Status and comments log" });
     this.statusLogShow = this.page.getByTestId("status-and-comments-log").getByText("Show");
@@ -272,6 +279,13 @@ class CrdClaims {
     ];
     this.claimDocTable = this.page.getByTestId("claim-documents-container").locator("table");
     this.continueForecastButton = this.page.getByRole("button").filter({ hasText: "Continue to update forecast" });
+    this.completeSurveyCopy = this.page.getByRole("paragraph").filter({
+      hasText: "You need to complete our short survey about the project before we can make your final payment:",
+    });
+    this.pcfSurveyList = [
+      "Complete our survey.",
+      "Download a copy of your completed survey and upload it on this page.",
+    ];
     //Forecast page
     this.updateForecastHeading = PageHeading.fromTitle(this.page, "Update forecast");
     this.backToDocumentsLink = this.commands.backLink("Back to claims documents");
@@ -291,6 +305,11 @@ class CrdClaims {
       ["Total costs to be claimed", "£16,995.55"],
       ["Funding level", "50.00%"],
       ["Total costs to be paid", "£8,497.77"],
+    ];
+    this.finalClaimCostsClaimedListing = [
+      ["Total costs to be claimed", "£79,560,000.00"],
+      ["Funding level", "50.00%"],
+      ["Total costs to be paid", "£39,780,000.00"],
     ];
     this.editCostsClaimedLink = this.page.getByRole("link").filter({ hasText: "Edit costs to be claimed" });
     this.claimDocumentsSubheading = this.page.getByRole("heading").filter({ hasText: "Claim documents" });
@@ -321,6 +340,7 @@ class CrdClaims {
     });
     this.claimSubmitButton = this.page.getByRole("button").filter({ hasText: "Submit claim" });
     this.iarValidationMessage = "You must upload an independent accountant's report before you can submit this claim.";
+    this.pcfValidationMessage = "You must upload a project completion form before you can submit this claim.";
     this.summaryCharValidation = "Comments must be 1000 characters or less.";
     this.commentForMo = "This is a comment for the Monitoring Officer.";
     //MSP Review
@@ -365,6 +385,18 @@ class CrdClaims {
       hasText: "You must submit a monitoring report for this period before the approved claim can be paid.",
     });
     this.commentForIUK = "This is a comment for Innovate UK.";
+    this.tenDocList = [
+      "T.doc",
+      "testfile.xlsx",
+      "testfile.csv",
+      "testfile.xps",
+      "testfile.odp",
+      "testfile.odt",
+      "testfile.pdf",
+      "testfile.ppt",
+      "testfile.rtf",
+      "testfile.txt",
+    ];
   }
 
   @Given("the FC is on the Claims dashboard")
@@ -534,6 +566,11 @@ class CrdClaims {
     await this.claimDocsHeading.isVisible();
   }
 
+  @When("the user clicks the Edit claim documents link")
+  async clickEditDocsLink() {
+    await this.editClaimDocsLink.click();
+  }
+
   @Then("the user will see the Claim documents page")
   async claimsDocumentsPage() {
     await this.claimDocsHeading.isVisible();
@@ -555,6 +592,19 @@ class CrdClaims {
       await this.docTypeSelector.selectOption(type);
     }
     await this.uploadInvoice();
+  }
+
+  @Then("the user will see the Final claim documents page")
+  async claimsFinalClaimDocsPage() {
+    await this.claimDocsHeading.isVisible();
+    await expect(this.backToCosts).toBeVisible();
+    await expect(this.mainIarText).toBeVisible();
+    await expect(this.uploadIarText).toBeVisible();
+    await expect(this.continueForecastButton).not.toBeVisible();
+    await expect(this.saveAndReturnButton).toBeVisible();
+    for (const type of this.docTypeList) {
+      await this.docTypeSelector.selectOption(type);
+    }
   }
 
   @Given("the user has accessed the Update forecast page")
@@ -682,6 +732,12 @@ class CrdClaims {
     await expect(this.claimDocTable.locator("td").filter({ hasText: "IAR.doc" })).toBeVisible();
   }
 
+  @When("the user uploads 10 documents")
+  async upload10Docs() {
+    await this.docTypeSelector.selectOption(this.docTypeList[2]);
+    await this.commands.uploadBatchOfDocs(this.tenDocList);
+  }
+
   @Then("the user submits the Claim")
   async submitTheClaim() {
     await this.continueForecastButton.click();
@@ -800,6 +856,108 @@ class CrdClaims {
   async submitAcademicClaim() {
     await this.textbox.fill(this.commentForMo);
     await this.claimSubmitButton.click();
+  }
+
+  @Then("the user will see the Final Claim notification")
+  async finalClaimNotification() {
+    await this.commands.validationNotification("This is the final claim.");
+  }
+
+  @Then("the user will see the Final claim Costs to be claimed page")
+  async finalClaimCostsToBeClaimed(table: DataTable) {
+    await this.costsToBeClaimedHeading.isVisible();
+    await expect(this.backToClaims).toBeVisible();
+    await expect(this.period12Subheading).toBeVisible();
+    await expect(this.statusAndCommentsLog).toBeVisible();
+    await expect(this.statusAndCommentsLog).toHaveAttribute("aria-expanded", "false");
+    await expect(this.statusLogShow).toBeVisible();
+    await this.statusAndCommentsLog.click();
+    await expect(this.statusLogHide).toBeVisible();
+    await expect(this.statusAndCommentsLog).toHaveAttribute("aria-expanded", "true");
+    await expect(this.logEntry).toHaveText("There are no changes.");
+    await expect(this.continueToClaimsDocs).toBeVisible();
+    await expect(this.saveAndReturnButton).toBeVisible();
+    await this.costCatClaimTable(table, false);
+  }
+
+  @Then("the user will see Project Completion Form guidance")
+  async pcfGuidance() {
+    await expect(this.completeSurveyCopy).toBeVisible();
+    for (const list of this.pcfSurveyList) {
+      await expect(this.page.getByRole("listitem").filter({ hasText: list })).toBeVisible();
+    }
+  }
+
+  @When("the user accesses the Summary page from the Documents page")
+  async accessSummaryFromDocPage() {
+    await this.claimDocsHeading.isVisible();
+    await this.continueToSummaryButton.click();
+  }
+
+  @Then("the user will see the Final claim summary page")
+  async finalClaimSummaryPage() {
+    await this.claimSummaryTitle.isVisible();
+    await expect(this.period12Subheading).toBeVisible();
+    await expect(this.costsToBeClaimedSubheading).toBeVisible();
+    await expect(this.editCostsClaimedLink).toBeVisible();
+    await expect(this.claimDocumentsSubheading).toBeVisible();
+    await this.commands.validationNotification(
+      "You must upload a supporting document before you can submit this claim.",
+    );
+    let i = 0;
+    for (const [key, item] of this.finalClaimCostsClaimedListing) {
+      await this.commands.getListItemFromKey(key, item, true, false, this.costsClaimedQaTags[i]);
+      i++;
+    }
+    await expect(this.editClaimDocsLink).toBeVisible();
+    await expect(this.forecastSubheading).not.toBeVisible();
+    await expect(this.editForecastLink).not.toBeVisible();
+    await expect(this.addCommentsSubheading).toBeVisible();
+    await expect(this.hintForComments).toBeVisible();
+    await expect(this.comments1000CharRemaining).toBeVisible();
+    await expect(this.claimConfirmationStatement).toBeVisible();
+    await expect(this.saveAndReturnButton).toBeVisible();
+    await expect(this.claimSubmitButton).toBeVisible();
+  }
+
+  @Then("the user will be advised of missing Project Completion Form")
+  async missingIarPCF() {
+    await this.commands.validationLink(this.pcfValidationMessage);
+  }
+
+  @When("the user uploads a PCF and then attempts to submit")
+  async uploadIarAttemptToSubmit() {
+    await this.editClaimDocsLink.click();
+    await this.claimDocsHeading.isVisible();
+    await this.uploadPcf();
+    await this.continueToSummaryButton.click();
+    await this.claimSummaryTitle.isVisible();
+    await this.claimSubmitButton.click();
+  }
+
+  @Then("the user will see all files displayed on the Summary page")
+  async allSummaryFilesDisplayed(table: DataTable) {
+    await this.claimSummaryTitle.isVisible();
+    await this.summaryDocTable(table);
+  }
+
+  @When("the user updates all costs for the final claim")
+  async finalClaimCosts(table: DataTable) {
+    let data = table.hashes();
+    let rowNum = 0;
+    for (const row of data) {
+      await this.clickCostCategory(row["Category"], rowNum);
+      if (row["Category"] === "Overheads") {
+        await expect(this.firstLineItemCost).toHaveValue(row["Cost"]);
+      } else {
+        await this.addCostButton.click();
+        await this.firstLineItemDescription.fill(this.lineItemDescription1);
+        await this.firstLineItemCost.fill(String(row["Cost"]));
+      }
+      await this.saveAndReturnButton.click();
+      await this.costsToBeClaimedHeading.isVisible();
+      rowNum++;
+    }
   }
 
   /**
@@ -995,6 +1153,24 @@ class CrdClaims {
     const fileTable = [
       ["File name", this.evidenceDocs[10]],
       ["Type", "Invoice"],
+      ["Date uploaded", this.commands.dateToday(false)],
+      ["Size", "0KB"],
+      ["Uploaded by", "Main Finance Contact"],
+    ];
+    let i = 0;
+    for (const [header, cell] of fileTable) {
+      await expect(this.claimDocTable.locator("thead").locator("th").nth(i)).toHaveText(header);
+      await expect(this.claimDocTable.locator("tbody").locator("td").nth(i)).toHaveText(cell);
+      i++;
+    }
+  }
+
+  async uploadPcf() {
+    await this.docTypeSelector.selectOption("Project completion form");
+    await this.commands.fileInput(["PCF.doc"], true);
+    const fileTable = [
+      ["File name", "PCF.doc"],
+      ["Type", "Project completion form"],
       ["Date uploaded", this.commands.dateToday(false)],
       ["Size", "0KB"],
       ["Uploaded by", "Main Finance Contact"],

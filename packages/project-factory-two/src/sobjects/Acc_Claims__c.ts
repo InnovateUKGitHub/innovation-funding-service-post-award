@@ -28,6 +28,9 @@ class Acc_Claims__c extends AbstractSObject {
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Acc_LineItemDescription__c: SObjectFieldType<string>;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor Acc_FinalClaim__c: SObjectFieldType<boolean>;
 }
 
 export { Acc_Claims__c };

@@ -17,12 +17,12 @@ import { overwriteProfiles } from "../helpers/overwriteProfiles";
 import { Acc_Prepayment__c } from "../sobjects/Acc_Prepayment__c";
 import { approveSObject } from "../helpers/approveSObject";
 
-interface TwoParticipantProjectFactoryScriptArguments {
+interface TwoParticipantProjectFactoryFinalClaimArguments {
   competitionType: "CR&D" | "SBRI";
   profiles: boolean;
 }
 
-type TwoParticipantProjectFactoryScriptContext = {
+type TwoParticipantProjectFactoryFinalClaimContext = {
   competition: Competition__c;
   project: Acc_Project__c;
   mspAccount: Account;
@@ -45,9 +45,9 @@ type TwoParticipantProjectFactoryScriptContext = {
   grantAdjustment: Acc_Prepayment__c;
 };
 
-class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
-  TwoParticipantProjectFactoryScriptContext,
-  TwoParticipantProjectFactoryScriptArguments
+class TwoParticipantProjectFactoryFinalClaimScript extends AbstractProjectFactoryScript<
+  TwoParticipantProjectFactoryFinalClaimContext,
+  TwoParticipantProjectFactoryFinalClaimArguments
 > {
   async script({
     connection,
@@ -56,8 +56,8 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
   }: {
     connection: ITsforceConnection;
     Database: DatabaseConnector;
-    args: TwoParticipantProjectFactoryScriptArguments;
-  }): Promise<TwoParticipantProjectFactoryScriptContext> {
+    args: TwoParticipantProjectFactoryFinalClaimArguments;
+  }): Promise<TwoParticipantProjectFactoryFinalClaimContext> {
     const date = new Date();
     const now = Math.floor(date.getTime() / 1000);
     const prefix = (val: string) => `${now}.${val}`;
@@ -90,7 +90,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     const project = new Acc_Project__c();
     project.Acc_ProjectNumber__c = prefix("100");
     project.Acc_CompetitionId__c = competition.Id;
-    project.Acc_StartDate__c = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+    project.Acc_StartDate__c = new Date(date.getFullYear(), date.getMonth() - 36, 1, 12);
     project.Acc_Duration__c = 36;
     project.Acc_ProjectTitle__c = "Project Factory 2 - Electric Boogaloo";
     project.Acc_LegacyID__c = prefix("100");
@@ -262,8 +262,8 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     project.Acc_NonFEC__c = false;
     project.Acc_MonitoringLevel__c = "Platinum";
     project.Acc_MonitoringReportSchedule__c = "Monthly";
-    project.Acc_ProjectStatus__c = "Live";
-    project.Acc_CurrentPeriodNumberHelper__c = 1;
+    project.Acc_ProjectStatus__c = "Final Claim";
+    project.Acc_CurrentPeriodNumberHelper__c = 12;
     await Database.update(project);
 
     await connection.executeApex({
@@ -359,9 +359,75 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
         claimOverrides: [
           {
             period: 1,
-            claimStatus: "Draft",
+            claimStatus: "Paid",
             claimDetails: [],
             finalClaim: false,
+          },
+          {
+            period: 2,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 3,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 4,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 5,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 6,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 7,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 8,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 9,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 10,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 11,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 12,
+            claimStatus: "Draft",
+            claimDetails: [],
+            finalClaim: true,
           },
         ],
       });
@@ -375,9 +441,75 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
         claimOverrides: [
           {
             period: 1,
-            claimStatus: "Draft",
+            claimStatus: "Paid",
             claimDetails: [],
             finalClaim: false,
+          },
+          {
+            period: 2,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 3,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 4,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 5,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 6,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 7,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 8,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 9,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 10,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 11,
+            claimStatus: "Paid",
+            claimDetails: [],
+            finalClaim: false,
+          },
+          {
+            period: 12,
+            claimStatus: "Draft",
+            claimDetails: [],
+            finalClaim: true,
           },
         ],
       });
@@ -427,7 +559,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
 }
 
 export {
-  TwoParticipantProjectFactoryScript,
-  TwoParticipantProjectFactoryScriptArguments,
-  TwoParticipantProjectFactoryScriptContext,
+  TwoParticipantProjectFactoryFinalClaimScript,
+  TwoParticipantProjectFactoryFinalClaimArguments,
+  TwoParticipantProjectFactoryFinalClaimContext,
 };

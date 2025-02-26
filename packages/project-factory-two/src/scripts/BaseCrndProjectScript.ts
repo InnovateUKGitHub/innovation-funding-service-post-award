@@ -5,7 +5,6 @@ import { batch } from "../helpers/batch";
 import { getRecordType } from "../helpers/getRecordType";
 import { makeClaims } from "../helpers/makeClaims";
 import { useTriggerMdt } from "../helpers/triggerMdtToggles";
-import { Acc_Profile__c } from "../sobjects/Acc_Profile__c";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -72,6 +71,7 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
     competition.Acc_CompetitionCode__c = prefix("000");
     competition.Acc_CompetitionName__c = "High-carbon inefficient motorways";
     competition.Acc_CompetitionType__c = "CR&D";
+    competition.Impact_Management_participation__c = "No";
     await Database.insert(competition);
 
     const project = new Acc_Project__c();

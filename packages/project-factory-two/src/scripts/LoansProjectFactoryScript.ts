@@ -88,6 +88,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     competition.Acc_CompetitionCode__c = prefix("000");
     competition.Acc_CompetitionName__c = "Beg, Borrow, Steal";
     competition.Acc_CompetitionType__c = args.competitionType;
+    competition.Impact_Management_participation__c = "No";
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
@@ -459,6 +460,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
             period: 1,
             claimStatus: "Draft",
             claimDetails: [],
+            finalClaim: false,
           },
         ],
       });
