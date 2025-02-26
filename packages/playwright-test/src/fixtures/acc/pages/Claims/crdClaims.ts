@@ -960,6 +960,20 @@ class CrdClaims {
     }
   }
 
+  @When("the user clicks Save and return to claims")
+  async clickSaveAndReturn() {
+    await this.saveAndReturnButton.click();
+    await this.pageTitle.isVisible();
+  }
+
+  @When("the user navigates through to the Claim documents page")
+  async accessClaimNavToDocs() {
+    await this.accessClaim("Edit");
+    await this.costsToBeClaimedHeading.isVisible();
+    await this.continueToClaimsDocs.click();
+    await this.claimDocsHeading.isVisible();
+  }
+
   /**
    * METHODS
    */

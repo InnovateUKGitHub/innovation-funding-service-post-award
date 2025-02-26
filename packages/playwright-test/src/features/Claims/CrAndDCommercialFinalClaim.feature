@@ -48,7 +48,8 @@ Feature: Commercial claim in Final Claim state
         When the user uploads a PCF and then attempts to submit
         Then an IAR validation message is displayed
 
-        When the user clicks the Edit claim documents link
+        When the user clicks Save and return to claims
+        And the user navigates through to the Claim documents page
         And the user uploads an Independent Accountant's Report
         And the user uploads 10 documents
         And the user accesses the Summary page from the Documents page
