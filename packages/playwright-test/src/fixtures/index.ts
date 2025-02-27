@@ -152,7 +152,7 @@ export const test = base.extend<AccFixtures, Workers>({
   loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
   loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
-  steveTest: ({ page }, use) => use(new SteveTest({ page })),
+  steveTest: ({ page, sfdcApi }, use) => use(new SteveTest({ page, sfdcApi })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),

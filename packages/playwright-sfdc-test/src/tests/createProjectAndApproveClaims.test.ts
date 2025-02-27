@@ -1,6 +1,7 @@
 import { test, expect } from "../fixtures";
 import fs from "fs";
 import path from "path";
+import { Fixture, Given } from "playwright-bdd/decorators";
 type QueryResponse = {
   totalSize: number;
   done: boolean;
