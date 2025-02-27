@@ -29,6 +29,10 @@ export const costCategoryLevelReallocateCostsEditSchema = z
     financialVirements: financialVirementValidator,
   })
   .superRefine((data, ctx) => {
+    // @ts-expect-error Zod has neglected to allow status to be a field in the first arg passed to super refine
+    if (data.status === "aborted") {
+      return;
+    }
     const { virementData } = mapOverwrittenFinancialVirements(data.financialVirements)(data.virements);
 
     virementData.partners.forEach(partner => {

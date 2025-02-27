@@ -18,6 +18,11 @@ const reallocateCostsSummaryValidator = evaluateObject(
     markedAsComplete: z.boolean(),
   }),
 ).superRefine((data, ctx) => {
+  // @ts-expect-error Zod has neglected to allow status to be a field in the first arg passed to super refine
+  if (data.status === "aborted") {
+    return;
+  }
+  console.log("here", data);
   const { isSummaryValid, virementData, virementMeta } = mapVirements(data.financialVirements);
 
   if (data.markedAsComplete) {
