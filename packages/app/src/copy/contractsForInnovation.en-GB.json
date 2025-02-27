@@ -36,7 +36,9 @@
     }
   },
   "components": {
+    "warningContent": {
     "amountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
     "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
+    }
   }
 }
