@@ -1,47 +1,46 @@
 import { contextProvider } from "@server/features/common/contextProvider";
 import { processDto } from "@shared/processResponse";
-import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-import { ClaimDetailsSummaryDto, ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDetailsSummaryDto, ClaimLineItemsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
-import { GetClaimDetailsQuery } from "@server/features/claimDetails/getClaimDetailsQuery";
+import { UpdateClaimLineItemsCommand } from "@server/features/claimDetails/updateClaimLineItemsCommand";
 
 export interface IClaimDetailsApi<Context extends "client" | "server"> {
-  saveClaimDetails: (
-    params: ApiParams<Context, ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
-  ) => Promise<ClaimDetailsDto>;
+  updateClaimLineItems: (
+    params: ApiParams<Context, ClaimDetailKey & { claimDetails: ClaimLineItemsDto }>,
+  ) => Promise<boolean>;
 }
 
 class Controller
-  extends ControllerBaseWithSummary<"server", ClaimDetailsSummaryDto, ClaimDetailsDto>
+  extends ControllerBaseWithSummary<"server", ClaimDetailsSummaryDto, ClaimLineItemsDto>
   implements IClaimDetailsApi<"server">
 {
   constructor() {
     super("claim-details");
 
     this.putItem(
-      "/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p, q, b: ClaimDetailsDto) => ({
+      "/:projectId/:partnerId/:periodId/:costCategoryId/claim-line-items",
+      (p, q, b: ClaimLineItemsDto) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
         periodId: parseInt(p.periodId, 10) as PeriodId,
         costCategoryId: p.costCategoryId,
         claimDetails: processDto(b),
       }),
-      p => this.saveClaimDetails(p),
+      p => this.updateClaimLineItems(p),
     );
   }
 
-  public async saveClaimDetails(
-    params: ApiParams<"server", ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
-  ): Promise<ClaimDetailsDto> {
+  public async updateClaimLineItems(
+    params: ApiParams<"server", ClaimDetailKey & { claimDetails: ClaimLineItemsDto }>,
+  ): Promise<boolean> {
     const { projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
     const context = await contextProvider.start(params);
-    const saveLineItemsCommand = new SaveClaimDetails(projectId, partnerId, periodId, costCategoryId, claimDetails);
-    await context.runCommand(saveLineItemsCommand);
+    await context.runCommand(
+      new UpdateClaimLineItemsCommand(projectId, partnerId, periodId, costCategoryId, claimDetails),
+    );
 
-    const claimDetailsQuery = new GetClaimDetailsQuery(projectId, partnerId, periodId, costCategoryId);
-    return context.runQuery(claimDetailsQuery);
+    return true;
   }
 }
 

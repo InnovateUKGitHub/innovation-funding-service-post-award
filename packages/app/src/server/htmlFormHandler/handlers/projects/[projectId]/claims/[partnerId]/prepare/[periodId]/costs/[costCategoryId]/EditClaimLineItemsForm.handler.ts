@@ -1,7 +1,5 @@
-import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { IContext } from "@framework/types/IContext";
-import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
-import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
+import { parseCurrency } from "@framework/util/numberHelper";
 import { configuration } from "@server/features/common/config";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { ClaimDetailDocumentsRoute } from "@ui/pages/claims/claimDetailDocuments.page";
@@ -15,6 +13,18 @@ import {
 import { PrepareClaimRoute } from "@ui/pages/claims/claimPrepare.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
+
+type ExistingItem = {
+  id: ClaimId;
+  description: string;
+  value: string | null;
+};
+
+type NewItem = {
+  id: null | undefined | "";
+  description: string;
+  value: string | null;
+};
 
 const isNotEmptyField = (x: string | undefined | null) => typeof x === "string" && x.trim() !== "";
 
@@ -35,7 +45,26 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
     };
   }
 
-  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<EditClaimLineItemsSchemaType>> {
+  protected async mapToZod({
+    input,
+    context,
+    params,
+  }: {
+    input: AnyObject;
+    context: IContext;
+    params: ClaimLineItemsParams;
+  }): Promise<z.input<EditClaimLineItemsSchemaType>> {
+    const initialLineItemsFromSf = await context.repositories.claimLineItems.getAllForCategory(
+      params.partnerId,
+      params.costCategoryId,
+      params.periodId,
+    );
+    const initialLineItems = initialLineItemsFromSf.map(x => ({
+      id: x.Id,
+      description: x.Acc_LineItemDescription__c,
+      value: String(x.Acc_LineItemCost__c),
+    }));
+
     const lineItems: z.input<EditClaimLineItemLineItemSchemaType>[] = [];
 
     // Loop until we cannot find line items, or we reach the claim line item limit
@@ -56,16 +85,21 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
       // the item afterwards is valid.
     }
 
+    const deletedClaimItems = initialLineItems
+      .filter(x => !lineItems.find(y => x.id == y.id))
+      .map(x => x.id) as ClaimId[];
+
     return {
+      id: input.id || null,
       form: input.form,
-      partnerId: input.partnerId,
-      projectId: input.projectId,
-      costCategoryId: input.costCategoryId,
-      periodId: input.periodId,
       comments: input.comments,
       lineItems,
+      deletedClaimItems,
+      initialLineItems,
     };
   }
+
+  private isExistingItem = (item: ExistingItem | NewItem): item is ExistingItem => !!item.id;
 
   protected async run({
     input,
@@ -76,34 +110,52 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
     context: IContext;
     params: ClaimLineItemsParams;
   }): Promise<string> {
-    const { projectId, partnerId, periodId, costCategoryId, comments, lineItems } = input;
+    const updatedLineItems = input.lineItems
+      .filter(this.isExistingItem)
+      .filter(x => {
+        const matchedItem = input.initialLineItems.find(y => y.id === x.id);
+        return matchedItem?.description !== x.description || matchedItem?.value !== x.value;
+      })
+      .map(x => ({
+        Id: x.id,
+        Acc_LineItemDescription__c: x.description,
+        Acc_LineItemCost__c: parseCurrency(x.value),
+      }));
 
-    const mappedLineItems = lineItems.map(lineItem => {
-      const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[0] ?? "";
+    const newLineItems = input.lineItems
+      .filter(x => !this.isExistingItem(x))
+      .map(x => ({
+        Acc_LineItemDescription__c: x.description,
+        Acc_LineItemCost__c: parseCurrency(x.value),
+        Acc_ProjectParticipant__c: params.partnerId,
+        Acc_ProjectPeriodNumber__c: params.periodId,
+        Acc_CostCategory__c: params.costCategoryId,
+      }));
 
-      return {
-        ...lineItem,
-        periodId,
-        partnerId,
-        costCategoryId,
-        value: parseCurrency(numberComponent),
-      };
-    });
-
-    await context.runCommand(
-      new SaveClaimDetails(projectId, partnerId, periodId, costCategoryId, {
-        comments,
-        partnerId,
-        periodId,
-        costCategoryId,
-        lineItems: mappedLineItems,
-      } as unknown as ClaimDetailsDto),
-    );
+    await Promise.allSettled([
+      !!input.id
+        ? context.repositories.claimDetails.update({
+            Acc_ReasonForDifference__c: input.comments,
+            Id: input.id,
+          })
+        : context.repositories.claimDetails.insert({
+            Acc_ReasonForDifference__c: input.comments,
+            Acc_ProjectParticipant__r: {
+              Id: params.partnerId,
+              Acc_ProjectId__c: params.projectId,
+            },
+            Acc_ProjectPeriodNumber__c: params.periodId,
+            Acc_CostCategory__c: params.costCategoryId,
+            Acc_PeriodCostCategoryTotal__c: 0,
+          }),
+      context.repositories.claimLineItems.update(updatedLineItems),
+      context.repositories.claimLineItems.insert(newLineItems),
+      context.repositories.claimLineItems.delete(input.deletedClaimItems),
+    ]);
 
     if (input.form === FormTypes.ClaimLineItemSaveAndDocuments) {
       return ClaimDetailDocumentsRoute.getLink(params).path;
     }
-
     return PrepareClaimRoute.getLink(params).path;
   }
 }

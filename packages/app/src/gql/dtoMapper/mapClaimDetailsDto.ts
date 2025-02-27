@@ -12,6 +12,7 @@ import { equalityIfDefined } from "./equalityIfDefined";
 const clock = new Clock();
 
 type ClaimDetailsNode = GQL.PartialNode<{
+  Id: string;
   Acc_ClaimStatus__c: GQL.Value<string>;
   Acc_CostCategory__c: GQL.Value<string>;
   Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;
@@ -38,6 +39,7 @@ type ClaimDetailsDtoMapping = Pick<
   | "grantPaidToDate"
   | "isAuthor"
   | "comments"
+  | "id"
 >;
 
 const mapper: GQL.DtoMapper<
@@ -45,14 +47,17 @@ const mapper: GQL.DtoMapper<
   ClaimDetailsNode,
   { currentUser?: { userId?: string; isSystemUser?: boolean } }
 > = {
+  id(node) {
+    return (node?.Id ?? "unknown") as ClaimId;
+  },
   costCategoryId(node) {
     return (node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId;
   },
   isAuthor(node, additionalData) {
-    return (
-      additionalData.currentUser?.isSystemUser ||
-      (typeof node?.OwnerId?.value === "string" && node?.OwnerId?.value === additionalData.currentUser?.userId)
-    );
+    const isSystemUser = !!additionalData.currentUser?.isSystemUser;
+    const isOwner =
+      typeof node?.OwnerId?.value === "string" && node?.OwnerId?.value === additionalData.currentUser?.userId;
+    return isSystemUser || isOwner;
   },
   comments(node) {
     return node?.Acc_ReasonForDifference__c?.value ?? "";

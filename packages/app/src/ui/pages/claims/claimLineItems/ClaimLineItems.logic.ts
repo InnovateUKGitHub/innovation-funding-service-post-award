@@ -79,7 +79,7 @@ const useClaimLineItemsData = (
 
   const claimsDetails = mapToClaimDetailsWithLineItemsDtoArray(
     claimsGql,
-    ["isAuthor", "value", "comments"],
+    ["isAuthor", "value", "comments", "id"],
     ["id", "isAuthor", "lastModifiedDate", "value", "description"],
     {
       currentUser: Object.assign(
@@ -98,6 +98,7 @@ const useClaimLineItemsData = (
     comments: null,
     lineItems: [],
     isAuthor: false,
+    id: null,
   };
 
   const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["value"]);

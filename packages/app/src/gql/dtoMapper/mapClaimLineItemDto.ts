@@ -32,7 +32,7 @@ const mapper: GQL.DtoMapper<
   { currentUser?: { userId?: string; isSystemUser?: boolean } }
 > = {
   id(node) {
-    return node?.Id ?? "unknown id";
+    return (node?.Id ?? "unknown id") as ClaimId;
   },
   isAuthor(node, additionalData) {
     return (

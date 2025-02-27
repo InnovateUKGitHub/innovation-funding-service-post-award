@@ -5,14 +5,7 @@ import {
 } from "@ui/validation/validators/claimDetailsValidator";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
-import {
-  claimIdValidation,
-  costCategoryIdValidation,
-  emptyStringToUndefinedValidation,
-  partnerIdValidation,
-  periodIdValidation,
-  projectIdValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
+import { claimIdValidation, emptyStringToUndefinedValidation } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
@@ -29,6 +22,7 @@ const editClaimLineItemLineItemSchema = z
       maxLength: claimLineItemDescriptionMaxLength,
       required: true,
     }),
+    hasChanged: z.boolean().optional(),
   })
   .superRefine(({ description, value }, ctx) => {
     if (typeof description === "undefined" && typeof value !== "undefined") {
@@ -53,15 +47,14 @@ const editClaimLineItemLineItemSchema = z
 
 const editClaimLineItemsSchema = z.object({
   form: z.union([z.literal(FormTypes.ClaimLineItemSaveAndQuit), z.literal(FormTypes.ClaimLineItemSaveAndDocuments)]),
-  projectId: projectIdValidation,
-  partnerId: partnerIdValidation,
-  periodId: periodIdValidation,
-  costCategoryId: costCategoryIdValidation,
   lineItems: editClaimLineItemLineItemSchema.array(),
+  deletedClaimItems: z.array(claimIdValidation),
   comments: getTextValidation({
     maxLength: claimDetailsCommentsMaxLength,
     required: false,
   }),
+  id: z.union([claimIdValidation, z.literal(null)]),
+  initialLineItems: z.array(editClaimLineItemLineItemSchema),
 });
 
 type EditClaimLineItemsSchemaType = typeof editClaimLineItemsSchema;

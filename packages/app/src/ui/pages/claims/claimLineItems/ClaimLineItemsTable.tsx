@@ -17,7 +17,7 @@ import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { Button } from "@ui/components/atoms/Button/Button";
 
-const emptyData = { id: "", description: "", value: "" };
+const emptyData = { id: "" as ClaimId, description: "", value: "" };
 
 interface ClaimLineItemsTableProps {
   lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
@@ -30,6 +30,7 @@ interface EditClaimLineItemsTableProps extends ClaimLineItemsTableProps {
   formMethods: UseFormReturn<z.output<EditClaimLineItemsSchemaType>>;
   disabled?: boolean;
   caption: string;
+  markClaimItemAsDeleted: (claimId: ClaimId) => void;
 }
 
 const EditClaimLineItemsTable = ({
@@ -40,6 +41,7 @@ const EditClaimLineItemsTable = ({
   differenceRow = true,
   boldTotalCosts = false,
   caption,
+  markClaimItemAsDeleted,
 }: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
@@ -123,8 +125,12 @@ const EditClaimLineItemsTable = ({
                   {x.isAuthor ? (
                     <Button
                       onClick={e => {
-                        remove(i);
                         e.preventDefault();
+                        if (!!x.id) {
+                          markClaimItemAsDeleted(x.id);
+                        }
+
+                        remove(i);
                       }}
                       disabled={disabled}
                       styling="Link"

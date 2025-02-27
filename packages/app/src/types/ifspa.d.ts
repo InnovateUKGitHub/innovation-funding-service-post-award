@@ -13,6 +13,7 @@ declare type LinkedEntityId = Nominal<string, "LinkedEntityId">;
 declare type PeriodId = Nominal<number, "PeriodId">;
 declare type CostCategoryId = Nominal<string, "CostCategoryId">;
 declare type CostId = Nominal<string, "CostId">;
+declare type ClaimId = Nominal<string, "ClaimId">;
 declare type FinancialVirementForParticipantId = Nominal<string, "FinancialVirementForParticipantId">;
 declare type FinancialVirementForCostsId = Nominal<string, "FinancialVirementForCostsId">;
 declare type LoanDrawdownId = Nominal<string, "LoanDrawdownId">;

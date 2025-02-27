@@ -47,12 +47,12 @@ export class ClaimReviewLevelFormHandler extends ZodFormHandlerBase<ClaimReviewS
   }): Promise<string> {
     await context.runCommand(
       new UpdateClaimCommand(input.projectId, {
-        id: input.claimId,
+        id: input.claimId as ClaimId,
         partnerId: input.partnerId,
         periodId: input.periodId,
-        comments: input.comments,
+        comments: input.comments ?? null,
         status: input.status,
-      } as ClaimDto),
+      } as unknown as ClaimDto),
     );
 
     return AllClaimsDashboardRoute.getLink({ projectId: input.projectId }).path;

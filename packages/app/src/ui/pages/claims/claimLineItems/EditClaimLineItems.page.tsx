@@ -61,17 +61,31 @@ const EditClaimLineItemsPage = ({
   const formMethods = useForm<z.output<EditClaimLineItemsSchemaType>>({
     resolver: zodResolver(editClaimLineItemsSchema, { errorMap: editClaimLineItemErrorMap }),
     defaultValues: {
+      deletedClaimItems: [],
       lineItems: initialLineItems,
       comments: previousInputs?.comments ?? claimDetails.comments ?? "",
+      initialLineItems,
+      id: claimDetails.id,
     },
   });
-  const { register, handleSubmit, setValue, setError, formState, watch, getFieldState } = formMethods;
+  const { register, handleSubmit, setValue, setError, formState, watch, getFieldState, getValues } = formMethods;
   const registerButton = createRegisterButton<z.output<EditClaimLineItemsSchemaType>>(setValue, "form");
-  const { onUpdate, isFetching, apiError } = useOnClaimLineItemsSubmit();
+  const { onUpdate, isFetching, apiError } = useOnClaimLineItemsSubmit({
+    projectId,
+    partnerId,
+    costCategoryId,
+    periodId,
+  });
+
   const onSubmitUpdate = (dto: z.output<EditClaimLineItemsSchemaType>) => {
     onUpdate({
       data: dto,
     });
+  };
+
+  const markClaimItemAsDeleted = (claimId: ClaimId) => {
+    const deletedClaimItems = getValues("deletedClaimItems");
+    setValue("deletedClaimItems", [...deletedClaimItems, claimId]);
   };
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
@@ -100,11 +114,7 @@ const EditClaimLineItemsPage = ({
       <GuidanceSection project={project} costCategory={currentCostCategory} />
 
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
-        <input type="hidden" {...register("projectId")} value={projectId} />
-        <input type="hidden" {...register("partnerId")} value={partnerId} />
-        <input type="hidden" {...register("periodId")} value={periodId} />
-        <input type="hidden" {...register("costCategoryId")} value={costCategoryId} />
-
+        <input type="hidden" name="id" value={claimDetails.id ?? ""} />
         <Section>
           <EditClaimLineItemsTable
             formMethods={formMethods}
@@ -114,6 +124,7 @@ const EditClaimLineItemsPage = ({
             differenceRow={true}
             boldTotalCosts={false}
             caption={getContent(x => x.pages.editClaimLineItems.tableCaption)}
+            markClaimItemAsDeleted={markClaimItemAsDeleted}
           />
         </Section>
 
@@ -136,7 +147,12 @@ const EditClaimLineItemsPage = ({
           <Hint id="hint-for-explanation">{getContent(x => x.pages.editClaimLineItems.hintAdditionalInformation)}</Hint>
           <ValidationError error={getFieldState("comments").error} />
           <CharacterCount count={watch("comments")?.length ?? 0} type="descending" maxValue={32768}>
-            <Textarea id="explanation" disabled={isFetching} {...register("comments")} />
+            <Textarea
+              id="explanation"
+              disabled={isFetching}
+              {...register("comments")}
+              defaultValue={previousInputs?.comments ?? claimDetails.comments ?? ""}
+            />
           </CharacterCount>
         </FormGroup>
 

@@ -18,7 +18,11 @@ export interface ISalesforceClaimLineItem {
 }
 
 export interface IClaimLineItemRepository {
-  getAllForCategory(partnerId: PartnerId, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  getAllForCategory(
+    partnerId: PartnerId,
+    categoryId: CostCategoryId,
+    periodId: PeriodId,
+  ): Promise<ISalesforceClaimLineItem[]>;
   delete(ids: string[]): Promise<void>;
   update(update: Updatable<ISalesforceClaimLineItem>[]): Promise<boolean>;
   insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;

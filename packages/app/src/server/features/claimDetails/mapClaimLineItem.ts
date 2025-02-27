@@ -4,7 +4,7 @@ import { ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepo
 
 export default (context: IContext) =>
   (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({
-    id: item.Id,
+    id: item.Id as ClaimId,
     description: item.Acc_LineItemDescription__c,
     value: item.Acc_LineItemCost__c,
     partnerId: item.Acc_ProjectParticipant__c as PartnerId,

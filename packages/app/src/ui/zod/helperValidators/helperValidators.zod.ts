@@ -72,7 +72,10 @@ const loanDrawdownIdValidation = z
 
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
 
-const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
+const claimIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_Claims__c)
+  .transform(x => x as ClaimId);
 
 const emptyStringToUndefinedValidation = z
   .string()

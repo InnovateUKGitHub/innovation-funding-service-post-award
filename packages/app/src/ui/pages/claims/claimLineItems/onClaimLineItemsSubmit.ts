@@ -1,5 +1,3 @@
-import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
-import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditClaimLineItemsSchemaType } from "@ui/pages/claims/claimLineItems/editClaimLineItems.zod";
 import { useRoutes } from "@ui/context/routesProvider";
@@ -8,41 +6,32 @@ import { useNavigate } from "react-router-dom";
 import type { z } from "zod";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 
-export const useOnClaimLineItemsSubmit = <Inputs extends z.output<EditClaimLineItemsSchemaType>>() => {
+export const useOnClaimLineItemsSubmit = ({
+  projectId,
+  partnerId,
+  periodId,
+  costCategoryId,
+}: {
+  projectId: ProjectId;
+  partnerId: PartnerId;
+  periodId: PeriodId;
+  costCategoryId: CostCategoryId;
+}) => {
   const navigate = useNavigate();
   const routes = useRoutes();
 
-  return useOnUpdate<Inputs, unknown>({
+  return useOnUpdate<z.output<EditClaimLineItemsSchemaType>, unknown>({
     async req(data) {
-      const { projectId, partnerId, periodId, costCategoryId, comments, lineItems } = data;
-      const mappedLineItems = lineItems.map(lineItem => {
-        const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[0] ?? "";
-
-        return {
-          ...lineItem,
-          periodId,
-          partnerId,
-          costCategoryId,
-          value: parseCurrency(numberComponent),
-        };
-      });
-
-      await clientsideApiClient.claimDetails.saveClaimDetails({
+      await clientsideApiClient.claimDetails.updateClaimLineItems({
         projectId,
         partnerId,
         periodId,
         costCategoryId,
-        claimDetails: {
-          comments,
-          partnerId,
-          periodId,
-          costCategoryId,
-          lineItems: mappedLineItems,
-        } as unknown as ClaimDetailsDto,
+        claimDetails: data,
       });
     },
     onSuccess(data) {
-      const { projectId, partnerId, costCategoryId, periodId, form } = data;
+      const { form } = data;
 
       switch (form) {
         case FormTypes.ClaimLineItemSaveAndQuit:

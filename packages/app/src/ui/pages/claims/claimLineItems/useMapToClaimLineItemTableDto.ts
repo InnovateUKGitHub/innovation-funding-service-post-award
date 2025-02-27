@@ -8,13 +8,13 @@ import { useMounted } from "@ui/context/Mounted";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 
 interface LineItem {
-  id?: string;
+  id?: ClaimId;
   description?: string;
   value: string | null;
 }
 
 interface InitialLineItem {
-  id?: string;
+  id?: ClaimId;
   description?: string;
   value: string | number | null;
 }
@@ -28,7 +28,7 @@ interface MapToClaimLineItemTableProps {
 }
 
 interface ClaimLineItemRow {
-  id?: string;
+  id?: ClaimId;
   description: string;
   value: number;
   lastModifiedDate?: Date;
