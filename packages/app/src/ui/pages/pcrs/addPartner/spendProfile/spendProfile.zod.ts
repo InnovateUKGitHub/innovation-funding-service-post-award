@@ -1,6 +1,6 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
-import { parseCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { getGenericCurrencyValidation } from "@ui/zod/currencyValidator.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -81,22 +81,35 @@ export const overheadDocumentsSchema = z.object({
 export type OverheadDocumentsSchemaType = typeof overheadDocumentsSchema;
 export type OverheadDocumentsSchema = z.infer<typeof overheadDocumentsSchema>;
 
-export const materialsSchema = z.object({
-  id: costIdValidation.nullable(),
-  materialsDescription: description,
-  costPerItem: getGenericCurrencyValidation({
-    required: true,
-  }),
-  quantityOfMaterialItems: getNumberValidation({
-    min: 0,
-    max: 1_000_000,
-    integer: true,
-    required: true,
-  }),
-  form: z.literal(FormTypes.PcrAddPartnerProjectCostMaterials),
-  costCategoryType: z.nativeEnum(CostCategoryType),
-  costCategoryId: costCategoryIdValidation,
-});
+export const materialsSchema = z
+  .object({
+    id: costIdValidation.nullable(),
+    materialsDescription: description,
+    costPerItem: getGenericCurrencyValidation({
+      required: true,
+    }),
+    quantityOfMaterialItems: getNumberValidation({
+      min: 0,
+      max: 1_000_000,
+      integer: true,
+      required: true,
+    }),
+    form: z.literal(FormTypes.PcrAddPartnerProjectCostMaterials),
+    costCategoryType: z.nativeEnum(CostCategoryType),
+    costCategoryId: costCategoryIdValidation,
+  })
+  .superRefine((data, ctx) => {
+    const totalCost = roundCurrency(data.quantityOfMaterialItems * parseCurrency(data.costPerItem));
+    if (totalCost >= maxTotalCost) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        inclusive: false,
+        maximum: maxTotalCost,
+        type: "number",
+        path: ["totalCost"],
+      });
+    }
+  });
 
 export type MaterialsSchemaType = typeof materialsSchema;
 export type MaterialsSchema = z.infer<typeof materialsSchema>;
