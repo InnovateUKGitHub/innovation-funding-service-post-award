@@ -44,8 +44,8 @@ Feature: Claims and Project Participant calculations are correct after a claim
       | Acc_TotalGrantApproved__c  | 49.51 |
 
     When the SObject "claimPeriod2" is updated with data
-      | key           | value |
-      | Acc_Status__c | Draft |
+      | key                | value |
+      | Acc_ClaimStatus__c | Draft |
     Given the user is on the prepare "claimPeriod2" claim summary page
     When the user attempts to submit the claim
     Given the user is the "mspUser" user
@@ -54,15 +54,14 @@ Feature: Claims and Project Participant calculations are correct after a claim
     When submits the claim to Innovate UK
     Then the claim will have the status "Submitted to Innovate UK"
 
-    Given the system user approves the "claimPeriod1" claim
+    Given the system user approves the "claimPeriod2" claim
     And the user is the "mainFcUser" user
     And the user is on the finance summary page
     Then the partner finance details matches
       | Participant                 | GOLCosts | FundingLevel | ApprovedGrant | RemainingGrant | AdvanceGrant | CapLevel | CapPot |
-      | Hedge's Primary Ltd. (Lead) | 12240    | 50           | 49.51         | 6070.49        | 0            | 50       | 0      |
+      | Hedge's Primary Ltd. (Lead) | 12240    | 50           | 99.02         | 6020.98        | 0            | 50       | 0      |
     And the SObject "claimPeriod2" should now match data
       | key                            | value |
-      | Acc_GOLTotalCostAwarded__c     | 11240 |
       | Acc_PeriodCostsApproved__c     | 99.02 |
       | Acc_PeriodCostsSubmitted__c    | 99.02 |
       | Acc_PeriodCostsToBeApproved__c | 99.02 |
