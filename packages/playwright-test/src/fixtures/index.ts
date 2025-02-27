@@ -42,6 +42,8 @@ import { AccProjectLoans } from "./projectFactory/AccProjectLoans";
 import { LoanDrawdowns } from "./acc/pages/Loans/LoanDrawdowns";
 import { LoanDrawdownChange } from "./acc/pages/PCRs/loanDrawdownChange";
 import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
+import { SteveTest } from "./acc/pages/steveTest/steveFirstTest";
+import { ITsforceConnection } from "@innovateuk/tsforce/index";
 
 type AccFixtures = {
   // Pages
@@ -67,6 +69,7 @@ type AccFixtures = {
   accFinanceSummary: AccFinanceSummary;
   loanDrawdowns: LoanDrawdowns;
   loanDrawdownChange: LoanDrawdownChange;
+  steveTest: SteveTest;
 
   // Misc
   accNavigation: AccNavigation;
@@ -149,6 +152,7 @@ export const test = base.extend<AccFixtures, Workers>({
   loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
   loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
+  steveTest: ({ page }, use) => use(new SteveTest({ page })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
