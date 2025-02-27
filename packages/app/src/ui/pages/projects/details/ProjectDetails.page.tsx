@@ -158,7 +158,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
   const { getContent } = useContent();
   const routes = useRoutes();
   const { project, partners, competitionName, contacts, fragmentRef } = useProjectDetailsQuery(props.projectId);
-  const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
+  const { isLoans } = checkProjectCompetition(project.competitionType);
 
   const competitionTypeName = useMemo(() => {
     const type = mapToSalesforceCompetitionTypes(project.competitionType);
@@ -215,11 +215,9 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
             qa="project-manager-details"
             contactRoles={projectManagers}
             comment={
-              !isKTP && (
-                <SimpleString>
-                  <Content value={x => x.pages.projectDetails.projectManagerInfo} />
-                </SimpleString>
-              )
+              <SimpleString>
+                <Content value={x => x.pages.projectDetails.projectManagerInfo} />
+              </SimpleString>
             }
           />
         </Section>
