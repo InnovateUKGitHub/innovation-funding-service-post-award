@@ -12,6 +12,8 @@ import {
   getPassportSamlStrategy,
 } from "./passportSaml";
 import { getPassportOidcStrategy, passportOidcSuccessRoute } from "./developmentPassportOidc";
+import { getErrorResponse } from "@framework/util/errorHandlers";
+import { UnauthenticatedError } from "@shared/appError";
 
 const logger = new Logger("Auth");
 
@@ -146,13 +148,14 @@ const getAuthRouter = async () => {
       if (sso.enabled) {
         // If a user is not logged in...
         if (!req?.session?.user?.email) {
-          // User not logged in - Log in to SAML
-          if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
+          if (req.url.startsWith("/api")) {
+            res.status(401).json(getErrorResponse(new UnauthenticatedError(), req.params.traceId));
+          } else if (req.url.startsWith("/login")) {
+            next(new UnauthenticatedError());
+          } else {
             // Remember the URL we need to go back to
             req.session.redirect = req.url;
             res.redirect("/login");
-          } else {
-            res.status(401);
           }
           return;
         }

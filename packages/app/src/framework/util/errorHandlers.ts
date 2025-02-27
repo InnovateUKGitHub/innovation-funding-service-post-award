@@ -9,6 +9,9 @@ export const getErrorStatus = (err?: Pick<IAppError, "stack" | "code" | "message
       return 400;
     case ErrorCode.BAD_REQUEST_ERROR:
       return 400;
+    case ErrorCode.UNAUTHORISED_ERROR:
+    case ErrorCode.UNAUTHENTICATED_ERROR:
+      return 401;
     case ErrorCode.FORBIDDEN_ERROR:
       return 403;
     case ErrorCode.REQUEST_ERROR:
