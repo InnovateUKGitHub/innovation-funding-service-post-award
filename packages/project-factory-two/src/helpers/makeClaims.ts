@@ -107,8 +107,10 @@ const makeClaims = ({
       }
     } else if (claimOverrides.length === 0) {
       claim.Acc_ClaimStatus__c = i === 1 ? "Draft" : "New";
+      claim.Acc_FinalClaim__c = false;
     } else {
       claim.Acc_ClaimStatus__c = "New";
+      claim.Acc_FinalClaim__c = false;
     }
 
     claimTotalProjectPeriods.push(claim);

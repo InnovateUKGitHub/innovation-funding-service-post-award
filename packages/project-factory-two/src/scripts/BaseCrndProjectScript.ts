@@ -268,6 +268,7 @@ class BaseCrndProjectFactoryScript extends AbstractProjectFactoryScript<
     for (let i = 1; i <= project.Acc_Duration__c / 3; i++) {
       claimOverrides.push({
         period: i,
+        finalClaim: false,
         claimStatus: i === 1 ? "Draft" : "New",
         claimDetails: [
           {

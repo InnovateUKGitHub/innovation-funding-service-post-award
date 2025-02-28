@@ -15,8 +15,6 @@ import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
 import { overwriteProfiles } from "../helpers/overwriteProfiles";
 import { Acc_Prepayment__c } from "../sobjects/Acc_Prepayment__c";
-import { approveSObject } from "../helpers/approveSObject";
-
 interface TwoParticipantProjectFactoryFinalClaimArguments {
   competitionType: "CR&D" | "SBRI";
   profiles: boolean;
