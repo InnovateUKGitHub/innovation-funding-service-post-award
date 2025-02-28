@@ -203,13 +203,8 @@ class ProjectDetails {
     await expect(this.membersHeading).toBeVisible();
     await expect(this.moHeading).toBeVisible();
     await this.checkTableDetails("monitoring-officer-details", 1, this.moDetails);
-    //This if needs removing once ticket ACC-11817 is resolved - KTP should also see this guidance copy.
-    if (compType === "KTP") {
-      await expect(this.pmHeading).toBeVisible();
-    } else {
-      await expect(this.pmHeading).toBeVisible();
-      await expect(this.pmGuidance).toBeVisible();
-    }
+    await expect(this.pmHeading).toBeVisible();
+    await expect(this.pmGuidance).toBeVisible();
     await this.checkTableDetails("project-manager-details", 1, this.pmDetails);
     await expect(this.fcHeading).toBeVisible();
     await expect(this.fcGuidance).toBeVisible();
