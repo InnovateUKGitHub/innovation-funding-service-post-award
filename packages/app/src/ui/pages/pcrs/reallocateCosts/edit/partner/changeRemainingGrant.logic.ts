@@ -40,34 +40,45 @@ export const useChangeRemainingGrantData = ({
 
   const partners = mapToPartnerDtoArray(
     data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges ?? [],
-    ["id", "name", "isLead"],
+    [
+      "id",
+      "name",
+      "isLead",
+      "totalRemainingCosts",
+      "awardRate",
+      "capLimitDeferredGrant",
+      "remainingParticipantGrant",
+      "totalApprovedCosts",
+    ],
     {},
   );
 
   const financialVirementsForParticipants = mapToFinancialVirementForParticipantDtoArray(
     data.salesforce.uiapi.query.Acc_VirementsForParticipant?.edges ?? [],
-    ["id", "newEligibleCosts", "newFundingLevel", "newRemainingGrant", "originalFundingLevel", "partnerId"],
+    ["id", "newEligibleCosts", "newFundingLevel", "partnerId"],
   );
 
   const financialVirementsForCosts = mapToFinancialVirementForCostsDtoArray(
     data.salesforce.uiapi.query.Acc_VirementsForCosts?.edges ?? [],
-    ["id", "parentId", "originalEligibleCosts", "newEligibleCosts"],
+    ["id", "parentId", "newEligibleCosts"],
   );
 
   const partnerData = financialVirementsForParticipants
     .map(x => {
       const matchingCostData = financialVirementsForCosts.filter(y => y.parentId === x.id);
-      const originalRemainingCosts = sumBy(matchingCostData, v => v.originalEligibleCosts);
-      const originalRemainingGrant = roundCurrency(originalRemainingCosts * (x.originalFundingLevel / 100));
-      const newRemainingCosts = sumBy(matchingCostData, v => v.newEligibleCosts);
       const matchingPartner = partners.find(z => z.id === x.partnerId)!;
+      const newRemainingCosts =
+        sumBy(matchingCostData, v => v.newEligibleCosts) - (matchingPartner.totalApprovedCosts ?? 0);
       return {
         ...x,
+        newRemainingGrant: newRemainingCosts * ((matchingPartner.awardRate ?? 0) / 100),
+        originalRemainingCosts: matchingPartner.totalRemainingCosts ?? 0,
         name: matchingPartner.name,
         isLead: matchingPartner.isLead,
-        originalRemainingCosts,
-        originalRemainingGrant,
+        originalRemainingGrant:
+          (matchingPartner.remainingParticipantGrant ?? 0) - (matchingPartner.capLimitDeferredGrant ?? 0),
         newRemainingCosts,
+        originalFundingLevel: matchingPartner.awardRate,
       };
     })
     .sort(partnerSorterAlphabetical)

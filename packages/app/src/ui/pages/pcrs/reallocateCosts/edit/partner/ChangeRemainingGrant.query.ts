@@ -25,9 +25,6 @@ export const changeRemainingGrantQuery = graphql`
                 Acc_NewAwardRate__c {
                   value
                 }
-                Acc_CurrentAwardRate__c {
-                  value
-                }
                 Acc_NewTotalEligibleCosts__c {
                   value
                 }
@@ -50,12 +47,6 @@ export const changeRemainingGrantQuery = graphql`
               node {
                 Id
                 Acc_ParticipantVirement__c {
-                  value
-                }
-                Acc_CurrentCosts__c {
-                  value
-                }
-                Acc_ClaimedCostsToDate__c {
                   value
                 }
                 Acc_NewCosts__c {
@@ -98,7 +89,22 @@ export const changeRemainingGrantQuery = graphql`
                     value
                   }
                 }
+                Acc_Award_Rate__c {
+                  value
+                }
+                Acc_CapLimitDeferredGrant__c {
+                  value
+                }
                 Acc_ProjectRole__c {
+                  value
+                }
+                Acc_RemainingParticipantGrant__c {
+                  value
+                }
+                Acc_TotalApprovedCosts__c {
+                  value
+                }
+                Acc_TotalParticipantCosts__c {
                   value
                 }
               }

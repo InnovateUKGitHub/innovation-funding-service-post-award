@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<147c62146a13231a7eab97d37fdbc333>>
+ * @generated SignedSource<<9fe8d0a6b0f0eaf838d0e89fd4d07f69>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,8 +26,23 @@ export type ChangeRemainingGrantQuery$data = {
                   readonly value: string | null | undefined;
                 } | null | undefined;
               } | null | undefined;
+              readonly Acc_Award_Rate__c: {
+                readonly value: number | null | undefined;
+              } | null | undefined;
+              readonly Acc_CapLimitDeferredGrant__c: {
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectRole__c: {
                 readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_RemainingParticipantGrant__c: {
+                readonly value: number | null | undefined;
+              } | null | undefined;
+              readonly Acc_TotalApprovedCosts__c: {
+                readonly value: number | null | undefined;
+              } | null | undefined;
+              readonly Acc_TotalParticipantCosts__c: {
+                readonly value: number | null | undefined;
               } | null | undefined;
               readonly Id: string;
             } | null | undefined;
@@ -55,12 +70,6 @@ export type ChangeRemainingGrantQuery$data = {
         readonly Acc_VirementsForCosts: {
           readonly edges: ReadonlyArray<{
             readonly node: {
-              readonly Acc_ClaimedCostsToDate__c: {
-                readonly value: number | null | undefined;
-              } | null | undefined;
-              readonly Acc_CurrentCosts__c: {
-                readonly value: number | null | undefined;
-              } | null | undefined;
               readonly Acc_NewCosts__c: {
                 readonly value: number | null | undefined;
               } | null | undefined;
@@ -74,9 +83,6 @@ export type ChangeRemainingGrantQuery$data = {
         readonly Acc_VirementsForParticipant: {
           readonly edges: ReadonlyArray<{
             readonly node: {
-              readonly Acc_CurrentAwardRate__c: {
-                readonly value: number | null | undefined;
-              } | null | undefined;
               readonly Acc_NewAwardRate__c: {
                 readonly value: number | null | undefined;
               } | null | undefined;
@@ -225,16 +231,6 @@ v6 = {
             {
               "alias": null,
               "args": null,
-              "concreteType": "PercentValue",
-              "kind": "LinkedField",
-              "name": "Acc_CurrentAwardRate__c",
-              "plural": false,
-              "selections": (v5/*: any*/),
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
               "concreteType": "CurrencyValue",
               "kind": "LinkedField",
               "name": "Acc_NewTotalEligibleCosts__c",
@@ -335,26 +331,6 @@ v9 = {
               "concreteType": "IDValue",
               "kind": "LinkedField",
               "name": "Acc_ParticipantVirement__c",
-              "plural": false,
-              "selections": (v5/*: any*/),
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "CurrencyValue",
-              "kind": "LinkedField",
-              "name": "Acc_CurrentCosts__c",
-              "plural": false,
-              "selections": (v5/*: any*/),
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "CurrencyValue",
-              "kind": "LinkedField",
-              "name": "Acc_ClaimedCostsToDate__c",
               "plural": false,
               "selections": (v5/*: any*/),
               "storageKey": null
@@ -578,9 +554,59 @@ v18 = {
             {
               "alias": null,
               "args": null,
+              "concreteType": "PercentValue",
+              "kind": "LinkedField",
+              "name": "Acc_Award_Rate__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "CurrencyValue",
+              "kind": "LinkedField",
+              "name": "Acc_CapLimitDeferredGrant__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
               "concreteType": "PicklistValue",
               "kind": "LinkedField",
               "name": "Acc_ProjectRole__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "CurrencyValue",
+              "kind": "LinkedField",
+              "name": "Acc_RemainingParticipantGrant__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "CurrencyValue",
+              "kind": "LinkedField",
+              "name": "Acc_TotalApprovedCosts__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "CurrencyValue",
+              "kind": "LinkedField",
+              "name": "Acc_TotalParticipantCosts__c",
               "plural": false,
               "selections": (v5/*: any*/),
               "storageKey": null
@@ -865,16 +891,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "10500650343341b3bdfcc378795d5169",
+    "cacheID": "a1b1884b559e3f4d859d9eb0248a3552",
     "id": null,
     "metadata": {},
     "name": "ChangeRemainingGrantQuery",
     "operationKind": "query",
-    "text": "query ChangeRemainingGrantQuery(\n  $projectId: ID\n  $pcrItemId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_VirementsForParticipant: Acc_Virements__c(where: {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForParticipant\"}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_NewAwardRate__c {\n                value\n              }\n              Acc_CurrentAwardRate__c {\n                value\n              }\n              Acc_NewTotalEligibleCosts__c {\n                value\n              }\n              Acc_NewRemainingGrant__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_VirementsForCosts: Acc_Virements__c(where: {Acc_ParticipantVirement__r: {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForCosts\"}}}, orderBy: {Acc_Profile__r: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantVirement__c {\n                value\n              }\n              Acc_CurrentCosts__c {\n                value\n              }\n              Acc_ClaimedCostsToDate__c {\n                value\n              }\n              Acc_NewCosts__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NonFEC__c {\n                value\n              }\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ChangeRemainingGrantQuery(\n  $projectId: ID\n  $pcrItemId: ID\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_VirementsForParticipant: Acc_Virements__c(where: {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForParticipant\"}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_NewAwardRate__c {\n                value\n              }\n              Acc_NewTotalEligibleCosts__c {\n                value\n              }\n              Acc_NewRemainingGrant__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_VirementsForCosts: Acc_Virements__c(where: {Acc_ParticipantVirement__r: {Acc_ProjectChangeRequest__c: {eq: $pcrItemId}}, RecordType: {DeveloperName: {eq: \"Acc_VirementsForCosts\"}}}, orderBy: {Acc_Profile__r: {Acc_CostCategory__r: {Acc_DisplayOrder__c: {order: ASC}}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantVirement__c {\n                value\n              }\n              Acc_NewCosts__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Acc_NonFEC__c {\n                value\n              }\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_Award_Rate__c {\n                value\n              }\n              Acc_CapLimitDeferredGrant__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_RemainingParticipantGrant__c {\n                value\n              }\n              Acc_TotalApprovedCosts__c {\n                value\n              }\n              Acc_TotalParticipantCosts__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "63764221d71526969dcd53ec6e46fd5e";
+(node as any).hash = "808c50238d925ab363688af735966e43";
 
 export default node;

@@ -91,7 +91,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
           newRemainingGrant: String(x.newRemainingGrant ?? 0),
           newRemainingCosts: x.newRemainingCosts,
           newFundingLevel: x.newFundingLevel,
-          originalFundingLevel: x.originalFundingLevel,
+          originalFundingLevel: x.originalFundingLevel ?? 0,
           originalRemainingCosts: x.originalRemainingCosts,
           originalRemainingGrant: x.originalRemainingGrant,
           initialNewRemainingGrant: x.newRemainingGrant ?? 0,
@@ -214,7 +214,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
                   <TD numeric dividerRight>
                     <input
                       type="hidden"
-                      value={x.originalFundingLevel}
+                      value={x.originalFundingLevel ?? 0}
                       {...register(`partners.${i}.originalFundingLevel`)}
                     />
                     <Percentage defaultIfInfinite={0} value={x.originalFundingLevel} />

@@ -109,4 +109,7 @@ export interface PartnerDtoGql extends PartnerDto {
   roles: SfRoles;
   openClaimPeriodNumber: number;
   isFlagged: boolean;
+  totalApprovedCosts: number | null;
+  totalParticipantCosts: number | null;
+  totalRemainingCosts: number | null;
 }

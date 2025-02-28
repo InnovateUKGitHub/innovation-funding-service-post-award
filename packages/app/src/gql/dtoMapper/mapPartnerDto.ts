@@ -129,9 +129,12 @@ type PartnerDtoMapping = Pick<
   | "totalCostsSubmitted"
   | "totalFutureForecastsForParticipants"
   | "totalGrantApproved"
+  | "totalApprovedCosts"
+  | "totalParticipantCosts"
   | "totalParticipantCostsClaimed"
   | "totalParticipantGrant"
   | "totalPrepayment"
+  | "totalRemainingCosts"
   | "type"
 > &
   GQL.NullableRequired<Pick<PartnerDtoGql, "competitionName">>;
@@ -283,6 +286,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   spendProfileStatusLabel(node) {
     return node?.Acc_SpendProfileCompleted__c?.label ?? "unknown";
   },
+  totalApprovedCosts(node) {
+    return node?.Acc_TotalApprovedCosts__c?.value ?? null;
+  },
   totalCostsSubmitted(node) {
     return node?.Acc_TotalCostsSubmitted__c?.value ?? null;
   },
@@ -298,8 +304,14 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   totalParticipantGrant(node) {
     return node?.Acc_TotalParticipantCosts__c?.value ?? null;
   },
+  totalParticipantCosts(node) {
+    return node?.Acc_TotalParticipantCosts__c?.value ?? null;
+  },
   totalPrepayment(node) {
     return node?.Acc_TotalPrepayment__c?.value ?? null;
+  },
+  totalRemainingCosts(node) {
+    return (node?.Acc_TotalParticipantCosts__c?.value ?? 0) - (node?.Acc_TotalApprovedCosts__c?.value ?? 0);
   },
   type(node) {
     return node?.Acc_ParticipantType__c?.value ?? "unknown";
