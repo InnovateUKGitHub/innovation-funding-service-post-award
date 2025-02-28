@@ -45,8 +45,7 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    //baseURL: envman.getEnv("SERVER_URL"),
-    baseURL: "https://www-acc-custom-11817.apps.ocp4.innovateuk.ukri.org",
+    baseURL: envman.getEnv("SERVER_URL"),
     httpCredentials,
     trace: "on-first-retry",
     testIdAttribute: "data-qa",
