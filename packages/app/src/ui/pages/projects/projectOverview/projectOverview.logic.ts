@@ -143,7 +143,35 @@ export const useProjectOverviewData = (projectId: string) => {
 
   const orderedPartners = sortPartnersLeadFirst(partners);
   const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
-  const highlightedPartner = orderedPartners.filter(x => x?.roles?.isFc || x?.roles?.isPm || x?.roles?.isMo)[0];
+
+  /**
+   * Figure out what partner should be up front and centre.
+   * This is done by scoring each project participant,
+   *   and showing the project participant based on
+   *   the participant with the greatest score
+   *
+   * **Examples:**
+   * > - "Nicole Hedges" is PM for Partner A and FC for Partner B
+   * > - Partner A gets  2 points (lead partner + pm)
+   * > - Partner B gets  3 points (fc)
+   * > - Therefore, partner B is shown on the project overview page
+   *
+   * > - "Steve Thompson" is FC for Partner A and FC for Partner B
+   * > - Partner A gets  4 points (lead partner + fc)
+   * > - Partner B gets  3 points (fc)
+   * > - Therefore, partner A is shown on the project overview page
+   */
+  const highlightedPartner = orderedPartners
+    .map(partner => {
+      let score = 0;
+
+      if (partner.roles.isPm) score += 1;
+      if (partner.roles.isFc) score += 3;
+      if (partner.isLead) score += 1;
+
+      return { partner, score };
+    })
+    .reduce((prev, cur) => (prev && prev.score > cur.score ? prev : cur)).partner;
 
   const user = {
     roleInfo: {
