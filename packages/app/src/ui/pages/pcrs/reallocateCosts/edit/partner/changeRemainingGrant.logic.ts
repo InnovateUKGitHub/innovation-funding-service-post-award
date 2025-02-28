@@ -15,7 +15,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { mapToFinancialVirementForCostsDtoArray } from "@gql/dtoMapper/mapFinancialVirementForCosts";
 import { sumBy } from "lodash";
-import { partnerSorterLeadFirst } from "@framework/util/partnerHelper";
+import { partnerSorterAlphabetical, partnerSorterLeadFirst } from "@framework/util/partnerHelper";
 
 export const useChangeRemainingGrantData = ({
   projectId,
@@ -70,6 +70,7 @@ export const useChangeRemainingGrantData = ({
         newRemainingCosts,
       };
     })
+    .sort(partnerSorterAlphabetical)
     .sort(partnerSorterLeadFirst);
 
   const originalRemainingGrant = sumBy(partnerData, "originalRemainingGrant");

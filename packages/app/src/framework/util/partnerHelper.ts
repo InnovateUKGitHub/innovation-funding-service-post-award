@@ -11,3 +11,7 @@ export const sortPartnersLeadFirst = <T extends Pick<PartnerDto, "isLead">>(part
 export const partnerSorterLeadFirst = (a: Pick<PartnerDto, "isLead">, b: Pick<PartnerDto, "isLead">) => {
   return a.isLead && !b.isLead ? -1 : 1;
 };
+
+export const partnerSorterAlphabetical = (a: Pick<PartnerDto, "name">, b: Pick<PartnerDto, "name">) => {
+  return a.name < b.name ? -1 : 1;
+};
