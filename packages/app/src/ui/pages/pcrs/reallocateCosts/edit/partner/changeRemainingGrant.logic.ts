@@ -71,7 +71,7 @@ export const useChangeRemainingGrantData = ({
         sumBy(matchingCostData, v => v.newEligibleCosts) - (matchingPartner.totalApprovedCosts ?? 0);
       return {
         ...x,
-        newRemainingGrant: newRemainingCosts * ((matchingPartner.awardRate ?? 0) / 100),
+        newRemainingGrant: roundCurrency(newRemainingCosts * ((matchingPartner.awardRate ?? 0) / 100)),
         originalRemainingCosts: matchingPartner.totalRemainingCosts ?? 0,
         name: matchingPartner.name,
         isLead: matchingPartner.isLead,

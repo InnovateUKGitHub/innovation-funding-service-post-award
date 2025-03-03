@@ -82,8 +82,6 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
     pcrItemId: itemId,
   };
 
-  // console.log("default virement dataa", defaultVirementData);
-
   const { register, watch, handleSubmit, setError, formState, getFieldState } = useForm<
     z.infer<CostCategoryLevelReallocateCostsEditSchemaType>
   >({
