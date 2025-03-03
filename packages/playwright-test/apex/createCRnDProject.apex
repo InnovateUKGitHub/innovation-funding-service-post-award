@@ -1,5 +1,5 @@
 Integer NoOfParticipants = 2;
-String ProjectName = '_CreatedByPlaywright_';
+String ProjectName = '_Playwright_CRAndD_Industrial_';
 String Acc_ClaimFrequency = 'Monthly';
 String Acc_CompetitionType = 'CR&D';
 Integer projectDur = 12;
@@ -146,23 +146,20 @@ insert recordsToInsertContacts;
 
 // Update Project Status only if field not null
 if (Acc_ClaimFrequency == 'Quarterly' || Acc_ClaimFrequency == 'Monthly') {
-	Acc_ProjectmsFrequency.Acc_MonitoringReportSchedule__c = 'Monthly';
+	Acc_Project__c projectClaimsFrequency = new Acc_Project__c();
+	if (Acc_CompetitionType == 'KTP') {
+		ProjectClaimsFrequency.Acc_NonFEC__c = true;
+	}
+	projectClaimsFrequency.Acc_MonitoringLevel__c = 'Platinum';
+	projectClaimsFrequency.Acc_MonitoringReportSchedule__c = 'Monthly';
 	projectClaimsFrequency.Acc_ProjectStatus__c = 'Live';
 	projectClaimsFrequency.Acc_ClaimFrequency__c = Acc_ClaimFrequency;
 	projectClaimsFrequency.Acc_WorkdayProjectSetupComplete__c = true;
 	projectClaimsFrequency.id = project.Id;
 
 	update projectClaimsFrequency;
-}__c projectClaimsFrequency = new Acc_Project__c();
-	if (Acc_CompetitionType == 'KTP') {
-		ProjectClaimsFrequency.Acc_NonFEC__c = true;
-	}
-	projectClaimsFrequency.Acc_MonitoringLevel__c = 'Platinum';
-	projectClai
+}
 
-
-
-	
 
 
 
