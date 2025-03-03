@@ -46,34 +46,6 @@ describe("GetClaimDetailsQuery", () => {
     expect(result.comments).toEqual(expectedComments);
   });
 
-  // this needs revising once roll-ups are working
-  // it may be best to expect exception rather than default item
-  it("if not found returns default item", async () => {
-    const context = new TestContext();
-
-    const expectedCostCategoryId = "Expected_CostCategory_Id" as CostCategoryId;
-    const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
-    const expectedPeriod = 3;
-    const requestedPeriodId = (expectedPeriod + 1) as PeriodId;
-
-    const query = new GetClaimDetailsQuery(
-      "" as ProjectId,
-      expectedParticipantId,
-      requestedPeriodId,
-      expectedCostCategoryId,
-    );
-    const result = await context.runQuery(query);
-
-    expect(result).not.toBeNull();
-    expect(result.costCategoryId).toEqual(expectedCostCategoryId);
-    expect(result.value).toEqual(0);
-    expect(result.periodId).toEqual(expectedPeriod + 1);
-    expect(result.value).toEqual(0);
-    expect(result.periodStart).toBeNull();
-    expect(result.periodEnd).toBeNull();
-    expect(result.comments).toBeNull();
-  });
-
   describe("Line Items", () => {
     it("returns objects of correct shape", async () => {
       const context = new TestContext();
@@ -137,8 +109,9 @@ describe("GetClaimDetailsQuery", () => {
 
       const testData = context.testData;
       const period = 1 as PeriodId;
-      const costCat = testData.createCostCategory();
 
+      const costCat = testData.createCostCategory();
+      testData.createClaimDetail(project, costCat, partner);
       const query = new GetClaimDetailsQuery(project.Id, partner.id, period, costCat.id);
       const result = await context.runQuery(query);
 

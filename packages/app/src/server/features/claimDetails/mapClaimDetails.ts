@@ -14,6 +14,7 @@ export function mapClaimDetailsSummary(
   context: IContext,
 ): ClaimDetailsSummaryDto {
   return {
+    id: salesforceClaimDetails.Id as ClaimId,
     partnerId: salesforceClaimDetails.Acc_ProjectParticipant__r.Id,
     periodId: salesforceClaimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
     periodStart: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodStartDate__c, salesforceDateFormat),

@@ -1,5 +1,4 @@
 import { mapClaimDetails } from "./mapClaimDetails";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { Authorisation } from "@framework/types/authorisation";
@@ -40,21 +39,9 @@ export class GetClaimDetailsQuery extends AuthorisedAsyncQueryBase<ClaimDetailsD
     );
 
     if (!claimDetail) {
-      // @TODO: throw once overheads re-enabled?
-      return {
-        partnerId: this.partnerId,
-        costCategoryId: this.costCategoryId,
-        periodId: this.periodId,
-        periodStart: null,
-        periodEnd: null,
-        value: 0,
-        comments: null,
-        isAuthor: false,
-        lineItems: [], // @TODO move client-side logic here?
-        grantPaidToDate: 0,
-        impactManagementParticipation: ImpactManagementParticipation.Unknown,
-      };
+      throw new Error("there is no claim detail item for this period and cost category");
     }
+
     return mapClaimDetails(claimDetail, lineItems, context);
   }
 }
