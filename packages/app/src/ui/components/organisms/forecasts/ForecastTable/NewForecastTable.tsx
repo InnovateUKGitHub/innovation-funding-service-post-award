@@ -5,19 +5,17 @@ import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { TableEmptyCell } from "@ui/components/atoms/table/TableEmptyCell/TableEmptyCell";
 import { Table, TBody, TFoot, THead, TH, TD, TR, TCaption } from "@ui/components/atoms/table/tableComponents";
 import { useContent } from "@ui/hooks/content.hook";
-import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import classNames from "classnames";
 import { useEffect } from "react";
 import { Control, FieldValues, UseFormGetFieldState, UseFormTrigger } from "react-hook-form";
-import { z } from "zod";
 import { ForecastTableCurrencyInput } from "./ForecastTableCurrencyInput";
 import { forecastTableResize } from "./forecastTableResize";
 import { getForecastHeaderContent } from "./getForecastHeaderContent";
-import { ForecastTableDto } from "./NewForecastTable.logic";
+import { ForecastTableDto, SchemaOutput, SchemaType } from "./NewForecastTable.logic";
 
-export interface NewForecastTableProps {
-  control?: Control<z.output<ForecastTableSchemaType>>;
-  trigger?: UseFormTrigger<z.output<ForecastTableSchemaType>>;
+export interface NewForecastTableProps<T extends SchemaType = "forecast-table"> {
+  control?: Control<SchemaOutput<T>>;
+  trigger?: UseFormTrigger<SchemaOutput<T>>;
   getFieldState?: UseFormGetFieldState<FieldValues>;
   tableData: ForecastTableDto;
   disabled?: boolean;
@@ -26,7 +24,7 @@ export interface NewForecastTableProps {
   caption: string;
 }
 
-const NewForecastTable = (props: NewForecastTableProps) => {
+const NewForecastTable = <T extends SchemaType = "forecast-table">(props: NewForecastTableProps<T>) => {
   const { control, getFieldState, disabled, tableData, trigger } = props;
   const { getContent } = useContent();
 
@@ -163,7 +161,7 @@ const NewForecastTable = (props: NewForecastTableProps) => {
                     className={colClassName(profile.rhc, "govuk-table__cell--numeric")}
                   >
                     {control && trigger && profile.forecastMode && !profile.calculatedField ? (
-                      <ForecastTableCurrencyInput
+                      <ForecastTableCurrencyInput<T>
                         costCategoryId={costCategory.costCategoryId}
                         periodId={profile.periodId}
                         profileId={profile.profileId}

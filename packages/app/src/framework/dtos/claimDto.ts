@@ -1,6 +1,8 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ReceivedStatus } from "@framework/entities/received-status";
+import { ClaimForecastSchemaType } from "@ui/pages/claims/forecast/ClaimForecast.zod";
+import { z } from "zod";
 
 export interface ClaimDto {
   allowIarEdit: boolean;
@@ -48,3 +50,5 @@ export interface ClaimStatusChangeDto {
   previousStatus: ClaimStatus;
   previousStatusLabel: string;
 }
+
+export type ClaimUpdateForecastDto = z.output<ClaimForecastSchemaType>;

@@ -1,21 +1,20 @@
 import { validTypingCurrencyRegex } from "@framework/util/numberHelper";
 import { NumberInput } from "@ui/components/atoms/form/NumberInput/NumberInput";
-import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { Control, Controller, UseFormTrigger } from "react-hook-form";
-import { z } from "zod";
+import { Control, Controller, Path, PathValue, UseFormTrigger } from "react-hook-form";
+import { SchemaOutput, SchemaType } from "./NewForecastTable.logic";
 
-interface ForecastTableCurrencyInputProps {
+interface ForecastTableCurrencyInputProps<T extends SchemaType> {
   costCategoryId: string;
   periodId: number;
   profileId: string;
-  control: Control<z.output<ForecastTableSchemaType>>;
-  trigger: UseFormTrigger<z.output<ForecastTableSchemaType>>;
+  control: Control<SchemaOutput<T>>;
+  trigger: UseFormTrigger<SchemaOutput<T>>;
   defaultValue?: string;
   disabled?: boolean;
 }
 
-const ForecastTableCurrencyInput = ({
+const ForecastTableCurrencyInput = <T extends SchemaType>({
   costCategoryId,
   periodId,
   profileId,
@@ -24,12 +23,12 @@ const ForecastTableCurrencyInput = ({
   defaultValue,
   disabled,
   ...props
-}: ForecastTableCurrencyInputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
+}: ForecastTableCurrencyInputProps<T> & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
   return (
     <Controller
-      name={`profile.${profileId}`}
+      name={`profile.${profileId}` as Path<SchemaOutput<T>>}
       control={control}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue as PathValue<SchemaOutput<T>, Path<SchemaOutput<T>>>}
       render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { invalid } }) => (
         <NumberInput
           {...props}
@@ -47,7 +46,7 @@ const ForecastTableCurrencyInput = ({
             }
           }}
           onBlur={onBlur}
-          value={value ?? undefined}
+          value={(value as string) ?? undefined}
           name={name}
           ref={ref}
           hasError={invalid}

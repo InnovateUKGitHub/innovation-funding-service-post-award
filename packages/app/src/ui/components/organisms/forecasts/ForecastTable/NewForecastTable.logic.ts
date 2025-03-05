@@ -28,6 +28,9 @@ import {
 } from "./__generated__/NewForecastTableFragment.graphql";
 import { CostCategoryList } from "@framework/types/CostCategory";
 import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
+import { ClaimForecastSchemaType } from "@ui/pages/claims/forecast/ClaimForecast.zod";
+import { z } from "zod";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -114,6 +117,14 @@ export interface ForecastTableDto {
     partner: Pick<PartnerDto, "id" | "name">;
   };
 }
+
+export type SchemaType = "forecast-table" | "update-claim-forecast";
+
+export type SchemaOutput<T extends SchemaType> = T extends "forecast-table"
+  ? z.output<ForecastTableSchemaType>
+  : T extends "update-claim-forecast"
+    ? z.output<ClaimForecastSchemaType>
+    : never;
 
 const mapToForecastTableDto = ({
   project,

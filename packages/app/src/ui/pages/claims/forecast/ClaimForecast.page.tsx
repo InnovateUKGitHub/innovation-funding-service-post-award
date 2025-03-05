@@ -1,4 +1,3 @@
-import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -23,10 +22,15 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useClaimForecastData } from "./ClaimForecast.logic";
+import { useClaimForecastData, useOnClaimForecastUpdate } from "./ClaimForecast.logic";
+import { errorMap, claimForecastSchema, ClaimForecastSchemaType } from "./ClaimForecast.zod";
+import {
+  ClaimStatusGroup,
+  getClaimStatusGroup,
+} from "@ui/components/organisms/forecasts/ForecastTable/getForecastHeaderContent";
+import { useEffect, useMemo } from "react";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -42,35 +46,59 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   const fragmentData = useNewForecastTableData({ fragmentRef, isProjectSetup: false, partnerId });
   const { project, partner } = fragmentData;
 
-  const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
+  const defaults = useServerInput<z.output<ClaimForecastSchemaType>>();
   const { isPm, isFc } = getAuthRoles(project.roles);
 
-  const { errorMap, schema } = getForecastTableValidation(fragmentData);
+  const nonForecastClaims = fragmentData.claimTotalProjectPeriods.filter(
+    x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST,
+  );
+
+  const initialProfile = useMemo(
+    () =>
+      fragmentData.profileDetails.reduce(
+        (acc, cur) => ({
+          ...acc,
+          [cur.id]: String(cur.value),
+        }),
+        {},
+      ),
+    [],
+  );
+
+  const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
+
   const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError, trigger } = useForm<
-    z.output<ForecastTableSchemaType>
+    z.output<ClaimForecastSchemaType>
   >({
-    resolver: zodResolver(schema, {
+    resolver: zodResolver(claimForecastSchema, {
       errorMap,
     }),
-    defaultValues: defaults ?? undefined,
+    defaultValues: {
+      ...defaults,
+      finalClaim,
+      total: 0,
+      totalGolCost: 0,
+      form: FormTypes.ClaimForecastSaveAndContinue,
+      initialProfile,
+    },
   });
   const routes = useRoutes();
   const { getContent } = useContent();
 
   const tableData = useMapToForecastTableDto({ ...fragmentData, clientProfiles: watch("profile") });
+  const totalRow = tableData.totalRow;
 
-  const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ periodId, isPm });
+  useEffect(() => {
+    setValue("total", totalRow.total);
+    setValue("totalGolCost", totalRow.golCost);
+  }, [totalRow.total, totalRow.golCost, setValue]);
+
+  const { onUpdate, isFetching, apiError } = useOnClaimForecastUpdate({ projectId, partnerId, periodId, isPm });
 
   useFormRevalidate(watch, trigger);
 
-  const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
-    onUpdate({
-      data: dto,
-    });
-  };
-
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
+  const allErrors = useZodErrors<z.output<ClaimForecastSchemaType>>(setError, formState.errors);
 
   return (
     <Page
@@ -83,9 +111,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
       fragmentRef={fragmentRef}
       apiError={apiError}
     >
-      <Form onSubmit={handleSubmit(onSubmitUpdate)}>
-        <input {...register("projectId")} value={projectId} type="hidden" />
-        <input {...register("partnerId")} value={partnerId} type="hidden" />
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <input {...register("submit")} value="false" type="hidden" />
 
         <Section>
@@ -104,7 +130,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
           {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
           )}
-          <NewForecastTable
+          <NewForecastTable<"update-claim-forecast">
             tableData={tableData}
             control={control}
             getFieldState={getFieldState}
