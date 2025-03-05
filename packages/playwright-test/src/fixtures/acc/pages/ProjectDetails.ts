@@ -45,6 +45,7 @@ class ProjectDetails {
   private readonly projectInfoHeading: Locator;
   private readonly projectInfoDetails: Array<[string, string, string | RegExp]>;
   private readonly ktpProjectInfoDetails: Array<[string, string, string | RegExp]>;
+  private readonly cfiProjectInfoDetails: Array<[string, string, string | RegExp]>;
   private readonly projectInfoList: Array<[string, string, string]>;
   private readonly otherContactsList: Array<[string, string, string, string]>;
   private readonly otherContactsTable: Locator;
@@ -170,6 +171,14 @@ class ProjectDetails {
       ["periods", "Number of periods", "12"],
       ["scope", "Project scope statement", "This is a project summary"],
     ];
+    this.cfiProjectInfoDetails = [
+      ["competition-name", "Competition name", /^[a-zA-Z0-9]+$/],
+      ["competition-type", "Competition type", "Contracts for Innovation"],
+      ["end-date", "Project end date", `2028`],
+      ["duration", "Duration", "36"],
+      ["periods", "Number of periods", "12"],
+      ["scope", "Project scope statement", "This is a project summary"],
+    ];
     this.projectInfoList = [
       ["Name", "Hedge's Primary Ltd.", "partner-name"],
       ["Type", "Business", "partner-type"],
@@ -240,11 +249,7 @@ class ProjectDetails {
       await expect(this.fcChangeGuidance).not.toBeVisible();
     }
     await expect(this.projectInfoHeading).toBeVisible();
-    if (compType === "KTP") {
-      await this.checkDataList(true);
-    } else {
-      await this.checkDataList(false);
-    }
+    await this.checkDataList(compType);
   }
 
   @Given("the user can see the project details heading")
@@ -376,12 +381,14 @@ class ProjectDetails {
     }
   }
 
-  async checkDataList(ktp: boolean) {
+  async checkDataList(comp: string) {
     let details: Array<[string, string, string | RegExp]>;
-    if (ktp) {
+    if (comp === "KTP") {
       details = this.ktpProjectInfoDetails;
-    } else {
+    } else if (comp === "CR&D") {
       details = this.projectInfoDetails;
+    } else if (comp === "Contracts for Innovation") {
+      details = this.cfiProjectInfoDetails;
     }
     for (const [qa, key, data] of details) {
       await expect(this.page.getByTestId(qa).locator("css=dt").filter({ hasText: key })).toBeVisible();

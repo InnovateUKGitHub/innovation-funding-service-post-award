@@ -10,7 +10,7 @@ class Competition__c extends AbstractSObject {
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_CompetitionType__c:
     | "CR&D"
-    | "CONTRACTS"
+    | "Contracts for Innovation"
     | "SBRI"
     | "SBRI IFS"
     | "KTP"
@@ -27,6 +27,9 @@ class Competition__c extends AbstractSObject {
 
   @SObjectField({ nullable: true, readonly: false })
   accessor Impact_Management_participation__c: SObjectFieldType<"Yes" | "No">;
+
+  @SObjectField({ nullable: true, readonly: false })
+  accessor SBRI_Contracting_Authority__c: SObjectFieldType<"Innovate UK">;
 }
 
 export { Competition__c };

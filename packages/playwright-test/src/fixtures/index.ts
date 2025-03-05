@@ -44,6 +44,7 @@ import { LoanDrawdownChange } from "./acc/pages/PCRs/loanDrawdownChange";
 import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
 import { SfdcExecuteApprovalProcessScript } from "./projectFactory/SfdcExecuteApprovalProcessScript";
 import { SfdcSObject } from "./sfdc/SfdcSObject";
+import { AccProjectCFI } from "./projectFactory/AccProjectCFI";
 
 type AccFixtures = {
   // Pages
@@ -102,6 +103,7 @@ interface Workers {
   projectState: ProjectState;
   accProjectLoans: AccProjectLoans;
   accProjectFinalClaim: AccProjectFinalClaim;
+  accProjectCFI: AccProjectCFI;
 }
 
 export const test = base.extend<AccFixtures, Workers>({
@@ -188,6 +190,10 @@ export const test = base.extend<AccFixtures, Workers>({
   ],
   accProjectFinalClaim: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectFinalClaim({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectCFI: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectCFI({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
 
