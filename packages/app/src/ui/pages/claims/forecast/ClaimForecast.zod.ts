@@ -23,15 +23,7 @@ export const claimForecastSchema = z
     submit: booleanValidation,
     total: z.number(),
     totalGolCost: z.number(),
-    initialProfile: z
-      .record(
-        profileIdValidation,
-        getGenericCurrencyValidation({
-          min: -1_000_000_000,
-          required: true,
-        }),
-      )
-      .default({}), // Required for if all forecast cells are disabled
+    initialProfile: z.record(profileIdValidation, z.string()),
     finalClaim: z.object({ isApproved: z.boolean() }).optional(),
   })
   .superRefine((data, { addIssue, path }) => {
