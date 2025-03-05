@@ -84,7 +84,7 @@ export class CreateProjectChangeRequestCommand extends ZodAuthorisedAsyncCommand
         items: validatedData.types.map(x => this.mapItem(x, itemTypes)),
       };
       const pcrId = await context.repositories.projectChangeRequests.createProjectChangeRequestHeader(newPCR);
-      await Promise.allSettled([
+      await Promise.all([
         context.repositories.projectChangeRequestStatusChange.createStatusChange({
           Acc_ProjectChangeRequest__c: pcrId,
           Acc_ExternalComment__c: "",

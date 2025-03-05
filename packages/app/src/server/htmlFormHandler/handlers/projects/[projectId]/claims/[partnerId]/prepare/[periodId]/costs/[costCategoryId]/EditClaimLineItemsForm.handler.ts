@@ -132,7 +132,7 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
         Acc_CostCategory__c: params.costCategoryId,
       }));
 
-    await Promise.allSettled([
+    await Promise.all([
       !!input.id
         ? context.repositories.claimDetails.update({
             Acc_ReasonForDifference__c: input.comments,

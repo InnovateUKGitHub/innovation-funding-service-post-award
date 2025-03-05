@@ -132,7 +132,7 @@ export class ProjectChangeRequestPrepareFormHandler extends ZodFormHandlerBase<
   }): Promise<string> {
     if (input.button_submit === "submit") {
       const newStatus = this.getNewStatus(input.status, this.monitoringLevel);
-      await Promise.allSettled([
+      await Promise.all([
         context.repositories.projectChangeRequests.updateSingleSalesforceItem({
           Id: params.pcrId,
           Acc_Status__c: mapToPCRApiName(newStatus),

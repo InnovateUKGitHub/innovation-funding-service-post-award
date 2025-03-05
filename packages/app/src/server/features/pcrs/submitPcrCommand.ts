@@ -102,7 +102,7 @@ export class SubmitPcrCommand extends ZodAuthorisedAsyncCommandBase<boolean, Pcr
   ): Promise<boolean> {
     if (validatedData.button_submit === "submit") {
       const newStatus = this.getNewStatus(validatedData.status, this.monitoringLevel);
-      await Promise.allSettled([
+      await Promise.all([
         context.repositories.projectChangeRequests.updateSingleSalesforceItem({
           Id: this.pcrId,
           Acc_Status__c: mapToPCRApiName(newStatus),

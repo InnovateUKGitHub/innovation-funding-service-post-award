@@ -103,7 +103,7 @@ export class UpdateClaimLineItemsCommand extends ZodAuthorisedAsyncCommandBase<
         Acc_CostCategory__c: this.costCategoryId,
       }));
 
-    await Promise.allSettled([
+    await Promise.all([
       !!validatedData.id
         ? context.repositories.claimDetails.update({
             Acc_ReasonForDifference__c: validatedData.comments,
