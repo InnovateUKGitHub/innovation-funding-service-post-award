@@ -1,5 +1,4 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectMonitoringLevel, ProjectRolePermissionBits } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
@@ -11,13 +10,15 @@ import { ClaimsDashboardRoute } from "@ui/pages/claims/claimDashboard.page";
 import { ClaimSummaryParams, ClaimSummaryRoute } from "@ui/pages/claims/claimSummary.page";
 import { PrepareClaimParams } from "@ui/pages/claims/claimPrepare.page";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { claimSummaryErrorMap, ClaimSummarySchemaType, getClaimSummarySchema } from "@ui/pages/claims/claimSummary.zod";
+import { claimSummaryErrorMap, ClaimSummarySchemaType, claimSummarySchema } from "@ui/pages/claims/claimSummary.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails/getCostsSummaryForPeriodQuery";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
+import { sumBy } from "lodash";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySchemaType, ClaimSummaryParams> {
   private project: ProjectDto | undefined;
@@ -49,17 +50,9 @@ export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySche
     }
   }
 
-  public async getZodSchema({ params, context }: { params: ClaimSummaryParams; context: IContext }) {
-    this.claim = await context.runQuery(new GetClaimByPartnerIdAndPeriod(params.partnerId, params.periodId));
-
-    this.project = await context.runQuery(new GetByIdQuery(params.projectId));
-
-    this.claimDetails = await context.runQuery(
-      new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId),
-    );
-
+  public async getZodSchema() {
     return {
-      schema: getClaimSummarySchema({ claim: this.claim, project: this.project, claimDetails: this.claimDetails }),
+      schema: claimSummarySchema,
       errorMap: claimSummaryErrorMap,
     };
   }
@@ -73,9 +66,13 @@ export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySche
     params: ClaimSummaryParams;
     context: IContext;
   }): Promise<z.input<ClaimSummarySchemaType>> {
-    if (!this.claim) {
-      this.claim = await context.runQuery(new GetClaimByPartnerIdAndPeriod(params.partnerId, params.periodId));
-    }
+    this.claim = await context.runQuery(new GetClaimByPartnerIdAndPeriod(params.partnerId, params.periodId));
+
+    this.project = await context.runQuery(new GetByIdQuery(params.projectId));
+
+    const claimDetails = await context.runQuery(
+      new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId),
+    );
 
     const documents = await context.runQuery(
       new GetClaimDocumentsQuery({
@@ -86,11 +83,15 @@ export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySche
     );
 
     return {
+      id: input.id,
       form: input.form,
       button_submit: input.button_submit,
       comments: input.comments,
-      status: this.claim.status,
+      status: input.status,
       documents,
+      claim: this.claim,
+      project: this.project,
+      remainingOfferCosts: roundCurrency(sumBy(claimDetails, "remainingOfferCosts")),
     };
   }
 
@@ -131,6 +132,42 @@ export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySche
     return this.claim;
   }
 
+  private getNextStatus(status: ClaimStatus, monitoringLevel: ProjectMonitoringLevel) {
+    switch (status) {
+      case ClaimStatus.DRAFT:
+      case ClaimStatus.MO_QUERIED:
+        if (monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
+          return ClaimStatus.AWAITING_IUK_APPROVAL;
+        } else {
+          return ClaimStatus.SUBMITTED;
+        }
+
+      case ClaimStatus.AWAITING_IAR:
+      case ClaimStatus.INNOVATE_QUERIED:
+        return ClaimStatus.AWAITING_IUK_APPROVAL;
+      default:
+        return status;
+    }
+  }
+
+  private readonly participantVisibleStatus: ClaimStatus[] = [
+    ClaimStatus.DRAFT,
+    ClaimStatus.MO_QUERIED,
+    ClaimStatus.SUBMITTED,
+    ClaimStatus.AWAITING_IAR,
+  ];
+
+  private getChangeStatusVisibility(existingStatus: ClaimStatus, nextStatus: ClaimStatus): boolean {
+    const hasVisibleStatus = this.participantVisibleStatus.includes(nextStatus);
+
+    if (hasVisibleStatus) return true;
+
+    const currentlyQueried = existingStatus === ClaimStatus.INNOVATE_QUERIED;
+    const updateStateIsAwaiting = nextStatus === ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    return currentlyQueried && updateStateIsAwaiting;
+  }
+
   protected async run({
     input,
     context,
@@ -140,9 +177,28 @@ export class ClaimSummaryFormHandler extends ZodFormHandlerBase<ClaimSummarySche
     params: PrepareClaimParams;
     input: z.output<ClaimSummarySchemaType>;
   }): Promise<string> {
-    const dto = await this.getDto(context, params, input);
+    if (input.button_submit === "submit") {
+      const nextStatus = this.getNextStatus(input.status, input.project.monitoringLevel);
+      const hasChangedClaimStatus = input.status !== nextStatus;
+      if (hasChangedClaimStatus) {
+        await context.repositories.claims.update({
+          Id: input.id,
+          Acc_ClaimStatus__c: nextStatus,
+          Acc_ReasonForDifference__c: "",
+        });
 
-    await context.runCommand(new UpdateClaimCommand(params.projectId, dto, true));
+        await context.repositories.claimStatusChanges.create({
+          Acc_Claim__c: input.id,
+          Acc_ExternalComment__c: input.comments,
+          Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(input.status, nextStatus),
+        });
+      }
+    } else {
+      await context.repositories.claims.update({
+        Id: input.id,
+        Acc_ReasonForDifference__c: input.comments,
+      });
+    }
 
     // if pm as well as fc then go to all claims route
     const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));

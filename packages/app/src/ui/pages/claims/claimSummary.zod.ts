@@ -1,5 +1,6 @@
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import {
@@ -8,6 +9,7 @@ import {
   pcfValidation,
 } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { claimIdValidation, evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { ZodIssueCode, z } from "zod";
 
@@ -23,103 +25,116 @@ export const claimSummaryErrorMap = makeZodI18nMap({ keyPrefix: ["claimSummary"]
  * 1. Draft/Queried validation is not ran here since it is assumed being on the
  *    prepare page means they are in an editable state
  */
-export const getClaimSummarySchema = ({
-  claim,
-  project,
-  claimDetails,
-}: {
-  claim: Pick<
-    ClaimDto,
-    | "status"
-    | "isFinalClaim"
-    | "impactManagementParticipation"
-    | "impactManagementPhasedCompetition"
-    | "impactManagementPhasedCompetitionStage"
-    | "pcfStatus"
-    | "iarStatus"
-    | "isIarRequired"
-  >;
-  project: Pick<ProjectDto, "competitionType">;
-  claimDetails: Pick<
-    CostsSummaryForPeriodDto,
-    | "costsClaimedToDate"
-    | "costCategoryId"
-    | "costsClaimedThisPeriod"
-    | "forecastThisPeriod"
-    | "offerTotal"
-    | "remainingOfferCosts"
-  >[];
-}) =>
-  z.discriminatedUnion("button_submit", [
-    z.object({
-      button_submit: z.literal("submit"),
-      form: z.literal(FormTypes.ClaimSummary),
-      status: z.string().superRefine((_, ctx) => {
-        const remainingOfferCosts = claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
-        if (remainingOfferCosts < 0) {
-          ctx.addIssue({
-            code: ZodIssueCode.too_small,
-            path: ["totalCosts"],
-            type: "number",
-            inclusive: true,
-            minimum: 0,
-          });
-        }
-      }),
+const isSubmit = (data: { button_submit: string }) => data.button_submit === "submit";
+
+export const claimSummarySchema = evaluateObject(
+  (data: {
+    button_submit: string;
+    remainingOfferCosts: number;
+    project: Pick<ProjectDto, "competitionType" | "monitoringLevel">;
+    claim: Pick<
+      ClaimDto,
+      | "status"
+      | "isFinalClaim"
+      | "impactManagementParticipation"
+      | "impactManagementPhasedCompetition"
+      | "impactManagementPhasedCompetitionStage"
+      | "pcfStatus"
+      | "iarStatus"
+      | "isIarRequired"
+    >;
+  }) => {
+    return {
+      button_submit: z.union([z.literal("submit"), z.literal("saveAndReturnToClaims")]),
+      form: z.literal(FormTypes.ClaimSummary),
+      id: claimIdValidation,
+      status: z
+        .string()
+        .superRefine((_, ctx) => {
+          if (isSubmit(data) && data.remainingOfferCosts < 0) {
+            ctx.addIssue({
+              code: ZodIssueCode.too_small,
+              path: ["totalCosts"],
+              type: "number",
+              inclusive: true,
+              minimum: 0,
+            });
+          }
+        })
+        .transform(x => x as ClaimStatus),
       comments: getTextValidation({
         maxLength: 1000,
         required: false,
+      }),
+      remainingOfferCosts: z.number().optional(),
+      project: z.object({
+        competitionType: z.string(),
+        monitoringLevel: z.string().transform(x => x as ProjectMonitoringLevel),
+      }),
+      claim: z.object({
+        status: z.string(),
+        isFinalClaim: z.boolean(),
+        impactManagementParticipation: z.string(),
+        impactManagementPhasedCompetition: z.boolean(),
+        impactManagementPhasedCompetitionStage: z.string(),
+        pcfStatus: z.string(),
+        iarStatus: z.string(),
+        isIarRequired: z.boolean(),
       }),
       documents: z
         .object({ description: z.nullable(z.number()).optional() })
         .array()
-        .superRefine((data, ctx) => {
-          const pcfResult = pcfValidation({ claim, project, documents: data, submit: true });
-          const iarResult = iarValidation({ claim, project, documents: data, submit: true });
+        .superRefine((refinedData, ctx) => {
+          if (isSubmit(data)) {
+            const pcfResult = pcfValidation({
+              claim: data.claim,
+              project: data.project,
+              documents: refinedData,
+              submit: true,
+            });
+            const iarResult = iarValidation({
+              claim: data.claim,
+              project: data.project,
+              documents: refinedData,
+              submit: true,
+            });
 
-          switch (pcfResult) {
-            case ClaimPcfIarSharedValidatorResult.PCF_MISSING:
-              ctx.addIssue({
-                code: ZodIssueCode.custom,
-                params: { i18n: "errors.pcf_required" },
-              });
-              break;
-            case ClaimPcfIarSharedValidatorResult.IM_QUESTIONS_MISSING:
-              ctx.addIssue({
-                code: ZodIssueCode.custom,
-                params: { i18n: "errors.im_required" },
-              });
-              break;
-          }
+            switch (pcfResult) {
+              case ClaimPcfIarSharedValidatorResult.PCF_MISSING:
+                ctx.addIssue({
+                  code: ZodIssueCode.custom,
+                  params: { i18n: "errors.pcf_required" },
+                });
+                break;
+              case ClaimPcfIarSharedValidatorResult.IM_QUESTIONS_MISSING:
+                ctx.addIssue({
+                  code: ZodIssueCode.custom,
+                  params: { i18n: "errors.im_required" },
+                });
+                break;
+            }
 
-          switch (iarResult) {
-            case ClaimPcfIarSharedValidatorResult.IAR_MISSING:
-              ctx.addIssue({
-                code: ZodIssueCode.custom,
-                params: { i18n: "errors.iar_required" },
-              });
-              break;
-            case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
-              ctx.addIssue({
-                code: ZodIssueCode.custom,
-                params: { i18n: "errors.schedule3_required" },
-              });
-              break;
+            switch (iarResult) {
+              case ClaimPcfIarSharedValidatorResult.IAR_MISSING:
+                ctx.addIssue({
+                  code: ZodIssueCode.custom,
+                  params: { i18n: "errors.iar_required" },
+                });
+                break;
+              case ClaimPcfIarSharedValidatorResult.SCHEDULE_THREE_MISSING:
+                ctx.addIssue({
+                  code: ZodIssueCode.custom,
+                  params: { i18n: "errors.schedule3_required" },
+                });
+                break;
+            }
           }
         }),
-    }),
-    z.object({
-      button_submit: z.literal("saveAndReturnToClaims"),
-      form: z.literal(FormTypes.ClaimSummary),
-      status: z.string(),
-      comments: getTextValidation({
-        maxLength: 1000,
-        required: false,
-      }),
-    }),
-  ]);
+    };
+  },
+);
 
-export type ClaimSummarySchemaType = ReturnType<typeof getClaimSummarySchema>;
+export type ClaimSummarySchemaType = typeof claimSummarySchema;
 
 export type ClaimSummarySchema = z.output<ClaimSummarySchemaType>;

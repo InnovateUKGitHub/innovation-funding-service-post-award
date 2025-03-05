@@ -135,7 +135,7 @@ const mapper: GQL.DtoMapper<
     return mapToReceivedStatus(node?.Acc_IAR_Status__c?.value ?? "");
   },
   id(node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as ClaimId;
   },
   impactManagementParticipation(node) {
     return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);

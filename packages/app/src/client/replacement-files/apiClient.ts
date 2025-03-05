@@ -19,6 +19,11 @@ const clientApi: IApiClient<"client"> = {
         `/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/update-claim-forecast`,
         params.claim,
       ),
+    updateSummary: params =>
+      ajaxPut(
+        `/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/update-claim-summary`,
+        params.claim,
+      ),
   },
   claimDetails: {
     updateClaimLineItems: params =>

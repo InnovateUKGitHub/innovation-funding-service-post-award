@@ -1,6 +1,7 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ReceivedStatus } from "@framework/entities/received-status";
+import { ClaimSummarySchemaType } from "@ui/pages/claims/claimSummary.zod";
 import { ClaimForecastSchemaType } from "@ui/pages/claims/forecast/ClaimForecast.zod";
 import { z } from "zod";
 
@@ -10,7 +11,7 @@ export interface ClaimDto {
   comments: string | null;
   forecastCost: number;
   iarStatus: ReceivedStatus;
-  id: string;
+  id: ClaimId;
   grantPaidToDate: number;
   isApproved: boolean;
   isFinalClaim: boolean;
@@ -40,7 +41,7 @@ export interface ClaimDtoGql extends ClaimDto {
 }
 
 export interface ClaimStatusChangeDto {
-  claimId: string;
+  claimId: ClaimId;
   comments: string | null;
   createdBy: string;
   createdDate: Date;
@@ -52,3 +53,5 @@ export interface ClaimStatusChangeDto {
 }
 
 export type ClaimUpdateForecastDto = z.output<ClaimForecastSchemaType>;
+
+export type ClaimSummaryDto = z.output<ClaimSummarySchemaType>;

@@ -30,13 +30,14 @@ import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { TextAreaField } from "@ui/components/molecules/form/TextFieldArea/TextAreaField";
 import { Button } from "@ui/components/atoms/form/Button/Button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ClaimSummarySchema, claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
+import { ClaimSummarySchema, claimSummaryErrorMap, claimSummarySchema } from "./claimSummary.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { DocumentView } from "@ui/components/organisms/documents/DocumentView/DocumentView";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { iarValidation } from "@ui/validation/validators/shared/claimPcfIarSharedValidator";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { sumBy } from "lodash";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -74,8 +75,6 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
     props.projectId,
     props.periodId,
     updateLink.path,
-    data.claim,
-    data.project.monitoringLevel,
   );
 
   const { register, formState, handleSubmit, watch, setValue, setError } = useForm<ClaimSummarySchema>({
@@ -84,15 +83,12 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
       comments: data.claim.comments ?? "",
       button_submit: "submit",
       documents: data.documents,
+      claim: data.claim,
+      remainingOfferCosts: roundCurrency(sumBy(data.claimDetails, "remainingOfferCosts")),
+      project: data.project,
+      id: data.claim.id,
     },
-    resolver: zodResolver(
-      getClaimSummarySchema({
-        claim: data.claim,
-        project: data.project,
-        claimDetails: data.claimDetails,
-      }),
-      { errorMap: claimSummaryErrorMap },
-    ),
+    resolver: zodResolver(claimSummarySchema, { errorMap: claimSummaryErrorMap }),
   });
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -190,8 +186,9 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
 
         {!data.claim.isFinalClaim && <ForecastSummary linkProps={linkProps} {...props} {...data} />}
 
-        <Form data-qa="summary-form" onSubmit={handleSubmit(data => onUpdate({ data, context: { updateLink } }))}>
+        <Form data-qa="summary-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
           <input type="hidden" {...register("form")} value={FormTypes.ClaimSummary} />
+          <input type="hidden" name="id" value={data.claim.id} />
           <Fieldset>
             <Legend>{getContent(x => x.pages.claimPrepareSummary.addCommentsHeading)}</Legend>
 

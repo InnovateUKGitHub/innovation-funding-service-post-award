@@ -1,8 +1,9 @@
-import { ClaimDto, ClaimUpdateForecastDto } from "@framework/dtos/claimDto";
+import { ClaimDto, ClaimSummaryDto, ClaimUpdateForecastDto } from "@framework/dtos/claimDto";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { GetClaimByPartnerIdAndPeriod } from "@server/features/claims/GetClaimByPartnerIdAndPeriod";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { UpdateClaimForecastCommand } from "@server/features/claims/updateClaimForecastCommand";
+import { UpdateClaimSummaryCommand } from "@server/features/claims/updateClaimSummaryCommand";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { BadRequestError } from "@shared/appError";
 import { processDto } from "@shared/processResponse";
@@ -23,6 +24,18 @@ export interface IClaimsApi<Context extends "client" | "server"> {
         partnerId: PartnerId;
         periodId: number;
         claim: ClaimUpdateForecastDto;
+      }
+    >,
+  ): Promise<boolean>;
+
+  updateSummary(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        partnerId: PartnerId;
+        periodId: number;
+        claim: ClaimSummaryDto;
       }
     >,
   ): Promise<boolean>;
@@ -54,6 +67,17 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
         // isClaimSummary: q.isClaimSummary === "true",
       }),
       this.updateForecast,
+    );
+
+    this.putItem(
+      "/:projectId/:partnerId/:periodId/update-claim-summary",
+      (p, q, b) => ({
+        projectId: p.projectId,
+        partnerId: p.partnerId,
+        periodId: parseInt(p.periodId, 10) as PeriodId,
+        claim: processDto(b),
+      }),
+      this.updateSummary,
     );
   }
 
@@ -92,6 +116,26 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
 
     const context = await contextProvider.start(params);
     const command = new UpdateClaimForecastCommand(projectId, partnerId, periodId, claim);
+    await context.runCommand(command);
+
+    return true;
+  }
+
+  public async updateSummary(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        partnerId: PartnerId;
+        periodId: PeriodId;
+        claim: ClaimSummaryDto;
+      }
+    >,
+  ): Promise<boolean> {
+    const { projectId, partnerId, periodId, claim } = params;
+
+    const context = await contextProvider.start(params);
+    const command = new UpdateClaimSummaryCommand(projectId, partnerId, periodId, claim);
     await context.runCommand(command);
 
     return true;
