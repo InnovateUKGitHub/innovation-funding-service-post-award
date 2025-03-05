@@ -52,7 +52,6 @@ export class UpdateClaimForecastCommand extends ZodAuthorisedAsyncCommandBase<
     context: IContext,
     validatedData: z.output<ClaimForecastSchemaType>,
   ): Promise<boolean> {
-    console.log("validatedData", validatedData);
     const updates = Object.entries(validatedData.profile)
       .filter(x => {
         return validatedData.initialProfile[x[0]] !== x[1];
@@ -67,63 +66,4 @@ export class UpdateClaimForecastCommand extends ZodAuthorisedAsyncCommandBase<
 
     return true;
   }
-
-  //   private hasChanged(item: ForecastDetailsDTO, existing: ForecastDetailsDTO[]): boolean {
-  //     const existingItem = existing.find(x => x.id === item.id);
-  //     return !existingItem || item.value !== existingItem.value;
-  //   }
-
-  //   private async updateProfileDetails(
-  //     context: IContext,
-  //     forecasts: ForecastDetailsDTO[],
-  //     existing: ForecastDetailsDTO[],
-  //   ) {
-  //     const updates = forecasts
-  //       .filter(x => this.hasChanged(x, existing))
-  //       .map<Updatable<ISalesforceProfileDetails>>(x => ({
-  //         Id: x.id,
-  //         Acc_LatestForecastCost__c: x.value,
-  //       }));
-
-  //     return context.repositories.profileDetails.update(updates);
-  //   }
-
-  //   private async updateClaim(context: IContext) {
-  //     const query = new GetAllClaimsByPartnerIdQuery(this.partnerId);
-  //     const claims = await context.runQuery(query);
-  //     const claim = claims.find(x => !x.isApproved);
-
-  //     if (!claim) {
-  //       throw new BadRequestError("Unable to find current claim.");
-  //     }
-
-  //     claim.status = this.nextClaimStatus(claim);
-  //     const updateClaimCommand = new UpdateClaimCommand(this.projectId, claim);
-  //     await context.runCommand(updateClaimCommand);
-  //   }
-
-  //   private async updatePartner(context: IContext, partner: PartnerDto) {
-  //     if (!partner.newForecastNeeded) {
-  //       return;
-  //     }
-  //     const updatedPartner: Updatable<ISalesforcePartner> = {
-  //       Id: partner.id,
-  //       Acc_NewForecastNeeded__c: false,
-  //     };
-
-  //     await context.repositories.partners.update(updatedPartner);
-  //   }
-
-  //   private nextClaimStatus(claim: ClaimDto) {
-  //     switch (claim.status) {
-  //       case ClaimStatus.DRAFT:
-  //         return ClaimStatus.SUBMITTED;
-  //       case ClaimStatus.MO_QUERIED:
-  //         return ClaimStatus.SUBMITTED;
-  //       case ClaimStatus.INNOVATE_QUERIED:
-  //         return ClaimStatus.AWAITING_IUK_APPROVAL;
-  //     }
-
-  //     throw new BadRequestError(`Claim in invalid status. Cannot get next claim status for claim in ${claim.status}`);
-  //   }
 }
