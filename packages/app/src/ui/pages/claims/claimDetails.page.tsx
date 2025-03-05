@@ -117,12 +117,14 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       <Section>
         {isFc ? (
           <ClaimTable
+            isFc={isFc}
             caption={`Claim details for ${data.partner.name} period ${props.periodId}`}
             getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
             {...data}
           />
         ) : (
           <ClaimReviewTable
+            isFc={isFc}
             caption={`Claim review for ${data.partner.name} period ${props.periodId}`}
             getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
             {...data}

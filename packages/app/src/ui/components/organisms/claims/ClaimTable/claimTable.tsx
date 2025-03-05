@@ -1,30 +1,23 @@
 import cx from "classnames";
 import { useContent } from "@ui/hooks/content.hook";
-
 import { createTypedTable } from "@ui/components/molecules/Table/Table";
-import { ValidationListMessage } from "../../../molecules/validation/ValidationListMessage/ValidationListMessage";
-
 import { ClaimTableProps, ClaimTableRow, createTableData } from "../utils/costCategoryTableHelper";
+import { ClaimAgreedCostWarning } from "@ui/components/molecules/validation/AgreedCostWarning/AgreedCostWarning";
 
 const CostCategoriesTable = createTypedTable<ClaimTableRow>();
 
 export const ClaimTable = (props: ClaimTableProps) => {
   const { getContent } = useContent();
-
   const { costCategories, totalNegativeCategories } = createTableData(props);
-  const displayWarningMessage = totalNegativeCategories.length > 0;
 
   const hasError = (row: ClaimTableRow): boolean => row.isTotal && row.cost.remainingOfferCosts < 0;
 
   return (
     <>
-      {displayWarningMessage && (
-        <ValidationListMessage
-          before={getContent(x => x.pages.claimsComponents.negativeCategoriesMessage.before)}
-          items={totalNegativeCategories.reduce<string[]>((acc, item) => [...acc, item.category.name], [])}
-          after={getContent(x => x.pages.claimsComponents.negativeCategoriesMessage.after)}
-        />
-      )}
+      <ClaimAgreedCostWarning
+        isFc={props.isFc}
+        costCategories={totalNegativeCategories.map(item => item.category.name)}
+      />
 
       <CostCategoriesTable.Table
         qa="cost-cat"

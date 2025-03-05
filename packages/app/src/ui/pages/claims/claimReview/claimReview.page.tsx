@@ -98,7 +98,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
   });
 
   const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);
-  const { isMo } = getAuthRoles(project.roles);
+  const { isMo, isFc } = getAuthRoles(project.roles);
 
   const disabled = isProcessing || onUploadProcessing || onDeleteProcessing;
 
@@ -150,6 +150,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
 
       <Section title={<ClaimPeriodDate claim={claim} partner={partner} />}>
         <ClaimReviewTable
+          isFc={isFc}
           project={project}
           partner={partner}
           claimDetails={claimDetails}

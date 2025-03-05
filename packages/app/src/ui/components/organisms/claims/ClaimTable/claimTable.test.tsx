@@ -24,6 +24,7 @@ describe("<ClaimTable />", () => {
     claimDetails: createClaimDetails(),
     getLink: createClaimLink(),
     caption: "stub-caption",
+    isFc: true,
   };
 
   const stubContent = {

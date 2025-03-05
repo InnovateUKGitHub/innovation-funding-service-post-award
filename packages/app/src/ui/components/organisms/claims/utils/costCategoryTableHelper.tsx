@@ -62,6 +62,7 @@ export interface ClaimTableProps {
   validation?: Result;
   disabled?: boolean;
   caption: Caption;
+  isFc: boolean;
 }
 /**
  * creates the table data

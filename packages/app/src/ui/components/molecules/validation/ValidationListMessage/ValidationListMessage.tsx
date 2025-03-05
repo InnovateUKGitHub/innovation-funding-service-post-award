@@ -6,6 +6,7 @@ export interface ValidationListMessageProps<MessageContent = JSX.Element | strin
   before: MessageContent;
   after?: MessageContent;
   items?: string[];
+  qa?: string;
 }
 
 export const ValidationListMessage = ({ before, items = [], after, ...props }: ValidationListMessageProps) => {

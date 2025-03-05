@@ -35,7 +35,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
   const { getContent } = useContent();
 
-  const { isPm } = getAuthRoles(data.project.roles);
+  const { isFc, isPm } = getAuthRoles(data.project.roles);
   const { isLoans } = checkProjectCompetition(data.project.competitionType);
 
   const backLink = isPm
@@ -65,6 +65,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
       <Section title={<ClaimPeriodDate claim={data.claim} />}>
         <ClaimTable
+          isFc={isFc}
           caption={`Claim for period ${props.periodId} from ${data.claim.periodStartDate} to ${data.claim.periodEndDate}`}
           disabled={isNonEditable}
           {...data}

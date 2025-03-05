@@ -40,6 +40,7 @@ describe("createTableData()", () => {
     claimDetails: stubClaimDetails,
     getLink: stubLink,
     caption: "stub-caption",
+    isFc: true,
   };
 
   describe("returns items with empty data", () => {

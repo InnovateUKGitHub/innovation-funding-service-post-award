@@ -7,7 +7,7 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { ForecastAgreedCostWarning } from "@ui/components/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { ForecastAgreedCostWarning } from "@ui/components/molecules/validation/AgreedCostWarning/AgreedCostWarning";
 import { AriaLive } from "../../../atoms/AriaLive/ariaLive";
 
 interface Props {

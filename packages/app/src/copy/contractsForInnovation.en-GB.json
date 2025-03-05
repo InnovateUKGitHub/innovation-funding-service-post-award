@@ -33,12 +33,17 @@
     },
     "editClaimLineItems": {
       "sbriHintAdditionalInformation": "Explain any difference between the forecast (payment schedule) costs and the total costs, including the actions you are taking as a result of the difference. For example, updating the project plan or financial forecast."
+    },
+    "claimsComponents": {
+      "negativeCategoriesMessage": {
+        "before": "The amount you are requesting is more than the maximum contract value offered for:"
+      }
     }
   },
   "components": {
     "warningContent": {
-    "amountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
-    "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
+      "amountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
+      "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
     }
   }
 }

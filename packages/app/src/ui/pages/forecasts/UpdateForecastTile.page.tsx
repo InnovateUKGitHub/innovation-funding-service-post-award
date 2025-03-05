@@ -13,7 +13,7 @@ import { Form } from "@ui/components/atoms/form/Form/Form";
 import { Content } from "@ui/components/molecules/Content/content";
 import { Page } from "@ui/components/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/molecules/Section/section";
-import { ForecastAgreedCostWarning } from "@ui/components/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { ForecastAgreedCostWarning } from "@ui/components/molecules/validation/AgreedCostWarning/AgreedCostWarning";
 import { NewForecastTable } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable";
 import {
   useMapToForecastTableDto,
