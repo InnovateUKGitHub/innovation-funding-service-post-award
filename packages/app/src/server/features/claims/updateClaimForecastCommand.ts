@@ -27,11 +27,8 @@ export class UpdateClaimForecastCommand extends ZodAuthorisedAsyncCommandBase<
   }
 
   async accessControl(auth: Authorisation) {
-    return auth
-      .forProject(this.projectId)
-      .hasAnyRoles(ProjectRolePermissionBits.ProjectManager, ProjectRolePermissionBits.MonitoringOfficer);
+    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRolePermissionBits.FinancialContact);
   }
-
   protected async getZodSchema() {
     return { schema: claimForecastSchema, errorMap };
   }
