@@ -1420,7 +1420,10 @@ export const updateClaimsForecast = () => {
     .within(() => {
       cy.get("td:nth-child(14)").contains("£291,220.00");
     });
-  cy.reload();
+  cy.backLink("Back to claims documents").click();
+  cy.heading("Claim documents");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
 };
 
 export const reviewLabourFCCopy = () => {
