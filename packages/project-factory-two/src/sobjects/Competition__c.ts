@@ -10,6 +10,7 @@ class Competition__c extends AbstractSObject {
   @SObjectField({ nullable: false, readonly: false })
   accessor Acc_CompetitionType__c:
     | "CR&D"
+    | "CONTRACTS"
     | "Contracts for Innovation"
     | "SBRI"
     | "SBRI IFS"
