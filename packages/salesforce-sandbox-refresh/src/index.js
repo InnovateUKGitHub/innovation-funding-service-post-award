@@ -6,10 +6,15 @@ const path = require("node:path");
 const sf = require("./sf");
 const { program, Option } = require("commander");
 
-program.addOption(new Option("--sandbox <sandbox>", "salesforce sandbox").choices(["accat", "rafadev1"]));
+program.addOption(
+  new Option("--sandbox <sandbox>", "salesforce sandbox").choices(["accat", "rafadev1"]).makeOptionMandatory(true),
+);
 program.parse();
 
-const { sandbox } = program.opts();
+/**
+ * @type {{ sandbox: "rafadev1" | "accat" }} options Options
+ */
+const options = program.opts();
 
 const main = async () => {
   const folder = await fs.mkdtemp(path.join(os.tmpdir(), "sfdc-"));
@@ -31,15 +36,15 @@ const main = async () => {
     },
   });
 
-  // await sf({
-  //   argv: ["org", "refresh", "sandbox"],
-  //   flags: {
-  //     "target-org": username,
-  //     name: sandbox,
-  //     wait: "120",
-  //     "no-prompt": true,
-  //   },
-  // });
+  await sf({
+    argv: ["org", "refresh", "sandbox"],
+    flags: {
+      "target-org": username,
+      name: options.sandbox,
+      wait: "120",
+      "no-prompt": true,
+    },
+  });
 
   // const data = await sf({
   //   argv: ["data", "query"],
@@ -68,3 +73,4 @@ const main = async () => {
 };
 
 main();
+console.log(options.sandbox);
