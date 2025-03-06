@@ -18,8 +18,6 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { ClaimSummarySchemaType } from "./claimSummary.zod";
 import { z } from "zod";
 import { useGetTotalCostsClaimed } from "@framework/mappers/totalCostsClaimed";
-// import { ClaimStatus } from "@framework/constants/claimStatus";
-// import { ProjectMonitoringLevel } from "@framework/constants/project";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
 export const useClaimSummaryData = (
@@ -155,49 +153,14 @@ export const useClaimSummaryData = (
   };
 };
 
-// const getNextStatus = (status: ClaimStatus, monitoringLevel: ProjectMonitoringLevel) => {
-//   switch (status) {
-//     case ClaimStatus.DRAFT:
-//     case ClaimStatus.MO_QUERIED:
-//       if (monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
-//         return ClaimStatus.AWAITING_IUK_APPROVAL;
-//       } else {
-//         return ClaimStatus.SUBMITTED;
-//       }
-
-//     case ClaimStatus.AWAITING_IAR:
-//     case ClaimStatus.INNOVATE_QUERIED:
-//       return ClaimStatus.AWAITING_IUK_APPROVAL;
-//     default:
-//       return status;
-//   }
-// };
-
 export const useOnUpdateClaimSummary = (
   partnerId: PartnerId,
   projectId: ProjectId,
   periodId: PeriodId,
   navigateTo: string,
-  // claim: PickRequiredFromPartial<ClaimDto, "id" | "partnerId" | "status">,
-  // monitoringLevel: ProjectMonitoringLevel,
 ) => {
   const navigate = useNavigate();
   return useOnUpdate<z.output<ClaimSummarySchemaType>, boolean, null>({
-    // req(data) {
-    //   let nextStatus = claim.status;
-    //   if (data.button_submit === "submit") {
-    //     nextStatus = getNextStatus(claim.status, monitoringLevel);
-    //   }
-
-    //   return clientsideApiClient.claims.update({
-    //     partnerId,
-    //     projectId,
-    //     periodId,
-    //     claim: { ...claim, ...data, status: nextStatus } as ClaimDto,
-    //     // only demand summary validated if attempting to submit
-    //     isClaimSummary: data.button_submit === "submit",
-    //   });
-    // },
     req(data) {
       return clientsideApiClient.claims.updateSummary({
         partnerId,
