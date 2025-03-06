@@ -90,6 +90,16 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
             input.submit,
           ),
         );
+      } else if (
+        input.form === FormTypes.ClaimForecastSaveAndContinue ||
+        input.form === FormTypes.ClaimForecastSaveAndQuit
+      ) {
+        const updates = Object.entries(input.profile).map(entry => ({
+          Id: entry[0],
+          Acc_LatestForecastCost__c: parseCurrency(entry[1]),
+        }));
+
+        await context.repositories.profileDetails.update(updates);
       } else {
         await context.runCommand(
           new UpdateForecastDetailsCommand(
