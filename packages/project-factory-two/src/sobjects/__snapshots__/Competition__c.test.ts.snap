@@ -30,5 +30,12 @@ exports[`Competition Factory competition can be made 1`] = `
     "set": true,
     "value": "No",
   },
+  {
+    "name": "SBRI_Contracting_Authority__c",
+    "nullable": true,
+    "readonly": false,
+    "set": true,
+    "value": null,
+  },
 ]
 `;

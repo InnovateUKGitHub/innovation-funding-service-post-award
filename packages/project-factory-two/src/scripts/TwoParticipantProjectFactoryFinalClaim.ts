@@ -83,6 +83,7 @@ class TwoParticipantProjectFactoryFinalClaimScript extends AbstractProjectFactor
     competition.Acc_CompetitionName__c = "High-carbon inefficient motorways";
     competition.Acc_CompetitionType__c = args.competitionType;
     competition.Impact_Management_participation__c = "No";
+    competition.SBRI_Contracting_Authority__c = null;
     await Database.insert(competition);
 
     const project = new Acc_Project__c();

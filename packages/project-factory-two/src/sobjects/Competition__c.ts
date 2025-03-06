@@ -29,7 +29,7 @@ class Competition__c extends AbstractSObject {
   accessor Impact_Management_participation__c: SObjectFieldType<"Yes" | "No">;
 
   @SObjectField({ nullable: true, readonly: false })
-  accessor SBRI_Contracting_Authority__c: SObjectFieldType<"Innovate UK">;
+  accessor SBRI_Contracting_Authority__c: SObjectFieldType<"Innovate UK" | null>;
 }
 
 export { Competition__c };

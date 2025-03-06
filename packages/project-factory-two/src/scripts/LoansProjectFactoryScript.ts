@@ -89,6 +89,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     competition.Acc_CompetitionName__c = "Beg, Borrow, Steal";
     competition.Acc_CompetitionType__c = args.competitionType;
     competition.Impact_Management_participation__c = "No";
+    competition.SBRI_Contracting_Authority__c = null;
     await Database.insert(competition);
 
     const project = new Acc_Project__c();

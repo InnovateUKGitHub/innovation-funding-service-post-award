@@ -19,6 +19,7 @@ describe("Competition Factory", () => {
     competition.Acc_CompetitionName__c = "Competition";
     competition.Acc_CompetitionType__c = "CR&D";
     competition.Impact_Management_participation__c = "No";
+    competition.SBRI_Contracting_Authority__c = null;
 
     // Set fields are marked as such
     expect(competition._fields).toMatchSnapshot();
@@ -29,6 +30,7 @@ describe("Competition Factory", () => {
       Acc_CompetitionName__c: "Competition",
       Acc_CompetitionType__c: "CR&D",
       Impact_Management_participation__c: "No",
+      SBRI_Contracting_Authority__c: null,
     });
 
     await Database.insert(competition);

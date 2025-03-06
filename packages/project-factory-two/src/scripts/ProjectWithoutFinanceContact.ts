@@ -72,6 +72,7 @@ class ProjectWithoutFinanceContactScript extends AbstractProjectFactoryScript<
     competition.Acc_CompetitionCode__c = prefix("000");
     competition.Acc_CompetitionName__c = "High-carbon inefficient motorways";
     competition.Acc_CompetitionType__c = "CR&D";
+    competition.SBRI_Contracting_Authority__c = null;
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
