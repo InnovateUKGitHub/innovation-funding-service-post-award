@@ -161,7 +161,8 @@ export const useProjectOverviewData = (projectId: string) => {
    * > - Partner B gets  3 points (fc)
    * > - Therefore, partner A is shown on the project overview page
    */
-  const highlightedPartner = orderedPartners
+  const partnerScores = orderedPartners
+    .filter(x => x?.roles?.isFc || x?.roles?.isPm || x?.roles?.isMo)
     .map(partner => {
       let score = 0;
 
@@ -170,8 +171,11 @@ export const useProjectOverviewData = (projectId: string) => {
       if (partner.isLead) score += 1;
 
       return { partner, score };
-    })
-    .reduce((prev, cur) => (prev && prev.score > cur.score ? prev : cur)).partner;
+    });
+
+  const highlightedPartner = partnerScores.length
+    ? partnerScores.reduce((prev, cur) => (prev && prev.score > cur.score ? prev : cur)).partner
+    : null;
 
   const user = {
     roleInfo: {
