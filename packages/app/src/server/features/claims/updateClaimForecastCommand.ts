@@ -50,12 +50,12 @@ export class UpdateClaimForecastCommand extends ZodAuthorisedAsyncCommandBase<
     validatedData: z.output<ClaimForecastSchemaType>,
   ): Promise<boolean> {
     const updates = Object.entries(validatedData.profile)
-      .filter(x => {
-        return parseCurrency(validatedData.initialProfile[x[0]]) !== parseCurrency(x[1]);
+      .filter(([id, value]) => {
+        return parseCurrency(validatedData.initialProfile[id]) !== parseCurrency(value);
       })
-      .map(entry => ({
-        Id: entry[0],
-        Acc_LatestForecastCost__c: parseCurrency(entry[1]),
+      .map(([id, value]) => ({
+        Id: id,
+        Acc_LatestForecastCost__c: parseCurrency(value),
       }));
 
     await context.repositories.profileDetails.update(updates);
