@@ -91,17 +91,19 @@ export class UpdateClaimSummaryCommand extends ZodAuthorisedAsyncCommandBase<
       const nextStatus = this.getNextStatus(validatedData.status, validatedData.project.monitoringLevel);
       const hasChangedClaimStatus = validatedData.status !== nextStatus;
       if (hasChangedClaimStatus) {
-        await context.repositories.claims.update({
-          Id: validatedData.id,
-          Acc_ClaimStatus__c: nextStatus,
-          Acc_ReasonForDifference__c: "",
-        });
+        await Promise.all([
+          context.repositories.claims.update({
+            Id: validatedData.id,
+            Acc_ClaimStatus__c: nextStatus,
+            Acc_ReasonForDifference__c: "",
+          }),
 
-        await context.repositories.claimStatusChanges.create({
-          Acc_Claim__c: validatedData.id,
-          Acc_ExternalComment__c: validatedData.comments,
-          Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(validatedData.status, nextStatus),
-        });
+          context.repositories.claimStatusChanges.create({
+            Acc_Claim__c: validatedData.id,
+            Acc_ExternalComment__c: validatedData.comments,
+            Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(validatedData.status, nextStatus),
+          }),
+        ]);
       }
     } else {
       await context.repositories.claims.update({
