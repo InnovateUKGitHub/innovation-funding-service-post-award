@@ -47,6 +47,7 @@ import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { PocSalesforce } from "./acc/pages/POCSalesforce/pocSalesforce";
 import { CheckCalculations } from "./acc/pages/POCSalesforce/checkCalculations";
 import { CheckQueueAssignments } from "./acc/pages/POCSalesforce/checkQueueAssignments";
+import { ProjectFactory } from "./projectFactory/ProjectFactory";
 
 type AccFixtures = {
   // Pages
@@ -75,7 +76,7 @@ type AccFixtures = {
   steveTest: SteveTest;
   pocSalesforce: PocSalesforce;
   checkCalculations: CheckCalculations;
-  checkQueueAssigments: CheckQueueAssignments;
+  checkQueueAssignments: CheckQueueAssignments;
 
   // Misc
   accNavigation: AccNavigation;
@@ -160,8 +161,8 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   steveTest: ({ page, sfdcApi }, use) => use(new SteveTest({ page, sfdcApi })),
   pocSalesforce: ({ page, sfdcApi }, use) => use(new PocSalesforce({ page, sfdcApi })),
-  checkCalculations: ({ page }, use) => use(new CheckCalculations({ page })),
-  checkQueueAssigments: ({ page }, use) => use(new CheckQueueAssignments({ page })),
+  checkCalculations: ({ page, sfdcApi }, use) => use(new CheckCalculations({ page, sfdcApi })),
+  checkQueueAssignments: ({ page }, use) => use(new CheckQueueAssignments({ page })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
