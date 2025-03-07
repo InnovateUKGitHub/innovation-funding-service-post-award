@@ -31,6 +31,7 @@ import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import { ClaimForecastSchemaType } from "@ui/pages/claims/forecast/ClaimForecast.zod";
 import { z } from "zod";
+import { ForecastPageSchema } from "@ui/pages/forecasts/forecastPage.zod";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -118,13 +119,15 @@ export interface ForecastTableDto {
   };
 }
 
-export type SchemaType = "forecast-table" | "update-claim-forecast";
+export type SchemaType = "forecast-table" | "update-claim-forecast" | "update-forecast";
 
 export type SchemaOutput<T extends SchemaType> = T extends "forecast-table"
   ? z.output<ForecastTableSchemaType>
   : T extends "update-claim-forecast"
     ? z.output<ClaimForecastSchemaType>
-    : never;
+    : T extends "update-forecast"
+      ? z.output<ForecastPageSchema>
+      : never;
 
 const mapToForecastTableDto = ({
   project,

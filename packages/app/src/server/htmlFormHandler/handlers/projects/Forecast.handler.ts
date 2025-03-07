@@ -92,7 +92,8 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
         );
       } else if (
         input.form === FormTypes.ClaimForecastSaveAndContinue ||
-        input.form === FormTypes.ClaimForecastSaveAndQuit
+        input.form === FormTypes.ClaimForecastSaveAndQuit ||
+        input.form === FormTypes.ForecastTileForecast
       ) {
         const updates = Object.entries(input.profile).map(entry => ({
           Id: entry[0],

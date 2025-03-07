@@ -1,4 +1,3 @@
-import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
@@ -28,15 +27,16 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useUpdateForecastData } from "./ForecastTile.logic";
+import { useOnUpdateForecast, useUpdateForecastData } from "./ForecastTile.logic";
 import { forecastTileQuery } from "./ForecastTile.query";
 import { FinalClaimMessage } from "./components/FinalClaimMessage";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { PartnerStatus } from "@framework/constants/partner";
+import { forecastPageSchema, errorMap, ForecastPageSchema } from "./forecastPage.zod";
+import { useEffect, useMemo } from "react";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -51,30 +51,60 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
   const data = useUpdateForecastData({ projectId, partnerId, refreshedQueryOptions });
   const fragmentData = useNewForecastTableData({ fragmentRef: data.fragmentRef, isProjectSetup: false, partnerId });
 
-  const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
-  const { isPm } = getAuthRoles(fragmentData.project.roles);
+  const defaults = useServerInput<z.output<ForecastPageSchema>>();
+
   const { isFc: isPartnerFc } = getAuthRoles(fragmentData.partner.roles);
 
-  const { errorMap, schema } = getForecastTableValidation(fragmentData);
-  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger } = useForm<
-    z.output<ForecastTableSchemaType>
+  const nonForecastClaims = fragmentData.claimTotalProjectPeriods.filter(
+    x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST,
+  );
+
+  const initialProfile = useMemo(
+    () =>
+      fragmentData.profileDetails.reduce(
+        (acc, cur) => ({
+          ...acc,
+          [cur.id]: String(cur.value),
+        }),
+        {},
+      ),
+    [],
+  );
+
+  const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
+
+  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger, setValue } = useForm<
+    z.output<ForecastPageSchema>
   >({
-    resolver: zodResolver(schema, {
+    resolver: zodResolver(forecastPageSchema, {
       errorMap,
     }),
-    defaultValues: defaults ?? undefined,
+    defaultValues: {
+      ...defaults,
+      finalClaim,
+      total: 0,
+      totalGolCost: 0,
+      form: FormTypes.ForecastTileForecast,
+      initialProfile,
+    },
   });
   const routes = useRoutes();
   const { getContent } = useContent();
 
   const tableData = useMapToForecastTableDto({ ...fragmentData, clientProfiles: watch("profile") });
 
-  const { onUpdate, isProcessing, apiError } = useOnForecastSubmit({
-    isPm,
-    async refresh() {
-      await refresh();
-    },
+  const totalRow = tableData.totalRow;
+
+  const { onUpdate, isProcessing, apiError } = useOnUpdateForecast({
+    projectId,
+    partnerId,
+    refresh,
   });
+
+  useEffect(() => {
+    setValue("total", totalRow.total);
+    setValue("totalGolCost", totalRow.golCost);
+  }, [totalRow.total, totalRow.golCost, setValue]);
 
   useFormRevalidate(watch, trigger);
 
@@ -93,7 +123,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
     finalClaimStatusGroup === ClaimStatusGroup.CLAIMED;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const validationErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
+  const validationErrors = useZodErrors<z.output<ForecastPageSchema>>(setError, formState.errors);
 
   return (
     <Page
@@ -123,9 +153,6 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
         )}
       >
         <input {...register("form")} value={FormTypes.ForecastTileForecast} type="hidden" />
-        <input {...register("projectId")} value={projectId} type="hidden" />
-        <input {...register("partnerId")} value={partnerId} type="hidden" />
-        <input {...register("submit")} value="false" type="hidden" />
 
         <Section title={data.partner.name} qa="partner-forecast">
           <ForecastAgreedCostWarning
@@ -146,7 +173,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
               {getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: fragmentData.partner.overheadRate }))}
             </P>
           )}
-          <NewForecastTable
+          <NewForecastTable<"update-forecast">
             tableData={tableData}
             control={control}
             getFieldState={getFieldState}
