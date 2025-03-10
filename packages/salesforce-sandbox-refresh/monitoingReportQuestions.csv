@@ -1,0 +1,33 @@
+Acc_ActiveFlag__c,Acc_DisplayOrder__c,Acc_QuestionDescription__c,Acc_QuestionName__c,Acc_QuestionScore__c,Acc_QuestionText__c,Acc_ScoredQuestion__c
+true,1,"For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",Scope,5,"The consortium has identified opportunities, beyond those specified in it's proposal, and plans to explore these within this project",true
+true,1,"For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",Scope,4,The project remains on course to deliver all planned objectives,true
+true,1,"For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",Scope,3,There is a possibility that the project will fail to deliver on all planned objectives,true
+true,1,"For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",Scope,2,It appears highly likely that the project will fail to deliver on one or more key objectives,true
+true,1,"For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",Scope,1,It is certain that the project will fail to deliver on one or more key objectives,true
+true,2,,Time,5,The project is running ahead of schedule,true
+true,2,,Time,4,The project is meeting its planned timetable,true
+true,2,,Time,3,"Milestones and deliverables for the current period have been met but future ones appear to be ""at risk""",true
+true,2,,Time,2,Milestones and deliverables for the current period have slipped by up to three months,true
+true,2,,Time,1,Milestones and deliverables for the current period have slipped by more than three months,true
+true,3,,Cost,5,Under/overspend within +/- <5%. Accurate & evidenced forecasts in place across project. Expenditure is lower than expected for work done,true
+true,3,,Cost,4,Under/overspend within +/- 6-10%. Accurate & evidenced forecasts are in place. Expenditure is in line with planned activity and budget,true
+true,3,,Cost,3,Under/overspend within +/- 11-15%. Expenditure not commensurate with progress in some instances. Limited forecast evidence,true
+true,3,,Cost,2,"Under/overspend within +/- 16-20%. Expenditure is not commensurate with progress. Forecasts not updated properly, and significantly inaccurate",true
+true,3,,Cost,1,"Under/overspend +/- >21%. Expenditure is routinely not commensurate with progress. Forecasts not updated, and routinely inaccurate",true
+true,4,,Exploitation,5,Exceeding expectations,true
+true,4,,Exploitation,4,Good,true
+true,4,,Exploitation,3,Scope for improvement,true
+true,4,,Exploitation,2,Very poor,true
+true,4,,Exploitation,1,Unacceptable,true
+true,5,,Risk management,5,Exceeding expectations,true
+true,5,,Risk management,4,Good practice,true
+true,5,,Risk management,3,Scope for improvement,true
+true,5,,Risk management,2,Very poor,true
+true,5,,Risk management,1,Unacceptable,true
+true,6,,Project planning,5,Exceeding expectations,true
+true,6,,Project planning,4,Good,true
+true,6,,Project planning,3,Scope for improvement,true
+true,6,,Project planning,2,Very poor,true
+true,6,,Project planning,1,Unacceptable,true
+true,7,Please summarise the project's key achievements and the key issues and risks that it faces.,Summary,,,false
+true,8,"Please confirm any specific issues that require Technology Strategy Board intervention - e.g. apparent scope change, partner changes, budget virements or time extensions.",Issues and actions,,,false

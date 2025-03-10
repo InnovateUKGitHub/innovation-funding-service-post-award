@@ -14,25 +14,35 @@ class EnvironmentManager {
    */
   configmapEnv = {};
 
+  /**
+   * @type string
+   */
+  sopsFile;
+
+  /**
+   * @type string
+   */
+  configmapFile;
+
   constructor(environment) {
     if (typeof environment === "string") {
       const kustomize = path.resolve(__dirname, "..", "..", "..", "kustomize");
-      const sopsFile = path.resolve(
+      this.sopsFile = path.resolve(
         kustomize,
         "acc-secrets",
         "secrets",
         "acc-ui-secret",
         `acc-ui-secret.${environment}.yml`,
       );
-      const configmapFile = path.resolve(kustomize, "config-mgmt", "env", "aws", environment, "acc-ui-configmap.yml");
+      this.configmapFile = path.resolve(kustomize, "config-mgmt", "env", "aws", environment, "acc-ui-configmap.yml");
 
-      if (fs.existsSync(configmapFile)) {
-        const configmapData = fs.readFileSync(configmapFile, { encoding: "utf-8" });
+      if (fs.existsSync(this.configmapFile)) {
+        const configmapData = fs.readFileSync(this.configmapFile, { encoding: "utf-8" });
         this.configmapEnv = yaml.parse(configmapData).data;
       }
 
-      if (fs.existsSync(sopsFile)) {
-        const sops = childProcess.spawnSync("sops", ["--decrypt", sopsFile], {
+      if (fs.existsSync(this.sopsFile)) {
+        const sops = childProcess.spawnSync("sops", ["--decrypt", this.sopsFile], {
           stdio: "pipe",
           encoding: "utf-8",
         });
@@ -54,6 +64,18 @@ class EnvironmentManager {
       process.env[key] ??
       console.error(`Cannot find environment variable associated with ${key}`)
     );
+  }
+
+  /**
+   * Write data back to a SOPS file
+   * @param {string} key The environment variable to write
+   * @param {string} value The content to write
+   */
+  setSecretEnv(key, value) {
+    childProcess.spawnSync("sops", ["set", this.sopsFile, `["stringData"]["${key}"]`, JSON.stringify(value)], {
+      stdio: "pipe",
+      encoding: "utf-8",
+    });
   }
 }
 

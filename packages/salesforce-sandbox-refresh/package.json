@@ -6,7 +6,10 @@
   "dependencies": {
     "@innovateuk/environment-manager": "*",
     "@innovateuk/salesforce-deluxe": "*",
-    "commander": "^12.1.0"
+    "@innovateuk/common": "*",
+    "commander": "^12.1.0",
+    "pem": "^1.14.8",
+    "xml2js": "^0.6.2"
   },
   "peerDependencies": {
     "@salesforce/cli": "^2.74.6"
