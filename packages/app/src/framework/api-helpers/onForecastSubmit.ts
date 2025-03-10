@@ -44,8 +44,6 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
         };
 
         switch (form) {
-          case FormTypes.ProjectSetupForecast:
-            return await clientsideApiClient.initialForecastDetails.update(forecastDetails);
           case FormTypes.ClaimForecastSaveAndContinue:
           case FormTypes.ClaimForecastSaveAndQuit:
           case FormTypes.ForecastTileForecast:
@@ -59,9 +57,6 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
       await refresh?.();
 
       switch (form) {
-        case FormTypes.ProjectSetupForecast:
-          navigate(routes.projectSetup.getLink({ projectId, partnerId }).path);
-          break;
         case FormTypes.ClaimForecastSaveAndContinue:
           navigate(routes.claimSummary.getLink({ projectId, partnerId, periodId: periodId ?? (0 as PeriodId) }).path);
           break;

@@ -1,11 +1,11 @@
 import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import { NewForecastTableProps, NewForecastTable as NewForecastTableComponent } from "./NewForecastTable";
-import { mapToForecastTableDto, useNewForecastTableData } from "./NewForecastTable.logic";
+import { mapToForecastTableDto, useNewForecastTableData, SchemaType } from "./NewForecastTable.logic";
 import { NewForecastTableFragment$key } from "./__generated__/NewForecastTableFragment.graphql";
 
-export const NewForecastTableWithFragment = (
-  props: Omit<NewForecastTableProps, "tableData"> & {
+export const NewForecastTableWithFragment = <T extends SchemaType = "forecast-table">(
+  props: Omit<NewForecastTableProps<T>, "tableData"> & {
     clientProfiles?: Record<string, string | null>;
     partnerId: PartnerId;
     periodId?: PeriodId;
@@ -28,5 +28,5 @@ export const NewForecastTableWithFragment = (
     periodId: props.periodId,
   });
 
-  return <NewForecastTableComponent tableData={tableData} {...props} />;
+  return <NewForecastTableComponent<T> tableData={tableData} {...props} />;
 };

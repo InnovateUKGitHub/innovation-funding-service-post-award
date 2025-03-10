@@ -1,7 +1,5 @@
-import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackLink } from "@ui/components/atoms/Links/links";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
@@ -15,15 +13,19 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/context/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
+import { useOnInitialForecastUpdate, useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
 import { Checkbox, CheckboxList } from "@ui/components/atoms/form/Checkbox/Checkbox";
 import { Legend } from "@ui/components/atoms/form/Legend/Legend";
 import { ValidationMessage } from "@ui/components/molecules/validation/ValidationMessage/ValidationMessage";
 import { SpendProfileStatus } from "@framework/constants/partner";
-import { useNewForecastTableData } from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import {
+  useMapToForecastTableDto,
+  useNewForecastTableData,
+} from "@ui/components/organisms/forecasts/ForecastTable/NewForecastTable.logic";
+import { setupSpendProfileSchema, errorMap, SetupSpendProfileSchemaType } from "./projectSetupSpendProfile.zod";
+import { useMemo } from "react";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -37,33 +39,41 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   });
 
   const data = useNewForecastTableData({ fragmentRef, isProjectSetup: true, partnerId });
-  const { project, partner } = data;
+  const { partner } = data;
 
-  const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
-  const { isPm } = getAuthRoles(project.roles);
+  const defaults = useServerInput<z.output<SetupSpendProfileSchemaType>>();
 
-  const { errorMap, schema } = getForecastTableValidation(data);
+  const mappedData = useMapToForecastTableDto(data);
+
+  const initialProfile = useMemo(() => {
+    return mappedData.costCategories.reduce((acc, cur) => {
+      const profile = cur.profiles.reduce((acc2, cur2) => {
+        return {
+          ...acc2,
+          [cur2.profileId]: String(cur2.value),
+        };
+      }, {});
+      return { ...acc, ...profile };
+    }, {});
+  }, []);
+
+  const costCategoryProfiles = mappedData.costCategories;
+
   const { register, handleSubmit, control, formState, getFieldState, setError, trigger, watch } = useForm<
-    z.output<ForecastTableSchemaType>
+    z.output<SetupSpendProfileSchemaType>
   >({
-    resolver: zodResolver(schema, {
+    resolver: zodResolver(setupSpendProfileSchema, {
       errorMap,
     }),
-    defaultValues: defaults ?? undefined,
+    defaultValues: { ...defaults, costCategoryProfiles, initialProfile },
   });
   const routes = useRoutes();
   const { getContent } = useContent();
 
-  const { onUpdate, isFetching, apiError } = useOnForecastSubmit({ isPm });
-
-  const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
-    onUpdate({
-      data: dto,
-    });
-  };
+  const { onUpdate, isFetching, apiError } = useOnInitialForecastUpdate({ projectId, partnerId });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
+  const allErrors = useZodErrors<z.output<SetupSpendProfileSchemaType>>(setError, formState.errors);
 
   return (
     <Page
@@ -81,11 +91,8 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
       fragmentRef={fragmentRef}
       apiError={apiError}
     >
-      <Form onSubmit={handleSubmit(onSubmitUpdate)}>
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <input {...register("form")} value={FormTypes.ProjectSetupForecast} type="hidden" />
-        <input {...register("projectId")} value={projectId} type="hidden" />
-        <input {...register("partnerId")} value={partnerId} type="hidden" />
-
         <Section>
           <P data-qa="guidance">{getContent(x => x.pages.projectSetupSpendProfile.guidanceMessage)}</P>
           {partner.overheadRate !== null && (
@@ -94,7 +101,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
               <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
             </>
           )}
-          <NewForecastTableWithFragment
+          <NewForecastTableWithFragment<"project-setup-profile">
             control={control}
             trigger={trigger}
             getFieldState={getFieldState}

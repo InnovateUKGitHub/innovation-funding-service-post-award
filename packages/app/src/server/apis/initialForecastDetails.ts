@@ -1,56 +1,38 @@
-import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { ForecastDetailsDTO, InitialForecastDto } from "@framework/dtos/forecastDetailsDto";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
-import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails/updateInitialForecastDetailsCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
+import { UpdateInitialForecastCommand } from "@server/features/forecastDetails/updateInititalForecastCommand";
 
 export interface IInitialForecastDetailsApi<Context extends "client" | "server"> {
   update: (
-    params: ApiParams<
-      Context,
-      { projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }
-    >,
-  ) => Promise<ForecastDetailsDTO[]>;
+    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; forecasts: InitialForecastDto }>,
+  ) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements IInitialForecastDetailsApi<"server"> {
   constructor() {
     super("initial-forecast-details");
 
-    this.putItems(
+    this.putItem(
       "/",
       (p, q, b) => ({
         projectId: q.projectId,
         partnerId: q.partnerId,
-        submit: q.submit === "true",
         forecasts: processDto(b),
       }),
       p => this.update(p),
     );
   }
 
-  private async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
-    const query = new GetAllInitialForecastsForPartnerQuery(params.partnerId);
-    return (await contextProvider.start(params)).runQuery(query);
-  }
-
   public async update(
-    params: ApiParams<
-      "server",
-      { projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }
-    >,
+    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; forecasts: InitialForecastDto }>,
   ) {
     const context = await contextProvider.start(params);
-    const forecastCmd = new UpdateInitialForecastDetailsCommand(
-      params.projectId,
-      params.partnerId,
-      params.forecasts,
-      params.submit,
-    );
+    const forecastCmd = new UpdateInitialForecastCommand(params.projectId, params.partnerId, params.forecasts);
     await context.runCommand(forecastCmd);
 
-    return this.getAllByPartnerId(params);
+    return true;
   }
 }
 

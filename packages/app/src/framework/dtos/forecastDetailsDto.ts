@@ -1,4 +1,5 @@
 import { ForecastPageSchema } from "@ui/pages/forecasts/forecastPage.zod";
+import { SetupSpendProfileSchemaType } from "@ui/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.zod";
 import { z } from "zod";
 
 export interface ForecastDetailsDTO {
@@ -11,3 +12,4 @@ export interface ForecastDetailsDTO {
 }
 
 export type ForecastUpdateDto = z.output<ForecastPageSchema>;
+export type InitialForecastDto = z.output<SetupSpendProfileSchemaType>;

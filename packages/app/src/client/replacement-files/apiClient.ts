@@ -100,7 +100,7 @@ const clientApi: IApiClient<"client"> = {
   initialForecastDetails: {
     update: params =>
       ajaxPut(
-        `/api/initial-forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}&submit=${params.submit}`,
+        `/api/initial-forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}`,
         params.forecasts,
       ),
   },
