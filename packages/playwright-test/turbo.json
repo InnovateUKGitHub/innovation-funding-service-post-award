@@ -8,6 +8,7 @@
     },
     "pw": {
       "persistent": true,
+      "cache": false,
       "env": [
         "PLAYWRIGHT_BROWSERS_PATH",
         "DISPLAY",
