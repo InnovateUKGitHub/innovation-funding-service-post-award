@@ -71,6 +71,22 @@ class PocSalesforce {
 
     console.log("Apex response: ", apexresponseCurrentParticipant);
 
+    // Run batch jobs to create Claim shells
+    console.log("Run batch job to create Claim shells");
+    let createClaimShells = fs.readFileSync(path.join(__dirname, "../../../../../apex/runClaimCreationBatchJob.apex"), {
+      encoding: "utf-8",
+    });
+
+    console.log(createClaimShells);
+
+    const apexresponseCreateClaimShells = await conn.executeApex({
+      query: createClaimShells,
+    });
+
+    console.log("Apex response: ", apexresponseCreateClaimShells);
+
+    await this.page.waitForTimeout(50000); // THIS WILL BE DONE USING A WAIT STATEMENT, WAIT FOR PROFILES TO BE CREATED
+
     // Update Profiles
     console.log("Update Profiles");
     let updateProfiles = fs
@@ -101,7 +117,7 @@ class PocSalesforce {
     // Create Claims based on Profiles, add GrandAdjustments and Overrides, Approve Claims
     // ************************************************************************************
 
-    let noOfApprovals = 1;
+    let noOfApprovals = 12;
     let loopCounterClaims = 1;
     for (loopCounterClaims = 1; loopCounterClaims <= noOfApprovals; loopCounterClaims++) {
       // Create GrandAdjustments (TO DO)
