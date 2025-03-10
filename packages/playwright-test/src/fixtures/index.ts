@@ -45,6 +45,7 @@ import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
 import { SfdcExecuteApprovalProcessScript } from "./projectFactory/SfdcExecuteApprovalProcessScript";
 import { SfdcSObject } from "./sfdc/SfdcSObject";
 import { AccProjectCFI } from "./projectFactory/AccProjectCFI";
+import { AddLeadPartner } from "./acc/pages/PCRs/addLeadPartner";
 
 type AccFixtures = {
   // Pages
@@ -70,6 +71,7 @@ type AccFixtures = {
   accFinanceSummary: AccFinanceSummary;
   loanDrawdowns: LoanDrawdowns;
   loanDrawdownChange: LoanDrawdownChange;
+  addLeadPartner: AddLeadPartner
 
   // Misc
   accNavigation: AccNavigation;
@@ -155,6 +157,8 @@ export const test = base.extend<AccFixtures, Workers>({
   loanDrawdowns: ({ page, commands }, use) => use(new LoanDrawdowns({ page, commands })),
   loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
+  addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
+    use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
