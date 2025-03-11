@@ -128,7 +128,6 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
   const { onUpdate, isFetching, apiError } = useOnUpdateLoanRequest(
     props.projectId,
     props.loanId,
-    loan,
     loansOverviewLink.path,
   );
   const disabled = isDeleting || isUploading || isFetching;

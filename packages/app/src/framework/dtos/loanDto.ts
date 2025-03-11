@@ -1,4 +1,6 @@
 import { LoanStatus } from "@framework/entities/loan-status";
+import { LoanRequestSchemaType } from "@ui/pages/loans/loanRequest.zod";
+import { z } from "zod";
 
 export interface LoanDto {
   amount: number;
@@ -16,3 +18,5 @@ export interface LoanDto {
     totalPaidToDate: number;
   };
 }
+
+export type LoanUpdateDto = z.output<LoanRequestSchemaType>;

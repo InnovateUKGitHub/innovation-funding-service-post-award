@@ -7,11 +7,9 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { LoanRequestSchemaType } from "./loanRequest.zod";
-import { z } from "zod";
 import { clientsideApiClient } from "@ui/apiClient";
-import { LoanDto } from "@framework/dtos/loanDto";
 import { useNavigate } from "react-router-dom";
+import { LoanUpdateDto } from "@framework/dtos/loanDto";
 
 export type Loan = {
   id: LoanId;
@@ -68,14 +66,14 @@ export const useLoanRequestData = (
   };
 };
 
-export const useOnUpdateLoanRequest = (projectId: ProjectId, loanId: LoanId, loan: LoanDto, navigateTo: string) => {
+export const useOnUpdateLoanRequest = (projectId: ProjectId, loanId: LoanId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate<z.output<LoanRequestSchemaType>, {}>({
+  return useOnUpdate<LoanUpdateDto, {}>({
     req: data => {
       return clientsideApiClient.loans.update({
         projectId,
         loanId,
-        loan: { ...loan, comments: data.comments ?? "" },
+        loan: data,
       });
     },
     onSuccess() {

@@ -1,59 +1,49 @@
 import { ProjectRolePermissionBits } from "@framework/constants/project";
-import { LoanDto } from "@framework/dtos/loanDto";
+import { LoanUpdateDto } from "@framework/dtos/loanDto";
 import { LoanStatus } from "@framework/entities/loan-status";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { ISalesforceLoan } from "@server/repositories/loanRepository";
-import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
-import { BadRequestError, ValidationError } from "../common/appError";
-import { AuthorisedAsyncCommandBase } from "../common/commandBase";
-import { GetLoanDocumentsQuery } from "../documents/getLoanDocuments";
-import { GetLoan } from "./getLoan";
+import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
+import { loanRequestErrorMap, loanRequestSchema, LoanRequestSchemaType } from "@ui/pages/loans/loanRequest.zod";
+import { z } from "zod";
 
-export class UpdateLoanCommand extends AuthorisedAsyncCommandBase<boolean> {
+export class UpdateLoanCommand extends ZodAuthorisedAsyncCommandBase<boolean, LoanRequestSchemaType, LoanUpdateDto> {
   public readonly runnableName: string = "UpdateLoanCommand";
-  constructor(
-    private readonly projectId: ProjectId,
-    private readonly loanId: string,
-    private readonly loan: LoanDto,
-  ) {
+  protected readonly projectId: ProjectId;
+  private readonly loanId: LoanId;
+  protected readonly dto: LoanUpdateDto;
+
+  constructor(projectId: ProjectId, loanId: LoanId, dto: LoanUpdateDto) {
     super();
+    this.projectId = projectId;
+    this.loanId = loanId;
+    this.dto = dto;
   }
 
   async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRolePermissionBits.FinancialContact);
   }
+  protected async getZodSchema() {
+    return { schema: loanRequestSchema, errorMap: loanRequestErrorMap };
+  }
 
-  protected async run(context: IContext): Promise<boolean> {
-    if (this.loanId !== this.loan.id) throw new BadRequestError();
-
-    const loanQuery = new GetLoan(this.projectId, { loanId: this.loanId });
-    const loanDocumentsQuery = new GetLoanDocumentsQuery(this.projectId, this.loanId);
-
-    const existingLoan = await context.runQuery(loanQuery);
-    const existingLoanDocuments = await context.runQuery(loanDocumentsQuery);
-
-    const validationResult = new LoanDtoValidator(this.loan, existingLoanDocuments, true);
-
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
-    }
-
-    const entityToUpdate: Updatable<ISalesforceLoan> = {
-      Id: existingLoan.id,
+  protected async mapToZod() {
+    return {
+      form: this.dto.form,
+      comments: this.dto.comments,
+      attachmentsCount: this.dto.attachmentsCount,
     };
+  }
 
-    if (existingLoan.status === LoanStatus.PLANNED) {
-      entityToUpdate.Loan_DrawdownStatus__c = LoanStatus.REQUESTED;
-    }
-
-    if (this.loan.comments.length > 0) {
-      entityToUpdate.Loan_UserComments__c = this.loan.comments;
-    }
-
-    await context.repositories.loans.update(entityToUpdate);
-
+  protected async runRepositoryCommands(
+    context: IContext,
+    validatedData: z.output<LoanRequestSchemaType>,
+  ): Promise<boolean> {
+    await context.repositories.loans.update({
+      Id: this.loanId,
+      Loan_DrawdownStatus__c: LoanStatus.REQUESTED,
+      Loan_UserComments__c: validatedData.comments,
+    });
     return true;
   }
 }

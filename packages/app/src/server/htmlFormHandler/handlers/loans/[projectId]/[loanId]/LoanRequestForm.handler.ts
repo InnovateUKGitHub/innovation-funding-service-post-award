@@ -1,6 +1,4 @@
 import { IContext } from "@framework/types/IContext";
-import { GetLoan } from "@server/features/loans/getLoan";
-import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
 import { LoansSummaryRoute } from "@ui/pages/loans/loanOverview.page";
 import { LoansRequestParams, LoansRequestRoute } from "@ui/pages/loans/loanRequest.page";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
@@ -8,6 +6,7 @@ import { LoanRequestSchemaType, loanRequestErrorMap, loanRequestSchema } from "@
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
+import { LoanStatus } from "@framework/entities/loan-status";
 
 export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchemaType, LoansRequestParams> {
   constructor() {
@@ -54,12 +53,11 @@ export class LoanRequestFormHandler extends ZodFormHandlerBase<LoanRequestSchema
     params: LoansRequestParams;
     context: IContext;
   }): Promise<string> {
-    const originalLoanQuery = new GetLoan(params.projectId, { loanId: params.loanId });
-    const originalLoan = await context.runQuery(originalLoanQuery);
-
-    const dto = { ...originalLoan, comments: input.comments ?? "" };
-    const updateLoanQuery = new UpdateLoanCommand(params.projectId, params.loanId, dto);
-    await context.runCommand(updateLoanQuery);
+    await context.repositories.loans.update({
+      Id: params.loanId,
+      Loan_DrawdownStatus__c: LoanStatus.REQUESTED,
+      Loan_UserComments__c: input.comments,
+    });
 
     return LoansSummaryRoute.getLink(params).path;
   }
