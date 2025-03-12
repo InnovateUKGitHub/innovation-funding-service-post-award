@@ -1,7 +1,8 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import path from "path";
-import { Fixture, Given } from "playwright-bdd/decorators";
+import { Fixture, Given, When } from "playwright-bdd/decorators";
 import { SfdcApi } from "../../../sfdc/SfdcApi";
+import { SfdcLightningPage } from "../../../sfdc/SfdcLightningPage";
 const fs = require("fs");
 
 export
@@ -9,10 +10,26 @@ export
 class PocSalesforce {
   protected readonly page: Page;
   protected readonly sfdcApi: SfdcApi;
+  protected readonly sfdcPage: SfdcLightningPage;
 
-  constructor({ page, sfdcApi }: { page: Page; sfdcApi: SfdcApi }) {
+  private readonly partialTabHeadings: Array<string>;
+  private readonly tabHeadings: Array<string>;
+
+  constructor({ page, sfdcApi, sfdcPage }: { page: Page; sfdcApi: SfdcApi; sfdcPage: SfdcLightningPage }) {
     this.page = page;
     this.sfdcApi = sfdcApi;
+    this.sfdcPage = sfdcPage;
+    this.partialTabHeadings = ["Details", "Participants", "Contacts", "Monitoring Reports", "PCRs", "Topics"];
+    this.tabHeadings = [
+      "Details",
+      "Participants",
+      "Contacts",
+      "Monitoring Reports",
+      "PCRs",
+      "Topics",
+      "Activity",
+      "Chatter",
+    ];
   }
 
   @Given("there is a CRnD Project with twelve Approved Claims")
@@ -117,7 +134,7 @@ class PocSalesforce {
     // Create Claims based on Profiles, add GrandAdjustments and Overrides, Approve Claims
     // ************************************************************************************
 
-    let noOfApprovals = 12;
+    let noOfApprovals = 1;
     let loopCounterClaims = 1;
     for (loopCounterClaims = 1; loopCounterClaims <= noOfApprovals; loopCounterClaims++) {
       // Create GrandAdjustments (TO DO)
@@ -204,5 +221,159 @@ class PocSalesforce {
 
       console.log("Apex response: ", apexresponseApproveClaim);
     }
+  }
+
+  @When("the user accesses the project in Salesforce")
+  async accessProject() {
+    type QueryProjectId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
+    const conn = await this.sfdcApi.getTsforceConnection();
+    await conn.executeApex({ query: "System.debug('Run an Apex query');" });
+
+    const response: QueryProjectId = await conn.executeSOQL({
+      query: "SELECT Id FROM Acc_Project__c ORDER BY createdDate desc LIMIT 1",
+    });
+
+    const myJSON = JSON.stringify(response);
+    console.log(myJSON);
+    const projectId = response.records[0].Id;
+    let path = String(`/lightning/r/Acc_Project__c/${projectId}/view`);
+    await this.sfdcPage.loginAndGoto(path);
+    await this.checkTabsRow();
+    await this.checkDetailsTab();
+    await this.openClaim();
+  }
+
+  /**
+   * Tool to locate elements using a SF-specific id.
+   */
+  getByFieldID(label: string) {
+    return this.page.locator(`[data-field-id="${label}"]`);
+  }
+
+  /**
+   *
+   * Returns xpath on the claims details tab using two items identifiers ('data-field-id' and the item container 'dd,dt,div' etc)
+   */
+  getByFieldIdXpath(fieldId: string, element: string, text: string) {
+    return this.page.locator(
+      `//flexipage-field[@data-field-id="${fieldId}"]//slot//record_flexipage-record-field//div//div//${element}//div//span[text()="${text}"]`,
+    );
+  }
+
+  async checkTabsRow() {
+    if (this.page.getByLabel("Tabs").locator("li").filter({ hasText: "More" }).isVisible()) {
+      for (const tab of this.partialTabHeadings) {
+        await expect(this.page.getByLabel("Tabs").locator("li").filter({ hasText: tab })).toBeVisible();
+      }
+      await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "More" }).click();
+      await expect(this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Activity" })).toBeVisible();
+      await expect(this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Chatter" })).toBeVisible();
+    } else {
+      let i = 0;
+      for (const tab of this.tabHeadings) {
+        await expect(this.page.getByLabel("Tabs").locator("li").nth(i).filter({ hasText: tab })).toBeVisible();
+        i++;
+      }
+    }
+  }
+
+  /**
+   * Included two different ways of asserting for the same thing (choices can be nice)
+   */
+  async checkDetailsTab() {
+    await expect(this.getByFieldID("RecordNameField").filter({ hasText: "Project ID" })).toBeVisible();
+    await expect(
+      this.getByFieldID("RecordAcc_ProjectTitle__cField").filter({ hasText: "Project Title" }),
+    ).toBeVisible();
+    await expect(
+      this.getByFieldID("RecordAcc_ProjectNumber__cField").filter({ hasText: "Project Number" }),
+    ).toBeVisible();
+    await expect(this.getByFieldID("RecordAcc_CompetitionId__cField").filter({ hasText: "Competition" })).toBeVisible();
+    const itemsOnTab = ["Project ID", "Project Title", "Project Number", "Competition"];
+    for (const item of itemsOnTab) {
+      await expect(
+        this.page.getByRole("tabpanel").getByRole("listitem").filter({ hasText: item }).first(),
+      ).toBeVisible();
+    }
+  }
+
+  async openClaim() {
+    await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Participants" }).click();
+    await this.page
+      .getByRole("tabpanel")
+      .locator("table")
+      .locator("tbody")
+      .locator("th")
+      .nth(0)
+      .getByRole("link")
+      .click();
+    await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Claims" }).click();
+
+    const paymentRow = this.page
+      .getByRole("tabpanel")
+      .locator("table")
+      .locator("tbody")
+      .locator("tr")
+      .filter({ hasText: "Payment being processed" });
+
+    await expect(paymentRow.locator("td").nth(2).filter({ hasText: "1" })).toBeVisible();
+    const draftCell = this.page.locator("td").nth(2).filter({ hasText: "2" });
+    const draftRow = this.page
+      .getByRole("tabpanel")
+      .locator("table")
+      .locator("tbody")
+      .locator("tr")
+      .filter({ has: draftCell });
+
+    await draftRow.locator("th").nth(1).getByRole("link").click();
+
+    await expect(
+      this.page.getByRole("presentation").getByRole("listitem").filter({ hasText: "Project period number" }),
+    ).toContainText("2");
+
+    //The below is currently failing to find the xpath in Playwright although it does seem to work fine when we search for it in-browser.
+    await expect(
+      this.page.locator(
+        `//span/ancestor::div[@class="section-layout-container slds-section slds-is-open"]//flexipage-column2//div/dt//span[text()="Claim Age"]/ancestor::div/dt`,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      this.page.locator(
+        `//span/ancestor::div[@class="section-layout-container slds-section slds-is-open"]//flexipage-column2//div/dt//span[text()="Claim status"]/ancestor::div/dt`,
+      ),
+    ).toBeVisible();
+
+    await expect(
+      this.page.locator(
+        `//span/ancestor::div[@class="section-layout-container slds-section slds-is-open"]//flexipage-column2//div/dd//span[text()="New"]/ancestor::div/dd`,
+      ),
+    ).toBeVisible();
+
+    //Below you can see a new function I've created that simply injects criteria into a different xpath above (also failing - line 264
+    //Again - these xpaths do work in-browser.
+    await expect(this.getByFieldIdXpath("dt", "RecordAcc_ClaimStatus__cField", "Claim status")).toBeVisible();
+    await expect(this.getByFieldIdXpath("dd", "RecordAcc_ClaimStatus__cField", "New")).toBeVisible();
+    await expect(this.getByFieldIdXpath("dt", "RecordAcc_Date_Submitted__cField", "Claim age")).toBeVisible();
+    await expect(this.getByFieldIdXpath("dd", "RecordAcc_Date_Submitted__cField", "0")).toBeVisible();
+
+    //This works
+    await this.page.getByRole("listbox").getByRole("presentation").getByTitle("Draft").click();
+    await this.page.getByRole("button").filter({ hasText: "Mark as Current Claim status" }).click();
+    await this.page.waitForTimeout(3000);
+    await expect(this.page.getByRole("listbox").getByRole("presentation").getByTitle("Draft")).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+
+    //This fails
+    await expect(this.getByFieldIdXpath("dd", "RecordAcc_ClaimStatus__cField", "Draft")).toBeVisible();
   }
 }

@@ -1,4 +1,4 @@
-import { Fixture, Given } from "playwright-bdd/decorators";
+import { Fixture, Given, When } from "playwright-bdd/decorators";
 import { TestCache } from "../../helpers/TestCache";
 import { ProjectState } from "../projectFactory/ProjectState";
 import { SfdcIfspaAppAccProjectPage } from "./pages/SfdcIfspaAppAccProjectPage";

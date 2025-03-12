@@ -160,7 +160,7 @@ export const test = base.extend<AccFixtures, Workers>({
   loanDrawdownChange: ({ page, commands, projectChangeRequests, loanDrawdowns }, use) =>
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   steveTest: ({ page, sfdcApi }, use) => use(new SteveTest({ page, sfdcApi })),
-  pocSalesforce: ({ page, sfdcApi }, use) => use(new PocSalesforce({ page, sfdcApi })),
+  pocSalesforce: ({ page, sfdcApi, sfdcPage }, use) => use(new PocSalesforce({ page, sfdcApi, sfdcPage })),
   checkCalculations: ({ page, sfdcApi }, use) => use(new CheckCalculations({ page, sfdcApi })),
   checkQueueAssignments: ({ page }, use) => use(new CheckQueueAssignments({ page })),
   // Project Factory
