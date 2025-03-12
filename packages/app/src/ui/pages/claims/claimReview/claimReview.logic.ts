@@ -1,7 +1,6 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { Claims } from "@framework/constants/recordTypes";
-import { ClaimDto } from "@framework/dtos/claimDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
@@ -157,21 +156,28 @@ export const useClaimReviewPageData = ({
   }, [totalDocumentsLength]);
 };
 
-export const useOnUpdateClaimReview = ({ claim }: { claim: PickRequiredFromPartial<ClaimDto, "id" | "partnerId"> }) => {
+export const useOnUpdateClaimReview = ({
+  projectId,
+  partnerId,
+  periodId,
+}: {
+  partnerId: PartnerId;
+  projectId: ProjectId;
+  periodId: PeriodId;
+}) => {
   const navigate = useNavigate();
   const routes = useRoutes();
 
-  return useOnUpdate<z.output<ClaimReviewSchemaType>, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
-    req({ projectId, partnerId, periodId, comments, status }) {
-      return clientsideApiClient.claims.update({
+  return useOnUpdate<z.output<ClaimReviewSchemaType>, boolean, null>({
+    req(data) {
+      return clientsideApiClient.claims.reviewClaim({
         projectId,
         partnerId,
         periodId,
-        claim: { ...claim, comments, status } as ClaimDto,
-        isClaimSummary: false,
+        claim: data,
       });
     },
-    onSuccess({ projectId }) {
+    onSuccess() {
       navigate(routes.allClaimsDashboard.getLink({ projectId }).path);
     },
   });

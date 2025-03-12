@@ -1,13 +1,7 @@
 import { z } from "zod";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import {
-  claimIdValidation,
-  evaluateObject,
-  partnerIdValidation,
-  periodIdValidation,
-  projectIdValidation,
-} from "@ui/zod/helperValidators/helperValidators.zod";
+import { claimIdValidation, evaluateObject } from "@ui/zod/helperValidators/helperValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
@@ -16,9 +10,6 @@ const claimReviewSchemaCommentsMax = 1000;
 
 const claimReviewSchema = evaluateObject((data: { status: ClaimStatus }) => ({
   form: z.literal(FormTypes.ClaimReviewLevelSaveAndContinue),
-  projectId: projectIdValidation,
-  partnerId: partnerIdValidation,
-  periodId: periodIdValidation,
   claimId: claimIdValidation,
   status: z.enum([ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL]),
   comments: getTextValidation({

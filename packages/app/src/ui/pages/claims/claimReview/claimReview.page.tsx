@@ -94,7 +94,9 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
   } = useOnDelete({ onSuccess: refresh });
 
   const { onUpdate, apiError, isProcessing } = useOnUpdateClaimReview({
-    claim,
+    projectId,
+    partnerId,
+    periodId,
   });
 
   const { isContractsForInnovation } = checkProjectCompetition(project.competitionType);

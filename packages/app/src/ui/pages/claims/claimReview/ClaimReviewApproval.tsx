@@ -28,15 +28,7 @@ interface ClaimReviewApprovalProps extends ReviewClaimParams {
   disabled: boolean;
 }
 
-const ClaimReviewApproval = ({
-  claimReviewForm,
-  projectId,
-  partnerId,
-  periodId,
-  claimId,
-  disabled,
-  onUpdate,
-}: ClaimReviewApprovalProps) => {
+const ClaimReviewApproval = ({ claimReviewForm, claimId, disabled, onUpdate }: ClaimReviewApprovalProps) => {
   const content = useReviewContent();
   const { isClient } = useMounted();
   const defaults = useServerInput<z.output<ClaimReviewSchemaType>>();
@@ -56,9 +48,6 @@ const ClaimReviewApproval = ({
   return (
     <Form onSubmit={claimReviewForm.handleSubmit(data => onUpdate({ data }), clearMessages)} data-qa="review-form">
       <input type="hidden" value={FormTypes.ClaimReviewLevelSaveAndContinue} {...claimReviewForm.register("form")} />
-      <input type="hidden" value={projectId} {...claimReviewForm.register("projectId")} />
-      <input type="hidden" value={partnerId} {...claimReviewForm.register("partnerId")} />
-      <input type="hidden" value={periodId} {...claimReviewForm.register("periodId")} />
       <input type="hidden" value={claimId} {...claimReviewForm.register("claimId")} />
 
       <Fieldset>

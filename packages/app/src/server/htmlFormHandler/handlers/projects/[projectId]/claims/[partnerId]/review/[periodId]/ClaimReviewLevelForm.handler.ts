@@ -1,6 +1,5 @@
-import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 import { IContext } from "@framework/types/IContext";
-import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { AllClaimsDashboardRoute } from "@ui/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ReviewClaimParams, ReviewClaimRoute } from "@ui/pages/claims/claimReview/claimReview.page";
@@ -29,9 +28,6 @@ export class ClaimReviewLevelFormHandler extends ZodFormHandlerBase<ClaimReviewS
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ClaimReviewSchemaType>> {
     return {
       form: input.form,
-      projectId: input.projectId,
-      partnerId: input.partnerId,
-      periodId: Number(input.periodId),
       claimId: input.claimId,
       comments: input.comments,
       status: input.status,
@@ -41,20 +37,26 @@ export class ClaimReviewLevelFormHandler extends ZodFormHandlerBase<ClaimReviewS
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<ClaimReviewSchemaType>;
     context: IContext;
+    params: ReviewClaimParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdateClaimCommand(input.projectId, {
-        id: input.claimId as ClaimId,
-        partnerId: input.partnerId,
-        periodId: input.periodId,
-        comments: input.comments ?? null,
-        status: input.status,
-      } as unknown as ClaimDto),
-    );
+    await Promise.all([
+      context.repositories.claims.update({
+        Id: input.claimId,
+        Acc_ClaimStatus__c: input.status,
+        Acc_ReasonForDifference__c: "",
+      }),
 
-    return AllClaimsDashboardRoute.getLink({ projectId: input.projectId }).path;
+      context.repositories.claimStatusChanges.create({
+        Acc_Claim__c: input.claimId,
+        Acc_ExternalComment__c: input.comments,
+        Acc_ParticipantVisibility__c: input.status === ClaimStatus.MO_QUERIED,
+      }),
+    ]);
+
+    return AllClaimsDashboardRoute.getLink({ projectId: params.projectId }).path;
   }
 }
