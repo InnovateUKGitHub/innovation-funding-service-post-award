@@ -323,7 +323,7 @@ export const submitCalculations = () => {
     .within(() => {
       cy.get("td:nth-child(14)").contains("£34,781.66");
     });
-  cy.intercept("/api/forecast-details/*").as("submitWait");
+  cy.intercept("/api/forecast-details/*/*/update-forecast").as("submitWait");
   cy.get("button").contains("Submit changes").click();
   cy.wait("@submitWait");
   cy.get("a").contains("Edit forecast");
