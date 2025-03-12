@@ -25,7 +25,7 @@ const mapper: GQL.DtoMapper<
   }
 > = {
   claimId(node) {
-    return node?.Acc_Claim__c?.value ?? "unknown";
+    return (node?.Acc_Claim__c?.value ?? "unknown") as ClaimId;
   },
   id(node) {
     return node?.Id ?? "unknown";
@@ -34,7 +34,7 @@ const mapper: GQL.DtoMapper<
     const canSeePublic = additionalData?.roles?.isFc || additionalData?.roles?.isPm;
     const canSeeHidden = additionalData?.roles?.isMo;
     const commentIsPublic = canSeeHidden || (node?.Acc_ParticipantVisibility__c?.value && canSeePublic);
-    return commentIsPublic ? node?.Acc_ExternalComment__c?.value ?? "" : "";
+    return commentIsPublic ? (node?.Acc_ExternalComment__c?.value ?? "") : "";
   },
   previousStatus(node) {
     return mapToClaimStatus(node?.Acc_PreviousClaimStatus__c?.value ?? "unknown");
