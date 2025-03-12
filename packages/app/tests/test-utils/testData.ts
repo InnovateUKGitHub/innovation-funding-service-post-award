@@ -590,7 +590,8 @@ export class TestData {
     periodId = periodId || 1;
 
     const newItem: ISalesforceClaimLineItem = {
-      Id: `ClaimLineItem-${seed}`,
+      Id: `ClaimLineItem-${seed}` as ClaimId,
+      CreatedDate: "2012-07-02T12:00:00.000+00",
       Acc_CostCategory__c: costCategory.id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__c: partner.id,

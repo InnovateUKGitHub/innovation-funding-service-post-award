@@ -1,4 +1,5 @@
 export interface ClaimLineItemDto {
+  createdDate: Date;
   costCategoryId: CostCategoryId;
   description: string;
   id: ClaimId;

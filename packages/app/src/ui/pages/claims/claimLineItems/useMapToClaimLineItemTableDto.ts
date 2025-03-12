@@ -15,6 +15,7 @@ interface LineItem {
 
 interface InitialLineItem {
   id?: ClaimId;
+  createdDate?: Date;
   description?: string;
   value: string | number | null;
 }
@@ -45,11 +46,18 @@ interface ClaimLineItemTableDto {
 }
 
 const mapToInitialLineItems = (initialLineItems: InitialLineItem[]): z.output<EditClaimLineItemLineItemSchemaType>[] =>
-  initialLineItems.map(({ id, value, description }) => ({
-    id,
-    value: String(value),
-    description: description ?? "",
-  }));
+  initialLineItems
+    .sort((a, b) => {
+      if (!a.createdDate) return -1;
+      if (!b.createdDate) return 1;
+      return a.createdDate.getTime() - b.createdDate.getTime();
+    })
+    .map(({ id, createdDate, value, description }) => ({
+      id,
+      createdDate,
+      value: String(value),
+      description: description ?? "",
+    }));
 
 const mapToClaimLineItemTableDto = ({
   existingLineItems,

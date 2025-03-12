@@ -80,7 +80,7 @@ const useClaimLineItemsData = (
   const claimsDetails = mapToClaimDetailsWithLineItemsDtoArray(
     claimsGql,
     ["isAuthor", "value", "comments", "id"],
-    ["id", "isAuthor", "lastModifiedDate", "value", "description"],
+    ["id", "isAuthor", "lastModifiedDate", "value", "description", "createdDate"],
     {
       currentUser: Object.assign(
         {},

@@ -90,6 +90,9 @@ export const claimLineItemsQuery = graphql`
                     value
                   }
                 }
+                CreatedDate {
+                  value
+                }
                 Acc_LineItemDescription__c {
                   value
                 }
