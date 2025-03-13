@@ -941,7 +941,7 @@ class CrdClaims {
     await this.summaryDocTable(table);
   }
 
-  @When("the user updates all costs for the final claim")
+  @When("the user updates all cost categories")
   async finalClaimCosts(table: DataTable) {
     let data = table.hashes();
     let rowNum = 0;
