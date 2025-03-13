@@ -9,7 +9,7 @@ String participantType = 'Business';
 String participantOrgType = 'Industrial';
 String Acc_CompetitionCode = String.valueOf(Integer.valueof(math.random() * 999999));
 String Acc_CompetitionName = 'SteveTest';
-Double accProjNo =  Integer.valueof(math.random() * 999999);
+Double accProjNo =  {uniqueProjectNumber};
 
 // Creates ad additional Finance Contact for the Project Manager Participant
 if (PMFinanceContact){NoOfParticipants++;}

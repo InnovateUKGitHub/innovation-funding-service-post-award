@@ -3,6 +3,7 @@ import path from "path";
 import { Fixture, Given, When } from "playwright-bdd/decorators";
 import { SfdcApi } from "../../../sfdc/SfdcApi";
 import { SfdcLightningPage } from "../../../sfdc/SfdcLightningPage";
+import { DataTable } from "playwright-bdd";
 const fs = require("fs");
 
 export
@@ -33,7 +34,8 @@ class PocSalesforce {
   }
 
   @Given("there is a CRnD Project with twelve Approved Claims")
-  async createCRndProject() {
+  async createCRndProject(table: DataTable) {
+    const data = table.rowsHash();
     // Definition for SOQL results
     type QueryProjectId = {
       totalSize: number;
@@ -46,18 +48,23 @@ class PocSalesforce {
 
     const conn = await this.sfdcApi.getTsforceConnection();
     await conn.executeApex({ query: "System.debug('Run an Apex query');" });
+    const uniqueId = Math.floor(Math.random() * (99999 + 100000) + 1);
 
     // Create a Project
     console.log("Create a Project");
     const apexresponse = await conn.executeApex({
-      query: fs.readFileSync(path.join(__dirname, "../../../../../apex/createCRnDProject.apex"), { encoding: "utf-8" }),
+      query: fs
+        .readFileSync(path.join(__dirname, "../../../../../apex/createCRnDProject.apex"), { encoding: "utf-8" })
+        .replaceAll("{uniqueProjectNumber}", uniqueId),
     });
 
     // Get the Project Id
+    let query = `SELECT Id FROM Acc_Project__c WHERE ACC_ProjectNumber__c = '${uniqueId}'`;
+    console.log("SOQL: ", query);
     const response: QueryProjectId = await conn.executeSOQL({
-      query: "SELECT Id FROM Acc_Project__c ORDER BY createdDate desc LIMIT 1",
+      query,
     });
-
+    console.log("Response", response);
     const myJSON = JSON.stringify(response);
     console.log(myJSON);
     const projectId = response.records[0].Id;
@@ -78,8 +85,8 @@ class PocSalesforce {
     let updateCurrentParticipant = fs
       .readFileSync(path.join(__dirname, "../../../../../apex/updateParticipant.apex"), { encoding: "utf-8" })
       .replaceAll("{ProjectId}", projectId)
-      .replaceAll("{AwardRate}", 100)
-      .replaceAll("{CapLimit}", 100);
+      .replaceAll("{AwardRate}", data["AwardRate"])
+      .replaceAll("{CapLimit}", data["CapLimit"]);
     console.log(updateCurrentParticipant);
 
     const apexresponseCurrentParticipant = await conn.executeApex({
@@ -110,18 +117,12 @@ class PocSalesforce {
       .readFileSync(path.join(__dirname, "../../../../../apex/updateProfiles.apex"), { encoding: "utf-8" })
       .replaceAll("{AccProjectId}", projectId)
       .replaceAll("{Acc_ParticipantId}", participantId)
-      .replaceAll("{CompetitionType}", "CR&D")
-      .replaceAll("{OrganisationType}", "Industrial")
-      .replaceAll("{CostCategoriesData}", "'Subcontracting','Labour','Materials','Travel and subsistence'")
-      .replaceAll(
-        "{CostCategoryArray}",
-        "'Labour','Subcontracting','Labour','Labour','Materials','Materials','Materials','Materials','Materials','Materials','Materials','Materials','Materials','Materials','Materials','Materials'",
-      )
-      .replaceAll("{PeriodNumberArray}", "'2','2','8','11','1','2','3','4','5','6','7','8','9','10','11','12'")
-      .replaceAll(
-        "{ValueArray}",
-        "'101000','110000','100600','105000','103995','135000','100100','100200','150000','150000','510000','150000','150000','150000','510000','150000'",
-      );
+      .replaceAll("{CompetitionType}", data["CompetitionType"])
+      .replaceAll("{OrganisationType}", data["OrganisationType"])
+      .replaceAll("{CostCategoriesData}", data["CostCategoriesData"])
+      .replaceAll("{CostCategoryArray}", data["CostCategoryArray"])
+      .replaceAll("{PeriodNumberArray}", data["PeriodNumberArray"])
+      .replaceAll("{ValueArray}", data["ValueArray"]);
 
     console.log(updateProfiles);
 
@@ -163,8 +164,8 @@ class PocSalesforce {
           encoding: "utf-8",
         })
         .replaceAll("{ParticipantId}", participantId)
-        .replaceAll("{IARStatusCounter}", "'5','6','7'") // If Independent Accountants Report is required for this period
-        .replaceAll("{ReviewTeamSetCounter}", "'1','2'") // If the Review Team has been overridden for this period
+        .replaceAll("{IARStatusCounter}", data["IARStatusCounter"]) // If Independent Accountants Report is required for this period
+        .replaceAll("{ReviewTeamSetCounter}", data["ReviewTeamSetCounter"]) // If the Review Team has been overridden for this period
         .replaceAll("{LoopCounterClaims}", loopCounterClaims);
 
       console.log(setIARAndOverrideReviewTeam);
