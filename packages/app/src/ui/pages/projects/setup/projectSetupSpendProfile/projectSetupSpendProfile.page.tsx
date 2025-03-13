@@ -59,6 +59,8 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
 
   const costCategoryProfiles = mappedData.costCategories;
 
+  console.log("costCategoryProfiles", costCategoryProfiles);
+
   const { register, handleSubmit, control, formState, getFieldState, setError, trigger, watch } = useForm<
     z.output<SetupSpendProfileSchemaType>
   >({
@@ -93,6 +95,9 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
     >
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <input {...register("form")} value={FormTypes.ProjectSetupForecast} type="hidden" />
+        <input type="hidden" name="initialProfile" value={JSON.stringify(initialProfile)} />
+        <input type="hidden" name="costCategoryProfiles" value={JSON.stringify(costCategoryProfiles)} />
+
         <Section>
           <P data-qa="guidance">{getContent(x => x.pages.projectSetupSpendProfile.guidanceMessage)}</P>
           {partner.overheadRate !== null && (

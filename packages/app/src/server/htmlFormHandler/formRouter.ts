@@ -95,6 +95,7 @@ import { ManageTeamMemberPcrReplaceHandler } from "./handlers/projects/[projectI
 import { ManageTeamMemberPcrUpdateHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrUpdate.handler";
 import { ManageTeamMemberPcrInviteHandler } from "./handlers/projects/[projectId]/details/manage-team-members/[action]/[role]/[pclId]/ManageTeamMemberPcrInvite.handler";
 import { ChangeRemainingGrantUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/pcrItemReallocateCostsChangeRemainingGrantUpdate.handler";
+import { InitialForecastHandler } from "./handlers/projects/initialForecast.handler";
 
 export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
@@ -172,6 +173,7 @@ export const standardFormHandlers = [
   new PartnerDetailsEditFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
   new ProjectSetupBankDetailsVerifyHandler(),
+  new InitialForecastHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
   new BankSetupStatementDocumentDeleteHandler(),

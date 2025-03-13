@@ -2,8 +2,6 @@ import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { IContext } from "@framework/types/IContext";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { GetForecastTableDataInputPropsQuery } from "@server/features/forecastDetails/GetForecastTableDataInputPropsQuery";
-import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
-import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails/updateInitialForecastDetailsCommand";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { IRouteDefinition } from "@ui/app/containerBase";
@@ -13,8 +11,6 @@ import { ClaimSummaryRoute } from "@ui/pages/claims/claimSummary.page";
 import { ClaimForecastRoute } from "@ui/pages/claims/forecast/ClaimForecast.page";
 import { UpdateForecastRoute } from "@ui/pages/forecasts/UpdateForecastTile.page";
 import { ViewForecastRoute } from "@ui/pages/forecasts/ViewForecastTile.page";
-import { ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
-import { ProjectSetupSpendProfileRoute } from "@ui/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { z } from "zod";
@@ -27,13 +23,8 @@ interface ForecastHandlerParams {
 class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, ForecastHandlerParams> {
   constructor() {
     super({
-      routes: [
-        ClaimForecastRoute,
-        ProjectSetupSpendProfileRoute,
-        UpdateForecastRoute,
-      ] as IRouteDefinition<ForecastHandlerParams>[],
+      routes: [ClaimForecastRoute, UpdateForecastRoute] as IRouteDefinition<ForecastHandlerParams>[],
       forms: [
-        FormTypes.ProjectSetupForecast,
         FormTypes.ClaimForecastSaveAndContinue,
         FormTypes.ClaimForecastSaveAndQuit,
         FormTypes.ForecastTileForecast,
@@ -77,43 +68,17 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
     params: ForecastHandlerParams;
     context: IContext;
   }): Promise<string> {
-    if (input.profile) {
-      if (input.form === FormTypes.ProjectSetupForecast) {
-        await context.runCommand(
-          new UpdateInitialForecastDetailsCommand(
-            input.projectId,
-            input.partnerId,
-            Object.entries(input.profile).map(([id, value]) => ({
-              id,
-              value: parseCurrency(value),
-            })),
-            input.submit,
-          ),
-        );
-      } else if (
-        input.form === FormTypes.ClaimForecastSaveAndContinue ||
-        input.form === FormTypes.ClaimForecastSaveAndQuit ||
-        input.form === FormTypes.ForecastTileForecast
-      ) {
-        const updates = Object.entries(input.profile).map(entry => ({
-          Id: entry[0],
-          Acc_LatestForecastCost__c: parseCurrency(entry[1]),
-        }));
+    if (
+      input.form === FormTypes.ClaimForecastSaveAndContinue ||
+      input.form === FormTypes.ClaimForecastSaveAndQuit ||
+      input.form === FormTypes.ForecastTileForecast
+    ) {
+      const updates = Object.entries(input.profile).map(entry => ({
+        Id: entry[0],
+        Acc_LatestForecastCost__c: parseCurrency(entry[1]),
+      }));
 
-        await context.repositories.profileDetails.update(updates);
-      } else {
-        await context.runCommand(
-          new UpdateForecastDetailsCommand(
-            input.projectId,
-            input.partnerId,
-            Object.entries(input.profile).map(([id, value]) => ({
-              id,
-              value: parseCurrency(value),
-            })),
-            false,
-          ),
-        );
-      }
+      await context.repositories.profileDetails.update(updates);
     }
 
     switch (input.form) {
@@ -136,9 +101,8 @@ class ForecastHandler extends ZodFormHandlerBase<ForecastTableSchemaType, Foreca
           projectId: input.projectId,
           partnerId: input.partnerId,
         }).path;
-      case FormTypes.ProjectSetupForecast:
-        return ProjectSetupRoute.getLink({ projectId: input.projectId, partnerId: input.partnerId }).path;
       case FormTypes.ForecastTileForecast:
+      default:
         return ViewForecastRoute.getLink({ projectId: input.projectId, partnerId: input.partnerId }).path;
     }
   }
