@@ -46,6 +46,7 @@ import { SfdcExecuteApprovalProcessScript } from "./projectFactory/SfdcExecuteAp
 import { SfdcSObject } from "./sfdc/SfdcSObject";
 import { AccProjectCFI } from "./projectFactory/AccProjectCFI";
 import { AddLeadPartner } from "./acc/pages/PCRs/addLeadPartner";
+import { ClaimLineItemsOrdering } from "./acc/pages/Claims/claimLineItemsOrdering";
 
 type AccFixtures = {
   // Pages
@@ -71,7 +72,8 @@ type AccFixtures = {
   accFinanceSummary: AccFinanceSummary;
   loanDrawdowns: LoanDrawdowns;
   loanDrawdownChange: LoanDrawdownChange;
-  addLeadPartner: AddLeadPartner
+  addLeadPartner: AddLeadPartner;
+  claimLineItemsOrdering: ClaimLineItemsOrdering;
 
   // Misc
   accNavigation: AccNavigation;
@@ -159,6 +161,9 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
+  claimLineItemsOrdering: ({ page, commands }, use) =>
+    use(new ClaimLineItemsOrdering({ page, commands})),
+
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
