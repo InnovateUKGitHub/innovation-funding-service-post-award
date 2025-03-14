@@ -42,10 +42,7 @@ Feature: ACC-11952 fix list order of claim line items
         And the overhead cost should be "£500.00"
 
     Scenario: Add 4 claim line items to the previously created line items
-        And the user is the "mainFcUser" user
-        And the user has accessed the Costs to be claimed page
-        And the user clicks the "Labour" cost category
-        Then the use sees the claim line item table below:
+        Given the use sees the claim line item table below:
             | description | cost |
             | 1           | 100  |
             | 2           | 100  |
@@ -83,10 +80,7 @@ Feature: ACC-11952 fix list order of claim line items
         And the overhead cost should be "£580.00"
 
     Scenario: Verify the additional the claim line items
-        And the user is the "mainFcUser" user
-        And the user has accessed the Costs to be claimed page
-        And the user clicks the "Labour" cost category
-        Then the use sees the claim line item table below:
+        Given the use sees the claim line item table below:
             | description | cost |
             | 1           | 100  |
             | 2           | 100  |
@@ -128,10 +122,7 @@ Feature: ACC-11952 fix list order of claim line items
         And the overhead cost should be "£660.00"
 
     Scenario: Verify all the claim line items are in order
-        And the user is the "mainFcUser" user
-        And the user has accessed the Costs to be claimed page
-        And the user clicks the "Labour" cost category
-        Then the use sees the claim line item table below:
+        Given the use sees the claim line item table below:
             | description | cost |
             | 1           | 100  |
             | 2           | 100  |
@@ -166,6 +157,7 @@ Feature: ACC-11952 fix list order of claim line items
             | 31          | 100  |
             | 32          | 100  |
             | 33          | 100  |
+            
 
 
 
