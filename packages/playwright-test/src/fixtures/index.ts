@@ -45,10 +45,11 @@ import { AccProjectFinalClaim } from "./projectFactory/AccProjectFinalClaim";
 import { SteveTest } from "./acc/pages/steveTest/steveFirstTest";
 import { ITsforceConnection } from "@innovateuk/tsforce/index";
 import { PocSalesforce } from "./acc/pages/POCSalesforce/pocSalesforce";
+import { PocSalesforce2 } from "./acc/pages/POCSalesforce/pocSalesforce2";
+import { Poc3 } from "./acc/pages/POCSalesforce/pocSalesforce3";
 import { CheckCalculations } from "./acc/pages/POCSalesforce/checkCalculations";
 import { CheckQueueAssignments } from "./acc/pages/POCSalesforce/checkQueueAssignments";
 import { ProjectFactory } from "./projectFactory/ProjectFactory";
-import { Poc3 } from "./acc/pages/POCSalesforce/pocSalesforce3";
 
 type AccFixtures = {
   // Pages
@@ -76,6 +77,7 @@ type AccFixtures = {
   loanDrawdownChange: LoanDrawdownChange;
   steveTest: SteveTest;
   pocSalesforce: PocSalesforce;
+  pocSalesforce2: PocSalesforce2;
   checkCalculations: CheckCalculations;
   checkQueueAssignments: CheckQueueAssignments;
   poc3: Poc3;
@@ -163,6 +165,8 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   steveTest: ({ page, sfdcApi }, use) => use(new SteveTest({ page, sfdcApi })),
   pocSalesforce: ({ page, sfdcApi, sfdcPage }, use) => use(new PocSalesforce({ page, sfdcApi, sfdcPage })),
+  pocSalesforce2: ({ page, commands, sfdcApi, sfdcPage, projectState }, use) =>
+    use(new PocSalesforce2({ page, commands, sfdcApi, sfdcPage, projectState })),
   poc3: ({ page, sfdcApi, sfdcPage }, use) => use(new Poc3({ page, sfdcApi, sfdcPage })),
   checkCalculations: ({ page, sfdcApi }, use) => use(new CheckCalculations({ page, sfdcApi })),
   checkQueueAssignments: ({ page }, use) => use(new CheckQueueAssignments({ page })),

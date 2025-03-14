@@ -26,7 +26,15 @@ class Poc3 {
     await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
     const uniqueCompId = Math.floor(Math.random() * (99999 + 100000) + 1);
     await this.page.locator("(//input[@class='slds-input'])[2]").fill("PW-" + uniqueCompId);
-    await this.page.getByLabel("Competition Type").getByRole("combobox").selectOption("CR&D");
-    await this.page.getByRole("button").filter({ hasText: /Save/ }).click();
+    await this.page.getByRole("dialog").getByLabel("Competition Type").getByRole("combobox").click();
+    await this.page
+      .getByRole("dialog")
+      .getByLabel("Competition Type")
+      .getByRole("combobox")
+      .selectOption({ value: "CR&D" });
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save&/ })
+      .click();
   }
 }
