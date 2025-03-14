@@ -97,6 +97,9 @@
         },
         "SFDC_INVALID_USERNAME": {
           "invalid": "Your user account does not exist, or has been misspelt."
+        },
+        "SFDC_EMAIL_BOUNCED": {
+          "invalid": "The email address has been rejected by our system. Check the email address is correct or try using a different email address."
         }
       }
     },

@@ -180,6 +180,62 @@ class ViewForecast {
     }
   }
 
+  @Then("the Forecast table will show required {string} for IAR period 1")
+  async iarRequired(required: string) {
+    if (required === "Yes") {
+      await expect(this.page.getByRole("table").locator("thead").locator("tr").nth(2).locator("th").nth(1)).toHaveText(
+        "Yes",
+      );
+    } else if (required === "No") {
+      await expect(this.page.getByRole("table").locator("thead").locator("tr").nth(2).locator("th").nth(1)).toHaveText(
+        "No",
+      );
+    }
+  }
+
+  @Then("the claims costs are reflected on the Forecast table")
+  async claimCostsOnForecastTable(table: DataTable) {
+    const data = table.hashes();
+    let totalCost = 0;
+    for (const row of data) {
+      let cost = Number(row["Cost"]);
+      totalCost = totalCost + cost;
+      await expect(this.page.getByLabel(`${row["Category"]} period 1`).first()).toHaveText(
+        cost.toLocaleString("en-GB", { style: "currency", currency: "GBP" }),
+      );
+    }
+    let totalCostString = totalCost.toLocaleString("en-GB", { style: "currency", currency: "GBP" });
+    console.log(totalCost);
+    console.log(totalCostString);
+    await expect(this.page.getByRole("table").locator("tfoot").locator("tr").locator("td").nth(0)).toHaveText(
+      totalCostString,
+    );
+  }
+
+  @Then("the user will see an overclaim warning")
+  async overclaimWarningMessages(table: DataTable) {
+    const data = table.hashes();
+    await expect(
+      this.forecastCostsWarningQa.filter({
+        hasText: "The amount you are requesting is more than the agreed costs for:",
+      }),
+    ).toBeVisible();
+
+    let i = 0;
+    for (const row of data) {
+      await expect(
+        this.forecastCostsWarningQa.locator("ul").locator("li").nth(i).filter({ hasText: row["Category"] }),
+      ).toBeVisible();
+      i++;
+    }
+
+    await expect(
+      this.forecastCostsWarningQa.filter({
+        hasText: "Your Monitoring Officer will let you know if they have any concerns.",
+      }),
+    ).toBeVisible();
+  }
+
   /**
    * View and update Forecast methods
    * This function is setup to enable the feature to run independently of previous claims steps.

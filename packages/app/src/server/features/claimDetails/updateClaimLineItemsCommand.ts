@@ -87,8 +87,12 @@ export class UpdateClaimLineItemsCommand extends ZodAuthorisedAsyncCommandBase<
         const matchedItem = validatedData.initialLineItems.find(y => y.id === x.id);
         return matchedItem?.description !== x.description || matchedItem?.value !== x.value;
       })
-      .map(x => ({
-        Id: x.id,
+      .map<{
+        Id: ClaimId;
+        Acc_LineItemDescription__c: string;
+        Acc_LineItemCost__c: number;
+      }>(x => ({
+        Id: x.id as ClaimId,
         Acc_LineItemDescription__c: x.description,
         Acc_LineItemCost__c: parseCurrency(x.value),
       }));

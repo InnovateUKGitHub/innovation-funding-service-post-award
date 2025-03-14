@@ -1,6 +1,7 @@
 import { TsforceCompositeSubrequestResult } from "../TsforceDataloader";
 import { BaseTsforceRequest, BaseTsforceRequestProps } from "./BaseTsforceRequest";
 import { AnyObject } from "../types/AnyObject";
+import { TsforceSalesforceErrorException } from "../exceptions/TsforceSalesforceErrorException";
 
 interface BaseTsforceCompositeSubrequest {
   body?: AnyObject;
@@ -44,7 +45,7 @@ abstract class BaseTsforceSubrequest<T> extends BaseTsforceRequest<T> {
     const result = (await this.connection.dataLoader.subrequest.load(this)) as TsforceCompositeSubrequestResult<T>;
 
     if (result.httpStatusCode < 200 || result.httpStatusCode >= 300) {
-      throw new Error(JSON.stringify(result));
+      throw new TsforceSalesforceErrorException({ info: result });
     }
 
     return result.body;

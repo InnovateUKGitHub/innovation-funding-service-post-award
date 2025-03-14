@@ -123,7 +123,7 @@ describe("GetClaimStatusChangesQuery", () => {
 
     const expected: ClaimStatusChangeDto = {
       id: existing.Id,
-      claimId: existing.Acc_Claim__c,
+      claimId: existing.Acc_Claim__c as ClaimId,
       comments: existing.Acc_ExternalComment__c,
       createdDate: new Date(existing.CreatedDate),
       newStatus: existing.Acc_NewClaimStatus__c as ClaimStatus,

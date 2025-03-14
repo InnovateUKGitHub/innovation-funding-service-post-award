@@ -4,7 +4,8 @@ import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase"
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 
 export interface ISalesforceClaimLineItem {
-  Id: string;
+  Id: ClaimId;
+  CreatedDate: string;
   Acc_LineItemDescription__c: string;
   Acc_LineItemCost__c: number;
   Acc_CostCategory__c: string;

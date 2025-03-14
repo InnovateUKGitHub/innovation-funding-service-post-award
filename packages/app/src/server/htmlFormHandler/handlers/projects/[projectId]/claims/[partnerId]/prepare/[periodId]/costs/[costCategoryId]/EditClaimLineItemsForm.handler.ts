@@ -1,4 +1,5 @@
 import { IContext } from "@framework/types/IContext";
+import { Clock } from "@framework/util/clock";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { configuration } from "@server/features/common/config";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
@@ -27,6 +28,8 @@ type NewItem = {
 };
 
 const isNotEmptyField = (x: string | undefined | null) => typeof x === "string" && x.trim() !== "";
+
+const clock = new Clock();
 
 class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItemsSchemaType, ClaimLineItemsParams> {
   constructor() {
@@ -63,6 +66,7 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
       id: x.Id,
       description: x.Acc_LineItemDescription__c,
       value: String(x.Acc_LineItemCost__c),
+      createdDate: clock.parseRequiredSalesforceDateTime(x.CreatedDate),
     }));
 
     const lineItems: z.input<EditClaimLineItemLineItemSchemaType>[] = [];
@@ -117,7 +121,7 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
         return matchedItem?.description !== x.description || matchedItem?.value !== x.value;
       })
       .map(x => ({
-        Id: x.id,
+        Id: x.id as ClaimId,
         Acc_LineItemDescription__c: x.description,
         Acc_LineItemCost__c: parseCurrency(x.value),
       }));

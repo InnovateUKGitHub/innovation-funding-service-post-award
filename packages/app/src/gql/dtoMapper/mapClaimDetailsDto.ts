@@ -13,6 +13,7 @@ const clock = new Clock();
 
 type ClaimDetailsNode = GQL.PartialNode<{
   Id: string;
+  CreatedDate: GQL.Value<string>;
   Acc_ClaimStatus__c: GQL.Value<string>;
   Acc_CostCategory__c: GQL.Value<string>;
   Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;

@@ -70,6 +70,10 @@ interface IAppDetailedSfdcInvalidUsernameError extends IAppDetailedBaseError {
   code: DetailedErrorCode.SFDC_INVALID_USERNAME;
 }
 
+interface IAppDetailedSfdcEmailBouncedError extends IAppDetailedBaseError {
+  code: DetailedErrorCode.SFDC_EMAIL_BOUNCED;
+}
+
 export type IAppDetailedError =
   | IAppDetailedAccValidationError
   | IAppDetailedAccGraphQLError
@@ -81,4 +85,5 @@ export type IAppDetailedError =
   | IAppDetailedSfdcGenericError
   | IAppDetailedSfdcFieldCustomValidationExceptionError
   | IAppDetailedSfdcInvalidGrantError
-  | IAppDetailedSfdcInvalidUsernameError;
+  | IAppDetailedSfdcInvalidUsernameError
+  | IAppDetailedSfdcEmailBouncedError;

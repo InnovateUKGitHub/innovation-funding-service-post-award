@@ -1,3 +1,6 @@
+import { ForecastPageSchema } from "@ui/pages/forecasts/forecastPage.zod";
+import { z } from "zod";
+
 export interface ForecastDetailsDTO {
   costCategoryId: CostCategoryId;
   id: string;
@@ -6,3 +9,5 @@ export interface ForecastDetailsDTO {
   periodStart: Date | null;
   value: number;
 }
+
+export type ForecastUpdateDto = z.output<ForecastPageSchema>;

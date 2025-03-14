@@ -9,6 +9,7 @@ const clock = new Clock();
 
 type ClaimLineItemNode = GQL.PartialNode<{
   Id: string | null;
+  CreatedDate: GQL.Value<string>;
   Acc_LineItemDescription__c: GQL.Value<string>;
   Acc_LineItemCost__c: GQL.Value<number>;
   Acc_ProjectParticipant__c: GQL.Value<string>;
@@ -23,7 +24,15 @@ type ClaimLineItemNode = GQL.PartialNode<{
 
 export type ClaimLineItemDtoMapping = Pick<
   ClaimLineItemDto,
-  "costCategoryId" | "description" | "id" | "lastModifiedDate" | "isAuthor" | "value" | "partnerId" | "periodId"
+  | "createdDate"
+  | "costCategoryId"
+  | "description"
+  | "id"
+  | "lastModifiedDate"
+  | "isAuthor"
+  | "value"
+  | "partnerId"
+  | "periodId"
 >;
 
 const mapper: GQL.DtoMapper<
@@ -33,6 +42,9 @@ const mapper: GQL.DtoMapper<
 > = {
   id(node) {
     return (node?.Id ?? "unknown id") as ClaimId;
+  },
+  createdDate(node) {
+    return node?.CreatedDate?.value ? clock.parseRequiredSalesforceDateTime(node?.CreatedDate?.value) : new Date(NaN);
   },
   isAuthor(node, additionalData) {
     return (

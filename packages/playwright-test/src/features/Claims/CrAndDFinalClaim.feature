@@ -21,7 +21,7 @@ Feature: Commercial claim in Final Claim state
             | Other costs 5          | £7,800,000.00        | £0.00                          | £0.00                     | £7,800,000.00            |
             | Total                  | £79,560,000.00       | £0.00                          | £0.00                     | £79,560,000.00           |
 
-        When the user updates all costs for the final claim
+        When the user updates all cost categories
             | Category               | Cost       |
             | Labour                 | 7800000.00 |
             | Overheads              | 1560000    |

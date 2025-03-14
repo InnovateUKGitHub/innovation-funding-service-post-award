@@ -37,7 +37,7 @@ export const mapClaim =
       claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, salesforceDateFormat);
 
     return {
-      id: claim.Id,
+      id: claim.Id as ClaimId,
       partnerId: claim.Acc_ProjectParticipant__r.Id,
       lastModifiedDate: DateTime.fromISO(claim.LastModifiedDate).toJSDate(),
       pcfStatus: mapToReceivedStatus(claim.Acc_PCF_Status__c),

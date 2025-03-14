@@ -17,7 +17,7 @@ import { Percentage } from "@ui/components/atoms/Percentage/percentage";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { Button } from "@ui/components/atoms/Button/Button";
 
-const emptyData = { id: "" as ClaimId, description: "", value: "" };
+const getEmptyData = () => ({ id: "" as ClaimId, description: "", value: "", createdDate: new Date() });
 
 interface ClaimLineItemsTableProps {
   lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
@@ -152,7 +152,7 @@ const EditClaimLineItemsTable = ({
             <TD colSpan={isClient && ownsAnyRows ? 4 : 3}>
               <Button
                 onClick={e => {
-                  append(emptyData);
+                  append(getEmptyData());
                   e.preventDefault();
                 }}
                 disabled={disabled}
