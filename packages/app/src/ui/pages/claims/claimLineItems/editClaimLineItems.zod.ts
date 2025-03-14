@@ -54,7 +54,20 @@ const editClaimLineItemsSchema = z.object({
     required: false,
   }),
   id: z.union([claimIdValidation, z.literal(null)]),
-  initialLineItems: z.array(editClaimLineItemLineItemSchema),
+  initialLineItems: z.array(
+    z.object({
+      id: z.union([claimIdValidation, emptyStringToUndefinedValidation]),
+      value: getGenericCurrencyValidation({
+        min: -1_000_000,
+        required: false,
+      }),
+      description: getTextValidation({
+        maxLength: claimLineItemDescriptionMaxLength,
+        required: false,
+      }),
+      hasChanged: z.boolean().optional(),
+    }),
+  ),
 });
 
 type EditClaimLineItemsSchemaType = typeof editClaimLineItemsSchema;
