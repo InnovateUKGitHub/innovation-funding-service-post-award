@@ -41,7 +41,7 @@ Feature: ACC-11952 fix list order of claim line items
         Then the labour labour costs claimed should be "£2,500.00"
         And the overhead cost should be "£500.00"
 
-    Scenario: Add 2 claim line items to the previously created line items
+    Scenario: Add 4 claim line items to the previously created line items
         And the user is the "mainFcUser" user
         And the user has accessed the Costs to be claimed page
         And the user clicks the "Labour" cost category
