@@ -48,6 +48,7 @@ import { PocSalesforce } from "./acc/pages/POCSalesforce/pocSalesforce";
 import { CheckCalculations } from "./acc/pages/POCSalesforce/checkCalculations";
 import { CheckQueueAssignments } from "./acc/pages/POCSalesforce/checkQueueAssignments";
 import { ProjectFactory } from "./projectFactory/ProjectFactory";
+import { Poc3 } from "./acc/pages/POCSalesforce/pocSalesforce3";
 
 type AccFixtures = {
   // Pages
@@ -77,6 +78,7 @@ type AccFixtures = {
   pocSalesforce: PocSalesforce;
   checkCalculations: CheckCalculations;
   checkQueueAssignments: CheckQueueAssignments;
+  poc3: Poc3;
 
   // Misc
   accNavigation: AccNavigation;
@@ -161,6 +163,7 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   steveTest: ({ page, sfdcApi }, use) => use(new SteveTest({ page, sfdcApi })),
   pocSalesforce: ({ page, sfdcApi, sfdcPage }, use) => use(new PocSalesforce({ page, sfdcApi, sfdcPage })),
+  poc3: ({ page, sfdcApi, sfdcPage }, use) => use(new Poc3({ page, sfdcApi, sfdcPage })),
   checkCalculations: ({ page, sfdcApi }, use) => use(new CheckCalculations({ page, sfdcApi })),
   checkQueueAssignments: ({ page }, use) => use(new CheckQueueAssignments({ page })),
   // Project Factory
