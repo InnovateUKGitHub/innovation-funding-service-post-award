@@ -106,15 +106,16 @@ export class SubmitPcrCommand extends ZodAuthorisedAsyncCommandBase<boolean, Pcr
         context.repositories.projectChangeRequests.updateSingleSalesforceItem({
           Id: this.pcrId,
           Acc_Status__c: mapToPCRApiName(newStatus),
-          Acc_Comments__c: validatedData.comments,
+          Acc_Comments__c: "",
         }),
         this.insertStatusChange(context, validatedData.comments ?? "", validatedData.status, newStatus),
       ]);
+    } else {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrId,
+        Acc_Comments__c: validatedData.comments,
+      });
     }
-    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
-      Id: this.pcrId,
-      Acc_Comments__c: validatedData.comments,
-    });
 
     return true;
   }

@@ -136,15 +136,17 @@ export class ProjectChangeRequestPrepareFormHandler extends ZodFormHandlerBase<
         context.repositories.projectChangeRequests.updateSingleSalesforceItem({
           Id: params.pcrId,
           Acc_Status__c: mapToPCRApiName(newStatus),
-          Acc_Comments__c: input.comments,
+          Acc_Comments__c: "",
         }),
         this.insertStatusChange(context, input.comments ?? "", input.status, newStatus, params.pcrId),
       ]);
+    } else {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: params.pcrId,
+        Acc_Comments__c: input.comments,
+      });
     }
-    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
-      Id: params.pcrId,
-      Acc_Comments__c: input.comments,
-    });
+
     if (input.button_submit === "submit") {
       return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId: params.projectId, pcrId: params.pcrId })
         .path;
