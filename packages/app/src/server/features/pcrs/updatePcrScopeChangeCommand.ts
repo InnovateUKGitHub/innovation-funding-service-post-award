@@ -15,7 +15,8 @@ import {
   scopeChangeErrorMap,
 } from "@ui/pages/pcrs/scopeChange/scopeChange.zod";
 import { z } from "zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus, mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 type ScopeChangeSchema =
   | PcrScopeChangeSchemaType
@@ -101,23 +102,28 @@ export class UpdatePcrScopeChangeCommand extends ZodAuthorisedAsyncCommandBase<
     }
   }
 
+  private schemaIsSummarySchema(schemaOutput: SchemaOutput): schemaOutput is z.output<PcrScopeChangeSchemaType> {
+    return schemaOutput.form === FormTypes.PcrChangeProjectScopeSummary;
+  }
+
   protected async runRepositoryCommands(context: IContext, validatedData: SchemaOutput): Promise<boolean> {
-    if (validatedData.form === FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue) {
+    if (this.schemaIsSummarySchema(validatedData)) {
+      const nextStatus = getPcrItemStatus(validatedData.markedAsComplete);
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: nextStatus,
+      });
+    } else if (validatedData.form === FormTypes.PcrChangeProjectScopeProposedProjectSummaryStepSaveAndContinue) {
+      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+        Id: this.pcrItemId,
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
         Acc_NewProjectSummary__c: validatedData?.projectSummary ?? null,
       });
     } else if (validatedData.form === FormTypes.PcrChangeProjectScopeProposedPublicDescriptionStepSaveAndContinue) {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
         Acc_NewPublicDescription__c: validatedData?.publicDescription ?? null,
-      });
-    } else {
-      await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
-        Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
       });
     }
 

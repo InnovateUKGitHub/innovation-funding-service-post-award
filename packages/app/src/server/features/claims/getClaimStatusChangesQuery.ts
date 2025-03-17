@@ -75,7 +75,7 @@ export class GetClaimStatusChangesQuery extends AuthorisedAsyncQueryBase<ClaimSt
     const newStatusLabel = mapToClaimStatusLabel(newStatus, unCheckedStatusLabel, competitionType);
 
     return {
-      claimId: item.Acc_Claim__c,
+      claimId: item.Acc_Claim__c as ClaimId,
       id: item.Id,
       comments,
       previousStatus,

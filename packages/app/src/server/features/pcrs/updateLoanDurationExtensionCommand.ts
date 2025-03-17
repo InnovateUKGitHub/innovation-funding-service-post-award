@@ -4,13 +4,14 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus, mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import {
   loanDrawdownExtensionSchema,
   LoanDrawdownExtensionSchemaType,
   errorMap,
 } from "@ui/pages/pcrs/loanDrawdownExtension/loanDrawdownExtension.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrLoanDurationExtensionCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -74,12 +75,12 @@ export class UpdatePcrLoanDurationExtensionCommand extends ZodAuthorisedAsyncCom
     if (this.form === FormTypes.PcrLoanDurationChangeSummary) {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
       });
     } else {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
         Loan_ExtensionPeriodChange__c: Number(validatedData.extensionPeriodChange) - validatedData.extensionPeriod,
         Loan_RepaymentPeriodChange__c: Number(validatedData.repaymentPeriodChange) - validatedData.repaymentPeriod,
         Acc_AdditionalNumberofMonths__c:

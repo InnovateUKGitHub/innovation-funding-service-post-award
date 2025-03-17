@@ -22,7 +22,6 @@ const reallocateCostsSummaryValidator = evaluateObject(
   if (data.status === "aborted") {
     return;
   }
-  console.log("here", data);
   const { isSummaryValid, virementData, virementMeta } = mapVirements(data.financialVirements);
 
   if (data.markedAsComplete) {

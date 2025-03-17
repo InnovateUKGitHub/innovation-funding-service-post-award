@@ -4,14 +4,13 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   reallocateCostsSummaryErrorMap,
   ReallocateCostsSummaryValidatorSchema,
   reallocateCostsSummaryValidator,
 } from "@ui/pages/pcrs/reallocateCosts/summary/ReallocateCostsSummary.zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { parseCurrency } from "@framework/util/numberHelper";
 
 export class UpdatePcrReallocateCostsSummaryCommand extends ZodAuthorisedAsyncCommandBase<
@@ -71,9 +70,7 @@ export class UpdatePcrReallocateCostsSummaryCommand extends ZodAuthorisedAsyncCo
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(
-        validatedData.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-      ),
+      Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
       Acc_GrantMovingOverFinancialYear__c: parseCurrency(validatedData.grantMovingOverFinancialYear),
     });
 

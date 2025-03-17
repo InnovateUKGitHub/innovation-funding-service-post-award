@@ -5,7 +5,7 @@ import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus, mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import {
   pcrReasoningErrorMap,
   PcrReasoningFilesSchema,
@@ -123,9 +123,7 @@ export class UpdatePcrReasoningCommand extends ZodAuthorisedAsyncCommandBase<
     } else if (this.isSummary(validatedData)) {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(
-          validatedData.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-        ),
+        Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
       });
     }
 

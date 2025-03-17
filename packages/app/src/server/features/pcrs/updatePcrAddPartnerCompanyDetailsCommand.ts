@@ -12,6 +12,7 @@ import {
   getPcrAddPartnerCompaniesHouseStepSchema,
   PcrAddPartnerCompaniesHouseStepSchemaType,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerCompanyDetailsCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -79,7 +80,7 @@ export class UpdatePcrAddPartnerCompanyDetailsCommand extends ZodAuthorisedAsync
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_OrganisationName__c: validatedData.organisationName,
       Acc_RegistrationNumber__c: validatedData.registrationNumber,
       Acc_RegisteredAddress__c: validatedData.registeredAddress,

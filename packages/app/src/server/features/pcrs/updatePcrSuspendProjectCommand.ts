@@ -13,8 +13,9 @@ import {
   ProjectSuspensionSummarySchema,
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { combineDate } from "@ui/components/atoms/Date";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus, mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import { Clock } from "@framework/util/clock";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 const clock = new Clock();
 
@@ -99,7 +100,7 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
     if (isStepData(validatedData)) {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
         Acc_SuspensionStarts__c: clock.formatOptionalSalesforceDate(
           combineDate(validatedData.suspensionStartDate_month, validatedData.suspensionStartDate_year, true),
         ),
@@ -110,7 +111,7 @@ export class UpdatePcrSuspendProjectCommand extends ZodAuthorisedAsyncCommandBas
     } else if (isSummaryData(validatedData)) {
       await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
         Id: this.pcrItemId,
-        Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+        Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
       });
     }
     return true;

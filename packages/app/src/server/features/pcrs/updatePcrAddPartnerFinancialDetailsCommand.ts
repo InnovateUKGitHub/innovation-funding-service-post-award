@@ -14,6 +14,7 @@ import {
 } from "@ui/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
 import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 const clock = new Clock();
 
@@ -77,7 +78,7 @@ export class UpdatePcrAddPartnerFinancialDetailsCommand extends ZodAuthorisedAsy
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_TurnoverYearEnd__c: clock.formatOptionalSalesforceDate(
         combineDate(validatedData.financialYearEndDate_month, validatedData.financialYearEndDate_year, false),
       ),
