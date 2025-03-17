@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { DataTable } from "playwright-bdd";
 import { Fixture, Given } from "playwright-bdd/decorators";
 import { SfdcApi } from "../../../sfdc/SfdcApi";
@@ -25,37 +25,19 @@ class Poc3 {
 
   @Given("there is a Competition created using the UI")
   async createCompetition() {
-    // Create Competition using the UI
-    //const uniqueCompId = Math.floor(Math.random() * (99999 + 100000) + 1);
-
     let pathComp = String(`/lightning/o/Competition__c/list?filterName=All`);
     await this.sfdcPage.loginAndGoto(pathComp);
-
     await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
-
-    /**
-     * Alternatively to xpath below you can simply use the following:
-     *  await this.page.getByLabel("Competition ID").fill("Playwright-" + uniqueCompId);
-     * and a new function above:
-     * await this.selectDropdown("Competition Type", "CR&D")
-     *
-     */
     await this.page.getByRole("dialog").getByLabel("Competition ID").fill(this.uniqueCompId);
     await this.selectDropdown("Competition Type", "KTP");
-    // await this.page.locator("(//input[@class='slds-input'])[2]").fill(this.uniqueCompId);
-    // await this.page.locator("//button[@aria-label='Competition Type']").click();
-    // await this.page.locator("//lightning-base-combobox-item[@data-value='KTP']").click();
-
     await this.page
       .getByRole("button")
       .filter({ hasText: /^Save$/ })
       .click();
-
-    //this.page.waitForTimeout(1000);
   }
 
   @Given("there is a Project created using the UI")
-  async createCRndProject() {
+  async createProject() {
     // Definition for SOQL results
     type QueryCompetitionId = {
       totalSize: number;
@@ -79,18 +61,108 @@ class Poc3 {
     console.log(myJSON);
     const competitionId = responseComp.records[0].Id;
 
+    // Navgate to Project
     let pathProject = String(`/lightning/o/Acc_Project__c/list?filterName=All`);
     await this.sfdcPage.loginAndGoto(pathProject);
     await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
-    await this.page
-      .locator("(//input[@class='slds-input'])[2]")
-      .fill("Playwright Test - " + Math.floor(Math.random() * (99999 + 100000) + 1));
-    await this.page.locator("(//input[@class='slds-combobox__input slds-input'])[1]").fill(this.uniqueCompId);
-    await this.page.waitForTimeout(5000);
-    await this.page.keyboard.press("ArrowDown");
-    //await this.page.locator("//*[@data-value='`${competitionId}`']").click();
 
-    // Identify the Compeition from the list
-    //*[@data-value="a00Pu00000HcQXbIAN"]
+    await this.page
+      .getByRole("dialog")
+      .getByLabel("Project Title")
+      .fill("Playwright Test - " + Math.floor(Math.random() * (99999 + 100000) + 1));
+
+    // *****   Need to enter the Competition rather than click then select ******
+    await this.getByFieldID("RecordAcc_CompetitionId__cField").getByLabel("Competition").click();
+    await this.page.waitForTimeout(500); /*
+    await this.getByFieldID("RecordAcc_CompetitionId__cField")
+      .getByLabel("Competition")
+      .getByRole("combobox")
+      .fill(this.uniqueCompId); */
+    await this.page.locator("lightning-base-combobox-item").filter({ hasText: this.uniqueCompId }).click();
+
+    await this.getByFieldID("RecordAcc_Duration__cField").getByLabel("Duration").fill("12");
+    await this.getByFieldID("RecordAcc_TSBProjectNumber__cField")
+      .getByLabel("TSB Project Number")
+      .fill(Math.floor(Math.random() * (99999 + 100000) + 1).toString());
+
+    // Click Save button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
+  }
+
+  @Given("that the Project is being edited by the UI")
+  async editProject() {
+    type QueryProjectId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
+
+    type QueryUserDetails = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string };
+        Id: string;
+        ContactId: string;
+        AccountId: string;
+        Name: string;
+        AccountName: string;
+        Email: string;
+      }[];
+    };
+
+    const conn = await this.sfdcApi.getTsforceConnection();
+    await this.page.waitForTimeout(5000);
+
+    // Get Project Id
+    let query = `SELECT Id FROM Acc_Project__c  WHERE Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
+    console.log("Project Query SOQL:  " + query);
+    const responseProject: QueryProjectId = await conn.executeSOQL({
+      query,
+    });
+
+    const myJSON = JSON.stringify(responseProject);
+    console.log(myJSON);
+    const projectId = responseProject.records[0].Id;
+
+    // Identify Users that can be used for Project Manager, Monitoring Officer and Finance Contact
+    query = `SELECT id, contactId, accountId, contact.Name, account.Name AccountName, contact.email
+FROM USER 
+WHERE profile.name IN ('IUK Customer Community Plus Login User','Customer Community Plus User', 'Customer Community Plus Login User') and contactid!=null
+GROUP BY accountId,contactId,Id,contact.Name,account.Name,contact.email HAVING count(id)>=1 order by count(id)
+LIMIT 3`;
+
+    console.log("Users Query SOQL:  " + query);
+    const responseUsers: QueryUserDetails = await conn.executeSOQL({
+      query,
+    });
+
+    const myJSONUsers = JSON.stringify(responseUsers);
+    console.log(myJSONUsers);
+
+    // Navigate to Project
+    let path = String(`/lightning/r/Acc_Project__c/${projectId}/view`);
+    await this.sfdcPage.loginAndGoto(path);
+
+    // Add Contacts
+    // ********************************************************************
+    await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Contacts" }).click();
+
+    // Click New button
+    await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
+
+    await this.page.waitForTimeout(50000);
+  }
+
+  // Functions
+
+  getByFieldID(label: string) {
+    return this.page.locator(`[data-field-id="${label}"]`);
   }
 }
