@@ -40,9 +40,11 @@ class Poc3 {
      * await this.selectDropdown("Competition Type", "CR&D")
      *
      */
-    await this.page.locator("(//input[@class='slds-input'])[2]").fill(this.uniqueCompId);
-    await this.page.locator("//button[@aria-label='Competition Type']").click();
-    await this.page.locator("//lightning-base-combobox-item[@data-value='KTP']").click();
+    await this.page.getByRole("dialog").getByLabel("Competition ID").fill(this.uniqueCompId);
+    await this.selectDropdown("Competition Type", "KTP");
+    // await this.page.locator("(//input[@class='slds-input'])[2]").fill(this.uniqueCompId);
+    // await this.page.locator("//button[@aria-label='Competition Type']").click();
+    // await this.page.locator("//lightning-base-combobox-item[@data-value='KTP']").click();
 
     await this.page
       .getByRole("button")
