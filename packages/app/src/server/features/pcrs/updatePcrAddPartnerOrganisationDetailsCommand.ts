@@ -13,6 +13,7 @@ import {
   OrganisationDetailsSchemaType,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/organisationDetails.zod";
 import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerOrganisationDetailsCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,

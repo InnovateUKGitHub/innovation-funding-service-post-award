@@ -4,11 +4,17 @@ import { Commands } from "../../../Commands";
 import { PcrType } from "../../../../typings/pcr";
 import { Button } from "../../../../components/Button";
 import { DataTable } from "playwright-bdd";
+import { SfdcApi } from "../../../sfdc/SfdcApi";
+import { ProjectState } from "../../../projectFactory/ProjectState";
+import { BaseCrndProjectScriptContext } from "@innovateuk/project-factory-two/scripts/BaseCrndProjectScript";
 export
 @Fixture("projectChangeRequests")
 class ProjectChangeRequests {
   protected readonly page: Page;
   protected readonly commands: Commands;
+  protected readonly sfdcApi: SfdcApi;
+  protected readonly projectState: ProjectState;
+
   private readonly pcrPageHeading: Locator;
   private readonly createButton: Locator;
   private readonly startRequestHeader: string;
@@ -57,9 +63,21 @@ class ProjectChangeRequests {
   private readonly deleteGuidance: string;
   private readonly deleteRequestButton: Locator;
 
-  constructor({ page, commands }: { page: Page; commands: Commands }) {
+  constructor({
+    page,
+    commands,
+    sfdcApi,
+    projectState,
+  }: {
+    page: Page;
+    commands: Commands;
+    sfdcApi: SfdcApi;
+    projectState: ProjectState;
+  }) {
     this.page = page;
     this.commands = commands;
+    this.sfdcApi = sfdcApi;
+    this.projectState = projectState;
     this.pcrPageHeading = this.page.getByRole("heading").filter({ hasText: "Project change requests" });
     this.createButton = Button.fromTitle(page, "Create request");
     this.startRequestHeader = "Start a new request";
@@ -116,6 +134,43 @@ class ProjectChangeRequests {
     this.deleteDraftRequestHeading = this.page.getByRole("heading").filter({ hasText: "Delete draft request" });
     this.deleteGuidance = "All the information will be permanently deleted.";
     this.deleteRequestButton = this.page.getByRole("button").filter({ hasText: "Delete request" });
+  }
+
+  @Then("the Marked as complete status is {string}")
+  async accessProject(markedCompleteStatus: string) {
+    let status = `"${markedCompleteStatus}"`;
+    const context = this.projectState.context as BaseCrndProjectScriptContext;
+    const projectNumber = String(context.project.Acc_ProjectNumber__c);
+    type QueryPCR = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Name: string;
+        Acc_MarkedasComplete__c: string;
+      }[];
+    };
+    const conn = await this.sfdcApi.getTsforceConnection();
+    await conn.executeApex({ query: "System.debug('Run an Apex query');" });
+    const pcrQuery: QueryPCR = await conn.executeSOQL({
+      query: `SELECT Name, CreatedDate from Acc_ProjectChangeRequest__c WHERE Acc_ProjectNumber__c = '${projectNumber}' ORDER BY CreatedDate`,
+    });
+    const pcr = pcrQuery.records[1].Name;
+    const markedAsQuery: QueryPCR = await conn.executeSOQL({
+      query: `SELECT Acc_MarkedasComplete__c from Acc_ProjectChangeRequest__c WHERE Name = '${pcr}'`,
+    });
+    const markedAsCompleteStatus = markedAsQuery.records[0].Acc_MarkedasComplete__c;
+    const markedAsJson = JSON.stringify(markedAsCompleteStatus);
+    if (markedAsJson === status) {
+      console.log(`Marked as complete status test passed. The status is '${markedAsJson}'`);
+    } else {
+      throw new Error(`Test failed because marked as complete status is '${markedAsJson}'`);
+    }
+  }
+
+  @Then("the user will see the Mark as complete subheading")
+  async markAsCompleteSubheading() {
+    await expect(this.markAsComplete).toBeVisible();
   }
 
   /**

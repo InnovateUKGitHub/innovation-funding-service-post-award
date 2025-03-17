@@ -118,7 +118,8 @@ export const test = base.extend<AccFixtures, Workers>({
   projectForecasts: ({ page, commands, accNavigation }, use) =>
     use(new ProjectForecasts({ page, commands, accNavigation })),
   viewForecast: ({ page, commands }, use) => use(new ViewForecast({ page, commands })),
-  projectChangeRequests: ({ page, commands }, use) => use(new ProjectChangeRequests({ page, commands })),
+  projectChangeRequests: ({ page, commands, sfdcApi, projectState }, use) =>
+    use(new ProjectChangeRequests({ page, commands, sfdcApi, projectState })),
   putProjectOnHold: ({ page, commands, projectChangeRequests }, use) =>
     use(new PutProjectOnHold({ page, commands, projectChangeRequests })),
   monitoringReports: ({ page, commands }, use) => use(new MonitoringReports({ page, commands })),
@@ -161,8 +162,7 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
-  claimLineItemsOrdering: ({ page, commands }, use) =>
-    use(new ClaimLineItemsOrdering({ page, commands})),
+  claimLineItemsOrdering: ({ page, commands }, use) => use(new ClaimLineItemsOrdering({ page, commands })),
 
   // Project Factory
   accProjectBase: [
