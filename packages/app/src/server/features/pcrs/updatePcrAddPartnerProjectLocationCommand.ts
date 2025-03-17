@@ -13,6 +13,7 @@ import {
   ProjectLocationSchemaType,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/projectLocation.zod";
 import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -74,7 +75,7 @@ export class UpdatePcrAddPartnerProjectLocationCommand extends ZodAuthorisedAsyn
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_ProjectPostcode__c: validatedData.projectPostcode,
       Acc_ProjectCity__c: validatedData.projectCity,
       Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(validatedData.projectLocation),

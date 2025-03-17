@@ -13,7 +13,12 @@ import {
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { PcrPartnerTypeMapper, PcrProjectRoleMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
-import { getPCROrganisationType, PCROrganisationType, PCRParticipantSize } from "@framework/constants/pcrConstants";
+import {
+  getPCROrganisationType,
+  PCRItemStatus,
+  PCROrganisationType,
+  PCRParticipantSize,
+} from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerRoleAndOrganisationCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -84,7 +89,7 @@ export class UpdatePcrAddPartnerRoleAndOrganisationCommand extends ZodAuthorised
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_CommercialWork__c: validatedData.isCommercialWork === "true",
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(validatedData.partnerType),
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(validatedData.projectRole),

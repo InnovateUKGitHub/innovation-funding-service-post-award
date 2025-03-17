@@ -5,13 +5,12 @@ import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 import {
   addPartnerErrorMap,
   AddPartnerSchemaType,
   addPartnerSummarySchema,
 } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerSummaryCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -92,11 +91,9 @@ export class UpdatePcrAddPartnerSummaryCommand extends ZodAuthorisedAsyncCommand
     context: IContext,
     validatedData: z.output<AddPartnerSchemaType>,
   ): Promise<boolean> {
-    const status = validatedData.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(status),
+      Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
     });
 
     return true;

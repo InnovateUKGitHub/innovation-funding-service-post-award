@@ -12,6 +12,7 @@ import {
   AcademicOrganisationSchemaType,
   getAcademicOrganisationSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/academicOrganisation.zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerAcademicOrganisationCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -71,7 +72,7 @@ export class UpdatePcrAddPartnerAcademicOrganisationCommand extends ZodAuthorise
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_OrganisationName__c: validatedData.organisationName,
     });
 

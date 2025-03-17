@@ -5,7 +5,8 @@ import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
 import { pcrTimeExtensionSchema, TimeExtensionSchema, errorMap } from "@ui/pages/pcrs/timeExtension/timeExtension.zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -60,7 +61,11 @@ export class UpdatePcrChangeDurationCommand extends ZodAuthorisedAsyncCommandBas
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrChangeDurationSummary,
+        validatedData.markedAsComplete,
+        this.form,
+      ),
       Acc_AdditionalNumberofMonths__c: Number(validatedData.timeExtension),
     });
 

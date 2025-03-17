@@ -12,6 +12,7 @@ import {
   getAcademicCostsSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/academicCosts.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerAcademicCostsCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -79,7 +80,7 @@ export class UpdatePcrAddPartnerAcademicCostsCommand extends ZodAuthorisedAsyncC
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_TSBReference__c: validatedData.tsbReference,
     });
 
