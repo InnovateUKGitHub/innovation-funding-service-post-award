@@ -18,6 +18,11 @@ class Poc3 {
     this.uniqueCompId = String(`PW-${Math.floor(Math.random() * (99999 + 100000) + 1)}`);
   }
 
+  async selectDropdown(label: string, option: string) {
+    await this.page.getByRole("combobox", { name: label }).click();
+    await this.page.locator("lightning-base-combobox-item").filter({ hasText: option }).click();
+  }
+
   @Given("there is a Competition created using the UI")
   async createCompetition() {
     // Create Competition using the UI
@@ -27,10 +32,18 @@ class Poc3 {
     await this.sfdcPage.loginAndGoto(pathComp);
 
     await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
+
+    /**
+     * Alternatively to xpath below you can simply use the following:
+     *  await this.page.getByLabel("Competition ID").fill("Playwright-" + uniqueCompId);
+     * and a new function above:
+     * await this.selectDropdown("Competition Type", "CR&D")
+     *
+     */
     await this.page.locator("(//input[@class='slds-input'])[2]").fill(this.uniqueCompId);
     await this.page.locator("//button[@aria-label='Competition Type']").click();
     await this.page.locator("//lightning-base-combobox-item[@data-value='KTP']").click();
-    //await this.page.getByLabel("Competition Type").getByRole("combobox").selectOption("CR&D");
+
     await this.page
       .getByRole("button")
       .filter({ hasText: /^Save$/ })
