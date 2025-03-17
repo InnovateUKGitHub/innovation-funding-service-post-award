@@ -13,6 +13,7 @@ import {
 } from "@ui/pages/pcrs/addPartner/steps/schemas/otherSourcesOfFunding.zod";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { combineDate } from "@ui/components/atoms/Date";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerOtherSourcesOfFundingCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -92,7 +93,7 @@ export class UpdatePcrAddPartnerOtherSourcesOfFundingCommand extends ZodAuthoris
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
     });
 
     await context.repositories.pcrSpendProfile.insertSpendProfiles(newFundItems);

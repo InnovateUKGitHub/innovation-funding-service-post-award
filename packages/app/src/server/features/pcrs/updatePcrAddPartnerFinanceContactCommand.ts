@@ -13,7 +13,7 @@ import {
   getFinanceContactSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/financeContact.zod";
 import { PcrContactRoleMapper } from "@framework/mappers/pcr";
-import { PCRContactRole } from "@framework/constants/pcrConstants";
+import { PCRContactRole, PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerFinanceContactCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -76,7 +76,7 @@ export class UpdatePcrAddPartnerFinanceContactCommand extends ZodAuthorisedAsync
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(
         PCRContactRole.FinanceContact,
       ),

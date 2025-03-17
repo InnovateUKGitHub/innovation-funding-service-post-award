@@ -13,6 +13,7 @@ import {
   OrganisationDetailsSchemaType,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/organisationDetails.zod";
 import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerOrganisationDetailsCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -76,7 +77,7 @@ export class UpdatePcrAddPartnerOrganisationDetailsCommand extends ZodAuthorised
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(
         validatedData.participantSize,
       ),

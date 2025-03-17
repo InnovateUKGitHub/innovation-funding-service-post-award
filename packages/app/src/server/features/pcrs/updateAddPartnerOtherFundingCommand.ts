@@ -8,6 +8,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { otherFundingSchema, OtherFundingSchemaType } from "@ui/pages/pcrs/addPartner/steps/schemas/otherFunding.zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export class UpdatePcrAddPartnerOtherFundingCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -67,7 +68,7 @@ export class UpdatePcrAddPartnerOtherFundingCommand extends ZodAuthorisedAsyncCo
   ): Promise<boolean> {
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
       Acc_OtherFunding__c: validatedData.hasOtherFunding === "true",
     });
 

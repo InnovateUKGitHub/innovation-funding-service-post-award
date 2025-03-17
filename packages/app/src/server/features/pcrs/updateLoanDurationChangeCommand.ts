@@ -4,7 +4,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ZodAuthorisedAsyncCommandBase } from "../common/commandBase";
 import { z } from "zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   loanDrawdownChangeSchema,
@@ -102,7 +102,11 @@ export class UpdatePcrLoanDrawdownChangeCommand extends ZodAuthorisedAsyncComman
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrLoanDrawdownChangeSummary,
+        validatedData.markedAsComplete,
+        this.form,
+      ),
     });
 
     return true;

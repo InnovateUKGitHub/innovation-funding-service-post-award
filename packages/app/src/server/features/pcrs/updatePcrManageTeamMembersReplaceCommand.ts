@@ -11,7 +11,7 @@ import {
   removePartnerSchema,
   RemovePartnerSchema,
 } from "@ui/pages/pcrs/removePartner/removePartner.zod";
-import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { getPcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class UpdatePcrManageTeamMembersReplaceCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
@@ -83,7 +83,7 @@ export class UpdatePcrManageTeamMembersReplaceCommand extends ZodAuthorisedAsync
 
     await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
       Id: this.pcrItemId,
-      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(this.dto.status),
+      Acc_MarkedasComplete__c: getPcrItemStatus(validatedData.markedAsComplete),
       Acc_RemovalPeriod__c: validatedData.removalPeriod,
       Acc_Project_Participant__c: validatedData.partnerId,
     });

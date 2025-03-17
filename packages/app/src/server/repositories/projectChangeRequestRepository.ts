@@ -24,6 +24,7 @@ import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { TsforceConnection } from "@innovateuk/tsforce/TsforceConnection";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { mapToSalesforcePCRManageTeamMemberType, mapProjectRoleToName } from "@framework/mappers/pcr";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
@@ -209,9 +210,26 @@ export const mapToPCRItemStatusLabel = (status?: PCRItemStatus): string => {
     case PCRItemStatus.Complete:
       return "Complete";
     default:
-      return "";
+      return "Unknown";
   }
 };
+
+export const getPcrItemStatus = (markedAsComplete: boolean) =>
+  mapToPCRItemStatusLabel(markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete);
+
+/**
+ * returns the salesforce label for Pcr Item Status, which will be Incomplete if not the summary view
+ * and if the summary view depends on the markedAsComplete value
+ * Complete if true, Incomplete if false
+ * @param summaryForm the form name for the summary view
+ * @param markedAsComplete the marked as complete value
+ * @param currentForm the current form from validated data
+ */
+export function handlePcrItemStatus(summaryForm: FormTypes, markedAsComplete: boolean, currentForm: FormTypes) {
+  return summaryForm === currentForm
+    ? getPcrItemStatus(markedAsComplete)
+    : mapToPCRItemStatusLabel(PCRItemStatus.Incomplete);
+}
 
 /**
  * ProjectChangeRequests are stored in Acc_ProjectChangeRequest__c table
