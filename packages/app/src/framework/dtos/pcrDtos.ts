@@ -32,6 +32,7 @@ import {
 import { AddPartnerSchemaType } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { ApproveNewSubcontractorSchemaType } from "@ui/pages/pcrs/approveNewSubcontractor/ApproveNewSubcontractor.zod";
 import { PcrReviewSchema } from "@ui/pages/pcrs/pcrReview.zod";
+import { replaceTeamMemberValidator } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberCrud.zod";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -559,15 +560,7 @@ export interface PcrAddPartnerProjectManagerDto extends PcrDtoCommon {
   contact2Phone?: string;
 }
 
-export interface PcrReplaceTeamMemberDto {
-  form: FormTypes.ProjectManageTeamMembersReplace;
-  pclId: ProjectContactLinkId;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: ProjectRole;
-  partnerId: PartnerId;
-}
+export type PcrReplaceTeamMemberDto = z.output<typeof replaceTeamMemberValidator>;
 
 export interface PcrInviteTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersCreate;

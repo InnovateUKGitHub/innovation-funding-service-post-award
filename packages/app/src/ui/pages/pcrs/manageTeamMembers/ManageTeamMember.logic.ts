@@ -80,6 +80,9 @@ const getManageTeamMember = ({
   let defaultStartDay: string | undefined;
   let defaultStartMonth: string | undefined;
   let defaultStartYear: string | undefined;
+  let defaultEndDay: string | undefined;
+  let defaultEndMonth: string | undefined;
+  let defaultEndYear: string | undefined;
   let hideBottomSection = false;
   let filteredPartners = partners;
 
@@ -100,6 +103,7 @@ const getManageTeamMember = ({
           defaults?.startDate && "year" in defaults?.startDate
             ? defaults?.startDate.year
             : getYear(defaults?.startDate);
+
         if (role === ProjectRole.ASSOCIATE || role === ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR) {
           filteredPartners = filteredPartners.filter(x => x.type === "Knowledge base");
         }
@@ -114,7 +118,12 @@ const getManageTeamMember = ({
         defaultFirstName = defaults?.firstName ?? undefined;
         defaultLastName = defaults?.lastName ?? undefined;
         defaultEmail = defaults?.email ?? undefined;
-
+        defaultEndDay =
+          defaults?.endDate && "day" in defaults?.endDate ? defaults?.endDate.day : getDay(defaults?.endDate);
+        defaultEndMonth =
+          defaults?.endDate && "month" in defaults?.endDate ? defaults?.endDate.month : getMonth(defaults?.endDate);
+        defaultEndYear =
+          defaults?.endDate && "year" in defaults?.endDate ? defaults?.endDate.year : getYear(defaults?.endDate);
         // Can only submit if there is a member to manage;
         hideBottomSection = !memberToManage;
       }
@@ -138,6 +147,9 @@ const getManageTeamMember = ({
       startDay: defaultStartDay,
       startMonth: defaultStartMonth,
       startYear: defaultStartYear,
+      endDay: defaultEndDay,
+      endMonth: defaultEndMonth,
+      endYear: defaultEndYear,
     },
     hideBottomSection,
     filteredPartners,
