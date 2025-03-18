@@ -150,19 +150,78 @@ LIMIT 3`;
     let path = String(`/lightning/r/Acc_Project__c/${projectId}/view`);
     await this.sfdcPage.loginAndGoto(path);
 
-    // Add Contacts
+    // Add PCL
     // ********************************************************************
     await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Contacts" }).click();
 
-    // Click New button
-    await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
+    // Project Manager
+    let externalUser = responseUsers.records[0].Name; //RecordAcc_ContactId_cField
+    let externalUserAccount = responseUsers.records[0].AccountName; //RecordAcc_AccountId_cField
+    let externalUserEmail = responseUsers.records[0].Email; //RecordAcc_EmailOfSFContact_cField
+    await this.addPCL(externalUser, externalUserAccount, "Project Manager", externalUserEmail);
 
-    await this.page.waitForTimeout(50000);
+    // Monitoring Officer
+    externalUser = responseUsers.records[1].Name; //RecordAcc_ContactId_cField
+    externalUserAccount = responseUsers.records[1].AccountName; //RecordAcc_AccountId_cField
+    externalUserEmail = responseUsers.records[1].Email; //RecordAcc_EmailOfSFContact_cField
+    await this.addPCL(externalUser, externalUserAccount, "Monitoring Officer", externalUserEmail);
+
+    // Finance Contact
+    externalUser = responseUsers.records[2].Name; //RecordAcc_ContactId_cField
+    externalUserAccount = responseUsers.records[2].AccountName; //RecordAcc_AccountId_cField
+    externalUserEmail = responseUsers.records[2].Email; //RecordAcc_EmailOfSFContact_cField
+    await this.addPCL(externalUser, externalUserAccount, "Finance Contact", externalUserEmail);
+
+    await this.page.waitForTimeout(10000);
   }
 
   // Functions
 
   getByFieldID(label: string) {
     return this.page.locator(`[data-field-id="${label}"]`);
+  }
+
+  // Adds PCL
+  async addPCL(
+    externalUserVal: string,
+    externalUserAccountVal: string,
+    projectRoleVal: string,
+    externalUserEmailVal: string,
+  ) {
+    console.log("External User: " + externalUserVal);
+    console.log("External User Account: " + externalUserAccountVal);
+
+    // Click New button
+    await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
+
+    await this.selectDropdown("Project Role", projectRoleVal);
+
+    await this.getByFieldID("RecordAcc_ContactId_cField").getByLabel("External User").click();
+    await this.getByFieldID("RecordAcc_ContactId_cField").getByLabel("External User").fill(externalUserVal);
+    await this.getByFieldID("RecordAcc_ContactId_cField")
+      .locator("li")
+      .locator("lightning-base-combobox-item")
+      .filter({ hasText: externalUserVal })
+      .first()
+      .click();
+
+    await this.getByFieldID("RecordAcc_AccountId_cField").getByLabel("Account").click();
+    await this.getByFieldID("RecordAcc_AccountId_cField").getByLabel("Account").fill(externalUserAccountVal);
+    await this.getByFieldID("RecordAcc_AccountId_cField")
+      .locator("li")
+      .locator("lightning-base-combobox-item")
+      .filter({ hasText: externalUserAccountVal })
+      .first()
+      .click();
+
+    await this.getByFieldID("RecordAcc_EmailOfSFContact_cField")
+      .getByLabel("Project Contact Email")
+      .fill(externalUserEmailVal + ".noemail");
+
+    // Click Save button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
   }
 }
