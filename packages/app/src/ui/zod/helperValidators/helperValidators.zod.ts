@@ -7,6 +7,7 @@ import { DateTime } from "luxon";
 import { z, ZodIssueCode, ZodRawShape } from "zod";
 import { filenameValidator } from "./filenameValidator.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { monthNameToNumber } from "@shared/date-helpers";
 
 const y2k = new Date("2000-01-01");
 
@@ -209,25 +210,34 @@ const dateValidation = z
     z.date(),
     z
       .object({
-        day: z
-          .string()
-          .max(2)
-          .regex(/^\d\d?$/),
-        month: z
-          .string()
-          .max(2)
-          .regex(/^\d\d?$/),
-        year: z
-          .string()
-          .min(4)
-          .max(4)
-          .regex(/^\d\d\d\d$/),
+        day: z.string(),
+        month: z.string().transform(monthNameToNumber),
+        year: z.string(),
       })
       .superRefine((x, ctx) => {
         const year = Number(x.year);
         const month = Number(x.month);
         const day = Number(x.day);
+
         const datetime = DateTime.utc(year, month, day);
+
+        const missingComponents: string[] = [];
+        if (x.day === "") missingComponents.push("day");
+        if (x.month === "") missingComponents.push("month");
+        if (x.year === "") missingComponents.push("year");
+
+        if (missingComponents.length === 3) {
+          ctx.addIssue({
+            code: ZodIssueCode.custom,
+            params: { i18n: "errors.missing_date" },
+          });
+        } else if (missingComponents.length !== 0) {
+          ctx.addIssue({
+            code: ZodIssueCode.custom,
+            params: { i18n: "errors.missing_date_component", missingComponents },
+          });
+        }
+
         if (!datetime.isValid) {
           ctx.addIssue({
             code: ZodIssueCode.invalid_date,

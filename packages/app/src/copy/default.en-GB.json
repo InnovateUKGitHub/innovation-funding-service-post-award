@@ -3186,35 +3186,28 @@
     "contact": {
       "contacts": {
         "arrayType": {
-          "associateStartDate": {
-            "day": {
-              "errors": {
-                "too_big": "Start day must be a valid number.",
-                "invalid_string": {
-                  "regex": "Start day must be a number."
-                }
-              }
-            },
-            "month": {
-              "errors": {
-                "too_big": "Start month must be a valid number.",
-                "invalid_string": {
-                  "regex": "Start month must be a number."
-                }
-              }
-            },
-            "year": {
-              "errors": {
-                "too_small": "Start year must be a valid 4 digit number.",
-                "too_big": "Start year must be a valid 4 digit number.",
-                "invalid_string": {
-                  "regex": "Start year must be a 4 digit number."
-                }
-              }
-            },
+          "startDate": {
             "errors": {
-              "invalid_date": "Enter a valid start date.",
-              "too_small": "The start date must be the same as or after 1 January 2000."
+              "missing_date": "Enter a start date.",
+              "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
+              "invalid_date": "Start date must be a real date.",
+              "too_small": "Start date must be the same as or after 1 January 2000."
+            }
+          },
+          "endDate": {
+            "errors": {
+              "missing_date": "Enter an end date.",
+              "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
+              "invalid_date": "End date must be a real date.",
+              "too_small": "End date must be the same as or after 1 January 2000."
+            }
+          },
+          "associateStartDate": {
+            "errors": {
+              "missing_date": "Enter a start date.",
+              "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
+              "invalid_date": "Start date must be a real date.",
+              "too_small": "Start date must be the same as or after 1 January 2000."
             }
           }
         }
@@ -3248,34 +3241,11 @@
           }
         },
         "startDate": {
-          "day": {
-            "errors": {
-              "too_big": "Start day must be a valid number.",
-              "invalid_string": {
-                "regex": "Start day must be a number."
-              }
-            }
-          },
-          "month": {
-            "errors": {
-              "too_big": "Start month must be a valid number.",
-              "invalid_string": {
-                "regex": "Start month must be a number."
-              }
-            }
-          },
-          "year": {
-            "errors": {
-              "too_small": "Start year must be a valid 4 digit number.",
-              "too_big": "Start year must be a valid 4 digit number.",
-              "invalid_string": {
-                "regex": "Start year must be a 4 digit number."
-              }
-            }
-          },
           "errors": {
-            "invalid_date": "Enter a valid start date.",
-            "too_small": "The start date must be the same as or after 1 January 2000."
+            "missing_date": "Enter a start date.",
+            "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
+            "invalid_date": "Start date must be a real date.",
+            "too_small": "Start date must be the same as or after 1 January 2000."
           }
         }
       }
