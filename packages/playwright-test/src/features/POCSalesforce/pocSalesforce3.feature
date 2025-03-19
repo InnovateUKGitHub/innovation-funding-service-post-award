@@ -3,4 +3,5 @@ Feature: Playwright Salesforce POC
     Scenario: Running a test
         Given there is a Competition created using the UI
         And there is a Project created using the UI
-        And that the Project is being edited by the UI
+        And Contacts and Participants are added by the UI
+        And Stattdate added and Project status changed to Live using the UI

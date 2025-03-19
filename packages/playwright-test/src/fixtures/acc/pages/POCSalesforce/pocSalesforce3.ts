@@ -18,11 +18,6 @@ class Poc3 {
     this.uniqueCompId = String(`PW-${Math.floor(Math.random() * (99999 + 100000) + 1)}`);
   }
 
-  async selectDropdown(label: string, option: string) {
-    await this.page.getByRole("combobox", { name: label }).click();
-    await this.page.locator("lightning-base-combobox-item").filter({ hasText: option }).click();
-  }
-
   @Given("there is a Competition created using the UI")
   async createCompetition() {
     let pathComp = String(`/lightning/o/Competition__c/list?filterName=All`);
@@ -92,7 +87,7 @@ class Poc3 {
       .click();
   }
 
-  @Given("that the Project is being edited by the UI")
+  @Given("Contacts and Participants are added by the UI")
   async editProject() {
     type QueryProjectId = {
       totalSize: number;
@@ -150,35 +145,126 @@ LIMIT 3`;
     let path = String(`/lightning/r/Acc_Project__c/${projectId}/view`);
     await this.sfdcPage.loginAndGoto(path);
 
-    // Add PCL
+    // Add PCLs
     // ********************************************************************
     await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Contacts" }).click();
 
     // Project Manager
-    let externalUser = responseUsers.records[0].Name; //RecordAcc_ContactId_cField
-    let externalUserAccount = responseUsers.records[0].AccountName; //RecordAcc_AccountId_cField
-    let externalUserEmail = responseUsers.records[0].Email; //RecordAcc_EmailOfSFContact_cField
+    let externalUser = responseUsers.records[0].Name;
+    let externalUserAccount = responseUsers.records[0].AccountName;
+    let externalUserEmail = responseUsers.records[0].Email;
     await this.addPCL(externalUser, externalUserAccount, "Project Manager", externalUserEmail);
 
     // Monitoring Officer
-    externalUser = responseUsers.records[1].Name; //RecordAcc_ContactId_cField
-    externalUserAccount = responseUsers.records[1].AccountName; //RecordAcc_AccountId_cField
-    externalUserEmail = responseUsers.records[1].Email; //RecordAcc_EmailOfSFContact_cField
+    externalUser = responseUsers.records[1].Name;
+    externalUserAccount = responseUsers.records[1].AccountName;
+    externalUserEmail = responseUsers.records[1].Email;
     await this.addPCL(externalUser, externalUserAccount, "Monitoring Officer", externalUserEmail);
 
     // Finance Contact
-    externalUser = responseUsers.records[2].Name; //RecordAcc_ContactId_cField
-    externalUserAccount = responseUsers.records[2].AccountName; //RecordAcc_AccountId_cField
-    externalUserEmail = responseUsers.records[2].Email; //RecordAcc_EmailOfSFContact_cField
+    externalUser = responseUsers.records[2].Name;
+    externalUserAccount = responseUsers.records[2].AccountName;
+    externalUserEmail = responseUsers.records[2].Email;
     await this.addPCL(externalUser, externalUserAccount, "Finance Contact", externalUserEmail);
+
+    // Add Participants
+    // ********************************************************************
+
+    await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Participants" }).click();
+
+    // Project Manager
+    externalUser = responseUsers.records[0].Name;
+    externalUserAccount = responseUsers.records[0].AccountName;
+    externalUserEmail = responseUsers.records[0].Email;
+    await this.addParticipant(externalUser, externalUserAccount, "Project Lead");
+
+    // Finance Contact
+    externalUser = responseUsers.records[2].Name;
+    externalUserAccount = responseUsers.records[2].AccountName;
+    externalUserEmail = responseUsers.records[2].Email;
+    await this.addParticipant(externalUser, externalUserAccount, "Collaborator");
 
     await this.page.waitForTimeout(10000);
   }
 
+  @Given("Stattdate added and Project status changed to Live using the UI")
+  async changeProjectStatus() {
+    await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Details" }).click();
+
+    // Select pen icon
+    await this.getByFieldID("RecordAcc_ProjectTitle__cField").getByTitle("Edit Project Title").click();
+
+    await this.selectDropdown("Claim Frequency", "Monthly");
+    await this.getByFieldID("RecordAcc_StartDate__cField").getByLabel("Start Date").fill("01/06/2024");
+    await this.selectDropdown("Project Reporting Type", "Public");
+    await this.selectDropdown("Monitoring Level", "Gold");
+    //    await this.selectDropdown("Monitoring Report Schedule", "Quarterly");
+    // ******** Had issues with the selectDropdown function returning multiple values ************
+    await this.page.getByRole("combobox", { name: "Monitoring Report Schedule" }).click();
+    await this.page.keyboard.type("Yearly");
+    await this.page.keyboard.press("Enter");
+
+    await this.getByFieldID("RecordAcc_WorkdayProjectSetupComplete__cField")
+      .getByLabel("Workday Project Setup Complete")
+      .check();
+
+    // Click Save button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
+
+    // Select Live
+    await this.page.waitForTimeout(10000);
+    await this.page.getByRole("listbox").locator("li").filter({ hasText: "Live" }).click();
+    await this.page.locator("button").filter({ hasText: "Mark as Current Project Status" }).click();
+    //await this.page.getByRole("listbox").locator("li").filter({ hasText: "Mark as Current Project Status" }).click();
+  }
+
   // Functions
+  // *************************************************************************************************************
 
   getByFieldID(label: string) {
     return this.page.locator(`[data-field-id="${label}"]`);
+  }
+
+  async selectDropdown(label: string, option: string) {
+    await this.page.getByRole("combobox", { name: label }).click();
+    await this.page.locator("lightning-base-combobox-item").filter({ hasText: option }).click();
+  }
+
+  // Adds Participant
+  async addParticipant(externalUserVal: string, externalUserAccountVal: string, projectRoleVal: string) {
+    console.log("External User: " + externalUserVal);
+    console.log("External User Account: " + externalUserAccountVal);
+
+    // Click New button
+    await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
+
+    await this.getByFieldID("RecordAcc_AccountId__cField").getByLabel("Account").click();
+    await this.getByFieldID("RecordAcc_AccountId__cField").getByLabel("Account").fill(externalUserAccountVal);
+    await this.getByFieldID("RecordAcc_AccountId__cField")
+      .locator("li")
+      .locator("lightning-base-combobox-item")
+      .filter({ hasText: externalUserAccountVal })
+      .first()
+      .click();
+
+    await this.selectDropdown("Project Role", projectRoleVal);
+
+    await this.selectDropdown("Participant Type", "Business");
+
+    await this.selectDropdown("Organisation Type", "Industrial");
+
+    await this.getByFieldID("RecordAcc_WorkdaySupplierSetupComplete__cField")
+      .getByLabel("Workday Supplier Setup Complete")
+      .check();
+
+    // Click Save button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
   }
 
   // Adds PCL
