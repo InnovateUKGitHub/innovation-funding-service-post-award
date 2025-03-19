@@ -13,7 +13,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "typecheck": "tsc --noEmit --watch"
+    "typecheck:watch": "tsc --watch",
+    "typecheck": "tsc"
   },
   "author": "BJSS Ltd",
   "license": "ISC",

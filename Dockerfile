@@ -10,7 +10,7 @@ COPY --chown=node:node patches /externalui/patches
 COPY --chown=node:node packages /externalui/packages
 RUN npm ci --include=optional
 
-RUN npm run build && npm run test
+RUN npm run typegen && npm run build && npm run test
 
 # Run turbo once to make sure the correct binary is installed
 RUN npm run turbo; exit 0
