@@ -109,8 +109,6 @@ const configGenerator = ({ env = "production", devtools = false }) => {
         getPath("src/client/replacement-files", "isomorphicFileWrapper.ts"),
       ),
       new NormalModuleReplacementPlugin(/logger/, result => {
-        console.log(result);
-
         if (result.createData?.resource) {
           result.createData.resource = result.createData.resource
             .replace("packages/logger/dist/index.js", "packages/logger/dist/clientIndexReplacement.js")
