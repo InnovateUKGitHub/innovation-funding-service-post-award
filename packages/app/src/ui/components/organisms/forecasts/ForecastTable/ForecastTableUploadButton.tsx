@@ -7,6 +7,9 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { ForecastTableDto } from "./NewForecastTable.logic";
 import { ForecastPageSchema } from "@ui/pages/forecasts/forecastPage.zod";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
+
+class TemplateException extends Error {}
 
 const ForecastTableUploadButton = <TFieldValues extends ForecastPageSchema>({
   tableData,
@@ -17,8 +20,7 @@ const ForecastTableUploadButton = <TFieldValues extends ForecastPageSchema>({
 }) => {
   const { copy } = useContent();
   const { isClient } = useMounted();
-
-  const { handleSubmit, register } = useForm<{ file: FileList }>();
+  const { handleSubmit, register, formState, setError } = useForm<{ file: FileList }>();
 
   if (!isClient) return null;
 
@@ -29,28 +31,41 @@ const ForecastTableUploadButton = <TFieldValues extends ForecastPageSchema>({
         await spreadsheet.import(await file.arrayBuffer());
         const data = await spreadsheet.extractWorksheets();
 
-        const profiles: Record<string, string> = {};
+        try {
+          const profiles: Record<string, string> = {};
 
-        for (const { costCategory, periods } of data) {
-          const costCatData = tableData.costCategories.find(x => x.costCategoryName === costCategory);
+          for (const { costCategory, periods } of data) {
+            const costCatData = tableData.costCategories.find(x => x.costCategoryName === costCategory);
 
-          for (let i = 0; i < periods.length; i++) {
-            const periodNumber = i + 1;
-            const periodValue = periods[i];
-            const profileId = costCatData?.profiles.find(x => x.periodId === periodNumber)?.profileId;
+            if (!costCatData) throw new TemplateException();
+            if (periods.length !== costCatData.profiles.length) throw new TemplateException();
 
-            if (profileId) profiles[profileId] = String(periodValue);
+            for (let i = 0; i < periods.length; i++) {
+              const periodNumber = i + 1;
+              const periodValue = periods[i];
+              const profileId = costCatData?.profiles.find(x => x.periodId === periodNumber)?.profileId;
+
+              if (profileId) profiles[profileId] = String(periodValue);
+            }
+          }
+
+          setValue("profile", profiles);
+        } catch (e) {
+          console.log(e);
+          if (e instanceof TemplateException) {
+            setError(
+              "file",
+              { message: "The selected file must use the template.", type: "custom" },
+              { shouldFocus: true },
+            );
           }
         }
-
-        setValue("profile", profiles);
       })}
     >
-      <FormGroup>
-        <Fieldset>
-          <FileInput {...register("file")} />
-          <button type="submit">import</button>
-        </Fieldset>
+      <FormGroup hasError={!!formState.errors.file}>
+        <ValidationError error={formState.errors.file} />
+        <FileInput {...register("file")} />
+        <button type="submit">import</button>
       </FormGroup>
     </form>
   );
