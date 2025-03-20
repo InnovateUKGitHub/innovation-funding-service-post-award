@@ -69,4 +69,8 @@ class AccIsLoaded {
   async selectProjectTile() {
     await DashboardTile.fromTitle(this.page, "Projects").click();
   }
+
+  async projectSetupLoaded() {
+    await this.commands.heading("Project Setup");
+  }
 }

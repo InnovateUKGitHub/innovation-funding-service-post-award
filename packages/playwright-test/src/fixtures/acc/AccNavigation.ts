@@ -237,4 +237,22 @@ class AccNavigation {
       `/projects/${project.Id}/claims/${claim.Acc_ProjectParticipant__c}/review/${claim.Acc_ProjectPeriodNumber__c}`,
     );
   }
+
+  @Given("the user navigates to the Project Setup page")
+  async goToProjectSetupPage() {
+    await this.testCache.cache(
+      ["gotoProjectSetup", this.projectState.prefixedProjectNumber()],
+      async () => {
+        await this.gotoProjectDashboard();
+        await ProjectCard.fromTitle(this.page, this.projectState.prefixedProjectNumber()).click();
+        return this.page.url();
+      },
+      async url => {
+        await this.page.goto(url);
+      },
+    );
+
+    await this.accIsLoaded.devToolsLoaded();
+    await this.accIsLoaded.projectSetupLoaded();
+  }
 }

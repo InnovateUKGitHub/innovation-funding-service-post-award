@@ -298,12 +298,12 @@ class ViewForecast {
     //Table headers
     if (viewOnlyID) {
       if (forecastTile) {
-        await this.forecastTableHeaders(true, viewOnlyID);
+        await this.forecastTableHeaders(false, true, viewOnlyID);
       } else {
-        await this.forecastTableHeaders(false, viewOnlyID);
+        await this.forecastTableHeaders(false, false, viewOnlyID);
       }
     } else {
-      await this.forecastTableHeaders();
+      await this.forecastTableHeaders(false);
     }
     /**
      * Note for the Forecast tile tests, the forecast costs jump in regular increments every period.
@@ -433,8 +433,13 @@ class ViewForecast {
     }
   }
 
-  async forecastTableHeaders(forecastTile?: boolean, moViewID?: string) {
-    const topHeaders = ["Costs you are claiming", "Forecast", "Total", "Total eligible costs", "Difference"];
+  async forecastTableHeaders(projectSetup: boolean, forecastTile?: boolean, moViewID?: string) {
+    let topHeaders: Array<string>;
+    if (projectSetup) {
+      topHeaders = ["Forecast", "Total", "Total eligible costs", "Difference"];
+    } else {
+      topHeaders = ["Costs you are claiming", "Forecast", "Total", "Total eligible costs", "Difference"];
+    }
     let i = 1;
     let table: Locator;
     if (moViewID) {

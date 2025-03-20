@@ -81,4 +81,5 @@ Feature: Loan Drawdowns
         Then the period 1 Drawdown status will be "Approved"
         And the user can access the second Drawdown
 
+#Future additions: Add Manual project setup steps (button change).
 

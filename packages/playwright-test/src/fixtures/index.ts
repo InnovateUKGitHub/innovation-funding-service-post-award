@@ -47,6 +47,8 @@ import { SfdcSObject } from "./sfdc/SfdcSObject";
 import { AccProjectCFI } from "./projectFactory/AccProjectCFI";
 import { AddLeadPartner } from "./acc/pages/PCRs/addLeadPartner";
 import { ClaimLineItemsOrdering } from "./acc/pages/Claims/claimLineItemsOrdering";
+import { AccProjectSetup } from "./projectFactory/AccProjectSetup";
+import { ProjectSetup } from "./acc/pages/Project Setup/projectSetup";
 
 type AccFixtures = {
   // Pages
@@ -74,6 +76,7 @@ type AccFixtures = {
   loanDrawdownChange: LoanDrawdownChange;
   addLeadPartner: AddLeadPartner;
   claimLineItemsOrdering: ClaimLineItemsOrdering;
+  projectSetup: ProjectSetup;
 
   // Misc
   accNavigation: AccNavigation;
@@ -108,6 +111,7 @@ interface Workers {
   accProjectLoans: AccProjectLoans;
   accProjectFinalClaim: AccProjectFinalClaim;
   accProjectCFI: AccProjectCFI;
+  accProjectSetup: AccProjectSetup;
 }
 
 export const test = base.extend<AccFixtures, Workers>({
@@ -163,6 +167,7 @@ export const test = base.extend<AccFixtures, Workers>({
   addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
   claimLineItemsOrdering: ({ page, commands }, use) => use(new ClaimLineItemsOrdering({ page, commands })),
+  projectSetup: ({ page, commands, viewForecast }, use) => use(new ProjectSetup({ page, commands, viewForecast })),
 
   // Project Factory
   accProjectBase: [
@@ -203,6 +208,10 @@ export const test = base.extend<AccFixtures, Workers>({
   ],
   accProjectCFI: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectCFI({ sfdcApi, projectState })),
+    { scope: "worker" },
+  ],
+  accProjectSetup: [
+    ({ sfdcApi, projectState }, use) => use(new AccProjectSetup({ sfdcApi, projectState })),
     { scope: "worker" },
   ],
 
