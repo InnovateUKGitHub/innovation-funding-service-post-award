@@ -3249,6 +3249,37 @@
             "invalid_date": "Start date must be a real date.",
             "too_small": "Start date must be the same as or after 1 January 2000."
           }
+        },
+        "endDate": {
+          "day": {
+            "errors": {
+              "too_big": "Date of change day must be a number.",
+              "invalid_string": {
+                "regex": "Date of change day must be a number."
+              }
+            }
+          },
+          "month": {
+            "errors": {
+              "too_big": "Date of change month must be a number.",
+              "invalid_string": {
+                "regex": "Date of change month must be a number."
+              }
+            }
+          },
+          "year": {
+            "errors": {
+              "too_small": "Date of change year must be a 4 digit number.",
+              "too_big": "Date of change year must be a 4 digit number.",
+              "invalid_string": {
+                "regex": "Date of change year must be a 4 digit number."
+              }
+            }
+          },
+          "errors": {
+            "invalid_date": "Enter a date of change .",
+            "too_small": "The date of change must be the same as or after 1 January 2000."
+          }
         }
       }
     }
