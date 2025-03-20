@@ -265,6 +265,41 @@ class ForecastTableSpreadsheet extends Spreadsheet {
 
     return Promise.resolve(this);
   }
+
+  async extractWorksheets() {
+    const worksheet = this.workbook.getWorksheet(1);
+    if (!worksheet) throw new Error("no worksheet exception");
+
+    const columns = worksheet.columnCount - 4;
+    const rows = worksheet.rowCount - 5;
+
+    const ret: { costCategory: string; periods: number[] }[] = [];
+
+    for (let j = 0; j < rows; j++) {
+      const costCategory = worksheet.getCell(j + 5, 1);
+
+      const row: { costCategory: string; periods: number[] } = {
+        costCategory: costCategory.value?.toString() ?? "",
+        periods: [],
+      };
+
+      for (let i = 0; i < columns; i++) {
+        const cell = worksheet.getCell(j + 5, i + 2);
+        const cellLabel = `${Spreadsheet.colToLet(i + 2)}${j + 5}`;
+        if (!cell.value) {
+          row.periods.push(0);
+        } else if (typeof cell.value === "number") {
+          row.periods.push(cell.value);
+        } else {
+          throw new Error("cell empty exception " + cellLabel);
+        }
+      }
+
+      ret.push(row);
+    }
+
+    return ret;
+  }
 }
 
 export { ForecastTableSpreadsheet };

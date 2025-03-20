@@ -88,7 +88,7 @@ export class ServerLogger extends BaseLogger {
   private static readonly LOG_IDENTIFIER_PADDING = 12;
 
   protected log(level: LogLevel, message: string, ...params: unknown[]) {
-    if (newrelic) {
+    if (typeof newrelic !== "undefined" && newrelic !== null) {
       this.logWithNewRelic(level, message, ...params);
     }
 
@@ -232,7 +232,7 @@ export class ServerLogger extends BaseLogger {
 
   private logWithNewRelic(level: LogLevel, message: string, ...params: unknown[]) {
     // newrelic is a global variable instantiated as a banner of the webpack/esbuild build
-    if (newrelic) {
+    if (typeof newrelic !== "undefined" && newrelic !== null) {
       const transaction = newrelic.getTransaction() as any;
 
       // Extract NewRelic custom attributes and re-add them to the log event

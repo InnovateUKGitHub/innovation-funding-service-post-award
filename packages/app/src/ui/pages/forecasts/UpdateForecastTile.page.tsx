@@ -37,6 +37,7 @@ import { ValidationMessage } from "@ui/components/molecules/validation/Validatio
 import { PartnerStatus } from "@framework/constants/partner";
 import { forecastPageSchema, errorMap, ForecastPageSchema } from "./forecastPage.zod";
 import { useEffect, useMemo } from "react";
+import { ForecastTableUploadButton } from "@ui/components/organisms/forecasts/ForecastTable/ForecastTableUploadButton";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -73,21 +74,20 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
 
   const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
 
-  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger, setValue } = useForm<
-    z.output<ForecastPageSchema>
-  >({
-    resolver: zodResolver(forecastPageSchema, {
-      errorMap,
-    }),
-    defaultValues: {
-      ...defaults,
-      finalClaim,
-      total: 0,
-      totalGolCost: 0,
-      form: FormTypes.ForecastTileForecast,
-      initialProfile,
-    },
-  });
+  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger, setValue, reset } =
+    useForm<z.output<ForecastPageSchema>>({
+      resolver: zodResolver(forecastPageSchema, {
+        errorMap,
+      }),
+      defaultValues: {
+        ...defaults,
+        finalClaim,
+        total: 0,
+        totalGolCost: 0,
+        form: FormTypes.ForecastTileForecast,
+        initialProfile,
+      },
+    });
   const routes = useRoutes();
   const { getContent } = useContent();
 
@@ -199,6 +199,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
           )}
         </Section>
       </Form>
+      <ForecastTableUploadButton tableData={tableData} setValue={setValue} />
     </Page>
   );
 };

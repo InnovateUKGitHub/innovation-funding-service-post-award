@@ -50,6 +50,10 @@ abstract class Spreadsheet {
   abstract createWorksheets(): Promise<Spreadsheet>;
   abstract getFilename(): string;
 
+  async import(buffer: ArrayBufferLike): Promise<void> {
+    await this.workbook.xlsx.load(buffer);
+  }
+
   async export(format: SpreadsheetFormat): Promise<ArrayBuffer> {
     await this.createWorksheets();
 
