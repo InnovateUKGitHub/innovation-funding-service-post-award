@@ -29,7 +29,6 @@ export const getTextValidation = <Required extends boolean = false>({
   params?: AnyObject;
 }) => {
   const validationRule = base
-    .trim()
     .optional()
     .nullable()
     .transform((val, ctx) => {
@@ -110,7 +109,7 @@ export const getTextValidation = <Required extends boolean = false>({
         return undefined;
       }
 
-      return val;
+      return val.trim();
     });
 
   return validationRule as unknown as Required extends true
