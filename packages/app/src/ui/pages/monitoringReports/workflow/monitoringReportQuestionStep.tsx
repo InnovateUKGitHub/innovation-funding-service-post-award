@@ -16,6 +16,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
 const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: number }) => {
   const { getContent } = useContent();
@@ -78,7 +79,10 @@ const MonitoringReportQuestionStep = ({ questionNumber }: { questionNumber: numb
         <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
       </H2>
       <Section>
-        <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="monitoringReportQuestionForm">
+        <Form
+          onSubmit={handleSubmit(data => onUpdate({ data }), scrollToTheTopSmoothly)}
+          data-qa="monitoringReportQuestionForm"
+        >
           <input type="hidden" name="form" value={FormTypes.MonitoringReportQuestion} />
           <H3>
             {getContent(x =>
