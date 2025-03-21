@@ -32,7 +32,7 @@ export const setupSpendProfileSchema = z
         costCategoryId: costCategoryIdValidation,
         isCalculated: z.boolean(),
         costCategoryName: z.string(),
-        total: z.number(),
+        golCost: z.number(),
         profiles: z
           .object({
             profileId: profileIdValidation,
@@ -48,7 +48,7 @@ export const setupSpendProfileSchema = z
         const totalForCategory = sum(
           costCategory.profiles.map(x => parseCurrency(data?.profile?.[x.profileId] ?? "0")),
         );
-        const differentFromAllocatedCosts = roundCurrency(totalForCategory) !== roundCurrency(costCategory.total);
+        const differentFromAllocatedCosts = roundCurrency(totalForCategory) !== roundCurrency(costCategory.golCost);
         if (!costCategory.isCalculated && differentFromAllocatedCosts) {
           addIssue({
             code: ZodIssueCode.custom,

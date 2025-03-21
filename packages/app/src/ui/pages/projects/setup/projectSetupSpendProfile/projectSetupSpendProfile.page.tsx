@@ -59,8 +59,6 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
 
   const costCategoryProfiles = mappedData.costCategories;
 
-  console.log("costCategoryProfiles", costCategoryProfiles);
-
   const { register, handleSubmit, control, formState, getFieldState, setError, trigger, watch } = useForm<
     z.output<SetupSpendProfileSchemaType>
   >({
