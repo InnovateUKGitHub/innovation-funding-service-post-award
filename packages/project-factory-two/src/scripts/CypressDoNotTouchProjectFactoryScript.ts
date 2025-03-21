@@ -5,7 +5,6 @@ import { batch } from "../helpers/batch";
 import { getRecordType } from "../helpers/getRecordType";
 import { makeClaims } from "../helpers/makeClaims";
 import { overwriteProfiles } from "../helpers/overwriteProfiles";
-import { useTriggerMdt } from "../helpers/triggerMdtToggles";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -14,20 +13,9 @@ import { Competition__c } from "../sobjects/Competition__c";
 import { Contact } from "../sobjects/Contact";
 import { User } from "../sobjects/User";
 import { AbstractProjectFactoryScript } from "./AbstractProjectFactoryScript";
-import { deleteEverything } from "../helpers/deleteEverything";
 
 class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript<unknown, unknown> {
-  async script({
-    connection,
-    Database,
-  }: {
-    connection: ITsforceConnection;
-    Database: DatabaseConnector;
-  }): Promise<unknown> {
-    const date = new Date();
-    const now = Math.floor(date.getTime() / 1000);
-    const prefix = (val: string) => `${now}.${val}`;
-
+  async script({ Database }: { Database: DatabaseConnector }): Promise<unknown> {
     const recordTypes = await Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`);
     const profileTotalCostCategoryRecordType = getRecordType({
       recordTypes,
@@ -41,7 +29,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     });
 
     const competition = new Competition__c();
-    competition.Acc_CompetitionCode__c = prefix("342463");
+    competition.Acc_CompetitionCode__c = this.prefix("342463");
     competition.Acc_CompetitionName__c = "SteveTest";
     competition.Acc_CompetitionType__c = "CR&D";
     competition.Impact_Management_participation__c = "No";
@@ -49,7 +37,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
-    project.Acc_ProjectNumber__c = prefix("328407");
+    project.Acc_ProjectNumber__c = this.prefix("328407");
     project.Acc_CompetitionId__c = competition.Id;
     project.Acc_StartDate__c = new Date(2024, 2, 1, 12);
     project.Acc_Duration__c = 12;
@@ -66,7 +54,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     swindonAccount.BillingCity = "Swindon";
     swindonAccount.BillingPostalCode = "SN1 2AB";
     swindonAccount.BillingCountry = "UK";
-    swindonAccount.OrgMigrationId__c = prefix("10004");
+    swindonAccount.OrgMigrationId__c = this.prefix("10004");
     swindonAccount.Name = "Swindon University";
     swindonAccount.Acc_FundingStatus__c = "Fund";
     swindonAccount.JES_Organisation__c = "Yes";
@@ -76,7 +64,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     euiAccount.BillingCity = "Bristol";
     euiAccount.BillingPostalCode = "BS1 1DB";
     euiAccount.BillingCountry = "UK";
-    euiAccount.OrgMigrationId__c = prefix("10003");
+    euiAccount.OrgMigrationId__c = this.prefix("10003");
     euiAccount.Name = "EUI Small Ent Health";
     euiAccount.Acc_FundingStatus__c = "Fund";
     euiAccount.JES_Organisation__c = "No";
@@ -85,7 +73,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     abCadAccount.BillingStreet = "Woodhouse Farm, Abbots Close";
     abCadAccount.BillingPostalCode = "TA19 0EF";
     abCadAccount.BillingCountry = "UK";
-    abCadAccount.OrgMigrationId__c = prefix("10013");
+    abCadAccount.OrgMigrationId__c = this.prefix("10013");
     abCadAccount.Name = "A B Cad Services";
     abCadAccount.Acc_FundingStatus__c = "Fund";
     abCadAccount.JES_Organisation__c = "No";
@@ -95,7 +83,7 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     absAccount.BillingCity = "Swansee"; // This is an intentional mispeling (we think!)
     absAccount.BillingPostalCode = "SA2 1DY";
     absAccount.BillingCountry = "UK";
-    absAccount.OrgMigrationId__c = prefix("10005");
+    absAccount.OrgMigrationId__c = this.prefix("10005");
     absAccount.Name = "ABS EUI Medium Enterprise";
     absAccount.Acc_FundingStatus__c = "Fund";
     absAccount.JES_Organisation__c = "No";
@@ -155,52 +143,52 @@ class CypressDoNotTouchProjectFactoryScript extends AbstractProjectFactoryScript
     jamesBlackContact.FirstName = "James";
     jamesBlackContact.LastName = "Black";
     jamesBlackContact.AccountId = euiAccount.Id;
-    jamesBlackContact.Email = prefix("james.black@euimeabs.test");
-    jamesBlackContact.Email__c = prefix("james.black@euimeabs.test");
+    jamesBlackContact.Email = this.prefix("james.black@euimeabs.test");
+    jamesBlackContact.Email__c = this.prefix("james.black@euimeabs.test");
 
     const javierBaezContact = new Contact();
     javierBaezContact.FirstName = "Javier";
     javierBaezContact.LastName = "Baez";
     javierBaezContact.AccountId = swindonAccount.Id;
-    javierBaezContact.Email = prefix("testman2@testing.com");
-    javierBaezContact.Email__c = prefix("testman2@testing.com");
+    javierBaezContact.Email = this.prefix("testman2@testing.com");
+    javierBaezContact.Email__c = this.prefix("testman2@testing.com");
 
     const kenCharlesContact = new Contact();
     kenCharlesContact.Salutation = "Mr.";
     kenCharlesContact.FirstName = "ken";
     kenCharlesContact.LastName = "Charles";
     kenCharlesContact.AccountId = abCadAccount.Id;
-    kenCharlesContact.Email = prefix("contact77@test.co.uk");
-    kenCharlesContact.Email__c = prefix("contact77@test.co.uk");
+    kenCharlesContact.Email = this.prefix("contact77@test.co.uk");
+    kenCharlesContact.Email__c = this.prefix("contact77@test.co.uk");
 
     const sarahShuangContact = new Contact();
     sarahShuangContact.FirstName = "Sarah";
     sarahShuangContact.LastName = "Shuang";
     sarahShuangContact.AccountId = abCadAccount.Id;
-    sarahShuangContact.Email = prefix("s.shuang@irc.trde.org.uk.test");
-    sarahShuangContact.Email__c = prefix("s.shuang@irc.trde.org.uk.test");
+    sarahShuangContact.Email = this.prefix("s.shuang@irc.trde.org.uk.test");
+    sarahShuangContact.Email__c = this.prefix("s.shuang@irc.trde.org.uk.test");
 
     await Database.insert([jamesBlackContact, javierBaezContact, kenCharlesContact, sarahShuangContact]);
 
     const jamesBlackUser = User.fromContact(jamesBlackContact);
     jamesBlackUser.boilerplate();
     jamesBlackUser.Alias = "JBlack";
-    jamesBlackUser.CommunityNickname = prefix("jamesBlack");
+    jamesBlackUser.CommunityNickname = this.prefix("jamesBlack");
 
     const javierBaezUser = User.fromContact(javierBaezContact);
     javierBaezUser.boilerplate();
     javierBaezUser.Alias = "JBaez";
-    javierBaezUser.CommunityNickname = prefix("javierBaez");
+    javierBaezUser.CommunityNickname = this.prefix("javierBaez");
 
     const kenCharlesUser = User.fromContact(kenCharlesContact);
     kenCharlesUser.boilerplate();
     kenCharlesUser.Alias = "kCharles";
-    kenCharlesUser.CommunityNickname = prefix("kenCharles");
+    kenCharlesUser.CommunityNickname = this.prefix("kenCharles");
 
     const sarahShuangUser = User.fromContact(sarahShuangContact);
     sarahShuangUser.boilerplate();
     sarahShuangUser.Alias = "sShuang";
-    sarahShuangUser.CommunityNickname = prefix("sarahShuang");
+    sarahShuangUser.CommunityNickname = this.prefix("sarahShuang");
 
     await Database.insert([jamesBlackUser, javierBaezUser, kenCharlesUser, sarahShuangUser]);
     await Database.insert([

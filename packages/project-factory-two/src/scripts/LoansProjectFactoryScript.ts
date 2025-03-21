@@ -63,10 +63,6 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     Database: DatabaseConnector;
     args: LoansProjectFactoryScriptArguments;
   }): Promise<LoansProjectFactoryScriptContext> {
-    const date = new Date();
-    const now = Math.floor(date.getTime() / 1000);
-    const prefix = (val: string) => `${now}.${val}`;
-
     const [recordTypes, triggers] = await Promise.all([
       Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
       Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
@@ -85,19 +81,19 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
       sobject: "Acc_Profile__c",
     });
     const competition = new Competition__c();
-    competition.Acc_CompetitionCode__c = prefix("000");
+    competition.Acc_CompetitionCode__c = this.prefix("000");
     competition.Acc_CompetitionName__c = "Beg, Borrow, Steal";
     competition.Acc_CompetitionType__c = args.competitionType;
     competition.Impact_Management_participation__c = "No";
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
-    project.Acc_ProjectNumber__c = prefix("100");
+    project.Acc_ProjectNumber__c = this.prefix("100");
     project.Acc_CompetitionId__c = competition.Id;
-    project.Acc_StartDate__c = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+    project.Acc_StartDate__c = new Date(this.now.getFullYear(), this.now.getMonth(), 1, 12);
     project.Acc_Duration__c = 36;
     project.Acc_ProjectTitle__c = "Project Factory 2 - Electric Boogaloo";
-    project.Acc_LegacyID__c = prefix("100");
+    project.Acc_LegacyID__c = this.prefix("100");
     project.Acc_ProjectSource__c = "Manual";
     project.Acc_PublicDescription__c = "This is a public description";
     project.Acc_ProjectSummary__c = "This is a project summary";
@@ -110,7 +106,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     mspAccount.BillingState = "Wiltshire";
     mspAccount.BillingPostalCode = "SN2 1SZ";
     mspAccount.BillingCountry = "United Kingdom";
-    mspAccount.OrgMigrationId__c = prefix("300");
+    mspAccount.OrgMigrationId__c = this.prefix("300");
     mspAccount.Name = "Hedge's Monitoring Ltd.";
 
     const mainAccount = new Account();
@@ -119,7 +115,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     mainAccount.BillingState = "Wiltshire";
     mainAccount.BillingPostalCode = "SN2 1SZ";
     mainAccount.BillingCountry = "United Kingdom";
-    mainAccount.OrgMigrationId__c = prefix("301");
+    mainAccount.OrgMigrationId__c = this.prefix("301");
     mainAccount.Name = "Hedge's Primary Ltd.";
 
     await Database.insert([mspAccount, mainAccount]);
@@ -127,7 +123,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     const mainProjectParticipant = new Acc_ProjectParticipant__c();
     mainProjectParticipant.Acc_AccountId__c = mainAccount.Id;
     mainProjectParticipant.Acc_ProjectId__c = project.Id;
-    mainProjectParticipant.ParticipantMigrationID__c = prefix("200");
+    mainProjectParticipant.ParticipantMigrationID__c = this.prefix("200");
     mainProjectParticipant.Acc_ParticipantType__c = "Business";
     mainProjectParticipant.Acc_ParticipantSize__c = "Medium";
     mainProjectParticipant.Acc_ProjectRole__c = "Lead";
@@ -149,22 +145,22 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     await Database.insert([mainProjectParticipant]);
 
     const mspContact = new Contact();
-    mspContact.ContactMigrationId__c = prefix("400");
-    mspContact.Email = prefix("mo@x.gov.uk");
+    mspContact.ContactMigrationId__c = this.prefix("400");
+    mspContact.Email = this.prefix("mo@x.gov.uk");
     mspContact.FirstName = "Monitoring";
     mspContact.LastName = "Officer";
     mspContact.AccountId = mspAccount.Id;
 
     const pmContact = new Contact();
-    pmContact.ContactMigrationId__c = prefix("401");
-    pmContact.Email = prefix("pm@x.gov.uk");
+    pmContact.ContactMigrationId__c = this.prefix("401");
+    pmContact.Email = this.prefix("pm@x.gov.uk");
     pmContact.FirstName = "Project";
     pmContact.LastName = "Manager";
     pmContact.AccountId = mainAccount.Id;
 
     const mainFcContact = new Contact();
-    mainFcContact.ContactMigrationId__c = prefix("402");
-    mainFcContact.Email = prefix("fc1@x.gov.uk");
+    mainFcContact.ContactMigrationId__c = this.prefix("402");
+    mainFcContact.Email = this.prefix("fc1@x.gov.uk");
     mainFcContact.FirstName = "Main Finance";
     mainFcContact.LastName = "Contact";
     mainFcContact.AccountId = mainAccount.Id;
@@ -174,17 +170,17 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     const mspUser = User.fromContact(mspContact);
     mspUser.boilerplate();
     mspUser.Alias = "msp";
-    mspUser.CommunityNickname = prefix("msp");
+    mspUser.CommunityNickname = this.prefix("msp");
 
     const pmUser = User.fromContact(pmContact);
     pmUser.boilerplate();
     pmUser.Alias = "pm";
-    pmUser.CommunityNickname = prefix("pm");
+    pmUser.CommunityNickname = this.prefix("pm");
 
     const mainFcUser = User.fromContact(mainFcContact);
     mainFcUser.boilerplate();
     mainFcUser.Alias = "fc1";
-    mainFcUser.CommunityNickname = prefix("fc1");
+    mainFcUser.CommunityNickname = this.prefix("fc1");
 
     await Database.insert([mspUser, pmUser, mainFcUser]);
 
@@ -235,7 +231,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment.Acc_GranttobePaid__c = 110_000;
     grantAdjustment.Loan_LatestForecastDrawdown__c = 110_000;
     grantAdjustment.Loan_InitialForecastDrawdown__c = 110_000;
-    grantAdjustment.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+    grantAdjustment.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth(), 1, 12);
     await Database.insert(grantAdjustment);
 
     const grantAdjustment2 = new Acc_Prepayment__c();
@@ -248,7 +244,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment2.Acc_GranttobePaid__c = 121_000;
     grantAdjustment2.Loan_LatestForecastDrawdown__c = 121_000;
     grantAdjustment2.Loan_InitialForecastDrawdown__c = 121_000;
-    grantAdjustment2.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 3, 1, 12);
+    grantAdjustment2.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 3, 1, 12);
     await Database.insert(grantAdjustment2);
 
     const grantAdjustment3 = new Acc_Prepayment__c();
@@ -261,7 +257,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment3.Acc_GranttobePaid__c = 132_000;
     grantAdjustment3.Loan_LatestForecastDrawdown__c = 132_000;
     grantAdjustment3.Loan_InitialForecastDrawdown__c = 132_000;
-    grantAdjustment3.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 6, 1, 12);
+    grantAdjustment3.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 6, 1, 12);
     await Database.insert(grantAdjustment3);
 
     const grantAdjustment4 = new Acc_Prepayment__c();
@@ -274,7 +270,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment4.Acc_GranttobePaid__c = 143_000;
     grantAdjustment4.Loan_LatestForecastDrawdown__c = 143_000;
     grantAdjustment4.Loan_InitialForecastDrawdown__c = 143_000;
-    grantAdjustment4.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 9, 1, 12);
+    grantAdjustment4.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 9, 1, 12);
     await Database.insert(grantAdjustment4);
 
     const grantAdjustment5 = new Acc_Prepayment__c();
@@ -287,7 +283,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment5.Acc_GranttobePaid__c = 154_000;
     grantAdjustment5.Loan_LatestForecastDrawdown__c = 154_000;
     grantAdjustment5.Loan_InitialForecastDrawdown__c = 154_000;
-    grantAdjustment5.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 12, 1, 12);
+    grantAdjustment5.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 12, 1, 12);
     await Database.insert(grantAdjustment5);
 
     const grantAdjustment6 = new Acc_Prepayment__c();
@@ -300,7 +296,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment6.Acc_GranttobePaid__c = 165_000;
     grantAdjustment6.Loan_LatestForecastDrawdown__c = 165_000;
     grantAdjustment6.Loan_InitialForecastDrawdown__c = 165_000;
-    grantAdjustment6.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 15, 1, 12);
+    grantAdjustment6.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 15, 1, 12);
     await Database.insert(grantAdjustment6);
 
     const grantAdjustment7 = new Acc_Prepayment__c();
@@ -313,7 +309,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment7.Acc_GranttobePaid__c = 176_000;
     grantAdjustment7.Loan_LatestForecastDrawdown__c = 176_000;
     grantAdjustment7.Loan_InitialForecastDrawdown__c = 176_000;
-    grantAdjustment7.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 18, 1, 12);
+    grantAdjustment7.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 18, 1, 12);
     await Database.insert(grantAdjustment7);
 
     const grantAdjustment8 = new Acc_Prepayment__c();
@@ -326,7 +322,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment8.Acc_GranttobePaid__c = 187_000;
     grantAdjustment8.Loan_LatestForecastDrawdown__c = 187_000;
     grantAdjustment8.Loan_InitialForecastDrawdown__c = 187_000;
-    grantAdjustment8.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 21, 1, 12);
+    grantAdjustment8.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 21, 1, 12);
     await Database.insert(grantAdjustment8);
 
     const grantAdjustment9 = new Acc_Prepayment__c();
@@ -339,7 +335,7 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment9.Acc_GranttobePaid__c = 198_000;
     grantAdjustment9.Loan_LatestForecastDrawdown__c = 198_000;
     grantAdjustment9.Loan_InitialForecastDrawdown__c = 198_000;
-    grantAdjustment9.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 24, 1, 12);
+    grantAdjustment9.Loan_PlannedDateForDrawdown__c = new Date(this.now.getFullYear(), this.now.getMonth() + 24, 1, 12);
     await Database.insert(grantAdjustment9);
 
     const grantAdjustment10 = new Acc_Prepayment__c();
@@ -352,7 +348,12 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment10.Acc_GranttobePaid__c = 209_000;
     grantAdjustment10.Loan_LatestForecastDrawdown__c = 209_000;
     grantAdjustment10.Loan_InitialForecastDrawdown__c = 209_000;
-    grantAdjustment10.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 27, 1, 12);
+    grantAdjustment10.Loan_PlannedDateForDrawdown__c = new Date(
+      this.now.getFullYear(),
+      this.now.getMonth() + 27,
+      1,
+      12,
+    );
     await Database.insert(grantAdjustment10);
 
     const grantAdjustment11 = new Acc_Prepayment__c();
@@ -365,7 +366,12 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment11.Acc_GranttobePaid__c = 220_000;
     grantAdjustment11.Loan_LatestForecastDrawdown__c = 220_000;
     grantAdjustment11.Loan_InitialForecastDrawdown__c = 220_000;
-    grantAdjustment11.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 30, 1, 12);
+    grantAdjustment11.Loan_PlannedDateForDrawdown__c = new Date(
+      this.now.getFullYear(),
+      this.now.getMonth() + 30,
+      1,
+      12,
+    );
     await Database.insert(grantAdjustment11);
 
     const grantAdjustment12 = new Acc_Prepayment__c();
@@ -378,7 +384,12 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     grantAdjustment12.Acc_GranttobePaid__c = 231_000;
     grantAdjustment12.Loan_LatestForecastDrawdown__c = 231_000;
     grantAdjustment12.Loan_InitialForecastDrawdown__c = 231_000;
-    grantAdjustment12.Loan_PlannedDateForDrawdown__c = new Date(date.getFullYear(), date.getMonth() + 33, 1, 12);
+    grantAdjustment12.Loan_PlannedDateForDrawdown__c = new Date(
+      this.now.getFullYear(),
+      this.now.getMonth() + 33,
+      1,
+      12,
+    );
     await Database.insert(grantAdjustment12);
 
     await connection.executeApex({

@@ -57,10 +57,6 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     Database: DatabaseConnector;
     args: TwoParticipantProjectFactoryScriptArguments;
   }): Promise<TwoParticipantProjectFactoryScriptContext> {
-    const date = new Date();
-    const now = Math.floor(date.getTime() / 1000);
-    const prefix = (val: string) => `${now}.${val}`;
-
     const [recordTypes, triggers] = await Promise.all([
       Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
       Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
@@ -80,19 +76,19 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     });
 
     const competition = new Competition__c();
-    competition.Acc_CompetitionCode__c = prefix("000");
+    competition.Acc_CompetitionCode__c = this.prefix("000");
     competition.Acc_CompetitionName__c = "High-carbon inefficient motorways";
     competition.Acc_CompetitionType__c = args.competitionType;
     competition.Impact_Management_participation__c = "No";
     await Database.insert(competition);
 
     const project = new Acc_Project__c();
-    project.Acc_ProjectNumber__c = prefix("100");
+    project.Acc_ProjectNumber__c = this.prefix("100");
     project.Acc_CompetitionId__c = competition.Id;
-    project.Acc_StartDate__c = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+    project.Acc_StartDate__c = new Date(this.now.getFullYear(), this.now.getMonth(), 1, 12);
     project.Acc_Duration__c = 36;
     project.Acc_ProjectTitle__c = "Project Factory 2 - Electric Boogaloo";
-    project.Acc_LegacyID__c = prefix("100");
+    project.Acc_LegacyID__c = this.prefix("100");
     project.Acc_ProjectSource__c = "Manual";
     project.Acc_PublicDescription__c = "This is a public description";
     project.Acc_ProjectSummary__c = "This is a project summary";
@@ -105,7 +101,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     mspAccount.BillingState = "Wiltshire";
     mspAccount.BillingPostalCode = "SN2 1SZ";
     mspAccount.BillingCountry = "United Kingdom";
-    mspAccount.OrgMigrationId__c = prefix("300");
+    mspAccount.OrgMigrationId__c = this.prefix("300");
     mspAccount.Name = "Hedge's Monitoring Ltd.";
 
     const mainAccount = new Account();
@@ -114,7 +110,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     mainAccount.BillingState = "Wiltshire";
     mainAccount.BillingPostalCode = "SN2 1SZ";
     mainAccount.BillingCountry = "United Kingdom";
-    mainAccount.OrgMigrationId__c = prefix("301");
+    mainAccount.OrgMigrationId__c = this.prefix("301");
     mainAccount.Name = "Hedge's Primary Ltd.";
 
     const secondaryAccount = new Account();
@@ -123,7 +119,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     secondaryAccount.BillingState = "Wiltshire";
     secondaryAccount.BillingPostalCode = "SN2 1SZ";
     secondaryAccount.BillingCountry = "United Kingdom";
-    secondaryAccount.OrgMigrationId__c = prefix("301");
+    secondaryAccount.OrgMigrationId__c = this.prefix("301");
     secondaryAccount.Name = "Hedge's Secondary Ltd.";
 
     await Database.insert([mspAccount, mainAccount, secondaryAccount]);
@@ -131,7 +127,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     const mainProjectParticipant = new Acc_ProjectParticipant__c();
     mainProjectParticipant.Acc_AccountId__c = mainAccount.Id;
     mainProjectParticipant.Acc_ProjectId__c = project.Id;
-    mainProjectParticipant.ParticipantMigrationID__c = prefix("200");
+    mainProjectParticipant.ParticipantMigrationID__c = this.prefix("200");
     mainProjectParticipant.Acc_ParticipantType__c = "Business";
     mainProjectParticipant.Acc_ParticipantSize__c = "Medium";
     mainProjectParticipant.Acc_ProjectRole__c = "Lead";
@@ -150,7 +146,7 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     const secondaryProjectParticipant = new Acc_ProjectParticipant__c();
     secondaryProjectParticipant.Acc_AccountId__c = secondaryAccount.Id;
     secondaryProjectParticipant.Acc_ProjectId__c = project.Id;
-    secondaryProjectParticipant.ParticipantMigrationID__c = prefix("200");
+    secondaryProjectParticipant.ParticipantMigrationID__c = this.prefix("200");
     secondaryProjectParticipant.Acc_ParticipantType__c = "Research";
     secondaryProjectParticipant.Acc_ParticipantSize__c = "Medium";
     secondaryProjectParticipant.Acc_ProjectRole__c = "Collaborator";
@@ -172,29 +168,29 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     await Database.insert([mainProjectParticipant, secondaryProjectParticipant]);
 
     const mspContact = new Contact();
-    mspContact.ContactMigrationId__c = prefix("400");
-    mspContact.Email = prefix("mo@x.gov.uk");
+    mspContact.ContactMigrationId__c = this.prefix("400");
+    mspContact.Email = this.prefix("mo@x.gov.uk");
     mspContact.FirstName = "Monitoring";
     mspContact.LastName = "Officer";
     mspContact.AccountId = mspAccount.Id;
 
     const pmContact = new Contact();
-    pmContact.ContactMigrationId__c = prefix("401");
-    pmContact.Email = prefix("pm@x.gov.uk");
+    pmContact.ContactMigrationId__c = this.prefix("401");
+    pmContact.Email = this.prefix("pm@x.gov.uk");
     pmContact.FirstName = "Project";
     pmContact.LastName = "Manager";
     pmContact.AccountId = mainAccount.Id;
 
     const mainFcContact = new Contact();
-    mainFcContact.ContactMigrationId__c = prefix("402");
-    mainFcContact.Email = prefix("fc1@x.gov.uk");
+    mainFcContact.ContactMigrationId__c = this.prefix("402");
+    mainFcContact.Email = this.prefix("fc1@x.gov.uk");
     mainFcContact.FirstName = "Main Finance";
     mainFcContact.LastName = "Contact";
     mainFcContact.AccountId = mainAccount.Id;
 
     const secondaryFcContact = new Contact();
-    secondaryFcContact.ContactMigrationId__c = prefix("402");
-    secondaryFcContact.Email = prefix("fc2@x.gov.uk");
+    secondaryFcContact.ContactMigrationId__c = this.prefix("402");
+    secondaryFcContact.Email = this.prefix("fc2@x.gov.uk");
     secondaryFcContact.FirstName = "Secondary Finance";
     secondaryFcContact.LastName = "Contact";
     secondaryFcContact.AccountId = mainAccount.Id;
@@ -204,22 +200,22 @@ class TwoParticipantProjectFactoryScript extends AbstractProjectFactoryScript<
     const mspUser = User.fromContact(mspContact);
     mspUser.boilerplate();
     mspUser.Alias = "msp";
-    mspUser.CommunityNickname = prefix("msp");
+    mspUser.CommunityNickname = this.prefix("msp");
 
     const pmUser = User.fromContact(pmContact);
     pmUser.boilerplate();
     pmUser.Alias = "pm";
-    pmUser.CommunityNickname = prefix("pm");
+    pmUser.CommunityNickname = this.prefix("pm");
 
     const mainFcUser = User.fromContact(mainFcContact);
     mainFcUser.boilerplate();
     mainFcUser.Alias = "fc1";
-    mainFcUser.CommunityNickname = prefix("fc1");
+    mainFcUser.CommunityNickname = this.prefix("fc1");
 
     const secondaryFcUser = User.fromContact(secondaryFcContact);
     secondaryFcUser.boilerplate();
     secondaryFcUser.Alias = "fc2";
-    secondaryFcUser.CommunityNickname = prefix("fc2");
+    secondaryFcUser.CommunityNickname = this.prefix("fc2");
 
     await Database.insert([mspUser, pmUser, mainFcUser, secondaryFcUser]);
 
