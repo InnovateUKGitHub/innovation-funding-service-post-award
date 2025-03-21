@@ -1,5 +1,4 @@
 import { ForecastTableSpreadsheet } from "@framework/documents/spreadsheets/ForecastTableSpreadsheet";
-import { Fieldset } from "@ui/components/atoms/form/Fieldset/Fieldset";
 import { FileInput } from "@ui/components/atoms/form/FileInput/FileInput";
 import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
 import { useMounted } from "@ui/context/Mounted";
@@ -29,9 +28,9 @@ const ForecastTableUploadButton = <TFieldValues extends ForecastPageSchema>({
       onSubmit={handleSubmit(async ({ file: [file] }) => {
         const spreadsheet = new ForecastTableSpreadsheet({ tableData, copy });
         await spreadsheet.import(await file.arrayBuffer());
-        const data = await spreadsheet.extractWorksheets();
 
         try {
+          const data = await spreadsheet.extractWorksheets();
           const profiles: Record<string, string> = {};
 
           for (const { costCategory, periods } of data) {
@@ -52,13 +51,12 @@ const ForecastTableUploadButton = <TFieldValues extends ForecastPageSchema>({
           setValue("profile", profiles);
         } catch (e) {
           console.log(e);
-          if (e instanceof TemplateException) {
-            setError(
-              "file",
-              { message: "The selected file must use the template.", type: "custom" },
-              { shouldFocus: true },
-            );
-          }
+
+          setError(
+            "file",
+            { message: "The selected file must use the template.", type: "custom" },
+            { shouldFocus: true },
+          );
         }
       })}
     >

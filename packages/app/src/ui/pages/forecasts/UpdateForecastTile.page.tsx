@@ -38,6 +38,8 @@ import { PartnerStatus } from "@framework/constants/partner";
 import { forecastPageSchema, errorMap, ForecastPageSchema } from "./forecastPage.zod";
 import { useEffect, useMemo } from "react";
 import { ForecastTableUploadButton } from "@ui/components/organisms/forecasts/ForecastTable/ForecastTableUploadButton";
+import { ForecastTableDownloadButton } from "@ui/components/organisms/forecasts/ForecastTable/ForecastTableDownloadButton";
+import { SpreadsheetFormat } from "@framework/documents/spreadsheets/Spreadsheet";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -199,7 +201,12 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
           )}
         </Section>
       </Form>
-      <ForecastTableUploadButton tableData={tableData} setValue={setValue} />
+      <Section title="ACC-11600 Templating Engine(TM)" subtitle="Sponsored by Ace Biscuits">
+        <P>
+          <ForecastTableDownloadButton format={SpreadsheetFormat.OOXML} tableData={tableData} />
+        </P>
+        <ForecastTableUploadButton tableData={tableData} setValue={setValue} />
+      </Section>
     </Page>
   );
 };
