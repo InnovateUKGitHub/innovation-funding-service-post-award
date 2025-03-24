@@ -10,7 +10,6 @@ import { User } from "../sobjects/User";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_Prepayment__c } from "../sobjects/Acc_Prepayment__c";
 import { getRecordType } from "../helpers/getRecordType";
-import { useTriggerMdt } from "../helpers/triggerMdtToggles";
 import { awaitResults } from "../helpers/awaitResults";
 import { batch } from "../helpers/batch";
 import { makeClaims } from "../helpers/makeClaims";
@@ -67,9 +66,6 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
       Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
       Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
     ]);
-    const { disableClaimTrigger, enableClaimTrigger } = useTriggerMdt({
-      triggers,
-    });
     const profileTotalCostCategoryRecordType = getRecordType({
       recordTypes,
       developerName: "Total_Cost_Category",
@@ -139,9 +135,6 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
     mainProjectParticipant.Acc_CreateClaims__c = false;
     mainProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
-    // Disable Trigger__mdt so we can insert profiles/claims with impunity
-    disableClaimTrigger();
-    await Database.update(triggers);
     await Database.insert([mainProjectParticipant]);
 
     const mspContact = new Contact();
@@ -482,9 +475,6 @@ class LoansProjectFactoryScript extends AbstractProjectFactoryScript<
 
     // await approveSObject(connection, grantAdjustment.Id);
 
-    // Re-enable Trigger__mdt for normal projects
-    enableClaimTrigger();
-    await Database.update(triggers);
     return {
       competition,
       project,

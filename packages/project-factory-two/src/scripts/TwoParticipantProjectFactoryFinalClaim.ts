@@ -4,7 +4,6 @@ import { awaitResults } from "../helpers/awaitResults";
 import { batch } from "../helpers/batch";
 import { getRecordType } from "../helpers/getRecordType";
 import { makeClaims } from "../helpers/makeClaims";
-import { useTriggerMdt } from "../helpers/triggerMdtToggles";
 import { Acc_Project__c } from "../sobjects/Acc_Project__c";
 import { Acc_ProjectContactLink__c } from "../sobjects/Acc_ProjectContactLink__c";
 import { Acc_ProjectParticipant__c } from "../sobjects/Acc_ProjectParticipant__c";
@@ -60,9 +59,6 @@ class TwoParticipantProjectFactoryFinalClaimScript extends AbstractProjectFactor
       Database.query(`SELECT Id, SObjectType, DeveloperName FROM RecordType`),
       Database.query(`SELECT Id, DeveloperName, IsDisabled__c FROM Trigger__mdt`),
     ]);
-    const { disableClaimTrigger, enableClaimTrigger } = useTriggerMdt({
-      triggers,
-    });
     const profileTotalCostCategoryRecordType = getRecordType({
       recordTypes,
       developerName: "Total_Cost_Category",
@@ -161,9 +157,6 @@ class TwoParticipantProjectFactoryFinalClaimScript extends AbstractProjectFactor
     secondaryProjectParticipant.Acc_CreateClaims__c = false;
     secondaryProjectParticipant.Acc_WorkdaySupplierSetupComplete__c = true;
 
-    // Disable Trigger__mdt so we can insert profiles/claims with impunity
-    disableClaimTrigger();
-    await Database.update(triggers);
     await Database.insert([mainProjectParticipant, secondaryProjectParticipant]);
 
     const mspContact = new Contact();
@@ -522,10 +515,6 @@ class TwoParticipantProjectFactoryFinalClaimScript extends AbstractProjectFactor
     grantAdjustment.Acc_GranttobePaid__c = 10_000_000;
     await Database.insert(grantAdjustment);
     // await approveSObject(connection, grantAdjustment.Id);
-
-    // Re-enable Trigger__mdt for normal projects
-    enableClaimTrigger();
-    await Database.update(triggers);
 
     return {
       competition,
