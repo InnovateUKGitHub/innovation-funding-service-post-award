@@ -42,6 +42,7 @@ import type {
   ChangeRemainingGrantDto,
   ReallocateCostsSummaryDto,
   ReallocateCostsDto,
+  PcrReviewDto,
 } from "@framework/dtos/pcrDtos";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -93,6 +94,7 @@ import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/update
 import { UpdatePcrChangeRemainingGrantCommand } from "@server/features/pcrs/updatePcrChangeRemainingGrantCommand";
 import { UpdatePcrReallocateCostsSummaryCommand } from "@server/features/pcrs/updatePcrReallocateCostsSummaryCommand";
 import { UpdatePcrReallocateCostsCommand } from "@server/features/pcrs/updatePcrReallocateCostsCommand";
+import { UpdatePcrReviewCommand } from "@server/features/pcrs/updatePcrReviewCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -172,6 +174,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
     >,
   ) => Promise<{ id: PcrId }>;
   pcrFilesStep: PcrUpdateMethod<Context, PcrFilesStepDto, boolean>;
+  pcrReview: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcr: PcrReviewDto;
+      }
+    >,
+  ) => Promise<boolean>;
   addPartnerAcademicCosts: PcrUpdateMethod<Context, PcrAddPartnerAcademicCostsDto, boolean>;
   addPartnerAcademicOrganisation: PcrUpdateMethod<Context, PcrAddPartnerAcademicOrganisationDto, boolean>;
   addPartnerCompanyDetails: PcrUpdateMethod<Context, PcrAddPartnerCompanyDetailsDto, boolean>;
@@ -272,6 +284,12 @@ class Controller
         pcr: processDto(b),
       }),
       this.updateTeamMember,
+    );
+
+    this.putItem(
+      "/:projectId/:pcrId/pcr-review",
+      (p, _, b: PcrReviewDto) => ({ projectId: p.projectId, pcrId: p.pcrId, pcr: processDto(b) }),
+      this.pcrReview,
     );
 
     this.putItem(
@@ -542,6 +560,22 @@ class Controller
     );
 
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
+  }
+
+  async pcrReview(
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcr: PcrReviewDto;
+      }
+    >,
+  ) {
+    return await runUpdateCommand(
+      params,
+      new UpdatePcrReviewCommand({ projectId: params.projectId, pcrId: params.pcrId, pcr: params.pcr }),
+    );
   }
 
   async pcrFilesStep(params: PcrUpdateParams<"server", PcrFilesStepDto>) {

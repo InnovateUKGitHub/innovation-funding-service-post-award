@@ -60,13 +60,14 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
       comments: "",
       status: "",
       form: FormTypes.PcrReview,
+      previousStatus: pcr.status,
     },
     resolver: zodResolver(pcrReviewSchema, {
       errorMap: pcrReviewErrorMap,
     }),
   });
 
-  const { isFetching, apiError, onUpdate } = useOnUpdatePcrReview(props.pcrId, props.projectId, pcr);
+  const { isFetching, apiError, onUpdate } = useOnUpdatePcrReview(props.pcrId, props.projectId);
 
   const validationErrors = useZodErrors(setError, formState.errors);
 
@@ -93,6 +94,7 @@ const PCRReviewComponent = (props: BaseProps & PCRReviewParams) => {
 
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <input type="hidden" {...register("form")} value={FormTypes.PcrReview} />
+        <input type="hidden" name="previousStatus" value={pcr.status} />
         <Fieldset>
           <H2>{getContent(x => x.pages.pcrReview.statusTitle)}</H2>
 

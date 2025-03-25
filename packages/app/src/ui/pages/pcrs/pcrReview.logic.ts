@@ -9,10 +9,8 @@ import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { useRoutes } from "@ui/context/routesProvider";
 import { PcrReviewSchemaType } from "./pcrReview.zod";
-import { PCRStatus } from "@framework/constants/pcrConstants";
 
 export const usePcrReviewQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<PcrReviewQuery>(pcrReviewQuery, { projectId, pcrId }, { fetchPolicy: "network-only" });
@@ -49,30 +47,34 @@ export const usePcrReviewQuery = (projectId: ProjectId, pcrId: PcrId) => {
   return { pcr, statusChanges, fragmentRef: data?.salesforce?.uiapi, editableItemTypes };
 };
 
-export const useOnUpdatePcrReview = (
-  pcrId: PcrId,
-  projectId: ProjectId,
-  pcr: Pick<PCRDto, "status" | "id"> & { items: Pick<FullPCRItemDto, "id" | "shortName" | "status" | "type">[] },
-) => {
+export const useOnUpdatePcrReview = (pcrId: PcrId, projectId: ProjectId) => {
   const routes = useRoutes();
   const navigate = useNavigate();
 
-  return useOnUpdate<PcrReviewSchemaType, PCRDto>({
-    req(data) {
-      const payload = {
-        projectId,
-        id: pcrId,
-        pcr: {
-          ...pcr,
-          ...data,
-          projectId,
-          pcrId,
-          items: pcr.items.map(x => ({ ...x, projectId })),
-          status: parseInt(data.status, 10) as PCRStatus,
-        },
-      };
+  return useOnUpdate<PcrReviewSchemaType, boolean>({
+    // req(data) {
+    //   const payload = {
+    //     projectId,
+    //     id: pcrId,
+    //     pcr: {
+    //       ...pcr,
+    //       ...data,
+    //       projectId,
+    //       pcrId,
+    //       items: pcr.items.map(x => ({ ...x, projectId })),
+    //       status: parseInt(data.status, 10) as PCRStatus,
+    //     },
+    //   };
 
-      return clientsideApiClient.pcrs.update(payload);
+    //   return clientsideApiClient.pcrs.update(payload);
+    // },
+
+    req(data) {
+      return clientsideApiClient.pcrs.pcrReview({
+        projectId,
+        pcrId,
+        pcr: data,
+      });
     },
     onSuccess() {
       navigate(routes?.pcrsDashboard?.getLink({ projectId }).path);

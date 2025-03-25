@@ -31,6 +31,7 @@ import {
 } from "@ui/pages/pcrs/addPartner/spendProfile/spendProfile.zod";
 import { AddPartnerSchemaType } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
 import { ApproveNewSubcontractorSchemaType } from "@ui/pages/pcrs/approveNewSubcontractor/ApproveNewSubcontractor.zod";
+import { PcrReviewSchema } from "@ui/pages/pcrs/pcrReview.zod";
 
 interface PCRBaseDto {
   id: PcrId;
@@ -623,6 +624,8 @@ export type ChangeRemainingGrantDto = z.output<ChangeRemainingGrantSchemaType>;
 export type ReallocateCostsSummaryDto = z.output<ReallocateCostsSummaryValidatorSchema>;
 
 export type ReallocateCostsDto = z.output<CostCategoryLevelReallocateCostsEditSchemaType>;
+
+export type PcrReviewDto = z.output<PcrReviewSchema>;
 
 export interface ReasoningDto {
   reasoningComments?: string;
