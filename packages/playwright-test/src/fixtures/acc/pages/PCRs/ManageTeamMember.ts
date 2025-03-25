@@ -76,6 +76,9 @@ class ManageTeamMember {
   private readonly removeAssociateTable: Array<[string, string]>;
   private readonly removeAssociateButton: Locator;
   private readonly cancelLink: Locator;
+  private readonly dayLabel: Locator;
+  private readonly monthLabel: Locator;
+  private readonly yearLabel: Locator;
 
   constructor({
     page,
@@ -205,6 +208,9 @@ class ManageTeamMember {
     ];
     this.removeAssociateButton = this.page.getByRole("button").filter({ hasText: "Remove associate" });
     this.cancelLink = this.page.getByRole("link").filter({ hasText: "Cancel" });
+    this.dayLabel = this.page.getByLabel("Day");
+    this.monthLabel = this.page.getByLabel("Month");
+    this.yearLabel = this.page.getByLabel("Year");
   }
 
   //**STEP DEFINITIONS**//
@@ -394,24 +400,24 @@ class ManageTeamMember {
     await this.emptyFormValidation(true);
   }
 
-  @When("the user exceeds 100 characters in the form fields")
+  @When("the user exceeds 80 characters in the form fields")
   async exceedFormCharacterLimits() {
     for (const input of this.inviteFormNames) {
-      await this.completeToCharacterLimit(101, input, false);
+      await this.completeToCharacterLimit(75, input, false);
     }
-    await this.completeToCharacterLimit(101, "Email", true);
+    await this.completeToCharacterLimit(75, "Email", true);
   }
 
   @Then("validation messages for each field will confirm length of 100 characters")
   async exceedCharacterValMessages() {
-    await this.validateLength("First name", "100");
-    await this.validateLength("Last name", "100");
-    await this.validateLength("Email", "100");
+    await this.validateLength("First name", "80");
+    await this.validateLength("Last name", "80");
+    await this.validateLength("Email", "80");
   }
 
   @When("the email entered is not in an email format")
   async enterInvalidEmail() {
-    await this.completeToCharacterLimit(100, "Email", false);
+    await this.completeToCharacterLimit(75, "Email", false);
   }
 
   @Then("the validation message will confirm an invalid email")
@@ -419,46 +425,18 @@ class ManageTeamMember {
     await this.commands.validationMessage("Enter a valid email address ");
   }
 
-  @When("the user enters alpha characters in the start date form")
-  async alphaDateForm() {
-    for (const input of this.associateStartDateList) {
-      await this.page.getByLabel(input).fill("Lorem");
-    }
-  }
-
-  @When("the user enters special characters in the start date form")
-  async specialDateForm() {
-    const specialList = ["!", "£", "$", "%", "^", "&", "*", "(", ")", "+", "-", "=", "@", "#", "<", ">"];
-    for (const input of specialList) {
-      for (const label of this.associateStartDateList) {
-        await this.page.getByLabel(label).clear();
-        await this.page.getByLabel(label).fill(input);
-      }
-      await this.invalidSpecialCharacterMsg();
-    }
-  }
-
-  @Then("the validation messages for each field will confirm invalid alpha characters")
-  async confirmInvalidAlphaChar() {
-    await this.invalidAlphaCharacterMsg();
-  }
-
-  @Then("the validation messages for each field will confirm invalid special characters")
-  async confirmInvalidSpecialChar() {
-    await this.invalidSpecialCharacterMsg();
-  }
-
-  @When("the form is completed with 100 characters")
+  @When("the form is completed with 80 characters")
   async completeFormValidInput() {
-    let lorem = getLorem(100);
+    let lorem = getLorem(80);
+
     for (const input of this.inviteFormNames) {
       await this.page.getByLabel(input).fill(lorem);
     }
-    await this.completeToCharacterLimit(95, "Email", true, true);
+    await this.completeToCharacterLimit(80, "Email", true, true);
     await this.page.getByLabel("Email").press("Delete");
   }
 
-  @When("a valid date is entered in the start date form")
+  @When("a correct and valid date is entered as the start date")
   async validStartDate() {
     let month = this.monthNow();
     let year = this.yearFromNow();
@@ -512,7 +490,7 @@ class ManageTeamMember {
       status = "Submitted to Innovate UK";
     }
     const data = [
-      ["Request number", /[1-9]/],
+      ["Request number", /^(\d?[1-9]|[1-9]0)$/],
       ["Request type", "Manage team members"],
       ["Request started", this.commands.dateToday(true)],
       ["Request status", status],
@@ -571,6 +549,29 @@ class ManageTeamMember {
     await this.removeAssociateButton.click();
   }
 
+  @When("the user enters invalid {string} in the date {string}")
+  async validateDateField(info: string, field: string) {
+    //first complete form so it's in a valid state
+    await this.completeFormValidInput();
+    await this.validStartDate();
+    await this.page.getByLabel(field).fill(info);
+  }
+
+  @Then("the user will see the date validation {string}")
+  async valMessageVisible(message: string) {
+    await this.commands.validationLink(message);
+    await expect(this.page.getByRole("paragraph").filter({ hasText: message })).toBeVisible();
+  }
+
+  @When("the user sets a date in the future as 01 {string} in the date {string}")
+  async setDateInFuture(month: string, year: string) {
+    await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
+    await this.validStartDate();
+    await this.page.getByLabel("Day").fill("01");
+    await this.page.getByLabel("Month").fill(month);
+    await this.page.getByLabel("Year").fill(year);
+  }
+
   // **METHODS**
 
   /**
@@ -596,7 +597,8 @@ class ManageTeamMember {
 
   async completeToCharacterLimit(charlength: number, inputField: string, email: boolean, accurateEmail?: boolean) {
     if (email) {
-      let emailLorem = `IfyoueverneedareasontogototheofficeinSwindonconsiderthefactthateverythirdwednesdaypippindonuts@x.comm`;
+      //let emailLorem = `IfyoueverneedareasontogototheofficeinSwindonconsiderthefactthateverythirdwednesdaypippindonuts@x.comm`;
+      let emailLorem = "IfyoueverneedareasontogototheofficeinSwindonconsiderthefactthateverythirdw@x.comm";
       await this.page.getByLabel(inputField).fill(emailLorem);
       if (accurateEmail) {
         await this.page.getByLabel(inputField).press("End");
@@ -704,18 +706,6 @@ class ManageTeamMember {
         await this.commands.validationMessage(`Start ${valLabel} must be a valid 4 digit number.`);
       } else {
         await this.commands.validationMessage(`Start ${valLabel} must be a valid number.`);
-      }
-      await this.commands.validationMessage(`Enter a valid start date`);
-    }
-  }
-
-  async invalidSpecialCharacterMsg() {
-    for (const input of this.associateStartDateList) {
-      let valLabel = input.toLowerCase();
-      if (valLabel === "year") {
-        await this.commands.validationMessage(`Start ${valLabel} must be a valid 4 digit number.`);
-      } else {
-        await this.commands.validationMessage(`Start ${valLabel} must be a number.`);
       }
       await this.commands.validationMessage(`Enter a valid start date`);
     }

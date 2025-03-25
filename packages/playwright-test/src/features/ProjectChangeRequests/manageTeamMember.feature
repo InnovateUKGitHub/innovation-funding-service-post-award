@@ -27,14 +27,14 @@ Feature: Manage team member
         When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
-        When the user exceeds 100 characters in the form fields
+        When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
         When the email entered is not in an email format
         Then the validation message will confirm an invalid email
 
-        When the form is completed with 100 characters
+        When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
     Scenario: Validating the Replace finance contact page
@@ -46,11 +46,11 @@ Feature: Manage team member
         And the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
-        When the user exceeds 100 characters in the form fields
+        When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
-        When the form is completed with 100 characters
+        When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
     Scenario: Validating the Replace knowledge base administrator page
@@ -61,11 +61,11 @@ Feature: Manage team member
         When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
-        When the user exceeds 100 characters in the form fields
+        When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
-        When the form is completed with 100 characters
+        When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
     Scenario: Validating the Replace main company contact page
@@ -76,11 +76,11 @@ Feature: Manage team member
         When the user clicks the "Confirm replacement and send invitation" button
         Then a standard validation message will advise of empty fields
 
-        When the user exceeds 100 characters in the form fields
+        When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
-        When the form is completed with 100 characters
+        When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
     #This step previously failed until ticket ACC-11681 was resolved
@@ -92,20 +92,70 @@ Feature: Manage team member
         When the user clicks the "Send invitation" button
         Then an associate page validation message will advise of empty fields
 
-        When the user exceeds 100 characters in the form fields
+        When the user exceeds 80 characters in the form fields
         And the user clicks the "Send invitation" button
         Then validation messages for each field will confirm length of 100 characters
 
-        When the user enters alpha characters in the start date form
-        And the user clicks the "Send invitation" button
-        Then the validation messages for each field will confirm invalid alpha characters
-
-        When the user enters special characters in the start date form
-        Then the validation messages for each field will confirm invalid special characters
-
-        When a valid date is entered in the start date form
-        And the form is completed with 100 characters
+        When a correct and valid date is entered as the start date
+        And the form is completed with 80 characters
         Then the validation messages will dynamically disappear
+
+    Scenario Outline: Validating Invite associate Date fields
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Invite associate" button
+        Then the user will see the Invite a new associate page
+
+        When the user enters invalid "<information>" in the date "<field>"
+        And the user clicks the "Send invitation" button
+        Then the user will see the date validation "<message>"
+
+        When a correct and valid date is entered as the start date
+        Then the validation messages will dynamically disappear
+
+        Examples:
+            | information | field | message                                                 |
+            |             | Day   | Start date must include a day.                          |
+            |             | Month | Start date must include a month.                        |
+            |             | Year  | Start date must include a year.                         |
+            | 32          | Day   | Start date must be a real date.                         |
+            | 2000        | Day   | Start date must be a real date.                         |
+            | lorem       | Day   | Start date must be a real date.                         |
+            | &^%         | Day   | Start date must be a real date.                         |
+            | -01         | Day   | Start date must be a real date.                         |
+            | 13          | Month | Start date must be a real date.                         |
+            | 2000        | Month | Start date must be a real date.                         |
+            | lorem       | Month | Start date must be a real date.                         |
+            | &^%         | Month | Start date must be a real date.                         |
+            | -01         | Month | Start date must be a real date.                         |
+            | 1066        | Year  | Start date must be the same as or after 1 January 2000. |
+            | 1999        | Year  | Start date must be the same as or after 1 January 2000. |
+            | lorem       | Year  | Start date must be a real date.                         |
+            | &^%         | Year  | Start date must be a real date.                         |
+            | -01         | Year  | Start date must be the same as or after 1 January 2000. |
+
+    Scenario Outline: Validating different date ranges of Invite Associate
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Invite associate" button
+        Then the user will see the Invite a new associate page
+
+        When the user sets a date in the future as 01 "<month>" in the date "<year>"
+        And the user clicks the "Send invitation" button
+        Then a "Invite a new associate" confirmation screen is displayed
+
+        Examples:
+            | month | year |
+            | 01    | 2028 |
+            | 02    | 2027 |
+            | 03    | 2026 |
+            | 04    | 2027 |
+            | 05    | 2029 |
+            | 06    | 2026 |
+            | 07    | 2030 |
+            | 08    | 2029 |
+            | 09    | 2040 |
+            | 10    | 2027 |
+            | 11    | 2035 |
+            | 12    | 2026 |
 
     Scenario: Completing and submitting Replace finance contact
         When the user creates a "Manage team members" PCR
