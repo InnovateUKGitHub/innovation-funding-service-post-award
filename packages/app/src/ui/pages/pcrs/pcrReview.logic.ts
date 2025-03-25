@@ -52,23 +52,6 @@ export const useOnUpdatePcrReview = (pcrId: PcrId, projectId: ProjectId) => {
   const navigate = useNavigate();
 
   return useOnUpdate<PcrReviewSchemaType, boolean>({
-    // req(data) {
-    //   const payload = {
-    //     projectId,
-    //     id: pcrId,
-    //     pcr: {
-    //       ...pcr,
-    //       ...data,
-    //       projectId,
-    //       pcrId,
-    //       items: pcr.items.map(x => ({ ...x, projectId })),
-    //       status: parseInt(data.status, 10) as PCRStatus,
-    //     },
-    //   };
-
-    //   return clientsideApiClient.pcrs.update(payload);
-    // },
-
     req(data) {
       return clientsideApiClient.pcrs.pcrReview({
         projectId,

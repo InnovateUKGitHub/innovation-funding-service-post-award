@@ -21,30 +21,19 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   watch,
   children,
   onUpdate,
-  isFetching: isFetchingFromProps,
+  isFetching,
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   watch: UseFormWatch<FormValues>;
   children?: ReactNode;
-  onUpdate?: ({ data, context }: { data: FormValues; context?: { link: ILinkInfo } }) => Promise<void>;
+  onUpdate: ({ data, context }: { data: FormValues; context?: { link: ILinkInfo } }) => Promise<void>;
   isFetching?: boolean;
 }) => {
-  const {
-    itemId,
-    routes,
-    projectId,
-    pcrId,
-    isFetching: isFetchingGeneric,
-    onSave,
-    allowSubmit,
-    setMarkedAsCompleteHasBeenChecked,
-  } = usePcrWorkflowContext();
+  const { itemId, routes, projectId, pcrId, allowSubmit, setMarkedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
-  const onSaveHandler = typeof onUpdate === "function" ? onUpdate : onSave;
-  const isFetching = isFetchingFromProps || isFetchingGeneric;
   const { getContent } = useContent();
 
   const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
@@ -58,7 +47,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   return (
     <Form
       onSubmit={handleSubmit((data: FormValues) => {
-        return onSaveHandler({
+        return onUpdate({
           data: {
             ...data,
             status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,

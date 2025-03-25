@@ -5,15 +5,11 @@ import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { SpendProfile, mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { spendProfileCostsQuery } from "./SpendProfileCosts.query";
-import { noop } from "lodash";
 import { createContext, Dispatch, SetStateAction } from "react";
-import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryItem } from "@framework/types/CostCategory";
 import { BaseProps } from "@ui/app/containerBase";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { SpendProfileCostsQuery } from "./__generated__/SpendProfileCostsQuery.graphql";
-import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { useNavigate } from "react-router-dom";
 import { useMessageContext } from "@ui/context/messages";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
@@ -140,14 +136,6 @@ export const useSpendProfileCostsQuery = (
 export type SpendProfileQueryReturnType = ReturnType<typeof useSpendProfileCostsQuery>;
 
 type SpendProfileContextType = {
-  isFetching: boolean;
-  onUpdate: ({
-    data,
-    context,
-  }: {
-    data: Partial<FullPCRItemDto> & { spendProfile: Partial<PcrSpendProfileDto> };
-    context: { link: ILinkInfo };
-  }) => Promise<void>;
   cost: SpendProfileQueryReturnType["cost"];
   costCategoryType: CostCategoryItem;
   spendProfile: SpendProfileQueryReturnType["spendProfile"];
@@ -162,17 +150,13 @@ type SpendProfileContextType = {
   documents: SpendProfileQueryReturnType["documents"];
   costCategory: SpendProfileQueryReturnType["costCategory"];
   pcrItem: SpendProfileQueryReturnType["pcrItem"];
-  apiError: ClientErrorResponse | null;
   stepRoute: ILinkInfo;
   addNewItem: boolean;
   fragmentRef: unknown;
   setFetchKey: Dispatch<SetStateAction<number>>;
 };
 
-export const SpendProfileContext = createContext<SpendProfileContextType>({
-  isFetching: false,
-  onUpdate: noop,
-} as SpendProfileContextType);
+export const SpendProfileContext = createContext<SpendProfileContextType>({} as SpendProfileContextType);
 
 export const appendOrMerge = <T extends { id?: string | null }>(costs: T[], cost: T) => {
   const matchingIndex = costs.findIndex(x => x?.id === cost?.id);

@@ -20,7 +20,7 @@ export const AcademicCostsReviewStep = () => {
   const total = sumBy(costs, x => Number(x.value.replace("£", "")));
 
   return (
-    <PcrPage>
+    <PcrPage apiError={null}>
       <Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
         <Section title={x => x.pcrAddPartnerLabels.tsbReferenceHeading}>
           <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>

@@ -48,7 +48,7 @@ export const SpendProfileStep = () => {
   const summaryLink = useSummaryLink();
 
   return (
-    <PcrPage>
+    <PcrPage apiError={null}>
       <Section>
         <H2>{getContent(x => x.pcrAddPartnerLabels.projectCostsHeading)}</H2>
         <Section>

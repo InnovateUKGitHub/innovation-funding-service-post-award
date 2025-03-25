@@ -12,16 +12,16 @@ import { ClientErrorResponse } from "@framework/util/errorHandlers";
 
 export const PcrPage = ({
   children,
-  apiError: pcrLevelApiError,
+  apiError,
   validationErrors,
   backLink,
 }: {
   children: React.ReactNode;
-  apiError?: ClientErrorResponse | null;
+  apiError: ClientErrorResponse | null;
   validationErrors?: RhfErrors;
   backLink?: React.ReactNode;
 }) => {
-  const { workflow, pcrItem, mode, step, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
+  const { workflow, pcrItem, mode, step, fragmentRef, messages, routes } = usePcrWorkflowContext();
 
   useScrollToTopSmoothly([step]);
 
@@ -37,7 +37,7 @@ export const PcrPage = ({
       backLink={backLink ?? <PcrBackLink />}
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
-      apiError={pcrLevelApiError ?? apiError}
+      apiError={apiError}
       heading={getDisplayName(pcrItem.typeName)}
     >
       <Messages messages={messages} />

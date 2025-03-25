@@ -19,7 +19,7 @@ export const NonAidFundingStep = () => {
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
   return (
-    <PcrPage>
+    <PcrPage apiError={null}>
       <Section qa="non-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleNonAidFunding}>
         {isKTP ? (
           <ValidationMessage

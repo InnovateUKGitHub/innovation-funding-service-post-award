@@ -16,11 +16,11 @@ import { ClientErrorResponse } from "@framework/util/errorHandlers";
 export const SpendProfilePreparePage = ({
   validationErrors,
   children,
-  apiError: pcrLevelApiError,
+  apiError,
 }: {
   validationErrors: RhfErrors;
   children: ReactNode;
-  apiError?: ClientErrorResponse | null;
+  apiError: ClientErrorResponse | null;
 }) => {
   const {
     costCategory,
@@ -30,7 +30,6 @@ export const SpendProfilePreparePage = ({
     pcrItem,
     routes,
     costCategoryId,
-    apiError,
     messages,
     costCategoryType,
     fragmentRef,
@@ -66,7 +65,7 @@ export const SpendProfilePreparePage = ({
           <Content value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })} />
         </BackLink>
       }
-      apiError={apiError || pcrLevelApiError}
+      apiError={apiError}
       validationErrors={validationErrors}
       fragmentRef={fragmentRef}
     >

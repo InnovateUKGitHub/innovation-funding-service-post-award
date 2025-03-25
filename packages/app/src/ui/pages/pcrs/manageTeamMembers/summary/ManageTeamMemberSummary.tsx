@@ -25,6 +25,7 @@ const ManageTeamMemberSummary = () => {
 
   return (
     <PcrPage
+      apiError={null}
       validationErrors={undefined}
       backLink={
         pcrItemCount === 1 ? (

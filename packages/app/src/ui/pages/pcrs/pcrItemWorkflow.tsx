@@ -1,15 +1,12 @@
 import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/molecules/Content/content";
 import { useFetchKey } from "@ui/context/FetchKeyProvider";
-import { ClientErrorResponse } from "@framework/util/errorHandlers";
 import { BaseProps } from "@ui/app/containerBase";
 import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import {
   Mode,
   ProjectChangeRequestPrepareItemParams,
@@ -63,14 +60,6 @@ type PcrWorkflowContextProps = Data &
   ProjectChangeRequestPrepareItemParams &
   ProjectChangeRequestPrepareItemSearchParams &
   Pick<BaseProps, "config" | "messages" | "routes" | "currentRoute"> & {
-    isFetching: boolean;
-    onSave: ({
-      data,
-      context,
-    }: {
-      data: Partial<FullPCRItemDto> & { button_submit?: string | null };
-      context?: { link: ILinkInfo };
-    }) => Promise<void>;
     workflow: PcrWorkflow;
     fetchKey: number;
     setFetchKey: Dispatch<SetStateAction<number>>;
@@ -79,7 +68,6 @@ type PcrWorkflowContextProps = Data &
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
     markedAsCompleteHasBeenChecked: boolean;
     setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
-    apiError: ClientErrorResponse | null;
     refreshItemWorkflowQuery: () => Promise<void>;
     step: number | undefined;
   };
@@ -101,31 +89,14 @@ export const PCRItemWorkflow = (props: BaseProps & Data & ProjectChangeRequestPr
     props.pcrItem.status === PCRItemStatus.Complete,
   );
 
-  const {
-    onUpdate: onSave,
-    apiError,
-    isProcessing,
-  } = useOnSavePcrItem(
-    props.projectId,
-    props.pcrId,
-    props.itemId,
-    setFetchKey,
-    props.refreshItemWorkflowQuery,
-    props.step,
-    props.pcrType,
-  );
-
   const displayCompleteForm = props.mode === "prepare";
   const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
 
   return (
     <PcrWorkflowContext.Provider
       value={{
-        apiError,
         ...props,
         workflow,
-        onSave,
-        isFetching: isProcessing,
         fetchKey,
         getRequiredToCompleteMessage,
         displayCompleteForm,

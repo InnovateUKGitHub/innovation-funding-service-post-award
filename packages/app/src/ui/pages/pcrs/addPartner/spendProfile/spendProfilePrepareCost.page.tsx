@@ -1,5 +1,5 @@
 import { CostCategoryGroupType } from "@framework/constants/enums";
-import { PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { CostCategoryList } from "@framework/types/CostCategory";
@@ -8,7 +8,6 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { AddPartnerStepNames } from "@ui/pages/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import { useContext } from "react";
-import { useOnSavePcrItem } from "../../pcrItemWorkflow.logic";
 import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
 import { LabourFormComponent } from "./labourFormComponent";
 import { MaterialsFormComponent } from "./materialsFormComponent";
@@ -45,16 +44,6 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
 
   const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
 
-  const { onUpdate, isFetching, apiError } = useOnSavePcrItem(
-    projectId,
-    pcrId,
-    itemId,
-    setFetchKey,
-    undefined,
-    undefined,
-    PCRItemType.PartnerAddition,
-  );
-
   const addPartnerWorkflow = getWorkflow(pcrItem);
   const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
   const stepRoute = routes.pcrPrepareItem.getLink({
@@ -67,8 +56,6 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
   return (
     <SpendProfileContext.Provider
       value={{
-        isFetching,
-        onUpdate,
         documents,
         cost,
         costCategory,
@@ -83,7 +70,6 @@ const SpendProfileEditComponent = (props: PcrAddSpendProfileCostParams & BasePro
         project,
         routes,
         messages,
-        apiError,
         stepRoute,
         addNewItem: !costId,
         fragmentRef,
