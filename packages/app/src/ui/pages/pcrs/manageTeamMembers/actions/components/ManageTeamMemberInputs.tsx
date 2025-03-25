@@ -110,6 +110,7 @@ const ManageTeamMemberInputs = () => {
         <Fieldset>
           <FormGroup hasError={!!getFieldState("startDate").error}>
             <Label htmlFor="startDate">{getContent(x => x.pages.manageTeamMembers.modify.labels.startDate)}</Label>
+            <Hint id="hint-for-startDate">{getContent(x => x.pages.manageTeamMembers.modify.labels.endDateHint)}</Hint>
 
             <ValidationError error={getFieldState("startDate").error} />
             <div className="govuk-date-input">
