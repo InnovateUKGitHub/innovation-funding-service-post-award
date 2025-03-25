@@ -5,6 +5,15 @@ import { SfdcApi } from "../../../sfdc/SfdcApi";
 import { SfdcLightningPage } from "../../../sfdc/SfdcLightningPage";
 import { DataTable } from "playwright-bdd";
 import { awaitResults } from "@innovateuk/project-factory-two/helpers/awaitResults";
+// Type created to add Grant Adjustments
+type GrantAdjustment = {
+  totalSize: number;
+  records: {
+    adjustmentType: string;
+    grantToBePaid: number;
+    periodNumber: number;
+  }[];
+};
 const fs = require("fs");
 
 export
@@ -126,16 +135,16 @@ class Poc3 {
       query,
     });
 
-    const myJSON = JSON.stringify(responseProject);
-    console.log(myJSON);
+    //const myJSON = JSON.stringify(responseProject);
+    //console.log(myJSON);
     const projectId = responseProject.records[0].Id;
 
     // Identify Users that can be used for Project Manager, Monitoring Officer and Finance Contact
     query = `SELECT id, contactId, accountId, contact.Name, account.Name AccountName, contact.email
-FROM USER 
-WHERE profile.name IN ('IUK Customer Community Plus Login User','Customer Community Plus User', 'Customer Community Plus Login User') and contactid!=null
-GROUP BY accountId,contactId,Id,contact.Name,account.Name,contact.email HAVING count(id)>=1 order by count(id)
-LIMIT 3`;
+    FROM USER 
+    WHERE profile.name IN ('IUK Customer Community Plus Login User','Customer Community Plus User', 'Customer Community Plus Login User') and contactid!=null
+    GROUP BY accountId,contactId,Id,contact.Name,account.Name,contact.email HAVING count(id)>=1 order by count(id)
+    LIMIT 3`;
 
     console.log("Users Query SOQL:  " + query);
     const responseUsers: QueryUserDetails = await conn.executeSOQL({
@@ -222,7 +231,6 @@ LIMIT 3`;
     await this.page.waitForTimeout(10000);
     await this.page.getByRole("listbox").locator("li").filter({ hasText: "Live" }).click();
     await this.page.locator("button").filter({ hasText: "Mark as Current Project Status" }).click();
-    //await this.page.getByRole("listbox").locator("li").filter({ hasText: "Mark as Current Project Status" }).click();
   }
 
   @Given("AwardRate and CapLimit updated using UI then Claim Shell batch job ran using Apex")
@@ -244,9 +252,9 @@ LIMIT 3`;
     const responseParticipant: QueryParticipantId = await conn.executeSOQL({
       query,
     });
-    console.log(responseParticipant);
+    //console.log(responseParticipant);
     const myJSONParticipant = JSON.stringify(responseParticipant);
-    console.log(myJSONParticipant);
+    //console.log(myJSONParticipant);
 
     let participantId = responseParticipant.records[0].Id;
 
@@ -305,15 +313,15 @@ LIMIT 3`;
     const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
       query,
     });
-    console.log(responseProjectParticipant);
+    //console.log(responseProjectParticipant);
     const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
-    console.log(myJSONProjectParticipant);
+    //console.log(myJSONProjectParticipant);
 
     let participantId = responseProjectParticipant.records[0].Id;
     let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
 
     // Update Profiles
-    console.log("Update Profiles");
+    //console.log("Update Profiles");
     let updateProfiles = fs
       .readFileSync(path.join(__dirname, "../../../../../apex/updateProfiles.apex"), { encoding: "utf-8" })
       .replaceAll("{AccProjectId}", projectId)
@@ -325,16 +333,16 @@ LIMIT 3`;
       .replaceAll("{PeriodNumberArray}", data["PeriodNumberArray"])
       .replaceAll("{ValueArray}", data["ValueArray"]);
 
-    console.log(updateProfiles);
+    //console.log(updateProfiles);
 
     const apexresponseProfiles = await conn.executeApex({
       query: updateProfiles,
     });
 
-    console.log("Apex response: ", apexresponseProfiles);
+    //console.log("Apex response: ", apexresponseProfiles);
   }
 
-  @Given("a claim has been added using the UI")
+  @Given("claims have been added and Approved using the UI")
   async addClaimUsingUI() {
     type QueryProjectParticipantId = {
       totalSize: number;
@@ -346,12 +354,52 @@ LIMIT 3`;
       }[];
     };
 
-    type QueryClaimApproval = {
+    // Grant Adjustment values
+    let gaValue: GrantAdjustment = {
+      totalSize: 2,
+      records: [
+        {
+          adjustmentType: "Prepayment",
+          grantToBePaid: 100000,
+          periodNumber: 1,
+        },
+        {
+          adjustmentType: "Prepayment",
+          grantToBePaid: 9999,
+          periodNumber: 1,
+        },
+      ],
+    };
+
+    const conn = await this.sfdcApi.getTsforceConnection();
+
+    // Get Participant/Project Ids
+    let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
+    //console.log("Participant/Project Query SOQL:  " + query);
+    const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
+      query,
+    });
+    //console.log(responseProjectParticipant);
+    const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
+    //console.log(myJSONProjectParticipant);
+
+    let participantId = responseProjectParticipant.records[0].Id;
+
+    // Creates and Approves 3 Claims
+    await this.createAndApproveClaimUsingUI(participantId, conn, 1, gaValue);
+    await this.createAndApproveClaimUsingUI(participantId, conn, 2, gaValue);
+    await this.createAndApproveClaimUsingUI(participantId, conn, 3, gaValue);
+  }
+
+  @Given("claims have been added and Approved by APEX")
+  async addClaimsUsingAPEX() {
+    type QueryProjectParticipantId = {
       totalSize: number;
       done: boolean;
       records: {
-        attributes: { type: number };
-        expr0: number;
+        attributes: { type: string; url: string };
+        Id: string;
+        Acc_ProjectId__c: string;
       }[];
     };
 
@@ -359,21 +407,22 @@ LIMIT 3`;
 
     // Get Participant/Project Ids
     let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
-    console.log("Participant/Project Query SOQL:  " + query);
+    //console.log("Participant/Project Query SOQL:  " + query);
     const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
       query,
     });
-    console.log(responseProjectParticipant);
+    //console.log(responseProjectParticipant);
     const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
-    console.log(myJSONProjectParticipant);
+    //console.log(myJSONProjectParticipant);
 
     let participantId = responseProjectParticipant.records[0].Id;
     let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
 
-    // Creates and Approves 3 Claims
-    await this.createAndApproveClaim(participantId, conn, 1);
-    await this.createAndApproveClaim(participantId, conn, 2);
-    await this.createAndApproveClaim(participantId, conn, 3);
+    // Creates and Approves 4 Claims
+    await this.createAndApproveClaimUsingAPEX(participantId, conn, 4);
+    await this.createAndApproveClaimUsingAPEX(participantId, conn, 5);
+    await this.createAndApproveClaimUsingAPEX(participantId, conn, 6);
+    await this.createAndApproveClaimUsingAPEX(participantId, conn, 7);
 
     await this.page.waitForTimeout(50000);
   }
@@ -392,9 +441,6 @@ LIMIT 3`;
 
   // Adds Participant
   async addParticipant(externalUserVal: string, externalUserAccountVal: string, projectRoleVal: string) {
-    console.log("External User: " + externalUserVal);
-    console.log("External User Account: " + externalUserAccountVal);
-
     // Click New button
     await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
 
@@ -408,9 +454,7 @@ LIMIT 3`;
       .click();
 
     await this.selectDropdown("Project Role", projectRoleVal);
-
     await this.selectDropdown("Participant Type", "Business");
-
     await this.selectDropdown("Organisation Type", "Industrial");
 
     await this.getByFieldID("RecordAcc_WorkdaySupplierSetupComplete__cField")
@@ -425,7 +469,7 @@ LIMIT 3`;
   }
 
   // Create and Approve a Claim using the UI
-  async createAndApproveClaim(participantId: string, conn, periodNo: number) {
+  async createAndApproveClaimUsingUI(participantId: string, conn, periodNo: number, gaValue: GrantAdjustment) {
     type QueryClaimId = {
       totalSize: number;
       done: boolean;
@@ -458,9 +502,9 @@ LIMIT 3`;
     const responseClaim: QueryClaimId = await conn.executeSOQL({
       query: queryClaim,
     });
-    console.log(responseClaim);
+    //console.log(responseClaim);
     const myJSONProjectClaim = JSON.stringify(responseClaim);
-    console.log(myJSONProjectClaim);
+    //console.log(myJSONProjectClaim);
 
     // Get Profile values to add to Claim
     let queryProfile = `SELECT Acc_ProjectPeriodNumber__c,Acc_CostCategory__r.name, Acc_LatestForecastCost__c
@@ -470,19 +514,150 @@ LIMIT 3`;
     AND Acc_ProjectPeriodNumber__c = ${periodNo}
     AND Acc_LatestForecastCost__c  > 0`;
 
-    console.log("Profile Query SOQL:  " + queryProfile);
+    //console.log("Profile Query SOQL:  " + queryProfile);
     const responseProfile: QueryProjectProfile = await conn.executeSOQL({
       query: queryProfile,
     });
-    console.log(responseProfile);
+    //console.log(responseProfile);
     const myJSONProjectProfile = JSON.stringify(responseProfile);
-    console.log("*********************", myJSONProjectProfile);
+    //console.log("*********************", myJSONProjectProfile);
 
-    // Add Claims Line item
-    // Navigate to Project
-    let path = String(`/lightning/r/Acc_ProjectParticipant__c /${participantId}/view`);
+    let path = String(`/lightning/r/Acc_ProjectParticipant__c/${participantId}/view`);
     await this.sfdcPage.loginAndGoto(path);
+    console.log("ORIGINAL PERIOD NO: ", periodNo);
+    await this.createAndApproveGAUsingUI(participantId, conn, periodNo, gaValue);
+    await this.createClaimLineItemsUI(participantId, periodNo, conn);
+    await this.page.waitForTimeout(10000); // Remove me
+    await this.submitAndApproveClaimUI(participantId, periodNo, conn);
+  }
+
+  async submitAndApproveClaimUI(participantId: string, periodNo: number, conn) {
+    type QueryClaimId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
+
+    // Get Claim Id
+    let queryClaim = `SELECT Id
+      FROM Acc_Claims__c
+      WHERE Acc_ProjectParticipant__c ='${participantId}'
+      AND recordType.Name = 'Total Project Period'
+      AND	Acc_ProjectPeriodNumber__c = ${periodNo}`;
+
+    //console.log("Claim Query SOQL:  " + queryClaim);
+    const responseClaim: QueryClaimId = await conn.executeSOQL({
+      query: queryClaim,
+    });
+
+    //console.log(responseClaim);
+    const myJSONProjectClaim = JSON.stringify(responseClaim);
+    //console.log(myJSONProjectClaim);
+
+    // Navigate to Claim
+    //et claimId = responseProfile.records[0].Acc_ClaimDetail__r.Acc_ParentId__c;
+    let claimId = responseClaim.records[0].Id;
+    let pathClaim = String(`/lightning/r/Acc_Claims__c /${claimId}/view`);
+    await this.sfdcPage.loginAndGoto(pathClaim);
+
+    // Select Submitted to MO
+    await this.page.waitForTimeout(10000);
+    await this.page.getByRole("listbox").locator("li").filter({ hasText: "Submitted to Monitoring Officer" }).click();
+    await this.page.locator("button").filter({ hasText: "Mark as Current Claim status" }).click();
+
+    // Select Submitted to Innovate
+    await this.page.waitForTimeout(10000);
+    await this.page.getByRole("listbox").locator("li").filter({ hasText: "Submitted to Innovate UK" }).click();
+    await this.page.locator("button").filter({ hasText: "Mark as Current Claim status" }).click();
+
+    // Click Submit for Approval  button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Submit for Approval$/ })
+      .click();
+
+    // Click Submit
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Submit$/ })
+      .click();
+
+    // Approve Claim if required
+
+    // Get count of workItems for claim
+    await this.page.waitForTimeout(10000); // Wait to see if the Claim needs approving
+
+    let queryClaimApproval = `Select COUNT(id) FROM ProcessInstanceWorkitem WHERE ProcessInstance.TargetObject.Id ='${claimId}'`;
+
+    //console.log("Claim Query SOQL:  " + queryClaimApproval);
+    const responseClaimApproval: QueryClaimApproval = await conn.executeSOQL({
+      query: queryClaimApproval,
+    });
+    //console.log(responseClaimApproval);
+    const myJSONProjectClaimApproval = JSON.stringify(responseClaimApproval);
+    //console.log(myJSONProjectClaimApproval);
+
+    let numberOfWorkItems = responseClaimApproval.records[0].expr0;
+    //console.log("Count id: ", numberOfWorkItems);
+
+    // Approve Claims and Grant Adjustments
+    for (let i = 1; i <= numberOfWorkItems; i++) {
+      // Navigate to Approval History
+      await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Approval History" }).click();
+
+      // Click Approve button
+      await this.page
+        .getByRole("button")
+        .filter({ hasText: /^Approve$/ })
+        .click();
+
+      await this.page.waitForTimeout(5000);
+
+      // Click Approve button
+      await this.page
+        .getByRole("button")
+        .filter({ hasText: /^Approve$/ })
+        .click();
+    }
+  }
+
+  async createClaimLineItemsUI(participantId: string, periodNo: number, conn) {
+    type QueryProjectProfile = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Acc_ProjectPeriodNumber__c: string;
+        Acc_CostCategory__r: { type: string; url: string; Name: string };
+        Acc_LatestForecastCost__c: string;
+        Acc_ClaimDetail__r: { type: string; url: string; Acc_ParentId__c: string };
+      }[];
+    };
+
+    // Navgate to Participant
+    let pathClaimLineItem = String(`/lightning/r/Acc_ProjectParticipant__c/${participantId}/view`);
+    await this.sfdcPage.loginAndGoto(pathClaimLineItem);
+    // Select Claims tab
     await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Claims" }).click();
+
+    // Get Profile values to add to Claim
+    let queryProfile = `SELECT Acc_ProjectPeriodNumber__c,Acc_CostCategory__r.name, Acc_LatestForecastCost__c
+    FROM Acc_Profile__c
+    WHERE Acc_ProjectParticipant__r.Id ='${participantId}'
+    AND RecordType.Name = 'Profile Detail'
+    AND Acc_ProjectPeriodNumber__c = ${periodNo}
+    AND Acc_LatestForecastCost__c  > 0`;
+
+    //console.log("Profile Query SOQL:  " + queryProfile);
+    const responseProfile: QueryProjectProfile = await conn.executeSOQL({
+      query: queryProfile,
+    });
+    //console.log(responseProfile);
+    const myJSONProjectProfile = JSON.stringify(responseProfile);
+    //console.log("*********************", myJSONProjectProfile);
 
     // Loop thought each Line Item then add
     for (const element of responseProfile.records) {
@@ -524,72 +699,172 @@ LIMIT 3`;
         .filter({ hasText: /^Save$/ })
         .click();
     }
+  }
 
-    // Navigate to Claim
-    //et claimId = responseProfile.records[0].Acc_ClaimDetail__r.Acc_ParentId__c;
-    let claimId = responseClaim.records[0].Id;
-    let pathClaim = String(`/lightning/r/Acc_Claims__c /${claimId}/view`);
-    await this.sfdcPage.loginAndGoto(pathClaim);
+  // Create and Approve Grant Adjustments
+  async createAndApproveGAUsingUI(participantId: string, conn, periodNoGA: number, gaValue: GrantAdjustment) {
+    type QueryPrepayment = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
 
-    // Select Submitted to MO
-    await this.page.waitForTimeout(10000);
-    await this.page.getByRole("listbox").locator("li").filter({ hasText: "Submitted to Monitoring Officer" }).click();
-    await this.page.locator("button").filter({ hasText: "Mark as Current Claim status" }).click();
+    // Add one or more Grant Adjustments
+    for (const element of gaValue.records) {
+      if (periodNoGA == element.periodNumber) {
+        console.log("Original PeriodNo: ", periodNoGA);
+        console.log("Period No: ", element.periodNumber);
+        console.log("Adjustment Type: ", element.adjustmentType);
+        console.log("Grant to be paid: ", element.grantToBePaid);
 
-    // Select Submitted to Innovate
-    await this.page.waitForTimeout(10000);
-    await this.page.getByRole("listbox").locator("li").filter({ hasText: "Submitted to Innovate UK" }).click();
-    await this.page.locator("button").filter({ hasText: "Mark as Current Claim status" }).click();
+        // Navigate to Participant
+        let pathGA = String(`/lightning/r/Acc_ProjectParticipant__c/${participantId}/view`);
 
-    // Click Submit for Approval  button
-    await this.page
-      .getByRole("button")
-      .filter({ hasText: /^Submit for Approval$/ })
-      .click();
+        //await this.sfdcPage.loginAndGoto(pathGA);
+        await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Grant Adjustments" }).click();
 
-    // Click Submit
-    await this.page
-      .getByRole("button")
-      .filter({ hasText: /^Submit$/ })
-      .click();
+        // Click New button
+        await this.page.getByRole("button").filter({ hasText: /^New$/ }).click();
 
-    // Approve Claim if required
+        // Adjustment Type
+        await this.selectDropdown("Adjustment Type", element.adjustmentType);
 
-    // Get count of workItems for claim
-    await this.page.waitForTimeout(10000); // Wait to see if the Claim needs approving
+        // Grant to be paid
+        await this.getByFieldID("RecordAcc_GranttobePaid__cField")
+          .getByLabel("Grant to be Paid")
+          .fill(element.grantToBePaid.toString());
 
-    let queryClaimApproval = `Select COUNT(id) FROM ProcessInstanceWorkitem WHERE ProcessInstance.TargetObject.Id ='${claimId}'`;
+        // Period number
+        await this.getByFieldID("RecordAcc_PeriodNumber__cField")
+          .getByLabel("Period Number")
+          .fill(element.periodNumber.toString());
 
-    console.log("Claim Query SOQL:  " + queryClaimApproval);
-    const responseClaimApproval: QueryClaimApproval = await conn.executeSOQL({
-      query: queryClaimApproval,
+        // Save button
+        await this.page
+          .getByRole("button")
+          .filter({ hasText: /^Save$/ })
+          .click();
+
+        await this.page.waitForTimeout(10000); // Remove me
+      }
+    }
+
+    // Approve Grant Adjustments
+
+    // Get GA Ids
+    let queryPrepayment = `SELECT Id
+      FROM Acc_Prepayment__c
+      WHERE Acc_ProjectParticipant__c ='${participantId}'
+      AND Acc_ProjectPeriodNumber__c = ${periodNoGA}`;
+
+    console.log("Prepayment Query SOQL:  " + queryPrepayment);
+    const responsePrepayment: QueryPrepayment = await conn.executeSOQL({
+      query: queryPrepayment,
     });
-    console.log(responseClaimApproval);
-    const myJSONProjectClaimApproval = JSON.stringify(responseClaimApproval);
-    console.log(myJSONProjectClaimApproval);
+    //console.log(responsePrepayment);
+    const myJSONPrepayment = JSON.stringify(responsePrepayment);
+    //console.log("Prepayment JSON: ", myJSONPrepayment);
 
-    let numberOfWorkItems = responseClaimApproval.records[0].expr0;
-    console.log("Count id: ", numberOfWorkItems);
+    // Loop through each GA for specified period then Approve
+    for (const gaVal of responsePrepayment.records) {
+      // Navigate to Grant Adjustment
+      let path = String(`/lightning/r/Acc_Prepayment__c /${gaVal.Id}/view`);
+      await this.sfdcPage.loginAndGoto(path);
 
-    // Approve Claims and Grant Adjustments
-    for (let i = 1; i <= numberOfWorkItems; i++) {
-      // Navigate to Approval History
+      // Submit for Approval button
+      await this.page
+        .getByRole("button")
+        .filter({ hasText: /^Submit for Approval$/ })
+        .click();
+
+      // Submit
+      await this.page
+        .getByRole("button")
+        .filter({ hasText: /^Submit$/ })
+        .click();
+
+      // Select Approval History tab
       await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Approval History" }).click();
 
-      // Click Approve button
+      // Approve button
       await this.page
         .getByRole("button")
         .filter({ hasText: /^Approve$/ })
         .click();
 
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(10000);
 
-      // Click Approve button
+      // Approve button
       await this.page
         .getByRole("button")
         .filter({ hasText: /^Approve$/ })
         .click();
     }
+  }
+
+  // Create and Approve Claim using APEX
+  async createAndApproveClaimUsingAPEX(participantId: string, conn, periodNo: number) {
+    let createClaimsFromProfiles = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/createClaimFromProfile.apex"), { encoding: "utf-8" })
+      .replaceAll("{ParticipantId}", participantId)
+      .replaceAll("{LoopCounterClaims}", periodNo);
+
+    console.log(createClaimsFromProfiles);
+
+    const apexresponseCreateClaims = await conn.executeApex({
+      query: createClaimsFromProfiles,
+    });
+
+    //console.log("Apex response: ", apexresponseCreateClaims);
+
+    // Submit to Innovateuk
+    let submitToInnovate = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/submittoInnovate.apex"), { encoding: "utf-8" })
+      .replaceAll("{ParticipantId}", participantId)
+      .replaceAll("{LoopCounterClaims}", periodNo);
+
+    //console.log(submitToInnovate);
+
+    const apexresponseSubmitToInnovate = await conn.executeApex({
+      query: submitToInnovate,
+    });
+
+    //console.log("Apex response: ", apexresponseSubmitToInnovate);
+
+    // Simulate clicking Submit for Approval button using Apex
+    let clickSubmitForApprovalButton = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/simulateClickingSubmitForApprovalButton.apex"), {
+        encoding: "utf-8",
+      })
+      .replaceAll("{ParticipantId}", participantId)
+      .replaceAll("{LoopCounterClaims}", periodNo);
+
+    //console.log(clickSubmitForApprovalButton);
+
+    const apexresponseClickSubmitForApprovalButton = await conn.executeApex({
+      query: clickSubmitForApprovalButton,
+    });
+
+    //console.log("Apex response: ", apexresponseClickSubmitForApprovalButton);
+
+    // Approve a Claim
+    let approveClaim = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/approveClaim.apex"), {
+        encoding: "utf-8",
+      })
+      .replaceAll("{ParticipantId}", participantId)
+      .replaceAll("{LoopCounterClaims}", periodNo);
+
+    //console.log(approveClaim);
+
+    const apexresponseApproveClaim = await conn.executeApex({
+      query: approveClaim,
+    });
+
+    console.log("Apex response: ", apexresponseApproveClaim);
   }
 
   // Adds PCL
@@ -599,8 +874,8 @@ LIMIT 3`;
     projectRoleVal: string,
     externalUserEmailVal: string,
   ) {
-    console.log("External User: " + externalUserVal);
-    console.log("External User Account: " + externalUserAccountVal);
+    //console.log("External User: " + externalUserVal);
+    //console.log("External User Account: " + externalUserAccountVal);
 
     // Click New button
     await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();

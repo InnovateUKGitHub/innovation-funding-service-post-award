@@ -18,5 +18,6 @@ Feature: Playwright Salesforce POC
             | ValueArray           | '101000','110000','100600','105000','103995','13500','100100','100200','150000','150000','510000','150000','150000','150000','510000','150000'                                              |
             | IARStatusCounter     | '5','6','7'                                                                                                                                                                                 |
             | ReviewTeamSetCounter | '1','2'                                                                                                                                                                                     |
-        And a claim has been added using the UI
+        And claims have been added and Approved using the UI
+        And claims have been added and Approved by APEX
 
