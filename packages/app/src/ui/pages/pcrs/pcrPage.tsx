@@ -17,7 +17,7 @@ export const PcrPage = ({
   backLink,
 }: {
   children: React.ReactNode;
-  apiError: ClientErrorResponse | null;
+  apiError?: ClientErrorResponse | null;
   validationErrors?: RhfErrors;
   backLink?: React.ReactNode;
 }) => {

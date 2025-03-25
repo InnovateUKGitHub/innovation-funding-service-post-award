@@ -71,7 +71,7 @@ export const JeSStep = () => {
 
   if (isKTP) {
     return (
-      <PcrPage apiError={null}>
+      <PcrPage>
         <H2>{content.jesHeading}</H2>
         <ValidationMessage
           messageType="info"

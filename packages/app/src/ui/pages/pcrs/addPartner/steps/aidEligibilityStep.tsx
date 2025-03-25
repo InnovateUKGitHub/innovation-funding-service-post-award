@@ -12,7 +12,7 @@ export const StateAidEligibilityStep = () => {
   const nextLink = useNextLink();
   const summaryLink = useSummaryLink();
   return (
-    <PcrPage apiError={null}>
+    <PcrPage>
       <Section qa="state-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleStateAid}>
         <Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceStateAid} />
       </Section>
