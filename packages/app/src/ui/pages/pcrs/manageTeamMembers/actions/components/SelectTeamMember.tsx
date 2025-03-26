@@ -51,9 +51,7 @@ const SelectTeamMember = () => {
         <>
           <Fieldset>
             <FormGroup hasError={!!getFieldState("pclId").error}>
-              <Label htmlFor="pclId">
-                {getContent(x => x.projectLabels[role]({ count: categories[role].length }))}
-              </Label>
+              <Label htmlFor="pclId">{getContent(x => x.pages.manageTeamMembers.modify.labels[role])}</Label>
               <ValidationError error={getFieldState("pclId").error} />
               <DropdownSelect
                 options={[

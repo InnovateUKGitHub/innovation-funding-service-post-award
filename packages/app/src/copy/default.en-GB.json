@@ -1203,7 +1203,12 @@
           "changeEmail": "To change the email address, please contact customer support service by calling 0300 321 4357 or email [support@iuk.ukri.org](mailto:support@iuk.ukri.org)",
           "noneProvided": "None provided",
           "cancel": "Cancel",
-          "saveAndContinue": "Select team member"
+          "saveAndContinue": "Select team member",
+          "projectManagers": "Project manager to be replaced:",
+          "financeContacts": "Finance contact to be replaced:",
+          "associates": "Associate to be replaced:",
+          "knowledgeBaseAdministrators": "KB admin to be replaced:",
+          "mainCompanyContacts": "Main company contact to be replaced:"
         },
         "messages": {
           "invalid": {
