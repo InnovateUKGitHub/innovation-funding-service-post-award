@@ -677,6 +677,7 @@ class Commands {
     }
     return newList;
   }
+
   async uploadBatchOfDocs(files = []) {
     await this.fileInput(files);
     await expect(
@@ -685,4 +686,12 @@ class Commands {
   }
 
   largerDocs = ["11MB_1", "11MB_2", "11MB_3"];
+
+  /**
+   * SALESFORCE COMMANDS
+   */
+
+  getByFieldID(label: string) {
+    return this.page.locator(`[data-field-id="${label}"]`);
+  }
 }
