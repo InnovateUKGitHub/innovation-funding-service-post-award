@@ -33,71 +33,13 @@ class Poc3 {
 
   @Given("there is a Competition created using the UI")
   async createCompetition() {
-    let pathComp = String(`/lightning/o/Competition__c/list?filterName=All`);
-    await this.sfdcPage.loginAndGoto(pathComp);
-    await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
-    await this.page.getByRole("dialog").getByLabel("Competition ID").fill(this.uniqueCompId);
-    await this.selectDropdown("Competition Type", "CR&D");
-    await this.page
-      .getByRole("button")
-      .filter({ hasText: /^Save$/ })
-      .click();
+    await this.createCompetitionUI();
   }
 
   @Given("there is a Project created using the UI")
   async createProject() {
-    // Definition for SOQL results
-    type QueryCompetitionId = {
-      totalSize: number;
-      done: boolean;
-      records: {
-        attributes: { type: string; url: string };
-        Id: string;
-      }[];
-    };
-
-    const conn = await this.sfdcApi.getTsforceConnection();
-
-    // Get Competition Id
-    let query = `SELECT Id FROM Competition__c  WHERE Name = '${this.uniqueCompId}'`;
-    console.log("Competition Query SOQL:  " + query);
-    const responseComp: QueryCompetitionId = await conn.executeSOQL({
-      query,
-    });
-
-    const myJSON = JSON.stringify(responseComp);
-    console.log(myJSON);
-    const competitionId = responseComp.records[0].Id;
-
-    // Navgate to Project
-    let pathProject = String(`/lightning/o/Acc_Project__c/list?filterName=All`);
-    await this.sfdcPage.loginAndGoto(pathProject);
-    await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
-
-    await this.page
-      .getByRole("dialog")
-      .getByLabel("Project Title")
-      .fill("Playwright Test - " + Math.floor(Math.random() * (99999 + 100000) + 1));
-
-    // *****   Need to enter the Competition rather than click then select ******
-    await this.getByFieldID("RecordAcc_CompetitionId__cField").getByLabel("Competition").click();
-    await this.page.waitForTimeout(500); /*
-    await this.getByFieldID("RecordAcc_CompetitionId__cField")
-      .getByLabel("Competition")
-      .getByRole("combobox")
-      .fill(this.uniqueCompId); */
-    await this.page.locator("lightning-base-combobox-item").filter({ hasText: this.uniqueCompId }).click();
-
-    await this.getByFieldID("RecordAcc_Duration__cField").getByLabel("Duration").fill("12");
-    await this.getByFieldID("RecordAcc_TSBProjectNumber__cField")
-      .getByLabel("TSB Project Number")
-      .fill(Math.floor(Math.random() * (99999 + 100000) + 1).toString());
-
-    // Click Save button
-    await this.page
-      .getByRole("button")
-      .filter({ hasText: /^Save$/ })
-      .click();
+    const connProject = await this.sfdcApi.getTsforceConnection();
+    await this.createProjectUI(connProject);
   }
 
   @Given("Contacts and Participants are added by the UI")
@@ -135,8 +77,7 @@ class Poc3 {
       query,
     });
 
-    //const myJSON = JSON.stringify(responseProject);
-    //console.log(myJSON);
+    const myJSON = JSON.stringify(responseProject);
     const projectId = responseProject.records[0].Id;
 
     // Identify Users that can be used for Project Manager, Monitoring Officer and Finance Contact
@@ -146,13 +87,10 @@ class Poc3 {
     GROUP BY accountId,contactId,Id,contact.Name,account.Name,contact.email HAVING count(id)>=1 order by count(id)
     LIMIT 3`;
 
-    console.log("Users Query SOQL:  " + query);
     const responseUsers: QueryUserDetails = await conn.executeSOQL({
       query,
     });
-
     const myJSONUsers = JSON.stringify(responseUsers);
-    console.log(myJSONUsers);
 
     // Navigate to Project
     let path = String(`/lightning/r/Acc_Project__c/${projectId}/view`);
@@ -211,8 +149,6 @@ class Poc3 {
     await this.getByFieldID("RecordAcc_StartDate__cField").getByLabel("Start Date").fill("01/06/2024");
     await this.selectDropdown("Project Reporting Type", "Public");
     await this.selectDropdown("Monitoring Level", "Gold");
-    //    await this.selectDropdown("Monitoring Report Schedule", "Quarterly");
-    // ******** Had issues with the selectDropdown function returning multiple values ************
     await this.page.getByRole("combobox", { name: "Monitoring Report Schedule" }).click();
     await this.page.keyboard.type("Yearly");
     await this.page.keyboard.press("Enter");
@@ -252,9 +188,7 @@ class Poc3 {
     const responseParticipant: QueryParticipantId = await conn.executeSOQL({
       query,
     });
-    //console.log(responseParticipant);
     const myJSONParticipant = JSON.stringify(responseParticipant);
-    //console.log(myJSONParticipant);
 
     let participantId = responseParticipant.records[0].Id;
 
@@ -288,58 +222,13 @@ class Poc3 {
     const apexresponseCreateClaimShells = await conn.executeApex({
       query: createClaimShells,
     });
-
-    console.log("Apex response: ", apexresponseCreateClaimShells);
   }
 
   @Given("Profiles have been updated using Apex")
   async updateProfiles(table: DataTable) {
     const data = table.rowsHash();
     const conn = await this.sfdcApi.getTsforceConnection();
-
-    type QueryProjectParticipantId = {
-      totalSize: number;
-      done: boolean;
-      records: {
-        attributes: { type: string; url: string };
-        Id: string;
-        Acc_ProjectId__c: string;
-      }[];
-    };
-
-    // Get Participant/Project Ids
-    let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
-    console.log("Participant/Project Query SOQL:  " + query);
-    const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
-      query,
-    });
-    //console.log(responseProjectParticipant);
-    const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
-    //console.log(myJSONProjectParticipant);
-
-    let participantId = responseProjectParticipant.records[0].Id;
-    let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
-
-    // Update Profiles
-    //console.log("Update Profiles");
-    let updateProfiles = fs
-      .readFileSync(path.join(__dirname, "../../../../../apex/updateProfiles.apex"), { encoding: "utf-8" })
-      .replaceAll("{AccProjectId}", projectId)
-      .replaceAll("{Acc_ParticipantId}", participantId)
-      .replaceAll("{CompetitionType}", data["CompetitionType"])
-      .replaceAll("{OrganisationType}", data["OrganisationType"])
-      .replaceAll("{CostCategoriesData}", data["CostCategoriesData"])
-      .replaceAll("{CostCategoryArray}", data["CostCategoryArray"])
-      .replaceAll("{PeriodNumberArray}", data["PeriodNumberArray"])
-      .replaceAll("{ValueArray}", data["ValueArray"]);
-
-    //console.log(updateProfiles);
-
-    const apexresponseProfiles = await conn.executeApex({
-      query: updateProfiles,
-    });
-
-    //console.log("Apex response: ", apexresponseProfiles);
+    await this.updateProfilesApex(conn, data);
   }
 
   @Given("claims have been added and Approved using the UI")
@@ -375,13 +264,10 @@ class Poc3 {
 
     // Get Participant/Project Ids
     let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
-    //console.log("Participant/Project Query SOQL:  " + query);
     const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
       query,
     });
-    //console.log(responseProjectParticipant);
     const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
-    //console.log(myJSONProjectParticipant);
 
     let participantId = responseProjectParticipant.records[0].Id;
 
@@ -407,13 +293,10 @@ class Poc3 {
 
     // Get Participant/Project Ids
     let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
-    //console.log("Participant/Project Query SOQL:  " + query);
     const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
       query,
     });
-    //console.log(responseProjectParticipant);
     const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
-    //console.log(myJSONProjectParticipant);
 
     let participantId = responseProjectParticipant.records[0].Id;
     let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
@@ -429,6 +312,110 @@ class Poc3 {
 
   // Functions
   // *************************************************************************************************************
+
+  async updateProfilesApex(conn, data) {
+    type QueryProjectParticipantId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+        Acc_ProjectId__c: string;
+      }[];
+    };
+
+    // Get Participant/Project Ids
+    let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
+    console.log("Participant/Project Query SOQL:  " + query);
+    const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
+      query,
+    });
+    const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
+
+    let participantId = responseProjectParticipant.records[0].Id;
+    let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
+
+    // Update Profiles
+    let updateProfiles = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/updateProfiles.apex"), { encoding: "utf-8" })
+      .replaceAll("{AccProjectId}", projectId)
+      .replaceAll("{Acc_ParticipantId}", participantId)
+      .replaceAll("{CompetitionType}", data["CompetitionType"])
+      .replaceAll("{OrganisationType}", data["OrganisationType"])
+      .replaceAll("{CostCategoriesData}", data["CostCategoriesData"])
+      .replaceAll("{CostCategoryArray}", data["CostCategoryArray"])
+      .replaceAll("{PeriodNumberArray}", data["PeriodNumberArray"])
+      .replaceAll("{ValueArray}", data["ValueArray"]);
+
+    const apexresponseProfiles = await conn.executeApex({
+      query: updateProfiles,
+    });
+  }
+
+  async createProjectUI(conn) {
+    // Definition for SOQL results
+    type QueryCompetitionId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
+
+    // Get Competition Id
+    let query = `SELECT Id FROM Competition__c  WHERE Name = '${this.uniqueCompId}'`;
+    console.log("Competition Query SOQL:  " + query);
+    const responseComp: QueryCompetitionId = await conn.executeSOQL({
+      query,
+    });
+
+    const myJSON = JSON.stringify(responseComp);
+    console.log(myJSON);
+    const competitionId = responseComp.records[0].Id;
+
+    // Navgate to Project
+    let pathProject = String(`/lightning/o/Acc_Project__c/list?filterName=All`);
+    await this.sfdcPage.loginAndGoto(pathProject);
+    await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
+
+    await this.page
+      .getByRole("dialog")
+      .getByLabel("Project Title")
+      .fill("Playwright Test - " + Math.floor(Math.random() * (99999 + 100000) + 1));
+
+    // *****   Need to enter the Competition rather than click then select ******
+    await this.getByFieldID("RecordAcc_CompetitionId__cField").getByLabel("Competition").click();
+    await this.page.waitForTimeout(500); /*
+  await this.getByFieldID("RecordAcc_CompetitionId__cField")
+    .getByLabel("Competition")
+    .getByRole("combobox")
+    .fill(this.uniqueCompId); */
+    await this.page.locator("lightning-base-combobox-item").filter({ hasText: this.uniqueCompId }).click();
+
+    await this.getByFieldID("RecordAcc_Duration__cField").getByLabel("Duration").fill("12");
+    await this.getByFieldID("RecordAcc_TSBProjectNumber__cField")
+      .getByLabel("TSB Project Number")
+      .fill(Math.floor(Math.random() * (99999 + 100000) + 1).toString());
+
+    // Click Save button
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
+  }
+
+  async createCompetitionUI() {
+    let pathComp = String(`/lightning/o/Competition__c/list?filterName=All`);
+    await this.sfdcPage.loginAndGoto(pathComp);
+    await this.page.locator("//div[@title='New' or class='forceActionLink']").click();
+    await this.page.getByRole("dialog").getByLabel("Competition ID").fill(this.uniqueCompId);
+    await this.selectDropdown("Competition Type", "CR&D");
+    await this.page
+      .getByRole("button")
+      .filter({ hasText: /^Save$/ })
+      .click();
+  }
 
   getByFieldID(label: string) {
     return this.page.locator(`[data-field-id="${label}"]`);
@@ -470,61 +457,9 @@ class Poc3 {
 
   // Create and Approve a Claim using the UI
   async createAndApproveClaimUsingUI(participantId: string, conn, periodNo: number, gaValue: GrantAdjustment) {
-    type QueryClaimId = {
-      totalSize: number;
-      done: boolean;
-      records: {
-        attributes: { type: string; url: string };
-        Id: string;
-      }[];
-    };
-
-    type QueryProjectProfile = {
-      totalSize: number;
-      done: boolean;
-      records: {
-        attributes: { type: string; url: string };
-        Acc_ProjectPeriodNumber__c: string;
-        Acc_CostCategory__r: { type: string; url: string; Name: string };
-        Acc_LatestForecastCost__c: string;
-        Acc_ClaimDetail__r: { type: string; url: string; Acc_ParentId__c: string };
-      }[];
-    };
-
-    // Get Claim Id
-    let queryClaim = `SELECT Id
-    FROM Acc_Claims__c
-    WHERE Acc_ProjectParticipant__c ='${participantId}'
-    AND recordType.Name = 'Total Project Period'
-    AND	Acc_ProjectPeriodNumber__c = ${periodNo}`;
-
-    console.log("Claim Query SOQL:  " + queryClaim);
-    const responseClaim: QueryClaimId = await conn.executeSOQL({
-      query: queryClaim,
-    });
-    //console.log(responseClaim);
-    const myJSONProjectClaim = JSON.stringify(responseClaim);
-    //console.log(myJSONProjectClaim);
-
-    // Get Profile values to add to Claim
-    let queryProfile = `SELECT Acc_ProjectPeriodNumber__c,Acc_CostCategory__r.name, Acc_LatestForecastCost__c
-    FROM Acc_Profile__c
-    WHERE Acc_ProjectParticipant__r.Id ='${participantId}'
-    AND RecordType.Name = 'Profile Detail'
-    AND Acc_ProjectPeriodNumber__c = ${periodNo}
-    AND Acc_LatestForecastCost__c  > 0`;
-
-    //console.log("Profile Query SOQL:  " + queryProfile);
-    const responseProfile: QueryProjectProfile = await conn.executeSOQL({
-      query: queryProfile,
-    });
-    //console.log(responseProfile);
-    const myJSONProjectProfile = JSON.stringify(responseProfile);
-    //console.log("*********************", myJSONProjectProfile);
-
     let path = String(`/lightning/r/Acc_ProjectParticipant__c/${participantId}/view`);
     await this.sfdcPage.loginAndGoto(path);
-    console.log("ORIGINAL PERIOD NO: ", periodNo);
+
     await this.createAndApproveGAUsingUI(participantId, conn, periodNo, gaValue);
     await this.createClaimLineItemsUI(participantId, periodNo, conn);
     await this.page.waitForTimeout(10000); // Remove me
@@ -541,6 +476,15 @@ class Poc3 {
       }[];
     };
 
+    type QueryClaimApproval = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        expr0: number;
+      }[];
+    };
+
     // Get Claim Id
     let queryClaim = `SELECT Id
       FROM Acc_Claims__c
@@ -548,17 +492,13 @@ class Poc3 {
       AND recordType.Name = 'Total Project Period'
       AND	Acc_ProjectPeriodNumber__c = ${periodNo}`;
 
-    //console.log("Claim Query SOQL:  " + queryClaim);
     const responseClaim: QueryClaimId = await conn.executeSOQL({
       query: queryClaim,
     });
 
-    //console.log(responseClaim);
     const myJSONProjectClaim = JSON.stringify(responseClaim);
-    //console.log(myJSONProjectClaim);
 
     // Navigate to Claim
-    //et claimId = responseProfile.records[0].Acc_ClaimDetail__r.Acc_ParentId__c;
     let claimId = responseClaim.records[0].Id;
     let pathClaim = String(`/lightning/r/Acc_Claims__c /${claimId}/view`);
     await this.sfdcPage.loginAndGoto(pathClaim);
@@ -592,16 +532,13 @@ class Poc3 {
 
     let queryClaimApproval = `Select COUNT(id) FROM ProcessInstanceWorkitem WHERE ProcessInstance.TargetObject.Id ='${claimId}'`;
 
-    //console.log("Claim Query SOQL:  " + queryClaimApproval);
     const responseClaimApproval: QueryClaimApproval = await conn.executeSOQL({
       query: queryClaimApproval,
     });
     //console.log(responseClaimApproval);
     const myJSONProjectClaimApproval = JSON.stringify(responseClaimApproval);
-    //console.log(myJSONProjectClaimApproval);
 
     let numberOfWorkItems = responseClaimApproval.records[0].expr0;
-    //console.log("Count id: ", numberOfWorkItems);
 
     // Approve Claims and Grant Adjustments
     for (let i = 1; i <= numberOfWorkItems; i++) {
@@ -651,13 +588,10 @@ class Poc3 {
     AND Acc_ProjectPeriodNumber__c = ${periodNo}
     AND Acc_LatestForecastCost__c  > 0`;
 
-    //console.log("Profile Query SOQL:  " + queryProfile);
     const responseProfile: QueryProjectProfile = await conn.executeSOQL({
       query: queryProfile,
     });
-    //console.log(responseProfile);
     const myJSONProjectProfile = JSON.stringify(responseProfile);
-    //console.log("*********************", myJSONProjectProfile);
 
     // Loop thought each Line Item then add
     for (const element of responseProfile.records) {
@@ -729,6 +663,8 @@ class Poc3 {
         // Click New button
         await this.page.getByRole("button").filter({ hasText: /^New$/ }).click();
 
+        await this.page.waitForTimeout(5000);
+
         // Adjustment Type
         await this.selectDropdown("Adjustment Type", element.adjustmentType);
 
@@ -764,9 +700,7 @@ class Poc3 {
     const responsePrepayment: QueryPrepayment = await conn.executeSOQL({
       query: queryPrepayment,
     });
-    //console.log(responsePrepayment);
     const myJSONPrepayment = JSON.stringify(responsePrepayment);
-    //console.log("Prepayment JSON: ", myJSONPrepayment);
 
     // Loop through each GA for specified period then Approve
     for (const gaVal of responsePrepayment.records) {
@@ -818,21 +752,15 @@ class Poc3 {
       query: createClaimsFromProfiles,
     });
 
-    //console.log("Apex response: ", apexresponseCreateClaims);
-
     // Submit to Innovateuk
     let submitToInnovate = fs
       .readFileSync(path.join(__dirname, "../../../../../apex/submittoInnovate.apex"), { encoding: "utf-8" })
       .replaceAll("{ParticipantId}", participantId)
       .replaceAll("{LoopCounterClaims}", periodNo);
 
-    //console.log(submitToInnovate);
-
     const apexresponseSubmitToInnovate = await conn.executeApex({
       query: submitToInnovate,
     });
-
-    //console.log("Apex response: ", apexresponseSubmitToInnovate);
 
     // Simulate clicking Submit for Approval button using Apex
     let clickSubmitForApprovalButton = fs
@@ -842,13 +770,9 @@ class Poc3 {
       .replaceAll("{ParticipantId}", participantId)
       .replaceAll("{LoopCounterClaims}", periodNo);
 
-    //console.log(clickSubmitForApprovalButton);
-
     const apexresponseClickSubmitForApprovalButton = await conn.executeApex({
       query: clickSubmitForApprovalButton,
     });
-
-    //console.log("Apex response: ", apexresponseClickSubmitForApprovalButton);
 
     // Approve a Claim
     let approveClaim = fs
@@ -858,13 +782,9 @@ class Poc3 {
       .replaceAll("{ParticipantId}", participantId)
       .replaceAll("{LoopCounterClaims}", periodNo);
 
-    //console.log(approveClaim);
-
     const apexresponseApproveClaim = await conn.executeApex({
       query: approveClaim,
     });
-
-    console.log("Apex response: ", apexresponseApproveClaim);
   }
 
   // Adds PCL
@@ -874,9 +794,6 @@ class Poc3 {
     projectRoleVal: string,
     externalUserEmailVal: string,
   ) {
-    //console.log("External User: " + externalUserVal);
-    //console.log("External User Account: " + externalUserAccountVal);
-
     // Click New button
     await this.page.getByRole("presentation").getByTitle("New").filter({ hasText: /^New$/ }).click();
 
