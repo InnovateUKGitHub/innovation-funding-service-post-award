@@ -1,5 +1,4 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import {
   PostcodeSchema,
@@ -48,9 +47,10 @@ export class ProjectSetupPartnerPostcodeFormHandler extends ZodFormHandlerBase<P
     params: PartnerDetailsParams;
     context: IContext;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePartnerCommand({ id: params.partnerId, projectId: params.projectId, ...input }, input.form),
-    );
+    await context.repositories.partners.update({
+      Id: params.partnerId,
+      Acc_Postcode__c: input.postcode,
+    });
     return ProjectSetupRoute.getLink(params).path;
   }
 }

@@ -6,10 +6,10 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useNavigate } from "react-router-dom";
 import { PartnerStatus } from "@framework/constants/partner";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { UpdatePartnerFormType } from "@framework/types/updatePartnerFormTypes";
+import { z } from "zod";
+import { PostcodeSchema } from "./partnerDetailsEdit.zod";
 
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
@@ -35,24 +35,14 @@ export type FormValues = {
   form: FormTypes;
 };
 
-export const useOnUpdatePartnerDetails = (
-  partnerId: PartnerId,
-  projectId: ProjectId,
-  navigateTo: string,
-  partner: Partial<PartnerDto>,
-) => {
+export const useOnUpdatePartnerDetails = (projectId: ProjectId, partnerId: PartnerId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<PartnerDto, "postcode">>({
+  return useOnUpdate<z.output<PostcodeSchema>, boolean>({
     req: data =>
-      clientsideApiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartnerPostcode({
         partnerId,
-        partnerDto: {
-          ...partner,
-          postcode: data.postcode,
-          id: partnerId,
-          projectId,
-          form: data.form as UpdatePartnerFormType,
-        },
+        projectId,
+        partnerDto: data,
       }),
     onSuccess: () => navigate(navigateTo),
   });
