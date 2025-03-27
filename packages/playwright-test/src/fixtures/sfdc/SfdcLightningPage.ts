@@ -55,9 +55,15 @@ class SfdcLightningPage {
     throw new Error("Sandbox does not match sandbox URL format.");
   }
 
-  public async loginAndGoto(path: string) {
-    const tokenInfo = await this.sfdcApi.getSalesforceToken();
-    await this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retURL=${encodeURIComponent(path)}`);
-    await this.goto(path);
+  public async loginAndGoto(path: string, userNameOverride?: string) {
+    if (userNameOverride) {
+      const tokenInfo = await this.sfdcApi.getSalesforceToken(userNameOverride);
+      await this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retURL=${encodeURIComponent(path)}`);
+      await this.goto(path);
+    } else {
+      const tokenInfo = await this.sfdcApi.getSalesforceToken();
+      await this.goto(`/secur/frontdoor.jsp?sid=${tokenInfo.accessToken}&retURL=${encodeURIComponent(path)}`);
+      await this.goto(path);
+    }
   }
 }

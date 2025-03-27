@@ -5,6 +5,7 @@ import { SfdcIfspaAppAccProjectPage } from "./pages/SfdcIfspaAppAccProjectPage";
 import { SfdcIfspaAppDashboard } from "./pages/SfdcIfspaAppDashboard";
 import { SfdcLightningPage } from "./SfdcLightningPage";
 import { SfdcSearchResultsPage } from "./pages/SfdcSearchResultsPage";
+import { expect } from "@playwright/test";
 
 export
 @Fixture("sfdcNavigation")
@@ -67,6 +68,11 @@ class SfdcNavigation {
   async gotoLightningHomepage() {
     await this.sfdcPage.loginAndGoto("/lightning/page/home");
     await this.sfdcIfspaAppDashboard.isPage();
+  }
+
+  @Given("the salesforce user is logged in as {string}")
+  async gotoLightningHomepageAsUser(username: string) {
+    await this.sfdcPage.loginAndGoto("/lightning/page/home", username);
   }
 
   @Given("the internal user is on the project flexipage")

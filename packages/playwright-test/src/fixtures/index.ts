@@ -50,6 +50,7 @@ import { Poc3 } from "./acc/pages/POCSalesforce/pocSalesforce3";
 import { CheckCalculations } from "./acc/pages/POCSalesforce/checkCalculations";
 import { CheckQueueAssignments } from "./acc/pages/POCSalesforce/checkQueueAssignments";
 import { ProjectFactory } from "./projectFactory/ProjectFactory";
+import { PocAuthGateway } from "./acc/pages/POCSalesforce/pocAuthGateway";
 
 type AccFixtures = {
   // Pages
@@ -81,6 +82,7 @@ type AccFixtures = {
   checkCalculations: CheckCalculations;
   checkQueueAssignments: CheckQueueAssignments;
   poc3: Poc3;
+  pocAuthGateway: PocAuthGateway;
 
   // Misc
   accNavigation: AccNavigation;
@@ -170,6 +172,7 @@ export const test = base.extend<AccFixtures, Workers>({
   poc3: ({ page, sfdcApi, sfdcPage }, use) => use(new Poc3({ page, sfdcApi, sfdcPage })),
   checkCalculations: ({ page, sfdcApi }, use) => use(new CheckCalculations({ page, sfdcApi })),
   checkQueueAssignments: ({ page }, use) => use(new CheckQueueAssignments({ page })),
+  pocAuthGateway: ({ page, commands }, use) => use(new PocAuthGateway({ page, commands })),
   // Project Factory
   accProjectBase: [
     ({ sfdcApi, projectState }, use) => use(new AccProjectBase({ sfdcApi, projectState })),
