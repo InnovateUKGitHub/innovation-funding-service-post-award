@@ -10,12 +10,14 @@ import {
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 import { z } from "zod";
 
+const maxInputLength = 80;
+
 const createTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersCreate),
   partnerId: partnerIdValidation,
-  firstName: getTextValidation({ maxLength: 100, required: true }),
-  lastName: getTextValidation({ maxLength: 100, required: true }),
-  email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
+  firstName: getTextValidation({ maxLength: maxInputLength, required: true }),
+  lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
+  email: getTextValidation({ base: z.string().email(), maxLength: maxInputLength, required: true }),
   startDate: dateValidation.optional(),
   role: z.union([
     z.literal(ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR),
@@ -28,9 +30,9 @@ const replaceTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersReplace),
   partnerId: partnerIdValidation,
   pclId: pclIdValidation,
-  firstName: getTextValidation({ maxLength: 100, required: true }),
-  lastName: getTextValidation({ maxLength: 100, required: true }),
-  email: getTextValidation({ base: z.string().email(), maxLength: 100, required: true }),
+  firstName: getTextValidation({ maxLength: maxInputLength, required: true }),
+  lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
+  email: getTextValidation({ base: z.string().email(), maxLength: maxInputLength, required: true }),
   role: z.nativeEnum(ProjectRole),
 });
 
@@ -39,8 +41,8 @@ const updateTeamMemberValidator = z.object({
   partnerId: partnerIdValidation,
   pclId: pclIdValidation,
   contactId: contactIdValidation,
-  firstName: getTextValidation({ maxLength: 100, required: true }),
-  lastName: getTextValidation({ maxLength: 100, required: true }),
+  firstName: getTextValidation({ maxLength: maxInputLength, required: true }),
+  lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
   role: z.nativeEnum(ProjectRole),
 });
 
