@@ -20,4 +20,5 @@ Feature: Playwright Salesforce POC
             | ReviewTeamSetCounter | '1','2'                                                                                                                                                                                     |
         And claims have been added and Approved using the UI
         And claims have been added and Approved by APEX
+        And approval details checked using the External UI
 

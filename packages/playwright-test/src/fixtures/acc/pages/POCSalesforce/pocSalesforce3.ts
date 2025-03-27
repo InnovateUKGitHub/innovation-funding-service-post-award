@@ -310,6 +310,9 @@ class Poc3 {
     await this.page.waitForTimeout(50000);
   }
 
+  @Given("approval details checked using the External UI")
+  async checkApprovalDetailsExternalUI() {}
+
   // Functions
   // *************************************************************************************************************
 
