@@ -53,7 +53,7 @@ export class PcrItemAddPartnerSpendProfileLabourCostsHandler extends ZodFormHand
       daysSpentOnProject: input.daysSpentOnProject,
       costCategoryType: parseInt(input.costCategoryType) as CostCategoryType,
       costCategoryId: input.costCategoryId,
-      overheadCostId: input.overheadCostId,
+      overheadCostId: input.overheadCostId || null,
       labourProfile: data.labourProfile,
     };
   }
