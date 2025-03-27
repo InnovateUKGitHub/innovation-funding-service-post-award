@@ -14,7 +14,6 @@ import {
   PartnerStatus,
   BankCheckStatus,
   BankDetailsTaskStatus,
-  PostcodeTaskStatus,
   SpendProfileStatus,
 } from "@framework/constants/partner";
 import { ProjectRolePermissionBits, ProjectSource } from "@framework/constants/project";
@@ -34,11 +33,6 @@ import {
   ProjectSetupBankDetailsSchemaType,
 } from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
-import {
-  postcodeErrorMap,
-  postcodeSchema,
-  PostcodeSchema,
-} from "@ui/components/templates/PartnerDetailsEdit/partnerDetailsEdit.zod";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import {
   projectSetupErrorMap,
@@ -55,7 +49,7 @@ type UpdatePartnerDto = PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
 
 export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   boolean,
-  ProjectSetupBankDetailsSchemaType | PostcodeSchema | ProjectSetupSchema | BankStatementSchema,
+  ProjectSetupBankDetailsSchemaType | ProjectSetupSchema | BankStatementSchema,
   UpdatePartnerDto
 > {
   protected readonly projectId: ProjectId;
@@ -99,9 +93,6 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
   protected async getZodSchema(context: IContext) {
     this.savedPartner = await context.runQuery(new GetByIdQuery(this.dto.id));
     switch (this.form) {
-      case FormTypes.ProjectSetupPostcode:
-      case FormTypes.PartnerDetailsEdit:
-        return { schema: postcodeSchema, errorMap: postcodeErrorMap };
       case FormTypes.ProjectSetup:
         return { schema: projectSetupSchema, errorMap: projectSetupErrorMap };
       case FormTypes.ProjectSetupBankDetails:
@@ -120,24 +111,8 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
 
   protected async mapToZod(
     context: IContext,
-  ): Promise<
-    | z.input<ProjectSetupBankDetailsSchemaType>
-    | z.input<PostcodeSchema>
-    | z.input<ProjectSetupSchema>
-    | z.input<BankStatementSchema>
-  > {
-    if (this.form === FormTypes.PartnerDetailsEdit || this.form === FormTypes.ProjectSetupPostcode) {
-      return {
-        form: this.form,
-        postcodeStatus: this.dto.postcodeStatus ?? PostcodeTaskStatus.Unknown,
-        partnerStatus: this.dto.partnerStatus ?? PartnerStatus.Unknown,
-        isSetup: this.form === FormTypes.ProjectSetupPostcode,
-        postcode: this.dto.postcode,
-      };
-    } else if (
-      this.form === FormTypes.ProjectSetupBankDetails ||
-      this.form === FormTypes.ProjectSetupBankDetailsVerify
-    ) {
+  ): Promise<z.input<ProjectSetupBankDetailsSchemaType> | z.input<ProjectSetupSchema> | z.input<BankStatementSchema>> {
+    if (this.form === FormTypes.ProjectSetupBankDetails || this.form === FormTypes.ProjectSetupBankDetailsVerify) {
       return {
         projectId: this.dto.projectId,
         partnerId: this.dto.id,
@@ -197,7 +172,6 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
 
       const updateData = {
         ...update,
-        Acc_Postcode__c: mergedPartner.postcode ?? undefined,
         Acc_NewForecastNeeded__c: isBoolean(mergedPartner.newForecastNeeded)
           ? mergedPartner.newForecastNeeded
           : undefined,

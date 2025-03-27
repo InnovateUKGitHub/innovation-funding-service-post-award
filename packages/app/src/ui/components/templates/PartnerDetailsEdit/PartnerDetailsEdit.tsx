@@ -62,7 +62,7 @@ export function PartnerDetailsEditComponent({
     resolver: zodResolver(postcodeSchema, { errorMap: postcodeErrorMap }),
   });
 
-  const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(projectId, partnerId, navigateTo);
 
   const validatorErrors = useZodErrors<SchemaType>(setError, formState.errors);
 
