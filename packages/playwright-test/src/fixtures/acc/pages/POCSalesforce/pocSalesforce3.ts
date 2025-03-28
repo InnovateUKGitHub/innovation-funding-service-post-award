@@ -291,7 +291,7 @@ class Poc3 {
 
     const conn = await this.sfdcApi.getTsforceConnection();
 
-    // Get Participant/Project Ids
+    // Get Project Ids
     let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
     const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
       query,
@@ -311,7 +311,56 @@ class Poc3 {
   }
 
   @Then("approval details checked using the External UI")
-  async checkApprovalDetailsExternalUI() {}
+  async checkApprovalDetailsExternalUI() {
+    type QueryProjectParticipantId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+        Acc_ProjectId__c: string;
+      }[];
+    };
+
+    const conn = await this.sfdcApi.getTsforceConnection();
+
+    // Get Project Ids
+    let query = `SELECT Id,  Acc_ProjectId__c FROM  Acc_ProjectParticipant__c WHERE Acc_ProjectId__r.Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
+    const responseProjectParticipant: QueryProjectParticipantId = await conn.executeSOQL({
+      query,
+    });
+    const myJSONProjectParticipant = JSON.stringify(responseProjectParticipant);
+
+    let participantId = responseProjectParticipant.records[0].Id;
+    let projectId = responseProjectParticipant.records[0].Acc_ProjectId__c;
+
+    await this.page.goto(`https://www-acc-capconfig.apps.ocp4.innovateuk.ukri.org/projects/${projectId}/overview`);
+
+    // Check Total Eligible Costs present with expected value
+    await expect(
+      this.page
+        .getByTestId("project-summary-gol-costs")
+        .getByRole("paragraph")
+        .filter({ hasText: "Total eligible costs" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByTestId("project-summary-gol-costs").getByRole("paragraph").filter({ hasText: "£2,654,395.00" }),
+    ).toBeVisible();
+
+    // Check Eligible costs claimed to date present with expected value
+    await expect(
+      this.page
+        .getByTestId("project-summary-claimed-costs")
+        .getByRole("paragraph")
+        .filter({ hasText: "Eligible costs claimed to date" }),
+    ).toBeVisible();
+    await expect(
+      this.page
+        .getByTestId("project-summary-claimed-costs")
+        .getByRole("paragraph")
+        .filter({ hasText: "£1,338,795.00" }),
+    ).toBeVisible();
+  }
 
   // Deletes the Project after the test has been ran
   @When("the Project has been deleted")

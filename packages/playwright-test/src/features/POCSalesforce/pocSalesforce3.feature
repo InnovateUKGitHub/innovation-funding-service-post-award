@@ -1,6 +1,7 @@
 @mode:serial
 Feature: Playwright Salesforce POC
     Scenario: Running a test
+        #Given the salesforce user is logged in as "steven.killen@iuk.ukri.org.capconfig"
         Given there is a Competition created using the UI
         And there is a Project created using the UI
         And Contacts and Participants are added by the UI
@@ -20,5 +21,6 @@ Feature: Playwright Salesforce POC
             | ReviewTeamSetCounter | '1','2'                                                                                                                                                                                     |
         And claims have been added and Approved using the UI
         And claims have been added and Approved by APEX
-        Then approval details checked using the External UI
+        And approval details checked using the External UI
+# And the Project has been deleted
 
