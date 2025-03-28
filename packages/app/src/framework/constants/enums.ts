@@ -16,6 +16,7 @@ export enum ErrorCode {
   SFDC_ERROR = 9,
   NOT_FOUND = 10,
   UNAUTHORISED_ERROR = 11,
+  BANK_CHECK_ERROR = 12,
 }
 
 export enum SalesforceStatusCode {

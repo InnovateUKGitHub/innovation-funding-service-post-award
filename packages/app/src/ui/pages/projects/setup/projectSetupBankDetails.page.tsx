@@ -31,6 +31,7 @@ import {
   projectSetupBankDetailsErrorMap,
 } from "./projectSetupBankDetails.zod";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { useMounted } from "@ui/context/Mounted";
 
 export interface ProjectSetupBankDetailsParams {
   projectId: ProjectId;
@@ -51,17 +52,21 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
     }),
   });
 
+  const { isServer } = useMounted();
+  if (isServer && partner.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+    // handles showing the bank validation error when js disabled
+    setError("bankCheckValidation", {
+      message: c(x => x.validation.partnerDtoValidator.bankChecksFailed),
+      types: { deps: ["sortCode", "accountNumber"] },
+    });
+  }
+
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ProjectSetupBankDetailsSchemaType>>(setError, formState.errors);
 
-  const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetupBankDetails(
-    props.projectId,
-    props.partnerId,
-    partner,
-    {
-      setError,
-    },
-  );
+  const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, {
+    setError,
+  });
 
   useFormRevalidate(watch, trigger);
 
@@ -85,9 +90,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
       <Section qa="bank-details-section">
         <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="bank-details-form">
+          <input type="hidden" {...register("bankCheckStatus")} value={partner.bankCheckStatus} />
           <input type="hidden" {...register("form")} value={FormTypes.ProjectSetupBankDetails} />
-          <input type="hidden" {...register("projectId")} value={props.projectId} />
-          <input type="hidden" {...register("partnerId")} value={props.partnerId} />
 
           <Fieldset>
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo)}</Legend>
@@ -225,7 +229,10 @@ const SortCode = ({
   defaultValue?: string;
 }) => {
   const { getContent: c } = useContent();
-  if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
+  if (
+    partner.bankCheckStatus === BankCheckStatus.NotValidated ||
+    partner.bankCheckStatus === BankCheckStatus.ValidationFailed
+  ) {
     return (
       <FormGroup hasError={!!error}>
         <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
@@ -265,7 +272,10 @@ const AccountNumber = ({
   defaultValue?: string;
 }) => {
   const { getContent: c } = useContent();
-  if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
+  if (
+    partner.bankCheckStatus === BankCheckStatus.NotValidated ||
+    partner.bankCheckStatus === BankCheckStatus.ValidationFailed
+  ) {
     return (
       <Field
         id="accountNumber"

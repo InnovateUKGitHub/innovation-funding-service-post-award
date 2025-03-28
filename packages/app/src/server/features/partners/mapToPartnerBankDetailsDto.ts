@@ -15,6 +15,8 @@ export class MapToPartnerBankDetailsDtoCommand extends SyncCommandBase<PartnerBa
 
   run(): PartnerBankDetailsDto {
     return {
+      companyName: this.item.name,
+      organisationType: this.item.organisationType,
       id: this.item.id,
       accountId: this.item.accountId,
       bankDetails: {

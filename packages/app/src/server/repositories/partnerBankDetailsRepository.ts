@@ -14,6 +14,7 @@ export interface ISalesforceBankPartnerDetails {
   Acc_FirstName__c: string;
   Acc_LastName__c: string;
   Acc_RegistrationNumber__c: string;
+  Acc_OrganisationType__c: string;
   Acc_AccountId__r: {
     Id: string;
     Name: string;
@@ -52,6 +53,7 @@ export class PartnerBankDetailsRepository
     "Acc_LastName__c",
     "Acc_RegistrationNumber__c",
     "Acc_AccountId__r",
+    "Acc_OrganisationType__c",
   ];
 
   mapper = new SalesforcePartnerBankDetailsMapper();

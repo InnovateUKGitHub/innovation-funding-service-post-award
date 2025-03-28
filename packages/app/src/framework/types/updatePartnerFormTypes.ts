@@ -1,10 +1,6 @@
 import { FormTypes } from "@ui/zod/FormTypes";
 
-export type UpdatePartnerFormType =
-  | FormTypes.ProjectSetupBankDetails
-  | FormTypes.ProjectSetupBankDetailsVerify
-  | FormTypes.ProjectSetup
-  | FormTypes.ProjectSetupBankStatement;
+export type UpdatePartnerFormType = FormTypes.ProjectSetup | FormTypes.ProjectSetupBankStatement;
 
 export const isUpdatePartnerFormType = (form: FormTypes): form is UpdatePartnerFormType =>
   form === FormTypes.ProjectSetupBankDetails ||

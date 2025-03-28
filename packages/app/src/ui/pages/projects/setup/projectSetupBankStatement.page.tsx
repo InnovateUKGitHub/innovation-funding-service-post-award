@@ -95,7 +95,6 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const documentsCallback = useCallback((childDocuments: DocumentSummaryDto[]) => {
     const hasUploadedBankStatement = childDocuments?.some(x => x.description === DocumentDescription.BankStatement);
-    console.log("called documents callback and hasUploadedBankStatement", hasUploadedBankStatement);
     setFieldValueForm("hasUploadedBankStatement", hasUploadedBankStatement);
   }, []);
 
@@ -109,10 +108,11 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   useFormRevalidate(watchForm, triggerForm);
 
+  const isDisabled = isFetching || isFetchingForm;
   return (
     <Page
       backLink={
-        <BackLink route={projectSetupRoute} disabled={isFetching}>
+        <BackLink route={projectSetupRoute} disabled={isDisabled}>
           <Content value={x => x.pages.projectSetupBankStatement.backLink} />
         </BackLink>
       }
@@ -132,7 +132,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           onBlur={onBlurOrChange}
           onChange={onBlurOrChange}
           onSubmit={handleSubmit(onChange)}
-          aria-disabled={isFetching}
+          aria-disabled={isDisabled}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -145,7 +145,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
               <FileInput
-                disabled={isFetching}
+                disabled={isDisabled}
                 id="attachment"
                 hasError={!!getFieldState("files").error}
                 multiple
@@ -155,7 +155,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           </Fieldset>
 
           <Fieldset>
-            <Button type="submit" name="button_default" secondary disabled={isFetching}>
+            <Button type="submit" name="button_default" secondary disabled={isDisabled}>
               <Content value={x => x.documentMessages.uploadTitle} />
             </Button>
           </Fieldset>
@@ -182,11 +182,11 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           <input type="hidden" value={FormTypes.ProjectSetupBankStatement} {...registerForm("form")} />
           <input type="hidden" {...registerForm("hasUploadedBankStatement")} />
           <Fieldset>
-            <Button type="submit" disabled={isFetching}>
+            <Button type="submit" disabled={isDisabled}>
               <Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
             </Button>
             <Link
-              disabled={isFetching || isFetchingForm}
+              disabled={isDisabled}
               styling="SecondaryButton"
               route={props.routes.projectSetup.getLink({
                 projectId: props.projectId,

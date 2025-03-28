@@ -1,5 +1,4 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { ProjectDashboardRoute } from "@ui/pages/projects/dashboard/Dashboard.page";
 import { ProjectSetupParams, ProjectSetupRoute } from "@ui/pages/projects/setup/projectSetup.page";
@@ -10,8 +9,7 @@ import {
 } from "@ui/pages/projects/setup/projectSetup.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
-import { PartnerStatus } from "@framework/constants/partner";
+import { options } from "@framework/mappers/partnerStatus";
 
 class ProjectSetupFormHandler extends ZodFormHandlerBase<ProjectSetupSchema, ProjectSetupParams> {
   constructor() {
@@ -39,23 +37,11 @@ class ProjectSetupFormHandler extends ZodFormHandlerBase<ProjectSetupSchema, Pro
     };
   }
 
-  protected async run({
-    input,
-    params,
-    context,
-  }: {
-    input: z.output<ProjectSetupSchema>;
-    params: ProjectSetupParams;
-    context: IContext;
-  }): Promise<string> {
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
-    await context.runCommand(
-      new UpdatePartnerCommand(
-        { id: params.partnerId, projectId: params.projectId, partnerStatus: PartnerStatus.Active, ...input },
-        input.form,
-        { projectSource: project.projectSource },
-      ),
-    );
+  protected async run({ params, context }: { params: ProjectSetupParams; context: IContext }): Promise<string> {
+    await context.repositories.partners.update({
+      Id: params.partnerId,
+      Acc_ParticipantStatus__c: options.active,
+    });
 
     return ProjectDashboardRoute.getLink({}).path;
   }

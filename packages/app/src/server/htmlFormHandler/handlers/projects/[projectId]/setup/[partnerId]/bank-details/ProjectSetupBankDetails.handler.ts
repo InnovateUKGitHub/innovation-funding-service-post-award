@@ -1,15 +1,18 @@
+import { BankCheckStatus, PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
 import { IContext } from "@framework/types/IContext";
+import { UpdatePartnerBankDetailsDto } from "@server/apis/partners";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
-import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { PartnerDetailsParams } from "@ui/pages/projects/partnerDetails/partnerDetailsEdit.page";
+import { BadRequestError } from "@shared/appError";
 import {
   ProjectSetupBankDetailsParams,
   ProjectSetupBankDetailsRoute,
 } from "@ui/pages/projects/setup/projectSetupBankDetails.page";
 import {
   ProjectSetupBankDetailsSchemaType,
+  UnValidatedSchema,
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
 } from "@ui/pages/projects/setup/projectSetupBankDetails.zod";
@@ -21,6 +24,8 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
   ProjectSetupBankDetailsSchemaType,
   ProjectSetupBankDetailsParams
 > {
+  private savedPartner: PartnerDto | null = null;
+
   constructor() {
     super({
       routes: [ProjectSetupBankDetailsRoute],
@@ -31,24 +36,16 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
   public acceptFiles = false;
 
   protected async getZodSchema({ params, context }: { params: ProjectSetupBankDetailsParams; context: IContext }) {
-    const partner = await context.runQuery(new GetByIdQuery(params.partnerId));
+    this.savedPartner = await context.runQuery(new GetByIdQuery(params.partnerId));
 
     return {
-      schema: getProjectSetupBankDetailsSchema(partner.bankCheckStatus),
+      schema: getProjectSetupBankDetailsSchema(this.savedPartner.bankCheckStatus),
       errorMap: projectSetupBankDetailsErrorMap,
     };
   }
 
-  protected async mapToZod({
-    input,
-    params,
-  }: {
-    input: AnyObject;
-    params: PartnerDetailsParams;
-  }): Promise<z.input<ProjectSetupBankDetailsSchemaType>> {
+  protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<ProjectSetupBankDetailsSchemaType>> {
     return {
-      projectId: params.projectId,
-      partnerId: params.partnerId,
       form: FormTypes.ProjectSetupBankDetails,
       companyNumber: input.companyNumber,
       accountBuilding: input.accountBuilding,
@@ -58,42 +55,64 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
       accountPostcode: input.accountPostcode,
       sortCode: input.sortCode,
       accountNumber: input.accountNumber,
+      bankCheckStatus: input.bankCheckStatus,
     };
   }
 
-  private async getDto(
-    context: IContext,
-    params: PartnerDetailsParams,
-    input: z.output<ProjectSetupBankDetailsSchemaType>,
-  ): Promise<PartnerDto> {
-    const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
-
-    dto.bankDetails.companyNumber = input.companyNumber ?? null;
-    dto.bankDetails.address.accountBuilding = input.accountBuilding ?? null;
-    dto.bankDetails.address.accountLocality = input.accountLocality ?? null;
-    dto.bankDetails.address.accountPostcode = input.accountPostcode ?? null;
-    dto.bankDetails.address.accountStreet = input.accountStreet ?? null;
-    dto.bankDetails.address.accountTownOrCity = input.accountTownOrCity ?? null;
-
-    if ("sortCode" in input) {
-      dto.bankDetails.sortCode = input.sortCode;
-      dto.bankDetails.accountNumber = input.accountNumber;
-    }
-
-    return dto;
+  protected dtoIsUnValidated(dto: UpdatePartnerBankDetailsDto): dto is z.output<UnValidatedSchema> {
+    return (
+      dto.bankCheckStatus === BankCheckStatus.NotValidated || dto.bankCheckStatus === BankCheckStatus.ValidationFailed
+    );
   }
 
   protected async run({
     input,
     context,
+    params,
   }: {
     input: z.output<ProjectSetupBankDetailsSchemaType>;
+    params: ProjectSetupBankDetailsParams;
     context: IContext;
   }): Promise<string> {
-    const params = { projectId: input.projectId, partnerId: input.partnerId };
-    await context.runCommand(
-      new UpdatePartnerCommand(await this.getDto(context, params, input), input.form, { validateBankDetails: true }),
-    );
-    return ProjectSetupBankDetailsVerifyRoute.getLink(params).path;
+    if (!this.savedPartner) {
+      this.savedPartner = await context.runQuery(new GetByIdQuery(params.partnerId));
+    }
+
+    let passedBankCheck = true;
+    if (this.savedPartner.partnerStatus === PartnerStatus.Pending) {
+      if (this.dtoIsUnValidated(input)) {
+        passedBankCheck = await this.validateBankDetails(context, input.sortCode, input.accountNumber);
+      }
+    }
+
+    await context.repositories.partners.update({
+      Id: params.partnerId,
+      Acc_RegistrationNumber__c: input.companyNumber,
+      Acc_AddressStreet__c: input.accountStreet,
+      Acc_AddressTown__c: input.accountTownOrCity,
+      Acc_AddressBuildingName__c: input.accountBuilding,
+      Acc_AddressLocality__c: input.accountLocality,
+      Acc_AddressPostcode__c: input.accountPostcode,
+      Acc_BankCheckState__c: new BankCheckStatusMapper().mapToSalesforce(
+        passedBankCheck ? BankCheckStatus.ValidationPassed : BankCheckStatus.ValidationFailed,
+      ),
+      ...(this.dtoIsUnValidated(input) && passedBankCheck
+        ? { Acc_SortCode__c: input.sortCode, Acc_AccountNumber__c: input.accountNumber }
+        : {}),
+    });
+
+    return passedBankCheck
+      ? ProjectSetupBankDetailsVerifyRoute.getLink(params).path
+      : ProjectSetupBankDetailsRoute.getLink(params).path;
+  }
+
+  private async validateBankDetails(context: IContext, sortCode: string, accountNumber: string) {
+    if (!sortCode || !accountNumber) {
+      return Promise.reject(new BadRequestError("Sort code or account number not provided"));
+    }
+
+    const bankCheckValidationResult = await context.resources.bankCheckService.validate(sortCode, accountNumber);
+
+    return !bankCheckValidationResult.checkPassed;
   }
 }

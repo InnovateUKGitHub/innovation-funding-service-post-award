@@ -83,5 +83,7 @@ export type PartnerBankDetails = Pick<
   | "firstName"
   | "id"
   | "lastName"
+  | "name"
+  | "organisationType"
   | "sortCode"
 >;

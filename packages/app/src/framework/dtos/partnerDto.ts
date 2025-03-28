@@ -43,6 +43,8 @@ export interface BankDetails {
 }
 
 export interface PartnerBankDetailsDto {
+  organisationType: string;
+  companyName: string;
   accountId: string;
   bankDetails: BankDetails;
   id: string;

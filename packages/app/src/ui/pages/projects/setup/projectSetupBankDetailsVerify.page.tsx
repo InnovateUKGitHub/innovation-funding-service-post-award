@@ -32,7 +32,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
     defaultValues: {},
   });
 
-  const { onUpdate, isFetching, apiError } = useOnUpdateSetupBankDetailsVerify(projectId, partnerId, partner);
+  const { onUpdate, isFetching, apiError } = useOnUpdateSetupBankDetailsVerify(projectId, partnerId);
 
   return (
     <Page

@@ -25,7 +25,7 @@ export abstract class AuthorisedAsyncCommandBase<T> extends AsyncCommandBase<T> 
 export abstract class ZodAuthorisedAsyncCommandBase<
   T,
   Schema extends ZodSchema,
-  Dto extends AnyObject,
+  Dto extends AnyObject | null,
 > extends AuthorisedAsyncCommandBase<T> {
   protected shouldSkipIsActiveCheck = false;
   protected abstract readonly dto: Dto;
