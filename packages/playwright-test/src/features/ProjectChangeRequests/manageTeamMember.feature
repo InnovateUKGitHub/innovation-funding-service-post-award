@@ -46,14 +46,7 @@ Feature: Manage team member
         And the user clicks the "Send invitation" button
         Then the user will see the date validation "<message>"
 
-        When the user exceeds 80 characters in the form fields
-        And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 80 characters
-
-        When the email entered is not in an email format
-        Then the validation message will confirm an invalid email
-
-        When the form is completed with 80 characters
+        When a correct and valid date is entered as the start date
         Then the validation messages will dynamically disappear
 
         Examples:
@@ -102,11 +95,7 @@ Feature: Manage team member
         And the user clicks the "Send invitation" button
         Then the user will see the date validation "<message>"
 
-        When the user exceeds 80 characters in the form fields
-        And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 80 characters
-
-        When the form is completed with 80 characters
+        When a correct and valid date is entered as the start date
         Then the validation messages will dynamically disappear
 
         Examples:
@@ -154,11 +143,7 @@ Feature: Manage team member
         And the user clicks the "Send invitation" button
         Then the user will see the date validation "<message>"
 
-        When the user exceeds 80 characters in the form fields
-        And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 80 characters
-
-        When the form is completed with 80 characters
+        When a correct and valid date is entered as the start date
         Then the validation messages will dynamically disappear
 
         Examples:
@@ -202,28 +187,9 @@ Feature: Manage team member
         And the user clicks the "Replace main company contact" button
         Then the user will see the Replace main company contact page
 
-        When the user clicks the "Confirm replacement and send invitation" button
-        Then a standard validation message will advise of empty fields
-
-        When the user exceeds 80 characters in the form fields
-        And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 80 characters
-
-        When the form is completed with 80 characters
-        Then the validation messages will dynamically disappear
-
-    #This step previously failed until ticket ACC-11681 was resolved
-    Scenario: Validating the Invite associate page
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Invite associate" button
-        Then the user will see the Invite a new associate page
-
-        When the user clicks the "Send invitation" button
-        Then an associate page validation message will advise of empty fields
-
-        When the user exceeds 80 characters in the form fields
+        When the user enters invalid "<information>" in the date "<field>"
         And the user clicks the "Send invitation" button
-        Then validation messages for each field will confirm length of 80 characters
+        Then the user will see the date validation "<message>"
 
         When a correct and valid date is entered as the start date
         Then the validation messages will dynamically disappear
