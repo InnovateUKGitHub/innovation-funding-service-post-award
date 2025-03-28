@@ -30,6 +30,7 @@ import {
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
 } from "./projectSetupBankDetails.zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ProjectSetupBankDetailsParams {
   projectId: ProjectId;
@@ -42,13 +43,12 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
   const defaults = useServerInput<z.output<ProjectSetupBankDetailsSchemaType>>();
 
-  const { register, handleSubmit, formState, setError, getFieldState } = useForm<
+  const { register, handleSubmit, formState, setError, getFieldState, watch, trigger } = useForm<
     z.output<ProjectSetupBankDetailsSchemaType>
   >({
     resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
       errorMap: projectSetupBankDetailsErrorMap,
     }),
-    reValidateMode: "onBlur",
   });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
@@ -62,6 +62,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       setError,
     },
   );
+
+  useFormRevalidate(watch, trigger);
 
   return (
     <Page
