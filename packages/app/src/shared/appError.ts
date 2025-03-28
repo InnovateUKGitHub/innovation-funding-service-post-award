@@ -70,6 +70,12 @@ export class BadRequestError extends AppError {
   }
 }
 
+export class BankCheckError extends AppError {
+  constructor(details?: string, cause?: Error) {
+    super(ErrorCode.BANK_CHECK_ERROR, details || "Invalid sort code or account number", cause);
+  }
+}
+
 export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>> extends AppError<T> {
   constructor(results: T, cause?: Error) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", cause);

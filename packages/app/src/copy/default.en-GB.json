@@ -3122,17 +3122,18 @@
     "projectSetupBankDetails": {
       "accountNumber": {
         "errors": {
-          "too_small": "Account number cannot be empty.",
+          "too_small": "Account number must be between 6 and 8 digits.",
+          "too_big": "Account number must be between 6 and 8 digits.",
           "invalid_string": {
-            "regex": "Enter a valid account number."
+            "regex": "Enter an account number like 00733445."
           }
         }
       },
       "sortCode": {
         "errors": {
-          "too_small": "Sort code cannot be empty.",
+          "too_small": "Enter a sort code.",
           "invalid_string": {
-            "regex": "Enter a valid sort code."
+            "regex": "Enter a valid sort code like 309430."
           }
         }
       },

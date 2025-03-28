@@ -261,14 +261,16 @@ const clientApi: IApiClient<"client"> = {
     update: params => ajaxPut(`/api/project-contacts/${params.projectId}`, params.contacts),
   },
   partners: {
-    updatePartner: params =>
-      ajaxPut(
-        `/api/partners/${params.partnerId}?validateBankDetails=${params.validateBankDetails}&verifyBankDetails=${params.verifyBankDetails}`,
-        params.partnerDto,
-      ),
-
     updatePartnerPostcode: params =>
       ajaxPut(`/api/partners/${params.projectId}/${params.partnerId}/postcode`, params.partnerDto),
+    updatePartnerBankDetails: params =>
+      ajaxPut(`/api/partners/${params.projectId}/${params.partnerId}/bank-details`, params.partnerDto),
+    updatePartnerBankDetailsVerify: params =>
+      ajaxPut(`/api/partners/${params.projectId}/${params.partnerId}/bank-verify`, {}),
+    updatePartnerBankStatement: params =>
+      ajaxPut(`/api/partners/${params.projectId}/${params.partnerId}/bank-statement`, params.partnerDto),
+    updatePartnerProjectSetup: params =>
+      ajaxPut(`/api/partners/${params.projectId}/${params.partnerId}/project-setup`, params.partnerDto),
   },
 };
 

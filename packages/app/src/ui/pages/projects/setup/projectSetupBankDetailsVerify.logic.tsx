@@ -6,10 +6,8 @@ import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { useRoutes } from "@ui/context/routesProvider";
-import { FormTypes } from "@ui/zod/FormTypes";
 
 export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupBankDetailsVerifyQuery>(
@@ -25,23 +23,15 @@ export const useSetupBankDetailsVerifyData = (projectId: ProjectId, partnerId: P
   return { fragmentRef: data?.salesforce?.uiapi, partner };
 };
 
-export const useOnUpdateSetupBankDetailsVerify = (
-  projectId: ProjectId,
-  partnerId: PartnerId,
-  partnerDto: Pick<PartnerDto, "id" | "projectId">,
-) => {
+export const useOnUpdateSetupBankDetailsVerify = (projectId: ProjectId, partnerId: PartnerId) => {
   const navigate = useNavigate();
   const routes = useRoutes();
 
   return useOnUpdate({
     req: () =>
-      clientsideApiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartnerBankDetailsVerify({
         partnerId,
-        partnerDto: {
-          ...partnerDto,
-          form: FormTypes.ProjectSetupBankDetailsVerify,
-        },
-        verifyBankDetails: true,
+        projectId,
       }),
     onSuccess: (_, response) => {
       if (response.bankCheckStatus === BankCheckStatus.VerificationPassed) {

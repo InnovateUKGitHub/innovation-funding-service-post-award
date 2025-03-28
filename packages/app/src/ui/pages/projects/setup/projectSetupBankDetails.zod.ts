@@ -2,7 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { partnerIdValidation, projectIdValidation } from "@ui/zod/helperValidators/helperValidators.zod";
+
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
 
 const projectSetupBankDetailsErrorMap = makeZodI18nMap({ keyPrefix: ["projectSetupBankDetails"] });
@@ -14,23 +14,23 @@ const projectSetupBankDetailsValidation = getTextValidation({
   required: false,
 });
 
-const getProjectSetupBankDetailsSchema = (
-  bankCheckStatus: BankCheckStatus,
-): typeof validatedProjectSetupBankDetailsSchema | typeof unvalidatedProjectSetupBankDetailsSchema =>
+type UnValidatedSchema = typeof unvalidatedProjectSetupBankDetailsSchema;
+type ValidatedSchema = typeof validatedProjectSetupBankDetailsSchema;
+
+const getProjectSetupBankDetailsSchema = (bankCheckStatus: BankCheckStatus): ValidatedSchema | UnValidatedSchema =>
   bankCheckStatus === BankCheckStatus.ValidationPassed
     ? validatedProjectSetupBankDetailsSchema
     : unvalidatedProjectSetupBankDetailsSchema;
 
 const validatedProjectSetupBankDetailsSchema = z.object({
-  projectId: projectIdValidation,
-  partnerId: partnerIdValidation,
-  form: z.union([z.literal(FormTypes.ProjectSetupBankDetails), z.literal(FormTypes.ProjectSetupBankDetailsVerify)]),
+  form: z.literal(FormTypes.ProjectSetupBankDetails),
   companyNumber: projectSetupBankDetailsValidation,
   accountBuilding: projectSetupBankDetailsValidation,
   accountStreet: projectSetupBankDetailsValidation,
   accountLocality: projectSetupBankDetailsValidation,
   accountTownOrCity: projectSetupBankDetailsValidation,
   accountPostcode: projectSetupBankDetailsValidation,
+  bankCheckStatus: z.coerce.number().int(),
   bankCheckValidation: z.undefined(),
 });
 
@@ -41,10 +41,7 @@ const unvalidatedProjectSetupBankDetailsSchema = z
       .min(1)
       .regex(/^\d\d-?\d\d-?\d\d$/)
       .transform(x => x.replaceAll("-", "")),
-    accountNumber: z
-      .string()
-      .min(1)
-      .regex(/^\d{6,8}$/),
+    accountNumber: z.string().regex(/^\d+$/).min(6).max(8),
   })
   .merge(validatedProjectSetupBankDetailsSchema);
 
@@ -55,4 +52,6 @@ export {
   getProjectSetupBankDetailsSchema,
   ProjectSetupBankDetailsSchemaType,
   projectSetupBankDetailsMaxLength,
+  ValidatedSchema,
+  UnValidatedSchema,
 };

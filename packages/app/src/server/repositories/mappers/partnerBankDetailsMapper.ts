@@ -2,6 +2,7 @@ import { PartnerBankDetails } from "@framework/entities/partner";
 import { ISalesforceBankPartnerDetails } from "../partnerBankDetailsRepository";
 import { ISalesforcePartner } from "../partnersRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 /**
  * Maps partner bank details from Salesforce to its equivalent PartnerBankDetails
@@ -23,6 +24,8 @@ export class SalesforcePartnerBankDetailsMapper extends SalesforceBaseMapper<ISa
       firstName: item.Acc_FirstName__c,
       lastName: item.Acc_LastName__c,
       companyNumber: item.Acc_RegistrationNumber__c,
+      organisationType: item.Acc_OrganisationType__c as PCROrganisationType,
+      name: item.Acc_AccountId__r?.Name ?? "",
     };
   }
 }

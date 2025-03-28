@@ -3,7 +3,7 @@ import { BankDetailsTaskStatus } from "@framework/constants/partner";
 export class BankDetailsTaskStatusMapper {
   private readonly options = {
     toDo: "To do",
-    incomplete: "In progress",
+    incomplete: "Incomplete",
     complete: "Complete",
   };
 

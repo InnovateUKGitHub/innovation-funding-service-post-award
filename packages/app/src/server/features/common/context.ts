@@ -4,7 +4,15 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
-import { SfdcServerError, AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
+import {
+  SfdcServerError,
+  AppError,
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+  BankCheckError,
+} from "./appError";
 import { Logger, ILogger, Timer } from "@innovateuk/logger";
 import { ErrorCode } from "@framework/constants/enums";
 import { Authorisation } from "@framework/types/authorisation";
@@ -72,7 +80,8 @@ export const constructErrorResponse = (error: unknown): AppError => {
     error instanceof ForbiddenError ||
     error instanceof BadRequestError ||
     error instanceof NotFoundError ||
-    error instanceof SfdcServerError
+    error instanceof SfdcServerError ||
+    error instanceof BankCheckError
   ) {
     return error;
   }

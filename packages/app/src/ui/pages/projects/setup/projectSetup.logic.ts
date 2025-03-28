@@ -5,12 +5,10 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { z } from "zod";
 import { ProjectSetupSchema } from "./projectSetup.zod";
-import { PartnerStatus } from "@framework/constants/partner";
 
 export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupQuery>(
@@ -44,11 +42,12 @@ export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId)
 
 export const useOnUpdateProjectSetup = (projectId: ProjectId, partnerId: PartnerId, navigateTo: string) => {
   const navigate = useNavigate();
-  return useOnUpdate<z.output<ProjectSetupSchema>, Pick<PartnerDto, "postcode">>({
+  return useOnUpdate<z.output<ProjectSetupSchema>, boolean>({
     req: data =>
-      clientsideApiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartnerProjectSetup({
         partnerId,
-        partnerDto: { projectId, id: partnerId, ...data, partnerStatus: PartnerStatus.Active },
+        projectId,
+        partnerDto: data,
       }),
     onSuccess: () => navigate(navigateTo),
   });
