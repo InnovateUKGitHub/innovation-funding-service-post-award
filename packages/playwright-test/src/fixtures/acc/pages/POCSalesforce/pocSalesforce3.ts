@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import path from "path";
-import { Fixture, Given, When } from "playwright-bdd/decorators";
+import { Fixture, Given, Then, When } from "playwright-bdd/decorators";
 import { SfdcApi } from "../../../sfdc/SfdcApi";
 import { SfdcLightningPage } from "../../../sfdc/SfdcLightningPage";
 import { DataTable } from "playwright-bdd";
@@ -310,8 +310,45 @@ class Poc3 {
     await this.page.waitForTimeout(50000);
   }
 
-  @Given("approval details checked using the External UI")
+  @Then("approval details checked using the External UI")
   async checkApprovalDetailsExternalUI() {}
+
+  // Deletes the Project after the test has been ran
+  @When("the Project has been deleted")
+  async deleteProject() {
+    type QueryProjectId = {
+      totalSize: number;
+      done: boolean;
+      records: {
+        attributes: { type: string; url: string };
+        Id: string;
+      }[];
+    };
+
+    const conn = await this.sfdcApi.getTsforceConnection();
+
+    // Project Ids
+    let query = `SELECT id FROM  Acc_Project__c WHERE Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
+    const responseProjectId: QueryProjectId = await conn.executeSOQL({
+      query,
+    });
+    const myJSONProjectParticipant = JSON.stringify(responseProjectId);
+
+    let projectId = responseProjectId.records[0].Id;
+
+    // Delete Project
+    let deleteProject = fs
+      .readFileSync(path.join(__dirname, "../../../../../apex/deleteProjectsById.apex"), {
+        encoding: "utf-8",
+      })
+      .replaceAll("{ProjectIdList}", projectId);
+
+    console.log(deleteProject);
+
+    const apexresponseDeleteProject = await conn.executeApex({
+      query: deleteProject,
+    });
+  }
 
   // Functions
   // *************************************************************************************************************
