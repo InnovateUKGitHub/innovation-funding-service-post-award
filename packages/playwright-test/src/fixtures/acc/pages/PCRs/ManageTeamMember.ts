@@ -403,12 +403,12 @@ class ManageTeamMember {
   @When("the user exceeds 80 characters in the form fields")
   async exceedFormCharacterLimits() {
     for (const input of this.inviteFormNames) {
-      await this.completeToCharacterLimit(75, input, false);
+      await this.completeToCharacterLimit(81, input, false);
     }
     await this.completeToCharacterLimit(75, "Email", true);
   }
 
-  @Then("validation messages for each field will confirm length of 100 characters")
+  @Then("validation messages for each field will confirm length of 80 characters")
   async exceedCharacterValMessages() {
     await this.validateLength("First name", "80");
     await this.validateLength("Last name", "80");
@@ -694,7 +694,7 @@ class ManageTeamMember {
     }
     if (associate) {
       await expect(
-        this.page.getByTestId("validation-summary").filter({ hasText: "Enter a valid start date." }),
+        this.page.getByTestId("validation-summary").filter({ hasText: "Enter a start date." }),
       ).toBeVisible();
     }
   }

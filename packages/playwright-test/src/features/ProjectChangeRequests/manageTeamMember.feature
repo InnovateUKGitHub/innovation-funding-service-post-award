@@ -29,7 +29,7 @@ Feature: Manage team member
 
         When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 100 characters
+        Then validation messages for each field will confirm length of 80 characters
 
         When the email entered is not in an email format
         Then the validation message will confirm an invalid email
@@ -48,7 +48,7 @@ Feature: Manage team member
 
         When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 100 characters
+        Then validation messages for each field will confirm length of 80 characters
 
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
@@ -63,7 +63,7 @@ Feature: Manage team member
 
         When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 100 characters
+        Then validation messages for each field will confirm length of 80 characters
 
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
@@ -78,7 +78,7 @@ Feature: Manage team member
 
         When the user exceeds 80 characters in the form fields
         And the user clicks the "Confirm replacement and send invitation" button
-        Then validation messages for each field will confirm length of 100 characters
+        Then validation messages for each field will confirm length of 80 characters
 
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
@@ -94,7 +94,7 @@ Feature: Manage team member
 
         When the user exceeds 80 characters in the form fields
         And the user clicks the "Send invitation" button
-        Then validation messages for each field will confirm length of 100 characters
+        Then validation messages for each field will confirm length of 80 characters
 
         When a correct and valid date is entered as the start date
         And the form is completed with 80 characters
