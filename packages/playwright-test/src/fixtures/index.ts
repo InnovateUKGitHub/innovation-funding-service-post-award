@@ -47,8 +47,8 @@ import { SfdcSObject } from "./sfdc/SfdcSObject";
 import { AccProjectCFI } from "./projectFactory/AccProjectCFI";
 import { AddLeadPartner } from "./acc/pages/PCRs/addLeadPartner";
 import { ClaimLineItemsOrdering } from "./acc/pages/Claims/claimLineItemsOrdering";
+import { AddMultiplePartners } from "./acc/pages/PCRs/addMultiplePartners";
 import { AccProjectSetup } from "./projectFactory/AccProjectSetup";
-import { ProjectSetup } from "./acc/pages/Project Setup/projectSetup";
 
 type AccFixtures = {
   // Pages
@@ -76,7 +76,7 @@ type AccFixtures = {
   loanDrawdownChange: LoanDrawdownChange;
   addLeadPartner: AddLeadPartner;
   claimLineItemsOrdering: ClaimLineItemsOrdering;
-  projectSetup: ProjectSetup;
+  addMultiplePartners: AddMultiplePartners
 
   // Misc
   accNavigation: AccNavigation;
@@ -166,8 +166,10 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
-  claimLineItemsOrdering: ({ page, commands }, use) => use(new ClaimLineItemsOrdering({ page, commands })),
-  projectSetup: ({ page, commands, viewForecast }, use) => use(new ProjectSetup({ page, commands, viewForecast })),
+  claimLineItemsOrdering: ({ page, commands }, use) =>
+    use(new ClaimLineItemsOrdering({ page, commands})),
+  addMultiplePartners: ({ page, commands, projectChangeRequests, addPartner}, use) =>
+    use(new AddMultiplePartners({ page, commands, projectChangeRequests, addPartner})),
 
   // Project Factory
   accProjectBase: [

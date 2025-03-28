@@ -79,7 +79,7 @@ Feature: ACC-11952 fix list order of claim line items
         Then the labour labour costs claimed should be "£2,900.00"
         And the overhead cost should be "£580.00"
 
-    Scenario: Verify the additional the claim line items
+    Scenario: Verify the additional claim line items
         Given the use sees the claim line item table below:
             | description | cost |
             | 1           | 100  |
@@ -121,7 +121,7 @@ Feature: ACC-11952 fix list order of claim line items
         Then the labour labour costs claimed should be "£3,300.00"
         And the overhead cost should be "£660.00"
 
-    Scenario: Verify all the claim line items are in order
+    Scenario: Verify that all the claim line items are in order
         Given the use sees the claim line item table below:
             | description | cost |
             | 1           | 100  |
