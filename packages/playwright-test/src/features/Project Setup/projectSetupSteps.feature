@@ -291,8 +291,7 @@ Feature: Project setup individual steps
         Then the We need more information page is displayed
 
         When the user clicks the "Return to set up your project" button
-        #This should display as 'complete' but doesn't - bug in dev. Leaving as To do for now. ACC-11975
-        Then the "Provide your bank details" section will show as "To do"
+        Then the "Provide your bank details" section will show as "Incomplete"
 
         When the user clicks the "Provide your bank details" list item
         Then the user will see the Upload bank statement page
