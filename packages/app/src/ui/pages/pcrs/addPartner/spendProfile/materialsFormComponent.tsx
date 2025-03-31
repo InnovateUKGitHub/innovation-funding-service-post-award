@@ -2,8 +2,8 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 
 import { SpendProfileContext } from "./spendProfileCosts.logic";
-import { useForm } from "react-hook-form";
-import { errorMap, MaterialsSchema, materialsSchema } from "./spendProfile.zod";
+import { FieldErrors, useForm } from "react-hook-form";
+import { errorMap, MaterialsSchema, materialsSchema, MaterialsSchemaType } from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
@@ -27,12 +27,22 @@ import { parseCurrency } from "@framework/util/numberHelper";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnUpdateMaterials } from "./materials.logic";
+import { z, ZodError } from "zod";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
 
 const isMaterialsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
 ): cost is PCRSpendProfileMaterialsCostDto {
   return isObject(cost) && ["id", "description", "quantity", "costPerItem"].every(x => x in cost);
 };
+
+type MaterialsFieldErrors = FieldErrors<z.output<MaterialsSchemaType>>;
+
+const isTotalCostError = (
+  errors: MaterialsFieldErrors | (MaterialsFieldErrors & { totalCost: ZodError }),
+): errors is MaterialsFieldErrors & { totalCost: ZodError } => "totalCost" in errors;
 
 export const MaterialsFormComponent = () => {
   const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
@@ -57,7 +67,7 @@ export const MaterialsFormComponent = () => {
     throw Error("Invalid cost dto");
   }
 
-  const { handleSubmit, watch, formState, register, setError } = useForm<MaterialsSchema>({
+  const { handleSubmit, watch, formState, register, setError, trigger } = useForm<MaterialsSchema>({
     defaultValues: {
       id: defaultCost.id,
       materialsDescription: defaultCost.description ?? "",
@@ -80,6 +90,7 @@ export const MaterialsFormComponent = () => {
 
   const { apiError, isFetching, onUpdate } = useOnUpdateMaterials();
 
+  useFormRevalidate(watch, trigger);
   return (
     <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
       <Form
@@ -138,10 +149,19 @@ export const MaterialsFormComponent = () => {
 
         {isClient && (
           <Section>
-            <H3>{getContent(x => x.pcrSpendProfileLabels.materials.totalCost)}</H3>
-            <P>
-              <Currency value={totalCost} />
-            </P>
+            <FormGroup hasError={isTotalCostError(formState.errors)}>
+              <H3>{getContent(x => x.pcrSpendProfileLabels.materials.totalCost)}</H3>
+              {isTotalCostError(formState.errors) && (
+                <ValidationError
+                  id="error-for-total-cost"
+                  data-qa="error-for-total-cost"
+                  error={formState.errors.totalCost}
+                />
+              )}
+              <P>
+                <Currency value={totalCost} />
+              </P>
+            </FormGroup>
           </Section>
         )}
 
