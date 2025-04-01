@@ -178,6 +178,7 @@ const getBankDetailsLink = (
 };
 
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "projectSetup",
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),

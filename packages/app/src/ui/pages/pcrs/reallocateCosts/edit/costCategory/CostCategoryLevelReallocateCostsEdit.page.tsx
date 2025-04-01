@@ -299,6 +299,7 @@ const EditPage = ({ projectId, pcrId, itemId, partnerId }: PartnerLevelReallocat
 };
 
 const PartnerLevelReallocateCostsRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   // pm reallocates costs for participant at cost category level
   routeName: "partnerLevelReallocateCostsEdit",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/financial/:partnerId",

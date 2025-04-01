@@ -168,6 +168,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
 };
 
 export const ProjectDashboardRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
   routePathWithQuery: "/projects/dashboard?:search",

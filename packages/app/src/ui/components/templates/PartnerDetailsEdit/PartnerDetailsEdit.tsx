@@ -135,6 +135,7 @@ const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) =>
 };
 
 export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "partnerDetailsEdit",
   routePath: "/projects/:projectId/setup/:partnerId/project-location",
   container: PartnerDetailsEditContainer,

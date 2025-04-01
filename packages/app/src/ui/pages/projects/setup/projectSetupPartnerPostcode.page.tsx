@@ -21,6 +21,7 @@ const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & Base
 };
 
 export const ProjectSetupPartnerPostcodeRoute = defineRoute<PartnerDetailsParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "projectSetupPostcode",
   routePath: "/projects/:projectId/postcode/:partnerId",
   container: ProjectSetupPartnerPostcodeContainer,

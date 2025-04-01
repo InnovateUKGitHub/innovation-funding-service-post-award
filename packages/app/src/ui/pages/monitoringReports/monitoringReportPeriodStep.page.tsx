@@ -101,6 +101,7 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
 };
 
 export const MonitoringReportPreparePeriodRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "monitoringReportPreparePeriod",
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare-period",
   container: PeriodStepPage,

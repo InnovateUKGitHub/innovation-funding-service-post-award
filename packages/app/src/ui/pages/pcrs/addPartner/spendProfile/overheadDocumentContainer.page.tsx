@@ -220,6 +220,7 @@ const OverheadDocumentsComponent = (props: OverheadDocumentsPageParams & BasePro
 };
 
 export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocumentsPageParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrSpendProfileOverheadDocument",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/documents",
   container: OverheadDocumentsComponent,

@@ -270,6 +270,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
 };
 
 export const ProjectDocumentsRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",

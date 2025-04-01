@@ -119,6 +119,7 @@ const SpendProfilePrepareFormSection = () => {
 };
 
 export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepareSpendProfileAddCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost",
   container: SpendProfileEditComponent,
@@ -133,6 +134,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
 });
 
 export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepareSpendProfileEditCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId",
   container: SpendProfileEditComponent,

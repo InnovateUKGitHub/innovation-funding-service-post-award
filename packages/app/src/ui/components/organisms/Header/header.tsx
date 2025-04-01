@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
 import { useMounted } from "../../../context/Mounted";
 import { Logo } from "../../atoms/svg/Logo/Logo";
+import { useUserContext } from "@ui/context/user";
 
 export interface HeaderProps {
   headingLink: string;
@@ -14,33 +15,34 @@ export interface HeaderProps {
 export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
+  const user = useUserContext();
   const { setRef } = useGovFrontend("Header");
 
   const config = useClientConfig();
 
-  const menuItems = useMemo(
-    () =>
-      showMenu
-        ? [
-            {
-              qa: "nav-dashboard",
-              href: `${config.ifsRoot}/dashboard-selection`,
-              text: getContent(x => x.site.header.navigation.dashboard),
-            },
-            {
-              qa: "nav-profile",
-              href: `${config.ifsRoot}/profile/view`,
-              text: getContent(x => x.site.header.navigation.profile),
-            },
-            {
-              qa: "nav-sign-out",
-              href: "/logout",
-              text: getContent(x => x.site.header.navigation.signOut),
-            },
-          ]
-        : [],
-    [showMenu, config, getContent],
-  );
+  const menuItems = useMemo(() => {
+    if (!showMenu) return [];
+    if (user.email)
+      return [
+        {
+          qa: "nav-dashboard",
+          href: `${config.ifsRoot}/dashboard-selection`,
+          text: getContent(x => x.site.header.navigation.dashboard),
+        },
+        {
+          qa: "nav-profile",
+          href: `${config.ifsRoot}/profile/view`,
+          text: getContent(x => x.site.header.navigation.profile),
+        },
+        {
+          qa: "nav-sign-out",
+          href: "/logout",
+          text: getContent(x => x.site.header.navigation.signOut),
+        },
+      ];
+
+    return [{ qa: "nav-sign-in", href: config.ifsRoot, text: getContent(x => x.site.header.navigation.signIn) }];
+  }, [showMenu, config, getContent]);
 
   return (
     <header className="govuk-header" role="banner" data-module="header" data-qa="pageHeader" ref={setRef}>

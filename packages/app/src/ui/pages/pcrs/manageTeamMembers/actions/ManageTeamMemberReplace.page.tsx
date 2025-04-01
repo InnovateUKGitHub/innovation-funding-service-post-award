@@ -24,6 +24,7 @@ const ManageTeamMemberReplacePage = (props: ManageTeamMemberModifyProps) => {
 };
 
 const ManageTeamMembersReplaceRoute = defineRoute<ManageTeamMemberReplaceProps>({
+  allowUnauthenticatedAccess: false,
   routeName: "ManageTeamMembersReplace",
   routePath: "/projects/:projectId/details/manage-team-members/replace/:role",
   routePathWithQuery: "/projects/:projectId/details/manage-team-members/replace/:role?:pclId",

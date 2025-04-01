@@ -247,6 +247,7 @@ const renderLinks = (
 };
 
 export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrSpendProfileCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
   container: SpendProfileCostsSummaryComponent,

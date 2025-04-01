@@ -32,6 +32,7 @@ This then uses the `StoresConsumer` to get the data defined in `TData` (see abov
 
 This is defined by calling `defineRoute` and exported from the file. `defineRoute` takes the following options
 
+    allowUnauthenticatedAccess: boolean;
     routeName: string;
     routePath: string;
     container: React.FunctionComponent<TParams & BaseProps>;
@@ -45,6 +46,7 @@ This is defined by calling `defineRoute` and exported from the file. `defineRout
 eg
 
     export const ProjectDetailsRoute = defineRoute({
+        allowUnauthenticatedAccess: false,
         routeName: "projectDetails",
         routePath: "/projects/:id/details",
         container: ProjectDetailsContainer,

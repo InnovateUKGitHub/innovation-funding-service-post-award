@@ -46,6 +46,7 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes }: BaseProps
 }
 
 export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfirmationParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "failedBankCheckConfirmation",
   routePath: "/projects/:projectId/setup/:partnerId/further-information-required",
   getParams: r => ({

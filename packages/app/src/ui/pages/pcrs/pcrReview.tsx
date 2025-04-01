@@ -282,6 +282,7 @@ const LogSection = ({ statusChanges }: { statusChanges: Data["statusChanges"] })
 };
 
 export const PCRReviewRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrReview",
   routePath: "/projects/:projectId/pcrs/:pcrId/review",
   container: PCRReviewComponent,

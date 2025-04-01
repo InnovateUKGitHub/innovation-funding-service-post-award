@@ -35,6 +35,7 @@ const DeveloperHomePageContainer = (props: BaseProps) => {
 };
 
 export const DeveloperHomePage = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "home",
   routePath: "/",
   container: DeveloperHomePageContainer,

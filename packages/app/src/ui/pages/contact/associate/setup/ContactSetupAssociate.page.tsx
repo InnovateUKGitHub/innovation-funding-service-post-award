@@ -210,6 +210,7 @@ const ContactSetupAssociatePage = (props: BaseProps & ContactSetupAssociateParam
 };
 
 const ContactSetupAssociateRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "ContactSetupAssociate",
   routePath: "/projects/:projectId/setup/associate",
   container: ContactSetupAssociatePage,

@@ -122,6 +122,7 @@ const ProjectSetupBankDetailsVerifyComponent = ({
 };
 
 export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "ProjectSetupBankDetailsVerify",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details-verify",
   container: ProjectSetupBankDetailsVerifyComponent,

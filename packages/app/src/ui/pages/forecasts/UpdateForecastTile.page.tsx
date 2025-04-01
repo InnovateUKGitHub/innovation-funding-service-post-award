@@ -204,6 +204,7 @@ const UpdateForecastPage = ({ projectId, partnerId }: UpdateForecastParams & Bas
 };
 
 export const UpdateForecastRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "updateForecast",
   routePath: "/projects/:projectId/claims/:partnerId/updateForecast",

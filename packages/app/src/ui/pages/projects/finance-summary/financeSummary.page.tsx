@@ -212,6 +212,7 @@ const renderTotalValueFooters = (
 };
 
 export const FinanceSummaryRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "financeSummary",
   routePath: "/projects/:projectId/finance-summary/:partnerId",

@@ -42,6 +42,7 @@ const BroadcastPage = (props: BroadcastItemProps) => {
 };
 
 export const BroadcastPageRoute = defineRoute<BroadcastPageParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "broadcastPage",
   routePath: "/broadcasts/:broadcastId",
   container: BroadcastPage,

@@ -3,6 +3,7 @@ import { defineRoute } from "../../app/containerBase";
 import { PcrUpdateSelectedContainer } from "./modifyOptions/PcrModifyOptions";
 
 export const ProjectChangeRequestAddTypeRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "projectChangeRequestAddType",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/add",
   container: PcrUpdateSelectedContainer,

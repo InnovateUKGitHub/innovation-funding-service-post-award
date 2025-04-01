@@ -24,6 +24,7 @@ const ProjectChangeRequestCompletedPage = ({ projectId, pcrId }: BaseProps & Pro
 };
 
 export const ProjectChangeRequestCompletedRoute = defineRoute<ProjectChangeRequestCompletedParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "projectChangeRequestCompleted",
   routePath: "/projects/:projectId/pcrs/:pcrId/completed",
   container: ProjectChangeRequestCompletedPage,

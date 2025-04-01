@@ -285,6 +285,7 @@ const ChangeRemainingGrantPage = (props: BaseProps & FinancialVirementParams) =>
 };
 
 export const ChangeRemainingGrantRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "change-remaining-grant",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/partner",
   container: ChangeRemainingGrantPage,

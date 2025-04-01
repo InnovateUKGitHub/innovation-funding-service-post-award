@@ -135,6 +135,7 @@ const ViewForecastPage = ({ projectId, partnerId }: ViewForecastParams & BasePro
 };
 
 export const ViewForecastRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "viewForecast",
   routePath: "/projects/:projectId/claims/:partnerId/viewForecast",

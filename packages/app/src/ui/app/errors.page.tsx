@@ -9,6 +9,7 @@ const ErrorRouteContainer = () => {
 };
 
 export const ErrorRoute = defineRoute({
+  allowUnauthenticatedAccess: true,
   routeName: "error",
   routePath: "/error",
   container: ErrorRouteContainer,
@@ -17,6 +18,7 @@ export const ErrorRoute = defineRoute({
 });
 
 export const ErrorNotFoundRoute = defineRoute({
+  allowUnauthenticatedAccess: true,
   routeName: "errorNotFound",
   routePath: "/error-not-found",
   container: NotFoundError,

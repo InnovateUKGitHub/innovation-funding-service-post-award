@@ -39,6 +39,7 @@ const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) =>
 };
 
 export const PCRDetailsRoute = defineRoute<ProjectChangeRequestDetailsParams>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "pcrDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/details",

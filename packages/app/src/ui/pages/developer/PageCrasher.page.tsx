@@ -14,6 +14,7 @@ const PageCrasherPage = () => {
 };
 
 export const DeveloperPageCrasherPage = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "developerPageCrasherPage",
   routePath: "/developer/crash",
   container: PageCrasherPage,

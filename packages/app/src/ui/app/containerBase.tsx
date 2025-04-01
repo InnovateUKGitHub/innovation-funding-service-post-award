@@ -72,6 +72,7 @@ interface IRouteOptions<TParams> {
     displayTitle: string;
   };
   allowRouteInActiveAccess?: boolean;
+  allowUnauthenticatedAccess: boolean;
 }
 
 export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {

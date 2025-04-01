@@ -216,6 +216,7 @@ const ClaimReviewPage = ({ projectId, partnerId, periodId, messages }: ReviewCla
 };
 
 export const ReviewClaimRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "reviewClaim",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
   container: ClaimReviewPage,

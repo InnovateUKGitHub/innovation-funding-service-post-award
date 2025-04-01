@@ -306,6 +306,7 @@ const previousClaimsSection = (
 };
 
 export const AllClaimsDashboardRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "allClaimsDashboard",
   routePath: "/projects/:projectId/claims/dashboard",

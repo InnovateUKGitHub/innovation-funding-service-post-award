@@ -142,6 +142,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 };
 
 export const ProjectChangeRequestPrepareRoute = defineRoute<ProjectChangeRequestPrepareParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepare",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
   container: PCRPreparePage,

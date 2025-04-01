@@ -347,6 +347,7 @@ const ForecastSummary = ({
 };
 
 export const ClaimSummaryRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "claimSummary",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/summary",
   container: ClaimSummaryPage,

@@ -165,6 +165,7 @@ const EditClaimLineItemsPage = ({
 };
 
 const EditClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "claimLineItemEdit",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",

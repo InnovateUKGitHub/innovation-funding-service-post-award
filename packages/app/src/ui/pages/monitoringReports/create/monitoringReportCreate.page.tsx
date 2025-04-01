@@ -91,6 +91,7 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
 export const MonitoringReportCreateRoute = defineRoute<{
   projectId: ProjectId;
 }>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",

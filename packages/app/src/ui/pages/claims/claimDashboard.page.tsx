@@ -239,6 +239,7 @@ const hasBodyRowFlag = (claim: Pick<ClaimDto, "status">, project: Data["project"
 };
 
 export const ClaimsDashboardRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/",

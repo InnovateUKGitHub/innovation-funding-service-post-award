@@ -64,6 +64,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
 };
 
 export const ForecastDashboardRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",

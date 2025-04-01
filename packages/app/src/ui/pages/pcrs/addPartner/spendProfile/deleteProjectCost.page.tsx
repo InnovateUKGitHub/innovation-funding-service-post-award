@@ -168,6 +168,7 @@ const SwitchComponent = ({
 };
 
 export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteProjectCostParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepareDeleteProjectCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId/delete",
   container: DeleteProjectCostPage,

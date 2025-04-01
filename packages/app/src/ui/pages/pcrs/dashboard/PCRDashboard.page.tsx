@@ -220,6 +220,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 };
 
 export const PCRsDashboardRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "pcrsDashboard",
   routePath: "/projects/:projectId/pcrs/dashboard",

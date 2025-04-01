@@ -441,6 +441,7 @@ const getFooters = (
 };
 
 export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrSpendProfileReviewCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId/spendProfile/:costCategoryId",
   container: SpendProfileCostsSummaryReviewComponent,

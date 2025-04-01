@@ -355,6 +355,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 };
 
 export const ProjectDetailsRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "projectDetails",
   routePath: "/projects/:projectId/details",

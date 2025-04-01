@@ -119,6 +119,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 };
 
 export const PrepareClaimRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "prepareClaim",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
   container: PrepareComponent,

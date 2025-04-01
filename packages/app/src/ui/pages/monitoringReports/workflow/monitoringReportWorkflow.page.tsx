@@ -15,6 +15,7 @@ export const MonitoringReportWorkflowRoute = defineRoute<{
   mode: "view" | "prepare";
   step: number | undefined;
 }>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:id/:mode",

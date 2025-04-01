@@ -112,6 +112,7 @@ export const findStepByName = (stepName: IReasoningWorkflowMetadata["stepName"])
 };
 
 export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
@@ -130,6 +131,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
 });
 
 export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrReviewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/reasoning",
   container: function PCRReviewReasoningWorkflowContainer(props) {
@@ -145,6 +147,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
 });
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepareReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning?:step",

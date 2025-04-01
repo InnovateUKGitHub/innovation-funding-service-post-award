@@ -293,6 +293,7 @@ const AccountNumber = ({
 };
 
 export const ProjectSetupBankDetailsRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "projectSetupBankDetails",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details",
   container: ProjectSetupBankDetailsPage,

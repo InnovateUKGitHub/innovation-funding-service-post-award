@@ -173,6 +173,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
 };
 
 export const ClaimForecastRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "claimForecast",
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
   container: ClaimForecastPage,

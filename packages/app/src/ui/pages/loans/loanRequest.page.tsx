@@ -320,6 +320,7 @@ const LoansRequestPage = (props: BaseProps & LoansRequestParams) => {
 };
 
 export const LoansRequestRoute = defineRoute<LoansRequestParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "loansRequest",
   routePath: "/loans/:projectId/:loanId",
   container: LoansRequestPage,

@@ -160,6 +160,7 @@ const ManageTeamMembersDashboardPage = ({ projectId }: BaseProps & ManageTeamMem
 };
 
 const ManageTeamMembersDashboardRoute = defineRoute<ManageTeamMembersDashboardParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "ManageTeamMembersDashboard",
   routePath: "/projects/:projectId/details/manage-team-members",
   container: ManageTeamMembersDashboardPage,

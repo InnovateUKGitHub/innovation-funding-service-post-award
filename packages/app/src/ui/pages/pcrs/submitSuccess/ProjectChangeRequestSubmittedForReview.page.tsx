@@ -31,6 +31,7 @@ const ProjectChangeRequestSubmittedForReviewPage = ({
 };
 
 export const ProjectChangeRequestSubmittedForReviewRoute = defineRoute<ProjectChangeRequestSubmittedForReviewParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "projectChangeRequestSubmittedForReview",
   routePath: "/projects/:projectId/pcrs/:pcrId/submitted-for-review",
   container: ProjectChangeRequestSubmittedForReviewPage,

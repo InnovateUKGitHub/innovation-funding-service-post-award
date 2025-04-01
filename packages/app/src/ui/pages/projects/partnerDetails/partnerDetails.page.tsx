@@ -68,6 +68,7 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
 };
 
 export const PartnerDetailsRoute = defineRoute<Params>({
+  allowUnauthenticatedAccess: false,
   routeName: "partnerDetails",
   routePath: "/projects/:projectId/details/partner/:partnerId",
   container: PartnerDetailsPage,

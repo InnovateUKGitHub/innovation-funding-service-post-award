@@ -73,6 +73,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
 };
 
 export const ProjectOverviewRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "projectOverview",
   routePath: "/projects/:projectId/overview",

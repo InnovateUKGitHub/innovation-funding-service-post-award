@@ -81,6 +81,7 @@ const ViewClaimLineItemsPage = ({
 };
 
 const ClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
@@ -89,6 +90,7 @@ const ClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
 });
 
 const ReviewClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "claimLineItemsReview",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
   container: props => <ViewClaimLineItemsPage {...props} mode="review" />,

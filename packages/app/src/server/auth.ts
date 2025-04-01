@@ -14,6 +14,7 @@ import {
 import { getPassportOidcStrategy, passportOidcSuccessRoute } from "./developmentPassportOidc";
 import { getErrorResponse } from "@framework/util/errorHandlers";
 import { UnauthenticatedError } from "@shared/appError";
+import { matchRoute } from "@ui/routing/matchRoute";
 
 const logger = new Logger("Auth");
 
@@ -131,6 +132,8 @@ const getAuthRouter = async () => {
         throw Error("Missing 'configuration.salesforce.serviceUsername' value");
       }
 
+      const matchedRoute = matchRoute(req.url);
+
       const { salesforceServiceUser, sso, developer } = configuration;
 
       if (sso.enabled && req.url === "/") {
@@ -150,14 +153,18 @@ const getAuthRouter = async () => {
         if (!req?.session?.user?.email) {
           if (req.url.startsWith("/api")) {
             res.status(401).json(getErrorResponse(new UnauthenticatedError(), req.params.traceId));
+            return;
           } else if (req.url.startsWith("/login")) {
             next(new UnauthenticatedError());
+            return;
+          } else if (matchedRoute.allowUnauthenticatedAccess) {
+            // noop
           } else {
             // Remember the URL we need to go back to
             req.session.redirect = req.url;
             res.redirect("/login");
+            return;
           }
-          return;
         }
 
         // User is successfully logged in :)
@@ -172,6 +179,8 @@ const getAuthRouter = async () => {
             // Remember the URL we need to go back to
             req.session.redirect = req.url;
             res.redirect("/developer/oidc/login");
+          } else if (matchedRoute.allowUnauthenticatedAccess) {
+            // noop
           } else {
             res.status(401);
           }

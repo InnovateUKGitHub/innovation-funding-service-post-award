@@ -65,6 +65,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
 };
 
 export const MonitoringReportDeleteRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "monitoringReportDeleteVerification",
   routePath: "/projects/:projectId/monitoring-reports/:id/delete",
   container: DeleteVerificationPage,

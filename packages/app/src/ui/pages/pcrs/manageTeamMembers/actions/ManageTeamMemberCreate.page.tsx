@@ -24,6 +24,7 @@ const ManageTeamMemberCreatePage = (props: ManageTeamMemberModifyProps) => {
 };
 
 const ManageTeamMembersCreateRoute = defineRoute<ManageTeamMemberCreateProps>({
+  allowUnauthenticatedAccess: false,
   routeName: "ManageTeamMembersCreate",
   routePath: "/projects/:projectId/details/manage-team-members/create/:role",
   container: ManageTeamMemberCreatePage,

@@ -50,6 +50,7 @@ const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
 };
 
 export const LoansSummaryRoute = defineRoute<LoanOverviewParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "loansSummary",
   routePath: "/loans/:projectId",
   container: LoansOverviewPage,

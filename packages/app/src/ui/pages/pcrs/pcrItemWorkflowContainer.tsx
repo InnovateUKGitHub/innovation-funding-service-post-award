@@ -45,6 +45,7 @@ export const PCRItemContainer = (
 };
 
 export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "pcrViewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
@@ -63,6 +64,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
 });
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrReviewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
@@ -80,6 +82,7 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
 });
 
 export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrPrepareItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",

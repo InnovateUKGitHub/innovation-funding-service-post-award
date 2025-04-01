@@ -222,6 +222,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
 };
 
 export const ClaimDetailDocumentsRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "claimDetailDocuments",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId/documents",
   container: ClaimDetailDocumentsPage,

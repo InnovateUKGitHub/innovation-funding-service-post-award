@@ -141,6 +141,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
 };
 
 export const ProjectSetupSpendProfileRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "projectSetupSpendProfile",
   routePath: "/projects/:projectId/setup/:partnerId/projectSetupSpendProfile",
   container: ProjectSetupSpendProfilePage,

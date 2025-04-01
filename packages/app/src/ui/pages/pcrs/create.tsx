@@ -3,6 +3,7 @@ import { defineRoute } from "../../app/containerBase";
 import { PcrCreateSelectedContainer } from "./modifyOptions/PcrModifyOptions";
 
 export const PCRCreateRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrCreate",
   routePath: "/projects/:projectId/pcrs/create",
   container: PcrCreateSelectedContainer,

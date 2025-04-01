@@ -174,6 +174,7 @@ export const MonitoringReportDashboardRoute = defineRoute<{
   projectId: ProjectId;
   periodId: number | undefined;
 }>({
+  allowUnauthenticatedAccess: false,
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportDashboard",
   routePath: "/projects/:projectId/monitoring-reports",

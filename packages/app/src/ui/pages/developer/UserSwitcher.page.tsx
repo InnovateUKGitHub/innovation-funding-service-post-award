@@ -14,6 +14,7 @@ const UserSwitcherPage = () => {
 };
 
 export const DeveloperUserSwitcherPage = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "userSwitcherPage",
   routePath: "/developer/userswitcher",
   container: UserSwitcherPage,

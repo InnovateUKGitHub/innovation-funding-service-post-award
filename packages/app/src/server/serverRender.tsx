@@ -96,6 +96,14 @@ const serverRender =
     let isErrorPage = false;
     const jsDisabled = req.headers["x-acc-js-disabled"] === "true";
     const clientConfig = getClientConfig();
+    const matchedRoute = matchRoute(req.url);
+
+    const baseUser = {
+      email: req.session?.user?.email ?? "",
+      projectId: req.session?.user.projectId,
+      userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
+      csrf: req.csrfToken(),
+    };
 
     try {
       const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
@@ -103,24 +111,21 @@ const serverRender =
       let user: IClientUser;
       let statusCode = 200;
 
-      if (err && !(err instanceof FormHandlerError || err instanceof ZodFormHandlerError)) {
+      if (
+        (err && !(err instanceof FormHandlerError || err instanceof ZodFormHandlerError)) ||
+        matchedRoute.allowUnauthenticatedAccess
+      ) {
         auth = new Authorisation({});
         user = {
           roleInfo: auth.permissions,
-          email: "",
-          csrf: req.csrfToken(),
-          projectId: req.session?.user.projectId,
-          userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
+          ...baseUser,
         };
       } else {
         const context = await contextProvider.start({ user: req.session?.user, traceId: res?.locals.traceId });
         auth = await context.runQuery(new GetAllProjectRolesForUser());
         user = {
           roleInfo: auth.permissions,
-          email: req.session?.user?.email ?? "",
-          projectId: req.session?.user.projectId,
-          userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
-          csrf: req.csrfToken(),
+          ...baseUser,
         };
       }
 
@@ -160,15 +165,14 @@ const serverRender =
 
       // If a fatal error has NOT occurred...
       if (!isErrorPage) {
-        const matched = matchRoute(req.url);
-        const { params } = getParamsFromUrl(matched.routePath, req.url);
+        const { params } = getParamsFromUrl(matchedRoute.routePath, req.url);
 
         // Check if they are allowed to access this page.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
+        if (matchedRoute.accessControl?.(auth, params as any, clientConfig) === false) {
           logger.warn("Access control failure", {
             route: req.url,
-            routeName: matched.routeName,
+            routeName: matchedRoute.routeName,
             username: req.session?.user?.email ?? "",
             traceId: res.locals.traceId,
           });

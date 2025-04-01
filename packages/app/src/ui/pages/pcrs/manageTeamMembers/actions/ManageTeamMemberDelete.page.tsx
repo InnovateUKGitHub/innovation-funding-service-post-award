@@ -21,6 +21,7 @@ const ManageTeamMemberDeletePage = (props: ManageTeamMemberModifyProps) => {
 };
 
 const ManageTeamMembersDeleteRoute = defineRoute<ManageTeamMemberUpdateDeleteProps>({
+  allowUnauthenticatedAccess: false,
   routeName: "ManageTeamMembersDelete",
   routePath: "/projects/:projectId/details/manage-team-members/delete/:role/:pclId",
   container: ManageTeamMemberDeletePage,

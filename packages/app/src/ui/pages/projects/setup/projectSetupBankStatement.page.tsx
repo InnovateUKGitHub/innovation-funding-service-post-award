@@ -203,6 +203,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 };
 
 export const ProjectSetupBankStatementRoute = defineRoute<ProjectSetupBankStatementParams>({
+  allowUnauthenticatedAccess: false,
   routeName: "projectSetupBankStatement",
   routePath: "/projects/:projectId/setup/:partnerId/bank-statement",
   container: ProjectSetupBankStatementComponent,

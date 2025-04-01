@@ -73,6 +73,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
 };
 
 export const PCRDeleteRoute = defineRoute({
+  allowUnauthenticatedAccess: false,
   routeName: "pcrDelete",
   routePath: "/projects/:projectId/pcrs/:pcrId/delete",
   container: PCRDeletePage,
