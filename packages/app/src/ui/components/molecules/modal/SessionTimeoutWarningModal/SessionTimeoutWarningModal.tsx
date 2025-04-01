@@ -86,7 +86,7 @@ const SessionTimeoutWarningModal = () => {
   return (
     <Modal isOpen={showModal} setIsOpen={extendTimeout}>
       <H2>{getContent(x => x.components.sessionTimeoutWarningModal.sectionTitle)}</H2>
-      <P>{getContent(x => x.components.sessionTimeoutWarningModal.message({ timeout: timeTillTimeout }))}</P>
+      <P multiline>{getContent(x => x.components.sessionTimeoutWarningModal.message({ timeout: timeTillTimeout }))}</P>
       <div className="govuk-button-group">
         <Button styling="Primary" onClick={extendTimeout}>
           {getContent(x => x.components.sessionTimeoutWarningModal.continueWorking)}
