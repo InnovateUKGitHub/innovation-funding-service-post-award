@@ -17,6 +17,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
 import { ProjectSetupBankDetailsSchemaType } from "./projectSetupBankDetails.zod";
 import { z } from "zod";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
 const isPartnerDtoValidatorError = (e: unknown): e is ValidationError<PartnerDtoValidator> => {
   return typeof e === "object" && e !== null && "code" in e && e.code === ErrorCode.VALIDATION_ERROR;
@@ -123,7 +124,7 @@ export const useOnUpdateProjectSetupBankDetails = (
           // Display the error message in React Hook Form
           const message = getContent(x => x.validation.partnerDtoValidator.bankChecksFailed);
           setError("bankCheckValidation", { message, types: { deps: ["sortCode", "accountNumber"] } });
-
+          scrollToTheTopSmoothly();
           // Stop the API Error box from appearing
           return Propagation.STOP;
         }

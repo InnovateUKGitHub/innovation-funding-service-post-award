@@ -34,6 +34,7 @@ const replaceTeamMemberValidator = z.object({
   lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: maxInputLength, required: true }),
   role: z.nativeEnum(ProjectRole),
+  endDate: dateValidation.optional(),
 });
 
 const updateTeamMemberValidator = z.object({

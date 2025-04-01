@@ -7,8 +7,13 @@ import { Currency } from "@ui/components/atoms/Currency/currency";
 import { useMounted } from "@ui/context/Mounted";
 import { useContext } from "react";
 import { SpendProfileContext } from "./spendProfileCosts.logic";
-import { useForm } from "react-hook-form";
-import { TravelAndASubsistenceSchema, travelAndASubsistenceSchema, errorMap } from "./spendProfile.zod";
+import { FieldErrors, useForm } from "react-hook-form";
+import {
+  TravelAndASubsistenceSchema,
+  travelAndASubsistenceSchema,
+  errorMap,
+  TravelAndSubsistenceSchemaType,
+} from "./spendProfile.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
@@ -29,12 +34,19 @@ import { ValidationError } from "@ui/components/atoms/validation/ValidationError
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { useOnUpdateTravelAndSubsistence } from "./travelAndSubs.logic";
+import { z, ZodError } from "zod";
 
 const isTravelAndSubsCostDto = function (
   cost: PCRSpendProfileCostDto | null | undefined,
 ): cost is PCRSpendProfileTravelAndSubsCostDto {
   return isObject(cost) && ["id", "description", "numberOfTimes", "costOfEach"].every(x => x in cost);
 };
+
+type TravelAndSubsFieldErrors = FieldErrors<z.output<TravelAndSubsistenceSchemaType>>;
+
+const isTotalCostError = (
+  errors: TravelAndSubsFieldErrors | (TravelAndSubsFieldErrors & { totalCost: ZodError }),
+): errors is TravelAndSubsFieldErrors & { totalCost: ZodError } => "totalCost" in errors;
 
 export const TravelAndSubsFormComponent = () => {
   const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem } =
@@ -149,7 +161,13 @@ export const TravelAndSubsFormComponent = () => {
           <Section>
             <H3>{getContent(x => x.pcrSpendProfileLabels.travelAndSubs.totalCost)}</H3>
             <FormGroup id="totalCost" hasError={!!validationErrors.totalCost}>
-              <ValidationError error={validationErrors.totalCost} />
+              {isTotalCostError(formState.errors) && (
+                <ValidationError
+                  id="error-for-total-cost"
+                  data-qa="error-for-total-cost"
+                  error={formState.errors.totalCost}
+                />
+              )}
               <P>
                 <Currency value={totalCost} />
               </P>

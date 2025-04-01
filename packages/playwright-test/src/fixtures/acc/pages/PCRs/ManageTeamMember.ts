@@ -76,9 +76,14 @@ class ManageTeamMember {
   private readonly removeAssociateTable: Array<[string, string]>;
   private readonly removeAssociateButton: Locator;
   private readonly cancelLink: Locator;
+  private readonly startDateLabel: Locator;
+  private readonly whatIsProposedDate: Locator;
+  private readonly proposedDateHint: Locator;
   private readonly dayLabel: Locator;
   private readonly monthLabel: Locator;
   private readonly yearLabel: Locator;
+  private readonly sfdcPclTable: Locator;
+  private readonly fcToBeReplacedLabel: Locator;
 
   constructor({
     page,
@@ -208,9 +213,16 @@ class ManageTeamMember {
     ];
     this.removeAssociateButton = this.page.getByRole("button").filter({ hasText: "Remove associate" });
     this.cancelLink = this.page.getByRole("link").filter({ hasText: "Cancel" });
+    this.startDateLabel = this.page.locator("legend").filter({ hasText: "Start date" });
+    this.whatIsProposedDate = this.page.locator("legend").filter({ hasText: "What is the proposed date of change?" });
+    this.proposedDateHint = this.page.locator("#hint-for-endDate").filter({ hasText: "for example, 27 3 2007" });
     this.dayLabel = this.page.getByLabel("Day");
     this.monthLabel = this.page.getByLabel("Month");
     this.yearLabel = this.page.getByLabel("Year");
+    this.sfdcPclTable = this.page.getByLabel("Project Contact Links").locator("table").locator("tbody");
+    this.fcToBeReplacedLabel = this.page
+      .locator("//form/fieldset/div/label")
+      .filter({ hasText: "Finance contact to be replaced:" });
   }
 
   //**STEP DEFINITIONS**//
@@ -437,7 +449,7 @@ class ManageTeamMember {
   }
 
   @When("a correct and valid date is entered as the start date")
-  async validStartDate() {
+  async validStartDate(returnDateString?: boolean) {
     let month = this.monthNow();
     let year = this.yearFromNow();
     const data = [
@@ -445,7 +457,6 @@ class ManageTeamMember {
       ["Month", month],
       ["Year", year],
     ];
-
     for (const [label, input] of data) {
       await this.page.getByLabel(label).clear();
       await this.page.getByLabel(label).fill(input);
@@ -462,11 +473,13 @@ class ManageTeamMember {
     if (pcr === "Replace project manager") {
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
       await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
+      await this.validStartDate();
       await this.confirmReplacementButton.click();
     } else if (pcr === "Replace finance contact") {
       await this.selectFc();
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
       await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
+      await this.validStartDate();
       await this.confirmReplacementButton.click();
       await expect(this.page.getByRole("combobox")).toBeDisabled();
     } else if (pcr === "Invite a new associate") {
@@ -476,6 +489,7 @@ class ManageTeamMember {
     } else {
       await this.completeContactForm("Joe", "Bloggs", "joe.bloggs@bloggs.test.test");
       await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
+      await this.validStartDate();
       await this.confirmReplacementButton.click();
     }
   }
@@ -514,6 +528,12 @@ class ManageTeamMember {
       await this.reviewScreenExisting(pcr);
       await this.reviewScreenNew(pcr);
     }
+  }
+
+  @Then("the correct start date is visible")
+  async inviteStartDateVisible() {
+    let date = this.generateEndDate(false);
+    await this.commands.getListItemFromKey("Start date", date, true, false, "after-startDate");
   }
 
   @Then("the user clicks Remove next to the existing associate")
@@ -570,6 +590,36 @@ class ManageTeamMember {
     await this.page.getByLabel("Day").fill("01");
     await this.page.getByLabel("Month").fill(month);
     await this.page.getByLabel("Year").fill(year);
+  }
+
+  @When("the user accesses the {string} PCL")
+  async accessPcl(contactName: string) {
+    await this.page.getByLabel("Tabs").getByTitle("Contacts").filter({ hasText: "Contacts" }).click();
+    const row = this.sfdcPclTable.locator("tr").filter({ hasText: contactName });
+    await row.locator("td").nth(7).locator(`[data-label="Project Contact Link Name"]`).getByRole("link").click();
+  }
+
+  @Then("the user will see the end date populated")
+  async endDatePopulated() {
+    let endDate = this.generateEndDate(true);
+    console.log(endDate);
+    await expect(
+      this.commands.getByFieldID("RecordAcc_EndDate_cField").getByRole("listitem").filter({ hasText: endDate }),
+    ).toBeVisible();
+  }
+
+  @Then("the PM has logged in and created a PCR")
+  async noFcCreatePcr() {
+    await this.accUserswitcher.switchToUser("pmUser");
+    await this.accNavigation.gotoProjectChangeRequests();
+    await this.userClicksCreate();
+    await this.startRequestPage();
+  }
+
+  @Then("the {string} button should not exist")
+  async pageWithoutFc(buttonName: string) {
+    await expect(this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." })).toBeVisible();
+    await expect(this.page.getByRole("button")).not.toContainText(buttonName);
   }
 
   // **METHODS**
@@ -648,6 +698,12 @@ class ManageTeamMember {
       await expect(this.page.getByText(hint)).toBeVisible();
       await this.checkInviteLabelsExist();
       await expect(this.inviteOrgLabel).toHaveText("Organisation");
+      await expect(this.whatIsProposedDate).toBeVisible();
+      await expect(this.proposedDateHint).toBeVisible();
+      await expect(this.dayLabel).toBeVisible();
+      await expect(this.monthLabel).toBeVisible();
+      await expect(this.yearLabel).toBeVisible();
+      await expect(this.inviteOrgLabel).toBeVisible();
       await expect(this.confirmReplacementButton).toBeVisible();
       await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await expect(this.page.getByRole("link").filter({ hasText: "Cancel" })).toBeVisible();
@@ -655,10 +711,12 @@ class ManageTeamMember {
       await this.commands.heading("Replace finance contact");
       await expect(this.backManageTeam).toBeVisible();
       await expect(this.page.getByText(this.replaceFcGuidance)).toBeVisible();
+      await expect(this.fcToBeReplacedLabel).toBeVisible();
       await expect(
         this.page.getByRole("button").filter({ hasText: "Confirm replacement and send invitation" }),
       ).toBeDisabled();
       await this.page.getByRole("link").filter({ hasText: "Cancel" }).isVisible();
+
       for (const fc of this.fcDropdownList) {
         await this.page.getByRole("combobox").selectOption(fc);
       }
@@ -668,6 +726,12 @@ class ManageTeamMember {
       await this.checkInviteLabelsExist();
       await expect(this.replaceFcSubheading).toBeVisible();
       await expect(this.page.getByText(this.replaceFcHint)).toBeVisible();
+      await expect(this.whatIsProposedDate).toBeVisible();
+      await expect(this.proposedDateHint).toBeVisible();
+      await expect(this.dayLabel).toBeVisible();
+      await expect(this.monthLabel).toBeVisible();
+      await expect(this.yearLabel).toBeVisible();
+      await expect(this.inviteOrgLabel).toBeVisible();
       await expect(this.confirmReplacementButton).toBeVisible();
       await expect(this.confirmReplacementButton).toHaveCSS("background-color", "rgb(212, 53, 28)");
       await expect(this.cancelLink).toBeVisible();
@@ -675,8 +739,8 @@ class ManageTeamMember {
       await expect(this.page.getByRole("heading").filter({ hasText: "Invite a new associate" })).toBeVisible();
       await expect(this.backManageTeam).toBeVisible();
       await expect(this.page.getByText(this.associateGuidance)).toBeVisible();
+      await expect(this.startDateLabel).toBeVisible();
       await this.checkInviteLabelsExist();
-      await expect(this.inviteOrgLabel).toBeVisible();
       await expect(
         this.page.locator("css=#hint-for-partnerId").filter({ hasText: "Hedge's Secondary Ltd." }),
       ).toBeVisible();
@@ -754,12 +818,14 @@ class ManageTeamMember {
     let lastName: string;
     let emailAddress: string;
     let role: string;
+    let endDate: string;
     const context = this.projectState.context as TwoParticipantKTPProjectFactoryScriptContext;
     if (pcr === "Replace project manager") {
       firstName = "Project";
       lastName = "Manager";
       emailAddress = String(context.pmPcl.Acc_EmailOfSFContact__c);
       role = "Project Manager";
+      endDate = "End date";
     } else if (pcr === "Replace finance contact") {
       firstName = "Main Finance";
       lastName = "Contact";
@@ -789,11 +855,18 @@ class ManageTeamMember {
     let lastName = (await this.getUserDetails(pcr)).lastName;
     let emailAddress = (await this.getUserDetails(pcr)).emailAddress;
     let role = (await this.getUserDetails(pcr)).role;
+    let date: string;
+    if (pcr === "Manage team members") {
+      date = this.commands.dateToday(true);
+    } else {
+      date = this.generateEndDate(false);
+    }
     const existingData = [
       ["First name", firstName, "before-firstName"],
       ["Last name", lastName, "before-lastName"],
       ["Email address", emailAddress, "before-email"],
       ["Role", role, "before-role"],
+      ["End date", date, "before-endDate"],
     ];
     if (pcr === "Manage team members") {
       await expect(this.page.getByRole("heading").filter({ hasText: "Team member being removed" })).toBeVisible();
@@ -818,7 +891,6 @@ class ManageTeamMember {
     } else if (pcr === "Invite a new associate") {
       role = "Associate";
     }
-
     const newData = [
       ["First name", "Joe", "after-firstName"],
       ["Last name", "Bloggs", "after-lastName"],
@@ -831,17 +903,16 @@ class ManageTeamMember {
     }
   }
 
-  @Then("the PM has logged in and created a PCR")
-  async noFcCreatePcr() {
-    await this.accUserswitcher.switchToUser("pmUser");
-    await this.accNavigation.gotoProjectChangeRequests();
-    await this.userClicksCreate();
-    await this.startRequestPage();
-  }
-
-  @Then("the {string} button should not exist")
-  async pageWithoutFc(buttonName: string) {
-    await expect(this.page.getByRole("paragraph").filter({ hasText: "No contacts exist." })).toBeVisible();
-    await expect(this.page.getByRole("button")).not.toContainText(buttonName);
+  generateEndDate(numeric: boolean) {
+    let date = new Date();
+    let month: string;
+    let year = date.getFullYear() + 1;
+    if (numeric) {
+      month = date.toLocaleDateString("en-GB", { month: "2-digit" });
+      return `01/${month}/${year}`;
+    } else {
+      month = date.toLocaleDateString("en-GB", { month: "long" });
+      return `1 ${month} ${year}`;
+    }
   }
 }

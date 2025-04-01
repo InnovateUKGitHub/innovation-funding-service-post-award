@@ -56,6 +56,7 @@ export class CreatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
       lastName: this.dto.lastName,
       email: this.dto.email,
       role: this.dto.role,
+      endDate: this.dto.endDate,
     };
   }
 
@@ -93,6 +94,7 @@ export class CreatePcrReplaceTeamMemberCommand extends ZodAuthorisedAsyncCommand
       {
         Id: this.dto.pclId,
         Acc_Replaced__c: true,
+        Acc_EndDate__c: validatedData.endDate?.toISOString(),
       },
     ]);
 

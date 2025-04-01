@@ -37,6 +37,39 @@ Feature: Manage team member
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
+    Scenario Outline: Validating Replace project manager date fields
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace project manager" button
+        Then the user will see the Replace project manager page
+
+        When the user enters invalid "<information>" in the date "<field>"
+        And the user clicks the "Send invitation" button
+        Then the user will see the date validation "<message>"
+
+        When a correct and valid date is entered as the start date
+        Then the validation messages will dynamically disappear
+
+        Examples:
+            | information | field | message                                               |
+            |             | Day   | End date must include a day.                          |
+            |             | Month | End date must include a month.                        |
+            |             | Year  | End date must include a year.                         |
+            | 32          | Day   | End date must be a real date.                         |
+            | 2000        | Day   | End date must be a real date.                         |
+            | lorem       | Day   | End date must be a real date.                         |
+            | &^%         | Day   | End date must be a real date.                         |
+            | -01         | Day   | End date must be a real date.                         |
+            | 13          | Month | End date must be a real date.                         |
+            | 2000        | Month | End date must be a real date.                         |
+            | lorem       | Month | End date must be a real date.                         |
+            | &^%         | Month | End date must be a real date.                         |
+            | -01         | Month | End date must be a real date.                         |
+            | 1066        | Year  | End date must be the same as or after 1 January 2000. |
+            | 1999        | Year  | End date must be the same as or after 1 January 2000. |
+            | lorem       | Year  | End date must be a real date.                         |
+            | &^%         | Year  | End date must be a real date.                         |
+            | -01         | Year  | End date must be the same as or after 1 January 2000. |
+
     Scenario: Validating the Replace finance contact page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace finance contact" button
@@ -53,6 +86,39 @@ Feature: Manage team member
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
+    Scenario Outline: Validating Replace finance contact date fields
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace finance contact" button
+        Then the user will see the Replace finance contact page
+
+        When the user enters invalid "<information>" in the date "<field>"
+        And the user clicks the "Send invitation" button
+        Then the user will see the date validation "<message>"
+
+        When a correct and valid date is entered as the start date
+        Then the validation messages will dynamically disappear
+
+        Examples:
+            | information | field | message                                               |
+            |             | Day   | End date must include a day.                          |
+            |             | Month | End date must include a month.                        |
+            |             | Year  | End date must include a year.                         |
+            | 32          | Day   | End date must be a real date.                         |
+            | 2000        | Day   | End date must be a real date.                         |
+            | lorem       | Day   | End date must be a real date.                         |
+            | &^%         | Day   | End date must be a real date.                         |
+            | -01         | Day   | End date must be a real date.                         |
+            | 13          | Month | End date must be a real date.                         |
+            | 2000        | Month | End date must be a real date.                         |
+            | lorem       | Month | End date must be a real date.                         |
+            | &^%         | Month | End date must be a real date.                         |
+            | -01         | Month | End date must be a real date.                         |
+            | 1066        | Year  | End date must be the same as or after 1 January 2000. |
+            | 1999        | Year  | End date must be the same as or after 1 January 2000. |
+            | lorem       | Year  | End date must be a real date.                         |
+            | &^%         | Year  | End date must be a real date.                         |
+            | -01         | Year  | End date must be the same as or after 1 January 2000. |
+
     Scenario: Validating the Replace knowledge base administrator page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace knowledge base administrator" button
@@ -68,6 +134,39 @@ Feature: Manage team member
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
 
+    Scenario Outline: Validating Replace KB Admin date fields
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace knowledge base administrator" button
+        Then the user will see the Replace knowledge base administator page
+
+        When the user enters invalid "<information>" in the date "<field>"
+        And the user clicks the "Send invitation" button
+        Then the user will see the date validation "<message>"
+
+        When a correct and valid date is entered as the start date
+        Then the validation messages will dynamically disappear
+
+        Examples:
+            | information | field | message                                               |
+            |             | Day   | End date must include a day.                          |
+            |             | Month | End date must include a month.                        |
+            |             | Year  | End date must include a year.                         |
+            | 32          | Day   | End date must be a real date.                         |
+            | 2000        | Day   | End date must be a real date.                         |
+            | lorem       | Day   | End date must be a real date.                         |
+            | &^%         | Day   | End date must be a real date.                         |
+            | -01         | Day   | End date must be a real date.                         |
+            | 13          | Month | End date must be a real date.                         |
+            | 2000        | Month | End date must be a real date.                         |
+            | lorem       | Month | End date must be a real date.                         |
+            | &^%         | Month | End date must be a real date.                         |
+            | -01         | Month | End date must be a real date.                         |
+            | 1066        | Year  | End date must be the same as or after 1 January 2000. |
+            | 1999        | Year  | End date must be the same as or after 1 January 2000. |
+            | lorem       | Year  | End date must be a real date.                         |
+            | &^%         | Year  | End date must be a real date.                         |
+            | -01         | Year  | End date must be the same as or after 1 January 2000. |
+
     Scenario: Validating the Replace main company contact page
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace main company contact" button
@@ -82,6 +181,39 @@ Feature: Manage team member
 
         When the form is completed with 80 characters
         Then the validation messages will dynamically disappear
+
+    Scenario Outline: Validating Replace main company contact date fields
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace main company contact" button
+        Then the user will see the Replace main company contact page
+
+        When the user enters invalid "<information>" in the date "<field>"
+        And the user clicks the "Send invitation" button
+        Then the user will see the date validation "<message>"
+
+        When a correct and valid date is entered as the start date
+        Then the validation messages will dynamically disappear
+
+        Examples:
+            | information | field | message                                               |
+            |             | Day   | End date must include a day.                          |
+            |             | Month | End date must include a month.                        |
+            |             | Year  | End date must include a year.                         |
+            | 32          | Day   | End date must be a real date.                         |
+            | 2000        | Day   | End date must be a real date.                         |
+            | lorem       | Day   | End date must be a real date.                         |
+            | &^%         | Day   | End date must be a real date.                         |
+            | -01         | Day   | End date must be a real date.                         |
+            | 13          | Month | End date must be a real date.                         |
+            | 2000        | Month | End date must be a real date.                         |
+            | lorem       | Month | End date must be a real date.                         |
+            | &^%         | Month | End date must be a real date.                         |
+            | -01         | Month | End date must be a real date.                         |
+            | 1066        | Year  | End date must be the same as or after 1 January 2000. |
+            | 1999        | Year  | End date must be the same as or after 1 January 2000. |
+            | lorem       | Year  | End date must be a real date.                         |
+            | &^%         | Year  | End date must be a real date.                         |
+            | -01         | Year  | End date must be the same as or after 1 January 2000. |
 
     #This step previously failed until ticket ACC-11681 was resolved
     Scenario: Validating the Invite associate page
@@ -157,11 +289,25 @@ Feature: Manage team member
             | 11    | 2035 |
             | 12    | 2026 |
 
+    Scenario: Completing and submitting Replace project manager
+        When the user creates a "Manage team members" PCR
+        And the user clicks the "Replace project manager" button
+        And the user submits a valid "Replace project manager" PCR
+        Then a "Replace project manager" confirmation screen is displayed
+
+        When the user accesses the Project Factory project in Salesforce
+        And the user accesses the "Project Manager" PCL
+        Then the user will see the end date populated
+
     Scenario: Completing and submitting Replace finance contact
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace finance contact" button
         And the user submits a valid "Replace finance contact" PCR
         Then a "Replace finance contact" confirmation screen is displayed
+
+        When the user accesses the Project Factory project in Salesforce
+        And the user accesses the "Main Finance Contact" PCL
+        Then the user will see the end date populated
 
     Scenario: Completing and submitting Replace knowledge base administrator
         When the user creates a "Manage team members" PCR
@@ -169,23 +315,26 @@ Feature: Manage team member
         And the user submits a valid "Replace knowledge base administrator" PCR
         Then a "Replace knowledge base administrator" confirmation screen is displayed
 
+        When the user accesses the Project Factory project in Salesforce
+        And the user accesses the "Knowledge Base" PCL
+        Then the user will see the end date populated
+
     Scenario: Completing and submitting Replace main company contact
         When the user creates a "Manage team members" PCR
         And the user clicks the "Replace main company contact" button
         And the user submits a valid "Replace main company contact" PCR
         Then a "Replace main company contact" confirmation screen is displayed
 
-    Scenario: Completing and submitting Replace project manager
-        When the user creates a "Manage team members" PCR
-        And the user clicks the "Replace project manager" button
-        And the user submits a valid "Replace project manager" PCR
-        Then a "Replace project manager" confirmation screen is displayed
+        When the user accesses the Project Factory project in Salesforce
+        And the user accesses the "Main Contact" PCL
+        Then the user will see the end date populated
 
     Scenario: Completing and submitting Invite a new associate
         When the user creates a "Manage team members" PCR
         And the user clicks the "Invite associate" button
         And the user submits a valid "Invite a new associate" PCR
         Then a "Invite a new associate" confirmation screen is displayed
+        And the correct start date is visible
 
     Scenario: Removing an existing associate
         When the user creates a "Manage team members" PCR

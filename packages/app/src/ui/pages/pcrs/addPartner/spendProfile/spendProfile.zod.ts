@@ -12,31 +12,48 @@ import {
 } from "@ui/zod/helperValidators/helperValidators.zod";
 import { ZodIssueCode, z } from "zod";
 import { getTextValidation } from "@ui/zod/textareaValidator.zod";
+import { head } from "lodash";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "spendProfile"] });
 
 const description = getTextValidation({ required: true, maxLength: 1_000 });
-export const labourSchema = z.object({
-  id: costIdValidation.nullable(),
-  form: z.literal(FormTypes.PcrAddPartnerProjectCostLabour),
-  labourDescription: description,
-  grossCostOfRole: getGenericCurrencyValidation({
-    required: true,
-  }),
-  ratePerDay: getGenericCurrencyValidation({
-    required: true,
-  }),
-  daysSpentOnProject: getNumberValidation({
-    max: 1_000_000,
-    min: 0,
-    integer: true,
-    required: true,
-  }),
-  costCategoryType: z.nativeEnum(CostCategoryType),
-  costCategoryId: costCategoryIdValidation,
-  overheadCostId: costIdValidation.nullable(),
-  labourProfile: z.array(z.object({ id: costIdValidation, value: z.number().nullable() })),
-});
+const maxTotalCost = 10_000_000_000_000_000;
+export const labourSchema = z
+  .object({
+    id: costIdValidation.nullable(),
+    form: z.literal(FormTypes.PcrAddPartnerProjectCostLabour),
+    labourDescription: description,
+    grossCostOfRole: getGenericCurrencyValidation({
+      required: true,
+    }),
+    ratePerDay: getGenericCurrencyValidation({
+      required: true,
+    }),
+    daysSpentOnProject: getNumberValidation({
+      max: 1_000_000,
+      min: 0,
+      integer: true,
+      required: true,
+    }),
+    costCategoryType: z.nativeEnum(CostCategoryType),
+    costCategoryId: costCategoryIdValidation,
+    overheadCostId: costIdValidation.nullable(),
+    labourProfile: z.array(z.object({ id: costIdValidation, value: z.number().nullable() })),
+  })
+  .superRefine((data, ctx) => {
+    const totalCostString =
+      head(String(parseCurrency(data?.ratePerDay ?? "0") * data?.daysSpentOnProject).split(".")) ?? "0";
+
+    if (totalCostString.length > 16) {
+      ctx.addIssue({
+        code: ZodIssueCode.too_big,
+        maximum: maxTotalCost,
+        inclusive: true,
+        type: "number",
+        path: ["totalCost"],
+      });
+    }
+  });
 
 export type LabourSchemaType = typeof labourSchema;
 export type LabourSchema = z.infer<typeof labourSchema>;
@@ -154,8 +171,6 @@ export const capitalUsageSchema = z.object({
 
 export type CapitalUsageSchemaType = typeof capitalUsageSchema;
 export type CapitalUsageSchema = z.infer<typeof capitalUsageSchema>;
-
-const maxTotalCost = 10_000_000_000_000;
 
 export const travelAndASubsistenceSchema = z
   .object({

@@ -107,6 +107,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   manageTeamMemberEmail?: string | null;
   manageTeamMemberRole?: ProjectRole | null;
   manageTeamMemberAssociateStartDate?: Date | null;
+  manageTeamMemberEndDate?: Date | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

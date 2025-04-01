@@ -10,12 +10,12 @@ import { H3 } from "@ui/components/atoms/Heading/Heading.variants";
 import { Hint } from "@ui/components/atoms/form/Hint/Hint";
 import { P } from "@ui/components/atoms/Paragraph/Paragraph";
 import { Button } from "@ui/components/atoms/form/Button/Button";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useContext, useMemo } from "react";
 import { SpendProfileContext } from "./spendProfileCosts.logic";
 import { SpendProfilePreparePage } from "./spendProfilePageComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { labourSchema, errorMap, LabourSchema } from "./spendProfile.zod";
+import { labourSchema, errorMap, LabourSchema, LabourSchemaType } from "./spendProfile.zod";
 import {
   MaybeNewCostDto,
   PCRSpendProfileCostDto,
@@ -28,6 +28,10 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { useOnUpdateLabour } from "./labour.logic";
 import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
+import { ValidationError } from "@ui/components/atoms/validation/ValidationError/ValidationError";
+import { z, ZodError } from "zod";
+import { FormGroup } from "@ui/components/atoms/form/FormGroup/FormGroup";
+import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 /**
  * getOverhead
@@ -70,6 +74,12 @@ const isLabourCostDto = function (
   );
 };
 
+type LabourFieldErrors = FieldErrors<z.output<LabourSchemaType>>;
+
+const isTotalCostError = (
+  errors: LabourFieldErrors | (LabourFieldErrors & { totalCost: ZodError }),
+): errors is LabourFieldErrors & { totalCost: ZodError } => "totalCost" in errors;
+
 export const LabourFormComponent = () => {
   const { cost, costCategory, routes, pcrId, projectId, itemId, costCategoryId, addNewItem, spendProfile } =
     useContext(SpendProfileContext);
@@ -96,8 +106,7 @@ export const LabourFormComponent = () => {
   }
 
   const { isClient } = useMounted();
-
-  const { handleSubmit, watch, formState, register, setError } = useForm<LabourSchema>({
+  const { handleSubmit, watch, formState, register, setError, trigger } = useForm<LabourSchema>({
     defaultValues: {
       id: defaultCost.id,
       form: FormTypes.PcrAddPartnerProjectCostLabour,
@@ -121,6 +130,7 @@ export const LabourFormComponent = () => {
 
   const validationErrors = useZodErrors(setError, formState?.errors) as ValidationErrorType<LabourSchema>;
 
+  useFormRevalidate(watch, trigger);
   const { apiError, isFetching, onUpdate } = useOnUpdateLabour();
   return (
     <SpendProfilePreparePage validationErrors={validationErrors} apiError={apiError}>
@@ -202,13 +212,21 @@ export const LabourFormComponent = () => {
           </Field>
 
           {isClient && (
-            <>
+            <FormGroup hasError={isTotalCostError(formState.errors)}>
               <H3>{getContent(x => x.pcrSpendProfileLabels.labour.totalCost)}</H3>
               <Hint id="hint-for-total-cost">{getContent(x => x.pcrSpendProfileLabels.labour.totalCostHint)}</Hint>
+
+              {isTotalCostError(formState.errors) && (
+                <ValidationError
+                  id="error-for-total-cost"
+                  data-qa="error-for-total-cost"
+                  error={formState.errors.totalCost}
+                />
+              )}
               <P>
                 <Currency id="total-cost" value={totalCost} />
               </P>
-            </>
+            </FormGroup>
           )}
         </Fieldset>
 

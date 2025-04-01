@@ -4,15 +4,16 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLLegendElement>, HTMLLegendElement> & {
   "data-qa"?: string;
   isSubQuestion?: boolean;
+  notBold?: boolean;
 };
 
-export const Legend = ({ className, isSubQuestion, ...rest }: Props) => (
+export const Legend = ({ className, isSubQuestion, notBold, ...rest }: Props) => (
   <legend
     className={cx(
       "govuk-fieldset__legend",
       {
-        "govuk-fieldset__legend--s": isSubQuestion,
-        "govuk-fieldset__legend--m": !isSubQuestion,
+        "govuk-fieldset__legend--s": isSubQuestion && !notBold,
+        "govuk-fieldset__legend--m": !isSubQuestion && !notBold,
       },
       className,
     )}

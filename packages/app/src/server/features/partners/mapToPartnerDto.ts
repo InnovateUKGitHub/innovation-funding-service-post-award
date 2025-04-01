@@ -199,7 +199,7 @@ export class PartnerSpendProfileStatusMapper {
 export class BankDetailsTaskStatusMapper {
   private readonly options = {
     toDo: "To Do",
-    incomplete: "In progress",
+    incomplete: "Incomplete",
     complete: "Complete",
   };
 

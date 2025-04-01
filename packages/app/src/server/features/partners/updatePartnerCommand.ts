@@ -195,7 +195,7 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
         }
       }
 
-      await context.repositories.partners.update({
+      const updateData = {
         ...update,
         Acc_Postcode__c: mergedPartner.postcode ?? undefined,
         Acc_NewForecastNeeded__c: isBoolean(mergedPartner.newForecastNeeded)
@@ -205,9 +205,13 @@ export class UpdatePartnerCommand extends ZodAuthorisedAsyncCommandBase<
         Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(
           this.form === FormTypes.ProjectSetupBankStatement
             ? BankDetailsTaskStatus.Complete
-            : mergedPartner.bankDetailsTaskStatus,
+            : this.form === FormTypes.ProjectSetupBankDetails
+              ? BankDetailsTaskStatus.Incomplete
+              : mergedPartner.bankDetailsTaskStatus,
         ),
-      });
+      };
+
+      await context.repositories.partners.update(updateData);
       return true;
     } catch (e) {
       return Promise.reject(e);
