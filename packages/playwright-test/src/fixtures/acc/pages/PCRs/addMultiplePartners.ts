@@ -49,6 +49,13 @@ class AddMultiplePartners {
 
     }
 
+    async addAnotherSource(index: number) {
+        for (let i = 0; i < index; i++) {
+          await this.commands.button("Add another source of funding").click();
+          await this.page.waitForTimeout(2000);
+        }
+      }
+
     @When('the user completes the new partner info')
     async newPartnerInfo() {
         await this.addPartner.govRadioButtons("Collaborator");
@@ -152,6 +159,21 @@ class AddMultiplePartners {
         await this.tsbRef.fill(tsbRef);
         await this.govInput.nth(1).fill("£10000");
     }
+
+
+  @When("the user enters the funding data below:")
+  async enterFunding(dataTable: DataTable) {
+    await this.page.waitForTimeout(2000);
+    await this.addAnotherSource(20);
+
+    const tableData = dataTable.hashes().map(row => ({
+      fund: row.fund,
+      mm: row.mm.toString().padStart(2, "0"),
+      yyyy: row.yyyy.toString(),
+      cost: row.cost.toString(),
+    }));
+    await this.addPartner.enterTableData(tableData);
+  }
 
     @Then('the user sees the pcr summary')
     async getSummaryPage(){

@@ -190,9 +190,10 @@ Feature: Lead partner
       | Gross | 100          |
       | Rate  | 100000000000 |
       | Days  | 1000000      |
-  # And the user clicks save and return to labour
-  # Then the following validation errors should be displayed:
-  #  | Total cost must be less than £10,000,000,000,000.00. |
+    And the user clicks save and return to labour
+    Then the following validation errors should be displayed:
+      | Total cost must be less than £10,000,000,000,000,000.00. |
+    And the total field level error must be "Total cost must be less than £10,000,000,000,000,000.00."
 
   Scenario: Add another cost
     Given the user is on the spend profile page
@@ -243,17 +244,19 @@ Feature: Lead partner
     And the user clicks save and return to project
     Then total cost categories should be "£202,836.00"
 
-  Scenario: Materials page
+  Scenario: Materials page - ACC 11926
     Given the user is on the spend profile page
     And the user is on the materials page
-    When the user enters the following materials costs
+    When the user enters the following materials costs 
       | Field    | Value        |
       | Item     | Test         |
       | Quantity | 999999       |
       | Cost     | 999999999999 |
     And the user clicks save and return to materials
     Then the following validation errors should be displayed:
-      | Total cost must be less than £10,000,000,000,000.00. |
+      | Total cost must be less than £10,000,000,000,000,000.00. |
+    And the total field level error must be "Total cost must be less than £10,000,000,000,000,000.00."
+
     And the user clicks back to materials
     When the user enters the following materials costs twenty times
       | Field    | Value   |
@@ -418,7 +421,7 @@ Feature: Lead partner
     Given the user is on the pcr request details page
     When the user completes the reasons section
     And the user clicks Submit request
-    Then the project change request should be submitted. 
-    
+    Then the project change request should be submitted.
+
 
 

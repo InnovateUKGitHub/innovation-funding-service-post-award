@@ -67,7 +67,7 @@ Feature: Add multiple partners
 
     Scenario: Other funding
         Given the user is on the other public sector funding page
-        When the user enters the following table data:
+        When the user enters the funding data below:
             | fund        | mm | yyyy | cost  |
             | Olu         | 01 | 2024 | £1000 |
             | Allan       | 02 | 2023 | 1500  |
@@ -136,7 +136,7 @@ Feature: Add multiple partners
 
     Scenario: Funding
         Given the user is on the Other public sector funding page
-        When the user enters the following table data:
+        When the user enters the funding data below:
             | fund      | mm | yyyy | cost  |
             | dave      | 01 | 2024 | £1000 |
             | user      | 02 | 2023 | 500   |

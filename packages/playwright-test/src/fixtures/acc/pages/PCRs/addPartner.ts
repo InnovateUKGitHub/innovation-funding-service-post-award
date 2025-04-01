@@ -844,6 +844,12 @@ class AddPartner {
       expect(errorText.trim()).toBe(expectedErrors[i]);
     }
   }
+
+  @Then('the total field level error must be {string}')
+  async costCategoryTotal(total: string) {
+    const fieldError = await this.page.locator("//*[text()='Total cost']//following::p[1]").textContent();
+    expect(fieldError.trim()).toContain(total);
+  }
   // non state aid
   @Given("the user is on the non aid page")
   async nonAid() {
