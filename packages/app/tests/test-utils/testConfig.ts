@@ -17,6 +17,8 @@ export class TestConfig implements IConfig {
     cookie: 1,
     token: 1,
     contentRefreshSeconds: 0,
+    clientside: 0,
+    clientsideWarning: 0,
   };
 
   public certificates = {

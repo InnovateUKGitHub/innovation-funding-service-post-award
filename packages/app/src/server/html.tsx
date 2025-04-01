@@ -108,6 +108,7 @@ export function renderHtml({
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
 
           <div id="root">${html}</div>
+          <div id="modal"></div>
 
           <script nonce="${nonce}">
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted

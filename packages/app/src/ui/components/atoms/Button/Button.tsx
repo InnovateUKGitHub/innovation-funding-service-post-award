@@ -13,7 +13,7 @@ export const Button = ({ className, styling, qa, ...props }: StyledButtonProps) 
   const { setRef } = useGovFrontend("Button");
 
   const getButtonTypeClass = (type: StyledButtonProps["styling"]) => {
-    const govukButton = "govuk-button govuk-!-margin-right-1";
+    const govukButton = "govuk-button";
 
     const buttonTypeMap = {
       Primary: govukButton,

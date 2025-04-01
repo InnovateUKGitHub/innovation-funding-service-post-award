@@ -74,6 +74,7 @@ import { ManageTeamMembersCreateRoute } from "@ui/pages/pcrs/manageTeamMembers/a
 import { ManageTeamMembersReplaceRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberReplace.page";
 import { ManageTeamMembersUpdateRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberUpdate.page";
 import { ManageTeamMembersDeleteRoute } from "@ui/pages/pcrs/manageTeamMembers/actions/ManageTeamMemberDelete.page";
+import { SessionTimeoutPage } from "@ui/app/SessionTimeout.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -143,6 +144,7 @@ export const routeConfig = {
   projectManageTeamMembersDashboard: ManageTeamMembersDashboardRoute,
   reviewClaim: ReviewClaimRoute,
   reviewClaimLineItems: ReviewClaimLineItemsRoute,
+  sessionTimeoutPage: SessionTimeoutPage,
   forecastDashboard: ForecastDashboardRoute,
   viewForecast: ViewForecastRoute,
   forecastUpdate: UpdateForecastRoute,

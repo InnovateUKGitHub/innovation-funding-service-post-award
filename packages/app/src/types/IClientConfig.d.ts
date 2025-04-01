@@ -14,4 +14,8 @@ export interface IClientConfig {
       enabled: boolean;
     };
   };
+  timeouts: {
+    clientsideWarning: number;
+    clientside: number;
+  };
 }

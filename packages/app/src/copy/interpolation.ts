@@ -128,6 +128,23 @@ const registerIntlFormatter = () => {
     return value;
   });
 
+  i18next.services.formatter?.add("timestampDuration", value => {
+    if (typeof value !== "number") return value;
+
+    const valInSecs = value / 1000;
+    const seconds = Math.floor(valInSecs % 60);
+    const minutes = Math.floor(valInSecs / 60);
+
+    if (minutes <= 0 && seconds <= 0) return "now";
+
+    const sections: string[] = [];
+
+    if (minutes) sections.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
+    if (seconds) sections.push(`${seconds} second${seconds === 1 ? "" : "s"}`);
+
+    return "in " + sections.join(" and ");
+  });
+
   i18next.services.formatter?.add("replace", (value, _, options) => {
     const { searchValue, replaceValue } = options ?? {};
     if (typeof value === "string") return value.replaceAll(searchValue, replaceValue);

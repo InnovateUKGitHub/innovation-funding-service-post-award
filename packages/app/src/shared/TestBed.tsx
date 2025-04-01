@@ -66,6 +66,10 @@ export function TestBed({
       maxClaimLineItems: 120,
       nonJsMaxClaimLineItems: 10,
     },
+    timeouts: {
+      clientside: 0,
+      clientsideWarning: 0,
+    },
     ifsRoot: "https://ifs-accdev.apps.ocp4.org.innovateuk.ukri.org",
     ssoEnabled: false,
     logLevel: "VERBOSE",

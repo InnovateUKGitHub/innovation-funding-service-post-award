@@ -10,7 +10,8 @@
       "navigation": {
         "dashboard": "Dashboard",
         "profile": "Profile",
-        "signOut": "Sign Out"
+        "signOut": "Sign Out",
+        "signIn": "Sign in"
       }
     },
     "footer": {
@@ -282,6 +283,13 @@
     "projectSuspensionMessage": {
       "message": "Please note this project is currently under suspension",
       "subMessage": "Some project participants will not be able to submit any claims or project change requests. Please email askoperations@iuk.ukri.org for further information."
+    },
+    "sessionTimeoutWarningModal": {
+      "sectionTitle": "Your session will time out soon",
+      "log": "Time till timeout: {{ timeout, timestampDuration }}",
+      "message": "We will log you off if you do not respond {{ timeout, timestampDuration }}. We do this to keep your information secure.",
+      "continueWorking": "Continue working",
+      "signOut": "Sign out"
     }
   },
   "pages": {
@@ -306,6 +314,11 @@
         "display": "Page not found"
       },
       "goBackMessage": "Please check the web address or search term you entered for any errors. You can return to <0>your dashboard</0> or go back to the <1>Innovate UK homepage</1>."
+    },
+    "sessionTimeout": {
+      "title": "You have been signed out",
+      "message": "You have been signed out and any information you have not saved has been deleted because you did not do anything for {{ timeout, timestampDuration }}. This is to protect your information.",
+      "signIn": "Sign back in"
     },
     "home": {
       "title": "Home",

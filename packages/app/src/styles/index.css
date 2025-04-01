@@ -1,5 +1,4 @@
 @import url("./govuk-frontend-4.9.0.css");
-@import url("./ifspa-govuk-overrides-modal.css");
 @import url("./ifspa-govuk-overrides-sticky-table.css");
 @import url("./ifspa-govuk-overrides-summary-list.css");
 @import url("./ifspa-govuk-overrides.css");
@@ -7,6 +6,7 @@
 @import url("./ifspa-developer-section.css");
 @import url("./ifspa-logs-table.css");
 @import url("./ifspa-links-list.css");
+@import url("./_ifspa-modal.css");
 @import url("./_ifspa-forecast-table.css");
 @import url("./_ifspa-claim-line-item-table.css");
 @import url("./ifspa-govuk-5-shim.css");

@@ -32,6 +32,8 @@ export interface IConfig {
     readonly recordTypes: number;
     readonly token: number;
     readonly cookie: number;
+    readonly clientsideWarning: number;
+    readonly clientside: number;
     readonly contentRefreshSeconds: number;
   };
 

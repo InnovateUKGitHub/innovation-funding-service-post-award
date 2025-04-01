@@ -27,6 +27,8 @@ import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { useMessageContext } from "@ui/context/messages";
 import { BasePropsContext } from "@framework/api-helpers/useBaseProps";
 import { useServerErrorContext } from "@ui/context/server-error";
+import { SessionTimeoutWarningModal } from "@ui/components/molecules/modal/SessionTimeoutWarningModal/SessionTimeoutWarningModal";
+import { Copy } from "@copy/Copy";
 
 interface IAppProps {
   currentRoute: AnyRouteDefinition;
@@ -113,31 +115,31 @@ interface AppRoute {
 export function App({ relayEnvironment }: AppRoute) {
   const routesList = getRoutes();
   const error = useServerErrorContext();
+
   return (
     <RelayEnvironmentProvider environment={relayEnvironment}>
-      <ErrorBoundary
-        fallbackRender={errorProps => (
-          <MountedProvider>
-            <ErrorBoundaryFallback {...errorProps} />
-          </MountedProvider>
-        )}
-      >
-        <RoutesProvider value={routeConfig}>
-          <MountedProvider>
-            <Routes>
-              {error ? (
-                <Route path="*" element={<AppView currentRoute={ErrorRoute} />} />
-              ) : (
-                routesList
-                  .map(([routeKey, route]) => (
-                    <Route key={routeKey} path={route.routePath} element={<AppView currentRoute={route} />} />
-                  ))
-                  .concat([<Route key="*" path="*" element={<AppView currentRoute={ErrorNotFoundRoute} />} />])
-              )}
-            </Routes>
-          </MountedProvider>
-        </RoutesProvider>
-      </ErrorBoundary>
+      <MountedProvider>
+        <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...errorProps} />}>
+          <>
+            <RoutesProvider value={routeConfig}>
+              <Routes>
+                {error ? (
+                  <Route path="*" element={<AppView currentRoute={ErrorRoute} />} />
+                ) : (
+                  routesList
+                    .map(([routeKey, route]) => (
+                      <Route key={routeKey} path={route.routePath} element={<AppView currentRoute={route} />} />
+                    ))
+                    .concat([<Route key="*" path="*" element={<AppView currentRoute={ErrorNotFoundRoute} />} />])
+                )}
+              </Routes>
+            </RoutesProvider>
+            <ContentProvider value={new Copy()}>
+              <SessionTimeoutWarningModal />
+            </ContentProvider>
+          </>
+        </ErrorBoundary>
+      </MountedProvider>
     </RelayEnvironmentProvider>
   );
 }

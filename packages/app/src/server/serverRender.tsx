@@ -306,6 +306,10 @@ function getClientConfig(): IClientConfig {
     accEnvironment: configuration.accEnvironment,
     logLevel: configuration.logLevel,
     developer: { oidc: { enabled: configuration.developer.oidc.enabled } },
+    timeouts: {
+      clientside: configuration.timeouts.clientside,
+      clientsideWarning: configuration.timeouts.clientsideWarning,
+    },
   };
 }
 

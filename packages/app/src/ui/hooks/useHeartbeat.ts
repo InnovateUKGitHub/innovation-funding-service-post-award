@@ -1,36 +1,37 @@
-import { useEffect } from "react";
+import { useClientConfig } from "@ui/context/ClientConfigProvider";
+import { useCallback, useMemo } from "react";
+import { useLocalStorage } from "./useLocalStorage";
+import { useUserContext } from "@ui/context/user";
 
-const heartbeatDebounceTime = 3000;
-let heartbeatTimeoutId: number;
+const useSessionTimeout = () => {
+  const [timeoutTimestamp, setTimeoutTimestamp] = useLocalStorage<number>("acc-timeout", Number.MAX_SAFE_INTEGER);
+  const config = useClientConfig();
+  const user = useUserContext();
 
-/**
- * sends a heartbeat to the server three seconds after the last keypress
- */
-function sendHeartbeat() {
-  window.clearTimeout(heartbeatTimeoutId);
+  const { timeoutMillis, warningMillis } = useMemo(() => {
+    if (config.timeouts.clientside <= 0 || user.email === "") {
+      return {
+        timeoutMillis: Infinity,
+        warningMillis: Infinity,
+      };
+    }
 
-  heartbeatTimeoutId = window.setTimeout(() => {
-    fetch("/heartbeat");
-  }, heartbeatDebounceTime);
-}
-
-/**
- * useHeartbeat adds event listeners to the window to send heartbeat calls.
- * Heartbeat calls serve to prevent the session from timing out while the user is
- * actively typing or clicking
- */
-function useHeartbeat() {
-  useEffect(() => {
-    addEventListener("keydown", sendHeartbeat);
-    addEventListener("click", sendHeartbeat);
-    addEventListener("scrollend", sendHeartbeat);
-
-    return () => {
-      removeEventListener("keydown", sendHeartbeat);
-      removeEventListener("click", sendHeartbeat);
-      removeEventListener("scrollend", sendHeartbeat);
+    return {
+      timeoutMillis: config.timeouts.clientside * 60 * 1000,
+      warningMillis: config.timeouts.clientsideWarning * 60 * 1000,
     };
-  }, []);
-}
+  }, [config]);
 
-export { useHeartbeat };
+  const extendTimeout = useCallback(() => {
+    if (user.email !== "") setTimeoutTimestamp(Date.now() + timeoutMillis);
+  }, [setTimeoutTimestamp, timeoutMillis]);
+
+  const getTimeout = useCallback(() => {
+    if (user.email === "") return { timeTillTimeout: Infinity };
+    return { timeTillTimeout: timeoutTimestamp - Date.now() };
+  }, [timeoutTimestamp, timeoutMillis, warningMillis]);
+
+  return { extendTimeout, timeoutTimestamp, getTimeout, timeoutMillis, warningMillis };
+};
+
+export { useSessionTimeout };

@@ -149,3 +149,8 @@ export enum AccEnvironment {
 
   UNKNOWN = "",
 }
+
+export enum LogoutReason {
+  SESSION_TIMEOUT = "session_timeout",
+  DEFAULT = "",
+}

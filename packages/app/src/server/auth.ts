@@ -15,6 +15,8 @@ import { getPassportOidcStrategy, passportOidcSuccessRoute } from "./development
 import { getErrorResponse } from "@framework/util/errorHandlers";
 import { UnauthenticatedError } from "@shared/appError";
 import { matchRoute } from "@ui/routing/matchRoute";
+import { LogoutReason } from "@framework/constants/enums";
+import { SessionTimeoutPage } from "@ui/app/SessionTimeout.page";
 
 const logger = new Logger("Auth");
 
@@ -59,14 +61,20 @@ const getAuthRouter = async () => {
     })
     .get("/developer/oidc/login", noCache, passport.authenticate("passportOidc"))
     .get("/login", noCache, passport.authenticate("passportSaml"))
-    .get("/logout", noCache, (_req, res) => {
+    .get("/logout", noCache, (req, res) => {
       res.cookie(cookieName, "", {
         expires: new Date("1970-01-01"),
         secure: configuration.cookie.secure,
         httpOnly: true,
       });
 
-      return res.redirect((configuration.sso.enabled && configuration.sso.signoutUrl) || "/");
+      switch (req.params.reason) {
+        case LogoutReason.SESSION_TIMEOUT:
+          return res.redirect(SessionTimeoutPage.routePath);
+        case LogoutReason.DEFAULT:
+        default:
+          return res.redirect((configuration.sso.enabled && configuration.sso.signoutUrl) || "/");
+      }
     })
     .get(passportOidcSuccessRoute, (req, res) =>
       passport.authenticate("passportOidc", (authError: AnyObject, payload: AnyObject) => {

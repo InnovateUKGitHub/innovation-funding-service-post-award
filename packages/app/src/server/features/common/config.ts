@@ -29,6 +29,8 @@ const configuration: Readonly<IConfig> = {
     optionsLookup: floatEnv("OPTIONS_LOOKUP_TIMEOUT_MINUTES", 720),
     token: floatEnv("TOKEN_TIMEOUT_MINUTES", 10),
     cookie: floatEnv("COOKIE_TIMEOUT_MINUTES", 30),
+    clientsideWarning: floatEnv("CLIENTSIDE_WARNING_TIMEOUT_MINUTES", 5),
+    clientside: floatEnv("CLIENTSIDE_TIMEOUT_MINUTES", 20),
     contentRefreshSeconds: floatEnv("CONTENT_REFRESH_TIMEOUT_SECONDS", 0),
   },
   certificates: {
