@@ -8,6 +8,8 @@ import { ClientConfigProvider } from "@ui/context/ClientConfigProvider";
 import { IClientConfig } from "../types/IClientConfig";
 import { AccEnvironment } from "@framework/constants/enums";
 import { RenderHookOptions } from "@testing-library/react";
+import { UserProvider } from "@ui/context/user";
+import { IClientUser } from "@framework/types/IUser";
 
 export interface ITestBedProps {
   children: React.ReactElement;
@@ -22,6 +24,7 @@ export interface ITestBedProps {
    */
   shouldOmitRouterProvider?: boolean;
   extendClientConfig?: (config: RecursiveMutable<IClientConfig>) => void;
+  extendClientUser?: (config: RecursiveMutable<IClientUser>) => void;
 }
 
 /**
@@ -36,6 +39,7 @@ export function TestBed({
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
   extendClientConfig,
+  extendClientUser,
 }: ITestBedProps) {
   const clientConfig = {
     features: {
@@ -81,8 +85,15 @@ export function TestBed({
     },
   };
 
+  const clientUser: IClientUser = {
+    csrf: "stub-csrf",
+    email: "ace.biscuits@example.com",
+    roleInfo: {},
+  };
+
   // Modify the clientConfig if the TextBed wants to.
   extendClientConfig?.(clientConfig);
+  extendClientUser?.(clientUser);
 
   // Note: We need a way of upfront toggling this can use 'MountedProvider'
   const testBedMountState = { isServer, isClient: !isServer };
@@ -91,11 +102,13 @@ export function TestBed({
 
   const Providers = (
     <mountedContext.Provider value={testBedMountState}>
-      <ClientConfigProvider config={clientConfig}>
-        <PageTitleProvider title={pageTitle}>
-          <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
-        </PageTitleProvider>
-      </ClientConfigProvider>
+      <UserProvider value={clientUser}>
+        <ClientConfigProvider config={clientConfig}>
+          <PageTitleProvider title={pageTitle}>
+            <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
+          </PageTitleProvider>
+        </ClientConfigProvider>
+      </UserProvider>
     </mountedContext.Provider>
   );
 

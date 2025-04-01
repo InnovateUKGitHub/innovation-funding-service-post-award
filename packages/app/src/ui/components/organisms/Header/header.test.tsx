@@ -21,9 +21,13 @@ describe("Header", () => {
     headingLink: "https://www.ukri.org/",
   };
 
-  const setup = (props?: Partial<HeaderProps>) =>
+  const setup = ({ props, auth = true }: { props?: Partial<HeaderProps>; auth?: boolean } = {}) =>
     render(
-      <TestBed>
+      <TestBed
+        extendClientUser={user => {
+          if (auth === false) user.email = "";
+        }}
+      >
         <Header {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -35,7 +39,7 @@ describe("Header", () => {
   describe("@renders", () => {
     it("should return heading link", () => {
       const stubHeadingLink = "https://stub-link.me";
-      const { getByText } = setup({ headingLink: stubHeadingLink });
+      const { getByText } = setup({ props: { headingLink: stubHeadingLink } });
 
       const siteLink = getByText(stubContent.site.header.siteName);
 
@@ -51,7 +55,7 @@ describe("Header", () => {
 
       it("with mobile toggle and label", () => {
         // No items no menu or toggle is shown
-        const { queryByTestId, queryByText } = setup({ showMenu: true });
+        const { queryByTestId, queryByText } = setup({ props: { showMenu: true } });
 
         const mobileNavigationLabel = queryByText(stubContent.site.header.mobileNavigationLabel);
 
@@ -63,7 +67,7 @@ describe("Header", () => {
 
     describe("without navigation items", () => {
       it("with showMenu false", () => {
-        const { queryAllByTestId } = setup({ showMenu: false });
+        const { queryAllByTestId } = setup({ props: { showMenu: false } });
 
         const navItems = queryAllByTestId("header-navigation-item");
 
@@ -71,28 +75,33 @@ describe("Header", () => {
       });
     });
 
-    it("with navigation items", () => {
-      const { queryByTestId, queryAllByTestId } = setup({});
+    describe("with navigation items", () => {
+      test.each(["with", "without"])("$1 authentication", (isAuth: string) => {
+        const { queryByTestId, queryAllByTestId } = setup({ auth: isAuth === "with" });
 
-      const expectedNavItems = queryAllByTestId("header-navigation-item");
+        const expectedNavItems = queryAllByTestId("header-navigation-item");
 
-      const stubNavItems = [
-        { qa: "nav-dashboard", href: /dashboard-selection/ },
-        { qa: "nav-profile", href: /profile\/view/ },
-        { qa: "nav-sign-out", href: /logout/ },
-      ];
+        const stubNavItems =
+          isAuth === "with"
+            ? [
+                { qa: "nav-dashboard", href: /dashboard-selection/ },
+                { qa: "nav-profile", href: /profile\/view/ },
+                { qa: "nav-sign-out", href: /logout/ },
+              ]
+            : [{ qa: "nav-sign-in", href: "https://ifs-accdev.apps.ocp4.org.innovateuk.ukri.org" }];
 
-      expect(expectedNavItems).toHaveLength(stubNavItems.length);
+        expect(expectedNavItems).toHaveLength(stubNavItems.length);
 
-      // Note: check object renders with expected properties
-      for (const stubItem of stubNavItems) {
-        const item = queryByTestId(stubItem.qa);
+        // Note: check object renders with expected properties
+        for (const stubItem of stubNavItems) {
+          const item = queryByTestId(stubItem.qa);
 
-        if (!item) throw Error(`${stubItem.qa} was not found!`);
+          if (!item) throw Error(`${stubItem.qa} was not found!`);
 
-        expect(item).toBeInTheDocument();
-        expect(item.getAttribute("href")).toMatch(stubItem.href);
-      }
+          expect(item).toBeInTheDocument();
+          expect(item.getAttribute("href")).toMatch(stubItem.href);
+        }
+      });
     });
   });
 });
