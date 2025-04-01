@@ -50,6 +50,7 @@ import { ClaimLineItemsOrdering } from "./acc/pages/Claims/claimLineItemsOrderin
 import { AddMultiplePartners } from "./acc/pages/PCRs/addMultiplePartners";
 import { AccProjectSetup } from "./projectFactory/AccProjectSetup";
 import { ProjectSetup } from "./acc/pages/Project Setup/projectSetup";
+import { ReallocateProjectCosts } from "./acc/pages/PCRs/reallocateProjectCosts";
 
 type AccFixtures = {
   // Pages
@@ -77,8 +78,10 @@ type AccFixtures = {
   loanDrawdownChange: LoanDrawdownChange;
   addLeadPartner: AddLeadPartner;
   claimLineItemsOrdering: ClaimLineItemsOrdering;
-  addMultiplePartners: AddMultiplePartners
+  addMultiplePartners: AddMultiplePartners;
   projectSetup: ProjectSetup;
+
+  reallocateProjectCosts: ReallocateProjectCosts;
 
   // Misc
   accNavigation: AccNavigation;
@@ -168,11 +171,13 @@ export const test = base.extend<AccFixtures, Workers>({
     use(new LoanDrawdownChange({ page, commands, projectChangeRequests, loanDrawdowns })),
   addLeadPartner: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddLeadPartner({ page, commands, projectChangeRequests, addPartner })),
-  claimLineItemsOrdering: ({ page, commands }, use) =>
-    use(new ClaimLineItemsOrdering({ page, commands })),
+  claimLineItemsOrdering: ({ page, commands }, use) => use(new ClaimLineItemsOrdering({ page, commands })),
   addMultiplePartners: ({ page, commands, projectChangeRequests, addPartner }, use) =>
     use(new AddMultiplePartners({ page, commands, projectChangeRequests, addPartner })),
   projectSetup: ({ page, commands, viewForecast }, use) => use(new ProjectSetup({ page, commands, viewForecast })),
+
+  reallocateProjectCosts: ({ page, commands, projectChangeRequests, accNavigation, accUserSwitcher }, use) =>
+    use(new ReallocateProjectCosts({ page, commands, projectChangeRequests, accNavigation, accUserSwitcher })),
 
   // Project Factory
   accProjectBase: [

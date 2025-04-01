@@ -184,7 +184,7 @@ class RemovePartner {
   @When("the user marks as complete and saves")
   async markCompleteSave() {
     await expect(this.markCompleteHeading).toBeVisible();
-    await this.iAgreeCheckBox.click();
+    await this.iAgreeCheckBox.check();
     await this.saveAndReturnToRequest.click();
   }
 
