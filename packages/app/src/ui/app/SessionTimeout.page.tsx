@@ -13,7 +13,7 @@ const SessionTimeoutContainer = () => {
   return (
     <Page isActive qa="not-found" pageTitle={<PageTitle />}>
       <Section>
-        <P>{getContent(x => x.pages.sessionTimeout.message({ timeout: config.timeouts.clientside }))}</P>
+        <P>{getContent(x => x.pages.sessionTimeout.message({ timeout: config.timeouts.clientside * 60 * 1000 }))}</P>
         <div className="govuk-button-group">
           <a className="govuk-button" href={config.ifsRoot}>
             {getContent(x => x.pages.sessionTimeout.signIn)}

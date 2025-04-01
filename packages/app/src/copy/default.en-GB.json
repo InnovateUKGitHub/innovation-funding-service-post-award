@@ -287,7 +287,7 @@
     "sessionTimeoutWarningModal": {
       "sectionTitle": "Your session will time out soon",
       "log": "Time till timeout: {{ timeout, timestampDuration }}",
-      "message": "We will log you off if you do not respond {{ timeout, timestampDuration }}. We do this to keep your information secure.",
+      "message": "We will log you off if you do not respond {{ timeout, timestampDuration(prefix: 'now') }}. We do this to keep your information secure.",
       "continueWorking": "Continue working",
       "signOut": "Sign out"
     }

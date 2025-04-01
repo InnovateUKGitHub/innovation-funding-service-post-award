@@ -1,3 +1,4 @@
+import { LogoutReason } from "@framework/constants/enums";
 import { Logger } from "@innovateuk/logger";
 import { Button } from "@ui/components/atoms/Button/Button";
 import { H2 } from "@ui/components/atoms/Heading/Heading.variants";
@@ -29,7 +30,9 @@ const SessionTimeoutWarningModal = () => {
           setTimeTillTimeout(timeTillTimeout);
         } else if (timeTillTimeout < 0) {
           logger.debug("Timeout reached, redirecting to '/logout'...");
-          window.location.pathname = "/logout";
+          const newLoc = new URL("/logout", location.href);
+          newLoc.searchParams.set("reason", LogoutReason.SESSION_TIMEOUT);
+          location.assign(newLoc);
           clearTimeout(checkTimer);
         } else {
           setShowModal(false);

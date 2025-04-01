@@ -128,7 +128,8 @@ const registerIntlFormatter = () => {
     return value;
   });
 
-  i18next.services.formatter?.add("timestampDuration", value => {
+  i18next.services.formatter?.add("timestampDuration", (value, _, options) => {
+    const { prefix } = options ?? {};
     if (typeof value !== "number") return value;
 
     const valInSecs = value / 1000;
@@ -142,7 +143,15 @@ const registerIntlFormatter = () => {
     if (minutes) sections.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
     if (seconds) sections.push(`${seconds} second${seconds === 1 ? "" : "s"}`);
 
-    return "in " + sections.join(" and ");
+    let result = "";
+    if (prefix) {
+      result += prefix;
+      result += " ";
+    }
+
+    result += sections.join(" and ");
+
+    return result;
   });
 
   i18next.services.formatter?.add("replace", (value, _, options) => {

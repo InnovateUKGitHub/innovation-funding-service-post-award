@@ -68,7 +68,7 @@ const getAuthRouter = async () => {
         httpOnly: true,
       });
 
-      switch (req.params.reason) {
+      switch (req.query.reason) {
         case LogoutReason.SESSION_TIMEOUT:
           return res.redirect(SessionTimeoutPage.routePath);
         case LogoutReason.DEFAULT:
