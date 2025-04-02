@@ -56,6 +56,10 @@ class PocAuthGateway {
     await this.clickDropdownBox("RecordAward_type__cField");
     await this.page.waitForTimeout(2000);
     await this.clickDropdownItem("RecordAward_type__cField", "A. This is a new initiative");
+    await this.clickDropdownBox("RecordA6_Is_this_part_of_existing_IFS_Award__cField");
+    await this.clickDropdownItem("RecordA6_Is_this_part_of_existing_IFS_Award__cField", "Yes");
+    await this.addOptionFromDualList("RecordSU6_2_Sectors_to_be_funded_cField", "Copper production");
+    await this.removeOptionFromDualList("RecordSU6_2_Sectors_to_be_funded_cField", "Copper production");
   }
   /**
    * METHODS
@@ -68,6 +72,27 @@ class PocAuthGateway {
 
   async clickDropdownItem(fieldId: string, filterText: string) {
     await this.getByFieldID(fieldId).locator("lightning-base-combobox-item").filter({ hasText: filterText }).click();
+  }
+
+  //Tools for dual picklists
+
+  async addOptionFromDualList(fieldId: string, option: string) {
+    await this.getByFieldID(fieldId)
+      .getByRole("listbox")
+      .nth(0)
+      .getByRole("option")
+      .filter({ hasText: option })
+      .click();
+    await this.page.getByTitle("Move to chosen").click();
+  }
+  async removeOptionFromDualList(fieldId: string, option: string) {
+    await this.getByFieldID(fieldId)
+      .getByRole("listbox")
+      .nth(1)
+      .getByRole("option")
+      .filter({ hasText: option })
+      .click();
+    await this.page.getByTitle("Move to available").click();
   }
 
   //Tools to locate elements using a SF-specific id.
