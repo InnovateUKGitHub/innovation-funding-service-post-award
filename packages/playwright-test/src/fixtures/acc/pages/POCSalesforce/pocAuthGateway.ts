@@ -58,8 +58,11 @@ class PocAuthGateway {
     await this.clickDropdownItem("RecordAward_type__cField", "A. This is a new initiative");
     await this.clickDropdownBox("RecordA6_Is_this_part_of_existing_IFS_Award__cField");
     await this.clickDropdownItem("RecordA6_Is_this_part_of_existing_IFS_Award__cField", "Yes");
+    await this.enterDate("RecordDesign_Approved_date_cField1", this.approvedDateGenerator());
     await this.addOptionFromDualList("RecordSU6_2_Sectors_to_be_funded_cField", "Copper production");
     await this.removeOptionFromDualList("RecordSU6_2_Sectors_to_be_funded_cField", "Copper production");
+    await this.clickDropdownBox("RecordSU6_4_Subsidy_Category_or_exemption_cField");
+    await this.clickDropdownItem("RecordSU6_4_Subsidy_Category_or_exemption_cField", "Streamlined Subsidy Routes");
   }
   /**
    * METHODS
@@ -92,7 +95,12 @@ class PocAuthGateway {
       .getByRole("option")
       .filter({ hasText: option })
       .click();
-    await this.page.getByTitle("Move to available").click();
+    await this.page.getByTitle("Move to Available").click();
+  }
+
+  async enterDate(fieldId: string, date: string) {
+    await this.getByFieldID(fieldId).scrollIntoViewIfNeeded();
+    await this.getByFieldID(fieldId).locator("lightning-datepicker").locator("input").fill(date);
   }
 
   //Tools to locate elements using a SF-specific id.
@@ -126,5 +134,10 @@ class PocAuthGateway {
 
   suffixGenerator() {
     return String(Math.floor(Math.random() * 9999 + 10000 + 1));
+  }
+
+  approvedDateGenerator() {
+    const date = new Date();
+    return String(date.toLocaleDateString("en-GB", { day: "numeric", month: "numeric", year: "numeric" }));
   }
 }
