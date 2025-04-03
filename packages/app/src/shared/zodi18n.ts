@@ -137,6 +137,7 @@ const generatePossibleCopyStrings = ({
           addToPath(key);
         }
       }
+      paths.push("forms.errors.invalid");
     }
   }
   return paths;

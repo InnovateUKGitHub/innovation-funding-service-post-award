@@ -2283,11 +2283,11 @@
       "months": "months"
     },
     "errors": {
-      "invalid": "A validation error occurred.",
+      "invalid": "Field '{{issue.path}}' received an invalid value and code: '{{issue.code}}'.",
       "invalid_string": {
         "email": "Enter a valid email address."
       },
-      "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form.",
+      "invalid_literal": "Schema field '{{issue.path}}' received an invalid zod literal, '{{issue.received}}'.",
       "generic": {
         "textarea": {
           "required": "Enter {{label, key, lowercase}}.",
