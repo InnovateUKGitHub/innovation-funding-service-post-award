@@ -3207,7 +3207,8 @@
               "missing_date": "Enter a start date.",
               "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "Start date must be a real date.",
-              "too_small": "Start date must be the same as or after {{ minimum, datetime }}."
+              "too_small": "Start date must be the same as or after {{ minimum, datetime }}.",
+              "too_big": "Start date must be the same as or before {{ maximum, datetime }}."
             }
           },
           "endDate": {
@@ -3215,7 +3216,8 @@
               "missing_date": "Enter an end date.",
               "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "End date must be a real date.",
-              "too_small": "End date must be the same as or after {{ minimum, datetime }}."
+              "too_small": "End date must be the same as or after {{ minimum, datetime }}.",
+              "too_big": "End date must be the same as or before {{ maximum, datetime }}."
             }
           },
           "associateStartDate": {
@@ -3223,7 +3225,8 @@
               "missing_date": "Enter a start date.",
               "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "Start date must be a real date.",
-              "too_small": "Start date must be the same as or after {{ minimum, datetime }}."
+              "too_small": "Start date must be the same as or after {{ minimum, datetime }}.",
+              "too_big": "Start date must be the same as or before {{ maximum, datetime }}."
             }
           },
           "associateEndDate": {
@@ -3231,7 +3234,8 @@
               "missing_date": "Enter an end date.",
               "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "End date must be a real date.",
-              "too_small": "End date must be the same as or after {{ minimum, datetime }}."
+              "too_small": "End date must be the same as or after {{ minimum, datetime }}.",
+              "too_big": "End date must be the same as or before {{ maximum, datetime }}."
             }
           }
         }
@@ -3269,7 +3273,8 @@
             "missing_date": "Enter a start date.",
             "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
             "invalid_date": "Start date must be a real date.",
-            "too_small": "Start date must be the same as or after 1 January 2000."
+            "too_small": "Start date must be the same as or after {{ minimum, datetime }}.",
+            "too_big": "Start date must be the same as or before {{ maximum, datetime }}."
           }
         },
         "endDate": {
@@ -3277,7 +3282,8 @@
             "missing_date": "Enter an end date.",
             "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
             "invalid_date": "End date must be a real date.",
-            "too_small": "End date must be the same as or after 1 January 2000."
+            "too_small": "End date must be the same as or after {{ minimum, datetime }}.",
+            "too_big": "End date must be the same as or before {{ maximum, datetime }}."
           }
         }
       }

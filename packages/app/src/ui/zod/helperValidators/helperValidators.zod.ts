@@ -10,6 +10,7 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { monthNameToNumber } from "@shared/date-helpers";
 
 const y2k = new Date("2000-01-01");
+const y3k = new Date("3000-01-01");
 
 const projectIdValidation = z
   .string()
@@ -205,7 +206,8 @@ const getMultiFileValidation = (options: IAppOptions) =>
       }
     });
 
-const getDateValidation = ({ minimum }: { minimum?: Date | { day: string; month: string; year: string } } = {}) =>
+type ParsableDate = Date | { day: string; month: string; year: string };
+const getDateValidation = ({ minimum, maximum }: { minimum?: ParsableDate; maximum?: ParsableDate } = {}) =>
   z
     .union([
       z.date(),
@@ -249,6 +251,7 @@ const getDateValidation = ({ minimum }: { minimum?: Date | { day: string; month:
     ])
     .superRefine((x, ctx) => {
       let min = y2k;
+      let max = y3k;
 
       if (minimum instanceof Date) {
         // Use minimum date as-is
@@ -259,10 +262,28 @@ const getDateValidation = ({ minimum }: { minimum?: Date | { day: string; month:
         if (success) min = data;
       }
 
+      if (maximum instanceof Date) {
+        // Use maximum date as-is
+        min = maximum;
+      } else if (maximum) {
+        // Parse maximum date if object
+        const { success, data } = getDateValidation().safeParse(maximum);
+        if (success) max = data;
+      }
+
       if (x < min) {
         ctx.addIssue({
           code: ZodIssueCode.too_small,
           minimum: min.getTime(),
+          inclusive: false,
+          type: "date",
+        });
+      }
+
+      if (x > max) {
+        ctx.addIssue({
+          code: ZodIssueCode.too_big,
+          maximum: max.getTime(),
           inclusive: false,
           type: "date",
         });
