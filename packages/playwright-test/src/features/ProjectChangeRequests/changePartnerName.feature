@@ -16,6 +16,7 @@ Feature: Change a partner's name PCR
 
         When the user submits a valid Change a partner's name PCR
         Then the user will see the submitted page for "Change a partner's name"
+        And the Salesforce Marked as complete status is "Complete"
 
     Scenario: Reviewing a Change a partner's name PCR
         Given a multi-partner CR&D project exists

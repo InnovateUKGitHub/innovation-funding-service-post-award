@@ -156,8 +156,7 @@ class ChangeProjectScope {
 
   @When("the user clicks an Edit button")
   async followEditToCorrectPage() {
-    await this.descriptionEditLink.click();
-    await expect(this.publishedDescriptionTitle).toBeVisible();
+    await this.clickPubDescriptionEdit();
     await this.commands.validationLink(this.enterPubDescription);
     await expect(this.page.getByRole("paragraph").filter({ hasText: this.enterPubDescription })).toBeVisible();
     await this.textBox.fill("Description test");
@@ -171,6 +170,12 @@ class ChangeProjectScope {
     await this.summaryEditLink.click();
     await expect(this.publishedSummaryTitle).toBeVisible();
     await this.saveContinueButton.click();
+  }
+
+  @When("the user clicks Edit against Public description")
+  async clickPubDescriptionEdit() {
+    await this.descriptionEditLink.click();
+    await expect(this.publishedDescriptionTitle).toBeVisible();
   }
 
   @Then("the user is brought to the project description page")
@@ -246,6 +251,17 @@ class ChangeProjectScope {
       await expect(this.page.locator(`//dl//div[${i}]//dd[2]`).filter({ hasText: "Edit" })).not.toBeVisible();
       i++;
     }
+  }
+
+  @Then("the user will see the Proposed project summary page")
+  async proposeSummaryPage() {
+    await expect(this.proposedPubSummary).toBeVisible();
+  }
+
+  @When("the user saves a change to the Project description")
+  async updateTextBoxAndSave() {
+    await this.page.getByRole("textbox").fill("This is a test message.");
+    await this.saveContinueButton.click();
   }
 
   /**
