@@ -59,7 +59,9 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
     };
   }
 
-  protected dtoIsUnValidated(dto: UpdatePartnerBankDetailsDto): dto is z.output<UnValidatedSchema> {
+  protected dtoIsUnValidated(
+    dto: Omit<UpdatePartnerBankDetailsDto, "bankCheckRetryAttempts">,
+  ): dto is z.output<UnValidatedSchema> {
     return (
       dto.bankCheckStatus === BankCheckStatus.NotValidated || dto.bankCheckStatus === BankCheckStatus.ValidationFailed
     );

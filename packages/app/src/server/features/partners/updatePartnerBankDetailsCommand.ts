@@ -16,6 +16,7 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { z } from "zod";
 import { UpdatePartnerBankDetailsDto } from "@server/apis/partners";
 import { BankDetailsTaskStatusMapper } from "@framework/mappers/bankTaskStatus";
+import { configuration } from "../../features/common/config";
 
 export class UpdatePartnerBankDetailsCommand extends ZodAuthorisedAsyncCommandBase<
   { bankCheckStatus: BankCheckStatus },
@@ -29,12 +30,14 @@ export class UpdatePartnerBankDetailsCommand extends ZodAuthorisedAsyncCommandBa
   protected dto: UpdatePartnerBankDetailsDto;
 
   private savedPartner: PartnerDto | null = null;
+  private bankCheckRetryAttempts: number = 0;
 
   constructor(projectId: ProjectId, partnerId: PartnerId, partner: UpdatePartnerBankDetailsDto) {
     super();
     this.dto = partner;
     this.projectId = projectId;
     this.partnerId = partnerId;
+    this.bankCheckRetryAttempts = partner.bankCheckRetryAttempts;
   }
 
   async accessControl(auth: Authorisation) {
@@ -52,7 +55,9 @@ export class UpdatePartnerBankDetailsCommand extends ZodAuthorisedAsyncCommandBa
     };
   }
 
-  protected dtoIsUnValidated(dto: UpdatePartnerBankDetailsDto): dto is z.output<UnValidatedSchema> {
+  protected dtoIsUnValidated(
+    dto: Omit<UpdatePartnerBankDetailsDto, "bankCheckRetryAttempts">,
+  ): dto is z.output<UnValidatedSchema> {
     return dto.bankCheckStatus === BankCheckStatus.NotValidated;
   }
 
@@ -99,7 +104,7 @@ export class UpdatePartnerBankDetailsCommand extends ZodAuthorisedAsyncCommandBa
             context,
             validatedData.sortCode,
             validatedData.accountNumber,
-            this.savedPartner.bankCheckRetryAttempts,
+            this.bankCheckRetryAttempts,
           );
         }
       }
@@ -142,7 +147,11 @@ export class UpdatePartnerBankDetailsCommand extends ZodAuthorisedAsyncCommandBa
       if (bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         await context.repositories.partners.update({
           Id: this.partnerId,
-          Acc_BankCheckState__c: new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationFailed),
+          Acc_BankCheckState__c: new BankCheckStatusMapper().mapToSalesforce(
+            bankCheckRetryAttempts >= configuration.options.bankCheckValidationRetries
+              ? BankCheckStatus.ValidationFailed
+              : BankCheckStatus.NotValidated,
+          ),
           Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(
             BankDetailsTaskStatus.Incomplete,
           ),

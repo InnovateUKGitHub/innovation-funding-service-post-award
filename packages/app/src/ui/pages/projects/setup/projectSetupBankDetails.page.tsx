@@ -23,10 +23,9 @@ import { BaseProps, defineRoute } from "@ui/app/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { UseFormRegister, useForm } from "react-hook-form";
-import { z } from "zod";
 import { useOnUpdateProjectSetupBankDetails, useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
 import {
-  ProjectSetupBankDetailsSchemaType,
+  ProjectSetupBankDetailsSchemaOutput,
   getProjectSetupBankDetailsSchema,
   projectSetupBankDetailsErrorMap,
 } from "./projectSetupBankDetails.zod";
@@ -42,15 +41,14 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
   const { getContent: c } = useContent();
   const { partner, fragmentRef } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
 
-  const defaults = useServerInput<z.output<ProjectSetupBankDetailsSchemaType>>();
+  const defaults = useServerInput<ProjectSetupBankDetailsSchemaOutput>();
 
-  const { register, handleSubmit, formState, setError, getFieldState, watch, trigger } = useForm<
-    z.output<ProjectSetupBankDetailsSchemaType>
-  >({
-    resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
-      errorMap: projectSetupBankDetailsErrorMap,
-    }),
-  });
+  const { register, handleSubmit, formState, setError, getFieldState, watch, trigger } =
+    useForm<ProjectSetupBankDetailsSchemaOutput>({
+      resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
+        errorMap: projectSetupBankDetailsErrorMap,
+      }),
+    });
 
   const { isServer } = useMounted();
   if (isServer && partner.bankCheckStatus === BankCheckStatus.ValidationFailed) {
@@ -62,7 +60,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
   }
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<ProjectSetupBankDetailsSchemaType>>(setError, formState.errors);
+  const allErrors = useZodErrors<ProjectSetupBankDetailsSchemaOutput>(setError, formState.errors);
 
   const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, {
     setError,
@@ -223,7 +221,7 @@ const SortCode = ({
   defaultValue,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
-  register: UseFormRegister<z.output<ProjectSetupBankDetailsSchemaType>>;
+  register: UseFormRegister<ProjectSetupBankDetailsSchemaOutput>;
   error?: TValidationError;
   disabled: boolean;
   defaultValue?: string;
@@ -266,7 +264,7 @@ const AccountNumber = ({
   defaultValue,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
-  register: UseFormRegister<z.output<ProjectSetupBankDetailsSchemaType>>;
+  register: UseFormRegister<ProjectSetupBankDetailsSchemaOutput>;
   disabled: boolean;
   error?: TValidationError;
   defaultValue?: string;
