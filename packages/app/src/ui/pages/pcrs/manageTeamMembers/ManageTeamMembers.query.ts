@@ -58,6 +58,9 @@ const manageTeamMembersQuery = graphql`
                       Acc_EmailOfSFContact__c {
                         value
                       }
+                      Acc_EndDate__c {
+                        value
+                      }
                     }
                   }
                 }

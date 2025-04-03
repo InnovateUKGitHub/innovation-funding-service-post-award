@@ -1,20 +1,24 @@
 import { ManageTeamMemberRole, ManageTeamMemberUpdateDeleteProps } from "../ManageTeamMember.logic";
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
-import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "@ui/app/containerBase";
 import { ManageEmailMessage } from "./components/ManageEmailMessage";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberNameInput } from "./components/inputs/ManageTeamMemberNameInput";
+import { ManageTeamMemberProjectParticipantInput } from "./components/inputs/ManageTeamMemberProjectParticipantInput";
+import { ManageTeamMemberEmailInput } from "./components/inputs/ManageTeamMemberEmailInput";
 
 const ManageTeamMemberUpdatePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.UPDATE}>
       <ManageTeamMemberForm>
         <ManageTeamMemberSection>
-          <ManageTeamMemberInputs />
+          <ManageTeamMemberNameInput />
+          <ManageTeamMemberProjectParticipantInput readOnly />
+          <ManageTeamMemberEmailInput readOnly />
           <ManageEmailMessage />
         </ManageTeamMemberSection>
         <ManageTeamMemberSubmitSection />

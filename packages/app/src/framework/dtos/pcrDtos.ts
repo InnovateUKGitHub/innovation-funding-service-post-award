@@ -586,6 +586,7 @@ export interface PcrDeleteTeamMemberDto {
   form: FormTypes.ProjectManageTeamMembersDelete;
   pclId: ProjectContactLinkId;
   role: ProjectRole;
+  endDate: Date;
 }
 
 export interface PcrAddPartnerProjectCost {

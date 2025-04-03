@@ -38,6 +38,11 @@ export class ManageTeamMemberPcrDeleteHandler extends ZodFormHandlerBase<
       form: input.form,
       role: input.role,
       pclId: input.pclId,
+      endDate: {
+        day: input["endDate.day"],
+        month: input["endDate.month"],
+        year: input["endDate.year"],
+      },
     };
   }
 
@@ -75,7 +80,7 @@ export class ManageTeamMemberPcrDeleteHandler extends ZodFormHandlerBase<
     await context.repositories.projectContacts.update([
       {
         Id: input.pclId,
-        Acc_EndDate__c: new Date().toISOString(),
+        Acc_EndDate__c: input.endDate.toISOString(),
       },
     ]);
 

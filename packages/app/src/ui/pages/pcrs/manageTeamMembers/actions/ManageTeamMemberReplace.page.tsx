@@ -2,12 +2,15 @@ import { ManageTeamMemberReplaceProps, ManageTeamMemberRole } from "../ManageTea
 import { BaseManageTeamMember, ManageTeamMemberModifyProps } from "./ManageTeamMemberCrud";
 import { ManageTeamMemberSection } from "./components/ManageTeamMemberSection";
 import { SelectTeamMember } from "./components/SelectTeamMember";
-import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 import { ProjectRolePermissionBits } from "@framework/constants/project";
 import { defineRoute } from "@ui/app/containerBase";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberNameInput } from "./components/inputs/ManageTeamMemberNameInput";
+import { ManageTeamMemberProjectParticipantInput } from "./components/inputs/ManageTeamMemberProjectParticipantInput";
+import { ManageTeamMemberEmailInput } from "./components/inputs/ManageTeamMemberEmailInput";
+import { ManageTeamMemberDateInput } from "./components/inputs/ManageTeamMemberDateInput";
 
 const ManageTeamMemberReplacePage = (props: ManageTeamMemberModifyProps) => {
   return (
@@ -15,7 +18,10 @@ const ManageTeamMemberReplacePage = (props: ManageTeamMemberModifyProps) => {
       <SelectTeamMember />
       <ManageTeamMemberForm>
         <ManageTeamMemberSection>
-          <ManageTeamMemberInputs />
+          <ManageTeamMemberNameInput />
+          <ManageTeamMemberProjectParticipantInput readOnly />
+          <ManageTeamMemberEmailInput />
+          <ManageTeamMemberDateInput visible type="startDate" />
         </ManageTeamMemberSection>
         <ManageTeamMemberSubmitSection />
       </ManageTeamMemberForm>

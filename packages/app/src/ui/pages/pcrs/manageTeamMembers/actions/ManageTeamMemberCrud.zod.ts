@@ -51,6 +51,7 @@ const deleteTeamMemberValidator = z.object({
   form: z.literal(FormTypes.ProjectManageTeamMembersDelete),
   pclId: pclIdValidation,
   role: z.nativeEnum(ProjectRole),
+  endDate: getDateValidation(),
 });
 
 const manageTeamMemberValidator = z.discriminatedUnion("form", [

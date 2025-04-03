@@ -1199,8 +1199,11 @@
           "lastName": "Last name",
           "email": "Email",
           "startDate": "Start date",
-          "endDate": "What is the proposed date of change?",
-          "endDateHint": "for example, 27 3 2007",
+          "endDate": "End date",
+          "existingEndDate": "Current end date",
+          "newEndDate": "New end date",
+          "dateOfChange": "What is the proposed date of change?",
+          "dateOfChangeHint": "for example, 27 3 2007",
           "changeEmail": "To change the email address, please contact customer support service by calling 0300 321 4357 or email [support@iuk.ukri.org](mailto:support@iuk.ukri.org)",
           "noneProvided": "None provided",
           "cancel": "Cancel",
@@ -1317,30 +1320,35 @@
               "title": "Confirm removal of project manager",
               "subtitle": "This page allows you to remove the below project manager. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove project manager",
+              "message": "You must confirm the end date to remove a project manager from the project.",
               "pclSelectPlaceholder": "-- Select a project manager --"
             },
             "financeContacts": {
               "title": "Confirm removal of finance contact",
               "subtitle": "This page allows you to remove the below finance contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove finance contact",
+              "message": "You must confirm the end date to remove a finance contact from the project.",
               "pclSelectPlaceholder": "-- Select a finance contact --"
             },
             "mainCompanyContacts": {
               "title": "Confirm removal of main company contact",
               "subtitle": "This page allows you to remove the below main company contact. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove main company contact",
+              "message": "You must confirm the end date to remove a main company contact from the project.",
               "pclSelectPlaceholder": "-- Select a main company contact --"
             },
             "knowledgeBaseAdministrators": {
               "title": "Confirm removal of knowledge base administrator",
               "subtitle": "This page allows you to remove the below knowledge base administrator. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove knowledge base administrator",
+              "message": "You must confirm the end date to remove a knowledge base administrator from the project.",
               "pclSelectPlaceholder": "-- Select a knowledge base administrator --"
             },
             "associates": {
               "title": "Confirm removal of associate",
               "subtitle": "This page allows you to remove the below associate. Once removed, they will no longer have access to the project unless they are added to the team again.",
               "apply": "Remove associate",
+              "message": "You must confirm the end date to remove an associate from the project.",
               "pclSelectPlaceholder": "-- Select an associate --"
             }
           }

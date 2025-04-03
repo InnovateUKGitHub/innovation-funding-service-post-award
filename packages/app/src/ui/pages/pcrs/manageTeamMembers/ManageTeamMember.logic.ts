@@ -134,6 +134,17 @@ const getManageTeamMember = ({
         defaultLastName = defaults?.lastName ?? memberToManage?.pcl?.lastName;
       }
       break;
+    case ManageTeamMemberMethod.DELETE:
+      {
+        defaultProjectContactLink = defaults?.pclId ?? memberToManage?.pclId ?? undefined;
+        defaultEndDay =
+          defaults?.endDate && "day" in defaults?.endDate ? defaults?.endDate.day : getDay(defaults?.endDate);
+        defaultEndMonth =
+          defaults?.endDate && "month" in defaults?.endDate ? defaults?.endDate.month : getMonth(defaults?.endDate);
+        defaultEndYear =
+          defaults?.endDate && "year" in defaults?.endDate ? defaults?.endDate.year : getYear(defaults?.endDate);
+      }
+      break;
   }
 
   return {
@@ -144,12 +155,16 @@ const getManageTeamMember = ({
       lastName: defaultLastName,
       projectParticipantId: defaultProjectParticipantId,
       email: defaultEmail,
-      startDay: defaultStartDay,
-      startMonth: defaultStartMonth,
-      startYear: defaultStartYear,
-      endDay: defaultEndDay,
-      endMonth: defaultEndMonth,
-      endYear: defaultEndYear,
+      startDate: {
+        day: defaultStartDay,
+        month: defaultStartMonth,
+        year: defaultStartYear,
+      },
+      endDate: {
+        day: defaultEndDay,
+        month: defaultEndMonth,
+        year: defaultEndYear,
+      },
     },
     hideBottomSection,
     filteredPartners,
@@ -178,7 +193,7 @@ const useManageTeamMembers = ({
 
 type PclData = Pick<
   ProjectContactDtoGql,
-  "accountId" | "contactId" | "id" | "name" | "role" | "email" | "firstName" | "lastName"
+  "accountId" | "contactId" | "id" | "name" | "role" | "email" | "firstName" | "lastName" | "endDate"
 >;
 type PartnerData = Pick<PartnerDto, "accountId" | "id" | "name">;
 
@@ -217,6 +232,7 @@ const useManageTeamMembersQuery = ({ projectId }: { projectId: ProjectId }) => {
     "email",
     "firstName",
     "lastName",
+    "endDate",
   ]);
 
   const { collated, categories } = useMemo(() => {

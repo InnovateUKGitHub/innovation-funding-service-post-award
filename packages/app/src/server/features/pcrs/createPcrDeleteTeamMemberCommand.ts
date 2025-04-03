@@ -54,6 +54,7 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
       form: this.form,
       pclId: this.dto.pclId,
       role: this.dto.role,
+      endDate: this.dto.endDate,
     };
   }
 
@@ -94,7 +95,7 @@ export class CreatePcrDeleteTeamMemberCommand extends ZodAuthorisedAsyncCommandB
     await context.repositories.projectContacts.update([
       {
         Id: this.dto.pclId,
-        Acc_EndDate__c: new Date().toISOString(),
+        Acc_EndDate__c: validatedData.endDate.toISOString(),
       },
     ]);
 
