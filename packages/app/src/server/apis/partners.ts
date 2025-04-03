@@ -16,7 +16,9 @@ import { z } from "zod";
 
 export type UpdatePartnerPostcodeDto = z.output<PostcodeSchema>;
 
-export type UpdatePartnerBankDetailsDto = z.output<ProjectSetupBankDetailsSchemaType>;
+export type UpdatePartnerBankDetailsDto = z.output<ProjectSetupBankDetailsSchemaType> & {
+  bankCheckRetryAttempts: number;
+};
 
 export type UpdatePartnerBankStatementDto = z.output<BankStatementSchema>;
 export type UpdatePartnerProjectSetupDto = z.output<ProjectSetupSchema>;

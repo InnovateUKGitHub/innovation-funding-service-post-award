@@ -45,12 +45,16 @@ const unvalidatedProjectSetupBankDetailsSchema = z
   })
   .merge(validatedProjectSetupBankDetailsSchema);
 
-type ProjectSetupBankDetailsSchemaType = ReturnType<typeof getProjectSetupBankDetailsSchema>;
+export type ProjectSetupBankDetailsSchemaType = ReturnType<typeof getProjectSetupBankDetailsSchema>;
+export type ProjectSetupBankDetailsSchemaOutput<T extends BankCheckStatus = BankCheckStatus.NotValidated> = T extends
+  | BankCheckStatus.NotValidated
+  | BankCheckStatus.ValidationPassed
+  ? z.output<typeof unvalidatedProjectSetupBankDetailsSchema>
+  : z.output<typeof validatedProjectSetupBankDetailsSchema>;
 
 export {
   projectSetupBankDetailsErrorMap,
   getProjectSetupBankDetailsSchema,
-  ProjectSetupBankDetailsSchemaType,
   projectSetupBankDetailsMaxLength,
   ValidatedSchema,
   UnValidatedSchema,

@@ -10,11 +10,10 @@ import { useRoutes } from "@ui/context/routesProvider";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { ErrorCode } from "@framework/constants/enums";
 import { BankCheckError } from "@shared/appError";
-import { UseFormSetError } from "react-hook-form";
+import type { UseFormSetError } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
 import { useClientConfig } from "@ui/context/ClientConfigProvider";
-import { ProjectSetupBankDetailsSchemaType } from "./projectSetupBankDetails.zod";
-import { z } from "zod";
+import type { ProjectSetupBankDetailsSchemaOutput } from "./projectSetupBankDetails.zod";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { useRef } from "react";
 
@@ -52,7 +51,11 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
 export const useOnUpdateProjectSetupBankDetails = (
   projectId: ProjectId,
   partnerId: PartnerId,
-  { setError }: { setError: UseFormSetError<z.output<ProjectSetupBankDetailsSchemaType>> },
+  {
+    setError,
+  }: {
+    setError: UseFormSetError<ProjectSetupBankDetailsSchemaOutput>;
+  },
 ) => {
   const navigate = useNavigate();
   const routes = useRoutes();
@@ -61,12 +64,12 @@ export const useOnUpdateProjectSetupBankDetails = (
 
   const bankCheckRetryAttempts = useRef(0);
 
-  return useOnUpdate<z.output<ProjectSetupBankDetailsSchemaType>, { bankCheckStatus: BankCheckStatus }>({
+  return useOnUpdate<ProjectSetupBankDetailsSchemaOutput, { bankCheckStatus: BankCheckStatus }>({
     req: data => {
       return clientsideApiClient.partners.updatePartnerBankDetails({
         partnerId,
         projectId,
-        partnerDto: data,
+        partnerDto: { ...data, bankCheckRetryAttempts: bankCheckRetryAttempts.current },
       });
     },
 
