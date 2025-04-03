@@ -7,13 +7,16 @@ import { SelectTeamMember } from "./components/SelectTeamMember";
 import { ManageTeamMemberForm } from "./components/ManageTeamMemberForm";
 import { ManageTeamMemberSubmitSection } from "./components/ManageTeamMemberSubmitSection";
 import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberInputs } from "./components/ManageTeamMemberInputs";
 
 const ManageTeamMemberDeletePage = (props: ManageTeamMemberModifyProps) => {
   return (
     <BaseManageTeamMember {...props} method={ManageTeamMemberMethod.DELETE}>
       <SelectTeamMember />
       <ManageTeamMemberForm>
-        <ManageTeamMemberSection />
+        <ManageTeamMemberSection>
+          <ManageTeamMemberInputs />
+        </ManageTeamMemberSection>
         <ManageTeamMemberSubmitSection />
       </ManageTeamMemberForm>
     </BaseManageTeamMember>

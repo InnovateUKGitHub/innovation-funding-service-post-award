@@ -205,57 +205,69 @@ const getMultiFileValidation = (options: IAppOptions) =>
       }
     });
 
-const dateValidation = z
-  .union([
-    z.date(),
-    z
-      .object({
-        day: z.string(),
-        month: z.string().transform(monthNameToNumber),
-        year: z.string(),
-      })
-      .superRefine((x, ctx) => {
-        const year = Number(x.year);
-        const month = Number(x.month);
-        const day = Number(x.day);
+const getDateValidation = ({ minimum }: { minimum?: Date | { day: string; month: string; year: string } } = {}) =>
+  z
+    .union([
+      z.date(),
+      z
+        .object({
+          day: z.string(),
+          month: z.string().transform(monthNameToNumber),
+          year: z.string(),
+        })
+        .superRefine((x, ctx) => {
+          const year = Number(x.year);
+          const month = Number(x.month);
+          const day = Number(x.day);
 
-        const datetime = DateTime.utc(year, month, day);
+          const datetime = DateTime.utc(year, month, day);
 
-        const missingComponents: string[] = [];
-        if (x.day === "") missingComponents.push("day");
-        if (x.month === "") missingComponents.push("month");
-        if (x.year === "") missingComponents.push("year");
+          const missingComponents: string[] = [];
+          if (x.day === "") missingComponents.push("day");
+          if (x.month === "") missingComponents.push("month");
+          if (x.year === "") missingComponents.push("year");
 
-        if (missingComponents.length === 3) {
-          ctx.addIssue({
-            code: ZodIssueCode.custom,
-            params: { i18n: "errors.missing_date" },
-          });
-        } else if (missingComponents.length !== 0) {
-          ctx.addIssue({
-            code: ZodIssueCode.custom,
-            params: { i18n: "errors.missing_date_component", missingComponents },
-          });
-        }
+          if (missingComponents.length === 3) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: { i18n: "errors.missing_date" },
+            });
+          } else if (missingComponents.length !== 0) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: { i18n: "errors.missing_date_component", missingComponents },
+            });
+          }
 
-        if (!datetime.isValid) {
-          ctx.addIssue({
-            code: ZodIssueCode.invalid_date,
-          });
-        }
-      })
-      .transform(x => DateTime.utc(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
-  ])
-  .superRefine((x, ctx) => {
-    if (x < y2k) {
-      ctx.addIssue({
-        code: ZodIssueCode.too_small,
-        minimum: y2k.getTime(),
-        inclusive: false,
-        type: "date",
-      });
-    }
-  });
+          if (!datetime.isValid) {
+            ctx.addIssue({
+              code: ZodIssueCode.invalid_date,
+            });
+          }
+        })
+        .transform(x => DateTime.utc(Number(x.year), Number(x.month), Number(x.day)).toJSDate()),
+    ])
+    .superRefine((x, ctx) => {
+      let min = y2k;
+
+      if (minimum instanceof Date) {
+        // Use minimum date as-is
+        min = minimum;
+      } else if (minimum) {
+        // Parse minimum date if object
+        const { success, data } = getDateValidation().safeParse(minimum);
+        if (success) min = data;
+      }
+
+      if (x < min) {
+        ctx.addIssue({
+          code: ZodIssueCode.too_small,
+          minimum: min.getTime(),
+          inclusive: false,
+          type: "date",
+        });
+      }
+    });
 
 /**
  * ## evaluateObject
@@ -292,7 +304,7 @@ export {
   costCategoryIdValidation,
   costIdValidation,
   currencyValidation,
-  dateValidation,
+  getDateValidation,
   emptyStringToNullValidation,
   emptyStringToUndefinedValidation,
   evaluateObject,

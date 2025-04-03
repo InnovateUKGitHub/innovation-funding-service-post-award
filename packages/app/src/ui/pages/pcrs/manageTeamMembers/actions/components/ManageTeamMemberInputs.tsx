@@ -107,46 +107,50 @@ const ManageTeamMemberInputs = () => {
         </FormGroup>
       </Fieldset>
 
-      {method === ManageTeamMemberMethod.CREATE && role === ProjectRole.ASSOCIATE ? (
-        <Fieldset>
-          <FormGroup hasError={!!getFieldState("startDate").error}>
-            <Legend notBold id="legend-for-startDate">
-              {getContent(x => x.pages.manageTeamMembers.modify.labels.startDate)}
-            </Legend>
-            <Hint id="hint-for-startDate">{getContent(x => x.pages.manageTeamMembers.modify.labels.endDateHint)}</Hint>
+      {method === ManageTeamMemberMethod.CREATE &&
+        (role === ProjectRole.ASSOCIATE ? (
+          <Fieldset>
+            <FormGroup hasError={!!getFieldState("startDate").error}>
+              <Legend notBold id="legend-for-startDate">
+                {getContent(x => x.pages.manageTeamMembers.modify.labels.startDate)}
+              </Legend>
+              <Hint id="hint-for-startDate">
+                {getContent(x => x.pages.manageTeamMembers.modify.labels.endDateHint)}
+              </Hint>
 
-            <ValidationError error={getFieldState("startDate").error} />
-            <div className="govuk-date-input" id="startDate">
-              <DateInput
-                type="day"
-                {...register("startDate.day")}
-                defaultValue={defaults?.startDay ?? ""}
-                disabled={isFetching}
-              />
-              <DateInput
-                type="month"
-                {...register("startDate.month")}
-                defaultValue={defaults?.startMonth ?? ""}
-                disabled={isFetching}
-              />
-              <DateInput
-                type="year"
-                {...register("startDate.year")}
-                defaultValue={defaults?.startYear ?? ""}
-                disabled={isFetching}
-              />
-            </div>
-          </FormGroup>
-        </Fieldset>
-      ) : (
-        <>
-          <input type="hidden" {...register("startDate.day")} value={today.day} />
-          <input type="hidden" {...register("startDate.month")} value={today.month} />
-          <input type="hidden" {...register("startDate.year")} value={today.year} />
-        </>
-      )}
+              <ValidationError error={getFieldState("startDate").error} />
+              <div className="govuk-date-input" id="startDate">
+                <DateInput
+                  type="day"
+                  {...register("startDate.day")}
+                  defaultValue={defaults?.startDay ?? ""}
+                  disabled={isFetching}
+                />
+                <DateInput
+                  type="month"
+                  {...register("startDate.month")}
+                  defaultValue={defaults?.startMonth ?? ""}
+                  disabled={isFetching}
+                />
+                <DateInput
+                  type="year"
+                  {...register("startDate.year")}
+                  defaultValue={defaults?.startYear ?? ""}
+                  disabled={isFetching}
+                />
+              </div>
+            </FormGroup>
+          </Fieldset>
+        ) : (
+          <>
+            <input type="hidden" {...register("startDate.day")} value={today.day} />
+            <input type="hidden" {...register("startDate.month")} value={today.month} />
+            <input type="hidden" {...register("startDate.year")} value={today.year} />
+          </>
+        ))}
 
-      {method === ManageTeamMemberMethod.REPLACE && (
+      {((method === ManageTeamMemberMethod.DELETE && role === ProjectRole.ASSOCIATE) ||
+        method === ManageTeamMemberMethod.REPLACE) && (
         <Fieldset>
           <FormGroup hasError={!!getFieldState("endDate").error}>
             <Legend notBold id="legend-for-endDate">

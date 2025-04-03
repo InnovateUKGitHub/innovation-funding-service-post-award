@@ -31,6 +31,7 @@ const mapToProjectContactDto = (x: ISalesforceProjectContact): ProjectContactDto
     firstName,
     lastName,
     associateStartDate: clock.parseOptionalSalesforceDateTime(x.Associate_Start_Date__c),
+    associateEndDate: clock.parseOptionalSalesforceDateTime(x.Associate_Start_Date__c),
     inactive: x.Acc_Inactive__c,
     newTeamMember: x.Acc_New_Team_Member__c,
     sendInvitation: x.Acc_Send_invitation__c,

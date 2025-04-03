@@ -31,7 +31,9 @@ export type Project = Pick<
   | "status"
   | "statusName"
   | "title"
-> & { partners: Partner[] } & { contacts: Pick<ProjectContactDto, "role" | "associateStartDate">[] };
+> & { partners: Partner[] } & {
+  contacts: Pick<ProjectContactDto, "role" | "associateStartDate" | "associateEndDate">[];
+};
 
 export type Partner = Pick<
   PartnerDtoGql,

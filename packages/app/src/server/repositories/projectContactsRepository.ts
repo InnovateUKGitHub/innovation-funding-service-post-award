@@ -35,6 +35,7 @@ export interface ISalesforceProjectContact {
   Acc_StartDate__c: string | null;
   Acc_EndDate__c: string | null;
   Associate_Start_Date__c: string | null;
+  Associate_End_Date__c: string | null;
   Acc_Inactive__c: boolean;
   Acc_New_Team_Member__c: boolean;
   Acc_Send_invitation__c: boolean;
@@ -94,6 +95,7 @@ export class ProjectContactsRepository
     "Acc_EndDate__c",
     "Acc_UserId__c",
     "Associate_Start_Date__c",
+    "Associate_End_Date__c",
   ];
 
   getById(pclId: ProjectContactLinkId): Promise<ISalesforceProjectContact> {
@@ -113,7 +115,12 @@ export class ProjectContactsRepository
   public async insert(
     contact: Pick<
       ISalesforceProjectContact,
-      "Acc_AccountId__c" | "Acc_ProjectId__c" | "Acc_EmailOfSFContact__c" | "Acc_Role__c" | "Associate_Start_Date__c"
+      | "Acc_AccountId__c"
+      | "Acc_ProjectId__c"
+      | "Acc_EmailOfSFContact__c"
+      | "Acc_Role__c"
+      | "Associate_Start_Date__c"
+      | "Associate_End_Date__c"
     >,
   ): Promise<ProjectContactLinkId> {
     return super.insertItem(contact) as Promise<ProjectContactLinkId>;

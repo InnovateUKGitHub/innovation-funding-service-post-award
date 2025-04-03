@@ -3,7 +3,7 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { FormTypes } from "@ui/zod/FormTypes";
 import {
   contactIdValidation,
-  dateValidation,
+  getDateValidation,
   partnerIdValidation,
   pclIdValidation,
 } from "@ui/zod/helperValidators/helperValidators.zod";
@@ -18,7 +18,7 @@ const createTeamMemberValidator = z.object({
   firstName: getTextValidation({ maxLength: maxInputLength, required: true }),
   lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: maxInputLength, required: true }),
-  startDate: dateValidation.optional(),
+  startDate: getDateValidation().optional(),
   role: z.union([
     z.literal(ProjectRole.KNOWLEDGE_BASE_ADMINISTRATOR),
     z.literal(ProjectRole.MAIN_COMPANY_CONTACT),
@@ -34,7 +34,7 @@ const replaceTeamMemberValidator = z.object({
   lastName: getTextValidation({ maxLength: maxInputLength, required: true }),
   email: getTextValidation({ base: z.string().email(), maxLength: maxInputLength, required: true }),
   role: z.nativeEnum(ProjectRole),
-  endDate: dateValidation.optional(),
+  endDate: getDateValidation().optional(),
 });
 
 const updateTeamMemberValidator = z.object({

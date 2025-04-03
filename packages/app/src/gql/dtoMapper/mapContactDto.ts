@@ -23,6 +23,7 @@ type ContactNode = GQL.PartialNode<{
   Acc_StartDate__c: GQL.Value<string>;
   Acc_EndDate__c: GQL.Value<string>;
   Associate_Start_Date__c: GQL.Value<string>;
+  Associate_End_Date__c: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
   Acc_Inactive__c: GQL.Value<boolean>;
   Acc_Replaced__c: GQL.Value<boolean>;
@@ -85,6 +86,9 @@ const mapper: GQL.DtoMapper<ProjectContactDtoGql, ContactNode> = {
   },
   associateStartDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Associate_Start_Date__c?.value ?? null);
+  },
+  associateEndDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Associate_End_Date__c?.value ?? null);
   },
   edited(node) {
     return node?.Acc_Edited__c?.value ?? false;

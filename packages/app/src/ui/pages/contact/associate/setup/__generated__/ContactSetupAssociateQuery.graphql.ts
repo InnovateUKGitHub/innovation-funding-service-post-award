@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cba5b9beef1a467b8e80fc4630a635c9>>
+ * @generated SignedSource<<627ea050cca81c5457a3e056778b6d1b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,9 @@ export type ContactSetupAssociateQuery$data = {
                       } | null | undefined;
                     } | null | undefined;
                     readonly Acc_EmailOfSFContact__c: {
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                    readonly Associate_End_Date__c: {
                       readonly value: string | null | undefined;
                     } | null | undefined;
                     readonly Associate_Start_Date__c: {
@@ -202,6 +205,16 @@ v4 = {
                           "concreteType": "DateValue",
                           "kind": "LinkedField",
                           "name": "Associate_Start_Date__c",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "DateValue",
+                          "kind": "LinkedField",
+                          "name": "Associate_End_Date__c",
                           "plural": false,
                           "selections": (v3/*: any*/),
                           "storageKey": null
@@ -529,16 +542,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "cd861b905b2af75f5134d3d34d0ff61c",
+    "cacheID": "db6afe6b070801be525fd572d438c6c2",
     "id": null,
     "metadata": {},
     "name": "ContactSetupAssociateQuery",
     "operationKind": "query",
-    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}, Acc_Inactive__c: {ne: true}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ContactSetupAssociateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...PageFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Project_Contact_Links__r(where: {Acc_Role__c: {eq: \"Associate\"}, Acc_Inactive__c: {ne: true}}, first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                    }\n                    Associate_Start_Date__c {\n                      value\n                    }\n                    Associate_End_Date__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageFragment on UIAPI {\n  query {\n    Page: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          isActive\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            isSalesforceSystemUser\n            partnerRoles {\n              isMo\n              isFc\n              isPm\n              isAssociate\n              isSalesforceSystemUser\n              partnerId\n            }\n          }\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n          Acc_ProjectStatus__c {\n            value\n          }\n          Acc_ProjectParticipantsProject__r(first: 200) {\n            edges {\n              node {\n                Id\n                Acc_ParticipantStatus__c {\n                  value\n                }\n                Acc_FlaggedParticipant__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f68b6ce8e302d41fb3f64b6dd7a7f349";
+(node as any).hash = "558f84a544c4943c0ef706e9b0424fa9";
 
 export default node;

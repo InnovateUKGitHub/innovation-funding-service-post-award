@@ -14,6 +14,7 @@ export type ServerUpdateProjectContactsAssociateDetailsCommand = Pick<ProjectCon
   Pick<
     Partial<ProjectContactDto>,
     | "associateStartDate"
+    | "associateEndDate"
     | "email"
     | "startDate"
     | "endDate"
@@ -72,6 +73,11 @@ export class UpdateProjectContactLinkCommand extends AuthorisedAsyncCommandBase<
       if (typeof editDetail.associateStartDate !== "undefined") {
         partial.Associate_Start_Date__c = editDetail.associateStartDate
           ? DateTime.fromJSDate(editDetail.associateStartDate).toFormat("yyyy-MM-dd")
+          : null;
+      }
+      if (typeof editDetail.associateEndDate !== "undefined") {
+        partial.Associate_End_Date__c = editDetail.associateEndDate
+          ? DateTime.fromJSDate(editDetail.associateEndDate).toFormat("yyyy-MM-dd")
           : null;
       }
       if (typeof editDetail.startDate !== "undefined") {

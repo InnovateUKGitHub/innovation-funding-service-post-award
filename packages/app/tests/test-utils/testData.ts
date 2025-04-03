@@ -276,6 +276,7 @@ export class TestData {
       Acc_StartDate__c: null,
       Acc_EndDate__c: null,
       Associate_Start_Date__c: null,
+      Associate_End_Date__c: null,
       Acc_Inactive__c: false,
       Acc_New_Team_Member__c: false,
       Acc_Send_invitation__c: false,

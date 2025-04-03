@@ -379,13 +379,14 @@
       "manualComplete": "Return to projects dashboard"
     },
     "projectSetupAssociate": {
-      "title": "Associate start date",
-      "guidanceMessage": "You need to provide an associate start date so we can complete this section of the project setup.",
+      "title": "Associate start and end date",
+      "guidanceMessage": "You need to provide an associate start and end date so we can complete this section of the project setup.",
       "name": "Name",
       "role": "Role",
       "associate": "Associate",
       "email": "Email address",
       "startDate": "Start date",
+      "endDate": "End date",
       "saveAndReturn": "Save and return to dashboard",
       "tableCaption": "Project associates"
     },
@@ -1515,8 +1516,8 @@
     "projectOnHold": "On hold",
     "pendingProject": "You need to set up your project",
     "checkForecast": "Check your forecast",
-    "startDateRequired": "You need to provide confirmation of the associate's start date",
-    "canEditStartDate": "You can update the associate's start date here"
+    "startDateRequired": "You need to provide confirmation of the associate's start and end date",
+    "canEditStartDate": "You can update the associate's start and end date here"
   },
   "pcrMessages": {
     "additionalCommentsGuidance": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
@@ -3198,7 +3199,7 @@
               "missing_date": "Enter a start date.",
               "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "Start date must be a real date.",
-              "too_small": "Start date must be the same as or after 1 January 2000."
+              "too_small": "Start date must be the same as or after {{ minimum, datetime }}."
             }
           },
           "endDate": {
@@ -3206,7 +3207,7 @@
               "missing_date": "Enter an end date.",
               "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "End date must be a real date.",
-              "too_small": "End date must be the same as or after 1 January 2000."
+              "too_small": "End date must be the same as or after {{ minimum, datetime }}."
             }
           },
           "associateStartDate": {
@@ -3214,7 +3215,15 @@
               "missing_date": "Enter a start date.",
               "missing_date_component": "Start date must include a {{ missingComponents, conjunction }}.",
               "invalid_date": "Start date must be a real date.",
-              "too_small": "Start date must be the same as or after 1 January 2000."
+              "too_small": "Start date must be the same as or after {{ minimum, datetime }}."
+            }
+          },
+          "associateEndDate": {
+            "errors": {
+              "missing_date": "Enter an end date.",
+              "missing_date_component": "End date must include a {{ missingComponents, conjunction }}.",
+              "invalid_date": "End date must be a real date.",
+              "too_small": "End date must be the same as or after {{ minimum, datetime }}."
             }
           }
         }

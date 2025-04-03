@@ -226,7 +226,7 @@ export function getIsKtpOfferLetterSent(project: Project) {
  * of start date
  */
 export function getAssociateStartDateMissing(project: Project) {
-  return project.contacts.filter(x => x.role === "Associate").some(x => !x.associateStartDate);
+  return project.contacts.filter(x => x.role === "Associate").some(x => !(x.associateStartDate && x.associateEndDate));
 }
 
 /**
@@ -352,6 +352,7 @@ export const useProjectsDashboardData = (search: string | number | undefined, co
       contacts: mapToContactDtoArray(x?.node?.Project_Contact_Links__r?.edges ?? [], [
         "role",
         "associateStartDate",
+        "associateEndDate",
         "name",
       ]),
     };

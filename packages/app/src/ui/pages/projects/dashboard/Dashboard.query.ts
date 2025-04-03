@@ -116,13 +116,15 @@ export const projectDashboardQuery = graphql`
                       Associate_Start_Date__c {
                         value
                       }
+                      Associate_End_Date__c {
+                        value
+                      }
                       Acc_ContactId__r {
                         Id
                         Name {
                           value
                         }
                       }
-
                       Acc_UserId__r {
                         Name {
                           value

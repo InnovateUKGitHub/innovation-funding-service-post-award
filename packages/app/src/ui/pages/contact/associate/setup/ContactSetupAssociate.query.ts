@@ -29,6 +29,9 @@ const contactSetupAssociateQuery = graphql`
                       Associate_Start_Date__c {
                         value
                       }
+                      Associate_End_Date__c {
+                        value
+                      }
                     }
                   }
                 }

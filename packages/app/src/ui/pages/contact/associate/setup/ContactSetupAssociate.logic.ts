@@ -34,6 +34,7 @@ const useContactSetupAssociatePageData = ({ projectId }: ContactSetupAssociatePa
     "email",
     "name",
     "associateStartDate",
+    "associateEndDate",
   ]);
 
   return { contacts, setFetchKey, fragmentRef: data.salesforce.uiapi };

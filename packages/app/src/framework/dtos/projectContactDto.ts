@@ -32,6 +32,7 @@ export interface ProjectContactDto {
   firstName: string;
   lastName: string;
   associateStartDate: Date | null;
+  associateEndDate: Date | null;
   inactive: boolean;
   newTeamMember: boolean;
   sendInvitation: boolean;
