@@ -159,7 +159,6 @@ class ProjectChangeRequests {
     const markedAsQuery: QueryPCR = await conn.executeSOQL({
       query: `SELECT Acc_MarkedasComplete__c from Acc_ProjectChangeRequest__c WHERE Name = '${pcr}'`,
     });
-    console.log(pcrQuery);
     const markedAsCompleteStatus = markedAsQuery.records[0].Acc_MarkedasComplete__c;
     const markedAsJson = JSON.stringify(markedAsCompleteStatus);
     if (markedAsJson === status) {
@@ -167,7 +166,6 @@ class ProjectChangeRequests {
     } else {
       throw new Error(`Test failed because marked as complete status is '${markedAsJson}'`);
     }
-    console.log(pcrQuery);
   }
 
   @Then("the user will see the Mark as complete subheading")
