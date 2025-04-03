@@ -68,7 +68,7 @@ class Poc3 {
     };
 
     const conn = await this.sfdcApi.getTsforceConnection();
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(9000);
 
     // Get Project Id
     let query = `SELECT Id FROM Acc_Project__c  WHERE Acc_CompetitionId__r.Name = '${this.uniqueCompId}'`;
@@ -232,7 +232,7 @@ class Poc3 {
   }
 
   @Given("claims have been added and Approved using the UI")
-  async addClaimUsingUI() {
+  async addClaimUsingUI(claimsTable: DataTable) {
     type QueryProjectParticipantId = {
       totalSize: number;
       done: boolean;
@@ -272,9 +272,9 @@ class Poc3 {
     let participantId = responseProjectParticipant.records[0].Id;
 
     // Creates and Approves 3 Claims
-    await this.createAndApproveClaimUsingUI(participantId, conn, 1, gaValue);
-    await this.createAndApproveClaimUsingUI(participantId, conn, 2, gaValue);
-    await this.createAndApproveClaimUsingUI(participantId, conn, 3, gaValue);
+    await this.createAndApproveClaimUsingUI(participantId, conn, 1, gaValue, claimsTable);
+    await this.createAndApproveClaimUsingUI(participantId, conn, 2, gaValue, claimsTable);
+    await this.createAndApproveClaimUsingUI(participantId, conn, 3, gaValue, claimsTable);
   }
 
   @Given("claims have been added and Approved by APEX")
@@ -311,7 +311,7 @@ class Poc3 {
   }
 
   @Then("approval details checked using the External UI")
-  async checkApprovalDetailsExternalUI() {
+  async checkApprovalDetailsExternalUI(table: DataTable) {
     type QueryProjectParticipantId = {
       totalSize: number;
       done: boolean;
@@ -545,7 +545,13 @@ class Poc3 {
   }
 
   // Create and Approve a Claim using the UI
-  async createAndApproveClaimUsingUI(participantId: string, conn, periodNo: number, gaValue: GrantAdjustment) {
+  async createAndApproveClaimUsingUI(
+    participantId: string,
+    conn,
+    periodNo: number,
+    gaValue: GrantAdjustment,
+    table: DataTable,
+  ) {
     let path = String(`/lightning/r/Acc_ProjectParticipant__c/${participantId}/view`);
     await this.sfdcPage.loginAndGoto(path);
 
@@ -553,6 +559,79 @@ class Poc3 {
     await this.createClaimLineItemsUI(participantId, periodNo, conn);
     await this.page.waitForTimeout(10000); // Remove me
     await this.submitAndApproveClaimUI(participantId, periodNo, conn);
+    await this.checkClaimValuesUsingtheUI(table, periodNo);
+  }
+
+  async checkClaimValuesUsingtheUI(table: DataTable, periodNo: number) {
+    const claimsData = table.hashes();
+
+    let headers: Array<string>;
+    headers = [
+      "Acc_ProjectPeriodStartDate__c",
+      "Acc_ProjectPeriodEndDate__c",
+      "Acc_TotalParticipantCosts__c",
+      "Acc_Total_Participant_Grant__c",
+      "Acc_ClaimStatus__c",
+      "Acc_ProjectPeriodNumber__c",
+      "Acc_PeriodApprovedDeferredGrant__c",
+      "Acc_CapLimitPercentage__c",
+      "Acc_StaticAwardRate__c",
+    ];
+
+    const rowValue = claimsData[periodNo - 1];
+
+    // Loop through each of the headers
+    for (let col = 0; col < headers.length; col++) {
+      let textValue: string;
+
+      // 3 page downs so the XML can be built
+      await this.page.keyboard.press("PageDown");
+      await this.page.keyboard.press("PageDown");
+      await this.page.keyboard.press("PageDown");
+
+      textValue = rowValue[headers[col]];
+
+      // Check for percentage fields
+      if (headers[col] == "Acc_CapLimitPercentage__c" || headers[col] == "Acc_StaticAwardRate__c") {
+        // Remove trailing zeros
+        textValue = textValue.replace(/.[0-9]*$/g, "");
+        textValue = textValue + ".000000%";
+        console.log("Regex: Checking Numeric Value: ", textValue, " is correct for: ", headers[col]);
+        console.log("Checking Formatted Date: ", textValue, " is correct for: ", headers[col]);
+      } // Format data
+      else {
+        // Check if the value is a date formatted YYYY-MM-DD
+        if (/^20[0-9][0-9]-[0-1][1-9]-[0-3][0-9]$/.test(rowValue[headers[col]])) {
+          // Date format
+          const dateValue: string[] = rowValue[headers[col]].split("-");
+          textValue = `${dateValue[2]}/${dateValue[1]}/${dateValue[0]}`;
+          console.log("Regex: Checking Formatted Date: ", textValue, " is correct for: ", headers[col]);
+        }
+
+        // Check if the value is a currency (assume 3 digits or less is not a currency)
+        if (/^\d{3,}.0$/.test(rowValue[headers[col]]) || /^-\d{3,}.0$/.test(rowValue[headers[col]])) {
+          // Currency format
+          textValue = Number(rowValue[headers[col]]).toLocaleString("en-GB", {
+            style: "currency",
+            currency: "GBP",
+          });
+          console.log("Regex: Checking Currency Value: ", textValue, " is correct for: ", headers[col]);
+        }
+
+        // Remove trailing zeros of just numbers
+        if (/^[0-9.]*$/.test(rowValue[headers[col]])) {
+          textValue = textValue.replace(/.[0-9]*$/g, "");
+          console.log("Regex: Checking Numeric Value: ", textValue, " is correct for: ", headers[col]);
+        }
+      }
+      console.log("TEXTVALUE: ", textValue);
+
+      await expect(
+        this.getByFieldID(`Record${headers[col]}Field`)
+          .locator("dd")
+          .filter({ hasText: `${textValue}` }),
+      ).toBeVisible();
+    }
   }
 
   async submitAndApproveClaimUI(participantId: string, periodNo: number, conn) {
@@ -647,6 +726,9 @@ class Poc3 {
         .getByRole("button")
         .filter({ hasText: /^Approve$/ })
         .click();
+
+      // Navigate to Details
+      await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Details" }).click();
     }
   }
 
@@ -692,6 +774,9 @@ class Poc3 {
       // Click New button
       await this.page.getByRole("button").filter({ hasText: /^New$/ }).click();
 
+      // Select Claims Line Item
+      await this.page.locator("label").locator("div").locator("span").filter({ hasText: "Claims Line item" }).click();
+
       // Click Next button
       await this.page
         .getByRole("button")
@@ -725,6 +810,7 @@ class Poc3 {
   }
 
   // Create and Approve Grant Adjustments
+  // User needs to be added to the "Acc - Claims Team Leads" for the Approval process to be available
   async createAndApproveGAUsingUI(participantId: string, conn, periodNoGA: number, gaValue: GrantAdjustment) {
     type QueryPrepayment = {
       totalSize: number;
@@ -773,7 +859,7 @@ class Poc3 {
           .filter({ hasText: /^Save$/ })
           .click();
 
-        await this.page.waitForTimeout(10000); // Remove me
+        await this.page.waitForTimeout(10000);
       }
     }
 
@@ -808,6 +894,8 @@ class Poc3 {
         .getByRole("button")
         .filter({ hasText: /^Submit$/ })
         .click();
+
+      await this.page.waitForTimeout(10000);
 
       // Select Approval History tab
       await this.page.getByLabel("Tabs").locator("li").filter({ hasText: "Approval History" }).click();
@@ -888,6 +976,7 @@ class Poc3 {
 
     await this.selectDropdown("Project Role", projectRoleVal);
 
+    await this.page.waitForTimeout(1000);
     await this.getByFieldID("RecordAcc_ContactId_cField").getByLabel("External User").click();
     await this.getByFieldID("RecordAcc_ContactId_cField").getByLabel("External User").fill(externalUserVal);
     await this.getByFieldID("RecordAcc_ContactId_cField")

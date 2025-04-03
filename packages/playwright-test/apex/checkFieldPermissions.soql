@@ -1,0 +1,3 @@
+SELECT Parent.Profile.Name, Parent.Label, Parent.IsOwnedByProfile, SobjectType, Field, PermissionsEdit, PermissionsRead 
+FROM FieldPermissions
+WHERE SobjectType = 'Acc_Project__c' AND Field = 'Acc_Project__c.Acc_CompetitionId__c' AND PermissionsEdit = true
