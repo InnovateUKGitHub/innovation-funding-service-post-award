@@ -67,7 +67,6 @@ const clientApi: IApiClient<"client"> = {
     uploadPartnerDocument: ({ projectId, partnerId, documents }) =>
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
-
   forecastDetails: {
     updateForecast: params =>
       ajaxPut(`/api/forecast-details/${params.projectId}/${params.partnerId}/update-forecast`, params.forecast),

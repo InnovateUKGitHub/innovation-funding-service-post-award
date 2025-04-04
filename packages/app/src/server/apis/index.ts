@@ -4,7 +4,6 @@ import { NotFoundError } from "../features/common/appError";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
 import * as documents from "./documents";
-import * as financialVirements from "./financialVirements";
 import * as forecastDetails from "./forecastDetails";
 import * as initialForecastDetails from "./initialForecastDetails";
 import * as loans from "./loans";
@@ -18,7 +17,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   claimDetails: claimDetails.IClaimDetailsApi<Context>;
   claims: claims.IClaimsApi<Context>;
   documents: documents.IDocumentsApi<Context>;
-  financialVirements: financialVirements.IFinancialVirement<Context>;
   forecastDetails: forecastDetails.IForecastDetailsApi<Context>;
   initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi<Context>;
   loans: loans.ILoansApi<Context>;
@@ -32,7 +30,6 @@ export const serverApis = {
   claims: claims.controller,
   claimDetails: claimDetails.controller,
   documents: documents.controller,
-  financialVirements: financialVirements.controller,
   forecastDetails: forecastDetails.controller,
   initialForecastDetails: initialForecastDetails.controller,
   loans: loans.controller,
