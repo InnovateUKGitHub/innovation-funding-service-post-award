@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dc06a1becd418d08356c12d6fdbd2b7d>>
+ * @generated SignedSource<<9a5f06d261aeae58f559e72320f46a24>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,9 @@ export type ManageTeamMemberSummaryQuery$data = {
               } | null | undefined;
               readonly Acc_Status__c: {
                 readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Reason_for_Rejection__c: {
+                readonly value: any | null | undefined;
               } | null | undefined;
             } | null | undefined;
           } | null | undefined> | null | undefined;
@@ -251,6 +254,16 @@ v5 = [
                             "plural": false,
                             "selections": (v2/*: any*/),
                             "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "LongTextAreaValue",
+                            "kind": "LinkedField",
+                            "name": "Reason_for_Rejection__c",
+                            "plural": false,
+                            "selections": (v2/*: any*/),
+                            "storageKey": null
                           }
                         ],
                         "storageKey": null
@@ -467,16 +480,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "df04cf55c11c41d649bcae4164a3e8f9",
+    "cacheID": "02bebfa75371b61da836328ee8a0872c",
     "id": null,
     "metadata": {},
     "name": "ManageTeamMemberSummaryQuery",
     "operationKind": "query",
-    "text": "query ManageTeamMemberSummaryQuery(\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                totalCount\n              }\n              Acc_Manage_Team_Member_Status__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n            }\n          }\n        }\n        Item: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Acc_Type__c {\n                value\n              }\n              Acc_Start_Date__c {\n                value\n              }\n              Acc_Role__c {\n                value\n              }\n              Acc_Email__c {\n                value\n              }\n              Acc_First_Name__c {\n                value\n              }\n              Acc_Last_Name__c {\n                value\n              }\n              Acc_ProjectContactLink__r {\n                Id\n                Acc_ContactId__r {\n                  Id\n                  Name {\n                    value\n                  }\n                  FirstName {\n                    value\n                  }\n                  LastName {\n                    value\n                  }\n                }\n                Acc_EndDate__c {\n                  value\n                }\n                Acc_Role__c {\n                  value\n                }\n                Acc_EmailOfSFContact__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ManageTeamMemberSummaryQuery(\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Header: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Project_Change_Requests__r {\n                totalCount\n              }\n              Acc_Manage_Team_Member_Status__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              Reason_for_Rejection__c {\n                value\n              }\n            }\n          }\n        }\n        Item: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Acc_Type__c {\n                value\n              }\n              Acc_Start_Date__c {\n                value\n              }\n              Acc_Role__c {\n                value\n              }\n              Acc_Email__c {\n                value\n              }\n              Acc_First_Name__c {\n                value\n              }\n              Acc_Last_Name__c {\n                value\n              }\n              Acc_ProjectContactLink__r {\n                Id\n                Acc_ContactId__r {\n                  Id\n                  Name {\n                    value\n                  }\n                  FirstName {\n                    value\n                  }\n                  LastName {\n                    value\n                  }\n                }\n                Acc_EndDate__c {\n                  value\n                }\n                Acc_Role__c {\n                  value\n                }\n                Acc_EmailOfSFContact__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3053aa93b8b6d692498c1de508a5c1d8";
+(node as any).hash = "54911f8e1c79257b998b238e14382323";
 
 export default node;

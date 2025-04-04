@@ -32,6 +32,7 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
   id: PcrId;
   items: ProjectChangeRequestItemEntity[];
   number: number;
+  reasonForRejection: string | null;
   reasoning: string;
   reasoningStatusName: string;
   started: Date;

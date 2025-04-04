@@ -41,6 +41,7 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
   manageTeamMemberStatus: pcr.manageTeamMemberStatus,
   statusName: pcr.statusName,
   comments: pcr.comments,
+  reasonForRejection: pcr.reasonForRejection,
   reasoningStatus: pcr.reasoningStatus,
   reasoningStatusName: pcr.reasoningStatusName,
   reasoningComments: pcr.reasoning,

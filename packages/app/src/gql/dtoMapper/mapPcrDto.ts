@@ -86,6 +86,7 @@ export type PcrNode = GQL.PartialNode<{
   }>;
   New_company_subcontractor_name__c: GQL.Value<string>;
   Company_registration_number__c: GQL.Value<string>;
+  Reason_for_Rejection__c: GQL.Value<string>;
   Relationship_between_partners__c: GQL.Value<boolean>;
   Relationship_justification__c: GQL.Value<string>;
   Role_in_the_project__c: GQL.Value<string>;
@@ -108,6 +109,7 @@ type PcrDtoMapping = Pick<
   | "id"
   | "lastUpdated"
   | "projectId"
+  | "reasonForRejection"
   | "reasoningComments"
   | "reasoningStatus"
   | "requestNumber"
@@ -485,6 +487,9 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
   },
   projectId(node) {
     return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
+  },
+  reasonForRejection(node) {
+    return node?.Reason_for_Rejection__c?.value ?? null;
   },
   reasoningComments(node) {
     return node?.Acc_Reasoning__c?.value ?? "";

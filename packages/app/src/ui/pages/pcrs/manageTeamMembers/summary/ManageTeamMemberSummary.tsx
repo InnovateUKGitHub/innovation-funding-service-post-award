@@ -7,11 +7,13 @@ import { PcrPage, PcrBackLink } from "../../pcrPage";
 import { useManageTeamMemberSummaryQuery } from "./ManageTeamMemberSummary.logic";
 import { ManageTeamMemberDeletedPartnerSummaryCard } from "./components/ManageTeamMemberDeletedPartnerSummaryCard";
 import { ManageTeamMemberCreatedPartnerSummaryCard } from "./components/ManageTeamMemberCreatedPartnerSummaryCard";
-import { ManageTeamMemberMethod } from "@framework/constants/pcrConstants";
+import { ManageTeamMemberMethod, PCRStatus } from "@framework/constants/pcrConstants";
+import { useGetPcrStatusMetadata } from "../../utils/useGetPcrStatusMetadata";
 
 const ManageTeamMemberSummary = () => {
   const { getContent } = useContent();
   const { projectId, pcrId, itemId, mode } = usePcrWorkflowContext();
+  const { getPcrStatusName } = useGetPcrStatusMetadata();
   const routes = useRoutes();
 
   if (mode === "prepare") throw new Error("This page does not support the prepare mode");
@@ -49,6 +51,10 @@ const ManageTeamMemberSummary = () => {
             content={getContent(x => x.pages.manageTeamMembers.types[manageTeamMemberType])}
             qa="actionRow"
           />
+        )}
+        <SummaryListItem label={getContent(x => x.pcrLabels.requestStatus)} content={getPcrStatusName(pcr.status)} />
+        {pcr.status === PCRStatus.Rejected && (
+          <SummaryListItem label={getContent(x => x.pcrLabels.reasonForRejection)} content={pcr.reasonForRejection} />
         )}
       </SummaryList>
 

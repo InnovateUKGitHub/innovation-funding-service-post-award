@@ -835,6 +835,7 @@ export class TestData {
       statusName: PCRStatus[PCRStatus.Unknown],
       started: new Date(),
       updated: new Date(),
+      reasonForRejection: null,
       reasoningStatus: PCRItemStatus.Complete,
       reasoning: "Test Reasoning",
       reasoningStatusName: PCRItemStatus[PCRItemStatus.Complete],

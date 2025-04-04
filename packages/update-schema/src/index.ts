@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 import { getCertificateEnv as certEnv, getStringEnv as strEnv } from "@innovateuk/common/envHelpers";
 
-const sfSchemaFilePath = path.join("src", "gql", "schema", "sfSchema.gql");
+const sfSchemaFilePath = path.join("..", "app", "src", "gql", "schema", "sfSchema.gql");
 
 const main = async () => {
   const whitelist = getTypeWhitelist();

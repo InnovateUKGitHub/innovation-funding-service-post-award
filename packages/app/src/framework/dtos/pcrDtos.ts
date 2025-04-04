@@ -58,6 +58,7 @@ export interface PCRSummaryDto extends PCRBaseDto {
 export interface PCRDto extends PCRBaseDto {
   comments: string;
   items: PCRItemDto[];
+  reasonForRejection: string | null;
   reasoningComments: string;
   reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;

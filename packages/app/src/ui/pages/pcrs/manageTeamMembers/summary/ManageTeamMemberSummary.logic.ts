@@ -19,7 +19,7 @@ const useManageTeamMemberSummaryQuery = ({ pcrId, pcrItemId }: { pcrId: PcrId; p
       head: pcrNode,
       children: [],
     },
-    ["requestNumber", "reasoningComments", "status"],
+    ["requestNumber", "reasoningComments", "status", "reasonForRejection"],
     [],
     {},
   );

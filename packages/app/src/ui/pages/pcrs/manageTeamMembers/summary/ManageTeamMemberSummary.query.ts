@@ -20,6 +20,9 @@ const manageTeamMemberSummaryQuery = graphql`
                 Acc_Status__c {
                   value
                 }
+                Reason_for_Rejection__c {
+                  value
+                }
               }
             }
           }

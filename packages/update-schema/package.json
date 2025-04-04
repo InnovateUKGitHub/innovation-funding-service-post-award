@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist/ --sourcemap",
-    "updateSchema": "node --inspect ./dist/index.js"
+    "updateSchema": "node --env-file=../../.env --inspect ./dist/index.js"
   },
   "dependencies": {
     "@graphql-tools/stitch": "^9.2.16",

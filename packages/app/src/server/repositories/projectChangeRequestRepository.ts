@@ -71,6 +71,8 @@ export interface ISalesforcePCR {
       };
     };
   };
+  Reason_For_Rejection__c: string;
+
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
@@ -343,6 +345,7 @@ export class ProjectChangeRequestRepository
     "Acc_Last_Name__c",
     "Acc_Email__c",
     "Acc_Manage_Team_Member_Status__c",
+    "Reason_For_Rejection__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
