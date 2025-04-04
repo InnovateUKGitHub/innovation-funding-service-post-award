@@ -8,9 +8,9 @@ exports[`Document upload validator With en-GB i18n test file size when below min
 
 exports[`Document upload validator With en-GB i18n test file size when exceeding maximum 1`] = `"You cannot upload 'test.pdf' because it must be no larger than 32MB."`;
 
-exports[`Document upload validator With no i18n invalid file names containing invalid character: \\ 1`] = `"forms.errors.bad_characters"`;
+exports[`Document upload validator With no i18n invalid file names containing invalid character: \\ 1`] = `"forms.errors.invalid"`;
 
-exports[`Document upload validator With no i18n test file extension with disallowed file type 1`] = `"forms.errors.invalid_extension"`;
+exports[`Document upload validator With no i18n test file extension with disallowed file type 1`] = `"forms.errors.invalid"`;
 
 exports[`Document upload validator With no i18n test file size when below minimum 1`] = `"validation.documentValidator.fileSizeEmpty"`;
 

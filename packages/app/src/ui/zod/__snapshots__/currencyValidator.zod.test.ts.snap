@@ -164,7 +164,7 @@ exports[`generic currency validator decline infinity 1`] = `
     "path": [
       "heinz"
     ],
-    "message": "forms.errors.invalid_type"
+    "message": "forms.errors.invalid"
   }
 ]],
   "success": false,
