@@ -5,7 +5,6 @@ import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
 import * as documents from "./documents";
 import * as financialVirements from "./financialVirements";
-import * as financialLoanVirements from "./financialLoanVirements";
 import * as forecastDetails from "./forecastDetails";
 import * as initialForecastDetails from "./initialForecastDetails";
 import * as loans from "./loans";
@@ -20,7 +19,6 @@ export interface IApiClient<Context extends "client" | "server"> {
   claims: claims.IClaimsApi<Context>;
   documents: documents.IDocumentsApi<Context>;
   financialVirements: financialVirements.IFinancialVirement<Context>;
-  financialLoanVirements: financialLoanVirements.IFinancialLoanVirement<Context>;
   forecastDetails: forecastDetails.IForecastDetailsApi<Context>;
   initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi<Context>;
   loans: loans.ILoansApi<Context>;
@@ -35,7 +33,6 @@ export const serverApis = {
   claimDetails: claimDetails.controller,
   documents: documents.controller,
   financialVirements: financialVirements.controller,
-  financialLoanVirements: financialLoanVirements.controller,
   forecastDetails: forecastDetails.controller,
   initialForecastDetails: initialForecastDetails.controller,
   loans: loans.controller,

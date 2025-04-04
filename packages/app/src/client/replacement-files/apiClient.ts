@@ -67,20 +67,7 @@ const clientApi: IApiClient<"client"> = {
     uploadPartnerDocument: ({ projectId, partnerId, documents }) =>
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
-  financialVirements: {
-    update: params =>
-      ajaxPut(
-        `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}&submit=${params.submit}`,
-        params.financialVirement,
-      ),
-  },
-  financialLoanVirements: {
-    update: params =>
-      ajaxPut(
-        `/api/financial-loan-virements/${params.projectId}/${params.pcrItemId}?submit=${params.submit}`,
-        params.financialVirement,
-      ),
-  },
+
   forecastDetails: {
     updateForecast: params =>
       ajaxPut(`/api/forecast-details/${params.projectId}/${params.partnerId}/update-forecast`, params.forecast),
