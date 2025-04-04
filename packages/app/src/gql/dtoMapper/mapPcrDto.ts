@@ -499,7 +499,17 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
     return node?.CreatedDate?.value ? clock.parseRequiredSalesforceDateTime(node?.CreatedDate?.value) : new Date();
   },
   status(node) {
-    return mapToPCRStatus((node?.Acc_Status__c?.value ?? node?.Acc_Manage_Team_Member_Status__c?.value) || "unknown");
+    switch (node?.RecordType?.DeveloperName?.value) {
+      case ProjectChangeRequest.manageTeamMemberRequestHeader:
+        return mapToPCRStatus(
+          (node?.Acc_Status__c?.value ?? node?.Acc_Manage_Team_Member_Status__c?.value) || "unknown",
+        );
+      case ProjectChangeRequest.requestHeader:
+      default:
+        return mapToPCRStatus(
+          (node?.Acc_Manage_Team_Member_Status__c?.value ?? node?.Acc_Status__c?.value) || "unknown",
+        );
+    }
   },
   manageTeamMemberStatus(node) {
     return mapToPCRStatus(node?.Acc_Manage_Team_Member_Status__c?.value || "unknown");
