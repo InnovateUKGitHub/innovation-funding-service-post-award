@@ -71,9 +71,6 @@ export class BankCheckService {
     }
 
     const request = await fetch(`${pathToHydra}${path}`, {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
       method: "POST",
       headers: {
         "Accept-Encoding": "zip",
