@@ -7,13 +7,6 @@ import { ClientFileWrapper } from "../clientFileWrapper";
 
 const clientApi: IApiClient<"client"> = {
   claims: {
-    update: params =>
-      ajaxPut(
-        `/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}?isClaimSummary=${
-          params.isClaimSummary ? "true" : "false"
-        }`,
-        params.claim,
-      ),
     updateForecast: params =>
       ajaxPut(
         `/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/update-claim-forecast`,
@@ -89,11 +82,6 @@ const clientApi: IApiClient<"client"> = {
       ),
   },
   forecastDetails: {
-    update: params =>
-      ajaxPut(
-        `/api/forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}&submit=${params.submit}`,
-        params.forecasts,
-      ),
     updateForecast: params =>
       ajaxPut(`/api/forecast-details/${params.projectId}/${params.partnerId}/update-forecast`, params.forecast),
   },
