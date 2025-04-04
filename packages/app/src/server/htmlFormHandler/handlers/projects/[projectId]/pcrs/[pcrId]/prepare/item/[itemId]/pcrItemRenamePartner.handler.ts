@@ -1,5 +1,4 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
@@ -12,7 +11,7 @@ import {
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
 import { isNil } from "lodash";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
   RenamePartnerSchema,
@@ -61,24 +60,16 @@ export class PcrItemChangeRenamePartnerHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams & { step?: number };
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              accountName: input.accountName,
-              partnerId: input.partnerId,
-              ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrRenamePartnerSummary,
+        input.markedAsComplete,
+        input.form,
+      ),
+      Acc_NewOrganisationName__c: input.accountName,
+      Acc_Project_Participant__c: input.partnerId,
+    });
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,

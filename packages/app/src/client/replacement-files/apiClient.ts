@@ -93,7 +93,6 @@ const clientApi: IApiClient<"client"> = {
     create: params => ajaxPost(`/api/pcrs/${params.projectId}/create`, params.projectChangeRequestDto),
     addPcrTypes: params =>
       ajaxPut(`/api/pcrs/${params.projectId}/${params.id}/add-types`, params.projectChangeRequestDto),
-    update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     pcrReview: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.pcrId}/pcr-review`, params.pcr),
     approveNewSubcontractor: params =>
       ajaxPut(

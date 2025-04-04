@@ -1,19 +1,15 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
-
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-
 import {
   ProjectSuspensionSummarySchema,
   pcrProjectSuspensionErrorMap,
   pcrProjectSuspensionSummarySchema,
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { getPcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrItemPutProjectOnHoldSummaryHandler extends ZodFormHandlerBase<
   ProjectSuspensionSummarySchema,
@@ -57,22 +53,10 @@ export class PcrItemPutProjectOnHoldSummaryHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: getPcrItemStatus(input.markedAsComplete),
+    });
 
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,

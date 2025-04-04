@@ -1,12 +1,8 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
-
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { isNil } from "lodash";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import {
   ProjectSuspensionSchema,
@@ -15,7 +11,10 @@ import {
 } from "@ui/pages/pcrs/suspendProject/suspendProject.zod";
 import { combineDate } from "@ui/components/atoms/Date";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { Clock } from "@framework/util/clock";
 
+const clock = new Clock();
 export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
   ProjectSuspensionSchema,
   ProjectChangeRequestPrepareItemParams
@@ -70,24 +69,16 @@ export class PcrItemPutProjectOnHoldHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              suspensionStartDate: combineDate(input.suspensionStartDate_month, input.suspensionStartDate_year, true),
-              suspensionEndDate: combineDate(input.suspensionEndDate_month, input.suspensionEndDate_year, false),
-              ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_SuspensionStarts__c: clock.formatOptionalSalesforceDate(
+        combineDate(input.suspensionStartDate_month, input.suspensionStartDate_year, true),
+      ),
+      Acc_SuspensionEnds__c: clock.formatOptionalSalesforceDate(
+        combineDate(input.suspensionEndDate_month, input.suspensionEndDate_year, false),
+      ),
+    });
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,

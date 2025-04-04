@@ -10,11 +10,9 @@ import {
 } from "@ui/pages/pcrs/loanDrawdownChange/loanDrawdownChange.zod";
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { BadRequestError } from "@shared/appError";
-import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrItemLoanDrawdownChangeSummaryHandler extends ZodFormHandlerBase<
   LoanDrawdownChangeSummarySchema,
@@ -80,44 +78,15 @@ export class PcrItemLoanDrawdownChangeSummaryHandler extends ZodFormHandlerBase<
     if (!this.loanDto) {
       this.loanDto = await context.runQuery(new GetFinancialLoanVirementQuery(params.projectId, params.itemId));
     }
-    const dto = {
-      pcrItemId: params.itemId,
-      loans: input.loans.map(x => {
-        const matchingOriginalData = this.loanDto?.loans?.find(y => y.period === x.period);
 
-        if (!matchingOriginalData) {
-          throw new Error("missing original data");
-        }
-
-        return {
-          ...x,
-          period: x.period as PeriodId,
-          id: matchingOriginalData.id,
-          status: matchingOriginalData.status,
-          isEditable: matchingOriginalData.isEditable,
-        };
-      }),
-    };
-    await context.runCommand(
-      new UpdateFinancialLoanVirementCommand(params.projectId, params.itemId, dto, input.markedAsComplete),
-    );
-
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrLoanDrawdownChangeSummary,
+        input.markedAsComplete,
+        input.form,
+      ),
+    });
 
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,

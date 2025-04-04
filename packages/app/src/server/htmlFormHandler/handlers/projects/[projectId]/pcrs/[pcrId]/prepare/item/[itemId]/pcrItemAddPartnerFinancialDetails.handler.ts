@@ -3,16 +3,19 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-
 import { addPartnerErrorMap } from "@ui/pages/pcrs/addPartner/addPartnerSummary.zod";
-import { getNextAddPartnerStep, updatePcrItem } from "./addPartnerUtils";
+import { getNextAddPartnerStep } from "./addPartnerUtils";
 import {
   FinanceDetailsSchemaType,
   getFinanceDetailsSchema,
 } from "@ui/pages/pcrs/addPartner/steps/schemas/financialDetails.zod";
 import { combineDate } from "@ui/components/atoms/Date";
 import { parseCurrency } from "@framework/util/numberHelper";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { Clock } from "@framework/util/clock";
 
+const clock = new Clock();
 export class PcrItemAddPartnerFinancialDetailsHandler extends ZodFormHandlerBase<
   FinanceDetailsSchemaType,
   ProjectChangeRequestPrepareItemParams
@@ -53,15 +56,14 @@ export class PcrItemAddPartnerFinancialDetailsHandler extends ZodFormHandlerBase
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await updatePcrItem({
-      params,
-      context,
-      data: {
-        financialYearEndDate: combineDate(input.financialYearEndDate_month, input.financialYearEndDate_year, false),
-        financialYearEndTurnover: parseCurrency(input.financialYearEndTurnover),
-      },
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_TurnoverYearEnd__c: clock.formatOptionalSalesforceDate(
+        combineDate(input.financialYearEndDate_month, input.financialYearEndDate_year, false),
+      ),
+      Acc_Turnover__c: parseCurrency(input.financialYearEndTurnover),
     });
-
     return await getNextAddPartnerStep({
       projectId: params.projectId,
       pcrId: params.pcrId,

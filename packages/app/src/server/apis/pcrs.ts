@@ -1,6 +1,5 @@
 import type {
   CreatePcrDto,
-  FullPCRItemDto,
   LoanDrawdownExtensionDto,
   PcrAddPartnerAcademicCostsDto,
   PcrAddPartnerAcademicOrganisationDto,
@@ -47,8 +46,6 @@ import type {
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
-import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary, RequestQueryParams, RequestUrlParams } from "./controllerBase";
 import { UpdatePcrScopeChangeCommand } from "@server/features/pcrs/updatePcrScopeChangeCommand";
@@ -90,11 +87,11 @@ import { UpdatePcrFilesStepCommand } from "@server/features/pcrs/updatePcrFilesS
 import { UpdatePcrReasoningCommand } from "@server/features/pcrs/updatePcrReasoningCommand";
 import { SubmitPcrCommand } from "@server/features/pcrs/submitPcrCommand";
 import { UpdatePcrApproveNewSubcontractorCommand } from "@server/features/pcrs/updatePcrApproveNewSubcontractorCommand";
-import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDurationChangeCommand";
 import { UpdatePcrChangeRemainingGrantCommand } from "@server/features/pcrs/updatePcrChangeRemainingGrantCommand";
 import { UpdatePcrReallocateCostsSummaryCommand } from "@server/features/pcrs/updatePcrReallocateCostsSummaryCommand";
 import { UpdatePcrReallocateCostsCommand } from "@server/features/pcrs/updatePcrReallocateCostsCommand";
 import { UpdatePcrReviewCommand } from "@server/features/pcrs/updatePcrReviewCommand";
+import { UpdatePcrLoanDrawdownChangeCommand } from "@server/features/pcrs/updateLoanDrawdownChangeCommand";
 
 type PcrUpdateParams<Context extends "client" | "server", TDto> = ApiParams<
   Context,
@@ -120,19 +117,6 @@ export interface IPCRsApi<Context extends "client" | "server"> {
       }
     >,
   ) => Promise<{ id: PcrId }>;
-
-  update: (
-    params: ApiParams<
-      Context,
-      {
-        projectId: ProjectId;
-        id: PcrId;
-        pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
-          items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
-        };
-      }
-    >,
-  ) => Promise<PCRDto>;
 
   inviteTeamMember: (
     params: ApiParams<
@@ -277,15 +261,6 @@ class Controller
       this.replaceTeamMember,
     );
 
-    this.postItem(
-      "/:projectId/manage-team-member/update",
-      (p, _, b: PcrUpdateTeamMemberDto) => ({
-        projectId: p.projectId,
-        pcr: processDto(b),
-      }),
-      this.updateTeamMember,
-    );
-
     this.putItem(
       "/:projectId/:pcrId/pcr-review",
       (p, _, b: PcrReviewDto) => ({ projectId: p.projectId, pcrId: p.pcrId, pcr: processDto(b) }),
@@ -296,12 +271,6 @@ class Controller
       "/:projectId/:pcrId/add-types",
       (p, _, b: CreatePcrDto) => ({ projectId: p.projectId, id: p.pcrId, projectChangeRequestDto: processDto(b) }),
       this.addPcrTypes,
-    );
-
-    this.putItem(
-      "/:projectId/:pcrId/",
-      (p, _, b: PCRDto) => ({ projectId: p.projectId, id: p.pcrId, pcr: processDto(b) }),
-      this.update,
     );
 
     this.deleteItem("/:projectId/:pcrId", p => ({ projectId: p.projectId, id: p.pcrId }), this.delete);
@@ -539,27 +508,6 @@ class Controller
     );
 
     return { id: params.id };
-  }
-
-  async update(
-    params: ApiParams<
-      "server",
-      {
-        projectId: ProjectId;
-        id: PcrId | PcrItemId;
-        pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
-          items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
-        };
-      }
-    >,
-  ): Promise<PCRDto> {
-    const context = await contextProvider.start(params);
-
-    await context.runCommand(
-      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
-    );
-
-    return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
   async pcrReview(

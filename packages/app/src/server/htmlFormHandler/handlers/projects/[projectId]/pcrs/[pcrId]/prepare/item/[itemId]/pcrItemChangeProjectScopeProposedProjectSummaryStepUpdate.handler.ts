@@ -2,8 +2,8 @@ import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import {
   PcrScopeChangeProjectSummarySchemaType,
@@ -79,22 +79,11 @@ class ProjectChangeRequestItemChangeProjectScopeProposedProjectSummaryStepUpdate
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              projectSummary: input.projectSummary,
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_NewProjectSummary__c: input?.projectSummary ?? null,
+    });
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,

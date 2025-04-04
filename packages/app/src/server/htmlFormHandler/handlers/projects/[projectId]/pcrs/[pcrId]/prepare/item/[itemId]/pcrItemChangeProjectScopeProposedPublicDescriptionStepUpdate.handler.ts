@@ -2,8 +2,8 @@ import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pc
 import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { mapToPCRItemStatusLabel } from "@server/repositories/projectChangeRequestRepository";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
 import {
@@ -91,22 +91,11 @@ class ProjectChangeRequestItemChangeProjectScopeProposedPublicDescriptionStepUpd
       pcrItemId: params.itemId,
     });
 
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              publicDescription: input.publicDescription,
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: mapToPCRItemStatusLabel(PCRItemStatus.Incomplete),
+      Acc_NewPublicDescription__c: input?.publicDescription ?? null,
+    });
 
     const summaryWorkflow = PcrWorkflow.getWorkflow(item, undefined);
     const companiesHouseStep = summaryWorkflow?.findStepNumberByName(PCRStepType.publicDescriptionStep);

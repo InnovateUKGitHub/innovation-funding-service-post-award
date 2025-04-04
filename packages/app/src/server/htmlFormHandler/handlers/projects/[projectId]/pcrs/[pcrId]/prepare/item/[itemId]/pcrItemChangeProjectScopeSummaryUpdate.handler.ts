@@ -1,9 +1,9 @@
-import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import { getPcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 import { ProjectChangeRequestPrepareRoute } from "@ui/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import {
@@ -82,22 +82,11 @@ class ProjectChangeRequestItemChangeProjectScopeSummaryUpdateHandler extends Zod
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-            },
-          ],
-        },
-      }),
-    );
+    const nextStatus = getPcrItemStatus(input.markedAsComplete);
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: nextStatus,
+    });
 
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,

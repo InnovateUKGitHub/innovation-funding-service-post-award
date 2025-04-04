@@ -1,11 +1,7 @@
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
+import { PCRPrepareItemRoute } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow } from "@ui/pages/pcrs/pcrWorkflow";
-import { isNil } from "lodash";
 
 export const getNextAddPartnerStep = async ({
   projectId,
@@ -40,32 +36,4 @@ export const getNextAddPartnerStep = async ({
     itemId: pcrItemId,
     step: toSummary ? undefined : nextInfo.stepNumber,
   }).path;
-};
-
-export const updatePcrItem = async function ({
-  params,
-  context,
-  data,
-}: {
-  params: ProjectChangeRequestPrepareItemParams;
-  context: IContext;
-  data: Partial<FullPCRItemDto>;
-}) {
-  await context.runCommand(
-    new UpdatePCRCommand({
-      projectId: params.projectId,
-      projectChangeRequestId: params.pcrId,
-      pcr: {
-        projectId: params.projectId,
-        id: params.pcrId,
-        items: [
-          {
-            id: params.itemId,
-            ...data,
-            ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
-          },
-        ],
-      },
-    }),
-  );
 };

@@ -11,9 +11,9 @@ import {
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { BadRequestError } from "@shared/appError";
 import { combineDayMonthYear, getDay, getMonth, getYear } from "@ui/components/atoms/Date";
-import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
 import { parseCurrency } from "@framework/util/numberHelper";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrItemLoanDrawdownChangeHandler extends ZodFormHandlerBase<
   LoanDrawdownChangeSchema,
@@ -102,32 +102,26 @@ export class PcrItemLoanDrawdownChangeHandler extends ZodFormHandlerBase<
     if (!this.loanDto) {
       this.loanDto = await context.runQuery(new GetFinancialLoanVirementQuery(params.projectId, params.itemId));
     }
-    const dto = {
-      pcrItemId: params.itemId,
-      loans: input.loans.map(x => {
-        const matchingOriginalData = this.loanDto?.loans?.find(y => y.period === x.period);
-        const newDate = combineDayMonthYear(x.newDate_day, x.newDate_month, x.newDate_year);
 
-        if (!matchingOriginalData) {
-          throw new Error("missing original data");
-        }
-        if (!newDate) {
-          throw Error("missing a new date");
-        }
-        return {
-          ...x,
-          period: x.period as PeriodId,
-          id: matchingOriginalData.id,
-          status: matchingOriginalData.status,
-          isEditable: matchingOriginalData.isEditable,
-          newDate,
-          newValue: parseCurrency(x.newValue),
-        };
-      }),
-    };
-    await context.runCommand(
-      new UpdateFinancialLoanVirementCommand(params.projectId, params.itemId, dto, input.markedAsComplete),
-    );
+    const virementUpdates = input.loans
+      .filter(x => x.isEditable)
+      .map(x => ({
+        Id: x.id,
+        Acc_ProjectChangeRequest__c: params.itemId,
+        Loan_NewDrawdownValue__c: parseCurrency(x.newValue),
+        Loan_NewDrawdownDate__c: combineDayMonthYear(x.newDate_day, x.newDate_month, x.newDate_year)?.toISOString(),
+      }));
+
+    await context.repositories.financialLoanVirements.updateVirements(virementUpdates);
+
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrLoanDrawdownChangeSummary,
+        input.markedAsComplete,
+        input.form,
+      ),
+    });
     return PCRPrepareItemRoute.getLink({ projectId: params.projectId, pcrId: params.pcrId, itemId: params.itemId })
       .path;
   }

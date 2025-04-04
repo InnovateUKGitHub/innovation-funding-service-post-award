@@ -1,14 +1,10 @@
 import { IContext } from "@framework/types/IContext";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/pages/pcrs/pcrItemWorkflowContainer";
-
 import { FormTypes } from "@ui/zod/FormTypes";
 import { z } from "zod";
-import { isNil } from "lodash";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { TimeExtensionSchema, pcrTimeExtensionSchema, errorMap } from "@ui/pages/pcrs/timeExtension/timeExtension.zod";
+import { handlePcrItemStatus } from "@server/repositories/projectChangeRequestRepository";
 
 export class PcrChangeDurationHandler extends ZodFormHandlerBase<
   TimeExtensionSchema,
@@ -47,23 +43,15 @@ export class PcrChangeDurationHandler extends ZodFormHandlerBase<
     context: IContext;
     params: ProjectChangeRequestPrepareItemParams;
   }): Promise<string> {
-    await context.runCommand(
-      new UpdatePCRCommand({
-        projectId: params.projectId,
-        projectChangeRequestId: params.pcrId,
-        pcr: {
-          projectId: params.projectId,
-          id: params.pcrId,
-          items: [
-            {
-              id: params.itemId,
-              offsetMonths: Number(input.timeExtension),
-              ...(!isNil(params.step) ? { status: PCRItemStatus.Incomplete } : {}),
-            },
-          ],
-        },
-      }),
-    );
+    await context.repositories.projectChangeRequests.updateSingleSalesforceItem({
+      Id: params.itemId,
+      Acc_MarkedasComplete__c: handlePcrItemStatus(
+        FormTypes.PcrChangeDurationSummary,
+        input.markedAsComplete,
+        input.form,
+      ),
+      Acc_AdditionalNumberofMonths__c: Number(input.timeExtension),
+    });
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,
