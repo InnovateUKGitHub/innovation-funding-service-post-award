@@ -5,7 +5,6 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { mapToMonitoringReportDto } from "@gql/dtoMapper/mapMonitoringReportDto";
@@ -54,10 +53,7 @@ export const useOnMonitoringReportUpdatePeriodStep = (
   routes: IRoutes,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<
-    z.output<MonitoringReportCreateSchema>,
-    Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">
-  >({
+  return useOnUpdate<z.output<MonitoringReportCreateSchema>, boolean>({
     req: data =>
       clientsideApiClient.monitoringReports.saveMonitoringReport({
         monitoringReportDto: {
@@ -69,8 +65,8 @@ export const useOnMonitoringReportUpdatePeriodStep = (
         submit: false, // just saving an update
         step: "prepare-period",
       }),
-    onSuccess: (data, response) => {
-      const link = getLink(data["button_submit"] === "saveAndContinue", projectId, response.headerId, routes);
+    onSuccess: data => {
+      const link = getLink(data["button_submit"] === "saveAndContinue", projectId, headerId, routes);
       return navigate(link.path);
     },
   });

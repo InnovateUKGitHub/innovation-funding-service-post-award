@@ -5,7 +5,6 @@ import { MonitoringReportCreateQuery } from "./__generated__/MonitoringReportCre
 import { monitoringReportCreateQuery } from "./MonitoringReportCreate.query";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { useNavigate } from "react-router-dom";
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
@@ -37,10 +36,7 @@ const getLink = (progress: boolean, projectId: ProjectId, id: MonitoringReportId
 
 export const useOnMonitoringReportCreate = (projectId: ProjectId, routes: IRoutes) => {
   const navigate = useNavigate();
-  return useOnUpdate<
-    z.output<MonitoringReportCreateSchema>,
-    Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">
-  >({
+  return useOnUpdate<z.output<MonitoringReportCreateSchema>, { headerId: MonitoringReportId }>({
     req: data =>
       clientsideApiClient.monitoringReports.createMonitoringReport({
         monitoringReportDto: { periodId: data.period, projectId, status: MonitoringReportStatus.Draft },

@@ -96,7 +96,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
   setFetchKey: Dispatch<SetStateAction<number>>,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
+  return useOnUpdate<FormValues, boolean | { headerId: MonitoringReportId }>({
     req: data => {
       const isFinalSubmit = data["button_submit"] === "submit";
       if (isFinalSubmit || hasFormChanged(data, report.questions, report.addComments)) {

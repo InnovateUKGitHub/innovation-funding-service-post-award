@@ -3,7 +3,6 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
 import { processDto } from "../../shared/processResponse";
-import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { MonitoringReportStep } from "@framework/types/monitoringReportStep";
@@ -14,7 +13,7 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
       Context,
       { monitoringReportDto: Pick<MonitoringReportDto, "periodId" | "projectId" | "status">; submit: boolean }
     >,
-  ) => Promise<MonitoringReportDto>;
+  ) => Promise<{ headerId: MonitoringReportId }>;
   saveMonitoringReport: (
     params: ApiParams<
       Context,
@@ -24,14 +23,14 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
         step: MonitoringReportStep;
       }
     >,
-  ) => Promise<MonitoringReportDto>;
+  ) => Promise<boolean>;
   deleteMonitoringReport: (
     params: ApiParams<Context, { projectId: ProjectId; reportId: MonitoringReportId }>,
   ) => Promise<boolean>;
 }
 
 class Controller
-  extends ControllerBaseWithSummary<"server", MonitoringReportSummaryDto, MonitoringReportDto>
+  extends ControllerBaseWithSummary<"server", MonitoringReportSummaryDto, { headerId: MonitoringReportId }>
   implements IMonitoringReportsApi<"server">
 {
   constructor() {
@@ -79,7 +78,7 @@ class Controller
     const context = await contextProvider.start(params);
 
     await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit, step));
-    return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
+    return true;
   }
 
   public async createMonitoringReport(
@@ -91,10 +90,10 @@ class Controller
     const { monitoringReportDto, submit } = params;
     const context = await contextProvider.start(params);
 
-    const id = (await context.runCommand(
+    const headerId = (await context.runCommand(
       new CreateMonitoringReportCommand(monitoringReportDto, submit),
     )) as MonitoringReportId;
-    return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, id));
+    return { headerId };
   }
 
   public async deleteMonitoringReport(
