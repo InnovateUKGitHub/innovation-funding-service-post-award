@@ -8,7 +8,7 @@ export interface ILoansApi<Context extends "client" | "server"> {
   update(params: ApiParams<Context, { projectId: ProjectId; loanId: LoanId; loan: LoanUpdateDto }>): Promise<boolean>;
 }
 
-class LoansApi extends ControllerBase<"server", LoanUpdateDto> {
+class LoansApi extends ControllerBase<"server", boolean> {
   constructor() {
     super("loans");
     super.putItem(

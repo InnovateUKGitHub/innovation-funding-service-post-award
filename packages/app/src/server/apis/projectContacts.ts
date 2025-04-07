@@ -1,11 +1,10 @@
-import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import {
   ServerUpdateProjectContactsAssociateDetailsCommand,
   UpdateProjectContactLinkCommand,
 } from "@server/features/projectContacts/UpdateProjectContactLinkCommand";
 import { processDto } from "@shared/processResponse";
 import { contextProvider } from "../features/common/contextProvider";
-import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProjectQuery";
+
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IProjectContactsApi<Context extends "client" | "server"> {
@@ -14,10 +13,10 @@ export interface IProjectContactsApi<Context extends "client" | "server"> {
       Context,
       { projectId: ProjectId; contacts: ServerUpdateProjectContactsAssociateDetailsCommand[] }
     >,
-  ) => Promise<ProjectContactDto[]>;
+  ) => Promise<boolean>;
 }
 
-class Controller extends ControllerBase<"server", ProjectContactDto> implements IProjectContactsApi<"server"> {
+class Controller extends ControllerBase<"server", boolean> implements IProjectContactsApi<"server"> {
   constructor() {
     super("project-contacts");
 
@@ -40,8 +39,7 @@ class Controller extends ControllerBase<"server", ProjectContactDto> implements 
     const ctx = await contextProvider.start(params);
     const command = new UpdateProjectContactLinkCommand(params.projectId, params.contacts);
     await ctx.runCommand(command);
-    const query = new GetAllForProjectQuery(params.projectId);
-    return await ctx.runQuery(query);
+    return true;
   }
 }
 

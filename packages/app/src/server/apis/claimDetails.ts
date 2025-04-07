@@ -1,7 +1,7 @@
 import { contextProvider } from "@server/features/common/contextProvider";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-import { ClaimDetailsSummaryDto, ClaimLineItemsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimLineItemsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { UpdateClaimLineItemsCommand } from "@server/features/claimDetails/updateClaimLineItemsCommand";
 
@@ -11,10 +11,7 @@ export interface IClaimDetailsApi<Context extends "client" | "server"> {
   ) => Promise<boolean>;
 }
 
-class Controller
-  extends ControllerBaseWithSummary<"server", ClaimDetailsSummaryDto, ClaimLineItemsDto>
-  implements IClaimDetailsApi<"server">
-{
+class Controller extends ControllerBaseWithSummary<"server", boolean, boolean> implements IClaimDetailsApi<"server"> {
   constructor() {
     super("claim-details");
 

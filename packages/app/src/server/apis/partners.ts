@@ -1,5 +1,4 @@
 import { BankCheckStatus } from "@framework/constants/partner";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { UpdatePartnerBankDetailsCommand } from "@server/features/partners/updatePartnerBankDetailsCommand";
@@ -80,7 +79,7 @@ export interface IPartnersApi<Context extends "client" | "server"> {
 }
 
 class Controller
-  extends ControllerBase<"server", PartnerDto | { bankCheckStatus: BankCheckStatus }>
+  extends ControllerBase<"server", { bankCheckStatus: BankCheckStatus }>
   implements IPartnersApi<"server">
 {
   constructor() {

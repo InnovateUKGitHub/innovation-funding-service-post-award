@@ -1,4 +1,4 @@
-import { ForecastDetailsDTO, InitialForecastDto } from "@framework/dtos/forecastDetailsDto";
+import { InitialForecastDto } from "@framework/dtos/forecastDetailsDto";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
@@ -10,7 +10,7 @@ export interface IInitialForecastDetailsApi<Context extends "client" | "server">
   ) => Promise<boolean>;
 }
 
-class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements IInitialForecastDetailsApi<"server"> {
+class Controller extends ControllerBase<"server", boolean> implements IInitialForecastDetailsApi<"server"> {
   constructor() {
     super("initial-forecast-details");
 

@@ -1,4 +1,4 @@
-import { ClaimDto, ClaimReviewDto, ClaimSummaryDto, ClaimUpdateForecastDto } from "@framework/dtos/claimDto";
+import { ClaimReviewDto, ClaimSummaryDto, ClaimUpdateForecastDto } from "@framework/dtos/claimDto";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { UpdateClaimForecastCommand } from "@server/features/claims/updateClaimForecastCommand";
 import { UpdateClaimReviewCommand } from "@server/features/claims/updateClaimReviewCommand";
@@ -36,7 +36,7 @@ export interface IClaimsApi<Context extends "client" | "server"> {
   ): Promise<boolean>;
 }
 
-class ClaimController extends ControllerBase<"server", ClaimDto> implements IClaimsApi<"server"> {
+class ClaimController extends ControllerBase<"server", boolean> implements IClaimsApi<"server"> {
   constructor() {
     super("claims");
 

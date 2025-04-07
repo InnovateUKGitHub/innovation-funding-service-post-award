@@ -14,7 +14,6 @@ import type {
   PcrAddPartnerRoleAndOrganisationDto,
   PcrChangeDurationDto,
   PcrDeleteTeamMemberDto,
-  PCRDto,
   PcrInviteTeamMemberDto,
   PcrRemovePartnerDto,
   PcrRenamePartnerDto,
@@ -23,7 +22,6 @@ import type {
   PCRSummaryDto,
   PcrSuspendProjectDto,
   PcrUpdateTeamMemberDto,
-  StandalonePcrDto,
   PcrAddPartnerFinancialDetailsDto,
   PcrAddPartnerProjectCostOtherCostDto,
   PcrAddPartnerProjectCostLabourDto,
@@ -219,7 +217,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
 }
 
 class Controller
-  extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRDto | StandalonePcrDto | { id: PcrId }>
+  extends ControllerBaseWithSummary<"server", PCRSummaryDto, { id: PcrId }>
   implements IPCRsApi<"server">
 {
   constructor() {
